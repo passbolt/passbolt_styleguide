@@ -16,12 +16,12 @@
  * Unit tests on IdentifyWithSso in regard of specifications
  */
 import IdentifyWithSsoPage from "./IdentifyWithSso.test.page";
-import {defaultProps} from "./IdentifyWithSso.test.data";
+import { defaultProps } from "./IdentifyWithSso.test.data";
 import IdentifyViaSsoService from "../../../../shared/services/sso/IdentifyViaSsoService";
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import GetUrlForSsoIdentificationService from "../../../../shared/services/api/sso/GetUrlForSsoIdentificationService";
 import SsoPopupHandlerService from "../../../../shared/services/sso/SsoPopupHandlerService";
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 import GetRecoverUrlService from "../../../../shared/services/api/sso/GetRecoverUrlService";
 
 beforeEach(() => {
@@ -29,20 +29,20 @@ beforeEach(() => {
 });
 
 describe("IdentifyWithSso", () => {
-  describe('As AN I be able to SSO to identify myself instead of using the email process', () => {
-    it('Component should mount', async() => {
+  describe("As AN I be able to SSO to identify myself instead of using the email process", () => {
+    it("Component should mount", async () => {
       expect.assertions(4);
       const props = defaultProps();
       const page = new IdentifyWithSsoPage(props);
       await waitFor(() => {});
 
       expect(page.exists()).toBeTruthy();
-      expect(page.title.textContent).toBe('Welcome back!');
+      expect(page.title.textContent).toBe("Welcome back!");
       expect(page.ssoButton).toBeTruthy();
       expect(page.secondaryActionButton).toBeTruthy();
     });
 
-    it('As AN I want to be redirected to the setup or recover page after a successful login attempt', async() => {
+    it("As AN I want to be redirected to the setup or recover page after a successful login attempt", async () => {
       expect.assertions(3);
       const expectedUrl = "https://www.passbolt.test";
       const popupUrl = "https://third-party.auth.com";
@@ -51,19 +51,19 @@ describe("IdentifyWithSso", () => {
       delete window.location;
 
       window.location = {
-        href: "/"
+        href: "/",
       };
 
-      jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async() => popupUrl);
-      jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async url => {
+      jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async () => popupUrl);
+      jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async (url) => {
         expect(url).toStrictEqual(popupUrl);
         return {
-          case: 'default',
-          token: expectedToken
+          case: "default",
+          token: expectedToken,
         };
       });
 
-      jest.spyOn(GetRecoverUrlService.prototype, "getRecoverUrl").mockImplementation(token => {
+      jest.spyOn(GetRecoverUrlService.prototype, "getRecoverUrl").mockImplementation((token) => {
         expect(token).toStrictEqual(expectedToken);
         return expectedUrl;
       });
@@ -80,25 +80,25 @@ describe("IdentifyWithSso", () => {
       window.location = location;
     });
 
-    it('As AN I want to be redirected to the self_registration a successful login attempt and if I am not a registered user', async() => {
+    it("As AN I want to be redirected to the self_registration a successful login attempt and if I am not a registered user", async () => {
       expect.assertions(2);
       const popupUrl = "https://third-party.auth.com";
       const expectedEmail = "user@registered-domain.com";
 
-      jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async() => popupUrl);
-      jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async url => {
+      jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async () => popupUrl);
+      jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async (url) => {
         expect(url).toStrictEqual(popupUrl);
         return {
-          case: 'registration_required',
-          token: expectedEmail
+          case: "registration_required",
+          token: expectedEmail,
         };
       });
 
-      const onUserRegistrationRequired = jest.fn(email => {
+      const onUserRegistrationRequired = jest.fn((email) => {
         expect(email).toStrictEqual(expectedEmail);
       });
 
-      const props = defaultProps({onUserRegistrationRequired});
+      const props = defaultProps({ onUserRegistrationRequired });
       const page = new IdentifyWithSsoPage(props);
       await waitFor(() => {});
 
@@ -107,14 +107,19 @@ describe("IdentifyWithSso", () => {
       await waitFor(() => {});
     });
 
-    it('As a user without the extension configured, I can cancel and retry the SSO process', async() => {
+    it("As a user without the extension configured, I can cancel and retry the SSO process", async () => {
       expect.assertions(3);
       const props = defaultProps();
       const page = new IdentifyWithSsoPage(props);
       await waitFor(() => {});
 
       let rejectPromise = null;
-      jest.spyOn(IdentifyViaSsoService.prototype, "exec").mockImplementation(() => new Promise((resolve, reject) => { rejectPromise = reject; }));
+      jest.spyOn(IdentifyViaSsoService.prototype, "exec").mockImplementation(
+        () =>
+          new Promise((resolve, reject) => {
+            rejectPromise = reject;
+          }),
+      );
 
       // start the SSO process
       expect(page.isProcessing()).toBeFalsy();
@@ -125,10 +130,10 @@ describe("IdentifyWithSso", () => {
       expect(page.isProcessing()).toBeFalsy();
     });
 
-    it('As a user without the extension configured, I can still use the email procedure to identify myself', async() => {
+    it("As a user without the extension configured, I can still use the email procedure to identify myself", async () => {
       expect.assertions(1);
       const props = defaultProps({
-        onSecondaryActionClick: jest.fn()
+        onSecondaryActionClick: jest.fn(),
       });
       const page = new IdentifyWithSsoPage(props);
       await waitFor(() => {});

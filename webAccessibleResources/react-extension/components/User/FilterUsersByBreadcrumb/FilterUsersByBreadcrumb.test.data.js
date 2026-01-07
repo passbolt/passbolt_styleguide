@@ -1,5 +1,5 @@
 import MockPort from "../../../test/mock/MockPort";
-import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
+import { UserWorkspaceFilterTypes } from "../../../contexts/UserWorkspaceContext";
 
 /**
  * Returns the default app context for the unit test
@@ -13,7 +13,6 @@ export function defaultAppContext(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 }
 
-
 /**
  * Props with a given user search filter
  * @param filter An user search filter
@@ -22,10 +21,10 @@ export function propsWithFilter(type) {
   return {
     userWorkspaceContext: {
       filter: {
-        type
+        type,
       },
-      filteredUsers: [{}, {}, {}]
-    }
+      filteredUsers: [{}, {}, {}],
+    },
   };
 }
 
@@ -37,10 +36,10 @@ export function propsWithTextFilter() {
     userWorkspaceContext: {
       filter: {
         type: UserWorkspaceFilterTypes.TEXT,
-        payload: "Ada"
+        payload: "Ada",
       },
-      filteredUsers: [{}]
-    }
+      filteredUsers: [{}],
+    },
   };
 }
 
@@ -52,10 +51,10 @@ export function propsWithEmptyTextFilter() {
     userWorkspaceContext: {
       filter: {
         type: UserWorkspaceFilterTypes.TEXT,
-        payload: ""
+        payload: "",
       },
-      filteredUsers: []
-    }
+      filteredUsers: [],
+    },
   };
 }
 
@@ -69,12 +68,12 @@ export function propsWithGroupFilter() {
         type: UserWorkspaceFilterTypes.GROUP,
         payload: {
           group: {
-            name: "My super group"
-          }
-        }
+            name: "My super group",
+          },
+        },
       },
-      filteredUsers: [{}, {}, {}, {}, {}, {}]
-    }
+      filteredUsers: [{}, {}, {}, {}, {}, {}],
+    },
   };
 }
 
@@ -87,11 +86,10 @@ export function propsWithEmptyGroupNameFilter() {
       filter: {
         type: UserWorkspaceFilterTypes.GROUP,
         payload: {
-          group: {
-          }
-        }
+          group: {},
+        },
       },
-      filteredUsers: []
-    }
+      filteredUsers: [],
+    },
   };
 }

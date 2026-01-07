@@ -15,8 +15,8 @@
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import PassboltResponseEntity from "./PassboltResponseEntity";
 import PassboltResponsePaginationHeaderEntity from "./PassboltResponsePaginationHeaderEntity";
-import {defaultPassboltResponseDto} from "./PassboltResponseEntity.test.data";
-import {defaultPassboltResponseHeaderDto} from "./PassboltResponseHeaderEntity.test.data";
+import { defaultPassboltResponseDto } from "./PassboltResponseEntity.test.data";
+import { defaultPassboltResponseHeaderDto } from "./PassboltResponseHeaderEntity.test.data";
 import PassboltResponseHeaderEntity from "./PassboltResponseHeaderEntity";
 
 describe("PassboltResponseEntity", () => {
@@ -35,12 +35,8 @@ describe("PassboltResponseEntity", () => {
 
     it("validates header property", () => {
       const dto = defaultPassboltResponseDto();
-      const successScenarios = [
-        {scenario: "valid header object", value: defaultPassboltResponseHeaderDto()},
-      ];
-      const failScenarios = [
-        {scenario: "invalid header type: integer", value: 42},
-      ];
+      const successScenarios = [{ scenario: "valid header object", value: defaultPassboltResponseHeaderDto() }];
+      const failScenarios = [{ scenario: "invalid header type: integer", value: 42 }];
       assertEntityProperty.required(PassboltResponseEntity, "header");
       assertEntityProperty.assertAssociation(PassboltResponseEntity, "header", dto, successScenarios, failScenarios);
     });

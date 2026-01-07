@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import AttentionSVG from "../../../img/svg/attention.svg";
 import ResourceIcon from "../Icons/ResourceIcon";
@@ -50,15 +50,9 @@ class CellName extends Component {
     const hasAttentionRequired = this.props.hasAttentionRequiredFeature && this.isAttentionRequiredOnExpiryDate;
     return (
       <div title={this.name}>
-        {this.props.hasIconVisibleCallback() &&
-          <ResourceIcon resource={this.props.value}/>
-        }
-        <span>
-          {this.name}
-        </span>
-        {hasAttentionRequired &&
-          <AttentionSVG className="attention-required"/>
-        }
+        {this.props.hasIconVisibleCallback() && <ResourceIcon resource={this.props.value} />}
+        <span>{this.name}</span>
+        {hasAttentionRequired && <AttentionSVG className="attention-required" />}
       </div>
     );
   }
@@ -67,7 +61,7 @@ class CellName extends Component {
 CellName.propTypes = {
   value: PropTypes.object.isRequired, // The value to display
   hasIconVisibleCallback: PropTypes.func, // true if the icon should be visible
-  hasAttentionRequiredFeature: PropTypes.bool.isRequired // Attention require feature is enabled
+  hasAttentionRequiredFeature: PropTypes.bool.isRequired, // Attention require feature is enabled
 };
 
 export default CellName;

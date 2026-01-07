@@ -14,15 +14,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import FilterResourcesByTagsListContextualMenu from "./FilterResourcesByTagsListContextualMenu";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
-import {withRouter} from "react-router-dom";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withContextualMenu } from "../../../contexts/ContextualMenuContext";
+import { withRouter } from "react-router-dom";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {Trans, withTranslation} from "react-i18next";
-import {withDrag} from "../../../contexts/DragContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withDrag } from "../../../contexts/DragContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class FilterResourcesByTagsList extends React.Component {
@@ -45,7 +45,7 @@ class FilterResourcesByTagsList extends React.Component {
       open: true,
       selectedTag: null, // Tag selected for the contextual menu
       draggingOverTagId: null, // The dragging over tag id
-      moreMenuOpenTagId: null // more menu open for a tag with the id
+      moreMenuOpenTagId: null, // more menu open for a tag with the id
     };
   }
 
@@ -85,9 +85,9 @@ class FilterResourcesByTagsList extends React.Component {
    */
   handleMoreClickEvent(event, selectedTag) {
     const moreMenuOpenTagId = this.state.moreMenuOpenTagId === selectedTag.id ? null : selectedTag.id;
-    this.setState({moreMenuOpenTagId});
+    this.setState({ moreMenuOpenTagId });
     if (moreMenuOpenTagId) {
-      const {left, top} = event.currentTarget.getBoundingClientRect();
+      const { left, top } = event.currentTarget.getBoundingClientRect();
       this.showContextualMenu(top + 19, left, selectedTag, "right", this.handleCloseMoreMenu);
     }
   }
@@ -98,7 +98,7 @@ class FilterResourcesByTagsList extends React.Component {
    */
   handleCloseMoreMenu(id) {
     if (this.state.moreMenuOpenTagId === id) {
-      this.setState({moreMenuOpenTagId: null});
+      this.setState({ moreMenuOpenTagId: null });
     }
   }
 
@@ -112,13 +112,13 @@ class FilterResourcesByTagsList extends React.Component {
    */
   showContextualMenu(top, left, selectedTag, className = "", callbackBeforeHide = null) {
     const onBeforeHide = callbackBeforeHide;
-    const contextualMenuProps = {left, selectedTag, onBeforeHide, top, className};
+    const contextualMenuProps = { left, selectedTag, onBeforeHide, top, className };
     this.props.contextualMenuContext.show(FilterResourcesByTagsListContextualMenu, contextualMenuProps);
   }
 
   handleOnClickTag(tag) {
-    const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: tag}};
-    this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    const filter = { type: ResourceWorkspaceFilterTypes.TAG, payload: { tag: tag } };
+    this.props.history.push({ pathname: "/app/passwords", state: { filter } });
   }
 
   /**
@@ -142,11 +142,11 @@ class FilterResourcesByTagsList extends React.Component {
       const isAppFilterByTag = filter && filter.type === ResourceWorkspaceFilterTypes.TAG;
       if (isAppFilterByTag) {
         // check if the tag is present in the list of tags
-        const isTagFilteredPresent = this.props.tags.filter(tag => tag.id === filter.payload.tag.id).length > 0;
+        const isTagFilteredPresent = this.props.tags.filter((tag) => tag.id === filter.payload.tag.id).length > 0;
         if (!isTagFilteredPresent) {
           // If the tag filtered is deleted apply all filter
-          const filter = {type: ResourceWorkspaceFilterTypes.ALL};
-          this.props.history.push({pathname: '/app/passwords', state: {filter}});
+          const filter = { type: ResourceWorkspaceFilterTypes.ALL };
+          this.props.history.push({ pathname: "/app/passwords", state: { filter } });
         }
       }
     }
@@ -158,10 +158,10 @@ class FilterResourcesByTagsList extends React.Component {
    * @param {Object} tag The tag
    */
   async handleDropEvent(event, tag) {
-    this.setState({draggingOverTagId: null});
+    this.setState({ draggingOverTagId: null });
     try {
-      const resources = this.props.dragContext.draggedItems.resources.map(resource => resource.id);
-      this.props.context.port.request("passbolt.tags.add-resources-tag", {resources, tag});
+      const resources = this.props.dragContext.draggedItems.resources.map((resource) => resource.id);
+      this.props.context.port.request("passbolt.tags.add-resources-tag", { resources, tag });
     } catch (error) {
       this.onUnexpectedError(error);
     }
@@ -174,7 +174,7 @@ class FilterResourcesByTagsList extends React.Component {
    */
   onUnexpectedError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -190,14 +190,14 @@ class FilterResourcesByTagsList extends React.Component {
      * see: https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations#droptargets
      */
     event.preventDefault();
-    this.setState({draggingOverTagId: tagId});
+    this.setState({ draggingOverTagId: tagId });
   }
 
   /**
    * Handle when the user is dragging leave the tag.
    */
   handleDragLeaveEvent() {
-    this.setState({draggingOverTagId: null});
+    this.setState({ draggingOverTagId: null });
   }
 
   // Zero conditional statements
@@ -207,9 +207,9 @@ class FilterResourcesByTagsList extends React.Component {
    */
   get filters() {
     return {
-      [filterByTagsOptions.personal]: tag => !tag.is_shared,
-      [filterByTagsOptions.shared]: tag => tag.is_shared,
-      [filterByTagsOptions.all]: tag => tag
+      [filterByTagsOptions.personal]: (tag) => !tag.is_shared,
+      [filterByTagsOptions.shared]: (tag) => tag.is_shared,
+      [filterByTagsOptions.all]: (tag) => tag,
     };
   }
 
@@ -263,8 +263,7 @@ class FilterResourcesByTagsList extends React.Component {
      */
     if (this.isDragging()) {
       if (tag.is_shared) {
-        const isOwnerOfAllResources = this.draggedItems.resources
-          .some(resource => resource.permission?.type !== 15);
+        const isOwnerOfAllResources = this.draggedItems.resources.some((resource) => resource.permission?.type !== 15);
         if (isOwnerOfAllResources) {
           return true;
         }
@@ -309,42 +308,57 @@ class FilterResourcesByTagsList extends React.Component {
   render() {
     return (
       <div className="accordion-content">
-        {this.isLoading() &&
-        <div className="processing-wrapper">
-          <SpinnerSVG/>
-          <span className="processing-text"><Trans>Retrieving tags</Trans></span>
-        </div>
-        }
-        {!this.isLoading() && this.filteredTags.length === 0 &&
-        <em className="empty-content"><Trans>empty</Trans></em>
-        }
-        {!this.isLoading() && this.filteredTags.length > 0 &&
-        <ul className="navigation-secondary-tree ready">
-          {this.filteredTags.map(tag =>
-            <li className="open node root tag-item" key={tag.id}>
-              <div className={`row ${this.isSelected(tag.id) ? "selected" : ""} ${this.isDisabled(tag) ? "disabled" : ""} ${this.showDropFocus(tag) ? "drop-focus" : ""}`}
-                onDrop={ event => this.handleDropEvent(event, tag)}
-                onDragOver={ event => this.handleDragOverEvent(event, tag.id)}
-                onDragLeave={this.handleDragLeaveEvent}>
-                <div className="main-cell-wrapper"
-                  onContextMenu={event => this.handleContextualMenuEvent(event, tag)}>
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" title={tag.slug}><span className="ellipsis tag-name" onClick={() => this.handleOnClickTag(tag)}>{tag.slug}</span></button>
+        {this.isLoading() && (
+          <div className="processing-wrapper">
+            <SpinnerSVG />
+            <span className="processing-text">
+              <Trans>Retrieving tags</Trans>
+            </span>
+          </div>
+        )}
+        {!this.isLoading() && this.filteredTags.length === 0 && (
+          <em className="empty-content">
+            <Trans>empty</Trans>
+          </em>
+        )}
+        {!this.isLoading() && this.filteredTags.length > 0 && (
+          <ul className="navigation-secondary-tree ready">
+            {this.filteredTags.map((tag) => (
+              <li className="open node root tag-item" key={tag.id}>
+                <div
+                  className={`row ${this.isSelected(tag.id) ? "selected" : ""} ${this.isDisabled(tag) ? "disabled" : ""} ${this.showDropFocus(tag) ? "drop-focus" : ""}`}
+                  onDrop={(event) => this.handleDropEvent(event, tag)}
+                  onDragOver={(event) => this.handleDragOverEvent(event, tag.id)}
+                  onDragLeave={this.handleDragLeaveEvent}
+                >
+                  <div
+                    className="main-cell-wrapper"
+                    onContextMenu={(event) => this.handleContextualMenuEvent(event, tag)}
+                  >
+                    <div className="main-cell">
+                      <button className="link no-border" type="button" title={tag.slug}>
+                        <span className="ellipsis tag-name" onClick={() => this.handleOnClickTag(tag)}>
+                          {tag.slug}
+                        </span>
+                      </button>
+                    </div>
                   </div>
+                  {!tag.is_shared && (
+                    <div className="dropdown right-cell more-ctrl">
+                      <button
+                        type="button"
+                        className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpenTagId === tag.id ? "open" : ""}`}
+                        onClick={(event) => this.handleMoreClickEvent(event, tag)}
+                      >
+                        <MoreHorizontalSVG />
+                      </button>
+                    </div>
+                  )}
                 </div>
-                {!tag.is_shared &&
-                <div className="dropdown right-cell more-ctrl">
-                  <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpenTagId === tag.id ? "open" : ""}`} onClick={event => this.handleMoreClickEvent(event, tag)}>
-                    <MoreHorizontalSVG />
-                  </button>
-                </div>
-                }
-              </div>
-            </li>
-          )
-          }
-        </ul>
-        }
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     );
   }
@@ -361,10 +375,16 @@ FilterResourcesByTagsList.propTypes = {
   dragContext: PropTypes.any, // The drag and drop context
 };
 
-export default withRouter(withAppContext(withDialog(withResourceWorkspace(withContextualMenu(withDrag(withTranslation("common")(FilterResourcesByTagsList)))))));
+export default withRouter(
+  withAppContext(
+    withDialog(
+      withResourceWorkspace(withContextualMenu(withDrag(withTranslation("common")(FilterResourcesByTagsList)))),
+    ),
+  ),
+);
 
 export const filterByTagsOptions = {
   all: "all",
   shared: "shared",
-  personal: "personal"
+  personal: "personal",
 };

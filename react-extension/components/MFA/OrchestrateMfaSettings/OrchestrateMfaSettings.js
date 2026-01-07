@@ -12,18 +12,18 @@
  * @since         4.4.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {MfaSettingsWorkflowStates, withMfa} from "../../../contexts/MFAContext";
+import { withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { MfaSettingsWorkflowStates, withMfa } from "../../../contexts/MFAContext";
 import DisplayProviderList from "../DisplayProviderList/DisplayProviderList";
 import ScanTotpCode from "../TotpSetup/ScanTotpCode/ScanTotpCode";
 import TotpGetStarted from "../TotpSetup/TotpGetStarted/TotpGetStarted";
 import DisplayMfaProviderConfiguration from "../DisplayMfaProviderConfiguration/DisplayMfaProviderConfiguration";
 import YubikeySetup from "../YubikeySetup/YubikeySetup";
 import DuoGetStarted from "../DuoSetup/DuoGetStarted";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 /**
  * The component orchestrates the mfa settings flow.
@@ -74,4 +74,3 @@ OrchestrateMfaSettings.propTypes = {
   mfaContext: PropTypes.any.isRequired, // The mfa content
 };
 export default withAppContext(withMfa(withRouter(withTranslation("common")(OrchestrateMfaSettings))));
-

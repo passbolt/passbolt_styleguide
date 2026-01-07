@@ -13,25 +13,22 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {
-  resourceLinkAuthorizedProtocols,
-  withResourceWorkspace
-} from "../../../contexts/ResourceWorkspaceContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withProgress} from "../../../contexts/ProgressContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { resourceLinkAuthorizedProtocols, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import sanitizeUrl, { urlProtocols } from "../../../lib/Sanitize/sanitizeUrl";
+import { Trans, withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withProgress } from "../../../contexts/ProgressContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
 import Totp from "../../../../shared/components/Totp/Totp";
-import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import DisplayResourceUrisBadge from "../../Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import Logger from "../../../../shared/utils/logger";
 
 class DisplayResourceDetailsTotp extends React.Component {
@@ -65,13 +62,13 @@ class DisplayResourceDetailsTotp extends React.Component {
   componentDidUpdate(prevProps) {
     const previousResource = prevProps.resourceWorkspaceContext?.details?.resource;
     const currentResource = this.props.resourceWorkspaceContext?.details?.resource;
-    const hasResourceChanged = previousResource?.id !== currentResource?.id
-      || previousResource?.modified !== currentResource?.modified;
+    const hasResourceChanged =
+      previousResource?.id !== currentResource?.id || previousResource?.modified !== currentResource?.modified;
 
     if (hasResourceChanged) {
       this.setState({
         isSecretPreviewed: null,
-        plaintextSecret: null
+        plaintextSecret: null,
       });
     }
   }
@@ -99,11 +96,10 @@ class DisplayResourceDetailsTotp extends React.Component {
    * @return {string}
    */
   get safeUri() {
-    return sanitizeUrl(
-      this.mainUri, {
-        whiteListedProtocols: resourceLinkAuthorizedProtocols,
-        defaultProtocol: urlProtocols.HTTPS
-      });
+    return sanitizeUrl(this.mainUri, {
+      whiteListedProtocols: resourceLinkAuthorizedProtocols,
+      defaultProtocol: urlProtocols.HTTPS,
+    });
   }
 
   /**
@@ -111,10 +107,10 @@ class DisplayResourceDetailsTotp extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
 
     if (!open) {
-      this.setState({plaintextSecret: null, isSecretPreviewed: false});
+      this.setState({ plaintextSecret: null, isSecretPreviewed: false });
     }
   }
 
@@ -141,7 +137,7 @@ class DisplayResourceDetailsTotp extends React.Component {
     const isTotpPreviewed = this.state.isSecretPreviewed;
     let plaintextSecret, code;
 
-    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
 
     if (isTotpPreviewed) {
       plaintextSecret = this.state.plaintextSecret;
@@ -159,7 +155,9 @@ class DisplayResourceDetailsTotp extends React.Component {
     this.props.progressContext.close();
 
     if (!plaintextSecret) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayError(
+        this.translate("The TOTP is empty and cannot be copied to clipboard."),
+      );
       return;
     }
 
@@ -192,7 +190,7 @@ class DisplayResourceDetailsTotp extends React.Component {
    * Hide the previewed resource secret.
    */
   hidePreviewedSecret() {
-    this.setState({plaintextSecret: null, isSecretPreviewed: false});
+    this.setState({ plaintextSecret: null, isSecretPreviewed: false });
   }
 
   /**
@@ -204,7 +202,7 @@ class DisplayResourceDetailsTotp extends React.Component {
     const isSecretPreviewed = true;
     let plaintextSecret;
 
-    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
 
     try {
       const plaintextSecretDto = await this.decryptResourceSecret(resourceId);
@@ -222,7 +220,7 @@ class DisplayResourceDetailsTotp extends React.Component {
       return;
     }
 
-    this.setState({plaintextSecret, isSecretPreviewed});
+    this.setState({ plaintextSecret, isSecretPreviewed });
   }
 
   /**
@@ -271,8 +269,9 @@ class DisplayResourceDetailsTotp extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canPreviewSecret = this.props.context.siteSettings.canIUse("previewPassword")
-      && this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
+    const canPreviewSecret =
+      this.props.context.siteSettings.canIUse("previewPassword") &&
+      this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
     const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
     const isTotpPreviewed = this.state.isSecretPreviewed;
     const isStandaloneTotp = this.props.isStandaloneTotp;
@@ -285,60 +284,71 @@ class DisplayResourceDetailsTotp extends React.Component {
               <span className="accordion-title">
                 <Trans>TOTP</Trans>
               </span>
-              {this.state.open &&
-              <CaretDownSVG/>
-              }
-              {!this.state.open &&
-              <CaretRightSVG/>
-              }
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className="accordion-content">
             <div className="information-label">
-              <span className="totp label"><Trans>TOTP</Trans></span>
-              {isStandaloneTotp &&
-                <span className="uri label"><Trans>URI</Trans></span>
-              }
+              <span className="totp label">
+                <Trans>TOTP</Trans>
+              </span>
+              {isStandaloneTotp && (
+                <span className="uri label">
+                  <Trans>URI</Trans>
+                </span>
+              )}
             </div>
             <div className="information-value">
               <div className="totp-value">
-                <div className={`secret secret-totp ${canPreviewSecret ? "secret-with-preview" : ""} ${isTotpPreviewed ? "" : "secret-copy"}`}
-                  title={this.translate("Click to copy")}>
-                  {isTotpPreviewed &&
+                <div
+                  className={`secret secret-totp ${canPreviewSecret ? "secret-with-preview" : ""} ${isTotpPreviewed ? "" : "secret-copy"}`}
+                  title={this.translate("Click to copy")}
+                >
+                  {isTotpPreviewed && (
                     <Totp
                       totp={this.state.plaintextSecret}
                       canClick={canCopySecret}
-                      onClick={this.handleTotpClickEvent}/>
-                  }
-                  {!isTotpPreviewed &&
-                    <button type="button" className="no-border" onClick={this.handleTotpClickEvent} disabled={!canCopySecret}>
+                      onClick={this.handleTotpClickEvent}
+                    />
+                  )}
+                  {!isTotpPreviewed && (
+                    <button
+                      type="button"
+                      className="no-border"
+                      onClick={this.handleTotpClickEvent}
+                      disabled={!canCopySecret}
+                    >
                       <span>Copy TOTP to clipboard</span>
                     </button>
-                  }
+                  )}
                 </div>
-                {canPreviewSecret &&
-                  <button type="button" onClick={this.handleViewTotpButtonClick}
-                    className="totp-view inline button-transparent">
-                    {isTotpPreviewed ? <EyeCloseSVG/> : <EyeOpenSVG/>}
+                {canPreviewSecret && (
+                  <button
+                    type="button"
+                    onClick={this.handleViewTotpButtonClick}
+                    className="totp-view inline button-transparent"
+                  >
+                    {isTotpPreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
                   </button>
-                }
+                )}
               </div>
-              {isStandaloneTotp &&
+              {isStandaloneTotp && (
                 <span className="uri value">
-                  {this.safeUri &&
+                  {this.safeUri && (
                     <button type="button" className="link no-border" onClick={this.handleGoToResourceUriClick}>
-                      <span>{this.mainUri}</span></button>}
+                      <span>{this.mainUri}</span>
+                    </button>
+                  )}
                   {!this.safeUri && <span>{this.mainUri}</span>}
-                  {this.additionalUris?.length > 0 &&
-                    <DisplayResourceUrisBadge additionalUris={this.additionalUris}/>
-                  }
+                  {this.additionalUris?.length > 0 && <DisplayResourceUrisBadge additionalUris={this.additionalUris} />}
                 </span>
-              }
+              )}
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -355,4 +365,10 @@ DisplayResourceDetailsTotp.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withClipboard(withRbac(withActionFeedback(withResourceWorkspace(withProgress(withTranslation('common')(DisplayResourceDetailsTotp)))))));
+export default withAppContext(
+  withClipboard(
+    withRbac(
+      withActionFeedback(withResourceWorkspace(withProgress(withTranslation("common")(DisplayResourceDetailsTotp)))),
+    ),
+  ),
+);

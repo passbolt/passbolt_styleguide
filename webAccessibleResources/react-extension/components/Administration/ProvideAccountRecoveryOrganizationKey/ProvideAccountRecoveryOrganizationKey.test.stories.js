@@ -17,7 +17,7 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 
 export default {
-  title: 'Components/Administration/ProvideAccountRecoveryOrganizationKey',
+  title: "Components/Administration/ProvideAccountRecoveryOrganizationKey",
   component: ProvideAccountRecoveryOrganizationKey,
 };
 
@@ -26,6 +26,6 @@ export const Initial = {
     context: {
       userSettings: new UserSettings(userSettingsFixture),
     },
-    onClose: () => {}
+    onClose: () => {},
   },
 };

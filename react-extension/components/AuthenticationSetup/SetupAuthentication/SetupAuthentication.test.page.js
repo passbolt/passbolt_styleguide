@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import SetupAuthentication from "./SetupAuthentication";
 
@@ -30,7 +30,7 @@ export default class SetupAuthenticationPage {
       <MockTranslationProvider>
         <SetupAuthentication {...props}></SetupAuthentication>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -127,7 +127,10 @@ export default class SetupAuthenticationPage {
    * @returns {boolean}
    */
   get isUnexpectedMetadataEncryptionEnablementErrorState() {
-    return this.isUnexpectedErrorState && this._page.container.querySelector(".setup-error h1").textContent === "An unexpected error occurred";
+    return (
+      this.isUnexpectedErrorState &&
+      this._page.container.querySelector(".setup-error h1").textContent === "An unexpected error occurred"
+    );
   }
 
   /**

@@ -12,7 +12,7 @@
  * @since         4.6.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationRbacActions from "./DisplayAdministrationRbacActions";
@@ -20,7 +20,7 @@ import DisplayAdministrationRbacActions from "./DisplayAdministrationRbacActions
 /**
  * The DisplayAdministrationRbacActions component represented as a page
  */
-export default class  DisplayAdministrationRbacActionsPage {
+export default class DisplayAdministrationRbacActionsPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -28,9 +28,9 @@ export default class  DisplayAdministrationRbacActionsPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayAdministrationRbacActions {...props}/>
+        <DisplayAdministrationRbacActions {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,14 +38,14 @@ export default class  DisplayAdministrationRbacActionsPage {
    * Returns the workspace action
    */
   get workspaceAction() {
-    return this._page.container.querySelector('.actions-wrapper');
+    return this._page.container.querySelector(".actions-wrapper");
   }
 
   /**
    * Returns the save button
    */
   get saveButton() {
-    return this._page.container.querySelector('button');
+    return this._page.container.querySelector("button");
   }
 
   /**
@@ -57,10 +57,9 @@ export default class  DisplayAdministrationRbacActionsPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 
   /** Click on the save element */
@@ -68,5 +67,3 @@ export default class  DisplayAdministrationRbacActionsPage {
     await this.click(this.saveButton);
   }
 }
-
-

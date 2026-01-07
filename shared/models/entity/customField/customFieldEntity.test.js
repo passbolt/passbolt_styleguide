@@ -14,9 +14,14 @@
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import CustomFieldEntity from "./customFieldEntity";
-import {customFieldWithAllInMetadata, customFieldWithAllInSecret, defaultCustomField, emptyCustomFieldDto} from "./customFieldEntity.test.data";
-import {isUUID} from "validator";
-import {v4 as uuidv4} from "uuid";
+import {
+  customFieldWithAllInMetadata,
+  customFieldWithAllInSecret,
+  defaultCustomField,
+  emptyCustomFieldDto,
+} from "./customFieldEntity.test.data";
+import { isUUID } from "validator";
+import { v4 as uuidv4 } from "uuid";
 
 describe("CustomFieldEntity", () => {
   describe("::getSchema", () => {
@@ -31,18 +36,9 @@ describe("CustomFieldEntity", () => {
     });
 
     it("validates type property", () => {
-      const successScenarios = [
-        "text",
-        "password",
-        "boolean",
-        "number",
-        "uri"
-      ];
+      const successScenarios = ["text", "password", "boolean", "number", "uri"];
 
-      const failScenarios = [
-        "https://www.passbolt.com",
-        "string",
-      ];
+      const failScenarios = ["https://www.passbolt.com", "string"];
 
       assertEntityProperty.enumeration(CustomFieldEntity, "type", successScenarios, failScenarios);
       assertEntityProperty.required(CustomFieldEntity, "type");
@@ -63,14 +59,14 @@ describe("CustomFieldEntity", () => {
 
     it("validates metadata_value property", () => {
       const successScenarios = [
-        {scenario: "a valid string value", value: "string value"},
-        {scenario: "a valid number value", value: 42},
-        {scenario: "a valie boolean value", value: true},
+        { scenario: "a valid string value", value: "string value" },
+        { scenario: "a valid number value", value: 42 },
+        { scenario: "a valie boolean value", value: true },
       ];
 
       const failScenarios = [
-        {scenario: "an invalid array", value: ["array"]},
-        {scenario: "an invalid object", value: {object: "object"}},
+        { scenario: "an invalid array", value: ["array"] },
+        { scenario: "an invalid object", value: { object: "object" } },
       ];
 
       assertEntityProperty.assert(CustomFieldEntity, "metadata_value", successScenarios, failScenarios, "type");
@@ -79,14 +75,14 @@ describe("CustomFieldEntity", () => {
 
     it("validates secret_value property", () => {
       const successScenarios = [
-        {scenario: "a valid string value", value: "string value"},
-        {scenario: "a valid number value", value: 42},
-        {scenario: "a valie boolean value", value: true},
+        { scenario: "a valid string value", value: "string value" },
+        { scenario: "a valid number value", value: 42 },
+        { scenario: "a valie boolean value", value: true },
       ];
 
       const failScenarios = [
-        {scenario: "an invalid array", value: ["array"]},
-        {scenario: "an invalid object", value: {object: "object"}},
+        { scenario: "an invalid array", value: ["array"] },
+        { scenario: "an invalid object", value: { object: "object" } },
       ];
 
       assertEntityProperty.assert(CustomFieldEntity, "secret_value", successScenarios, failScenarios, "type");
@@ -180,7 +176,6 @@ describe("CustomFieldEntity", () => {
       expect(() => new CustomFieldEntity(dto)).toThrow();
     });
 
-
     it("validateBuildRules: type is not matching value type for uri", () => {
       expect.assertions(1);
       const dto = defaultCustomField({
@@ -241,7 +236,7 @@ describe("CustomFieldEntity", () => {
     it("::value (from metadata_value) ", () => {
       expect.assertions(1);
       const dto = defaultCustomField({
-        metadata_value: 'Value',
+        metadata_value: "Value",
       });
       delete dto.secret_value;
 
@@ -273,7 +268,7 @@ describe("CustomFieldEntity", () => {
       const dtoB = defaultCustomField({
         id: dtoA.id,
         metadata_key: dtoA.metadata_key,
-        metadata_value: dtoA.secret_value
+        metadata_value: dtoA.secret_value,
       });
       delete dtoB.secret_value;
       const entityA = new CustomFieldEntity(dtoA);

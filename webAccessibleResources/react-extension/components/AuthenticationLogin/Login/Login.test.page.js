@@ -13,8 +13,8 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { fireEvent, render, waitFor } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import Login from "./Login";
 
@@ -30,10 +30,9 @@ export default class LoginPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <Login {...props}/>
+          <Login {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
   }
 
@@ -48,7 +47,7 @@ export default class LoginPage {
    * REturns passphrase input
    */
   get passphraseInput() {
-    return  this._page.container.querySelector('#passphrase');
+    return this._page.container.querySelector("#passphrase");
   }
 
   /**
@@ -62,7 +61,7 @@ export default class LoginPage {
    * Returns remember me input
    */
   get rememberMeInput() {
-    return  this._page.container.querySelector('#remember-me');
+    return this._page.container.querySelector("#remember-me");
   }
 
   /**
@@ -77,29 +76,29 @@ export default class LoginPage {
    * Returns the sign in button element
    */
   get signInButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns the secondary action link element
    */
   get secondaryActionLink() {
-    return this._page.container.querySelector('.form-actions button.link');
+    return this._page.container.querySelector(".form-actions button.link");
   }
 
   /**
    * Returns the Azure SSO login button element
    */
   get azureLoginButton() {
-    return this._page.container.querySelector('.sso-login-form .sso-login-button');
+    return this._page.container.querySelector(".sso-login-form .sso-login-button");
   }
 
   /**
    * Returns true if the user can change something like the token code
    */
   get canChange() {
-    const cannotChangePassphrase = this.passphraseInput.hasAttribute('disabled');
-    const cannotChangeRememberMer = this.rememberMeInput?.hasAttribute('disabled');
+    const cannotChangePassphrase = this.passphraseInput.hasAttribute("disabled");
+    const cannotChangeRememberMer = this.rememberMeInput?.hasAttribute("disabled");
     return !cannotChangePassphrase && !cannotChangeRememberMer;
   }
 
@@ -107,28 +106,28 @@ export default class LoginPage {
    * Returns true if one is processing
    */
   get isProcessing() {
-    return this.signInButton.getAttribute('class').indexOf('processing') > -1;
+    return this.signInButton.getAttribute("class").indexOf("processing") > -1;
   }
 
   /**
    * Returns true if the empty error message is displayed
    */
   get hasEmptyPassphraseError() {
-    return Boolean(this._page.container.querySelector('.empty-passphrase'));
+    return Boolean(this._page.container.querySelector(".empty-passphrase"));
   }
 
   /**
    * Returns true if the invalid passphrase error is displayed
    */
   hasInvalidPassphraseError() {
-    return Boolean(this._page.container.querySelector('.invalid-passphrase'));
+    return Boolean(this._page.container.querySelector(".invalid-passphrase"));
   }
 
   /**
    * Toggle the remember me value
    */
   async toggleRememberMe() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.rememberMeInput, leftClick);
     await waitFor(() => {});
   }
@@ -138,7 +137,7 @@ export default class LoginPage {
    * @param passphrase A passphrase
    */
   async fillPassphrase(passphrase) {
-    fireEvent.change(this.passphraseInput, {target: {value: passphrase}});
+    fireEvent.change(this.passphraseInput, { target: { value: passphrase } });
     await waitFor(() => {});
   }
 
@@ -147,7 +146,7 @@ export default class LoginPage {
    * @param inProgressFn The function called while processing the operation
    */
   async signIn(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.signInButton, leftClick);
     await waitFor(inProgressFn);
   }
@@ -156,7 +155,7 @@ export default class LoginPage {
    * Click on the secondary action link.
    */
   async clickSecondaryActionLink(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.secondaryActionLink, leftClick);
     await waitFor(inProgressFn);
   }
@@ -165,7 +164,7 @@ export default class LoginPage {
    * Click on the secondary action link.
    */
   async clickOnSsoLogin(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.azureLoginButton, leftClick);
     await waitFor(inProgressFn);
   }

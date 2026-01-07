@@ -21,37 +21,43 @@ class EnvironmentEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      EnvironmentEntity.ENTITY_NAME,
-      dto,
-      EnvironmentEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(EnvironmentEntity.ENTITY_NAME, dto, EnvironmentEntity.getSchema()), options);
   }
 
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["phpVersion", "nextMinPhpVersion", "pcre", "mbstring", "gnupg", "intl", "image", "tmpWritable", "logWritable"],
-      "properties": {
-        "phpVersion": {"type": "boolean"},
-        "nextMinPhpVersion": {"type": "boolean"},
-        "pcre": {"type": "boolean"},
-        "mbstring": {"type": "boolean"},
-        "gnupg": {"type": "boolean"},
-        "intl": {"type": "boolean"},
-        "image": {"type": "boolean"},
-        "tmpWritable": {"type": "boolean"},
-        "logWritable": {"type": "boolean"},
-        "info": {
-          "type": "object",
-          "required": ["phpVersion"],
-          "properties": {
-            "serverPhpVersion": {
-              "type:": "string"
-            }
-          }
-        }
-      }
+      type: "object",
+      required: [
+        "phpVersion",
+        "nextMinPhpVersion",
+        "pcre",
+        "mbstring",
+        "gnupg",
+        "intl",
+        "image",
+        "tmpWritable",
+        "logWritable",
+      ],
+      properties: {
+        phpVersion: { type: "boolean" },
+        nextMinPhpVersion: { type: "boolean" },
+        pcre: { type: "boolean" },
+        mbstring: { type: "boolean" },
+        gnupg: { type: "boolean" },
+        intl: { type: "boolean" },
+        image: { type: "boolean" },
+        tmpWritable: { type: "boolean" },
+        logWritable: { type: "boolean" },
+        info: {
+          type: "object",
+          required: ["phpVersion"],
+          properties: {
+            serverPhpVersion: {
+              "type:": "string",
+            },
+          },
+        },
+      },
     };
   }
 

@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 
-import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import SecretDataEntity, { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV5PasswordStringEntity extends SecretDataEntity {
@@ -22,19 +22,16 @@ class SecretDataV5PasswordStringEntity extends SecretDataEntity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "object_type",
-        "password",
-      ],
-      "properties": {
+      type: "object",
+      required: ["object_type", "password"],
+      properties: {
         ...SecretDataEntity.getSchema().properties,
-        "password": {
-          "type": "string",
-          "maxLength": 4096,
-          "nullable": true
-        }
-      }
+        password: {
+          type: "string",
+          maxLength: 4096,
+          nullable: true,
+        },
+      },
     };
   }
 
@@ -60,7 +57,7 @@ class SecretDataV5PasswordStringEntity extends SecretDataEntity {
       password: "",
     };
 
-    return new SecretDataV5PasswordStringEntity({...defaultData, ...data}, options);
+    return new SecretDataV5PasswordStringEntity({ ...defaultData, ...data }, options);
   }
 
   /**

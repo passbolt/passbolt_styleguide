@@ -12,7 +12,10 @@
  * @since         4.11.0
  */
 
-import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "./metadataTypesSettingsEntity";
+import MetadataTypesSettingsEntity, {
+  RESOURCE_TYPE_VERSION_4,
+  RESOURCE_TYPE_VERSION_5,
+} from "./metadataTypesSettingsEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
 import MetadataKeysCollection from "./metadataKeysCollection";
@@ -97,7 +100,7 @@ class MetadataTypesSettingsFormEntity extends MetadataTypesSettingsEntity {
       result.addError("allow_v4_v5_upgrade", "allow_creation", "Resource types v5 creation is not allowed.");
     }
 
-    const activeMetadataKeysCollection = metadataKeysCollection.items.filter(metadataKey => !metadataKey.expired);
+    const activeMetadataKeysCollection = metadataKeysCollection.items.filter((metadataKey) => !metadataKey.expired);
     if (activeMetadataKeysCollection.length === 0 && this.allowCreationOfV5Resources) {
       result = result || new EntityValidationError();
       result.addError("allow_creation_of_v5_resources", "active_metadata_key", "No active metadata key defined.");

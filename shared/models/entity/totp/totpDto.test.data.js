@@ -12,7 +12,7 @@
  * @since         4.6.0
  */
 
-import {SUPPORTED_TOTP_ALGORITHMS} from "./totpEntity";
+import { SUPPORTED_TOTP_ALGORITHMS } from "./totpEntity";
 
 /**
  * The default TOTP DTO
@@ -24,7 +24,7 @@ export const defaultTotpDto = (data = {}) => {
     secret_key: "DAV3DS4ERAAF5QGH",
     period: 30,
     digits: 6,
-    algorithm: "SHA1"
+    algorithm: "SHA1",
   };
 
   return Object.assign(defaultData, data);
@@ -35,7 +35,7 @@ export const defaultEmptyTotpDto = (data = {}) => {
     secret_key: "",
     period: 30,
     digits: 6,
-    algorithm: "SHA1"
+    algorithm: "SHA1",
   };
 
   return Object.assign(defaultData, data);
@@ -43,8 +43,9 @@ export const defaultEmptyTotpDto = (data = {}) => {
 
 export const lowerCaseAlgorithmSetupTotpData = (props = {}) => {
   const data = {
-    otpProvisioningUri: "otpauth://totp/www.passbolt.local:admin%40passbolt.com?issuer=www.passbolt.local&secret=TVWEGQFS3WPCID6GYAPHHCC54VXHFUL7EC5FVHEMVH7CKQI2XEQQ&algorithm=sha1&digits=6&period=30",
-    totp: "663516"
+    otpProvisioningUri:
+      "otpauth://totp/www.passbolt.local:admin%40passbolt.com?issuer=www.passbolt.local&secret=TVWEGQFS3WPCID6GYAPHHCC54VXHFUL7EC5FVHEMVH7CKQI2XEQQ&algorithm=sha1&digits=6&period=30",
+    totp: "663516",
   };
   return Object.assign(data, props);
 };
@@ -59,9 +60,8 @@ export const defaultTotpViewModelDto = (data = {}) => {
     secret_key: "DAV3DS4ERAAF5QGH",
     period: 30,
     digits: 6,
-    algorithm: SUPPORTED_TOTP_ALGORITHMS[0]
+    algorithm: SUPPORTED_TOTP_ALGORITHMS[0],
   };
 
   return Object.assign(defaultData, data);
 };
-

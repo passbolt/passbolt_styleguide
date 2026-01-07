@@ -13,28 +13,29 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
-import CheckPassphrase, {CheckPassphraseVariations} from "./CheckPassphrase";
-import {defaultProps} from "./CheckPassphrase.test.data";
+import { MemoryRouter, Route } from "react-router-dom";
+import CheckPassphrase, { CheckPassphraseVariations } from "./CheckPassphrase";
+import { defaultProps } from "./CheckPassphrase.test.data";
 
 export default {
-  title: 'Components/Authentication/CheckPassphrase',
-  component: CheckPassphrase
+  title: "Components/Authentication/CheckPassphrase",
+  component: CheckPassphrase,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <CheckPassphrase {...args} {...routerProps}/>}/>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <CheckPassphrase {...args} {...routerProps} />} />
         </MemoryRouter>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 export const Setup = Template.bind({});
@@ -42,9 +43,9 @@ Setup.args = defaultProps();
 Setup.parameters = defaultParameters;
 
 export const SetupWithRememberMe = Template.bind({});
-SetupWithRememberMe.args = defaultProps({canRememberMe: true});
+SetupWithRememberMe.args = defaultProps({ canRememberMe: true });
 SetupWithRememberMe.parameters = defaultParameters;
 
 export const Recover = Template.bind({});
-Recover.args = defaultProps({displayAs: CheckPassphraseVariations.RECOVER});
+Recover.args = defaultProps({ displayAs: CheckPassphraseVariations.RECOVER });
 Recover.parameters = defaultParameters;

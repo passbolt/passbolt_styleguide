@@ -16,7 +16,7 @@
  * Unit tests on DisplayUsersWorkspaceFilterBar in regard of specifications
  */
 
-import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
+import { UserWorkspaceFilterTypes } from "../../../contexts/UserWorkspaceContext";
 import DisplayUsersWorkspaceFilterBarPage from "./DisplayUsersWorkspaceFilterBar.test.page";
 import {
   defaultProps,
@@ -26,17 +26,17 @@ import {
   propsWithAttentionRequiredUsersNotAdmin,
   propsWithAttentionRequiredUsersNotAdminWithRbacAllowed,
   propsWithUsersFilteredByAccountRecovery,
-  propsWithUsersFilteredByMissingMetadata
+  propsWithUsersFilteredByMissingMetadata,
 } from "./DisplayUsersWorkspaceFilterBar.test.data";
 import each from "jest-each";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("As a signed-in users I can see filters", () => {
-  it('As LU I see the all statuses filter dropdown button', async() => {
+  it("As LU I see the all statuses filter dropdown button", async () => {
     expect.assertions(4);
     const props = defaultProps();
     const page = new DisplayUsersWorkspaceFilterBarPage(props);
@@ -48,9 +48,9 @@ describe("As a signed-in users I can see filters", () => {
   });
 
   describe("As a signed-in admin I can see attention required filter", () => {
-    it('As LA I see the attention required request filter if there is a user in either one of the attention states', async() => {
+    it("As LA I see the attention required request filter if there is a user in either one of the attention states", async () => {
       expect.assertions(7);
-      const filterOptions = ['Account Recovery Requests', 'Missing Metadata Key'];
+      const filterOptions = ["Account Recovery Requests", "Missing Metadata Key"];
       const props = defaultPropsWithAttentionRequiredUsers();
       const page = new DisplayUsersWorkspaceFilterBarPage(props);
 
@@ -66,7 +66,7 @@ describe("As a signed-in users I can see filters", () => {
         expect(el.textContent).toBe(filterOptions[index]);
       });
     });
-    it('As LA I do not see the attention required request filter if there are no users in either one of the attention states', async() => {
+    it("As LA I do not see the attention required request filter if there are no users in either one of the attention states", async () => {
       expect.assertions(4);
       const props = defaultPropsWithoutAttentionRequiredUsers();
       const page = new DisplayUsersWorkspaceFilterBarPage(props);
@@ -77,7 +77,7 @@ describe("As a signed-in users I can see filters", () => {
       expect(page.filterSelected).toBeUndefined();
     });
 
-    it('As LU I can see the attention required request filter if I am a user having rbac permission', async() => {
+    it("As LU I can see the attention required request filter if I am a user having rbac permission", async () => {
       expect.assertions(6);
       const props = propsWithAttentionRequiredUsersNotAdminWithRbacAllowed();
       const page = new DisplayUsersWorkspaceFilterBarPage(props);
@@ -92,7 +92,7 @@ describe("As a signed-in users I can see filters", () => {
       expect(page.attentionFilterOptions[0].textContent).toBe("Account Recovery Requests");
     });
 
-    it('As LU I do not see the attention required request filter if I am not an admin user', async() => {
+    it("As LU I do not see the attention required request filter if I am not an admin user", async () => {
       expect.assertions(4);
       const props = propsWithAttentionRequiredUsersNotAdmin();
       const page = new DisplayUsersWorkspaceFilterBarPage(props);
@@ -105,12 +105,11 @@ describe("As a signed-in users I can see filters", () => {
   });
 
   each([
-    {filter: UserWorkspaceFilterTypes.SUSPENDED_USER, props: propsFilterBySuspended()},
-    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, props: propsWithUsersFilteredByAccountRecovery()},
-    {filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY, props: propsWithUsersFilteredByMissingMetadata()},
-
-  ]).describe('As LU I should be able to remove filter', scenario => {
-    it(`for:  ${scenario.filter}`, async() => {
+    { filter: UserWorkspaceFilterTypes.SUSPENDED_USER, props: propsFilterBySuspended() },
+    { filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, props: propsWithUsersFilteredByAccountRecovery() },
+    { filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY, props: propsWithUsersFilteredByMissingMetadata() },
+  ]).describe("As LU I should be able to remove filter", (scenario) => {
+    it(`for:  ${scenario.filter}`, async () => {
       expect.assertions(4);
       const props = scenario.props;
       const page = new DisplayUsersWorkspaceFilterBarPage(props);
@@ -121,23 +120,47 @@ describe("As a signed-in users I can see filters", () => {
 
       await page.removeSelectedFilter();
 
-      const pathname = '/app/users';
+      const pathname = "/app/users";
       const state = {
         filter: {
-          type: UserWorkspaceFilterTypes.ALL
-        }
+          type: UserWorkspaceFilterTypes.ALL,
+        },
       };
-      expect(props.history.push).toBeCalledWith({pathname, state});
+      expect(props.history.push).toBeCalledWith({ pathname, state });
     });
   });
 
   each([
-    {filter: UserWorkspaceFilterTypes.SUSPENDED_USER, itemSelected: "Suspended", itemIndex: 1, props: defaultProps(), button: 'openDropdownFilterButton'},
-    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", itemIndex: 1, props: defaultPropsWithAttentionRequiredUsers(), button: 'openAttentionRequiredFilterButton'}, // For Admins and user having rbac allowed only
-    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", itemIndex: 1, props: propsWithAttentionRequiredUsersNotAdminWithRbacAllowed(), button: 'openAttentionRequiredFilterButton'}, // For Admins and user having rbac allowed only
-    {filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY, itemSelected: "Missing Metadata Key", itemIndex: 2, props: defaultPropsWithAttentionRequiredUsers(), button: 'openAttentionRequiredFilterButton'}, // For Admins only
-  ]).describe("as LU I should be able to filter", scenario => {
-    it(`for: ${scenario.filter}`, async() => {
+    {
+      filter: UserWorkspaceFilterTypes.SUSPENDED_USER,
+      itemSelected: "Suspended",
+      itemIndex: 1,
+      props: defaultProps(),
+      button: "openDropdownFilterButton",
+    },
+    {
+      filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST,
+      itemSelected: "Account Recovery Requests",
+      itemIndex: 1,
+      props: defaultPropsWithAttentionRequiredUsers(),
+      button: "openAttentionRequiredFilterButton",
+    }, // For Admins and user having rbac allowed only
+    {
+      filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST,
+      itemSelected: "Account Recovery Requests",
+      itemIndex: 1,
+      props: propsWithAttentionRequiredUsersNotAdminWithRbacAllowed(),
+      button: "openAttentionRequiredFilterButton",
+    }, // For Admins and user having rbac allowed only
+    {
+      filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY,
+      itemSelected: "Missing Metadata Key",
+      itemIndex: 2,
+      props: defaultPropsWithAttentionRequiredUsers(),
+      button: "openAttentionRequiredFilterButton",
+    }, // For Admins only
+  ]).describe("as LU I should be able to filter", (scenario) => {
+    it(`for: ${scenario.filter}`, async () => {
       expect.assertions(1);
       const props = scenario.props; // The props
       const page = new DisplayUsersWorkspaceFilterBarPage(props);
@@ -146,30 +169,42 @@ describe("As a signed-in users I can see filters", () => {
       await page[scenario.button]();
       await page.selectFilter(scenario.itemIndex);
 
-      const pathname = scenario.pathname || '/app/users';
+      const pathname = scenario.pathname || "/app/users";
       const state = {
         filter: {
-          type: scenario.filter
-        }
+          type: scenario.filter,
+        },
       };
-      expect(props.history.push).toBeCalledWith({pathname, state});
+      expect(props.history.push).toBeCalledWith({ pathname, state });
     });
   });
 
   each([
-    {filter: UserWorkspaceFilterTypes.SUSPENDED_USER, itemSelected: "Suspended", props: defaultProps},
-    {filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY, itemSelected: "Missing Metadata Key", props: defaultPropsWithAttentionRequiredUsers}, // For Admins only
-    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", props: defaultPropsWithAttentionRequiredUsers}, // For Admins and user having rbac allowed only
-    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", props: propsWithAttentionRequiredUsersNotAdminWithRbacAllowed}, // For Admins and user having rbac allowed only
-  ]).describe("As LU I should be able to identify the filters", scenario => {
-    it(`for: ${scenario.filter}`, async() => {
+    { filter: UserWorkspaceFilterTypes.SUSPENDED_USER, itemSelected: "Suspended", props: defaultProps },
+    {
+      filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY,
+      itemSelected: "Missing Metadata Key",
+      props: defaultPropsWithAttentionRequiredUsers,
+    }, // For Admins only
+    {
+      filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST,
+      itemSelected: "Account Recovery Requests",
+      props: defaultPropsWithAttentionRequiredUsers,
+    }, // For Admins and user having rbac allowed only
+    {
+      filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST,
+      itemSelected: "Account Recovery Requests",
+      props: propsWithAttentionRequiredUsersNotAdminWithRbacAllowed,
+    }, // For Admins and user having rbac allowed only
+  ]).describe("As LU I should be able to identify the filters", (scenario) => {
+    it(`for: ${scenario.filter}`, async () => {
       expect.assertions(3);
       const props = scenario.props({
         userWorkspaceContext: {
           filter: {
-            type: scenario.filter
-          }
-        }
+            type: scenario.filter,
+          },
+        },
       }); // The props
       const page = new DisplayUsersWorkspaceFilterBarPage(props);
       await waitForTrue(() => page.exists());
@@ -180,24 +215,24 @@ describe("As a signed-in users I can see filters", () => {
     });
   });
 
-  each([
-    {filter: UserWorkspaceFilterTypes.NONE},
-    {filter: UserWorkspaceFilterTypes.ALL},
-  ]).describe("I should not see the filters button", scenario => {
-    it(`for: ${scenario.filter}`, async() => {
-      expect.assertions(2);
-      const props = defaultProps({
-        resourceWorkspaceContext: {
-          filter: {
-            type: scenario.filter
-          }
-        }
-      }); // The props
-      const page = new DisplayUsersWorkspaceFilterBarPage(props);
-      await waitForTrue(() => page.exists());
+  each([{ filter: UserWorkspaceFilterTypes.NONE }, { filter: UserWorkspaceFilterTypes.ALL }]).describe(
+    "I should not see the filters button",
+    (scenario) => {
+      it(`for: ${scenario.filter}`, async () => {
+        expect.assertions(2);
+        const props = defaultProps({
+          resourceWorkspaceContext: {
+            filter: {
+              type: scenario.filter,
+            },
+          },
+        }); // The props
+        const page = new DisplayUsersWorkspaceFilterBarPage(props);
+        await waitForTrue(() => page.exists());
 
-      expect(page.dropdownFilterButton.textContent).toBe("All statuses");
-      expect(page.filterSelected).toBeUndefined();
-    });
-  });
+        expect(page.dropdownFilterButton.textContent).toBe("All statuses");
+        expect(page.filterSelected).toBeUndefined();
+      });
+    },
+  );
 });

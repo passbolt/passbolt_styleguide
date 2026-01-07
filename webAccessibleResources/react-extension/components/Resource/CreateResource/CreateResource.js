@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import React, {Component} from "react";
-import {withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import memoize from "memoize-one";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -25,27 +25,31 @@ import OrchestrateResourceForm from "../ResourceForm/OrchestrateResourceForm";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import AddResourceName from "../ResourceForm/AddResourceName";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
-import {DateTime} from "luxon";
-import {ResourceEditCreateFormEnumerationTypes} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
-import {withResourceTypesLocalStorage} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
-import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
-import ConfirmCreateEdit, {ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations} from "../ConfirmCreateEdit/ConfirmCreateEdit";
-import {withDialog} from "../../../contexts/DialogContext";
-import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import {withRouter} from "react-router-dom";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { DateTime } from "luxon";
+import { ResourceEditCreateFormEnumerationTypes } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
+import { withPasswordPolicies } from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { ENTROPY_THRESHOLDS } from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import ConfirmCreateEdit, {
+  ConfirmEditCreateOperationVariations,
+  ConfirmEditCreateRuleVariations,
+} from "../ConfirmCreateEdit/ConfirmCreateEdit";
+import { withDialog } from "../../../contexts/DialogContext";
+import { SecretGenerator } from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import { withRouter } from "react-router-dom";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {
-  RESOURCE_TYPE_PASSWORD_STRING_SLUG
-} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import { RESOURCE_TYPE_PASSWORD_STRING_SLUG } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class CreateResource extends Component {
   constructor(props) {
     super(props);
-    this.resourceFormEntity = new ResourceFormEntity({resource_type_id: this.props.resourceType.id, folder_parent_id: props.folderParentId}, {validate: false, resourceTypes: this.props.resourceTypes});
+    this.resourceFormEntity = new ResourceFormEntity(
+      { resource_type_id: this.props.resourceType.id, folder_parent_id: props.folderParentId },
+      { validate: false, resourceTypes: this.props.resourceTypes },
+    );
     this.state = this.defaultState;
     this.passwordEntropyError = false;
     this.bindCallbacks();
@@ -109,7 +113,7 @@ class CreateResource extends Component {
       this.pownedService = new PownedService(this.props.context.port);
     }
 
-    this.setState({isPasswordDictionaryCheckRequested});
+    this.setState({ isPasswordDictionaryCheckRequested });
   }
 
   /**
@@ -119,10 +123,13 @@ class CreateResource extends Component {
    *   A clone need to be created before validation to use marshall function from TotpEntity that modify the content but the form should not be modified for the user
    * @return {EntityValidationError}
    */
-  validateForm = memoize(resourceFormDto => {
-    const resourceFormEntity = new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes});
-    resourceFormEntity.removeEmptySecret({validate: false});
-    resourceFormEntity.addRequiredSecret({validate: false});
+  validateForm = memoize((resourceFormDto) => {
+    const resourceFormEntity = new ResourceFormEntity(resourceFormDto, {
+      validate: false,
+      resourceTypes: this.props.resourceTypes,
+    });
+    resourceFormEntity.removeEmptySecret({ validate: false });
+    resourceFormEntity.addRequiredSecret({ validate: false });
     return resourceFormEntity.validate();
   });
 
@@ -133,7 +140,7 @@ class CreateResource extends Component {
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  verifyDataHealth = memoize(resourceFormDto => this.resourceFormEntity?.verifyHealth());
+  verifyDataHealth = memoize((resourceFormDto) => this.resourceFormEntity?.verifyHealth());
 
   /**
    * Selected the resource form by resource type
@@ -159,7 +166,7 @@ class CreateResource extends Component {
   selectResourceFormByFirstError(errors) {
     if (errors.hasError("secret")) {
       if (errors.details.secret.hasError("totp")) {
-        this.setState({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP});
+        this.setState({ resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP });
       }
     }
   }
@@ -183,15 +190,13 @@ class CreateResource extends Component {
       value = target.value;
     }
 
-    this.resourceFormEntity.set(name, value, {validate: false});
+    this.resourceFormEntity.set(name, value, { validate: false });
 
-    const newState = {resource: this.resourceFormEntity.toDto()};
+    const newState = { resource: this.resourceFormEntity.toDto() };
 
     if (name === "secret.password") {
       newState.passwordInDictionary = false;
-      newState.passwordEntropy = value?.length
-        ? SecretGenerator.entropy(value)
-        : null;
+      newState.passwordEntropy = value?.length ? SecretGenerator.entropy(value) : null;
     }
 
     this.setState(newState);
@@ -207,7 +212,7 @@ class CreateResource extends Component {
       return;
     }
 
-    this.setState({hasAlreadyBeenValidated: true});
+    this.setState({ hasAlreadyBeenValidated: true });
     await this.toggleProcessing();
 
     try {
@@ -254,8 +259,7 @@ class CreateResource extends Component {
       return true;
     }
 
-    return this.state.passwordEntropy
-      && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
+    return this.state.passwordEntropy && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
   }
 
   /**
@@ -280,10 +284,10 @@ class CreateResource extends Component {
       return false;
     }
 
-    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(password);
+    const { isPwnedServiceAvailable, inDictionary } = await this.pownedService.evaluateSecret(password);
 
     if (!isPwnedServiceAvailable) {
-      this.setState({isPasswordDictionaryCheckServiceAvailable: false});
+      this.setState({ isPasswordDictionaryCheckServiceAvailable: false });
       return false;
     }
 
@@ -300,7 +304,7 @@ class CreateResource extends Component {
       rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
       resourceName: this.state.resource?.metadata?.name,
       onConfirm: () => this.acceptCreationConfirmation(resourceFormEntity),
-      onReject: this.rejectCreationConfirmation
+      onReject: this.rejectCreationConfirmation,
     };
     this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
   }
@@ -319,7 +323,7 @@ class CreateResource extends Component {
       rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
       resourceName: this.state.resource?.metadata?.name,
       onConfirm: () => this.acceptCreationConfirmation(resourceFormEntity),
-      onReject: this.rejectCreationConfirmation
+      onReject: this.rejectCreationConfirmation,
     };
     this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
   }
@@ -372,25 +376,28 @@ class CreateResource extends Component {
    * @returns {ResourceFormEntity}
    */
   createAndSanitizeResourceFormEntity() {
-    const resourceFormEntity = new ResourceFormEntity(this.state.resource, {validate: false, resourceTypes: this.props.resourceTypes});
+    const resourceFormEntity = new ResourceFormEntity(this.state.resource, {
+      validate: false,
+      resourceTypes: this.props.resourceTypes,
+    });
     const expiryDate = this.getResourceExpirationDate();
-    if (typeof(expiryDate) !== "undefined") {
-      resourceFormEntity.set("expired", expiryDate, {validate: false});
+    if (typeof expiryDate !== "undefined") {
+      resourceFormEntity.set("expired", expiryDate, { validate: false });
     }
     if (resourceFormEntity.metadata.name.length === 0) {
-      resourceFormEntity.set("metadata.name", "no name", {validate: false});
+      resourceFormEntity.set("metadata.name", "no name", { validate: false });
     }
-    resourceFormEntity.removeEmptySecret({validate: false});
-    resourceFormEntity.addRequiredSecret({validate: false});
+    resourceFormEntity.removeEmptySecret({ validate: false });
+    resourceFormEntity.addRequiredSecret({ validate: false });
     resourceFormEntity.removeUnusedNonEmptyMetadata();
 
     const resourceType = this.props.resourceTypes.getFirstById(resourceFormEntity.resourceTypeId);
-    const shouldResetUsername = !resourceFormEntity.metadata.username
-      || resourceFormEntity.metadata.username.length === 0;
+    const shouldResetUsername =
+      !resourceFormEntity.metadata.username || resourceFormEntity.metadata.username.length === 0;
 
     if (shouldResetUsername) {
       const usernameResetValue = resourceType.isStandaloneTotp() ? null : "";
-      resourceFormEntity.set("metadata.username", usernameResetValue, {validate: false});
+      resourceFormEntity.set("metadata.username", usernameResetValue, { validate: false });
     }
 
     return resourceFormEntity;
@@ -446,7 +453,7 @@ class CreateResource extends Component {
       return;
     }
     console.error(error);
-    this.props.dialogContext.open(NotifyError, {error});
+    this.props.dialogContext.open(NotifyError, { error });
   }
 
   /**
@@ -455,8 +462,8 @@ class CreateResource extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.isProcessing;
-    return new Promise(resolve => {
-      this.setState({isProcessing: !prev}, () => resolve());
+    return new Promise((resolve) => {
+      this.setState({ isProcessing: !prev }, () => resolve());
     });
   }
 
@@ -473,7 +480,7 @@ class CreateResource extends Component {
    * @param resourceFormSelected
    */
   onSelectForm(event, resourceFormSelected) {
-    this.setState({resourceFormSelected});
+    this.setState({ resourceFormSelected });
   }
 
   /**
@@ -481,9 +488,9 @@ class CreateResource extends Component {
    * @param {string} secret The secret to add
    */
   onAddSecret(secret) {
-    this.resourceFormEntity.addSecret(secret, {validate: false});
+    this.resourceFormEntity.addSecret(secret, { validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
-    this.setState({resource: this.resourceFormEntity.toDto(), resourceFormSelected: secret, resourceType});
+    this.setState({ resource: this.resourceFormEntity.toDto(), resourceFormSelected: secret, resourceType });
   }
 
   /**
@@ -491,12 +498,16 @@ class CreateResource extends Component {
    * @param {string} secret The secret to delete
    */
   onDeleteSecret(secret) {
-    this.resourceFormEntity.deleteSecret(secret, {validate: false});
+    this.resourceFormEntity.deleteSecret(secret, { validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
     if (this.state.resourceFormSelected === secret) {
-      this.setState({resource: this.resourceFormEntity.toDto(), resourceFormSelected: this.selectResourceFormByResourceSecretData(), resourceType});
+      this.setState({
+        resource: this.resourceFormEntity.toDto(),
+        resourceFormSelected: this.selectResourceFormByResourceSecretData(),
+        resourceType,
+      });
     } else {
-      this.setState({resource: this.resourceFormEntity.toDto(), resourceType});
+      this.setState({ resource: this.resourceFormEntity.toDto(), resourceType });
     }
   }
 
@@ -504,12 +515,12 @@ class CreateResource extends Component {
    * Handle convert note to metadata description
    */
   handleConvertToDescription() {
-    this.resourceFormEntity.convertToMetadataDescription({validate: false});
+    this.resourceFormEntity.convertToMetadataDescription({ validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
     this.setState({
       resource: this.resourceFormEntity.toDto(),
       resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION,
-      resourceType
+      resourceType,
     });
   }
 
@@ -517,12 +528,12 @@ class CreateResource extends Component {
    * Handle convert description to secret note
    */
   handleConvertToNote() {
-    this.resourceFormEntity.convertToNote({validate: false});
+    this.resourceFormEntity.convertToNote({ validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
     this.setState({
       resource: this.resourceFormEntity.toDto(),
       resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE,
-      resourceType
+      resourceType,
     });
   }
 
@@ -539,7 +550,7 @@ class CreateResource extends Component {
     }
 
     const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
-    if (!(passwordExpirySettings?.automatic_update)) {
+    if (!passwordExpirySettings?.automatic_update) {
       return undefined;
     }
 
@@ -547,7 +558,7 @@ class CreateResource extends Component {
       return null;
     }
 
-    return DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period}).toISO();
+    return DateTime.utc().plus({ days: passwordExpirySettings.default_expiry_period }).toISO();
   }
 
   /**
@@ -568,8 +579,12 @@ class CreateResource extends Component {
     const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.resource) : null;
 
     return (
-      <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
-        disabled={this.state.isProcessing} onClose={this.handleClose}>
+      <DialogWrapper
+        title={this.translate("Create a resource")}
+        className="create-resource"
+        disabled={this.state.isProcessing}
+        onClose={this.handleClose}
+      >
         <SelectResourceForm
           resourceType={this.state.resourceType}
           resourceFormSelected={this.state.resourceFormSelected}
@@ -604,12 +619,17 @@ class CreateResource extends Component {
                 warnings={warnings}
                 errors={errors}
                 consumePasswordEntropyError={this.consumePasswordEntropyError}
-                disabled={this.state.isProcessing}/>
+                disabled={this.state.isProcessing}
+              />
             </div>
           </div>
           <div className="submit-wrapper">
-            <FormCancelButton disabled={this.state.isProcessing} onClick={this.handleClose}/>
-            <FormSubmitButton value={this.translate("Create")} disabled={this.state.isProcessing} processing={this.state.isProcessing}/>
+            <FormCancelButton disabled={this.state.isProcessing} onClick={this.handleClose} />
+            <FormSubmitButton
+              value={this.translate("Create")}
+              disabled={this.state.isProcessing}
+              processing={this.state.isProcessing}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -631,5 +651,12 @@ CreateResource.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withRouter(withAppContext(withPasswordPolicies(withPasswordExpiry(withResourceTypesLocalStorage(withActionFeedback(withDialog(withTranslation('common')(CreateResource))))))));
-
+export default withRouter(
+  withAppContext(
+    withPasswordPolicies(
+      withPasswordExpiry(
+        withResourceTypesLocalStorage(withActionFeedback(withDialog(withTranslation("common")(CreateResource)))),
+      ),
+    ),
+  ),
+);

@@ -12,7 +12,7 @@
  * @since         5.5.0
  */
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ManageAccountRecoveryAdministrationSettingsTeasing from "./ManageAccountRecoveryAdministrationSettingsTeasing";
@@ -30,10 +30,10 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <ManageAccountRecoveryAdministrationSettingsTeasing {...props}/>
+          <ManageAccountRecoveryAdministrationSettingsTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -42,7 +42,7 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get accountRecovery() {
-    return this._page.container.querySelector('.recover-account-settings-teasing');
+    return this._page.container.querySelector(".recover-account-settings-teasing");
   }
 
   /**
@@ -50,7 +50,7 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this._page.container.querySelector('#recover-account-settings-title').textContent;
+    return this._page.container.querySelector("#recover-account-settings-title").textContent;
   }
 
   /**
@@ -58,7 +58,7 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get accountRecoveryPolicyFirstLine() {
-    return this._page.container.querySelector('.recover-account-settings-teasing .main-content > p').textContent;
+    return this._page.container.querySelector(".recover-account-settings-teasing .main-content > p").textContent;
   }
 
   /**
@@ -66,7 +66,7 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help-section');
+    return this._page.container.querySelector(".sidebar-help-section");
   }
 
   /**
@@ -74,7 +74,7 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBoxTitle() {
-    return this.helpBox.querySelector('h3').textContent;
+    return this.helpBox.querySelector("h3").textContent;
   }
 
   /**
@@ -82,7 +82,7 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBoxDescription() {
-    return this.helpBox.querySelector('p').textContent;
+    return this.helpBox.querySelector("p").textContent;
   }
 
   /**
@@ -90,7 +90,7 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('.button');
+    return this.helpBox.querySelector(".button");
   }
 
   /**
@@ -129,7 +129,7 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

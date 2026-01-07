@@ -27,16 +27,14 @@ export default class RowsSettingEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "height",
-      ],
-      "properties": {
-        "height": {
-          "type": "string",
-          "enum": [ROW_SETTING_HEIGHT_COMPACT, ROW_SETTING_HEIGHT_COMFORTABLE]
+      type: "object",
+      required: ["height"],
+      properties: {
+        height: {
+          type: "string",
+          enum: [ROW_SETTING_HEIGHT_COMPACT, ROW_SETTING_HEIGHT_COMFORTABLE],
         },
-      }
+      },
     };
   }
 
@@ -61,7 +59,7 @@ export default class RowsSettingEntity extends EntityV2 {
       height: ROW_SETTING_HEIGHT_COMPACT,
     };
 
-    return new RowsSettingEntity({...defaultData, ...data});
+    return new RowsSettingEntity({ ...defaultData, ...data });
   }
 
   /*

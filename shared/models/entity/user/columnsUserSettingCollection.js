@@ -26,14 +26,14 @@ class ColumnsUserSettingCollection extends ColumnsSettingCollection {
    */
   static get DEFAULT() {
     return new ColumnsSettingCollection([
-      {id: "name", label: "Name", position: 1, show: true},
-      {id: "username", label: "Username", position: 2, show: true},
-      {id: "role", label: "Role", position: 3, show: true},
-      {id: "suspended", label: "Suspended", position: 4, show: true},
-      {id: "modified", label: "Modified", position: 5, show: true},
-      {id: "last_logged_in", label: "Last logged in", position: 6, show: true},
-      {id: "mfa", label: "MFA", position: 6, show: true},
-      {id: "account_recovery", label: "Account Recovery", position: 8, show: true}
+      { id: "name", label: "Name", position: 1, show: true },
+      { id: "username", label: "Username", position: 2, show: true },
+      { id: "role", label: "Role", position: 3, show: true },
+      { id: "suspended", label: "Suspended", position: 4, show: true },
+      { id: "modified", label: "Modified", position: 5, show: true },
+      { id: "last_logged_in", label: "Last logged in", position: 6, show: true },
+      { id: "mfa", label: "MFA", position: 6, show: true },
+      { id: "account_recovery", label: "Account Recovery", position: 8, show: true },
     ]);
   }
 }

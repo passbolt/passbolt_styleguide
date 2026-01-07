@@ -1,4 +1,4 @@
-import {ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET} from "../resource/metadata/IconEntity";
+import { ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET } from "../resource/metadata/IconEntity";
 
 /**
  * Passbolt ~ Open source password manager for teams
@@ -42,19 +42,19 @@ export const RESOURCE_TYPE_PASSWORD_STRING_LEGACY_DEFINITION_SCHEMA = {
       description: {
         maxLength: 10000,
         nullable: true,
-        type: "string"
+        type: "string",
       },
       uri: {
         type: "string",
         maxLength: 1024,
-        nullable: true
-      }
-    }
+        nullable: true,
+      },
+    },
   },
   secret: {
     type: "string",
-    maxLength: 4096
-  }
+    maxLength: 4096,
+  },
 };
 
 //Plaintext secret schema for slug: "password-and-description"
@@ -65,17 +65,17 @@ const RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_DEFINITION_SCHEMA = {
     properties: {
       name: {
         type: "string",
-        maxLength: 255
+        maxLength: 255,
       },
       username: {
         type: "string",
         maxLength: 255,
-        nullable: true
+        nullable: true,
       },
       uri: {
         type: "string",
         maxLength: 1024,
-        nullable: true
+        nullable: true,
       },
     },
   },
@@ -85,7 +85,7 @@ const RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_DEFINITION_SCHEMA = {
     properties: {
       password: {
         type: "string",
-        maxLength: 4096
+        maxLength: 4096,
       },
       description: {
         type: "string",
@@ -93,7 +93,7 @@ const RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_DEFINITION_SCHEMA = {
         nullable: true,
       },
     },
-  }
+  },
 };
 
 //Plaintext secret schema for slug: "totp"
@@ -104,14 +104,14 @@ const RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA = {
     properties: {
       name: {
         type: "string",
-        maxLength: 255
+        maxLength: 255,
       },
       uri: {
         type: "string",
         maxLength: 1024,
-        nullable: true
-      }
-    }
+        nullable: true,
+      },
+    },
   },
   secret: {
     type: "object",
@@ -128,20 +128,20 @@ const RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA = {
           },
           secret_key: {
             type: "string",
-            maxLength: 1024
+            maxLength: 1024,
           },
           digits: {
             type: "number",
             minimum: 6,
-            maximum: 8
+            maximum: 8,
           },
           period: {
-            type: "number"
-          }
-        }
-      }
-    }
-  }
+            type: "number",
+          },
+        },
+      },
+    },
+  },
 };
 
 //Plaintext secret schema for slug: "password-description-totp"
@@ -152,17 +152,17 @@ const RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_DEFINITION_SCHEMA = {
     properties: {
       name: {
         type: "string",
-        maxLength: 255
+        maxLength: 255,
       },
       username: {
         type: "string",
         maxLength: 255,
-        nullable: true
+        nullable: true,
       },
       uri: {
         type: "string",
         maxLength: 1024,
-        nullable: true
+        nullable: true,
       },
     },
   },
@@ -172,7 +172,7 @@ const RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_DEFINITION_SCHEMA = {
     properties: {
       password: {
         type: "string",
-        maxLength: 4096
+        maxLength: 4096,
       },
       description: {
         type: "string",
@@ -181,7 +181,7 @@ const RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_DEFINITION_SCHEMA = {
       },
       totp: RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA.secret.properties.totp,
     },
-  }
+  },
 };
 
 //Plaintext secret schema for slug: "v5-custom-fields"
@@ -192,21 +192,21 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
     properties: {
       name: {
         type: "string",
-        maxLength: 255
+        maxLength: 255,
       },
       username: {
         type: "string",
         maxLength: 255,
-        nullable: true
+        nullable: true,
       },
       uris: {
         type: "array",
         items: {
           type: "string",
           maxLength: 1024,
-          nullable: true
+          nullable: true,
         },
-        maxItems: 32
+        maxItems: 32,
       },
       description: {
         type: "string",
@@ -224,13 +224,13 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
           value: {
             type: "number",
             minimum: 0,
-            nullable: true
+            nullable: true,
           },
           background_color: {
             type: "string",
             nullable: true,
           },
-        }
+        },
       },
       custom_fields: {
         type: "array",
@@ -241,37 +241,33 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
           properties: {
             id: {
               type: "string",
-              format: "uuid"
+              format: "uuid",
             },
             type: {
               type: "string",
-              enum: ["text", "password", "boolean", "number", "uri"]
+              enum: ["text", "password", "boolean", "number", "uri"],
             },
             metadata_key: {
               type: "string",
               maxLength: 255,
-              nullable: true
+              nullable: true,
             },
             metadata_value: {
-              anyOf: [
-                {type: "string", maxLength: 20000},
-                {type: "number"},
-                {type: "boolean"}
-              ],
-              nullable: true
+              anyOf: [{ type: "string", maxLength: 20000 }, { type: "number" }, { type: "boolean" }],
+              nullable: true,
             },
-          }
-        }
-      }
+          },
+        },
+      },
     },
   },
   secret: {
     type: "object",
-    required: ["custom_fields",  "object_type"],
+    required: ["custom_fields", "object_type"],
     properties: {
       object_type: {
         type: "string",
-        enum: ['PASSBOLT_SECRET_DATA'],
+        enum: ["PASSBOLT_SECRET_DATA"],
       },
       custom_fields: {
         type: "array",
@@ -282,30 +278,26 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
           properties: {
             id: {
               type: "string",
-              format: "uuid"
+              format: "uuid",
             },
             type: {
               type: "string",
-              enum: ["text", "password", "boolean", "number", "uri"]
+              enum: ["text", "password", "boolean", "number", "uri"],
             },
             secret_key: {
               type: "string",
               maxLength: 255,
-              nullable: true
+              nullable: true,
             },
             secret_value: {
-              anyOf: [
-                {type: "string", maxLength: 20000},
-                {type: "number"},
-                {type: "boolean"}
-              ],
-              nullable: true
-            }
-          }
-        }
-      }
+              anyOf: [{ type: "string", maxLength: 20000 }, { type: "number" }, { type: "boolean" }],
+              nullable: true,
+            },
+          },
+        },
+      },
     },
-  }
+  },
 };
 
 //Plaintext secret schema for slug: "v5-default"
@@ -316,21 +308,21 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
     properties: {
       name: {
         type: "string",
-        maxLength: 255
+        maxLength: 255,
       },
       username: {
         type: "string",
         maxLength: 255,
-        nullable: true
+        nullable: true,
       },
       uris: {
         type: "array",
         items: {
           type: "string",
           maxLength: 1024,
-          nullable: true
+          nullable: true,
         },
-        maxItems: 32
+        maxItems: 32,
       },
       description: {
         type: "string",
@@ -348,15 +340,15 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
           value: {
             type: "number",
             minimum: 0,
-            nullable: true
+            nullable: true,
           },
           background_color: {
             type: "string",
             nullable: true,
           },
-        }
+        },
       },
-      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.resource.properties.custom_fields
+      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.resource.properties.custom_fields,
     },
   },
   secret: {
@@ -365,21 +357,21 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
     properties: {
       object_type: {
         type: "string",
-        enum: ['PASSBOLT_SECRET_DATA'],
+        enum: ["PASSBOLT_SECRET_DATA"],
       },
       password: {
         type: "string",
         maxLength: 4096,
-        nullable: true
+        nullable: true,
       },
       description: {
         type: "string",
         maxLength: 50000,
         nullable: true,
       },
-      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.secret.properties.custom_fields
+      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.secret.properties.custom_fields,
     },
-  }
+  },
 };
 
 //Plaintext secret schema for slug: "v5-password-string"
@@ -390,21 +382,21 @@ const RESOURCE_TYPE_V5_PASSWORD_STRING_DEFINITION_SCHEMA = {
     properties: {
       name: {
         type: "string",
-        maxLength: 255
+        maxLength: 255,
       },
       username: {
         type: "string",
         maxLength: 255,
-        nullable: true
+        nullable: true,
       },
       uris: {
         type: "array",
         items: {
           type: "string",
           maxLength: 1024,
-          nullable: true
+          nullable: true,
         },
-        maxItems: 32
+        maxItems: 32,
       },
       description: {
         type: "string",
@@ -422,20 +414,20 @@ const RESOURCE_TYPE_V5_PASSWORD_STRING_DEFINITION_SCHEMA = {
           value: {
             type: "number",
             minimum: 0,
-            nullable: true
+            nullable: true,
           },
           background_color: {
             type: "string",
             nullable: true,
           },
-        }
+        },
       },
     },
   },
   secret: {
     type: "string",
-    maxLength: 4096
-  }
+    maxLength: 4096,
+  },
 };
 
 //Plaintext secret schema for slug: "v5-default-with-totp"
@@ -446,21 +438,21 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
     properties: {
       name: {
         type: "string",
-        maxLength: 255
+        maxLength: 255,
       },
       username: {
         type: "string",
         maxLength: 255,
-        nullable: true
+        nullable: true,
       },
       uris: {
         type: "array",
         items: {
           type: "string",
           maxLength: 1024,
-          nullable: true
+          nullable: true,
         },
-        maxItems: 32
+        maxItems: 32,
       },
       description: {
         type: "string",
@@ -478,15 +470,15 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
           value: {
             type: "number",
             minimum: 0,
-            nullable: true
+            nullable: true,
           },
           background_color: {
             type: "string",
             nullable: true,
           },
-        }
+        },
       },
-      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.resource.properties.custom_fields
+      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.resource.properties.custom_fields,
     },
   },
   secret: {
@@ -495,12 +487,12 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
     properties: {
       object_type: {
         type: "string",
-        enum: ['PASSBOLT_SECRET_DATA'],
+        enum: ["PASSBOLT_SECRET_DATA"],
       },
       password: {
         type: "string",
         maxLength: 4096,
-        nullable: true
+        nullable: true,
       },
       description: {
         type: "string",
@@ -508,9 +500,9 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
         nullable: true,
       },
       totp: RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA.secret.properties.totp,
-      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.secret.properties.custom_fields
+      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.secret.properties.custom_fields,
     },
-  }
+  },
 };
 
 //Plaintext secret schema for slug: "v5-totp-standalone"
@@ -521,16 +513,16 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
     properties: {
       name: {
         type: "string",
-        maxLength: 255
+        maxLength: 255,
       },
       uris: {
         type: "array",
         items: {
           type: "string",
           maxLength: 1024,
-          nullable: true
+          nullable: true,
         },
-        maxItems: 32
+        maxItems: 32,
       },
       description: {
         type: "string",
@@ -548,15 +540,15 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
           value: {
             type: "number",
             minimum: 0,
-            nullable: true
+            nullable: true,
           },
           background_color: {
             type: "string",
             nullable: true,
           },
-        }
+        },
       },
-    }
+    },
   },
   secret: {
     type: "object",
@@ -564,7 +556,7 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
     properties: {
       object_type: {
         type: "string",
-        enum: ['PASSBOLT_SECRET_DATA'],
+        enum: ["PASSBOLT_SECRET_DATA"],
       },
       totp: {
         type: "object",
@@ -577,19 +569,19 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
           },
           secret_key: {
             type: "string",
-            maxLength: 1024
+            maxLength: 1024,
           },
           digits: {
             type: "number",
             minimum: 6,
-            maximum: 8
+            maximum: 8,
           },
           period: {
-            type: "number"
-          }
-        }
-      }
-    }
+            type: "number",
+          },
+        },
+      },
+    },
   },
 };
 
@@ -601,16 +593,16 @@ const RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA = {
     properties: {
       name: {
         type: "string",
-        maxLength: 255
+        maxLength: 255,
       },
       uris: {
         type: "array",
         items: {
           type: "string",
           maxLength: 1024,
-          nullable: true
+          nullable: true,
         },
-        maxItems: 32
+        maxItems: 32,
       },
       description: {
         type: "string",
@@ -628,14 +620,14 @@ const RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA = {
           value: {
             type: "number",
             minimum: 0,
-            nullable: true
+            nullable: true,
           },
           background_color: {
             type: "string",
             nullable: true,
           },
-        }
-      }
+        },
+      },
     },
   },
   secret: {
@@ -644,14 +636,14 @@ const RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA = {
     properties: {
       object_type: {
         type: "string",
-        enum: ['PASSBOLT_SECRET_DATA'],
+        enum: ["PASSBOLT_SECRET_DATA"],
       },
       description: {
         type: "string",
         maxLength: 50000,
       },
     },
-  }
+  },
 };
 
 export const V4_TO_V5_RESOURCE_TYPE_MAPPING = {
@@ -673,7 +665,7 @@ class ResourceTypeSchemasDefinition {
       [RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG]: RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_TOTP_SLUG]: RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG]: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA,
-      [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA
+      [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA,
     };
   }
 }

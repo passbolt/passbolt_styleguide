@@ -13,100 +13,59 @@
  */
 import * as React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {withRouter} from "react-router-dom";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { withRouter } from "react-router-dom";
 
 /**
  * Context related to application navigation.
  */
 export const NavigationContext = React.createContext({
   // Administration
-  onGoToAdministrationRequested: () => {
-  }, // Whenever the users wants to navigate to the administration workspace
-  onGoToAdministrationSelfRegistrationRequested: () => {
-  }, // Whenever the users wants to navigate to the administration workspace self registration
-  onGoToAdministrationMfaRequested: () => {
-  }, // Whenever the users wants to navigate to the administration workspace mfa
-  onGoToAdministrationUsersDirectoryRequested: () => {
-  }, // Whenever the users wants to navigate to the administration workspace users directory
-  onGoToAdministrationEmailNotificationsRequested: () => {
-  }, // Whenever the users wants to navigate to the administration workspace email notifications
-  onGoToAdministrationSubscriptionRequested: () => {
-  }, // Whenever the users wants to navigate to the administration workspace subscription
-  onGoToAdministrationInternationalizationRequested: () => {
-  }, // Whenever the users wants to navigate to the administration workspace internationalization
-  onGoToAdministrationAccountRecoveryRequested: () => {
-  }, // Whenever the users wants to navigate to the administration workspace account recovery
-  onGoToAdministrationSmtpSettingsRequested: () => {
-  }, // Whenever the users wants to navigate to the administration workspace SMTP settings
-  onGoToAdministrationSsoRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace sso
-  onGoToAdministrationPasswordPoliciesRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace password policies settings
-  onGoToAdministrationSecretHistoryRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace secret history settings
-  onGoToAdministrationUserPassphrasePoliciesRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace user passphrase policies
-  onGoToAdministrationPasswordExpirySettingsRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace password expiry settings
-  onGoToAdministrationHealthcheckRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace healthcheck section.
+  onGoToAdministrationRequested: () => {}, // Whenever the users wants to navigate to the administration workspace
+  onGoToAdministrationSelfRegistrationRequested: () => {}, // Whenever the users wants to navigate to the administration workspace self registration
+  onGoToAdministrationMfaRequested: () => {}, // Whenever the users wants to navigate to the administration workspace mfa
+  onGoToAdministrationUsersDirectoryRequested: () => {}, // Whenever the users wants to navigate to the administration workspace users directory
+  onGoToAdministrationEmailNotificationsRequested: () => {}, // Whenever the users wants to navigate to the administration workspace email notifications
+  onGoToAdministrationSubscriptionRequested: () => {}, // Whenever the users wants to navigate to the administration workspace subscription
+  onGoToAdministrationInternationalizationRequested: () => {}, // Whenever the users wants to navigate to the administration workspace internationalization
+  onGoToAdministrationAccountRecoveryRequested: () => {}, // Whenever the users wants to navigate to the administration workspace account recovery
+  onGoToAdministrationSmtpSettingsRequested: () => {}, // Whenever the users wants to navigate to the administration workspace SMTP settings
+  onGoToAdministrationSsoRequested: () => {}, // Whenever the user wants to navigate to the administration workspace sso
+  onGoToAdministrationPasswordPoliciesRequested: () => {}, // Whenever the user wants to navigate to the administration workspace password policies settings
+  onGoToAdministrationSecretHistoryRequested: () => {}, // Whenever the user wants to navigate to the administration workspace secret history settings
+  onGoToAdministrationUserPassphrasePoliciesRequested: () => {}, // Whenever the user wants to navigate to the administration workspace user passphrase policies
+  onGoToAdministrationPasswordExpirySettingsRequested: () => {}, // Whenever the user wants to navigate to the administration workspace password expiry settings
+  onGoToAdministrationHealthcheckRequested: () => {}, // Whenever the user wants to navigate to the administration workspace healthcheck section.
   // Passwords
-  onGoToPasswordsRequested: () => {
-  }, // Whenever the user wants to navigate to the passwords workspace
+  onGoToPasswordsRequested: () => {}, // Whenever the user wants to navigate to the passwords workspace
   // Users
-  onGoToUsersRequested: () => {
-  }, // Whenever the user wants to navigate to the users workspace
+  onGoToUsersRequested: () => {}, // Whenever the user wants to navigate to the users workspace
   // Help
-  onGoToHelpRequested: () => {
-  }, // Whenever the user wants to navigate to the help passbolt documentation
+  onGoToHelpRequested: () => {}, // Whenever the user wants to navigate to the help passbolt documentation
   // User settings
-  onGoToUserSettingsProfileRequested: () => {
-  }, // Whenever the user wants to navigate to the users settings workspace profile section.
-  onGoToUserSettingsPassphraseRequested: () => {
-  }, // Whenever the user wants to navigate to the users settings workspace passphrase section.
-  onGoToUserSettingsSecurityTokenRequested: () => {
-  }, // Whenever the user wants to navigate to the users settings workspace security token section.
-  onGoToUserSettingsThemeRequested: () => {
-  }, // Whenever the user wants to navigate to the users settings workspace theme section.
-  onGoToUserSettingsMfaRequested: () => {
-  }, // Whenever the user wants to navigate to the users settings workspace mfa section.
-  onGoToUserSettingsKeysRequested: () => {
-  }, // Whenever the user wants to navigate to the users settings workspace keys section.
-  onGoToUserSettingsMobileRequested: () => {
-  }, // Whenever the user wants to navigate to the users settings workspace mobile section.
-  onGoToUserSettingsDesktopRequested: () => {
-  }, // Whenever the user wants to navigate to the users settings workspace desktop section.
-  onGoToUserSettingsAccountRecoveryRequested: () => {
-  }, // Whenever the user wants to navigate to the users settings workspace mobile section.
-  onGoToNewTab: () => {
-  }, // Whenever the user want to navigate to a new url.
-  onGoToAdministrationRbacsRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace rbacs section.
-  onGoToAdministrationMigrateMetadataRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace migrate metadata section.
-  onGoToAdministrationAllowContentTypesRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace allow content types section.
-  onGoToAdministrationMetadataGettingStartedRequested: () => {
-  }, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
-  onGoToAdministrationSubscriptionRequestedTeasing: () => {
-  }, // Whenever the CE Admin wants to navigate to the administration workspace Subscription.
-  onGoToAdministrationPasswordPoliciesRequestedTeasing: () => {
-  }, // Whenever the CE Admin wants to navigate to the administration workspace Password policies.
-  onGoToAdministrationUserPassphrasePoliciesRequestedTeasing: () => {
-  }, // Whenever the CE Admin wants to navigate to the administration workspace Passphrase policies.
-  onGoToAdministrationAccountRecoveryRequestedTeasing: () => {
-  }, // Whenever the CE Admin wants to navigate to the administration workspace Account Recovery.
-  onGoToAdministrationSsoRequestedTeasing: () => {
-  }, // Whenever the CE Admin wants to navigate to the administration workspace SSO.
-  onGoToAdministrationMfaPolicyRequestedTeasing: () => {
-  }, // Whenever the CE Admin wants to navigate to the administration workspace MFA Policy.
-  onGoToAdministrationUsersDirectoryRequestedTeasing: () => {
-  }, // Whenever the CE Admin wants to navigate to the administration workspace Users Directory.
-  onGoToAdministrationScimRequestedTeasing: () => {
-  }, // Whenever the CE Admin wants to navigate to the administration workspace SCIM.
-  onGoToAdministrationScimRequested: () => {
-  }, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
+  onGoToUserSettingsProfileRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace profile section.
+  onGoToUserSettingsPassphraseRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace passphrase section.
+  onGoToUserSettingsSecurityTokenRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace security token section.
+  onGoToUserSettingsThemeRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace theme section.
+  onGoToUserSettingsMfaRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mfa section.
+  onGoToUserSettingsKeysRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace keys section.
+  onGoToUserSettingsMobileRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mobile section.
+  onGoToUserSettingsDesktopRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace desktop section.
+  onGoToUserSettingsAccountRecoveryRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mobile section.
+  onGoToNewTab: () => {}, // Whenever the user want to navigate to a new url.
+  onGoToAdministrationRbacsRequested: () => {}, // Whenever the user wants to navigate to the administration workspace rbacs section.
+  onGoToAdministrationMigrateMetadataRequested: () => {}, // Whenever the user wants to navigate to the administration workspace migrate metadata section.
+  onGoToAdministrationAllowContentTypesRequested: () => {}, // Whenever the user wants to navigate to the administration workspace allow content types section.
+  onGoToAdministrationMetadataGettingStartedRequested: () => {}, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
+  onGoToAdministrationSubscriptionRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace Subscription.
+  onGoToAdministrationPasswordPoliciesRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace Password policies.
+  onGoToAdministrationUserPassphrasePoliciesRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace Passphrase policies.
+  onGoToAdministrationAccountRecoveryRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace Account Recovery.
+  onGoToAdministrationSsoRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace SSO.
+  onGoToAdministrationMfaPolicyRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace MFA Policy.
+  onGoToAdministrationUsersDirectoryRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace Users Directory.
+  onGoToAdministrationScimRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace SCIM.
+  onGoToAdministrationScimRequested: () => {}, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
 });
 
 /**
@@ -135,7 +94,8 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationUsersDirectoryRequested: this.onGoToAdministrationUsersDirectoryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace users directory
       onGoToAdministrationEmailNotificationsRequested: this.onGoToAdministrationEmailNotificationsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace email notifications
       onGoToAdministrationSubscriptionRequested: this.onGoToAdministrationSubscriptionRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
-      onGoToAdministrationInternationalizationRequested: this.onGoToAdministrationInternationalizationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
+      onGoToAdministrationInternationalizationRequested:
+        this.onGoToAdministrationInternationalizationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       onGoToAdministrationAccountRecoveryRequested: this.onGoToAdministrationAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace account recovery
       onGoToAdministrationSmtpSettingsRequested: this.onGoToAdministrationSmtpSettingsRequested.bind(this), // Whenever the users wants to navigate to the administration workspace SMTP settings
       onGoToAdministrationSelfRegistrationRequested: this.onGoToAdministrationSelfRegistrationRequested.bind(this), //Whenever the users wants to navigate to the administration workspace self registration settings
@@ -143,11 +103,15 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationMfaPolicyRequested: this.onGoToAdministrationMfaPolicyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       onGoToAdministrationPasswordPoliciesRequested: this.onGoToAdministrationPasswordPoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password policies
       onGoToAdministrationSecretHistoryRequested: this.onGoToAdministrationSecretHistoryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace secret history
-      onGoToAdministrationUserPassphrasePoliciesRequested: this.onGoToAdministrationUserPassphrasePoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace user passphrase policies
-      onGoToAdministrationPasswordExpirySettingsRequested: this.onGoToAdministrationPasswordExpirySettingsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password expiry settings
+      onGoToAdministrationUserPassphrasePoliciesRequested:
+        this.onGoToAdministrationUserPassphrasePoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace user passphrase policies
+      onGoToAdministrationPasswordExpirySettingsRequested:
+        this.onGoToAdministrationPasswordExpirySettingsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password expiry settings
       onGoToAdministrationHealthcheckRequested: this.onGoToAdministrationHealthcheckRequested.bind(this),
-      onGoToAdministrationContentTypesEncryptedMetadataRequested: this.onGoToAdministrationContentTypesEncryptedMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types encrypted metadata settings.
-      onGoToAdministrationContentTypesMetadataKeyRequested: this.onGoToAdministrationContentTypesMetadataKeyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata key settings.
+      onGoToAdministrationContentTypesEncryptedMetadataRequested:
+        this.onGoToAdministrationContentTypesEncryptedMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types encrypted metadata settings.
+      onGoToAdministrationContentTypesMetadataKeyRequested:
+        this.onGoToAdministrationContentTypesMetadataKeyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata key settings.
       onGoToAdministrationMigrateMetadataRequested: this.onGoToAdministrationMigrateMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata key settings.
       onGoToAdministrationAllowContentTypesRequested: this.onGoToAdministrationAllowContentTypesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace allow content types.
       // Passwords
@@ -167,14 +131,20 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsDesktopRequested: this.onGoToUserSettingsDesktopRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
       onGoToAdministrationRbacsRequested: this.onGoToAdministrationRbacsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace rbacs section.
-      onGoToAdministrationMetadataGettingStartedRequested: this.onGoToAdministrationMetadataGettingStartedRequested.bind(this), // Whenever the user wants to navigate to the administration meadata getting started workspace section.
-      onGoToAdministrationSubscriptionRequestedTeasing: this.onGoToAdministrationSubscriptionRequestedTeasing.bind(this),
-      onGoToAdministrationPasswordPoliciesRequestedTeasing: this.onGoToAdministrationPasswordPoliciesRequestedTeasing.bind(this),
-      onGoToAdministrationUserPassphrasePoliciesRequestedTeasing: this.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing.bind(this),
-      onGoToAdministrationAccountRecoveryRequestedTeasing: this.onGoToAdministrationAccountRecoveryRequestedTeasing.bind(this),
+      onGoToAdministrationMetadataGettingStartedRequested:
+        this.onGoToAdministrationMetadataGettingStartedRequested.bind(this), // Whenever the user wants to navigate to the administration meadata getting started workspace section.
+      onGoToAdministrationSubscriptionRequestedTeasing:
+        this.onGoToAdministrationSubscriptionRequestedTeasing.bind(this),
+      onGoToAdministrationPasswordPoliciesRequestedTeasing:
+        this.onGoToAdministrationPasswordPoliciesRequestedTeasing.bind(this),
+      onGoToAdministrationUserPassphrasePoliciesRequestedTeasing:
+        this.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing.bind(this),
+      onGoToAdministrationAccountRecoveryRequestedTeasing:
+        this.onGoToAdministrationAccountRecoveryRequestedTeasing.bind(this),
       onGoToAdministrationSsoRequestedTeasing: this.onGoToAdministrationSsoRequestedTeasing.bind(this),
       onGoToAdministrationMfaPolicyRequestedTeasing: this.onGoToAdministrationMfaPolicyRequestedTeasing.bind(this),
-      onGoToAdministrationUsersDirectoryRequestedTeasing: this.onGoToAdministrationUsersDirectoryRequestedTeasing.bind(this),
+      onGoToAdministrationUsersDirectoryRequestedTeasing:
+        this.onGoToAdministrationUsersDirectoryRequestedTeasing.bind(this),
       onGoToAdministrationScimRequestedTeasing: this.onGoToAdministrationScimRequestedTeasing.bind(this),
       onGoToAdministrationScimRequested: this.onGoToAdministrationScimRequested.bind(this), // Whenever the user wants to navigate to the administration SCIM section.
     };
@@ -188,11 +158,13 @@ class NavigationContextProvider extends React.Component {
    */
   async goTo(appName, pathname) {
     if (appName === this.props.context.name) {
-      await this.props.history.push({pathname});
+      await this.props.history.push({ pathname });
     } else {
-      const trustedDomain = this.props.context.userSettings ? this.props.context.userSettings.getTrustedDomain() : this.props.context.trustedDomain;
+      const trustedDomain = this.props.context.userSettings
+        ? this.props.context.userSettings.getTrustedDomain()
+        : this.props.context.trustedDomain;
       const url = `${trustedDomain}${pathname}`;
-      window.open(url, '_parent', 'noopener,noreferrer');
+      window.open(url, "_parent", "noopener,noreferrer");
     }
   }
 
@@ -201,7 +173,7 @@ class NavigationContextProvider extends React.Component {
    * @param {string} url The url to go too
    */
   onGoToNewTab(url) {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   /*
@@ -257,7 +229,6 @@ class NavigationContextProvider extends React.Component {
   async onGoToAdministrationSelfRegistrationRequested() {
     await this.goTo("api", "/app/administration/self-registration");
   }
-
 
   /**
    * Whenever the user wants to navigate to the administration workspace users directory.
@@ -458,7 +429,7 @@ class NavigationContextProvider extends React.Component {
    */
   get isMfaEnabled() {
     const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('multiFactorAuthentication');
+    return siteSettings && siteSettings.canIUse("multiFactorAuthentication");
   }
 
   /**
@@ -467,7 +438,7 @@ class NavigationContextProvider extends React.Component {
    */
   get isUserDirectoryEnabled() {
     const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('directorySync');
+    return siteSettings && siteSettings.canIUse("directorySync");
   }
 
   /**
@@ -476,7 +447,7 @@ class NavigationContextProvider extends React.Component {
    */
   get isSmtpSettingsEnable() {
     const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('smtpSettings');
+    return siteSettings && siteSettings.canIUse("smtpSettings");
   }
 
   /**
@@ -485,7 +456,7 @@ class NavigationContextProvider extends React.Component {
    */
   get isSelfRegistrationEnable() {
     const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('selfRegistration');
+    return siteSettings && siteSettings.canIUse("selfRegistration");
   }
 
   /**
@@ -494,7 +465,7 @@ class NavigationContextProvider extends React.Component {
    */
   get isPasswordPoliciesEnable() {
     const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('passwordPoliciesUpdate');
+    return siteSettings && siteSettings.canIUse("passwordPoliciesUpdate");
   }
 
   /**
@@ -503,7 +474,7 @@ class NavigationContextProvider extends React.Component {
    */
   get isUserPassphrasePoliciesEnable() {
     const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('userPassphrasePolicies');
+    return siteSettings && siteSettings.canIUse("userPassphrasePolicies");
   }
 
   /**
@@ -512,7 +483,7 @@ class NavigationContextProvider extends React.Component {
    */
   get isPasswordExpiryEnable() {
     const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('passwordExpiry');
+    return siteSettings && siteSettings.canIUse("passwordExpiry");
   }
 
   /*
@@ -653,15 +624,11 @@ class NavigationContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <NavigationContext.Provider value={this.state}>
-        {this.props.children}
-      </NavigationContext.Provider>
-    );
+    return <NavigationContext.Provider value={this.state}>{this.props.children}</NavigationContext.Provider>;
   }
 }
 
-NavigationContextProvider.displayName = 'NavigationContextProvider';
+NavigationContextProvider.displayName = "NavigationContextProvider";
 NavigationContextProvider.propTypes = {
   context: PropTypes.object, // The application context
   children: PropTypes.any, // The component children
@@ -681,12 +648,9 @@ export function withNavigationContext(WrappedComponent) {
     render() {
       return (
         <NavigationContext.Consumer>
-          {
-            navigationContext => <WrappedComponent navigationContext={navigationContext} {...this.props} />
-          }
+          {(navigationContext) => <WrappedComponent navigationContext={navigationContext} {...this.props} />}
         </NavigationContext.Consumer>
       );
     }
   };
 }
-

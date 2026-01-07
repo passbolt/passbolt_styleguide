@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
 class DisplayLoadingDialog extends Component {
@@ -69,7 +69,7 @@ class DisplayLoadingDialog extends Component {
   startInfiniteTimerUpdateProgress() {
     this.infiniteTimerUpdateIntervalId = setInterval(() => {
       const infiniteTimer = this.state.infiniteTimer + 2;
-      this.setState({infiniteTimer});
+      this.setState({ infiniteTimer });
     }, 500);
   }
 
@@ -78,7 +78,7 @@ class DisplayLoadingDialog extends Component {
    * @return {number}
    */
   calculateInfiniteProgress() {
-    return 100 - (100 / Math.pow(1.1, this.state.infiniteTimer));
+    return 100 - 100 / Math.pow(1.1, this.state.infiniteTimer);
   }
 
   /**
@@ -95,21 +95,25 @@ class DisplayLoadingDialog extends Component {
    */
   render() {
     const progress = this.calculateInfiniteProgress();
-    const progressBarStyle = {width: `${progress}%`};
+    const progressBarStyle = { width: `${progress}%` };
 
     return (
-      <DialogWrapper className='loading-dialog' title={this.props.title}
-        onClose={this.handleClose} disabled={true}>
+      <DialogWrapper className="loading-dialog" title={this.props.title} onClose={this.handleClose} disabled={true}>
         <div className="form-content">
-          <label><Trans>Take a deep breath and enjoy being in the present moment...</Trans></label>
+          <label>
+            <Trans>Take a deep breath and enjoy being in the present moment...</Trans>
+          </label>
           <div className="progress-bar-wrapper">
             <span className="progress-bar">
-              <span className={`progress ${progress === 100 ? 'completed' : ''}`} style={progressBarStyle}/>
+              <span className={`progress ${progress === 100 ? "completed" : ""}`} style={progressBarStyle} />
             </span>
           </div>
         </div>
         <div className="submit-wrapper clearfix">
-          <button type="submit" disabled className="processing">Submit<SpinnerSVG/></button>
+          <button type="submit" disabled className="processing">
+            Submit
+            <SpinnerSVG />
+          </button>
         </div>
       </DialogWrapper>
     );

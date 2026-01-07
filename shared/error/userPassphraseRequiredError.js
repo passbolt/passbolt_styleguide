@@ -14,9 +14,9 @@
 
 class UserPassphraseRequiredError extends Error {
   constructor(message) {
-    message = message || 'The user passphrase is required.';
+    message = message || "The user passphrase is required.";
     super(message);
-    this.name = 'UserPassphraseRequiredError';
+    this.name = "UserPassphraseRequiredError";
   }
 }
 

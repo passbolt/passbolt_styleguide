@@ -11,16 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.10.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import ApiError from "./ApiError/ApiError";
 import ApiSuccess from "./ApiSuccess/ApiSuccess";
 
 const ApiFeedbackOrchestratorStates = {
   LOADING: "loading",
   ERROR: "Error",
-  SUCCESS: "Success"
+  SUCCESS: "Success",
 };
 
 class ApiFeedbackOrchestrator extends Component {
@@ -52,12 +52,12 @@ class ApiFeedbackOrchestrator extends Component {
     if (errorNode) {
       this.setState({
         state: ApiFeedbackOrchestratorStates.ERROR,
-        message: errorNode?.textContent
+        message: errorNode?.textContent,
       });
     } else {
       this.setState({
         state: ApiFeedbackOrchestratorStates.SUCCESS,
-        message: successNode?.textContent
+        message: successNode?.textContent,
       });
     }
   }
@@ -71,19 +71,15 @@ class ApiFeedbackOrchestrator extends Component {
       case ApiFeedbackOrchestratorStates.LOADING:
         return <></>;
       case ApiFeedbackOrchestratorStates.ERROR:
-        return <ApiError
-          message={this.state.message}
-        />;
+        return <ApiError message={this.state.message} />;
       case ApiFeedbackOrchestratorStates.SUCCESS:
-        return <ApiSuccess
-          message={this.state.message}
-        />;
+        return <ApiSuccess message={this.state.message} />;
     }
   }
 }
 
 ApiFeedbackOrchestrator.propTypes = {
-  t: PropTypes.func // the translation function
+  t: PropTypes.func, // the translation function
 };
 
 export default withTranslation("common")(ApiFeedbackOrchestrator);

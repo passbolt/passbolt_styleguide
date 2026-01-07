@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         5.5.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import ScimSettingsEntity from "../../../models/entity/scimSettings/scimSettingsEntity";
 
 /**

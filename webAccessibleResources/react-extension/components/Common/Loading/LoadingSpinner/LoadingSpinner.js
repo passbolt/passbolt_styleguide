@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../../../img/svg/spinner.svg";
 
 /**
@@ -28,7 +28,7 @@ class LoadingSpinner extends React.Component {
       <div className="login-processing">
         <h1>{this.props.title}</h1>
         <div className="processing-wrapper">
-          <SpinnerSVG/>
+          <SpinnerSVG />
         </div>
       </div>
     );
@@ -36,16 +36,11 @@ class LoadingSpinner extends React.Component {
 }
 
 LoadingSpinner.propTypes = {
-  title: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-    PropTypes.string,
-  ])
+  title: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node, PropTypes.string]),
 };
 
 LoadingSpinner.defaultProps = {
-  title: <Trans>Please wait...</Trans>
+  title: <Trans>Please wait...</Trans>,
 };
 
 export default withTranslation("common")(LoadingSpinner);
-

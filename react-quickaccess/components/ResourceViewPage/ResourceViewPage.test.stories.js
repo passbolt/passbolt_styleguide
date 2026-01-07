@@ -1,35 +1,44 @@
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import ResourceViewPage from "./ResourceViewPage";
 import {
   defaultProps,
   deniedRbacProps,
-  disabledApiFlagsProps, multipleUrisResourceProps,
+  disabledApiFlagsProps,
+  multipleUrisResourceProps,
   standaloneTotpResourceProps,
-  totpResourceProps
+  totpResourceProps,
 } from "./ResourceViewPage.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {
-  title: 'Components/QuickAccess/ResourceView',
-  component: ResourceViewPage
+  title: "Components/QuickAccess/ResourceView",
+  component: ResourceViewPage,
 };
 
-const Template = ({context, initialEntries, ...args}) =>
+const Template = ({ context, initialEntries, ...args }) => (
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={[initialEntries]}>
-      <Route path="/:id" component={routerProps => <div className="container quickaccess"><ResourceViewPage {...args} {...routerProps}/></div>}/>
+      <Route
+        path="/:id"
+        component={(routerProps) => (
+          <div className="container quickaccess">
+            <ResourceViewPage {...args} {...routerProps} />
+          </div>
+        )}
+      />
     </MemoryRouter>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 Template.propTypes = {
   context: PropTypes.object,
-  initialEntries: PropTypes.array
+  initialEntries: PropTypes.array,
 };
 
 const parameters = {
-  css: "ext_quickaccess"
+  css: "ext_quickaccess",
 };
 
 export const ResourceView = Template.bind({});

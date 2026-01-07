@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.3
  */
-import i18n from 'i18next';
-import {initReactI18next} from 'react-i18next';
-import {Component} from "react";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import deTranslations from "../../../../../locales/de-DE/common.json";
 import enTranslations from "../../../../../locales/en-UK/common.json";
@@ -50,66 +50,66 @@ class MockTranslationProvider extends Component {
       // init i18next, for all options read: https://www.i18next.com/overview/configuration-options
       .init({
         // As en-UK is not supported for the english locale we need to use en-GB
-        lng: props.language || 'en-GB',
+        lng: props.language || "en-GB",
         resources: {
           "de-DE": {
-            common: deTranslations
+            common: deTranslations,
           },
           "en-GB": {
-            common: enTranslations
+            common: enTranslations,
           },
           "es-ES": {
-            common: esTranslations
+            common: esTranslations,
           },
           "fr-FR": {
-            common: frTranslations
+            common: frTranslations,
           },
           "it-IT": {
-            common: itTranslations
+            common: itTranslations,
           },
           "ja-JP": {
-            common: jaTranslations
+            common: jaTranslations,
           },
           "ko-KR": {
-            common: koTranslations
+            common: koTranslations,
           },
           "lt-LT": {
-            common:  ltTranslations
+            common: ltTranslations,
           },
           "nl-NL": {
-            common: nlTranslations
+            common: nlTranslations,
           },
           "pl-PL": {
-            common: plTranslations
+            common: plTranslations,
           },
           "pt-BR": {
-            common: ptBrTranslations
+            common: ptBrTranslations,
           },
           "ro-RO": {
-            common: roTranslations
+            common: roTranslations,
           },
           "ru-RU": {
-            common: ruTranslations
+            common: ruTranslations,
           },
           "sl-SI": {
-            common: slTranslations
+            common: slTranslations,
           },
           "sv-SE": {
-            common: svTranslations
+            common: svTranslations,
           },
           "uk-UA": {
-            common: ukTranslations
+            common: ukTranslations,
           },
           "cs-CZ": {
-            common: csTranslations
-          }
+            common: csTranslations,
+          },
         },
         react: {
           useSuspense: false,
         },
         fallbackLng: false,
-        ns: ['common'],
-        defaultNS: 'common',
+        ns: ["common"],
+        defaultNS: "common",
         keySeparator: false, // don't use the dot for separator of nested json object
         nsSeparator: false, // allowed ':' in key to avoid namespace separator
         debug: false,
@@ -145,14 +145,13 @@ class MockTranslationProvider extends Component {
    * @returns {JSX}
    */
   render() {
-    return ({...this.props.children});
+    return { ...this.props.children };
   }
 }
 
 MockTranslationProvider.propTypes = {
   children: PropTypes.any, // The children components,
-  language: PropTypes.string // The current translation language
+  language: PropTypes.string, // The current translation language
 };
 
 export default MockTranslationProvider;
-

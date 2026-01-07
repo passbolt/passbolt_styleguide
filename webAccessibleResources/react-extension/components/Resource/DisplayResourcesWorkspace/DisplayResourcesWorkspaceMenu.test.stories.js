@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {overridenPasswordExpirySettingsEntityDto} from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
-import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import { denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { overridenPasswordExpirySettingsEntityDto } from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
+import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import DisplayResourcesWorkspaceMenu from "./DisplayResourcesWorkspaceMenu";
 import {
   defaultPropsMultipleResource,
@@ -29,19 +29,19 @@ import React from "react";
  * DisplayResourcesWorkspaceMenu stories
  */
 export default {
-  title: 'Components/Resource/DisplayResourcesWorkspaceMenu',
+  title: "Components/Resource/DisplayResourcesWorkspaceMenu",
   decorators: [
-    Story => (
+    (Story) => (
       <div className="top-bar">
         <div className="action-bar">
           <div className="actions-wrapper">
-            <Story/>
+            <Story />
           </div>
         </div>
       </div>
     ),
   ],
-  component: DisplayResourcesWorkspaceMenu
+  component: DisplayResourcesWorkspaceMenu,
 };
 
 export const OneResourceOwned = {
@@ -67,18 +67,18 @@ export const MultipleResourcesNotOwnedWithAllDenyOnRBAC = {
 };
 
 export const MultipleResource = {
-  args:  defaultPropsMultipleResourceUpdateRights(),
+  args: defaultPropsMultipleResourceUpdateRights(),
 };
 
 export const MultipleResourceNotOwned = {
-  args:  defaultPropsMultipleResource(),
+  args: defaultPropsMultipleResource(),
 };
 
 const propsResourcesWithAllFeatures = defaultPropsOneTotpResourceOwned({
   passwordExpiryContext: defaultPasswordExpirySettingsContext({
     getSettings: overridenPasswordExpirySettingsEntityDto,
-  })
+  }),
 });
 export const WithAllFeatureDisplayed = {
-  args: propsResourcesWithAllFeatures
+  args: propsResourcesWithAllFeatures,
 };

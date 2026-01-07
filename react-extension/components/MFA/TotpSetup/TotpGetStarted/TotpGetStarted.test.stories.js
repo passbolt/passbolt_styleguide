@@ -14,16 +14,16 @@
 
 import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {MfaContextProvider} from "../../../../contexts/MFAContext";
+import { MfaContextProvider } from "../../../../contexts/MFAContext";
 import TotpGetStarted from "./TotpGetStarted";
-import {defaultProps} from "../../DisplayProviderList/DisplayProviderList.test.data";
+import { defaultProps } from "../../DisplayProviderList/DisplayProviderList.test.data";
 
 export default {
-  title: 'Components/MFA/TotpGetStarted',
-  component: TotpGetStarted
+  title: "Components/MFA/TotpGetStarted",
+  component: TotpGetStarted,
 };
 
-const Template = args =>
+const Template = (args) => (
   <MfaContextProvider {...args}>
     <MockTranslationProvider>
       <div className="panel middle">
@@ -31,8 +31,10 @@ const Template = args =>
           <TotpGetStarted {...args} />
         </div>
       </div>
-    </MockTranslationProvider>;
-  </MfaContextProvider>;
+    </MockTranslationProvider>
+    ;
+  </MfaContextProvider>
+);
 
 export const Default = Template.bind({});
 Default.args = defaultProps();

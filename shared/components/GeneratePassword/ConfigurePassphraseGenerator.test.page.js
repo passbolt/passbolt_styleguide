@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,10 +12,9 @@
  * @since         3.3.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import ConfigurePassphraseGenerator from "./ConfigurePassphraseGenerator";
 
 /**
@@ -30,17 +28,17 @@ export default class ConfigurePassphraseGeneratorPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ConfigurePassphraseGenerator {...props}/>
+        <ConfigurePassphraseGenerator {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
   rerender(props) {
     this._page.rerender(
       <MockTranslationProvider>
-        <ConfigurePassphraseGenerator {...props}/>
-      </MockTranslationProvider>
+        <ConfigurePassphraseGenerator {...props} />
+      </MockTranslationProvider>,
     );
   }
 
@@ -62,21 +60,21 @@ export default class ConfigurePassphraseGeneratorPage {
    * Get the separator
    */
   get separator() {
-    return this._page.container.querySelector('#configure-passphrase-generator-form-words-separator');
+    return this._page.container.querySelector("#configure-passphrase-generator-form-words-separator");
   }
 
   /**
    * Get the word case
    */
   get wordCase() {
-    return this._page.container.querySelector('#configure-passphrase-generator-form-words-case .selected-value .value');
+    return this._page.container.querySelector("#configure-passphrase-generator-form-words-case .selected-value .value");
   }
 
   /**
    * Get the first item word case select
    */
   get firstWordCaseItem() {
-    return this._page.container.querySelector('#configure-passphrase-generator-form-words-case .option');
+    return this._page.container.querySelector("#configure-passphrase-generator-form-words-case .option");
   }
 
   /**
@@ -85,7 +83,7 @@ export default class ConfigurePassphraseGeneratorPage {
    * @returns {Promise<void>}
    */
   async changeRangeWordCount(data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(this.rangeWordCount, dataInputEvent);
     await waitFor(() => {});
   }
@@ -96,7 +94,7 @@ export default class ConfigurePassphraseGeneratorPage {
    * @returns {Promise<void>}
    */
   async changeNumberWordCount(data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(this.numberWordCount, dataInputEvent);
     await waitFor(() => {});
   }
@@ -107,14 +105,14 @@ export default class ConfigurePassphraseGeneratorPage {
    * @returns {Promise<void>}
    */
   async changeSeparator(data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(this.separator, dataInputEvent);
     await waitFor(() => {});
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

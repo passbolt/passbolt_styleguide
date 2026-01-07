@@ -38,12 +38,12 @@ class DisplayInFormMenuItem extends React.Component {
    * @returns {string}
    */
   getClassName() {
-    let name = 'in-form-menu-item';
+    let name = "in-form-menu-item";
     if (this.props.disabled) {
-      name += ' disabled';
+      name += " disabled";
     }
     if (this.props.processing) {
-      name += ' processing';
+      name += " processing";
     }
     return name;
   }
@@ -63,23 +63,14 @@ class DisplayInFormMenuItem extends React.Component {
     return (
       <a className={this.getClassName()} onClick={this.handleClick} disabled={this.props.disabled}>
         <div className="in-form-menu-item-icon">
-          {this.props.processing
-            ? <SpinnerSVG className="svg-icon icon-only dim"/>
-            : this.props.icon
-          }
+          {this.props.processing ? <SpinnerSVG className="svg-icon icon-only dim" /> : this.props.icon}
         </div>
         <div className="in-form-menu-item-content">
           <div className="in-form-menu-item-content-header">
-            <strong>
-              {this.props.title}
-            </strong>
+            <strong>{this.props.title}</strong>
           </div>
-          <div className="in-form-menu-item-content-subheader">
-            {this.props.subtitle}
-          </div>
-          <div className="in-form-menu-item-content-description">
-            {this.props.description}
-          </div>
+          <div className="in-form-menu-item-content-subheader">{this.props.subtitle}</div>
+          <div className="in-form-menu-item-content-description">{this.props.description}</div>
         </div>
       </a>
     );
@@ -97,7 +88,7 @@ DisplayInFormMenuItem.propTypes = {
   icon: PropTypes.any,
   processing: PropTypes.bool,
   disabled: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export default DisplayInFormMenuItem;

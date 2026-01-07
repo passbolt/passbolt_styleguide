@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import CloseSVG from "../../../../img/svg/close.svg";
 
@@ -49,12 +49,18 @@ class AnnouncementWrapper extends Component {
     return (
       <div className={`${this.props.className} announcement`}>
         <div className="announcement-content">
-          {this.props.canClose &&
-          <button type="button" className="announcement-close dialog-close button-transparent" onClick={this.handleClose}>
-            <CloseSVG className="svg-icon"/>
-            <span className="visually-hidden"><Trans>Close</Trans></span>
-          </button>
-          }
+          {this.props.canClose && (
+            <button
+              type="button"
+              className="announcement-close dialog-close button-transparent"
+              onClick={this.handleClose}
+            >
+              <CloseSVG className="svg-icon" />
+              <span className="visually-hidden">
+                <Trans>Close</Trans>
+              </span>
+            </button>
+          )}
           {this.props.children}
         </div>
       </div>
@@ -66,7 +72,7 @@ AnnouncementWrapper.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   canClose: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
 export default withTranslation("common")(AnnouncementWrapper);

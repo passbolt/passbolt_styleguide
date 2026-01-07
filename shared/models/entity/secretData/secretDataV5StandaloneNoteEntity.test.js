@@ -13,10 +13,10 @@
  */
 
 import EntitySchema from "../abstract/entitySchema";
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import SecretDataV5StandaloneNoteEntity from "./secretDataV5StandaloneNoteEntity";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultSecretDataV5StandaloneNoteDto} from "./secretDataV5StandaloneNoteEntity.test.data";
+import { defaultSecretDataV5StandaloneNoteDto } from "./secretDataV5StandaloneNoteEntity.test.data";
 
 describe("secretDataV5StandaloneNoteEntity", () => {
   describe("::getSchema", () => {
@@ -25,7 +25,12 @@ describe("secretDataV5StandaloneNoteEntity", () => {
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.enumeration(SecretDataV5StandaloneNoteEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
+      assertEntityProperty.enumeration(
+        SecretDataV5StandaloneNoteEntity,
+        "object_type",
+        [SECRET_DATA_OBJECT_TYPE],
+        ["any other values"],
+      );
     });
 
     it("validates description property", () => {
@@ -46,7 +51,6 @@ describe("secretDataV5StandaloneNoteEntity", () => {
       expect(entity.description).toStrictEqual(dto.description);
     });
   });
-
 
   describe("::createFromDefault", () => {
     it("create with no data provided", () => {
@@ -89,7 +93,7 @@ describe("secretDataV5StandaloneNoteEntity", () => {
     it("should return true", () => {
       const dto = defaultSecretDataV5StandaloneNoteDto();
       const entity = SecretDataV5StandaloneNoteEntity.createFromDefault(dto);
-      expect(entity.areSecretsDifferent({description: ""})).toBeTruthy();
+      expect(entity.areSecretsDifferent({ description: "" })).toBeTruthy();
     });
 
     it("should return false", () => {

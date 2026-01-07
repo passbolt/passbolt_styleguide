@@ -14,16 +14,16 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import DeleteComment from "../DeleteResourceComment/DeleteComment";
-import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
+import { Trans, withTranslation } from "react-i18next";
+import { DateTime } from "luxon";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
+import { isUserSuspended } from "../../../../shared/utils/userUtils";
 import CommentsServiceWorkerService from "../CommentsServiceWorkerService";
-import {withActionFeedback} from '../../../contexts/ActionFeedbackContext';
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 
 class DisplayResourceCommentList extends React.Component {
   /**
@@ -43,9 +43,10 @@ class DisplayResourceCommentList extends React.Component {
   getDefaultState() {
     return {
       comments: [], // The list of comments to display
-      actions: { // The ongoing action
+      actions: {
+        // The ongoing action
         loading: false, // A loading action
-      }
+      },
     };
   }
 
@@ -69,21 +70,22 @@ class DisplayResourceCommentList extends React.Component {
    */
   async fetch() {
     try {
-      this.setState({actions: {loading: true}});
+      this.setState({ actions: { loading: true } });
 
       const resourceId = this.props.resource.id;
       const comments = await this.commentsServiceWorkerService.findAllByResource(resourceId);
 
-      const commentsSorter = (comment1, comment2) => DateTime.fromISO(comment2.created) < DateTime.fromISO(comment1.created) ? -1 : 1;
-      this.setState({comments: comments.sort(commentsSorter)});
+      const commentsSorter = (comment1, comment2) =>
+        DateTime.fromISO(comment2.created) < DateTime.fromISO(comment1.created) ? -1 : 1;
+      this.setState({ comments: comments.sort(commentsSorter) });
 
       this.props.onFetch(comments);
 
-      this.setState({actions: {loading: false}});
+      this.setState({ actions: { loading: false } });
     } catch (error) {
       console.error(error);
       await this.props.actionFeedbackContext.displayError(error.message);
-      this.setState({actions: {loading: false}});
+      this.setState({ actions: { loading: false } });
     }
   }
 
@@ -99,7 +101,7 @@ class DisplayResourceCommentList extends React.Component {
     }
 
     if (this.props.context.mustRefreshComments) {
-      this.props.context.setContext({mustRefreshComments: false});
+      this.props.context.setContext({ mustRefreshComments: false });
     }
   }
 
@@ -126,7 +128,7 @@ class DisplayResourceCommentList extends React.Component {
    * @returns {boolean}
    */
   isUserSuspended(user) {
-    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
+    return this.props.context.siteSettings.canIUse("disableUser") && isUserSuspended(user);
   }
 
   /**
@@ -136,59 +138,67 @@ class DisplayResourceCommentList extends React.Component {
   render() {
     return (
       <>
-        {!this.state.actions.loading &&
-        <>
-          {
-            this.state.comments.map((comment, index) => (
+        {!this.state.actions.loading && (
+          <>
+            {this.state.comments.map((comment, index) => (
               <div
                 key={index}
-                className={`comment ${this.isUserSuspended(comment.creator) ? "from-suspended-user" : ""}`}>
+                className={`comment ${this.isUserSuspended(comment.creator) ? "from-suspended-user" : ""}`}
+              >
                 <div className="left-column">
                   <UserAvatar
                     user={comment.creator}
                     baseUrl={this.props.context.siteSettings.settings.app.url}
-                    className="author profile picture avatar"/>
+                    className="author profile picture avatar"
+                  />
                 </div>
                 <div className="right-column">
                   <p> {comment.content} </p>
                   <div className="metadata">
-                    {this.isOwner(comment) &&
+                    {this.isOwner(comment) && (
                       <span className="author username">
                         <Trans>You</Trans>
                       </span>
-                    }
-                    {!this.isOwner(comment) &&
-                      <span
-                        className="author username">{comment.creator.profile.first_name} {comment.creator.profile.last_name}{this.isUserSuspended(comment.creator) &&
-                        <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
-                    }
-                    <span
-                      className="modified" title={comment.created}>{formatDateTimeAgo(comment.created, this.props.t, this.props.context.locale)}
+                    )}
+                    {!this.isOwner(comment) && (
+                      <span className="author username">
+                        {comment.creator.profile.first_name} {comment.creator.profile.last_name}
+                        {this.isUserSuspended(comment.creator) && (
+                          <span className="suspended">
+                            {" "}
+                            <Trans>(suspended)</Trans>
+                          </span>
+                        )}
+                      </span>
+                    )}
+                    <span className="modified" title={comment.created}>
+                      {formatDateTimeAgo(comment.created, this.props.t, this.props.context.locale)}
                     </span>
-                    {this.canDeleteComment(comment) &&
+                    {this.canDeleteComment(comment) && (
                       <div className="actions">
-                        <DeleteComment commentId={comment.id}/>
+                        <DeleteComment commentId={comment.id} />
                       </div>
-                    }
+                    )}
                   </div>
                 </div>
               </div>
-            ))
-          }
-        </>
-        }
-        {this.state.actions.loading &&
+            ))}
+          </>
+        )}
+        {this.state.actions.loading && (
           <div className="processing-wrapper">
-            <SpinnerSVG/>
-            <span className="processing-text"><Trans>Retrieving comments</Trans></span>
+            <SpinnerSVG />
+            <span className="processing-text">
+              <Trans>Retrieving comments</Trans>
+            </span>
           </div>
-        }
+        )}
       </>
     );
   }
 }
 
-export default withAppContext(withActionFeedback(withTranslation('common')(DisplayResourceCommentList)));
+export default withAppContext(withActionFeedback(withTranslation("common")(DisplayResourceCommentList)));
 
 DisplayResourceCommentList.propTypes = {
   context: PropTypes.any, // The application context

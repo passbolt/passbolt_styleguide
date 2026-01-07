@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import PropTypes from "prop-types";
@@ -34,11 +33,11 @@ export default class DisplayResourcesWorkspaceMenuPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContextProvider context={appContext}>
-          <ManageDialogs/>
-          <DisplayResourcesWorkspaceMenu {...props}/>
+          <ManageDialogs />
+          <DisplayResourcesWorkspaceMenu {...props} />
         </AppContextProvider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -75,7 +74,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get actionMenu() {
-    return this._container.querySelector('.actions');
+    return this._container.querySelector(".actions");
   }
 
   /**
@@ -83,7 +82,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get editMenu() {
-    return this._container.querySelector('#edit_action button');
+    return this._container.querySelector("#edit_action button");
   }
 
   /**
@@ -91,7 +90,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get shareMenu() {
-    return this._container.querySelector('#share_action button');
+    return this._container.querySelector("#share_action button");
   }
 
   /**
@@ -99,7 +98,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get copyMenuDropdown() {
-    return this._container.querySelector('#copy_action button');
+    return this._container.querySelector("#copy_action button");
   }
 
   /**
@@ -107,7 +106,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get moreMenu() {
-    return this._container.querySelector('button.more');
+    return this._container.querySelector("button.more");
   }
 
   /**
@@ -115,7 +114,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get deleteMenu() {
-    return this._container.querySelector('#delete_action button');
+    return this._container.querySelector("#delete_action button");
   }
 
   /**
@@ -123,7 +122,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get dropdownMenuMarkAsExpired() {
-    return this._container.querySelector('#mark_as_expired_action');
+    return this._container.querySelector("#mark_as_expired_action");
   }
 
   /**
@@ -131,7 +130,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get dropdownMenuSetExpiryDate() {
-    return this._container.querySelector('#set_expiry_date_action');
+    return this._container.querySelector("#set_expiry_date_action");
   }
 
   /**
@@ -139,7 +138,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get dropdownMenuSecretHistory() {
-    return this._container.querySelector('#secret_history_action');
+    return this._container.querySelector("#secret_history_action");
   }
 
   /**
@@ -147,7 +146,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get permalinkMenu() {
-    return this._container.querySelector('#permalink_action');
+    return this._container.querySelector("#permalink_action");
   }
 
   /**
@@ -155,7 +154,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get usernameMenu() {
-    return this._container.querySelector('#username_action');
+    return this._container.querySelector("#username_action");
   }
 
   /**
@@ -171,7 +170,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get uriMenu() {
-    return this._container.querySelector('#uri_action');
+    return this._container.querySelector("#uri_action");
   }
 
   /**
@@ -187,7 +186,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get dropdownMenuSecret() {
-    return this._container.querySelector('#secret_action');
+    return this._container.querySelector("#secret_action");
   }
 
   /**
@@ -195,7 +194,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get dropdownMenuTotp() {
-    return this._container.querySelector('#totp_action');
+    return this._container.querySelector("#totp_action");
   }
 
   /**
@@ -203,7 +202,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get clearSelectionButton() {
-    return this._container.querySelector('.actions .actions-wrapper > button.button-transparent.inline');
+    return this._container.querySelector(".actions .actions-wrapper > button.button-transparent.inline");
   }
 
   /**
@@ -215,26 +214,26 @@ class DisplayMenuPageObject {
   }
 
   /** Click on the more menu */
-  clickOnMoreMenu()  {
-    const leftClick = {button: 0};
+  clickOnMoreMenu() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.moreMenu, leftClick);
   }
 
   /** Click on the more menu */
-  clickOnCopyMenu()  {
-    const leftClick = {button: 0};
+  clickOnCopyMenu() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.copyMenuDropdown, leftClick);
   }
 
   /** Click on the more menu */
-  clickOnClearSelection()  {
-    const leftClick = {button: 0};
+  clickOnClearSelection() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.clearSelectionButton, leftClick);
   }
 
   /** Click on the action menu */
-  async clickOnMenu(element)  {
-    const leftClick = {button: 0};
+  async clickOnMenu(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -254,22 +253,18 @@ class AppContextProvider extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({setContext: this.setState.bind(this)});
+    this.setState({ setContext: this.setState.bind(this) });
   }
 
   /**
    * Render the component
    */
   render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        {this.props.children}
-      </AppContext.Provider>
-    );
+    return <AppContext.Provider value={this.state}>{this.props.children}</AppContext.Provider>;
   }
 }
 
 AppContextProvider.propTypes = {
   context: PropTypes.object,
-  children: PropTypes.any
+  children: PropTypes.any,
 };

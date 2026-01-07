@@ -14,7 +14,7 @@
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 
-const ENTITY_NAME = 'externalGpgKey';
+const ENTITY_NAME = "externalGpgKey";
 
 const FINGERPRINT_MIN_LENGTH = 40;
 const FINGERPRINT_MAX_LENGTH = 40;
@@ -27,11 +27,10 @@ class ExternalGpgKeyEntity extends Entity {
    */
   constructor(gpgkeyDto, options = {}) {
     const sanitizedGpgkeyDto = ExternalGpgKeyEntity.sanitizeDto(gpgkeyDto);
-    super(EntitySchema.validate(
-      ExternalGpgKeyEntity.ENTITY_NAME,
-      sanitizedGpgkeyDto,
-      ExternalGpgKeyEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(ExternalGpgKeyEntity.ENTITY_NAME, sanitizedGpgkeyDto, ExternalGpgKeyEntity.getSchema()),
+      options,
+    );
   }
 
   /**
@@ -40,22 +39,20 @@ class ExternalGpgKeyEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "armored_key"
-      ],
-      "properties": {
-        "armored_key": {
-          "type": "string",
-          "minLength": 1,
+      type: "object",
+      required: ["armored_key"],
+      properties: {
+        armored_key: {
+          type: "string",
+          minLength: 1,
         },
-        "key_id": {
-          "type": "string",
-          "minLength": KEY_ID_MIN_LENGTH,
-          "maxLength": KEY_ID_MAX_LENGTH
+        key_id: {
+          type: "string",
+          minLength: KEY_ID_MIN_LENGTH,
+          maxLength: KEY_ID_MAX_LENGTH,
         },
-        "user_ids": {
-          "type": "array",
+        user_ids: {
+          type: "array",
           /*
            * TODO validate nested user ids
            * "items": {
@@ -75,44 +72,47 @@ class ExternalGpgKeyEntity extends Entity {
            * }
            */
         },
-        "fingerprint": {
-          "type": "string",
-          "minLength": FINGERPRINT_MIN_LENGTH,
-          "maxLength": FINGERPRINT_MAX_LENGTH
+        fingerprint: {
+          type: "string",
+          minLength: FINGERPRINT_MIN_LENGTH,
+          maxLength: FINGERPRINT_MAX_LENGTH,
         },
-        "expires": {
-          "anyOf": [{
-            "type": "string",
-            "format": "date-time"
-          }, {
-            "type": "string",
-            "pattern": "^Infinity$"
-          }, {
-          }],
-          "nullable": true,
+        expires: {
+          anyOf: [
+            {
+              type: "string",
+              format: "date-time",
+            },
+            {
+              type: "string",
+              pattern: "^Infinity$",
+            },
+            {},
+          ],
+          nullable: true,
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "algorithm": {
-          "type": "string"
+        algorithm: {
+          type: "string",
         },
-        "length": {
-          "type": "integer",
-          "minimum": 1,
+        length: {
+          type: "integer",
+          minimum: 1,
         },
-        "curve": {
-          "type": "string",
-          "nullable": true,
+        curve: {
+          type: "string",
+          nullable: true,
         },
-        "private": {
-          "type": "boolean"
+        private: {
+          type: "boolean",
         },
-        "revoked": {
-          "type": "boolean"
-        }
-      }
+        revoked: {
+          type: "boolean",
+        },
+      },
     };
   }
 

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class Breadcrumb extends Component {
@@ -21,7 +21,9 @@ class Breadcrumb extends Component {
    */
   render() {
     return (
-      <button type="button" className="link no-border inline ellipsis" onClick={this.props.onClick}>{this.props.name}</button>
+      <button type="button" className="link no-border inline ellipsis" onClick={this.props.onClick}>
+        {this.props.name}
+      </button>
     );
   }
 }

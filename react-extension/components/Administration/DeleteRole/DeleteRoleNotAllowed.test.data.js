@@ -13,7 +13,7 @@
  */
 
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
-import {customRoleDto} from "../../../../shared/models/entity/role/roleEntity.test.data";
+import { customRoleDto } from "../../../../shared/models/entity/role/roleEntity.test.data";
 
 /**
  * Default props
@@ -24,6 +24,6 @@ export function defaultProps(data = {}) {
     onClose: jest.fn(),
     usersCount: 12,
     role: new RoleEntity(customRoleDto()),
-    ...data
+    ...data,
   };
 }

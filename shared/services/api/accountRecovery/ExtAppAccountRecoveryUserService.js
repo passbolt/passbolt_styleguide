@@ -18,6 +18,6 @@ export default class ExtAppAccountRecoveryUserService {
   }
 
   async getOrganizationAccountRecoverySettings() {
-    return await this.port.request('passbolt.account-recovery.get-organization-policy');
+    return await this.port.request("passbolt.account-recovery.get-organization-policy");
   }
 }

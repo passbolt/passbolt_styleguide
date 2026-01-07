@@ -13,12 +13,12 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationSelfRegistrationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSelfRegistrationActions/DisplayAdministrationSelfRegistrationActions";
 import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration";
-import {AdminSelfRegistrationContextProvider} from "../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import { AdminSelfRegistrationContextProvider } from "../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
 import userEvent from "@testing-library/user-event";
 
 /**
@@ -34,23 +34,23 @@ export default class DisplaySelfRegistrationAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <AdminSelfRegistrationContextProvider  {...props}>
+          <AdminSelfRegistrationContextProvider {...props}>
             <DisplayAdministrationSelfRegistrationActions />
-            <DisplaySelfRegistrationAdministration {...props}/>
+            <DisplaySelfRegistrationAdministration {...props} />
           </AdminSelfRegistrationContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
-    this.user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
+    this.user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
   }
 
   /**
    * Returns the self registration parent class
    */
   get selfRegistration() {
-    return this._page.container.querySelector('.self-registration ');
+    return this._page.container.querySelector(".self-registration ");
   }
 
   get actions() {
@@ -60,62 +60,62 @@ export default class DisplaySelfRegistrationAdministrationPage {
    * Returns the save settings button
    */
   get saveSettingsButton() {
-    return this._page.container.querySelector('#save-settings');
+    return this._page.container.querySelector("#save-settings");
   }
 
   /**
    * Returns the toggle settings
    */
   get toggle() {
-    return this._page.container.querySelector('#settings-toggle');
+    return this._page.container.querySelector("#settings-toggle");
   }
 
   /**
    * Returns the first domain row
    */
   get firstInputRow() {
-    return this._page.container.querySelector('.full-width');
+    return this._page.container.querySelector(".full-width");
   }
 
   /**
    * Returns the first delere button row
    */
   get firstDeleteButton() {
-    return this._page.container.querySelector('.button-icon');
+    return this._page.container.querySelector(".button-icon");
   }
 
   /**
    * Returns the enable description
    */
   get enabledDescription() {
-    return this._page.container.querySelector('#enabled-description');
+    return this._page.container.querySelector("#enabled-description");
   }
 
   /**
    * Returns the enable label
    */
   get enabledLabel() {
-    return this._page.container.querySelector('#enabled-label');
+    return this._page.container.querySelector("#enabled-label");
   }
 
   /**
    * Returns the disable description
    */
   get disabledDescription() {
-    return this._page.container.querySelector('#disabled-description');
+    return this._page.container.querySelector("#disabled-description");
   }
   /**
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelectorAll('.sidebar-help-section')[0];
+    return this._page.container.querySelectorAll(".sidebar-help-section")[0];
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('.button');
+    return this.helpBox.querySelector(".button");
   }
   /**
    * Returns banner for settings changes
@@ -128,28 +128,28 @@ export default class DisplaySelfRegistrationAdministrationPage {
    * Returns the add domain button
    */
   get addDomainButton() {
-    return this._page.container.querySelector('.domain-add button');
+    return this._page.container.querySelector(".domain-add button");
   }
 
   /**
    * Returns the warning message
    */
   get warningMessage() {
-    return this._page.container.querySelector('.warning-message');
+    return this._page.container.querySelector(".warning-message");
   }
 
   /**
    * Returns the error message
    */
   get errorMessage() {
-    return this._page.container.querySelector('.error-message');
+    return this._page.container.querySelector(".error-message");
   }
 
   /**
    * Returns the subtitle
    */
   get subtitle() {
-    return this._page.container.querySelector('#self-registration-subtitle');
+    return this._page.container.querySelector("#self-registration-subtitle");
   }
 
   /**
@@ -221,7 +221,7 @@ export default class DisplaySelfRegistrationAdministrationPage {
   /** fill the input element with data */
   async fillInput(element, data) {
     element.focus();
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
     jest.runAllTimers();
     await waitFor(() => {});

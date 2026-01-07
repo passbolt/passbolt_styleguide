@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import SubscriptionActionService from './SubscriptionActionService';
+import SubscriptionActionService from "./SubscriptionActionService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -23,14 +23,14 @@ describe("SubscriptionActionService", () => {
 
   const props = {
     context: {
-      setContext: jest.fn()
+      setContext: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
     adminSubscriptionContext: {
-      getSubscription: () => ({data: "mockData"})
-    }
+      getSubscription: () => ({ data: "mockData" }),
+    },
   };
 
   beforeEach(() => {
@@ -54,8 +54,12 @@ describe("SubscriptionActionService", () => {
     it("should kill the instance and create a new one", () => {
       expect.assertions(1);
       SubscriptionActionService.killInstance();
-      subscriptionActionService = SubscriptionActionService.getInstance({"context": null, "dialogContext": null, "adminSubscriptionContext": null});
-      expect(subscriptionActionService).toEqual({"context": null, "dialogContext": null, "subscriptionContext": null});
+      subscriptionActionService = SubscriptionActionService.getInstance({
+        context: null,
+        dialogContext: null,
+        adminSubscriptionContext: null,
+      });
+      expect(subscriptionActionService).toEqual({ context: null, dialogContext: null, subscriptionContext: null });
     });
   });
 
@@ -63,11 +67,10 @@ describe("SubscriptionActionService", () => {
     it("should kill the instance and create a new one", () => {
       expect.assertions(1);
       const editSubscriptionKey = {
-        key: props.adminSubscriptionContext.getSubscription().data
+        key: props.adminSubscriptionContext.getSubscription().data,
       };
       subscriptionActionService.editSubscription();
-      expect(props.context.setContext).toHaveBeenCalledWith({editSubscriptionKey});
+      expect(props.context.setContext).toHaveBeenCalledWith({ editSubscriptionKey });
     });
   });
 });
-

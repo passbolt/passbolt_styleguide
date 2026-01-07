@@ -13,7 +13,7 @@
  */
 
 import TotpEntity from "../totp/totpEntity";
-import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import SecretDataEntity, { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
@@ -25,7 +25,7 @@ class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
 
     // Associations
     if (this._props.totp) {
-      this._totp = new TotpEntity(this._props.totp, {...options, clone: false});
+      this._totp = new TotpEntity(this._props.totp, { ...options, clone: false });
       delete this._props.totp;
     }
   }
@@ -36,15 +36,12 @@ class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "object_type",
-        "totp"
-      ],
-      "properties": {
+      type: "object",
+      required: ["object_type", "totp"],
+      properties: {
         ...SecretDataEntity.getSchema().properties,
-        "totp": TotpEntity.getSchema(),
-      }
+        totp: TotpEntity.getSchema(),
+      },
     };
   }
 
@@ -53,7 +50,7 @@ class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
    */
   static get associations() {
     return {
-      totp: TotpEntity
+      totp: TotpEntity,
     };
   }
 
@@ -76,10 +73,10 @@ class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
   static createFromDefault(data = {}, options) {
     const defaultData = {
       object_type: SECRET_DATA_OBJECT_TYPE,
-      totp: TotpEntity.createFromDefault({}, {validate: false}).toDto()
+      totp: TotpEntity.createFromDefault({}, { validate: false }).toDto(),
     };
 
-    return new SecretDataV5StandaloneTotpEntity({...defaultData, ...data}, options);
+    return new SecretDataV5StandaloneTotpEntity({ ...defaultData, ...data }, options);
   }
 
   /**
@@ -91,7 +88,7 @@ class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
     assertString(propName);
     switch (propName) {
       case "totp":
-        return TotpEntity.createFromDefault({}, {validate: false}).toDto();
+        return TotpEntity.createFromDefault({}, { validate: false }).toDto();
       default:
         return;
     }
@@ -104,7 +101,7 @@ class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
    */
   areSecretsDifferent(secretDto) {
     const totp = this.totp.toDto();
-    return Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
+    return Object.keys(totp).some((key) => totp[key] !== secretDto.totp?.[key]);
   }
 
   /**

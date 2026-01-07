@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayContentTypesMetadataKeyAdministration from "./DisplayContentTypesMetadataKeyAdministration";
@@ -28,10 +28,10 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-          <DisplayContentTypesMetadataKeyAdministration {...props}/>
+          <DisplayContentTypesMetadataKeyAdministration {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

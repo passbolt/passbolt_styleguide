@@ -17,7 +17,7 @@
  */
 
 import IntroduceExtensionTestPage from "./IntroduceExtension.test.page";
-import {defaultProps} from "./IntroduceExtension.test.data";
+import { defaultProps } from "./IntroduceExtension.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,17 +27,17 @@ describe("As AN I should see setup extension page", () => {
   let page; // The page to test against
   const props = defaultProps();
 
-  describe('As AN I should be able to see setup extension for supported browser', () => {
+  describe("As AN I should be able to see setup extension for supported browser", () => {
     /**
      * Given a AN
      * Then I should see a setup extension page
      */
-    it('As AN I should see the setup extension for chrome', () => {
+    it("As AN I should see the setup extension for chrome", () => {
       Object.defineProperty(window, "navigator", {
-        value: {userAgent: "Chrome"},
-        writable: true
+        value: { userAgent: "Chrome" },
+        writable: true,
       });
-      window.chrome = {runtime: "true"};
+      window.chrome = { runtime: "true" };
       page = new IntroduceExtensionTestPage(props);
       expect(page.exists()).toBeTruthy();
       // title
@@ -46,27 +46,27 @@ describe("As AN I should see setup extension page", () => {
       expect(page.browser.className).toBe("animated-setup-introduction chrome");
     });
 
-    it('As AN I should see the setup extension for firefox', () => {
+    it("As AN I should see the setup extension for firefox", () => {
       Object.defineProperty(window, "navigator", {
-        value: {userAgent: "Firefox"},
-        writable: true
+        value: { userAgent: "Firefox" },
+        writable: true,
       });
       page = new IntroduceExtensionTestPage(props);
       // browser image
       expect(page.browser.className).toBe("animated-setup-introduction firefox");
     });
 
-    it('As AN I should see the setup extension for edge', () => {
+    it("As AN I should see the setup extension for edge", () => {
       Object.defineProperty(window, "navigator", {
-        value: {userAgent: "Edg"},
-        writable: true
+        value: { userAgent: "Edg" },
+        writable: true,
       });
       page = new IntroduceExtensionTestPage(props);
       // browser image
       expect(page.browser.className).toBe("animated-setup-introduction edge");
     });
 
-    it('As AN I should be able to click next on the page', async() => {
+    it("As AN I should be able to click next on the page", async () => {
       page = new IntroduceExtensionTestPage(props);
       await page.next();
       expect(props.onComplete).toHaveBeenCalled();

@@ -12,7 +12,6 @@
  * @since         3.7.0
  */
 
-
 import SignInManager from "./lib/SignIn/SignInManager";
 
 /**
@@ -22,4 +21,4 @@ async function init() {
   SignInManager.initialize();
 }
 
-export const PublicWebsiteSignInBootstrap = {init};
+export const PublicWebsiteSignInBootstrap = { init };

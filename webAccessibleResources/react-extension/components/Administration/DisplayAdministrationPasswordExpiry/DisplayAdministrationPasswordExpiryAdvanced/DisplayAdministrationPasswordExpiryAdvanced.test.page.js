@@ -13,10 +13,10 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {waitForTrue} from "../../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../../test/utils/waitFor";
 import AdministrationPasswordExpiryContextProvider from "../../../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
 import DisplayAdministrationPasswordExpiryAdvanced from "./DisplayAdministrationPasswordExpiryAdvanced";
 
@@ -34,11 +34,11 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <AdministrationPasswordExpiryContextProvider {...props}>
-            <DisplayAdministrationPasswordExpiryAdvanced {...props}/>
+            <DisplayAdministrationPasswordExpiryAdvanced {...props} />
           </AdministrationPasswordExpiryContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -56,7 +56,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get expiryPoliciesTitle() {
-    return this.select('#expiry-policies-subtitle');
+    return this.select("#expiry-policies-subtitle");
   }
 
   /**
@@ -64,7 +64,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get expiryPoliciesDescription() {
-    return this.select('#expiry-policies-description');
+    return this.select("#expiry-policies-description");
   }
 
   /**
@@ -72,7 +72,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get automaticWorkflowTitle() {
-    return this.select('#automatic-workflow-subtitle');
+    return this.select("#automatic-workflow-subtitle");
   }
 
   /**
@@ -80,7 +80,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get automaticWorkflowDescription() {
-    return this.select('#automatic-workflow-description');
+    return this.select("#automatic-workflow-description");
   }
 
   /**
@@ -88,7 +88,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get defaultExpiryPeriodToggle() {
-    return this.select('#default-expiry-period-toggle');
+    return this.select("#default-expiry-period-toggle");
   }
 
   /**
@@ -96,7 +96,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get defaultExpiryPeriodInput() {
-    return this.select('#default-expiry-period-input');
+    return this.select("#default-expiry-period-input");
   }
 
   /**
@@ -104,7 +104,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get policyOverrideToggle() {
-    return this.select('#policy-override-toggle');
+    return this.select("#policy-override-toggle");
   }
 
   /**
@@ -112,7 +112,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get automaticExpiryToggle() {
-    return this.select('#automatic-expiry-toggle');
+    return this.select("#automatic-expiry-toggle");
   }
 
   /**
@@ -120,7 +120,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get automaticExpiryLabel() {
-    return this.select('#automatic-expiry .name');
+    return this.select("#automatic-expiry .name");
   }
 
   /**
@@ -128,7 +128,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get automaticExpiryInfo() {
-    return this.select('#automatic-expiry .info');
+    return this.select("#automatic-expiry .info");
   }
 
   /**
@@ -136,7 +136,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get automaticUpdateLabel() {
-    return this.select('#automatic-update .name');
+    return this.select("#automatic-update .name");
   }
 
   /**
@@ -144,7 +144,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get automaticUpdateInfo() {
-    return this.select('#automatic-update .info');
+    return this.select("#automatic-update .info");
   }
 
   /**
@@ -152,7 +152,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get defaultExpiryPeriodLabel() {
-    return this.select('#default-expiry-period .name');
+    return this.select("#default-expiry-period .name");
   }
 
   /**
@@ -160,7 +160,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get defaultExpiryPeriodInfo() {
-    return this.select('#default-expiry-period .info-input');
+    return this.select("#default-expiry-period .info-input");
   }
 
   /**
@@ -168,7 +168,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get policyOverrideLabel() {
-    return this.select('#policy-override .name');
+    return this.select("#policy-override .name");
   }
 
   /**
@@ -176,7 +176,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get policyOverrideInfo() {
-    return this.select('#policy-override .info');
+    return this.select("#policy-override .info");
   }
 
   /**
@@ -184,7 +184,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get automaticUpdateToggle() {
-    return this.select('#automatic-update-toggle');
+    return this.select("#automatic-update-toggle");
   }
 
   /**
@@ -192,7 +192,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get expiryNotificationInput() {
-    return this.select('#expiry-notification-input');
+    return this.select("#expiry-notification-input");
   }
 
   /**
@@ -200,7 +200,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get expiryNotificationDescription() {
-    return this.select('#expiry-notification-description');
+    return this.select("#expiry-notification-description");
   }
 
   /**
@@ -208,16 +208,15 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get expiryNotificationTitle() {
-    return this.select('#expiry-notification-subtitle');
+    return this.select("#expiry-notification-subtitle");
   }
-
 
   /**
    * Returns the expiry notification info
    * @returns {HTMLElement}
    */
   get expiryNotificationInfo() {
-    return this.select('#expiry-notification');
+    return this.select("#expiry-notification");
   }
 
   /**
@@ -225,7 +224,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get defaultExpiryPeriodGteError() {
-    return this.select('#default-expiry-period-gte');
+    return this.select("#default-expiry-period-gte");
   }
 
   /**
@@ -233,7 +232,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get defaultExpiryPeriodRequiredError() {
-    return this.select('#default-expiry-period-required');
+    return this.select("#default-expiry-period-required");
   }
 
   /**
@@ -241,7 +240,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get expiryNotificationGteError() {
-    return this.select('#expiry-notification-gte');
+    return this.select("#expiry-notification-gte");
   }
 
   /**
@@ -249,7 +248,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get expiryNotificationRequiredError() {
-    return this.select('#expiry-notification-required');
+    return this.select("#expiry-notification-required");
   }
 
   /**
@@ -257,7 +256,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get form() {
-    return this.select('#password-expiry-form-advanced form');
+    return this.select("#password-expiry-form-advanced form");
   }
 
   /**
@@ -306,7 +305,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {Promise<void>}
    */
   clickOn(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 
@@ -318,7 +317,6 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
   async fillDefaultExpiryPeriod(data) {
     await this.fillInput(this.defaultExpiryPeriodInput, data);
   }
-
 
   /**
    * fill the expiry notification input with data
@@ -337,7 +335,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    */
   async fillInput(element, data) {
     element.focus();
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
     await waitFor(() => {});
   }

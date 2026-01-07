@@ -12,9 +12,9 @@
  * @since         4.5.0
  */
 
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 export const defaultProps = (data = {}) => ({
   context: defaultAppContext(),
@@ -23,9 +23,6 @@ export const defaultProps = (data = {}) => ({
   actionFeedbackContext: {
     displaySuccess: jest.fn(),
   },
-  resources: [
-    defaultResourceDto(),
-    defaultResourceDto(),
-  ],
+  resources: [defaultResourceDto(), defaultResourceDto()],
   ...data,
 });

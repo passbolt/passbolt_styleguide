@@ -12,9 +12,12 @@
  * @since         3.8.0
  */
 
-import {defaultProps, mockSubscriptionModel} from "../../../../react-extension/components/Administration/DisplaySubscriptionKey/DisplaySubscriptionKey.test.data";
-import {AdminSubscriptionContextProvider} from "./AdministrationSubscription";
-import PassboltSubscriptionError from '../../../lib/Error/PassboltSubscriptionError';
+import {
+  defaultProps,
+  mockSubscriptionModel,
+} from "../../../../react-extension/components/Administration/DisplaySubscriptionKey/DisplaySubscriptionKey.test.data";
+import { AdminSubscriptionContextProvider } from "./AdministrationSubscription";
+import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
 
 describe("AdminSubscriptionContext", () => {
   let adminSubscribeContext; // The adminSubscribeContext to test
@@ -23,11 +26,11 @@ describe("AdminSubscriptionContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminSubscribeContext = new AdminSubscriptionContextProvider(Object.assign({}, props));
-    const setStateMock = state => adminSubscribeContext.state = Object.assign(adminSubscribeContext.state, state);
+    const setStateMock = (state) => (adminSubscribeContext.state = Object.assign(adminSubscribeContext.state, state));
     jest.spyOn(adminSubscribeContext, "setState").mockImplementation(setStateMock);
   });
   describe("AdminSubscriptionContext::findSubscriptionKey", () => {
-    it("should get the current subscription and store it in its state", async() => {
+    it("should get the current subscription and store it in its state", async () => {
       await adminSubscribeContext.findSubscriptionKey();
 
       expect.assertions(2);
@@ -36,19 +39,21 @@ describe("AdminSubscriptionContext", () => {
       expect(adminSubscribeContext.isProcessing()).toBeFalsy();
     });
 
-    it("should init subscription with error in case of PassboltSubscriptionError", async() => {
-      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementation(() => { throw new PassboltSubscriptionError("error", {}); });
+    it("should init subscription with error in case of PassboltSubscriptionError", async () => {
+      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementation(() => {
+        throw new PassboltSubscriptionError("error", {});
+      });
       await adminSubscribeContext.findSubscriptionKey();
 
       expect.assertions(3);
       const subscription = adminSubscribeContext.getSubscription();
-      expect(subscription.email).toEqual('N/A');
-      expect(subscription.subscriptionId).toEqual('N/A');
+      expect(subscription.email).toEqual("N/A");
+      expect(subscription.subscriptionId).toEqual("N/A");
       expect(adminSubscribeContext.isProcessing()).toBeFalsy();
     });
   });
   describe("AdminSubscriptionContext::hasSettingsChanges", () => {
-    it("should return the number of active user", async() => {
+    it("should return the number of active user", async () => {
       const activeUsers = await adminSubscribeContext.getActiveUsers();
 
       expect.assertions(1);
@@ -58,7 +63,7 @@ describe("AdminSubscriptionContext", () => {
   });
 
   describe("AdminSubscriptionContext::clearContext", () => {
-    it("should clear the context and set it by default", async() => {
+    it("should clear the context and set it by default", async () => {
       await adminSubscribeContext.findSubscriptionKey();
       adminSubscribeContext.clearContext();
 
@@ -69,5 +74,3 @@ describe("AdminSubscriptionContext", () => {
     });
   });
 });
-
-

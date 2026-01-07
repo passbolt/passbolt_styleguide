@@ -13,16 +13,14 @@
  */
 
 import EntitySchema from "../entity/abstract/entitySchema";
-import {v4 as uuid} from "uuid";
-import {defaultResourceViewModelDto, minimalResourceViewModelDto} from "./resourceViewModel.test.data";
-import {defaultResourceDto} from "../entity/resource/resourceEntity.test.data";
-import {
-  TEST_RESOURCE_TYPE_V5_DEFAULT
-} from "../entity/resourceType/resourceTypeEntity.test.data";
-import {DateTime} from "luxon";
+import { v4 as uuid } from "uuid";
+import { defaultResourceViewModelDto, minimalResourceViewModelDto } from "./resourceViewModel.test.data";
+import { defaultResourceDto } from "../entity/resource/resourceEntity.test.data";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../entity/resourceType/resourceTypeEntity.test.data";
+import { DateTime } from "luxon";
 import ResourceViewModel from "./ResourceViewModel";
 import ResourceV5DefaultViewModel from "./ResourceV5DefaultViewModel";
-import {SECRET_DATA_OBJECT_TYPE} from "../entity/secretData/secretDataEntity";
+import { SECRET_DATA_OBJECT_TYPE } from "../entity/secretData/secretDataEntity";
 
 describe("ResourceV5DefaultViewModel", () => {
   describe("::createFromEntity", () => {
@@ -171,7 +169,7 @@ describe("ResourceV5DefaultViewModel", () => {
 
     it("should return a dto with an id if it is set", () => {
       expect.assertions(1);
-      const dto = minimalResourceViewModelDto({id: uuid()});
+      const dto = minimalResourceViewModelDto({ id: uuid() });
       const viewModel = new ResourceV5DefaultViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
@@ -238,7 +236,7 @@ describe("ResourceV5DefaultViewModel", () => {
       const originalDto = {
         password: "a password",
         description: "",
-        totp: {}
+        totp: {},
       };
       const viewModel1 = new ResourceV5DefaultViewModel(originalDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(true);
@@ -248,7 +246,7 @@ describe("ResourceV5DefaultViewModel", () => {
       expect.assertions(1);
       const originalDto = {
         password: "test",
-        description: "a description"
+        description: "a description",
       };
       const viewModel1 = new ResourceV5DefaultViewModel(originalDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(false);
@@ -258,11 +256,11 @@ describe("ResourceV5DefaultViewModel", () => {
       expect.assertions(1);
       const originalDto = {
         password: "test",
-        description: "a description"
+        description: "a description",
       };
       const otherDto = {
         password: "test-other",
-        description: "a description"
+        description: "a description",
       };
       const viewModel1 = new ResourceV5DefaultViewModel(otherDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(true);

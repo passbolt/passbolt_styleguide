@@ -17,7 +17,7 @@
  */
 
 import SignInManager from "./SignInManager";
-import {fireEvent, waitFor} from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 
 export default class SignInManagerPage {
   /**
@@ -28,7 +28,7 @@ export default class SignInManagerPage {
   }
 
   async destroy() {
-    await port.emit('passbolt.content-script.destroy');
+    await port.emit("passbolt.content-script.destroy");
   }
 
   /**
@@ -50,7 +50,7 @@ export default class SignInManagerPage {
    * @returns {Promise<void>}
    */
   async clickOnSignIn() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.signIn, leftClick);
     await waitFor(() => {});
   }
@@ -60,7 +60,7 @@ export default class SignInManagerPage {
    * @returns {Promise<void>}
    */
   async clickOnOtherButton() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.otherButton, leftClick);
     await waitFor(() => {});
   }

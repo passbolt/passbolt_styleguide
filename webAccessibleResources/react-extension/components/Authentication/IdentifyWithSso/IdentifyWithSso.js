@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.11.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import IdentifyViaSsoService from "../../../../shared/services/sso/IdentifyViaSsoService";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 
 class IdentifyWithSso extends Component {
   /**
@@ -26,7 +26,12 @@ class IdentifyWithSso extends Component {
     super(props);
     this.state = this.defaultState;
     this.bindEventHandlers();
-    this.identifyViaSsoService = new IdentifyViaSsoService(this.props.ssoProvider.id, this.props.context, this.handleSsoAuthSuccess, this.handleSsoAuthSuccessForRegistration);
+    this.identifyViaSsoService = new IdentifyViaSsoService(
+      this.props.ssoProvider.id,
+      this.props.context,
+      this.handleSsoAuthSuccess,
+      this.handleSsoAuthSuccessForRegistration,
+    );
   }
 
   /**
@@ -123,7 +128,7 @@ class IdentifyWithSso extends Component {
    */
   toggleProcessing() {
     const prev = this.state.processing;
-    this.setState({processing: !prev});
+    this.setState({ processing: !prev });
   }
 
   isProcessing() {
@@ -140,17 +145,25 @@ class IdentifyWithSso extends Component {
       return null;
     }
     const isDisabled = this.isProcessing();
-    const processingClassName = isDisabled ? 'disabled' : '';
+    const processingClassName = isDisabled ? "disabled" : "";
     return (
       <div className="enter-username">
-        <h1><Trans>Welcome back!</Trans></h1>
-        <p><Trans>Your browser is not configured to work with this passbolt instance.</Trans> <Trans>Please authenticate with the Single Sign-On provider to continue.</Trans></p>
+        <h1>
+          <Trans>Welcome back!</Trans>
+        </h1>
+        <p>
+          <Trans>Your browser is not configured to work with this passbolt instance.</Trans>{" "}
+          <Trans>Please authenticate with the Single Sign-On provider to continue.</Trans>
+        </p>
         <div className="sso-login-form form-actions">
-          <button type="button" className={`sso-login-button ${processingClassName} ${ssoProvider.id}`} onClick={this.handleSsoRecoverClick} disabled={isDisabled} >
-            <span className="provider-logo">
-              {ssoProvider.icon}
-            </span>
-            {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProvider.name})}
+          <button
+            type="button"
+            className={`sso-login-button ${processingClassName} ${ssoProvider.id}`}
+            onClick={this.handleSsoRecoverClick}
+            disabled={isDisabled}
+          >
+            <span className="provider-logo">{ssoProvider.icon}</span>
+            {this.props.t(`Sign in with {{providerName}}`, { providerName: ssoProvider.name })}
           </button>
           <button type="button" className="link" onClick={this.handleGoToEmailClick}>
             <Trans>Continue with my email.</Trans>
@@ -169,4 +182,4 @@ IdentifyWithSso.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(IdentifyWithSso));
+export default withAppContext(withTranslation("common")(IdentifyWithSso));

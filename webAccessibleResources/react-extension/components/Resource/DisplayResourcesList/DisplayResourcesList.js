@@ -13,18 +13,18 @@
  */
 import PropTypes from "prop-types";
 import React from "react";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withRouter} from "react-router-dom";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withRouter } from "react-router-dom";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
-import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withDrag} from "../../../contexts/DragContext";
+import { withContextualMenu } from "../../../contexts/ContextualMenuContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withDrag } from "../../../contexts/DragContext";
 import DisplayDragResource from "./DisplayDragResource";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import GridTable from "../../../../shared/components/Table/GridTable";
 import CellFavorite from "../../../../shared/components/Table/CellFavorite";
 import CellUris from "../../../../shared/components/Table/CellUris";
@@ -39,27 +39,25 @@ import ColumnUsernameModel from "../../../../shared/models/column/ColumnUsername
 import ColumnPasswordModel from "../../../../shared/models/column/ColumnPasswordModel";
 import ColumnUriModel from "../../../../shared/models/column/ColumnUriModel";
 import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
-import ColumnModel, {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
-import {withProgress} from "../../../contexts/ProgressContext";
+import ColumnModel, { ColumnModelTypes } from "../../../../shared/models/column/ColumnModel";
+import { withProgress } from "../../../contexts/ProgressContext";
 import CellTotp from "../../../../shared/components/Table/CellTotp";
 import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
-import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import ColumnExpiredModel from "../../../../shared/models/column/ColumnExpiredModel";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
 import CellDate from "../../../../shared/components/Table/CellDate";
 import CellExpiryDate from "../../../../shared/components/Table/CellExpiryDate";
 import CellHeaderDefault from "../../../../shared/components/Table/CellHeaderDefault";
 import ColumnLocationModel from "../../../../shared/models/column/ColumnLocationModel";
 import CellLocation from "../../../../shared/components/Table/CellLocation";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
 import CellName from "../../../../shared/components/Table/CellName";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
 import memoize from "memoize-one";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import FavoriteServiceWorkerService from "./FavoriteServiceWorkerService";
 import Logger from "../../../../shared/utils/logger";
 
@@ -96,7 +94,7 @@ class DisplayResourcesList extends React.Component {
         columnId: null, // The previewed cellule column id
         resourceId: null, // The previewed cellule resource id
       },
-      plaintextSecretDto: null // The plain text secret dto.
+      plaintextSecretDto: null, // The plain text secret dto.
     };
   }
 
@@ -131,21 +129,100 @@ class DisplayResourcesList extends React.Component {
    * Init the grid columns.
    */
   initColumns() {
-    this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
-    this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: FavoriteSVG}}));
-    this.defaultColumns.push(new ColumnNameModel({cellRenderer: {component: CellName, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredFeature, hasIconVisibleCallback: this.hasIconVisible}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
+    this.defaultColumns.push(
+      new ColumnCheckboxModel({
+        cellRenderer: { component: CellCheckbox, props: { onClick: this.handleCheckboxWrapperClick } },
+        headerCellRenderer: { component: CellHeaderCheckbox, props: { onChange: this.handleSelectAllChange } },
+      }),
+    );
+    this.defaultColumns.push(
+      new ColumnFavoriteModel({
+        cellRenderer: { component: CellFavorite, props: { onClick: this.handleFavoriteClick } },
+        headerCellRenderer: { component: FavoriteSVG },
+      }),
+    );
+    this.defaultColumns.push(
+      new ColumnNameModel({
+        cellRenderer: {
+          component: CellName,
+          props: {
+            hasAttentionRequiredFeature: this.hasAttentionRequiredFeature,
+            hasIconVisibleCallback: this.hasIconVisible,
+          },
+        },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Name") } },
+      }),
+    );
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
-      this.defaultColumns.push(new ColumnExpiredModel({cellRenderer: {component: CellExpiryDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Expiry")}}}));
+      this.defaultColumns.push(
+        new ColumnExpiredModel({
+          cellRenderer: { component: CellExpiryDate, props: { locale: this.props.context.locale, t: this.props.t } },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Expiry") } },
+        }),
+      );
     }
-    this.defaultColumns.push(new ColumnUsernameModel({cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Username")}}}));
-    this.defaultColumns.push(new ColumnPasswordModel({cellRenderer: {component: CellPassword, props: {title: this.translate("Click to copy"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Password")}}}));
-    if (this.props.context.siteSettings.canIUse('totpResourceTypes')) {
-      this.defaultColumns.push(new ColumnTotpModel({cellRenderer: {component: CellTotp, props: {title: this.translate("Click to copy"), getPreviewTotp: this.getPreviewTotp, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("TOTP")}}}));
+    this.defaultColumns.push(
+      new ColumnUsernameModel({
+        cellRenderer: { component: CellButton, props: { onClick: this.handleCopyUsernameClick } },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Username") } },
+      }),
+    );
+    this.defaultColumns.push(
+      new ColumnPasswordModel({
+        cellRenderer: {
+          component: CellPassword,
+          props: {
+            title: this.translate("Click to copy"),
+            getPreviewPassword: this.getPreviewPassword,
+            canCopy: this.canCopySecret,
+            canPreview: this.canPreviewSecret,
+            onPasswordClick: this.handleCopyPasswordClick,
+            onPreviewPasswordClick: this.handlePreviewPasswordButtonClick,
+            hasPassword: this.isPasswordResources,
+          },
+        },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Password") } },
+      }),
+    );
+    if (this.props.context.siteSettings.canIUse("totpResourceTypes")) {
+      this.defaultColumns.push(
+        new ColumnTotpModel({
+          cellRenderer: {
+            component: CellTotp,
+            props: {
+              title: this.translate("Click to copy"),
+              getPreviewTotp: this.getPreviewTotp,
+              canCopy: this.canCopySecret,
+              canPreview: this.canPreviewSecret,
+              onTotpClick: this.handleCopyTotpClick,
+              onPreviewTotpClick: this.handlePreviewTotpButtonClick,
+              hasTotp: this.isTotpResources,
+            },
+          },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("TOTP") } },
+        }),
+      );
     }
-    this.defaultColumns.push(new ColumnUriModel({cellRenderer: {component: CellUris, props: {onClick: this.handleGoToResourceUriClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("URI")}}}));
-    this.defaultColumns.push(new ColumnModifiedModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Modified")}}}));
+    this.defaultColumns.push(
+      new ColumnUriModel({
+        cellRenderer: { component: CellUris, props: { onClick: this.handleGoToResourceUriClick } },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("URI") } },
+      }),
+    );
+    this.defaultColumns.push(
+      new ColumnModifiedModel({
+        cellRenderer: { component: CellDate, props: { locale: this.props.context.locale, t: this.props.t } },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Modified") } },
+      }),
+    );
     if (this.canUseFolders) {
-      this.defaultColumns.push(new ColumnLocationModel({getValue: resource => this.props.context.getHierarchyFolderCache(resource.folder_parent_id), cellRenderer: {component: CellLocation, props: {onClick: this.handleLocationClick, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Location")}}}));
+      this.defaultColumns.push(
+        new ColumnLocationModel({
+          getValue: (resource) => this.props.context.getHierarchyFolderCache(resource.folder_parent_id),
+          cellRenderer: { component: CellLocation, props: { onClick: this.handleLocationClick, t: this.props.t } },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Location") } },
+        }),
+      );
     }
   }
 
@@ -168,11 +245,13 @@ class DisplayResourcesList extends React.Component {
     // Get the column with id as a key from the column to merge
     const columnsResourceSetting = this.columnsResourceSetting.toHashTable();
     // Merge the column values
-    const columns = this.defaultColumns.map(column => Object.assign(new ColumnModel(column), columnsResourceSetting[column.id]));
+    const columns = this.defaultColumns.map((column) =>
+      Object.assign(new ColumnModel(column), columnsResourceSetting[column.id]),
+    );
 
     // Sort the position of the column, the column with no position will be at the beginning
-    columns.sort((columnA, columnB) => (columnA.position || 0) < (columnB.position || 0) ? -1 : 1);
-    this.setState({columns});
+    columns.sort((columnA, columnB) => ((columnA.position || 0) < (columnB.position || 0) ? -1 : 1));
+    this.setState({ columns });
   }
 
   /**
@@ -187,7 +266,7 @@ class DisplayResourcesList extends React.Component {
    * @param {array} columnsResourceSetting
    * @returns {boolean}
    */
-  memoizedHasIconVisible = memoize(columns => columns.getFirst("id", ColumnModelTypes.ICON).show);
+  memoizedHasIconVisible = memoize((columns) => columns.getFirst("id", ColumnModelTypes.ICON).show);
 
   /**
    * Whenever the component has been updated
@@ -197,8 +276,12 @@ class DisplayResourcesList extends React.Component {
   componentDidUpdate(prevProps) {
     this.handleResourceScroll();
     // Column resource settings have changed
-    const hasColumnsResourceViewChange = this.columnsResourceSetting?.hasDifferentShowValue(prevProps.resourceWorkspaceContext.columnsResourceSetting);
-    const hasColumnsSettingsChanged = prevProps.resourceWorkspaceContext.columnsResourceSetting !== this.props.resourceWorkspaceContext.columnsResourceSetting;
+    const hasColumnsResourceViewChange = this.columnsResourceSetting?.hasDifferentShowValue(
+      prevProps.resourceWorkspaceContext.columnsResourceSetting,
+    );
+    const hasColumnsSettingsChanged =
+      prevProps.resourceWorkspaceContext.columnsResourceSetting !==
+      this.props.resourceWorkspaceContext.columnsResourceSetting;
 
     if (hasColumnsSettingsChanged || hasColumnsResourceViewChange) {
       this.mergeAndSortColumns();
@@ -209,23 +292,38 @@ class DisplayResourcesList extends React.Component {
    * Returns true if the component should be re-rendered
    */
   shouldComponentUpdate(nextProps, nextState) {
-    const {filteredResources, selectedResources, sorter, scrollTo, columnsResourceSetting} = nextProps.resourceWorkspaceContext;
+    const { filteredResources, selectedResources, sorter, scrollTo, columnsResourceSetting } =
+      nextProps.resourceWorkspaceContext;
     const hasFilteredResourcesChanged = this.props.resourceWorkspaceContext.filteredResources !== filteredResources;
-    const hasBothSingleSelection = selectedResources.length === 1 && this.props.resourceWorkspaceContext.selectedResources.length === 1;
-    const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== this.props.resourceWorkspaceContext.selectedResources[0].id;
-    const hasSelectedResourcesLengthChanged = this.props.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
+    const hasBothSingleSelection =
+      selectedResources.length === 1 && this.props.resourceWorkspaceContext.selectedResources.length === 1;
+    const hasSingleSelectedResourceChanged =
+      hasBothSingleSelection && selectedResources[0].id !== this.props.resourceWorkspaceContext.selectedResources[0].id;
+    const hasSelectedResourcesLengthChanged =
+      this.props.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
     const hasSorterChanged = sorter !== this.props.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
     const hasResourcePreviewSecretChange = nextState.previewedCellule !== this.state.previewedCellule;
     const hasResourceColumnsChange = nextState.columns !== this.state.columns;
-    const hasColumnOrderChanged = nextProps.resourceWorkspaceContext.columnsResourceSetting !== this.props.resourceWorkspaceContext.columnsResourceSetting;
-    const hasColumnsResourceViewChange = columnsResourceSetting?.hasDifferentShowValue(this.props.resourceWorkspaceContext.columnsResourceSetting);
-    const hasRowsSettingChanged = nextProps.resourceWorkspaceContext.rowsSetting?.height !== this.props.resourceWorkspaceContext.rowsSetting?.height;
-    const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
+    const hasColumnOrderChanged =
+      nextProps.resourceWorkspaceContext.columnsResourceSetting !==
+      this.props.resourceWorkspaceContext.columnsResourceSetting;
+    const hasColumnsResourceViewChange = columnsResourceSetting?.hasDifferentShowValue(
+      this.props.resourceWorkspaceContext.columnsResourceSetting,
+    );
+    const hasRowsSettingChanged =
+      nextProps.resourceWorkspaceContext.rowsSetting?.height !==
+      this.props.resourceWorkspaceContext.rowsSetting?.height;
+    const mustHidePreviewPassword =
+      hasFilteredResourcesChanged ||
+      hasSingleSelectedResourceChanged ||
+      hasSelectedResourcesLengthChanged ||
+      hasSorterChanged;
     if (mustHidePreviewPassword) {
       this.hidePreviewedCellule();
     }
-    return hasFilteredResourcesChanged ||
+    return (
+      hasFilteredResourcesChanged ||
       hasSelectedResourcesLengthChanged ||
       hasSingleSelectedResourceChanged ||
       hasSorterChanged ||
@@ -234,7 +332,8 @@ class DisplayResourcesList extends React.Component {
       hasColumnsResourceViewChange ||
       hasResourcePreviewSecretChange ||
       hasColumnOrderChanged ||
-      hasRowsSettingChanged;
+      hasRowsSettingChanged
+    );
   }
 
   /**
@@ -250,8 +349,9 @@ class DisplayResourcesList extends React.Component {
    * @returns {boolean}
    */
   get canUseFolders() {
-    return this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
+    return (
+      this.props.context.siteSettings.canIUse("folders") && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE)
+    );
   }
 
   /**
@@ -280,7 +380,7 @@ class DisplayResourcesList extends React.Component {
   handleSelectResources(resources) {
     const selectedFolders = [];
     const selectedResources = resources;
-    this.setState({selectedFolders, selectedResources}, () => {
+    this.setState({ selectedFolders, selectedResources }, () => {
       if (resources.length === 1) {
         this.props.history.push(`/app/passwords/view/${resources[0].id}`);
       }
@@ -296,7 +396,7 @@ class DisplayResourcesList extends React.Component {
     this.handleSelectResources([resource]);
     const left = event.pageX;
     const top = event.pageY;
-    const contextualMenuProps = {left, top, resource};
+    const contextualMenuProps = { left, top, resource };
     this.props.contextualMenuContext.show(DisplayResourcesListContextualMenu, contextualMenuProps);
   }
 
@@ -315,7 +415,7 @@ class DisplayResourcesList extends React.Component {
    */
   handleResourceScroll() {
     const resourceToScroll = this.props.resourceWorkspaceContext.scrollTo.resource;
-    const hasNotEmptyRange = this.listRef.current?.getVisibleRange().some(value => value);
+    const hasNotEmptyRange = this.listRef.current?.getVisibleRange().some((value) => value);
     if (resourceToScroll && hasNotEmptyRange) {
       this.scrollTo(resourceToScroll.id);
       this.props.resourceWorkspaceContext.onResourceScrolled();
@@ -341,7 +441,7 @@ class DisplayResourcesList extends React.Component {
    * @return {*}
    */
   get selectedResourcesIds() {
-    const getIds = resource => resource.id;
+    const getIds = (resource) => resource.id;
     return this.selectedResources.map(getIds);
   }
 
@@ -358,7 +458,7 @@ class DisplayResourcesList extends React.Component {
    * @return {[]}
    */
   get columnsFiltered() {
-    const filteredByColumnToDisplay = column => column.id === 'checkbox' || column.show;
+    const filteredByColumnToDisplay = (column) => column.id === "checkbox" || column.show;
     return this.state.columns.filter(filteredByColumnToDisplay);
   }
 
@@ -368,7 +468,7 @@ class DisplayResourcesList extends React.Component {
    * @return {string|undefined}
    */
   getPreviewPassword(resource) {
-    return this.isCellulePreviewed('password', resource.id) ? this.state.plaintextSecretDto?.password : undefined;
+    return this.isCellulePreviewed("password", resource.id) ? this.state.plaintextSecretDto?.password : undefined;
   }
 
   /**
@@ -377,7 +477,7 @@ class DisplayResourcesList extends React.Component {
    * @return {object|undefined}
    */
   getPreviewTotp(resource) {
-    return this.isCellulePreviewed('totp', resource.id) ? this.state.plaintextSecretDto?.totp : undefined;
+    return this.isCellulePreviewed("totp", resource.id) ? this.state.plaintextSecretDto?.totp : undefined;
   }
 
   /**
@@ -428,11 +528,11 @@ class DisplayResourcesList extends React.Component {
    */
   async copyTotpToClipboard(resourceId) {
     let plaintextSecretDto, code;
-    const isTotpPreviewed = this.isCellulePreviewed('totp', resourceId);
+    const isTotpPreviewed = this.isCellulePreviewed("totp", resourceId);
     if (isTotpPreviewed) {
       plaintextSecretDto = this.state.plaintextSecretDto;
     } else {
-      this.props.progressContext.open(this.props.t('Decrypting secret'));
+      this.props.progressContext.open(this.props.t("Decrypting secret"));
 
       try {
         plaintextSecretDto = await this.decryptResourceSecret(resourceId);
@@ -450,7 +550,9 @@ class DisplayResourcesList extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayError(
+        this.translate("The TOTP is empty and cannot be copied to clipboard."),
+      );
       return;
     }
 
@@ -474,10 +576,10 @@ class DisplayResourcesList extends React.Component {
   async copyPasswordToClipboard(resourceId) {
     let plaintextSecretDto;
 
-    if (this.isCellulePreviewed('password', resourceId)) {
+    if (this.isCellulePreviewed("password", resourceId)) {
       plaintextSecretDto = this.state.plaintextSecretDto;
     } else {
-      this.props.progressContext.open(this.props.t('Decrypting secret'));
+      this.props.progressContext.open(this.props.t("Decrypting secret"));
 
       try {
         plaintextSecretDto = await this.decryptResourceSecret(resourceId);
@@ -495,11 +597,16 @@ class DisplayResourcesList extends React.Component {
     }
 
     if (!plaintextSecretDto?.password?.length) {
-      await this.props.actionFeedbackContext.displayWarning(this.translate("The password is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayWarning(
+        this.translate("The password is empty and cannot be copied to clipboard."),
+      );
       return;
     }
 
-    await this.props.clipboardContext.copyTemporarily(plaintextSecretDto.password, this.translate("The password has been copied to clipboard."));
+    await this.props.clipboardContext.copyTemporarily(
+      plaintextSecretDto.password,
+      this.translate("The password has been copied to clipboard."),
+    );
     await this.props.resourceWorkspaceContext.onResourceCopied();
   }
 
@@ -509,7 +616,7 @@ class DisplayResourcesList extends React.Component {
    * @returns {Promise<void>}
    */
   async togglePreviewPassword(resourceId) {
-    const isPasswordPreviewedPreviewed = this.isCellulePreviewed('password', resourceId);
+    const isPasswordPreviewedPreviewed = this.isCellulePreviewed("password", resourceId);
     this.hidePreviewedCellule();
     if (!isPasswordPreviewedPreviewed) {
       await this.previewPassword(resourceId);
@@ -523,7 +630,7 @@ class DisplayResourcesList extends React.Component {
   hidePreviewedCellule() {
     const previewedCellule = null;
     const plaintextSecretDto = null;
-    this.setState({previewedCellule, plaintextSecretDto});
+    this.setState({ previewedCellule, plaintextSecretDto });
   }
 
   /**
@@ -534,7 +641,7 @@ class DisplayResourcesList extends React.Component {
   async previewPassword(resourceId) {
     let plaintextSecretDto;
 
-    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
 
     try {
       plaintextSecretDto = await this.decryptResourceSecret(resourceId);
@@ -555,8 +662,8 @@ class DisplayResourcesList extends React.Component {
     }
 
     const columnId = "password";
-    const previewedCellule = {resourceId, columnId};
-    this.setState({previewedCellule, plaintextSecretDto});
+    const previewedCellule = { resourceId, columnId };
+    this.setState({ previewedCellule, plaintextSecretDto });
   }
 
   /**
@@ -565,7 +672,7 @@ class DisplayResourcesList extends React.Component {
    * @returns {Promise<void>}
    */
   async togglePreviewTotp(resourceId) {
-    const isTotpPreviewedPreviewed = this.isCellulePreviewed('totp', resourceId);
+    const isTotpPreviewedPreviewed = this.isCellulePreviewed("totp", resourceId);
     this.hidePreviewedCellule();
     if (!isTotpPreviewedPreviewed) {
       await this.previewTotp(resourceId);
@@ -580,7 +687,7 @@ class DisplayResourcesList extends React.Component {
   async previewTotp(resourceId) {
     let plaintextSecretDto;
 
-    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
 
     try {
       plaintextSecretDto = await this.decryptResourceSecret(resourceId);
@@ -602,8 +709,8 @@ class DisplayResourcesList extends React.Component {
     }
 
     const columnId = "totp";
-    const previewedCellule = {resourceId, columnId};
-    this.setState({previewedCellule, plaintextSecretDto});
+    const previewedCellule = { resourceId, columnId };
+    this.setState({ previewedCellule, plaintextSecretDto });
   }
 
   /**
@@ -657,7 +764,7 @@ class DisplayResourcesList extends React.Component {
     if (!isSelected) {
       await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
-    const draggedItems = {resources:  this.props.resourceWorkspaceContext.selectedResources, folders: []};
+    const draggedItems = { resources: this.props.resourceWorkspaceContext.selectedResources, folders: [] };
     this.props.dragContext.onDragStart(event, DisplayDragResource, draggedItems);
   }
 
@@ -725,9 +832,10 @@ class DisplayResourcesList extends React.Component {
       if (filterIsDifferent) {
         this.props.history.push(`/app/folders/view/${folderId}`);
       }
-    } else { // Case of root folder
-      const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
-      this.props.history.push(`/app/passwords`, {filter});
+    } else {
+      // Case of root folder
+      const filter = { type: ResourceWorkspaceFilterTypes.ROOT_FOLDER };
+      this.props.history.push(`/app/passwords`, { filter });
     }
   }
 
@@ -752,7 +860,7 @@ class DisplayResourcesList extends React.Component {
    * @param {string} resourceId
    */
   scrollTo(resourceId) {
-    const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
+    const resourceIndex = this.resources.findIndex((resource) => resource.id === resourceId);
     const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
     const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
     if (isInvisible) {
@@ -776,8 +884,7 @@ class DisplayResourcesList extends React.Component {
    * @returns {boolean}
    */
   isCellulePreviewed(columnId, resourceId) {
-    return this.state.previewedCellule?.columnId === columnId
-      && this.state.previewedCellule?.resourceId === resourceId;
+    return this.state.previewedCellule?.columnId === columnId && this.state.previewedCellule?.resourceId === resourceId;
   }
 
   /**
@@ -812,8 +919,10 @@ class DisplayResourcesList extends React.Component {
    * @return {boolean}
    */
   get canPreviewSecret() {
-    return this.props.context.siteSettings.canIUse('previewPassword')
-    && this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
+    return (
+      this.props.context.siteSettings.canIUse("previewPassword") &&
+      this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW)
+    );
   }
 
   /**
@@ -854,97 +963,123 @@ class DisplayResourcesList extends React.Component {
 
     return (
       <>
-        {isEmpty &&
+        {isEmpty && (
           <div className="tableview empty">
-            {filterType === ResourceWorkspaceFilterTypes.TEXT &&
+            {filterType === ResourceWorkspaceFilterTypes.TEXT && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>None of your passwords matched this search.</Trans></h1>
-                  <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
+                  <h1>
+                    <Trans>None of your passwords matched this search.</Trans>
+                  </h1>
+                  <p>
+                    <Trans>Try another search or use the left panel to navigate into your passwords.</Trans>
+                  </p>
                 </div>
               </div>
-            }
-            {filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
+            )}
+            {filterType === ResourceWorkspaceFilterTypes.FAVORITE && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>None of your passwords are yet marked as favorite.</Trans></h1>
-                  <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
+                  <h1>
+                    <Trans>None of your passwords are yet marked as favorite.</Trans>
+                  </h1>
+                  <p>
+                    <Trans>Add stars to passwords you want to easily find later.</Trans>
+                  </p>
                 </div>
               </div>
-            }
-            {filterType === ResourceWorkspaceFilterTypes.GROUP &&
+            )}
+            {filterType === ResourceWorkspaceFilterTypes.GROUP && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>No passwords are shared with this group yet.</Trans></h1>
-                  <p><Trans>Share a password with this group or wait for a team member to share one with this
-                    group.</Trans></p>
+                  <h1>
+                    <Trans>No passwords are shared with this group yet.</Trans>
+                  </h1>
+                  <p>
+                    <Trans>
+                      Share a password with this group or wait for a team member to share one with this group.
+                    </Trans>
+                  </p>
                 </div>
               </div>
-            }
-            {(filterType === ResourceWorkspaceFilterTypes.FOLDER || filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) &&
+            )}
+            {(filterType === ResourceWorkspaceFilterTypes.FOLDER ||
+              filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>No passwords in this folder yet.</Trans></h1>
-                  <p><Trans>It does feel a bit empty here.</Trans></p>
+                  <h1>
+                    <Trans>No passwords in this folder yet.</Trans>
+                  </h1>
+                  <p>
+                    <Trans>It does feel a bit empty here.</Trans>
+                  </p>
                 </div>
               </div>
-            }
-            {filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
+            )}
+            {filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>No passwords are shared with you yet.</Trans></h1>
+                  <h1>
+                    <Trans>No passwords are shared with you yet.</Trans>
+                  </h1>
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;
                     <Trans>Wait for a team member to share a password with you.</Trans>
                   </p>
                 </div>
               </div>
-            }
-            {filterType === ResourceWorkspaceFilterTypes.EXPIRED &&
+            )}
+            {filterType === ResourceWorkspaceFilterTypes.EXPIRED && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>No passwords have expired yet.</Trans></h1>
+                  <h1>
+                    <Trans>No passwords have expired yet.</Trans>
+                  </h1>
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;
                     <Trans>Wait for a password to expire.</Trans>
                   </p>
                 </div>
               </div>
-            }
+            )}
             {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN ||
-                filterType === ResourceWorkspaceFilterTypes.ALL) &&
+              filterType === ResourceWorkspaceFilterTypes.ALL) && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>Welcome to passbolt!</Trans></h1>
+                  <h1>
+                    <Trans>Welcome to passbolt!</Trans>
+                  </h1>
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;
                     <Trans>Create your first password or wait for a team member to share one with you.</Trans>
                   </p>
                 </div>
               </div>
-            }
-            {filterType === ResourceWorkspaceFilterTypes.PRIVATE &&
+            )}
+            {filterType === ResourceWorkspaceFilterTypes.PRIVATE && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>Welcome to passbolt!</Trans></h1>
+                  <h1>
+                    <Trans>Welcome to passbolt!</Trans>
+                  </h1>
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;
                     <Trans>Create your first password.</Trans>
                   </p>
                 </div>
               </div>
-            }
+            )}
           </div>
-        }
-        {this.isGridReady &&
+        )}
+        {this.isGridReady && (
           <GridTable
             columns={this.columnsFiltered}
             rows={this.resources}
@@ -957,9 +1092,9 @@ class DisplayResourcesList extends React.Component {
             onRowDragStart={this.handleResourceDragStartEvent}
             onRowDragEnd={this.handleDragEndEvent}
             selectedRowsIds={this.selectedResourcesIds}
-            rowsRef={this.listRef}>
-          </GridTable>
-        }
+            rowsRef={this.listRef}
+          ></GridTable>
+        )}
       </>
     );
   }
@@ -979,4 +1114,20 @@ DisplayResourcesList.propTypes = {
   clipboardContext: PropTypes.object, // the clipboard service provider
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withClipboard(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDrag(withProgress(withTranslation('common')(DisplayResourcesList))))))))))));
+export default withAppContext(
+  withClipboard(
+    withRouter(
+      withRbac(
+        withActionFeedback(
+          withContextualMenu(
+            withResourceWorkspace(
+              withResourceTypesLocalStorage(
+                withPasswordExpiry(withDrag(withProgress(withTranslation("common")(DisplayResourcesList)))),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  ),
+);

@@ -12,7 +12,7 @@
  * @since         4.3.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayProgress from "./DisplayProgress";
@@ -28,9 +28,9 @@ export default class DisplayProgressTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayProgress {...props}/>
+        <DisplayProgress {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 

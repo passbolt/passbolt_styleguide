@@ -13,11 +13,11 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Autocomplete from "../../Common/Autocomplete/Autocomplete";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withLoading} from "../../../contexts/LoadingContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withLoading } from "../../../contexts/LoadingContext";
+import { Trans, withTranslation } from "react-i18next";
 import CloseSVG from "../../../../img/svg/close.svg";
 
 const TAG_MAX_LENGTH = 128;
@@ -52,7 +52,7 @@ class EditResourceTags extends React.Component {
         width: 0,
       },
       suggestedTags: null,
-      errorMessage: ""
+      errorMessage: "",
     };
   }
 
@@ -89,15 +89,15 @@ class EditResourceTags extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleEditorClickEvent, {capture: true});
+    document.addEventListener("click", this.handleEditorClickEvent, { capture: true });
     this.fetchAllTags();
-    this.setState({loading: false}, () => {
+    this.setState({ loading: false }, () => {
       this.focusOnInputTag();
     });
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleEditorClickEvent, {capture: true});
+    document.removeEventListener("click", this.handleEditorClickEvent, { capture: true });
   }
 
   focusOnInputTag() {
@@ -111,7 +111,7 @@ class EditResourceTags extends React.Component {
   async fetchAllTags() {
     const allTags = await this.props.context.port.request("passbolt.tags.find-all");
     if (allTags) {
-      this.setState({allTags});
+      this.setState({ allTags });
     }
   }
 
@@ -153,7 +153,7 @@ class EditResourceTags extends React.Component {
    */
   setInputTagValue() {
     const inputTagValue = this.inputTagRef.current.textContent;
-    this.setState({inputTagValue});
+    this.setState({ inputTagValue });
   }
 
   /**
@@ -172,8 +172,8 @@ class EditResourceTags extends React.Component {
     const top = this.inputTagRef.current.offsetTop + 28;
     const left = this.inputTagRef.current.offsetLeft - 2;
     const width = this.elementRef.current.getBoundingClientRect().width;
-    const autocompletePosition = {left, top, width};
-    this.setState({autocompletePosition});
+    const autocompletePosition = { left, top, width };
+    this.setState({ autocompletePosition });
   }
 
   /**
@@ -188,7 +188,7 @@ class EditResourceTags extends React.Component {
     }
     return {
       slug,
-      is_shared
+      is_shared,
     };
   }
 
@@ -207,7 +207,7 @@ class EditResourceTags extends React.Component {
    * @returns {boolean}
    */
   isTagAlreadyPresent(slug) {
-    const tagAlreadyPresent = this.state.tags.filter(tag => (tag.slug === slug)).shift();
+    const tagAlreadyPresent = this.state.tags.filter((tag) => tag.slug === slug).shift();
     if (tagAlreadyPresent) {
       return true;
     }
@@ -219,7 +219,7 @@ class EditResourceTags extends React.Component {
    * @param errorMessage
    */
   setErrorMessage(errorMessage) {
-    this.setState({errorMessage});
+    this.setState({ errorMessage });
   }
 
   /**
@@ -227,9 +227,9 @@ class EditResourceTags extends React.Component {
    * @param slug the name of the tag
    */
   blinkTagAlreadyPresent(slug) {
-    this.setState({tagAlreadyPresent: slug});
+    this.setState({ tagAlreadyPresent: slug });
     setTimeout(() => {
-      this.setState({tagAlreadyPresent: ""});
+      this.setState({ tagAlreadyPresent: "" });
     }, 2000);
   }
 
@@ -254,7 +254,11 @@ class EditResourceTags extends React.Component {
       return false;
     }
     if (this.isTagExceedMaxLength(slug.trim())) {
-      this.setErrorMessage(this.translate("This tag can't be added, the length cannot exceed {{tagMaxLength}}", {tagMaxLength: TAG_MAX_LENGTH}));
+      this.setErrorMessage(
+        this.translate("This tag can't be added, the length cannot exceed {{tagMaxLength}}", {
+          tagMaxLength: TAG_MAX_LENGTH,
+        }),
+      );
       return false;
     }
     if (!this.props.isOwner && slug.startsWith("#")) {
@@ -296,7 +300,7 @@ class EditResourceTags extends React.Component {
   insertTag(tag) {
     const tags = this.state.tags;
     tags.push(tag);
-    this.setState({tags});
+    this.setState({ tags });
   }
 
   /**
@@ -324,7 +328,7 @@ class EditResourceTags extends React.Component {
       if (this.isTagDeletable(tag)) {
         const tags = this.state.tags;
         tags.pop();
-        this.setState({tags});
+        this.setState({ tags });
         this.setErrorMessage("");
       } else {
         this.setErrorMessage(this.translate("This shared tag can't be deleted, you are not the owner"));
@@ -347,7 +351,7 @@ class EditResourceTags extends React.Component {
     event.nativeEvent.stopImmediatePropagation();
     const tags = this.state.tags;
     tags.splice(indexTag, 1);
-    this.setState({tags});
+    this.setState({ tags });
   }
 
   /**
@@ -362,7 +366,7 @@ class EditResourceTags extends React.Component {
    * hide autocomplete
    */
   hideAutocomplete() {
-    this.setState({suggestedTags: null});
+    this.setState({ suggestedTags: null });
   }
 
   /**
@@ -391,11 +395,11 @@ class EditResourceTags extends React.Component {
   async handleOnSubmit() {
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      this.setState({processing: true});
+      this.setState({ processing: true });
       if (this.checkTagToBeSaved()) {
         await this.updateTags();
       } else {
-        this.setState({processing: false});
+        this.setState({ processing: false });
       }
     }
   }
@@ -407,10 +411,14 @@ class EditResourceTags extends React.Component {
   async updateTags() {
     try {
       this.props.loadingContext.add();
-      await this.props.context.port.request("passbolt.tags.update-resource-tags", this.props.resourceId, this.state.tags);
+      await this.props.context.port.request(
+        "passbolt.tags.update-resource-tags",
+        this.props.resourceId,
+        this.state.tags,
+      );
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The tags have been updated successfully"));
-      this.setState({processing: false});
+      this.setState({ processing: false });
       this.props.toggleInputTagEditor();
     } catch (error) {
       // Unexpected error occurred.
@@ -418,7 +426,7 @@ class EditResourceTags extends React.Component {
       console.error(error);
       this.setState({
         errorMessage: error.message,
-        processing: false
+        processing: false,
       });
     }
   }
@@ -434,14 +442,15 @@ class EditResourceTags extends React.Component {
   getSuggestedTags() {
     const inputTagValue = this.inputTagRef.current.textContent;
     if (inputTagValue && this.state.allTags) {
-      const suggestedTags = this.state.allTags.filter(tag =>
-        this.state.tags.filter(tagResources => (tagResources.slug === tag.slug)).length === 0
-        && this.isTagDeletable(tag)
-        && tag.slug.toLowerCase().indexOf(inputTagValue.toLowerCase()) != -1
+      const suggestedTags = this.state.allTags.filter(
+        (tag) =>
+          this.state.tags.filter((tagResources) => tagResources.slug === tag.slug).length === 0 &&
+          this.isTagDeletable(tag) &&
+          tag.slug.toLowerCase().indexOf(inputTagValue.toLowerCase()) != -1,
       );
-      this.setState({suggestedTags});
+      this.setState({ suggestedTags });
     } else {
-      this.setState({suggestedTags: null});
+      this.setState({ suggestedTags: null });
     }
   }
 
@@ -498,56 +507,81 @@ class EditResourceTags extends React.Component {
         <div className="input tag-editor">
           <div className="tag-editor-input-wrapper" onClick={this.focusOnInputTag}>
             {this.state.tags &&
-              this.state.tags.map((tag, index) =>
+              this.state.tags.map((tag, index) => (
                 <div key={index} className="tag">
                   <span
-                    className={`tag-content ellipsis ${this.state.tagAlreadyPresent === tag.slug ? "blink-fast" : ""}`}>{tag.slug}</span>
-                  {this.isTagDeletable(tag) &&
+                    className={`tag-content ellipsis ${this.state.tagAlreadyPresent === tag.slug ? "blink-fast" : ""}`}
+                  >
+                    {tag.slug}
+                  </span>
+                  {this.isTagDeletable(tag) && (
                     <>
                       <div className="separator"></div>
-                      <button type="button" onClick={event => this.deleteTag(event, index)} className="tag-delete button-transparent inline">
-                        <CloseSVG/>
+                      <button
+                        type="button"
+                        onClick={(event) => this.deleteTag(event, index)}
+                        className="tag-delete button-transparent inline"
+                      >
+                        <CloseSVG />
                       </button>
                     </>
-                  }
+                  )}
                 </div>
-              )
-
-            }
-            <div ref={this.inputTagRef} className="tag-editor-input" contentEditable={!this.hasAllInputDisabled()}
-              suppressContentEditableWarning="true" onKeyPress={this.handleKeyPressed}
-              onKeyDown={this.handleOnKeyDown} onInput={this.handleOnInput}>
-            </div>
-            {this.mustShowAutocomplete() &&
-            <Autocomplete
-              id="tag-autocomplete"
-              value={this.state.inputTagValue}
-              autocompleteItems={this.state.suggestedTags}
-              left={this.state.autocompletePosition.left}
-              top={this.state.autocompletePosition.top}
-              width={this.state.autocompletePosition.width}
-              onSelect={this.handleAutocompleteSelect}
-              onArrowFocus={this.handleAutocompleteArrowFocus}
-            />
-            }
+              ))}
+            <div
+              ref={this.inputTagRef}
+              className="tag-editor-input"
+              contentEditable={!this.hasAllInputDisabled()}
+              suppressContentEditableWarning="true"
+              onKeyPress={this.handleKeyPressed}
+              onKeyDown={this.handleOnKeyDown}
+              onInput={this.handleOnInput}
+            ></div>
+            {this.mustShowAutocomplete() && (
+              <Autocomplete
+                id="tag-autocomplete"
+                value={this.state.inputTagValue}
+                autocompleteItems={this.state.suggestedTags}
+                left={this.state.autocompletePosition.left}
+                top={this.state.autocompletePosition.top}
+                width={this.state.autocompletePosition.width}
+                onSelect={this.handleAutocompleteSelect}
+                onArrowFocus={this.handleAutocompleteArrowFocus}
+              />
+            )}
           </div>
-          {this.state.errorMessage &&
-          <div className="error-message">{this.state.errorMessage}</div>
-          }
+          {this.state.errorMessage && <div className="error-message">{this.state.errorMessage}</div>}
         </div>
         <div className="actions">
-          <button type="button" disabled={this.hasAllInputDisabled()} className="link cancel tag-editor-cancel"
-            onClick={this.props.toggleInputTagEditor}><span><Trans>Cancel</Trans></span></button>
-          <button type="button" disabled={this.hasAllInputDisabled()} className={`primary tag-editor-submit ${this.hasAllInputDisabled() ? "processing" : ""}`}
-            onClick={this.handleOnSubmit}>
-            <span><Trans>Save</Trans></span>
+          <button
+            type="button"
+            disabled={this.hasAllInputDisabled()}
+            className="link cancel tag-editor-cancel"
+            onClick={this.props.toggleInputTagEditor}
+          >
+            <span>
+              <Trans>Cancel</Trans>
+            </span>
+          </button>
+          <button
+            type="button"
+            disabled={this.hasAllInputDisabled()}
+            className={`primary tag-editor-submit ${this.hasAllInputDisabled() ? "processing" : ""}`}
+            onClick={this.handleOnSubmit}
+          >
+            <span>
+              <Trans>Save</Trans>
+            </span>
           </button>
         </div>
-        {!this.state.errorMessage && this.props.isOwner &&
+        {!this.state.errorMessage && this.props.isOwner && (
           <div className="message notice">
-            <strong><Trans>Pro tip</Trans>:</strong> <Trans>Tags starting with # are shared with all users who have access. Separate tags using commas.</Trans>
+            <strong>
+              <Trans>Pro tip</Trans>:
+            </strong>{" "}
+            <Trans>Tags starting with # are shared with all users who have access. Separate tags using commas.</Trans>
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -564,4 +598,4 @@ EditResourceTags.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withLoading(withActionFeedback(withTranslation('common')(EditResourceTags))));
+export default withAppContext(withLoading(withActionFeedback(withTranslation("common")(EditResourceTags))));

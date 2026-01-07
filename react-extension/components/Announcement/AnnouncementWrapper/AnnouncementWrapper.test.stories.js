@@ -17,36 +17,37 @@ import AnnouncementWrapper from "./AnnouncementWrapper";
 import DisplayExpiredSubscriptionAnnouncement from "../HandleSubscriptionAnnouncement/DisplayExpiredSubscriptionAnnouncement";
 import DisplayInvalidSubscriptionAnnouncement from "../HandleSubscriptionAnnouncement/DisplayInvalidSubscriptionAnnouncement";
 import DisplayGoingToExpireSubscriptionAnnouncement from "../HandleSubscriptionAnnouncement/DisplayGoingToExpireSubscriptionAnnouncement";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 
-const defaultArgs = data => ({
+const defaultArgs = (data) => ({
   canClose: true,
   ...data,
 });
 
-const customCss = {position: "relative", height: "12rem"};
+const customCss = { position: "relative", height: "12rem" };
 
 export default {
-  title: 'Foundations/AnnouncementWrapper',
-  component: AnnouncementWrapper
+  title: "Foundations/AnnouncementWrapper",
+  component: AnnouncementWrapper,
 };
 
 export const DefaultAnnouncementBar = {
-  args: defaultArgs()
+  args: defaultArgs(),
 };
 
 export const AnnouncementBarInApp = {
   args: defaultArgs(),
-  render: args =>
+  render: (args) => (
     <>
       <div style={customCss}>
-        <DisplayExpiredSubscriptionAnnouncement {...args}/>
+        <DisplayExpiredSubscriptionAnnouncement {...args} />
       </div>
       <div style={customCss}>
-        <DisplayInvalidSubscriptionAnnouncement {...args}/>
+        <DisplayInvalidSubscriptionAnnouncement {...args} />
       </div>
       <div style={customCss}>
-        <DisplayGoingToExpireSubscriptionAnnouncement {...args} expiry={DateTime.now().plus({days: 4})}/>
+        <DisplayGoingToExpireSubscriptionAnnouncement {...args} expiry={DateTime.now().plus({ days: 4 })} />
       </div>
     </>
+  ),
 };

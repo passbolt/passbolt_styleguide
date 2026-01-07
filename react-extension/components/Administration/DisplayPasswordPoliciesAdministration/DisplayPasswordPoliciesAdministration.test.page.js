@@ -13,12 +13,12 @@
  */
 
 import React from "react";
-import {render, screen} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {AdminPasswordPoliciesContextProvider} from "../../../contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
+import { AdminPasswordPoliciesContextProvider } from "../../../contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
 import DisplayAdministrationPasswordPoliciesActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationPasswordPoliciesActions/DisplayAdministrationPasswordPoliciesActions";
-import DisplayPasswordPoliciesAdministration from './DisplayPasswordPoliciesAdministration';
+import DisplayPasswordPoliciesAdministration from "./DisplayPasswordPoliciesAdministration";
 import userEvent from "@testing-library/user-event";
 
 /**
@@ -35,12 +35,12 @@ export default class DisplayPasswordPoliciesAdministrationPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <AdminPasswordPoliciesContextProvider {...props}>
-            <DisplayAdministrationPasswordPoliciesActions {...props}/>
-            <DisplayPasswordPoliciesAdministration {...props}/>
+            <DisplayAdministrationPasswordPoliciesActions {...props} />
+            <DisplayPasswordPoliciesAdministration {...props} />
           </AdminPasswordPoliciesContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -51,7 +51,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passwordPolicies() {
-    return this._page.container.querySelector('.password-policies-settings');
+    return this._page.container.querySelector(".password-policies-settings");
   }
 
   /**
@@ -59,7 +59,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get saveSettingsButton() {
-    return this._page.container.querySelector('#save-settings');
+    return this._page.container.querySelector("#save-settings");
   }
 
   /**
@@ -67,7 +67,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passphrasePolicyTitle() {
-    return this._page.container.querySelector('.password-policies-settings .main-content > form > h4');
+    return this._page.container.querySelector(".password-policies-settings .main-content > form > h4");
   }
 
   /**
@@ -75,7 +75,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get helpBox() {
-    return this._page.container.querySelectorAll('.sidebar-help-section')[1];
+    return this._page.container.querySelectorAll(".sidebar-help-section")[1];
   }
 
   /**
@@ -83,7 +83,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get helpBoxTitle() {
-    return this.helpBox.querySelector('h3');
+    return this.helpBox.querySelector("h3");
   }
 
   /**
@@ -91,7 +91,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get helpBoxDescription() {
-    return this.helpBox.querySelector('p');
+    return this.helpBox.querySelector("p");
   }
 
   /**
@@ -99,7 +99,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('.button');
+    return this.helpBox.querySelector(".button");
   }
 
   /**
@@ -131,14 +131,14 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this._page.container.querySelector('#password-policies-settings-title');
+    return this._page.container.querySelector("#password-policies-settings-title");
   }
   /**
    * Returns the password configuration pannel
    * @returns {HTMLElement}
    */
   get passwordPanel() {
-    return this._page.container.querySelector('.password-policies-settings .passwords-settings');
+    return this._page.container.querySelector(".password-policies-settings .passwords-settings");
   }
 
   /**
@@ -146,7 +146,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passwordPanelButton() {
-    return this._page.container.querySelector('#accordion-toggle-password');
+    return this._page.container.querySelector("#accordion-toggle-password");
   }
 
   /**
@@ -154,7 +154,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passphrasePanel() {
-    return this._page.container.querySelector('.password-policies-settings .passphrase-settings');
+    return this._page.container.querySelector(".password-policies-settings .passphrase-settings");
   }
 
   /**
@@ -162,7 +162,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passphrasePanelButton() {
-    return this._page.container.querySelector('#accordion-toggle-passphrase');
+    return this._page.container.querySelector("#accordion-toggle-passphrase");
   }
 
   /**
@@ -170,7 +170,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passwordLengthInput() {
-    return this._page.container.querySelector('#configure-password-generator-form-length');
+    return this._page.container.querySelector("#configure-password-generator-form-length");
   }
 
   /**
@@ -178,7 +178,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passphraseWordCountInput() {
-    return this._page.container.querySelector('#configure-passphrase-generator-form-word-count');
+    return this._page.container.querySelector("#configure-passphrase-generator-form-word-count");
   }
 
   /**
@@ -186,7 +186,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passphraseWordsSeparatorInput() {
-    return this._page.container.querySelector('#configure-passphrase-generator-form-words-separator');
+    return this._page.container.querySelector("#configure-passphrase-generator-form-words-separator");
   }
 
   /**
@@ -194,7 +194,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get externalDictionaryCheck() {
-    return screen.getByRole("checkbox", {name: /external services/i});
+    return screen.getByRole("checkbox", { name: /external services/i });
   }
 
   /**
@@ -202,7 +202,9 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {NodeList}
    */
   get maskButtons() {
-    return this._page.container.querySelectorAll("label[for='configure-password-generator-form-masks'] + .button-group button");
+    return this._page.container.querySelectorAll(
+      "label[for='configure-password-generator-form-masks'] + .button-group button",
+    );
   }
 
   /**
@@ -210,7 +212,9 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {NodeList}
    */
   get activeMaskButtons() {
-    return this._page.container.querySelectorAll("label[for='configure-password-generator-form-masks'] + .button-group button.selected");
+    return this._page.container.querySelectorAll(
+      "label[for='configure-password-generator-form-masks'] + .button-group button.selected",
+    );
   }
 
   /**
@@ -226,7 +230,9 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {string}
    */
   get passwordEntropyValue() {
-    return this._page.container.querySelector('.passwords-settings .estimated-entropy .password-complexity .complexity-text').textContent;
+    return this._page.container.querySelector(
+      ".passwords-settings .estimated-entropy .password-complexity .complexity-text",
+    ).textContent;
   }
 
   /**
@@ -234,7 +240,9 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {string}
    */
   get passphraseEntropyValue() {
-    return this._page.container.querySelector('.passphrase-settings .estimated-entropy .password-complexity .complexity-text').textContent;
+    return this._page.container.querySelector(
+      ".passphrase-settings .estimated-entropy .password-complexity .complexity-text",
+    ).textContent;
   }
 
   /**
@@ -242,7 +250,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get defaultGeneratorSelect() {
-    return this._page.container.querySelector('#configure-passphrase-default-generator');
+    return this._page.container.querySelector("#configure-passphrase-default-generator");
   }
 
   /**
@@ -250,7 +258,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get defaultGeneratorSelectOptionPassphrase() {
-    return this._page.container.querySelectorAll('#configure-passphrase-default-generator .select-items li')[0];
+    return this._page.container.querySelectorAll("#configure-passphrase-default-generator .select-items li")[0];
   }
 
   /**
@@ -258,7 +266,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {string}
    */
   get defaultGeneratorSelectedValue() {
-    return this._page.container.querySelector('#configure-passphrase-default-generator .selected-value').textContent;
+    return this._page.container.querySelector("#configure-passphrase-default-generator .selected-value").textContent;
   }
 
   /**
@@ -266,7 +274,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get minimalPassphraseEntropyError() {
-    return this._page.container.querySelector('.passphrase-settings .estimated-entropy .error-message');
+    return this._page.container.querySelector(".passphrase-settings .estimated-entropy .error-message");
   }
 
   /**
@@ -274,7 +282,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get minimalPasswordEntropyError() {
-    return this._page.container.querySelector('.passwords-settings .estimated-entropy .error-message');
+    return this._page.container.querySelector(".passwords-settings .estimated-entropy .error-message");
   }
 
   /**
@@ -282,7 +290,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get wordsSeparatorErrorMessage() {
-    return this._page.container.querySelector('#configure-passphrase-generator-form-words-separator + .error-message');
+    return this._page.container.querySelector("#configure-passphrase-generator-form-words-separator + .error-message");
   }
 
   /**
@@ -290,7 +298,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passwordLengthError() {
-    return this._page.container.querySelector('#passwordLength-error');
+    return this._page.container.querySelector("#passwordLength-error");
   }
 
   /**
@@ -298,7 +306,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passphraseLengthError() {
-    return this._page.container.querySelector('#wordsCount-error');
+    return this._page.container.querySelector("#wordsCount-error");
   }
 
   /**
@@ -306,7 +314,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get sourceChangingBanner() {
-    return this._page.container.querySelector('#password-policies-setting-source-changing-banner');
+    return this._page.container.querySelector("#password-policies-setting-source-changing-banner");
   }
 
   /**
@@ -314,14 +322,14 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get maskError() {
-    return this._page.container.querySelector('#password-mask-error');
+    return this._page.container.querySelector("#password-mask-error");
   }
 
   /**
    * Returns the html element that contains the sentence about the source of information
    */
   get settingsSource() {
-    return this._page.container.querySelector('#password-policies-source p');
+    return this._page.container.querySelector("#password-policies-source p");
   }
 
   /**

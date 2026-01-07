@@ -11,14 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-import {v4 as uuidv4} from "uuid";
-import {ownerPermissionDto, readPermissionDto, updatePermissionDto} from "../permission/permissionEntity.test.data";
-import {defaultPermissionsDtos} from "../permission/permissionCollection.test.data";
-import {defaultUserDto} from "../user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { ownerPermissionDto, readPermissionDto, updatePermissionDto } from "../permission/permissionEntity.test.data";
+import { defaultPermissionsDtos } from "../permission/permissionCollection.test.data";
+import { defaultUserDto } from "../user/userEntity.test.data";
 
 export const minimalFolderDto = (data = {}) => ({
-  name: 'Folder name',
-  ...data
+  name: "Folder name",
+  ...data,
 });
 
 /**
@@ -41,16 +41,16 @@ export const defaultFolderDto = (data = {}, options = {}) => {
     created_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     modified_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     permission: ownerPermissionDto({
-      aco: 'Folder',
-      aco_foreign_key: id
+      aco: "Folder",
+      aco_foreign_key: id,
     }),
     folder_parent_id: null,
     personal: false,
-    ...data
+    ...data,
   };
 
   if (!data.permissions && options.withPermissions) {
-    defaultData.permissions = defaultPermissionsDtos({aco: 'Folder', aco_foreign_key: id}, options.withPermissions);
+    defaultData.permissions = defaultPermissionsDtos({ aco: "Folder", aco_foreign_key: id }, options.withPermissions);
   }
 
   if (!data.creator && options?.withCreator) {
@@ -69,8 +69,8 @@ export const folderWithReadPermissionDto = (data = {}) => {
 
   return defaultFolderDto({
     id: id,
-    permission: readPermissionDto({aco_foreign_key: id, aco: 'Folder'}),
-    ...data
+    permission: readPermissionDto({ aco_foreign_key: id, aco: "Folder" }),
+    ...data,
   });
 };
 
@@ -79,7 +79,7 @@ export const folderWithUpdatePermissionDto = (data = {}) => {
 
   return defaultFolderDto({
     id: id,
-    permission: updatePermissionDto({aco_foreign_key: id, aco: 'Folder'}),
-    ...data
+    permission: updatePermissionDto({ aco_foreign_key: id, aco: "Folder" }),
+    ...data,
   });
 };

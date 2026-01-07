@@ -14,11 +14,11 @@
 
 import "../../../../../../test/mocks/mockClipboard";
 import each from "jest-each";
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import AzureSsoProviderFormPage from "./AzureSsoProviderForm.test.page";
-import {defaultAzureProps} from "./SsoProviderForm.test.data";
+import { defaultAzureProps } from "./SsoProviderForm.test.data";
 import EntityValidationError from "../../../../../shared/models/entity/abstract/entityValidationError";
-import {waitForTrue} from "../../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -38,7 +38,7 @@ describe("AzureSsoProviderForm", () => {
     expect(page.exists()).toStrictEqual(true);
   });
 
-  it("Should copy the redirect URL in the clipboard", async() => {
+  it("Should copy the redirect URL in the clipboard", async () => {
     expect.assertions(3);
     const props = defaultAzureProps();
     const page = new AzureSsoProviderFormPage(props);
@@ -48,10 +48,13 @@ describe("AzureSsoProviderForm", () => {
     const expectedRedirectUrl = "http://localhost/sso/azure/redirect";
     expect(page.redirect_url.value).toStrictEqual(expectedRedirectUrl);
     expect(props.clipboardContext.copy).toHaveBeenCalledTimes(1);
-    expect(props.clipboardContext.copy).toHaveBeenCalledWith(expectedRedirectUrl, "The redirection URL has been copied to the clipboard.");
+    expect(props.clipboardContext.copy).toHaveBeenCalledWith(
+      expectedRedirectUrl,
+      "The redirection URL has been copied to the clipboard.",
+    );
   });
 
-  it("Should toggle the advanced settings", async() => {
+  it("Should toggle the advanced settings", async () => {
     expect.assertions(3);
     const props = defaultAzureProps();
     const page = new AzureSsoProviderFormPage(props);
@@ -73,11 +76,11 @@ describe("AzureSsoProviderForm", () => {
       client_secret_expiry: "client_secret_expiry is not a valid date",
     };
 
-    it("Should show the error in the form", async() => {
+    it("Should show the error in the form", async () => {
       expect.assertions(8);
 
       const errors = new EntityValidationError();
-      Object.keys(rawErrors).forEach(key => {
+      Object.keys(rawErrors).forEach((key) => {
         errors.addError(key, "format", rawErrors[key]);
       });
 
@@ -96,29 +99,30 @@ describe("AzureSsoProviderForm", () => {
       expect(page.clientSecretExpiryError.textContent).toStrictEqual(rawErrors.client_secret_expiry);
     });
 
-    each(
-      Object.keys(rawErrors).map(key => ({field: key}))
-    ).describe("Should focus on the right erroneous field in the form", scenario => {
-      it(`For: ${scenario.field}`, async() => {
-        expect.assertions(1);
+    each(Object.keys(rawErrors).map((key) => ({ field: key }))).describe(
+      "Should focus on the right erroneous field in the form",
+      (scenario) => {
+        it(`For: ${scenario.field}`, async () => {
+          expect.assertions(1);
 
-        const errors = new EntityValidationError();
-        errors.addError(scenario.field, "format", "field is erroneous");
+          const errors = new EntityValidationError();
+          errors.addError(scenario.field, "format", "field is erroneous");
 
-        const props = defaultAzureProps();
-        const page = new AzureSsoProviderFormPage(props);
-        await waitFor(() => {});
+          const props = defaultAzureProps();
+          const page = new AzureSsoProviderFormPage(props);
+          await waitFor(() => {});
 
-        //force a call to `componentDidUpdate`
-        const newProps = defaultAzureProps();
-        newProps.adminSsoContext.getErrors = () => errors;
-        newProps.adminSsoContext.consumeFocusOnError = () => true;
-        page.render(newProps);
+          //force a call to `componentDidUpdate`
+          const newProps = defaultAzureProps();
+          newProps.adminSsoContext.getErrors = () => errors;
+          newProps.adminSsoContext.consumeFocusOnError = () => true;
+          page.render(newProps);
 
-        await waitForTrue(() => page.hasActiveElement);
+          await waitForTrue(() => page.hasActiveElement);
 
-        expect(page.currentActiveElement).toStrictEqual(page[scenario.field]);
-      });
-    });
+          expect(page.currentActiveElement).toStrictEqual(page[scenario.field]);
+        });
+      },
+    );
   });
 });

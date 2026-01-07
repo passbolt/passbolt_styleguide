@@ -19,8 +19,8 @@ export default class IsRegexValidator {
    * @param {string} regex The regex;
    */
   constructor(regex) {
-    if (typeof regex !== 'string') {
-      throw Error('The regex should be a string.');
+    if (typeof regex !== "string") {
+      throw Error("The regex should be a string.");
     }
     this.regex = new XRegExp(regex);
   }
@@ -31,7 +31,7 @@ export default class IsRegexValidator {
    * @returns {boolean}
    */
   validate(value) {
-    if (typeof value !== 'string') {
+    if (typeof value !== "string") {
       return false;
     }
 

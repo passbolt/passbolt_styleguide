@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.5.0
  */
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
-import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
-import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
+import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
+import { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultNavigationContext} from "../../../contexts/NavigationContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
 
 const betaMetadataProApiContext = defaultAppContext();
 betaMetadataProApiContext.siteSettings.settings.passbolt.plugins.metadata.isInBeta = true;
@@ -27,19 +27,19 @@ betaMetadataProApiContext.siteSettings.settings.passbolt.plugins.metadata.isInBe
  * @returns {object}
  */
 export function defaultProps(props = {}, isCommunityEdition = false) {
-  const context = isCommunityEdition ? {
-    siteSettings: new SiteSettings(siteSettingsCe),
-  } : betaMetadataProApiContext;
+  const context = isCommunityEdition
+    ? {
+        siteSettings: new SiteSettings(siteSettingsCe),
+      }
+    : betaMetadataProApiContext;
 
   const _props = {
     context,
     navigationContext: defaultNavigationContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.HOME
+      selectedAdministration: AdministrationWorkspaceMenuTypes.HOME,
     }),
-    metadataGettingStartedSettings: {enabled: false},
+    metadataGettingStartedSettings: { enabled: false },
   };
   return Object.assign(_props, props);
 }
-
-

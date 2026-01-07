@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayRbacAdministration from "./DisplayRbacAdministration";
 
@@ -28,9 +28,9 @@ export default class DisplayRbacAdministrationPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayRbacAdministration {...props}/>
+        <DisplayRbacAdministration {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,7 +38,7 @@ export default class DisplayRbacAdministrationPage {
    * Returns the self registration parent class
    */
   get Rbac() {
-    return this._page.container.querySelector('.rbac-settings');
+    return this._page.container.querySelector(".rbac-settings");
   }
 
   /**
@@ -47,7 +47,7 @@ export default class DisplayRbacAdministrationPage {
    * @returns {string}
    */
   formatActionNameInClassName(actionName) {
-    return actionName.toLowerCase().replaceAll(/[^\w]/g, '-');
+    return actionName.toLowerCase().replaceAll(/[^\w]/g, "-");
   }
 
   /**
@@ -73,7 +73,9 @@ export default class DisplayRbacAdministrationPage {
    * @returns {Element}
    */
   select(roleIndex, actionName) {
-    return this.row(actionName)?.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .selected-value`);
+    return this.row(actionName)?.querySelector(
+      `.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .selected-value`,
+    );
   }
 
   /**
@@ -83,21 +85,23 @@ export default class DisplayRbacAdministrationPage {
    * @returns {Element}
    */
   selectFirstItem(roleIndex, actionName) {
-    return this.row(actionName)?.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .option`);
+    return this.row(actionName)?.querySelector(
+      `.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .option`,
+    );
   }
 
   /**
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help-section');
+    return this._page.container.querySelector(".sidebar-help-section");
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help-section .button');
+    return this._page.container.querySelector(".sidebar-help-section .button");
   }
 
   /**
@@ -115,7 +119,9 @@ export default class DisplayRbacAdministrationPage {
    * @param actionName
    */
   selectFirstItemList(roleIndex, actionName) {
-    return this.row(actionName)?.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .option[tabindex = "0"]`);
+    return this.row(actionName)?.querySelector(
+      `.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .option[tabindex = "0"]`,
+    );
   }
 
   /**
@@ -131,7 +137,9 @@ export default class DisplayRbacAdministrationPage {
    * @param roleIndex
    */
   getDeleteRoleButton(roleIndex) {
-    return this._page.container.querySelector(`.header-flex .flex-item:nth-child(${roleIndex}) .dropdown #delete_role_action`);
+    return this._page.container.querySelector(
+      `.header-flex .flex-item:nth-child(${roleIndex}) .dropdown #delete_role_action`,
+    );
   }
 
   /**
@@ -139,7 +147,9 @@ export default class DisplayRbacAdministrationPage {
    * @param roleIndex
    */
   getRenameRoleButton(roleIndex) {
-    return this._page.container.querySelector(`.header-flex .flex-item:nth-child(${roleIndex}) .dropdown #rename_role_action`);
+    return this._page.container.querySelector(
+      `.header-flex .flex-item:nth-child(${roleIndex}) .dropdown #rename_role_action`,
+    );
   }
 
   /**
@@ -154,14 +164,14 @@ export default class DisplayRbacAdministrationPage {
    * @returns {HTMLElement}
    */
   get createRoleButton() {
-    return this._page.container.querySelector('.main-content button');
+    return this._page.container.querySelector(".main-content button");
   }
 
   /**
    * Returns the count of roles displayed on screen
    */
   get displayedRoleCount() {
-    return this._page.container.querySelectorAll('.flex-container.header-flex .flex-item.centered').length;
+    return this._page.container.querySelectorAll(".flex-container.header-flex .flex-item.centered").length;
   }
 
   /**
@@ -169,7 +179,7 @@ export default class DisplayRbacAdministrationPage {
    * @param {HTMLElement} element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

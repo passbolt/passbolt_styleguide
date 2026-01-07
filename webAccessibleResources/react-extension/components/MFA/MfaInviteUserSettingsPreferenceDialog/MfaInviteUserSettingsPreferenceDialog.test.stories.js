@@ -13,16 +13,16 @@
  */
 
 import MfaInviteUserSettingsPreferenceDialog from "./MfaInviteUserSettingsPreferenceDialog";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 export default {
-  title: 'Components/MFA/MfaInviteUserSettingsPreferenceDialog',
-  component: MfaInviteUserSettingsPreferenceDialog
+  title: "Components/MFA/MfaInviteUserSettingsPreferenceDialog",
+  component: MfaInviteUserSettingsPreferenceDialog,
 };
 
 export const Default = {
   args: {
     context: defaultUserAppContext(),
-    onClose: () => {}
-  }
+    onClose: () => {},
+  },
 };

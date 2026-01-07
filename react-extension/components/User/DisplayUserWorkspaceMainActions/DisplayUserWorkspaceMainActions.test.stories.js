@@ -13,43 +13,42 @@
  */
 
 import DisplayUserWorkspaceMainActions from "./DisplayUserWorkspaceMainActions";
-import {defaultAppContext, defaultProps} from "./DisplayUserWorkspaceMainActions.test.data";
+import { defaultAppContext, defaultProps } from "./DisplayUserWorkspaceMainActions.test.data";
 import {
   defaultAdministratorRbacContext,
   defaultUserRbacContext,
-  denyRbacContext
+  denyRbacContext,
 } from "../../../../shared/context/Rbac/RbacContext.test.data";
 
-
 export default {
-  title: 'Components/User/DisplayUserWorkspaceMainActions',
-  component: DisplayUserWorkspaceMainActions
+  title: "Components/User/DisplayUserWorkspaceMainActions",
+  component: DisplayUserWorkspaceMainActions,
 };
 
 const adminRole = {
   loggedInUser: {
     role: {
-      name: "admin"
-    }
-  }
+      name: "admin",
+    },
+  },
 };
 
 export const Admin = {
-  args: defaultProps({context: defaultAppContext(adminRole), rbacContext: defaultAdministratorRbacContext()})
+  args: defaultProps({ context: defaultAppContext(adminRole), rbacContext: defaultAdministratorRbacContext() }),
 };
 
 const userRole = {
   loggedInUser: {
     role: {
-      name: 'user'
-    }
+      name: "user",
+    },
   },
 };
 
 export const UserWithGroupPermission = {
-  args: defaultProps({context: defaultAppContext(userRole), rbacContext: defaultUserRbacContext()})
+  args: defaultProps({ context: defaultAppContext(userRole), rbacContext: defaultUserRbacContext() }),
 };
 
 export const User = {
-  args: defaultProps({context: defaultAppContext(userRole), rbacContext: denyRbacContext()})
+  args: defaultProps({ context: defaultAppContext(userRole), rbacContext: denyRbacContext() }),
 };

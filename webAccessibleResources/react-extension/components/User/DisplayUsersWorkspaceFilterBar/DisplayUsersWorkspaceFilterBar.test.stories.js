@@ -12,47 +12,55 @@
  * @since         5.0.0
  */
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import DisplayUsersWorkspaceFilterBar from "./DisplayUsersWorkspaceFilterBar";
-import {defaultProps, propsFilterBySuspended, propsWithAttentionFilter, propsWithUsersFilteredByAccountRecovery, propsWithUsersFilteredByMissingMetadata} from "./DisplayUsersWorkspaceFilterBar.test.data";
+import {
+  defaultProps,
+  propsFilterBySuspended,
+  propsWithAttentionFilter,
+  propsWithUsersFilteredByAccountRecovery,
+  propsWithUsersFilteredByMissingMetadata,
+} from "./DisplayUsersWorkspaceFilterBar.test.data";
 
 /**
  * DisplayUsersWorkspaceFilterBar stories
  */
 export default {
-  title: 'Components/User/DisplayUsersWorkspaceFilterBar',
+  title: "Components/User/DisplayUsersWorkspaceFilterBar",
   decorators: [
-    Story => (
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps =>
-          <div className="top-bar">
-            <div className="action-bar">
-              <Story {...routerProps}/>
+    (Story) => (
+      <MemoryRouter initialEntries={["/"]}>
+        <Route
+          component={(routerProps) => (
+            <div className="top-bar">
+              <div className="action-bar">
+                <Story {...routerProps} />
+              </div>
             </div>
-          </div>}>
-        </Route>
+          )}
+        ></Route>
       </MemoryRouter>
     ),
   ],
-  component: DisplayUsersWorkspaceFilterBar
+  component: DisplayUsersWorkspaceFilterBar,
 };
 
 export const FilterResources = {
-  args: defaultProps()
+  args: defaultProps(),
 };
 
 export const FilterBySuspended = {
-  args: propsFilterBySuspended()
+  args: propsFilterBySuspended(),
 };
 
 export const AttentionRequiredFilter = {
-  args: propsWithAttentionFilter()
+  args: propsWithAttentionFilter(),
 };
 
 export const FilteredByAccountRecoveryRequest = {
-  args: propsWithUsersFilteredByAccountRecovery()
+  args: propsWithUsersFilteredByAccountRecovery(),
 };
 
 export const FilteredByMissingMetadataKey = {
-  args: propsWithUsersFilteredByMissingMetadata()
+  args: propsWithUsersFilteredByMissingMetadata(),
 };

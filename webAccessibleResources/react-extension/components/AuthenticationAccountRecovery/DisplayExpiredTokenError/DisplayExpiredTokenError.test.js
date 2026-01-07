@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {defaultProps} from "./DisplayExpiredTokenError.test.data";
+import { defaultProps } from "./DisplayExpiredTokenError.test.data";
 import DisplayExpiredTokenErrorTestPage from "./DisplayExpiredTokenError.test.page";
 
 beforeEach(() => {
@@ -27,9 +27,8 @@ describe("DisplayExpiredTokenError", () => {
     page = new DisplayExpiredTokenErrorTestPage(props);
   });
 
-  it('As AN I should be able to continue', async() => {
+  it("As AN I should be able to continue", async () => {
     expect.assertions(1);
     expect(page.restartFromScratchButton.getAttribute("href")).toEqual(`${props.context.trustedDomain}`);
   });
 });
-

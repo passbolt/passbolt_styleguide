@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.12.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import AppContext from "../shared/context/AppContext/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AuthenticationLoginContextProvider from "./contexts/Authentication/AuthenticationLoginContext";
@@ -83,7 +83,7 @@ class ExtAuthenticationLogin extends Component {
   async initializeUserSettings() {
     const storageData = await this.props.storage.local.get(["_passbolt_data"]);
     const userSettings = new UserSettings(storageData._passbolt_data.config);
-    this.setState({userSettings});
+    this.setState({ userSettings });
   }
 
   /**
@@ -93,7 +93,7 @@ class ExtAuthenticationLogin extends Component {
   async getSiteSettings() {
     const settings = await this.props.port.request("passbolt.organization-settings.get");
     const siteSettings = new SiteSettings(settings);
-    this.setState({siteSettings});
+    this.setState({ siteSettings });
   }
 
   /**
@@ -101,23 +101,23 @@ class ExtAuthenticationLogin extends Component {
    */
   async getExtensionVersion() {
     const extensionVersion = await this.props.port.request("passbolt.addon.get-version");
-    this.setState({extensionVersion});
+    this.setState({ extensionVersion });
   }
 
   /**
    * Init the locale
    */
   async initLocale() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
-    this.setState({locale});
+    const { locale } = await this.props.port.request("passbolt.locale.get");
+    this.setState({ locale });
   }
 
   /**
    * Whenever the update of the locale is requested
    */
   async onUpdateLocaleRequested() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
-    this.setState({locale});
+    const { locale } = await this.props.port.request("passbolt.locale.get");
+    this.setState({ locale });
   }
 
   /**
@@ -126,32 +126,32 @@ class ExtAuthenticationLogin extends Component {
   render() {
     return (
       <AppContext.Provider value={this.state}>
-        {this.isReady() &&
-        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-          <Router>
-            <SsoContextProvider>
-              <AuthenticationLoginContextProvider>
-                <div id="container" className="container page login">
-                  <div className="content">
-                    <div className="header">
-                      <div className="logo-svg">
-                        <LogoSVG role="img" width="20rem" height="3.5rem"/>
+        {this.isReady() && (
+          <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+            <Router>
+              <SsoContextProvider>
+                <AuthenticationLoginContextProvider>
+                  <div id="container" className="container page login">
+                    <div className="content">
+                      <div className="header">
+                        <div className="logo-svg">
+                          <LogoSVG role="img" width="20rem" height="3.5rem" />
+                        </div>
+                      </div>
+                      <div className="login-form">
+                        <OrchestrateLoginBoxMain />
+                      </div>
+                      <div className="login-box-footer">
+                        <OrchestrateLoginBoxFooter />
                       </div>
                     </div>
-                    <div className="login-form">
-                      <OrchestrateLoginBoxMain/>
-                    </div>
-                    <div className="login-box-footer">
-                      <OrchestrateLoginBoxFooter/>
-                    </div>
+                    <Footer />
                   </div>
-                  <Footer/>
-                </div>
-              </AuthenticationLoginContextProvider>
-            </SsoContextProvider>
-          </Router>
-        </TranslationProvider>
-        }
+                </AuthenticationLoginContextProvider>
+              </SsoContextProvider>
+            </Router>
+          </TranslationProvider>
+        )}
       </AppContext.Provider>
     );
   }

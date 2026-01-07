@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import {defaultPasswordPoliciesDto} from "../../models/passwordPolicies/PasswordPoliciesDto.test.data";
+import { defaultPasswordPoliciesDto } from "../../models/passwordPolicies/PasswordPoliciesDto.test.data";
 
 /**
  * Default password policies context
@@ -26,6 +26,6 @@ export const defaultPasswordPoliciesContext = (data = {}) => {
     getPolicies: jest.fn(),
     findPolicies: jest.fn(),
     shouldRunDictionaryCheck: jest.fn(() => policies?.external_dictionary_check || false),
-    ...data
+    ...data,
   };
 };

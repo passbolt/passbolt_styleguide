@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import ApiAccountRecovery from "./ApiAccountRecovery";
 
 /**
@@ -23,12 +23,5 @@ import ApiAccountRecovery from "./ApiAccountRecovery";
 const appDomElement = document.createElement("div");
 document.body.appendChild(appDomElement);
 
-/*
- * TODO: React18 - enable when ready
- * const root = ReactDOM.createRoot(appDomElement);
- */
-/* eslint-disable react/no-deprecated */
-ReactDOM.render(
-  <ApiAccountRecovery/>,
-  appDomElement
-);
+const root = createRoot(appDomElement);
+root.render(<ApiAccountRecovery />);

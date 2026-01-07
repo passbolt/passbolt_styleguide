@@ -15,7 +15,7 @@
 /**
  * Unit tests on SessionExpired in regard of specifications
  */
-import {defaultProps} from "./HandleSessionExpired.test.data";
+import { defaultProps } from "./HandleSessionExpired.test.data";
 import HandleSessionExpiredPage from "./HandleSessionExpired.test.page";
 import NotifyExpiredSession from "../NotifyExpiredSession/NotifyExpiredSession";
 
@@ -34,7 +34,7 @@ describe("HandleSessionExpired", () => {
       new HandleSessionExpiredPage(props);
     });
 
-    it('As LU I should add a callback for session expired in the app context', () => {
+    it("As LU I should add a callback for session expired in the app context", () => {
       expect.assertions(3);
       expect(props.context.onExpiredSession).toHaveBeenCalledWith(expect.any(Function));
       expect(props.dialogContext.closeAll).toHaveBeenCalled();

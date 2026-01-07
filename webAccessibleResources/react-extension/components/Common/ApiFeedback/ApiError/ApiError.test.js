@@ -18,10 +18,10 @@ beforeEach(() => {
 });
 
 describe("ApiError", () => {
-  it('Should display the given error log message from the content of the page', async() => {
+  it("Should display the given error log message from the content of the page", async () => {
     expect.assertions(6);
     const props = {
-      message: "This is an error message to be displayed in the log details"
+      message: "This is an error message to be displayed in the log details",
     };
     const page = new ApiErrorPage(props);
 

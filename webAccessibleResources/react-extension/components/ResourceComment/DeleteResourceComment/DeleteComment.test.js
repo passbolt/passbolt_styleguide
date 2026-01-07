@@ -16,10 +16,10 @@
  * Unit tests on DeleteComment in regard of specifications
  */
 
-import {administratorAppContext, defaultAppContext, defaultProps} from "./DeleteComment.test.data";
+import { administratorAppContext, defaultAppContext, defaultProps } from "./DeleteComment.test.data";
 import DisplayResourceDetailsPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {defaultCommentCollectionDto} from "../../../../shared/models/entity/comment/commentEntityCollection.test.data";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { defaultCommentCollectionDto } from "../../../../shared/models/entity/comment/commentEntityCollection.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -31,14 +31,19 @@ describe("Delete comments", () => {
   const administratorContext = administratorAppContext(); // The applicative context as administrator
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(context.port, "request").mockImplementation(implementation);
   const noneCommentFoundRequestMockImpl = jest.fn(() => Promise.resolve([]));
-  const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(defaultCommentCollectionDto({
-    id: '9e56b21f-36f1-44a7-a363-1c6ccbbf09e2'
-  })));
+  const commentsFoundRequestMockImpl = jest.fn(() =>
+    Promise.resolve(
+      defaultCommentCollectionDto({
+        id: "9e56b21f-36f1-44a7-a363-1c6ccbbf09e2",
+      }),
+    ),
+  );
 
   describe("As AD I should be able to delete comments I don’t own", () => {
-    describe('As AD I can delete a comment I don’t own', () => {
+    describe("As AD I can delete a comment I don’t own", () => {
       /**
        * Given I am deleting a comment I don’t own
        * When I confirm the deletion
@@ -51,7 +56,7 @@ describe("Delete comments", () => {
         mockContextRequest(administratorContext, commentsFoundRequestMockImpl);
       });
 
-      it('I should not be able to delete the comment', async() => {
+      it("I should not be able to delete the comment", async () => {
         /*
          * @todo the API doesn't yet support this scenario.
          * await page.title.click();
@@ -60,8 +65,8 @@ describe("Delete comments", () => {
       });
     });
   });
-  describe('As LU I should be able to delete my comment', () => {
-    describe('Remove comment from the list', () => {
+  describe("As LU I should be able to delete my comment", () => {
+    describe("Remove comment from the list", () => {
       /**
        * Given I am deleting a comment
        * When I confirm the deletion
@@ -75,7 +80,7 @@ describe("Delete comments", () => {
         requestMock = mockContextRequest(context, commentsFoundRequestMockImpl).mockClear();
       });
 
-      it('the comment should be removed from the comments list', async() => {
+      it("the comment should be removed from the comments list", async () => {
         expect.assertions(3);
         await page.title.click();
         await page.displayCommentList.delete(1);
@@ -84,12 +89,12 @@ describe("Delete comments", () => {
 
         const requestName = requestMock.mock.calls[requestMock.mock.calls.length - 2][0];
         const deletedCommentId = requestMock.mock.calls[requestMock.mock.calls.length - 2][1];
-        expect(requestName).toBe('passbolt.comments.delete');
+        expect(requestName).toBe("passbolt.comments.delete");
         expect(deletedCommentId).toBe(context.resourceCommentId);
       });
     });
 
-    describe('Remove the only one comment of a resource', () => {
+    describe("Remove the only one comment of a resource", () => {
       /**
        * Given a resource with only one comment
        * And I don’t own the comment
@@ -105,7 +110,7 @@ describe("Delete comments", () => {
         mockContextRequest(context, commentsFoundRequestMockImpl);
       });
 
-      it('I should prompt to insert a new comment', async() => {
+      it("I should prompt to insert a new comment", async () => {
         expect.assertions(1);
         await page.title.click();
         await page.displayCommentList.delete(1);
@@ -118,7 +123,7 @@ describe("Delete comments", () => {
       });
     });
 
-    describe('See notification after removing a comment', () => {
+    describe("See notification after removing a comment", () => {
       /**
        * Given I am deleting a comment
        * When I confirm the deletion
@@ -130,8 +135,8 @@ describe("Delete comments", () => {
         mockContextRequest(context, commentsFoundRequestMockImpl);
       });
 
-      it('I should be notified about the success of the operation', async() => {
-        jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      it("I should be notified about the success of the operation", async () => {
+        jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
         await page.title.click();
         await page.displayCommentList.delete(1);
         await page.confirmDeleteComment.confirm();
@@ -139,7 +144,7 @@ describe("Delete comments", () => {
       });
     });
 
-    describe('Cannot delete a comment I don’t own', () => {
+    describe("Cannot delete a comment I don’t own", () => {
       /**
        * Given a selected resource which has comments I don’t own
        * When I intends to remove a comment I don’t own
@@ -151,7 +156,7 @@ describe("Delete comments", () => {
         mockContextRequest(context, commentsFoundRequestMockImpl);
       });
 
-      it('I should not be able to delete the comment', async() => {
+      it("I should not be able to delete the comment", async () => {
         await page.title.click();
         expect(page.displayCommentList.canDelete(4)).toBeFalsy();
       });

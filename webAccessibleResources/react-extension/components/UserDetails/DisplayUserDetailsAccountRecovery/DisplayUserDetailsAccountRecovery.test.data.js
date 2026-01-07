@@ -21,93 +21,97 @@ import MockPort from "../../../test/mock/MockPort";
 export function defaultProps(props = {}) {
   const defaultProps = {
     context: {
-      port: new MockPort()
+      port: new MockPort(),
     },
     userWorkspaceContext: {
       details: {
         user: {
           id: "54c6278e-f824-5fda-91ff-3e946b18d994",
-          pending_account_recovery_request: null
-        }
-      }
+          pending_account_recovery_request: null,
+        },
+      },
     },
     workflowContext: {
-      start: jest.fn()
-    }
+      start: jest.fn(),
+    },
   };
   return Object.assign(defaultProps, props);
 }
 
-export const oneUserAccountRequestsPending = [{
-  "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-  "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-  "status": "pending",
-  "created": "2020-05-04T20:31:45+00:00",
-}];
+export const oneUserAccountRequestsPending = [
+  {
+    id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "pending",
+    created: "2020-05-04T20:31:45+00:00",
+  },
+];
 
-export const oneUserAccountRequestsApproved = [{
-  "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-  "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-  "status": "approved",
-  "created": "2020-05-04T20:31:45+00:00",
-}];
+export const oneUserAccountRequestsApproved = [
+  {
+    id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "approved",
+    created: "2020-05-04T20:31:45+00:00",
+  },
+];
 
 export const userAccountRequestsRejectedWithPending = [
   {
-    "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-    "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-    "status": "pending",
-    "created": "2020-05-04T20:31:45+00:00",
+    id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "pending",
+    created: "2020-05-04T20:31:45+00:00",
   },
   {
-    "id": "54c6278e-f824-5fda-91ff-3e946b18d999",
-    "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-    "status": "rejected",
-    "created": "2020-05-04T20:31:45+00:00",
-  }
+    id: "54c6278e-f824-5fda-91ff-3e946b18d999",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "rejected",
+    created: "2020-05-04T20:31:45+00:00",
+  },
 ];
 
 export const userAccountRequestsApprovedWithPending = [
   {
-    "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-    "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-    "status": "pending",
-    "created": "2020-05-04T20:31:45+00:00",
+    id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "pending",
+    created: "2020-05-04T20:31:45+00:00",
   },
   {
-    "id": "54c6278e-f824-5fda-91ff-3e946b18d999",
-    "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-    "status": "approved",
-    "created": "2020-05-04T20:31:45+00:00",
-  }
+    id: "54c6278e-f824-5fda-91ff-3e946b18d999",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "approved",
+    created: "2020-05-04T20:31:45+00:00",
+  },
 ];
 
 export const userAccountRequestsApproved = [
   {
-    "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-    "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-    "status": "approved",
-    "created": "2020-05-04T20:31:45+00:00",
+    id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "approved",
+    created: "2020-05-04T20:31:45+00:00",
   },
   {
-    "id": "54c6278e-f824-5fda-91ff-3e946b18d999",
-    "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-    "status": "approved",
-    "created": "2020-05-04T20:31:45+00:00",
-  }
+    id: "54c6278e-f824-5fda-91ff-3e946b18d999",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "approved",
+    created: "2020-05-04T20:31:45+00:00",
+  },
 ];
 
 export const userAccountRequestsRejected = [
   {
-    "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-    "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-    "status": "rejected",
-    "created": "2020-05-04T20:31:45+00:00",
+    id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "rejected",
+    created: "2020-05-04T20:31:45+00:00",
   },
   {
-    "id": "54c6278e-f824-5fda-91ff-3e946b18d999",
-    "user_id": "d4c0e643-3967-443b-93b3-102d902c4511",
-    "status": "rejected",
-    "created": "2020-05-04T20:31:45+00:00",
-  }
+    id: "54c6278e-f824-5fda-91ff-3e946b18d999",
+    user_id: "d4c0e643-3967-443b-93b3-102d902c4511",
+    status: "rejected",
+    created: "2020-05-04T20:31:45+00:00",
+  },
 ];

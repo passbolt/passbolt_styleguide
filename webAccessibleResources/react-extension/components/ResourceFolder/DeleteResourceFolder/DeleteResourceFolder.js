@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withLoading} from "../../../contexts/LoadingContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withLoading } from "../../../contexts/LoadingContext";
+import { Trans, withTranslation } from "react-i18next";
 
 class DeleteResourceFolder extends Component {
   /**
@@ -31,7 +31,7 @@ class DeleteResourceFolder extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getStateBasedOnContext(props,  this.getDefaultState());
+    this.state = this.getStateBasedOnContext(props, this.getDefaultState());
     this.bindEventHandlers();
   }
 
@@ -41,7 +41,7 @@ class DeleteResourceFolder extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.setState({loading: false});
+    this.setState({ loading: false });
   }
 
   /**
@@ -55,7 +55,7 @@ class DeleteResourceFolder extends Component {
       processing: false,
 
       // Cascade checkbox
-      cascade: false
+      cascade: false,
     };
   }
 
@@ -80,13 +80,13 @@ class DeleteResourceFolder extends Component {
   getStateBasedOnContext(props, defaultState) {
     const folders = props.context.folders;
     const error = {
-      message: this.translate("The folder could not be found. Maybe it was deleted or you lost access.")
+      message: this.translate("The folder could not be found. Maybe it was deleted or you lost access."),
     };
     if (!folders) {
       console.error(`No folders context defined.`);
       this.handleError(error);
     }
-    const folder = props.context.folders.find(item => item.id === props.context.folder.id) || false;
+    const folder = props.context.folders.find((item) => item.id === props.context.folder.id) || false;
     if (!folder) {
       console.error(`Folder ${props.context.folder.id} not found in context.`);
       this.handleError(error);
@@ -112,7 +112,11 @@ class DeleteResourceFolder extends Component {
 
     try {
       this.props.loadingContext.add();
-      await this.props.context.port.request("passbolt.folders.delete", this.props.context.folder.id, this.state.cascade);
+      await this.props.context.port.request(
+        "passbolt.folders.delete",
+        this.props.context.folder.id,
+        this.state.cascade,
+      );
       await this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
@@ -136,12 +140,12 @@ class DeleteResourceFolder extends Component {
     this.props.loadingContext.remove();
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     } else {
       // Unexpected error occurred.
       console.error(error);
       this.handleError(error);
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -151,7 +155,7 @@ class DeleteResourceFolder extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -162,8 +166,8 @@ class DeleteResourceFolder extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return new Promise(resolve => {
-      this.setState({processing: !prev}, resolve());
+    return new Promise((resolve) => {
+      this.setState({ processing: !prev }, resolve());
     });
   }
 
@@ -176,7 +180,7 @@ class DeleteResourceFolder extends Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -208,25 +212,46 @@ class DeleteResourceFolder extends Component {
 
   render() {
     return (
-      <DialogWrapper className='folder-create-dialog' title={this.translate("Delete folder?")}
-        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+      <DialogWrapper
+        className="folder-create-dialog"
+        title={this.translate("Delete folder?")}
+        onClose={this.handleClose}
+        disabled={this.hasAllInputDisabled()}
+      >
         <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <p>
               <Trans>
-                Are you sure you want to delete the folder <strong className="dialog-variable">{{folderName: this.state.name}}</strong>?
+                Are you sure you want to delete the folder{" "}
+                <strong className="dialog-variable">{{ folderName: this.state.name }}</strong>?
               </Trans>
             </p>
-            <p><Trans>This action cannot be undone. Other users may lose access.</Trans></p>
+            <p>
+              <Trans>This action cannot be undone. Other users may lose access.</Trans>
+            </p>
             <div className="input checkbox">
-              <input id="delete-cascade" type="checkbox" name="cascade" onChange={this.handleInputChange}
-                autoFocus={true} disabled={this.hasAllInputDisabled()} />&nbsp;
-              <label htmlFor="delete-cascade"><Trans>Also delete items inside this folder.</Trans></label>
+              <input
+                id="delete-cascade"
+                type="checkbox"
+                name="cascade"
+                onChange={this.handleInputChange}
+                autoFocus={true}
+                disabled={this.hasAllInputDisabled()}
+              />
+              &nbsp;
+              <label htmlFor="delete-cascade">
+                <Trans>Also delete items inside this folder.</Trans>
+              </label>
             </div>
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Delete")}
+              warning={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -243,4 +268,6 @@ DeleteResourceFolder.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withLoading(withDialog(withActionFeedback(withTranslation('common')(DeleteResourceFolder)))));
+export default withAppContext(
+  withLoading(withDialog(withActionFeedback(withTranslation("common")(DeleteResourceFolder)))),
+);

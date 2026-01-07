@@ -13,8 +13,10 @@
  */
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
-import ResourcesServiceWorkerService, {RESOURCES_UPDATE_LOCAL_STORAGE_BY_PARENT_FOLDER_ID} from "./resourcesServiceWorkerService";
-import {v4 as uuidv4} from "uuid";
+import ResourcesServiceWorkerService, {
+  RESOURCES_UPDATE_LOCAL_STORAGE_BY_PARENT_FOLDER_ID,
+} from "./resourcesServiceWorkerService";
+import { v4 as uuidv4 } from "uuid";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -32,7 +34,7 @@ describe("ResourcesServiceWorkerService", () => {
   });
 
   describe("::updateResourceLocalStorageForParentFolderId", () => {
-    it("requests the service worker with the expected event and parameter.", async() => {
+    it("requests the service worker with the expected event and parameter.", async () => {
       expect.assertions(2);
       const parentFolderId = uuidv4();
 
@@ -43,7 +45,7 @@ describe("ResourcesServiceWorkerService", () => {
       expect(port.request).toHaveBeenCalledWith(RESOURCES_UPDATE_LOCAL_STORAGE_BY_PARENT_FOLDER_ID, parentFolderId);
     });
 
-    it("should assert its parameter.", async() => {
+    it("should assert its parameter.", async () => {
       expect.assertions(1);
       const parentFolderId = "test";
       await expect(() => service.updateResourceLocalStorageForParentFolderId(parentFolderId)).rejects.toThrow();

@@ -11,15 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {v4 as uuidv4} from "uuid";
-import {
-  defaultGroupUser
-} from "../groupUser/groupUserEntity.test.data";
-import {defaultUserDto} from "../user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultGroupUser } from "../groupUser/groupUserEntity.test.data";
+import { defaultUserDto } from "../user/userEntity.test.data";
 
 export const minimumGroupUserDto = (data = {}) => ({
   name: "Current group",
-  ...data
+  ...data,
 });
 
 /**
@@ -41,11 +39,11 @@ export const defaultGroupDto = (data = {}, options = {}) => {
     modified: "2022-01-13T13:19:04.661Z",
     created_by: uuidv4(),
     modified_by: uuidv4(),
-    ...data
+    ...data,
   };
 
   if (!data.my_group_user && options?.withMyGroupUser) {
-    defaultData.my_group_user = defaultGroupUser({group_id: groupId, is_admin: true});
+    defaultData.my_group_user = defaultGroupUser({ group_id: groupId, is_admin: true });
   }
 
   if (!data.creator && options?.withCreator) {
@@ -60,7 +58,7 @@ export const defaultGroupDto = (data = {}, options = {}) => {
     const groupsUsersCount = typeof options?.withGroupsUsers === "number" ? options?.withGroupsUsers : 1;
     defaultData.groups_users = [];
     for (let i = 0; i < groupsUsersCount; i++) {
-      const groupUserDto = defaultGroupUser({user_id: uuidv4(), group_id: groupId, is_admin: true});
+      const groupUserDto = defaultGroupUser({ user_id: uuidv4(), group_id: groupId, is_admin: true });
       defaultData.groups_users.push(groupUserDto);
     }
   }

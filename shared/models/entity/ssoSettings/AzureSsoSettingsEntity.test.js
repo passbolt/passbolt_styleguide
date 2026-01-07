@@ -12,11 +12,11 @@
  * @since         4.5.0
  */
 import each from "jest-each";
-import {defaultAzureSsoSettingsViewModelDto} from "../../ssoSettings/SsoSettingsViewModel.test.data";
+import { defaultAzureSsoSettingsViewModelDto } from "../../ssoSettings/SsoSettingsViewModel.test.data";
 import AzureSsoSettingsEntity from "./AzureSsoSettingsEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 import EntitySchema from "../abstract/entitySchema";
-import {defaultAzureSsoSettingsDto} from "./SsoSettingsEntity.test.data";
+import { defaultAzureSsoSettingsDto } from "./SsoSettingsEntity.test.data";
 
 describe("AzureSsoSettingsEntity", () => {
   it("schema must validate", () => {
@@ -59,29 +59,29 @@ it("should throw an exception if required fields are not present", () => {
 });
 
 each([
-  {dto: {url: -1}, errorType: "type"},
-  {dto: {url: "test"}, errorType: "pattern"},
+  { dto: { url: -1 }, errorType: "type" },
+  { dto: { url: "test" }, errorType: "pattern" },
 
-  {dto: {client_id: -1}, errorType: "type"},
-  {dto: {client_id: ""}, errorType: "format"},
+  { dto: { client_id: -1 }, errorType: "type" },
+  { dto: { client_id: "" }, errorType: "format" },
 
-  {dto: {tenant_id: -1}, errorType: "type"},
-  {dto: {tenant_id: ""}, errorType: "format"},
+  { dto: { tenant_id: -1 }, errorType: "type" },
+  { dto: { tenant_id: "" }, errorType: "format" },
 
-  {dto: {client_secret: -1}, errorType: "type"},
-  {dto: {client_secret: ""}, errorType: "minLength"},
+  { dto: { client_secret: -1 }, errorType: "type" },
+  { dto: { client_secret: "" }, errorType: "minLength" },
 
-  {dto: {client_secret_expiry: -1}, errorType: "type"},
-  {dto: {client_secret_expiry: "this is a test"}, errorType: "format"},
+  { dto: { client_secret_expiry: -1 }, errorType: "type" },
+  { dto: { client_secret_expiry: "this is a test" }, errorType: "format" },
 
-  {dto: {email_claim: -1}, errorType: "type"},
-  {dto: {email_claim: "this is a test"}, errorType: "enum"},
+  { dto: { email_claim: -1 }, errorType: "type" },
+  { dto: { email_claim: "this is a test" }, errorType: "enum" },
 
-  {dto: {prompt: -1}, errorType: "type"},
-  {dto: {prompt: "this is a test"}, errorType: "enum"},
+  { dto: { prompt: -1 }, errorType: "type" },
+  { dto: { prompt: "this is a test" }, errorType: "enum" },
 
-  {dto: {login_hint: -1}, errorType: "type"},
-]).describe("should throw an exception if DTO contains invalid values", scenario => {
+  { dto: { login_hint: -1 }, errorType: "type" },
+]).describe("should throw an exception if DTO contains invalid values", (scenario) => {
   it(`scenario: ${JSON.stringify(scenario)}`, () => {
     expect.assertions(2);
     const fieldName = Object.keys(scenario.dto)[0];
@@ -99,9 +99,9 @@ each([
       "https://login.microsoftonline.com",
       "https://login.microsoftonline.us",
       "https://login.partner.microsoftonline.cn",
-    ]).describe("Should validate the supported URL", url => {
+    ]).describe("Should validate the supported URL", (url) => {
       it(`${url}`, () => {
-        const dto = defaultAzureSsoSettingsViewModelDto({url});
+        const dto = defaultAzureSsoSettingsViewModelDto({ url });
         expect(() => new AzureSsoSettingsEntity(dto)).not.toThrow();
       });
     });
@@ -193,9 +193,9 @@ each([
       "ftp://login.microsoftonline.com",
       "ftp://login.microsoftonline.us",
       "ftp://login.partner.microsoftonline.cn",
-    ]).describe("Should not validate an unsupported URL", url => {
+    ]).describe("Should not validate an unsupported URL", (url) => {
       it(`${url}`, () => {
-        const dto = defaultAzureSsoSettingsViewModelDto({url});
+        const dto = defaultAzureSsoSettingsViewModelDto({ url });
         expect(() => new AzureSsoSettingsEntity(dto)).toThrow(EntityValidationError);
       });
     });

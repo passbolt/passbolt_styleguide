@@ -13,12 +13,12 @@
  */
 
 import mockComponentSetState from "../../test/mock/components/React/mockSetState";
-import {ManagedClipboardServiceProvider} from "./ManagedClipboardServiceProvider";
-import {defaultProps} from "./ManagedClipboardServiceProvider.test.data";
+import { ManagedClipboardServiceProvider } from "./ManagedClipboardServiceProvider";
+import { defaultProps } from "./ManagedClipboardServiceProvider.test.data";
 
 describe("ManagedClipboardServiceProvider", () => {
   describe("::copy", () => {
-    it("should call for the service worker service to copy the given content", async() => {
+    it("should call for the service worker service to copy the given content", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
@@ -33,7 +33,7 @@ describe("ManagedClipboardServiceProvider", () => {
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", "data");
     });
 
-    it("should assert its parameters", async() => {
+    it("should assert its parameters", async () => {
       expect.assertions(2);
 
       const contextProvider = new ManagedClipboardServiceProvider(defaultProps());
@@ -45,7 +45,7 @@ describe("ManagedClipboardServiceProvider", () => {
   });
 
   describe("::copyTemporarily", () => {
-    it("should call for the service worker service to temporarily copy the given content", async() => {
+    it("should call for the service worker service to temporarily copy the given content", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
@@ -60,11 +60,14 @@ describe("ManagedClipboardServiceProvider", () => {
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", "data");
     });
 
-    it("should assert its parameters", async() => {
+    it("should assert its parameters", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
-      props.context.port.addRequestListener("passbolt.account-recovery.continue", jest.fn(() => Promise.reject()));
+      props.context.port.addRequestListener(
+        "passbolt.account-recovery.continue",
+        jest.fn(() => Promise.reject()),
+      );
       const contextProvider = new ManagedClipboardServiceProvider(props);
       mockComponentSetState(contextProvider);
 

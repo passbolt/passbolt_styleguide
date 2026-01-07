@@ -16,19 +16,19 @@ import React from "react";
 import ApiError from "./ApiError";
 
 export default {
-  title: 'Components/Common/ApiFeedback',
-  component: ApiError
+  title: "Components/Common/ApiFeedback",
+  component: ApiError,
 };
 
-const Template = args =>
-  <ApiError {...args}/>;
+const Template = (args) => <ApiError {...args} />;
 
 const parameters = {
-  css: "api_main"
+  css: "api_main",
 };
 
 export const ErrorFeedback = Template.bind({});
 ErrorFeedback.args = {
-  message: "AADSTS70011: The provided value for the input parameter 'scope' isn't valid. The scope https://example.contoso.com/activity.read isn't valid.\r\nTrace ID: 255d1aef-8c98-452f-ac51-23d051240864\r\nCorrelation ID: fb3d2015-bc17-4bb9-bb85-30c5cf1aaaa7\r\nTimestamp: 2016-01-09 02:02:12Z",
+  message:
+    "AADSTS70011: The provided value for the input parameter 'scope' isn't valid. The scope https://example.contoso.com/activity.read isn't valid.\r\nTrace ID: 255d1aef-8c98-452f-ac51-23d051240864\r\nCorrelation ID: fb3d2015-bc17-4bb9-bb85-30c5cf1aaaa7\r\nTimestamp: 2016-01-09 02:02:12Z",
 };
 ErrorFeedback.parameters = parameters;

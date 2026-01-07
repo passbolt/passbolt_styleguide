@@ -12,8 +12,8 @@
  * @since         5.0.0
  */
 
-import React from 'react';
-import {Trans, withTranslation} from "react-i18next";
+import React from "react";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * This component displays the user choose passphrase information help
@@ -22,12 +22,18 @@ class EnterNewPassphraseHelp extends React.Component {
   render() {
     return (
       <div className="sidebar-help-section">
-        <h3><Trans>Tips for choosing a good passphrase</Trans></h3>
-        <p><Trans>Make sure your passphrase is hard to guess but also that is long enough. For example you can use your favorite lyric from a song,
-          grab the first couple of characters from the words in your favorite line.</Trans></p>
+        <h3>
+          <Trans>Tips for choosing a good passphrase</Trans>
+        </h3>
+        <p>
+          <Trans>
+            Make sure your passphrase is hard to guess but also that is long enough. For example you can use your
+            favorite lyric from a song, grab the first couple of characters from the words in your favorite line.
+          </Trans>
+        </p>
       </div>
     );
   }
 }
 
-export default withTranslation('common')(EnterNewPassphraseHelp);
+export default withTranslation("common")(EnterNewPassphraseHelp);

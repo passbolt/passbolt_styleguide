@@ -25,8 +25,8 @@ export function defaultProps(data = {}) {
       port: new MockPort(),
     },
     importAccountKitContext: {
-      verifyAccountKit: jest.fn()
-    }
+      verifyAccountKit: jest.fn(),
+    },
   };
   return Object.assign(defaultProps, data);
 }
@@ -38,7 +38,7 @@ export function mockFile(data = {}) {
   const defaultFile = {
     name: "account-kit.passbolt",
     content: "test content",
-    contentType: "application/passbolt"
+    contentType: "application/passbolt",
   };
   return Object.assign(defaultFile, data);
 }

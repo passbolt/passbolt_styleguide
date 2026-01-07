@@ -19,5 +19,5 @@ export const defaultAdministrationEncryptedMetadataGettingStartedContext = (data
   service: {
     findGettingStartedSettings: jest.fn(),
   },
-  ...data
+  ...data,
 });

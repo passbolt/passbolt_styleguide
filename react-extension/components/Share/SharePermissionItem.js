@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import ShareVariesDetails from "./ShareVariesDetails";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import Select from "../Common/Select/Select";
-import {isUserSuspended} from "../../../shared/utils/userUtils";
+import { isUserSuspended } from "../../../shared/utils/userUtils";
 import TooltipPortal from "../Common/Tooltip/TooltipPortal";
 import TooltipMessageFingerprintLoading from "../Common/Tooltip/TooltipMessageFingerprintLoading";
 import Fingerprint from "../Common/Fingerprint/Fingerprint";
@@ -58,7 +58,7 @@ class SharePermissionItem extends Component {
    */
   componentDidUpdate(prevProps) {
     if (prevProps.permissionType !== this.props.permissionType) {
-      this.setState({permissionType: this.props.permissionType});
+      this.setState({ permissionType: this.props.permissionType });
     }
   }
 
@@ -76,7 +76,7 @@ class SharePermissionItem extends Component {
     if (this.props.aro.profile) {
       return this.props.aro.username;
     } else {
-      return 'Group';
+      return "Group";
     }
   }
 
@@ -86,15 +86,15 @@ class SharePermissionItem extends Component {
 
   getSelectClassName() {
     if (this.isInputDisabled()) {
-      return 'permission inline disabled';
+      return "permission inline disabled";
     }
-    return 'permission inline';
+    return "permission inline";
   }
 
   getAroName() {
     if (this.props.aro.profile) {
       const profile = this.props.aro.profile;
-      return `${profile.first_name} ${profile.last_name}${this.isUserSuspended ? ` ${this.translate('(suspended)')}` : ''}`;
+      return `${profile.first_name} ${profile.last_name}${this.isUserSuspended ? ` ${this.translate("(suspended)")}` : ""}`;
     } else {
       return this.props.aro.name;
     }
@@ -109,9 +109,12 @@ class SharePermissionItem extends Component {
       return;
     }
 
-    const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.props.aro.id);
-    const tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint}/>;
-    this.setState({tooltipFingerprintMessage});
+    const gpgkey = await this.props.context.port.request(
+      "passbolt.keyring.get-public-key-info-by-user",
+      this.props.aro.id,
+    );
+    const tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint} />;
+    this.setState({ tooltipFingerprintMessage });
   }
 
   /**
@@ -131,12 +134,12 @@ class SharePermissionItem extends Component {
   }
 
   getClassName() {
-    let className = 'row';
+    let className = "row";
     if (this.props.updated) {
-      className += ' permission-updated';
+      className += " permission-updated";
     }
     if (this.isUserSuspended) {
-      className += ' suspended';
+      className += " suspended";
     }
     return className;
   }
@@ -156,12 +159,12 @@ class SharePermissionItem extends Component {
    */
   get permissions() {
     const permissions = [
-      {value: "1", label: this.translate("can read")},
-      {value: "7", label: this.translate("can update")},
-      {value: "15", label: this.translate("is owner")},
+      { value: "1", label: this.translate("can read") },
+      { value: "7", label: this.translate("can update") },
+      { value: "15", label: this.translate("is owner") },
     ];
     if (this.props.variesDetails) {
-      permissions.push({value: "-1", label: this.translate("varies")});
+      permissions.push({ value: "-1", label: this.translate("varies") });
     }
     return permissions;
   }
@@ -172,7 +175,7 @@ class SharePermissionItem extends Component {
    * @returns {boolean}
    */
   get isUserSuspended() {
-    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(this.props.aro);
+    return this.props.context.siteSettings.canIUse("disableUser") && isUserSuspended(this.props.aro);
   }
 
   /**
@@ -186,38 +189,37 @@ class SharePermissionItem extends Component {
   render() {
     return (
       <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
-        {this.isUser() &&
-        <UserAvatar user={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
-        }
-        {this.isGroup() &&
-        <GroupAvatar group={this.props.aro}/>
-        }
+        {this.isUser() && (
+          <UserAvatar user={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()} />
+        )}
+        {this.isGroup() && <GroupAvatar group={this.props.aro} />}
 
         <div className="aro">
           <div className="aro-name">
             <span className="ellipsis">{this.getAroName()}</span>
-            {this.isUser() &&
+            {this.isUser() && (
               <TooltipPortal
                 message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
-                onMouseHover={this.onTooltipFingerprintMouseHover}>
-                <FingerprintSVG/>
+                onMouseHover={this.onTooltipFingerprintMouseHover}
+              >
+                <FingerprintSVG />
               </TooltipPortal>
-            }
+            )}
           </div>
           <div className="aro-details">
             <span className="ellipsis">{this.getAroDetails()}</span>
           </div>
         </div>
 
-        {(this.props.variesDetails) &&
-          <TooltipPortal
-            message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
-            <AttentionSVG className="attention-required"/>
+        {this.props.variesDetails && (
+          <TooltipPortal message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
+            <AttentionSVG className="attention-required" />
           </TooltipPortal>
-        }
+        )}
 
         <div className="rights">
-          <Select name="permissionSelect"
+          <Select
+            name="permissionSelect"
             className={this.getSelectClassName()}
             items={this.permissions}
             value={this.state.permissionType.toString()}
@@ -228,7 +230,7 @@ class SharePermissionItem extends Component {
         </div>
 
         <div className="actions">
-          <SharePermissionDeleteButton onClose={this.handleDelete} disabled={this.isInputDisabled()}/>
+          <SharePermissionDeleteButton onClose={this.handleDelete} disabled={this.isInputDisabled()} />
         </div>
       </li>
     );
@@ -248,4 +250,4 @@ SharePermissionItem.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(SharePermissionItem));
+export default withAppContext(withTranslation("common")(SharePermissionItem));

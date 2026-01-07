@@ -17,15 +17,13 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
-import {
-  defaultProps, propsWithDenyUiAction, standaloneTotpProps,
-} from "./DisplayResourceDetailsTotp.test.data";
+import { defaultProps, propsWithDenyUiAction, standaloneTotpProps } from "./DisplayResourceDetailsTotp.test.data";
 import DisplayResourceDetailsTotpPage from "./DisplayResourceDetailsTotp.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {waitFor} from "@testing-library/dom";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
-import {defaultTotpViewModelDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { waitFor } from "@testing-library/dom";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import { defaultTotpViewModelDto } from "../../../../shared/models/entity/totp/totpDto.test.data";
 
 describe("DisplayResourceDetailsTotp", () => {
   let page;
@@ -43,8 +41,8 @@ describe("DisplayResourceDetailsTotp", () => {
    * And I should be able to identify each Totp name
    * And I should be able to see each Totp value
    */
-  describe(' As LU I can see Totp of a resource', () => {
-    it('I should see the Totp of a resource', async() => {
+  describe(" As LU I can see Totp of a resource", () => {
+    it("I should see the Totp of a resource", async () => {
       const props = defaultProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
@@ -53,7 +51,7 @@ describe("DisplayResourceDetailsTotp", () => {
       expect(page.exists()).toBeTruthy();
     });
 
-    it('I should close the Totp of a resource', async() => {
+    it("I should close the Totp of a resource", async () => {
       const props = defaultProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
@@ -62,67 +60,83 @@ describe("DisplayResourceDetailsTotp", () => {
       expect(page.exists()).toBeFalsy();
     });
 
-    it('I should be able to identify each property of totp for a password description and totp resource', async() => {
+    it("I should be able to identify each property of totp for a password description and totp resource", async () => {
       const props = defaultProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
       expect.assertions(4);
-      expect(page.totpLabel).toBe('TOTP');
+      expect(page.totpLabel).toBe("TOTP");
       expect(page.totp.textContent).toBe("Copy TOTP to clipboard");
       expect(page.uriLabel).toBeUndefined();
       expect(page.uri).toBeNull();
     });
 
-    it('I should be able to identify each property of totp for a standalone totp resource', async() => {
+    it("I should be able to identify each property of totp for a standalone totp resource", async () => {
       const props = standaloneTotpProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
       expect.assertions(4);
-      expect(page.totpLabel).toBe('TOTP');
+      expect(page.totpLabel).toBe("TOTP");
       expect(page.totp.textContent).toBe("Copy TOTP to clipboard");
-      expect(page.uriLabel).toBe('URI');
+      expect(page.uriLabel).toBe("URI");
       expect(page.uri.textContent).toBe(props.resourceWorkspaceContext.details.resource.metadata.uris[0]);
     });
   });
 
-  describe(' As LU I can copy a TOTP of a resource to clipboard', () => {
-    it('AS LU, I should be able to copy the TOTP of a resource to clipboard', async() => {
+  describe(" As LU I can copy a TOTP of a resource to clipboard", () => {
+    it("AS LU, I should be able to copy the TOTP of a resource to clipboard", async () => {
       expect.assertions(2);
 
       const props = defaultProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       const totp = defaultTotpViewModelDto();
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementation(copyClipboardMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
+      jest.spyOn(props.context.port, "request").mockImplementation(copyClipboardMockImpl);
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest
+        .spyOn(props.context.port, "request")
+        .mockImplementationOnce(() => ({ password: "secret-password", description: "", totp: totp }));
 
       await page.click(page.totp);
 
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.find-by-resource-id", props.resourceWorkspaceContext.details.resource.id);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.details.resource.id,
+      );
       const code = TotpCodeGeneratorService.generate(totp);
-      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(code, "The TOTP has been copied to clipboard.");
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
+        code,
+        "The TOTP has been copied to clipboard.",
+      );
     });
 
-    it('AS LU, I should be able to copy the TOTP of a standalone totp resource to clipboard', async() => {
+    it("AS LU, I should be able to copy the TOTP of a standalone totp resource to clipboard", async () => {
       expect.assertions(2);
 
       const props = standaloneTotpProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       const totp = defaultTotpViewModelDto();
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementation(copyClipboardMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
+      jest.spyOn(props.context.port, "request").mockImplementation(copyClipboardMockImpl);
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest
+        .spyOn(props.context.port, "request")
+        .mockImplementationOnce(() => ({ password: "secret-password", description: "", totp: totp }));
 
       await page.click(page.totp);
 
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.find-by-resource-id", props.resourceWorkspaceContext.details.resource.id);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.details.resource.id,
+      );
       const code = TotpCodeGeneratorService.generate(totp);
-      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(code, "The TOTP has been copied to clipboard.");
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
+        code,
+        "The TOTP has been copied to clipboard.",
+      );
     });
 
-    it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
+    it("AS LU, I cannot copy secret of resource if denied by RBAC", async () => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
@@ -132,33 +146,38 @@ describe("DisplayResourceDetailsTotp", () => {
     });
   });
 
-  describe(' As LU I can preview secret of a resource', () => {
-    it('AS LU, I should be able to preview secret of a resource', async() => {
+  describe(" As LU I can preview secret of a resource", () => {
+    it("AS LU, I should be able to preview secret of a resource", async () => {
       const props = defaultProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
       const totp = defaultTotpViewModelDto();
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+      jest
+        .spyOn(props.context.port, "request")
+        .mockImplementationOnce(() => ({ password: "secret-password", description: "", totp: totp }));
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
 
       expect.assertions(4);
       await page.click(page.viewTotp);
       const code = TotpCodeGeneratorService.generate(totp);
       expect(page.totp.textContent.replaceAll(/\s+/g, "")).toBe(code);
       expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalled();
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.details.resource.id);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.details.resource.id,
+      );
       await page.click(page.viewTotp);
-      expect(page.totp.textContent).toBe('Copy TOTP to clipboard');
+      expect(page.totp.textContent).toBe("Copy TOTP to clipboard");
     });
 
-    it('AS LU, I cannot preview secret of resource if disabled by API flag', async() => {
+    it("AS LU, I cannot preview secret of resource if disabled by API flag", async () => {
       const context = defaultUserAppContext({
         siteSettings: {
-          getServerTimezone: () => '',
+          getServerTimezone: () => "",
           canIUse: () => false,
-        }
+        },
       });
-      const props = defaultProps({context});
+      const props = defaultProps({ context });
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
 
@@ -166,7 +185,7 @@ describe("DisplayResourceDetailsTotp", () => {
       expect(page.isViewTotpExist).toBeFalsy();
     });
 
-    it('AS LU, I cannot preview secret of resource if denied by RBAC', async() => {
+    it("AS LU, I cannot preview secret of resource if denied by RBAC", async () => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});

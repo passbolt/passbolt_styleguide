@@ -13,15 +13,15 @@
  */
 import RbacsCollection from "./rbacsCollection";
 import EntitySchema from "../abstract/entitySchema";
-import {defaultRbacData, defaultRbacWithActionData, defaultRbacWithUiActionData} from "./rbacEntity.test.data";
-import {userRoleDto} from "../role/roleEntity.test.data";
+import { defaultRbacData, defaultRbacWithActionData, defaultRbacWithUiActionData } from "./rbacEntity.test.data";
+import { userRoleDto } from "../role/roleEntity.test.data";
 import RoleEntity from "../role/roleEntity";
-import {uiActions} from "../../../services/rbacs/uiActionEnumeration";
-import {defaultUiActionData} from "./uiActionEntity.test.data";
-import {defaultActionData} from "./actionEntity.test.data";
+import { uiActions } from "../../../services/rbacs/uiActionEnumeration";
+import { defaultUiActionData } from "./uiActionEntity.test.data";
+import { defaultActionData } from "./actionEntity.test.data";
 import RbacEntity from "./rbacEntity";
-import {v4 as uuidv4} from "uuid";
-import {actions} from "../../../services/rbacs/actionEnumeration";
+import { v4 as uuidv4 } from "uuid";
+import { actions } from "../../../services/rbacs/actionEnumeration";
 
 describe("Rbacs Collection", () => {
   it("schema must validate", () => {
@@ -45,22 +45,22 @@ describe("Rbacs Collection", () => {
 
   it("constructor throw exception if invalid id DTO provided", () => {
     expect.assertions(1);
-    const collectionDto = [defaultRbacData(), defaultRbacData({id: 'invalid-data'})];
+    const collectionDto = [defaultRbacData(), defaultRbacData({ id: "invalid-data" })];
     expect(() => new RbacsCollection(collectionDto)).toThrowCollectionValidationError("1.id.format");
   });
 
   it("constructor throw exception if invalid unique id DTO provided", () => {
     expect.assertions(1);
     const id = uuidv4();
-    const collectionDto = [defaultRbacData({id}), defaultRbacData({id})];
+    const collectionDto = [defaultRbacData({ id }), defaultRbacData({ id })];
     expect(() => new RbacsCollection(collectionDto)).toThrowCollectionValidationError("1.id.unique");
   });
 
   it("constructor doesn't include rbac item having an unsupported control", () => {
     expect.assertions(2);
 
-    const collectionDto = [defaultRbacData(), defaultRbacData({control_function: "NotSupported"})];
-    const collection = new RbacsCollection(collectionDto, {ignoreInvalidEntity: true});
+    const collectionDto = [defaultRbacData(), defaultRbacData({ control_function: "NotSupported" })];
+    const collection = new RbacsCollection(collectionDto, { ignoreInvalidEntity: true });
 
     expect(collection.items.length).toEqual(1);
     expect(collection.items[0].id).toEqual(collectionDto[0].id);
@@ -70,27 +70,37 @@ describe("Rbacs Collection", () => {
     it("should return a rbac item with ui action", () => {
       const dto = userRoleDto();
       const role = new RoleEntity(dto);
-      const rbacDto = defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})});
+      const rbacDto = defaultRbacWithUiActionData({
+        ui_action: defaultUiActionData({ name: uiActions.USERS_VIEW_WORKSPACE }),
+      });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(collection.findRbacByRoleAndActionName(role, uiActions.USERS_VIEW_WORKSPACE).toDto(RbacEntity.ALL_CONTAIN_OPTIONS)).toEqual(rbacDto);
+      expect(
+        collection
+          .findRbacByRoleAndActionName(role, uiActions.USERS_VIEW_WORKSPACE)
+          .toDto(RbacEntity.ALL_CONTAIN_OPTIONS),
+      ).toEqual(rbacDto);
     });
 
     it("should return a rbac item with action", () => {
       const dto = userRoleDto();
       const role = new RoleEntity(dto);
-      const rbacDto = defaultRbacWithUiActionData({ui_action: defaultActionData({name: actions.GROUPS_ADD})});
+      const rbacDto = defaultRbacWithUiActionData({ ui_action: defaultActionData({ name: actions.GROUPS_ADD }) });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(collection.findRbacByRoleAndActionName(role, actions.GROUPS_ADD).toDto(RbacEntity.ALL_CONTAIN_OPTIONS)).toEqual(rbacDto);
+      expect(
+        collection.findRbacByRoleAndActionName(role, actions.GROUPS_ADD).toDto(RbacEntity.ALL_CONTAIN_OPTIONS),
+      ).toEqual(rbacDto);
     });
 
     it("should return undefined if not found", () => {
       const dto = userRoleDto();
       const role = new RoleEntity(dto);
-      const rbacDto = defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})});
+      const rbacDto = defaultRbacWithUiActionData({
+        ui_action: defaultUiActionData({ name: uiActions.USERS_VIEW_WORKSPACE }),
+      });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
@@ -99,35 +109,49 @@ describe("Rbacs Collection", () => {
 
     it("should throw an error if role is not a roleEntity", () => {
       const dto = userRoleDto();
-      const rbacDto = defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})});
+      const rbacDto = defaultRbacWithUiActionData({
+        ui_action: defaultUiActionData({ name: uiActions.USERS_VIEW_WORKSPACE }),
+      });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByRoleAndActionName(dto, uiActions.USERS_VIEW_WORKSPACE)).toThrowError('The role parameter should be a role entity.');
+      expect(() => collection.findRbacByRoleAndActionName(dto, uiActions.USERS_VIEW_WORKSPACE)).toThrowError(
+        "The role parameter should be a role entity.",
+      );
     });
 
     it("should throw an error if ui action is not a string", () => {
       const dto = userRoleDto();
       const role = new RoleEntity(dto);
-      const rbacDto = defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})});
+      const rbacDto = defaultRbacWithUiActionData({
+        ui_action: defaultUiActionData({ name: uiActions.USERS_VIEW_WORKSPACE }),
+      });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByRoleAndActionName(role, {})).toThrowError('The name parameter should be a valid string.');
+      expect(() => collection.findRbacByRoleAndActionName(role, {})).toThrowError(
+        "The name parameter should be a valid string.",
+      );
     });
   });
 
   describe("RbacsCollection::findRbacByUiActionName", () => {
     it("should return a rbac item", () => {
-      const rbacDto = defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})});
+      const rbacDto = defaultRbacWithUiActionData({
+        ui_action: defaultUiActionData({ name: uiActions.USERS_VIEW_WORKSPACE }),
+      });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(collection.findRbacByUiActionName(uiActions.USERS_VIEW_WORKSPACE).toDto(RbacEntity.ALL_CONTAIN_OPTIONS)).toEqual(rbacDto);
+      expect(
+        collection.findRbacByUiActionName(uiActions.USERS_VIEW_WORKSPACE).toDto(RbacEntity.ALL_CONTAIN_OPTIONS),
+      ).toEqual(rbacDto);
     });
 
     it("should return undefined if not found", () => {
-      const rbacDto = defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})});
+      const rbacDto = defaultRbacWithUiActionData({
+        ui_action: defaultUiActionData({ name: uiActions.USERS_VIEW_WORKSPACE }),
+      });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
@@ -135,11 +159,13 @@ describe("Rbacs Collection", () => {
     });
 
     it("should throw an error if ui action is not a string", () => {
-      const rbacDto = defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})});
+      const rbacDto = defaultRbacWithUiActionData({
+        ui_action: defaultUiActionData({ name: uiActions.USERS_VIEW_WORKSPACE }),
+      });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByUiActionName({})).toThrowError('The name parameter should be a valid string.');
+      expect(() => collection.findRbacByUiActionName({})).toThrowError("The name parameter should be a valid string.");
     });
   });
 
@@ -147,17 +173,19 @@ describe("Rbacs Collection", () => {
     it("should return a rbac item", () => {
       const dto = userRoleDto();
       const role = new RoleEntity(dto);
-      const rbacDto = defaultRbacWithActionData({action: defaultActionData({name: actions.GROUPS_ADD})});
+      const rbacDto = defaultRbacWithActionData({ action: defaultActionData({ name: actions.GROUPS_ADD }) });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(collection.findRbacByRoleAndActionName(role, actions.GROUPS_ADD).toDto(RbacEntity.ALL_CONTAIN_OPTIONS)).toEqual(rbacDto);
+      expect(
+        collection.findRbacByRoleAndActionName(role, actions.GROUPS_ADD).toDto(RbacEntity.ALL_CONTAIN_OPTIONS),
+      ).toEqual(rbacDto);
     });
 
     it("should return undefined if not found", () => {
       const dto = userRoleDto();
       const role = new RoleEntity(dto);
-      const rbacDto = defaultRbacWithActionData({action: defaultActionData({name: actions.GROUPS_ADD})});
+      const rbacDto = defaultRbacWithActionData({ action: defaultActionData({ name: actions.GROUPS_ADD }) });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
@@ -166,21 +194,25 @@ describe("Rbacs Collection", () => {
 
     it("should throw an error if role is not a roleEntity", () => {
       const dto = userRoleDto();
-      const rbacDto = defaultRbacWithActionData({action: defaultActionData({name: actions.GROUPS_ADD})});
+      const rbacDto = defaultRbacWithActionData({ action: defaultActionData({ name: actions.GROUPS_ADD }) });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByRoleAndActionName(dto, actions.GROUPS_ADD)).toThrowError('The role parameter should be a role entity.');
+      expect(() => collection.findRbacByRoleAndActionName(dto, actions.GROUPS_ADD)).toThrowError(
+        "The role parameter should be a role entity.",
+      );
     });
 
     it("should throw an error if action is not a string", () => {
       const dto = userRoleDto();
       const role = new RoleEntity(dto);
-      const rbacDto = defaultRbacWithActionData({action: defaultActionData({name: actions.GROUPS_ADD})});
+      const rbacDto = defaultRbacWithActionData({ action: defaultActionData({ name: actions.GROUPS_ADD }) });
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByRoleAndActionName(role, {})).toThrowError('The name parameter should be a valid string.');
+      expect(() => collection.findRbacByRoleAndActionName(role, {})).toThrowError(
+        "The name parameter should be a valid string.",
+      );
     });
   });
 
@@ -206,7 +238,7 @@ describe("Rbacs Collection", () => {
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByActionName({})).toThrowError('The name parameter should be a valid string.');
+      expect(() => collection.findRbacByActionName({})).toThrowError("The name parameter should be a valid string.");
     });
   });
 });

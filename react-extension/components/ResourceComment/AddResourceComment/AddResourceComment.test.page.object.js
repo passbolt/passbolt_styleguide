@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, waitFor} from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 /**
@@ -33,35 +32,35 @@ export default class AddResourceCommentPageObject {
    * Returns the form element
    */
   get form() {
-    return this._container.querySelector('form.comment');
+    return this._container.querySelector("form.comment");
   }
 
   /**
    * Returns the textarea element
    */
   get textarea() {
-    return this.form.querySelector('textarea');
+    return this.form.querySelector("textarea");
   }
 
   /**
    * Returns the button to save
    */
   get saveButton() {
-    return this.form.querySelector('.button.comment-submit');
+    return this.form.querySelector(".button.comment-submit");
   }
 
   /**
    * Returns the button to cancel
    */
   get cancelButton() {
-    return this.form.querySelector('.cancel');
+    return this.form.querySelector(".cancel");
   }
 
   /**
    * Returns the error message element
    */
   get errorMessage() {
-    return this.form.querySelector('.error-message');
+    return this.form.querySelector(".error-message");
   }
 
   /**
@@ -82,14 +81,14 @@ export default class AddResourceCommentPageObject {
    * Returns true if the Too Long Comment message is displayed
    */
   isTooLong() {
-    return this.errorMessage.textContent === 'A comment must be less than 256 characters';
+    return this.errorMessage.textContent === "A comment must be less than 256 characters";
   }
 
   /**
    * Returns true if the Is Empty Comment message is displayed
    */
   isEmpty() {
-    return this.errorMessage.textContent === 'A comment is required.';
+    return this.errorMessage.textContent === "A comment is required.";
   }
 
   /**
@@ -104,10 +103,12 @@ export default class AddResourceCommentPageObject {
    * Returns true if the the component is in a disable state
    */
   isDisabled() {
-    return this.exists() &&
-            this.textarea.hasAttribute('disabled') &&
-            this.saveButton.hasAttribute('disabled') &&
-            this.cancelButton.hasAttribute('disabled');
+    return (
+      this.exists() &&
+      this.textarea.hasAttribute("disabled") &&
+      this.saveButton.hasAttribute("disabled") &&
+      this.cancelButton.hasAttribute("disabled")
+    );
   }
   /**
    * Write a text in the comment area
@@ -115,7 +116,7 @@ export default class AddResourceCommentPageObject {
    */
   async write(text) {
     this.textarea.focus();
-    fireEvent.change(this.textarea, {target: {textContent: text}});
+    fireEvent.change(this.textarea, { target: { textContent: text } });
     await waitFor(() => {});
   }
 
@@ -142,6 +143,6 @@ export default class AddResourceCommentPageObject {
    */
   async escape() {
     this.textarea.focus();
-    await userEvent.keyboard('{Escape}');
+    await userEvent.keyboard("{Escape}");
   }
 }

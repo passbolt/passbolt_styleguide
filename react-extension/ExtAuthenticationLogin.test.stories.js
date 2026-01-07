@@ -17,19 +17,19 @@ import siteSettingsFixture from "./test/fixture/Settings/siteSettings";
 import mockStorage from "../../test/mocks/mockStorage";
 
 export default {
-  title: 'Components/ExtAuthenticationLogin/ExtAuthenticationLogin',
+  title: "Components/ExtAuthenticationLogin/ExtAuthenticationLogin",
   component: ExtAuthenticationLogin,
   parameters: {
-    css: "ext_authentication"
-  }
+    css: "ext_authentication",
+  },
 };
 
 function getMockedPort() {
   const mockedPort = new MockPort();
   mockedPort.addRequestListener("passbolt.organization-settings.get", () => siteSettingsFixture);
   mockedPort.addRequestListener("passbolt.locale.get", () => ({
-    locale: 'en-UK',
-    label: 'English'
+    locale: "en-UK",
+    label: "English",
   }));
   return mockedPort;
 }
@@ -37,7 +37,7 @@ function getMockedPort() {
 export const Initial = {
   args: {
     port: getMockedPort(),
-    storage: mockStorage()
+    storage: mockStorage(),
   },
 };
 
@@ -48,6 +48,6 @@ mockedPortWithSso.addRequestListener("passbolt.sso.get-local-configured-provider
 export const WithSsoKitAvailable = {
   args: {
     port: mockedPortWithSso,
-    storage: mockStorage()
+    storage: mockStorage(),
   },
 };

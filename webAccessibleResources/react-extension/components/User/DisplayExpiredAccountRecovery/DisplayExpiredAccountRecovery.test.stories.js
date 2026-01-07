@@ -15,9 +15,8 @@
 import DisplayExpiredAccountRecovery from "./DisplayExpiredAccountRecovery";
 
 export default {
-  title: 'Components/User/DisplayExpiredAccountRecovery',
-  component: DisplayExpiredAccountRecovery
+  title: "Components/User/DisplayExpiredAccountRecovery",
+  component: DisplayExpiredAccountRecovery,
 };
-
 
 export const Initial = {};

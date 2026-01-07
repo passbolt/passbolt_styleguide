@@ -17,15 +17,15 @@
  */
 export const defaultContext = {
   userSettings: {
-    getTrustedDomain: () => "https://passbolt.test"
-  }
+    getTrustedDomain: () => "https://passbolt.test",
+  },
 };
 
 /**
  * Default user workspace context props
  */
 export const defaultUserWorkspaceContext = {
-  selectedUsers: []
+  selectedUsers: [],
 };
 
 /**
@@ -40,10 +40,10 @@ export const mockUserFullProfile = {
     avatar: {
       url: {
         medium: "https://passbolt.test/avatar/medium.jpg",
-        small: "https://passbolt.test/avatar/small.jpg"
-      }
-    }
-  }
+        small: "https://passbolt.test/avatar/small.jpg",
+      },
+    },
+  },
 };
 
 /**
@@ -51,7 +51,7 @@ export const mockUserFullProfile = {
  */
 export const mockUserNoProfile = {
   id: "user-id-2",
-  username: "jane.smith@passbolt.com"
+  username: "jane.smith@passbolt.com",
 };
 
 /**
@@ -60,7 +60,7 @@ export const mockUserNoProfile = {
 export const mockUserNullProfile = {
   id: "user-id-3",
   username: "bob.jones@passbolt.com",
-  profile: null
+  profile: null,
 };
 
 /**
@@ -72,8 +72,8 @@ export const mockUserFirstNameOnly = {
   profile: {
     first_name: "Alice",
     last_name: "",
-    avatar: null
-  }
+    avatar: null,
+  },
 };
 
 /**
@@ -85,8 +85,8 @@ export const mockUserLastNameOnly = {
   profile: {
     first_name: "",
     last_name: "Johnson",
-    avatar: null
-  }
+    avatar: null,
+  },
 };
 
 /**
@@ -97,8 +97,8 @@ export const mockUserUndefinedFields = {
   username: "charlie@passbolt.com",
   profile: {
     first_name: undefined,
-    last_name: undefined
-  }
+    last_name: undefined,
+  },
 };
 
 /**
@@ -112,10 +112,10 @@ export const mockUserAvatarSmallOnly = {
     last_name: "Prince",
     avatar: {
       url: {
-        small: "https://passbolt.test/avatar/small.jpg"
-      }
-    }
-  }
+        small: "https://passbolt.test/avatar/small.jpg",
+      },
+    },
+  },
 };
 
 /**
@@ -127,8 +127,8 @@ export const mockUserAvatarString = {
   profile: {
     first_name: "Eve",
     last_name: "Adams",
-    avatar: "https://passbolt.test/avatar/direct.jpg"
-  }
+    avatar: "https://passbolt.test/avatar/direct.jpg",
+  },
 };
 
 /**
@@ -140,8 +140,8 @@ export const mockUserNullAvatar = {
   profile: {
     first_name: "Frank",
     last_name: "Castle",
-    avatar: null
-  }
+    avatar: null,
+  },
 };
 
 /**
@@ -154,9 +154,9 @@ export const mockUserEmptyAvatarUrl = {
     first_name: "Grace",
     last_name: "Hopper",
     avatar: {
-      url: {}
-    }
-  }
+      url: {},
+    },
+  },
 };
 
 /**
@@ -173,11 +173,11 @@ export const createMockUser = (overrides = {}) => ({
     avatar: {
       url: {
         medium: "https://passbolt.test/avatar/medium.jpg",
-        small: "https://passbolt.test/avatar/small.jpg"
-      }
-    }
+        small: "https://passbolt.test/avatar/small.jpg",
+      },
+    },
   },
-  ...overrides
+  ...overrides,
 });
 
 /**
@@ -185,26 +185,27 @@ export const createMockUser = (overrides = {}) => ({
  * @param {number} count - Number of users to create
  * @returns {Array} Array of mock user objects
  */
-export const createMockUsers = count => Array.from({length: count}, (_, i) => ({
-  id: `user-id-${i}`,
-  username: `user${i}@passbolt.com`,
-  profile: {
-    first_name: `FirstName${i}`,
-    last_name: `LastName${i}`,
-    avatar: {
-      url: {
-        medium: `https://passbolt.test/avatar/user${i}-medium.jpg`,
-        small: `https://passbolt.test/avatar/user${i}-small.jpg`
-      }
-    }
-  }
-}));
+export const createMockUsers = (count) =>
+  Array.from({ length: count }, (_, i) => ({
+    id: `user-id-${i}`,
+    username: `user${i}@passbolt.com`,
+    profile: {
+      first_name: `FirstName${i}`,
+      last_name: `LastName${i}`,
+      avatar: {
+        url: {
+          medium: `https://passbolt.test/avatar/user${i}-medium.jpg`,
+          small: `https://passbolt.test/avatar/user${i}-small.jpg`,
+        },
+      },
+    },
+  }));
 
 /**
  * Custom context with different domain
  */
 export const customContext = {
   userSettings: {
-    getTrustedDomain: () => "https://custom.domain.test"
-  }
+    getTrustedDomain: () => "https://custom.domain.test",
+  },
 };

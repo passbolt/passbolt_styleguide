@@ -22,9 +22,7 @@ describe("ApplicationEntity", () => {
     });
 
     it("validates info property", () => {
-      const successScenarios = [
-        assertEntityProperty.SCENARIO_OBJECT,
-      ];
+      const successScenarios = [assertEntityProperty.SCENARIO_OBJECT];
       /*
        * @todo: //add failing scenarios when nested object will be checked
        */
@@ -65,9 +63,7 @@ describe("ApplicationEntity", () => {
     });
 
     it("validates registrationClosed property", () => {
-      const successScenarios = [
-        assertEntityProperty.SCENARIO_OBJECT,
-      ];
+      const successScenarios = [assertEntityProperty.SCENARIO_OBJECT];
       /*
        * @todo: //add failing scenarios when nested object will be checked
        */

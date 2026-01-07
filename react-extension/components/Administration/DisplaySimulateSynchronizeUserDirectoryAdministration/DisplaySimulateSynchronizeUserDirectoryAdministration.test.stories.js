@@ -13,29 +13,30 @@
  */
 
 import React from "react";
-import DisplaySimulateSynchronizeUserDirectoryAdministration
-  from "./DisplaySimulateSynchronizeUserDirectoryAdministration";
-import {AdminUserDirectoryContextProvider} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
-import {defaultProps} from "../DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
-import MockFetch from '../../../test/mock/MockFetch';
-import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import {mockSynchronizeBody} from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration.test.data";
+import DisplaySimulateSynchronizeUserDirectoryAdministration from "./DisplaySimulateSynchronizeUserDirectoryAdministration";
+import { AdminUserDirectoryContextProvider } from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import { defaultProps } from "../DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
+import MockFetch from "../../../test/mock/MockFetch";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import { mockSynchronizeBody } from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration.test.data";
 
 export default {
-  title: 'Components/Administration/DisplaySimulateSynchronizeUserDirectoryAdministration',
+  title: "Components/Administration/DisplaySimulateSynchronizeUserDirectoryAdministration",
   component: DisplaySimulateSynchronizeUserDirectoryAdministration,
   decorators: [
-    (Story, {args}) => <AdminUserDirectoryContextProvider {...args}>
-      <Story {...args} />
-    </AdminUserDirectoryContextProvider>
+    (Story, { args }) => (
+      <AdminUserDirectoryContextProvider {...args}>
+        <Story {...args} />
+      </AdminUserDirectoryContextProvider>
+    ),
   ],
   parmeters: {
     css: "api_main",
-  }
+  },
 };
 
 const mockFetch = new MockFetch();
-mockFetch.addGetFetchRequest(/directorysync\/synchronize\/dry-run/, async() => mockApiResponse(mockSynchronizeBody));
+mockFetch.addGetFetchRequest(/directorysync\/synchronize\/dry-run/, async () => mockApiResponse(mockSynchronizeBody));
 
 export const Initial = {
   args: defaultProps(),

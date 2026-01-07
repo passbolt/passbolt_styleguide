@@ -16,12 +16,10 @@
  * Unit tests on OrchestrateResourceForm in regard of specifications
  */
 
-import React from 'react';
-import {defaultProps} from "./OrchestrateResourceForm.test.data";
+import React from "react";
+import { defaultProps } from "./OrchestrateResourceForm.test.data";
 import OrchestrateResourceFormPage from "./OrchestrateResourceForm.test.page";
-import {
-  ResourceEditCreateFormEnumerationTypes
-} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import { ResourceEditCreateFormEnumerationTypes } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
 jest.mock("./AddResourcePassword", () => () => <span className="password"></span>);
 jest.mock("./AddResourceTotp", () => () => <span className="totp"></span>);
@@ -36,8 +34,8 @@ beforeEach(() => {
 describe("OrchestrateResourceForm", () => {
   let page; // The page to test against
 
-  describe('As LU I can see the different form.', () => {
-    it('As LU I can see the resource password form.', () => {
+  describe("As LU I can see the different form.", () => {
+    it("As LU I can see the resource password form.", () => {
       const props = defaultProps();
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeTruthy();
@@ -47,8 +45,8 @@ describe("OrchestrateResourceForm", () => {
       expect(page.hasDescriptionForm).toBeFalsy();
     });
 
-    it('As LU I can see the resource totp form.', () => {
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP});
+    it("As LU I can see the resource totp form.", () => {
+      const props = defaultProps({ resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP });
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeFalsy();
       expect(page.hasTotpForm).toBeTruthy();
@@ -57,8 +55,8 @@ describe("OrchestrateResourceForm", () => {
       expect(page.hasDescriptionForm).toBeFalsy();
     });
 
-    it('As LU I can see the resource custom field form.', () => {
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS});
+    it("As LU I can see the resource custom field form.", () => {
+      const props = defaultProps({ resourceFormSelected: ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS });
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeFalsy();
       expect(page.hasTotpForm).toBeFalsy();
@@ -67,8 +65,8 @@ describe("OrchestrateResourceForm", () => {
       expect(page.hasDescriptionForm).toBeFalsy();
     });
 
-    it('As LU I can see the resource note form.', () => {
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE});
+    it("As LU I can see the resource note form.", () => {
+      const props = defaultProps({ resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE });
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeFalsy();
       expect(page.hasTotpForm).toBeFalsy();
@@ -77,8 +75,8 @@ describe("OrchestrateResourceForm", () => {
       expect(page.hasDescriptionForm).toBeFalsy();
     });
 
-    it('As LU I can see the resource description form.', () => {
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION});
+    it("As LU I can see the resource description form.", () => {
+      const props = defaultProps({ resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION });
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeFalsy();
       expect(page.hasTotpForm).toBeFalsy();
@@ -87,8 +85,8 @@ describe("OrchestrateResourceForm", () => {
       expect(page.hasDescriptionForm).toBeTruthy();
     });
 
-    it('As LU I can see the resource appearance form.', () => {
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.APPEARANCE});
+    it("As LU I can see the resource appearance form.", () => {
+      const props = defaultProps({ resourceFormSelected: ResourceEditCreateFormEnumerationTypes.APPEARANCE });
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeFalsy();
       expect(page.hasTotpForm).toBeFalsy();

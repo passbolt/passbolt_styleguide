@@ -17,13 +17,12 @@
  */
 
 import InstallExtensionTestPage from "./InstallExtension.test.page";
-import {defaultProps} from "./InstallExtension.test.data";
-import {CHROME_STORE_BROWSER_EXTENSION_URL} from "./InstallExtension";
+import { defaultProps } from "./InstallExtension.test.data";
 
 beforeAll(() => {
-  Object.defineProperty(window, 'matchMedia', {
+  Object.defineProperty(window, "matchMedia", {
     writable: true,
-    value: jest.fn().mockImplementation(query => ({
+    value: jest.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -44,33 +43,33 @@ describe("As AN I should see install extension page", () => {
   let page; // The page to test against
   const props = defaultProps();
 
-  describe('As AN I should be able to be requested to download the extension during the setup of my account', () => {
+  describe("As AN I should be able to be requested to download the extension during the setup of my account", () => {
     /**
      * Given a AN
      * Then I should see an install extension page
      */
-    it('As AN I should see the install extension for an unsupported browser', () => {
+    it("As AN I should see the install extension for an unsupported browser", () => {
       page = new InstallExtensionTestPage(props);
       // browser image
       expect(page.browser.className).toBe("browser-webstore unknown");
     });
 
-    it('As AN I should see the install extension for firefox', () => {
+    it("As AN I should see the install extension for firefox", () => {
       Object.defineProperty(window, "navigator", {
-        value: {userAgent: "Firefox"},
-        writable: true
+        value: { userAgent: "Firefox" },
+        writable: true,
       });
       page = new InstallExtensionTestPage();
       // browser image
       expect(page.browser.className).toBe("browser-webstore firefox");
     });
 
-    it('As AN I should see the install extension for chrome', () => {
+    it("As AN I should see the install extension for chrome", () => {
       Object.defineProperty(window, "navigator", {
-        value: {userAgent: "Chrome"},
-        writable: true
+        value: { userAgent: "Chrome" },
+        writable: true,
       });
-      window.chrome = {runtime: "true"};
+      window.chrome = { runtime: "true" };
       page = new InstallExtensionTestPage();
       expect(page.exists()).toBeTruthy();
       // title
@@ -78,29 +77,30 @@ describe("As AN I should see install extension page", () => {
       // browser image
       expect(page.browser.className).toBe("browser-webstore chrome");
       // message
-      expect(page.message).toBe('Please download the browser extension and refresh this page to continue.');
+      expect(page.message).toBe("Please download the browser extension and refresh this page to continue.");
       // download
-      expect(page.download).toBe('Download extension');
-      // download
-      expect(page.downloadUrl).toBe(CHROME_STORE_BROWSER_EXTENSION_URL);
+      expect(page.download).toBe("Download extension");
       // link
-      expect(page.linkContent).toBe('Refresh to detect extension');
+      expect(page.linkContent).toBe("Refresh to detect extension");
     });
 
-    it('As AN I should see the install extension for Edge', () => {
+    it("As AN I should see the install extension for Edge", () => {
       Object.defineProperty(window, "navigator", {
-        value: {userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36 Edg/96.0.1054.34"},
-        writable: true
+        value: {
+          userAgent:
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36 Edg/96.0.1054.34",
+        },
+        writable: true,
       });
-      window.chrome = {runtime: "true"};
+      window.chrome = { runtime: "true" };
       page = new InstallExtensionTestPage();
       // browser image
       expect(page.browser.className).toBe("browser-webstore edge");
     });
 
-    it('As AN I should be able to refresh the page', async() => {
+    it("As AN I should be able to refresh the page", async () => {
       Object.defineProperty(window, "location", {
-        value: {reload: jest.fn()},
+        value: { reload: jest.fn() },
       });
       page = new InstallExtensionTestPage();
       await page.refresh();

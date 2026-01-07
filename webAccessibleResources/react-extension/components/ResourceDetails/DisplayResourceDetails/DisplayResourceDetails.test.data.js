@@ -12,25 +12,22 @@
  * @since         2.11.0
  */
 
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceWorkspaceContext, resourceWorkspaceContextWithSelectedResourceIOwn} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import {
+  defaultResourceWorkspaceContext,
+  resourceWorkspaceContextWithSelectedResourceIOwn,
+} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {TEST_RESOURCE_TYPE_PASSWORD_STRING} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { TEST_RESOURCE_TYPE_PASSWORD_STRING } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {
-  defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
-} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 
 /**
@@ -46,10 +43,12 @@ export function defaultProps(data = {}) {
     dialogContext: defaultDialogContext(),
     resourceWorkspaceContext: resourceWorkspaceContext,
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
-      default_resource_types: "v5",
-      ...data?.metadataTypeSettings
-    })),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(
+      defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
+        default_resource_types: "v5",
+        ...data?.metadataTypeSettings,
+      }),
+    ),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     actionFeedbackContext: defaultActionFeedbackContext(),
     clipboardContext: defaultClipboardContext(),
@@ -65,10 +64,10 @@ export function propsWithUnencryptedDescriptionResource(data = {}) {
   const resourceWorkspaceContext = defaultResourceWorkspaceContext({
     details: {
       resource: defaultResourceDto({
-        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
       }),
     },
-    ...data
+    ...data,
   });
 
   return {
@@ -76,10 +75,12 @@ export function propsWithUnencryptedDescriptionResource(data = {}) {
     resourceWorkspaceContext: resourceWorkspaceContext,
     rbacContext: defaultAdministratorRbacContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
-      default_resource_types: "v5",
-      ...data?.metadataTypeSettings
-    })),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(
+      defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
+        default_resource_types: "v5",
+        ...data?.metadataTypeSettings,
+      }),
+    ),
     actionFeedbackContext: defaultActionFeedbackContext(),
     initialEntries: `/app/passwords/view/${resourceWorkspaceContext.details.resource.id}`,
     ...data,

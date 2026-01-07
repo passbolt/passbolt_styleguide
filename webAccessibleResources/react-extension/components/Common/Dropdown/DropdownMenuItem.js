@@ -14,8 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withDropdown} from "./DropdownContext";
-
+import { withDropdown } from "./DropdownContext";
 
 /**
  * This component acts as a dropdown item.
@@ -56,9 +55,7 @@ class DropdownMenuItem extends React.Component {
       <li onClick={this.handleClick} className={`${this.props.separator ? "separator-after" : ""}`}>
         <div className="row">
           <div className="main-cell-wrapper">
-            <div className="main-cell">
-              {this.props.children}
-            </div>
+            <div className="main-cell">{this.props.children}</div>
           </div>
         </div>
       </li>
@@ -74,7 +71,7 @@ DropdownMenuItem.propTypes = {
   separator: PropTypes.bool,
   keepOpenOnClick: PropTypes.bool,
   dropdownContext: PropTypes.any, // The dropdown context
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 export default withDropdown(DropdownMenuItem);

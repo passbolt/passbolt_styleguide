@@ -17,48 +17,54 @@
  */
 
 import HandleSaveAccountRecoveryOrganizationPolicyWorkflowPage from "./HandleSaveAccountRecoveryOrganizationPolicyWorkflow.test.page";
-import {defaultProps, hasPolicyChangesProps} from "./HandleSaveAccountRecoveryOrganizationPolicyWorkflow.test.data";
+import { defaultProps, hasPolicyChangesProps } from "./HandleSaveAccountRecoveryOrganizationPolicyWorkflow.test.data";
 import ConfirmSaveAccountRecoverySettings from "../ConfirmSaveAccountRecoverySettings/ConfirmSaveAccountRecoverySettings";
 import ProvideAccountRecoveryOrganizationKey from "../ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("As AD I can see the dialog of the different save step of account recovery policy", () => {
-  it('As AD I should not see a dialog', async() => {
+  it("As AD I should not see a dialog", async () => {
     const props = defaultProps();
     new HandleSaveAccountRecoveryOrganizationPolicyWorkflowPage(props);
     expect(props.dialogContext.open).not.toBeCalled();
   });
 
-  it('As AD I should see the confirm save account recovery settings', async() => {
+  it("As AD I should see the confirm save account recovery settings", async () => {
     const props = hasPolicyChangesProps();
     const expectDialogProps = {
       policy: "opt-in",
       onClose: expect.any(Function),
-      onSubmit: expect.any(Function)
+      onSubmit: expect.any(Function),
     };
 
     expect.assertions(1);
     new HandleSaveAccountRecoveryOrganizationPolicyWorkflowPage(props);
     await waitFor(() => {});
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmSaveAccountRecoverySettings, expect.objectContaining(expectDialogProps));
+    expect(props.dialogContext.open).toHaveBeenCalledWith(
+      ConfirmSaveAccountRecoverySettings,
+      expect.objectContaining(expectDialogProps),
+    );
   });
 
-  it.skip('As AD I should see the provided ork', async() => {
+  it.skip("As AD I should see the provided ork", async () => {
     // @todo to complete, but it's a bit overmocked
     const props = hasPolicyChangesProps();
     const expectDialogProps = {
       onCancel: expect.any(Function),
       onError: expect.any(Function),
-      onSubmit:  expect.any(Function)
+      onSubmit: expect.any(Function),
     };
 
     expect.assertions(1);
     new HandleSaveAccountRecoveryOrganizationPolicyWorkflowPage(props);
     await waitFor(() => {});
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ProvideAccountRecoveryOrganizationKey, expect.objectContaining(expectDialogProps));
+    expect(props.dialogContext.open).toHaveBeenCalledWith(
+      ProvideAccountRecoveryOrganizationKey,
+      expect.objectContaining(expectDialogProps),
+    );
   });
 });

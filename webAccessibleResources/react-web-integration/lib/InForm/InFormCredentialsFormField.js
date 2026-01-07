@@ -27,7 +27,7 @@ class InFormCredentialsFormField {
    * Retrieve all the DOM elements which can be an credentials form fields
    */
   static findAll() {
-    const domFields =  Array.from(document.querySelectorAll('form'));
+    const domFields = Array.from(document.querySelectorAll("form"));
     const iframesFields = InFormCallToActionField.findAllInIframes();
     return domFields.concat(iframesFields);
   }
@@ -38,10 +38,8 @@ class InFormCredentialsFormField {
    */
   static findAllInIframes() {
     const iframes = DomUtils.getAccessibleAndSameDomainIframes();
-    const queryMapper = iframe => Array.from(iframe.contentDocument.querySelectorAll('form'));
-    return iframes
-      .map(queryMapper)
-      .flat();
+    const queryMapper = (iframe) => Array.from(iframe.contentDocument.querySelectorAll("form"));
+    return iframes.map(queryMapper).flat();
   }
 
   /**
@@ -83,8 +81,8 @@ class InFormCredentialsFormField {
    * Whenever one must propose auto-save on the current credentials form
    */
   handleAutoSaveEvent() {
-    this.field.addEventListener('submit', this.autosave);
-    this.submitButton?.addEventListener('click', this.autosave);
+    this.field.addEventListener("submit", this.autosave);
+    this.submitButton?.addEventListener("click", this.autosave);
   }
 
   /** Autosave current credentials in the page */
@@ -92,11 +90,11 @@ class InFormCredentialsFormField {
     const areFieldsFilled = Boolean(this.usernameField?.value?.trim()) || Boolean(this.passwordField?.value?.trim());
     if (!this.hasAlreadySubmitted && areFieldsFilled) {
       this.hasAlreadySubmitted = true;
-      port.emit('passbolt.web-integration.autosave', {
+      port.emit("passbolt.web-integration.autosave", {
         name: document.title,
         username: this.usernameField?.value || "",
-        password:  this.passwordField.value,
-        url: document.URL
+        password: this.passwordField.value,
+        url: document.URL,
       });
     }
   }
@@ -107,7 +105,7 @@ class InFormCredentialsFormField {
    * Remove all listener to clean the page and avoid issue on extension update
    */
   destroy() {
-    this.field.removeEventListener('submit', this.autosave);
+    this.field.removeEventListener("submit", this.autosave);
     this.submitButton?.removeEventListener("click", this.autosave);
   }
 }

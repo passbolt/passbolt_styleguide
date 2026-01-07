@@ -14,11 +14,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
-import {withAdminInternationalization} from "../../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
-
-
+import { Trans, withTranslation } from "react-i18next";
+import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
+import { withAdminInternationalization } from "../../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -53,7 +51,10 @@ class DisplayAdministrationInternationalisationActions extends React.Component {
    * @returns {boolean}
    */
   isSaveEnabled() {
-    return !this.props.adminInternationalizationContext.isProcessing() && this.props.adminInternationalizationContext.hasLocaleChanges();
+    return (
+      !this.props.adminInternationalizationContext.isProcessing() &&
+      this.props.adminInternationalizationContext.hasLocaleChanges()
+    );
   }
 
   /**
@@ -67,7 +68,9 @@ class DisplayAdministrationInternationalisationActions extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The internationalization settings were updated."));
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.props.t("The internationalization settings were updated."),
+    );
   }
   /**
    * Handle save operation error.
@@ -90,7 +93,6 @@ class DisplayAdministrationInternationalisationActions extends React.Component {
     await this.props.actionFeedbackContext.displayError(error.message);
   }
 
-
   /**
    * Render the component
    * @returns {JSX}
@@ -98,8 +100,16 @@ class DisplayAdministrationInternationalisationActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button className="button primary form" id="save-settings" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-          <span><Trans>Save</Trans></span>
+        <button
+          className="button primary form"
+          id="save-settings"
+          type="button"
+          disabled={!this.isSaveEnabled()}
+          onClick={this.handleSaveClick}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );
@@ -113,5 +123,6 @@ DisplayAdministrationInternationalisationActions.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAdminInternationalization(withActionFeedback(withTranslation("common")(DisplayAdministrationInternationalisationActions)));
-
+export default withAdminInternationalization(
+  withActionFeedback(withTranslation("common")(DisplayAdministrationInternationalisationActions)),
+);

@@ -15,14 +15,13 @@
 import DisplayLoadingDialog from "./DisplayLoadingDialog";
 
 export default {
-  title: 'Components/Dialogs/DisplayLoadingDialog',
-  component: DisplayLoadingDialog
+  title: "Components/Dialogs/DisplayLoadingDialog",
+  component: DisplayLoadingDialog,
 };
-
 
 export const Default = {
   args: {
     title: "Title",
-    onClose: () => {}
-  }
+    onClose: () => {},
+  },
 };

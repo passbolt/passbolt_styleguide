@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,19 +12,18 @@
  * @since         2.13.0
  */
 
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withLoading} from "../../../contexts/LoadingContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withLoading } from "../../../contexts/LoadingContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { Trans, withTranslation } from "react-i18next";
 import DefaultThemeSVG from "../../../../img/themes/default.svg";
 import MidgarThemeSVG from "../../../../img/themes/midgar.svg";
 import SolarizedLightThemeSVG from "../../../../img/themes/solarized_light.svg";
 import SolarizedDarkThemeSVG from "../../../../img/themes/solarized_dark.svg";
-
 
 /**
  * This component displays the user profile theme
@@ -47,7 +45,7 @@ class DisplayUserTheme extends React.Component {
   get defaultState() {
     return {
       themes: [], // The list of available theme
-      selectedTheme: null // The current user selected theme
+      selectedTheme: null, // The current user selected theme
     };
   }
 
@@ -82,9 +80,9 @@ class DisplayUserTheme extends React.Component {
    */
   async populate() {
     this.props.loadingContext.add();
-    const themes = await this.props.context.port.request('passbolt.themes.find-all');
+    const themes = await this.props.context.port.request("passbolt.themes.find-all");
     const selectedTheme = this.props.context.userSettings.getTheme();
-    this.setState({themes, selectedTheme});
+    this.setState({ themes, selectedTheme });
     this.props.loadingContext.remove();
   }
 
@@ -97,8 +95,9 @@ class DisplayUserTheme extends React.Component {
       return;
     }
     this.props.loadingContext.add();
-    this.setState({selectedTheme: theme.name});
-    this.props.context.port.request("passbolt.themes.change", theme.name)
+    this.setState({ selectedTheme: theme.name });
+    this.props.context.port
+      .request("passbolt.themes.change", theme.name)
       .then(this.onSelectSuccess)
       .catch(this.onSelectFailure)
       .finally(this.onSelectFinally);
@@ -118,7 +117,7 @@ class DisplayUserTheme extends React.Component {
    */
   async onSelectFailure(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -162,18 +161,23 @@ class DisplayUserTheme extends React.Component {
    * Render the component
    */
   render() {
-    const selectedClass = theme => this.state.selectedTheme === theme.name ? 'selected' : '';
+    const selectedClass = (theme) => (this.state.selectedTheme === theme.name ? "selected" : "");
     return (
       <div className="main-column profile-theme">
         <div className="main-content">
-          <h3><Trans>Theme</Trans></h3>
+          <h3>
+            <Trans>Theme</Trans>
+          </h3>
           <div className="themes">
-            {this.state.themes.map(theme => (
-              <button key={theme.id} className={`main-cell theme ${selectedClass(theme)}`} type="button" onClick={() => this.handleThemeSelected(theme)}>
+            {this.state.themes.map((theme) => (
+              <button
+                key={theme.id}
+                className={`main-cell theme ${selectedClass(theme)}`}
+                type="button"
+                onClick={() => this.handleThemeSelected(theme)}
+              >
                 {this.getThemePreview(theme)}
-                <div className="theme-desc">
-                  {this.getThemeName(theme)}
-                </div>
+                <div className="theme-desc">{this.getThemeName(theme)}</div>
               </button>
             ))}
           </div>
@@ -191,7 +195,4 @@ DisplayUserTheme.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withLoading(withTranslation('common')(DisplayUserTheme)))));
-
-
-
+export default withAppContext(withActionFeedback(withDialog(withLoading(withTranslation("common")(DisplayUserTheme)))));

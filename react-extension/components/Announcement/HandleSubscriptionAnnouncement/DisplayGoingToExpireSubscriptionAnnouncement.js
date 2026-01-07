@@ -13,13 +13,12 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AnnouncementWrapper
-  from "../AnnouncementWrapper/AnnouncementWrapper";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withAnnouncement} from "../../../contexts/AnnouncementContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import AnnouncementWrapper from "../AnnouncementWrapper/AnnouncementWrapper";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAnnouncement } from "../../../contexts/AnnouncementContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
 
 /**
  * This component allows to display the subscription announcement
@@ -34,8 +33,16 @@ class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
       <AnnouncementWrapper className="subscription" onClose={this.props.onClose} canClose={true}>
         <p>
           <Trans>Warning:</Trans>&nbsp;
-          <Trans>your subscription key will expire</Trans> <span title={this.props.expiry}>{formatDateTimeAgo(this.props.expiry, this.props.t, this.props.context.locale)}</span>.
-          <button className="link" type="button" onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
+          <Trans>your subscription key will expire</Trans>{" "}
+          <span title={this.props.expiry}>
+            {formatDateTimeAgo(this.props.expiry, this.props.t, this.props.context.locale)}
+          </span>
+          .
+          <button
+            className="link"
+            type="button"
+            onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}
+          >
             <Trans>Manage Subscription</Trans>
           </button>
         </p>
@@ -52,4 +59,6 @@ DisplayGoingToExpireSubscriptionAnnouncement.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withNavigationContext(withAnnouncement(withTranslation('common')(DisplayGoingToExpireSubscriptionAnnouncement))));
+export default withAppContext(
+  withNavigationContext(withAnnouncement(withTranslation("common")(DisplayGoingToExpireSubscriptionAnnouncement))),
+);

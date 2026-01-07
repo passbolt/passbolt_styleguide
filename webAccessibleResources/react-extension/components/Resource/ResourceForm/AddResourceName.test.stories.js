@@ -16,39 +16,40 @@ import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import React from "react";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import AddResourceName from "./AddResourceName";
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { defaultResourceFormDto } from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
-import {resourceTypePasswordAndDescriptionDto, resourceTypeV5DefaultDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {
+  resourceTypePasswordAndDescriptionDto,
+  resourceTypeV5DefaultDto,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 export default {
-  title: 'Components/Resource/AddResourceName',
+  title: "Components/Resource/AddResourceName",
   component: AddResourceName,
-  decorators: [(Story, {args}) =>
-    <div style={{margin: "-1rem"}}>
-      <DialogWrapper title="Create a resource" className="create-resource">
-        <div className="left-sidebar">
-          <div className="main-action-wrapper">
+  decorators: [
+    (Story, { args }) => (
+      <div style={{ margin: "-1rem" }}>
+        <DialogWrapper title="Create a resource" className="create-resource">
+          <div className="left-sidebar">
+            <div className="main-action-wrapper"></div>
+            <div className="sidebar-content-sections"></div>
           </div>
-          <div className="sidebar-content-sections">
-          </div>
-        </div>
-        <div className="grid-and-footer">
-          <div className="grid">
-            <Story {...args}/>
-            <div className="create-workspace">
-              <div className="content">
+          <div className="grid-and-footer">
+            <div className="grid">
+              <Story {...args} />
+              <div className="create-workspace">
+                <div className="content"></div>
               </div>
             </div>
+            <div className="submit-wrapper"></div>
           </div>
-          <div className="submit-wrapper">
-          </div>
-        </div>
-      </DialogWrapper>
-    </div>
+        </DialogWrapper>
+      </div>
+    ),
   ],
 };
 
@@ -58,9 +59,9 @@ export const Default = {
     resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     context: defaultAppContext({
-      getHierarchyFolderCache: () => []
+      getHierarchyFolderCache: () => [],
     }),
-  }
+  },
 };
 
 export const DefaultVersion5 = {
@@ -69,9 +70,9 @@ export const DefaultVersion5 = {
     resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     context: defaultAppContext({
-      getHierarchyFolderCache: () => []
+      getHierarchyFolderCache: () => [],
     }),
-  }
+  },
 };
 
 export const SubFolder = {
@@ -80,7 +81,7 @@ export const SubFolder = {
     resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     context: defaultAppContext({
-      getHierarchyFolderCache: () => [{name: "Folder"}, {name: "subfolder"}]
+      getHierarchyFolderCache: () => [{ name: "Folder" }, { name: "subfolder" }],
     }),
-  }
+  },
 };

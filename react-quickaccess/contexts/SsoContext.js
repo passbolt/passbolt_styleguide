@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import { withTranslation } from "react-i18next";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
 
 export const SsoContext = React.createContext({
   loadSsoConfiguration: () => {}, // Load the current sso configuration and store it in the state
@@ -55,8 +55,10 @@ export class SsoContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async loadSsoConfiguration() {
-    const ssoLocalConfiguredProvider = await this.props.context.port.request("passbolt.sso.get-local-configured-provider");
-    this.setState({ssoLocalConfiguredProvider});
+    const ssoLocalConfiguredProvider = await this.props.context.port.request(
+      "passbolt.sso.get-local-configured-provider",
+    );
+    this.setState({ ssoLocalConfiguredProvider });
   }
 
   /**
@@ -82,7 +84,7 @@ export class SsoContextProvider extends React.Component {
   async runSignInProcess() {
     try {
       const provider = this.getProvider();
-      await this.props.context.port.request('passbolt.sso.sign-in', provider, true);
+      await this.props.context.port.request("passbolt.sso.sign-in", provider, true);
     } catch (e) {
       console.error(e);
       this.handleSpecificError(e);
@@ -97,12 +99,20 @@ export class SsoContextProvider extends React.Component {
   handleSpecificError(e) {
     let errorToThrow = e;
     switch (e.name) {
-      case 'InvalidMasterPasswordError': {
-        errorToThrow = new Error(this.props.t("The passphrase from the SSO kit doesn't match your private key: {{error}}", {error: e.message}));
+      case "InvalidMasterPasswordError": {
+        errorToThrow = new Error(
+          this.props.t("The passphrase from the SSO kit doesn't match your private key: {{error}}", {
+            error: e.message,
+          }),
+        );
         break;
       }
-      case 'OutdatedSsoKitError': {
-        errorToThrow = new Error(this.props.t("The SSO kit is outdated and can't be used to decrypt your passphrase: {{error}}", {error: e.message}));
+      case "OutdatedSsoKitError": {
+        errorToThrow = new Error(
+          this.props.t("The SSO kit is outdated and can't be used to decrypt your passphrase: {{error}}", {
+            error: e.message,
+          }),
+        );
         break;
       }
     }
@@ -115,11 +125,7 @@ export class SsoContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <SsoContext.Provider value={this.state}>
-        {this.props.children}
-      </SsoContext.Provider>
-    );
+    return <SsoContext.Provider value={this.state}>{this.props.children}</SsoContext.Provider>;
   }
 }
 
@@ -128,7 +134,7 @@ SsoContextProvider.propTypes = {
   children: PropTypes.any, // The children components
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation('common')(SsoContextProvider));
+export default withAppContext(withTranslation("common")(SsoContextProvider));
 
 /**
  * Resource Workspace Context Consumer HOC
@@ -139,12 +145,9 @@ export function withSso(WrappedComponent) {
     render() {
       return (
         <SsoContext.Consumer>
-          {
-            ssoContext => <WrappedComponent ssoContext={ssoContext} {...this.props} />
-          }
+          {(ssoContext) => <WrappedComponent ssoContext={ssoContext} {...this.props} />}
         </SsoContext.Consumer>
       );
     }
   };
 }
-

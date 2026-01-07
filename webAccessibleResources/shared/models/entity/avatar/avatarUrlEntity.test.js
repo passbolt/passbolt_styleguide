@@ -15,7 +15,7 @@
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
 import AvatarUrlEntity from "./avatarUrlEntity";
-import {defaultAvatarUrlDto} from "./avatarUrlEntity.test.data";
+import { defaultAvatarUrlDto } from "./avatarUrlEntity.test.data";
 
 describe("AvatarUrlEntity", () => {
   describe("::getSchema", () => {

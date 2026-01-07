@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.1.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import EnterNewPassphrase from "./EnterNewPassphrase";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 /**
  * The EnterNewPassphrase component represented as a page
@@ -29,9 +28,9 @@ export default class EnterNewPassphrasePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <EnterNewPassphrase {...props}/>
+        <EnterNewPassphrase {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -39,35 +38,35 @@ export default class EnterNewPassphrasePage {
    * Returns the user confirm passphrase element
    */
   get enterNewPassphrase() {
-    return this._page.container.querySelector('.profile-passphrase');
+    return this._page.container.querySelector(".profile-passphrase");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.profile-passphrase h3').textContent;
+    return this._page.container.querySelector(".profile-passphrase h3").textContent;
   }
 
   /**
    * Returns the passphrase input element
    */
   get passphraseInput() {
-    return this._page.container.querySelector('#passphrase-input');
+    return this._page.container.querySelector("#passphrase-input");
   }
 
   /**
    * Returns the obfuscate button
    */
   get obfuscateButton() {
-    return this._page.container.querySelector('.password-view');
+    return this._page.container.querySelector(".password-view");
   }
 
   /**
    * Returns the passphrase error message element
    */
   get passphraseErrorMessage() {
-    return this._page.container.querySelector('.error-message').innerHTML;
+    return this._page.container.querySelector(".error-message").innerHTML;
   }
 
   /**
@@ -81,56 +80,56 @@ export default class EnterNewPassphrasePage {
    * Returns true if the component is in an obfuscated mode
    */
   get isObfuscated() {
-    return this.passphraseInput.getAttribute('type') === "password";
+    return this.passphraseInput.getAttribute("type") === "password";
   }
 
   /**
    * Returns the element where is displayed the passphrase complexity text
    */
   get passphraseComplexity() {
-    return this._page.container.querySelector('.complexity-text');
+    return this._page.container.querySelector(".complexity-text");
   }
 
   /**
    * Returns true if the current passphrase is very weak
    */
   get isVeryWeakPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Very weak'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Very weak"));
   }
 
   /**
    * Returns true if the current passphrase is weak
    */
   get isWeakPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Weak'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Weak"));
   }
 
   /**
    * Returns true if the current passphrase is fair
    */
   get isFairPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Fair'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Fair"));
   }
 
   /**
    * Returns true if the current passphrase is strong
    */
   get isStrongPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Strong'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Strong"));
   }
 
   /**
    * Returns true if the current passphrase is empty
    */
   get isEmptyPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Quality'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Quality"));
   }
 
   /**
    * Returns true if the current passphrase is very strong
    */
   get isVeryStrongPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Very strong'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Very strong"));
   }
 
   /**
@@ -151,21 +150,21 @@ export default class EnterNewPassphrasePage {
    * Returns true if one is processing
    */
   get isProcessing() {
-    return this.updateButton.classList.contains('processing');
+    return this.updateButton.classList.contains("processing");
   }
 
   /**
    * Returns true if one can go to the next step
    */
   get canUpdate() {
-    return !this.updateButton.classList.contains('disabled');
+    return !this.updateButton.classList.contains("disabled");
   }
 
   /**
    * Returns true if the user can change something like the passphrase
    */
   get canChange() {
-    return !this.passphraseInput.hasAttribute('disabled');
+    return !this.passphraseInput.hasAttribute("disabled");
   }
 
   /**
@@ -183,33 +182,33 @@ export default class EnterNewPassphrasePage {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
   /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
+  clickWithoutWaitFor(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
-    const dataInputEvent = {target: {value: data}};
+  fillInput(element, data) {
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 
   /** fill the passphrase input element with data */
-  async insertPassphrase(data)  {
+  async insertPassphrase(data) {
     this.fillInput(this.passphraseInput, data);
     await waitForTrue(() => this.passphraseInput.value === data);
   }
 
   /** click update */
   async update(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.updateButton, leftClick);
     await waitForTrue(inProgressFn);
   }

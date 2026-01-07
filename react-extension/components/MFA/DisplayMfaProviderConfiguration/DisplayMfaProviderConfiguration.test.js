@@ -12,10 +12,10 @@
  * @since         4.4.0
  */
 
-import DisplayMfaProviderConfigurationPage from './DisplayMfaProviderConfiguration.test.page';
-import {mockVerifiedDate, propsMfaWithProvider} from './DisplayMfaProviderConfiguration.test.data';
-import MfaProviders from '../DisplayProviderList/MfaProviders.data';
-import {Providers} from '../../../contexts/MFAContext';
+import DisplayMfaProviderConfigurationPage from "./DisplayMfaProviderConfiguration.test.page";
+import { mockVerifiedDate, propsMfaWithProvider } from "./DisplayMfaProviderConfiguration.test.data";
+import MfaProviders from "../DisplayProviderList/MfaProviders.data";
+import { Providers } from "../../../contexts/MFAContext";
 
 /**
  * Unit tests on DisplayMfaProviderConfiguration in regard of specifications
@@ -23,38 +23,36 @@ import {Providers} from '../../../contexts/MFAContext';
 
 describe("DisplayMfaProviderConfiguration", () => {
   describe("As a logged user I can see the details of a configured mfa provider", () => {
-    let page,
-      props,
-      provider;
+    let page, props, provider;
 
     beforeEach(() => {
       props = propsMfaWithProvider(Providers.TOTP);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.resolve(mockVerifiedDate));
       page = new DisplayMfaProviderConfigurationPage(props);
-      provider = MfaProviders.find(mfaProvider => mfaProvider.id === Providers.TOTP);
+      provider = MfaProviders.find((mfaProvider) => mfaProvider.id === Providers.TOTP);
     });
-    it('I can see the mfa provider configuration page', () => {
+    it("I can see the mfa provider configuration page", () => {
       expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       expect(page.successIcon).not.toBeNull();
     });
 
-    it('I can see a dedicated title for the selected provider', () => {
+    it("I can see a dedicated title for the selected provider", () => {
       expect.assertions(1);
       expect(page.title.textContent).toEqual(provider.configuration.title);
     });
 
-    it('I can see a dedicated description for the selected provider', () => {
+    it("I can see a dedicated description for the selected provider", () => {
       expect.assertions(1);
       expect(page.description.textContent).toEqual(provider.configuration.description);
     });
 
-    it('I can see a the verified date', () => {
+    it("I can see a the verified date", () => {
       expect.assertions(1);
       expect(page.verifiedDate.textContent).toContain("27 September 2023");
     });
 
-    it('I can go back to the provider list', async() => {
+    it("I can go back to the provider list", async () => {
       expect.assertions(1);
 
       await page.clickOnManageProviderButton();
@@ -62,7 +60,7 @@ describe("DisplayMfaProviderConfiguration", () => {
       expect(props.mfaContext.goToProviderList).toHaveBeenCalled();
     });
 
-    it('I can remove the existing provider', async() => {
+    it("I can remove the existing provider", async () => {
       expect.assertions(2);
 
       await page.clickOnTurnOffButton();

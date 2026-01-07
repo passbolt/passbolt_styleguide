@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https=//www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {MfaProviders} from './MfaEnumeration';
+import { MfaProviders } from "./MfaEnumeration";
 
 /**
  * Model related to the mfa model settings

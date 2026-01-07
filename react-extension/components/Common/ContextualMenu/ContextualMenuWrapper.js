@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 /**
@@ -41,7 +41,7 @@ class ContextualMenuWrapper extends Component {
 
   get defaultState() {
     return {
-      positionY: this.props.top
+      positionY: this.props.top,
     };
   }
 
@@ -70,10 +70,10 @@ class ContextualMenuWrapper extends Component {
    */
   componentDidMount() {
     this.adjustPositionY();
-    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-    document.addEventListener('scroll', this.handleDocumentScrollEvent, {capture: true});
+    document.addEventListener("click", this.handleDocumentClickEvent, { capture: true });
+    document.addEventListener("contextmenu", this.handleDocumentContextualMenuEvent, { capture: true });
+    document.addEventListener("dragstart", this.handleDocumentDragStartEvent, { capture: true });
+    document.addEventListener("scroll", this.handleDocumentScrollEvent, { capture: true });
   }
 
   /**
@@ -82,10 +82,10 @@ class ContextualMenuWrapper extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-    document.removeEventListener('scroll', this.handleDocumentScrollEvent, {capture: true});
+    document.removeEventListener("click", this.handleDocumentClickEvent, { capture: true });
+    document.removeEventListener("contextmenu", this.handleDocumentContextualMenuEvent, { capture: true });
+    document.removeEventListener("dragstart", this.handleDocumentDragStartEvent, { capture: true });
+    document.removeEventListener("scroll", this.handleDocumentScrollEvent, { capture: true });
   }
 
   /**
@@ -144,7 +144,7 @@ class ContextualMenuWrapper extends Component {
    */
   adjustPositionY() {
     if (this.isWindowExceeded()) {
-      this.setState({positionY: window.innerHeight - this.elementRef.current.offsetHeight});
+      this.setState({ positionY: window.innerHeight - this.elementRef.current.offsetHeight });
       this.elementRef.current.style.zIndex = 1000;
     }
   }
@@ -157,7 +157,7 @@ class ContextualMenuWrapper extends Component {
       position: "absolute",
       display: "block",
       left: this.props.left,
-      top: this.state.positionY
+      top: this.state.positionY,
     };
   }
 
@@ -167,7 +167,11 @@ class ContextualMenuWrapper extends Component {
    */
   render() {
     return (
-      <ul ref={this.elementRef} className={`contextual-menu ${this.props.className} ${this.isWindowExceeded() ? 'floating' : ''}`} style={this.getStyle()}>
+      <ul
+        ref={this.elementRef}
+        className={`contextual-menu ${this.props.className} ${this.isWindowExceeded() ? "floating" : ""}`}
+        style={this.getStyle()}
+      >
         {this.props.children}
       </ul>
     );
@@ -175,7 +179,7 @@ class ContextualMenuWrapper extends Component {
 }
 
 ContextualMenuWrapper.defaultProps = {
-  className: ""
+  className: "",
 };
 
 ContextualMenuWrapper.propTypes = {
@@ -183,7 +187,7 @@ ContextualMenuWrapper.propTypes = {
   left: PropTypes.number, // left position in px of the menu
   hide: PropTypes.func, // Hide the contextual menu
   top: PropTypes.number, // top position in px of the menu
-  className: PropTypes.string // Class name to add
+  className: PropTypes.string, // Class name to add
 };
 
 export default ContextualMenuWrapper;

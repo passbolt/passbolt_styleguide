@@ -51,7 +51,7 @@ class SignInManager {
    * Handle the click on the sign in web extension
    */
   async handlePublicWebsiteClickEvent() {
-    document.documentElement.addEventListener('click', this.redirectToSignIn, true);
+    document.documentElement.addEventListener("click", this.redirectToSignIn, true);
   }
 
   /**
@@ -61,7 +61,7 @@ class SignInManager {
    */
   redirectToSignIn(event) {
     if (event.target.id === "extension-sign-in") {
-      port.request('passbolt.extension.sign-in-url');
+      port.request("passbolt.extension.sign-in-url");
     }
   }
 
@@ -69,7 +69,7 @@ class SignInManager {
    * Remove all event
    */
   destroy() {
-    document.documentElement.removeEventListener('click', this.redirectToSignIn, true);
+    document.documentElement.removeEventListener("click", this.redirectToSignIn, true);
     document.documentElement.classList.remove("passbolt-extension");
   }
 
@@ -81,7 +81,7 @@ class SignInManager {
      * This is extremely important, when an extension is available
      * so the port receive the message 'passbolt.port.destroy' to clean all data and listeners
      */
-    port.on('passbolt.content-script.destroy', this.destroy);
+    port.on("passbolt.content-script.destroy", this.destroy);
     /*
      * If the port has not been destroyed correctly,
      * The port cannot reconnect due to an invalid context in case of a manual update of the extension,
@@ -92,4 +92,3 @@ class SignInManager {
 }
 
 export default new SignInManager();
-

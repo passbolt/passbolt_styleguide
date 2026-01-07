@@ -12,9 +12,9 @@
  * @since         5.6.0
  */
 
-import {fireEvent, waitFor} from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 import ResizableSidebarPage from "./ResizableSidebar.test.page";
-import {waitForTrue} from "../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../test/utils/waitFor";
 
 describe("ResizableSidebar", () => {
   let props;
@@ -23,7 +23,7 @@ describe("ResizableSidebar", () => {
     jest.clearAllMocks();
   });
 
-  it("renders correctly with default props", async() => {
+  it("renders correctly with default props", async () => {
     props = {
       resizable: true,
       gutterLeft: false,
@@ -34,7 +34,7 @@ describe("ResizableSidebar", () => {
     expect(page.container).toBeTruthy();
   });
 
-  it("sets initial sidebar width on mount", async() => {
+  it("sets initial sidebar width on mount", async () => {
     props = {
       resizable: true,
       gutterLeft: true,
@@ -48,12 +48,12 @@ describe("ResizableSidebar", () => {
     });
   });
 
-  it("resizes sidebar on mouse move (right sidebar)", async() => {
+  it("resizes sidebar on mouse move (right sidebar)", async () => {
     props = {
       resizable: true,
       gutterLeft: true, // right sidebar
       minWidth: "20%",
-      maxWidth: "30%"
+      maxWidth: "30%",
     };
     const page = new ResizableSidebarPage(props);
     await waitFor(() => {
@@ -61,8 +61,8 @@ describe("ResizableSidebar", () => {
       expect(page.getWidthOf(page.container)).toBe(20);
     });
 
-    fireEvent.mouseDown(page.gutter, {clientX: 290});
-    fireEvent.mouseMove(document, {clientX: 270});
+    fireEvent.mouseDown(page.gutter, { clientX: 290 });
+    fireEvent.mouseMove(document, { clientX: 270 });
     fireEvent.mouseUp(document);
     await waitFor(() => {
       const widthPx = page.getWidthOf(page.container);
@@ -70,12 +70,12 @@ describe("ResizableSidebar", () => {
     });
   });
 
-  it("resizes sidebar on mouse move (left sidebar)", async() => {
+  it("resizes sidebar on mouse move (left sidebar)", async () => {
     props = {
       resizable: true,
       gutterLeft: false, // left sidebar
       minWidth: "20%",
-      maxWidth: "30%"
+      maxWidth: "30%",
     };
     const page = new ResizableSidebarPage(props);
     await waitFor(() => {
@@ -83,8 +83,8 @@ describe("ResizableSidebar", () => {
       expect(page.getWidthOf(page.container)).toBe(20);
     });
 
-    fireEvent.mouseDown(page.gutter, {clientX: 270});
-    fireEvent.mouseMove(document, {clientX: 290});
+    fireEvent.mouseDown(page.gutter, { clientX: 270 });
+    fireEvent.mouseMove(document, { clientX: 290 });
     fireEvent.mouseUp(document);
     await waitFor(() => {
       const widthPx = page.getWidthOf(page.container);
@@ -92,28 +92,28 @@ describe("ResizableSidebar", () => {
     });
   });
 
-  it("clamps width between min and max bounds", async() => {
+  it("clamps width between min and max bounds", async () => {
     props = {
       resizable: true,
       gutterLeft: false, // left sidebar
       minWidth: "20%",
-      maxWidth: "30%"
+      maxWidth: "30%",
     };
     const page = new ResizableSidebarPage(props);
     await waitFor(() => {
       expect(page.gutter).toBeTruthy();
     });
 
-    fireEvent.mouseDown(page.gutter, {clientX: 250});
-    fireEvent.mouseMove(document, {clientX: 700});
+    fireEvent.mouseDown(page.gutter, { clientX: 250 });
+    fireEvent.mouseMove(document, { clientX: 700 });
     fireEvent.mouseUp(document);
     await waitFor(() => {
       const widthPx = page.getWidthOf(page.container);
       expect(widthPx).toBeCloseTo(30); //max is 30%
     });
 
-    fireEvent.mouseDown(page.gutter, {clientX: 300});
-    fireEvent.mouseMove(document, {clientX: 150});
+    fireEvent.mouseDown(page.gutter, { clientX: 300 });
+    fireEvent.mouseMove(document, { clientX: 150 });
     fireEvent.mouseUp(document);
     await waitFor(() => {
       const widthPx = page.getWidthOf(page.container);
@@ -121,20 +121,20 @@ describe("ResizableSidebar", () => {
     });
   });
 
-  it("resets width on double-click", async() => {
+  it("resets width on double-click", async () => {
     props = {
       resizable: true,
       gutterLeft: false,
       minWidth: "20%",
-      maxWidth: "30%"
+      maxWidth: "30%",
     };
     const page = new ResizableSidebarPage(props);
     await waitFor(() => {
       expect(page.gutter).toBeTruthy();
     });
 
-    fireEvent.mouseDown(page.gutter, {clientX: 250});
-    fireEvent.mouseMove(document, {clientX: 700});
+    fireEvent.mouseDown(page.gutter, { clientX: 250 });
+    fireEvent.mouseMove(document, { clientX: 700 });
     fireEvent.mouseUp(document);
 
     fireEvent.doubleClick(page.gutter);
@@ -145,13 +145,13 @@ describe("ResizableSidebar", () => {
     });
   });
 
-  it("Stops resizing if mouse is moved outside app and brought back", async() => {
+  it("Stops resizing if mouse is moved outside app and brought back", async () => {
     expect.assertions(4);
     props = {
       resizable: true,
       gutterLeft: false, // left sidebar
       minWidth: "20%",
-      maxWidth: "30%"
+      maxWidth: "30%",
     };
     const page = new ResizableSidebarPage(props);
 
@@ -160,26 +160,26 @@ describe("ResizableSidebar", () => {
     expect(page.gutter).toBeTruthy();
     expect(page.getWidthOf(page.container)).toBe(20);
 
-    fireEvent.mouseDown(page.gutter, {clientX: 200});
-    fireEvent.mouseMove(document, {clientX: 240});
+    fireEvent.mouseDown(page.gutter, { clientX: 200 });
+    fireEvent.mouseMove(document, { clientX: 240 });
     await waitForTrue(() => page.getWidthOf(page.container) === 24);
 
     expect(page.getWidthOf(page.container)).toBeCloseTo(24);
 
     fireEvent.mouseLeave(document); // leave document
 
-    fireEvent.mouseMove(document, {clientX: 300}); // resizing again but mouse is outside doc
+    fireEvent.mouseMove(document, { clientX: 300 }); // resizing again but mouse is outside doc
 
     expect(page.getWidthOf(page.container)).toBeCloseTo(24); // same as before leave
   });
 
-  it("Stops resizing if window loses focus and mouse is moved back", async() => {
+  it("Stops resizing if window loses focus and mouse is moved back", async () => {
     expect.assertions(4);
     props = {
       resizable: true,
       gutterLeft: false, // left sidebar
       minWidth: "20%",
-      maxWidth: "30%"
+      maxWidth: "30%",
     };
     const page = new ResizableSidebarPage(props);
 
@@ -188,15 +188,15 @@ describe("ResizableSidebar", () => {
     expect(page.gutter).toBeTruthy();
     expect(page.getWidthOf(page.container)).toBe(20);
 
-    fireEvent.mouseDown(page.gutter, {clientX: 200});
-    fireEvent.mouseMove(document, {clientX: 240});
+    fireEvent.mouseDown(page.gutter, { clientX: 200 });
+    fireEvent.mouseMove(document, { clientX: 240 });
     await waitForTrue(() => page.getWidthOf(page.container) === 24);
 
     expect(page.getWidthOf(page.container)).toBeCloseTo(24);
 
     fireEvent.blur(window); // window loses focus like tab switch etc
 
-    fireEvent.mouseMove(document, {clientX: 300}); // resizing again but mouse is outside doc
+    fireEvent.mouseMove(document, { clientX: 300 }); // resizing again but mouse is outside doc
 
     expect(page.getWidthOf(page.container)).toBeCloseTo(24); // Width should not change after blur
   });

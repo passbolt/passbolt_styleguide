@@ -16,20 +16,18 @@
  * Unit tests on ChangeLocale in regard of specifications
  */
 
-
-import {defaultProps} from "./ChangeLocale.test.data";
+import { defaultProps } from "./ChangeLocale.test.data";
 import ChangeLocalePage from "./ChangeLocale.test.page";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-
 describe("As AN I should see the current locale", () => {
   let page; // The page to test against
   const props = defaultProps(); // The props to pass
 
-  describe('As AD I can see the default locale', () => {
+  describe("As AD I can see the default locale", () => {
     /**
      * When I go to the internationalisation page
      * Then I should see the language
@@ -38,12 +36,12 @@ describe("As AN I should see the current locale", () => {
       page = new ChangeLocalePage(props);
     });
 
-    it('As a AD I should be able to see my default language in the administration internationalisation page', async() => {
+    it("As a AD I should be able to see my default language in the administration internationalisation page", async () => {
       expect(page.changeLocale.exists()).toBeTruthy();
       expect(page.localeSelected).toBe("English");
     });
 
-    it('As AN I should be able to change the locale', async() => {
+    it("As AN I should be able to change the locale", async () => {
       await page.selectLanguageFr();
       expect(props.context.onUpdateLocaleRequested).toHaveBeenCalledWith("fr-FR");
     });

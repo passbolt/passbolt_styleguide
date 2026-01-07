@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import HandleSubscriptionAnnouncement from "./HandleSubscriptionAnnouncement";
 
@@ -24,9 +24,6 @@ export default class HandleSubscriptionAnnouncementPage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(
-      <HandleSubscriptionAnnouncement {...props}/>,
-      {legacyRoot: true}
-    );
+    this._page = render(<HandleSubscriptionAnnouncement {...props} />, { legacyRoot: true });
   }
 }

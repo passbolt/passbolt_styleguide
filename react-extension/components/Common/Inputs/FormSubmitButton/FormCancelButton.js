@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class FormCancelButton extends Component {
   /**
@@ -49,7 +49,9 @@ class FormCancelButton extends Component {
    */
   render() {
     return (
-      <button type="button" disabled={this.props.disabled} className="link cancel" onClick={this.handleClick}>{this.props.value}</button>
+      <button type="button" disabled={this.props.disabled} className="link cancel" onClick={this.handleClick}>
+        {this.props.value}
+      </button>
     );
   }
 }
@@ -61,11 +63,7 @@ FormCancelButton.defaultProps = {
 FormCancelButton.propTypes = {
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
-  value: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-    PropTypes.string,
-  ]),
+  value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node, PropTypes.string]),
 };
 
 export default withTranslation("common")(FormCancelButton);

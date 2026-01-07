@@ -28,7 +28,7 @@ export function defaultProps(data = {}) {
     searchCallback: jest.fn(),
     onSelect: jest.fn(),
     onOpen: jest.fn(),
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
   return Object.assign(defaultProps, data);
 }

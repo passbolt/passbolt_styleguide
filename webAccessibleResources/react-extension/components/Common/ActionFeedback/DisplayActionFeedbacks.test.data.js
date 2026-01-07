@@ -17,9 +17,9 @@
  */
 export const propsWithOneSuccessMessage = {
   actionFeedbackContext: {
-    feedbacks: [{type: 'success', message: "The comment has been added successfully"}],
-    remove: () => {}
-  }
+    feedbacks: [{ type: "success", message: "The comment has been added successfully" }],
+    remove: () => {},
+  },
 };
 
 /**
@@ -27,9 +27,9 @@ export const propsWithOneSuccessMessage = {
  */
 export const propsWithOneErrorMessage = {
   actionFeedbackContext: {
-    feedbacks: [{type: 'error', message: "An error occurred during the operation"}],
-    remove: () => {}
-  }
+    feedbacks: [{ type: "error", message: "An error occurred during the operation" }],
+    remove: () => {},
+  },
 };
 
 /**
@@ -37,9 +37,9 @@ export const propsWithOneErrorMessage = {
  */
 export const propsWithOneWarningMessage = {
   actionFeedbackContext: {
-    feedbacks: [{type: 'warning', message: "Be carreful this is a warning message"}],
-    remove: () => {}
-  }
+    feedbacks: [{ type: "warning", message: "Be carreful this is a warning message" }],
+    remove: () => {},
+  },
 };
 
 /**
@@ -47,9 +47,9 @@ export const propsWithOneWarningMessage = {
  */
 export const propsForDisplayTime = {
   actionFeedbackContext: {
-    feedbacks: [{type: 'success', message: "The comment has been added successfully"}],
-    remove: () => {}
-  }
+    feedbacks: [{ type: "success", message: "The comment has been added successfully" }],
+    remove: () => {},
+  },
 };
 
 /**
@@ -58,8 +58,8 @@ export const propsForDisplayTime = {
 export const propsWithMultipleFeedbacks = {
   actionFeedbackContext: {
     feedbacks: [
-      {type: 'success', message: "The comment has been added successfully"},
-      {type: 'error', message: "An error occurred during the operation"}
-    ]
-  }
+      { type: "success", message: "The comment has been added successfully" },
+      { type: "error", message: "An error occurred during the operation" },
+    ],
+  },
 };

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,15 +12,15 @@
  * @since         2.13.0
  */
 
-import React from 'react';
+import React from "react";
 import DisplayUsers from "../DisplayUsers/DisplayUsers";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {Route, withRouter} from "react-router-dom";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { Route, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import DisplayUserDetails from "../../UserDetails/DisplayUserDetails/DisplayUserDetails";
 import DisplayUserWorkspaceActions from "../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions";
 import DisplayUserBadgeMenu from "../DisplayUserBadgeMenu/DisplayUserBadgeMenu";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";
 import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUsersByShortcut";
 import FilterUsersByText from "../FilterUsersByText/FilterUsersByText";
@@ -29,21 +28,21 @@ import DisplayUserGroupDetails from "../../UserGroup/DisplayUserGroupDetails/Dis
 import DisplayUserWorkspaceMainActions from "../DisplayUserWorkspaceMainActions/DisplayUserWorkspaceMainActions";
 import FilterUsersByBreadcrumb from "../FilterUsersByBreadcrumb/FilterUsersByBreadcrumb";
 import HandleReviewAccountRecoveryRequestRoute from "../HandleReviewAccountRecoveryRequestRoute/HandleReviewAccountRecoveryRequestRoute";
-import DisplayHttpError from '../../Common/Error/DisplayHttpError/DisplayHttpError';
+import DisplayHttpError from "../../Common/Error/DisplayHttpError/DisplayHttpError";
 import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
-import {Trans, withTranslation} from "react-i18next";
-import DisplayUserWorkspaceEmptyDetails from '../DisplayUserWorkspaceEmptyDetails/DisplayUserWorkspaceEmptyDetails';
-import Footer from '../../Common/Footer/Footer';
-import DisplayUsersWorkspaceFilterBar from '../DisplayUsersWorkspaceFilterBar/DisplayUsersWorkspaceFilterBar';
+import { Trans, withTranslation } from "react-i18next";
+import DisplayUserWorkspaceEmptyDetails from "../DisplayUserWorkspaceEmptyDetails/DisplayUserWorkspaceEmptyDetails";
+import Footer from "../../Common/Footer/Footer";
+import DisplayUsersWorkspaceFilterBar from "../DisplayUsersWorkspaceFilterBar/DisplayUsersWorkspaceFilterBar";
 import debounce from "debounce-promise";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
-import WorkspaceSwitcher, {WORKSPACE_ENUM} from '../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher';
-import RoleEntity from '../../../../shared/models/entity/role/roleEntity';
-import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
-import {withRbac} from '../../../../shared/context/Rbac/RbacContext';
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import WorkspaceSwitcher, { WORKSPACE_ENUM } from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
+import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 import ResizableSidebar from "../../ResizableSidebar/ResizableSidebar";
-import {withResizableSidebar} from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
+import { withResizableSidebar } from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -59,7 +58,7 @@ class DisplayUserWorkspace extends React.Component {
     super(props);
     this.bindCallbacks();
     this.createRefs();
-    window.addEventListener('resize', this.handleWindowResizeEventDebounced);
+    window.addEventListener("resize", this.handleWindowResizeEventDebounced);
   }
 
   /**
@@ -111,7 +110,9 @@ class DisplayUserWorkspace extends React.Component {
     this.actionsBar.current?.classList.remove("icon-only");
     // Get elements width
     const offsetWidthActionBar = this.actionsBar.current?.offsetWidth;
-    const offsetActionsButton = this.actionsFilter.current ? this.actionsFilter.current.offsetWidth : this.actionsButton.current?.offsetWidth;
+    const offsetActionsButton = this.actionsFilter.current
+      ? this.actionsFilter.current.offsetWidth
+      : this.actionsButton.current?.offsetWidth;
     const offsetActionsSecondary = this.actionsSecondary.current?.offsetWidth;
 
     // Check if the default width overlay the container to show only icons
@@ -124,7 +125,7 @@ class DisplayUserWorkspace extends React.Component {
    * @returns {boolean}
    */
   get shouldDisplayUserDetails() {
-    const {details} = this.props.userWorkspaceContext;
+    const { details } = this.props.userWorkspaceContext;
     return details.user;
   }
 
@@ -133,7 +134,7 @@ class DisplayUserWorkspace extends React.Component {
    * @returns {boolean}
    */
   get shouldDisplayGroupDetails() {
-    const {details} = this.props.userWorkspaceContext;
+    const { details } = this.props.userWorkspaceContext;
     return details.group;
   }
 
@@ -157,7 +158,7 @@ class DisplayUserWorkspace extends React.Component {
    * @returns {boolean}
    */
   get shouldDisplayEmptyDetails() {
-    const {details} = this.props.userWorkspaceContext;
+    const { details } = this.props.userWorkspaceContext;
     return !details.user && !details.group;
   }
 
@@ -167,7 +168,10 @@ class DisplayUserWorkspace extends React.Component {
    */
   get isUserAdmin() {
     const loggedInUser = this.props.context.loggedInUser;
-    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
+    return (
+      loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN &&
+      this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE)
+    );
   }
 
   /**
@@ -191,14 +195,18 @@ class DisplayUserWorkspace extends React.Component {
    * @return {JSX}
    */
   render() {
-    const {right, containerRef} = this.props.sidebarContext || {};
+    const { right, containerRef } = this.props.sidebarContext || {};
     const containerWidth = containerRef?.current?.offsetWidth || 1;
-    const rightHeaderWidth = ((right?.width / containerWidth) * 100) < 25 ? `25%` : `${(right?.width / containerWidth) * 100}%`; // set width of right header
+    const rightHeaderWidth =
+      (right?.width / containerWidth) * 100 < 25 ? `25%` : `${(right?.width / containerWidth) * 100}%`; // set width of right header
     return (
       <>
-        {this.props.context.users &&
-        <Route path="/app/account-recovery/requests/review/:accountRecoveryRequestId" component={HandleReviewAccountRecoveryRequestRoute}/>
-        }
+        {this.props.context.users && (
+          <Route
+            path="/app/account-recovery/requests/review/:accountRecoveryRequestId"
+            component={HandleReviewAccountRecoveryRequestRoute}
+          />
+        )}
         <div className="panel main">
           {this.isAccessAllowed ? (
             <>
@@ -215,15 +223,17 @@ class DisplayUserWorkspace extends React.Component {
                       <div className="navigation">
                         {/* Add onclick action */}
                         <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
-                          <ArrowLeftSVG/>
+                          <ArrowLeftSVG />
                         </button>
-                        <span className="title users"><Trans>Users & Groups</Trans></span>
+                        <span className="title users">
+                          <Trans>Users & Groups</Trans>
+                        </span>
                       </div>
                     </div>
-                    <DisplayUserWorkspaceMainActions/>
+                    <DisplayUserWorkspaceMainActions />
                     <div className="sidebar-content-left">
-                      <FilterUsersByShortcut/>
-                      <DisplayGroups/>
+                      <FilterUsersByShortcut />
+                      <DisplayGroups />
                     </div>
                   </div>
                 </div>
@@ -231,61 +241,67 @@ class DisplayUserWorkspace extends React.Component {
               <div className="panel middle">
                 <div className="header">
                   <div className="header-left">
-                    <FilterUsersByText/>
+                    <FilterUsersByText />
                   </div>
-                  <div className="header-right" style={{width: rightHeaderWidth}}>
-                    <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={true} currentWorkspace={WORKSPACE_ENUM.USER_AND_GROUPS}/>
-                    <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+                  <div className="header-right" style={{ width: rightHeaderWidth }}>
+                    <WorkspaceSwitcher
+                      isUserAdmin={this.isUserAdmin}
+                      isUserWorkspaceVisible={true}
+                      currentWorkspace={WORKSPACE_ENUM.USER_AND_GROUPS}
+                    />
+                    <DisplayUserBadgeMenu
+                      baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                      user={this.props.context.loggedInUser}
+                    />
                   </div>
                 </div>
                 <div className="middle-right">
                   <div className="breadcrumbs-and-grid">
                     <div className="top-bar">
-                      <FilterUsersByBreadcrumb/>
+                      <FilterUsersByBreadcrumb />
                       <div className="action-bar" ref={this.actionsBar}>
-                        {this.props.userWorkspaceContext.selectedUsers?.length > 0
-                          ? <DisplayUserWorkspaceActions actionsButtonRef={this.actionsButton}/>
-                          : <DisplayUsersWorkspaceFilterBar actionsFilterRef={this.actionsFilter}/>
-                        }
+                        {this.props.userWorkspaceContext.selectedUsers?.length > 0 ? (
+                          <DisplayUserWorkspaceActions actionsButtonRef={this.actionsButton} />
+                        ) : (
+                          <DisplayUsersWorkspaceFilterBar actionsFilterRef={this.actionsFilter} />
+                        )}
                         <div className="actions-secondary" ref={this.actionsSecondary}>
-                          <button type="button"
+                          <button
+                            type="button"
                             className={`button-toggle button-action button-action-icon info ${this.hasDetailsLocked() ? "active" : ""}`}
-                            onClick={this.handleDetailsLockedEvent}>
-                            <InfoSVG/>
-                            <span className="visuallyhidden"><Trans>View detail</Trans></span>
+                            onClick={this.handleDetailsLockedEvent}
+                          >
+                            <InfoSVG />
+                            <span className="visuallyhidden">
+                              <Trans>View detail</Trans>
+                            </span>
                           </button>
                         </div>
                       </div>
                     </div>
-                    <DisplayUsers/>
+                    <DisplayUsers />
                   </div>
-                  {this.hasDetailsLocked() &&
-                  <ResizableSidebar
-                    resizable
-                    gutterLeft={true}
-                    minWidth={"25%"}
-                    maxWidth={"35%"}
-                    classNames={"users-workspace right-side-bar"}
-                  >
-                    <div className="panel aside">
-                      {this.shouldDisplayEmptyDetails &&
-                        <DisplayUserWorkspaceEmptyDetails />
-                      }
-                      {this.shouldDisplayUserDetails &&
-                        <DisplayUserDetails/>
-                      }
-                      {this.shouldDisplayGroupDetails &&
-                        <DisplayUserGroupDetails/>
-                      }
-                      <Footer/>
-                    </div>
-                  </ResizableSidebar>
-                  }
+                  {this.hasDetailsLocked() && (
+                    <ResizableSidebar
+                      resizable
+                      gutterLeft={true}
+                      minWidth={"25%"}
+                      maxWidth={"35%"}
+                      classNames={"users-workspace right-side-bar"}
+                    >
+                      <div className="panel aside">
+                        {this.shouldDisplayEmptyDetails && <DisplayUserWorkspaceEmptyDetails />}
+                        {this.shouldDisplayUserDetails && <DisplayUserDetails />}
+                        {this.shouldDisplayGroupDetails && <DisplayUserGroupDetails />}
+                        <Footer />
+                      </div>
+                    </ResizableSidebar>
+                  )}
                 </div>
               </div>
             </>
           ) : (
-            <DisplayHttpError errorCode={403}/>
+            <DisplayHttpError errorCode={403} />
           )}
         </div>
       </>
@@ -303,4 +319,10 @@ DisplayUserWorkspace.propTypes = {
   sidebarContext: PropTypes.any,
 };
 
-export default withRouter(withAppContext(withRbac(withNavigationContext(withUserWorkspace(withResizableSidebar(withTranslation('common')(DisplayUserWorkspace)))))));
+export default withRouter(
+  withAppContext(
+    withRbac(
+      withNavigationContext(withUserWorkspace(withResizableSidebar(withTranslation("common")(DisplayUserWorkspace)))),
+    ),
+  ),
+);

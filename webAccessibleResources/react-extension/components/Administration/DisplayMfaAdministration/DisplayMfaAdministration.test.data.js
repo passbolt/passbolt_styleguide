@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 
 /**
  * Default props.
@@ -24,11 +24,11 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(data?.context),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
-      resetDisplayAdministrationWorkspaceAction: jest.fn()
+      resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
     actionFeedbackContext: {
       displaySuccess: () => jest.fn(),
-      displayError: jest.fn()
+      displayError: jest.fn(),
     },
   };
   return Object.assign(defaultProps, data);
@@ -39,33 +39,28 @@ export function defaultProps(data = {}) {
  * @returns {object}
  */
 export const mockMfaSettings = {
-  "providers": [
-    "totp",
-    "yubikey",
-    "duo"
-  ],
-  "yubikey": {
-    "clientId": "80412",
-    "secretKey": "pas6lyijz2AIhX3D9eLIYAxv63lt@"
+  providers: ["totp", "yubikey", "duo"],
+  yubikey: {
+    clientId: "80412",
+    secretKey: "pas6lyijz2AIhX3D9eLIYAxv63lt@",
   },
-  "duo": {
-    "hostName": "api-123456af.duosecurity.com",
-    "integrationKey": "PAGI605APMFKP8YSME6T",
-    "secretKey": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
-  }
+  duo: {
+    hostName: "api-123456af.duosecurity.com",
+    integrationKey: "PAGI605APMFKP8YSME6T",
+    secretKey: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT",
+  },
 };
 
 export const mockDefaultMfaModel = {
-  "duoHostname": "",
-  "duoClientId": "",
-  "duoClientSecret": "",
-  "duoToggle": false,
-  "totpProviderToggle": false,
-  "yubikeyClientIdentifier": "",
-  "yubikeySecretKey": "",
-  "yubikeyToggle": false,
+  duoHostname: "",
+  duoClientId: "",
+  duoClientSecret: "",
+  duoToggle: false,
+  totpProviderToggle: false,
+  yubikeyClientIdentifier: "",
+  yubikeySecretKey: "",
+  yubikeyToggle: false,
 };
-
 
 /**
  * Mock settings model for UI
@@ -79,7 +74,7 @@ export const mockModel = {
   yubikeySecretKey: "pas6lyijz2AIhX3D9eLIYAxv63lt@",
   duoHostname: "api-123456af.duosecurity.com",
   duoClientId: "PAGI605APMFKP8YSME6T",
-  duoClientSecret: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
+  duoClientSecret: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT",
 };
 
 /**
@@ -90,7 +85,7 @@ export const mockModel = {
 export function defaultMfaSettings(data = {}) {
   return {
     ...mockMfaSettings,
-    ...data
+    ...data,
   };
 }
 
@@ -102,10 +97,10 @@ export function defaultMfaSettings(data = {}) {
 export function mockYubikeyError(data = {}) {
   return {
     ...{
-      "yubikeyClientIdentifierError": "A client identifier is required.",
-      "yubikeySecretKeyError": "A secret key is required.",
+      yubikeyClientIdentifierError: "A client identifier is required.",
+      yubikeySecretKeyError: "A secret key is required.",
     },
-    ...data
+    ...data,
   };
 }
 
@@ -117,11 +112,11 @@ export function mockYubikeyError(data = {}) {
 export function mockDuoError(data = {}) {
   return {
     ...{
-      "duoHostnameError": "A hostname is required.",
-      "duoClientIdError": "A client id is required.",
-      "duoClientSecretError": "A client secret is required.",
+      duoHostnameError: "A hostname is required.",
+      duoClientIdError: "A client id is required.",
+      duoClientSecretError: "A client secret is required.",
     },
-    ...data
+    ...data,
   };
 }
 /**
@@ -132,6 +127,6 @@ export function mockDuoError(data = {}) {
 export function defaultSettingsModel(data = {}) {
   return {
     ...mockModel,
-    ...data
+    ...data,
   };
 }

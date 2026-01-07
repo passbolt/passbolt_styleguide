@@ -12,16 +12,14 @@
  * @since         3.3.3
  */
 
-import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
-import {ownerFolderPermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import { defaultFolderDto } from "../../../../shared/models/entity/folder/folderEntity.test.data";
+import { ownerFolderPermissionDto } from "../../../../shared/models/entity/permission/permissionEntity.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props
@@ -29,21 +27,21 @@ import {
  */
 export function defaultProps() {
   return {
-    context: defaultAppContext({folders: foldersMock}),
+    context: defaultAppContext({ folders: foldersMock }),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filter: {
         type: ResourceWorkspaceFilterTypes.FOLDER,
         payload: {
-          folder: foldersMock[0]
-        }
-      }
+          folder: foldersMock[0],
+        },
+      },
     }),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     dragContext: {
       dragging: true,
       draggedItems: {
         folders: [foldersMock[2]],
-        resources: []
+        resources: [],
       },
       onDragStart: jest.fn(),
       onDragEnd: jest.fn(),
@@ -52,7 +50,7 @@ export function defaultProps() {
     toggleOpenFolder: jest.fn(),
     toggleCloseFolder: jest.fn(),
     contextualMenuContext: {
-      show: jest.fn()
+      show: jest.fn(),
     },
     dialogContext: defaultDialogContext(),
     history: {
@@ -60,9 +58,9 @@ export function defaultProps() {
     },
     match: {
       params: {
-        filterByFolderId: foldersMock[0].id
-      }
-    }
+        filterByFolderId: foldersMock[0].id,
+      },
+    },
   };
 }
 
@@ -104,5 +102,5 @@ export const foldersMock = [
       aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
     }),
     folder_parent_id: "3ed65efd-7c41-5906-9c02-71e2d95951dc",
-  })
+  }),
 ];

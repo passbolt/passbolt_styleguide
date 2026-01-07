@@ -11,21 +11,21 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withLoading} from "../../../contexts/LoadingContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
-import {maxSizeValidation} from '../../../lib/Error/InputValidator';
-import {RESOURCE_TAG_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
+import { withLoading } from "../../../contexts/LoadingContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
+import { maxSizeValidation } from "../../../lib/Error/InputValidator";
+import { RESOURCE_TAG_MAX_LENGTH } from "../../../../shared/constants/inputs.const";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 
 /**
@@ -41,10 +41,10 @@ class EditResourceTag extends Component {
 
   getDefaultState() {
     return {
-      name: '',
+      name: "",
       nameError: "",
       nameWarning: "",
-      processing: false
+      processing: false,
     };
   }
 
@@ -66,7 +66,7 @@ class EditResourceTag extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    this.setState({name:  this.props.context.tagToEdit.slug});
+    this.setState({ name: this.props.context.tagToEdit.slug });
   }
 
   /**
@@ -91,7 +91,7 @@ class EditResourceTag extends Component {
     const value = target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -102,14 +102,14 @@ class EditResourceTag extends Component {
     const state = this.validateNameInput();
     this.setState(state);
     const nameWarning = maxSizeValidation(this.state.name, RESOURCE_TAG_MAX_LENGTH, this.translate);
-    this.setState({nameWarning});
+    this.setState({ nameWarning });
   }
 
   /**
    * Handle close button click.
    */
   handleCloseClick() {
-    this.props.context.setContext({tagToEdit: null});
+    this.props.context.setContext({ tagToEdit: null });
     this.props.onClose();
   }
 
@@ -117,9 +117,9 @@ class EditResourceTag extends Component {
    * Save the changes.
    */
   async save() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
 
-    if (!await this.validate()) {
+    if (!(await this.validate())) {
       this.handleValidateError();
       return;
     }
@@ -127,7 +127,7 @@ class EditResourceTag extends Component {
     const tagDto = {
       id: this.props.context.tagToEdit.id,
       slug: this.state.name,
-      is_shared: this.props.context.tagToEdit.is_shared
+      is_shared: this.props.context.tagToEdit.is_shared,
     };
 
     try {
@@ -136,7 +136,7 @@ class EditResourceTag extends Component {
       await this.handleSaveSuccess(updatedTag);
     } catch (error) {
       this.handleSaveError(error);
-      this.setState({processing: false});
+      this.setState({ processing: false });
       this.focusFieldError();
       return;
     }
@@ -146,7 +146,7 @@ class EditResourceTag extends Component {
    * Handle validation error.
    */
   handleValidateError() {
-    this.setState({processing: false});
+    this.setState({ processing: false });
     this.focusFieldError();
   }
 
@@ -161,7 +161,7 @@ class EditResourceTag extends Component {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The tag has been updated successfully"));
 
     const previousTagId = this.props.context.tagToEdit.id;
-    this.props.context.setContext({tagToEdit: null});
+    this.props.context.setContext({ tagToEdit: null });
     this.selectUpdatedTag(previousTagId, updatedTag);
   }
 
@@ -178,8 +178,8 @@ class EditResourceTag extends Component {
     if (isFilterByTag) {
       const isTagSelected = this.props.resourceWorkspaceContext.filter.payload.tag.id === previousTagId;
       if (isTagSelected) {
-        const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: updatedTag}};
-        this.props.history.push({pathname: "/app/passwords", state: {filter}});
+        const filter = { type: ResourceWorkspaceFilterTypes.TAG, payload: { tag: updatedTag } };
+        this.props.history.push({ pathname: "/app/passwords", state: { filter } });
       }
     }
   }
@@ -192,12 +192,12 @@ class EditResourceTag extends Component {
     this.props.loadingContext.remove();
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     } else {
       // Unexpected error occurred.
       console.error(error);
       const errorDialogProps = {
-        error: error
+        error: error,
       };
       this.props.dialogContext.open(NotifyError, errorDialogProps);
     }
@@ -223,8 +223,8 @@ class EditResourceTag extends Component {
       nameError = this.translate("A tag name is required.");
     }
 
-    return new Promise(resolve => {
-      this.setState({nameError: nameError}, resolve);
+    return new Promise((resolve) => {
+      this.setState({ nameError: nameError }, resolve);
     });
   }
 
@@ -267,31 +267,50 @@ class EditResourceTag extends Component {
         title={this.translate("Edit tag")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="edit-tag-dialog">
+        className="edit-tag-dialog"
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-tag-form-name"><Trans>Tag name</Trans>{this.state.nameWarning &&
-                <AttentionSVG className="attention-required"/>
-              }</label>
-              <input id="edit-tag-form-name" name="name" type="text" value={this.state.name}
-                onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-                disabled={this.state.processing} ref={this.nameInputRef} className="required fluid"
+            <div
+              className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+            >
+              <label htmlFor="edit-tag-form-name">
+                <Trans>Tag name</Trans>
+                {this.state.nameWarning && <AttentionSVG className="attention-required" />}
+              </label>
+              <input
+                id="edit-tag-form-name"
+                name="name"
+                type="text"
+                value={this.state.name}
+                onKeyUp={this.handleNameInputKeyUp}
+                onChange={this.handleInputChange}
+                disabled={this.state.processing}
+                ref={this.nameInputRef}
+                className="required fluid"
                 maxLength="128"
-                required="required" autoComplete="off" autoFocus={true}/>
-              {this.state.nameError &&
-                  <div className="name error-message">{this.state.nameError}</div>
-              }
+                required="required"
+                autoComplete="off"
+                autoFocus={true}
+              />
+              {this.state.nameError && <div className="name error-message">{this.state.nameError}</div>}
               {this.state.nameWarning && (
                 <div className="name warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.nameWarning}
                 </div>
               )}
             </div>
           </div>
           <div className="submit-wrapper">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Save")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -312,4 +331,8 @@ EditResourceTag.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withResourceWorkspace(withLoading(withActionFeedback(withDialog(withTranslation('common')(EditResourceTag)))))));
+export default withAppContext(
+  withRouter(
+    withResourceWorkspace(withLoading(withActionFeedback(withDialog(withTranslation("common")(EditResourceTag))))),
+  ),
+);

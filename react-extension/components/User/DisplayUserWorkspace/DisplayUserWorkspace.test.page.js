@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,13 +12,12 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import DisplayUserWorkspace from "./DisplayUserWorkspace";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 
 /**
  * The DisplayUserWorkspacePage component represented as a page
@@ -33,10 +31,10 @@ export default class DisplayUserWorkspacePage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <DisplayUserWorkspace {...props}/>
+          <DisplayUserWorkspace {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -44,42 +42,42 @@ export default class DisplayUserWorkspacePage {
    * Returns true if the user details area is visible
    */
   get isGridDisplayed() {
-    return Boolean(this._page.container.querySelector('.tableview'));
+    return Boolean(this._page.container.querySelector(".tableview"));
   }
 
   /**
    * Returns true if the user details area is visible
    */
   get hasUserDetails() {
-    return Boolean(this._page.container.querySelector('.user-details'));
+    return Boolean(this._page.container.querySelector(".user-details"));
   }
 
   /**
    * Returns true if the user workspace filters bar is visible
    */
   get hasFilterBar() {
-    return Boolean(this._page.container.querySelector('.actions-filter'));
+    return Boolean(this._page.container.querySelector(".actions-filter"));
   }
 
   /**
    * Returns true if the user group details area is visible
    */
   get hasUserGroupDetails() {
-    return Boolean(this._page.container.querySelector('.user-group-details'));
+    return Boolean(this._page.container.querySelector(".user-group-details"));
   }
 
   /**
    * Returns the go back button
    */
   get goBackButton() {
-    return this._page.container.querySelector('button.back');
+    return this._page.container.querySelector("button.back");
   }
 
   /**
    * Click on the go back button element
    */
   async goBack() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.goBackButton, leftClick);
     await waitFor(() => {});
   }
@@ -88,8 +86,8 @@ export default class DisplayUserWorkspacePage {
    * Toggle the lock of the display of the details
    */
   async lockDetails() {
-    const element = this._page.container.querySelector('.button-toggle.info');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector(".button-toggle.info");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

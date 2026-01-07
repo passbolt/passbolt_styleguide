@@ -23,21 +23,23 @@ beforeEach(() => {
 describe("ApiApp Context", () => {
   let apiAppContext; // The apiAppContext to text
 
-  describe('As LU I should complete an authentication setup', () => {
+  describe("As LU I should complete an authentication setup", () => {
     beforeEach(() => {
-      jest.spyOn(document, "getElementsByTagName").mockImplementation(() => [{
-        attributes: {
-          href: {
-            value: "http://localhost:6006"
-          }
-        }
-      }]);
+      jest.spyOn(document, "getElementsByTagName").mockImplementation(() => [
+        {
+          attributes: {
+            href: {
+              value: "http://localhost:6006",
+            },
+          },
+        },
+      ]);
       apiAppContext = new ApiAppContextProvider();
-      const setStateMock = state => apiAppContext.state = Object.assign(apiAppContext.state, state);
-      jest.spyOn(apiAppContext, 'setState').mockImplementation(setStateMock);
+      const setStateMock = (state) => (apiAppContext.state = Object.assign(apiAppContext.state, state));
+      jest.spyOn(apiAppContext, "setState").mockImplementation(setStateMock);
     });
 
-    it('As LU I should listen on expired session', async() => {
+    it("As LU I should listen on expired session", async () => {
       expect.assertions(8);
       // data mocked
       const callback = jest.fn(() => "Hello");

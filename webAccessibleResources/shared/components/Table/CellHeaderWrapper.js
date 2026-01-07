@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import CellHeaderDefault from "./CellHeaderDefault";
-import {withTable} from "./Context/TableContext";
+import { withTable } from "./Context/TableContext";
 import ColumnModel from "../../models/column/ColumnModel";
 import ArrowDownSVG from "../../../img/svg/arrow_down.svg";
 import ArrowUpSVG from "../../../img/svg/arrow_up.svg";
@@ -42,7 +42,7 @@ class CellHeaderWrapper extends Component {
       mouseXPosition: 0,
       move: 0,
       columnToResizeWidth: 0,
-      resizing: false
+      resizing: false,
     };
   }
 
@@ -76,14 +76,17 @@ class CellHeaderWrapper extends Component {
   handleReorderColumnMouseDownEvent(event) {
     // Get the current mouse position
     const mouseXPosition = event.clientX;
-    this.setState({mouseXPosition});
+    this.setState({ mouseXPosition });
     // Get width of the previous and next column
-    this.updatePreviousAndNextColumnWidth(this.columnRef.current.previousSibling?.offsetWidth, this.columnRef.current.nextSibling?.offsetWidth);
+    this.updatePreviousAndNextColumnWidth(
+      this.columnRef.current.previousSibling?.offsetWidth,
+      this.columnRef.current.nextSibling?.offsetWidth,
+    );
     // Add listener to handle the first move
-    this.columnRef.current.addEventListener('mousemove', this.startDragging, {once: true});
+    this.columnRef.current.addEventListener("mousemove", this.startDragging, { once: true });
     // Add listener to handle mouse move event on document
-    document.addEventListener('mousemove', this.handleReorderColumnMouseMoveEvent, {capture: true});
-    document.addEventListener('mouseup', this.handleReorderColumnMouseUpEvent, {capture: true, once: true});
+    document.addEventListener("mousemove", this.handleReorderColumnMouseMoveEvent, { capture: true });
+    document.addEventListener("mouseup", this.handleReorderColumnMouseUpEvent, { capture: true, once: true });
   }
 
   /**
@@ -105,11 +108,14 @@ class CellHeaderWrapper extends Component {
     const canMoveColumn = this.props.tableContext.canMoveColumn(this.props.index, dx);
     if (canMoveColumn) {
       this.columnRef.current.style.translate = `${dx}px`;
-      if (this.previousColumnWidth && dx < - this.previousColumnWidth / 2) {
+      if (this.previousColumnWidth && dx < -this.previousColumnWidth / 2) {
         // Move the column to the previous position
         this.props.tableContext.onReorderColumns(this.props.index, this.props.index - 1);
         this.updateColumnPosition(-this.previousColumnWidth, dx);
-        this.updatePreviousAndNextColumnWidth(this.columnRef.current.previousSibling?.offsetWidth, this.previousColumnWidth);
+        this.updatePreviousAndNextColumnWidth(
+          this.columnRef.current.previousSibling?.offsetWidth,
+          this.previousColumnWidth,
+        );
       } else if (this.nextColumnWidth && dx > this.nextColumnWidth / 2) {
         // Move the column to the next position
         this.props.tableContext.onReorderColumns(this.props.index, this.props.index + 1);
@@ -130,11 +136,11 @@ class CellHeaderWrapper extends Component {
     this.columnRef.current.style.translate = null;
     this.updatePreviousAndNextColumnWidth(null, null);
     // Remove listener on mouse move
-    this.columnRef.current.removeEventListener('mousemove', this.startDragging);
-    document.removeEventListener('mousemove', this.handleReorderColumnMouseMoveEvent, {capture: true});
+    this.columnRef.current.removeEventListener("mousemove", this.startDragging);
+    document.removeEventListener("mousemove", this.handleReorderColumnMouseMoveEvent, { capture: true });
     // Call props to inform of the column is not dragging anymore
     this.props.tableContext.onEndDraggingColumn();
-    this.setState({mouseXPosition: 0, move: 0});
+    this.setState({ mouseXPosition: 0, move: 0 });
     this.handleChangeColumn();
   }
 
@@ -162,7 +168,7 @@ class CellHeaderWrapper extends Component {
   updateColumnPosition(columnPermutedWidth, dx) {
     const move = this.state.move + columnPermutedWidth;
     this.columnRef.current.style.translate = `${dx - columnPermutedWidth}px`;
-    this.setState({move});
+    this.setState({ move });
   }
 
   /**
@@ -186,11 +192,11 @@ class CellHeaderWrapper extends Component {
     const columnToResizeWidth = this.column.width;
     // Get the current mouse position
     const mouseXPosition = event.clientX;
-    this.setState({resizing: true, mouseXPosition, columnToResizeWidth});
+    this.setState({ resizing: true, mouseXPosition, columnToResizeWidth });
     // Add listener to handle mouse move event on document
-    document.addEventListener('mousemove', this.handleResizeColumnMouseMoveEvent, {capture: true});
+    document.addEventListener("mousemove", this.handleResizeColumnMouseMoveEvent, { capture: true });
     // Add once listener to handle mouse up event on document
-    document.addEventListener('mouseup', this.handleResizeColumnMouseUpEvent, {capture: true, once: true});
+    document.addEventListener("mouseup", this.handleResizeColumnMouseUpEvent, { capture: true, once: true });
   }
 
   /**
@@ -211,8 +217,8 @@ class CellHeaderWrapper extends Component {
    */
   handleResizeColumnMouseUpEvent() {
     // Remove listener on mouse move
-    document.removeEventListener('mousemove', this.handleResizeColumnMouseMoveEvent, {capture: true});
-    this.setState({resizing: null, mouseXPosition: 0, columnToResizeWidth: 0});
+    document.removeEventListener("mousemove", this.handleResizeColumnMouseMoveEvent, { capture: true });
+    this.setState({ resizing: null, mouseXPosition: 0, columnToResizeWidth: 0 });
     this.handleChangeColumn();
   }
 
@@ -269,7 +275,7 @@ class CellHeaderWrapper extends Component {
    */
   get columnWidthStyle() {
     // Get the column width
-    return this.column?.width ? {width: `${this.column.width}px`} : null;
+    return this.column?.width ? { width: `${this.column.width}px` } : null;
   }
 
   /**
@@ -284,33 +290,31 @@ class CellHeaderWrapper extends Component {
         className={`cell-${this.column.id} selections ${this.column.draggable ? "draggable" : ""} ${this.column.sortable ? "sortable" : ""}`}
         style={this.columnWidthStyle}
         ref={this.columnRef}
-        onMouseDown={event => this.column.draggable ? this.handleReorderColumnMouseDownEvent(event) : undefined}>
-        {!this.column.sortable &&
+        onMouseDown={(event) => (this.column.draggable ? this.handleReorderColumnMouseDownEvent(event) : undefined)}
+      >
+        {!this.column.sortable && (
           <div className="cell-header">
-            <CellHeader {...this.propsCellHeader}/>
+            <CellHeader {...this.propsCellHeader} />
           </div>
-        }
-        {this.column.sortable &&
+        )}
+        {this.column.sortable && (
           <button className="no-border" type="button" onClick={this.handleSortByColumnClick}>
             <div className="cell-header">
-              <CellHeader {...this.propsCellHeader}/>
+              <CellHeader {...this.propsCellHeader} />
               <span className="cell-header-icon-sort">
-                {this.isSortedColumn(this.column.field) && this.isSortedAsc() &&
-                  <ArrowDownSVG/>
-                }
-                {this.isSortedColumn(this.column.field) && !this.isSortedAsc() &&
-                  <ArrowUpSVG/>
-                }
+                {this.isSortedColumn(this.column.field) && this.isSortedAsc() && <ArrowDownSVG />}
+                {this.isSortedColumn(this.column.field) && !this.isSortedAsc() && <ArrowUpSVG />}
               </span>
             </div>
           </button>
-        }
-        {this.column.resizable &&
-          <div className={`resizer ${this.state.resizing ? "resizing" : ""}`}
+        )}
+        {this.column.resizable && (
+          <div
+            className={`resizer ${this.state.resizing ? "resizing" : ""}`}
             onMouseDown={this.handleResizeColumnMouseDown}
-            onDoubleClick={this.handleResizeDefaultByColumnDoubleClick}>
-          </div>
-        }
+            onDoubleClick={this.handleResizeDefaultByColumnDoubleClick}
+          ></div>
+        )}
       </th>
     );
   }
@@ -319,7 +323,7 @@ class CellHeaderWrapper extends Component {
 CellHeaderWrapper.propTypes = {
   tableContext: PropTypes.any, // The table context
   column: PropTypes.instanceOf(ColumnModel).isRequired, // The columns to display
-  index: PropTypes.number.isRequired // The index of the column
+  index: PropTypes.number.isRequired, // The index of the column
 };
 
 export default withTable(CellHeaderWrapper);

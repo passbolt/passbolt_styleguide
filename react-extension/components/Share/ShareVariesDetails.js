@@ -11,26 +11,46 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class ShareVariesDetails extends Component {
   render() {
     return (
       <span className="share-varies-details">
-        {(this.props.variesDetails[0].length > 0) &&
-        <span><strong><Trans>No access</Trans>: {this.props.variesDetails[0].join(', ')}</strong><br/></span>
-        }
-        {(this.props.variesDetails[1].length > 0) &&
-        <span><strong><Trans>Can read</Trans>: {this.props.variesDetails[1].join(', ')}</strong><br/></span>
-        }
-        {(this.props.variesDetails[7].length > 0) &&
-        <span><strong><Trans>Can edit</Trans>: {this.props.variesDetails[7].join(', ')}</strong><br/></span>
-        }
-        {(this.props.variesDetails[15].length > 0) &&
-        <span><strong><Trans>Is owner</Trans>: {this.props.variesDetails[15].join(', ')}</strong><br/></span>
-        }
+        {this.props.variesDetails[0].length > 0 && (
+          <span>
+            <strong>
+              <Trans>No access</Trans>: {this.props.variesDetails[0].join(", ")}
+            </strong>
+            <br />
+          </span>
+        )}
+        {this.props.variesDetails[1].length > 0 && (
+          <span>
+            <strong>
+              <Trans>Can read</Trans>: {this.props.variesDetails[1].join(", ")}
+            </strong>
+            <br />
+          </span>
+        )}
+        {this.props.variesDetails[7].length > 0 && (
+          <span>
+            <strong>
+              <Trans>Can edit</Trans>: {this.props.variesDetails[7].join(", ")}
+            </strong>
+            <br />
+          </span>
+        )}
+        {this.props.variesDetails[15].length > 0 && (
+          <span>
+            <strong>
+              <Trans>Is owner</Trans>: {this.props.variesDetails[15].join(", ")}
+            </strong>
+            <br />
+          </span>
+        )}
       </span>
     );
   }

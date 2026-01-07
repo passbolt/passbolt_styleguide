@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,10 +12,9 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import EditResourceTagsItemViewerPageObject from "../../ResourceTag/EditResourceTags/EditResourceTagsItemViewer.test.page";
 import EditResourceTagsPageObject from "../../ResourceTag/EditResourceTags/EditResourceTags.test.page";
@@ -37,11 +35,11 @@ export default class PasswordSidebarTagSectionPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
-            <DisplayResourceDetailsTag  {...props}/>
+            <DisplayResourceDetailsTag {...props} />
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -105,8 +103,8 @@ class TitleHeaderPageObject {
   }
 
   /** Click on the title */
-  async click()  {
-    const leftClick = {button: 0};
+  async click() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.hyperlink, leftClick);
     await waitFor(() => {});
   }
@@ -125,14 +123,14 @@ class PasswordSidebarTagSectionPageObject {
    * Returns the content elements of tags
    */
   get content() {
-    return this._container.querySelector('.accordion-content');
+    return this._container.querySelector(".accordion-content");
   }
 
   /**
    * Returns the loading element
    */
   get editIcon() {
-    return this._container.querySelector('button.section-action');
+    return this._container.querySelector("button.section-action");
   }
 
   /**
@@ -152,63 +150,63 @@ class PasswordSidebarTagSectionPageObject {
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
 
   /** Click without wait for on the component */
-  clickWithoutWaitFor(component)  {
-    const leftClick = {button: 0};
+  clickWithoutWaitFor(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
   }
 
   /** change input value on the component */
-  async input(component, data)  {
-    const options = {target: {textContent: data}};
+  async input(component, data) {
+    const options = { target: { textContent: data } };
     fireEvent.input(component, options);
     await waitFor(() => {});
   }
 
   /** enter key pressed on the component */
-  async enterKeyPressed(component)  {
-    const enterKeyPressed = {keyCode: 13};
+  async enterKeyPressed(component) {
+    const enterKeyPressed = { keyCode: 13 };
     fireEvent.keyPress(component, enterKeyPressed);
     await waitFor(() => {});
   }
 
   /** comma key pressed on the component */
-  async commaKeyPressed(component)  {
-    const commaKeyPressed = {charCode: 44};
+  async commaKeyPressed(component) {
+    const commaKeyPressed = { charCode: 44 };
     fireEvent.keyPress(component, commaKeyPressed);
     await waitFor(() => {});
   }
 
   /** backspace key down on the component */
-  async backspaceKeyDown(component)  {
-    const backspaceKeyDown = {keyCode: 8};
+  async backspaceKeyDown(component) {
+    const backspaceKeyDown = { keyCode: 8 };
     fireEvent.keyDown(component, backspaceKeyDown);
     await waitFor(() => {});
   }
 
   /** escape key down on the component */
-  async escapeKeyDown(component)  {
-    const escapeKeyDown = {keyCode: 27};
+  async escapeKeyDown(component) {
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(component, escapeKeyDown);
     await waitFor(() => {});
   }
 
   /** up arrow key down on the component */
-  async upArrowKeyDown(component)  {
-    const upArrowPressed = {keyCode: 38};
+  async upArrowKeyDown(component) {
+    const upArrowPressed = { keyCode: 38 };
     fireEvent.keyDown(component, upArrowPressed);
     await waitFor(() => {});
   }
 
   /** down arrow key down on the component */
-  async downArrowKeyDown(component)  {
-    const downArrowPressed = {keyCode: 40};
+  async downArrowKeyDown(component) {
+    const downArrowPressed = { keyCode: 40 };
     fireEvent.keyDown(component, downArrowPressed);
     await waitFor(() => {});
   }

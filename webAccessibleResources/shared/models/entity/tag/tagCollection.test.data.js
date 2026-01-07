@@ -12,7 +12,7 @@
  * @since         4.9.4
  */
 
-import {defaultTagDto} from "./tagEntity.test.data";
+import { defaultTagDto } from "./tagEntity.test.data";
 
 /**
  * Build dto of a collection of tags.
@@ -22,9 +22,8 @@ import {defaultTagDto} from "./tagEntity.test.data";
 export const defaultTagsDtos = (count = 10) => {
   const dtos = [];
   for (let i = 0; i < count; i++) {
-    const groupDto = defaultTagDto({slug: `tag ${i}`});
+    const groupDto = defaultTagDto({ slug: `tag ${i}` });
     dtos.push(groupDto);
   }
   return dtos;
 };
-

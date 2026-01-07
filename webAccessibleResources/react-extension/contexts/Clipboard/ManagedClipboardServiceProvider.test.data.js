@@ -12,16 +12,16 @@
  * @since         5.3.2
  */
 
-import {defaultActionFeedbackContext} from "../ActionFeedbackContext.test.data";
-import {defaultAppContext} from "../ExtAppContext.test.data";
+import { defaultActionFeedbackContext } from "../ActionFeedbackContext.test.data";
+import { defaultAppContext } from "../ExtAppContext.test.data";
 
-export const defaultProps = data => ({
+export const defaultProps = (data) => ({
   context: defaultAppContext(),
   actionFeedbackContext: defaultActionFeedbackContext(),
   ...data,
 });
 
-export const defaultClipboardContext = data => ({
+export const defaultClipboardContext = (data) => ({
   copyTemporarily: jest.fn(),
   copy: jest.fn(),
   ...data,

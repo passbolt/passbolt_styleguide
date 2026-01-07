@@ -14,12 +14,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
-import {withAdminMfa} from "../../../../contexts/Administration/AdministrationMfa/AdministrationMfaContext";
-import MfaFormService from '../../../../../shared/services/forms/Mfa/MfaFormService';
-
-
+import { Trans, withTranslation } from "react-i18next";
+import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
+import { withAdminMfa } from "../../../../contexts/Administration/AdministrationMfa/AdministrationMfaContext";
+import MfaFormService from "../../../../../shared/services/forms/Mfa/MfaFormService";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -73,7 +71,9 @@ class DisplayAdministrationMfaActions extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The multi factor authentication settings for the organization were updated."));
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.props.t("The multi factor authentication settings for the organization were updated."),
+    );
   }
 
   /**
@@ -97,7 +97,6 @@ class DisplayAdministrationMfaActions extends React.Component {
     await this.props.actionFeedbackContext.displayError(error.message);
   }
 
-
   /**
    * Render the component
    * @returns {JSX}
@@ -105,8 +104,16 @@ class DisplayAdministrationMfaActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button id="save-settings" className="button primary form" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-          <span><Trans>Save</Trans></span>
+        <button
+          id="save-settings"
+          className="button primary form"
+          type="button"
+          disabled={!this.isSaveEnabled()}
+          onClick={this.handleSaveClick}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );

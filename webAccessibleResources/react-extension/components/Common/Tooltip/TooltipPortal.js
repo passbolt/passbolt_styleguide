@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import { createSafePortal } from "../../../../shared/utils/portals";
 
 const MARGIN = 10;
 
@@ -37,7 +37,7 @@ class TooltipPortal extends Component {
       hasToDisplayTooltip: false, // boolean to display or not the tooltip (better for performance)
       direction: "", // boolean to display or not the tooltip
       top: 0,
-      left: 0
+      left: 0,
     };
   }
 
@@ -63,14 +63,14 @@ class TooltipPortal extends Component {
    */
   handleMouseEnter() {
     this.props.onMouseHover?.();
-    this.setState({hasToDisplayTooltip: true}, this.findBestPosition);
+    this.setState({ hasToDisplayTooltip: true }, this.findBestPosition);
   }
 
   /**
    * Handle mouse out event
    */
   handleMouseLeave() {
-    this.setState({hasToDisplayTooltip: false, direction: ""});
+    this.setState({ hasToDisplayTooltip: false, direction: "" });
   }
 
   /**
@@ -79,29 +79,37 @@ class TooltipPortal extends Component {
   findBestPosition() {
     const tooltipContainer = this.tooltipRef.current.getBoundingClientRect();
     const tooltipText = this.tooltipTextRef.current.getBoundingClientRect();
-    const {innerHeight, innerWidth} = window;
+    const { innerHeight, innerWidth } = window;
     // Tooltip top position center with tooltip container
-    const topTooltipText = tooltipContainer.top + (tooltipContainer.height / 2) - (tooltipText.height / 2);
+    const topTooltipText = tooltipContainer.top + tooltipContainer.height / 2 - tooltipText.height / 2;
     // Tooltip left position center with tooltip container
-    const leftTooltipText = tooltipContainer.left + (tooltipContainer.width / 2) - (tooltipText.width / 2);
+    const leftTooltipText = tooltipContainer.left + tooltipContainer.width / 2 - tooltipText.width / 2;
 
     // Check if the tooltip is contained in the inner height of the window
     if (topTooltipText + tooltipText.height <= innerHeight && topTooltipText >= 0) {
       if (tooltipContainer.right + tooltipText.width <= innerWidth) {
         // If tooltip is visible on the right of the container
-        this.setState({direction: 'right', left: tooltipContainer.right + MARGIN, top: topTooltipText});
+        this.setState({ direction: "right", left: tooltipContainer.right + MARGIN, top: topTooltipText });
       } else if (tooltipContainer.left - tooltipText.width > 0) {
         // If tooltip is visible on the left of the container
-        this.setState({direction: 'left', left: tooltipContainer.left - tooltipText.width - MARGIN, top: topTooltipText});
+        this.setState({
+          direction: "left",
+          left: tooltipContainer.left - tooltipText.width - MARGIN,
+          top: topTooltipText,
+        });
       }
     } else if (leftTooltipText >= 0 && leftTooltipText + tooltipText.width <= innerWidth) {
       // If tooltip is not visible side of the container but visible on top or at the bottom
       if (tooltipContainer.top - tooltipText.height <= 0) {
         // If tooltip is visible on the bottom of the container
-        this.setState({direction: 'bottom', left: leftTooltipText, top: tooltipContainer.bottom + MARGIN});
+        this.setState({ direction: "bottom", left: leftTooltipText, top: tooltipContainer.bottom + MARGIN });
       } else if (tooltipContainer.top - tooltipText.height <= innerHeight) {
         // If tooltip is visible on the top of the container
-        this.setState({direction: 'top', left: leftTooltipText, top: tooltipContainer.top - tooltipText.height - MARGIN});
+        this.setState({
+          direction: "top",
+          left: leftTooltipText,
+          top: tooltipContainer.top - tooltipText.height - MARGIN,
+        });
       }
     } else {
       // If tooltip cannot be visible entirely side of the container
@@ -117,7 +125,7 @@ class TooltipPortal extends Component {
    * @param leftTooltipText
    */
   findPositionWithMoreSpace(tooltipContainer, tooltipText, topTooltipText, leftTooltipText) {
-    const {innerHeight, innerWidth} = window;
+    const { innerHeight, innerWidth } = window;
     const topSpace = innerHeight - tooltipContainer.top + innerWidth - leftTooltipText;
     const bottomSpace = innerHeight - tooltipContainer.bottom + innerWidth - leftTooltipText;
     const rightSpace = innerWidth - tooltipContainer.right + innerHeight - topTooltipText;
@@ -125,13 +133,21 @@ class TooltipPortal extends Component {
 
     // Try to display the tooltip entirely
     if (rightSpace > leftSpace && rightSpace > topSpace && rightSpace > bottomSpace) {
-      this.setState({direction: 'right', left: tooltipContainer.right - (tooltipContainer.width / 2), top: topTooltipText});
+      this.setState({
+        direction: "right",
+        left: tooltipContainer.right - tooltipContainer.width / 2,
+        top: topTooltipText,
+      });
     } else if (leftSpace > topSpace && leftSpace > bottomSpace) {
-      this.setState({direction: 'left', left: tooltipContainer.left + (tooltipContainer.width / 2), top: topTooltipText});
+      this.setState({
+        direction: "left",
+        left: tooltipContainer.left + tooltipContainer.width / 2,
+        top: topTooltipText,
+      });
     } else if (topSpace > bottomSpace) {
-      this.setState({direction: 'top', left: leftTooltipText, top: tooltipContainer.top - tooltipText.height});
+      this.setState({ direction: "top", left: leftTooltipText, top: tooltipContainer.top - tooltipText.height });
     } else {
-      this.setState({direction: 'bottom', left: leftTooltipText, top: tooltipContainer.bottom});
+      this.setState({ direction: "bottom", left: leftTooltipText, top: tooltipContainer.bottom });
     }
   }
 
@@ -141,16 +157,24 @@ class TooltipPortal extends Component {
    */
   render() {
     return (
-      <div className="tooltip-portal" tabIndex="0" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-        <span ref={this.tooltipRef}>
-          {this.props.children}
-        </span>
+      <div
+        className="tooltip-portal"
+        tabIndex="0"
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+      >
+        <span ref={this.tooltipRef}>{this.props.children}</span>
         {this.state.hasToDisplayTooltip &&
-          createSafePortal(<span ref={this.tooltipTextRef} className={`tooltip-portal-text ${this.state.direction} ${this.props.className}`}
-            style={{top: `${this.state.top}px`, left: `${this.state.left}px`}}>
-            {this.props.message}
-          </span>, document.body)
-        }
+          createSafePortal(
+            <span
+              ref={this.tooltipTextRef}
+              className={`tooltip-portal-text ${this.state.direction} ${this.props.className}`}
+              style={{ top: `${this.state.top}px`, left: `${this.state.left}px` }}
+            >
+              {this.props.message}
+            </span>,
+            document.body,
+          )}
       </div>
     );
   }

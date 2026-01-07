@@ -13,7 +13,7 @@
  */
 
 import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
-import {ApiClient} from "../../../lib/apiClient/apiClient";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
 
 const AUTH_LOGOUT_RESOURCE_NAME = "auth";
 
@@ -37,7 +37,7 @@ class AuthLogoutService {
    */
   async logout() {
     const url = this.apiClient.buildUrl(`${this.apiClient.baseUrl}/logout`, {});
-    const response = await this.apiClient.sendRequest("POST", url, null, {redirect: "manual"});
+    const response = await this.apiClient.sendRequest("POST", url, null, { redirect: "manual" });
     const isResponseOk = response.ok || response.status === 0; // status is 0 as there should be a redirection that is handled manually
     if (!isResponseOk) {
       return this._logoutLegacy();
@@ -53,11 +53,11 @@ class AuthLogoutService {
    */
   async _logoutLegacy() {
     const url = this.apiClient.buildUrl(`${this.apiClient.baseUrl}/logout`, {});
-    const response = await this.apiClient.sendRequest("GET", url, null, {redirect: "manual"});
+    const response = await this.apiClient.sendRequest("GET", url, null, { redirect: "manual" });
     const isResponseOk = response.ok || response.status === 0; // status is 0 as there should be a redirection that is handled manually
     if (!isResponseOk) {
-      throw new PassboltApiFetchError('An unexpected error happened during the legacy logout process', {
-        code: response.status
+      throw new PassboltApiFetchError("An unexpected error happened during the legacy logout process", {
+        code: response.status,
       });
     }
   }

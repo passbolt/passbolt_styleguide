@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ConfirmSaveAccountRecoverySettings from "./ConfirmSaveAccountRecoverySettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,9 @@ export default class ConfirmSaveAccountRecoverySettingsPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ConfirmSaveAccountRecoverySettings {...props}/>
+        <ConfirmSaveAccountRecoverySettings {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,91 +38,112 @@ export default class ConfirmSaveAccountRecoverySettingsPage {
    * Returns the account recovery settings element
    */
   get accountRecoverySettings() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog');
+    return this._page.container.querySelector(".save-recovery-account-settings-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get closeButton() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .dialog-header-title').textContent;
+    return this._page.container.querySelector(".save-recovery-account-settings-dialog .dialog-header-title")
+      .textContent;
   }
 
   /**
    * Returns the account recovery policy name element
    */
   get accountRecoveryPolicy() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .account-recovery-setting-save .name').textContent;
+    return this._page.container.querySelector(
+      ".save-recovery-account-settings-dialog .form-content .account-recovery-setting-save .name",
+    ).textContent;
   }
 
   /**
    * Returns the account recovery policy name element
    */
   get accountRecoveryPolicyInfo() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .account-recovery-setting-save .info').textContent;
+    return this._page.container.querySelector(
+      ".save-recovery-account-settings-dialog .form-content .account-recovery-setting-save .info",
+    ).textContent;
   }
 
   /**
    * Returns the recovery key details element
    */
   recoveryKeyDetailsExists() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .recovery-key-details') !== null;
+    return (
+      this._page.container.querySelector(
+        ".save-recovery-account-settings-dialog .form-content .recovery-key-details",
+      ) !== null
+    );
   }
 
   /**
    * Returns true if the recovery key details element exists
    */
   get recoveryKeyDetailsFingerprint() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .recovery-key-details .fingerprint .value').textContent;
+    return this._page.container.querySelector(
+      ".save-recovery-account-settings-dialog .form-content .recovery-key-details .fingerprint .value",
+    ).textContent;
   }
 
   /**
    * Returns the recovery key details algorithm element
    */
   get recoveryKeyDetailsAlgorithm() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .recovery-key-details .algorithm .value').textContent;
+    return this._page.container.querySelector(
+      ".save-recovery-account-settings-dialog .form-content .recovery-key-details .algorithm .value",
+    ).textContent;
   }
 
   /**
    * Returns the recovery key details key length element
    */
   get recoveryKeyDetailsKeyLength() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .recovery-key-details .key-length .value').textContent;
+    return this._page.container.querySelector(
+      ".save-recovery-account-settings-dialog .form-content .recovery-key-details .key-length .value",
+    ).textContent;
   }
 
   /**
    * Returns the recovery key details user ids element
    */
   get recoveryKeyDetailsUserIds() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .recovery-key-details .user-ids .value').textContent;
+    return this._page.container.querySelector(
+      ".save-recovery-account-settings-dialog .form-content .recovery-key-details .user-ids .value",
+    ).textContent;
   }
 
   /**
    * Returns the recovery key details created element
    */
   get recoveryKeyDetailsCreated() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .recovery-key-details .created .value').textContent;
+    return this._page.container.querySelector(
+      ".save-recovery-account-settings-dialog .form-content .recovery-key-details .created .value",
+    ).textContent;
   }
 
   /**
    * Returns the recovery key details expires element
    */
   get recoveryKeyDetailsExpires() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .recovery-key-details .expires .value').textContent;
+    return this._page.container.querySelector(
+      ".save-recovery-account-settings-dialog .form-content .recovery-key-details .expires .value",
+    ).textContent;
   }
 
   /**
    * Returns the warning message element
    */
   get warningMessage() {
-    return this._page.container.querySelector('.warning.message').textContent;
+    return this._page.container.querySelector(".warning.message").textContent;
   }
 
   /**
@@ -143,14 +164,14 @@ export default class ConfirmSaveAccountRecoverySettingsPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
    * Saves the change on the group
    */
   async save() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.saveButton, leftClick);
     await waitFor(() => {});
   }
@@ -159,7 +180,7 @@ export default class ConfirmSaveAccountRecoverySettingsPage {
    * Cancels the user's MFA disable
    */
   async cancel() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.cancelButton, leftClick);
     await waitFor(() => {});
   }
@@ -168,7 +189,7 @@ export default class ConfirmSaveAccountRecoverySettingsPage {
    * Close the dialog
    */
   async close() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.closeButton, leftClick);
     await waitFor(() => {});
   }

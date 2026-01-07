@@ -23,53 +23,45 @@ class SecretRevisionEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "id",
-        "resource_id",
-        "resource_type_id",
-        "created",
-        "created_by",
-        "modified",
-        "modified_by",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["id", "resource_id", "resource_type_id", "created", "created_by", "modified", "modified_by"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "resource_id": {
-          "type": "string",
-          "format": "uuid"
+        resource_id: {
+          type: "string",
+          format: "uuid",
         },
-        "resource_type_id": {
-          "type": "string",
-          "format": "uuid"
+        resource_type_id: {
+          type: "string",
+          format: "uuid",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid",
+        created_by: {
+          type: "string",
+          format: "uuid",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid",
+        modified_by: {
+          type: "string",
+          format: "uuid",
         },
-        "deleted": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+        deleted: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "secrets": SecretsCollection.getSchema(),
-        "creator": UserEntity.getSchema(),
-      }
+        secrets: SecretsCollection.getSchema(),
+        creator: UserEntity.getSchema(),
+      },
     };
   }
 
@@ -201,7 +193,7 @@ class SecretRevisionEntity extends EntityV2 {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {creator: true, secrets: true};
+    return { creator: true, secrets: true };
   }
 }
 

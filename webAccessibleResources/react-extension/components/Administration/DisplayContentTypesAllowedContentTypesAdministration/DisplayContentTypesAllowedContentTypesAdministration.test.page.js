@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration";
 import userEvent from "@testing-library/user-event";
@@ -26,9 +26,9 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayContentTypesAllowedContentTypesAdministration {...props}/>
+        <DisplayContentTypesAllowedContentTypesAdministration {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

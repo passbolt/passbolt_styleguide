@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.8.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import memoize from "memoize-one";
@@ -28,7 +28,7 @@ class CreateRole extends Component {
    */
   constructor(props) {
     super(props);
-    this.roleEntity = new RoleEntity({name: ""}, {validate: false});
+    this.roleEntity = new RoleEntity({ name: "" }, { validate: false });
     this.state = this.defaultState;
     this.createInputRefs();
     this.bindEventHandlers();
@@ -71,7 +71,7 @@ class CreateRole extends Component {
    *   function is only triggered when the form is updated.
    * @return {EntityValidationError}
    */
-  validateForm = memoize(roleDto => this.roleEntity.validate(roleDto));
+  validateForm = memoize((roleDto) => this.roleEntity.validate(roleDto));
 
   /**
    * Verify the data health. This intends for user, to inform if data form has invalid size
@@ -80,7 +80,7 @@ class CreateRole extends Component {
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  verifyDataHealth = memoize(_roleDto => this.roleEntity.verifyHealth());
+  verifyDataHealth = memoize((_roleDto) => this.roleEntity.verifyHealth());
 
   /**
    * Handle close button click.
@@ -100,9 +100,9 @@ class CreateRole extends Component {
     const value = target.value;
     const name = target.name;
 
-    this.roleEntity.set(name, value, {validate: false});
+    this.roleEntity.set(name, value, { validate: false });
 
-    const newState = {role: this.roleEntity.toDto()};
+    const newState = { role: this.roleEntity.toDto() };
     this.setState(newState);
   }
 
@@ -116,7 +116,7 @@ class CreateRole extends Component {
       return;
     }
 
-    this.setState({hasAlreadyBeenValidated: true});
+    this.setState({ hasAlreadyBeenValidated: true });
     await this.toggleProcessing();
 
     // Validate the entity
@@ -138,8 +138,8 @@ class CreateRole extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return new Promise(resolve => {
-      this.setState({processing: !prev}, resolve());
+    return new Promise((resolve) => {
+      this.setState({ processing: !prev }, resolve());
     });
   }
 
@@ -177,52 +177,72 @@ class CreateRole extends Component {
     const hasNameReservedError = this.state.hasAlreadyBeenValidated && this.roleEntity.isAReservedRole();
 
     return (
-      <DialogWrapper className='role-create-dialog' title={this.translate("Create role")}
-        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+      <DialogWrapper
+        className="role-create-dialog"
+        title={this.translate("Create role")}
+        onClose={this.handleClose}
+        disabled={this.hasAllInputDisabled()}
+      >
         <form className="role-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${errors?.hasError("name") || hasNameReservedError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="role-name-input"><Trans>Role name</Trans>{warnings?.hasErrors() &&
-                <AttentionSVG className="attention-required"/>
-              }</label>
-              <input id="role-name-input" name="name"
+            <div
+              className={`input text required ${errors?.hasError("name") || hasNameReservedError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+            >
+              <label htmlFor="role-name-input">
+                <Trans>Role name</Trans>
+                {warnings?.hasErrors() && <AttentionSVG className="attention-required" />}
+              </label>
+              <input
+                id="role-name-input"
+                name="name"
                 ref={this.nameRef}
-                type="text" value={this.state.role.name}
+                type="text"
+                value={this.state.role.name}
                 placeholder={this.props.t("New role")}
                 maxLength={RoleEntity.ROLE_NAME_MAX_LENGTH}
                 disabled={this.hasAllInputDisabled()}
                 onChange={this.handleInputChange}
-                autoComplete='off' autoFocus={true}
+                autoComplete="off"
+                autoFocus={true}
               />
-              {errors?.hasErrors() &&
+              {errors?.hasErrors() && (
                 <div className="error-message">
-                  {errors?.hasError("name", "maxLength") &&
+                  {errors?.hasError("name", "maxLength") && (
                     <Trans>A name can not be more than 50 char in length.</Trans>
-                  }
-                  {errors?.hasError("name", "minLength") &&
-                    <Trans>A name is required.</Trans>
-                  }
-                  {errors?.hasError("name", "trailing-spaces") &&
+                  )}
+                  {errors?.hasError("name", "minLength") && <Trans>A name is required.</Trans>}
+                  {errors?.hasError("name", "trailing-spaces") && (
                     <Trans>The name contains forbidden trailing spaces.</Trans>
-                  }
+                  )}
                 </div>
-              }
-              {errors?.hasError("name", "maxLength") &&
-                <div className="error-message"><Trans>A name can not be more than 255 char in length.</Trans></div>
-              }
-              {hasNameReservedError &&
-                <div className="error-message"><Trans>This name is reserved by the system.</Trans></div>
-              }
+              )}
+              {errors?.hasError("name", "maxLength") && (
+                <div className="error-message">
+                  <Trans>A name can not be more than 255 char in length.</Trans>
+                </div>
+              )}
+              {hasNameReservedError && (
+                <div className="error-message">
+                  <Trans>This name is reserved by the system.</Trans>
+                </div>
+              )}
               {warnings?.hasError("name", "maxLength") && (
                 <div className="name warning-message">
-                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                 </div>
               )}
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Save")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -236,4 +256,4 @@ CreateRole.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(CreateRole);
+export default withTranslation("common")(CreateRole);

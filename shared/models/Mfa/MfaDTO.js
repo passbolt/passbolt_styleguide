@@ -12,10 +12,9 @@
  * @since         3.8.0
  */
 
-import {MfaProviders} from "./MfaEnumeration";
-import Yubikey from './Yubikey';
-import Duo from './Duo';
-
+import { MfaProviders } from "./MfaEnumeration";
+import Yubikey from "./Yubikey";
+import Duo from "./Duo";
 
 /**
  * Model related to the Mfa dto settings
@@ -48,4 +47,3 @@ class MfaDTO {
 }
 
 export default MfaDTO;
-

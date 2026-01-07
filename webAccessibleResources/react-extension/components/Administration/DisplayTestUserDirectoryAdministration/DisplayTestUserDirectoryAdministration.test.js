@@ -18,7 +18,7 @@
 import {
   defaultAppContext,
   defaultProps,
-  mockTestSettingsReportBody
+  mockTestSettingsReportBody,
 } from "./DisplayTestUserDirectoryAdministration.test.data";
 import DisplayTestUserDirectoryAdministrationPage from "./DisplayTestUserDirectoryAdministration.test.page";
 
@@ -31,36 +31,48 @@ describe("See the test user directory administration Dialog", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
   const displayTestUserDirectoryDialogProps = {
-    userDirectoryTestResult: mockTestSettingsReportBody
+    userDirectoryTestResult: mockTestSettingsReportBody,
   };
 
-  describe('As Ad I should see a dialog for my Test settings report', () => {
+  describe("As Ad I should see a dialog for my Test settings report", () => {
     /**
      * I should see the User Directory activation state on the administration settings page
      */
     beforeEach(() => {
-      context.setContext({displayTestUserDirectoryDialogProps});
+      context.setContext({ displayTestUserDirectoryDialogProps });
       page = new DisplayTestUserDirectoryAdministrationPage(context, props);
     });
 
-    it('As AD I should see the number of user(s) and group(s) founds on the LDAP server in the dialog for my Test settings report', async() => {
+    it("As AD I should see the number of user(s) and group(s) founds on the LDAP server in the dialog for my Test settings report", async () => {
       expect(page.title.hyperlink.textContent).toBe("Test settings report");
       expect(page.displayTestUserDirectoryAdministrationDialog.exists()).toBeTruthy();
-      expect(page.displayTestUserDirectoryAdministrationDialog.usersAndGroupsFound).toBe('12 users have been found.58 groups have been found.');
-      await page.displayTestUserDirectoryAdministrationDialog.click(page.displayTestUserDirectoryAdministrationDialog.buttonOk);
+      expect(page.displayTestUserDirectoryAdministrationDialog.usersAndGroupsFound).toBe(
+        "12 users have been found.58 groups have been found.",
+      );
+      await page.displayTestUserDirectoryAdministrationDialog.click(
+        page.displayTestUserDirectoryAdministrationDialog.buttonOk,
+      );
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I should see The list and Structure associated to those user(s) and group(s) in the dialog for my Test settings report', async() => {
+    it("As AD I should see The list and Structure associated to those user(s) and group(s) in the dialog for my Test settings report", async () => {
       expect(page.displayTestUserDirectoryAdministrationDialog.exists()).toBeTruthy();
-      await page.displayTestUserDirectoryAdministrationDialog.click(page.displayTestUserDirectoryAdministrationDialog.list);
+      await page.displayTestUserDirectoryAdministrationDialog.click(
+        page.displayTestUserDirectoryAdministrationDialog.list,
+      );
       expect(page.displayTestUserDirectoryAdministrationDialog.groupsList.length).toBe(58);
       expect(page.displayTestUserDirectoryAdministrationDialog.usersList.length).toBe(12);
-      await page.displayTestUserDirectoryAdministrationDialog.click(page.displayTestUserDirectoryAdministrationDialog.structure);
+      await page.displayTestUserDirectoryAdministrationDialog.click(
+        page.displayTestUserDirectoryAdministrationDialog.structure,
+      );
       expect(page.displayTestUserDirectoryAdministrationDialog.structureGroups.length).toBe(60);
       expect(page.displayTestUserDirectoryAdministrationDialog.structureUsers.length).toBe(25);
-      await page.displayTestUserDirectoryAdministrationDialog.click(page.displayTestUserDirectoryAdministrationDialog.errorsList);
-      expect(page.displayTestUserDirectoryAdministrationDialog.errors).toBe('7 entries had errors and will be ignored during synchronization.');
+      await page.displayTestUserDirectoryAdministrationDialog.click(
+        page.displayTestUserDirectoryAdministrationDialog.errorsList,
+      );
+      expect(page.displayTestUserDirectoryAdministrationDialog.errors).toBe(
+        "7 entries had errors and will be ignored during synchronization.",
+      );
       expect(page.displayTestUserDirectoryAdministrationDialog.errorsTextarea).not.toBeNull();
     });
   });

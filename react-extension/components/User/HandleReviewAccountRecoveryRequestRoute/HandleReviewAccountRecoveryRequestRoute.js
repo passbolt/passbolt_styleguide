@@ -12,15 +12,14 @@
  * @since        3.6.0
  */
 import React from "react";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import HandleReviewAccountRecoveryRequestWorkflow
-  from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withRouter } from "react-router-dom";
+import { withTranslation } from "react-i18next";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
 
 /**
  * Handle the review account recovery request route.
@@ -46,21 +45,24 @@ class HandleReviewAccountRecoveryRequestRoute extends React.Component {
     let accountRecoveryRequest;
 
     try {
-      accountRecoveryRequest = await this.props.context.port.request("passbolt.account-recovery.get-request", accountRecoveryRequestId);
+      accountRecoveryRequest = await this.props.context.port.request(
+        "passbolt.account-recovery.get-request",
+        accountRecoveryRequestId,
+      );
     } catch (error) {
       console.error(`Error during account recovery:`, error);
       this.handleAccountRecoveryRequestNotFound();
       return;
     }
 
-    const user = this.props.context.users.find(user => user.id === accountRecoveryRequest.user_id);
+    const user = this.props.context.users.find((user) => user.id === accountRecoveryRequest.user_id);
     if (!user) {
       this.handleAccountRecoveryRequestUserNotFound();
       return;
     }
 
     await this.props.userWorkspaceContext.onUserSelected.single(user);
-    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequest});
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, { accountRecoveryRequest });
   }
 
   /**
@@ -74,7 +76,9 @@ class HandleReviewAccountRecoveryRequestRoute extends React.Component {
    * The user who created the account recovery request cannot be found.
    */
   handleAccountRecoveryRequestUserNotFound() {
-    this.props.actionFeedbackContext.displayError(this.props.t("The user who requested an account recovery does not exist."));
+    this.props.actionFeedbackContext.displayError(
+      this.props.t("The user who requested an account recovery does not exist."),
+    );
   }
 
   /**
@@ -96,4 +100,8 @@ HandleReviewAccountRecoveryRequestRoute.propTypes = {
   workflowContext: PropTypes.any, // The workflow context
 };
 
-export default withAppContext(withUserWorkspace(withActionFeedback(withWorkflow(withRouter(withTranslation("common")(HandleReviewAccountRecoveryRequestRoute))))));
+export default withAppContext(
+  withUserWorkspace(
+    withActionFeedback(withWorkflow(withRouter(withTranslation("common")(HandleReviewAccountRecoveryRequestRoute)))),
+  ),
+);

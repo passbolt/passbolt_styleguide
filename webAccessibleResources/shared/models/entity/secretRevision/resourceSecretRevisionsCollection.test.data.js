@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.7.0
  */
-import {v4 as uuidv4} from "uuid";
-import {defaultSecretRevisionDto} from "./secretRevisionEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultSecretRevisionDto } from "./secretRevisionEntity.test.data";
 
 /**
  * Default resource secret revisions dtos

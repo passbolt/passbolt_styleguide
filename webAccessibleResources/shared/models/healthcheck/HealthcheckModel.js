@@ -44,4 +44,3 @@ class HealthcheckModel {
 }
 
 export default HealthcheckModel;
-

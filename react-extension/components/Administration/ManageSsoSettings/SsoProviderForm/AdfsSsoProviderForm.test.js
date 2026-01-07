@@ -16,9 +16,9 @@ import "../../../../../../test/mocks/mockClipboard";
 import each from "jest-each";
 import EntityValidationError from "../../../../../shared/models/entity/abstract/entityValidationError";
 import AdfsSsoProviderFormPage from "./AdfsSsoProviderForm.test.page";
-import {defaultAdfsProps} from "./SsoProviderForm.test.data";
-import {waitFor} from "@testing-library/dom";
-import {waitForTrue} from "../../../../../../test/utils/waitFor";
+import { defaultAdfsProps } from "./SsoProviderForm.test.data";
+import { waitFor } from "@testing-library/dom";
+import { waitForTrue } from "../../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -38,7 +38,7 @@ describe("AdfsSsoProviderForm", () => {
     expect(page.exists()).toStrictEqual(true);
   });
 
-  it("Should copy the redirect URL in the clipboard", async() => {
+  it("Should copy the redirect URL in the clipboard", async () => {
     expect.assertions(3);
     const props = defaultAdfsProps();
     const page = new AdfsSsoProviderFormPage(props);
@@ -48,7 +48,10 @@ describe("AdfsSsoProviderForm", () => {
     const expectedRedirectUrl = "http://localhost/sso/adfs/redirect";
     expect(page.redirect_url.value).toStrictEqual(expectedRedirectUrl);
     expect(props.clipboardContext.copy).toHaveBeenCalledTimes(1);
-    expect(props.clipboardContext.copy).toHaveBeenCalledWith(expectedRedirectUrl, "The redirection URL has been copied to the clipboard.");
+    expect(props.clipboardContext.copy).toHaveBeenCalledWith(
+      expectedRedirectUrl,
+      "The redirection URL has been copied to the clipboard.",
+    );
   });
 
   describe("Should handle errors", () => {
@@ -60,11 +63,11 @@ describe("AdfsSsoProviderForm", () => {
       scope: "scope should not be empty",
     };
 
-    it("Should show the error in the form", async() => {
+    it("Should show the error in the form", async () => {
       expect.assertions(10);
 
       const errors = new EntityValidationError();
-      Object.keys(rawErrors).forEach(key => {
+      Object.keys(rawErrors).forEach((key) => {
         errors.addError(key, "format", rawErrors[key]);
       });
 
@@ -85,32 +88,33 @@ describe("AdfsSsoProviderForm", () => {
       expect(page.scopeError.textContent).toStrictEqual(rawErrors.scope);
     });
 
-    each(
-      Object.keys(rawErrors).map(key => ({field: key}))
-    ).describe("Should focus on the right erroneous field in the form", scenario => {
-      it(`For: ${scenario.field}`, async() => {
-        expect.assertions(1);
+    each(Object.keys(rawErrors).map((key) => ({ field: key }))).describe(
+      "Should focus on the right erroneous field in the form",
+      (scenario) => {
+        it(`For: ${scenario.field}`, async () => {
+          expect.assertions(1);
 
-        const errors = new EntityValidationError();
-        errors.addError(scenario.field, "format", "field is erroneous");
+          const errors = new EntityValidationError();
+          errors.addError(scenario.field, "format", "field is erroneous");
 
-        const props = defaultAdfsProps();
-        const page = new AdfsSsoProviderFormPage(props);
-        await waitFor(() => {});
+          const props = defaultAdfsProps();
+          const page = new AdfsSsoProviderFormPage(props);
+          await waitFor(() => {});
 
-        //force a call to `componentDidUpdate`
-        const newProps = defaultAdfsProps();
-        newProps.adminSsoContext.getErrors = () => errors;
-        newProps.adminSsoContext.consumeFocusOnError = () => true;
-        page.render(newProps);
+          //force a call to `componentDidUpdate`
+          const newProps = defaultAdfsProps();
+          newProps.adminSsoContext.getErrors = () => errors;
+          newProps.adminSsoContext.consumeFocusOnError = () => true;
+          page.render(newProps);
 
-        await waitForTrue(() => page.hasActiveElement);
+          await waitForTrue(() => page.hasActiveElement);
 
-        expect(page.currentActiveElement).toStrictEqual(page[scenario.field]);
-      });
-    });
+          expect(page.currentActiveElement).toStrictEqual(page[scenario.field]);
+        });
+      },
+    );
 
-    it("As an administrator I should not have focus on field when there is no error", async() => {
+    it("As an administrator I should not have focus on field when there is no error", async () => {
       expect.assertions(1);
 
       const props = defaultAdfsProps();

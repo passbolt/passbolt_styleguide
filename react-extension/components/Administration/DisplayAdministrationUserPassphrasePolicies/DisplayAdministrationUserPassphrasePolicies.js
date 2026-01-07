@@ -14,13 +14,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
-import {withAdminUserPassphrasePolicies} from "../../../contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withAdministrationWorkspace } from "../../../contexts/AdministrationWorkspaceContext";
+import { withAdminUserPassphrasePolicies } from "../../../contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
 import DisplayAdministrationUserPassphrasePoliciesActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationUserPassphrasePoliciesActions/DisplayAdministrationUserPassphrasePoliciesActions";
 import Range from "../../Common/Range/Range";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import { createSafePortal } from "../../../../shared/utils/portals";
 import BuoySVG from "../../../../img/svg/buoy.svg";
 
 const MINIMAL_ADVISED_ENTROPY = 80;
@@ -51,7 +51,7 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
    */
   async componentDidMount() {
     await this.props.adminUserPassphrasePoliciesContext.findSettings();
-    this.setState({isReady: true});
+    this.setState({ isReady: true });
   }
 
   /**
@@ -105,8 +105,7 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
   get hasWarnings() {
     const adminContext = this.props.adminUserPassphrasePoliciesContext;
     const settings = adminContext.getSettings();
-    return adminContext.hasSettingsChanges()
-      || this.isWeakSettings(settings);
+    return adminContext.hasSettingsChanges() || this.isWeakSettings(settings);
   }
 
   /**
@@ -124,9 +123,13 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
       <div className="row">
         <div className="password-policies-settings main-column">
           <div className="main-content">
-            <h3 id="user-passphrase-policies-title" className="title"><Trans>User Passphrase Policies</Trans></h3>
+            <h3 id="user-passphrase-policies-title" className="title">
+              <Trans>User Passphrase Policies</Trans>
+            </h3>
             <form>
-              <h4 id="user-passphrase-policies-entropy-minimum"><Trans>User passphrase minimal entropy</Trans></h4>
+              <h4 id="user-passphrase-policies-entropy-minimum">
+                <Trans>User passphrase minimal entropy</Trans>
+              </h4>
               <div className="input range">
                 <Range
                   id="entropy_minimum"
@@ -135,7 +138,10 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
                   disabled={allInputDisabled}
                 />
               </div>
-              <div><Trans>You can set the minimal entropy for the users&apos; private key passphrase.</Trans> <Trans>This is the passphrase that is asked during sign in or recover.</Trans></div>
+              <div>
+                <Trans>You can set the minimal entropy for the users&apos; private key passphrase.</Trans>{" "}
+                <Trans>This is the passphrase that is asked during sign in or recover.</Trans>
+              </div>
               <h4 id="user-passphrase-policies-external-services-subtitle">
                 <span className="input toggle-switch form-element ready">
                   <input
@@ -147,44 +153,66 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
                     checked={settings?.external_dictionary_check}
                     disabled={allInputDisabled}
                   />
-                  <label htmlFor="user-passphrase-policies-external-services-toggle-button"><Trans>External password dictionary check</Trans></label>
+                  <label htmlFor="user-passphrase-policies-external-services-toggle-button">
+                    <Trans>External password dictionary check</Trans>
+                  </label>
                 </span>
               </h4>
               <span className="input toggle-switch form-element">
-                <Trans>Allow passbolt to access external services to check if the user passphrase has been compromised when the user creates it.</Trans>
+                <Trans>
+                  Allow passbolt to access external services to check if the user passphrase has been compromised when
+                  the user creates it.
+                </Trans>
               </span>
             </form>
           </div>
-          {this.hasWarnings &&
+          {this.hasWarnings && (
             <div className="warning message">
-              {adminContext.hasSettingsChanges() &&
-              <div id="user-passphrase-policies-save-banner">
-                <p>
-                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
-                </p>
-              </div>
-              }
-              {this.isWeakSettings(settings) &&
-                <div id="user-passphrase-policies-weak-settings-banner">
+              {adminContext.hasSettingsChanges() && (
+                <div id="user-passphrase-policies-save-banner">
                   <p>
-                    <Trans>Passbolt recommends passphrase strength to be at minimum of {{MINIMAL_ADVISED_ENTROPY}} bits to be safe.</Trans>
+                    <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
                   </p>
                 </div>
-              }
+              )}
+              {this.isWeakSettings(settings) && (
+                <div id="user-passphrase-policies-weak-settings-banner">
+                  <p>
+                    <Trans>
+                      Passbolt recommends passphrase strength to be at minimum of {{ MINIMAL_ADVISED_ENTROPY }} bits to
+                      be safe.
+                    </Trans>
+                  </p>
+                </div>
+              )}
             </div>
-          }
+          )}
         </div>
-        <DisplayAdministrationUserPassphrasePoliciesActions/>
+        <DisplayAdministrationUserPassphrasePoliciesActions />
         {createSafePortal(
           <div className="sidebar-help-section">
-            <h3><Trans>What is user passphrase policies?</Trans></h3>
-            <p><Trans>For more information about the user passphrase policies, checkout the dedicated page on the help website.</Trans></p>
-            <a className="button" href="https://passbolt.com/docs/admin/authentication/user-passphrase-policies/" target="_blank" rel="noopener noreferrer">
-              <BuoySVG/>
-              <span><Trans>Read the documentation</Trans></span>
+            <h3>
+              <Trans>What is user passphrase policies?</Trans>
+            </h3>
+            <p>
+              <Trans>
+                For more information about the user passphrase policies, checkout the dedicated page on the help
+                website.
+              </Trans>
+            </p>
+            <a
+              className="button"
+              href="https://passbolt.com/docs/admin/authentication/user-passphrase-policies/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <BuoySVG />
+              <span>
+                <Trans>Read the documentation</Trans>
+              </span>
             </a>
           </div>,
-          document.getElementById("administration-help-panel")
+          document.getElementById("administration-help-panel"),
         )}
       </div>
     );
@@ -198,4 +226,8 @@ DisplayAdministrationUserPassphrasePolicies.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAdministrationWorkspace(withAdminUserPassphrasePolicies(withTranslation('common')(DisplayAdministrationUserPassphrasePolicies))));
+export default withAppContext(
+  withAdministrationWorkspace(
+    withAdminUserPassphrasePolicies(withTranslation("common")(DisplayAdministrationUserPassphrasePolicies)),
+  ),
+);

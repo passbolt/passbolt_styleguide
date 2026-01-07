@@ -12,11 +12,11 @@
  * @since         2.11.0
  */
 
-import {defaultAppContext, defaultProps, tooLongComment} from "./AddResourceComment.test.data";
+import { defaultAppContext, defaultProps, tooLongComment } from "./AddResourceComment.test.data";
 import DisplayResourceDetailsCommentPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {defaultCommentCollectionDto} from "../../../../shared/models/entity/comment/commentEntityCollection.test.data";
-import {screen} from "@testing-library/react";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { defaultCommentCollectionDto } from "../../../../shared/models/entity/comment/commentEntityCollection.test.data";
+import { screen } from "@testing-library/react";
 
 /**
  * Unit tests on AddComponent in regard of specifications
@@ -32,7 +32,7 @@ describe("Add comments", () => {
   const props = defaultProps(); // The props to pass
 
   // The mocked context port request
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
   const noneCommentFoundRequestMockImpl = jest.fn(() => Promise.resolve([]));
   const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(defaultCommentCollectionDto()));
 
@@ -49,14 +49,14 @@ describe("Add comments", () => {
       mockContextRequest(noneCommentFoundRequestMockImpl);
     });
 
-    it("I should be prompted to insert a new comment", async() => {
+    it("I should be prompted to insert a new comment", async () => {
       await page.title.click();
 
       expect(page.addComment.exists()).toBeTruthy();
       expect(context.port.request).toBeCalled();
     });
 
-    it("I should not see the add icon", async() => {
+    it("I should not see the add icon", async () => {
       await page.title.click();
 
       expect(page.addIcon.exists()).toBeFalsy();
@@ -77,7 +77,7 @@ describe("Add comments", () => {
       mockContextRequest(commentsFoundRequestMockImpl);
     });
 
-    it("I should start adding a comment", async() => {
+    it("I should start adding a comment", async () => {
       await page.title.click();
       expect(page.addIcon.exists()).toBeTruthy();
       expect(page.addComment.exists()).toBeFalsy();
@@ -101,7 +101,7 @@ describe("Add comments", () => {
       mockContextRequest(commentsFoundRequestMockImpl);
     });
 
-    it("I should stop adding a comment", async() => {
+    it("I should stop adding a comment", async () => {
       await page.title.click();
       await page.addIcon.click();
       await page.addComment.write("I'm starting a new comment");
@@ -112,13 +112,11 @@ describe("Add comments", () => {
   });
 
   describe("Scenario: As LU I should stop adding a comment by clicking out of the adding zone", () => {
-
     /**
      * Given I am adding a comment to a resource
      * When I click out of the adding zone
      * Then I should stop the adding operation
      */
-
     // Standard browser behavior (?)
   });
 
@@ -136,7 +134,7 @@ describe("Add comments", () => {
       mockContextRequest(commentsFoundRequestMockImpl).mockClear();
     });
 
-    it('the adding operation should be stopped', async() => {
+    it("the adding operation should be stopped", async () => {
       expect.assertions(2);
       // Since there's a refresh fetch after adding a comment, just need to check if the refresh fetch call is done
       await page.title.click();
@@ -165,7 +163,7 @@ describe("Add comments", () => {
       requestMock = mockContextRequest(commentsFoundRequestMockImpl).mockClear();
     });
 
-    it('I should see the comment “Good men don’t need rules.” at the top of the comments list', async() => {
+    it("I should see the comment “Good men don’t need rules.” at the top of the comments list", async () => {
       // Since there's a refresh fetch after adding a comment, just need to check if the refresh fetch call is done
       await page.title.click();
       await page.addIcon.click();
@@ -193,12 +191,11 @@ describe("Add comments", () => {
       mockContextRequest(commentsFoundRequestMockImpl);
     });
 
-    it("the new comment shouldn’t be added to the resource’s comments", async() => {
-
+    it("the new comment shouldn’t be added to the resource’s comments", async () => {
       // TODO When the display comments part is done
     });
 
-    it("the adding operation should be stopped", async() => {
+    it("the adding operation should be stopped", async () => {
       expect.assertions(2);
       await page.title.click();
       await page.addIcon.click();
@@ -220,13 +217,21 @@ describe("Add comments", () => {
      */
 
     let saveResolve;
-    const saveMockImpl = jest.fn(() => new Promise(resolve => { saveResolve = resolve; }));
-    const requestsMockImpl = async(...parameters) => {
+    const saveMockImpl = jest.fn(
+      () =>
+        new Promise((resolve) => {
+          saveResolve = resolve;
+        }),
+    );
+    const requestsMockImpl = async (...parameters) => {
       const requestName = parameters[0];
       switch (requestName) {
-        case 'passbolt.comments.find-all-by-resource': return await commentsFoundRequestMockImpl(...parameters);
-        case 'passbolt.comments.create': return await saveMockImpl(...parameters);
-        default: return jest.fn(() => Promise.resolve([]));
+        case "passbolt.comments.find-all-by-resource":
+          return await commentsFoundRequestMockImpl(...parameters);
+        case "passbolt.comments.create":
+          return await saveMockImpl(...parameters);
+        default:
+          return jest.fn(() => Promise.resolve([]));
       }
     };
 
@@ -235,7 +240,7 @@ describe("Add comments", () => {
       mockContextRequest(requestsMockImpl).mockClear();
     });
 
-    it("the adding operation should be stopped", async() => {
+    it("the adding operation should be stopped", async () => {
       expect.assertions(3);
       await page.title.click();
       await page.addIcon.click();
@@ -266,7 +271,7 @@ describe("Add comments", () => {
       // TODO
     });
 
-    it('I should be notified about the success of the operation',  () => {
+    it("I should be notified about the success of the operation", () => {
       // TODO Depend on the progress feedback component
     });
   });
@@ -284,8 +289,8 @@ describe("Add comments", () => {
       mockContextRequest(commentsFoundRequestMockImpl);
     });
 
-    it('I should be notified about the success of the operation',  async() => {
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+    it("I should be notified about the success of the operation", async () => {
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
       await page.title.click();
       await page.addIcon.click();
       await page.addComment.write("Good men don’t need rules.");
@@ -307,7 +312,7 @@ describe("Add comments", () => {
       mockContextRequest(commentsFoundRequestMockImpl).mockClear();
     });
 
-    it('I should see a feedback message explaining to me that the comment is too long', async() => {
+    it("I should see a feedback message explaining to me that the comment is too long", async () => {
       await page.title.click();
       await page.addIcon.click();
       await page.addComment.write(tooLongComment);
@@ -316,7 +321,7 @@ describe("Add comments", () => {
       expect(page.addComment.isTooLong).toBeTruthy();
     });
 
-    it('I should not able to add the comment', async() => {
+    it("I should not able to add the comment", async () => {
       await page.title.click();
       await page.addIcon.click();
       await page.addComment.write(tooLongComment);
@@ -339,19 +344,19 @@ describe("Add comments", () => {
       mockContextRequest(commentsFoundRequestMockImpl).mockClear();
     });
 
-    it('I should see a feedback message explaining to me that the comment is required\n', async() => {
+    it("I should see a feedback message explaining to me that the comment is required\n", async () => {
       await page.title.click();
       await page.addIcon.click();
-      await page.addComment.write('');
+      await page.addComment.write("");
       await page.addComment.save();
 
       expect(page.addComment.isEmpty).toBeTruthy();
     });
 
-    it('I should not able to add the comment', async() => {
+    it("I should not able to add the comment", async () => {
       await page.title.click();
       await page.addIcon.click();
-      await page.addComment.write('');
+      await page.addComment.write("");
       await page.addComment.save();
 
       expect(context.port.request).toHaveBeenCalledTimes(1);
@@ -373,10 +378,10 @@ describe("Add comments", () => {
       requestMock = mockContextRequest(commentsFoundRequestMockImpl).mockClear();
     });
 
-    it('I should see not see spaces at the end or a the start of the added comment', async() => {
+    it("I should see not see spaces at the end or a the start of the added comment", async () => {
       await page.title.click();
       await page.addIcon.click();
-      await page.addComment.write(' I am writing a comment ');
+      await page.addComment.write(" I am writing a comment ");
       await page.addComment.save();
 
       expect(context.port.request).toHaveBeenCalledTimes(3);
@@ -399,19 +404,19 @@ describe("Add comments", () => {
       mockContextRequest(commentsFoundRequestMockImpl).mockClear();
     });
 
-    it('it should be displayed “A comment is required.', async() => {
+    it("it should be displayed “A comment is required.", async () => {
       await page.title.click();
       await page.addIcon.click();
-      await page.addComment.write('   ');
+      await page.addComment.write("   ");
       await page.addComment.save();
 
       expect(page.addComment.isEmpty).toBeTruthy();
     });
 
-    it('I should not able to add the comment', async() => {
+    it("I should not able to add the comment", async () => {
       await page.title.click();
       await page.addIcon.click();
-      await page.addComment.write('   ');
+      await page.addComment.write("   ");
       await page.addComment.save();
 
       expect(context.port.request).toHaveBeenCalledTimes(1);
@@ -428,14 +433,19 @@ describe("Add comments", () => {
      */
 
     let saveReject;
-    const saveError = {message: "The comment has not been added"};
-    const saveErrorMockImpl = jest.fn(() => new Promise((resolve, reject) => saveReject = reject.bind(null, saveError)));
-    const requestsMockImpl = async(...parameters) => {
+    const saveError = { message: "The comment has not been added" };
+    const saveErrorMockImpl = jest.fn(
+      () => new Promise((resolve, reject) => (saveReject = reject.bind(null, saveError))),
+    );
+    const requestsMockImpl = async (...parameters) => {
       const requestName = parameters[0];
       switch (requestName) {
-        case 'passbolt.comments.find-all-by-resource': return await commentsFoundRequestMockImpl(...parameters);
-        case 'passbolt.comments.create': return await saveErrorMockImpl(...parameters);
-        default: return jest.fn(() => Promise.resolve([]));
+        case "passbolt.comments.find-all-by-resource":
+          return await commentsFoundRequestMockImpl(...parameters);
+        case "passbolt.comments.create":
+          return await saveErrorMockImpl(...parameters);
+        default:
+          return jest.fn(() => Promise.resolve([]));
       }
     };
 
@@ -445,7 +455,7 @@ describe("Add comments", () => {
       page = new DisplayResourceDetailsCommentPage(context, Object.assign(props));
     });
 
-    it(' I should see an error message', async() => {
+    it(" I should see an error message", async () => {
       await page.title.click();
       await page.addIcon.click();
       await page.addComment.write("I'm writing a valid comment");

@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.0
  */
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 
 class ManageQuickAccessMode extends Component {
   /**
@@ -37,8 +37,7 @@ class ManageQuickAccessMode extends Component {
    * Handle close outside window event
    */
   handleCloseOutsideWindowEvent() {
-    const mustCloseWindow = this.props.context.getDetached()
-      && this.props.context.getBootstrapFeature() !== null;
+    const mustCloseWindow = this.props.context.getDetached() && this.props.context.getBootstrapFeature() !== null;
     if (mustCloseWindow) {
       const closeWindow = () => {
         if (this.props.context.shouldCloseAtWindowBlur) {
@@ -57,7 +56,8 @@ class ManageQuickAccessMode extends Component {
   handleResizeWindow() {
     const detachedMode = this.props.context.getDetached();
     if (detachedMode) {
-      const handleWindowResized = entries => this.props.context.port.emit("passbolt.quickaccess.update-window-height", entries[0].target.clientHeight);
+      const handleWindowResized = (entries) =>
+        this.props.context.port.emit("passbolt.quickaccess.update-window-height", entries[0].target.clientHeight);
       const resizeObserver = new ResizeObserver(handleWindowResized);
       resizeObserver.observe(document.body);
     }
@@ -67,9 +67,7 @@ class ManageQuickAccessMode extends Component {
    * @return {JSX}
    */
   render() {
-    return (
-      <></>
-    );
+    return <></>;
   }
 }
 

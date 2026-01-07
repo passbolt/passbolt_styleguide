@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, screen} from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplaySecretHistoryAdministration from "./DisplaySecretHistoryAdministration";
 import userEvent from "@testing-library/user-event";
@@ -26,9 +26,9 @@ export default class DisplaySecretHistoryAdministrationPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplaySecretHistoryAdministration {...props}/>
+        <DisplaySecretHistoryAdministration {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }
@@ -87,7 +87,7 @@ export default class DisplaySecretHistoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get historyLengthInput() {
-    return this._page.container.querySelector('#configure-secret-history-form-length');
+    return this._page.container.querySelector("#configure-secret-history-form-length");
   }
 
   /**
@@ -104,7 +104,7 @@ export default class DisplaySecretHistoryAdministrationPage {
    * @returns {Promise<void>}
    */
   async setHistoryLength(value) {
-    fireEvent.input(this.historyLengthInput, {target: {value: value}});
+    fireEvent.input(this.historyLengthInput, { target: { value: value } });
   }
 
   /**
@@ -129,7 +129,7 @@ export default class DisplaySecretHistoryAdministrationPage {
    * @returns {Promise<void>}
    */
   async save() {
-    const saveButton = await screen.findByRole("button", {name: /save/i});
+    const saveButton = await screen.findByRole("button", { name: /save/i });
     await this.user.click(saveButton);
   }
 }

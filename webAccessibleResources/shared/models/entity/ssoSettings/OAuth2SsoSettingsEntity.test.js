@@ -16,8 +16,8 @@ import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
-import {defaultOAuth2SsoSettingsDto} from "./SsoSettingsEntity.test.data";
-import {defaultOAuth2SsoSettingsViewModelDto} from "../../ssoSettings/SsoSettingsViewModel.test.data";
+import { defaultOAuth2SsoSettingsDto } from "./SsoSettingsEntity.test.data";
+import { defaultOAuth2SsoSettingsViewModelDto } from "../../ssoSettings/SsoSettingsViewModel.test.data";
 
 describe("OAuth2SsoSettingsEntity", () => {
   it("schema must validate", () => {
@@ -59,18 +59,18 @@ describe("OAuth2SsoSettingsEntity", () => {
   });
 
   each([
-    {dto: {url: -1}, errorType: "type"},
-    {dto: {url: "test"}, errorType: "pattern"},
+    { dto: { url: -1 }, errorType: "type" },
+    { dto: { url: "test" }, errorType: "pattern" },
 
-    {dto: {openid_configuration_path: -1}, errorType: "type"},
-    {dto: {openid_configuration_path: ""}, errorType: "minLength"},
+    { dto: { openid_configuration_path: -1 }, errorType: "type" },
+    { dto: { openid_configuration_path: "" }, errorType: "minLength" },
 
-    {dto: {client_id: -1}, errorType: "type"},
-    {dto: {client_id: ""}, errorType: "minLength"},
+    { dto: { client_id: -1 }, errorType: "type" },
+    { dto: { client_id: "" }, errorType: "minLength" },
 
-    {dto: {client_secret: -1}, errorType: "type"},
-    {dto: {client_secret: ""}, errorType: "minLength"},
-  ]).describe("should throw an exception if DTO contains invalid values", scenario => {
+    { dto: { client_secret: -1 }, errorType: "type" },
+    { dto: { client_secret: "" }, errorType: "minLength" },
+  ]).describe("should throw an exception if DTO contains invalid values", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(2);
       const fieldName = Object.keys(scenario.dto)[0];
@@ -91,9 +91,9 @@ describe("OAuth2SsoSettingsEntity", () => {
       "https://login.partner.oauth2.lu",
       "https://localhost",
       "https://192.168.1.1",
-    ]).describe("Should validate the supported URL", url => {
+    ]).describe("Should validate the supported URL", (url) => {
       it(`${url}`, () => {
-        const dto = defaultOAuth2SsoSettingsViewModelDto({url});
+        const dto = defaultOAuth2SsoSettingsViewModelDto({ url });
         expect(() => new OAuth2SsoSettingsEntity(dto)).not.toThrow();
       });
     });
@@ -126,9 +126,9 @@ describe("OAuth2SsoSettingsEntity", () => {
       "ftp://login.partner.oauth2.lu/",
       "ftp://localhost/",
       "ftp://192.168.1.1/",
-    ]).describe("Should not validate an unsupported URL", url => {
+    ]).describe("Should not validate an unsupported URL", (url) => {
       it(`${url}`, () => {
-        const dto = defaultOAuth2SsoSettingsViewModelDto({url});
+        const dto = defaultOAuth2SsoSettingsViewModelDto({ url });
         expect(() => new OAuth2SsoSettingsEntity(dto)).toThrow(EntityValidationError);
       });
     });

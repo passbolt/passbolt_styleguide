@@ -13,24 +13,23 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import ReviewAccountRecoveryRequest from "./ReviewAccountRecoveryRequest";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {defaultProps} from "./ReviewAccountRecoveryRequest.test.data";
-
+import { defaultProps } from "./ReviewAccountRecoveryRequest.test.data";
 
 export default {
-  title: 'Components/AccountRecovery/ReviewAccountRecoveryRequest',
-  component: ReviewAccountRecoveryRequest
+  title: "Components/AccountRecovery/ReviewAccountRecoveryRequest",
+  component: ReviewAccountRecoveryRequest,
 };
 
-
-const Template = args =>
+const Template = (args) => (
   <MockTranslationProvider>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <ReviewAccountRecoveryRequest {...args} {...routerProps}/>}></Route>
+    <MemoryRouter initialEntries={["/"]}>
+      <Route component={(routerProps) => <ReviewAccountRecoveryRequest {...args} {...routerProps} />}></Route>
     </MemoryRouter>
-  </MockTranslationProvider>;
+  </MockTranslationProvider>
+);
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();

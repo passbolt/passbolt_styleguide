@@ -13,29 +13,29 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import AcceptLoginServerKeyChange from "./AcceptLoginServerKeyChange";
-import {defaultProps} from "./AcceptLoginServerKeyChange.test.data";
+import { defaultProps } from "./AcceptLoginServerKeyChange.test.data";
 
 export default {
-  title: 'Components/AuthenticationLogin/AcceptLoginServerKeyChange',
-  component: AcceptLoginServerKeyChange
+  title: "Components/AuthenticationLogin/AcceptLoginServerKeyChange",
+  component: AcceptLoginServerKeyChange,
 };
 
-const Template = args =>
-  <MemoryRouter initialEntries={['/']}>
+const Template = (args) => (
+  <MemoryRouter initialEntries={["/"]}>
     <div id="container" className="container page login">
       <div className="content">
         <div className="login-form">
-          <Route component={routerProps => <AcceptLoginServerKeyChange {...args} {...routerProps}/>}/>
+          <Route component={(routerProps) => <AcceptLoginServerKeyChange {...args} {...routerProps} />} />
         </div>
       </div>
     </div>
-  </MemoryRouter>;
-
+  </MemoryRouter>
+);
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();
 Initial.parameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };

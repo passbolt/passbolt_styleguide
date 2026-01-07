@@ -11,11 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-import {adminRoleDto, customRoleDto, guestRoleDto, userRoleDto} from "./roleEntity.test.data";
+import { adminRoleDto, customRoleDto, guestRoleDto, userRoleDto } from "./roleEntity.test.data";
 
-export const rolesCollectionDto = [
-  userRoleDto(),
-  adminRoleDto(),
-  customRoleDto(),
-  guestRoleDto(),
-];
+export const rolesCollectionDto = [userRoleDto(), adminRoleDto(), customRoleDto(), guestRoleDto()];

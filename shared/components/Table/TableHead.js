@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTable} from "./Context/TableContext";
+import { withTable } from "./Context/TableContext";
 import RowHeader from "./RowHeader";
 
 /**
@@ -25,7 +25,7 @@ class TableHead extends Component {
    * @return {{width: string}}
    */
   get tableStyleWidth() {
-    return {width: `${this.props.tableContext.tableWidth}px`};
+    return { width: `${this.props.tableContext.tableWidth}px` };
   }
 
   /**
@@ -37,7 +37,7 @@ class TableHead extends Component {
       <div className="tableview-header">
         <table style={this.tableStyleWidth}>
           <thead>
-            <RowHeader/>
+            <RowHeader />
           </thead>
         </table>
       </div>
@@ -46,7 +46,7 @@ class TableHead extends Component {
 }
 
 TableHead.propTypes = {
-  tableContext: PropTypes.any // The table context
+  tableContext: PropTypes.any, // The table context
 };
 
 export default withTable(TableHead);

@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.10.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import AnimatedFeedback from "../../../../../shared/components/Icons/AnimatedFeedback";
 import LogoSVG from "../../../../../img/svg/logo.svg";
 
@@ -28,11 +28,11 @@ class ApiSuccess extends Component {
         <div className="content">
           <div className="header">
             <div className="logo-svg">
-              <LogoSVG role="img" width="20rem" height="3.5rem"/>
+              <LogoSVG role="img" width="20rem" height="3.5rem" />
             </div>
           </div>
           <div className="api-feedback-card">
-            <AnimatedFeedback name="success"/>
+            <AnimatedFeedback name="success" />
             <p>{this.props.message}</p>
           </div>
         </div>
@@ -43,7 +43,7 @@ class ApiSuccess extends Component {
 
 ApiSuccess.propTypes = {
   message: PropTypes.string.isRequired, // The message to display on the UI
-  t: PropTypes.func // the translation function
+  t: PropTypes.func, // the translation function
 };
 
 export default withTranslation("common")(ApiSuccess);

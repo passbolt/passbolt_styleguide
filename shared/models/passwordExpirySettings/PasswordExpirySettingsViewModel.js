@@ -34,9 +34,10 @@ class PasswordExpirySettingsViewModel {
     const defaultExpiryPeriod = parseInt(settings?.default_expiry_period, 10);
     this.default_expiry_period = !isNaN(defaultExpiryPeriod) ? defaultExpiryPeriod : null;
 
-    this.default_expiry_period_toggle = typeof(settings?.default_expiry_period_toggle) !== 'undefined'
-      ? Boolean(settings.default_expiry_period_toggle)
-      : Boolean(this.default_expiry_period);
+    this.default_expiry_period_toggle =
+      typeof settings?.default_expiry_period_toggle !== "undefined"
+        ? Boolean(settings.default_expiry_period_toggle)
+        : Boolean(this.default_expiry_period);
 
     if (settings?.id) {
       this.id = settings?.id;
@@ -49,7 +50,9 @@ class PasswordExpirySettingsViewModel {
    * @returns {Object} schema
    */
   static getSchema(isAvanced = false) {
-    const baseEntitySchema = !isAvanced ? PasswordExpirySettingsEntity.getSchema() : PasswordExpiryProSettingsEntity.getSchema();
+    const baseEntitySchema = !isAvanced
+      ? PasswordExpirySettingsEntity.getSchema()
+      : PasswordExpiryProSettingsEntity.getSchema();
     return this.getDefaultSchema(baseEntitySchema, isAvanced);
   }
 
@@ -58,19 +61,16 @@ class PasswordExpirySettingsViewModel {
    * @returns {Object} schema
    */
   static getDefaultSchema(baseEntitySchema, isAdvanced = false) {
-    const schema =  {
+    const schema = {
       type: "object",
-      required: [
-        "automatic_expiry",
-        "automatic_update",
-      ],
+      required: ["automatic_expiry", "automatic_update"],
       properties: {
         id: baseEntitySchema.properties.id,
         automatic_expiry: baseEntitySchema.properties.automatic_expiry,
         automatic_update: baseEntitySchema.properties.automatic_update,
         policy_override: baseEntitySchema.properties.policy_override,
         default_expiry_period: baseEntitySchema.properties.default_expiry_period,
-      }
+      },
     };
 
     if (isAdvanced) {
@@ -90,7 +90,8 @@ class PasswordExpirySettingsViewModel {
       automatic_expiry: Boolean(entityDto?.automatic_expiry),
       automatic_update: Boolean(entityDto?.automatic_update),
       policy_override: Boolean(entityDto?.policy_override),
-      default_expiry_period: entityDto?.default_expiry_period !== null ? parseInt(entityDto?.default_expiry_period, 10) : null,
+      default_expiry_period:
+        entityDto?.default_expiry_period !== null ? parseInt(entityDto?.default_expiry_period, 10) : null,
     };
     if (entityDto?.id) {
       data.id = entityDto.id;
@@ -105,13 +106,8 @@ class PasswordExpirySettingsViewModel {
    * @returns {boolean}
    */
   static isDataDifferent(a, b) {
-    const keys = [
-      "automatic_expiry",
-      "automatic_update",
-      "policy_override",
-      "default_expiry_period",
-    ];
-    return keys.some(key => a[key] !== b[key]);
+    const keys = ["automatic_expiry", "automatic_update", "policy_override", "default_expiry_period"];
+    return keys.some((key) => a[key] !== b[key]);
   }
 
   /**
@@ -119,9 +115,7 @@ class PasswordExpirySettingsViewModel {
    * @returns {object}
    */
   toEntityDto() {
-    const default_expiry_period = this.default_expiry_period_toggle
-      ? this.default_expiry_period
-      : null;
+    const default_expiry_period = this.default_expiry_period_toggle ? this.default_expiry_period : null;
 
     return {
       automatic_expiry: this.automatic_expiry,
@@ -140,7 +134,7 @@ class PasswordExpirySettingsViewModel {
   cloneWithMutation(field, value) {
     const clone = {
       ...this,
-      [field]: value
+      [field]: value,
     };
     return new PasswordExpirySettingsViewModel(clone);
   }
@@ -176,7 +170,7 @@ class PasswordExpirySettingsViewModel {
   validateFormInput(entityValidationError, isAdvanced) {
     //Validate only if the toggle is enable
     if (isAdvanced && this.default_expiry_period_toggle && this.default_expiry_period === null) {
-      entityValidationError.addError("default_expiry_period", 'required', `The default_expiry_period is required.`);
+      entityValidationError.addError("default_expiry_period", "required", `The default_expiry_period is required.`);
     }
   }
 

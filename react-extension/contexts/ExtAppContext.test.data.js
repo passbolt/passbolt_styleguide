@@ -18,13 +18,18 @@ import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../test/fixture/Settings/siteSettings";
 import MockPort from "../test/mock/MockPort";
 import MockStorage from "../test/mock/MockStorage";
-import {defaultAdminUserDto, defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
-import {adminRoleDto, TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/roleEntity.test.data";
-import {defaultAccountDto} from "../../shared/models/entity/account/accountEntity.test.data";
+import { defaultAdminUserDto, defaultUserDto } from "../../shared/models/entity/user/userEntity.test.data";
+import {
+  adminRoleDto,
+  TEST_ROLE_ADMIN_ID,
+  TEST_ROLE_USER_ID,
+  userRoleDto,
+} from "../../shared/models/entity/role/roleEntity.test.data";
+import { defaultAccountDto } from "../../shared/models/entity/account/accountEntity.test.data";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
-import {defaultCeSiteSettings} from "../test/fixture/Settings/siteSettings.test.data";
+import { defaultCeSiteSettings } from "../test/fixture/Settings/siteSettings.test.data";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
-import {settingsRbacsCollectionData} from "../../shared/models/entity/rbac/rbacsCollection.test.data";
+import { settingsRbacsCollectionData } from "../../shared/models/entity/rbac/rbacsCollection.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -33,9 +38,11 @@ import {settingsRbacsCollectionData} from "../../shared/models/entity/rbac/rbacs
  */
 export function defaultAppContext(appContext = {}, isCommunityEdition = false) {
   const userSettings = new UserSettings(userSettingsFixture);
-  const siteSettings = isCommunityEdition ? new SiteSettings(defaultCeSiteSettings()) : new SiteSettings(siteSettingsFixture);
+  const siteSettings = isCommunityEdition
+    ? new SiteSettings(defaultCeSiteSettings())
+    : new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
-    locale: 'en-UK',
+    locale: "en-UK",
     userSettings,
     siteSettings,
     port: new MockPort(),
@@ -45,17 +52,20 @@ export function defaultAppContext(appContext = {}, isCommunityEdition = false) {
       id: userSettings.id,
       role: {
         id: TEST_ROLE_ADMIN_ID,
-        name: 'admin'
-      }
+        name: "admin",
+      },
     },
     users: [],
-    roles: [{
-      id: TEST_ROLE_ADMIN_ID,
-      name: 'admin'
-    }, {
-      id: TEST_ROLE_USER_ID,
-      name: 'user'
-    }],
+    roles: [
+      {
+        id: TEST_ROLE_ADMIN_ID,
+        name: "admin",
+      },
+      {
+        id: TEST_ROLE_USER_ID,
+        name: "user",
+      },
+    ],
     rbacs: new RbacsCollection([]),
     setContext: jest.fn(),
     foldersMapById: [],
@@ -73,12 +83,12 @@ export const defaultUserAppContext = (data = {}) => {
   const siteSettings = new SiteSettings(siteSettingsFixture);
 
   return {
-    locale: 'en-UK',
+    locale: "en-UK",
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: siteSettings,
     port: new MockPort(),
     storage: new MockStorage(),
-    loggedInUser: defaultUserDto({}, {withRole: true}),
+    loggedInUser: defaultUserDto({}, { withRole: true }),
     users: [],
     roles: [userRoleDto(), adminRoleDto()],
     resources: [],
@@ -87,7 +97,7 @@ export const defaultUserAppContext = (data = {}) => {
     rbacs: new RbacsCollection(settingsRbacsCollectionData()),
     foldersMapById: [],
     getHierarchyFolderCache: jest.fn(() => []),
-    ...data
+    ...data,
   };
 };
 
@@ -96,7 +106,8 @@ export const defaultUserAppContext = (data = {}) => {
  * @param {object} data Override the default props.
  * @returns {object}
  */
-export const defaultAdministratorAppContext = (data = {}) => defaultUserAppContext({
-  loggedInUser: defaultAdminUserDto({}, {withRole: true}),
-  ...data
-});
+export const defaultAdministratorAppContext = (data = {}) =>
+  defaultUserAppContext({
+    loggedInUser: defaultAdminUserDto({}, { withRole: true }),
+    ...data,
+  });

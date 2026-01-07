@@ -18,9 +18,9 @@ const ENTITY_NAME = "AzureSsoSettings";
 const AZURE = "azure";
 
 const SUPPORTED_URLS = [
-  'https://login.microsoftonline.com',
-  'https://login.microsoftonline.us',
-  'https://login.partner.microsoftonline.cn',
+  "https://login.microsoftonline.com",
+  "https://login.microsoftonline.us",
+  "https://login.partner.microsoftonline.cn",
 ];
 
 const AZURE_SUPPORTED_URLS = /^https:\/\/login\.(microsoftonline\.(com|us)|partner\.microsoftonline\.cn)$/;
@@ -34,11 +34,14 @@ class AzureSsoSettingsEntity extends Entity {
    */
   constructor(azureSsoSettingsDto, options = {}) {
     const sanitizedAzureSsoSettingsDto = AzureSsoSettingsEntity.sanitizeDto(azureSsoSettingsDto);
-    super(EntitySchema.validate(
-      AzureSsoSettingsEntity.ENTITY_NAME,
-      sanitizedAzureSsoSettingsDto,
-      AzureSsoSettingsEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        AzureSsoSettingsEntity.ENTITY_NAME,
+        sanitizedAzureSsoSettingsDto,
+        AzureSsoSettingsEntity.getSchema(),
+      ),
+      options,
+    );
   }
 
   /**
@@ -47,54 +50,41 @@ class AzureSsoSettingsEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "url",
-        "client_id",
-        "tenant_id",
-        "client_secret",
-        "client_secret_expiry",
-      ],
-      "properties": {
-        "url": {
-          "type": "string",
-          "pattern": AZURE_SUPPORTED_URLS
+      type: "object",
+      required: ["url", "client_id", "tenant_id", "client_secret", "client_secret_expiry"],
+      properties: {
+        url: {
+          type: "string",
+          pattern: AZURE_SUPPORTED_URLS,
         },
-        "client_id": {
-          "type": "string",
-          "format": "uuid",
+        client_id: {
+          type: "string",
+          format: "uuid",
         },
-        "tenant_id": {
-          "type": "string",
-          "format": "uuid",
+        tenant_id: {
+          type: "string",
+          format: "uuid",
         },
-        "client_secret": {
-          "type": "string",
-          "minLength": 1,
+        client_secret: {
+          type: "string",
+          minLength: 1,
         },
-        "client_secret_expiry": {
-          "type": "string",
-          "format": "date-time",
+        client_secret_expiry: {
+          type: "string",
+          format: "date-time",
         },
-        "email_claim": {
-          "type": "string",
-          "enum": [
-            "email",
-            "preferred_username",
-            "upn",
-          ],
+        email_claim: {
+          type: "string",
+          enum: ["email", "preferred_username", "upn"],
         },
-        "prompt": {
-          "type": "string",
-          "enum": [
-            "login",
-            "none",
-          ],
+        prompt: {
+          type: "string",
+          enum: ["login", "none"],
         },
-        "login_hint": {
-          "type": "boolean",
+        login_hint: {
+          type: "boolean",
         },
-      }
+      },
     };
   }
 
@@ -118,7 +108,7 @@ class AzureSsoSettingsEntity extends Entity {
     if (!dto?.prompt) {
       dto.prompt = "login";
     }
-    if (typeof(dto.login_hint) === "undefined") {
+    if (typeof dto.login_hint === "undefined") {
       dto.login_hint = true;
     }
 

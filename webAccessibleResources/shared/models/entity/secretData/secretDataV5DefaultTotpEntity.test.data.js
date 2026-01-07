@@ -12,8 +12,8 @@
  * @since         5.0.0
  */
 
-import {defaultTotpDto} from "../totp/totpDto.test.data";
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { defaultTotpDto } from "../totp/totpDto.test.data";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 
 /**
  * The minimal default secret v5 default totp entity
@@ -32,8 +32,9 @@ export const minimalSecretDataV5DefaultTotpEntityDto = (data = {}) => ({
  * @param {Object} data The data to override
  * @returns {Object}
  */
-export const defaultSecretDataV5DefaultTotpEntityDto = (data = {}) => minimalSecretDataV5DefaultTotpEntityDto({
-  password: "this-is-a-secret-password",
-  description: "this-is-a-default-description",
-  ...data,
-});
+export const defaultSecretDataV5DefaultTotpEntityDto = (data = {}) =>
+  minimalSecretDataV5DefaultTotpEntityDto({
+    password: "this-is-a-secret-password",
+    description: "this-is-a-default-description",
+    ...data,
+  });

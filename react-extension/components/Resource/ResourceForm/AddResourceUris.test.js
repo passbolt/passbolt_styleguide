@@ -16,8 +16,8 @@
  * Unit tests on AddResourceUris in regard of specifications
  */
 
-import {defaultProps} from './AddResourceUris.test.data';
-import AddResourceUrisPage from './AddResourceUris.test.page';
+import { defaultProps } from "./AddResourceUris.test.data";
+import AddResourceUrisPage from "./AddResourceUris.test.page";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,11 +26,11 @@ beforeEach(() => {
 describe("AddResourceUris", () => {
   let page; // The page to test against
 
-  describe('As LU I can see the uris form.', () => {
-    it('As LU I can see the uris form.', () => {
+  describe("As LU I can see the uris form.", () => {
+    it("As LU I can see the uris form.", () => {
       expect.assertions(4);
 
-      const props = defaultProps({resource: {metadata: {uris: [""]}}});
+      const props = defaultProps({ resource: { metadata: { uris: [""] } } });
       page = new AddResourceUrisPage(props);
 
       expect(page.exists).toBeTruthy();
@@ -40,13 +40,13 @@ describe("AddResourceUris", () => {
     });
   });
 
-  describe('Fill form uris', () => {
-    it('Enter main uri should call callback function.', async() => {
+  describe("Fill form uris", () => {
+    it("Enter main uri should call callback function.", async () => {
       expect.assertions(3);
 
       let name, value;
-      const props = defaultProps({resource: {metadata: {uris: [""]}}});
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      const props = defaultProps({ resource: { metadata: { uris: [""] } } });
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });
@@ -59,13 +59,13 @@ describe("AddResourceUris", () => {
     });
   });
 
-  describe('As LU I should see add uri enabled if main uri is filled.', () => {
-    it('As LU I can add uri.', async() => {
+  describe("As LU I should see add uri enabled if main uri is filled.", () => {
+    it("As LU I can add uri.", async () => {
       expect.assertions(5);
 
       let name, value;
       const props = defaultProps();
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });
@@ -81,13 +81,13 @@ describe("AddResourceUris", () => {
     });
   });
 
-  describe('As LU I should delete an additional uri.', () => {
-    it('As LU I can see the uris form deleted.', async() => {
+  describe("As LU I should delete an additional uri.", () => {
+    it("As LU I can see the uris form deleted.", async () => {
       expect.assertions(3);
 
       let name, value;
       const props = defaultProps();
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });

@@ -12,7 +12,7 @@
  * @since         5.3.0
  */
 
-import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import SecretDataEntity, { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import CustomFieldsCollection from "../customField/customFieldsCollection";
 import assertString from "validator/es/lib/util/assertString";
 import CustomFieldEntity from "../customField/customFieldEntity";
@@ -31,15 +31,12 @@ export default class SecretDataV5StandaloneCustomFieldsCollection extends Secret
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "object_type",
-        "custom_fields"
-      ],
-      "properties": {
+      type: "object",
+      required: ["object_type", "custom_fields"],
+      properties: {
         ...SecretDataEntity.getSchema().properties,
-        "custom_fields": CustomFieldsCollection.getSchema(),
-      }
+        custom_fields: CustomFieldsCollection.getSchema(),
+      },
     };
   }
 
@@ -115,7 +112,7 @@ export default class SecretDataV5StandaloneCustomFieldsCollection extends Secret
    * @throws {TypeError} if one of the parameters is not of type SecretDataV5StandaloneCustomFieldsCollection
    */
   areSecretsDifferent(secretDto) {
-    const otherCollection = new CustomFieldsCollection(secretDto.custom_fields, {validate: false});
+    const otherCollection = new CustomFieldsCollection(secretDto.custom_fields, { validate: false });
     return CustomFieldsCollection.areCollectionsDifferent(this.customFields, otherCollection);
   }
 }

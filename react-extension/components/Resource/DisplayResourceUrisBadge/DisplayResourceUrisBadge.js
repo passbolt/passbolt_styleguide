@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
+import sanitizeUrl, { urlProtocols } from "../../../lib/Sanitize/sanitizeUrl";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
 
 const linkAuthorizedProtocols = [
@@ -21,7 +21,7 @@ const linkAuthorizedProtocols = [
   urlProtocols.FTPS,
   urlProtocols.HTTPS,
   urlProtocols.HTTP,
-  urlProtocols.SSH
+  urlProtocols.SSH,
 ];
 
 class DisplayResourceUrisBadge extends React.Component {
@@ -31,11 +31,12 @@ class DisplayResourceUrisBadge extends React.Component {
    * @return {string}
    */
   safeLink(link) {
-    return sanitizeUrl(
-      link, {
+    return (
+      sanitizeUrl(link, {
         whiteListedProtocols: linkAuthorizedProtocols,
-        defaultProtocol: urlProtocols.HTTPS
-      }) || "";
+        defaultProtocol: urlProtocols.HTTPS,
+      }) || ""
+    );
   }
 
   /**
@@ -43,7 +44,7 @@ class DisplayResourceUrisBadge extends React.Component {
    * @param {string} safeUri The safe URI to open in the new window.
    */
   handleClick(safeUri) {
-    window.open(safeUri, '_blank', 'noopener,noreferrer');
+    window.open(safeUri, "_blank", "noopener,noreferrer");
   }
 
   /**
@@ -56,11 +57,18 @@ class DisplayResourceUrisBadge extends React.Component {
         {this.props.additionalUris?.map((uri, index) => {
           const safeUri = this.safeLink(uri);
           if (safeUri) {
-            return <button className="link" key={index} type="button" onClick={() => this.handleClick(safeUri)}><span className="ellipsis">{uri}</span></button>;
+            return (
+              <button className="link" key={index} type="button" onClick={() => this.handleClick(safeUri)}>
+                <span className="ellipsis">{uri}</span>
+              </button>
+            );
           }
-          return <span className="link ellipsis" key={index}>{uri}</span>;
-        })
-        }
+          return (
+            <span className="link ellipsis" key={index}>
+              {uri}
+            </span>
+          );
+        })}
       </div>
     );
   }
@@ -90,7 +98,6 @@ class DisplayResourceUrisBadge extends React.Component {
     );
   }
 }
-
 
 DisplayResourceUrisBadge.propTypes = {
   additionalUris: PropTypes.arrayOf(PropTypes.string), // The uris

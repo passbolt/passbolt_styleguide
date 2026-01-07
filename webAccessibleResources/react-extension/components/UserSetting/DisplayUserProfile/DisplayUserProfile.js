@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,13 +12,13 @@
  * @since         2.13.0
  */
 
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import {formatDateTimeAgo} from '../../../../shared/utils/dateUtils';
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withUserSettings } from "../../../contexts/UserSettingsContext";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
 import EditUserProfile from "../EditUserProfile/EditUserProfile";
 
 /**
@@ -54,7 +53,7 @@ class DisplayUserProfile extends React.Component {
    */
   get userLocaleLabel() {
     const supportedLocales = this.props.context.siteSettings.supportedLocales || [];
-    const locale = supportedLocales.find(supportedLocale => supportedLocale.locale === this.props.context.locale);
+    const locale = supportedLocales.find((supportedLocale) => supportedLocale.locale === this.props.context.locale);
     return locale ? locale.label : "N/A";
   }
 
@@ -71,7 +70,7 @@ class DisplayUserProfile extends React.Component {
    * @type {boolean}
    */
   get canIUseLocale() {
-    return this.props.context.siteSettings.canIUse('locale');
+    return this.props.context.siteSettings.canIUse("locale");
   }
 
   /**
@@ -81,59 +80,81 @@ class DisplayUserProfile extends React.Component {
     this.props.dialogContext.open(EditUserProfile);
   }
 
-
   render() {
     return (
-      this.user &&
+      this.user && (
         <>
           <div className="profile main-column">
             <div className="main-content">
-              <h3><Trans>Profile</Trans></h3>
+              <h3>
+                <Trans>Profile</Trans>
+              </h3>
               <table className="table-info detailed-information">
                 <tbody>
                   <tr className="name">
-                    <td className="label"><Trans>Name</Trans></td>
+                    <td className="label">
+                      <Trans>Name</Trans>
+                    </td>
                     <td className="value">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</td>
                   </tr>
                   <tr className="email">
-                    <td className="label"><Trans>Email</Trans></td>
+                    <td className="label">
+                      <Trans>Email</Trans>
+                    </td>
                     <td className="value">{this.user.username}</td>
                   </tr>
                   <tr className="role">
-                    <td className="label"><Trans>Role</Trans></td>
+                    <td className="label">
+                      <Trans>Role</Trans>
+                    </td>
                     <td className="value">{this.user.role.name}</td>
                   </tr>
                   <tr className="modified">
-                    <td className="label"><Trans>Modified</Trans></td>
-                    <td className="value" title={this.user.modified}>{formatDateTimeAgo(this.user.modified, this.props.t, this.props.context.locale)}</td>
+                    <td className="label">
+                      <Trans>Modified</Trans>
+                    </td>
+                    <td className="value" title={this.user.modified}>
+                      {formatDateTimeAgo(this.user.modified, this.props.t, this.props.context.locale)}
+                    </td>
                   </tr>
                   <tr className="created">
-                    <td className="label"><Trans>Created</Trans></td>
-                    <td className="value" title={this.user.created}>{formatDateTimeAgo(this.user.created, this.props.t, this.props.context.locale)}</td>
+                    <td className="label">
+                      <Trans>Created</Trans>
+                    </td>
+                    <td className="value" title={this.user.created}>
+                      {formatDateTimeAgo(this.user.created, this.props.t, this.props.context.locale)}
+                    </td>
                   </tr>
                 </tbody>
               </table>
-              {this.canIUseLocale &&
+              {this.canIUseLocale && (
                 <>
-                  <h4><Trans>Internationalisation</Trans></h4>
+                  <h4>
+                    <Trans>Internationalisation</Trans>
+                  </h4>
                   <table className="table-info profile">
                     <tbody>
                       <tr className="locale">
-                        <td className="label"><Trans>Language</Trans></td>
+                        <td className="label">
+                          <Trans>Language</Trans>
+                        </td>
                         <td className="value">{this.userLocaleLabel}</td>
                       </tr>
                     </tbody>
                   </table>
                 </>
-              }
+              )}
             </div>
           </div>
           <div className="actions-wrapper">
             <button className="button primary form" type="button" onClick={this.handleEdit}>
-              <span><Trans>Edit</Trans></span>
+              <span>
+                <Trans>Edit</Trans>
+              </span>
             </button>
           </div>
         </>
+      )
     );
   }
 }
@@ -143,7 +164,7 @@ DisplayUserProfile.propTypes = {
   dialogContext: PropTypes.object, // The dialog context
   userSettingsContext: PropTypes.object, // The user settings context
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
+  i18n: PropTypes.any, // The i18n context translation
 };
 
-export default withAppContext(withDialog(withUserSettings(withTranslation('common')(DisplayUserProfile))));
+export default withAppContext(withDialog(withUserSettings(withTranslation("common")(DisplayUserProfile))));

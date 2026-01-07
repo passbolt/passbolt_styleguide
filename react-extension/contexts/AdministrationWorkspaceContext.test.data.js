@@ -18,7 +18,7 @@
 export function defaultProps(data = {}) {
   return {
     rbacContext: {
-      canIUseAction: () => true
+      canIUseAction: () => true,
     },
     ...data,
   };
@@ -33,11 +33,11 @@ export function defaultAdministrationWorkspaceContext(context = {}) {
   const defaultContext = {
     must: {
       editSubscriptionKey: false,
-      refreshSubscriptionKey: false
+      refreshSubscriptionKey: false,
     },
     onResetActionsSettings: jest.fn(),
     setDisplayAdministrationWorkspaceAction: jest.fn(),
-    resetDisplayAdministrationWorkspaceAction: jest.fn()
+    resetDisplayAdministrationWorkspaceAction: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }

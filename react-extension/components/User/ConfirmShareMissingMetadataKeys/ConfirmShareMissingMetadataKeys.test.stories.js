@@ -12,31 +12,32 @@
  * @since         5.2.0
  */
 
-
-import {defaultProps, notOwnedAllMisingMetadataKeysProps, ownedPartiallyMisingMetadataKeysProps} from "./ConfirmShareMissingMetadataKeys.test.data";
+import {
+  defaultProps,
+  notOwnedAllMisingMetadataKeysProps,
+  ownedPartiallyMisingMetadataKeysProps,
+} from "./ConfirmShareMissingMetadataKeys.test.data";
 import ConfirmShareMissingMetadataKeys from "./ConfirmShareMissingMetadataKeys";
 
-
 export default {
-  title: 'Components/User/ConfirmShareMissingMetadataKeys',
-  component: ConfirmShareMissingMetadataKeys
+  title: "Components/User/ConfirmShareMissingMetadataKeys",
+  component: ConfirmShareMissingMetadataKeys,
 };
-
 
 export const Initial = {
   args: {
-    ...defaultProps()
-  }
+    ...defaultProps(),
+  },
 };
 
 export const PartiallySharing = {
   args: {
-    ...ownedPartiallyMisingMetadataKeysProps()
-  }
+    ...ownedPartiallyMisingMetadataKeysProps(),
+  },
 };
 
 export const CannotShare = {
   args: {
-    ...notOwnedAllMisingMetadataKeysProps()
-  }
+    ...notOwnedAllMisingMetadataKeysProps(),
+  },
 };

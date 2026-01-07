@@ -20,7 +20,7 @@ import {
   defaultHealthcheckCEdata,
   defaultHealthcheckDataWithoutDirectorySyncAndSso,
   defaultHealthcheckDataWithoutDirectorySync,
-  defaultHealthcheckDataWithoutSso
+  defaultHealthcheckDataWithoutSso,
 } from "./associations/healthcheckEntity.test.data";
 import healthcheckEntity from "./healthcheckEntity";
 import DatabaseEntity from "./associations/databaseEntity";
@@ -141,8 +141,7 @@ describe("HealthcheckEntity", () => {
       expect(entity.sso).toBeNull();
     });
 
-
-    it('it should create a DatabaseEntity with all properties', () => {
+    it("it should create a DatabaseEntity with all properties", () => {
       const databaseDTO = {
         tablesCount: true,
         info: {
@@ -161,26 +160,26 @@ describe("HealthcheckEntity", () => {
       expect(databaseEntity.defaultContent).toBeTruthy();
     });
 
-    it('it should create a SslEntity with all properties', () => {
+    it("it should create a SslEntity with all properties", () => {
       const sslDTO = {
         peerValid: true,
         hostValid: true,
         notSelfSigned: false,
-        info: "SSL peer certificate does not validate"
+        info: "SSL peer certificate does not validate",
       };
       const sslEntity = new SslEntity(sslDTO);
 
       expect(sslEntity.peerValid).toBeTruthy();
       expect(sslEntity.hostValid).toBeTruthy();
       expect(sslEntity.notSelfSigned).toBeFalsy();
-      expect(sslEntity.info).toEqual('SSL peer certificate does not validate');
+      expect(sslEntity.info).toEqual("SSL peer certificate does not validate");
     });
 
-    it('it should create a ApplicationEntity with all properties', () => {
+    it("it should create a ApplicationEntity with all properties", () => {
       const applicationDTO = {
         info: {
-          remoteVersion: '4.5.2',
-          currentVersion: '4.5.2',
+          remoteVersion: "4.5.2",
+          currentVersion: "4.5.2",
         },
         latestVersion: true,
         schema: true,
@@ -188,28 +187,28 @@ describe("HealthcheckEntity", () => {
         sslForce: false,
         sslFullBaseUrl: true,
         seleniumDisabled: true,
-        configPath: '/var/www/passbolt/config',
+        configPath: "/var/www/passbolt/config",
         registrationClosed: {
           isSelfRegistrationPluginEnabled: false,
           selfRegistrationProvider: null,
-          isRegistrationPublicRemovedFromPassbolt: true
+          isRegistrationPublicRemovedFromPassbolt: true,
         },
         hostAvailabilityCheckEnabled: false,
         jsProd: true,
-        emailNotificationEnabled: true
+        emailNotificationEnabled: true,
       };
 
       const applicationEntity = new ApplicationEntity(applicationDTO);
 
-      expect(applicationEntity.info.remoteVersion).toEqual('4.5.2');
-      expect(applicationEntity.info.currentVersion).toEqual('4.5.2');
+      expect(applicationEntity.info.remoteVersion).toEqual("4.5.2");
+      expect(applicationEntity.info.currentVersion).toEqual("4.5.2");
       expect(applicationEntity.latestVersion).toBeTruthy();
       expect(applicationEntity.schema).toBeTruthy();
       expect(applicationEntity.robotsIndexDisabled).toBeTruthy();
       expect(applicationEntity.sslForce).toBeFalsy();
       expect(applicationEntity.sslFullBaseUrl).toBeTruthy();
       expect(applicationEntity.seleniumDisabled).toBeTruthy();
-      expect(applicationEntity.configPath).toEqual('/var/www/passbolt/config');
+      expect(applicationEntity.configPath).toEqual("/var/www/passbolt/config");
       expect(applicationEntity.registrationClosed.isSelfRegistrationPluginEnabled).toBeFalsy();
       expect(applicationEntity.registrationClosed.selfRegistrationProvider).toBeNull();
       expect(applicationEntity.registrationClosed.isRegistrationPublicRemovedFromPassbolt).toBeTruthy();
@@ -218,11 +217,11 @@ describe("HealthcheckEntity", () => {
       expect(applicationEntity.emailNotificationEnabled).toBeTruthy();
     });
 
-    it('it should create a ApplicationEntity with an airgaped instance properties', () => {
+    it("it should create a ApplicationEntity with an airgaped instance properties", () => {
       const applicationDTO = {
         info: {
-          remoteVersion: 'undefined',
-          currentVersion: '4.5.2',
+          remoteVersion: "undefined",
+          currentVersion: "4.5.2",
         },
         latestVersion: null,
         schema: true,
@@ -230,28 +229,28 @@ describe("HealthcheckEntity", () => {
         sslForce: false,
         sslFullBaseUrl: true,
         seleniumDisabled: true,
-        configPath: '/var/www/passbolt/config',
+        configPath: "/var/www/passbolt/config",
         registrationClosed: {
           isSelfRegistrationPluginEnabled: false,
           selfRegistrationProvider: null,
-          isRegistrationPublicRemovedFromPassbolt: true
+          isRegistrationPublicRemovedFromPassbolt: true,
         },
         hostAvailabilityCheckEnabled: false,
         jsProd: true,
-        emailNotificationEnabled: true
+        emailNotificationEnabled: true,
       };
 
       const applicationEntity = new ApplicationEntity(applicationDTO);
 
-      expect(applicationEntity.info.remoteVersion).toEqual('undefined');
-      expect(applicationEntity.info.currentVersion).toEqual('4.5.2');
+      expect(applicationEntity.info.remoteVersion).toEqual("undefined");
+      expect(applicationEntity.info.currentVersion).toEqual("4.5.2");
       expect(applicationEntity.latestVersion).toBeNull();
       expect(applicationEntity.schema).toBeTruthy();
       expect(applicationEntity.robotsIndexDisabled).toBeTruthy();
       expect(applicationEntity.sslForce).toBeFalsy();
       expect(applicationEntity.sslFullBaseUrl).toBeTruthy();
       expect(applicationEntity.seleniumDisabled).toBeTruthy();
-      expect(applicationEntity.configPath).toEqual('/var/www/passbolt/config');
+      expect(applicationEntity.configPath).toEqual("/var/www/passbolt/config");
       expect(applicationEntity.registrationClosed.isSelfRegistrationPluginEnabled).toBeFalsy();
       expect(applicationEntity.registrationClosed.selfRegistrationProvider).toBeNull();
       expect(applicationEntity.registrationClosed.isRegistrationPublicRemovedFromPassbolt).toBeTruthy();
@@ -260,7 +259,7 @@ describe("HealthcheckEntity", () => {
       expect(applicationEntity.emailNotificationEnabled).toBeTruthy();
     });
 
-    it('it should create a GpgEntity with all properties', () => {
+    it("it should create a GpgEntity with all properties", () => {
       const gpgDTO = {
         canDecryptVerify: true,
         canVerify: true,
@@ -286,9 +285,9 @@ describe("HealthcheckEntity", () => {
         isPublicServerKeyGopengpgCompatible: true,
         isPrivateServerKeyGopengpgCompatible: true,
         info: {
-          gpgHome: '/home/www-data/.gnupg',
-          gpgKeyPrivate: '/var/www/passbolt/config/gpg/serverkey_private.asc'
-        }
+          gpgHome: "/home/www-data/.gnupg",
+          gpgKeyPrivate: "/var/www/passbolt/config/gpg/serverkey_private.asc",
+        },
       };
 
       const gpgEntity = new GpgEntity(gpgDTO);
@@ -314,31 +313,31 @@ describe("HealthcheckEntity", () => {
       expect(gpgEntity.gpgKeyPrivateBlock).toBeTruthy();
       expect(gpgEntity.isPublicServerKeyGopengpgCompatible).toBeTruthy();
       expect(gpgEntity.isPrivateServerKeyGopengpgCompatible).toBeTruthy();
-      expect(gpgEntity.info.gpgHome).toEqual('/home/www-data/.gnupg');
-      expect(gpgEntity.info.gpgKeyPrivate).toEqual('/var/www/passbolt/config/gpg/serverkey_private.asc');
+      expect(gpgEntity.info.gpgHome).toEqual("/home/www-data/.gnupg");
+      expect(gpgEntity.info.gpgKeyPrivate).toEqual("/var/www/passbolt/config/gpg/serverkey_private.asc");
     });
 
-    it('it should create a EnvironmentEntity with all properties', () => {
+    it("it should create a EnvironmentEntity with all properties", () => {
       const environmentDTO = {
-        "phpVersion": true,
-        "nextMinPhpVersion": true,
-        "info": {
-          "phpVersion": "8.1.25"
+        phpVersion: true,
+        nextMinPhpVersion: true,
+        info: {
+          phpVersion: "8.1.25",
         },
-        "pcre": true,
-        "mbstring": true,
-        "gnupg": true,
-        "intl": true,
-        "image": true,
-        "tmpWritable": true,
-        "logWritable": true
+        pcre: true,
+        mbstring: true,
+        gnupg: true,
+        intl: true,
+        image: true,
+        tmpWritable: true,
+        logWritable: true,
       };
 
       const environmentEntity = new EnvironmentEntity(environmentDTO);
 
       expect(environmentEntity.phpVersion).toBeTruthy();
       expect(environmentEntity.nextMinPhpVersion).toBeTruthy();
-      expect(environmentEntity.info.phpVersion).toEqual('8.1.25');
+      expect(environmentEntity.info.phpVersion).toEqual("8.1.25");
       expect(environmentEntity.pcre).toBeTruthy();
       expect(environmentEntity.mbstring).toBeTruthy();
       expect(environmentEntity.gnupg).toBeTruthy();
@@ -348,10 +347,10 @@ describe("HealthcheckEntity", () => {
       expect(environmentEntity.logWritable).toBeTruthy();
     });
 
-    it('it should create a configFileEntity with all properties', () => {
+    it("it should create a configFileEntity with all properties", () => {
       const configFileDTO = {
-        "app": true,
-        "passbolt": false
+        app: true,
+        passbolt: false,
       };
 
       const configFileEntity = new ConfigFileEntity(configFileDTO);
@@ -360,17 +359,17 @@ describe("HealthcheckEntity", () => {
       expect(configFileEntity.passbolt).toBeFalsy();
     });
 
-    it('it should create a coreEntity with all properties', () => {
+    it("it should create a coreEntity with all properties", () => {
       const coreDTO = {
-        "cache": true,
-        "debugDisabled": false,
-        "salt": true,
-        "fullBaseUrl": true,
-        "validFullBaseUrl": true,
-        "info": {
-          "fullBaseUrl": "https://passbolt.local"
+        cache: true,
+        debugDisabled: false,
+        salt: true,
+        fullBaseUrl: true,
+        validFullBaseUrl: true,
+        info: {
+          fullBaseUrl: "https://passbolt.local",
         },
-        "fullBaseUrlReachable": true
+        fullBaseUrlReachable: true,
       };
 
       const coreEntity = new CoreEntity(coreDTO);
@@ -380,17 +379,17 @@ describe("HealthcheckEntity", () => {
       expect(coreEntity.salt).toBeTruthy();
       expect(coreEntity.fullBaseUrl).toBeTruthy();
       expect(coreEntity.validFullBaseUrl).toBeTruthy();
-      expect(coreEntity.info.fullBaseUrl).toEqual('https://passbolt.local');
+      expect(coreEntity.info.fullBaseUrl).toEqual("https://passbolt.local");
       expect(coreEntity.fullBaseUrlReachable).toBeTruthy();
     });
 
-    it('it should create a smtpSettingsEntity with all properties', () => {
+    it("it should create a smtpSettingsEntity with all properties", () => {
       const smtpSettingsDTO = {
-        "isEnabled": true,
-        "areEndpointsDisabled": false,
-        "errorMessage": false,
-        "source": "database",
-        "isInDb": true
+        isEnabled: true,
+        areEndpointsDisabled: false,
+        errorMessage: false,
+        source: "database",
+        isInDb: true,
       };
 
       const smtpSettingsEntity = new SmtpSettingsEntity(smtpSettingsDTO);
@@ -398,13 +397,13 @@ describe("HealthcheckEntity", () => {
       expect(smtpSettingsEntity.isEnabled).toBeTruthy();
       expect(smtpSettingsEntity.areEndpointsDisabled).toBeFalsy();
       expect(smtpSettingsEntity.errorMessage).toBeFalsy();
-      expect(smtpSettingsEntity.source).toEqual('database');
+      expect(smtpSettingsEntity.source).toEqual("database");
       expect(smtpSettingsEntity.isInDb).toBeTruthy();
     });
 
-    it('it should create a directorySyncEntity with all properties', () => {
+    it("it should create a directorySyncEntity with all properties", () => {
       const directorySyncDTO = {
-        "endpointsDisabled": true
+        endpointsDisabled: true,
       };
 
       const directorySyncEntity = new DirectorySyncEntity(directorySyncDTO);
@@ -412,9 +411,9 @@ describe("HealthcheckEntity", () => {
       expect(directorySyncEntity.endpointsDisabled).toBeTruthy();
     });
 
-    it('it should create a ssoEntity with all properties', () => {
+    it("it should create a ssoEntity with all properties", () => {
       const ssoDTO = {
-        "sslHostVerification": false
+        sslHostVerification: false,
       };
 
       const ssoEntity = new SsoEntity(ssoDTO);
@@ -422,9 +421,9 @@ describe("HealthcheckEntity", () => {
       expect(ssoEntity.sslHostVerification).toBeFalsy();
     });
 
-    it('it should create a metadataEntity with all properties', () => {
+    it("it should create a metadataEntity with all properties", () => {
       const metadataDto = {
-        "canDecryptMetadataPrivateKey": true
+        canDecryptMetadataPrivateKey: true,
       };
 
       const metadataEntity = new MetadataEntity(metadataDto);

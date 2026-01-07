@@ -14,17 +14,18 @@
 
 import React from "react";
 import Range from "./Range";
-import {defaultProps} from "./Range.test.data";
+import { defaultProps } from "./Range.test.data";
 
 export default {
-  title: 'Foundations/Range',
-  component: Range
+  title: "Foundations/Range",
+  component: Range,
 };
 
 export const defaultRange = {
-  args: defaultProps({value: 80}),
-  render: args =>
+  args: defaultProps({ value: 80 }),
+  render: (args) => (
     <div>
       <Range {...args} />
     </div>
+  ),
 };

@@ -21,18 +21,20 @@ class CustomPropTypes {
    * @param types
    * @returns {function(...[*]): Error}
    */
-  allPropTypes = (...types) => (...args) => {
-    const errors = types.map(type => type(...args)).filter(Boolean);
+  allPropTypes =
+    (...types) =>
+    (...args) => {
+      const errors = types.map((type) => type(...args)).filter(Boolean);
 
-    // No errors
-    if (errors.length === 0) {
-      return;
-    }
+      // No errors
+      if (errors.length === 0) {
+        return;
+      }
 
-    // Collect the messages and join them together
-    const message = errors.map(e => e.message).join('\n');
-    return new Error(message);
-  };
+      // Collect the messages and join them together
+      const message = errors.map((e) => e.message).join("\n");
+      return new Error(message);
+    };
 }
 
 export default new CustomPropTypes();

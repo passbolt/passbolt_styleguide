@@ -14,23 +14,25 @@
 
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {MfaContextProvider} from "../../../contexts/MFAContext";
+import { MfaContextProvider } from "../../../contexts/MFAContext";
 import YubikeySetup from "./YubikeySetup";
-import {defaultProps} from "./YubikeySetup.test.data";
+import { defaultProps } from "./YubikeySetup.test.data";
 
 export default {
-  title: 'Components/MFA/YubikeySetup',
-  component: YubikeySetup
+  title: "Components/MFA/YubikeySetup",
+  component: YubikeySetup,
 };
 
-const Template = args =>
+const Template = (args) => (
   <MfaContextProvider {...args}>
     <MockTranslationProvider>
       <div className="panel middle">
         <YubikeySetup {...args} />
       </div>
-    </MockTranslationProvider>;
-  </MfaContextProvider>;
+    </MockTranslationProvider>
+    ;
+  </MfaContextProvider>
+);
 
 export const Default = Template.bind({});
 Default.args = defaultProps();

@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.5.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import AdministrationHomePage from "./AdministrationHomePage";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -32,18 +32,18 @@ export default class AdministrationHomePagePage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={props.context}>
-            <AdministrationHomePage {...props}/>
+            <AdministrationHomePage {...props} />
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
   /**
    * Returns the menu
    */
   get menu() {
-    return this._page.container.querySelector('#administration-home-page');
+    return this._page.container.querySelector("#administration-home-page");
   }
 
   /**
@@ -52,7 +52,6 @@ export default class AdministrationHomePagePage {
   get mfa() {
     return this._page.container.querySelector('button.card span.title[title="Multi Factor Authentication"]');
   }
-
 
   /**
    * Returns the mfa policy menu
@@ -199,7 +198,6 @@ export default class AdministrationHomePagePage {
     return this._page.container.querySelector(`button.card span.title[title="${title}"]+[data-testid="frame-svg"]`);
   }
 
-
   /**
    * Returns true if the page object exists in the container
    */
@@ -209,10 +207,9 @@ export default class AdministrationHomePagePage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 
   /** Click on the mfa element */

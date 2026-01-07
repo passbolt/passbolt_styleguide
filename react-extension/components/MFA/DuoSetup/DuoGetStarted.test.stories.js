@@ -13,17 +13,17 @@
  */
 
 import React from "react";
-import {MfaContextProvider} from "../../../contexts/MFAContext";
-import {defaultProps} from "../DisplayProviderList/DisplayProviderList.test.data";
+import { MfaContextProvider } from "../../../contexts/MFAContext";
+import { defaultProps } from "../DisplayProviderList/DisplayProviderList.test.data";
 import DuoGetStarted from "./DuoGetStarted";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 export default {
-  title: 'Components/MFA/DuoGetStarted',
-  component: DuoGetStarted
+  title: "Components/MFA/DuoGetStarted",
+  component: DuoGetStarted,
 };
 
-const Template = args =>
+const Template = (args) => (
   <MfaContextProvider {...args}>
     <MockTranslationProvider>
       <div className="panel middle">
@@ -31,8 +31,10 @@ const Template = args =>
           <DuoGetStarted {...args} />
         </div>
       </div>
-    </MockTranslationProvider>;
-  </MfaContextProvider>;
+    </MockTranslationProvider>
+    ;
+  </MfaContextProvider>
+);
 
 export const Default = Template.bind({});
 Default.args = defaultProps();

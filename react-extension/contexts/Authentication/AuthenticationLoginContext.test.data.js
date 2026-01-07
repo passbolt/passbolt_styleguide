@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {defaultAppContext} from "../ExtAppContext.test.data";
+import { defaultAppContext } from "../ExtAppContext.test.data";
 import MockPort from "../../test/mock/MockPort";
 import ServerKeyChangedError from "../../lib/Error/ServerKeyChangedError";
 import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
@@ -25,16 +25,34 @@ import siteSettingsFixture from "../../test/fixture/Settings/siteSettings";
  */
 export function defaultAuthenticationLoginAppContext(appContext = {}) {
   const port = new MockPort();
-  port.addRequestListener("passbolt.auth.verify-server-key", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.auth.get-server-key", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.auth.verify-passphrase", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.auth.login", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.auth.replace-server-key", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.auth.request-help-credentials-lost", jest.fn(() => Promise.resolve()));
+  port.addRequestListener(
+    "passbolt.auth.verify-server-key",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.auth.get-server-key",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.auth.verify-passphrase",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.auth.login",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.auth.replace-server-key",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.auth.request-help-credentials-lost",
+    jest.fn(() => Promise.resolve()),
+  );
 
   const defaultAuthenticationLoginAppContext = {
     port: port,
-    siteSettings: new SiteSettings(siteSettingsFixture)
+    siteSettings: new SiteSettings(siteSettingsFixture),
   };
   return Object.assign(defaultAppContext(defaultAuthenticationLoginAppContext), appContext);
 }
@@ -59,15 +77,18 @@ export function defaultAuthenticationLoginAppContextWithAccountRecoveryDisabled(
  * @returns {object}
  */
 export function defaultProps(props) {
-  const ssoContext = Object.assign({
-    loadSsoConfiguration: () => {},
-    runSignInProcess: () => {},
-    hasUserAnSsoKit: () => false
-  }, props?.ssoContext);
+  const ssoContext = Object.assign(
+    {
+      loadSsoConfiguration: () => {},
+      runSignInProcess: () => {},
+      hasUserAnSsoKit: () => false,
+    },
+    props?.ssoContext,
+  );
 
   const defaultProps = {
     context: defaultAuthenticationLoginAppContext(),
-    ssoContext: ssoContext
+    ssoContext: ssoContext,
   };
 
   delete props?.ssoContext;
@@ -81,9 +102,15 @@ export function defaultProps(props) {
  * @returns {object}
  */
 export function withServerKeyChanged(props) {
-  props.context.port.addRequestListener("passbolt.auth.verify-server-key", jest.fn(() => Promise.reject(new ServerKeyChangedError())));
-  const serverKey = {fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3"};
-  props.context.port.addRequestListener("passbolt.auth.get-server-key", jest.fn(() => Promise.resolve(serverKey)));
+  props.context.port.addRequestListener(
+    "passbolt.auth.verify-server-key",
+    jest.fn(() => Promise.reject(new ServerKeyChangedError())),
+  );
+  const serverKey = { fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3" };
+  props.context.port.addRequestListener(
+    "passbolt.auth.get-server-key",
+    jest.fn(() => Promise.resolve(serverKey)),
+  );
 
   return props;
 }

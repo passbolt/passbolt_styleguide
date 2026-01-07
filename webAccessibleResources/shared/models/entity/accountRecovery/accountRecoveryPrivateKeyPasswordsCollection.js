@@ -17,8 +17,8 @@ import EntitySchema from "../abstract/entitySchema";
 import EntityCollectionError from "../abstract/entityCollectionError";
 import deduplicateObjects from "../../../utils/deduplicateObjects";
 
-const ENTITY_NAME = 'AccountRecoveryPrivateKeyPassword';
-const RULE_UNIQUE_ID = 'unique_id';
+const ENTITY_NAME = "AccountRecoveryPrivateKeyPassword";
+const RULE_UNIQUE_ID = "unique_id";
 
 /**
  * Entity Collection related to the account recovery private key password
@@ -29,25 +29,34 @@ class AccountRecoveryPrivateKeyPasswordsCollection extends EntityCollection {
    * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
    */
   constructor(accountRecoveryPrivateKeyPasswordsCollectionDto, options = {}) {
-    super(EntitySchema.validate(
-      AccountRecoveryPrivateKeyPasswordsCollection.ENTITY_NAME,
-      accountRecoveryPrivateKeyPasswordsCollectionDto,
-      AccountRecoveryPrivateKeyPasswordsCollection.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        AccountRecoveryPrivateKeyPasswordsCollection.ENTITY_NAME,
+        accountRecoveryPrivateKeyPasswordsCollectionDto,
+        AccountRecoveryPrivateKeyPasswordsCollection.getSchema(),
+      ),
+      options,
+    );
 
     /*
      * Check if items ids are unique
      * Why not this.push? It is faster than adding items one by one
      */
-    const ids = this._props.map(accountRecoveryPrivateKeyPassword => accountRecoveryPrivateKeyPassword.id);
+    const ids = this._props.map((accountRecoveryPrivateKeyPassword) => accountRecoveryPrivateKeyPassword.id);
     ids.sort().sort((a, b) => {
       if (a === b) {
-        throw new EntityCollectionError(0, AccountRecoveryPrivateKeyPasswordsCollection.RULE_UNIQUE_ID, `AccountRecoveryPrivateKeyPassword id ${a} already exists.`);
+        throw new EntityCollectionError(
+          0,
+          AccountRecoveryPrivateKeyPasswordsCollection.RULE_UNIQUE_ID,
+          `AccountRecoveryPrivateKeyPassword id ${a} already exists.`,
+        );
       }
     });
     // Directly push into the private property _items[]
-    this._props.forEach(accountRecoveryPrivateKeyPassword => {
-      this._items.push(new AccountRecoveryPrivateKeyPasswordEntity(accountRecoveryPrivateKeyPassword, {...options, clone: false}));
+    this._props.forEach((accountRecoveryPrivateKeyPassword) => {
+      this._items.push(
+        new AccountRecoveryPrivateKeyPasswordEntity(accountRecoveryPrivateKeyPassword, { ...options, clone: false }),
+      );
     });
 
     // We do not keep original props
@@ -61,8 +70,8 @@ class AccountRecoveryPrivateKeyPasswordsCollection extends EntityCollection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": AccountRecoveryPrivateKeyPasswordEntity.getSchema(),
+      type: "array",
+      items: AccountRecoveryPrivateKeyPasswordEntity.getSchema(),
     };
   }
 
@@ -80,7 +89,7 @@ class AccountRecoveryPrivateKeyPasswordsCollection extends EntityCollection {
    * @returns {Array<string>}
    */
   get ids() {
-    return this._items.map(r => r.id);
+    return this._items.map((r) => r.id);
   }
 
   /*
@@ -100,7 +109,7 @@ class AccountRecoveryPrivateKeyPasswordsCollection extends EntityCollection {
       return [];
     }
 
-    return deduplicateObjects(dto, 'id');
+    return deduplicateObjects(dto, "id");
   }
 
   /*
@@ -123,7 +132,11 @@ class AccountRecoveryPrivateKeyPasswordsCollection extends EntityCollection {
     for (; i < length; i++) {
       const existingResource = this.accountRecoveryPrivateKeyPasswords[i];
       if (existingResource.id && existingResource.id === accountRecoveryPrivateKeyPassword.id) {
-        throw new EntityCollectionError(i, AccountRecoveryPrivateKeyPasswordsCollection.RULE_UNIQUE_ID, `account recovery private key password id ${accountRecoveryPrivateKeyPassword.id} already exists.`);
+        throw new EntityCollectionError(
+          i,
+          AccountRecoveryPrivateKeyPasswordsCollection.RULE_UNIQUE_ID,
+          `account recovery private key password id ${accountRecoveryPrivateKeyPassword.id} already exists.`,
+        );
       }
     }
   }
@@ -138,13 +151,15 @@ class AccountRecoveryPrivateKeyPasswordsCollection extends EntityCollection {
    * @param {object} accountRecoveryPrivateKeyPassword DTO or AccountRecoveryPrivateKeyPasswordEntity
    */
   push(accountRecoveryPrivateKeyPassword) {
-    if (!accountRecoveryPrivateKeyPassword || typeof accountRecoveryPrivateKeyPassword !== 'object') {
+    if (!accountRecoveryPrivateKeyPassword || typeof accountRecoveryPrivateKeyPassword !== "object") {
       throw new TypeError(`accountRecoveryPrivateKeyPasswordsCollection push parameter should be an object.`);
     }
     if (accountRecoveryPrivateKeyPassword instanceof AccountRecoveryPrivateKeyPasswordEntity) {
       accountRecoveryPrivateKeyPassword = accountRecoveryPrivateKeyPassword.toDto(); // deep clone
     }
-    const accountRecoveryPrivateKeyPasswordEntity = new AccountRecoveryPrivateKeyPasswordEntity(accountRecoveryPrivateKeyPassword); // validate
+    const accountRecoveryPrivateKeyPasswordEntity = new AccountRecoveryPrivateKeyPasswordEntity(
+      accountRecoveryPrivateKeyPassword,
+    ); // validate
 
     // Build rules
     this.assertUniqueId(accountRecoveryPrivateKeyPasswordEntity);
@@ -157,7 +172,7 @@ class AccountRecoveryPrivateKeyPasswordsCollection extends EntityCollection {
    * @param accountRecoveryPrivateKeyPasswordId
    */
   remove(accountRecoveryPrivateKeyPasswordId) {
-    const i = this.items.findIndex(item => item.id === accountRecoveryPrivateKeyPasswordId);
+    const i = this.items.findIndex((item) => item.id === accountRecoveryPrivateKeyPasswordId);
     this.items.splice(i, 1);
   }
 
@@ -176,7 +191,8 @@ class AccountRecoveryPrivateKeyPasswordsCollection extends EntityCollection {
    * @returns {AccountRecoveryPrivateKeyPasswordEntity}
    */
   filterByForeignModel(foreignModel) {
-    const filterPrivateKeyPasswordByRecipientForeignModel = accountRecoveryPrivateKeyPassword => accountRecoveryPrivateKeyPassword.recipientForeignModel === foreignModel;
+    const filterPrivateKeyPasswordByRecipientForeignModel = (accountRecoveryPrivateKeyPassword) =>
+      accountRecoveryPrivateKeyPassword.recipientForeignModel === foreignModel;
     return this.items.find(filterPrivateKeyPasswordByRecipientForeignModel);
   }
 

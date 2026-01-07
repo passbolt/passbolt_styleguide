@@ -17,7 +17,7 @@
  */
 
 import FilterUsersByShortcutPage from "./FilterUsersByShortcut.test.page";
-import {defaultAppContext, defaultProps} from "./FilterUsersByShortcut.test.data";
+import { defaultAppContext, defaultProps } from "./FilterUsersByShortcut.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,10 +32,10 @@ describe("Filter User By Shortcut", () => {
     page = new FilterUsersByShortcutPage(context, props);
   });
 
-  it('As LU, I should be redirected to /app/users when I filter by "All Users"', async() => {
+  it('As LU, I should be redirected to /app/users when I filter by "All Users"', async () => {
     expect.assertions(1);
-    jest.spyOn(props.history, 'push').mockImplementationOnce(() => {});
-    const expectedCallParameters =  {pathname: "/app/users", state: {filter: {type: "ALL"}}};
+    jest.spyOn(props.history, "push").mockImplementationOnce(() => {});
+    const expectedCallParameters = { pathname: "/app/users", state: { filter: { type: "ALL" } } };
     await page.filterByAllUsers();
     expect(props.history.push).toHaveBeenCalledWith(expectedCallParameters);
   });

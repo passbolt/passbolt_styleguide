@@ -13,8 +13,11 @@
  */
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
-import ActivitiesServiceWorkerService, {RESOURCE_ACTIVITIES_FIND_ALL_EVENT, LIMIT_ACTIVITIES_PER_PAGE} from "./ActivitiesServiceWorkerService";
-import {v4 as uuidv4} from "uuid";
+import ActivitiesServiceWorkerService, {
+  RESOURCE_ACTIVITIES_FIND_ALL_EVENT,
+  LIMIT_ACTIVITIES_PER_PAGE,
+} from "./ActivitiesServiceWorkerService";
+import { v4 as uuidv4 } from "uuid";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -29,22 +32,28 @@ describe("ActivitiesServiceWorkerService", () => {
   });
 
   describe("::findAllFromResourceId", () => {
-    it("requests the service worker for all activities event with resourceId, page and default limit", async() => {
+    it("requests the service worker for all activities event with resourceId, page and default limit", async () => {
       expect.assertions(1);
       jest.spyOn(port, "request").mockReturnValue(() => {});
       const resourceId = uuidv4();
-      await service.findAllFromResourceId(resourceId, {page: 1});
+      await service.findAllFromResourceId(resourceId, { page: 1 });
 
-      expect(port.request).toHaveBeenCalledWith(RESOURCE_ACTIVITIES_FIND_ALL_EVENT, "Resource", resourceId, {page: 1, limit: LIMIT_ACTIVITIES_PER_PAGE});
+      expect(port.request).toHaveBeenCalledWith(RESOURCE_ACTIVITIES_FIND_ALL_EVENT, "Resource", resourceId, {
+        page: 1,
+        limit: LIMIT_ACTIVITIES_PER_PAGE,
+      });
     });
 
-    it("requests the service worker for all activities event with resourceId, page and limit.", async() => {
+    it("requests the service worker for all activities event with resourceId, page and limit.", async () => {
       expect.assertions(1);
       jest.spyOn(port, "request").mockReturnValue(() => {});
       const resourceId = uuidv4();
-      await service.findAllFromResourceId(resourceId, {page: 1, limit: 4});
+      await service.findAllFromResourceId(resourceId, { page: 1, limit: 4 });
 
-      expect(port.request).toHaveBeenCalledWith(RESOURCE_ACTIVITIES_FIND_ALL_EVENT, "Resource", resourceId, {page: 1, limit: 4});
+      expect(port.request).toHaveBeenCalledWith(RESOURCE_ACTIVITIES_FIND_ALL_EVENT, "Resource", resourceId, {
+        page: 1,
+        limit: 4,
+      });
     });
   });
 });

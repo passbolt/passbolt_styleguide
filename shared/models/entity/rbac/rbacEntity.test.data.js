@@ -12,21 +12,21 @@
  * @since         4.1.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import RbacEntity from "./rbacEntity";
-import {defaultActionData} from "./actionEntity.test.data";
-import {defaultUiActionData} from "./uiActionEntity.test.data";
-import {controlFunctions} from "../../../services/rbacs/controlFunctionEnumeration";
-import {TEST_ROLE_USER_ID} from "../role/roleEntity.test.data";
-import {uiActions} from "../../../services/rbacs/uiActionEnumeration";
+import { defaultActionData } from "./actionEntity.test.data";
+import { defaultUiActionData } from "./uiActionEntity.test.data";
+import { controlFunctions } from "../../../services/rbacs/controlFunctionEnumeration";
+import { TEST_ROLE_USER_ID } from "../role/roleEntity.test.data";
+import { uiActions } from "../../../services/rbacs/uiActionEnumeration";
 
 export const defaultRbacData = (data = {}) => {
   const defaultData = {
-    "id": uuidv4(),
-    "role_id": TEST_ROLE_USER_ID,
-    "foreign_model": RbacEntity.FOREIGN_MODEL_ACTION,
-    "foreign_id": uuidv4(),
-    "control_function": controlFunctions.ALLOW,
+    id: uuidv4(),
+    role_id: TEST_ROLE_USER_ID,
+    foreign_model: RbacEntity.FOREIGN_MODEL_ACTION,
+    foreign_id: uuidv4(),
+    control_function: controlFunctions.ALLOW,
     ...data,
   };
 
@@ -36,10 +36,10 @@ export const defaultRbacData = (data = {}) => {
 export const defaultRbacWithActionData = (data = {}) => {
   const foreignId = data?.foreign_id || data?.action?.id || uuidv4();
   const defaultData = {
-    "foreign_model": RbacEntity.FOREIGN_MODEL_ACTION,
-    "action": defaultActionData({id: foreignId}),
+    foreign_model: RbacEntity.FOREIGN_MODEL_ACTION,
+    action: defaultActionData({ id: foreignId }),
     ...data,
-    "foreign_id": foreignId,
+    foreign_id: foreignId,
   };
 
   return defaultRbacData(defaultData);
@@ -48,10 +48,10 @@ export const defaultRbacWithActionData = (data = {}) => {
 export const defaultRbacWithUiActionData = (data = {}) => {
   const foreignId = data?.foreign_id || data?.ui_action?.id || uuidv4();
   const defaultData = {
-    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
-    "ui_action": defaultUiActionData({id: foreignId}),
+    foreign_model: RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    ui_action: defaultUiActionData({ id: foreignId }),
     ...data,
-    "foreign_id": foreignId,
+    foreign_id: foreignId,
   };
 
   return defaultRbacData(defaultData);
@@ -59,8 +59,8 @@ export const defaultRbacWithUiActionData = (data = {}) => {
 
 export const denyRbacWithUiActionData = (data = {}) => {
   const defaultData = {
-    "control_function": controlFunctions.DENY,
-    ...data
+    control_function: controlFunctions.DENY,
+    ...data,
   };
 
   return defaultRbacWithUiActionData(defaultData);
@@ -68,8 +68,8 @@ export const denyRbacWithUiActionData = (data = {}) => {
 
 export const denyRbacWithActionData = (data = {}) => {
   const defaultData = {
-    "control_function": controlFunctions.DENY,
-    ...data
+    control_function: controlFunctions.DENY,
+    ...data,
   };
 
   return defaultRbacWithActionData(defaultData);
@@ -78,22 +78,23 @@ export const denyRbacWithActionData = (data = {}) => {
 export const defaultRbacWithAllAssociationData = (data = {}) => {
   const foreignId = data?.foreign_id || data?.action?.id || data?.ui_action?.id || uuidv4();
   const defaultData = {
-    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
-    "action": defaultActionData({id: foreignId}),
-    "ui_action": defaultUiActionData({id: foreignId}),
+    foreign_model: RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    action: defaultActionData({ id: foreignId }),
+    ui_action: defaultUiActionData({ id: foreignId }),
     ...data,
-    "foreign_id": foreignId,
+    foreign_id: foreignId,
   };
 
   return defaultRbacData(defaultData);
 };
 
-export const rbacWithUiActionName = (uiAction = uiActions.DESKTOP_TRANSFER) => defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiAction})});
+export const rbacWithUiActionName = (uiAction = uiActions.DESKTOP_TRANSFER) =>
+  defaultRbacWithUiActionData({ ui_action: defaultUiActionData({ name: uiAction }) });
 
 export const defaultUnknownRbac = (data = {}) => {
   const defaultData = {
-    "control_function": "unknown",
-    "action": "unknown",
+    control_function: "unknown",
+    action: "unknown",
   };
   return Object.assign(defaultRbacData(defaultData, data));
 };

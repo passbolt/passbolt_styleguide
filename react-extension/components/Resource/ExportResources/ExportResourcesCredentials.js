@@ -12,17 +12,17 @@
  * @since         2.14.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
 
 /**
@@ -45,11 +45,11 @@ class ExportResourcesCredentials extends Component {
    */
   get defaultState() {
     return {
-      password: '', // The current password
+      password: "", // The current password
       keyFile: null, // The optional key file
       actions: {
-        processing: false // Actions flag about processing
-      }
+        processing: false, // Actions flag about processing
+      },
     };
   }
 
@@ -106,7 +106,7 @@ class ExportResourcesCredentials extends Component {
    */
   async handleFileSelected(event) {
     const [keyFile] = event.target.files;
-    await this.setState({keyFile});
+    await this.setState({ keyFile });
   }
 
   /**
@@ -119,7 +119,7 @@ class ExportResourcesCredentials extends Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -136,10 +136,8 @@ class ExportResourcesCredentials extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.setState({actions: {processing: true}});
-    await this.export()
-      .then(this.onExportSuccess.bind(this))
-      .catch(this.onExportFailure.bind(this));
+    await this.setState({ actions: { processing: true } });
+    await this.export().then(this.onExportSuccess.bind(this)).catch(this.onExportFailure.bind(this));
   }
 
   /**
@@ -148,14 +146,14 @@ class ExportResourcesCredentials extends Component {
   async export() {
     const password = this.state.password;
     const keyfile = await this.readFile();
-    const options = {credentials: {password, keyfile}};
+    const options = { credentials: { password, keyfile } };
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
     const resourcesIds = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
     const exportDto = {
       format: this.props.format,
       folders_ids: foldersIds,
       resources_ids: resourcesIds,
-      options: options
+      options: options,
     };
     await this.props.context.port.request("passbolt.export-resources.export-to-file", exportDto);
   }
@@ -171,7 +169,7 @@ class ExportResourcesCredentials extends Component {
 
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
-      reader.onloadend = event => {
+      reader.onloadend = (event) => {
         try {
           const base64Url = event.target.result;
           const fileBase64 = base64Url.split(",")[1];
@@ -188,8 +186,10 @@ class ExportResourcesCredentials extends Component {
    * Whenever the export has been performed succesfully
    */
   async onExportSuccess() {
-    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The passwords have been exported successfully"));
+    await this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds: null, foldersIds: null });
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.translate("The passwords have been exported successfully"),
+    );
     this.close();
   }
 
@@ -199,14 +199,14 @@ class ExportResourcesCredentials extends Component {
   onExportFailure(error) {
     const isUserAbortsOperation = error.name === "UserAbortsOperationError";
     if (isUserAbortsOperation) {
-      this.setState({actions: {processing: false}});
+      this.setState({ actions: { processing: false } });
       return;
     }
 
     const errorDialogProps = {
-      error: error
+      error: error,
     };
-    this.setState({actions: {processing: false}});
+    this.setState({ actions: { processing: false } });
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
@@ -234,14 +234,16 @@ class ExportResourcesCredentials extends Component {
         title={this.translate("Enter the password and/or key file")}
         className="export-password-dialog"
         onClose={this.handleCancel}
-        disabled={!this.areActionsAllowed}>
+        disabled={!this.areActionsAllowed}
+      >
         <form onSubmit={this.handleSubmit}>
-
           <div className="form-content">
-
-            <div className={`input-password-wrapper input ${!this.areActionsAllowed ? 'disabled' : ''}`}>
-              <label htmlFor="password"><Trans>Keepass password</Trans></label>
-              <Password id="password"
+            <div className={`input-password-wrapper input ${!this.areActionsAllowed ? "disabled" : ""}`}>
+              <label htmlFor="password">
+                <Trans>Keepass password</Trans>
+              </label>
+              <Password
+                id="password"
                 name="password"
                 value={this.state.password}
                 onChange={this.handleInputChange}
@@ -249,37 +251,48 @@ class ExportResourcesCredentials extends Component {
                 autoComplete="off"
                 inputRef={this.passwordInputRef}
                 preview={true}
-                disabled={!this.areActionsAllowed}/>
+                disabled={!this.areActionsAllowed}
+              />
             </div>
 
             <div className={`input file ${!this.areActionsAllowed ? "disabled" : ""}`}>
-              <input type="file"
+              <input
+                type="file"
                 ref={this.fileUploaderRef}
                 id="dialog-exports-passwords"
-                onChange={this.handleFileSelected}/>
-              <label htmlFor="dialog-exports-passwords"><Trans>Keepass key file (optional)</Trans></label>
+                onChange={this.handleFileSelected}
+              />
+              <label htmlFor="dialog-exports-passwords">
+                <Trans>Keepass key file (optional)</Trans>
+              </label>
               <div className="input-file-inline">
-                <input type="text"
+                <input
+                  type="text"
                   placeholder={this.translate("No key file selected")}
                   disabled
-                  value={this.selectedFilename}/>
-                <button type='button' className="button primary"
+                  value={this.selectedFilename}
+                />
+                <button
+                  type="button"
+                  className="button primary"
                   disabled={!this.areActionsAllowed}
-                  onClick={this.handleSelectFile}>
-                  <span><Trans>Choose a file</Trans></span>
+                  onClick={this.handleSelectFile}
+                >
+                  <span>
+                    <Trans>Choose a file</Trans>
+                  </span>
                 </button>
               </div>
             </div>
           </div>
 
           <div className="submit-wrapper clearfix">
-            <FormCancelButton
-              disabled={!this.areActionsAllowed}
-              onClick={this.handleCancel}/>
+            <FormCancelButton disabled={!this.areActionsAllowed} onClick={this.handleCancel} />
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
-              value={this.translate("Export")}/>
+              value={this.translate("Export")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -297,5 +310,6 @@ ExportResourcesCredentials.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ExportResourcesCredentials)))));
-
+export default withAppContext(
+  withResourceWorkspace(withActionFeedback(withDialog(withTranslation("common")(ExportResourcesCredentials)))),
+);

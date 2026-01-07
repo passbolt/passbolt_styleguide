@@ -11,13 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
-import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import PownedService from '../../../../shared/services/api/secrets/pownedService';
+import { SecretGenerator } from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import PasswordComplexityWithGoal from "../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal";
 
 /**
@@ -25,8 +25,8 @@ import PasswordComplexityWithGoal from "../../../../shared/components/PasswordCo
  * @type {Object}
  */
 export const CreateGpgKeyVariation = {
-  SETUP: 'Setup',
-  GENERATE_ACCOUNT_RECOVERY_GPG_KEY: 'Account recovery request key'
+  SETUP: "Setup",
+  GENERATE_ACCOUNT_RECOVERY_GPG_KEY: "Account recovery request key",
 };
 
 /**
@@ -52,8 +52,8 @@ class CreateGpgKey extends Component {
    */
   get defaultState() {
     return {
-      passphrase: '', // The current passphrase
-      passphraseEntropy: null,  // The current passphrase entropy
+      passphrase: "", // The current passphrase
+      passphraseEntropy: null, // The current passphrase entropy
       actions: {
         processing: false, // True if one's processing passphrase
       },
@@ -74,10 +74,10 @@ class CreateGpgKey extends Component {
   get isValid() {
     const validation = {
       notInDictionary: this.pownedService === null || !this.state.passphraseInDictionnary,
-      enoughEntropy: this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy)
+      enoughEntropy: this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy),
     };
 
-    return Object.values(validation).every(value => value);
+    return Object.values(validation).every((value) => value);
   }
 
   /**
@@ -200,7 +200,7 @@ class CreateGpgKey extends Component {
     const result = await this.pownedService.evaluateSecret(passphrase);
     const passphraseInDictionnary = result.inDictionary;
 
-    this.setState({passphraseInDictionnary});
+    this.setState({ passphraseInDictionnary });
     return passphraseInDictionnary;
   }
 
@@ -217,9 +217,9 @@ class CreateGpgKey extends Component {
   toggleProcessing() {
     const actions = {
       ...this.state.actions,
-      processing: !this.state.actions.processing
+      processing: !this.state.actions.processing,
     };
-    this.setState({actions});
+    this.setState({ actions });
   }
 
   /**
@@ -236,17 +236,17 @@ class CreateGpgKey extends Component {
    */
   render() {
     const passphraseEntropy = this.state.passphraseInDictionnary ? 0 : this.state.passphraseEntropy;
-    const processingClassName = this.isProcessing ? 'processing' : '';
-    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
+    const processingClassName = this.isProcessing ? "processing" : "";
+    const disabledClassName = this.mustBeDisabled ? "disabled" : "";
     return (
       <div className="create-gpg-key">
         <h1>
-          {this.props.displayAs === CreateGpgKeyVariation.SETUP &&
+          {this.props.displayAs === CreateGpgKeyVariation.SETUP && (
             <Trans>Welcome to Passbolt, please select a passphrase!</Trans>
-          }
-          {this.props.displayAs === CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY &&
+          )}
+          {this.props.displayAs === CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY && (
             <Trans>Choose a new passphrase.</Trans>
-          }
+          )}
         </h1>
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <p>
@@ -260,14 +260,18 @@ class CreateGpgKey extends Component {
               value={this.state.passphrase}
               preview={true}
               onChange={this.handlePassphraseChange}
-              disabled={!this.areActionsAllowed}/>
+              disabled={!this.areActionsAllowed}
+            />
             <PasswordComplexityWithGoal
               entropy={passphraseEntropy}
-              targetEntropy={this.props.userPassphrasePolicies.entropy_minimum}/>
+              targetEntropy={this.props.userPassphrasePolicies.entropy_minimum}
+            />
             <>
-              {this.state.passphraseInDictionnary &&
-                <div className="invalid-passphrase error-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
-              }
+              {this.state.passphraseInDictionnary && (
+                <div className="invalid-passphrase error-message">
+                  <Trans>The passphrase is part of an exposed data breach.</Trans>
+                </div>
+              )}
             </>
           </div>
 
@@ -275,16 +279,19 @@ class CreateGpgKey extends Component {
             <button
               type="submit"
               className={`button primary big full-width ${disabledClassName} ${processingClassName}`}
-              disabled={this.mustBeDisabled || this.isProcessing}>
+              disabled={this.mustBeDisabled || this.isProcessing}
+            >
               <Trans>Next</Trans>
             </button>
-            {this.props.onSecondaryActionClick &&
-            <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
-              {{
-                [CreateGpgKeyVariation.SETUP]: <Trans>Or use an existing private key.</Trans>,
-              }[this.props.displayAs]}
-            </button>
-            }
+            {this.props.onSecondaryActionClick && (
+              <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
+                {
+                  {
+                    [CreateGpgKeyVariation.SETUP]: <Trans>Or use an existing private key.</Trans>,
+                  }[this.props.displayAs]
+                }
+              </button>
+            )}
           </div>
         </form>
       </div>
@@ -302,7 +309,7 @@ CreateGpgKey.propTypes = {
   userPassphrasePolicies: PropTypes.object.isRequired, // The User Passphrase Policies set by the organisation
   displayAs: PropTypes.PropTypes.oneOf([
     CreateGpgKeyVariation.SETUP,
-    CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY
+    CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY,
   ]), // Defines how the form should be displayed and behaves
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
 };

@@ -1,5 +1,5 @@
 export default {
-  "user.settings.trustedDomain": (new URL(window.location.href)).origin,
+  "user.settings.trustedDomain": new URL(window.location.href).origin,
   "user.firstname": "Ada",
   "user.id": "f848277c-5398-58f8-a82a-72397af2d450",
   "user.lastname": "Lovelace",
@@ -8,5 +8,5 @@ export default {
   "user.settings.securityToken.textColor": "#FFFFFF",
   "user.username": "ada@passbolt.com",
   "user.settings.locale": "en-UK",
-  "user.settings.theme": "default"
+  "user.settings.theme": "default",
 };

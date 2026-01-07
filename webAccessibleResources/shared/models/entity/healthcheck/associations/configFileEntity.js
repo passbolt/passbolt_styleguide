@@ -21,21 +21,17 @@ class ConfigFileEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      ConfigFileEntity.ENTITY_NAME,
-      dto,
-      ConfigFileEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(ConfigFileEntity.ENTITY_NAME, dto, ConfigFileEntity.getSchema()), options);
   }
 
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["app", "passbolt"],
-      "properties": {
-        "app": {"type": "boolean"},
-        "passbolt": {"type": "boolean"}
-      }
+      type: "object",
+      required: ["app", "passbolt"],
+      properties: {
+        app: { type: "boolean" },
+        passbolt: { type: "boolean" },
+      },
     };
   }
 

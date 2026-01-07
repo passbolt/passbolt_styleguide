@@ -14,10 +14,10 @@
 import PasswordComplexityWithGoal from "./PasswordComplexityWithGoal";
 
 export default {
-  title: 'Foundations/PasswordComplexityWithGoal',
-  component: PasswordComplexityWithGoal
+  title: "Foundations/PasswordComplexityWithGoal",
+  component: PasswordComplexityWithGoal,
 };
 
 export const Default = {
-  args: {targetEntropy: 112, entropy: 87.5, error: false}
+  args: { targetEntropy: 112, entropy: 87.5, error: false },
 };

@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.0
  */
-import React, {Component} from "react";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
 import InsertAppIframe from "./components/InsertAppIframe";
 import InsertFileIframe from "./components/InsertFileIframe";
@@ -38,7 +38,7 @@ class ExtBootstrapApp extends Component {
     return {
       port: props.port,
       storage: props.storage,
-      userSettings: null
+      userSettings: null,
     };
   }
 
@@ -60,8 +60,7 @@ class ExtBootstrapApp extends Component {
     const rootNode = document.getRootNode();
     const htmlTag = rootNode.lastChild;
 
-    return htmlTag?.tagName === "HTML"
-      && htmlTag.classList.contains('passbolt');
+    return htmlTag?.tagName === "HTML" && htmlTag.classList.contains("passbolt");
   }
 
   /**
@@ -71,7 +70,7 @@ class ExtBootstrapApp extends Component {
   async getUserSettings() {
     const storageData = await this.props.storage.local.get(["_passbolt_data"]);
     const userSettings = new UserSettings(storageData._passbolt_data.config);
-    this.setState({userSettings});
+    this.setState({ userSettings });
   }
 
   /**
@@ -99,63 +98,66 @@ class ExtBootstrapApp extends Component {
 
     return (
       <>
-        {this.isReady &&
-        <Router basename={this.basename}>
-          <HandleExtAppBootstrapRouteChangeRequested port={this.props.port}/>
-          <Switch>
-            <Route exact path={[
-              "/app/account-recovery/requests/review/:accountRecoveryRequestId",
-              "/app/administration",
-              "/app/administration/subscription",
-              "/app/administration/account-recovery",
-              "/app/administration/sso",
-              "/app/administration/secret-history",
-              "/app/administration/password-policies",
-              "/app/administration/user-passphrase-policies",
-              "/app/administration/password-expiry",
-              "/app/administration/content-types/metadata",
-              "/app/administration/content-types/metadata-key",
-              "/app/administration/migrate-metadata",
-              "/app/administration/allow-content-types",
-              "/app/administration/content-types/metadata-getting-started",
-              "/app/administration/subscription-teasing",
-              "/app/administration/password-policies-teasing",
-              "/app/administration/user-passphrase-policies-teasing",
-              "/app/administration/account-recovery-teasing",
-              "/app/administration/sso-teasing",
-              "/app/administration/mfa-policy-teasing",
-              "/app/administration/users-directory-teasing",
-              "/app/administration/scim-teasing",
-              "/app/administration/user-provisionning/scim",
-              "/app/folders/view/:filterByFolderId",
-              "/app/groups/view/:selectedGroupId",
-              "/app/groups/edit/:selectedGroupId",
-              "/app/passwords/view/:selectedResourceId",
-              "/app/passwords/filter/:filterType",
-              "/app/passwords",
-              "/app/settings",
-              "/app/settings/keys",
-              "/app/settings/profile",
-              "/app/settings/passphrase",
-              "/app/settings/security-token",
-              "/app/settings/mfa",
-              "/app/settings/mfa/:provider",
-              "/app/settings/mobile",
-              "/app/settings/desktop",
-              "/app/settings/account-recovery",
-              "/app/settings/account-recovery/edit",
-              "/app/settings/theme",
-              "/app/users/view/:selectedUserId",
-              "/app/users",
-              "/app",
-              "/",
-            ]}>
-              <InsertAppIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
-              <InsertFileIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
-            </Route>
-          </Switch>
-        </Router>
-        }
+        {this.isReady && (
+          <Router basename={this.basename}>
+            <HandleExtAppBootstrapRouteChangeRequested port={this.props.port} />
+            <Switch>
+              <Route
+                exact
+                path={[
+                  "/app/account-recovery/requests/review/:accountRecoveryRequestId",
+                  "/app/administration",
+                  "/app/administration/subscription",
+                  "/app/administration/account-recovery",
+                  "/app/administration/sso",
+                  "/app/administration/secret-history",
+                  "/app/administration/password-policies",
+                  "/app/administration/user-passphrase-policies",
+                  "/app/administration/password-expiry",
+                  "/app/administration/content-types/metadata",
+                  "/app/administration/content-types/metadata-key",
+                  "/app/administration/migrate-metadata",
+                  "/app/administration/allow-content-types",
+                  "/app/administration/content-types/metadata-getting-started",
+                  "/app/administration/subscription-teasing",
+                  "/app/administration/password-policies-teasing",
+                  "/app/administration/user-passphrase-policies-teasing",
+                  "/app/administration/account-recovery-teasing",
+                  "/app/administration/sso-teasing",
+                  "/app/administration/mfa-policy-teasing",
+                  "/app/administration/users-directory-teasing",
+                  "/app/administration/scim-teasing",
+                  "/app/administration/user-provisionning/scim",
+                  "/app/folders/view/:filterByFolderId",
+                  "/app/groups/view/:selectedGroupId",
+                  "/app/groups/edit/:selectedGroupId",
+                  "/app/passwords/view/:selectedResourceId",
+                  "/app/passwords/filter/:filterType",
+                  "/app/passwords",
+                  "/app/settings",
+                  "/app/settings/keys",
+                  "/app/settings/profile",
+                  "/app/settings/passphrase",
+                  "/app/settings/security-token",
+                  "/app/settings/mfa",
+                  "/app/settings/mfa/:provider",
+                  "/app/settings/mobile",
+                  "/app/settings/desktop",
+                  "/app/settings/account-recovery",
+                  "/app/settings/account-recovery/edit",
+                  "/app/settings/theme",
+                  "/app/users/view/:selectedUserId",
+                  "/app/users",
+                  "/app",
+                  "/",
+                ]}
+              >
+                <InsertAppIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
+                <InsertFileIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
+              </Route>
+            </Switch>
+          </Router>
+        )}
       </>
     );
   }

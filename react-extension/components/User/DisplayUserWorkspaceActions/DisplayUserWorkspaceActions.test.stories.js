@@ -16,22 +16,22 @@ import React from "react";
 import DisplayUserWorkspaceActions from "./DisplayUserWorkspaceActions";
 import {
   propsGroupSelected,
-  propsUserRole, propsWithMyselfAsSelectedUser,
-  propsWithSelectedUser
+  propsUserRole,
+  propsWithMyselfAsSelectedUser,
+  propsWithSelectedUser,
 } from "./DisplayUserWorkspaceActions.test.data";
 
-
 export default {
-  title: 'Components/User/DisplayUserWorkspaceActions',
+  title: "Components/User/DisplayUserWorkspaceActions",
   decorators: [
-    Story => (
+    (Story) => (
       <div className="panel main">
         <div className="panel middle">
           <div className="middle-right">
             <div className="breadcrumbs-and-grid">
               <div className="top-bar">
                 <div className="action-bar">
-                  <Story/>
+                  <Story />
                 </div>
               </div>
             </div>
@@ -40,21 +40,21 @@ export default {
       </div>
     ),
   ],
-  component: DisplayUserWorkspaceActions
+  component: DisplayUserWorkspaceActions,
 };
 
 export const Admin = {
-  args:  propsWithSelectedUser()
+  args: propsWithSelectedUser(),
 };
 
 export const AdminSelected = {
-  args: propsWithMyselfAsSelectedUser()
+  args: propsWithMyselfAsSelectedUser(),
 };
 
 export const User = {
-  args: propsUserRole()
+  args: propsUserRole(),
 };
 
 export const GroupSelected = {
-  args: propsGroupSelected()
+  args: propsGroupSelected(),
 };

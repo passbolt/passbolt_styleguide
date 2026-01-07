@@ -13,28 +13,25 @@
  */
 
 import DeleteResourceFolder from "./DeleteResourceFolder";
-import {defaultAppContext} from "./DeleteResourceFolder.test.data";
-
+import { defaultAppContext } from "./DeleteResourceFolder.test.data";
 
 export default {
-  title: 'Components/ResourceFolder/DeleteResourceFolder',
-  component: DeleteResourceFolder
+  title: "Components/ResourceFolder/DeleteResourceFolder",
+  component: DeleteResourceFolder,
 };
 
 export const Initial = {
   args: {
     context: defaultAppContext(),
-    onClose: () => {}
-  }
+    onClose: () => {},
+  },
 };
 
 export const WithLongFolderName = {
   args: {
     context: defaultAppContext({
-      folders: [
-        {id: 1, name: "foldername".repeat(10)}
-      ],
-      folder: {id: 1}
-    })
-  }
+      folders: [{ id: 1, name: "foldername".repeat(10) }],
+      folder: { id: 1 },
+    }),
+  },
 };

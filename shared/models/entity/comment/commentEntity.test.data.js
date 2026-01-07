@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.3
  */
-import {v4 as uuidv4} from "uuid";
-import {defaultUserDto} from "../user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultUserDto } from "../user/userEntity.test.data";
 
 /**
  * Build the minimum comment Dto needed
@@ -24,7 +24,7 @@ export const minimumCommentDto = (data = {}) => ({
   foreign_key: "5fe06fae-4fa0-4a7e-82dd-46d96c63733a",
   foreign_model: "Resource",
   content: "minimum content",
-  ...data
+  ...data,
 });
 
 /**
@@ -39,17 +39,17 @@ export const defaultCommentDto = (data = {}, options = {}) => {
   const id = data?.id || uuidv4();
 
   const defaultData = {
-    "id": id,
-    "parent_id": null,
-    "foreign_key": "5fe06fae-4fa0-4a7e-82dd-46d96c63733a",
-    "foreign_model": "Resource",
-    "content": "comment2",
-    "created": "2020-09-03T09:54:10+00:00",
-    "modified": "2020-09-03T09:54:10+00:00",
-    "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
-    "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
-    "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
-    ...data
+    id: id,
+    parent_id: null,
+    foreign_key: "5fe06fae-4fa0-4a7e-82dd-46d96c63733a",
+    foreign_model: "Resource",
+    content: "comment2",
+    created: "2020-09-03T09:54:10+00:00",
+    modified: "2020-09-03T09:54:10+00:00",
+    created_by: "f848277c-5398-58f8-a82a-72397af2d450",
+    modified_by: "f848277c-5398-58f8-a82a-72397af2d450",
+    user_id: "f848277c-5398-58f8-a82a-72397af2d450",
+    ...data,
   };
 
   if (!data.creator && options?.withCreator) {

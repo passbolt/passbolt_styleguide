@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-const {pgpKeys} = require("../../../../../test/fixture/pgpKeys/keys");
+const { pgpKeys } = require("../../../../../test/fixture/pgpKeys/keys");
 
 exports.ExternalGpgKeyEntityFixtures = {
   minimal_dto: {
@@ -20,10 +20,12 @@ exports.ExternalGpgKeyEntityFixtures = {
   full_dto: {
     armored_key: pgpKeys.ada.public,
     key_id: "5d9b054f",
-    user_ids: [{
-      email: "ada@passbolt.com",
-      name: "Ada Lovelace"
-    }],
+    user_ids: [
+      {
+        email: "ada@passbolt.com",
+        name: "Ada Lovelace",
+      },
+    ],
     fingerprint: pgpKeys.ada.fingerprint,
     expires: "Infinity",
     created: "2015-08-09T12:48:31.000Z",
@@ -31,14 +33,16 @@ exports.ExternalGpgKeyEntityFixtures = {
     length: 4096,
     curve: null,
     private: false,
-    revoked: false
+    revoked: false,
   },
   missing_required_field_dto: {
     key_id: "5d9b054f",
-    user_ids: [{
-      email: "ada@passbolt.com",
-      name: "Ada Lovelace"
-    }],
+    user_ids: [
+      {
+        email: "ada@passbolt.com",
+        name: "Ada Lovelace",
+      },
+    ],
     fingerprint: pgpKeys.ada.fingerprint,
     expires: "Infinity",
     created: "2015-08-09T12:48:31.000Z",
@@ -46,14 +50,16 @@ exports.ExternalGpgKeyEntityFixtures = {
     length: 4096,
     curve: null,
     private: false,
-    revoked: false
+    revoked: false,
   },
   broken_fields_dto: {
     armored_key: "---",
     key_id: "-",
-    user_ids: [{
-      email: "fake-email.com"
-    }],
+    user_ids: [
+      {
+        email: "fake-email.com",
+      },
+    ],
     fingerprint: "03f60e958f4cb29723acdf761353b5b15d9b054f03f60e958f4cb29723acdf761353b5b15d9b054f",
     expires: "Infinity",
     created: null,
@@ -61,15 +67,17 @@ exports.ExternalGpgKeyEntityFixtures = {
     length: "4096",
     curve: false,
     private: "false",
-    revoked: "false"
+    revoked: "false",
   },
   private_key_dto: {
     armored_key: pgpKeys.ada.private,
     key_id: "5d9b054f",
-    user_ids: [{
-      email: "ada@passbolt.com",
-      name: "Ada Lovelace"
-    }],
+    user_ids: [
+      {
+        email: "ada@passbolt.com",
+        name: "Ada Lovelace",
+      },
+    ],
     fingerprint: pgpKeys.ada.fingerprint,
     expires: "Infinity",
     created: "2015-08-09T12:48:31.000Z",
@@ -77,15 +85,17 @@ exports.ExternalGpgKeyEntityFixtures = {
     length: 4096,
     curve: null,
     private: true,
-    revoked: false
+    revoked: false,
   },
   legacy_full_dto: {
     key: pgpKeys.ada.public,
     keyId: "5d9b054f",
-    userIds: [{
-      email: "ada@passbolt.com",
-      name: "Ada Lovelace"
-    }],
+    userIds: [
+      {
+        email: "ada@passbolt.com",
+        name: "Ada Lovelace",
+      },
+    ],
     fingerprint: pgpKeys.ada.fingerprint,
     expires: "Mon Oct 26 2024 13:45:08 GMT+0100 (Central European Standard Time)",
     created: "Mon Oct 26 2015 13:45:08 GMT+0100 (Central European Standard Time)",
@@ -93,7 +103,7 @@ exports.ExternalGpgKeyEntityFixtures = {
     length: 4096,
     curve: null,
     private: false,
-    revoked: false
+    revoked: false,
   },
   eddsa: {
     armored_key: pgpKeys.anita.public,
@@ -107,5 +117,5 @@ exports.ExternalGpgKeyEntityFixtures = {
     curve: pgpKeys.anita.curve,
     private: false,
     revoked: pgpKeys.anita.revoked,
-  }
+  },
 };

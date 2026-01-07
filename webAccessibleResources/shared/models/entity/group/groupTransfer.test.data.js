@@ -12,8 +12,8 @@
  * @since         4.9.3
  */
 
-import {defaultPermissionTransferDto} from "../permission/permissionTransferEntity.test.data";
-import {v4 as uuidv4} from 'uuid';
+import { defaultPermissionTransferDto } from "../permission/permissionTransferEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Build default group transfer dto.
@@ -22,9 +22,7 @@ import {v4 as uuidv4} from 'uuid';
  */
 export const defaultGroupTransferDto = (data = {}) => {
   const defaultData = {
-    owners: [
-      defaultPermissionTransferDto(data)
-    ]
+    owners: [defaultPermissionTransferDto(data)],
   };
 
   return defaultData;
@@ -41,7 +39,7 @@ export const defaultUserTransferDto = (data = {}) => {
   const defaultData = {
     id: id,
     group_id: uuidv4(),
-    ...data
+    ...data,
   };
 
   return defaultData;

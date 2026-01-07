@@ -16,9 +16,9 @@
  * Unit tests on OrchestrateResourceForm in regard of specifications
  */
 
-import AddResourcePasswordPage from './AddResourcePassword.test.page';
-import {defaultProps} from './AddResourcePassword.test.data';
-import {SecretGenerator} from '../../../../shared/lib/SecretGenerator/SecretGenerator';
+import AddResourcePasswordPage from "./AddResourcePassword.test.page";
+import { defaultProps } from "./AddResourcePassword.test.data";
+import { SecretGenerator } from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,8 +27,8 @@ beforeEach(() => {
 describe("AddResourcePassword", () => {
   let page; // The page to test against
 
-  describe('As LU I can see the password form.', () => {
-    it('As LU I can see the resource password form.', () => {
+  describe("As LU I can see the password form.", () => {
+    it("As LU I can see the resource password form.", () => {
       expect.assertions(5);
 
       const props = defaultProps();
@@ -42,8 +42,8 @@ describe("AddResourcePassword", () => {
     });
   });
 
-  describe('Fill form password', () => {
-    it('generates password when clicking on the generate button should call callback function.', async() => {
+  describe("Fill form password", () => {
+    it("generates password when clicking on the generate button should call callback function.", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
@@ -53,16 +53,15 @@ describe("AddResourcePassword", () => {
       await page.click(page.passwordGenerateButton);
 
       expect(props.onChange).toHaveBeenCalledTimes(1);
-      expect(props.onChange).toHaveBeenCalledWith({"target": {"name": "secret.password", "value": "generate-password"}});
+      expect(props.onChange).toHaveBeenCalledWith({ target: { name: "secret.password", value: "generate-password" } });
     });
 
-    it('Enter password should call callback function.', async() => {
+    it("Enter password should call callback function.", async () => {
       expect.assertions(3);
 
-      let name,
-        value;
+      let name, value;
       const props = defaultProps();
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });
@@ -74,13 +73,12 @@ describe("AddResourcePassword", () => {
       expect(value).toEqual("secret");
     });
 
-    it('Enter username should call callback function.', async() => {
+    it("Enter username should call callback function.", async () => {
       expect.assertions(3);
 
-      let name,
-        value;
+      let name, value;
       const props = defaultProps();
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });
@@ -92,13 +90,12 @@ describe("AddResourcePassword", () => {
       expect(value).toEqual("username");
     });
 
-    it('Enter uri should call callback function.', async() => {
+    it("Enter uri should call callback function.", async () => {
       expect.assertions(3);
 
-      let name,
-        value;
+      let name, value;
       const props = defaultProps();
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });
@@ -111,8 +108,8 @@ describe("AddResourcePassword", () => {
     });
   });
 
-  describe('View password', () => {
-    it('views password when clicking on the view button.', async() => {
+  describe("View password", () => {
+    it("views password when clicking on the view button.", async () => {
       expect.assertions(6);
 
       const props = defaultProps();
@@ -139,8 +136,8 @@ describe("AddResourcePassword", () => {
     });
   });
 
-  describe('should focus on password field', () => {
-    it('should focus on password field if the entropy is too low.', async() => {
+  describe("should focus on password field", () => {
+    it("should focus on password field if the entropy is too low.", async () => {
       expect.assertions(1);
 
       const props = defaultProps({
@@ -152,11 +149,11 @@ describe("AddResourcePassword", () => {
     });
   });
 
-  describe('As LU I should see the password disabled.', () => {
-    it('As LU I can see the password form disabled.', async() => {
+  describe("As LU I should see the password disabled.", () => {
+    it("As LU I can see the password form disabled.", async () => {
       expect.assertions(3);
 
-      const props = defaultProps({disabled: true});
+      const props = defaultProps({ disabled: true });
       page = new AddResourcePasswordPage(props);
 
       expect(page.password.hasAttribute("disabled")).toBeTruthy();

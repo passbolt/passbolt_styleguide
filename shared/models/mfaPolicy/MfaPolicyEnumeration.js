@@ -13,7 +13,6 @@
  */
 
 export const MfaPolicyEnumerationTypes = {
-  MANDATORY: 'mandatory',
-  OPTIN: 'opt-in'
+  MANDATORY: "mandatory",
+  OPTIN: "opt-in",
 };
-

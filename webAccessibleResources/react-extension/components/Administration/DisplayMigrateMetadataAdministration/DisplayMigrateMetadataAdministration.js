@@ -13,24 +13,22 @@
  */
 
 import PropTypes from "prop-types";
-import React, {Component} from 'react';
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import memoize from "memoize-one";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import MetadataSettingsServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataSettingsServiceWorkerService";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 import MetadataKeysServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataKeysServiceWorkerService";
 import MigrateMetadataFormEntity from "../../../../shared/models/entity/metadata/migrateMetadataFormEntity";
 import MetadataMigrateContentServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataMigrateContentServiceWorkerService";
 import ConfirmMigrateMetadataDialog from "./ConfirmMigrateMetadataDialog";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import { createSafePortal } from "../../../../shared/utils/portals";
 import InfoSVG from "../../../../img/svg/info.svg";
 
 class DisplayMigrateMetadataAdministration extends Component {
@@ -49,14 +47,15 @@ class DisplayMigrateMetadataAdministration extends Component {
     super(props);
     this.formSettings = new MigrateMetadataFormEntity({});
 
-    this.metadataSettingsServiceWorkerService = props.metadataSettingsServiceWorkerService
-      ?? new MetadataSettingsServiceWorkerService(props.context.port);
+    this.metadataSettingsServiceWorkerService =
+      props.metadataSettingsServiceWorkerService ?? new MetadataSettingsServiceWorkerService(props.context.port);
 
-    this.metadataKeysServiceWorkerService = props.metadataKeysServiceWorkerService
-      ?? new MetadataKeysServiceWorkerService(props.context.port);
+    this.metadataKeysServiceWorkerService =
+      props.metadataKeysServiceWorkerService ?? new MetadataKeysServiceWorkerService(props.context.port);
 
-    this.metadataMigrateContentServiceWorkerService = props.metadataMigrateContentServiceWorkerService
-      ?? new MetadataMigrateContentServiceWorkerService(props.context.port);
+    this.metadataMigrateContentServiceWorkerService =
+      props.metadataMigrateContentServiceWorkerService ??
+      new MetadataMigrateContentServiceWorkerService(props.context.port);
 
     this.state = this.defaultState;
     this.bindCallbacks();
@@ -100,8 +99,10 @@ class DisplayMigrateMetadataAdministration extends Component {
     this.metadataTypesSettings = await this.metadataSettingsServiceWorkerService.findTypesSettings();
     this.metadataKeys = await this.metadataKeysServiceWorkerService.findAll();
 
-    this.migrationCountDetailsShared = await this.metadataMigrateContentServiceWorkerService.findCountMetadataMigrateResources(true);
-    this.migrationCountDetails = await this.metadataMigrateContentServiceWorkerService.findCountMetadataMigrateResources();
+    this.migrationCountDetailsShared =
+      await this.metadataMigrateContentServiceWorkerService.findCountMetadataMigrateResources(true);
+    this.migrationCountDetails =
+      await this.metadataMigrateContentServiceWorkerService.findCountMetadataMigrateResources();
 
     this.setState({
       settings: this.formSettings.toDto(),
@@ -118,7 +119,7 @@ class DisplayMigrateMetadataAdministration extends Component {
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  validateForm = memoize(formSettingsDto => this.formSettings?.validate());
+  validateForm = memoize((formSettingsDto) => this.formSettings?.validate());
 
   /**
    * Verify the data health. This intends for administrators, helping them adjust settings to prevent unusual or
@@ -128,7 +129,9 @@ class DisplayMigrateMetadataAdministration extends Component {
    * @param {ResourceTypesCollection} resourceTypes The resource types.
    * @return {EntityValidationError}
    */
-  verifyDataHealth = memoize((_, resourceTypes, metadataTypesSettings, metadataKeys) => this.formSettings?.verifyHealth(resourceTypes, metadataTypesSettings, metadataKeys));
+  verifyDataHealth = memoize((_, resourceTypes, metadataTypesSettings, metadataKeys) =>
+    this.formSettings?.verifyHealth(resourceTypes, metadataTypesSettings, metadataKeys),
+  );
 
   /**
    * Handle form input changes.
@@ -139,8 +142,8 @@ class DisplayMigrateMetadataAdministration extends Component {
     if (this.hasAllInputDisabled()) {
       return;
     }
-    const {type, checked, value, name} = event.target;
-    const parsedValue =  type === "checkbox" ? checked : value;
+    const { type, checked, value, name } = event.target;
+    const parsedValue = type === "checkbox" ? checked : value;
     this.setFormPropertyValue(name, parsedValue);
   }
 
@@ -150,7 +153,7 @@ class DisplayMigrateMetadataAdministration extends Component {
    * @returns {void}
    */
   handleMigrateScopeInputChange(event) {
-    const {value, name} = event.target;
+    const { value, name } = event.target;
     this.setFormPropertyValue(name, value === "all-content");
   }
 
@@ -160,8 +163,8 @@ class DisplayMigrateMetadataAdministration extends Component {
    * @param parsedValue
    */
   setFormPropertyValue(name, parsedValue) {
-    this.formSettings.set(name, parsedValue, {validate: false});
-    this.setState({settings: this.formSettings.toDto()});
+    this.formSettings.set(name, parsedValue, { validate: false });
+    this.setState({ settings: this.formSettings.toDto() });
   }
 
   /**
@@ -194,10 +197,12 @@ class DisplayMigrateMetadataAdministration extends Component {
    * @returns {boolean}
    */
   get hasPendingMigration() {
-    return this.hasPendingResourcesMigration
-      || this.hasPendingFoldersMigration
-      || this.hasPendingCommentsMigration
-      || this.hasPendingTagsMigration;
+    return (
+      this.hasPendingResourcesMigration ||
+      this.hasPendingFoldersMigration ||
+      this.hasPendingCommentsMigration ||
+      this.hasPendingTagsMigration
+    );
   }
 
   /**
@@ -276,9 +281,7 @@ class DisplayMigrateMetadataAdministration extends Component {
       return this.props.t("Done");
     }
 
-    return this.state.hasMigrationRunOnce
-      ? this.props.t("Pending")
-      : this.props.t("Required");
+    return this.state.hasMigrationRunOnce ? this.props.t("Pending") : this.props.t("Required");
   }
 
   /**
@@ -319,16 +322,23 @@ class DisplayMigrateMetadataAdministration extends Component {
     }
 
     const validationError = this.validateForm(this.state.settings);
-    const healthWarnings = this.verifyDataHealth(this.state.settings, this.props.resourceTypes, this.metadataTypesSettings, this.metadataKeys);
+    const healthWarnings = this.verifyDataHealth(
+      this.state.settings,
+      this.props.resourceTypes,
+      this.metadataTypesSettings,
+      this.metadataKeys,
+    );
     if (validationError?.hasErrors() || this.hasGlobalError(healthWarnings)) {
-      this.setState({hasAlreadyBeenValidated: true});
+      this.setState({ hasAlreadyBeenValidated: true });
       return;
     }
 
-    this.setState({isProcessing: true});
+    this.setState({ isProcessing: true });
 
     try {
-      const migrationDetails = this.formSettings.sharedContentOnly ? this.migrationCountDetailsShared : this.migrationCountDetails;
+      const migrationDetails = this.formSettings.sharedContentOnly
+        ? this.migrationCountDetailsShared
+        : this.migrationCountDetails;
       await this.metadataMigrateContentServiceWorkerService.migrate(this.formSettings.toDto(), migrationDetails);
       await this.initData();
 
@@ -338,7 +348,7 @@ class DisplayMigrateMetadataAdministration extends Component {
         this.props.actionFeedbackContext.displaySuccess(this.props.t("The encrypted metadata were migrated."));
       }
     } catch (error) {
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
     }
 
     this.setState({
@@ -352,41 +362,58 @@ class DisplayMigrateMetadataAdministration extends Component {
    * @returns {JSX}
    */
   render() {
-    const warnings = this.verifyDataHealth(this.state.settings, this.props.resourceTypes, this.metadataTypesSettings, this.metadataKeys);
+    const warnings = this.verifyDataHealth(
+      this.state.settings,
+      this.props.resourceTypes,
+      this.metadataTypesSettings,
+      this.metadataKeys,
+    );
     const hasGlobalError = this.hasGlobalError(warnings);
     const isFeatureBeta = this.props.context.siteSettings.isFeatureBeta("metadata");
 
-    const shouldDisplayAWarningBlock = !hasGlobalError && (isFeatureBeta || (!this.hasMissingMetadataKeys && this.hasPendingMigration));
+    const shouldDisplayAWarningBlock =
+      !hasGlobalError && (isFeatureBeta || (!this.hasMissingMetadataKeys && this.hasPendingMigration));
     return (
       <div className="row">
         <div id="migrate-metadata-settings" className="main-column">
           <div className="main-content">
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
-              <h3 className="title"><label><Trans>Migrate metadata</Trans></label></h3>
+              <h3 className="title">
+                <label>
+                  <Trans>Migrate metadata</Trans>
+                </label>
+              </h3>
               <p className="description">
                 <Trans>Initiate a migration to convert cleartext metadata to encrypted metadata.</Trans>
               </p>
-              <h4><Trans>Summary</Trans></h4>
+              <h4>
+                <Trans>Summary</Trans>
+              </h4>
               <div className="feedback-card">
-                {this.state.isReady && this.hasPendingMigration &&
-                <AnimatedFeedback name="warning" />
-                }
-                {this.state.isReady && !this.hasPendingMigration &&
-                <AnimatedFeedback name="success" />
-                }
+                {this.state.isReady && this.hasPendingMigration && <AnimatedFeedback name="warning" />}
+                {this.state.isReady && !this.hasPendingMigration && <AnimatedFeedback name="success" />}
                 <div className="migration-status-information">
                   <ul>
                     <li className="migration-status">
-                      <span className="label"><Trans>Migration status</Trans></span>
+                      <span className="label">
+                        <Trans>Migration status</Trans>
+                      </span>
                       <span className="value">{this.migrationStatus}</span>
                     </li>
                     <li className="migration-resources-count">
-                      <span className="label"><Trans>Resources</Trans></span>
+                      <span className="label">
+                        <Trans>Resources</Trans>
+                      </span>
                       <span className="value">
-                        {this.hasPendingResourcesMigration
-                          ? <>{this.props.t("{{count}} to be migrated", {count: this.totalResources})} ({this.props.t("{{count}} shared resources", {count: this.totalSharedResources})}, {this.props.t("{{count}} personal resources", {count: this.totalPersonalResources})})</>
-                          : <Trans>All migrated</Trans>
-                        }
+                        {this.hasPendingResourcesMigration ? (
+                          <>
+                            {this.props.t("{{count}} to be migrated", { count: this.totalResources })} (
+                            {this.props.t("{{count}} shared resources", { count: this.totalSharedResources })},{" "}
+                            {this.props.t("{{count}} personal resources", { count: this.totalPersonalResources })})
+                          </>
+                        ) : (
+                          <Trans>All migrated</Trans>
+                        )}
                       </span>
                     </li>
                     {/*
@@ -422,29 +449,52 @@ class DisplayMigrateMetadataAdministration extends Component {
                 </div>
               </div>
 
-              <h4><Trans>Items to migrate</Trans></h4>
+              <h4>
+                <Trans>Items to migrate</Trans>
+              </h4>
               <div className="togglelist">
-                <span className={`input toggle-switch form-element ${!hasGlobalError && warnings?.hasError("migrate_resources_to_v5") && "warning"}`}>
-                  <input id="migrateResourcesInput" type="checkbox" name="migrate_resources_to_v5" className="toggle-switch-checkbox checkbox"
+                <span
+                  className={`input toggle-switch form-element ${!hasGlobalError && warnings?.hasError("migrate_resources_to_v5") && "warning"}`}
+                >
+                  <input
+                    id="migrateResourcesInput"
+                    type="checkbox"
+                    name="migrate_resources_to_v5"
+                    className="toggle-switch-checkbox checkbox"
                     onChange={this.handleInputChange}
                     checked={this.state.settings.migrate_resources_to_v5}
-                    disabled={this.hasAllInputDisabled()}/>
+                    disabled={this.hasAllInputDisabled()}
+                  />
                   <label htmlFor="migrateResourcesInput">
-                    <span className="name"><Trans>Resources:</Trans></span>
-                    <span className="info"><Trans>Name, Username, URI, Cleartext description.</Trans></span>
-                    {!hasGlobalError && warnings?.hasError("migrate_resources_to_v5") &&
+                    <span className="name">
+                      <Trans>Resources:</Trans>
+                    </span>
+                    <span className="info">
+                      <Trans>Name, Username, URI, Cleartext description.</Trans>
+                    </span>
+                    {!hasGlobalError && warnings?.hasError("migrate_resources_to_v5") && (
                       <div className="warning">
-                        {warnings?.hasError("migrate_resources_to_v5", "allow_creation_of_v5_resources") &&
-                          <div className="warning-message"><Trans>Resource types v5 creation is not allowed.</Trans></div>
-                        }
-                        {warnings?.hasError("migrate_resources_to_v5", "resource_types_v5_deleted") &&
-                          <div className="warning-message"><Trans>Resources will not be migrated as no content types with encrypted metadata is allowed.</Trans></div>
-                        }
-                        {warnings?.hasError("migrate_resources_to_v5", "resource_types_v5_partially_deleted") &&
-                          <div className="warning-message"><Trans>Not all resources will be migrated, some corresponding content types are not active.</Trans></div>
-                        }
+                        {warnings?.hasError("migrate_resources_to_v5", "allow_creation_of_v5_resources") && (
+                          <div className="warning-message">
+                            <Trans>Resource types v5 creation is not allowed.</Trans>
+                          </div>
+                        )}
+                        {warnings?.hasError("migrate_resources_to_v5", "resource_types_v5_deleted") && (
+                          <div className="warning-message">
+                            <Trans>
+                              Resources will not be migrated as no content types with encrypted metadata is allowed.
+                            </Trans>
+                          </div>
+                        )}
+                        {warnings?.hasError("migrate_resources_to_v5", "resource_types_v5_partially_deleted") && (
+                          <div className="warning-message">
+                            <Trans>
+                              Not all resources will be migrated, some corresponding content types are not active.
+                            </Trans>
+                          </div>
+                        )}
                       </div>
-                    }
+                    )}
                   </label>
                 </span>
                 {/*
@@ -513,81 +563,138 @@ class DisplayMigrateMetadataAdministration extends Component {
                 */}
               </div>
 
-              <h4><Trans>Migration scope</Trans></h4>
+              <h4>
+                <Trans>Migration scope</Trans>
+              </h4>
               <div className="radiolist-alt">
-                <div className={`input radio ${this.state.settings.migrate_personal_content && 'checked'}  ${this.hasAllInputDisabled() && 'disabled'}`}>
-                  <input type="radio"
+                <div
+                  className={`input radio ${this.state.settings.migrate_personal_content && "checked"}  ${this.hasAllInputDisabled() && "disabled"}`}
+                >
+                  <input
+                    type="radio"
                     value="all-content"
                     onChange={this.handleMigrateScopeInputChange}
                     name="migrate_personal_content"
                     checked={this.state.settings.migrate_personal_content}
                     id="migrateScopeAllContentInput"
-                    disabled={this.hasAllInputDisabled()}/>
+                    disabled={this.hasAllInputDisabled()}
+                  />
                   <label htmlFor="migrateScopeAllContentInput">
-                    <span className="name"><Trans>All content</Trans></span>
-                    <span className="info"><Trans>All resources including the private ones.</Trans></span>
+                    <span className="name">
+                      <Trans>All content</Trans>
+                    </span>
+                    <span className="info">
+                      <Trans>All resources including the private ones.</Trans>
+                    </span>
                   </label>
                 </div>
-                <div className={`input radio ${!this.state.settings.migrate_personal_content && 'checked'} ${this.hasAllInputDisabled() && 'disabled'}`}>
-                  <input type="radio"
+                <div
+                  className={`input radio ${!this.state.settings.migrate_personal_content && "checked"} ${this.hasAllInputDisabled() && "disabled"}`}
+                >
+                  <input
+                    type="radio"
                     value="shared-only"
                     onChange={this.handleMigrateScopeInputChange}
                     name="migrate_personal_content"
                     checked={!this.state.settings.migrate_personal_content}
                     id="migrateScopeSharedContentInput"
-                    disabled={this.hasAllInputDisabled()}/>
+                    disabled={this.hasAllInputDisabled()}
+                  />
                   <label htmlFor="migrateScopeSharedContentInput">
-                    <span className="name"><Trans>Shared content only</Trans></span>
-                    <span className="info"><Trans>Only shared resources are migrated.</Trans></span>
+                    <span className="name">
+                      <Trans>Shared content only</Trans>
+                    </span>
+                    <span className="info">
+                      <Trans>Only shared resources are migrated.</Trans>
+                    </span>
                   </label>
                 </div>
               </div>
             </form>
           </div>
-          {hasGlobalError && this.hasPendingMigration &&
+          {hasGlobalError && this.hasPendingMigration && (
             <div className="error message">
               <div>
                 <Trans>No active metadata keys available.</Trans>
               </div>
             </div>
-          }
-          {!hasGlobalError && this.hasMissingMetadataKeys &&
+          )}
+          {!hasGlobalError && this.hasMissingMetadataKeys && (
             <div className="error message">
               <div>
-                <Trans>You lack access to the shared metadata key.</Trans>&nbsp;<Trans>Please ask another administrator to share it with you.</Trans>
+                <Trans>You lack access to the shared metadata key.</Trans>&nbsp;
+                <Trans>Please ask another administrator to share it with you.</Trans>
               </div>
             </div>
-          }
-          {shouldDisplayAWarningBlock &&
+          )}
+          {shouldDisplayAWarningBlock && (
             <div className="warning message">
-              {isFeatureBeta &&
+              {isFeatureBeta && (
                 <div className="form-banner">
-                  <b><Trans>Warning:</Trans></b> <Trans>Your current API version includes beta support for encrypted metadata and new resource types.</Trans> <Trans>To ensure stability and avoid potential issues, upgrade to the latest version before enabling these features.</Trans>
+                  <b>
+                    <Trans>Warning:</Trans>
+                  </b>{" "}
+                  <Trans>
+                    Your current API version includes beta support for encrypted metadata and new resource types.
+                  </Trans>{" "}
+                  <Trans>
+                    To ensure stability and avoid potential issues, upgrade to the latest version before enabling these
+                    features.
+                  </Trans>
                 </div>
-              }
-              {!this.hasMissingMetadataKeys && this.hasPendingMigration &&
+              )}
+              {!this.hasMissingMetadataKeys && this.hasPendingMigration && (
                 <div>
-                  <p><b><Trans>Warning:</Trans></b> <Trans>If you have integrations, you will have to make sure they are updated before triggering the migration.</Trans></p>
+                  <p>
+                    <b>
+                      <Trans>Warning:</Trans>
+                    </b>{" "}
+                    <Trans>
+                      If you have integrations, you will have to make sure they are updated before triggering the
+                      migration.
+                    </Trans>
+                  </p>
                 </div>
-              }
+              )}
             </div>
-          }
+          )}
         </div>
         <div className="actions-wrapper">
-          <button type="button" className="button primary" disabled={this.state.isProcessing || hasGlobalError || this.hasMissingMetadataKeys} onClick={this.handleFormSubmit}>
-            <span><Trans>Migrate</Trans></span>
+          <button
+            type="button"
+            className="button primary"
+            disabled={this.state.isProcessing || hasGlobalError || this.hasMissingMetadataKeys}
+            onClick={this.handleFormSubmit}
+          >
+            <span>
+              <Trans>Migrate</Trans>
+            </span>
           </button>
         </div>
         {createSafePortal(
           <div className="sidebar-help-section">
-            <h3><Trans>Need help?</Trans></h3>
-            <p><Trans>For more information about the content type support and migration, checkout the dedicated page on the official website.</Trans></p>
-            <a className="button" target="_blank" rel="noopener noreferrer" href="https://passbolt.com/docs/admin/metadata-encryption/migrate-metadata/" >
-              <InfoSVG/>
-              <span><Trans>Read the documentation</Trans></span>
+            <h3>
+              <Trans>Need help?</Trans>
+            </h3>
+            <p>
+              <Trans>
+                For more information about the content type support and migration, checkout the dedicated page on the
+                official website.
+              </Trans>
+            </p>
+            <a
+              className="button"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://passbolt.com/docs/admin/metadata-encryption/migrate-metadata/"
+            >
+              <InfoSVG />
+              <span>
+                <Trans>Read the documentation</Trans>
+              </span>
             </a>
           </div>,
-          document.getElementById("administration-help-panel")
+          document.getElementById("administration-help-panel"),
         )}
       </div>
     );
@@ -606,4 +713,10 @@ DisplayMigrateMetadataAdministration.propTypes = {
   t: PropTypes.func, // translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withResourceTypesLocalStorage(withDialog(withTranslation('common')(DisplayMigrateMetadataAdministration))))));
+export default withAppContext(
+  withActionFeedback(
+    withDialog(
+      withResourceTypesLocalStorage(withDialog(withTranslation("common")(DisplayMigrateMetadataAdministration))),
+    ),
+  ),
+);

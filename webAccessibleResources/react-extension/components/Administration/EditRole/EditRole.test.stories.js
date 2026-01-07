@@ -11,16 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.8.0
  */
-import {defaultProps} from "./EditRole.test.data";
+import { defaultProps } from "./EditRole.test.data";
 import EditRole from "./EditRole";
 
-
 export default {
-  title: 'Components/Administration/EditRole',
-  component: EditRole
+  title: "Components/Administration/EditRole",
+  component: EditRole,
 };
 
-
 export const Initial = {
-  args: defaultProps()
+  args: defaultProps(),
 };

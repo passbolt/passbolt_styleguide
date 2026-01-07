@@ -14,8 +14,7 @@
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 
-
-const ENTITY_NAME = 'ColumnSetting';
+const ENTITY_NAME = "ColumnSetting";
 const COLUMN_ID_MAX_LENGTH = 255;
 const COLUMN_LABEL_MAX_LENGTH = 255;
 
@@ -27,11 +26,10 @@ class ColumnSettingEntity extends Entity {
    * @inheritDoc
    */
   constructor(columnSettingDto, options = {}) {
-    super(EntitySchema.validate(
-      ColumnSettingEntity.ENTITY_NAME,
-      columnSettingDto,
-      ColumnSettingEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(ColumnSettingEntity.ENTITY_NAME, columnSettingDto, ColumnSettingEntity.getSchema()),
+      options,
+    );
   }
 
   /**
@@ -40,32 +38,29 @@ class ColumnSettingEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "id",
-        "label"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "pattern": /^[a-zA-Z_]+$/,
-          "maxLength": COLUMN_ID_MAX_LENGTH,
+      type: "object",
+      required: ["id", "label"],
+      properties: {
+        id: {
+          type: "string",
+          pattern: /^[a-zA-Z_]+$/,
+          maxLength: COLUMN_ID_MAX_LENGTH,
         },
-        "label": {
-          "type": "string",
-          "pattern": /^[a-zA-Z ]+$/,
-          "maxLength": COLUMN_LABEL_MAX_LENGTH,
+        label: {
+          type: "string",
+          pattern: /^[a-zA-Z ]+$/,
+          maxLength: COLUMN_LABEL_MAX_LENGTH,
         },
-        "width": {
-          "type": "number"
+        width: {
+          type: "number",
         },
-        "position": {
-          "type": "integer"
+        position: {
+          type: "integer",
         },
-        "show": {
-          "type": "boolean"
-        }
-      }
+        show: {
+          type: "boolean",
+        },
+      },
     };
   }
 

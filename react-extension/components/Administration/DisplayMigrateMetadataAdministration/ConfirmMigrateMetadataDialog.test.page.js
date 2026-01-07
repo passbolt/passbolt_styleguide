@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.12.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ConfirmMigrateMetadataDialog from "./ConfirmMigrateMetadataDialog";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,9 @@ export default class ConfirmMigrateMetadataDialogPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ConfirmMigrateMetadataDialog {...props}/>
+        <ConfirmMigrateMetadataDialog {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,7 +38,7 @@ export default class ConfirmMigrateMetadataDialogPage {
    * Returns the confirm migrate metadata element
    */
   get confirmMigrateMetadata() {
-    return this._page.container.querySelector('.confirm-migrate-metadata-dialog');
+    return this._page.container.querySelector(".confirm-migrate-metadata-dialog");
   }
 
   /**
@@ -52,31 +52,28 @@ export default class ConfirmMigrateMetadataDialogPage {
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.dialog-title-wrapper h2');
+    return this._page.container.querySelector(".dialog-title-wrapper h2");
   }
-
 
   /**
    * Returns the confirm button element
    */
   get confirmButton() {
-    return this._page.container.querySelector('.submit-wrapper button.primary');
+    return this._page.container.querySelector(".submit-wrapper button.primary");
   }
-
 
   /**
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper button.cancel');
+    return this._page.container.querySelector(".submit-wrapper button.cancel");
   }
-
 
   /**
    * Returns the close button element
    */
   get closeButton() {
-    return this._page.container.querySelector('.dialog-header button');
+    return this._page.container.querySelector(".dialog-header button");
   }
 
   /**
@@ -84,7 +81,7 @@ export default class ConfirmMigrateMetadataDialogPage {
    * @param {HTMLElement} element
    */
   async clickOn(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

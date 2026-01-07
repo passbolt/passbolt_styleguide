@@ -21,11 +21,7 @@ class GpgEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      GpgEntity.ENTITY_NAME,
-      dto,
-      GpgEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(GpgEntity.ENTITY_NAME, dto, GpgEntity.getSchema()), options);
   }
 
   /**
@@ -34,56 +30,72 @@ class GpgEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "canDecryptVerify", "canVerify", "gpgKeyPublicInKeyring", "canEncrypt",
-        "canDecrypt", "canEncryptSign", "canSign", "gpgHome",
-        "gpgKeyPrivateFingerprint", "gpgKeyPublicFingerprint", "gpgKeyPublicEmail",
-        "gpgKeyPublicReadable", "gpgKeyPrivateReadable", "gpgKey", "lib",
-        "gpgKeyNotDefault", "info", "gpgHomeWritable", "gpgKeyPublic",
-        "gpgKeyPublicBlock", "gpgKeyPrivate", "gpgKeyPrivateBlock",
-        "isPublicServerKeyGopengpgCompatible", "isPrivateServerKeyGopengpgCompatible"
+      type: "object",
+      required: [
+        "canDecryptVerify",
+        "canVerify",
+        "gpgKeyPublicInKeyring",
+        "canEncrypt",
+        "canDecrypt",
+        "canEncryptSign",
+        "canSign",
+        "gpgHome",
+        "gpgKeyPrivateFingerprint",
+        "gpgKeyPublicFingerprint",
+        "gpgKeyPublicEmail",
+        "gpgKeyPublicReadable",
+        "gpgKeyPrivateReadable",
+        "gpgKey",
+        "lib",
+        "gpgKeyNotDefault",
+        "info",
+        "gpgHomeWritable",
+        "gpgKeyPublic",
+        "gpgKeyPublicBlock",
+        "gpgKeyPrivate",
+        "gpgKeyPrivateBlock",
+        "isPublicServerKeyGopengpgCompatible",
+        "isPrivateServerKeyGopengpgCompatible",
       ],
-      "properties": {
-        "canDecryptVerify": {"type": "boolean"},
-        "canVerify": {"type": "boolean"},
-        "gpgKeyPublicInKeyring": {"type": "boolean"},
-        "canEncrypt": {"type": "boolean"},
-        "canDecrypt": {"type": "boolean"},
-        "canEncryptSign": {"type": "boolean"},
-        "canSign": {"type": "boolean"},
-        "gpgHome": {"type": "boolean"},
-        "gpgKeyPrivateFingerprint": {"type": "boolean"},
-        "gpgKeyPublicFingerprint": {"type": "boolean"},
-        "gpgKeyPublicEmail": {"type": "boolean"},
-        "gpgKeyPublicReadable": {"type": "boolean"},
-        "gpgKeyPrivateReadable": {"type": "boolean"},
-        "gpgKey": {"type": "boolean"},
-        "lib": {"type": "boolean"},
-        "gpgKeyNotDefault": {"type": "boolean"},
-        "gpgHomeWritable": {"type": "boolean"},
-        "gpgKeyPublic": {"type": "boolean"},
-        "gpgKeyPublicBlock": {"type": "boolean"},
-        "gpgKeyPrivate": {"type": "boolean"},
-        "gpgKeyPrivateBlock": {"type": "boolean"},
-        "isPublicServerKeyGopengpgCompatible": {"type": "boolean"},
-        "isPrivateServerKeyGopengpgCompatible": {"type": "boolean"},
-        "info": {
-          "type": "object",
-          "required": ["gpgHome", "gpgKeyPrivate"],
-          "properties": {
-            "gpgHome": {
-              "type": "string"
+      properties: {
+        canDecryptVerify: { type: "boolean" },
+        canVerify: { type: "boolean" },
+        gpgKeyPublicInKeyring: { type: "boolean" },
+        canEncrypt: { type: "boolean" },
+        canDecrypt: { type: "boolean" },
+        canEncryptSign: { type: "boolean" },
+        canSign: { type: "boolean" },
+        gpgHome: { type: "boolean" },
+        gpgKeyPrivateFingerprint: { type: "boolean" },
+        gpgKeyPublicFingerprint: { type: "boolean" },
+        gpgKeyPublicEmail: { type: "boolean" },
+        gpgKeyPublicReadable: { type: "boolean" },
+        gpgKeyPrivateReadable: { type: "boolean" },
+        gpgKey: { type: "boolean" },
+        lib: { type: "boolean" },
+        gpgKeyNotDefault: { type: "boolean" },
+        gpgHomeWritable: { type: "boolean" },
+        gpgKeyPublic: { type: "boolean" },
+        gpgKeyPublicBlock: { type: "boolean" },
+        gpgKeyPrivate: { type: "boolean" },
+        gpgKeyPrivateBlock: { type: "boolean" },
+        isPublicServerKeyGopengpgCompatible: { type: "boolean" },
+        isPrivateServerKeyGopengpgCompatible: { type: "boolean" },
+        info: {
+          type: "object",
+          required: ["gpgHome", "gpgKeyPrivate"],
+          properties: {
+            gpgHome: {
+              type: "string",
             },
-            "gpgKeyPrivate": {
-              "type": "string"
-            }
-          }
-        }
-      }
+            gpgKeyPrivate: {
+              type: "string",
+            },
+          },
+        },
+      },
     };
   }
-
 
   /*
    *==================================================*
@@ -93,7 +105,6 @@ class GpgEntity extends Entity {
   get canDecryptVerify() {
     return this._props.canDecryptVerify;
   }
-
 
   get canVerify() {
     return this._props.canVerify;

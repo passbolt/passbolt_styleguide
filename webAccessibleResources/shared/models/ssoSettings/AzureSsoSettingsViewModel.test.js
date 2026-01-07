@@ -13,7 +13,8 @@
  */
 import each from "jest-each";
 import {
-  defaultAzureSsoSettingsViewModelDto, defaultGoogleSsoSettingsViewModelDto,
+  defaultAzureSsoSettingsViewModelDto,
+  defaultGoogleSsoSettingsViewModelDto,
 } from "./SsoSettingsViewModel.test.data";
 import AzureSsoSettingsViewModel from "./AzureSsoSettingsViewModel";
 import AzureSsoSettingsEntity from "../entity/ssoSettings/AzureSsoSettingsEntity";
@@ -47,14 +48,14 @@ describe("AzureSsoSettingsViewModel", () => {
 
   describe("::isDataDifferent", () => {
     each([
-      {url: "https://test.passbolt.com"},
-      {client_id: "client-id"},
-      {tenant_id: "tenant_id"},
-      {client_secret: "this is a secret"},
-      {client_secret_expiry: "2023-12-12"},
-      {email_claim: "upn"},
-      {prompt: "none"},
-    ]).describe("should return true if at least 1 difference is found between 2 ViewModel", scenario => {
+      { url: "https://test.passbolt.com" },
+      { client_id: "client-id" },
+      { tenant_id: "tenant_id" },
+      { client_secret: "this is a secret" },
+      { client_secret_expiry: "2023-12-12" },
+      { email_claim: "upn" },
+      { prompt: "none" },
+    ]).describe("should return true if at least 1 difference is found between 2 ViewModel", (scenario) => {
       it(`for: ${JSON.stringify(scenario)}`, () => {
         expect.assertions(1);
 
@@ -129,25 +130,20 @@ describe("AzureSsoSettingsViewModel", () => {
   });
 
   describe("::validate", () => {
-    each([
-      "url",
-      "client_id",
-      "tenant_id",
-      "client_secret",
-      "client_secret_expiry",
-      "email_claim",
-      "prompt",
-    ]).describe("should validates the required field", requiredField => {
-      it(`for: ${requiredField}`, () => {
-        expect.assertions(2);
-        const viewModel = new AzureSsoSettingsViewModel();
-        delete viewModel[requiredField];
+    each(["url", "client_id", "tenant_id", "client_secret", "client_secret_expiry", "email_claim", "prompt"]).describe(
+      "should validates the required field",
+      (requiredField) => {
+        it(`for: ${requiredField}`, () => {
+          expect.assertions(2);
+          const viewModel = new AzureSsoSettingsViewModel();
+          delete viewModel[requiredField];
 
-        const validationErrors = viewModel.validate();
-        expect(validationErrors.hasErrors(requiredField)).toStrictEqual(true);
-        expect(validationErrors.getError(requiredField, "required")).toBeTruthy();
-      });
-    });
+          const validationErrors = viewModel.validate();
+          expect(validationErrors.hasErrors(requiredField)).toStrictEqual(true);
+          expect(validationErrors.getError(requiredField, "required")).toBeTruthy();
+        });
+      },
+    );
 
     each([
       {
@@ -161,14 +157,14 @@ describe("AzureSsoSettingsViewModel", () => {
           prompt: true,
         },
         expectedErrors: {
-          url: {type: "The url is not a valid string."},
-          client_id: {type: "The client_id is not a valid string."},
-          tenant_id: {type: "The tenant_id is not a valid string."},
-          client_secret: {type: "The client_secret is not a valid string."},
-          client_secret_expiry: {format: "The client_secret_expiry is not a valid date-time."},
-          email_claim: {type: "The email_claim is not a valid string."},
-          prompt: {type: "The prompt is not a valid string."},
-        }
+          url: { type: "The url is not a valid string." },
+          client_id: { type: "The client_id is not a valid string." },
+          tenant_id: { type: "The tenant_id is not a valid string." },
+          client_secret: { type: "The client_secret is not a valid string." },
+          client_secret_expiry: { format: "The client_secret_expiry is not a valid date-time." },
+          email_claim: { type: "The email_claim is not a valid string." },
+          prompt: { type: "The prompt is not a valid string." },
+        },
       },
       {
         dto: {
@@ -181,16 +177,16 @@ describe("AzureSsoSettingsViewModel", () => {
           prompt: "test",
         },
         expectedErrors: {
-          url: {pattern: "The url is not valid."},
-          client_id: {format: "The client_id is not a valid uuid."},
-          tenant_id: {format: "The tenant_id is not a valid uuid."},
-          client_secret: {minLength: "The client_secret should be 1 character in length minimum."},
-          client_secret_expiry: {format: "The client_secret_expiry is not a valid date-time."},
-          email_claim: {enum: "The email_claim value is not included in the supported list."},
-          prompt: {enum: "The prompt value is not included in the supported list."},
-        }
-      }
-    ]).describe("should validate the current data set", scenario => {
+          url: { pattern: "The url is not valid." },
+          client_id: { format: "The client_id is not a valid uuid." },
+          tenant_id: { format: "The tenant_id is not a valid uuid." },
+          client_secret: { minLength: "The client_secret should be 1 character in length minimum." },
+          client_secret_expiry: { format: "The client_secret_expiry is not a valid date-time." },
+          email_claim: { enum: "The email_claim value is not included in the supported list." },
+          prompt: { enum: "The prompt value is not included in the supported list." },
+        },
+      },
+    ]).describe("should validate the current data set", (scenario) => {
       it(`for: ${JSON.stringify(scenario.dto)}`, () => {
         const expectedErroneousField = Object.keys(scenario.expectedErrors);
         const expectedErroneousFieldCount = expectedErroneousField.length;

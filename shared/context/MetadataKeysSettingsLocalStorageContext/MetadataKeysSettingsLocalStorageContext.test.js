@@ -12,11 +12,11 @@
  * @since         5.4.0
  */
 
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import mockComponentSetState from "../../../react-extension/test/mock/components/React/mockSetState";
-import {defaultProps} from "./MetadataKeysSettingsLocalStorageContext.test.data";
-import {MetadataKeysSettingsLocalStorageContextProvider} from "./MetadataKeysSettingsLocalStorageContext";
-import {defaultMetadataKeysSettingsDto} from "../../models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultProps } from "./MetadataKeysSettingsLocalStorageContext.test.data";
+import { MetadataKeysSettingsLocalStorageContextProvider } from "./MetadataKeysSettingsLocalStorageContext";
+import { defaultMetadataKeysSettingsDto } from "../../models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -35,7 +35,7 @@ describe("MetadataKeysSettingsLocalStorageContext", () => {
       expect(contextProvider.state).toMatchObject({
         get: expect.any(Function),
         metadataKeysSettings: null,
-        updateLocalStorage: expect.any(Function)
+        updateLocalStorage: expect.any(Function),
       });
     });
   });
@@ -96,7 +96,7 @@ describe("MetadataKeysSettingsLocalStorageContext", () => {
       mockComponentSetState(contextProvider);
 
       contextProvider.handleStorageChange({
-        test: "something"
+        test: "something",
       });
 
       expect(contextProvider.setState).not.toHaveBeenCalled();
@@ -122,13 +122,13 @@ describe("MetadataKeysSettingsLocalStorageContext", () => {
       expect(contextProvider.get().toDto()).toStrictEqual(expectedMetadataKeysSettings);
     });
 
-    it("should return null if the state hasn't been initialized yet and set a blocking promise while the init occurs", async() => {
+    it("should return null if the state hasn't been initialized yet and set a blocking promise while the init occurs", async () => {
       expect.assertions(3);
 
       const props = defaultProps();
       const contextProvider = new MetadataKeysSettingsLocalStorageContextProvider(props);
 
-      props.context.storage.local.set({[contextProvider.storageKey]: null});
+      props.context.storage.local.set({ [contextProvider.storageKey]: null });
 
       mockComponentSetState(contextProvider);
 
@@ -158,7 +158,7 @@ describe("MetadataKeysSettingsLocalStorageContext", () => {
   });
 
   describe("::loadLocalStorage", () => {
-    it("should find the metadata keys settings from the local storage and set the context state with it.", async() => {
+    it("should find the metadata keys settings from the local storage and set the context state with it.", async () => {
       expect.assertions(1);
 
       const metadataKeysSettings = defaultMetadataKeysSettingsDto();
@@ -166,7 +166,7 @@ describe("MetadataKeysSettingsLocalStorageContext", () => {
       const props = defaultProps();
       const contextProvider = new MetadataKeysSettingsLocalStorageContextProvider(props);
 
-      props.context.storage.local.set({[contextProvider.storageKey]: metadataKeysSettings});
+      props.context.storage.local.set({ [contextProvider.storageKey]: metadataKeysSettings });
       mockComponentSetState(contextProvider);
 
       await contextProvider.loadLocalStorage();
@@ -174,14 +174,14 @@ describe("MetadataKeysSettingsLocalStorageContext", () => {
       expect(contextProvider.state.metadataKeysSettings.toDto()).toStrictEqual(metadataKeysSettings);
     });
 
-    it("should call for updating the local storage if there is no metadata keys settings in the local storage.", async() => {
+    it("should call for updating the local storage if there is no metadata keys settings in the local storage.", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
       const contextProvider = new MetadataKeysSettingsLocalStorageContextProvider(props);
 
-      props.context.storage.local.set({[contextProvider.storageKey]: null});
-      props.context.port.addRequestListener("passbolt.metadata.get-or-find-metadata-keys-settings", async() => {});
+      props.context.storage.local.set({ [contextProvider.storageKey]: null });
+      props.context.port.addRequestListener("passbolt.metadata.get-or-find-metadata-keys-settings", async () => {});
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 
@@ -195,14 +195,14 @@ describe("MetadataKeysSettingsLocalStorageContext", () => {
   });
 
   describe("::updateLocalStorage", () => {
-    it("should call the service worker with the right event to trigger the local storage update.", async() => {
+    it("should call the service worker with the right event to trigger the local storage update.", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
       const contextProvider = new MetadataKeysSettingsLocalStorageContextProvider(props);
 
-      props.context.storage.local.set({[contextProvider.storageKey]: null});
-      props.context.port.addRequestListener("passbolt.metadata.get-or-find-metadata-keys-settings", async() => {});
+      props.context.storage.local.set({ [contextProvider.storageKey]: null });
+      props.context.port.addRequestListener("passbolt.metadata.get-or-find-metadata-keys-settings", async () => {});
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 
@@ -214,14 +214,14 @@ describe("MetadataKeysSettingsLocalStorageContext", () => {
       expect(spyOnRequest).toHaveBeenCalledWith("passbolt.metadata.get-or-find-metadata-keys-settings");
     });
 
-    it("should not call the service worker twice if a pending promise is running.", async() => {
+    it("should not call the service worker twice if a pending promise is running.", async () => {
       expect.assertions(4);
 
       const props = defaultProps();
       let resolveUpdadeLocalStoragePromise;
-      const spyOnRequest = jest.spyOn(props.context.port, "request").mockImplementation(
-        () => new Promise(resolve => resolveUpdadeLocalStoragePromise = resolve)
-      );
+      const spyOnRequest = jest
+        .spyOn(props.context.port, "request")
+        .mockImplementation(() => new Promise((resolve) => (resolveUpdadeLocalStoragePromise = resolve)));
 
       const contextProvider = new MetadataKeysSettingsLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
@@ -244,11 +244,11 @@ describe("MetadataKeysSettingsLocalStorageContext", () => {
       await resolveUpdadeLocalStoragePromise();
     });
 
-    it("should call the service worker again if the promise has been resolved.", async() => {
+    it("should call the service worker again if the promise has been resolved.", async () => {
       expect.assertions(5);
 
       const props = defaultProps();
-      props.context.port.addRequestListener("passbolt.metadata.get-or-find-metadata-keys-settings", async() => {});
+      props.context.port.addRequestListener("passbolt.metadata.get-or-find-metadata-keys-settings", async () => {});
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 

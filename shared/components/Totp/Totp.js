@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.3.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import TimerSVG from "../../../img/svg/timer.svg";
-import {TotpCodeGeneratorService} from "../../services/otp/TotpCodeGeneratorService";
-import {withTranslation} from "react-i18next";
-import {withActionFeedback} from "../../../react-extension/contexts/ActionFeedbackContext";
+import { TotpCodeGeneratorService } from "../../services/otp/TotpCodeGeneratorService";
+import { withTranslation } from "react-i18next";
+import { withActionFeedback } from "../../../react-extension/contexts/ActionFeedbackContext";
 import Logger from "../../utils/logger";
 
 const DEFAULT_TOTP_PERIOD = 30;
@@ -60,10 +60,11 @@ class Totp extends Component {
    * @return {number}
    */
   calculateDelayFromMounted() {
-    const todaySecond = this.dateOnCreation.getUTCHours() * 3600
-      + this.dateOnCreation.getUTCMinutes() * 60
-      + this.dateOnCreation.getUTCSeconds();
-    return todaySecond % (this.period);
+    const todaySecond =
+      this.dateOnCreation.getUTCHours() * 3600 +
+      this.dateOnCreation.getUTCMinutes() * 60 +
+      this.dateOnCreation.getUTCSeconds();
+    return todaySecond % this.period;
   }
 
   /**
@@ -72,10 +73,8 @@ class Totp extends Component {
    */
   calculateDelayFromNow() {
     const now = new Date(Date.now());
-    const todaySeconds = now.getUTCHours() * 3600
-      + now.getUTCMinutes() * 60
-      + now.getUTCSeconds();
-    return todaySeconds % (this.period);
+    const todaySeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
+    return todaySeconds % this.period;
   }
 
   /**
@@ -85,7 +84,7 @@ class Totp extends Component {
   get defaultState() {
     return {
       code: this.generateCode(),
-      delay: this.calculateDelayFromMounted()
+      delay: this.calculateDelayFromMounted(),
     };
   }
 
@@ -141,7 +140,7 @@ class Totp extends Component {
     const delayTotp = this.calculateDelayFromNow();
     const code = this.generateCode();
     this.updateCodeOnPeriodTimeout = this.updateCodeOnPeriod(this.period - delayTotp);
-    this.setState({code, delay});
+    this.setState({ code, delay });
   }
 
   /**
@@ -151,7 +150,7 @@ class Totp extends Component {
   updateCodeOnPeriod(when) {
     return setTimeout(() => {
       const code = this.generateCode();
-      this.setState({code});
+      this.setState({ code });
       this.updateCodeOnPeriodTimeout = this.updateCodeOnPeriod(this.period);
     }, when * 1000);
   }
@@ -188,11 +187,15 @@ class Totp extends Component {
 
     return (
       <button type="button" className="no-border" onClick={this.onClick} disabled={!this.props.canClick}>
-        <span className="totp-code"><span>{firstHalfCode}</span>&nbsp;<span>{secondHalfCode}</span></span>
-        <TimerSVG style={{
-          "--timer-duration": `${this.period}s`,
-          "--timer-delay": `-${this.state.delay}s`
-        }}/>
+        <span className="totp-code">
+          <span>{firstHalfCode}</span>&nbsp;<span>{secondHalfCode}</span>
+        </span>
+        <TimerSVG
+          style={{
+            "--timer-duration": `${this.period}s`,
+            "--timer-delay": `-${this.state.delay}s`,
+          }}
+        />
       </button>
     );
   }

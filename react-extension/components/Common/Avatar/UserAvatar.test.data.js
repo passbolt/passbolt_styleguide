@@ -20,10 +20,10 @@
 export function defaultProps(props = {}) {
   const _props = {
     user: {
-      "first_name": "Dame Steve",
-      "last_name": "Shirley",
+      first_name: "Dame Steve",
+      last_name: "Shirley",
     },
-    baseUrl: (new URL(window.location.href)).origin,
+    baseUrl: new URL(window.location.href).origin,
   };
   return Object.assign(_props, props);
 }

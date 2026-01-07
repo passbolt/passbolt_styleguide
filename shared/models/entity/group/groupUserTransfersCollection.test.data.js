@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.4
  */
-import {defaultUserTransferDto} from "./groupTransfer.test.data";
+import { defaultUserTransferDto } from "./groupTransfer.test.data";
 
 /**
  * Default user transfers collection
@@ -27,4 +27,3 @@ export const defaultUserTransfersCollectionDto = (userTransferCount = 10, data =
   }
   return dtos;
 };
-

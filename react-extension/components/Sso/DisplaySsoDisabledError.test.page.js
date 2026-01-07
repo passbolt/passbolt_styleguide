@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplaySsoDisabledError from "./DisplaySsoDisabledError";
 import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -27,9 +27,8 @@ export default class DisplaySsoDisabledErrorPage {
   constructor(props = {}) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplaySsoDisabledError {...props}/>
+        <DisplaySsoDisabledError {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
   }
 
@@ -37,14 +36,14 @@ export default class DisplaySsoDisabledErrorPage {
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.sso-disabled-error h1');
+    return this._page.container.querySelector(".sso-disabled-error h1");
   }
 
   /**
    * Returns paragraph containing the error message
    */
   get message() {
-    return this._page.container.querySelector('.sso-disabled-error p');
+    return this._page.container.querySelector(".sso-disabled-error p");
   }
 
   /**
@@ -65,7 +64,7 @@ export default class DisplaySsoDisabledErrorPage {
    * Simulates a click on the confirmation checkbox
    */
   async clickOnConfirmationCheckbox() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.confirmationCheckbox, leftClick);
     await waitFor(() => {});
   }
@@ -74,7 +73,7 @@ export default class DisplaySsoDisabledErrorPage {
    * Simulates a click on the "Sign in with passphrase" button
    */
   async clickOnSignInWithPassphrase() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.signInWithPassphraseButton, leftClick);
     await waitFor(() => {});
   }

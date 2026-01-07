@@ -14,11 +14,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PasswordPoliciesDto from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto";
 import PasswordPoliciesViewModel from "../../../../shared/models/passwordPolicies/PasswordPoliciesViewModel";
-import {withTranslation} from "react-i18next";
-import {MASKS, SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import { withTranslation } from "react-i18next";
+import { MASKS, SecretGeneratorComplexity } from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 
 const PASSBOLT_MINIMAL_ENTROPY_REQUIREMENT = 80;
 const PASSBOLT_MINIMAL_ENTROPY_ADVISED = 112;
@@ -98,7 +98,7 @@ export class AdminPasswordPoliciesContextProvider extends React.Component {
     const result = await this.props.context.port.request("passbolt.password-policies.get-admin-settings");
     const currentSettings = new PasswordPoliciesViewModel(result);
     //Init saved setting
-    this.setState({currentSettings, settings: currentSettings}, callback);
+    this.setState({ currentSettings, settings: currentSettings }, callback);
     this.setProcessing(false);
   }
 
@@ -111,7 +111,8 @@ export class AdminPasswordPoliciesContextProvider extends React.Component {
     let isValid = true;
     const errors = {};
     const settings = this.state.settings;
-    const hasAtLeast1MaskActivated = settings.mask_upper ||
+    const hasAtLeast1MaskActivated =
+      settings.mask_upper ||
       settings.mask_lower ||
       settings.mask_digit ||
       settings.mask_parenthesis ||
@@ -145,14 +146,20 @@ export class AdminPasswordPoliciesContextProvider extends React.Component {
     const minimalEntropyRequired = this.getMinimalRequiredEntropy();
     if (this.getEntropyForPassphraseConfiguration() < minimalEntropyRequired) {
       isValid = false;
-      errors.passphraseMinimalRequiredEntropy = this.props.t("The passphrase generator will not generate strong enough passphrase. Minimum of {{minimum}}bits is required", {minimum: minimalEntropyRequired});
+      errors.passphraseMinimalRequiredEntropy = this.props.t(
+        "The passphrase generator will not generate strong enough passphrase. Minimum of {{minimum}}bits is required",
+        { minimum: minimalEntropyRequired },
+      );
     }
 
     if (this.getEntropyForPasswordConfiguration() < minimalEntropyRequired) {
       isValid = false;
-      errors.passwordMinimalRequiredEntropy = this.props.t("The password generator will not generate strong enough password. Minimum of {{minimum}}bits is required", {minimum: minimalEntropyRequired});
+      errors.passwordMinimalRequiredEntropy = this.props.t(
+        "The password generator will not generate strong enough password. Minimum of {{minimum}}bits is required",
+        { minimum: minimalEntropyRequired },
+      );
     }
-    this.setState({errors});
+    this.setState({ errors });
     return isValid;
   }
 
@@ -209,7 +216,7 @@ export class AdminPasswordPoliciesContextProvider extends React.Component {
       const newSettings = new PasswordPoliciesDto(this.state.settings);
       const result = await this.props.context.port.request("passbolt.password-policies.save", newSettings);
       const currentSettings = new PasswordPoliciesViewModel(result);
-      this.setState({currentSettings, settings: currentSettings});
+      this.setState({ currentSettings, settings: currentSettings });
     } finally {
       this.setProcessing(false);
     }
@@ -238,8 +245,8 @@ export class AdminPasswordPoliciesContextProvider extends React.Component {
    * @returns {void}
    */
   setSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings, {[key]: value});
-    this.setState({settings: newSettings}, () => {
+    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
+    this.setState({ settings: newSettings }, () => {
       if (this.hasDataBeenValidated) {
         this.validateData();
       }
@@ -261,7 +268,7 @@ export class AdminPasswordPoliciesContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -277,15 +284,14 @@ export class AdminPasswordPoliciesContextProvider extends React.Component {
    * @returns {Boolean}
    */
   isSourceChanging() {
-    return this.state.currentSettings?.source !== "db"
-      && this.state.currentSettings?.source !== "default";
+    return this.state.currentSettings?.source !== "db" && this.state.currentSettings?.source !== "default";
   }
 
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {currentSettings, settings, processing} = this.defaultState;
+    const { currentSettings, settings, processing } = this.defaultState;
     this.setState({
       currentSettings,
       settings,
@@ -313,7 +319,7 @@ AdminPasswordPoliciesContextProvider.propTypes = {
   actionFeedbackContext: PropTypes.object, // The action feedback context
 };
 
-export default withAppContext(withTranslation('common')(AdminPasswordPoliciesContextProvider));
+export default withAppContext(withTranslation("common")(AdminPasswordPoliciesContextProvider));
 
 /**
  * Resource Workspace Context Consumer HOC
@@ -324,11 +330,8 @@ export function withAdminPasswordPolicies(WrappedComponent) {
     render() {
       return (
         <AdminPasswordPoliciesContext.Consumer>
-          {adminPasswordPoliciesContext => (
-            <WrappedComponent
-              adminPasswordPoliciesContext={adminPasswordPoliciesContext}
-              {...this.props}
-            />
+          {(adminPasswordPoliciesContext) => (
+            <WrappedComponent adminPasswordPoliciesContext={adminPasswordPoliciesContext} {...this.props} />
           )}
         </AdminPasswordPoliciesContext.Consumer>
       );

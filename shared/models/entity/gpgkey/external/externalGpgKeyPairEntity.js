@@ -15,27 +15,29 @@ import Entity from "../../abstract/entity";
 import ExternalGpgKeyEntity from "../externalGpgKeyEntity";
 import EntitySchema from "../../abstract/entitySchema";
 
-
-const ENTITY_NAME = 'externalGpgKeyPairEntity';
+const ENTITY_NAME = "externalGpgKeyPairEntity";
 
 class ExternalGpgKeyPairEntity extends Entity {
   /**
    * @inheritDoc
    */
   constructor(externalGpgKeyPeyPairDto, options = {}) {
-    super(EntitySchema.validate(
-      ExternalGpgKeyPairEntity.ENTITY_NAME,
-      externalGpgKeyPeyPairDto,
-      ExternalGpgKeyPairEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        ExternalGpgKeyPairEntity.ENTITY_NAME,
+        externalGpgKeyPeyPairDto,
+        ExternalGpgKeyPairEntity.getSchema(),
+      ),
+      options,
+    );
 
     if (this._props.private_key) {
-      this._private_key = new ExternalGpgKeyEntity(this._props.private_key, {clone: false});
+      this._private_key = new ExternalGpgKeyEntity(this._props.private_key, { clone: false });
       delete this._props.private_key;
     }
 
     if (this._props.public_key) {
-      this._public_key = new ExternalGpgKeyEntity(this._props.public_key, {clone: false});
+      this._public_key = new ExternalGpgKeyEntity(this._props.public_key, { clone: false });
       delete this._props.public_key;
     }
   }
@@ -46,15 +48,12 @@ class ExternalGpgKeyPairEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "public_key",
-        "private_key"
-      ],
-      "properties": {
-        "public_key": ExternalGpgKeyEntity.getSchema(),
-        "private_key": ExternalGpgKeyEntity.getSchema()
-      }
+      type: "object",
+      required: ["public_key", "private_key"],
+      properties: {
+        public_key: ExternalGpgKeyEntity.getSchema(),
+        private_key: ExternalGpgKeyEntity.getSchema(),
+      },
     };
   }
 
@@ -84,7 +83,6 @@ class ExternalGpgKeyPairEntity extends Entity {
 
     return result;
   }
-
 
   /**
    * Customizes JSON stringification behavior
@@ -133,7 +131,7 @@ class ExternalGpgKeyPairEntity extends Entity {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {public_key: true, private_key: true};
+    return { public_key: true, private_key: true };
   }
 }
 

@@ -12,10 +12,10 @@
  * @since         5.6.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import ResizableSidebar from "./ResizableSidebar";
-import {ResizableSidebarContextProvider} from "../../contexts/ResizeSidebar/ResizeSidebarContext";
+import { ResizableSidebarContextProvider } from "../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 export default class ResizableSidebarPage {
   constructor(props) {
@@ -25,34 +25,34 @@ export default class ResizableSidebarPage {
       </ResizableSidebarContextProvider>
     );
 
-    this._page = render(<Wrapper />,
-      {legacyRoot: true});
+    this._page = render(<Wrapper />, { legacyRoot: true });
 
-    const container = this._page.container.querySelector('.resizable-sidebar-container');
-    const sidebar = this._page.container.querySelector('.resizable-sidebar');
-    Object.defineProperty(container, 'offsetWidth', {
+    const container = this._page.container.querySelector(".resizable-sidebar-container");
+    const sidebar = this._page.container.querySelector(".resizable-sidebar");
+    Object.defineProperty(container, "offsetWidth", {
       configurable: true,
-      value: 1000
+      value: 1000,
     });
 
-    Object.defineProperty(sidebar, 'offsetWidth', {
+    Object.defineProperty(sidebar, "offsetWidth", {
       configurable: true,
       value: 200, // 20% of 1000 — matches initial minWidth: '20%'
     });
   }
 
   get gutter() {
-    return this._page.container.querySelector('.gutter');
+    return this._page.container.querySelector(".gutter");
   }
 
   get container() {
-    return this._page.container.querySelector('.resizable-sidebar');
+    return this._page.container.querySelector(".resizable-sidebar");
   }
 
   getWidthOf(element) {
-    if (!element) { return 0; }
+    if (!element) {
+      return 0;
+    }
     const style = getComputedStyle(element);
     return parseFloat(style.width || "0");
   }
 }
-

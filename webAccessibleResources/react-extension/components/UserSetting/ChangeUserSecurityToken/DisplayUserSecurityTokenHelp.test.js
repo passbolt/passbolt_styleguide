@@ -12,22 +12,24 @@
  * @since         5.8.0
  */
 
-import DisplayUserSecurityTokenHelpPage from './DisplayUserSecurityTokenHelp.test.page';
+import DisplayUserSecurityTokenHelpPage from "./DisplayUserSecurityTokenHelp.test.page";
 
 describe("Change security token help", () => {
   let page;
 
-  it('As AN I should see a link redirecting me to phising attacks definition', async() => {
+  it("As AN I should see a link redirecting me to phising attacks definition", async () => {
     page = new DisplayUserSecurityTokenHelpPage();
-    expect(page.phishingDefinitionLink.getAttribute('target')).toEqual('_blank');
-    expect(page.phishingDefinitionLink.getAttribute('rel')).toEqual('noopener noreferrer');
-    expect(page.phishingDefinitionLink.getAttribute('href')).toEqual('https://en.wikipedia.org/wiki/Phishing');
+    expect(page.phishingDefinitionLink.getAttribute("target")).toEqual("_blank");
+    expect(page.phishingDefinitionLink.getAttribute("rel")).toEqual("noopener noreferrer");
+    expect(page.phishingDefinitionLink.getAttribute("href")).toEqual("https://en.wikipedia.org/wiki/Phishing");
   });
 
-  it('As AN I should see a link redirecting me to security token documentation', async() => {
+  it("As AN I should see a link redirecting me to security token documentation", async () => {
     page = new DisplayUserSecurityTokenHelpPage();
-    expect(page.tokenDocumentationLink.getAttribute('target')).toEqual('_blank');
-    expect(page.tokenDocumentationLink.getAttribute('rel')).toEqual('noopener noreferrer');
-    expect(page.tokenDocumentationLink.getAttribute('href')).toEqual('https://www.passbolt.com/docs/user/settings/browser/security-token/');
+    expect(page.tokenDocumentationLink.getAttribute("target")).toEqual("_blank");
+    expect(page.tokenDocumentationLink.getAttribute("rel")).toEqual("noopener noreferrer");
+    expect(page.tokenDocumentationLink.getAttribute("href")).toEqual(
+      "https://www.passbolt.com/docs/user/settings/browser/security-token/",
+    );
   });
 });

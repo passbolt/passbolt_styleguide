@@ -10,10 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import InsertRecoverAuthenticationIframe
-  from "./components/AuthenticationRecover/RecoverAuthentication/InsertRecoverAuthenticationIframe";
+import InsertRecoverAuthenticationIframe from "./components/AuthenticationRecover/RecoverAuthentication/InsertRecoverAuthenticationIframe";
 
 /**
  * The bootstrap of the recover application served by the browser extension.
@@ -37,8 +36,7 @@ class ExtBootstrapRecover extends Component {
     const rootNode = document.getRootNode();
     const htmlTag = rootNode.lastChild;
 
-    return htmlTag?.tagName === "HTML"
-      && htmlTag.classList.contains('passbolt');
+    return htmlTag?.tagName === "HTML" && htmlTag.classList.contains("passbolt");
   }
 
   /**
@@ -75,7 +73,10 @@ class ExtBootstrapRecover extends Component {
 
     return (
       <>
-        <InsertRecoverAuthenticationIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
+        <InsertRecoverAuthenticationIframe
+          port={this.props.port}
+          browserExtensionUrl={this.props.browserExtensionUrl}
+        />
       </>
     );
   }

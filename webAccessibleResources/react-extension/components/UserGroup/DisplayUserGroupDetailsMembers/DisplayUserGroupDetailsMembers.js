@@ -15,12 +15,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
-import {withDialog} from "../../../contexts/DialogContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withDialog } from "../../../contexts/DialogContext";
+import { Trans, withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
@@ -43,7 +43,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
    */
   get defaultState() {
     return {
-      open: false // Flag for the expand / collapse mode
+      open: false, // Flag for the expand / collapse mode
     };
   }
 
@@ -73,7 +73,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
    * Handle the click on the title
    */
   handleTitleClicked() {
-    this.setState({open: !this.state.open});
+    this.setState({ open: !this.state.open });
   }
 
   /**
@@ -104,34 +104,30 @@ class DisplayUserGroupDetailsMembers extends React.Component {
               <span className="accordion-title">
                 <Trans>Group members</Trans>
               </span>
-              {this.state.open &&
-                <CaretDownSVG/>
-              }
-              {!this.state.open &&
-                <CaretRightSVG/>
-              }
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className="accordion-content">
-            {this.isLoading() &&
+            {this.isLoading() && (
               <div className="processing-wrapper">
-                <SpinnerSVG/>
-                <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
+                <SpinnerSVG />
+                <span className="processing-text">
+                  <Trans>Retrieving permissions</Trans>
+                </span>
               </div>
-            }
-            {!this.isLoading() &&
-            <>
-              {
-                this.group.groups_users.map(groupUser => (
-                  <DisplayUserGroupDetailsMembersGroupMember key={groupUser.id} groupUser={groupUser}/>
-                ))
-              }
-            </>
-            }
+            )}
+            {!this.isLoading() && (
+              <>
+                {this.group.groups_users.map((groupUser) => (
+                  <DisplayUserGroupDetailsMembersGroupMember key={groupUser.id} groupUser={groupUser} />
+                ))}
+              </>
+            )}
           </div>
-        }
+        )}
       </div>
     );
   }

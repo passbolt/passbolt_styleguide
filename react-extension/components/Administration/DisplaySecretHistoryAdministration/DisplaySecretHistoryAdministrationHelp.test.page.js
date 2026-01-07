@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplaySecretHistoryAdministrationHelp from "./DisplaySecretHistoryAdministrationHelp";
 
@@ -24,8 +24,8 @@ export default class DisplaySecretHistoryAdministrationPage {
   constructor() {
     this._page = render(
       <MockTranslationProvider>
-        <DisplaySecretHistoryAdministrationHelp/>
-      </MockTranslationProvider>
+        <DisplaySecretHistoryAdministrationHelp />
+      </MockTranslationProvider>,
     );
   }
 
@@ -50,6 +50,6 @@ export default class DisplaySecretHistoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get readDocumentation() {
-    return this._page.container.querySelector('a.button');
+    return this._page.container.querySelector("a.button");
   }
 }

@@ -2,23 +2,22 @@ import DeleteResource from "./DeleteResource";
 import {
   defaultPropsMultipleResource,
   defaultPropsOneResource,
-  defaultPropsOneResourceLongPassword
+  defaultPropsOneResourceLongPassword,
 } from "./DeleteResource.test.data";
 
-
 export default {
-  title: 'Components/Resource/DeleteResource',
-  component: DeleteResource
+  title: "Components/Resource/DeleteResource",
+  component: DeleteResource,
 };
 
 export const SinglePassword = {
-  args: defaultPropsOneResource()
+  args: defaultPropsOneResource(),
 };
 
 export const MultiplePassword = {
-  args: defaultPropsMultipleResource()
+  args: defaultPropsMultipleResource(),
 };
 
 export const WithLongPassword = {
-  args: defaultPropsOneResourceLongPassword()
+  args: defaultPropsOneResourceLongPassword(),
 };

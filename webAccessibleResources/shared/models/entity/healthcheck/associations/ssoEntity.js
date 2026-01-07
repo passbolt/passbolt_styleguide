@@ -22,11 +22,7 @@ class SsoEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      SsoEntity.ENTITY_NAME,
-      dto,
-      SsoEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(SsoEntity.ENTITY_NAME, dto, SsoEntity.getSchema()), options);
   }
 
   /**
@@ -35,11 +31,11 @@ class SsoEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["sslHostVerification"],
-      "properties": {
-        "sslHostVerification": {"type": "boolean"},
-      }
+      type: "object",
+      required: ["sslHostVerification"],
+      properties: {
+        sslHostVerification: { type: "boolean" },
+      },
     };
   }
 

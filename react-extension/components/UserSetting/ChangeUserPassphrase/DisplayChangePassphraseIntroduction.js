@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,10 +12,10 @@
  * @since         3.1.0
  */
 
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withUserSettings } from "../../../contexts/UserSettingsContext";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * This component displays the user profile information
@@ -55,7 +54,7 @@ class DisplayChangePassphraseIntroduction extends React.Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+    await this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -67,7 +66,7 @@ class DisplayChangePassphraseIntroduction extends React.Component {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    this.setState({[name]: value});
+    this.setState({ [name]: value });
   }
 
   /**
@@ -102,7 +101,7 @@ class DisplayChangePassphraseIntroduction extends React.Component {
    */
   async validateUnderstandPassphrase() {
     const understandPassphraseError = !this.state.understandPassphrase;
-    return this.setState({understandPassphraseError});
+    return this.setState({ understandPassphraseError });
   }
 
   /**
@@ -110,7 +109,7 @@ class DisplayChangePassphraseIntroduction extends React.Component {
    * @returns {boolean}
    */
   hasValidationError() {
-    return  this.state.understandPassphraseError;
+    return this.state.understandPassphraseError;
   }
 
   /**
@@ -126,21 +125,44 @@ class DisplayChangePassphraseIntroduction extends React.Component {
       <form className="profile-passphrase" onSubmit={this.handleSubmit}>
         <div className="main-column">
           <div className="main-content">
-            <h3><Trans>Before getting started...</Trans></h3>
-            <div className="password-management-bg">
-            </div>
+            <h3>
+              <Trans>Before getting started...</Trans>
+            </h3>
+            <div className="password-management-bg"></div>
             <p>
               <Trans>The passphrase is used to protect your private key locally.</Trans>&nbsp;
-              <Trans>The passphrase is stored on your device and never transmitted to the server.</Trans><br/><br/>
-              <Trans>Changing your passphrase will only update it on your current device and browser profile.</Trans>&nbsp;
-              <Trans>If you use Passbolt on multiple browsers or devices, you’ll need to update the passphrase on each one individually.</Trans><br/><br/>
-              <Trans>Whenever you change your passphrase, Passbolt automatically creates a new key backup encrypted with the updated passphrase.</Trans>&nbsp;
-              <Trans>This backup supersedes the previous one, so be sure to replace any older backups with it.</Trans>&nbsp;
+              <Trans>The passphrase is stored on your device and never transmitted to the server.</Trans>
+              <br />
+              <br />
+              <Trans>Changing your passphrase will only update it on your current device and browser profile.</Trans>
+              &nbsp;
+              <Trans>
+                If you use Passbolt on multiple browsers or devices, you’ll need to update the passphrase on each one
+                individually.
+              </Trans>
+              <br />
+              <br />
+              <Trans>
+                Whenever you change your passphrase, Passbolt automatically creates a new key backup encrypted with the
+                updated passphrase.
+              </Trans>
+              &nbsp;
+              <Trans>This backup supersedes the previous one, so be sure to replace any older backups with it.</Trans>
+              &nbsp;
             </p>
-            <div className={`input checkbox ${this.state.understandPassphraseError ? 'error' : ''}`}>
-              <input id="passphrase-update-understand" type="checkbox" checked={this.state.understandPassphrase}
-                disabled={this.hasAllInputDisabled()} name="understandPassphrase" onChange={this.handleInputChange}/>
-              <label htmlFor="passphrase-update-understand"> <Trans>Ok, I understand what I need to do.</Trans></label>
+            <div className={`input checkbox ${this.state.understandPassphraseError ? "error" : ""}`}>
+              <input
+                id="passphrase-update-understand"
+                type="checkbox"
+                checked={this.state.understandPassphrase}
+                disabled={this.hasAllInputDisabled()}
+                name="understandPassphrase"
+                onChange={this.handleInputChange}
+              />
+              <label htmlFor="passphrase-update-understand">
+                {" "}
+                <Trans>Ok, I understand what I need to do.</Trans>
+              </label>
             </div>
           </div>
         </div>

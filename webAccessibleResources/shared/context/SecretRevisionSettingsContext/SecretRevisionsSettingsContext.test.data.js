@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.7.0
  */
-import {defaultAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
+import { defaultAppContext } from "../../../react-extension/contexts/ExtAppContext.test.data";
 
 export const defaultProps = (data = {}) => ({
   context: defaultAppContext(),
-  ...data
+  ...data,
 });
 
 export const defaultMetadataTypesSettingsStorageContext = (data = {}) => ({

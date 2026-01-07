@@ -12,21 +12,17 @@
  * @since         3.7.4
  */
 
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import MockPort from "../../../react-extension/test/mock/MockPort";
-import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
-import {createMemoryHistory} from "history";
-import {defaultGroupDto} from "../../../shared/models/entity/group/groupEntity.test.data";
+import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import { createMemoryHistory } from "history";
+import { defaultGroupDto } from "../../../shared/models/entity/group/groupEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {
-  defaultMetadataTypesSettingsV4Dto
-} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default component props
@@ -35,15 +31,20 @@ import {
  */
 export function defaultProps(props = {}) {
   const port = new MockPort();
-  port.addRequestListener("passbolt.resources.find-all-ids-by-is-shared-with-group", () => new Promise(resolve => setTimeout(() => resolve(props.groups ?? []), 4000)));
-  port.addRequestListener("passbolt.groups.find-my-groups", () => new Promise(resolve => setTimeout(() => resolve(props.resources ?? []), 4000)));
-  const defaultContext = {port};
+  port.addRequestListener(
+    "passbolt.resources.find-all-ids-by-is-shared-with-group",
+    () => new Promise((resolve) => setTimeout(() => resolve(props.groups ?? []), 4000)),
+  );
+  port.addRequestListener(
+    "passbolt.groups.find-my-groups",
+    () => new Promise((resolve) => setTimeout(() => resolve(props.resources ?? []), 4000)),
+  );
+  const defaultContext = { port };
   const defaultProps = {
-    context: defaultAppContext(
-      {
-        ...defaultContext,
-        ...props?.context
-      }),
+    context: defaultAppContext({
+      ...defaultContext,
+      ...props?.context,
+    }),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
@@ -63,12 +64,12 @@ export function noGroupsProps(props) {
   const port = new MockPort();
   port.addRequestListener("passbolt.resources.find-all-ids-by-is-shared-with-group", () => []);
   port.addRequestListener("passbolt.groups.find-my-groups", () => []);
-  const defaultContext = {port};
+  const defaultContext = { port };
   const context = {
     ...defaultContext,
-    ...props?.context
+    ...props?.context,
   };
-  return defaultProps({context});
+  return defaultProps({ context });
 }
 
 /**
@@ -80,25 +81,25 @@ export function withGroupsProps(props) {
   const port = new MockPort();
   const groups = props?.groups || [
     defaultGroupDto({
-      name: "group1"
+      name: "group1",
     }),
     defaultGroupDto({
-      name: "group2"
+      name: "group2",
     }),
     defaultGroupDto({
-      name: "group3"
+      name: "group3",
     }),
     defaultGroupDto({
-      name: "group4"
-    })
+      name: "group4",
+    }),
   ];
   port.addRequestListener("passbolt.groups.find-my-groups", () => groups);
-  const defaultContext = {port};
+  const defaultContext = { port };
   const context = {
     ...defaultContext,
-    ...props?.context
+    ...props?.context,
   };
-  return defaultProps({context});
+  return defaultProps({ context });
 }
 
 /**
@@ -112,7 +113,7 @@ export function withSelectedGroupProps(props) {
   propsWithGroup.location = propsWithGroup.history.location;
 
   propsWithGroup.location.state = {
-    selectedGroup: defaultGroupDto().id
+    selectedGroup: defaultGroupDto().id,
   };
 
   return propsWithGroup;
@@ -127,32 +128,40 @@ export function withFilteredResourcesProps(props) {
   const port = new MockPort();
 
   const resources = props?.resources ?? [
-    defaultResourceDto({
-      metadata: {
-        name: "apache",
-        username: "www-data",
-        uris: ["http://www.apache.org/", "http://www.apache.org/projects"],
-        description: "Apache is the world\u0027s most used web server software.",
-      }
-    }, {withTags: true}),
-    defaultResourceDto({
-      metadata: {
-        name: "passbolt",
-        username: "passbolt",
-        uris: ["http://www.passbolt.local/"],
-        description: "passbolt.",
-      }
-    }, {withTags: true})
+    defaultResourceDto(
+      {
+        metadata: {
+          name: "apache",
+          username: "www-data",
+          uris: ["http://www.apache.org/", "http://www.apache.org/projects"],
+          description: "Apache is the world\u0027s most used web server software.",
+        },
+      },
+      { withTags: true },
+    ),
+    defaultResourceDto(
+      {
+        metadata: {
+          name: "passbolt",
+          username: "passbolt",
+          uris: ["http://www.passbolt.local/"],
+          description: "passbolt.",
+        },
+      },
+      { withTags: true },
+    ),
   ];
 
   port.addRequestListener("passbolt.groups.find-my-groups", () => [
-    defaultGroupDto({name: "group1"}),
-    defaultGroupDto({name: "group2"})
+    defaultGroupDto({ name: "group1" }),
+    defaultGroupDto({ name: "group2" }),
   ]);
-  port.addRequestListener("passbolt.resources.find-all-ids-by-is-shared-with-group", () => [resources[0]?.id, resources[1]?.id]);
-  const defaultContext = {port};
+  port.addRequestListener("passbolt.resources.find-all-ids-by-is-shared-with-group", () => [
+    resources[0]?.id,
+    resources[1]?.id,
+  ]);
+  const defaultContext = { port };
   const context = Object.assign(defaultContext, props?.context);
 
-  return withSelectedGroupProps({context, resources: resources
-  });
+  return withSelectedGroupProps({ context, resources: resources });
 }

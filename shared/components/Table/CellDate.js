@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
-import React, {Component, memo} from "react";
+import React, { Component, memo } from "react";
 import PropTypes from "prop-types";
-import {formatDateTimeAgo} from "../../utils/dateUtils";
+import { formatDateTimeAgo } from "../../utils/dateUtils";
 
 /**
  * This component represents a table date cell

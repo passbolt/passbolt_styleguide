@@ -11,14 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
-import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import { UserWorkspaceFilterTypes, withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied users filter
@@ -38,7 +38,9 @@ class FilterUsersByBreadcrumb extends Component {
       case UserWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.userWorkspaceContext.filter.payload;
         const currentSearchText = this.props.userWorkspaceContext.filter.payload;
-        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(`${this.translate("Search:")} ${currentSearchText}`)];
+        return isEmptySearchText
+          ? items
+          : [...items, this.getLastBreadcrumb(`${this.translate("Search:")} ${currentSearchText}`)];
       }
       case UserWorkspaceFilterTypes.SUSPENDED_USER:
         return [...items, this.getLastBreadcrumb(this.translate("Suspended users"))];
@@ -63,7 +65,9 @@ class FilterUsersByBreadcrumb extends Component {
    * @return {JSX.Element}
    */
   get allUsersBreadcrumb() {
-    return <Breadcrumb name={this.translate("All users")} onClick={this.props.navigationContext.onGoToUsersRequested}/>;
+    return (
+      <Breadcrumb name={this.translate("All users")} onClick={this.props.navigationContext.onGoToUsersRequested} />
+    );
   }
 
   /**
@@ -72,7 +76,7 @@ class FilterUsersByBreadcrumb extends Component {
    * @return {JSX.Element}
    */
   getLastBreadcrumb(name) {
-    return <Breadcrumb name={name} onClick={this.onLastBreadcrumbClick.bind(this)}/>;
+    return <Breadcrumb name={name} onClick={this.onLastBreadcrumbClick.bind(this)} />;
   }
 
   /**
@@ -81,7 +85,7 @@ class FilterUsersByBreadcrumb extends Component {
    */
   async onLastBreadcrumbClick() {
     const pathname = this.props.location.pathname;
-    this.props.history.push({pathname});
+    this.props.history.push({ pathname });
   }
 
   /**
@@ -100,7 +104,9 @@ class FilterUsersByBreadcrumb extends Component {
     const count = this.props.userWorkspaceContext.filteredUsers.length;
     return (
       <Breadcrumbs items={this.items}>
-        <span className="counter"><Trans count={count}>{{count}} items</Trans></span>
+        <span className="counter">
+          <Trans count={count}>{{ count }} items</Trans>
+        </span>
       </Breadcrumbs>
     );
   }
@@ -114,4 +120,4 @@ FilterUsersByBreadcrumb.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(withUserWorkspace(withTranslation('common')(FilterUsersByBreadcrumb))));
+export default withRouter(withNavigationContext(withUserWorkspace(withTranslation("common")(FilterUsersByBreadcrumb))));

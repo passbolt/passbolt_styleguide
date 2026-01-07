@@ -1,11 +1,8 @@
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import MetadataGettingStartedSettingsEntity
-  from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
-import {
-  defaultMetadataGettingStartedSettingsDto
-} from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
-import siteSettingsPro, {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
-import {defaultNavigationContext} from "../../../contexts/NavigationContext.test.data";
+import MetadataGettingStartedSettingsEntity from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
+import { defaultMetadataGettingStartedSettingsDto } from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
+import siteSettingsPro, { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
+import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -26,12 +23,17 @@ export function defaultAppContext(appContext) {
 export function defaultProps(data = {}, isCommunityEdition = false) {
   const siteSettingsValue = isCommunityEdition ? siteSettingsCe : siteSettingsPro;
   const siteSettings = new SiteSettings(siteSettingsValue);
-  return Object.assign({
-    context: {
-      siteSettings: siteSettings
+  return Object.assign(
+    {
+      context: {
+        siteSettings: siteSettings,
+      },
+      administrationWorkspaceContext: {},
+      metadataGettingStartedSettings: new MetadataGettingStartedSettingsEntity(
+        defaultMetadataGettingStartedSettingsDto(),
+      ),
+      navigationContext: defaultNavigationContext(),
     },
-    administrationWorkspaceContext: {},
-    metadataGettingStartedSettings: new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto()),
-    navigationContext: defaultNavigationContext(),
-  }, data);
+    data,
+  );
 }

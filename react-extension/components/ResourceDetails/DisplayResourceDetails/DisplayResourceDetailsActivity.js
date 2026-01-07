@@ -15,12 +15,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {Trans, withTranslation} from "react-i18next";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import {withActionFeedback} from '../../../contexts/ActionFeedbackContext';
+import { Trans, withTranslation } from "react-i18next";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import ActivitiesServiceWorkerService from "./ActivitiesServiceWorkerService";
 import DisplayAroName from "../../../../shared/components/Aro/DisplayAroName";
 
@@ -57,7 +57,7 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   async componentDidMount() {
     await this.fetch(this.state.activitiesPage);
-    this.setState({loading: false});
+    this.setState({ loading: false });
   }
 
   /**
@@ -91,8 +91,8 @@ class DisplayResourceDetailsActivity extends React.Component {
     }
 
     // Reset the component, and fetch activities for the new resource.
-    this.setState(this.defaultState, async() => await this.fetch(this.state.activitiesPage));
-    this.setState({loading: false});
+    this.setState(this.defaultState, async () => await this.fetch(this.state.activitiesPage));
+    this.setState({ loading: false });
   }
 
   /**
@@ -113,10 +113,11 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   async handleMoreClickEvent() {
     // If initial load : page 1 is not successful, don't increment to page 2
-    const activitiesPage = this.state?.activities?.length > 0 ? this.state.activitiesPage + 1 : this.state.activitiesPage;
-    this.setState({activitiesPage, loadingMore: true});
+    const activitiesPage =
+      this.state?.activities?.length > 0 ? this.state.activitiesPage + 1 : this.state.activitiesPage;
+    this.setState({ activitiesPage, loadingMore: true });
     await this.fetch(activitiesPage);
-    this.setState({loadingMore: false});
+    this.setState({ loadingMore: false });
   }
 
   /**
@@ -126,7 +127,8 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   async fetch(page) {
     try {
-      const newActivities = await this.activitiesServiceWorkerService.findAllFromResourceId(this.resource.id, {page}) || [];
+      const newActivities =
+        (await this.activitiesServiceWorkerService.findAllFromResourceId(this.resource.id, { page })) || [];
       // For the first page need to reset activities state
       this.mergeActivities(newActivities);
     } catch (error) {
@@ -135,7 +137,7 @@ class DisplayResourceDetailsActivity extends React.Component {
       // If fetch failed for page 2 or more, decrement page count to try the same page next
       if (this.state.activitiesPage > 1) {
         const activitiesPage = this.state.activitiesPage - 1;
-        this.setState({activitiesPage});
+        this.setState({ activitiesPage });
       }
     }
   }
@@ -146,10 +148,12 @@ class DisplayResourceDetailsActivity extends React.Component {
    * @param {array} fetchActivities
    */
   mergeActivities(fetchActivities) {
-    const newActivities = fetchActivities.filter(activity => !this.state.activities.find(a => a.id === activity.id));
+    const newActivities = fetchActivities.filter(
+      (activity) => !this.state.activities.find((a) => a.id === activity.id),
+    );
     const activities = [...this.state.activities, ...newActivities];
     activities.sort((a, b) => new Date(b.created) - new Date(a.created));
-    this.setState({activities});
+    this.setState({ activities });
   }
 
   /**
@@ -215,13 +219,16 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> created item <span className="item">{{resourceName}}</span>
+                <span className="creator">{{ activityCreatorName }}</span> created item{" "}
+                <span className="item">{{ resourceName }}</span>
               </Trans>
             </div>
-            <div className="subinfo third-level light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo third-level light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -242,13 +249,16 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> updated item <span className="item">{{resourceName}}</span>
+                <span className="creator">{{ activityCreatorName }}</span> updated item{" "}
+                <span className="item">{{ resourceName }}</span>
               </Trans>
             </div>
-            <div className="subinfo third-level light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo third-level light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -269,13 +279,16 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> accessed secret of item <span className="item">{{resourceName}}</span>
+                <span className="creator">{{ activityCreatorName }}</span> accessed secret of item{" "}
+                <span className="item">{{ resourceName }}</span>
               </Trans>
             </div>
-            <div className="subinfo third-level light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo third-level light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -296,13 +309,16 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> updated secret of item <span className="item">{{resourceName}}</span>
+                <span className="creator">{{ activityCreatorName }}</span> updated secret of item{" "}
+                <span className="item">{{ resourceName }}</span>
               </Trans>
             </div>
-            <div className="subinfo third-level light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo third-level light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -319,17 +335,17 @@ class DisplayResourceDetailsActivity extends React.Component {
 
     return (
       <li key={permission.id}>
-        {permission.user &&
-        <UserAvatar user={permission.user} baseUrl={this.baseUrl}/>
-        }
-        {permission.group &&
-        <GroupAvatar group={permission.group}/>
-        }
+        {permission.user && <UserAvatar user={permission.user} baseUrl={this.baseUrl} />}
+        {permission.group && <GroupAvatar group={permission.group} />}
         <div className="name">
-          <span className="creator"><DisplayAroName displayAs={permission.aro} user={permission.user} group={permission.group}/></span>
+          <span className="creator">
+            <DisplayAroName displayAs={permission.aro} user={permission.user} group={permission.group} />
+          </span>
           <span className="permission-type"> {permissionLabel}</span>
         </div>
-        <div className="type"><span className={changeType}>{changeTypeLabel}</span></div>
+        <div className="type">
+          <span className={changeType}>{changeTypeLabel}</span>
+        </div>
       </li>
     );
   }
@@ -350,18 +366,27 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> changed permissions of item <span className="item">{{resourceName}}</span> with
+                <span className="creator">{{ activityCreatorName }}</span> changed permissions of item{" "}
+                <span className="item">{{ resourceName }}</span> with
               </Trans>
             </div>
             <ul className="permissions-list">
-              {activity.data.permissions.added.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "created"))}
-              {activity.data.permissions.updated.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "updated"))}
-              {activity.data.permissions.removed.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "removed"))}
+              {activity.data.permissions.added.map((permission) =>
+                this.renderSharedActivityPermissionChangeItem(permission, "created"),
+              )}
+              {activity.data.permissions.updated.map((permission) =>
+                this.renderSharedActivityPermissionChangeItem(permission, "updated"),
+              )}
+              {activity.data.permissions.removed.map((permission) =>
+                this.renderSharedActivityPermissionChangeItem(permission, "removed"),
+              )}
             </ul>
-            <div className="subinfo third-level light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo third-level light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -424,7 +449,7 @@ class DisplayResourceDetailsActivity extends React.Component {
    * @return {boolean}
    */
   mustDisplayMoreButton() {
-    return !this.state.activities.some(activity => activity.type === "Resources.created");
+    return !this.state.activities.some((activity) => activity.type === "Resources.created");
   }
 
   /**
@@ -450,26 +475,33 @@ class DisplayResourceDetailsActivity extends React.Component {
     return (
       <div className={`activity accordion sidebar-section`}>
         <div className="accordion-content">
-          {this.state.loading &&
-          <div className="processing-wrapper">
-            <SpinnerSVG/>
-            <span className="processing-text"><Trans>Retrieving activities</Trans></span>
-          </div>
-          }
-          {!this.state.loading &&
-          <React.Fragment>
-            <ul className="ready">
-              {this.state.activities.map(activity => this.renderActivity(activity))}
-            </ul>
-            {this.mustDisplayMoreButton() &&
-            <div className="actions">
-              <button type="button" onClick={this.handleMoreClickEvent} disabled={this.state.loadingMore} className={`link no-border action-logs-load-more ${this.state.loadingMore ? "processing" : ""}`}>
-                <span><Trans>More</Trans></span>
-              </button>
+          {this.state.loading && (
+            <div className="processing-wrapper">
+              <SpinnerSVG />
+              <span className="processing-text">
+                <Trans>Retrieving activities</Trans>
+              </span>
             </div>
-            }
-          </React.Fragment>
-          }
+          )}
+          {!this.state.loading && (
+            <React.Fragment>
+              <ul className="ready">{this.state.activities.map((activity) => this.renderActivity(activity))}</ul>
+              {this.mustDisplayMoreButton() && (
+                <div className="actions">
+                  <button
+                    type="button"
+                    onClick={this.handleMoreClickEvent}
+                    disabled={this.state.loadingMore}
+                    className={`link no-border action-logs-load-more ${this.state.loadingMore ? "processing" : ""}`}
+                  >
+                    <span>
+                      <Trans>More</Trans>
+                    </span>
+                  </button>
+                </div>
+              )}
+            </React.Fragment>
+          )}
         </div>
       </div>
     );
@@ -483,4 +515,6 @@ DisplayResourceDetailsActivity.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetailsActivity))));
+export default withAppContext(
+  withResourceWorkspace(withActionFeedback(withTranslation("common")(DisplayResourceDetailsActivity))),
+);

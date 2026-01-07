@@ -20,7 +20,7 @@ import DisplayActionFeedbacksPage from "./DisplayActionFeedbacks.test.page";
 import {
   propsForDisplayTime,
   propsWithOneErrorMessage,
-  propsWithOneSuccessMessage
+  propsWithOneSuccessMessage,
 } from "./DisplayActionFeedbacks.test.data";
 
 beforeEach(() => {
@@ -31,7 +31,7 @@ beforeEach(() => {
 describe("Share Action Feedbacks", () => {
   let page; // The page to test against
 
-  describe('As a LU I should see the feedback messages', () => {
+  describe("As a LU I should see the feedback messages", () => {
     describe("As a LU I should see a success message", () => {
       /**
        * Given a success feedback message “The comment has been added successfully”
@@ -45,7 +45,7 @@ describe("Share Action Feedbacks", () => {
 
       it('I should see “Success: The comment has been added successfully"', () => {
         expect.assertions(1);
-        expect(page.message(1)).toBe('Success: The comment has been added successfully');
+        expect(page.message(1)).toBe("Success: The comment has been added successfully");
       });
     });
 
@@ -60,9 +60,9 @@ describe("Share Action Feedbacks", () => {
         page = new DisplayActionFeedbacksPage(propsWithOneErrorMessage);
       });
 
-      it('I should see “Error: An error occurred during the operation”', () => {
+      it("I should see “Error: An error occurred during the operation”", () => {
         expect.assertions(1);
-        expect(page.message(1)).toBe('Error: An error occurred during the operation');
+        expect(page.message(1)).toBe("Error: An error occurred during the operation");
       });
     });
 
@@ -77,8 +77,8 @@ describe("Share Action Feedbacks", () => {
         page = new DisplayActionFeedbacksPage(propsForDisplayTime);
       });
 
-      it('I should not see the feedback message after 5 seconds', () => {
-        jest.spyOn(propsForDisplayTime.actionFeedbackContext, 'remove').mockImplementation(() => {});
+      it("I should not see the feedback message after 5 seconds", () => {
+        jest.spyOn(propsForDisplayTime.actionFeedbackContext, "remove").mockImplementation(() => {});
         const sixSecondAfterExpectedRemoval = 6000;
         expect.assertions(1);
         setTimeout(() => {
@@ -88,8 +88,8 @@ describe("Share Action Feedbacks", () => {
       });
     });
   });
-  describe('As a LU I should persist the feedback message display', () => {
-    describe(' As a LU I should close the persisted feedback message', () => {
+  describe("As a LU I should persist the feedback message display", () => {
+    describe(" As a LU I should close the persisted feedback message", () => {
       /**
        * Given a feedback message “The comment has been added successfully”
        * When I mouse over the feedback message area
@@ -99,8 +99,11 @@ describe("Share Action Feedbacks", () => {
         page = new DisplayActionFeedbacksPage(propsForDisplayTime);
       });
 
-      it('I should see the feedback message “The comment has been added successfully” after 5 seconds', async() => {
-        jest.spyOn(propsForDisplayTime.actionFeedbackContext, 'remove').mockImplementation(() => {}).mockClear();
+      it("I should see the feedback message “The comment has been added successfully” after 5 seconds", async () => {
+        jest
+          .spyOn(propsForDisplayTime.actionFeedbackContext, "remove")
+          .mockImplementation(() => {})
+          .mockClear();
 
         await page.persist(1);
 
@@ -108,14 +111,14 @@ describe("Share Action Feedbacks", () => {
         expect.assertions(2);
         setTimeout(() => {
           expect(propsForDisplayTime.actionFeedbackContext.remove).not.toHaveBeenCalled();
-          expect(page.message(1)).toBe('Success: The comment has been added successfully');
+          expect(page.message(1)).toBe("Success: The comment has been added successfully");
         }, oneSecondAfterExpectedRemoval);
         jest.runAllTimers();
       });
     });
   });
-  describe('As a LU I should close the persisted feedback message', () => {
-    describe('As a LU I should close the persisted feedback message', () => {
+  describe("As a LU I should close the persisted feedback message", () => {
+    describe("As a LU I should close the persisted feedback message", () => {
       /**
        * Given a persisted feedback message “The comment has been added successfully”
        * When I close the feedback message
@@ -126,8 +129,11 @@ describe("Share Action Feedbacks", () => {
         page = new DisplayActionFeedbacksPage(propsForDisplayTime);
       });
 
-      it('I should not see the feedback message anymore', async() => {
-        jest.spyOn(propsForDisplayTime.actionFeedbackContext, 'remove').mockImplementation(() => {}).mockClear();
+      it("I should not see the feedback message anymore", async () => {
+        jest
+          .spyOn(propsForDisplayTime.actionFeedbackContext, "remove")
+          .mockImplementation(() => {})
+          .mockClear();
 
         const twoSecondsAfterExpectedRemoval = 2000;
         expect.assertions(1);

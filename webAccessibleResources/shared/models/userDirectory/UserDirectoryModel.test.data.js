@@ -11,7 +11,7 @@
  * @link          https=//www.passbolt.com Passbolt(tm)
  * @since         4.0.0
  */
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from "uuid";
 
 /**
  * User directory modal test data.
@@ -74,7 +74,7 @@ export const mockedData = (data = {}) => {
     host: "127.0.0.1",
     username: "username",
     userDirectoryToggle: true,
-    fieldsMapping: data.fieldsMapping
+    fieldsMapping: data.fieldsMapping,
   });
 
   delete data.fieldsMapping;
@@ -83,45 +83,60 @@ export const mockedData = (data = {}) => {
 
 export const defaultFieldsMapping = (data = {}) => ({
   ad: {
-    user: Object.assign({
-      id: 'objectGuid',
-      firstname: 'givenName',
-      lastname: 'sn',
-      username: "mail",
-      created: 'whenCreated',
-      modified: 'whenChanged',
-      groups: 'memberOf',
-      enabled: 'userAccountControl',
-    }, data?.ad?.user),
-    group: Object.assign({
-      id: 'objectGuid',
-      name: 'cn',
-      created: 'whenCreated',
-      modified: 'whenChanged',
-      users: 'member',
-    }, data?.ad?.group)
+    user: Object.assign(
+      {
+        id: "objectGuid",
+        firstname: "givenName",
+        lastname: "sn",
+        username: "mail",
+        created: "whenCreated",
+        modified: "whenChanged",
+        groups: "memberOf",
+        enabled: "userAccountControl",
+      },
+      data?.ad?.user,
+    ),
+    group: Object.assign(
+      {
+        id: "objectGuid",
+        name: "cn",
+        created: "whenCreated",
+        modified: "whenChanged",
+        users: "member",
+      },
+      data?.ad?.group,
+    ),
   },
   openldap: {
-    user: Object.assign({
-      id: 'entryUuid',
-      firstname: 'givenname',
-      lastname: 'sn',
-      username: 'mail',
-      created: 'createtimestamp',
-      modified: 'modifytimestamp',
-    }, data?.openldap?.user),
-    group: Object.assign({
-      id: 'entryUuid',
-      name: 'cn',
-      created: 'createtimestamp',
-      modified: 'modifytimestamp',
-      users: "uniqueMember",
-    }, data?.openldap?.group)
+    user: Object.assign(
+      {
+        id: "entryUuid",
+        firstname: "givenname",
+        lastname: "sn",
+        username: "mail",
+        created: "createtimestamp",
+        modified: "modifytimestamp",
+      },
+      data?.openldap?.user,
+    ),
+    group: Object.assign(
+      {
+        id: "entryUuid",
+        name: "cn",
+        created: "createtimestamp",
+        modified: "modifytimestamp",
+        users: "uniqueMember",
+      },
+      data?.openldap?.group,
+    ),
   },
 });
 
 export const defaultFallbackFields = (data = {}) => ({
-  ad: Object.assign({
-    username: ""
-  }, data?.ad),
+  ad: Object.assign(
+    {
+      username: "",
+    },
+    data?.ad,
+  ),
 });

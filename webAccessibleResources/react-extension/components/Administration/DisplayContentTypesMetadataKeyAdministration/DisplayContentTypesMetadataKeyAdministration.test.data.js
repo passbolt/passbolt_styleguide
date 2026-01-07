@@ -12,31 +12,28 @@
  * @since         4.11.0
  */
 
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
-import {defaultMetadataKeyDto} from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
+import { defaultMetadataKeyDto } from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
 import ExternalGpgKeyCollection from "../../../../shared/models/entity/gpgkey/externalGpgKeyCollection";
 import {
   adaExternalPrivateGpgKeyEntityDto,
   bettyExternalPublicGpgKeyEntityDto,
-  caroleExternalPublicGpgKeyEntityDto, ed25519ExternalPrivateGpgKeyEntityDto,
-  ed25519ExternalPublicGpgKeyEntityDto
+  caroleExternalPublicGpgKeyEntityDto,
+  ed25519ExternalPrivateGpgKeyEntityDto,
+  ed25519ExternalPublicGpgKeyEntityDto,
 } from "../../../../shared/models/entity/gpgkey/externalGpgKeyEntity.test.data";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 import ExternalGpgKeyPairEntity from "../../../../shared/models/entity/gpgkey/external/externalGpgKeyPairEntity";
 import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
+import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
 
 const metadataKeysInfoDto = [
   adaExternalPrivateGpgKeyEntityDto(),
@@ -58,32 +55,37 @@ export function defaultProps(props = {}) {
     dialogContext: defaultDialogContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY
+      selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY,
     }),
     metadataSettingsServiceWorkerService: {
       findKeysSettings: () => new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
-      saveKeysSettings: settings => settings
+      saveKeysSettings: (settings) => settings,
     },
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection([]),
-      generateKeyPair: () => new ExternalGpgKeyPairEntity({
-        public_key: ed25519ExternalPublicGpgKeyEntityDto(),
-        private_key: ed25519ExternalPrivateGpgKeyEntityDto()
-      }),
-      createKey: () => new MetadataKeyEntity(
-        defaultMetadataKeyDto({fingerprint: pgpKeys.eddsa_ed25519.fingerprint, armored_key: pgpKeys.eddsa_ed25519.public})
-      ),
+      generateKeyPair: () =>
+        new ExternalGpgKeyPairEntity({
+          public_key: ed25519ExternalPublicGpgKeyEntityDto(),
+          private_key: ed25519ExternalPrivateGpgKeyEntityDto(),
+        }),
+      createKey: () =>
+        new MetadataKeyEntity(
+          defaultMetadataKeyDto({
+            fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
+            armored_key: pgpKeys.eddsa_ed25519.public,
+          }),
+        ),
       rotate: () => {},
-      resumeRotation: () => {}
+      resumeRotation: () => {},
     },
     gpgServiceWorkerService: {
-      keyInfo: armoredKey => metadataKeysInfo.getFirst("armored_key", armoredKey),
+      keyInfo: (armoredKey) => metadataKeysInfo.getFirst("armored_key", armoredKey),
       keysInfo: () => metadataKeysInfo,
     },
     createPortal: jest.fn(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    t: text => text,
-    ...props
+    t: (text) => text,
+    ...props,
   };
 }
 
@@ -93,22 +95,25 @@ export function defaultProps(props = {}) {
  * @returns {object}
  */
 export function defaultSettingsAndSingleActiveKeyProps(props = {}) {
-  const metadataKeysDto = [defaultMetadataKeyDto({
-    armored_key: pgpKeys.ada.public,
-    fingerprint: pgpKeys.ada.fingerprint,
-  })];
+  const metadataKeysDto = [
+    defaultMetadataKeyDto({
+      armored_key: pgpKeys.ada.public,
+      fingerprint: pgpKeys.ada.fingerprint,
+    }),
+  ];
 
   return defaultProps({
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection(metadataKeysDto),
-      generateKeyPair: () => new ExternalGpgKeyPairEntity({
-        public_key: ed25519ExternalPublicGpgKeyEntityDto(),
-        private_key: ed25519ExternalPrivateGpgKeyEntityDto()
-      }),
+      generateKeyPair: () =>
+        new ExternalGpgKeyPairEntity({
+          public_key: ed25519ExternalPublicGpgKeyEntityDto(),
+          private_key: ed25519ExternalPrivateGpgKeyEntityDto(),
+        }),
       rotate: () => {},
-      resumeRotation: () => {}
+      resumeRotation: () => {},
     },
-    ...props
+    ...props,
   });
 }
 
@@ -126,14 +131,15 @@ export function defaultSettingsAndMultipleActiveKeysProps(props = {}) {
     defaultMetadataKeyDto({
       armored_key: pgpKeys.betty.public,
       fingerprint: pgpKeys.betty.fingerprint,
-    })];
+    }),
+  ];
 
   return defaultProps({
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection(metadataKeysDto),
-      resumeRotation: () => {}
+      resumeRotation: () => {},
     },
-    ...props
+    ...props,
   });
 }
 
@@ -161,14 +167,15 @@ export function defaultSettingsAndMultipleKeysProps(props = {}) {
       armored_key: pgpKeys.eddsa_ed25519.public,
       fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
       expired: "2023-10-04T15:11:45+00:00",
-    })];
+    }),
+  ];
 
   return defaultProps({
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection(metadataKeysDto),
       rotate: () => {},
-      resumeRotation: () => {}
+      resumeRotation: () => {},
     },
-    ...props
+    ...props,
   });
 }

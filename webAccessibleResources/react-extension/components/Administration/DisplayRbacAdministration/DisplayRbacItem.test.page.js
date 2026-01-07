@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayRbacItem from "./DisplayRbacItem";
 
@@ -28,9 +28,9 @@ export default class DisplayRbacItemPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayRbacItem {...props}/>
+        <DisplayRbacItem {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,7 +38,7 @@ export default class DisplayRbacItemPage {
    * Returns the rbac row parent class
    */
   get Rbac() {
-    return this._page.container.querySelector('.rbac-row');
+    return this._page.container.querySelector(".rbac-row");
   }
 
   /**
@@ -46,7 +46,7 @@ export default class DisplayRbacItemPage {
    * @returns {string}
    */
   get selectAdmin() {
-    return this._page.container.querySelector('.admin');
+    return this._page.container.querySelector(".admin");
   }
 
   /**
@@ -54,7 +54,7 @@ export default class DisplayRbacItemPage {
    * @returns {string}
    */
   get selectedItemByRole() {
-    return this.selectAdmin.querySelector('.selected-value');
+    return this.selectAdmin.querySelector(".selected-value");
   }
 
   /**
@@ -62,7 +62,7 @@ export default class DisplayRbacItemPage {
    * @returns {string}
    */
   get label() {
-    return this._page.container.querySelector('.flex-item.first');
+    return this._page.container.querySelector(".flex-item.first");
   }
 
   /**
@@ -113,7 +113,7 @@ export default class DisplayRbacItemPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

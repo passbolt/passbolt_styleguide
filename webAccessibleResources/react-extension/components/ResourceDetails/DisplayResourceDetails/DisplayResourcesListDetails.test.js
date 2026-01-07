@@ -16,8 +16,8 @@
  * Unit tests on PasswordSidebar in regard of specifications
  */
 import "../../../../shared/components/Icons/ResourceIcon.test.init";
-import {waitFor} from "@testing-library/dom";
-import {defaultProps} from "./DisplayResourcesListDetails.test.data";
+import { waitFor } from "@testing-library/dom";
+import { defaultProps } from "./DisplayResourcesListDetails.test.data";
 import DisplayResourcesListDetailsPage from "./DisplayResourcesListDetails.test.page";
 
 beforeEach(() => {
@@ -32,12 +32,12 @@ describe("DisplayResourcesListDetails", () => {
     page = new DisplayResourcesListDetailsPage(props);
   });
 
-  it('I should see a list of resources in the sidebar', () => {
+  it("I should see a list of resources in the sidebar", () => {
     expect.assertions(1);
     expect(page.exists()).toBeTruthy();
   });
 
-  it('I can see a sumed up information of the resources', async() => {
+  it("I can see a sumed up information of the resources", async () => {
     expect.assertions(9);
     expect(page.resourceName(0)).toStrictEqual("Passbolt");
     expect(page.resourceType(0)).toStrictEqual("Password");
@@ -52,7 +52,7 @@ describe("DisplayResourcesListDetails", () => {
     expect(page.resourcePermission(2)).toStrictEqual("Can read");
   });
 
-  it('I can remove an element from the list', async() => {
+  it("I can remove an element from the list", async () => {
     expect.assertions(2);
     const resourceIndex = 1;
     const expectedResource = props.resourceWorkspaceContext.selectedResources[resourceIndex];

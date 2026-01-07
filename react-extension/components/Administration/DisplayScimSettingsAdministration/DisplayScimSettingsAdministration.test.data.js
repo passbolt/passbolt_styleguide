@@ -11,16 +11,19 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.5.0
  */
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
-import {mockUsers} from "../DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
-import {v4 as uuidv4} from "uuid";
-import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
-import {defaultScimSettingsDto, scimSettingsWithoutSecretTokenDto} from "../../../../shared/services/serviceWorker/scim/scimSettingsServiceWorkerService.test.data";
-import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
+import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import { mockUsers } from "../DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import {
+  defaultScimSettingsDto,
+  scimSettingsWithoutSecretTokenDto,
+} from "../../../../shared/services/serviceWorker/scim/scimSettingsServiceWorkerService.test.data";
+import { defaultRoleContext } from "../../../contexts/RoleContext.test.data";
 
 /**
  * Default props.
@@ -32,25 +35,25 @@ export function defaultProps(data = {}) {
   const roles = data.roles || roleContext.getAllRoles();
   return {
     context: defaultAdministratorAppContext({
-      users: mockUsers
+      users: mockUsers,
     }),
     clipboardContext: defaultClipboardContext(),
     dialogContext: defaultDialogContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.SCIM
+      selectedAdministration: AdministrationWorkspaceMenuTypes.SCIM,
     }),
     scimSettingsServiceWorkerService: {
       findSettings: () => defaultScimSettingsDto(),
       createSettings: jest.fn(),
-      updateSettings:  jest.fn(),
-      disableSettings: jest.fn()
+      updateSettings: jest.fn(),
+      disableSettings: jest.fn(),
     },
     createPortal: jest.fn,
-    t: text => text,
+    t: (text) => text,
     ...data,
     roleContext: roleContext,
-    roles: roles
+    roles: roles,
   };
 }
 
@@ -65,10 +68,9 @@ export function defaultScimSettingsDisabledProps(props = {}) {
       findSettings: () => null,
       createSettings: jest.fn(),
     },
-    ...props
+    ...props,
   });
 }
-
 
 /**
  * Default configured SCIM settings disabled.
@@ -78,11 +80,12 @@ export function defaultScimSettingsDisabledProps(props = {}) {
 export function defaultScimSettingsConfiguredProps(props = {}) {
   return defaultProps({
     scimSettingsServiceWorkerService: {
-      findSettings: () => scimSettingsWithoutSecretTokenDto({
-        id: uuidv4(),
-        scim_user_id: props.scim_user_id || mockUsers.find(user => user.username === 'admin@passbolt.com').id,
-      })
+      findSettings: () =>
+        scimSettingsWithoutSecretTokenDto({
+          id: uuidv4(),
+          scim_user_id: props.scim_user_id || mockUsers.find((user) => user.username === "admin@passbolt.com").id,
+        }),
     },
-    ...props
+    ...props,
   });
 }

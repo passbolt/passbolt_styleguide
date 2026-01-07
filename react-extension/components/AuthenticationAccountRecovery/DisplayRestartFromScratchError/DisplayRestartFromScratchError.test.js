@@ -25,19 +25,21 @@ beforeEach(() => {
 describe("As AN I should see the account recovery restart from scratch", () => {
   let page; // The page to test against
 
-  describe('As AN I should see a restart from scratch feedback if my request is valid but I\'m not completing the process on the right browser', () => {
+  describe("As AN I should see a restart from scratch feedback if my request is valid but I'm not completing the process on the right browser", () => {
     beforeEach(() => {
       page = new DisplayRestartFromScratchPage();
     });
 
-    it('As AN I should see a restart from scratch feedback if my request is valid but I\'m not completing the process on the right browser', () => {
+    it("As AN I should see a restart from scratch feedback if my request is valid but I'm not completing the process on the right browser", () => {
       expect(page.exists()).toBeTruthy();
       // title
       expect(page.title).toBe("Sorry, wrong computer or browser...");
       // message
-      expect(page.message).toBe('You need to finalize the account recovery process with the same computer you used for the account recovery request.If you changed systems, or reinstalled passbolt web extension in the meantime, you will need to start the account recovery process from scratch.');
+      expect(page.message).toBe(
+        "You need to finalize the account recovery process with the same computer you used for the account recovery request.If you changed systems, or reinstalled passbolt web extension in the meantime, you will need to start the account recovery process from scratch.",
+      );
       // download
-      expect(page.linkToRestartFromScratch).toBe('Restart from scratch');
+      expect(page.linkToRestartFromScratch).toBe("Restart from scratch");
     });
   });
 });

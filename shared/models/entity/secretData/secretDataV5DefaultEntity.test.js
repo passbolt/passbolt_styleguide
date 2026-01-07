@@ -15,12 +15,15 @@
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
-import {defaultSecretDataV5DefaultDto, minimalDefaultSecretDataV5DefaultDto} from "./secretDataV5DefaultEntity.test.data";
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import {
+  defaultSecretDataV5DefaultDto,
+  minimalDefaultSecretDataV5DefaultDto,
+} from "./secretDataV5DefaultEntity.test.data";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import CustomFieldsCollection from "../customField/customFieldsCollection";
 import CustomFieldEntity from "../customField/customFieldEntity";
-import {defaultCustomField} from "../customField/customFieldEntity.test.data";
-import {defaultCustomFieldsCollection} from "../customField/customFieldsCollection.test.data";
+import { defaultCustomField } from "../customField/customFieldEntity.test.data";
+import { defaultCustomFieldsCollection } from "../customField/customFieldsCollection.test.data";
 
 describe("SecretDataV5DefaultEntity", () => {
   describe("::getSchema", () => {
@@ -29,7 +32,12 @@ describe("SecretDataV5DefaultEntity", () => {
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
+      assertEntityProperty.enumeration(
+        SecretDataV5DefaultEntity,
+        "object_type",
+        [SECRET_DATA_OBJECT_TYPE],
+        ["any other values"],
+      );
     });
 
     it("validates password property", () => {
@@ -71,7 +79,7 @@ describe("SecretDataV5DefaultEntity", () => {
   describe("::associations", () => {
     it("associations should have custom_fields", () => {
       expect.assertions(1);
-      expect(SecretDataV5DefaultEntity.associations).toStrictEqual({custom_fields: CustomFieldsCollection});
+      expect(SecretDataV5DefaultEntity.associations).toStrictEqual({ custom_fields: CustomFieldsCollection });
     });
   });
 
@@ -132,7 +140,7 @@ describe("SecretDataV5DefaultEntity", () => {
     it("should return true", () => {
       const dto = minimalDefaultSecretDataV5DefaultDto();
       const entity = SecretDataV5DefaultEntity.createFromDefault(dto);
-      expect(entity.areSecretsDifferent({password: ""})).toBeTruthy();
+      expect(entity.areSecretsDifferent({ password: "" })).toBeTruthy();
     });
 
     it("should return false", () => {

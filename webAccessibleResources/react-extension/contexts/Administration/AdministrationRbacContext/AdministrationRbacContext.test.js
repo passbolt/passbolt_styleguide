@@ -12,14 +12,17 @@
  * @since         4.5.0
  */
 
-import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {defaultProps} from './AdministrationRbacContext.test.data';
-import {defaultSettingsRbacsCollectionData, settingsRbacsCollectionData} from '../../../../shared/models/entity/rbac/rbacsCollection.test.data';
-import {AdminRbacContextProvider} from './AdministrationRbacContext';
-import RbacsCollection from '../../../../shared/models/entity/rbac/rbacsCollection';
-import PassboltServiceUnavailableError from '../../../../shared/lib/Error/PassboltServiceUnavailableError';
-import RbacApiService from '../../../../shared/services/api/rbac/rbacApiService';
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { defaultProps } from "./AdministrationRbacContext.test.data";
+import {
+  defaultSettingsRbacsCollectionData,
+  settingsRbacsCollectionData,
+} from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
+import { AdminRbacContextProvider } from "./AdministrationRbacContext";
+import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
+import PassboltServiceUnavailableError from "../../../../shared/lib/Error/PassboltServiceUnavailableError";
+import RbacApiService from "../../../../shared/services/api/rbac/rbacApiService";
 
 describe("AdministrationRbacContext", () => {
   let adminRbacContext; // The adminRbacContextProvider to test
@@ -33,7 +36,7 @@ describe("AdministrationRbacContext", () => {
   });
 
   describe("AdministrationRbacContext::setRbacs", () => {
-    it("should set rbacs with parameter", async() => {
+    it("should set rbacs with parameter", async () => {
       expect.assertions(2);
 
       expect(adminRbacContext.state.rbacs).toBeNull();
@@ -43,7 +46,7 @@ describe("AdministrationRbacContext", () => {
   });
 
   describe("AdministrationRbacContext::setRbacsUpdated", () => {
-    it("should set rbacs updated with parameter", async() => {
+    it("should set rbacs updated with parameter", async () => {
       expect.assertions(2);
 
       expect(adminRbacContext.state.rbacsUpdated).toEqual(new RbacsCollection([]));
@@ -53,7 +56,7 @@ describe("AdministrationRbacContext", () => {
   });
 
   describe("AdministrationRbacContext::hasSettingsChanges", () => {
-    it("should set return true if changes exist", async() => {
+    it("should set return true if changes exist", async () => {
       expect.assertions(1);
 
       adminRbacContext.setRbacsUpdated(new RbacsCollection(settingsRbacsCollectionData()));
@@ -61,7 +64,7 @@ describe("AdministrationRbacContext", () => {
       expect(adminRbacContext.hasSettingsChanges()).toBeTruthy();
     });
 
-    it("should set return false if there are no change", async() => {
+    it("should set return false if there are no change", async () => {
       expect.assertions(1);
 
       expect(adminRbacContext.hasSettingsChanges()).toBeFalsy();
@@ -84,7 +87,7 @@ describe("AdministrationRbacContext", () => {
   });
 
   describe("AdministrationRbacContext::save", () => {
-    it("As a logged in administrator I can update the rbacs setting", async() => {
+    it("As a logged in administrator I can update the rbacs setting", async () => {
       expect.assertions(2);
 
       adminRbacContext.setRbacs(new RbacsCollection(defaultSettingsRbacsCollectionData));
@@ -97,10 +100,10 @@ describe("AdministrationRbacContext", () => {
       expect(adminRbacContext.state.rbacs).toEqual(new RbacsCollection(defaultSettingsRbacsCollectionData));
     });
 
-    it("As a logged in administrator I should not be blocked when an error occured", async() => {
+    it("As a logged in administrator I should not be blocked when an error occured", async () => {
       expect.assertions(3);
 
-      const error = {message: "The service is unavailable"};
+      const error = { message: "The service is unavailable" };
       props.adminRbacContext.save = () => Promise.reject(error);
       fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, () => Promise.reject(error));
 
@@ -111,7 +114,7 @@ describe("AdministrationRbacContext", () => {
       expect(adminRbacContext.state.rbacs).toEqual(null);
     });
 
-    it("As a logged in administrator I can update the rbacs setting even with no changes", async() => {
+    it("As a logged in administrator I can update the rbacs setting even with no changes", async () => {
       expect.assertions(1);
 
       adminRbacContext.setRbacs(new RbacsCollection(defaultSettingsRbacsCollectionData));
@@ -124,11 +127,10 @@ describe("AdministrationRbacContext", () => {
   });
 });
 
-
 function mockState(contextProvider) {
-  const setStateMock = state => {
+  const setStateMock = (state) => {
     let newState;
-    if (typeof state  === 'function') {
+    if (typeof state === "function") {
       newState = state(contextProvider.state);
     } else {
       newState = state;

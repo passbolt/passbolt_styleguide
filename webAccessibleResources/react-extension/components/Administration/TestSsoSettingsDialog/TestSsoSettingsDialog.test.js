@@ -16,9 +16,9 @@
  * Unit tests on TestSsoSettingsDialog in regard of specifications
  */
 import SsoProviders from "../ManageSsoSettings/SsoProviders.data";
-import {waitFor} from "@testing-library/react";
-import {defaultProps} from "./TestSsoSettingsDialog.test.data";
-import {v4 as uuid} from "uuid";
+import { waitFor } from "@testing-library/react";
+import { defaultProps } from "./TestSsoSettingsDialog.test.data";
+import { v4 as uuid } from "uuid";
 import TestSsoSettingsDialogPage from "../TestSsoSettingsDialog/TestSsoSettingsDialog.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
@@ -32,7 +32,7 @@ describe("TestSsoSettingsDialog", () => {
      * Covers as well:
      * As AD I cannot save the SSO settings before testing them
      */
-    it('As AD I should see a dialog to invite me to test the SSO settings before saving them', async() => {
+    it("As AD I should see a dialog to invite me to test the SSO settings before saving them", async () => {
       expect.assertions(4);
 
       const props = defaultProps();
@@ -44,7 +44,7 @@ describe("TestSsoSettingsDialog", () => {
       expect(page.saveButton.classList.contains("disabled")).toBeTruthy();
     });
 
-    it('As AD I need to successfully sign in with the new SSO settings before saving them (happy path)', async() => {
+    it("As AD I need to successfully sign in with the new SSO settings before saving them (happy path)", async () => {
       expect.assertions(8);
 
       const expectedSsoToken = uuid();
@@ -53,24 +53,24 @@ describe("TestSsoSettingsDialog", () => {
 
       const props = defaultProps({
         configurationId: expectedConfigurationId,
-        provider: SsoProviders.find(provider => provider.id === expectedProviderId),
-        onClose: jest.fn()
+        provider: SsoProviders.find((provider) => provider.id === expectedProviderId),
+        onClose: jest.fn(),
       });
 
       let ssoLoginResolve = null;
-      props.context.port.addRequestListener('passbolt.sso.dry-run', async configurationId => {
+      props.context.port.addRequestListener("passbolt.sso.dry-run", async (configurationId) => {
         expect(configurationId).toBe(expectedConfigurationId);
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           ssoLoginResolve = resolve;
         });
       });
 
-      props.context.port.addRequestListener("passbolt.sso.activate-settings", async(configurationId, ssoToken) => {
+      props.context.port.addRequestListener("passbolt.sso.activate-settings", async (configurationId, ssoToken) => {
         expect(configurationId).toBe(expectedConfigurationId);
         expect(ssoToken).toBe(expectedSsoToken);
       });
 
-      props.context.port.addRequestListener("passbolt.sso.generate-sso-kit", providerId => {
+      props.context.port.addRequestListener("passbolt.sso.generate-sso-kit", (providerId) => {
         expect(providerId).toBe(expectedProviderId);
       });
 
@@ -103,17 +103,17 @@ describe("TestSsoSettingsDialog", () => {
       expect(props.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it('As AD I need to successfully sign in with the new SSO settings before saving them (error from API during test)', async() => {
+    it("As AD I need to successfully sign in with the new SSO settings before saving them (error from API during test)", async () => {
       expect.assertions(2);
 
       const expectedError = new Error("Something went wrong!");
 
       const props = defaultProps({
         configurationId: uuid(),
-        provider: SsoProviders.find(provider => provider.id === "azure")
+        provider: SsoProviders.find((provider) => provider.id === "azure"),
       });
 
-      props.context.port.addRequestListener('passbolt.sso.dry-run', async() => {
+      props.context.port.addRequestListener("passbolt.sso.dry-run", async () => {
         throw expectedError;
       });
 
@@ -124,21 +124,21 @@ describe("TestSsoSettingsDialog", () => {
 
       await page.clickOnLogin();
 
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: expectedError});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: expectedError });
     });
 
-    it('As AD I need to successfully sign in with the new SSO settings before saving them (error from API during activation)', async() => {
+    it("As AD I need to successfully sign in with the new SSO settings before saving them (error from API during activation)", async () => {
       expect.assertions(3);
 
       const expectedError = new Error("Something went wrong!");
 
       const props = defaultProps({
         configurationId: uuid(),
-        provider: SsoProviders.find(provider => provider.id === "azure")
+        provider: SsoProviders.find((provider) => provider.id === "azure"),
       });
 
-      props.context.port.addRequestListener('passbolt.sso.dry-run', async() => uuid());
-      props.context.port.addRequestListener("passbolt.sso.activate-settings", async() => {
+      props.context.port.addRequestListener("passbolt.sso.dry-run", async () => uuid());
+      props.context.port.addRequestListener("passbolt.sso.activate-settings", async () => {
         throw expectedError;
       });
 
@@ -160,21 +160,21 @@ describe("TestSsoSettingsDialog", () => {
 
       await waitFor(() => {});
 
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: expectedError});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: expectedError });
     });
 
-    it("As AD I can't save the SSO settings on a failed sign in test attempt", async() => {
+    it("As AD I can't save the SSO settings on a failed sign in test attempt", async () => {
       expect.assertions(3);
 
       const expectedError = new Error("User closed the popup!");
-      expectedError.name = 'UserAbortsOperationError';
+      expectedError.name = "UserAbortsOperationError";
 
       const props = defaultProps({
         configurationId: uuid(),
-        provider: SsoProviders.find(provider => provider.id === "azure")
+        provider: SsoProviders.find((provider) => provider.id === "azure"),
       });
 
-      props.context.port.addRequestListener('passbolt.sso.dry-run', async() => {
+      props.context.port.addRequestListener("passbolt.sso.dry-run", async () => {
         throw expectedError;
       });
 

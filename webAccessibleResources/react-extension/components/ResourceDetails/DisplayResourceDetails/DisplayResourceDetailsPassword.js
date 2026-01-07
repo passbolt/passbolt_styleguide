@@ -13,24 +13,21 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {
-  resourceLinkAuthorizedProtocols,
-  withResourceWorkspace
-} from "../../../contexts/ResourceWorkspaceContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { resourceLinkAuthorizedProtocols, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import sanitizeUrl, { urlProtocols } from "../../../lib/Sanitize/sanitizeUrl";
+import { Trans, withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
-import {withProgress} from "../../../contexts/ProgressContext";
+import { withProgress } from "../../../contexts/ProgressContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
 import DisplayResourceUrisBadge from "../../Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class DisplayResourceDetailsPassword extends React.Component {
   /**
@@ -51,13 +48,13 @@ class DisplayResourceDetailsPassword extends React.Component {
   componentDidUpdate(prevProps) {
     const previousResource = prevProps.resourceWorkspaceContext?.details?.resource;
     const currentResource = this.props.resourceWorkspaceContext?.details?.resource;
-    const hasResourceChanged = previousResource?.id !== currentResource?.id
-      || previousResource?.modified !== currentResource?.modified;
+    const hasResourceChanged =
+      previousResource?.id !== currentResource?.id || previousResource?.modified !== currentResource?.modified;
 
     if (hasResourceChanged) {
       this.setState({
         isSecretPreviewed: null,
-        plaintextSecret: null
+        plaintextSecret: null,
       });
     }
   }
@@ -98,11 +95,10 @@ class DisplayResourceDetailsPassword extends React.Component {
    * @return {string}
    */
   get safeUri() {
-    return sanitizeUrl(
-      this.mainUri, {
-        whiteListedProtocols: resourceLinkAuthorizedProtocols,
-        defaultProtocol: urlProtocols.HTTPS
-      });
+    return sanitizeUrl(this.mainUri, {
+      whiteListedProtocols: resourceLinkAuthorizedProtocols,
+      defaultProtocol: urlProtocols.HTTPS,
+    });
   }
 
   /**
@@ -110,10 +106,10 @@ class DisplayResourceDetailsPassword extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
 
     if (!open) {
-      this.setState({plaintextSecret: null, isSecretPreviewed: false});
+      this.setState({ plaintextSecret: null, isSecretPreviewed: false });
     }
   }
 
@@ -121,7 +117,10 @@ class DisplayResourceDetailsPassword extends React.Component {
    * Handle when the user select the username of the resource
    */
   async handleUsernameClickEvent() {
-    await this.props.clipboardContext.copy(this.resource.metadata.username, this.translate("The username has been copied to clipboard."));
+    await this.props.clipboardContext.copy(
+      this.resource.metadata.username,
+      this.translate("The username has been copied to clipboard."),
+    );
   }
 
   /**
@@ -147,7 +146,7 @@ class DisplayResourceDetailsPassword extends React.Component {
     const isPasswordPreviewed = this.state.isSecretPreviewed;
     let plaintextSecret;
 
-    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
 
     if (isPasswordPreviewed) {
       plaintextSecret = this.state.plaintextSecret;
@@ -165,11 +164,16 @@ class DisplayResourceDetailsPassword extends React.Component {
     this.props.progressContext.close();
 
     if (!plaintextSecret?.length) {
-      await this.props.actionFeedbackContext.displayWarning(this.translate("The password is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayWarning(
+        this.translate("The password is empty and cannot be copied to clipboard."),
+      );
       return;
     }
 
-    await this.props.clipboardContext.copyTemporarily(plaintextSecret, this.translate("The secret has been copied to clipboard."));
+    await this.props.clipboardContext.copyTemporarily(
+      plaintextSecret,
+      this.translate("The secret has been copied to clipboard."),
+    );
     await this.props.resourceWorkspaceContext.onResourceCopied();
   }
 
@@ -190,7 +194,7 @@ class DisplayResourceDetailsPassword extends React.Component {
    * Hide the previewed resource secret.
    */
   hidePreviewedSecret() {
-    this.setState({plaintextSecret: null, isSecretPreviewed: false});
+    this.setState({ plaintextSecret: null, isSecretPreviewed: false });
   }
 
   /**
@@ -202,7 +206,7 @@ class DisplayResourceDetailsPassword extends React.Component {
     const isSecretPreviewed = true;
     let plaintextSecret;
 
-    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
 
     try {
       const plaintextSecretDto = await this.decryptResourceSecret(resourceId);
@@ -219,7 +223,7 @@ class DisplayResourceDetailsPassword extends React.Component {
       plaintextSecret = "";
     }
 
-    this.setState({plaintextSecret, isSecretPreviewed});
+    this.setState({ plaintextSecret, isSecretPreviewed });
   }
 
   /**
@@ -276,8 +280,9 @@ class DisplayResourceDetailsPassword extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canPreviewSecret = this.props.context.siteSettings.canIUse("previewPassword")
-      && this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
+    const canPreviewSecret =
+      this.props.context.siteSettings.canIUse("previewPassword") &&
+      this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
     const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
     const isPasswordPreviewed = this.state.isSecretPreviewed;
 
@@ -289,51 +294,63 @@ class DisplayResourceDetailsPassword extends React.Component {
               <span className="accordion-title">
                 <Trans>Password</Trans>
               </span>
-              {this.state.open &&
-              <CaretDownSVG/>
-              }
-              {!this.state.open &&
-              <CaretRightSVG/>
-              }
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className="accordion-content">
             <div className="information-label">
-              <span className="username label"><Trans>Username</Trans></span>
-              <span className="password label"><Trans>Password</Trans></span>
-              <span className="uri label"><Trans>URI</Trans></span>
+              <span className="username label">
+                <Trans>Username</Trans>
+              </span>
+              <span className="password label">
+                <Trans>Password</Trans>
+              </span>
+              <span className="uri label">
+                <Trans>URI</Trans>
+              </span>
             </div>
             <div className="information-value">
-              <span className="username value"><button type="button" className="no-border" onClick={this.handleUsernameClickEvent}><span>{this.resource.metadata.username}</span></button></span>
+              <span className="username value">
+                <button type="button" className="no-border" onClick={this.handleUsernameClickEvent}>
+                  <span>{this.resource.metadata.username}</span>
+                </button>
+              </span>
               <div className="password-value">
-                <div className={`secret secret-password ${canPreviewSecret ? "secret-with-preview" : ""} ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                  title={isPasswordPreviewed ? this.state.plaintextSecret : this.translate("Click to copy")}>
+                <div
+                  className={`secret secret-password ${canPreviewSecret ? "secret-with-preview" : ""} ${isPasswordPreviewed ? "" : "secret-copy"}`}
+                  title={isPasswordPreviewed ? this.state.plaintextSecret : this.translate("Click to copy")}
+                >
                   <HiddenPassword
                     canClick={canCopySecret}
                     preview={this.state.plaintextSecret}
-                    onClick={this.handlePasswordClickEvent}/>
+                    onClick={this.handlePasswordClickEvent}
+                  />
                 </div>
-                {canPreviewSecret &&
-                  <button type="button" onClick={this.handleViewPasswordButtonClick}
-                    className="password-view inline button-transparent">
-                    {isPasswordPreviewed ? <EyeCloseSVG/> : <EyeOpenSVG/>}
+                {canPreviewSecret && (
+                  <button
+                    type="button"
+                    onClick={this.handleViewPasswordButtonClick}
+                    className="password-view inline button-transparent"
+                  >
+                    {isPasswordPreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
                   </button>
-                }
+                )}
               </div>
               <span className="uri value">
-                {this.safeUri &&
+                {this.safeUri && (
                   <button type="button" className="link no-border" onClick={this.handleGoToResourceUriClick}>
-                    <span>{this.mainUri}</span></button>}
+                    <span>{this.mainUri}</span>
+                  </button>
+                )}
                 {!this.safeUri && <span>{this.mainUri}</span>}
-                {this.additionalUris?.length > 0 &&
-                  <DisplayResourceUrisBadge additionalUris={this.additionalUris}/>
-                }
+                {this.additionalUris?.length > 0 && <DisplayResourceUrisBadge additionalUris={this.additionalUris} />}
               </span>
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -349,4 +366,12 @@ DisplayResourceDetailsPassword.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withClipboard(withRbac(withActionFeedback(withResourceWorkspace(withProgress(withTranslation('common')(DisplayResourceDetailsPassword)))))));
+export default withAppContext(
+  withClipboard(
+    withRbac(
+      withActionFeedback(
+        withResourceWorkspace(withProgress(withTranslation("common")(DisplayResourceDetailsPassword))),
+      ),
+    ),
+  ),
+);

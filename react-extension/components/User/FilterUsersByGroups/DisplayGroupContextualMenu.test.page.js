@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -29,13 +28,13 @@ export default class DisplayGroupsContextualMenuPageObject {
    * @returns the delete group menu element
    */
   get deleteGroupContextualMenu() {
-    return this._container.querySelector('#delete-group');
+    return this._container.querySelector("#delete-group");
   }
 
   /**
    * @returns {any} the edit group menu element
    */
   get editGroupContextualMenu() {
-    return this._container.querySelector('#edit-group');
+    return this._container.querySelector("#edit-group");
   }
 }

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,14 +12,14 @@
  * @since         3.1.0
  */
 
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import {withUserSettings} from "../../../contexts/UserSettingsContext";
+import { withUserSettings } from "../../../contexts/UserSettingsContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
 
 /**
@@ -83,7 +82,7 @@ class ConfirmPassphrase extends React.Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+    await this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -95,7 +94,7 @@ class ConfirmPassphrase extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState({[name]: value});
+    this.setState({ [name]: value });
   }
 
   /**
@@ -115,7 +114,8 @@ class ConfirmPassphrase extends React.Component {
    * Check the passphrase
    */
   async checkPassphrase() {
-    this.props.userSettingsContext.onCheckProvidePassphraseRequested(this.state.passphrase)
+    this.props.userSettingsContext
+      .onCheckProvidePassphraseRequested(this.state.passphrase)
       .catch(this.onCheckFailure.bind(this));
   }
 
@@ -127,9 +127,9 @@ class ConfirmPassphrase extends React.Component {
     // Whenever the passphrase is invalid.
     this.toggleProcessing();
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({passphraseError: this.translate("The passphrase is invalid.")});
+      this.setState({ passphraseError: this.translate("The passphrase is invalid.") });
     } else {
-      const ErrorDialogProps = {error: error};
+      const ErrorDialogProps = { error: error };
       this.props.dialogContext.open(NotifyError, ErrorDialogProps);
       console.error(error);
     }
@@ -149,7 +149,7 @@ class ConfirmPassphrase extends React.Component {
    */
   IsValidPassphrase() {
     const passphrase = this.state.passphrase;
-    return passphrase.trim() !== '';
+    return passphrase.trim() !== "";
   }
 
   /**
@@ -180,14 +180,21 @@ class ConfirmPassphrase extends React.Component {
       <form className="profile-passphrase" onSubmit={this.handleSubmit}>
         <div className="main-column">
           <div className="main-content">
-            <h3><Trans>Please enter your passphrase to continue</Trans></h3>
+            <h3>
+              <Trans>Please enter your passphrase to continue</Trans>
+            </h3>
             <div className="enter-passphrase">
-              <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                <label htmlFor="passphrase-input"><Trans>Passphrase</Trans></label>
+              <div
+                className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+              >
+                <label htmlFor="passphrase-input">
+                  <Trans>Passphrase</Trans>
+                </label>
                 <Password
                   id="passphrase-input"
                   autoComplete="off"
-                  name="passphrase" placeholder={this.translate('Passphrase')}
+                  name="passphrase"
+                  placeholder={this.translate("Passphrase")}
                   inputRef={this.passphraseInputRef}
                   value={this.state.passphrase}
                   onChange={this.handleInputChange}
@@ -195,12 +202,12 @@ class ConfirmPassphrase extends React.Component {
                   preview={true}
                   securityToken={this.props.context.userSettings.getSecurityToken()}
                 />
-                {this.state.passphraseError &&
-                  <div className="error-message">{this.state.passphraseError}</div>
-                }
-                {!this.state.passphraseError &&
-                  <div className="help-message"><Trans>You need to enter your current passphrase.</Trans></div>
-                }
+                {this.state.passphraseError && <div className="error-message">{this.state.passphraseError}</div>}
+                {!this.state.passphraseError && (
+                  <div className="help-message">
+                    <Trans>You need to enter your current passphrase.</Trans>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -210,13 +217,15 @@ class ConfirmPassphrase extends React.Component {
             className="button cancel secondary"
             type="button"
             disabled={this.hasAllInputDisabled()}
-            onClick={this.handleCancel}>
+            onClick={this.handleCancel}
+          >
             <Trans>Cancel</Trans>
           </button>
           <FormSubmitButton
             disabled={this.mustBeDisabled()}
             processing={this.state.processing}
-            value={this.translate('Verify')}/>
+            value={this.translate("Verify")}
+          />
         </div>
       </form>
     );
@@ -230,4 +239,4 @@ ConfirmPassphrase.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withUserSettings(withTranslation('common')(ConfirmPassphrase))));
+export default withAppContext(withDialog(withUserSettings(withTranslation("common")(ConfirmPassphrase))));

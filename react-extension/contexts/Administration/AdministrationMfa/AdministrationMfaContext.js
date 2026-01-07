@@ -14,9 +14,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import MfaModel from '../../../../shared/models/Mfa/MfaModel';
-import MfaDTO from '../../../../shared/models/Mfa/MfaDTO';
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import MfaModel from "../../../../shared/models/Mfa/MfaModel";
+import MfaDTO from "../../../../shared/models/Mfa/MfaDTO";
 import MfaService from "../../../../shared/services/api/Mfa/MfaService";
 
 /**
@@ -67,7 +67,7 @@ export class AdminMfaContextProvider extends React.Component {
       processing: true, // Context is processing data
       getCurrentSettings: this.getCurrentSettings.bind(this), // Returns settings saved
       getSettings: this.getSettings.bind(this), // Returns settings for UI changes
-      setSettings: this.setSettings.bind(this),  // Set the settings object with changes
+      setSettings: this.setSettings.bind(this), // Set the settings object with changes
       findMfaSettings: this.findMfaSettings.bind(this), // Find the current settings and store it in the state
       hasSettingsChanges: this.hasSettingsChanges.bind(this), // Check if setting has changes
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
@@ -105,9 +105,9 @@ export class AdminMfaContextProvider extends React.Component {
     const result = await this.mfaService.findAllSettings();
     const currentSettings = new MfaModel(result);
     //Init saved setting
-    this.setState({currentSettings});
+    this.setState({ currentSettings });
     //Init setting which will interact with UI
-    this.setState({settings: Object.assign({}, currentSettings)});
+    this.setState({ settings: Object.assign({}, currentSettings) });
 
     this.setProcessing(false);
   }
@@ -134,8 +134,8 @@ export class AdminMfaContextProvider extends React.Component {
    * @returns {void}
    */
   async setSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings, {[key]: value});
-    await this.setState({settings: newSettings});
+    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
+    await this.setState({ settings: newSettings });
   }
 
   /**
@@ -153,7 +153,7 @@ export class AdminMfaContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -177,16 +177,18 @@ export class AdminMfaContextProvider extends React.Component {
    * @returns {Boolean}
    */
   setSubmitted(submitted) {
-    this.setState({submitted});
+    this.setState({ submitted });
   }
 
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {currentSettings, settings, processing} = this.defaultState;
+    const { currentSettings, settings, processing } = this.defaultState;
     this.setState({
-      currentSettings, settings, processing
+      currentSettings,
+      settings,
+      processing,
     });
   }
 
@@ -211,17 +213,16 @@ export class AdminMfaContextProvider extends React.Component {
    * set an error to object
    */
   setError(key, value) {
-    const errors = Object.assign({}, this.state.errors, {[key]: value});
-    this.setState({errors});
+    const errors = Object.assign({}, this.state.errors, { [key]: value });
+    this.setState({ errors });
   }
-
 
   /**
    * set errors to object
    */
   setErrors(newErrors, callback = () => {}) {
     const errors = Object.assign({}, this.state.errors, newErrors);
-    return this.setState({errors}, callback);
+    return this.setState({ errors }, callback);
   }
 
   /**
@@ -229,11 +230,7 @@ export class AdminMfaContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <AdminMfaContext.Provider value={this.state}>
-        {this.props.children}
-      </AdminMfaContext.Provider>
-    );
+    return <AdminMfaContext.Provider value={this.state}>{this.props.children}</AdminMfaContext.Provider>;
   }
 }
 
@@ -244,7 +241,6 @@ AdminMfaContextProvider.propTypes = {
 
 export default withAppContext(AdminMfaContextProvider);
 
-
 /**
  * Resource Workspace Context Consumer HOC
  * @param WrappedComponent
@@ -254,9 +250,7 @@ export function withAdminMfa(WrappedComponent) {
     render() {
       return (
         <AdminMfaContext.Consumer>
-          {
-            adminMfaContext => <WrappedComponent adminMfaContext={adminMfaContext} {...this.props} />
-          }
+          {(adminMfaContext) => <WrappedComponent adminMfaContext={adminMfaContext} {...this.props} />}
         </AdminMfaContext.Consumer>
       );
     }

@@ -13,38 +13,41 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import ManageAccountRecoveryUserSettings from "./ManageAccountRecoveryUserSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {defaultProps} from './ManageAccountRecoveryUserSettings.test.data';
-import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {defaultAccountRecoveryPolicyCreator, optOutOrganizationPolicy} from "../HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute.test.data";
+import { defaultProps } from "./ManageAccountRecoveryUserSettings.test.data";
+import { users } from "../../../../shared/models/entity/user/userEntity.test.data";
+import {
+  defaultAccountRecoveryPolicyCreator,
+  optOutOrganizationPolicy,
+} from "../HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute.test.data";
 
 export default {
-  title: 'Components/AccountRecovery/ManageAccountRecoveryUserSettings',
-  component: ManageAccountRecoveryUserSettings
+  title: "Components/AccountRecovery/ManageAccountRecoveryUserSettings",
+  component: ManageAccountRecoveryUserSettings,
 };
 
-
-const Template = args =>
+const Template = (args) => (
   <MockTranslationProvider>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <ManageAccountRecoveryUserSettings {...args} {...routerProps}/>}></Route>
+    <MemoryRouter initialEntries={["/"]}>
+      <Route component={(routerProps) => <ManageAccountRecoveryUserSettings {...args} {...routerProps} />}></Route>
     </MemoryRouter>
-  </MockTranslationProvider>;
+  </MockTranslationProvider>
+);
 
 export const OptOut = Template.bind({});
 OptOut.args = defaultProps({
   organizationPolicy: optOutOrganizationPolicy({
-    creator: defaultAccountRecoveryPolicyCreator({...users.ada}),
-  })
+    creator: defaultAccountRecoveryPolicyCreator({ ...users.ada }),
+  }),
 });
 
 export const OptIn = Template.bind({});
 OptIn.args = defaultProps({
   organizationPolicy: optOutOrganizationPolicy({
     policy: "opt-in",
-    creator: defaultAccountRecoveryPolicyCreator({disabled: new Date().toISOString()}),
+    creator: defaultAccountRecoveryPolicyCreator({ disabled: new Date().toISOString() }),
   }),
 });
 
@@ -52,6 +55,6 @@ export const Mandatory = Template.bind({});
 Mandatory.args = defaultProps({
   organizationPolicy: optOutOrganizationPolicy({
     policy: "mandatory",
-    creator: defaultAccountRecoveryPolicyCreator({deleted: true}),
+    creator: defaultAccountRecoveryPolicyCreator({ deleted: true }),
   }),
 });

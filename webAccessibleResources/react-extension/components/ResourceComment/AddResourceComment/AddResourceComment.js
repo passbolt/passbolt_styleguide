@@ -14,11 +14,11 @@
 
 import React from "react";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withLoading} from "../../../contexts/LoadingContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withLoading } from "../../../contexts/LoadingContext";
+import { Trans, withTranslation } from "react-i18next";
 import CommentsServiceWorkerService from "../CommentsServiceWorkerService";
 
 /**
@@ -53,10 +53,11 @@ class AddResourceComment extends React.Component {
   getDefaultState() {
     return {
       content: "", // The comment content
-      actions: { // The ongoing action
+      actions: {
+        // The ongoing action
         processing: false, // An action is processing
       },
-      errors: {} // The list of validation errors
+      errors: {}, // The list of validation errors
     };
   }
 
@@ -81,7 +82,7 @@ class AddResourceComment extends React.Component {
    * @returns {boolean} Returns true if the form is valid
    */
   get isValid() {
-    return Object.values(this.state.errors).every(value => ! value);
+    return Object.values(this.state.errors).every((value) => !value);
   }
 
   /**
@@ -96,7 +97,7 @@ class AddResourceComment extends React.Component {
 
     if (this.isValid) {
       try {
-        await this.setState({actions: {processing: true}});
+        await this.setState({ actions: { processing: true } });
         this.props.loadingContext.add();
         const addedComment = await this.add();
         await this.handleSubmitSuccess(addedComment);
@@ -125,8 +126,8 @@ class AddResourceComment extends React.Component {
     this.props.loadingContext.remove();
     await this.props.actionFeedbackContext.displayError(error.message);
     await this.setState({
-      actions: {processing: false},
-      errors: {technicalError: error.message}
+      actions: { processing: false },
+      errors: { technicalError: error.message },
     });
   }
 
@@ -142,7 +143,7 @@ class AddResourceComment extends React.Component {
    * @param event The DOM event
    */
   handleContentChanged(event) {
-    this.setState({content: event.target.value});
+    this.setState({ content: event.target.value });
   }
 
   /**
@@ -166,11 +167,11 @@ class AddResourceComment extends React.Component {
    */
   async add() {
     const commentToAdd = this.state.content.trim();
-    const payload =  {
+    const payload = {
       foreign_key: this.props.resource.id,
-      foreign_model: 'Resource',
+      foreign_model: "Resource",
       content: commentToAdd,
-      user_id: this.props.context.loggedInUser.id
+      user_id: this.props.context.loggedInUser.id,
     };
     return await this.commentsServiceWorkerService.create(payload);
   }
@@ -180,13 +181,13 @@ class AddResourceComment extends React.Component {
    */
   async validate() {
     // Rule: the content could not be empty or trimmered empty
-    const isEmpty = this.state.content.trim() === '';
+    const isEmpty = this.state.content.trim() === "";
 
     // Rule: the content could not be longer than 256
     const isTooLong = this.state.content.length > 256;
 
-    const errors = {isEmpty, isTooLong};
-    await this.setState({errors});
+    const errors = { isEmpty, isTooLong };
+    await this.setState({ errors });
   }
 
   /**
@@ -203,26 +204,26 @@ class AddResourceComment extends React.Component {
    */
   render() {
     return (
-      <form
-        className="comment"
-        autoComplete="off">
+      <form className="comment" autoComplete="off">
         <div className="left-column">
           <UserAvatar
             user={this.props.context.loggedInUser}
             baseUrl={this.props.context.siteSettings.settings.app.url}
-            className="author profile picture avatar"/>
+            className="author profile picture avatar"
+          />
         </div>
 
         <div className="right-column">
           <div className="form-content">
             <div className="input textarea required">
-              <textarea ref={this.textareaRef}
+              <textarea
+                ref={this.textareaRef}
                 placeholder={this.translate("Add a comment")}
                 aria-required={true}
                 onChange={this.handleContentChanged}
                 onKeyDown={this.handleEscapeKeyPressed}
-                disabled={this.state.actions.processing}>
-              </textarea>
+                disabled={this.state.actions.processing}
+              ></textarea>
               <div className="error-message">
                 {this.state.errors.isEmpty && this.translate("A comment is required.")}
                 {this.state.errors.isTooLong && this.translate("A comment must be less than 256 characters")}
@@ -234,24 +235,29 @@ class AddResourceComment extends React.Component {
               <span className="author username">
                 <Trans>You</Trans>
               </span>
-              <span className="modified"><Trans>right now</Trans></span>
+              <span className="modified">
+                <Trans>right now</Trans>
+              </span>
             </div>
             <div className="actions">
-              {
-                this.props.cancellable &&
+              {this.props.cancellable && (
                 <button
                   type="button"
                   className="link cancel"
                   onClick={this.handleCancelEvent}
-                  disabled={this.state.actions.processing}>
-                  <span><Trans>Cancel</Trans></span>
+                  disabled={this.state.actions.processing}
+                >
+                  <span>
+                    <Trans>Cancel</Trans>
+                  </span>
                 </button>
-              }
+              )}
               <button
                 className="button primary comment-submit"
                 type="submit"
                 onClick={this.handleSubmitEvent}
-                disabled={this.state.actions.processing}>
+                disabled={this.state.actions.processing}
+              >
                 <Trans>Save</Trans>
               </button>
             </div>
@@ -273,4 +279,4 @@ AddResourceComment.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withLoading(withActionFeedback(withTranslation('common')(AddResourceComment))));
+export default withAppContext(withLoading(withActionFeedback(withTranslation("common")(AddResourceComment))));

@@ -12,11 +12,11 @@
  * @since         2.11.0
  */
 
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
-import {defaultAppContext as defaultExtAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {v4 as uuidv4} from "uuid";
+import { TEST_ROLE_USER_ID } from "../../../../shared/models/entity/role/roleEntity.test.data";
+import { defaultAppContext as defaultExtAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { v4 as uuidv4 } from "uuid";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
-import {rolesCollectionDto} from "../../../../shared/models/entity/role/rolesCollection.test.data";
+import { rolesCollectionDto } from "../../../../shared/models/entity/role/rolesCollection.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -33,10 +33,10 @@ export function defaultAppContext(appContext) {
           last_name: "lastname",
         },
         username: "firstname@passbolt.com",
-        role_id: TEST_ROLE_USER_ID
-      }
+        role_id: TEST_ROLE_USER_ID,
+      },
     ],
-    setContext: function(newContext) {
+    setContext: function (newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
@@ -51,6 +51,6 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {
     roles: new RolesCollection(rolesCollectionDto),
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
 }

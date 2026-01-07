@@ -12,12 +12,11 @@
  * @since         4.10.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {Router} from "react-router-dom";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import {createMemoryHistory} from "history";
+import { Router } from "react-router-dom";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import { createMemoryHistory } from "history";
 import MoreFiltersPage from "./MoreFiltersPage";
 
 /**
@@ -32,10 +31,10 @@ export default class MoreFiltersPagePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
-          <MoreFiltersPage {...props}/>
+          <MoreFiltersPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -44,7 +43,7 @@ export default class MoreFiltersPagePage {
    * @returns {HTMLElement}
    */
   get createButton() {
-    return this._page.container.querySelector('.submit-wrapper #popupAction');
+    return this._page.container.querySelector(".submit-wrapper #popupAction");
   }
 
   /**
@@ -60,7 +59,7 @@ export default class MoreFiltersPagePage {
    * @returns {Promise<void>}
    */
   async clickOnBackButton() {
-    fireEvent.click(this.backButton, {button: 0});
+    fireEvent.click(this.backButton, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -69,7 +68,7 @@ export default class MoreFiltersPagePage {
    * @returns {Promise<void>}
    */
   async clickOnCreateButton() {
-    fireEvent.click(this.createButton, {button: 0});
+    fireEvent.click(this.createButton, { button: 0 });
     await waitFor(() => {});
   }
 }

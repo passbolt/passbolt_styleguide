@@ -12,7 +12,7 @@
  * @since         3.5.0
  */
 import GpgkeyEntity from "./gpgkeyEntity";
-import {GpgkeyEntityFixtures} from "./gpgkeyEntity.test.fixtures";
+import { GpgkeyEntityFixtures } from "./gpgkeyEntity.test.fixtures";
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
 
@@ -46,10 +46,7 @@ describe("Gpgkey entity", () => {
     });
 
     it("validates type property", () => {
-      const successScenarios = [
-        ...assertEntityProperty.SUCCESS_STRING_SCENARIOS,
-        assertEntityProperty.SCENARIO_NULL,
-      ];
+      const successScenarios = [...assertEntityProperty.SUCCESS_STRING_SCENARIOS, assertEntityProperty.SCENARIO_NULL];
       const failingScenarios = assertEntityProperty.FAIL_STRING_SCENARIOS;
 
       assertEntityProperty.assert(GpgkeyEntity, "type", successScenarios, failingScenarios, "type");
@@ -62,10 +59,7 @@ describe("Gpgkey entity", () => {
     });
 
     it("validates bits property", () => {
-      const successScenarios = [
-        ...assertEntityProperty.SUCCESS_INTEGER_SCENARIO,
-        assertEntityProperty.SCENARIO_NULL,
-      ];
+      const successScenarios = [...assertEntityProperty.SUCCESS_INTEGER_SCENARIO, assertEntityProperty.SCENARIO_NULL];
       const failingScenarios = assertEntityProperty.FAIL_INTEGER_SCENARIO;
 
       assertEntityProperty.assert(GpgkeyEntity, "bits", successScenarios, failingScenarios, "type");

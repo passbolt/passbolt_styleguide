@@ -11,64 +11,64 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import {SecretGeneratorComplexity} from "../SecretGenerator/SecretGeneratorComplexity";
+import { SecretGeneratorComplexity } from "../SecretGenerator/SecretGeneratorComplexity";
 import PwnedPasswords from "./PwnedPasswords";
 
 const STRENGTH = [
   {
-    id: 'not_available',
-    label: 'n/a',
-    strength: 0
+    id: "not_available",
+    label: "n/a",
+    strength: 0,
   },
   {
-    id: 'very-weak',
-    label: 'very weak',
-    strength: 1
+    id: "very-weak",
+    label: "very weak",
+    strength: 1,
   },
   {
-    id: 'weak',
-    label: 'weak',
-    strength: 60
+    id: "weak",
+    label: "weak",
+    strength: 60,
   },
   {
-    id: 'fair',
-    label: 'fair',
-    strength: 80
+    id: "fair",
+    label: "fair",
+    strength: 80,
   },
   {
-    id: 'strong',
-    label: 'strong',
-    strength: 112
+    id: "strong",
+    label: "strong",
+    strength: 112,
   },
   {
-    id: 'very-strong',
-    label: 'very strong',
-    strength: 128
-  }
+    id: "very-strong",
+    label: "very strong",
+    strength: 128,
+  },
 ];
 
 const MASKS = {
-  'alpha': {
+  alpha: {
     size: 26,
-    data: 'abcdefghijklmnopqrstuvwxyz',
-    pattern: /[a-z]/
+    data: "abcdefghijklmnopqrstuvwxyz",
+    pattern: /[a-z]/,
   },
-  'uppercase': {
+  uppercase: {
     size: 26,
-    data: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-    pattern: /[A-Z]/
+    data: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    pattern: /[A-Z]/,
   },
-  'digit': {
+  digit: {
     size: 10,
-    data: '0123456789',
-    pattern: /[0-9]/
+    data: "0123456789",
+    pattern: /[0-9]/,
   },
-  'special': {
+  special: {
     size: 32,
     // ASCII Code = 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 64, 91, 92, 93, 94, 95, 96, 123, 124, 125, 126
-    data: '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~',
-    pattern: /[!"#$%&\'\(\)*+,\-./:;<=>?@\[\\\]^_`{|}~]/
-  }
+    data: "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
+    pattern: /[!"#$%&\'\(\)*+,\-./:;<=>?@\[\\\]^_`{|}~]/,
+  },
 };
 
 export default class SecretComplexity {
@@ -96,8 +96,12 @@ export default class SecretComplexity {
     const entropy = SecretGeneratorComplexity.entropyPassword(txt);
 
     const strength = STRENGTH.reduce((accumulator, item) => {
-      if (!accumulator) { return item; }
-      if (item.strength > accumulator.strength && entropy >= item.strength) { return item; }
+      if (!accumulator) {
+        return item;
+      }
+      if (item.strength > accumulator.strength && entropy >= item.strength) {
+        return item;
+      }
       return accumulator;
     });
 
@@ -111,7 +115,7 @@ export default class SecretComplexity {
    * @return {string}
    */
   static generate(length, masks) {
-    let secret = '';
+    let secret = "";
     let mask = [];
     length = length || 18;
     masks = masks || ["alpha", "uppercase", "digit", "special"];
@@ -129,7 +133,7 @@ export default class SecretComplexity {
     const expectedEntropy = SecretGeneratorComplexity.calculEntropy(length, mask.length);
 
     do {
-      secret = '';
+      secret = "";
       for (let i = 0; i < length; i++) {
         secret += mask[this.randomRange(0, mask.length - 1)];
       }
@@ -143,6 +147,6 @@ export default class SecretComplexity {
    */
   static async ispwned(password) {
     const count = await PwnedPasswords.pwnedPasswords(password);
-    return (count > 0);
+    return count > 0;
   }
 }

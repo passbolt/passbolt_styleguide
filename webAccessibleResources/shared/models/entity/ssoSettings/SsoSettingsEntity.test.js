@@ -24,9 +24,9 @@ import {
   defaultSsoSettingsWithAdfs,
   defaultSsoSettingsWithAzure,
   defaultSsoSettingsWithGoogle,
-  defaultSsoSettingsWithOAuth2
+  defaultSsoSettingsWithOAuth2,
 } from "./SsoSettingsEntity.test.data";
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 
@@ -42,34 +42,23 @@ describe("SsoSettingsEntity", () => {
     });
 
     it("validates providers property", () => {
-      const successScenarios = [
-        assertEntityProperty.SCENARIO_ARRAY
-      ];
+      const successScenarios = [assertEntityProperty.SCENARIO_ARRAY];
       const failingScenarios = [
         assertEntityProperty.SCENARIO_INTEGER,
         assertEntityProperty.SCENARIO_STRING,
-        assertEntityProperty.SCENARIO_NULL
+        assertEntityProperty.SCENARIO_NULL,
       ];
       assertEntityProperty.assert(SsoSettingsEntity, "providers", successScenarios, failingScenarios, "type");
       assertEntityProperty.notRequired(SsoSettingsEntity, "providers");
     });
 
     it("validates provider property", () => {
-      const successValues = [
-        "azure",
-        "adfs",
-        "google",
-        "oauth2",
-      ];
+      const successValues = ["azure", "adfs", "google", "oauth2"];
 
-      const failingValues = [
-        "test",
-        "other",
-        "unknown"
-      ];
+      const failingValues = ["test", "other", "unknown"];
 
-      const successScenarios = successValues.map(value => ({scenario: `with value "${value}}"`, value: value}));
-      const failingScenarios = failingValues.map(value => ({scenario: `with value "${value}}"`, value: value}));
+      const successScenarios = successValues.map((value) => ({ scenario: `with value "${value}}"`, value: value }));
+      const failingScenarios = failingValues.map((value) => ({ scenario: `with value "${value}}"`, value: value }));
 
       assertEntityProperty.assert(SsoSettingsEntity, "provider", successScenarios, failingScenarios, "enum");
       assertEntityProperty.nullable(SsoSettingsEntity, "provider");
@@ -77,9 +66,7 @@ describe("SsoSettingsEntity", () => {
     });
 
     it("validates data property", () => {
-      const successScenarios = [
-        assertEntityProperty.SCENARIO_OBJECT,
-      ];
+      const successScenarios = [assertEntityProperty.SCENARIO_OBJECT];
 
       /*
        * @todo: add object failing scenarios when the schema will handled such checks
@@ -121,12 +108,12 @@ describe("SsoSettingsEntity", () => {
 
   describe("SsoSettingsEntity:constructor", () => {
     each([
-      {provider: null, dto: defaultSsoSettings()},
-      {provider: AzureSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAzure({id: uuid()})},
-      {provider: GoogleSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithGoogle({id: uuid()})},
-      {provider: OAuth2SsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithOAuth2({id: uuid()})},
-      {provider: AdfsSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAdfs({id: uuid()})},
-    ]).describe("it should instantiate the entity with a minimal dto", scenario => {
+      { provider: null, dto: defaultSsoSettings() },
+      { provider: AzureSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAzure({ id: uuid() }) },
+      { provider: GoogleSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithGoogle({ id: uuid() }) },
+      { provider: OAuth2SsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithOAuth2({ id: uuid() }) },
+      { provider: AdfsSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAdfs({ id: uuid() }) },
+    ]).describe("it should instantiate the entity with a minimal dto", (scenario) => {
       it(`For: ${scenario.provider}`, () => {
         expect.assertions(4);
         const entity = new SsoSettingsEntity(scenario.dto);
@@ -150,7 +137,7 @@ describe("SsoSettingsEntity", () => {
         new SsoSettingsEntity(erroneousDto);
       } catch (e) {
         expect(e).toBeInstanceOf(EntityValidationError);
-        expect(e.hasError('url', 'pattern')).toStrictEqual(true);
+        expect(e.hasError("url", "pattern")).toStrictEqual(true);
       }
     });
   });

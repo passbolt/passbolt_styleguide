@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.7.0
  */
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
+import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
 
 /**
  * Default props.
@@ -27,8 +27,8 @@ export const defaultProps = (props = {}) => ({
   dialogContext: defaultDialogContext(),
   actionFeedbackContext: defaultActionFeedbackContext(),
   administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-    selectedAdministration: AdministrationWorkspaceMenuTypes.SECRET_HISTORY
+    selectedAdministration: AdministrationWorkspaceMenuTypes.SECRET_HISTORY,
   }),
   createPortal: jest.fn,
-  ...props
+  ...props,
 });

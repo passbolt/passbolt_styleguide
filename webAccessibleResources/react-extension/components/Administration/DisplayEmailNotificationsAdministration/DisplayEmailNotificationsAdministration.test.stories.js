@@ -14,29 +14,35 @@
 
 import React from "react";
 import DisplayEmailNotificationsAdministration from "./DisplayEmailNotificationsAdministration";
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 import MockFetch from "../../../test/mock/MockFetch";
-import {defaultEmailNotificationSettings, defaultProps, defaultPropsCE, withFileSourceSettings, withoutDatabaseSourceSettings} from "./DisplayEmailNotificationsAdministration.test.data";
-import {AdminEmailNotificationContextProvider} from "../../../contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
+import {
+  defaultEmailNotificationSettings,
+  defaultProps,
+  defaultPropsCE,
+  withFileSourceSettings,
+  withoutDatabaseSourceSettings,
+} from "./DisplayEmailNotificationsAdministration.test.data";
+import { AdminEmailNotificationContextProvider } from "../../../contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
 import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 
 export default {
-  title: 'Components/Administration/DisplayEmailNotificationsAdministration',
-  component: DisplayEmailNotificationsAdministration
+  title: "Components/Administration/DisplayEmailNotificationsAdministration",
+  component: DisplayEmailNotificationsAdministration,
 };
 
 let currentStory = null;
 const mockFetch = new MockFetch();
-mockFetch.addGetFetchRequest(/settings\/emails\/notifications\.json/, async() => {
+mockFetch.addGetFetchRequest(/settings\/emails\/notifications\.json/, async () => {
   switch (currentStory) {
-    case 'components-administration-displayemailnotificationsadministration--all-notifications':
-    case 'components-administration-displayemailnotificationsadministration--all-notifications-for-ce': {
+    case "components-administration-displayemailnotificationsadministration--all-notifications":
+    case "components-administration-displayemailnotificationsadministration--all-notifications-for-ce": {
       return mockApiResponse(defaultEmailNotificationSettings());
     }
-    case 'components-administration-displayemailnotificationsadministration--both-sources-exist': {
+    case "components-administration-displayemailnotificationsadministration--both-sources-exist": {
       return mockApiResponse(withFileSourceSettings());
     }
-    case 'components-administration-displayemailnotificationsadministration--only-file-setting-exist': {
+    case "components-administration-displayemailnotificationsadministration--only-file-setting-exist": {
       return mockApiResponse(withoutDatabaseSourceSettings());
     }
   }
@@ -46,23 +52,25 @@ mockFetch.addGetFetchRequest(/settings\/emails\/notifications\.json/, async() =>
 const decorators = [
   (Story, context) => {
     currentStory = context.id;
-    return <>
-      <Story/>
-    </>;
-  }
+    return (
+      <>
+        <Story />
+      </>
+    );
+  },
 ];
 
-const Template = args =>
+const Template = (args) => (
   <AdminEmailNotificationContextProvider {...args}>
     <RbacContextProvider>
       <div className="panel middle">
         <div className="grid grid-responsive-12">
-          <DisplayEmailNotificationsAdministration {...args}/>
+          <DisplayEmailNotificationsAdministration {...args} />
         </div>
       </div>
     </RbacContextProvider>
-  </AdminEmailNotificationContextProvider>;
-
+  </AdminEmailNotificationContextProvider>
+);
 
 export const AllNotifications = Template.bind({});
 AllNotifications.args = defaultProps();

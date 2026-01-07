@@ -16,15 +16,18 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {
   defaultMetadataKeysSettingsFormDto,
-  metadataKeysSettingsFormWithGeneratedKeyDto
+  metadataKeysSettingsFormWithGeneratedKeyDto,
 } from "./metadataKeysSettingsFormEntity.test.data";
 import MetadataKeysSettingsFormEntity from "./metadataKeysSettingsFormEntity";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 import {
   SCENARIO_EMPTY,
-  SCENARIO_FALSE, SCENARIO_FLOAT,
-  SCENARIO_INTEGER, SCENARIO_OBJECT,
-  SCENARIO_STRING, SCENARIO_TRUE
+  SCENARIO_FALSE,
+  SCENARIO_FLOAT,
+  SCENARIO_INTEGER,
+  SCENARIO_OBJECT,
+  SCENARIO_STRING,
+  SCENARIO_TRUE,
 } from "../../../../../test/assert/assertEntityProperty";
 
 describe("MetadataKeysSettingsFormEntity", () => {
@@ -45,14 +48,34 @@ describe("MetadataKeysSettingsFormEntity", () => {
 
     it("validates generated_private_key property", () => {
       const dto = metadataKeysSettingsFormWithGeneratedKeyDto();
-      const successScenario = [
-        {scenario: "valid gpg key pair entity", value: dto.generated_metadata_key},
-      ];
+      const successScenario = [{ scenario: "valid gpg key pair entity", value: dto.generated_metadata_key }];
 
-      const failingPrivateKeyScenario = {scenario: "invalid private key", value: {private_key: {armored_key: "invalid-armored-key"}}};
-      const failingPublicKeyScenario = {scenario: "invalid private key", value: {public_key: {armored_key: "invalid-armored-key"}}};
-      const failingScenario = [SCENARIO_EMPTY, SCENARIO_STRING, SCENARIO_INTEGER, SCENARIO_FLOAT, SCENARIO_OBJECT, SCENARIO_TRUE, SCENARIO_FALSE, failingPrivateKeyScenario, failingPublicKeyScenario];
-      assertEntityProperty.assertAssociation(MetadataKeysSettingsFormEntity, "generated_metadata_key", dto, successScenario, failingScenario);
+      const failingPrivateKeyScenario = {
+        scenario: "invalid private key",
+        value: { private_key: { armored_key: "invalid-armored-key" } },
+      };
+      const failingPublicKeyScenario = {
+        scenario: "invalid private key",
+        value: { public_key: { armored_key: "invalid-armored-key" } },
+      };
+      const failingScenario = [
+        SCENARIO_EMPTY,
+        SCENARIO_STRING,
+        SCENARIO_INTEGER,
+        SCENARIO_FLOAT,
+        SCENARIO_OBJECT,
+        SCENARIO_TRUE,
+        SCENARIO_FALSE,
+        failingPrivateKeyScenario,
+        failingPublicKeyScenario,
+      ];
+      assertEntityProperty.assertAssociation(
+        MetadataKeysSettingsFormEntity,
+        "generated_metadata_key",
+        dto,
+        successScenario,
+        failingScenario,
+      );
       assertEntityProperty.nullable(MetadataKeysSettingsFormEntity, "generated_private_key");
       assertEntityProperty.notRequired(MetadataKeysSettingsFormEntity, "generated_metadata_key");
     });
@@ -110,8 +133,8 @@ describe("MetadataKeysSettingsFormEntity", () => {
           },
           public_key: {
             armored_key: pgpKeys.eddsa_ed25519.public,
-          }
-        }
+          },
+        },
       };
       expect(settings.toDto()).toStrictEqual(expectedDto);
     });
@@ -119,13 +142,16 @@ describe("MetadataKeysSettingsFormEntity", () => {
     it("exports even if invalid", () => {
       expect.assertions(1);
 
-      const settings = new MetadataKeysSettingsFormEntity({
-        allow_usage_of_personal_keys: "",
-        zero_knowledge_key_share: "",
-        metadata_private_armored_key: "",
-        metadata_public_armored_key: "",
-        generated_metadata_key: "",
-      }, {validate: false});
+      const settings = new MetadataKeysSettingsFormEntity(
+        {
+          allow_usage_of_personal_keys: "",
+          zero_knowledge_key_share: "",
+          metadata_private_armored_key: "",
+          metadata_public_armored_key: "",
+          generated_metadata_key: "",
+        },
+        { validate: false },
+      );
 
       const expectedDto = {
         allow_usage_of_personal_keys: "",

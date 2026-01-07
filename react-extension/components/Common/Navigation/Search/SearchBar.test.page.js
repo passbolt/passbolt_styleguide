@@ -12,7 +12,7 @@
  * @since         5.4.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import SearchBar from "./SearchBar";
@@ -28,9 +28,9 @@ export default class SearchBarTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <SearchBar  {...props}/>
+        <SearchBar {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 

@@ -16,17 +16,17 @@ import ScimSettingsServiceWorkerService, {
   SCIM_FIND_SETTINGS_EVENT,
   SCIM_CREATE_SETTINGS_EVENT,
   SCIM_UPDATE_SETTINGS_EVENT,
-  SCIM_DISABLE_SETTINGS_EVENT
+  SCIM_DISABLE_SETTINGS_EVENT,
 } from "./scimSettingsServiceWorkerService";
-import {v4 as uuidv4} from "uuid";
-import {defaultScimSettingsDto, scimSettingsWithoutIdDto} from "./scimSettingsServiceWorkerService.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultScimSettingsDto, scimSettingsWithoutIdDto } from "./scimSettingsServiceWorkerService.test.data";
 
 describe("ScimSettingsServiceWorkerService", () => {
   let portMock, service;
 
   beforeEach(() => {
     portMock = {
-      request: jest.fn()
+      request: jest.fn(),
     };
     service = new ScimSettingsServiceWorkerService(portMock);
   });
@@ -36,7 +36,7 @@ describe("ScimSettingsServiceWorkerService", () => {
   });
 
   describe("findSettings", () => {
-    it("should find SCIM settings", async() => {
+    it("should find SCIM settings", async () => {
       const settingsDto = defaultScimSettingsDto();
       portMock.request.mockResolvedValue(settingsDto);
 
@@ -47,7 +47,7 @@ describe("ScimSettingsServiceWorkerService", () => {
       expect(result.toDto()).toEqual(settingsDto);
     });
 
-    it("should return null if no settings found", async() => {
+    it("should return null if no settings found", async () => {
       portMock.request.mockResolvedValue(null);
 
       const result = await service.findSettings();
@@ -59,7 +59,7 @@ describe("ScimSettingsServiceWorkerService", () => {
   });
 
   describe("saveSettings", () => {
-    it("should create SCIM settings", async() => {
+    it("should create SCIM settings", async () => {
       const settingsDto = defaultScimSettingsDto();
       const formSettings = new ScimSettingsEntity(settingsDto);
       portMock.request.mockResolvedValue(settingsDto);
@@ -71,7 +71,7 @@ describe("ScimSettingsServiceWorkerService", () => {
       expect(result.toDto()).toEqual(settingsDto);
     });
 
-    it("should update SCIM settings", async() => {
+    it("should update SCIM settings", async () => {
       const settingsDto = scimSettingsWithoutIdDto();
       delete settingsDto.setting_id;
       const formSettings = new ScimSettingsEntity(settingsDto);
@@ -85,13 +85,13 @@ describe("ScimSettingsServiceWorkerService", () => {
       expect(result.toDto()).toEqual(settingsDto);
     });
 
-    it("should throw TypeError if settings is not a ScimSettingsEntity", async() => {
+    it("should throw TypeError if settings is not a ScimSettingsEntity", async () => {
       await expect(service.updateSettings({})).rejects.toThrow(TypeError);
     });
   });
 
   describe("disableSettings", () => {
-    it("should disable SCIM settings", async() => {
+    it("should disable SCIM settings", async () => {
       portMock.request.mockResolvedValue(null);
       const id = uuidv4();
 

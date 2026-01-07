@@ -12,24 +12,24 @@
  * @since         5.8.0
  */
 import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
-import {defaultUserDto} from "../../../models/entity/user/userEntity.test.data";
+import { defaultUserDto } from "../../../models/entity/user/userEntity.test.data";
 
 export class DefaultUserApiService {
   findAll() {
-    return new PassboltResponseEntity({body: [defaultUserDto()], header: {}});
+    return new PassboltResponseEntity({ body: [defaultUserDto()], header: {} });
   }
 
   findByRoleId() {
-    return new PassboltResponseEntity({body: [], header: {}});
+    return new PassboltResponseEntity({ body: [], header: {} });
   }
 }
 
 export class UserApiServiceWithUsersHavingCustomRoles {
   findAll() {
-    return new PassboltResponseEntity({body: [defaultUserDto()], header: {}});
+    return new PassboltResponseEntity({ body: [defaultUserDto()], header: {} });
   }
 
   findByRoleId(roleId) {
-    return new PassboltResponseEntity({body: [defaultUserDto({role_id: roleId})], header: {}});
+    return new PassboltResponseEntity({ body: [defaultUserDto({ role_id: roleId })], header: {} });
   }
 }

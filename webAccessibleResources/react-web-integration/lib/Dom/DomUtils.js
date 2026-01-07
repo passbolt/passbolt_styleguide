@@ -17,9 +17,12 @@
  */
 class DomUtils {
   static getAccessibleAndSameDomainIframes() {
-    return Array.prototype.filter.call(document.querySelectorAll("iframe"), iframe => {
+    return Array.prototype.filter.call(document.querySelectorAll("iframe"), (iframe) => {
       const contentDocument = DomUtils.getAccessedIframeContentDocument(iframe);
-      return contentDocument && DomUtils.isRequestInitiatedFromSameOrigin(window.location.href, contentDocument.location.href);
+      return (
+        contentDocument &&
+        DomUtils.isRequestInitiatedFromSameOrigin(window.location.href, contentDocument.location.href)
+      );
     });
   }
 
@@ -43,23 +46,18 @@ class DomUtils {
    * @return {Array<Document>} iframe document
    */
   static getShadowDomDocuments() {
-    const filterByShadowRoot = element => element.shadowRoot ? NodeFilter.FILTER_ACCEPT
-      : NodeFilter.FILTER_SKIP;
-    const treeWalker = document.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_ELEMENT,
-      filterByShadowRoot
-    );
+    const filterByShadowRoot = (element) => (element.shadowRoot ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP);
+    const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, filterByShadowRoot);
     const shadowDomDocuments = [];
     while (treeWalker.nextNode()) {
-      const shadowDom = browser.dom?.openOrClosedShadowRoot(treeWalker.currentNode) || treeWalker.currentNode.shadowRoot;
+      const shadowDom =
+        browser.dom?.openOrClosedShadowRoot(treeWalker.currentNode) || treeWalker.currentNode.shadowRoot;
       if (shadowDom) {
         shadowDomDocuments.push(shadowDom);
       }
     }
     return shadowDomDocuments;
   }
-
 
   /**
    * Check the requested document, top document and an iframe form is initiated from same domain.
@@ -87,13 +85,14 @@ class DomUtils {
    * @param node A Dom node
    */
   static getScrollParent(node) {
-    const style = (node, prop) =>
-      getComputedStyle(node, null).getPropertyValue(prop);
+    const style = (node, prop) => getComputedStyle(node, null).getPropertyValue(prop);
 
-    const isScrollable = node =>
-      style(node, "overflow")?.split(' ').every(overflow => overflow === 'auto' || overflow === 'scroll');
+    const isScrollable = (node) =>
+      style(node, "overflow")
+        ?.split(" ")
+        .every((overflow) => overflow === "auto" || overflow === "scroll");
 
-    const scrollParent = node => {
+    const scrollParent = (node) => {
       // if node or node = document.body or node type is element node (ex: for iframe node type = document)
       if (!node || node === document.body || node.nodeType !== Node.ELEMENT_NODE) {
         return window;
@@ -123,7 +122,7 @@ class DomUtils {
       // We loop to find the field with the lowest common ancestors
       while (parent && !field) {
         parent = parent.offsetParent || parent.parentElement;
-        field = fields.find(callToActionField => parent.contains(callToActionField.field));
+        field = fields.find((callToActionField) => parent.contains(callToActionField.field));
       }
       return field;
     }

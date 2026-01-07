@@ -15,7 +15,7 @@
 import React from "react";
 import LoadingBar from "../LoadingBar/LoadingBar";
 import PropTypes from "prop-types";
-import {withLoading} from "../../../../contexts/LoadingContext";
+import { withLoading } from "../../../../contexts/LoadingContext";
 
 /**
  * This component acts as an anchor for loading bar.
@@ -45,7 +45,7 @@ class ManageLoading extends React.Component {
   get defaultState() {
     return {
       progressRate: 0, // The current rate of progress
-      mustShow: false // Flag to display the loading bar
+      mustShow: false, // Flag to display the loading bar
     };
   }
 
@@ -90,7 +90,7 @@ class ManageLoading extends React.Component {
    * Reset the loading bar
    */
   reset() {
-    this.setState({progressRate: 0, mustShow: false});
+    this.setState({ progressRate: 0, mustShow: false });
   }
 
   /**
@@ -98,8 +98,10 @@ class ManageLoading extends React.Component {
    * @param progressRate A progress rate
    */
   load(progressRate) {
-    this.setState({mustShow: true});
-    setTimeout(() => { this.setState({progressRate}); });
+    this.setState({ mustShow: true });
+    setTimeout(() => {
+      this.setState({ progressRate });
+    });
   }
 
   /**
@@ -108,18 +110,16 @@ class ManageLoading extends React.Component {
   render() {
     return (
       <div className="loading-bar-wrapper">
-        {this.state.mustShow &&
-          <LoadingBar
-            progress={this.state.progressRate}
-            onProgressCompleted={this.handleProgressCompleted}/>
-        }
+        {this.state.mustShow && (
+          <LoadingBar progress={this.state.progressRate} onProgressCompleted={this.handleProgressCompleted} />
+        )}
       </div>
     );
   }
 }
 
 ManageLoading.propTypes = {
-  loadingContext: PropTypes.any // The loading context
+  loadingContext: PropTypes.any, // The loading context
 };
 
 export default withLoading(ManageLoading);

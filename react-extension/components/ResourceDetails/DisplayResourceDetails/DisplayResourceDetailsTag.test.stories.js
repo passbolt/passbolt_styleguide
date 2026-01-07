@@ -15,25 +15,25 @@
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceDetailsTag from "./DisplayResourceDetailsTag";
-import {defaultProps} from "./DisplayResourceDetailsTag.test.data";
-import {MemoryRouter} from "react-router-dom";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultProps } from "./DisplayResourceDetailsTag.test.data";
+import { MemoryRouter } from "react-router-dom";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetailsTag',
+  title: "Components/ResourceDetails/DisplayResourceDetailsTag",
   component: DisplayResourceDetailsTag,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <div className="page">
-        <div className="app" style={{margin: "-1rem"}}>
+        <div className="app" style={{ margin: "-1rem" }}>
           <div className="panel main">
             <div className="panel middle">
-              <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+              <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <div className="panel aside">
                   <div className="sidebar resource">
                     <div className="sidebar-content">
                       <AppContext.Provider value={args.context}>
-                        <MemoryRouter initialEntries={['/']}>
+                        <MemoryRouter initialEntries={["/"]}>
                           <Story {...args} />
                         </MemoryRouter>
                       </AppContext.Provider>
@@ -45,8 +45,8 @@ export default {
           </div>
         </div>
       </div>
-    )
-  ]
+    ),
+  ],
 };
 
 export const Default = {
@@ -56,36 +56,36 @@ export const Default = {
       details: {
         resource: {
           permission: {
-            type: 15
+            type: 15,
           },
-          tags: []
-        }
-      }
-    }
-  })
+          tags: [],
+        },
+      },
+    },
+  }),
 };
 
 const tags = [
   {
-    "id": "ae930cc9-516c-4206-8f0b-00b8b6752029",
-    "slug": 'apache',
-    "is_shared": false
+    id: "ae930cc9-516c-4206-8f0b-00b8b6752029",
+    slug: "apache",
+    is_shared: false,
   },
   {
-    "id": "be930cc9-516c-4206-8f0b-00b8b6752029",
-    "slug": "#shared",
-    "is_shared": true
+    id: "be930cc9-516c-4206-8f0b-00b8b6752029",
+    slug: "#shared",
+    is_shared: true,
   },
   {
-    "id": "d4582ccc-1869-43ce-b47f-1c957764e654",
-    "slug": "demo",
-    "is_shared": false
+    id: "d4582ccc-1869-43ce-b47f-1c957764e654",
+    slug: "demo",
+    is_shared: false,
   },
   {
-    "id": "37d7eeca-71d5-46fb-9f08-831e2bde7781",
-    "slug": "ok",
-    "is_shared": false
-  }
+    id: "37d7eeca-71d5-46fb-9f08-831e2bde7781",
+    slug: "ok",
+    is_shared: false,
+  },
 ];
 
 const props = defaultProps({
@@ -94,12 +94,12 @@ const props = defaultProps({
     details: {
       resource: {
         permission: {
-          type: 15
+          type: 15,
         },
-        tags: tags
-      }
-    }
-  }
+        tags: tags,
+      },
+    },
+  },
 });
 
 props.context.port.addRequestListener("passbolt.tags.find-all", () => tags);
@@ -110,11 +110,11 @@ export const Tags = {
       details: {
         resource: {
           permission: {
-            type: 15
+            type: 15,
           },
-          tags: tags
-        }
-      }
-    }
-  })
+          tags: tags,
+        },
+      },
+    },
+  }),
 };

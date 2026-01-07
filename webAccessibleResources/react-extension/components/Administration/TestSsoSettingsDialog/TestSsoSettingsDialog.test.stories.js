@@ -12,14 +12,14 @@
  * @since         3.9.0
  */
 import TestSsoSettingsDialog from "./TestSsoSettingsDialog";
-import {defaultProps} from "./TestSsoSettingsDialog.test.data";
+import { defaultProps } from "./TestSsoSettingsDialog.test.data";
 import SsoProviders from "../ManageSsoSettings/SsoProviders.data";
 
 export default {
-  title: 'Components/Administration/TestSsoSettingsDialog',
-  component: TestSsoSettingsDialog
+  title: "Components/Administration/TestSsoSettingsDialog",
+  component: TestSsoSettingsDialog,
 };
 
 export const Default = {
-  args: defaultProps({provider: SsoProviders.at(0)})
+  args: defaultProps({ provider: SsoProviders.at(0) }),
 };

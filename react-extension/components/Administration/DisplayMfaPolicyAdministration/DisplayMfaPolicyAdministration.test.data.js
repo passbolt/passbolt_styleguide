@@ -12,8 +12,8 @@
  * @since         3.10.0
  */
 
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
-import {MfaPolicyEnumerationTypes} from '../../../../shared/models/mfaPolicy/MfaPolicyEnumeration';
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
+import { MfaPolicyEnumerationTypes } from "../../../../shared/models/mfaPolicy/MfaPolicyEnumeration";
 
 /**
  * Default props.
@@ -25,18 +25,18 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(data?.context),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
-      resetDisplayAdministrationWorkspaceAction: jest.fn()
+      resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),
-      displayError: jest.fn()
+      displayError: jest.fn(),
     },
-    t: text => text
+    t: (text) => text,
   };
   return Object.assign(defaultProps, data);
 }
 
 export const settingDto = {
   policy: MfaPolicyEnumerationTypes.OPTIN,
-  remember_me_for_a_month: "false"
+  remember_me_for_a_month: "false",
 };

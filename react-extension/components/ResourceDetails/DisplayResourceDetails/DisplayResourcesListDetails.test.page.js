@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesListDetails from "./DisplayResourcesListDetails";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
 
 /**
  * The DisplayResourceDetails component represented as a page
@@ -29,10 +29,10 @@ export default class DisplayResourcesListDetailsPage {
     this._page = render(
       <MockTranslationProvider>
         <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
-          <DisplayResourcesListDetails {...props}/>
+          <DisplayResourcesListDetails {...props} />
         </ResourceWorkspaceContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -44,7 +44,7 @@ export default class DisplayResourcesListDetailsPage {
   }
 
   resource(index) {
-    return this._page.container.querySelectorAll('.sidebar .sidebar-header')[index];
+    return this._page.container.querySelectorAll(".sidebar .sidebar-header")[index];
   }
 
   resourceName(index) {
@@ -64,8 +64,8 @@ export default class DisplayResourcesListDetailsPage {
   }
 
   /** Click on the component */
-  async clickOn(component)  {
-    const leftClick = {button: 0};
+  async clickOn(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

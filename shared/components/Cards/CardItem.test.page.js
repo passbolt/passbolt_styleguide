@@ -13,7 +13,7 @@
  */
 import React from "react";
 import CardItem from "./CardItem";
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 
 /**
  * The ResourceWorkspaceContextPage component represented as a page
@@ -25,10 +25,7 @@ export default class ResourceWorkspaceContextPage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(
-      <CardItem {...props}/>,
-      {legacyRoot: true}
-    );
+    this._page = render(<CardItem {...props} />, { legacyRoot: true });
   }
 
   /**
@@ -75,6 +72,6 @@ export default class ResourceWorkspaceContextPage {
    * Simulates a click on the button.
    */
   click() {
-    fireEvent.click(this.button, {button: 0});
+    fireEvent.click(this.button, { button: 0 });
   }
 }

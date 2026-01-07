@@ -12,17 +12,19 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import {
   ApiAccountRecoveryContextState,
-  withApiAccountRecoveryContext
+  withApiAccountRecoveryContext,
 } from "../../../contexts/ApiAccountRecoveryContext";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import DisplayRestartFromScratchError from "../DisplayRestartFromScratchError/DisplayRestartFromScratchError";
 import DisplayExpiredTokenError from "../DisplayExpiredTokenError/DisplayExpiredTokenError";
-import DisplayAlreadyLoggedInError, {DisplayAlreadyLoggedInErrorVariations} from "../../Authentication/DisplayAlreadyLoggedInError/DisplayAlreadyLoggedInError";
+import DisplayAlreadyLoggedInError, {
+  DisplayAlreadyLoggedInErrorVariations,
+} from "../../Authentication/DisplayAlreadyLoggedInError/DisplayAlreadyLoggedInError";
 
 /**
  * The component orchestrates the api account recovery authentication workflow.
@@ -49,20 +51,20 @@ class OrchestrateApiAccountRecovery extends Component {
   render() {
     switch (this.props.apiAccountRecoveryContext.state) {
       case ApiAccountRecoveryContextState.RESTART_FROM_SCRATCH:
-        return <DisplayRestartFromScratchError/>;
+        return <DisplayRestartFromScratchError />;
       case ApiAccountRecoveryContextState.TOKEN_EXPIRED_STATE:
-        return <DisplayExpiredTokenError/>;
+        return <DisplayExpiredTokenError />;
       case ApiAccountRecoveryContextState.ERROR_ALREADY_SIGNED_IN_STATE:
-        return <DisplayAlreadyLoggedInError
-          onLogoutButtonClick={this.props.apiAccountRecoveryContext.logoutUserAndRefresh}
-          displayAs={DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY}
-        />;
+        return (
+          <DisplayAlreadyLoggedInError
+            onLogoutButtonClick={this.props.apiAccountRecoveryContext.logoutUserAndRefresh}
+            displayAs={DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY}
+          />
+        );
       case ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE:
-        return <DisplayUnexpectedError
-          error={this.props.apiAccountRecoveryContext.unexpectedError}
-        />;
+        return <DisplayUnexpectedError error={this.props.apiAccountRecoveryContext.unexpectedError} />;
       default:
-        return <LoadingSpinner/>;
+        return <LoadingSpinner />;
     }
   }
 }

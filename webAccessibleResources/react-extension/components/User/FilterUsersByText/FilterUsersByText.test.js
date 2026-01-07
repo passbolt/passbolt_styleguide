@@ -16,7 +16,7 @@
  * Unit tests on FilterUserByShortcut in regard of specifications
  */
 
-import {defaultAppContext, defaultProps} from "./FilterUsersByText.test.data";
+import { defaultAppContext, defaultProps } from "./FilterUsersByText.test.data";
 import FilterUsersByTextPage from "./FilterUsersByText.test.page";
 
 beforeEach(() => {
@@ -33,19 +33,25 @@ describe("Filter User By Text", () => {
     page = new FilterUsersByTextPage(context, props);
   });
 
-  it('As LU, I should be redirected to /app/users with a textual filter when I input a search text', async() => {
-    jest.spyOn(props.history, 'push').mockImplementationOnce(() => {});
-    const expectedCallParameters =  {pathname: "/app/users", state: {filter: {payload: "Some search text", type: "FILTER-BY-TEXT-SEARCH"}}};
-    await page.search('Some search text');
+  it("As LU, I should be redirected to /app/users with a textual filter when I input a search text", async () => {
+    jest.spyOn(props.history, "push").mockImplementationOnce(() => {});
+    const expectedCallParameters = {
+      pathname: "/app/users",
+      state: { filter: { payload: "Some search text", type: "FILTER-BY-TEXT-SEARCH" } },
+    };
+    await page.search("Some search text");
     jest.runAllTimers();
     expect(props.history.push).toHaveBeenCalledWith(expectedCallParameters);
     expect(page.button.textContent).toBe("Clear");
   });
 
-  it('As LU, I should be able to see a search button when I clear all input ', async() => {
-    jest.spyOn(props.history, 'push').mockImplementationOnce(() => {});
-    const expectedCallParameters =  {pathname: "/app/users", state: {filter: {payload: "Some search text", type: "FILTER-BY-TEXT-SEARCH"}}};
-    await page.search('');
+  it("As LU, I should be able to see a search button when I clear all input ", async () => {
+    jest.spyOn(props.history, "push").mockImplementationOnce(() => {});
+    const expectedCallParameters = {
+      pathname: "/app/users",
+      state: { filter: { payload: "Some search text", type: "FILTER-BY-TEXT-SEARCH" } },
+    };
+    await page.search("");
     jest.runAllTimers();
     expect(props.history.push).toHaveBeenCalledWith(expectedCallParameters);
     expect(page.button).toBeNull();

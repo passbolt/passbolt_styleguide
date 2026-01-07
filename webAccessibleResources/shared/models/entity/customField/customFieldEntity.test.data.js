@@ -11,14 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.3.0
  */
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 export const defaultCustomField = (data = {}) => ({
   id: uuidv4(),
   type: "text",
   metadata_key: "key-0",
   secret_value: "secret-0",
-  ...data
+  ...data,
 });
 
 export const customFieldWithAllInMetadata = (data = {}) => ({
@@ -26,7 +26,7 @@ export const customFieldWithAllInMetadata = (data = {}) => ({
   type: "text",
   metadata_key: "key-0",
   metadata_value: "secret-0",
-  ...data
+  ...data,
 });
 
 export const customFieldWithAllInSecret = (data = {}) => ({
@@ -34,7 +34,7 @@ export const customFieldWithAllInSecret = (data = {}) => ({
   type: "text",
   secret_key: "key-0",
   secret_value: "secret-0",
-  ...data
+  ...data,
 });
 
 export const emptyCustomFieldDto = (data = {}) => ({
@@ -42,5 +42,5 @@ export const emptyCustomFieldDto = (data = {}) => ({
   type: "text",
   secret_key: "",
   secret_value: "",
-  ...data
+  ...data,
 });

@@ -37,14 +37,11 @@ class UserPassphrasePoliciesViewModel {
     const baseEntitySchema = UserPassphrasePoliciesEntity.getSchema();
     return {
       type: "object",
-      required: [
-        "entropy_minimum",
-        "external_dictionary_check",
-      ],
+      required: ["entropy_minimum", "external_dictionary_check"],
       properties: {
         entropy_minimum: baseEntitySchema.properties.entropy_minimum,
         external_dictionary_check: baseEntitySchema.properties.external_dictionary_check,
-      }
+      },
     };
   }
 
@@ -68,11 +65,8 @@ class UserPassphrasePoliciesViewModel {
    * @returns {boolean}
    */
   static isDataDifferent(a, b) {
-    const keys = [
-      "entropy_minimum",
-      "external_dictionary_check"
-    ];
-    return keys.some(key => a[key] !== b[key]);
+    const keys = ["entropy_minimum", "external_dictionary_check"];
+    return keys.some((key) => a[key] !== b[key]);
   }
 
   /**
@@ -95,7 +89,7 @@ class UserPassphrasePoliciesViewModel {
   cloneWithMutation(field, value) {
     const clone = {
       ...this,
-      [field]: value
+      [field]: value,
     };
     return new UserPassphrasePoliciesViewModel(clone);
   }

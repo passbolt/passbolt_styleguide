@@ -12,12 +12,12 @@
  * @since         5.0.0
  */
 
-import React, {Component, Fragment} from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {ResourceEditCreateFormEnumerationTypes} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { ResourceEditCreateFormEnumerationTypes } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 
 class AddResourceName extends Component {
@@ -68,15 +68,19 @@ class AddResourceName extends Component {
    */
   get breadcrumbItems() {
     const foldersHierarchy = this.props.context.getHierarchyFolderCache(this.props.resource?.folder_parent_id);
-    return <div className="breadcrumbs">
-      <div className="folder-name"><Trans>My workspace</Trans></div>
-      {foldersHierarchy?.map(folder =>
-        <Fragment key={folder.id}>
-          <span className="caret">›</span>
-          <div className="folder-name">{folder.name}</div>
-        </Fragment>
-      )}
-    </div>;
+    return (
+      <div className="breadcrumbs">
+        <div className="folder-name">
+          <Trans>My workspace</Trans>
+        </div>
+        {foldersHierarchy?.map((folder) => (
+          <Fragment key={folder.id}>
+            <span className="caret">›</span>
+            <div className="folder-name">{folder.name}</div>
+          </Fragment>
+        ))}
+      </div>
+    );
   }
 
   /**
@@ -123,30 +127,40 @@ class AddResourceName extends Component {
     return (
       <div className="resource-info">
         <div className="resource-icon">
-          {
-            this.isV5ResourceType && (
-              <button className="button-transparent" onClick={this.onResourceIconClick} type="button">
-                <ResourceIcon resource={this.props.resource}/>
-              </button>
-            )
-          }
-          {
-            !this.isV5ResourceType && <ResourceIcon resource={this.props.resource} />
-          }
+          {this.isV5ResourceType && (
+            <button className="button-transparent" onClick={this.onResourceIconClick} type="button">
+              <ResourceIcon resource={this.props.resource} />
+            </button>
+          )}
+          {!this.isV5ResourceType && <ResourceIcon resource={this.props.resource} />}
         </div>
         <div className="information">
-          <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
-            <input id="resource-name" name="metadata.name" type="text" value={this.props.resource?.metadata?.name || ""}
-              onChange={this.handleInputChange} disabled={this.props.disabled} maxLength="255"
-              autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-            {this.isMaxLengthError() &&
-                <div className="name error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
-            }
-            {this.isMaxLengthWarnings("name", "metadata") &&
-                <div className="name warning-message">
-                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
-                </div>
-            }
+          <div className={`input text ${this.props.disabled ? "disabled" : ""}`}>
+            <input
+              id="resource-name"
+              name="metadata.name"
+              type="text"
+              value={this.props.resource?.metadata?.name || ""}
+              onChange={this.handleInputChange}
+              disabled={this.props.disabled}
+              maxLength="255"
+              autoComplete="off"
+              autoFocus={true}
+              placeholder={this.translate("Name")}
+            />
+            {this.isMaxLengthError() && (
+              <div className="name error-message">
+                <Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans>
+              </div>
+            )}
+            {this.isMaxLengthWarnings("name", "metadata") && (
+              <div className="name warning-message">
+                <strong>
+                  <Trans>Warning:</Trans>
+                </strong>{" "}
+                <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+              </div>
+            )}
           </div>
           {this.breadcrumbItems}
         </div>
@@ -167,5 +181,4 @@ AddResourceName.propTypes = {
   onIconClick: PropTypes.func, // The callback to change the current form
 };
 
-export default  withAppContext(withTranslation('common')(AddResourceName));
-
+export default withAppContext(withTranslation("common")(AddResourceName));

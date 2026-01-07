@@ -19,10 +19,11 @@ import {
   defaultAppContext,
   resourceWithLastSharedTagMock,
   resourceWithNoTagMock,
-  resourceWithTagMock, TagMock,
+  resourceWithTagMock,
+  TagMock,
 } from "./DisplayResourceDetailsTag.test.data";
 import PasswordSidebarTagSectionPage from "./DisplayResourceDetailsTag.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 
 beforeEach(() => {
@@ -33,12 +34,12 @@ describe("See tags", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
-  const saveTagMockImpl = jest.fn((message, data) => Object.assign({id: resourceWithNoTagMock.id}, data));
+  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
+  const saveTagMockImpl = jest.fn((message, data) => Object.assign({ id: resourceWithNoTagMock.id }, data));
   const tagSuggested = jest.fn(() => TagMock);
 
-  describe('As LU I see the tags of my resources', () => {
-    const props = {resourceWorkspaceContext: {details: {resource: resourceWithTagMock}}};
+  describe("As LU I see the tags of my resources", () => {
+    const props = { resourceWorkspaceContext: { details: { resource: resourceWithTagMock } } };
 
     /**
      * Given a resource with 6 tags
@@ -52,25 +53,25 @@ describe("See tags", () => {
       page = new PasswordSidebarTagSectionPage(context, props);
     });
 
-    it('I should see the 6 tags made on the resource', async() => {
+    it("I should see the 6 tags made on the resource", async () => {
       await page.title.click();
 
       expect(page.passwordSidebarTagSection.exists()).toBeTruthy();
       expect(page.tagItemViewer.count()).toBe(6);
     });
 
-    it('I should be able to identify each tag name', async() => {
+    it("I should be able to identify each tag name", async () => {
       await page.title.click();
 
-      expect(page.tagItemViewer.name(1)).toBe('#gg');
-      expect(page.tagItemViewer.name(2)).toBe('#test');
-      expect(page.tagItemViewer.name(3)).toBe('dede');
-      expect(page.tagItemViewer.name(4)).toBe('ok');
-      expect(page.tagItemViewer.name(5)).toBe('test');
-      expect(page.tagItemViewer.name(6)).toBe('There’s always something to look at if you open your eyes');
+      expect(page.tagItemViewer.name(1)).toBe("#gg");
+      expect(page.tagItemViewer.name(2)).toBe("#test");
+      expect(page.tagItemViewer.name(3)).toBe("dede");
+      expect(page.tagItemViewer.name(4)).toBe("ok");
+      expect(page.tagItemViewer.name(5)).toBe("test");
+      expect(page.tagItemViewer.name(6)).toBe("There’s always something to look at if you open your eyes");
     });
 
-    it('Start editing by clicking on the edit icon', async() => {
+    it("Start editing by clicking on the edit icon", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -80,7 +81,7 @@ describe("See tags", () => {
       expect(page.tagEditor.cancelButton.textContent).toBe("Cancel");
     });
 
-    it('Stop editing by clicking on the edit icon', async() => {
+    it("Stop editing by clicking on the edit icon", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -90,7 +91,7 @@ describe("See tags", () => {
       expect(page.tagEditor.component).toBeNull();
     });
 
-    it('Stop editing by clicking out of the edit zone', async() => {
+    it("Stop editing by clicking out of the edit zone", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -100,7 +101,7 @@ describe("See tags", () => {
       expect(page.tagEditor.component).toBeNull();
     });
 
-    it('Stop editing by cancelling the operation', async() => {
+    it("Stop editing by cancelling the operation", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -110,7 +111,7 @@ describe("See tags", () => {
       expect(page.tagEditor.component).toBeNull();
     });
 
-    it('Stop editing with keyboard', async() => {
+    it("Stop editing with keyboard", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -120,7 +121,7 @@ describe("See tags", () => {
       expect(page.tagEditor.component).toBeNull();
     });
 
-    it('Cannot add a shared tag to a resource I don’t own', async() => {
+    it("Cannot add a shared tag to a resource I don’t own", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -131,7 +132,7 @@ describe("See tags", () => {
       expect(page.tagEditor.errorMessage).toBe("This shared tag can't be added, you are not the owner");
     });
 
-    it('Cannot add a tag already added to a resource', async() => {
+    it("Cannot add a tag already added to a resource", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -143,7 +144,7 @@ describe("See tags", () => {
       expect(page.tagEditor.errorMessage).toBe("This tag is already present");
     });
 
-    it('Remove a tag using the edit icon', async() => {
+    it("Remove a tag using the edit icon", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -153,7 +154,7 @@ describe("See tags", () => {
       expect(page.tagEditor.count()).toBe(5);
     });
 
-    it('Remove a tag using the keyboard', async() => {
+    it("Remove a tag using the keyboard", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -165,8 +166,8 @@ describe("See tags", () => {
     });
   });
 
-  describe('As LU I should see the tag section empty', () => {
-    const props = {resourceWorkspaceContext: {details: {resource: resourceWithNoTagMock}}};
+  describe("As LU I should see the tag section empty", () => {
+    const props = { resourceWorkspaceContext: { details: { resource: resourceWithNoTagMock } } };
     mockContextRequest(saveTagMockImpl);
     /**
      * Given a resource with 0 tags
@@ -178,39 +179,49 @@ describe("See tags", () => {
       page = new PasswordSidebarTagSectionPage(context, props);
     });
 
-    it('See an empty message if the resource has no tags', async() => {
+    it("See an empty message if the resource has no tags", async () => {
       await page.title.click();
       expect(page.tagItemViewer.isEmpty()).toBeTruthy();
     });
 
-    it('Start editing by clicking on the edit button', async() => {
+    it("Start editing by clicking on the edit button", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
       expect(page.tagEditor.component).not.toBeNull();
-      expect(page.tagEditor.noticeMessage.textContent).toBe("Pro tip: Tags starting with # are shared with all users who have access. Separate tags using commas.");
+      expect(page.tagEditor.noticeMessage.textContent).toBe(
+        "Pro tip: Tags starting with # are shared with all users who have access. Separate tags using commas.",
+      );
     });
 
-    it('Add a new tag to a resource', async() => {
+    it("Add a new tag to a resource", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tardis");
 
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.passwordSidebarTagSection.click(page.tagEditor.saveButton);
       expect(page.tagEditor.component).toBeNull();
-      const tagsDto = [{
-        slug: "tardis",
-        is_shared: false
-      }];
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update-resource-tags", resourceWithNoTagMock.id, tagsDto);
+      const tagsDto = [
+        {
+          slug: "tardis",
+          is_shared: false,
+        },
+      ];
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.tags.update-resource-tags",
+        resourceWithNoTagMock.id,
+        tagsDto,
+      );
       // notification toaster called
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The tags have been updated successfully",
+      );
     });
 
-    it('Add multiple tags to a resource', async() => {
+    it("Add multiple tags to a resource", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -221,34 +232,46 @@ describe("See tags", () => {
       await page.passwordSidebarTagSection.commaKeyPressed(page.tagEditor.component);
 
       expect(page.tagEditor.count()).toBe(2);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.passwordSidebarTagSection.click(page.tagEditor.saveButton);
       expect(page.tagEditor.component).toBeNull();
-      const tagsDto = [{
-        slug: "tardis",
-        is_shared: false
-      }, {
-        slug: "vortex-manipulator",
-        is_shared: false
-      }];
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update-resource-tags", resourceWithNoTagMock.id, tagsDto);
+      const tagsDto = [
+        {
+          slug: "tardis",
+          is_shared: false,
+        },
+        {
+          slug: "vortex-manipulator",
+          is_shared: false,
+        },
+      ];
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.tags.update-resource-tags",
+        resourceWithNoTagMock.id,
+        tagsDto,
+      );
       // notification toaster called
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The tags have been updated successfully",
+      );
     });
 
-    it('Cannot add a tag longer than 128 characters', async() => {
+    it("Cannot add a tag longer than 128 characters", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
       expect(page.tagEditor.component).not.toBeNull();
-      await page.passwordSidebarTagSection.input(page.tagEditor.component, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      await page.passwordSidebarTagSection.input(
+        page.tagEditor.component,
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      );
 
       await page.passwordSidebarTagSection.click(page.tagEditor.saveButton);
       expect(page.tagEditor.errorMessage).toBe("This tag can't be added, the length cannot exceed 128");
     });
 
-    it('Trim tag', async() => {
+    it("Trim tag", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -261,7 +284,7 @@ describe("See tags", () => {
       expect(page.tagEditor.name(1)).toBe("trim");
     });
 
-    it('Cannot edit and Show progress feedback while submitting changes', async() => {
+    it("Cannot edit and Show progress feedback while submitting changes", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
@@ -269,9 +292,12 @@ describe("See tags", () => {
 
       let updateResolve;
       // Mock the request function to make it the expected result
-      const waitSaveMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
+      const waitSaveMockImpl = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            updateResolve = resolve;
+          }),
+      );
       mockContextRequest(waitSaveMockImpl);
 
       await page.passwordSidebarTagSection.clickWithoutWaitFor(page.tagEditor.saveButton);
@@ -280,14 +306,14 @@ describe("See tags", () => {
         expect(page.tagEditor.component).not.toBeNull();
         expect(page.tagEditor.component.getAttribute("contenteditable")).toBe("false");
         expect(page.tagEditor.saveButton.className).toBe("primary tag-editor-submit processing");
-        expect(page.tagEditor.saveButton.hasAttribute('disabled')).toBeTruthy();
+        expect(page.tagEditor.saveButton.hasAttribute("disabled")).toBeTruthy();
         expect(page.tagEditor.cancelButton.className).toBe("link cancel tag-editor-cancel");
-        expect(page.tagEditor.cancelButton.hasAttribute('disabled')).toBeTruthy();
+        expect(page.tagEditor.cancelButton.hasAttribute("disabled")).toBeTruthy();
         updateResolve();
       });
     });
 
-    it('Add suggested tag to a resource', async() => {
+    it("Add suggested tag to a resource", async () => {
       await page.title.click();
 
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
@@ -302,7 +328,7 @@ describe("See tags", () => {
       expect(page.tagEditor.name(1)).toBe(TagMock[1].slug);
     });
 
-    it('Navigate with keyboard in the list of suggested tags', async() => {
+    it("Navigate with keyboard in the list of suggested tags", async () => {
       await page.title.click();
 
       const tagSuggested = jest.fn(() => TagMock);
@@ -331,7 +357,7 @@ describe("See tags", () => {
       expect(page.tagEditor.name(1)).toBe(TagMock[1].slug);
     });
 
-    it('Close autocomplete with keyboard', async() => {
+    it("Close autocomplete with keyboard", async () => {
       await page.title.click();
 
       const tagSuggested = jest.fn(() => TagMock);
@@ -351,36 +377,44 @@ describe("See tags", () => {
       expect(page.tagEditor.component).toBeNull();
     });
 
-    it('Save tags on keyboard enter', async() => {
+    it("Save tags on keyboard enter", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tardis");
 
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
       await page.passwordSidebarTagSection.enterKeyPressed(page.tagEditor.component);
       expect(page.tagEditor.component.textContent).toBe("");
       expect(page.tagEditor.count()).toBe(1);
       await page.passwordSidebarTagSection.enterKeyPressed(page.tagEditor.component);
       expect(page.tagEditor.component).toBeNull();
-      const tagsDto = [{
-        slug: "tardis",
-        is_shared: false
-      }];
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update-resource-tags", resourceWithNoTagMock.id, tagsDto);
+      const tagsDto = [
+        {
+          slug: "tardis",
+          is_shared: false,
+        },
+      ];
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.tags.update-resource-tags",
+        resourceWithNoTagMock.id,
+        tagsDto,
+      );
       // notification toaster called
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The tags have been updated successfully",
+      );
     });
 
-    it('As LU I should see an error message in the tag section when the API call fails', async() => {
+    it("As LU I should see an error message in the tag section when the API call fails", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tardis");
 
-      const saveErrorTagMockImpl = jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      const saveErrorTagMockImpl = jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
       mockContextRequest(saveErrorTagMockImpl);
@@ -390,7 +424,7 @@ describe("See tags", () => {
     });
   });
 
-  describe('As LU I see a loading feedback in the section when the tags are not yet fetched', () => {
+  describe("As LU I see a loading feedback in the section when the tags are not yet fetched", () => {
     const context = defaultAppContext(); // The applicative context
     /**
      * Given the tags section
@@ -402,14 +436,14 @@ describe("See tags", () => {
       page = new PasswordSidebarTagSectionPage(context, {});
     });
 
-    it('I should see the loading message “Retrieving tags”', async() => {
+    it("I should see the loading message “Retrieving tags”", async () => {
       await page.title.click();
       expect(page.tagItemViewer.isLoading()).toBeTruthy();
     });
   });
 
-  describe('As LU I shouldn’t be able to deleting a shared tag', () => {
-    const props = {resourceWorkspaceContext: {details: {resource: resourceWithLastSharedTagMock}}};
+  describe("As LU I shouldn’t be able to deleting a shared tag", () => {
+    const props = { resourceWorkspaceContext: { details: { resource: resourceWithLastSharedTagMock } } };
     /**
      * Given the tags section
      * Then I should’t be able to delete a shared tag
@@ -421,7 +455,7 @@ describe("See tags", () => {
       page = new PasswordSidebarTagSectionPage(context, props);
     });
 
-    it('Cannot remove shared tags on resources not owned', async() => {
+    it("Cannot remove shared tags on resources not owned", async () => {
       await page.title.click();
       await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
 

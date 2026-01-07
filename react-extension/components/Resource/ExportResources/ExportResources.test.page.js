@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ExportResources from "./ExportResources";
@@ -31,10 +30,10 @@ export default class ExportResourcesPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <ExportResources {...props}/>
+          <ExportResources {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -49,21 +48,21 @@ export default class ExportResourcesPage {
    * Returns the dialog element
    */
   get form() {
-    return this._page.container.querySelector('.form-content');
+    return this._page.container.querySelector(".form-content");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the input file element
    */
   get select() {
-    return this._page.container.querySelector('#export-format .selected-value');
+    return this._page.container.querySelector("#export-format .selected-value");
   }
 
   /**
@@ -77,7 +76,7 @@ export default class ExportResourcesPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -91,20 +90,20 @@ export default class ExportResourcesPage {
    * Returns the export format element
    */
   getLocaleList(index) {
-    return this._page.container.querySelectorAll('#export-format .option')[index - 1];
+    return this._page.container.querySelectorAll("#export-format .option")[index - 1];
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.form, escapeKeyDown);
   }
 
@@ -115,7 +114,7 @@ export default class ExportResourcesPage {
 
   /** Click on save button */
   submitExportWithoutWaiting() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.exportButton, leftClick);
   }
 

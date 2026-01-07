@@ -16,19 +16,19 @@
  * Default props
  * @returns {{resource: {id: string, name: string}}}
  */
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
+import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
 import {
   administrationRbacContextWithUpdatedRbac,
   defaultAdministrationRbacContext,
   populatedAdministrationRbacContext,
-  populatedAdministrationWithMissingRbacContext
+  populatedAdministrationWithMissingRbacContext,
 } from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext.test.data";
-import {DefaultRoleApiService} from "../../../../shared/services/api/role/roleApiService.test.data";
-import {DefaultRbacApiService} from "../../../../shared/services/api/rbac/rbacApiService.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {DefaultUserApiService} from "../../../../shared/services/api/user/userService.test.data";
+import { DefaultRoleApiService } from "../../../../shared/services/api/role/roleApiService.test.data";
+import { DefaultRbacApiService } from "../../../../shared/services/api/rbac/rbacApiService.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { DefaultUserApiService } from "../../../../shared/services/api/user/userService.test.data";
 
 export function defaultProps(props = {}) {
   return {
@@ -40,38 +40,38 @@ export function defaultProps(props = {}) {
     RbacApiService: DefaultRbacApiService,
     UserApiService: DefaultUserApiService,
     dialogContext: defaultDialogContext(),
-    ...props
+    ...props,
   };
 }
 
 export function propsWithPopulatedRbacContext(props = {}) {
   return defaultProps({
     adminRbacContext: populatedAdministrationRbacContext(),
-    ...props
+    ...props,
   });
 }
 
 export function propsWithMissingRbacContext(props = {}) {
   return defaultProps({
     adminRbacContext: populatedAdministrationWithMissingRbacContext(),
-    ...props
+    ...props,
   });
 }
 
 export function propsWithDisabledFlags(featureName, props = {}) {
   const siteSettings = {
-    getServerTimezone: () => '',
-    canIUse: canIUserFeatureName => !featureName.some(flag => canIUserFeatureName === flag),
+    getServerTimezone: () => "",
+    canIUse: (canIUserFeatureName) => !featureName.some((flag) => canIUserFeatureName === flag),
   };
   return propsWithPopulatedRbacContext({
-    context: defaultAppContext({siteSettings}),
-    ...props
+    context: defaultAppContext({ siteSettings }),
+    ...props,
   });
 }
 
 export function propsWithUpdatedRbacs(props = {}) {
   return propsWithPopulatedRbacContext({
     adminRbacContext: administrationRbacContextWithUpdatedRbac(),
-    ...props
+    ...props,
   });
 }

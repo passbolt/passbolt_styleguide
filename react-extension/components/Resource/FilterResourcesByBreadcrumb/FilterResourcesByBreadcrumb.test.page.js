@@ -11,14 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
-import {Router} from "react-router-dom";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
+import { Router } from "react-router-dom";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByBreadcrumb from "./FilterResourcesByBreadcrumb";
-import {createMemoryHistory} from "history";
+import { createMemoryHistory } from "history";
 
 /**
  * The FilterResourcesByBreadcrumb component represented as a page
@@ -35,12 +35,12 @@ export default class FilterResourcesByBreadcrumbPage {
         <Router history={history || createMemoryHistory()}>
           <AppContext.Provider value={appContext}>
             <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
-              <FilterResourcesByBreadcrumb/>
+              <FilterResourcesByBreadcrumb />
             </ResourceWorkspaceContext.Provider>
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -73,28 +73,28 @@ class DisplayBreadcrumbPageObject {
    * Returns the resource breadcrumb
    */
   get breadcrumb() {
-    return this._container.querySelector('.breadcrumbs');
+    return this._container.querySelector(".breadcrumbs");
   }
 
   /**
    * Returns the number of items element
    */
   get count() {
-    return this._container.querySelectorAll('li').length;
+    return this._container.querySelectorAll("li").length;
   }
 
   /**
    * Returns the item element for the index one
    */
   item(index) {
-    return this._container.querySelectorAll('li')[index - 1].textContent;
+    return this._container.querySelectorAll("li")[index - 1].textContent;
   }
 
   /**
    * Returns the item element for the index one
    */
   breadcrumbItem(index) {
-    return this._container.querySelectorAll('li')[index - 1];
+    return this._container.querySelectorAll("li")[index - 1];
   }
 
   /**
@@ -103,7 +103,7 @@ class DisplayBreadcrumbPageObject {
    */
   async clickOnBreadCrumb(index) {
     const element = this.breadcrumbItem(index).querySelector(".link");
-    fireEvent.click(element, {button: 0});
+    fireEvent.click(element, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -112,7 +112,7 @@ class DisplayBreadcrumbPageObject {
    * @return {string | any}
    */
   get itemNumberDisplayed() {
-    return this._container.querySelector('.counter')?.textContent;
+    return this._container.querySelector(".counter")?.textContent;
   }
 
   /**
@@ -122,8 +122,3 @@ class DisplayBreadcrumbPageObject {
     return this.breadcrumb !== null;
   }
 }
-
-
-
-
-

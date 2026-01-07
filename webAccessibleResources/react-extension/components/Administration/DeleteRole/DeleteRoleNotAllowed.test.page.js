@@ -12,7 +12,7 @@
  * @since         5.8.0
  */
 
-import {render, waitFor} from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import userEvent from "@testing-library/user-event";
@@ -31,7 +31,7 @@ export default class DeleteRolePage {
       <MockTranslationProvider>
         <DeleteRoleNotAllowed {...props}></DeleteRoleNotAllowed>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -41,21 +41,21 @@ export default class DeleteRolePage {
    * Returns true if one can cancel the operation
    */
   get canCancel() {
-    return !this._page.container.querySelector('.cancel').hasAttribute('disabled');
+    return !this._page.container.querySelector(".cancel").hasAttribute("disabled");
   }
 
   /**
    * Returns true if one can close the dialog
    */
   get canClose() {
-    return !this._page.container.querySelector('.dialog-close').hasAttribute('disabled');
+    return !this._page.container.querySelector(".dialog-close").hasAttribute("disabled");
   }
 
   /**
    * Returns true if one can submit the edit operation
    */
   get canSubmit() {
-    return !this._page.container.querySelector('button[type="submit"]').hasAttribute('disabled');
+    return !this._page.container.querySelector('button[type="submit"]').hasAttribute("disabled");
   }
 
   /**

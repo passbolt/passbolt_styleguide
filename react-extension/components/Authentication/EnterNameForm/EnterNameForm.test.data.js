@@ -23,12 +23,12 @@ export function defaultProps(props) {
     context: {
       setContext: jest.fn(),
       siteSettings: new SiteSettings(siteSettingsFixture),
-      trustedDomain: "http://127.0.0.1:3001"
+      trustedDomain: "http://127.0.0.1:3001",
     },
     apiTriageContext: {
       username: "user@passbolt.com",
       onRegistrationRequested: () => {},
-    }
+    },
   };
   return Object.assign(defaultProps, props || {});
 }

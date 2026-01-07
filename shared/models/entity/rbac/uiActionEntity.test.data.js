@@ -12,11 +12,11 @@
  * @since         4.1.0
  */
 
-import {v4 as uuidv4} from "uuid";
-import {uiActions} from "../../../services/rbacs/uiActionEnumeration";
+import { v4 as uuidv4 } from "uuid";
+import { uiActions } from "../../../services/rbacs/uiActionEnumeration";
 
 export const defaultUiActionData = (data = {}) => ({
-  "id": uuidv4(),
-  "name": uiActions.TAGS_USE,
-  ...data
+  id: uuidv4(),
+  name: uiActions.TAGS_USE,
+  ...data,
 });

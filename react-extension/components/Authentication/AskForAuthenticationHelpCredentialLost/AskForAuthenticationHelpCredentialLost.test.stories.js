@@ -13,25 +13,26 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import AskForAuthenticationHelpCredentialLost from "./AskForAuthenticationHelpCredentialLost";
-import {defaultProps} from "./AskForAuthenticationHelpCredentialLost.test.data";
+import { defaultProps } from "./AskForAuthenticationHelpCredentialLost.test.data";
 
 export default {
-  title: 'Components/Authentication/AskForAuthenticationHelpCredentialLost',
-  component: AskForAuthenticationHelpCredentialLost
+  title: "Components/Authentication/AskForAuthenticationHelpCredentialLost",
+  component: AskForAuthenticationHelpCredentialLost,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <AskForAuthenticationHelpCredentialLost {...args} {...routerProps}/>}/>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <AskForAuthenticationHelpCredentialLost {...args} {...routerProps} />} />
         </MemoryRouter>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();

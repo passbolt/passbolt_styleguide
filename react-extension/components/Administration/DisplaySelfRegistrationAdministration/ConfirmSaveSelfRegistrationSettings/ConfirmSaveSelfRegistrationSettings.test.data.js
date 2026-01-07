@@ -12,7 +12,7 @@
  * @since         3.8.3
  */
 
-import {defaultAppContext} from "../../../../contexts/ApiAppContext.test.data";
+import { defaultAppContext } from "../../../../contexts/ApiAppContext.test.data";
 
 /**
  * Default props.
@@ -28,11 +28,10 @@ export function defaultProps(data = {}) {
     },
     onClose: jest.fn(),
     onSubmit: jest.fn(),
-    t: jest.fn()
+    t: jest.fn(),
   };
   return Object.assign(defaultProps, data);
 }
-
 
 /**
  * Has changed policy.
@@ -43,8 +42,8 @@ export function propsWithMockDomains(props = {}) {
   const _props = {
     adminSelfRegistrationContext: {
       isProcessing: jest.fn(),
-      getAllowedDomains: () =>  (mockDomains())
-    }
+      getAllowedDomains: () => mockDomains(),
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -60,4 +59,3 @@ export function mockDomains() {
   map.set("uuid2", "passbolt.lu");
   return map;
 }
-

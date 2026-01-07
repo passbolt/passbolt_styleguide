@@ -14,13 +14,13 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultSecretRevisionDto} from "./secretRevisionEntity.test.data";
+import { defaultSecretRevisionDto } from "./secretRevisionEntity.test.data";
 import SecretRevisionEntity from "./secretRevisionEntity";
-import {defaultUserDto} from "../user/userEntity.test.data";
-import {v4 as uuidv4} from "uuid";
-import {TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP} from "../resourceType/resourceTypeEntity.test.data";
+import { defaultUserDto } from "../user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP } from "../resourceType/resourceTypeEntity.test.data";
 import UserEntity from "../user/userEntity";
-import {readSecret} from "../secret/secretEntity.test.data";
+import { readSecret } from "../secret/secretEntity.test.data";
 
 describe("SecretRevision", () => {
   describe("::getSchema", () => {
@@ -76,27 +76,25 @@ describe("SecretRevision", () => {
     });
 
     it("validates creator property", () => {
-      const secretRevisionDto = defaultSecretRevisionDto({}, {withCreator: true});
-      const successScenarios = [
-        {scenario: "a valid option", value: defaultUserDto()},
-      ];
-      const failScenarios = [
-        {scenario: "with invalid creator", value: {"role": "admin"}},
-      ];
-      assertEntityProperty.assertAssociation(SecretRevisionEntity, "creator", secretRevisionDto, successScenarios, failScenarios);
+      const secretRevisionDto = defaultSecretRevisionDto({}, { withCreator: true });
+      const successScenarios = [{ scenario: "a valid option", value: defaultUserDto() }];
+      const failScenarios = [{ scenario: "with invalid creator", value: { role: "admin" } }];
+      assertEntityProperty.assertAssociation(
+        SecretRevisionEntity,
+        "creator",
+        secretRevisionDto,
+        successScenarios,
+        failScenarios,
+      );
     });
 
     it("validates secrets property", () => {
-      const dto = defaultSecretRevisionDto({}, {withSecrets: true});
-      const invalidSecret = [{id: "id"}];
+      const dto = defaultSecretRevisionDto({}, { withSecrets: true });
+      const invalidSecret = [{ id: "id" }];
 
-      const successScenario = [
-        {scenario: "valid secrets collection", value: dto.secrets},
-      ];
+      const successScenario = [{ scenario: "valid secrets collection", value: dto.secrets }];
 
-      const failingScenario = [
-        {scenario: "invalid secrets", value: invalidSecret},
-      ];
+      const failingScenario = [{ scenario: "invalid secrets", value: invalidSecret }];
       assertEntityProperty.assertAssociation(SecretRevisionEntity, "secrets", dto, successScenario, failingScenario);
       assertEntityProperty.notRequired(SecretRevisionEntity, "secrets");
     });
@@ -120,7 +118,7 @@ describe("SecretRevision", () => {
 
     it("constructor works if valid DTO is provided", () => {
       expect.assertions(10);
-      const dto = defaultSecretRevisionDto({}, {withCreator: true, withSecrets: true});
+      const dto = defaultSecretRevisionDto({}, { withCreator: true, withSecrets: true });
       const entity = new SecretRevisionEntity(dto);
 
       expect(entity._props.id).toStrictEqual(dto.id);
@@ -139,14 +137,14 @@ describe("SecretRevision", () => {
   describe("::toDto", () => {
     it("serialization works with full object inside collection and return with no contain", () => {
       expect.assertions(1);
-      const dto = defaultSecretRevisionDto({}, {withCreator: true, withSecrets: true});
+      const dto = defaultSecretRevisionDto({}, { withCreator: true, withSecrets: true });
       const entity = new SecretRevisionEntity(dto);
       expect(entity.toDto(SecretRevisionEntity.ALL_CONTAIN_OPTIONS)).toEqual(dto);
     });
 
     it("serialization works with full object inside collection", () => {
       expect.assertions(1);
-      const dto = defaultSecretRevisionDto({}, {withCreator: true, withSecrets: true});
+      const dto = defaultSecretRevisionDto({}, { withCreator: true, withSecrets: true });
       const entity = new SecretRevisionEntity(dto);
 
       expect(entity.toDto()).toEqual(dto);
@@ -157,55 +155,57 @@ describe("SecretRevision", () => {
     it("`id` should return the right value", () => {
       expect.assertions(1);
       const id = uuidv4();
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({id: id}));
+      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({ id: id }));
       expect(entity.id).toStrictEqual(id);
     });
 
     it("`resourceId` should return the right value", () => {
       expect.assertions(1);
       const resource_id = uuidv4();
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({resource_id: resource_id}));
+      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({ resource_id: resource_id }));
       expect(entity.resourceId).toStrictEqual(resource_id);
     });
 
     it("`resourceTypeId` should return the right value", () => {
       expect.assertions(1);
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP}));
+      const entity = new SecretRevisionEntity(
+        defaultSecretRevisionDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP }),
+      );
       expect(entity.resourceTypeId).toStrictEqual(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP);
     });
 
     it("`created` should return the right value", () => {
       expect.assertions(1);
       const created = "2024-10-05T12:10:00+00:00";
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({created: created}));
+      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({ created: created }));
       expect(entity.created).toStrictEqual(created);
     });
 
     it("`createdBy` should return the right value", () => {
       expect.assertions(1);
       const created_by = uuidv4();
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({created_by: created_by}));
+      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({ created_by: created_by }));
       expect(entity.createdBy).toStrictEqual(created_by);
     });
 
     it("`modified` should return the right value", () => {
       expect.assertions(1);
       const modified = "2024-10-05T12:10:00+00:00";
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({modified: modified}));
+      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({ modified: modified }));
       expect(entity.modified).toStrictEqual(modified);
     });
 
     it("`modifiedBy` should return the right value", () => {
       expect.assertions(1);
       const modified_by = uuidv4();
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({modified_by: modified_by}));
+      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({ modified_by: modified_by }));
       expect(entity.modifiedBy).toStrictEqual(modified_by);
     });
 
     it("`deleted` should return the right value", () => {
       expect.assertions(1);
       const deleted = "2024-10-05T12:10:00+00:00";
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({deleted: deleted}));
+      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({ deleted: deleted }));
       expect(entity.deleted).toStrictEqual(deleted);
     });
 
@@ -215,14 +215,14 @@ describe("SecretRevision", () => {
       //todo: put back when UserEntity is fully migrated
       delete creator.last_logged_in;
       delete creator.is_mfa_enabled;
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({creator: creator}));
+      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({ creator: creator }));
       expect(entity.creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS)).toStrictEqual(creator);
     });
 
     it("`secrets` should return the right value", () => {
       expect.assertions(1);
       const secrets = [readSecret()];
-      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({secrets: secrets}));
+      const entity = new SecretRevisionEntity(defaultSecretRevisionDto({ secrets: secrets }));
       expect(entity.secrets.toDto()).toStrictEqual(secrets);
     });
   });

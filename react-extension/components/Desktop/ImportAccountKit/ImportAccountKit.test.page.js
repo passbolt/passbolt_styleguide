@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render, fireEvent, waitFor} from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ImportAccountKit from "./ImportAccountKit";
 
@@ -30,7 +30,7 @@ export default class ImportAccountKitPage {
       <MockTranslationProvider>
         <ImportAccountKit {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,28 +38,28 @@ export default class ImportAccountKitPage {
    * Returns the import account kit parent class
    */
   get importAccountKit() {
-    return this._page.container.querySelector('.import-account-kit');
+    return this._page.container.querySelector(".import-account-kit");
   }
 
   /**
    * Returns the upload input parent
    */
   get uploadParent() {
-    return this._page.container.querySelector('.input');
+    return this._page.container.querySelector(".input");
   }
 
   /**
    * Returns the upload label
    */
   get uploadLabel() {
-    return this.uploadParent.querySelector('label');
+    return this.uploadParent.querySelector("label");
   }
 
   /**
    * Returns the browse input
    */
   get browseInput() {
-    return this.uploadParent.querySelector('#dialog-upload-account-kit-input');
+    return this.uploadParent.querySelector("#dialog-upload-account-kit-input");
   }
 
   /**
@@ -87,7 +87,7 @@ export default class ImportAccountKitPage {
    * Returns the error message
    */
   get errorMessage() {
-    return this._page.container.querySelector('.error-message');
+    return this._page.container.querySelector(".error-message");
   }
 
   /**
@@ -101,7 +101,7 @@ export default class ImportAccountKitPage {
    * Returns the help message
    */
   get getHelpMessage() {
-    return this._page.container.querySelector('.link');
+    return this._page.container.querySelector(".link");
   }
 
   /**
@@ -116,11 +116,11 @@ export default class ImportAccountKitPage {
    * @param {*} fileData
    */
   async chooseFile(fileData) {
-    const file = new File([fileData.content], fileData.name, {type: fileData.contentType});
+    const file = new File([fileData.content], fileData.name, { type: fileData.contentType });
     fireEvent.change(this.browseInput, {
       target: {
-        files: [file]
-      }
+        files: [file],
+      },
     });
     await waitFor(() => this.checkFieldIsNotEmpty(this.uploadFilename));
   }
@@ -145,8 +145,8 @@ export default class ImportAccountKitPage {
    * Click on the element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => { });
+    await waitFor(() => {});
   }
 }

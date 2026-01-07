@@ -12,7 +12,7 @@
  * @since         4.9.3
  */
 
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Build default group transfer dto.
@@ -23,7 +23,7 @@ export const defaultNeededSecretDto = (data = {}) => {
   const defaultData = {
     user_id: uuidv4(),
     resource_id: uuidv4(),
-    ...data
+    ...data,
   };
 
   return defaultData;

@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {withSso} from "../SsoContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { withSso } from "../SsoContext";
 import SsoProviders from "../../components/Administration/ManageSsoSettings/SsoProviders.data";
 
 const EXPECTED_SSO_LOGIN_ERROR = ["SsoDisabledError", "SsoProviderMismatchError"];
@@ -48,34 +48,20 @@ export const AuthenticationLoginContext = React.createContext({
   newSsoProvider: null, //The new SSO provider the user should use to sign in in case of a provider change
 
   // Public workflow mutators.
-  checkPassphrase: () => {
-  }, // Whenever a user passphrase check is required.
-  signIn: () => {
-  }, // Whenever a user sign-in is required.
-  handleSsoSignIn: () => {
-  }, // Whenever a user sign-in via SSO is required.
-  handleSwitchAccount: () => {
-  }, // Whenever a switch account is required.
-  acceptNewServerKey: () => {
-  }, // Whenever a new server gpg key is accepted.
-  needHelpCredentialsLost: () => {
-  }, // Whenever a user lost its passphrase.
-  requestHelpCredentialsLost: () => {
-  }, // Whenever the user wants to request help because it lost its credentials.
-  goToValidatePassphrase: () => {
-  }, // Whenever the users wants to go to the validate passphrase.
-  handleSsoLoginError: () => {
-  }, // Handles the SSO login error
-  getSsoProvider: () => {
-  }, // Returns the current SSO provider if any
-  isSsoAvailable: () => {
-  }, // Returns true is the SSO feature is enabled
-  handleUserConfirmSsoDisable: () => {
-  }, // Whenere the user confirms the SSO feature has been disabled by an admin
-  handleUserConfirmSsoProviderChange: () => {
-  }, // Whenere the user confirms the SSO provider has been changed by an admin
-  getNewSsoProvider: () => {
-  }, // returns the new provider found from the API configuration
+  checkPassphrase: () => {}, // Whenever a user passphrase check is required.
+  signIn: () => {}, // Whenever a user sign-in is required.
+  handleSsoSignIn: () => {}, // Whenever a user sign-in via SSO is required.
+  handleSwitchAccount: () => {}, // Whenever a switch account is required.
+  acceptNewServerKey: () => {}, // Whenever a new server gpg key is accepted.
+  needHelpCredentialsLost: () => {}, // Whenever a user lost its passphrase.
+  requestHelpCredentialsLost: () => {}, // Whenever the user wants to request help because it lost its credentials.
+  goToValidatePassphrase: () => {}, // Whenever the users wants to go to the validate passphrase.
+  handleSsoLoginError: () => {}, // Handles the SSO login error
+  getSsoProvider: () => {}, // Returns the current SSO provider if any
+  isSsoAvailable: () => {}, // Returns true is the SSO feature is enabled
+  handleUserConfirmSsoDisable: () => {}, // Whenere the user confirms the SSO feature has been disabled by an admin
+  handleUserConfirmSsoProviderChange: () => {}, // Whenere the user confirms the SSO provider has been changed by an admin
+  getNewSsoProvider: () => {}, // returns the new provider found from the API configuration
 });
 
 /**
@@ -142,14 +128,14 @@ export class AuthenticationLoginContextProvider extends React.Component {
     }
 
     if (!this.isSsoAvailable()) {
-      this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
+      this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
       return;
     }
 
     const isSsoLoginErrorState = await this.props.context.port.request("passbolt.sso.has-sso-login-error");
     if (isSsoLoginErrorState) {
       const ssoError = await this.props.context.port.request("passbolt.sso.get-qualified-sso-login-error");
-      const isExpectedError = EXPECTED_SSO_LOGIN_ERROR.findIndex(errorType => errorType === ssoError.name) > -1;
+      const isExpectedError = EXPECTED_SSO_LOGIN_ERROR.findIndex((errorType) => errorType === ssoError.name) > -1;
       if (isExpectedError) {
         /*
          * By this we avoid the blocking case where if the user hits an SSO login error URL with an SSO kit provider matching the API one.
@@ -161,7 +147,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
       }
     }
 
-    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO});
+    this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO });
   }
 
   /**
@@ -170,7 +156,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
    */
   async verifyServerKey() {
     try {
-      await this.props.context.port.request('passbolt.auth.verify-server-key');
+      await this.props.context.port.request("passbolt.auth.verify-server-key");
       return true;
     } catch (error) {
       await this.handleVerifyServerKeyFailure(error);
@@ -186,12 +172,12 @@ export class AuthenticationLoginContextProvider extends React.Component {
     if (error.name === "KeyIsExpiredError") {
       // Nothing to do. @todo document why?
     } else if (error.name === "ServerKeyChangedError") {
-      const serverKey = await this.props.context.port.request('passbolt.auth.get-server-key');
-      await this.setState({state: AuthenticationLoginWorkflowStates.ACCEPT_NEW_SERVER_KEY, serverKey});
+      const serverKey = await this.props.context.port.request("passbolt.auth.get-server-key");
+      await this.setState({ state: AuthenticationLoginWorkflowStates.ACCEPT_NEW_SERVER_KEY, serverKey });
     } else if (error.name === "UserNotFoundError") {
       // This case should be treated by the background page itself, and the login form should not be displayed.
     } else {
-      await this.setState({state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error});
+      await this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -202,13 +188,13 @@ export class AuthenticationLoginContextProvider extends React.Component {
    */
   async checkPassphrase(passphrase) {
     try {
-      await this.props.context.port.request('passbolt.auth.verify-passphrase', passphrase);
+      await this.props.context.port.request("passbolt.auth.verify-passphrase", passphrase);
     } catch (error) {
       if (error.name === "InvalidMasterPasswordError" || error.name === "GpgKeyError") {
         // Expected errors controlled by the component CheckPassphrase, throw it.
         throw error;
       } else {
-        await this.setState({state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error});
+        await this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
       }
     }
   }
@@ -220,12 +206,12 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async signIn(passphrase, rememberMe = false) {
-    await this.setState({state: AuthenticationLoginWorkflowStates.SIGNING_IN});
+    await this.setState({ state: AuthenticationLoginWorkflowStates.SIGNING_IN });
     try {
-      await this.props.context.port.request('passbolt.auth.login', passphrase, rememberMe);
-      this.props.context.port.request('passbolt.auth.post-login-redirect');
+      await this.props.context.port.request("passbolt.auth.login", passphrase, rememberMe);
+      this.props.context.port.request("passbolt.auth.post-login-redirect");
     } catch (error) {
-      await this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_ERROR, error});
+      await this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN_ERROR, error });
     }
   }
 
@@ -236,7 +222,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
   async handleSsoSignIn() {
     try {
       await this.props.ssoContext.runSignInProcess();
-      this.setState({state: AuthenticationLoginWorkflowStates.SIGNING_IN});
+      this.setState({ state: AuthenticationLoginWorkflowStates.SIGNING_IN });
     } catch (e) {
       if (e.name !== "UserAbortsOperationError") {
         this.handleSsoLoginError(e);
@@ -249,7 +235,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async handleSwitchToSso() {
-    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO});
+    this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO });
   }
 
   /**
@@ -257,7 +243,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async handleSwitchToPassphrase() {
-    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
+    this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
   }
 
   /**
@@ -265,7 +251,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
    */
   handleSwitchAccount() {
     const url = `${this.props.context.userSettings.getTrustedDomain()}/users/recover?locale=${this.props.context.locale}`;
-    window.open(url, '_parent', 'noopener,noreferrer');
+    window.open(url, "_parent", "noopener,noreferrer");
   }
 
   /**
@@ -275,7 +261,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
   handleSsoLoginError(e) {
     const newState = {
       state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR,
-      error: e
+      error: e,
     };
 
     if (e.name === "SsoDisabledError") {
@@ -291,9 +277,9 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * Handles the confirmation of the removal of the SSO kit and switch the state to SIGN_IN
    */
   async handleUserConfirmSsoDisable() {
-    await this.props.context.port.request('passbolt.sso.delete-local-kit');
+    await this.props.context.port.request("passbolt.sso.delete-local-kit");
     await this.props.ssoContext.loadSsoConfiguration();
-    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
+    this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
   }
 
   /**
@@ -301,7 +287,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Object}
    */
   getNewSsoProvider() {
-    return SsoProviders.find(provider => this.state.newSsoProvider === provider.id);
+    return SsoProviders.find((provider) => this.state.newSsoProvider === provider.id);
   }
 
   /**
@@ -310,9 +296,9 @@ export class AuthenticationLoginContextProvider extends React.Component {
    */
   async handleUserConfirmSsoProviderChange() {
     const provider = this.getNewSsoProvider().id;
-    await this.props.context.port.request('passbolt.sso.update-provider-local-kit', provider);
+    await this.props.context.port.request("passbolt.sso.update-provider-local-kit", provider);
     await this.props.ssoContext.loadSsoConfiguration();
-    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO});
+    this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO });
   }
 
   /**
@@ -321,10 +307,10 @@ export class AuthenticationLoginContextProvider extends React.Component {
    */
   async acceptNewServerKey() {
     try {
-      await this.props.context.port.request('passbolt.auth.replace-server-key');
-      this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
+      await this.props.context.port.request("passbolt.auth.replace-server-key");
+      this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
     } catch (error) {
-      await this.setState({state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error});
+      await this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -333,11 +319,11 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async needHelpCredentialsLost() {
-    const canIUserAccountRecovery = this.props.context.siteSettings.canIUse('accountRecovery');
+    const canIUserAccountRecovery = this.props.context.siteSettings.canIUse("accountRecovery");
     if (canIUserAccountRecovery) {
-      await this.setState({state: AuthenticationLoginWorkflowStates.INITIATE_ACCOUNT_RECOVERY});
+      await this.setState({ state: AuthenticationLoginWorkflowStates.INITIATE_ACCOUNT_RECOVERY });
     } else {
-      await this.setState({state: AuthenticationLoginWorkflowStates.HELP_CREDENTIALS_LOST});
+      await this.setState({ state: AuthenticationLoginWorkflowStates.HELP_CREDENTIALS_LOST });
     }
   }
 
@@ -347,10 +333,10 @@ export class AuthenticationLoginContextProvider extends React.Component {
    */
   async requestHelpCredentialsLost() {
     try {
-      await this.props.context.port.request('passbolt.auth.request-help-credentials-lost');
-      await this.setState({state: AuthenticationLoginWorkflowStates.CHECK_MAILBOX});
+      await this.props.context.port.request("passbolt.auth.request-help-credentials-lost");
+      await this.setState({ state: AuthenticationLoginWorkflowStates.CHECK_MAILBOX });
     } catch (error) {
-      await this.setState({state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error});
+      await this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -359,7 +345,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async goToValidatePassphrase() {
-    await this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
+    await this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
   }
 
   /**
@@ -371,7 +357,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
     if (!ssoProvider) {
       return null;
     }
-    return SsoProviders.find(provider => provider.id === ssoProvider);
+    return SsoProviders.find((provider) => provider.id === ssoProvider);
   }
 
   /**
@@ -411,10 +397,9 @@ export function withAuthenticationLoginContext(WrappedComponent) {
     render() {
       return (
         <AuthenticationLoginContext.Consumer>
-          {
-            AuthenticationLoginContext => <WrappedComponent
-              authenticationLoginContext={AuthenticationLoginContext} {...this.props} />
-          }
+          {(AuthenticationLoginContext) => (
+            <WrappedComponent authenticationLoginContext={AuthenticationLoginContext} {...this.props} />
+          )}
         </AuthenticationLoginContext.Consumer>
       );
     }

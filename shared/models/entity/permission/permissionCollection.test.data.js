@@ -12,8 +12,7 @@
  * @since         4.8.0
  */
 
-
-import {defaultPermissionDto} from "./permissionEntity.test.data";
+import { defaultPermissionDto } from "./permissionEntity.test.data";
 
 /**
  * Build dtos.
@@ -27,9 +26,8 @@ export const defaultPermissionsDtos = (data = {}, options = {}) => {
   const count = options.count || 10;
   const acoForeignKey = crypto.randomUUID();
   for (let i = 0; i < count; i++) {
-    const dto = defaultPermissionDto({aco_foreign_key: acoForeignKey, ...data}, options);
+    const dto = defaultPermissionDto({ aco_foreign_key: acoForeignKey, ...data }, options);
     dtos.push(dto);
   }
   return dtos;
 };
-

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.1.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayChangePassphraseIntroduction from "./DisplayChangePassphraseIntroduction";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +27,9 @@ export default class DisplayChangePassphraseIntroductionPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayChangePassphraseIntroduction {...props}/>
+        <DisplayChangePassphraseIntroduction {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,28 +37,28 @@ export default class DisplayChangePassphraseIntroductionPage {
    * Returns the user confirm passphrase element
    */
   get displayChangePassphraseIntroduction() {
-    return this._page.container.querySelector('.profile-passphrase');
+    return this._page.container.querySelector(".profile-passphrase");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.profile-passphrase h3').textContent;
+    return this._page.container.querySelector(".profile-passphrase h3").textContent;
   }
 
   /**
    * Returns the checkbox element
    */
   get checkbox() {
-    return this._page.container.querySelector('.input.checkbox');
+    return this._page.container.querySelector(".input.checkbox");
   }
 
   /**
    * Returns the understand update passphrase checkbox input element
    */
   get understandUpdatePassphraseCheckbox() {
-    return this._page.container.querySelector('#passphrase-update-understand');
+    return this._page.container.querySelector("#passphrase-update-understand");
   }
 
   /**
@@ -77,15 +76,15 @@ export default class DisplayChangePassphraseIntroductionPage {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
   /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
+  clickWithoutWaitFor(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 
@@ -104,8 +103,3 @@ export default class DisplayChangePassphraseIntroductionPage {
     this.clickWithoutWaitFor(this.startButton);
   }
 }
-
-
-
-
-

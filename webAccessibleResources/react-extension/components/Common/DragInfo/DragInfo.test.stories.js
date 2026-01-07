@@ -15,58 +15,55 @@ import React from "react";
 import CircleXSVG from "../../../../img/svg/circle_x.svg";
 
 export default {
-  title: 'Foundations/DragInfo',
-  component: "DragInfo"
+  title: "Foundations/DragInfo",
+  component: "DragInfo",
 };
 
-
-const Template = () =>
-  <div style={{display: "flex", flexWrap: "wrap"}}>
-    <div style={{width: "50%"}}>
-      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "1%"}}>
+const Template = () => (
+  <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <div style={{ width: "50%" }}>
+      <div className="drag-and-drop-wrapper" draggable={true} style={{ top: "1%" }}>
         <div className="drag-and-drop item-1">
           <span className="message">First name of the resource/folder/user</span>
         </div>
       </div>
     </div>
-    <div style={{width: "50%"}}>
-      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "1%"}}>
+    <div style={{ width: "50%" }}>
+      <div className="drag-and-drop-wrapper" draggable={true} style={{ top: "1%" }}>
         <div className="drag-and-drop item-2">
           <span className="message">First name of the resource/folder/user</span>
           <span className="count">2</span>
         </div>
       </div>
     </div>
-    <br/>
-    <br/>
-    <div style={{width: "50%"}}>
-      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "8%"}}>
+    <br />
+    <br />
+    <div style={{ width: "50%" }}>
+      <div className="drag-and-drop-wrapper" draggable={true} style={{ top: "8%" }}>
         <div className="drag-and-drop item-n">
           <span className="message">First name of the resource/folder/user</span>
           <span className="count">3</span>
         </div>
       </div>
     </div>
-    <div style={{width: "50%"}}>
-      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "8%"}}>
+    <div style={{ width: "50%" }}>
+      <div className="drag-and-drop-wrapper" draggable={true} style={{ top: "8%" }}>
         <div className="drag-and-drop item-n">
           <span className="message">First name of the resource/folder/user</span>
           <span className="count">99+</span>
         </div>
       </div>
     </div>
-    <br/>
-    <br/>
-    <div style={{width: "25%"}}>
-      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "15%"}}>
+    <br />
+    <br />
+    <div style={{ width: "25%" }}>
+      <div className="drag-and-drop-wrapper" draggable={true} style={{ top: "15%" }}>
         <div className="drag-and-drop item-1">
-          <CircleXSVG/>
+          <CircleXSVG />
           <span className="message not-allowed">You are not allowed to move this content</span>
         </div>
       </div>
     </div>
-
   </div>
-  ;
-
+);
 export const Default = Template.bind({});

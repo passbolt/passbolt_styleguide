@@ -16,14 +16,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
+import { isUserSuspended } from "../../../../shared/utils/userUtils";
 import AttentionSVG from "../../../../img/svg/attention.svg";
-import {withRoles} from "../../../contexts/RoleContext";
+import { withRoles } from "../../../contexts/RoleContext";
 
 /**
  * This component displays the user details about information
@@ -44,7 +44,7 @@ class DisplayUserDetailsInformation extends React.Component {
    */
   get defaultState() {
     return {
-      open: true // Flag for the expand / collapse mode
+      open: true, // Flag for the expand / collapse mode
     };
   }
 
@@ -83,7 +83,7 @@ class DisplayUserDetailsInformation extends React.Component {
    * Handle the click on the title
    */
   handleTitleClicked() {
-    this.setState({open: !this.state.open});
+    this.setState({ open: !this.state.open });
   }
 
   /**
@@ -91,7 +91,7 @@ class DisplayUserDetailsInformation extends React.Component {
    * @return {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -99,7 +99,11 @@ class DisplayUserDetailsInformation extends React.Component {
    * @returns {boolean}
    */
   hasMfaSection() {
-    return this.props.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin() && this.user.active;
+    return (
+      this.props.context.siteSettings.canIUse("multiFactorAuthentication") &&
+      this.isLoggedInUserAdmin() &&
+      this.user.active
+    );
   }
 
   /**
@@ -107,7 +111,7 @@ class DisplayUserDetailsInformation extends React.Component {
    * @returns {boolean}
    */
   hasDisableUserSection() {
-    return this.props.context.siteSettings.canIUse('disableUser');
+    return this.props.context.siteSettings.canIUse("disableUser");
   }
 
   /**
@@ -115,10 +119,12 @@ class DisplayUserDetailsInformation extends React.Component {
    * @returns {boolean}
    */
   hasAccountRecoverySection() {
-    return this.props.context.siteSettings.canIUse("accountRecovery")
-      && this.isLoggedInUserAdmin()
-      && this.props.accountRecoveryContext.isPolicyEnabled()
-      && this.user.active;
+    return (
+      this.props.context.siteSettings.canIUse("accountRecovery") &&
+      this.isLoggedInUserAdmin() &&
+      this.props.accountRecoveryContext.isPolicyEnabled() &&
+      this.user.active
+    );
   }
 
   /**
@@ -126,9 +132,7 @@ class DisplayUserDetailsInformation extends React.Component {
    * @returns {boolean}
    */
   hasMetadataDataSection() {
-    return this.props.context.siteSettings.canIUse("metadata")
-        && this.isLoggedInUserAdmin()
-        && this.user.active;
+    return this.props.context.siteSettings.canIUse("metadata") && this.isLoggedInUserAdmin() && this.user.active;
   }
 
   /**
@@ -155,67 +159,100 @@ class DisplayUserDetailsInformation extends React.Component {
               <span className="accordion-title">
                 <Trans>Information</Trans>
               </span>
-              {this.state.open && <CaretDownSVG/>}
-              {!this.state.open && <CaretRightSVG/>}
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
-
-        <div className="accordion-content">
-          <div className="information-label">
-            <span className="role label"><Trans>Role</Trans></span>
-            <span className="modified label"><Trans>Modified</Trans></span>
-            <span className="status label"><Trans>Status</Trans></span>
-            {this.hasAccountRecoverySection() &&
-                <span className="account-recovery-status label"><Trans>Account recovery</Trans></span>
-            }
-            {this.hasMfaSection() &&
-                <span className="mfa label"><Trans>MFA</Trans></span>
-            }
-            {this.hasDisableUserSection() &&
-                <span className="suspended label"><Trans>Suspended</Trans></span>
-            }
-            {this.hasMetadataDataSection() &&
-              <span className="metadata-keys label"><Trans>Metadata keys</Trans></span>
-            }
-          </div>
-          <div className="information-value">
-            <span className="role value capitalize">{role}</span>
-            <span className="modified value" title={this.user.modified}>{modified}</span>
-            <span className="status value">{status}</span>
-            {this.hasAccountRecoverySection() &&
-                <span className="account-recovery-status value">{{
-                  "approved": <Trans>Approved</Trans>,
-                  "rejected": <Trans>Rejected</Trans>,
-                  [undefined]: <Trans>Pending</Trans>,
-                }[this.user?.account_recovery_user_setting?.status]}
+        {this.state.open && (
+          <div className="accordion-content">
+            <div className="information-label">
+              <span className="role label">
+                <Trans>Role</Trans>
+              </span>
+              <span className="modified label">
+                <Trans>Modified</Trans>
+              </span>
+              <span className="status label">
+                <Trans>Status</Trans>
+              </span>
+              {this.hasAccountRecoverySection() && (
+                <span className="account-recovery-status label">
+                  <Trans>Account recovery</Trans>
                 </span>
-            }
-            {this.hasMfaSection() &&
-                <span className="mfa value">{{
-                  [true]: <Trans>Enabled</Trans>,
-                  [false]: <Trans>Disabled</Trans>,
-                  [undefined]: <Trans>Disabled</Trans>,
-                }[this.user?.is_mfa_enabled]}</span>
-            }
-            {this.hasDisableUserSection() &&
+              )}
+              {this.hasMfaSection() && (
+                <span className="mfa label">
+                  <Trans>MFA</Trans>
+                </span>
+              )}
+              {this.hasDisableUserSection() && (
+                <span className="suspended label">
+                  <Trans>Suspended</Trans>
+                </span>
+              )}
+              {this.hasMetadataDataSection() && (
+                <span className="metadata-keys label">
+                  <Trans>Metadata keys</Trans>
+                </span>
+              )}
+            </div>
+            <div className="information-value">
+              <span className="role value capitalize">{role}</span>
+              <span className="modified value" title={this.user.modified}>
+                {modified}
+              </span>
+              <span className="status value">{status}</span>
+              {this.hasAccountRecoverySection() && (
+                <span className="account-recovery-status value">
+                  {
+                    {
+                      approved: <Trans>Approved</Trans>,
+                      rejected: <Trans>Rejected</Trans>,
+                      [undefined]: <Trans>Pending</Trans>,
+                    }[this.user?.account_recovery_user_setting?.status]
+                  }
+                </span>
+              )}
+              {this.hasMfaSection() && (
+                <span className="mfa value">
+                  {
+                    {
+                      [true]: <Trans>Enabled</Trans>,
+                      [false]: <Trans>Disabled</Trans>,
+                      [undefined]: <Trans>Disabled</Trans>,
+                    }[this.user?.is_mfa_enabled]
+                  }
+                </span>
+              )}
+              {this.hasDisableUserSection() && (
                 <span className="suspended value">
-                  {{
-                    [false]: <Trans>No</Trans>,
-                    [true]: <Trans>Yes</Trans>,
-                  }[isUserSuspended(this.user)]}
+                  {
+                    {
+                      [false]: <Trans>No</Trans>,
+                      [true]: <Trans>Yes</Trans>,
+                    }[isUserSuspended(this.user)]
+                  }
                 </span>
-            }
-            {this.hasMetadataDataSection() &&
-                <span className="metadata-keys value">{{
-                  [true]: <><Trans>Missing</Trans><AttentionSVG className="attention-required"/></>,
-                  [false]: <Trans>All</Trans>,
-                }[this.user?.missing_metadata_key_ids?.length > 0]}</span>
-            }
+              )}
+              {this.hasMetadataDataSection() && (
+                <span className="metadata-keys value">
+                  {
+                    {
+                      [true]: (
+                        <>
+                          <Trans>Missing</Trans>
+                          <AttentionSVG className="attention-required" />
+                        </>
+                      ),
+                      [false]: <Trans>All</Trans>,
+                    }[this.user?.missing_metadata_key_ids?.length > 0]
+                  }
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-        }
+        )}
       </div>
     );
   }
@@ -229,4 +266,6 @@ DisplayUserDetailsInformation.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withUserWorkspace(withAccountRecovery(withRoles(withTranslation('common')(DisplayUserDetailsInformation)))));
+export default withAppContext(
+  withUserWorkspace(withAccountRecovery(withRoles(withTranslation("common")(DisplayUserDetailsInformation)))),
+);

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,9 +12,9 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesWorkspace from "./DisplayResourcesWorkspace";
 
@@ -31,10 +30,10 @@ export default class DisplayResourcesWorkspacePage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <DisplayResourcesWorkspace {...props}/>
+          <DisplayResourcesWorkspace {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -72,7 +71,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get panelMain() {
-    return this._container.querySelector('.panel.main');
+    return this._container.querySelector(".panel.main");
   }
 
   /**
@@ -80,7 +79,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get panelLeft() {
-    return this._container.querySelector('.panel.left');
+    return this._container.querySelector(".panel.left");
   }
 
   /**
@@ -88,7 +87,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get panelMiddle() {
-    return this._container.querySelector('.panel.middle');
+    return this._container.querySelector(".panel.middle");
   }
 
   /**
@@ -96,7 +95,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get hasSidebarEmpty() {
-    return Boolean(this._container.querySelector('.sidebar.empty'));
+    return Boolean(this._container.querySelector(".sidebar.empty"));
   }
 
   /**
@@ -104,7 +103,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get hasSidebarMultipleResources() {
-    return Boolean(this._container.querySelector('.sidebar.multiple-resources-selected'));
+    return Boolean(this._container.querySelector(".sidebar.multiple-resources-selected"));
   }
 
   /**
@@ -112,7 +111,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get hasSidebarResource() {
-    return Boolean(this._container.querySelector('.sidebar.resource'));
+    return Boolean(this._container.querySelector(".sidebar.resource"));
   }
 
   /**
@@ -120,7 +119,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get hasSidebarFolder() {
-    return Boolean(this._container.querySelector('.sidebar.folder'));
+    return Boolean(this._container.querySelector(".sidebar.folder"));
   }
 
   /**
@@ -128,7 +127,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get folderTree() {
-    return Boolean(this._container.querySelector('.folder_tree'));
+    return Boolean(this._container.querySelector(".folder_tree"));
   }
 
   /**
@@ -136,7 +135,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get tag() {
-    return Boolean(this._container.querySelector('.tag'));
+    return Boolean(this._container.querySelector(".tag"));
   }
 
   /**
@@ -144,7 +143,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get footer() {
-    return Boolean(this._container.querySelector('.footer'));
+    return Boolean(this._container.querySelector(".footer"));
   }
 
   /**
@@ -152,7 +151,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get filterButton() {
-    return Boolean(this._container.querySelector('.actions-filter'));
+    return Boolean(this._container.querySelector(".actions-filter"));
   }
 
   /**
@@ -160,7 +159,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get infoButton() {
-    return this._container.querySelector('.actions-secondary button.info');
+    return this._container.querySelector(".actions-secondary button.info");
   }
 
   /**
@@ -168,7 +167,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get menuColumnView() {
-    return this._container.querySelector('.actions-secondary .dropdown button');
+    return this._container.querySelector(".actions-secondary .dropdown button");
   }
 
   /**
@@ -176,7 +175,9 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   menuColumnViewItem(index) {
-    return this._container.querySelectorAll('.actions-secondary .dropdown-content li .checkbox')[index - 1].querySelector('input[type=\"checkbox\"]');
+    return this._container
+      .querySelectorAll(".actions-secondary .dropdown-content li .checkbox")
+      [index - 1].querySelector('input[type=\"checkbox\"]');
   }
 
   /**
@@ -184,7 +185,9 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   menuRowHeightItem(index) {
-    return this._container.querySelectorAll('.actions-secondary .dropdown-content li .radio')[index - 1].querySelector('input[type=\"radio\"]');
+    return this._container
+      .querySelectorAll(".actions-secondary .dropdown-content li .radio")
+      [index - 1].querySelector('input[type=\"radio\"]');
   }
 
   /**
@@ -192,7 +195,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   get menuColumnViewResetButton() {
-    return this._container.querySelector('.actions-secondary .dropdown-content #reset-columns-settings');
+    return this._container.querySelector(".actions-secondary .dropdown-content #reset-columns-settings");
   }
 
   /**
@@ -200,8 +203,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {boolean}
    */
   exists() {
-    return this.panelMain !== null
-      && this.panelLeft !== null && this.panelMiddle !== null;
+    return this.panelMain !== null && this.panelLeft !== null && this.panelMiddle !== null;
   }
 
   /**
@@ -210,7 +212,7 @@ class DisplayResourceWorkspacePageObject {
    * @returns {Promise<void>}
    */
   async clickOn(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

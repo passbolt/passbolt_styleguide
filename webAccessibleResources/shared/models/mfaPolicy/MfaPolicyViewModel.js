@@ -20,11 +20,10 @@ class MfaPolicyViewModel {
    * Constructor
    * @param {MfaPolicyDto} settings
    */
-  constructor(settings = {remember_me_for_a_month: false}) {
+  constructor(settings = { remember_me_for_a_month: false }) {
     this.policy = settings.policy;
     this.rememberMeForAMonth = settings.remember_me_for_a_month;
   }
 }
 
 export default MfaPolicyViewModel;
-

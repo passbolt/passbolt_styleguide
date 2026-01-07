@@ -15,14 +15,10 @@
 /**
  * Unit tests on ConfirmSaveAccountRecoverySettings in regard of specifications
  */
-import {waitFor} from "@testing-library/react";
-import {
-  defaultProps,
-  formatDate,
-  hasChangedPolicyProps
-} from "./ConfirmSaveAccountRecoverySettings.test.data";
+import { waitFor } from "@testing-library/react";
+import { defaultProps, formatDate, hasChangedPolicyProps } from "./ConfirmSaveAccountRecoverySettings.test.data";
 import ConfirmSaveAccountRecoverySettingsPage from "./ConfirmSaveAccountRecoverySettings.test.page";
-import {formatDateTimeAgo} from "../../../../../test/utils/dateUtils";
+import { formatDateTimeAgo } from "../../../../../test/utils/dateUtils";
 
 beforeEach(() => {
   jest.resetModules();
@@ -31,11 +27,11 @@ beforeEach(() => {
 describe("See the Confirm Save Account Recovery Settings", () => {
   let page; // The page to test agains
 
-  describe('As a logged in administrator in the administration workspace, I can preview the changes the Account recovery settings prior to enabling my new policy', () => {
+  describe("As a logged in administrator in the administration workspace, I can preview the changes the Account recovery settings prior to enabling my new policy", () => {
     /**
      * I should see the account recovery settings dialog
      */
-    it('As a logged in administrator in the administration workspace, I can preview only policy', async() => {
+    it("As a logged in administrator in the administration workspace, I can preview only policy", async () => {
       const props = defaultProps(); // The props to pass
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
       await waitFor(() => {});
@@ -47,8 +43,10 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(page.closeButton).not.toBeNull();
 
       // Policy label
-      expect(page.accountRecoveryPolicy).toBe('Optional, Opt-in');
-      expect(page.accountRecoveryPolicyInfo).toBe("Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.");
+      expect(page.accountRecoveryPolicy).toBe("Optional, Opt-in");
+      expect(page.accountRecoveryPolicyInfo).toBe(
+        "Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.",
+      );
 
       // organization recovery key
       expect(page.recoveryKeyDetailsExists()).toBeFalsy();
@@ -60,13 +58,15 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(page.cancelButton.textContent).toBe("Cancel");
     });
 
-    it('As a logged in administrator in the administration workspace, I can preview policy and organization recovery key', async() => {
+    it("As a logged in administrator in the administration workspace, I can preview policy and organization recovery key", async () => {
       const props = hasChangedPolicyProps();
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
 
       // Policy label
-      expect(page.accountRecoveryPolicy).toBe('Prompt');
-      expect(page.accountRecoveryPolicyInfo).toBe("Every user is required to provide a copy of their private key and passphrase during setup.Warning: You should inform your users not to store personal passwords.");
+      expect(page.accountRecoveryPolicy).toBe("Prompt");
+      expect(page.accountRecoveryPolicyInfo).toBe(
+        "Every user is required to provide a copy of their private key and passphrase during setup.Warning: You should inform your users not to store personal passwords.",
+      );
 
       // organization recovery key
       expect(page.recoveryKeyDetailsExists()).toBeTruthy();
@@ -78,7 +78,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(page.recoveryKeyDetailsExpires).toBe(formatDateTimeAgo(props.keyInfo.expires));
     });
 
-    it('As a logged in administrator in the administration workspace, if the previous Account recovery settings state was "Disabled" I can save the Account recovery settings to enable my policy without entering the Organization recovery key', async() => {
+    it('As a logged in administrator in the administration workspace, if the previous Account recovery settings state was "Disabled" I can save the Account recovery settings to enable my policy without entering the Organization recovery key', async () => {
       const props = defaultProps(); // The props to pass
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
       await waitFor(() => {});
@@ -88,7 +88,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(props.onSubmit).toHaveBeenCalled();
     });
 
-    it('As LU I can stop saving an account recovery settings by clicking on the cancel button', async() => {
+    it("As LU I can stop saving an account recovery settings by clicking on the cancel button", async () => {
       const props = defaultProps(); // The props to pass
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
       await waitFor(() => {});
@@ -97,7 +97,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I can stop saving an account recovery settings by closing the dialog', async() => {
+    it("As LU I can stop saving an account recovery settings by closing the dialog", async () => {
       const props = defaultProps(); // The props to pass
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
       await waitFor(() => {});

@@ -12,91 +12,97 @@
  * @since         3.3.0
  */
 
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import AskInFormMenuDisplay from "./AskInFormMenuDisplay";
 import ReactDOM from "react-dom/client";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import PropTypes from "prop-types";
-import {defaultAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
+import { defaultAppContext } from "../../../react-extension/contexts/ExtAppContext.test.data";
 
 export default {
-  title: 'Components/WebIntegration/AskInFormMenuDisplay',
-  component: AskInFormMenuDisplay
+  title: "Components/WebIntegration/AskInFormMenuDisplay",
+  component: AskInFormMenuDisplay,
 };
 
-
 // Simulate Iframe anchor of In-form components
-const InFormAnchor = ({context}) => {
+const InFormAnchor = ({ context }) => {
   useEffect(() => {
-    const loginInput = document.querySelector('input');
+    const loginInput = document.querySelector("input");
     const anchor = document.createElement("div");
     loginInput.parentNode.insertBefore(anchor, loginInput);
 
     // Find the position to insert the in-form component in regard of the input
-    const {top, left, width, height} = loginInput.getBoundingClientRect();
+    const { top, left, width, height } = loginInput.getBoundingClientRect();
     const leftAnchorPosition = left + width - 25; // 25px inside the input
     const topAnchorPosition = top + (height - 16) / 2; // Look for the difference between the input height and the icon size 16
-    const containerStyle = {zIndex: 200, position: 'absolute', top: topAnchorPosition, left: leftAnchorPosition};
-    const InForm = () =>
+    const containerStyle = { zIndex: 200, position: "absolute", top: topAnchorPosition, left: leftAnchorPosition };
+    const InForm = () => (
       <AppContext.Provider value={context}>
         <div style={containerStyle}>
           <div className="web-integration">
-            <AskInFormMenuDisplay/>
+            <AskInFormMenuDisplay />
           </div>
         </div>
-      </AppContext.Provider>;
+      </AppContext.Provider>
+    );
 
     const root = ReactDOM.createRoot(anchor);
-    root.render(
-      <InForm/>
-    );
+    root.render(<InForm />);
   }, []);
-  return (<></>);
+  return <></>;
 };
 
 InFormAnchor.propTypes = {
   context: PropTypes.object,
 };
 
-const Template = ({context}) =>
+const Template = ({ context }) => (
   <div>
-    <input
-      type="text"
-      placeholder="username"/>
-    <InFormAnchor context={context}/>
-  </div>;
+    <input type="text" placeholder="username" />
+    <InFormAnchor context={context} />
+  </div>
+);
 
 Template.propTypes = {
   context: PropTypes.object,
 };
 
 const parameters = {
-  css: "ext_in_form_cta"
+  css: "ext_in_form_cta",
 };
 
 const inactiveMockedPort = new MockPort();
-inactiveMockedPort.addRequestListener('passbolt.in-form-cta.check-status', () => ({isAuthenticated: false, isMfaRequired: false}));
+inactiveMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+  isAuthenticated: false,
+  isMfaRequired: false,
+}));
 export const Inactive = Template.bind({});
 Inactive.args = {
-  context: defaultAppContext({port: inactiveMockedPort})
+  context: defaultAppContext({ port: inactiveMockedPort }),
 };
 Inactive.parameters = parameters;
 
 const activeWithNoSuggestionMockedPort = new MockPort();
-activeWithNoSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.check-status', () => ({isAuthenticated: true, isMfaRequired: false}));
-activeWithNoSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.suggested-resources', () => 0);
+activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+  isAuthenticated: true,
+  isMfaRequired: false,
+}));
+activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 0);
 export const ActiveWithNoSuggestion = Template.bind({});
 ActiveWithNoSuggestion.args = {
-  context: defaultAppContext({port: activeWithNoSuggestionMockedPort})
+  context: defaultAppContext({ port: activeWithNoSuggestionMockedPort }),
 };
 ActiveWithNoSuggestion.parameters = parameters;
 
 const activeWithOneSuggestionMockedPort = new MockPort();
-activeWithOneSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.check-status', () => ({isAuthenticated: true, isMfaRequired: false}));
-activeWithOneSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.suggested-resources', () => 1);
+activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+  isAuthenticated: true,
+  isMfaRequired: false,
+}));
+activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 1);
 export const ActiveWithOneSuggestion = Template.bind({});
 ActiveWithOneSuggestion.args = {
-  context: defaultAppContext({port: activeWithOneSuggestionMockedPort})
+  context: defaultAppContext({ port: activeWithOneSuggestionMockedPort }),
 };
 ActiveWithOneSuggestion.parameters = parameters;

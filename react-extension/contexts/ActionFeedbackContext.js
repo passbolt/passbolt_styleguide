@@ -14,7 +14,7 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Context used to provide action feedbacks to display
@@ -24,7 +24,7 @@ export const ActionFeedbackContext = React.createContext({
   displaySuccess: () => {}, // Inform a user about an successful action feedback
   displayWarning: () => {}, // Inform a user with a warning action feedback
   displayError: () => {}, // Inform a user about an action failure's feedback
-  remove: () => {} // Remove a particular feedback
+  remove: () => {}, // Remove a particular feedback
 });
 
 /**
@@ -49,10 +49,9 @@ export default class ActionFeedbackContextProvider extends React.Component {
       displaySuccess: this.displaySuccess.bind(this),
       displayWarning: this.displayWarning.bind(this),
       displayError: this.displayError.bind(this),
-      remove: this.remove.bind(this)
+      remove: this.remove.bind(this),
     };
   }
-
 
   /**
    * Display the feedback in a success mode
@@ -64,10 +63,10 @@ export default class ActionFeedbackContextProvider extends React.Component {
         ...this.state.feedbacks,
         {
           id: uuidv4(),
-          type: 'success',
-          message: feedbackToAdd
+          type: "success",
+          message: feedbackToAdd,
         },
-      ]
+      ],
     });
   }
 
@@ -81,10 +80,10 @@ export default class ActionFeedbackContextProvider extends React.Component {
         ...this.state.feedbacks,
         {
           id: uuidv4(),
-          type: 'warning',
-          message: feedbackToAdd
+          type: "warning",
+          message: feedbackToAdd,
         },
-      ]
+      ],
     });
   }
 
@@ -98,10 +97,10 @@ export default class ActionFeedbackContextProvider extends React.Component {
         ...this.state.feedbacks,
         {
           id: uuidv4(),
-          type: 'error',
-          message: feedbackToAdd
+          type: "error",
+          message: feedbackToAdd,
         },
-      ]
+      ],
     });
   }
 
@@ -110,8 +109,8 @@ export default class ActionFeedbackContextProvider extends React.Component {
    * @param feedbackToRemove A feedback
    */
   remove(feedbackToRemove) {
-    const hasSameId = feedback => feedbackToRemove.id !== feedback.id;
-    this.setState({feedbacks: this.state.feedbacks.filter(hasSameId)});
+    const hasSameId = (feedback) => feedbackToRemove.id !== feedback.id;
+    this.setState({ feedbacks: this.state.feedbacks.filter(hasSameId) });
   }
 
   /**
@@ -119,16 +118,12 @@ export default class ActionFeedbackContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <ActionFeedbackContext.Provider value={this.state}>
-        {this.props.children}
-      </ActionFeedbackContext.Provider>
-    );
+    return <ActionFeedbackContext.Provider value={this.state}>{this.props.children}</ActionFeedbackContext.Provider>;
   }
 }
-ActionFeedbackContextProvider.displayName = 'ActionFeedbackContextProvider';
+ActionFeedbackContextProvider.displayName = "ActionFeedbackContextProvider";
 ActionFeedbackContextProvider.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 /**
@@ -140,9 +135,9 @@ export function withActionFeedback(WrappedComponent) {
     render() {
       return (
         <ActionFeedbackContext.Consumer>
-          {
-            actionFeedbackContext => <WrappedComponent actionFeedbackContext={actionFeedbackContext} {...this.props} />
-          }
+          {(actionFeedbackContext) => (
+            <WrappedComponent actionFeedbackContext={actionFeedbackContext} {...this.props} />
+          )}
         </ActionFeedbackContext.Consumer>
       );
     }

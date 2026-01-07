@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 
 /**
  * Default props.
@@ -24,10 +24,10 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(data?.context),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
-      resetDisplayAdministrationWorkspaceAction: jest.fn()
+      resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
     actionFeedbackContext: {
-      displaySuccess: jest.fn()
+      displaySuccess: jest.fn(),
     },
   };
   delete data.context; // Treated in the default

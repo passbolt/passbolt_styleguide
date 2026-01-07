@@ -21,11 +21,7 @@ class ApplicationEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      ApplicationEntity.ENTITY_NAME,
-      dto,
-      ApplicationEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(ApplicationEntity.ENTITY_NAME, dto, ApplicationEntity.getSchema()), options);
   }
 
   /**
@@ -34,70 +30,87 @@ class ApplicationEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["info", "latestVersion", "schema", "robotsIndexDisabled", "sslForce", "sslFullBaseUrl", "seleniumDisabled", "registrationClosed", "configPath", "hostAvailabilityCheckEnabled", "jsProd", "emailNotificationEnabled"],
-      "properties": {
-        "info": {
-          "type": "object",
-          "required": ["remoteVersion", "currentVersion"],
-          "properties": {
-            "remoteVersion": {
-              "type": "string",
-              "nullable": true,
+      type: "object",
+      required: [
+        "info",
+        "latestVersion",
+        "schema",
+        "robotsIndexDisabled",
+        "sslForce",
+        "sslFullBaseUrl",
+        "seleniumDisabled",
+        "registrationClosed",
+        "configPath",
+        "hostAvailabilityCheckEnabled",
+        "jsProd",
+        "emailNotificationEnabled",
+      ],
+      properties: {
+        info: {
+          type: "object",
+          required: ["remoteVersion", "currentVersion"],
+          properties: {
+            remoteVersion: {
+              type: "string",
+              nullable: true,
             },
-            "currentVersion": {
-              "type": "string"
-            }
-          }
-        },
-        "latestVersion": {
-          "type": "boolean",
-          "nullable": true,
-        },
-        "schema": {
-          "type": "boolean"
-        },
-        "robotsIndexDisabled": {
-          "type": "boolean"
-        },
-        "sslForce": {
-          "type": "boolean"
-        },
-        "sslFullBaseUrl": {
-          "type": "boolean"
-        },
-        "seleniumDisabled": {
-          "type": "boolean"
-        },
-        "configPath": {
-          "type": "string"
-        },
-        "registrationClosed": {
-          "type": "object",
-          "required": ["isSelfRegistrationPluginEnabled", "selfRegistrationProvider", "isRegistrationPublicRemovedFromPassbolt"],
-          "properties": {
-            "isSelfRegistrationPluginEnabled": {
-              "type": "boolean"
+            currentVersion: {
+              type: "string",
             },
-            "selfRegistrationProvider": {
-              "type": "string",
-              "nullable": true,
+          },
+        },
+        latestVersion: {
+          type: "boolean",
+          nullable: true,
+        },
+        schema: {
+          type: "boolean",
+        },
+        robotsIndexDisabled: {
+          type: "boolean",
+        },
+        sslForce: {
+          type: "boolean",
+        },
+        sslFullBaseUrl: {
+          type: "boolean",
+        },
+        seleniumDisabled: {
+          type: "boolean",
+        },
+        configPath: {
+          type: "string",
+        },
+        registrationClosed: {
+          type: "object",
+          required: [
+            "isSelfRegistrationPluginEnabled",
+            "selfRegistrationProvider",
+            "isRegistrationPublicRemovedFromPassbolt",
+          ],
+          properties: {
+            isSelfRegistrationPluginEnabled: {
+              type: "boolean",
             },
-            "isRegistrationPublicRemovedFromPassbolt": {
-              "type": "boolean"
-            }
-          }
+            selfRegistrationProvider: {
+              type: "string",
+              nullable: true,
+            },
+            isRegistrationPublicRemovedFromPassbolt: {
+              type: "boolean",
+            },
+          },
         },
-        "hostAvailabilityCheckEnabled": {
-          "type": "boolean"
+        hostAvailabilityCheckEnabled: {
+          type: "boolean",
         },
-        "jsProd": {
-          "type": "boolean"
+        jsProd: {
+          type: "boolean",
         },
-        "emailNotificationEnabled": {
-          "type": "boolean"
-        }
-      }
+        emailNotificationEnabled: {
+          type: "boolean",
+        },
+      },
     };
   }
 

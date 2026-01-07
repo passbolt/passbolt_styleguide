@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.1.0
  */
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 /**
  * Returns a default DTO object suitable for the MetadataTrustedKeyEntity
@@ -21,6 +20,6 @@ import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
  */
 export const defaultMetadataTrustedKeyDto = (data = {}) => ({
   fingerprint: pgpKeys.metadataKey.fingerprint,
-  signed:  pgpKeys.metadataKey.created,
+  signed: pgpKeys.metadataKey.created,
   ...data,
 });

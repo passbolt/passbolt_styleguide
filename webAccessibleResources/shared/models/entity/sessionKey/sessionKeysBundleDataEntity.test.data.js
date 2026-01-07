@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         4.10.1
  */
 
-import {sharedResourcesSessionKeys} from "./sessionKeysCollection.test.data";
+import { sharedResourcesSessionKeys } from "./sessionKeysCollection.test.data";
 
 /**
  * Returns a default DTO object suitable for the SessionKeysBundleDataEntity

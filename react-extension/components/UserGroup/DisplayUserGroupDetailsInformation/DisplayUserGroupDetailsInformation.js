@@ -16,10 +16,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {Trans, withTranslation} from "react-i18next";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
 
 /**
  * This component displays the group details about information
@@ -40,7 +40,7 @@ class DisplayUserGroupDetailsInformation extends React.Component {
    */
   get defaultState() {
     return {
-      open: true // Flag for the expand / collapse mode
+      open: true, // Flag for the expand / collapse mode
     };
   }
 
@@ -62,7 +62,7 @@ class DisplayUserGroupDetailsInformation extends React.Component {
    * Handle the click on the title
    */
   handleTitleClicked() {
-    this.setState({open: !this.state.open});
+    this.setState({ open: !this.state.open });
   }
 
   /**
@@ -79,38 +79,53 @@ class DisplayUserGroupDetailsInformation extends React.Component {
   render() {
     const created = formatDateTimeAgo(this.group.created, this.props.t, this.props.context.locale);
     const modified = formatDateTimeAgo(this.group.modified, this.props.t, this.props.context.locale);
-    const modifiedByUser = this.props.context.users.find(user => user.id === this.group.modified_by);
-    const modifiedByUserName = modifiedByUser ? `${modifiedByUser.profile.first_name} ${modifiedByUser.profile.last_name}` : this.translate("Unknown user");
+    const modifiedByUser = this.props.context.users.find((user) => user.id === this.group.modified_by);
+    const modifiedByUserName = modifiedByUser
+      ? `${modifiedByUser.profile.first_name} ${modifiedByUser.profile.last_name}`
+      : this.translate("Unknown user");
     const membersCount = this.group.groups_users.length;
     return (
-      <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>        <div className="accordion-header">
-        <h4>
-          <button type="button" className="link no-border section-opener" onClick={this.handleTitleClicked}>
-            <span className="accordion-title">
-              <Trans>Information</Trans>
-            </span>
-            {this.state.open && <CaretDownSVG/>}
-            {!this.state.open && <CaretRightSVG/>}
-          </button>
-        </h4>
-      </div>
-      {this.state.open &&
-        <div className="accordion-content">
-          <div className="information-label">
-            <span className="created label"><Trans>Created</Trans></span>
-            <span className="modified label"><Trans>Modified</Trans></span>
-            <span className="modified-by label"><Trans>Modified by</Trans></span>
-            <span className="members label"><Trans>Members</Trans></span>
-
-          </div>
-          <div className="information-value">
-            <span className="created value" title={this.group.created}>{created}</span>
-            <span className="modified value" title={this.group.modified}>{modified}</span>
-            <span className="modified-by value">{modifiedByUserName}</span>
-            <span className="members value">{membersCount}</span>
-          </div>
+      <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
+        {" "}
+        <div className="accordion-header">
+          <h4>
+            <button type="button" className="link no-border section-opener" onClick={this.handleTitleClicked}>
+              <span className="accordion-title">
+                <Trans>Information</Trans>
+              </span>
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
+            </button>
+          </h4>
         </div>
-      }
+        {this.state.open && (
+          <div className="accordion-content">
+            <div className="information-label">
+              <span className="created label">
+                <Trans>Created</Trans>
+              </span>
+              <span className="modified label">
+                <Trans>Modified</Trans>
+              </span>
+              <span className="modified-by label">
+                <Trans>Modified by</Trans>
+              </span>
+              <span className="members label">
+                <Trans>Members</Trans>
+              </span>
+            </div>
+            <div className="information-value">
+              <span className="created value" title={this.group.created}>
+                {created}
+              </span>
+              <span className="modified value" title={this.group.modified}>
+                {modified}
+              </span>
+              <span className="modified-by value">{modifiedByUserName}</span>
+              <span className="members value">{membersCount}</span>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -122,4 +137,4 @@ DisplayUserGroupDetailsInformation.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsInformation)));
+export default withAppContext(withUserWorkspace(withTranslation("common")(DisplayUserGroupDetailsInformation)));

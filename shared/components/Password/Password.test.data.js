@@ -23,11 +23,10 @@ export function defaultProps(props = {}) {
     securityToken: {
       code: "PAS",
       backgroundColor: "#FFAA47",
-      textColor: "#000000"
+      textColor: "#000000",
     },
     disabled: false,
-    onChange: jest.fn()
+    onChange: jest.fn(),
   };
   return Object.assign(defaultProps, props || {});
 }
-

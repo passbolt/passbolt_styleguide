@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayResourceFolderDetails from "./DisplayResourceFolderDetails";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -33,11 +32,11 @@ export default class DisplayResourceFolderDetailsPage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
-            <DisplayResourceFolderDetails {...props}/>
+            <DisplayResourceFolderDetails {...props} />
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -45,35 +44,35 @@ export default class DisplayResourceFolderDetailsPage {
    * Returns the resource sidebar
    */
   get resourceSidebar() {
-    return this._page.container.querySelector('.sidebar.resource');
+    return this._page.container.querySelector(".sidebar.resource");
   }
 
   /**
    * Returns the name element
    */
   get name() {
-    return this._page.container.querySelector('.name').textContent;
+    return this._page.container.querySelector(".name").textContent;
   }
 
   /**
    * Returns the subtitle element
    */
   get subtitle() {
-    return this._page.container.querySelector('.subtitle').textContent;
+    return this._page.container.querySelector(".subtitle").textContent;
   }
 
   /**
    * Returns the permalink
    */
   get permalink() {
-    return this._page.container.querySelector('.title-link');
+    return this._page.container.querySelector(".title-link");
   }
 
   /**
    * Returns the share with button
    */
   get shareWith() {
-    return this._page.container.querySelector('.sharedwith');
+    return this._page.container.querySelector(".sharedwith");
   }
 
   /**
@@ -85,18 +84,13 @@ export default class DisplayResourceFolderDetailsPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
   /** Click on the permalink */
-  async selectPermalink()  {
+  async selectPermalink() {
     await this.click(this.permalink);
   }
 }
-
-
-
-
-

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,8 +12,7 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, waitFor} from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 
 /**
  * The FilterResourcesByTagsContextualMenu component represented as a page
@@ -32,26 +30,26 @@ export default class FilterResourcesByTagsContextualMenuPageObject {
    * Returns the all tag menu
    */
   get allTagMenu() {
-    return this._container.querySelector('#all-tag');
+    return this._container.querySelector("#all-tag");
   }
 
   /**
    * Returns the personal tag menu
    */
   get personalTagMenu() {
-    return this._container.querySelector('#personal-tag');
+    return this._container.querySelector("#personal-tag");
   }
 
   /**
    * Returns the shared tag menu
    */
   get sharedTagMenu() {
-    return this._container.querySelector('#shared-tag');
+    return this._container.querySelector("#shared-tag");
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

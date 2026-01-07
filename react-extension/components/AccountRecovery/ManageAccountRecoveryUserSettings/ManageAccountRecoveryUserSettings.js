@@ -11,24 +11,24 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import {getUserStatus} from "../../../../shared/utils/userUtils";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
+import { getUserStatus } from "../../../../shared/utils/userUtils";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
-import {withRoles} from "../../../contexts/RoleContext";
+import { withRoles } from "../../../contexts/RoleContext";
 
 class ManageAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -43,7 +43,7 @@ class ManageAccountRecoveryUserSettings extends Component {
   getDefaultState() {
     return {
       status: null,
-      processing: false
+      processing: false,
     };
   }
 
@@ -61,9 +61,9 @@ class ManageAccountRecoveryUserSettings extends Component {
    */
   componentDidMount() {
     if (this.props.organizationPolicy.policy === "opt-in") {
-      this.setState({status: "rejected"});
+      this.setState({ status: "rejected" });
     } else {
-      this.setState({status: "approved"});
+      this.setState({ status: "approved" });
     }
   }
 
@@ -71,7 +71,7 @@ class ManageAccountRecoveryUserSettings extends Component {
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({processing: !this.state.processing});
+    this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -88,14 +88,19 @@ class ManageAccountRecoveryUserSettings extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     this.toggleProcessing();
-    const accountRecoveryUserSettingDto = {status: this.state.status};
+    const accountRecoveryUserSettingDto = { status: this.state.status };
     try {
-      await this.props.context.port.request("passbolt.account-recovery.save-user-settings", accountRecoveryUserSettingDto);
+      await this.props.context.port.request(
+        "passbolt.account-recovery.save-user-settings",
+        accountRecoveryUserSettingDto,
+      );
       this.props.accountRecoveryContext.setUserAccountRecoveryStatus(this.state.status);
       // The logged-in user has to be refreshed to keep the local storage up to date and prevent to display again the enrollment
       const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user", true);
-      this.props.context.setContext({loggedInUser});
-      this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery subscription setting has been updated."));
+      this.props.context.setContext({ loggedInUser });
+      this.props.actionFeedbackContext.displaySuccess(
+        this.translate("The account recovery subscription setting has been updated."),
+      );
       this.close();
     } catch (error) {
       this.toggleProcessing();
@@ -128,7 +133,7 @@ class ManageAccountRecoveryUserSettings extends Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -138,7 +143,7 @@ class ManageAccountRecoveryUserSettings extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -169,7 +174,11 @@ class ManageAccountRecoveryUserSettings extends Component {
    * @returns {string}
    */
   get requestorName() {
-    return (<>{this.requestor.profile.first_name} {this.requestor.profile.last_name} ({this.requestor.username})</>);
+    return (
+      <>
+        {this.requestor.profile.first_name} {this.requestor.profile.last_name} ({this.requestor.username})
+      </>
+    );
   }
 
   /**
@@ -214,11 +223,16 @@ class ManageAccountRecoveryUserSettings extends Component {
         title={`${this.translate("Recovery")} (${this.type})`}
         onClose={this.close}
         disabled={this.state.processing}
-        className="recovery-account-policy-dialog">
+        className="recovery-account-policy-dialog"
+      >
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
             <p>
-              <Trans>It is possible and recommended to share securely your recovery kit with your organization recovery contacts.</Trans>&nbsp;
+              <Trans>
+                It is possible and recommended to share securely your recovery kit with your organization recovery
+                contacts.
+              </Trans>
+              &nbsp;
               <Trans>They will be able to help you in case you lose it.</Trans>
             </p>
             <ul>
@@ -228,9 +242,13 @@ class ManageAccountRecoveryUserSettings extends Component {
                     <TooltipPortal message={<Fingerprint fingerprint={this.requestor.gpgkey.fingerprint} />}>
                       <span className="name-with-tooltip">{this.requestorName}</span>
                     </TooltipPortal>
-                    <span className="name"><Trans>requested this operation</Trans></span>
+                    <span className="name">
+                      <Trans>requested this operation</Trans>
+                    </span>
                     <div className="subinfo light">
-                      <span className="dateTimeAgo" title={this.date}>{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
+                      <span className="dateTimeAgo" title={this.date}>
+                        {formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}
+                      </span>
                       <span className="chips-group">
                         <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
                         <span className={`chips user-role ${requestorRole}`}>{requestorRole}</span>
@@ -238,39 +256,53 @@ class ManageAccountRecoveryUserSettings extends Component {
                     </div>
                   </div>
                 </div>
-                <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+                <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()} />
               </li>
             </ul>
             <div className="radiolist-alt">
-              {this.canReject() &&
-              <div className={`input radio ${this.state.status === "rejected" ? "checked" : ""}`}>
-                <input type="radio"
-                  value="rejected"
-                  onChange={this.handleInputChange}
-                  name="status"
-                  checked={this.state.status === "rejected"}
-                  id="statusRecoverAccountReject"
-                  disabled={this.isProcessing}/>
-                <label htmlFor="statusRecoverAccountReject">
-                  <span className="name"><Trans>Reject</Trans></span>
-                  <span className="info">
-                    <Trans>I do not want to share a copy of my private key & passphrase with my organization recovery contacts.</Trans>
-                  </span>
-                </label>
-              </div>
-              }
+              {this.canReject() && (
+                <div className={`input radio ${this.state.status === "rejected" ? "checked" : ""}`}>
+                  <input
+                    type="radio"
+                    value="rejected"
+                    onChange={this.handleInputChange}
+                    name="status"
+                    checked={this.state.status === "rejected"}
+                    id="statusRecoverAccountReject"
+                    disabled={this.isProcessing}
+                  />
+                  <label htmlFor="statusRecoverAccountReject">
+                    <span className="name">
+                      <Trans>Reject</Trans>
+                    </span>
+                    <span className="info">
+                      <Trans>
+                        I do not want to share a copy of my private key & passphrase with my organization recovery
+                        contacts.
+                      </Trans>
+                    </span>
+                  </label>
+                </div>
+              )}
               <div className={`input radio ${this.state.status === "approved" ? "checked" : ""}`}>
-                <input type="radio"
+                <input
+                  type="radio"
                   value="approved"
                   onChange={this.handleInputChange}
                   name="status"
                   checked={this.state.status === "approved"}
                   id="statusRecoverAccountAccept"
-                  disabled={this.isProcessing}/>
+                  disabled={this.isProcessing}
+                />
                 <label htmlFor="statusRecoverAccountAccept">
-                  <span className="name"><Trans>Accept</Trans></span>
+                  <span className="name">
+                    <Trans>Accept</Trans>
+                  </span>
                   <span className="info">
-                    <Trans>I agree to share securely a copy of my private key & passphrase with my organization recovery contacts.</Trans>
+                    <Trans>
+                      I agree to share securely a copy of my private key & passphrase with my organization recovery
+                      contacts.
+                    </Trans>
                   </span>
                 </label>
               </div>
@@ -278,19 +310,20 @@ class ManageAccountRecoveryUserSettings extends Component {
           </div>
           <div className="submit-wrapper clearfix">
             <a
-              target="_blank" rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
               href="https://www.passbolt.com/docs/user/settings/browser/account-recovery-setup/"
               className={`button button-left ${this.isProcessing ? "disabled" : ""}`}
-              disabled={this.isProcessing}>
+              disabled={this.isProcessing}
+            >
               <Trans>Learn more</Trans>
             </a>
-            <FormCancelButton
-              disabled={this.isProcessing}
-              onClick={this.close}/>
+            <FormCancelButton disabled={this.isProcessing} onClick={this.close} />
             <FormSubmitButton
               value={this.translate("Save")}
               disabled={this.isProcessing}
-              processing={this.isProcessing}/>
+              processing={this.isProcessing}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -310,4 +343,10 @@ ManageAccountRecoveryUserSettings.propTypes = {
   location: PropTypes.object, // The current page location
   t: PropTypes.func, // The translation function
 };
-export default withRouter(withAppContext(withActionFeedback(withAccountRecovery(withRoles(withDialog(withTranslation("common")(ManageAccountRecoveryUserSettings)))))));
+export default withRouter(
+  withAppContext(
+    withActionFeedback(
+      withAccountRecovery(withRoles(withDialog(withTranslation("common")(ManageAccountRecoveryUserSettings)))),
+    ),
+  ),
+);

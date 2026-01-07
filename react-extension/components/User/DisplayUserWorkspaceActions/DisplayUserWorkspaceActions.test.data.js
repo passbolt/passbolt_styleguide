@@ -1,32 +1,36 @@
-import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import { defaultAppContext, defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultWorkflowContext } from "../../../contexts/WorkflowContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 import {
   defaultAdministratorRbacContext,
-  defaultUserRbacContext
+  defaultUserRbacContext,
 } from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultGroupDto} from "../../../../shared/models/entity/group/groupEntity.test.data";
-import {minimumGroupUserDto} from "../../../../shared/models/entity/groupUser/groupUserEntity.test.data";
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultGroupDto } from "../../../../shared/models/entity/group/groupEntity.test.data";
+import { minimumGroupUserDto } from "../../../../shared/models/entity/groupUser/groupUserEntity.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
 
 /**
  * Default selected user for workspace actions tests
  * @param {Object} data The data to override
  * @returns {object}
  */
-const defaultSelectedUserDto = (data = {}) => defaultUserDto({
-  id: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-  username: "carol@passbolt.com",
-  active: false,
-  is_mfa_enabled: true,
-  missing_metadata_key_ids: ["f848277c-5398-58f8-a82a-72397af2d450"],
-  ...data
-}, {
-  withRole: true,
-  withPendingAccountRecoveryUserRequest: true
-});
+const defaultSelectedUserDto = (data = {}) =>
+  defaultUserDto(
+    {
+      id: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+      username: "carol@passbolt.com",
+      active: false,
+      is_mfa_enabled: true,
+      missing_metadata_key_ids: ["f848277c-5398-58f8-a82a-72397af2d450"],
+      ...data,
+    },
+    {
+      withRole: true,
+      withPendingAccountRecoveryUserRequest: true,
+    },
+  );
 
 /**
  * Props with selected user
@@ -37,22 +41,21 @@ export function propsWithSelectedUser(props) {
     userWorkspaceContext: {
       onDetailsLocked: () => {},
       details: {
-        locked: true
+        locked: true,
       },
       filter: {
-        type: "ALL"
+        type: "ALL",
       },
-      selectedUsers: [defaultSelectedUserDto()]
+      selectedUsers: [defaultSelectedUserDto()],
     },
     workflowContext: defaultWorkflowContext(),
     dialogContext: defaultDialogContext(),
     rbacContext: defaultAdministratorRbacContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     clipboardContext: defaultClipboardContext(),
-    ...props
+    ...props,
   };
 }
-
 
 /**
  * Props with group selected
@@ -63,16 +66,16 @@ export function propsGroupSelected() {
     context,
     userWorkspaceContext: {
       details: {
-        locked: true
+        locked: true,
       },
       filter: {
         type: "FILTER-BY-GROUP",
         payload: {
-          group: defaultGroupDto({}, {withGroupsUsers: 2})
-        }
+          group: defaultGroupDto({}, { withGroupsUsers: 2 }),
+        },
       },
-      selectedUsers: [defaultUserDto()]
-    }
+      selectedUsers: [defaultUserDto()],
+    },
   });
 }
 
@@ -85,16 +88,16 @@ export function propsSoleMemberSelected() {
     context,
     userWorkspaceContext: {
       details: {
-        locked: true
+        locked: true,
       },
       filter: {
         type: "FILTER-BY-GROUP",
         payload: {
-          group: defaultGroupDto({}, {withGroupsUsers: 1})
-        }
+          group: defaultGroupDto({}, { withGroupsUsers: 1 }),
+        },
       },
-      selectedUsers: [defaultUserDto()]
-    }
+      selectedUsers: [defaultUserDto()],
+    },
   });
 }
 
@@ -107,23 +110,21 @@ export function propsSoleManagerSelected() {
     context,
     userWorkspaceContext: {
       details: {
-        locked: true
+        locked: true,
       },
       filter: {
         type: "FILTER-BY-GROUP",
         payload: {
           group: defaultGroupDto({
             groups_users: [
-              minimumGroupUserDto({user_id: context.loggedInUser.id, is_admin: true}),
-              minimumGroupUserDto()
-            ]
-          })
-        }
+              minimumGroupUserDto({ user_id: context.loggedInUser.id, is_admin: true }),
+              minimumGroupUserDto(),
+            ],
+          }),
+        },
       },
-      selectedUsers: [
-        defaultUserDto({id: context.loggedInUser.id})
-      ]
-    }
+      selectedUsers: [defaultUserDto({ id: context.loggedInUser.id })],
+    },
   });
 }
 
@@ -137,7 +138,7 @@ export function propsUserGroupManagerWithGroupSelected() {
     rbacContext: defaultUserRbacContext(),
     userWorkspaceContext: {
       details: {
-        locked: true
+        locked: true,
       },
       filter: {
         type: "FILTER-BY-GROUP",
@@ -145,13 +146,13 @@ export function propsUserGroupManagerWithGroupSelected() {
           group: {
             groups_users: [{}, {}], // At least two users needed in the group
             my_group_user: {
-              is_admin: true
-            }
+              is_admin: true,
+            },
           },
-        }
+        },
       },
-      selectedUsers: [{}] // At least on user selected
-    }
+      selectedUsers: [{}], // At least on user selected
+    },
   });
 }
 
@@ -161,7 +162,7 @@ export function propsUserGroupManagerWithGroupSelected() {
 export function propsUserRole() {
   return propsWithSelectedUser({
     context: defaultUserAppContext(),
-    rbacContext: defaultUserRbacContext()
+    rbacContext: defaultUserRbacContext(),
   });
 }
 
@@ -174,20 +175,23 @@ export function propsWithMyselfAsSelectedUser() {
     context,
     userWorkspaceContext: {
       details: {
-        locked: true
+        locked: true,
       },
       filter: {
-        type: "ALL"
+        type: "ALL",
       },
       selectedUsers: [
-        defaultUserDto({
-          id: context.loggedInUser.id,
-          active: true,
-          is_mfa_enabled: true,
-          missing_metadata_key_ids: ["f848277c-5398-58f8-a82a-72397af2d450"],
-        }, {withRole: true})
-      ]
-    }
+        defaultUserDto(
+          {
+            id: context.loggedInUser.id,
+            active: true,
+            is_mfa_enabled: true,
+            missing_metadata_key_ids: ["f848277c-5398-58f8-a82a-72397af2d450"],
+          },
+          { withRole: true },
+        ),
+      ],
+    },
   });
 }
 
@@ -227,20 +231,17 @@ export function propsUserRoleGroupSelectedNotManager() {
     context,
     userWorkspaceContext: {
       details: {
-        locked: true
+        locked: true,
       },
       filter: {
         type: "FILTER-BY-GROUP",
         payload: {
           group: defaultGroupDto({
-            groups_users: [
-              minimumGroupUserDto({user_id: "other-user-id", is_admin: true}),
-              minimumGroupUserDto()
-            ]
-          })
-        }
+            groups_users: [minimumGroupUserDto({ user_id: "other-user-id", is_admin: true }), minimumGroupUserDto()],
+          }),
+        },
       },
-      selectedUsers: [defaultUserDto()]
-    }
+      selectedUsers: [defaultUserDto()],
+    },
   });
 }

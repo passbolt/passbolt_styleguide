@@ -15,22 +15,23 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DisplayInternationalizationAdministration from "./DisplayInternationalizationAdministration";
-import {AdminInternationalizationContextProvider} from '../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext';
-import {defaultProps} from "./DisplayInternationalizationAdministration.test.data";
+import { AdminInternationalizationContextProvider } from "../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
+import { defaultProps } from "./DisplayInternationalizationAdministration.test.data";
 
 export default {
-  title: 'Components/Administration/DisplayInternationalizationAdministration',
-  component: DisplayInternationalizationAdministration
+  title: "Components/Administration/DisplayInternationalizationAdministration",
+  component: DisplayInternationalizationAdministration,
 };
 
-const Template = args =>
+const Template = (args) => (
   <AdminInternationalizationContextProvider {...args}>
     <div className="panel middle">
       <div className="grid grid-responsive-12">
-        <DisplayInternationalizationAdministration {...args}/>
+        <DisplayInternationalizationAdministration {...args} />
       </div>
     </div>
-  </AdminInternationalizationContextProvider>;
+  </AdminInternationalizationContextProvider>
+);
 
 Template.propTypes = {
   context: PropTypes.object,

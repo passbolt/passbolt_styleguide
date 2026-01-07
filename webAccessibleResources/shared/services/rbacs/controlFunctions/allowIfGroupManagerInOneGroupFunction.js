@@ -21,6 +21,6 @@ export default class AllowIfGroupManagerInOneGroupFunction extends ControlFuncti
    * @returns {boolean}
    */
   static execute(user) {
-    return user.groups_users.some(group => group.is_admin);
+    return user.groups_users.some((group) => group.is_admin);
   }
 }

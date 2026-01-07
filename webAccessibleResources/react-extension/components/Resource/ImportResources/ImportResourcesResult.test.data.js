@@ -20,7 +20,7 @@ export function defaultProps() {
   return {
     onClose: jest.fn(),
     history: {
-      push: jest.fn()
+      push: jest.fn(),
     },
     resourceWorkspaceContext: {
       resourceFileImportResult: {
@@ -30,30 +30,36 @@ export function defaultProps() {
         },
         references: {
           folder: {
-            id: "imported-123"
-          }
+            id: "imported-123",
+          },
         },
         errors: {
-          resources: [{
-            name: "resource1"
-          },
-          {
-            name: "resource2"
-          }],
-          folders: [{
-            name: "folder1"
-          }]
+          resources: [
+            {
+              name: "resource1",
+            },
+            {
+              name: "resource2",
+            },
+          ],
+          folders: [
+            {
+              name: "folder1",
+            },
+          ],
         },
         warnings: {
-          resources: [{
-            name: "resource1"
-          },
-          {
-            name: "resource2"
-          }],
-        }
-      }
-    }
+          resources: [
+            {
+              name: "resource1",
+            },
+            {
+              name: "resource2",
+            },
+          ],
+        },
+      },
+    },
   };
 }
 
@@ -65,7 +71,7 @@ export function defaultPropsWithNoError() {
   return {
     onClose: jest.fn(),
     history: {
-      push: jest.fn()
+      push: jest.fn(),
     },
     resourceWorkspaceContext: {
       resourceFileImportResult: {
@@ -75,10 +81,10 @@ export function defaultPropsWithNoError() {
         },
         references: {
           tag: {
-            slug: "tag"
+            slug: "tag",
           },
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

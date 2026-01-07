@@ -13,66 +13,71 @@
  */
 import React from "react";
 import Select from "./Select";
-import {defaultInlineLdapProps, defaultInlineProps, defaultProps} from "./Select.test.data";
+import { defaultInlineLdapProps, defaultInlineProps, defaultProps } from "./Select.test.data";
 
 export default {
-  title: 'Foundations/Select',
-  component: Select
+  title: "Foundations/Select",
+  component: Select,
 };
 
 export const DefaultSelects = {
-  render: () =>
-    <div style={{display: "flex", flexWrap: "wrap"}}>
-      <span style={{width: "100%", marginBottom: ".5rem"}}>Select field</span>
-      <div style={{width: "24%", marginRight: "1%"}}>
+  render: () => (
+    <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <span style={{ width: "100%", marginBottom: ".5rem" }}>Select field</span>
+      <div style={{ width: "24%", marginRight: "1%" }}>
         <div className="select-wrapper input">
           <label>Label</label>
-          <Select {...defaultProps({id: "select-field1"})} />
+          <Select {...defaultProps({ id: "select-field1" })} />
         </div>
       </div>
-      <div style={{width: "24%", marginRight: "1%"}}>
+      <div style={{ width: "24%", marginRight: "1%" }}>
         <div className="select-wrapper input disabled">
           <label>Label</label>
-          <Select {...defaultProps({id: "select-field2", disabled: true})}/>
+          <Select {...defaultProps({ id: "select-field2", disabled: true })} />
         </div>
       </div>
-      <div style={{width: "24%", marginRight: "1%"}}>
+      <div style={{ width: "24%", marginRight: "1%" }}>
         <div className="select-wrapper input">
           <label>Label</label>
-          <Select {...defaultProps({id: "select-field3", search: true})}/>
+          <Select {...defaultProps({ id: "select-field3", search: true })} />
         </div>
       </div>
-      <div style={{width: "24%", marginRight: "1%"}}>
+      <div style={{ width: "24%", marginRight: "1%" }}>
         <div className="select-wrapper input disabled">
           <label>Label</label>
-          <Select {...defaultProps({id: "select-field4", disabled: true, search: true})}/>
+          <Select {...defaultProps({ id: "select-field4", disabled: true, search: true })} />
         </div>
       </div>
-      <span style={{width: "100%", marginBottom: "1rem"}}>In line button with list</span>
-      <div style={{width: "24%", marginRight: "1%"}}>
-        <Select className="inline" {...defaultInlineProps({id: "select-field5"})} />
+      <span style={{ width: "100%", marginBottom: "1rem" }}>In line button with list</span>
+      <div style={{ width: "24%", marginRight: "1%" }}>
+        <Select className="inline" {...defaultInlineProps({ id: "select-field5" })} />
       </div>
-      <div style={{width: "24%", marginRight: "1%"}}>
-        <Select className="inline" {...defaultInlineProps({id: "select-field6", disabled: true})} />
+      <div style={{ width: "24%", marginRight: "1%" }}>
+        <Select className="inline" {...defaultInlineProps({ id: "select-field6", disabled: true })} />
       </div>
-      <div style={{width: "24%", marginRight: "1%"}}>
-        <Select className="inline" direction="top" {...defaultInlineLdapProps({id: "select-field7"})} />
+      <div style={{ width: "24%", marginRight: "1%" }}>
+        <Select className="inline" direction="top" {...defaultInlineLdapProps({ id: "select-field7" })} />
       </div>
-      <div style={{width: "24%", marginRight: "1%"}}>
-        <Select className="inline" direction="top" {...defaultInlineLdapProps({id: "select-field8", disabled: true})} />
+      <div style={{ width: "24%", marginRight: "1%" }}>
+        <Select
+          className="inline"
+          direction="top"
+          {...defaultInlineLdapProps({ id: "select-field8", disabled: true })}
+        />
       </div>
-      <span style={{width: "100%", marginBottom: ".5rem"}}>Setup Select field</span>
-      <div style={{width: "24%", marginRight: "1%"}}>
+      <span style={{ width: "100%", marginBottom: ".5rem" }}>Setup Select field</span>
+      <div style={{ width: "24%", marginRight: "1%" }}>
         <div className="select-wrapper input">
           <label>Label</label>
-          <Select {...defaultProps({id: "select-field1", className: "setup-extension"})} />
+          <Select {...defaultProps({ id: "select-field1", className: "setup-extension" })} />
         </div>
       </div>
-      <div style={{width: "24%", marginRight: "1%"}}>
+      <div style={{ width: "24%", marginRight: "1%" }}>
         <div className="select-wrapper input disabled">
           <label>Label</label>
-          <Select {...defaultProps({id: "select-field1", className: "setup-extension", disabled: true})} />
+          <Select {...defaultProps({ id: "select-field1", className: "setup-extension", disabled: true })} />
         </div>
       </div>
     </div>
+  ),
 };

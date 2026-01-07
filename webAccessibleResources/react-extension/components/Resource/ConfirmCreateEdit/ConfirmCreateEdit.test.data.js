@@ -12,7 +12,7 @@
  * @since         4.9.0
  */
 
-import {ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations} from "./ConfirmCreateEdit";
+import { ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations } from "./ConfirmCreateEdit";
 
 /**
  * Default props

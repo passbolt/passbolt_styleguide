@@ -17,7 +17,7 @@ import ipRegex from "ip-regex";
 import assertString from "validator/es/lib/util/assertString";
 
 // Hostname allowed characters regex
-const regexHostnameAllowedChars = XRegExp('^[\\p{L}\\p{N}.-]*$');
+const regexHostnameAllowedChars = XRegExp("^[\\p{L}\\p{N}.-]*$");
 
 /**
  * The can suggest service
@@ -31,7 +31,7 @@ class CanSuggestService {
    */
   canSuggestUris(uri, suggestedUris) {
     assertString(uri);
-    return suggestedUris?.some(suggestedUri => this.canSuggestUri(uri, suggestedUri)) || false;
+    return suggestedUris?.some((suggestedUri) => this.canSuggestUri(uri, suggestedUri)) || false;
   }
 
   /**
@@ -96,8 +96,8 @@ class CanSuggestService {
     }
 
     // If IPs, make a strict comparison.
-    const uriIsIpAddress = ipRegex({exact: true}).test(uriObject.hostname);
-    const suggestUriIsIpAddress = ipRegex({exact: true}).test(suggestedUriObject.hostname);
+    const uriIsIpAddress = ipRegex({ exact: true }).test(uriObject.hostname);
+    const suggestUriIsIpAddress = ipRegex({ exact: true }).test(suggestedUriObject.hostname);
     if (uriIsIpAddress || suggestUriIsIpAddress) {
       return uriObject.hostname === suggestedUriObject.hostname;
     }
@@ -149,7 +149,7 @@ class CanSuggestService {
       hostname = suggestedUriObject.hostname;
     }
 
-    return {protocol: protocol, hostname: hostname, port: port};
+    return { protocol: protocol, hostname: hostname, port: port };
   }
 
   /**
@@ -171,8 +171,7 @@ class CanSuggestService {
    * @return {boolean}
    */
   isParentHostname(parent, child) {
-    if (!child || !parent || !regexHostnameAllowedChars.test(child) || !regexHostnameAllowedChars.test(parent)
-    ) {
+    if (!child || !parent || !regexHostnameAllowedChars.test(child) || !regexHostnameAllowedChars.test(parent)) {
       return false;
     }
 
@@ -191,7 +190,7 @@ class CanSuggestService {
          * It will prevent an attacker to use a hostname such as www.attacher-passbolt.com, and make passbolt
          * recognize it as passbolt.com.
          */
-        if (child[lastIndexOf - 1] === undefined || child[lastIndexOf - 1] === '.') {
+        if (child[lastIndexOf - 1] === undefined || child[lastIndexOf - 1] === ".") {
           return true;
         }
       }

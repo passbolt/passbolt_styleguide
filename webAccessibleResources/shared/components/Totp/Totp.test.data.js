@@ -12,8 +12,8 @@
  * @since         4.3.0
  */
 
-import {plaintextSecretPasswordDescriptionTotpDto} from "../../models/entity/plaintextSecret/plaintextSecretEntity.test.data";
-import {defaultActionFeedbackContext} from "../../../react-extension/contexts/ActionFeedbackContext.test.data";
+import { plaintextSecretPasswordDescriptionTotpDto } from "../../models/entity/plaintextSecret/plaintextSecretEntity.test.data";
+import { defaultActionFeedbackContext } from "../../../react-extension/contexts/ActionFeedbackContext.test.data";
 
 /**
  * Returns the default component props
@@ -26,7 +26,7 @@ export function defaultProps(props = {}) {
     canClick: true,
     onClick: jest.fn(),
     actionFeedbackContext: defaultActionFeedbackContext(),
-    ...props
+    ...props,
   };
 }
 
@@ -46,6 +46,6 @@ export function secretKeyInvalidProps(props = {}) {
     canClick: true,
     onClick: jest.fn(),
     actionFeedbackContext: defaultActionFeedbackContext(),
-    ...props
+    ...props,
   };
 }

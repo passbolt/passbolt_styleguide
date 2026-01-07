@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import InstallExtension from "./InstallExtension";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -29,9 +28,8 @@ export default class InstallExtensionTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <InstallExtension {...props}/>
+        <InstallExtension {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
   }
 
@@ -39,42 +37,35 @@ export default class InstallExtensionTestPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.install-extension h1').textContent;
+    return this._page.container.querySelector(".install-extension h1").textContent;
   }
 
   /**
    * Returns the browser image
    */
   get browser() {
-    return this._page.container.querySelector('.install-extension a');
+    return this._page.container.querySelector(".install-extension a");
   }
 
   /**
    * Returns the message
    */
   get message() {
-    return this._page.container.querySelector('.install-extension p').textContent;
+    return this._page.container.querySelector(".install-extension p").textContent;
   }
 
   /**
    * Returns the download button
    */
   get download() {
-    return this._page.container.querySelector('.install-extension .form-actions .button.primary.big').textContent;
-  }
-
-  /**
-   * Returns the download button url
-   */
-  get downloadUrl() {
-    return this._page.container.querySelector('.install-extension .form-actions .button.primary.big').href;
+    return this._page.container.querySelector(".install-extension .form-actions .button.primary.big").textContent;
   }
 
   /**
    * Returns the link to refresh
    */
   get link() {
-    return this._page.container.querySelector('.install-extension .form-actions button.link');
+    return this._page.container.querySelector(".install-extension .form-actions button.link");
   }
 
   /**
@@ -88,7 +79,7 @@ export default class InstallExtensionTestPage {
    * refresh the page
    */
   async refresh() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.link, leftClick);
     await waitFor(() => {});
   }

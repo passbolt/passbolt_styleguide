@@ -12,13 +12,12 @@
  * @since         5.4.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {Router} from "react-router-dom";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import { Router } from "react-router-dom";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import ActionAbortedMissingMetadataKeysPage from "./ActionAbortedMissingMetadataKeysPage";
-import {createMemoryHistory} from "history";
+import { createMemoryHistory } from "history";
 
 /**
  * The ActionAbortedMissingMetadataKeysPage component represented as a page
@@ -32,10 +31,10 @@ export default class ActionAbortedMissingMetadataKeysPagePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
-          <ActionAbortedMissingMetadataKeysPage {...props}/>
+          <ActionAbortedMissingMetadataKeysPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -74,7 +73,7 @@ export default class ActionAbortedMissingMetadataKeysPagePage {
    * Simulates a click on the submit button
    */
   async submit() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.submitButton, leftClick);
     await waitFor(() => {});
   }
@@ -84,14 +83,14 @@ export default class ActionAbortedMissingMetadataKeysPagePage {
    * @returns {Promise<void>}
    */
   async close() {
-    fireEvent.click(this.backButton, {button: 0});
+    fireEvent.click(this.backButton, { button: 0 });
     await waitFor(() => {});
   }
 
   /** Click without wait for on the element */
-  async escapeKey()  {
+  async escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.actionAbortedMissingMetadataKey, escapeKeyDown);
     await waitFor(() => {});
   }

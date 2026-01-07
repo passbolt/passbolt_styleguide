@@ -13,35 +13,37 @@
  */
 
 import React from "react";
-import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import MockFetch from '../../../test/mock/MockFetch';
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import MockFetch from "../../../test/mock/MockFetch";
 import DisplayPasswordPoliciesAdministration from "./DisplayPasswordPoliciesAdministration";
-import {defaultProps} from "./DisplayPasswordPoliciesAdministration.test.data";
-import {AdminPasswordPoliciesContextProvider} from "../../../contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
-import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import { defaultProps } from "./DisplayPasswordPoliciesAdministration.test.data";
+import { AdminPasswordPoliciesContextProvider } from "../../../contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
+import { defaultPasswordPoliciesDto } from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 
 const mockFetch = new MockFetch();
 mockFetch.addGetFetchRequest(/password-policies\/settings\.json/, () => mockApiResponse(defaultPasswordPoliciesDto()));
 
 export default {
-  title: 'Components/Administration/DisplayPasswordPoliciesAdministration',
+  title: "Components/Administration/DisplayPasswordPoliciesAdministration",
   component: DisplayPasswordPoliciesAdministration,
-  decorators: [(Story, {args}) =>
-    <div className="page administration">
-      <div className="app" >
-        <div className="panel main">
-          <div className="panel middle">
-            <div className="middle-right">
-              <div className="main-page password-policies-settings">
-                <AdminPasswordPoliciesContextProvider {...args}>
-                  <Story {...args}/>
-                </AdminPasswordPoliciesContextProvider>
+  decorators: [
+    (Story, { args }) => (
+      <div className="page administration">
+        <div className="app">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="main-page password-policies-settings">
+                  <AdminPasswordPoliciesContextProvider {...args}>
+                    <Story {...args} />
+                  </AdminPasswordPoliciesContextProvider>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    ),
   ],
 };
 

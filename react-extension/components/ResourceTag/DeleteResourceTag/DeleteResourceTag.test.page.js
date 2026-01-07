@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DeleteResourceTag from "./DeleteResourceTag";
 
@@ -35,13 +35,13 @@ export default class DeleteResourceTagPage {
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
             <Router>
-              <ManageDialogs/>
-              <DeleteResourceTag {...props}/>
+              <ManageDialogs />
+              <DeleteResourceTag {...props} />
             </Router>
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -102,21 +102,21 @@ class TagDeletePageObject {
    * Returns the dialog element
    */
   get dialog() {
-    return this._container.querySelector('.delete-tag-dialog');
+    return this._container.querySelector(".delete-tag-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._container.querySelector('.dialog-close');
+    return this._container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the tag name input element
    */
   get tagName() {
-    return this._container.querySelector('.form-content p strong');
+    return this._container.querySelector(".form-content p strong");
   }
 
   /**
@@ -137,15 +137,15 @@ class TagDeletePageObject {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._container.querySelector('.submit-wrapper .cancel');
+    return this._container.querySelector(".submit-wrapper .cancel");
   }
 
   get errorDialog() {
-    return this._container.querySelector('.error-dialog');
+    return this._container.querySelector(".error-dialog");
   }
 
   get errorDialogMessage() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
+    return this._container.querySelector(".error-dialog .dialog .dialog-content .form-content");
   }
 
   /**
@@ -156,22 +156,22 @@ class TagDeletePageObject {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
   /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
+  clickWithoutWaitFor(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.dialog, escapeKeyDown);
   }
 }

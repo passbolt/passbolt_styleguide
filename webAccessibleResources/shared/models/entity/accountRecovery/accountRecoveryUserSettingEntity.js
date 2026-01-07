@@ -15,24 +15,29 @@ import AccountRecoveryPrivateKeyEntity from "../accountRecovery/accountRecoveryP
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 
-
-const ENTITY_NAME = 'AccountRecoveryUserSetting';
-const STATUS_APPROVED = 'approved';
-const STATUS_REJECTED = 'rejected';
+const ENTITY_NAME = "AccountRecoveryUserSetting";
+const STATUS_APPROVED = "approved";
+const STATUS_REJECTED = "rejected";
 
 class AccountRecoveryUserSettingEntity extends Entity {
   /**
    * @inheritDoc
    */
   constructor(accountRecoveryUserSettingDto, options = {}) {
-    super(EntitySchema.validate(
-      AccountRecoveryUserSettingEntity.ENTITY_NAME,
-      accountRecoveryUserSettingDto,
-      AccountRecoveryUserSettingEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        AccountRecoveryUserSettingEntity.ENTITY_NAME,
+        accountRecoveryUserSettingDto,
+        AccountRecoveryUserSettingEntity.getSchema(),
+      ),
+      options,
+    );
 
     if (this._props.account_recovery_private_key) {
-      this._account_recovery_private_key = new AccountRecoveryPrivateKeyEntity(this._props.account_recovery_private_key, {...options, clone: false});
+      this._account_recovery_private_key = new AccountRecoveryPrivateKeyEntity(
+        this._props.account_recovery_private_key,
+        { ...options, clone: false },
+      );
       delete this._props.account_recovery_private_key;
     }
   }
@@ -43,44 +48,39 @@ class AccountRecoveryUserSettingEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "status"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["status"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "user_id": {
-          "type": "string",
-          "format": "uuid"
+        user_id: {
+          type: "string",
+          format: "uuid",
         },
-        "status": {
-          "type": "string",
-          "enum": [
-            AccountRecoveryUserSettingEntity.STATUS_APPROVED,
-            AccountRecoveryUserSettingEntity.STATUS_REJECTED
-          ]
+        status: {
+          type: "string",
+          enum: [AccountRecoveryUserSettingEntity.STATUS_APPROVED, AccountRecoveryUserSettingEntity.STATUS_REJECTED],
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid"
+        created_by: {
+          type: "string",
+          format: "uuid",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid"
+        modified_by: {
+          type: "string",
+          format: "uuid",
         },
-        "account_recovery_private_key": AccountRecoveryPrivateKeyEntity.getSchema(),
-      }
+        account_recovery_private_key: AccountRecoveryPrivateKeyEntity.getSchema(),
+      },
     };
   }
 
@@ -98,7 +98,9 @@ class AccountRecoveryUserSettingEntity extends Entity {
   toDto(contain) {
     const result = Object.assign({}, this._props);
     if (this._account_recovery_private_key && contain?.account_recovery_private_key) {
-      result.account_recovery_private_key = this._account_recovery_private_key.toDto(AccountRecoveryPrivateKeyEntity.ALL_CONTAIN_OPTIONS);
+      result.account_recovery_private_key = this._account_recovery_private_key.toDto(
+        AccountRecoveryPrivateKeyEntity.ALL_CONTAIN_OPTIONS,
+      );
     }
     return result;
   }

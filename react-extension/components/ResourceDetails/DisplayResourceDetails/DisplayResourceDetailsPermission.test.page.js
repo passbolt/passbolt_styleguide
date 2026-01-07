@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +27,9 @@ export default class PasswordSidebarPermissionSectionPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourceDetailsPermission {...props}/>
+        <DisplayResourceDetailsPermission {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -79,8 +78,8 @@ class TitleHeaderPageObject {
   }
 
   /** Click on the title */
-  async click()  {
-    const leftClick = {button: 0};
+  async click() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.hyperlink, leftClick);
     await waitFor(() => {});
   }
@@ -99,14 +98,14 @@ class DisplayPermissionPageObject {
    * Returns the list elements of permissions
    */
   get list() {
-    return this._container.querySelectorAll('.usercard-col-2');
+    return this._container.querySelectorAll(".usercard-col-2");
   }
 
   /**
    * Returns the loading element
    */
   get loadingMessage() {
-    return this._container.querySelector('.processing-text');
+    return this._container.querySelector(".processing-text");
   }
 
   /**
@@ -120,7 +119,7 @@ class DisplayPermissionPageObject {
    * Returns true
    */
   isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving permissions';
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === "Retrieving permissions";
   }
 
   /**
@@ -135,7 +134,7 @@ class DisplayPermissionPageObject {
    * @param index The display rank of name's permission
    */
   name(index) {
-    return this.list[index - 1].querySelector('.name').textContent;
+    return this.list[index - 1].querySelector(".name").textContent;
   }
 
   /**
@@ -143,7 +142,7 @@ class DisplayPermissionPageObject {
    * @param index The display rank of permission
    */
   type(index) {
-    return this.list[index - 1].querySelector('.subinfo').textContent;
+    return this.list[index - 1].querySelector(".subinfo").textContent;
   }
 
   /**
@@ -156,14 +155,9 @@ class DisplayPermissionPageObject {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 }
-
-
-
-
-

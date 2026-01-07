@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,20 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
-import {BrowserRouter as Router} from 'react-router-dom';
-import {FilterResourcesByFoldersItemPageObject} from "./FilterResourcesByFoldersItem.test.page";
+import { BrowserRouter as Router } from "react-router-dom";
+import { FilterResourcesByFoldersItemPageObject } from "./FilterResourcesByFoldersItem.test.page";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByFolders from "./FilterResourcesByFolders";
-import {DragContext} from "../../../contexts/DragContext";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
-import {ContextualMenuContext} from "../../../contexts/ContextualMenuContext";
-import {DialogContext} from "../../../contexts/DialogContext";
-import {
-  ResourceTypesLocalStorageContext
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { DragContext } from "../../../contexts/DragContext";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
+import { ContextualMenuContext } from "../../../contexts/ContextualMenuContext";
+import { DialogContext } from "../../../contexts/DialogContext";
+import { ResourceTypesLocalStorageContext } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 
 /**
  * The FilterResourcesByFolders component represented as a page
@@ -42,10 +39,12 @@ export default class FilterResourcesByFoldersPage {
           <Router>
             <ContextualMenuContext.Provider value={props.contextualMenuContext}>
               <DialogContext.Provider value={props.dialogContext}>
-                <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+                <ResourceTypesLocalStorageContext.Provider
+                  value={{ get: () => props.resourceTypes, resourceTypes: props.resourceTypes }}
+                >
                   <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
                     <DragContext.Provider value={props.dragContext}>
-                      <FilterResourcesByFolders.WrappedComponent {...props}/>
+                      <FilterResourcesByFolders.WrappedComponent {...props} />
                     </DragContext.Provider>
                   </ResourceWorkspaceContext.Provider>
                 </ResourceTypesLocalStorageContext.Provider>
@@ -54,7 +53,7 @@ export default class FilterResourcesByFoldersPage {
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -110,8 +109,8 @@ class TitleHeaderPageObject {
   }
 
   /** Click on the component */
-  async click()  {
-    const leftClick = {button: 0};
+  async click() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.hyperlink, leftClick);
     await waitFor(() => {});
   }
@@ -130,21 +129,21 @@ class FilterResourcesByFoldersPageObject {
    * Returns the folder tree component
    */
   get component() {
-    return this._container.querySelector('.navigation-secondary.navigation-folders');
+    return this._container.querySelector(".navigation-secondary.navigation-folders");
   }
 
   /**
    * Returns the root folder
    */
   get rootFolder() {
-    return this._container.querySelectorAll('.folders-label button')[0];
+    return this._container.querySelectorAll(".folders-label button")[0];
   }
 
   /**
    * Returns the root folder caret
    */
   get rootFolderCaret() {
-    return this._container.querySelector('.folders-label .toggle-folder');
+    return this._container.querySelector(".folders-label .toggle-folder");
   }
 
   /**
@@ -158,28 +157,28 @@ class FilterResourcesByFoldersPageObject {
    * Returns the more button root folder
    */
   get moreButton() {
-    return this._container.querySelector('.accordion-header .node.root .row.title .right-cell.more-ctrl button');
+    return this._container.querySelector(".accordion-header .node.root .row.title .right-cell.more-ctrl button");
   }
 
   /**
    * Returns the list of folders
    */
   get displayFolderList() {
-    return this._container.querySelector('.folders-tree') !== null;
+    return this._container.querySelector(".folders-tree") !== null;
   }
 
   /**
    * Returns the empty content element
    */
   get emptyContent() {
-    return this._container.querySelector('.empty-content');
+    return this._container.querySelector(".empty-content");
   }
 
   /**
    * Returns true
    */
   isEmpty() {
-    return this.emptyContent !== null && this.emptyContent.innerHTML === 'empty';
+    return this.emptyContent !== null && this.emptyContent.innerHTML === "empty";
   }
 
   /**
@@ -214,43 +213,43 @@ class FilterResourcesByFoldersPageObject {
    * Returns the loading element
    */
   get loadingMessage() {
-    return this._container.querySelector('.processing-text');
+    return this._container.querySelector(".processing-text");
   }
 
   /**
    * Returns true
    */
   isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving folders';
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === "Retrieving folders";
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
 
   /** Right click on the component */
-  async rightClick(component)  {
+  async rightClick(component) {
     fireEvent.contextMenu(component);
     await waitFor(() => {});
   }
 
   /** Drop on the component */
-  async drop(component)  {
+  async drop(component) {
     fireEvent.drop(component);
     await waitFor(() => {});
   }
 
   /** Drag over on the component */
-  async dragOver(component)  {
+  async dragOver(component) {
     fireEvent.dragOver(component);
     await waitFor(() => {});
   }
 
   /** Drag over on the component */
-  async dragLeave(component)  {
+  async dragLeave(component) {
     fireEvent.dragLeave(component);
     await waitFor(() => {});
   }
@@ -276,8 +275,3 @@ class FilterResourcesByFoldersPageObject {
     return this.dragLeave(this.rootFolder);
   }
 }
-
-
-
-
-

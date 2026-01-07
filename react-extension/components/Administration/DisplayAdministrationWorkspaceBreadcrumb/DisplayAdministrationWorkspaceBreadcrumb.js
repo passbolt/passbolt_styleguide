@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import {
   AdministrationWorkspaceMenuTypes,
-  withAdministrationWorkspace
+  withAdministrationWorkspace,
 } from "../../../contexts/AdministrationWorkspaceContext";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the administration setting selected
@@ -36,12 +36,20 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return [];
       case AdministrationWorkspaceMenuTypes.HOME:
         return [
-          <Breadcrumb key="bread-2" name={this.translate("Home")} onClick={this.onLastBreadcrumbClick.bind(this)}/>,
+          <Breadcrumb key="bread-2" name={this.translate("Home")} onClick={this.onLastBreadcrumbClick.bind(this)} />,
         ];
       default:
         return [
-          <Breadcrumb key="bread-3" name={this.translate("Home")} onClick={this.props.navigationContext.onGoToAdministrationRequested}/>,
-          <Breadcrumb key="bread-2" name={this.getLastBreadcrumbItemName()} onClick={this.onLastBreadcrumbClick.bind(this)}/>,
+          <Breadcrumb
+            key="bread-3"
+            name={this.translate("Home")}
+            onClick={this.props.navigationContext.onGoToAdministrationRequested}
+          />,
+          <Breadcrumb
+            key="bread-2"
+            name={this.getLastBreadcrumbItemName()}
+            onClick={this.onLastBreadcrumbClick.bind(this)}
+          />,
         ];
     }
   }
@@ -107,7 +115,7 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
    */
   async onLastBreadcrumbClick() {
     const pathname = this.props.location.pathname;
-    this.props.history.push({pathname});
+    this.props.history.push({ pathname });
   }
 
   /**
@@ -123,9 +131,7 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <Breadcrumbs items={this.items}/>
-    );
+    return <Breadcrumbs items={this.items} />;
   }
 }
 
@@ -137,4 +143,8 @@ DisplayAdministrationWorkspaceBreadcrumb.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(withAdministrationWorkspace(withTranslation('common')(DisplayAdministrationWorkspaceBreadcrumb))));
+export default withRouter(
+  withNavigationContext(
+    withAdministrationWorkspace(withTranslation("common")(DisplayAdministrationWorkspaceBreadcrumb)),
+  ),
+);

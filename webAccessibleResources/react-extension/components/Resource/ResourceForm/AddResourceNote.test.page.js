@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AddResourceNote from "./AddResourceNote";
@@ -29,7 +28,7 @@ export default class AddResourceNotePage {
       <MockTranslationProvider>
         <AddResourceNote {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
   /**
@@ -42,14 +41,14 @@ export default class AddResourceNotePage {
    * Returns the note input element
    */
   get note() {
-    return this._page.container.querySelector('#resource-note');
+    return this._page.container.querySelector("#resource-note");
   }
 
   /**
    * Returns the convert to description button element
    */
   get convertToDescription() {
-    return this._page.container.querySelector('.message.notice button');
+    return this._page.container.querySelector(".message.notice button");
   }
 
   /**
@@ -65,9 +64,11 @@ export default class AddResourceNotePage {
    * @param {string} data - The data to fill the input element with.
    */
   async fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
-    await waitFor(() => { element.value === data; });
+    await waitFor(() => {
+      element.value === data;
+    });
   }
 
   /**
@@ -75,7 +76,7 @@ export default class AddResourceNotePage {
    * @param {Element} element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

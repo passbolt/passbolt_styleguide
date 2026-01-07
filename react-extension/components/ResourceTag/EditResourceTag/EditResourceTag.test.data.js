@@ -8,7 +8,7 @@ import MockPort from "../../../test/mock/MockPort";
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
-    setContext: function(newContext) {
+    setContext: function (newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
@@ -22,6 +22,6 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
 }

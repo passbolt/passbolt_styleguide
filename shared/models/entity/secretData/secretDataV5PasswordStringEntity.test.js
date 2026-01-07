@@ -16,9 +16,9 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {
   defaultSecretDataV5PasswordStringDto,
-  minimalDefaultSecretDataV5PasswordStringDto
+  minimalDefaultSecretDataV5PasswordStringDto,
 } from "./secretDataV5PasswordStringEntity.test.data";
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import SecretDataV5PasswordStringEntity from "./secretDataV5PasswordStringEntity";
 import SecretDataV4PasswordStringEntity from "./secretDataV4PasswordStringEntity";
 
@@ -29,7 +29,12 @@ describe("secretDataV5PasswordStringEntity", () => {
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.enumeration(SecretDataV5PasswordStringEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
+      assertEntityProperty.enumeration(
+        SecretDataV5PasswordStringEntity,
+        "object_type",
+        [SECRET_DATA_OBJECT_TYPE],
+        ["any other values"],
+      );
     });
 
     it("validates password property", () => {
@@ -100,7 +105,7 @@ describe("secretDataV5PasswordStringEntity", () => {
     it("should return true", () => {
       const dto = defaultSecretDataV5PasswordStringDto();
       const entity = new SecretDataV5PasswordStringEntity(dto);
-      expect(entity.areSecretsDifferent({password: "different"})).toBeTruthy();
+      expect(entity.areSecretsDifferent({ password: "different" })).toBeTruthy();
     });
 
     it("should return false", () => {

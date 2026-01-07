@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import HeartSVG from "../../../../img/svg/heart.svg";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Tooltip from "../Tooltip/Tooltip";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";
@@ -61,22 +61,24 @@ class Footer extends Component {
     const versions = [];
     const serverVersion = this.props.context.siteSettings.version;
     if (serverVersion) {
-      versions.push(`${this.props.t('Server')} ${serverVersion}`);
+      versions.push(`${this.props.t("Server")} ${serverVersion}`);
     }
     if (this.props.context.extensionVersion) {
-      versions.push(`${this.props.t('Client')} ${this.props.context.extensionVersion}`);
+      versions.push(`${this.props.t("Client")} ${this.props.context.extensionVersion}`);
     }
 
-    return versions.join(' / ');
+    return versions.join(" / ");
   }
 
   /**
    * Returns true if the application is in an unsafe mode
    */
   get isUnsafeMode() {
-    if (!this.props.context.siteSettings) { return false; }
+    if (!this.props.context.siteSettings) {
+      return false;
+    }
     const debug = this.props.context.siteSettings.debug;
-    const isHttpMode = this.props.context.siteSettings.url.startsWith('http://');
+    const isHttpMode = this.props.context.siteSettings.url.startsWith("http://");
     return debug || isHttpMode;
   }
 
@@ -88,61 +90,55 @@ class Footer extends Component {
     return (
       <footer className="footer">
         <ul className="footer-links">
-          {this.isUnsafeMode &&
-          <li className="error-message">
-            <a
-              href={this.unsafeUrl}
-              target="_blank" rel="noopener noreferrer">
-              <Trans>Unsafe mode</Trans>
-            </a>
-          </li>
-          }
-          {this.termsUrl &&
+          {this.isUnsafeMode && (
+            <li className="error-message">
+              <a href={this.unsafeUrl} target="_blank" rel="noopener noreferrer">
+                <Trans>Unsafe mode</Trans>
+              </a>
+            </li>
+          )}
+          {this.termsUrl && (
+            <li>
+              <a href={this.termsUrl} target="_blank" rel="noopener noreferrer">
+                <Trans>Terms</Trans>
+              </a>
+            </li>
+          )}
+          {this.privacyUrl && (
+            <li>
+              <a href={this.privacyUrl} target="_blank" rel="noopener noreferrer">
+                <Trans>Privacy</Trans>
+              </a>
+            </li>
+          )}
           <li>
-            <a href={this.termsUrl}
-              target="_blank"
-              rel="noopener noreferrer">
-              <Trans>Terms</Trans>
-            </a>
-          </li>
-          }
-          {this.privacyUrl &&
-          <li>
-            <a href={this.privacyUrl}
-              target="_blank"
-              rel="noopener noreferrer">
-              <Trans>Privacy</Trans>
-            </a>
-          </li>
-          }
-          <li>
-            <a href={this.creditsUrl}
-              target="_blank"
-              rel="noopener noreferrer">
+            <a href={this.creditsUrl} target="_blank" rel="noopener noreferrer">
               <Trans>Credits</Trans>
             </a>
           </li>
           <li>
-            {this.versions &&
+            {this.versions && (
               <Tooltip message={this.versions} direction="left">
                 <a
                   className="button button-transparent inline"
                   href={this.creditsUrl}
                   target="_blank"
-                  rel="noopener noreferrer">
-                  <HeartSVG/>
+                  rel="noopener noreferrer"
+                >
+                  <HeartSVG />
                 </a>
               </Tooltip>
-            }
-            {!this.versions &&
+            )}
+            {!this.versions && (
               <a
                 className="button button-transparent inline"
                 href={this.creditsUrl}
                 target="_blank"
-                rel="noopener noreferrer">
-                <HeartSVG/>
+                rel="noopener noreferrer"
+              >
+                <HeartSVG />
               </a>
-            }
+            )}
           </li>
         </ul>
       </footer>

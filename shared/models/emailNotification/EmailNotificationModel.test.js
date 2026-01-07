@@ -12,7 +12,11 @@
  * @since         3.8.0
  */
 
-import {defaultSettingsModel, mockResult, withoutSourceSettingsModel} from "../../../react-extension/components/Administration/DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration.test.data";
+import {
+  defaultSettingsModel,
+  mockResult,
+  withoutSourceSettingsModel,
+} from "../../../react-extension/components/Administration/DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration.test.data";
 import EmailNotificationModel from "./EmailNotificationModel";
 
 describe("EmailNotificationModel", () => {

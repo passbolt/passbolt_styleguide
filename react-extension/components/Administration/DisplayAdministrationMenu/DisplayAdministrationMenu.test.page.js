@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -33,11 +32,11 @@ export default class DisplayAdministrationMenuPage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
-            <DisplayAdministrationMenu.WrappedComponent {...props}/>
+            <DisplayAdministrationMenu.WrappedComponent {...props} />
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -45,155 +44,158 @@ export default class DisplayAdministrationMenuPage {
    * Returns the menu
    */
   get menu() {
-    return this._page.container.querySelector('#administration_menu');
+    return this._page.container.querySelector("#administration_menu");
   }
 
   /**
    * Returns the menu
    */
   get menuSelected() {
-    return this._page.container.querySelector('.row.selected .main-cell-wrapper .main-cell button span').textContent;
+    return this._page.container.querySelector(".row.selected .main-cell-wrapper .main-cell button span").textContent;
   }
 
   /**
    * Returns the mfa menu
    */
   get mfa() {
-    return this._page.container.querySelector('#mfa_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#mfa_menu .row .main-cell-wrapper .main-cell button");
   }
-
 
   /**
    * Returns the mfa policy menu
    */
   get mfaPolicy() {
-    return this._page.container.querySelector('#mfa_policy_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#mfa_policy_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the rbac menu
    */
   get rbacs() {
-    return this._page.container.querySelector('#rbacs_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#rbacs_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the user directory menu
    */
   get userDirectory() {
-    return this._page.container.querySelector('#user_directory_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#user_directory_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the email notifications menu
    */
   get emailNotifications() {
-    return this._page.container.querySelector('#email_notification_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#email_notification_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Return the healthcheck menu
    */
   get healthCheck() {
-    return this._page.container.querySelector('#healthcheck_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#healthcheck_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the subscription menu
    */
   get subscription() {
-    return this._page.container.querySelector('#subscription_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#subscription_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the internationalization menu
    */
   get internationalization() {
-    return this._page.container.querySelector('#internationalization_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#internationalization_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the account recovery menu
    */
   get accountRecovery() {
-    return this._page.container.querySelector('#account_recovery_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#account_recovery_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the account recovery menu
    */
   get smtpSettings() {
-    return this._page.container.querySelector('#smtp_settings_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#smtp_settings_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the self registration menu
    */
   get selfRegistration() {
-    return this._page.container.querySelector('#self_registration_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#self_registration_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the Single Sign-On menu
    */
   get ssoSettings() {
-    return this._page.container.querySelector('#sso_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#sso_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the User Passphrase Policies menu
    */
   get userPassphrasePolicies() {
-    return this._page.container.querySelector('#user_passphrase_policies_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector(
+      "#user_passphrase_policies_menu .row .main-cell-wrapper .main-cell button",
+    );
   }
 
   /**
    * Returns the Password Expiry menu
    */
   get passwordExpirySettings() {
-    return this._page.container.querySelector('#password_expiry_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#password_expiry_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the Password Policy menu
    */
   get passwordPolicySettings() {
-    return this._page.container.querySelector('#password_policy_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#password_policy_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the secret history menu
    */
   get secretHistorySettings() {
-    return this._page.container.querySelector('#secret_history_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#secret_history_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the Content Types Encrypted Metadata.
    */
   get contentTypesEncryptedMetadata() {
-    return this._page.container.querySelector('#encrypted_metadata_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#encrypted_metadata_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the Content Types Encrypted Metadata.
    */
   get contentTypesMetadataKey() {
-    return this._page.container.querySelector('#metadata_key_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#metadata_key_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the Content Types Encrypted Metadata.
    */
   get migrateMetadata() {
-    return this._page.container.querySelector('#migrate_metadata_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#migrate_metadata_menu .row .main-cell-wrapper .main-cell button");
   }
 
   /**
    * Returns the Metadata Getting Started Settings.
    */
   get metadataGettingStartedSettings() {
-    return this._page.container.querySelector('#metadata_getting_started_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector(
+      "#metadata_getting_started_menu .row .main-cell-wrapper .main-cell button",
+    );
   }
 
   /**
@@ -207,9 +209,8 @@ export default class DisplayAdministrationMenuPage {
    * Returns the SCIM Settings.
    */
   get scimSettings() {
-    return this._page.container.querySelector('#scim_menu .row .main-cell-wrapper .main-cell button');
+    return this._page.container.querySelector("#scim_menu .row .main-cell-wrapper .main-cell button");
   }
-
 
   /**
    * Returns true if the page object exists in the container
@@ -220,10 +221,9 @@ export default class DisplayAdministrationMenuPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 
   /** Click on the mfa element */

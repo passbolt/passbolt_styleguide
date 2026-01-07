@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class ConfirmDisableUserMFA extends Component {
   /**
@@ -40,8 +40,8 @@ class ConfirmDisableUserMFA extends Component {
   get defaultState() {
     return {
       actions: {
-        processing: false // Action flag of processing
-      }
+        processing: false, // Action flag of processing
+      },
     };
   }
 
@@ -94,8 +94,9 @@ class ConfirmDisableUserMFA extends Component {
    * Disable the selected user's MFA
    */
   async disableMFA() {
-    await this.setState({actions: {processing: true}});
-    await this.props.context.port.request("passbolt.mfa.disable-for-user", this.user.id)
+    await this.setState({ actions: { processing: true } });
+    await this.props.context.port
+      .request("passbolt.mfa.disable-for-user", this.user.id)
       .then(this.onDisableMFASuccess.bind(this))
       .catch(this.onDisableMFAFailure.bind(this));
   }
@@ -104,8 +105,10 @@ class ConfirmDisableUserMFA extends Component {
    * Whenever the user MFA has been disabled successfully
    */
   async onDisableMFASuccess() {
-    await this.setState({actions: {processing: false}});
-    this.props.actionFeedbackContext.displaySuccess(this.translate("Multi-factor authentication has been disabled successfully"));
+    await this.setState({ actions: { processing: false } });
+    this.props.actionFeedbackContext.displaySuccess(
+      this.translate("Multi-factor authentication has been disabled successfully"),
+    );
     this.props.onClose();
   }
 
@@ -113,9 +116,9 @@ class ConfirmDisableUserMFA extends Component {
    * Whenever the user MFA has been disabled with failure
    */
   onDisableMFAFailure(error) {
-    this.setState({actions: {processing: false}});
+    this.setState({ actions: { processing: false } });
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -145,33 +148,34 @@ class ConfirmDisableUserMFA extends Component {
       <DialogWrapper
         title={this.translate("Are you sure?")}
         onClose={this.handleClose}
-        disabled={this.areActionsDisabled}>
-        <form
-          onSubmit={this.handleConfirm}
-          noValidate>
-
+        disabled={this.areActionsDisabled}
+      >
+        <form onSubmit={this.handleConfirm} noValidate>
           <div className="form-content">
             <p>
               <Trans>
-                You are about to disable second-factor authentication (MFA) for the user <strong>{{name}} ({{username}})</strong>.
+                You are about to disable second-factor authentication (MFA) for the user{" "}
+                <strong>
+                  {{ name }} ({{ username }})
+                </strong>
+                .
               </Trans>
             </p>
-            <p><Trans>Existing settings will be lost. This action cannot be undone.</Trans></p>
+            <p>
+              <Trans>Existing settings will be lost. This action cannot be undone.</Trans>
+            </p>
           </div>
 
           <div className="submit-wrapper clearfix">
-            <FormCancelButton
-              disabled={this.areActionsDisabled}
-              onClick={this.handleClose}/>
+            <FormCancelButton disabled={this.areActionsDisabled} onClick={this.handleClose} />
             <FormSubmitButton
               value={this.translate("Disable MFA")}
               warning={true}
               processing={this.isProcessing}
-              disabled={this.areActionsDisabled}/>
+              disabled={this.areActionsDisabled}
+            />
           </div>
-
         </form>
-
       </DialogWrapper>
     );
   }
@@ -186,4 +190,6 @@ ConfirmDisableUserMFA.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withUserWorkspace(withActionFeedback(withDialog(withTranslation('common')(ConfirmDisableUserMFA)))));
+export default withAppContext(
+  withUserWorkspace(withActionFeedback(withDialog(withTranslation("common")(ConfirmDisableUserMFA)))),
+);

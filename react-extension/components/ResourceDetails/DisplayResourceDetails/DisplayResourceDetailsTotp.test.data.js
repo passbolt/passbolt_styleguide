@@ -12,19 +12,20 @@
  * @since         5.0.0
  */
 
-import {defaultAdministratorRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {
+  defaultAdministratorRbacContext,
+  denyRbacContext,
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {
   resourceStandaloneTotpDto,
-  resourceWithTotpDto
+  resourceWithTotpDto,
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {
-  defaultResourceMetadataDto
-} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
-import {TEST_RESOURCE_TYPE_TOTP} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultResourceMetadataDto } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { TEST_RESOURCE_TYPE_TOTP } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default component props with resource having owner permission
@@ -36,7 +37,7 @@ export function defaultProps(data = {}) {
 
   return {
     context: defaultUserAppContext({
-      users: [resourceOwner]
+      users: [resourceOwner],
     }),
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
@@ -45,11 +46,11 @@ export function defaultProps(data = {}) {
           created_by: resourceOwner.id,
           modified_by: resourceOwner.id,
         }),
-      }
+      },
     }),
     isStandaloneTotp: false,
     clipboardContext: defaultClipboardContext(),
-    ...data
+    ...data,
   };
 }
 
@@ -63,7 +64,7 @@ export function standaloneTotpProps(data = {}) {
 
   return {
     context: defaultUserAppContext({
-      users: [resourceOwner]
+      users: [resourceOwner],
     }),
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
@@ -77,15 +78,13 @@ export function standaloneTotpProps(data = {}) {
           created_by: resourceOwner.id,
           modified_by: resourceOwner.id,
         }),
-      }
+      },
     }),
     isStandaloneTotp: true,
     clipboardContext: defaultClipboardContext(),
-    ...data
+    ...data,
   };
 }
-
-
 
 /**
  * Props with denied UI action.
@@ -95,6 +94,6 @@ export function standaloneTotpProps(data = {}) {
 export function propsWithDenyUiAction(data = {}) {
   return defaultProps({
     rbacContext: denyRbacContext(),
-    ...data
+    ...data,
   });
 }

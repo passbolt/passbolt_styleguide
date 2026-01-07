@@ -14,17 +14,15 @@
 import React from "react";
 import LoadingBar from "./LoadingBar";
 
-
 export default {
-  title: 'Foundations/Loading',
-  component: LoadingBar
+  title: "Foundations/Loading",
+  component: LoadingBar,
 };
 
-const Template = args => <LoadingBar {...args}/>;
-
+const Template = (args) => <LoadingBar {...args} />;
 
 export const Initial = Template.bind({});
 Initial.args = {
   progress: 50,
-  onProgressCompleted: jest.fn()
+  onProgressCompleted: jest.fn(),
 };

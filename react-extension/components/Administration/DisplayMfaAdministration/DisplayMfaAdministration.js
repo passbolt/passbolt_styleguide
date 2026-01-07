@@ -14,14 +14,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import FileSVG from "../../../../img/svg/file.svg";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withAdministrationWorkspace } from "../../../contexts/AdministrationWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 import DisplayAdministrationMfaActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationMfaActions/DisplayAdministrationMfaActions";
-import {withAdminMfa} from "../../../contexts/Administration/AdministrationMfa/AdministrationMfaContext";
-import MfaFormService from '../../../../shared/services/forms/Mfa/MfaFormService';
+import { withAdminMfa } from "../../../contexts/Administration/AdministrationMfa/AdministrationMfaContext";
+import MfaFormService from "../../../../shared/services/forms/Mfa/MfaFormService";
 import Password from "../../../../shared/components/Password/Password";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { createSafePortal } from "../../../../shared/utils/portals";
 
 /**
  * This component allows to display the MFA for the administration
@@ -88,19 +88,19 @@ class DisplayMfaAdministration extends React.Component {
    */
   validateInput(name, value) {
     switch (name) {
-      case 'yubikeyClientIdentifier':
+      case "yubikeyClientIdentifier":
         this.mfaFormService.validateYubikeyClientIdentifier(value);
         break;
-      case 'yubikeySecretKey':
+      case "yubikeySecretKey":
         this.mfaFormService.validateYubikeySecretKey(value);
         break;
-      case 'duoHostname':
+      case "duoHostname":
         this.mfaFormService.validateDuoHostname(value);
         break;
-      case 'duoClientId':
+      case "duoClientId":
         this.mfaFormService.validateDuoClientId(value);
         break;
-      case 'duoClientSecret':
+      case "duoClientSecret":
         this.mfaFormService.validateDuoClientSecret(value);
         break;
     }
@@ -132,70 +132,114 @@ class DisplayMfaAdministration extends React.Component {
     const isSubmitted = this.props.adminMfaContext.isSubmitted();
     const settings = this.props.adminMfaContext.getSettings();
     const errors = this.props.adminMfaContext.getErrors();
-    const hasSaveWarning = this.props.adminMfaContext.getCurrentSettings() !== null && this.props.adminMfaContext.hasSettingsChanges();
+    const hasSaveWarning =
+      this.props.adminMfaContext.getCurrentSettings() !== null && this.props.adminMfaContext.hasSettingsChanges();
 
     return (
       <div className="row">
         <div className="mfa-settings main-column">
           <div className="main-content">
             <h3 className="title">Multi Factor Authentication</h3>
-            {!this.isRunningUnderHttps &&
-              <p><Trans>Sorry the multi factor authentication feature is only available in a secure context (HTTPS).</Trans></p>
-            }
-            {this.isRunningUnderHttps &&
+            {!this.isRunningUnderHttps && (
+              <p>
+                <Trans>
+                  Sorry the multi factor authentication feature is only available in a secure context (HTTPS).
+                </Trans>
+              </p>
+            )}
+            {this.isRunningUnderHttps && (
               <>
-                <p><Trans>In this section you can choose which multi factor authentication will be available.</Trans></p>
+                <p>
+                  <Trans>In this section you can choose which multi factor authentication will be available.</Trans>
+                </p>
                 <div className="provider-section">
                   <h4 className="no-border">
                     <span className="input toggle-switch form-element ready">
-                      <input id="totp-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="totpProviderToggle"
-                        onChange={this.handleInputChange} checked={settings.totpProviderToggle} disabled={this.hasAllInputDisabled()}/>
-                      <label htmlFor="totp-provider-toggle-button"><Trans>Time-based One Time Password</Trans></label>
+                      <input
+                        id="totp-provider-toggle-button"
+                        type="checkbox"
+                        className="toggle-switch-checkbox checkbox"
+                        name="totpProviderToggle"
+                        onChange={this.handleInputChange}
+                        checked={settings.totpProviderToggle}
+                        disabled={this.hasAllInputDisabled()}
+                      />
+                      <label htmlFor="totp-provider-toggle-button">
+                        <Trans>Time-based One Time Password</Trans>
+                      </label>
                     </span>
                   </h4>
-                  {!settings.totpProviderToggle &&
+                  {!settings.totpProviderToggle && (
                     <p className="description">
                       <Trans>The Time-based One Time Password provider is disabled for all users.</Trans>
                     </p>
-                  }
-                  {settings.totpProviderToggle &&
+                  )}
+                  {settings.totpProviderToggle && (
                     <p className="description">
-                      <Trans>The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
+                      <Trans>
+                        The Time-based One Time Password provider is enabled for all users. They can setup this provider
+                        in their profile and use it as second factor authentication.
+                      </Trans>
                     </p>
-                  }
+                  )}
                 </div>
                 <div className="provider-section">
                   <h4>
                     <span className="input toggle-switch form-element">
-                      <input id="yubikey-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="yubikeyToggle"
-                        onChange={this.handleInputChange} checked={settings.yubikeyToggle} disabled={this.hasAllInputDisabled()}/>
+                      <input
+                        id="yubikey-provider-toggle-button"
+                        type="checkbox"
+                        className="toggle-switch-checkbox checkbox"
+                        name="yubikeyToggle"
+                        onChange={this.handleInputChange}
+                        checked={settings.yubikeyToggle}
+                        disabled={this.hasAllInputDisabled()}
+                      />
                       <label htmlFor="yubikey-provider-toggle-button">Yubikey</label>
                     </span>
                   </h4>
-                  {!settings.yubikeyToggle &&
+                  {!settings.yubikeyToggle && (
                     <p className="description">
                       <Trans>The Yubikey provider is disabled for all users.</Trans>
                     </p>
-                  }
-                  {settings.yubikeyToggle &&
+                  )}
+                  {settings.yubikeyToggle && (
                     <>
                       <p className="description">
-                        <Trans>The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
+                        <Trans>
+                          The Yubikey provider is enabled for all users. They can setup this provider in their profile
+                          and use it as second factor authentication.
+                        </Trans>
                       </p>
-                      <div className={`input text required yubikey ${errors.yubikeyClientIdentifierError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                        <label><Trans>Client identifier</Trans></label>
+                      <div
+                        className={`input text required yubikey ${errors.yubikeyClientIdentifierError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                      >
+                        <label>
+                          <Trans>Client identifier</Trans>
+                        </label>
                         <input
-                          id="yubikeyClientIdentifier" name="yubikeyClientIdentifier"
+                          id="yubikeyClientIdentifier"
+                          name="yubikeyClientIdentifier"
                           className="required fluid form-element ready"
-                          type="text" aria-required={true}
-                          onChange={this.handleInputChange} value={settings.yubikeyClientIdentifier}
-                          placeholder="123456789" disabled={this.hasAllInputDisabled()}/>
-                        {(errors.yubikeyClientIdentifierError  && isSubmitted) &&
-                          <div className="yubikey_client_identifier error-message">{errors.yubikeyClientIdentifierError}</div>
-                        }
+                          type="text"
+                          aria-required={true}
+                          onChange={this.handleInputChange}
+                          value={settings.yubikeyClientIdentifier}
+                          placeholder="123456789"
+                          disabled={this.hasAllInputDisabled()}
+                        />
+                        {errors.yubikeyClientIdentifierError && isSubmitted && (
+                          <div className="yubikey_client_identifier error-message">
+                            {errors.yubikeyClientIdentifierError}
+                          </div>
+                        )}
                       </div>
-                      <div className={`input required input-secret ${errors.yubikeySecretKeyError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                        <label><Trans>Secret key</Trans></label>
+                      <div
+                        className={`input required input-secret ${errors.yubikeySecretKeyError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                      >
+                        <label>
+                          <Trans>Secret key</Trans>
+                        </label>
                         <Password
                           id="yubikeySecretKey"
                           onChange={this.handleInputChange}
@@ -204,52 +248,91 @@ class DisplayMfaAdministration extends React.Component {
                           placeholder="**********"
                           disabled={this.hasAllInputDisabled()}
                           value={settings.yubikeySecretKey}
-                          preview={true}></Password>
-                        {(errors.yubikeySecretKeyError && isSubmitted) &&
+                          preview={true}
+                        ></Password>
+                        {errors.yubikeySecretKeyError && isSubmitted && (
                           <div className="yubikey_secret_key error-message">{errors.yubikeySecretKeyError}</div>
-                        }
+                        )}
                       </div>
                     </>
-                  }
+                  )}
                 </div>
                 <div className="provider-section">
                   <h4>
                     <span className="input toggle-switch form-element ready">
-                      <input id="duo-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="duoToggle"
-                        onChange={this.handleInputChange} checked={settings.duoToggle} disabled={this.hasAllInputDisabled()}/>
+                      <input
+                        id="duo-provider-toggle-button"
+                        type="checkbox"
+                        className="toggle-switch-checkbox checkbox"
+                        name="duoToggle"
+                        onChange={this.handleInputChange}
+                        checked={settings.duoToggle}
+                        disabled={this.hasAllInputDisabled()}
+                      />
                       <label htmlFor="duo-provider-toggle-button">Duo</label>
                     </span>
                   </h4>
-                  {!settings.duoToggle &&
+                  {!settings.duoToggle && (
                     <p className="description">
                       <Trans>The Duo provider is disabled for all users.</Trans>
                     </p>
-                  }
-                  {settings.duoToggle &&
+                  )}
+                  {settings.duoToggle && (
                     <>
                       <p className="description enabled">
-                        <Trans>The Duo provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
+                        <Trans>
+                          The Duo provider is enabled for all users. They can setup this provider in their profile and
+                          use it as second factor authentication.
+                        </Trans>
                       </p>
-                      <div className={`input text required ${errors.duoHostnameError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                        <label><Trans>Hostname</Trans></label>
-                        <input id="duoHostname" type="text" name="duoHostname" aria-required={true} className="required fluid form-element ready"
-                          placeholder="api-24zlkn4.duosecurity.com" value={settings.duoHostname}
-                          onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-                        {(errors.duoHostnameError  && isSubmitted) &&
+                      <div
+                        className={`input text required ${errors.duoHostnameError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                      >
+                        <label>
+                          <Trans>Hostname</Trans>
+                        </label>
+                        <input
+                          id="duoHostname"
+                          type="text"
+                          name="duoHostname"
+                          aria-required={true}
+                          className="required fluid form-element ready"
+                          placeholder="api-24zlkn4.duosecurity.com"
+                          value={settings.duoHostname}
+                          onChange={this.handleInputChange}
+                          disabled={this.hasAllInputDisabled()}
+                        />
+                        {errors.duoHostnameError && isSubmitted && (
                           <div className="duo_hostname error-message">{errors.duoHostnameError}</div>
-                        }
+                        )}
                       </div>
-                      <div className={`input text required ${errors.duoClientIdError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                        <label><Trans>Client id</Trans></label>
-                        <input id="duoClientId" type="text" name="duoClientId" aria-required={true} className="required fluid form-element ready"
-                          placeholder="HASJKDSQJO213123KQSLDF" value={settings.duoClientId}
-                          onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-                        {(errors.duoClientIdError  && isSubmitted) &&
+                      <div
+                        className={`input text required ${errors.duoClientIdError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                      >
+                        <label>
+                          <Trans>Client id</Trans>
+                        </label>
+                        <input
+                          id="duoClientId"
+                          type="text"
+                          name="duoClientId"
+                          aria-required={true}
+                          className="required fluid form-element ready"
+                          placeholder="HASJKDSQJO213123KQSLDF"
+                          value={settings.duoClientId}
+                          onChange={this.handleInputChange}
+                          disabled={this.hasAllInputDisabled()}
+                        />
+                        {errors.duoClientIdError && isSubmitted && (
                           <div className="duo_client_id error-message">{errors.duoClientIdError}</div>
-                        }
+                        )}
                       </div>
-                      <div className={`input text required ${errors.duoClientSecretError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                        <label><Trans>Client secret</Trans></label>
+                      <div
+                        className={`input text required ${errors.duoClientSecretError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                      >
+                        <label>
+                          <Trans>Client secret</Trans>
+                        </label>
                         <Password
                           id="duoClientSecret"
                           onChange={this.handleInputChange}
@@ -258,18 +341,19 @@ class DisplayMfaAdministration extends React.Component {
                           placeholder="**********"
                           disabled={this.hasAllInputDisabled()}
                           value={settings.duoClientSecret}
-                          preview={true}></Password>
-                        {(errors.duoClientSecretError  && isSubmitted) &&
+                          preview={true}
+                        ></Password>
+                        {errors.duoClientSecretError && isSubmitted && (
                           <div className="duo_client_secret error-message">{errors.duoClientSecretError}</div>
-                        }
+                        )}
                       </div>
                     </>
-                  }
+                  )}
                 </div>
               </>
-            }
+            )}
           </div>
-          {hasSaveWarning &&
+          {hasSaveWarning && (
             <div className="warning message">
               <div>
                 <p>
@@ -277,19 +361,30 @@ class DisplayMfaAdministration extends React.Component {
                 </p>
               </div>
             </div>
-          }
+          )}
         </div>
         <DisplayAdministrationMfaActions />
         {createSafePortal(
           <div className="sidebar-help-section">
-            <h3><Trans>Need some help?</Trans></h3>
-            <p><Trans>Check out our Multi Factor Authentication configuration guide.</Trans></p>
-            <a className="button" href="https://passbolt.com/docs/admin/authentication/mfa/" target="_blank" rel="noopener noreferrer">
+            <h3>
+              <Trans>Need some help?</Trans>
+            </h3>
+            <p>
+              <Trans>Check out our Multi Factor Authentication configuration guide.</Trans>
+            </p>
+            <a
+              className="button"
+              href="https://passbolt.com/docs/admin/authentication/mfa/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FileSVG />
-              <span><Trans>Read the documentation</Trans></span>
+              <span>
+                <Trans>Read the documentation</Trans>
+              </span>
             </a>
           </div>,
-          document.getElementById("administration-help-panel")
+          document.getElementById("administration-help-panel"),
         )}
       </div>
     );
@@ -304,4 +399,6 @@ DisplayMfaAdministration.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAdminMfa(withAdministrationWorkspace(withTranslation('common')(DisplayMfaAdministration))));
+export default withAppContext(
+  withAdminMfa(withAdministrationWorkspace(withTranslation("common")(DisplayMfaAdministration))),
+);

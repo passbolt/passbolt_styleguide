@@ -16,12 +16,10 @@
  * Unit tests on AddResourceCustomFields in regard of specifications
  */
 
-import {defaultProps} from './AddResourceCustomFields.test.data';
-import AddResourceCustomFieldsPage from './AddResourceCustomFields.test.page';
-import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
-import {
-  minimalSecretDataV5StandaloneCustomFieldsCollectionDtos
-} from "../../../../shared/models/entity/secretData/secretDataV5StandaloneCustomFieldsCollection.test.data";
+import { defaultProps } from "./AddResourceCustomFields.test.data";
+import AddResourceCustomFieldsPage from "./AddResourceCustomFields.test.page";
+import { defaultResourceFormDto } from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import { minimalSecretDataV5StandaloneCustomFieldsCollectionDtos } from "../../../../shared/models/entity/secretData/secretDataV5StandaloneCustomFieldsCollection.test.data";
 import CustomFieldEntity from "../../../../shared/models/entity/customField/customFieldEntity";
 
 beforeEach(() => {
@@ -31,8 +29,8 @@ beforeEach(() => {
 describe("AddResourceCustomFields", () => {
   let page; // The page to test against
 
-  describe('As LU I can see the custom fields form.', () => {
-    it('As LU I can see the custom fields form.', () => {
+  describe("As LU I can see the custom fields form.", () => {
+    it("As LU I can see the custom fields form.", () => {
       expect.assertions(7);
 
       const props = defaultProps();
@@ -47,15 +45,15 @@ describe("AddResourceCustomFields", () => {
       expect(page.addCustomField.hasAttribute("disabled")).toBeFalsy();
     });
 
-    it('As LU I can see the custom fields form empty.', () => {
+    it("As LU I can see the custom fields form empty.", () => {
       expect.assertions(5);
 
       const secret = minimalSecretDataV5StandaloneCustomFieldsCollectionDtos();
       secret.custom_fields[0] = CustomFieldEntity.createFromDefault().toDto();
       const props = defaultProps({
         resource: defaultResourceFormDto({
-          secret: secret
-        })
+          secret: secret,
+        }),
       });
       page = new AddResourceCustomFieldsPage(props);
 
@@ -67,13 +65,13 @@ describe("AddResourceCustomFields", () => {
     });
   });
 
-  describe('Fill form custom fields', () => {
-    it('Enter custom field key and value should call callback function.', async() => {
+  describe("Fill form custom fields", () => {
+    it("Enter custom field key and value should call callback function.", async () => {
       expect.assertions(5);
 
       let name, value;
       const props = defaultProps();
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });
@@ -89,8 +87,8 @@ describe("AddResourceCustomFields", () => {
     });
   });
 
-  describe('As LU I should see add custom field disable if there is 32 custom fields.', () => {
-    it('As LU I can not add custom field when I reach the limit.', async() => {
+  describe("As LU I should see add custom field disable if there is 32 custom fields.", () => {
+    it("As LU I can not add custom field when I reach the limit.", async () => {
       expect.assertions(1);
       const secret = minimalSecretDataV5StandaloneCustomFieldsCollectionDtos();
       for (let i = 0; i < 33; i++) {
@@ -98,8 +96,8 @@ describe("AddResourceCustomFields", () => {
       }
       const props = defaultProps({
         resource: defaultResourceFormDto({
-          secret: secret
-        })
+          secret: secret,
+        }),
       });
       page = new AddResourceCustomFieldsPage(props);
 
@@ -107,13 +105,13 @@ describe("AddResourceCustomFields", () => {
     });
   });
 
-  describe('As LU I should delete a custom field.', () => {
-    it('As LU I can see the custom field form deleted.', async() => {
+  describe("As LU I should delete a custom field.", () => {
+    it("As LU I can see the custom field form deleted.", async () => {
       expect.assertions(3);
 
       let name, value;
       const props = defaultProps();
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });

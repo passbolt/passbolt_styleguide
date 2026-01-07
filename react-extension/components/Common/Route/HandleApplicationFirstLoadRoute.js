@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.6.0
  */
-import React, {Component} from "react";
-import {Redirect, withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { Redirect, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // The default path to redirect the users to.
@@ -66,12 +66,12 @@ class HandleApplicationFirstLoadRoute extends Component {
    * @return {JSX}
    */
   render() {
-    return <Redirect to={this.pathnameToRedirectTo}/>;
+    return <Redirect to={this.pathnameToRedirectTo} />;
   }
 }
 
 HandleApplicationFirstLoadRoute.propTypes = {
-  location: PropTypes.object // From router HOC
+  location: PropTypes.object, // From router HOC
 };
 
 export default withRouter(HandleApplicationFirstLoadRoute);

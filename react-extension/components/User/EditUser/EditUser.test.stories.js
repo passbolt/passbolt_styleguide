@@ -13,30 +13,29 @@
  */
 
 import EditUser from "./EditUser";
-import {defaultAppContext} from "./EditUser.test.data";
-import {defaultProps} from "../CreateUser/CreateUser.test.data";
+import { defaultAppContext } from "./EditUser.test.data";
+import { defaultProps } from "../CreateUser/CreateUser.test.data";
 
 export default {
-  title: 'Components/User/EditUser',
-  component: EditUser
+  title: "Components/User/EditUser",
+  component: EditUser,
 };
 
-
 const context = defaultAppContext();
-context.editUserDialogProps = {id: context.users[0].id};
+context.editUserDialogProps = { id: context.users[0].id };
 export const Initial = {
   args: {
     context: context,
-    ...defaultProps()
-  }
+    ...defaultProps(),
+  },
 };
 
 const contextWithScheduledSuspension = defaultAppContext();
 contextWithScheduledSuspension.users[0].disabled = new Date(Date.now() + 3600000);
-contextWithScheduledSuspension.editUserDialogProps = {id: contextWithScheduledSuspension.users[0].id};
+contextWithScheduledSuspension.editUserDialogProps = { id: contextWithScheduledSuspension.users[0].id };
 export const WithScheduledSuspension = {
   args: {
     context: contextWithScheduledSuspension,
-    ...defaultProps()
-  }
+    ...defaultProps(),
+  },
 };

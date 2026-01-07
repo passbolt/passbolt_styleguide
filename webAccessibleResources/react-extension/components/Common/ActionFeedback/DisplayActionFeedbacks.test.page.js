@@ -13,8 +13,8 @@
  */
 
 import React from "react";
-import {fireEvent, render} from "@testing-library/react";
-import {waitFor} from "@testing-library/dom";
+import { fireEvent, render } from "@testing-library/react";
+import { waitFor } from "@testing-library/dom";
 import DisplayActionFeedbacks from "./DisplayActionFeedbacks";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -29,9 +29,9 @@ export default class DisplayActionFeedbacksPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayActionFeedbacks {...props}/>
+        <DisplayActionFeedbacks {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -40,7 +40,7 @@ export default class DisplayActionFeedbacksPage {
    * @param index The rank of the feedback
    */
   feedback(index) {
-    return this._page.container.querySelectorAll('.notification')[index - 1];
+    return this._page.container.querySelectorAll(".notification")[index - 1];
   }
 
   /**
@@ -48,7 +48,7 @@ export default class DisplayActionFeedbacksPage {
    * @param index
    */
   message(index) {
-    return this._page.container.querySelectorAll('.message .content')[index - 1].textContent;
+    return this._page.container.querySelectorAll(".message .content")[index - 1].textContent;
   }
 
   /**
@@ -65,8 +65,8 @@ export default class DisplayActionFeedbacksPage {
    * @param index The rank of the feedback
    */
   async close(index) {
-    const closeAction = this.feedback(index).querySelector('.message');
-    const leftClick = {button: 0};
+    const closeAction = this.feedback(index).querySelector(".message");
+    const leftClick = { button: 0 };
     fireEvent.click(closeAction, leftClick);
     await waitFor(() => {});
   }
@@ -76,8 +76,8 @@ export default class DisplayActionFeedbacksPage {
    * @param index The rank of the feedback
    */
   async copy(index) {
-    const copyAction = this.feedback(index).querySelector('.action.copy');
-    const leftClick = {button: 0};
+    const copyAction = this.feedback(index).querySelector(".action.copy");
+    const leftClick = { button: 0 };
     fireEvent.click(copyAction, leftClick);
     await waitFor(() => {});
   }

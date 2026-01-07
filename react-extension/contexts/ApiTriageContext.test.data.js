@@ -12,8 +12,7 @@
  * @since         3.9.0
  */
 
-import {defaultAppContext} from "./ApiAppContext.test.data";
-
+import { defaultAppContext } from "./ApiAppContext.test.data";
 
 /**
  * Default props.
@@ -35,7 +34,6 @@ export function defaultProps(data = {}, userId) {
  */
 export function listOfPlugins(plugin = "") {
   const props = defaultProps();
-  props.context.siteSettings.canIUse = name => name !== plugin;
+  props.context.siteSettings.canIUse = (name) => name !== plugin;
   return props;
 }
-

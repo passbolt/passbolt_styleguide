@@ -14,7 +14,7 @@
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 
-const ENTITY_NAME = 'UiAction';
+const ENTITY_NAME = "UiAction";
 const UI_ACTION_NAME_LENGTH = 255;
 
 class UiActionEntity extends Entity {
@@ -22,11 +22,7 @@ class UiActionEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      UiActionEntity.ENTITY_NAME,
-      dto,
-      UiActionEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(UiActionEntity.ENTITY_NAME, dto, UiActionEntity.getSchema()), options);
   }
 
   /**
@@ -35,21 +31,18 @@ class UiActionEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "id",
-        "name"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["id", "name"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "name": {
-          "type": "string",
-          "maxLength": UI_ACTION_NAME_LENGTH
+        name: {
+          type: "string",
+          maxLength: UI_ACTION_NAME_LENGTH,
         },
-      }
+      },
     };
   }
 

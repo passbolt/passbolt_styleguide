@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,11 +12,10 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import FilterUsersByText from "./FilterUsersByText";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -35,11 +33,11 @@ export default class FilterUsersByTextPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
-            <FilterUsersByText.WrappedComponent {...props}/>
+            <FilterUsersByText.WrappedComponent {...props} />
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -47,14 +45,14 @@ export default class FilterUsersByTextPage {
    * Returns the search input
    */
   get searchInput() {
-    return this._page.container.querySelector('.input.search input');
+    return this._page.container.querySelector(".input.search input");
   }
 
   /**
    * Returns the clear button
    */
   get button() {
-    return this._page.container.querySelector('.input.search button');
+    return this._page.container.querySelector(".input.search button");
   }
 
   /**
@@ -69,7 +67,7 @@ export default class FilterUsersByTextPage {
    * @param text A search tewt
    */
   search(text) {
-    const inputEvent = {target: {value: text}};
+    const inputEvent = { target: { value: text } };
     fireEvent.change(this.searchInput, inputEvent);
   }
 }

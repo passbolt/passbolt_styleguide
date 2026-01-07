@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Tab from "../../Common/Tab/Tab";
 import Tabs from "../../Common/Tab/Tabs";
@@ -78,25 +78,22 @@ class SelectAccountRecoveryOrganizationKey extends React.Component {
         title={this.props.t("Organization Recovery Key")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="organization-recover-key-dialog">
-        <Tabs activeTabName='Import'>
-          <Tab
-            key='Import'
-            name={this.props.t('Import')}
-            type='Import'>
+        className="organization-recover-key-dialog"
+      >
+        <Tabs activeTabName="Import">
+          <Tab key="Import" name={this.props.t("Import")} type="Import">
             <ImportOrganizationKey
               {...this.props}
               onClose={this.handleCloseClick}
-              onUpdateOrganizationKey={this.handleApplyChanges} />
+              onUpdateOrganizationKey={this.handleApplyChanges}
+            />
           </Tab>
-          <Tab
-            key='Generate'
-            name={this.props.t('Generate')}
-            type='Generate'>
+          <Tab key="Generate" name={this.props.t("Generate")} type="Generate">
             <GenerateOrganizationKey
               {...this.props}
               onClose={this.handleCloseClick}
-              onUpdateOrganizationKey={this.handleApplyChanges} />
+              onUpdateOrganizationKey={this.handleApplyChanges}
+            />
           </Tab>
         </Tabs>
       </DialogWrapper>
@@ -110,4 +107,4 @@ SelectAccountRecoveryOrganizationKey.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(SelectAccountRecoveryOrganizationKey);
+export default withTranslation("common")(SelectAccountRecoveryOrganizationKey);

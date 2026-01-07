@@ -39,8 +39,8 @@ class SecretsCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": SecretEntity.getSchema(),
+      type: "array",
+      items: SecretEntity.getSchema(),
     };
   }
 
@@ -58,8 +58,8 @@ class SecretsCollection extends EntityV2Collection {
    * @throws {EntityValidationError} If a secret already exists with the same resource id and user id.
    */
   validateBuildRules(item, options) {
-    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
-    this.assertUniqueResourceIdUserId(item, {haystackSet: options?.uniqueResourceIdUserIdSetCache});
+    this.assertNotExist("id", item._props.id, { haystackSet: options?.uniqueIdsSetCache });
+    this.assertUniqueResourceIdUserId(item, { haystackSet: options?.uniqueResourceIdUserIdSetCache });
   }
 
   /**
@@ -67,7 +67,7 @@ class SecretsCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSecretsDataDecrypted() {
-    return this._items.every(secret => secret.isDataDecrypted);
+    return this._items.every((secret) => secret.isDataDecrypted);
   }
 
   /**
@@ -75,14 +75,14 @@ class SecretsCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSecretsDataEncrypted() {
-    return this._items.every(secret => !secret.isDataDecrypted);
+    return this._items.every((secret) => !secret.isDataDecrypted);
   }
 
   /**
    * Filter out the secret which data is encrypted.
    */
   filterOutSecretDataEncrypted() {
-    this.filterByCallback(secret => secret.isDataDecrypted);
+    this.filterByCallback((secret) => secret.isDataDecrypted);
   }
 
   /**
@@ -102,7 +102,7 @@ class SecretsCollection extends EntityV2Collection {
 
     // If not given initialize the haystack set with the values of the items properties.
     if (!haystackSet) {
-      haystackSet = new Set(this.items.map(item => `${item.resourceId}:${item.userId}`));
+      haystackSet = new Set(this.items.map((item) => `${item.resourceId}:${item.userId}`));
     }
 
     const resourceIdUserIdKey = `${secret.resourceId}:${secret.userId}`;
@@ -110,7 +110,7 @@ class SecretsCollection extends EntityV2Collection {
     if (haystackSet.has(resourceIdUserIdKey)) {
       const error = new EntityValidationError();
       const message = `The collection already includes an element that has a couple resource_id:user_id (${resourceIdUserIdKey}) with an identical value.`;
-      error.addError("resource_id:user_id", 'unique', message);
+      error.addError("resource_id:user_id", "unique", message);
       throw error;
     }
   }
@@ -126,16 +126,16 @@ class SecretsCollection extends EntityV2Collection {
    */
   pushMany(data, entityOptions = {}, options = {}) {
     const uniqueIdsSetCache = new Set(this.extract("id"));
-    const uniqueResourceIdUserIdSetCache = new Set(this.items.map(item => `${item.id}:${item.userId}`));
-    const onItemPushed = item => {
+    const uniqueResourceIdUserIdSetCache = new Set(this.items.map((item) => `${item.id}:${item.userId}`));
+    const onItemPushed = (item) => {
       uniqueIdsSetCache.add(item.id);
       uniqueResourceIdUserIdSetCache.add(`${item.resourceId}:${item.userId}`);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache, uniqueResourceIdUserIdSetCache},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueIdsSetCache, uniqueResourceIdUserIdSetCache },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);
@@ -146,7 +146,7 @@ class SecretsCollection extends EntityV2Collection {
    * @returns {array}
    */
   toDto(contains = {}) {
-    return this._items.map(entity => entity.toDto(contains));
+    return this._items.map((entity) => entity.toDto(contains));
   }
 }
 

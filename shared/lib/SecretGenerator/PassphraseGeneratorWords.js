@@ -7784,6 +7784,6 @@ export default {
     "yin",
     "zap",
     "zen",
-    "zit"
-  ]
+    "zit",
+  ],
 };

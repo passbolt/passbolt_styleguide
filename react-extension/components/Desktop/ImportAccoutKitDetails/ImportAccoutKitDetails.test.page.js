@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render, fireEvent, waitFor} from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ImportAccoutKitDetails from "./ImportAccoutKitDetails";
 
@@ -30,7 +30,7 @@ export default class ImportAccoutKitDetailsPage {
       <MockTranslationProvider>
         <ImportAccoutKitDetails {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,63 +38,63 @@ export default class ImportAccoutKitDetailsPage {
    * Returns the import account kit details parent class
    */
   get importAccountKitDetails() {
-    return this._page.container.querySelector('.import-account-kit-details');
+    return this._page.container.querySelector(".import-account-kit-details");
   }
 
   /**
    * return the user name
    */
   get userName() {
-    return this.importAccountKitDetails.querySelector('.user-name').textContent;
+    return this.importAccountKitDetails.querySelector(".user-name").textContent;
   }
 
   /**
    * return the user email
    */
   get email() {
-    return this.importAccountKitDetails.querySelector('.user-email').textContent;
+    return this.importAccountKitDetails.querySelector(".user-email").textContent;
   }
 
   /**
    * return the user domain
    */
   get domain() {
-    return this.importAccountKitDetails.querySelector('.user-domain').textContent;
+    return this.importAccountKitDetails.querySelector(".user-domain").textContent;
   }
 
   /**
    * Returns the secondary action link element
    */
   get secondaryActionLink() {
-    return this.importAccountKitDetails.querySelector('.form-actions button.link');
+    return this.importAccountKitDetails.querySelector(".form-actions button.link");
   }
 
   /**
    * Returns passphrase input
    */
   get passphraseInput() {
-    return  this.importAccountKitDetails.querySelector('#passphrase-input');
+    return this.importAccountKitDetails.querySelector("#passphrase-input");
   }
 
   /**
    * Returns the invalid GPG key error
    */
   get invalidGPGKey() {
-    return this.importAccountKitDetails.querySelector('.invalid-gpg-key.error-message');
+    return this.importAccountKitDetails.querySelector(".invalid-gpg-key.error-message");
   }
 
   /**
    * Returns the invalid passphrase error
    */
   get invalidPassphrase() {
-    return this.importAccountKitDetails.querySelector('.invalid-passphrase.error-message');
+    return this.importAccountKitDetails.querySelector(".invalid-passphrase.error-message");
   }
 
   /**
    * Returns the warning message
    */
   get warningMessage() {
-    return this.importAccountKitDetails.querySelector('.invalid-passphrase.warning-message');
+    return this.importAccountKitDetails.querySelector(".invalid-passphrase.warning-message");
   }
 
   /**
@@ -123,7 +123,7 @@ export default class ImportAccoutKitDetailsPage {
    * @param passphrase A passphrase
    */
   async fillPassphrase(passphrase) {
-    fireEvent.change(this.passphraseInput, {target: {value: passphrase}});
+    fireEvent.change(this.passphraseInput, { target: { value: passphrase } });
     jest.runAllTimers();
     await waitFor(() => {});
   }
@@ -132,7 +132,7 @@ export default class ImportAccoutKitDetailsPage {
    * Returns the next button element
    */
   get nextButton() {
-    return this.importAccountKitDetails.querySelector('.button.primary');
+    return this.importAccountKitDetails.querySelector(".button.primary");
   }
 
   /**
@@ -147,9 +147,9 @@ export default class ImportAccoutKitDetailsPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => { });
+    await waitFor(() => {});
   }
 
   /**

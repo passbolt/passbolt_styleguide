@@ -12,7 +12,7 @@
  * @since         5.3.0
  */
 
-import {defaultTotpDto} from "../totp/totpDto.test.data";
+import { defaultTotpDto } from "../totp/totpDto.test.data";
 
 /**
  * Returns a default DTO object suitable for the SecretDataV4StandaloneTotpEntity

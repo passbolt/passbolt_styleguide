@@ -14,19 +14,18 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
 import EditUser from "../EditUser/EditUser";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import DeleteUser from "../DeleteUser/DeleteUser";
 import DeleteUserWithConflicts from "../DeleteUser/DeleteUserWithConflicts";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
-import {Trans, withTranslation} from "react-i18next";
-import HandleReviewAccountRecoveryRequestWorkflow
-  from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
+import { Trans, withTranslation } from "react-i18next";
+import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
@@ -45,11 +44,11 @@ import EditSVG from "../../../../img/svg/edit.svg";
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
 import RemoveUserSVG from "../../../../img/svg/user_minus.svg";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import RemoveUserFromGroup from "../../UserGroup/RemoveUserFromGroup/RemoveUserFromGroup";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -86,7 +85,9 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canDelete() {
-    return this.isLoggedInUserAdmin() && this.selectedUser && this.props.context.loggedInUser.id !== this.selectedUser.id;
+    return (
+      this.isLoggedInUserAdmin() && this.selectedUser && this.props.context.loggedInUser.id !== this.selectedUser.id
+    );
   }
 
   /**
@@ -94,7 +95,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canRemoveFromGroup() {
-    const {filter} = this.props.userWorkspaceContext;
+    const { filter } = this.props.userWorkspaceContext;
     const selectedUser = this.selectedUser;
 
     // Only show remove option when viewing a specific group's members
@@ -119,7 +120,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       return false;
     }
     // Don't allow removing the last manager from the group
-    const managers = groupUsers.filter(u => u.is_admin);
+    const managers = groupUsers.filter((u) => u.is_admin);
     if (managers.length === 1 && managers[0].user_id === selectedUser.id) {
       return false;
     }
@@ -139,7 +140,10 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {Promise<void>}
    */
   async handleCopyEmailClickEvent() {
-    await this.props.clipboardContext.copy(this.selectedUser.username, this.translate("The email address has been copied to clipboard."));
+    await this.props.clipboardContext.copy(
+      this.selectedUser.username,
+      this.translate("The email address has been copied to clipboard."),
+    );
   }
 
   /**
@@ -147,8 +151,14 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {Promise<void>}
    */
   async handleCopyPublicKeyEvent() {
-    const gpgKeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.selectedUser.id);
-    await this.props.clipboardContext.copy(gpgKeyInfo?.armored_key, this.translate("The public key has been copied to clipboard."));
+    const gpgKeyInfo = await this.props.context.port.request(
+      "passbolt.keyring.get-public-key-info-by-user",
+      this.selectedUser.id,
+    );
+    await this.props.clipboardContext.copy(
+      gpgKeyInfo?.armored_key,
+      this.translate("The public key has been copied to clipboard."),
+    );
   }
 
   /**
@@ -163,9 +173,9 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   handleEditClickEvent() {
     const editUserDialogProps = {
-      id: this.selectedUser.id
+      id: this.selectedUser.id,
     };
-    this.props.context.setContext({editUserDialogProps});
+    this.props.context.setContext({ editUserDialogProps });
     this.props.dialogContext.open(EditUser);
   }
 
@@ -193,9 +203,9 @@ class DisplayUserWorkspaceActions extends React.Component {
   async handleRemoveUserClickEvent() {
     const removeUserFromGroupDialogProps = {
       user: this.selectedUser,
-      group: this.props.userWorkspaceContext.filter.payload.group
+      group: this.props.userWorkspaceContext.filter.payload.group,
     };
-    this.props.context.setContext({removeUserFromGroupDialogProps});
+    this.props.context.setContext({ removeUserFromGroupDialogProps });
     this.props.dialogContext.open(RemoveUserFromGroup);
   }
 
@@ -204,9 +214,9 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   displayDeleteUserDialog() {
     const deleteUserDialogProps = {
-      user: this.selectedUser
+      user: this.selectedUser,
     };
-    this.props.context.setContext({deleteUserDialogProps});
+    this.props.context.setContext({ deleteUserDialogProps });
     this.props.dialogContext.open(DeleteUser);
   }
 
@@ -219,7 +229,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       user: this.selectedUser,
       errors: errors,
     };
-    this.props.context.setContext({deleteUserWithConflictsDialogProps});
+    this.props.context.setContext({ deleteUserWithConflictsDialogProps });
     this.props.dialogContext.open(DeleteUserWithConflicts);
   }
 
@@ -229,7 +239,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -246,7 +256,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   handleReviewRecoveryRequestEvent() {
     const accountRecoveryRequestId = this.selectedUser.pending_account_recovery_request.id;
-    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId});
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, { accountRecoveryRequestId });
   }
 
   /**
@@ -280,10 +290,12 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canIUseMfa() {
-    return this.isLoggedInUserAdmin()
-      && this.hasOneUserSelected()
-      && this.props.context.siteSettings.canIUse("multiFactorAuthentication")
-      && this.selectedUser.is_mfa_enabled;
+    return (
+      this.isLoggedInUserAdmin() &&
+      this.hasOneUserSelected() &&
+      this.props.context.siteSettings.canIUse("multiFactorAuthentication") &&
+      this.selectedUser.is_mfa_enabled
+    );
   }
 
   /**
@@ -307,11 +319,13 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canIReviewAccountRecoveryRequest() {
-    return this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE)
-      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX)
-      && this.hasOneUserSelected()
-      && this.props.context.siteSettings.canIUse("accountRecovery")
-      && Boolean(this.selectedUser.pending_account_recovery_request);
+    return (
+      this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE) &&
+      this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX) &&
+      this.hasOneUserSelected() &&
+      this.props.context.siteSettings.canIUse("accountRecovery") &&
+      Boolean(this.selectedUser.pending_account_recovery_request)
+    );
   }
 
   /**
@@ -319,11 +333,13 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canIShareMissingMetadataKeys() {
-    return this.isLoggedInUserAdmin()
-      && this.hasOneUserSelected()
-      && this.props.context.siteSettings.canIUse("metadata")
-      && this.selectedUser.missing_metadata_key_ids?.length > 0
-      && this.props.context.loggedInUser.id !== this.selectedUser.id;
+    return (
+      this.isLoggedInUserAdmin() &&
+      this.hasOneUserSelected() &&
+      this.props.context.siteSettings.canIUse("metadata") &&
+      this.selectedUser.missing_metadata_key_ids?.length > 0 &&
+      this.props.context.loggedInUser.id !== this.selectedUser.id
+    );
   }
 
   /**
@@ -363,7 +379,8 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Resend an invite to the given user
    */
   resendInvite() {
-    this.props.context.port.request('passbolt.users.resend-invite', this.selectedUser.username)
+    this.props.context.port
+      .request("passbolt.users.resend-invite", this.selectedUser.username)
       .then(this.onResendInviteSuccess.bind(this))
       .catch(this.handleError.bind(this));
   }
@@ -402,50 +419,80 @@ class DisplayUserWorkspaceActions extends React.Component {
       <div className="actions" ref={this.props.actionsButtonRef}>
         <div className="actions-wrapper">
           <ul>
-            {this.hasOneUserSelected() &&
+            {this.hasOneUserSelected() && (
               <>
                 <li id="copy-action">
                   <Dropdown>
                     <DropdownButton className="button-action-contextual">
-                      <CopySVG/>
-                      <span><Trans>Copy</Trans></span>
-                      <CaretDownSVG/>
+                      <CopySVG />
+                      <span>
+                        <Trans>Copy</Trans>
+                      </span>
+                      <CaretDownSVG />
                     </DropdownButton>
                     <DropdownMenu className="menu-action-contextual">
                       <DropdownMenuItem>
-                        <button id="copy-user-email" type="button" className="no-border" onClick={this.handleCopyEmailClickEvent}>
-                          <EmailSVG/>
-                          <span><Trans>Copy email address</Trans></span>
+                        <button
+                          id="copy-user-email"
+                          type="button"
+                          className="no-border"
+                          onClick={this.handleCopyEmailClickEvent}
+                        >
+                          <EmailSVG />
+                          <span>
+                            <Trans>Copy email address</Trans>
+                          </span>
                         </button>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <button id="copy-user-permalink" type="button" className="no-border" onClick={this.handleCopyPermalinkEvent}>
-                          <LinkSVG/>
-                          <span><Trans>Copy permalink</Trans></span>
+                        <button
+                          id="copy-user-permalink"
+                          type="button"
+                          className="no-border"
+                          onClick={this.handleCopyPermalinkEvent}
+                        >
+                          <LinkSVG />
+                          <span>
+                            <Trans>Copy permalink</Trans>
+                          </span>
                         </button>
                       </DropdownMenuItem>
-                      {this.isActiveUser &&
+                      {this.isActiveUser && (
                         <DropdownMenuItem>
-                          <button id="copy-user-public-key" type="button" className="no-border" onClick={this.handleCopyPublicKeyEvent}>
-                            <KeySVG/>
-                            <span><Trans>Copy public key</Trans></span>
+                          <button
+                            id="copy-user-public-key"
+                            type="button"
+                            className="no-border"
+                            onClick={this.handleCopyPublicKeyEvent}
+                          >
+                            <KeySVG />
+                            <span>
+                              <Trans>Copy public key</Trans>
+                            </span>
                           </button>
                         </DropdownMenuItem>
-                      }
+                      )}
                     </DropdownMenu>
                   </Dropdown>
                 </li>
-                {this.isLoggedInUserAdmin() &&
+                {this.isLoggedInUserAdmin() && (
                   <li>
-                    <button id="edit-user" type="button" className="button-action-contextual" onClick={this.handleEditClickEvent}>
-                      <EditSVG/>
-                      <span><Trans>Edit</Trans></span>
+                    <button
+                      id="edit-user"
+                      type="button"
+                      className="button-action-contextual"
+                      onClick={this.handleEditClickEvent}
+                    >
+                      <EditSVG />
+                      <span>
+                        <Trans>Edit</Trans>
+                      </span>
                     </button>
                   </li>
-                }
+                )}
               </>
-            }
-            {this.canRemoveFromGroup &&
+            )}
+            {this.canRemoveFromGroup && (
               <li>
                 <button
                   id="remove-user-from-group"
@@ -454,65 +501,106 @@ class DisplayUserWorkspaceActions extends React.Component {
                   onClick={this.handleRemoveUserClickEvent}
                 >
                   <RemoveUserSVG />
-                  <span><Trans>Remove from group</Trans></span>
+                  <span>
+                    <Trans>Remove from group</Trans>
+                  </span>
                 </button>
               </li>
-            }
-            {this.canIUseResend &&
+            )}
+            {this.canIUseResend && (
               <li>
-                <button id="resend-invite-user" className="button-action-contextual" type="button" onClick={this.handleResendInviteClickEvent}>
-                  <SendSVG/>
-                  <span><Trans>Resend invite</Trans></span>
+                <button
+                  id="resend-invite-user"
+                  className="button-action-contextual"
+                  type="button"
+                  onClick={this.handleResendInviteClickEvent}
+                >
+                  <SendSVG />
+                  <span>
+                    <Trans>Resend invite</Trans>
+                  </span>
                 </button>
               </li>
-            }
-            {this.canIReviewAccountRecoveryRequest &&
+            )}
+            {this.canIReviewAccountRecoveryRequest && (
               <li>
-                <button id="review-recovery" className="button-action-contextual" type="button" onClick={this.handleReviewRecoveryRequestEvent}>
-                  <BuoySVG/>
-                  <span><Trans>Review recovery request</Trans></span>
+                <button
+                  id="review-recovery"
+                  className="button-action-contextual"
+                  type="button"
+                  onClick={this.handleReviewRecoveryRequestEvent}
+                >
+                  <BuoySVG />
+                  <span>
+                    <Trans>Review recovery request</Trans>
+                  </span>
                 </button>
               </li>
-            }
-            {this.canIShareMissingMetadataKeys &&
+            )}
+            {this.canIShareMissingMetadataKeys && (
               <li>
-                <button id="share-metadata-keys" className="button-action-contextual" type="button" onClick={this.handleShareMissingMetadataKeysEvent}>
-                  <MetadataKeySVG/>
-                  <span><Trans>Share metadata keys</Trans></span>
+                <button
+                  id="share-metadata-keys"
+                  className="button-action-contextual"
+                  type="button"
+                  onClick={this.handleShareMissingMetadataKeysEvent}
+                >
+                  <MetadataKeySVG />
+                  <span>
+                    <Trans>Share metadata keys</Trans>
+                  </span>
                 </button>
               </li>
-            }
-            {this.hasMoreActionAllowed &&
+            )}
+            {this.hasMoreActionAllowed && (
               <li>
                 <Dropdown>
                   <DropdownButton className="more button-action-contextual button-action-icon">
-                    <MoreHorizontalSVG/>
+                    <MoreHorizontalSVG />
                   </DropdownButton>
                   <DropdownMenu className="menu-action-contextual">
-                    {this.canDelete &&
+                    {this.canDelete && (
                       <DropdownMenuItem>
-                        <button id="delete-user" type="button" className="no-border" onClick={this.handleDeleteClickEvent} aria-label="Delete user">
-                          <DeleteSVG/>
-                          <span><Trans>Delete</Trans></span>
+                        <button
+                          id="delete-user"
+                          type="button"
+                          className="no-border"
+                          onClick={this.handleDeleteClickEvent}
+                          aria-label="Delete user"
+                        >
+                          <DeleteSVG />
+                          <span>
+                            <Trans>Delete</Trans>
+                          </span>
                         </button>
                       </DropdownMenuItem>
-                    }
-                    {this.canIUseMfa &&
+                    )}
+                    {this.canIUseMfa && (
                       <DropdownMenuItem>
-                        <button id="disable-mfa-action" className="no-border" type="button" onClick={this.handleDisableMfaEvent} aria-label="Diable MFA">
-                          <FingerprintDisabledSVG/>
-                          <span><Trans>Disable MFA</Trans></span>
+                        <button
+                          id="disable-mfa-action"
+                          className="no-border"
+                          type="button"
+                          onClick={this.handleDisableMfaEvent}
+                          aria-label="Diable MFA"
+                        >
+                          <FingerprintDisabledSVG />
+                          <span>
+                            <Trans>Disable MFA</Trans>
+                          </span>
                         </button>
                       </DropdownMenuItem>
-                    }
+                    )}
                   </DropdownMenu>
                 </Dropdown>
               </li>
-            }
+            )}
           </ul>
-          <span className="counter"><Trans count={count}>{{count}} selected</Trans></span>
+          <span className="counter">
+            <Trans count={count}>{{ count }} selected</Trans>
+          </span>
           <button type="button" className="button-transparent inline" onClick={this.handleClearSelectionClick}>
-            <CloseSVG/>
+            <CloseSVG />
           </button>
         </div>
       </div>
@@ -532,4 +620,12 @@ DisplayUserWorkspaceActions.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withRbac(withWorkflow(withDialog(withUserWorkspace(withClipboard(withTranslation('common')(DisplayUserWorkspaceActions))))))));
+export default withAppContext(
+  withActionFeedback(
+    withRbac(
+      withWorkflow(
+        withDialog(withUserWorkspace(withClipboard(withTranslation("common")(DisplayUserWorkspaceActions)))),
+      ),
+    ),
+  ),
+);

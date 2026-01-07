@@ -12,12 +12,15 @@
  * @since         2.11.0
  */
 
-import {defaultAdministratorRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {resourceWithFavoriteDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
-import {propsWithFilteredResources} from "../DisplayResourcesList/DisplayResourcesList.test.data";
+import {
+  defaultAdministratorRbacContext,
+  denyRbacContext,
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { resourceWithFavoriteDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultFolderDto } from "../../../../shared/models/entity/folder/folderEntity.test.data";
+import { propsWithFilteredResources } from "../DisplayResourcesList/DisplayResourcesList.test.data";
 
 /**
  * Default component props.
@@ -29,7 +32,7 @@ export function defaultProps(data = {}) {
     context: defaultUserAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
-    ...data
+    ...data,
   };
 }
 
@@ -43,11 +46,11 @@ export function defaultPropsFolderAndResourceLocked(data = {}) {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       details: {
         folder: null,
-        resource: null
+        resource: null,
       },
       lockDisplayDetail: false,
     }),
-    ...data
+    ...data,
   });
 }
 
@@ -61,11 +64,11 @@ export function defaultPropsWithFolderAndResource(data = {}) {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       details: {
         folder: defaultFolderDto(),
-        resource: resourceWithFavoriteDto()
+        resource: resourceWithFavoriteDto(),
       },
       lockDisplayDetail: true,
     }),
-    ...data
+    ...data,
   });
 }
 
@@ -77,6 +80,6 @@ export function defaultPropsWithFolderAndResource(data = {}) {
 export function propsWithDenyUiAction(data = {}) {
   return propsWithFilteredResources({
     rbacContext: denyRbacContext(),
-    ...data
+    ...data,
   });
 }

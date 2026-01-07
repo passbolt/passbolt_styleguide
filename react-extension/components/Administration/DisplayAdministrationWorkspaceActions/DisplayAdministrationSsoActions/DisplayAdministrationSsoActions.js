@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAdminSso} from "../../../../contexts/AdminSsoContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAdminSso } from "../../../../contexts/AdminSsoContext";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -68,8 +68,15 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button" className="button primary form" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-          <span><Trans>Save</Trans></span>
+        <button
+          type="button"
+          className="button primary form"
+          disabled={!this.isSaveEnabled()}
+          onClick={this.handleSaveClick}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );

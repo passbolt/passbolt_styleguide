@@ -13,12 +13,11 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withAdminSso} from "../../../contexts/AdminSsoContext";
+import { withAdminSso } from "../../../contexts/AdminSsoContext";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-
 
 class ConfirmDeleteSsoSettingsDialog extends React.Component {
   /**
@@ -37,7 +36,7 @@ class ConfirmDeleteSsoSettingsDialog extends React.Component {
    */
   get defaultState() {
     return {
-      processing: false
+      processing: false,
     };
   }
 
@@ -55,9 +54,9 @@ class ConfirmDeleteSsoSettingsDialog extends React.Component {
    */
   async handleConfirmDelete(event) {
     event.preventDefault();
-    this.setState({processing: true});
+    this.setState({ processing: true });
     await this.props.adminSsoContext.deleteSettings();
-    this.setState({processing: false});
+    this.setState({ processing: false });
     this.props.onClose();
   }
 
@@ -76,15 +75,29 @@ class ConfirmDeleteSsoSettingsDialog extends React.Component {
   render() {
     const isDisabled = this.hasAllInputDisabled();
     return (
-      <DialogWrapper className='delete-sso-settings-dialog' title={this.props.t("Disable Single Sign-On settings?")} onClose={this.props.onClose} disabled={isDisabled}>
+      <DialogWrapper
+        className="delete-sso-settings-dialog"
+        title={this.props.t("Disable Single Sign-On settings?")}
+        onClose={this.props.onClose}
+        disabled={isDisabled}
+      >
         <form onSubmit={this.handleConfirmDelete} noValidate>
           <div className="form-content">
-            <p><Trans>Are you sure you want to disable the current Single Sign-On settings?</Trans></p>
-            <p><Trans>This action cannot be undone. All the data associated with SSO will be permanently deleted.</Trans></p>
+            <p>
+              <Trans>Are you sure you want to disable the current Single Sign-On settings?</Trans>
+            </p>
+            <p>
+              <Trans>This action cannot be undone. All the data associated with SSO will be permanently deleted.</Trans>
+            </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={isDisabled} onClick={this.props.onClose}/>
-            <FormSubmitButton warning={true} disabled={isDisabled} processing={this.state.processing} value={this.props.t("Disable")}/>
+            <FormCancelButton disabled={isDisabled} onClick={this.props.onClose} />
+            <FormSubmitButton
+              warning={true}
+              disabled={isDisabled}
+              processing={this.state.processing}
+              value={this.props.t("Disable")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -98,4 +111,4 @@ ConfirmDeleteSsoSettingsDialog.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAdminSso(withTranslation('common')(ConfirmDeleteSsoSettingsDialog));
+export default withAdminSso(withTranslation("common")(ConfirmDeleteSsoSettingsDialog));

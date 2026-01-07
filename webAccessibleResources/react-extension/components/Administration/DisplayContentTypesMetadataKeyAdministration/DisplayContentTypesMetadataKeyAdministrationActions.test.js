@@ -12,9 +12,8 @@
  * @since         4.11.0
  */
 
-import DisplayContentTypesMetadataKeyAdministrationActionsPage
-  from "./DisplayContentTypesMetadataKeyAdministrationActions.test.page";
-import {defaultProps} from "./DisplayContentTypesMetadataKeyAdministrationActions.test.data";
+import DisplayContentTypesMetadataKeyAdministrationActionsPage from "./DisplayContentTypesMetadataKeyAdministrationActions.test.page";
+import { defaultProps } from "./DisplayContentTypesMetadataKeyAdministrationActions.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -23,7 +22,7 @@ beforeEach(() => {
 describe("DisplayContentTypesMetadataKeyAdministrationActions", () => {
   let page; // The page to test against
 
-  it('displays the save button as enabled if the component is not processing', async() => {
+  it("displays the save button as enabled if the component is not processing", async () => {
     expect.assertions(2);
     const props = defaultProps();
     page = new DisplayContentTypesMetadataKeyAdministrationActionsPage(props);
@@ -31,23 +30,23 @@ describe("DisplayContentTypesMetadataKeyAdministrationActions", () => {
     expect(page.saveButton.hasAttribute("disabled")).toBeFalsy();
   });
 
-  it('displays the save button as disabled if the component is processing', async() => {
+  it("displays the save button as disabled if the component is processing", async () => {
     expect.assertions(2);
-    const props = defaultProps({isProcessing: true});
+    const props = defaultProps({ isProcessing: true });
     page = new DisplayContentTypesMetadataKeyAdministrationActionsPage(props);
     expect(page.exists()).toBeTruthy();
     expect(page.saveButton.className.includes("processing")).toBeTruthy();
   });
 
-  it('displays the save button as disabled if the component is disabled', async() => {
+  it("displays the save button as disabled if the component is disabled", async () => {
     expect.assertions(2);
-    const props = defaultProps({isDisabled: true});
+    const props = defaultProps({ isDisabled: true });
     page = new DisplayContentTypesMetadataKeyAdministrationActionsPage(props);
     expect(page.exists()).toBeTruthy();
     expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
   });
 
-  it('call the onSaveRequested callback when clicking on the save button', async() => {
+  it("call the onSaveRequested callback when clicking on the save button", async () => {
     expect.assertions(1);
     const props = defaultProps();
     jest.spyOn(props, "onSaveRequested");

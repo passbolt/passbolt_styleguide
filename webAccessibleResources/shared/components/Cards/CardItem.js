@@ -25,12 +25,12 @@ class CardItem extends React.PureComponent {
    */
   get pill() {
     if (this.props.isBeta) {
-      return (<span className="chips beta">beta</span>);
+      return <span className="chips beta">beta</span>;
     }
     if (this.props.isNew) {
-      return (<span className="chips new">new</span>);
+      return <span className="chips new">new</span>;
     }
-    return (<></>);
+    return <></>;
   }
 
   /**
@@ -57,9 +57,11 @@ class CardItem extends React.PureComponent {
             </span>
             {this.props.proTeasing && <FrameSVG />}
           </span>
-          {this.props.description &&
-            <span className="info" title={this.props.description}>{this.props.description}</span>
-          }
+          {this.props.description && (
+            <span className="info" title={this.props.description}>
+              {this.props.description}
+            </span>
+          )}
         </div>
       </button>
     );

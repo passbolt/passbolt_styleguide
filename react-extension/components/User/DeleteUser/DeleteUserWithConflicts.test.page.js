@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
@@ -35,12 +34,12 @@ export default class DeleteUserWithConflictsPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
-            <ManageDialogs/>
-            <DeleteUserWithConflicts {...props}/>
+            <ManageDialogs />
+            <DeleteUserWithConflicts {...props} />
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -76,14 +75,14 @@ class DeleteUserWithConflictsDialogPageObject {
    * Returns the menu elements
    */
   get dialogTitle() {
-    return this._container.querySelector('.dialog-header h2 span');
+    return this._container.querySelector(".dialog-header h2 span");
   }
 
   /**
    * Returns the close button elements
    */
   get closeButton() {
-    return this._container.querySelector('.dialog-close');
+    return this._container.querySelector(".dialog-close");
   }
 
   /**
@@ -104,35 +103,35 @@ class DeleteUserWithConflictsDialogPageObject {
    * Returns the cancel button elements
    */
   get cancelButton() {
-    return this._container.querySelector('.submit-wrapper .cancel');
+    return this._container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
    * Returns true if the cancel button is disabled elements
    */
   hasCancelButtonDisabled() {
-    return this.cancelButton.hasAttribute('disabled');
+    return this.cancelButton.hasAttribute("disabled");
   }
 
   /**
    * Returns the error dialog
    */
   get errorDialog() {
-    return this._container.querySelector('.error-dialog');
+    return this._container.querySelector(".error-dialog");
   }
 
   /**
    * Returns the error dialog message
    */
   get errorDialogMessage() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
+    return this._container.querySelector(".error-dialog .dialog .dialog-content .form-content");
   }
 
   /**
    * Returns the user first name, last name
    */
   get userName() {
-    return this._container.querySelector('.form-content.intro p strong');
+    return this._container.querySelector(".form-content.intro p strong");
   }
 
   /**
@@ -146,8 +145,8 @@ class DeleteUserWithConflictsDialogPageObject {
    * Click on the element
    * @param element
    */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -156,8 +155,8 @@ class DeleteUserWithConflictsDialogPageObject {
    * Click on the element without wait for
    * @param element
    */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
+  clickWithoutWaitFor(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 }

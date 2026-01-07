@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {render, fireEvent, waitFor} from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AccountRecoveryInviteUserSettingPreferenceDialog from "./AccountRecoveryInviteUserSettingPreferenceDialog";
-import {Router} from 'react-router-dom';
-import {createMemoryHistory} from "history";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
 
 /**
  * The AccountRecoveryInviteUserSettingPreferenceDialogPage component represented as a page
@@ -34,7 +34,7 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
           <AccountRecoveryInviteUserSettingPreferenceDialog {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -52,7 +52,7 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
    * @returns {string}
    */
   get message() {
-    return this.selector('.recovery-account-policy-dialog p').textContent;
+    return this.selector(".recovery-account-policy-dialog p").textContent;
   }
 
   /**
@@ -60,7 +60,7 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
    * @returns {HTMLElement}
    */
   get cancelButton() {
-    return this.selector('.recovery-account-policy-dialog button.cancel');
+    return this.selector(".recovery-account-policy-dialog button.cancel");
   }
 
   /**
@@ -68,7 +68,7 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
    * @returns {HTMLElement}
    */
   get cancelCross() {
-    return this.selector('.recovery-account-policy-dialog .dialog-close');
+    return this.selector(".recovery-account-policy-dialog .dialog-close");
   }
 
   /**
@@ -84,7 +84,7 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
    * @returns {Promise<void>}
    */
   async clickOnContinue() {
-    fireEvent.click(this.continueButton, {button: 0});
+    fireEvent.click(this.continueButton, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -93,7 +93,7 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
    * @returns {Promise<void>}
    */
   async clickOnCancel() {
-    fireEvent.click(this.cancelButton, {button: 0});
+    fireEvent.click(this.cancelButton, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -102,7 +102,7 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
    * @returns {Promise<void>}
    */
   async clickOnCross() {
-    fireEvent.click(this.cancelCross, {button: 0});
+    fireEvent.click(this.cancelCross, { button: 0 });
     await waitFor(() => {});
   }
 }

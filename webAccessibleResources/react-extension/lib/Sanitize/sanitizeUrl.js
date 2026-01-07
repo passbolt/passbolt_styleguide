@@ -24,7 +24,7 @@
  */
 export default (uri, options) => {
   // Wrong format.
-  if (typeof uri === 'undefined' || typeof uri !== "string" || !uri.length) {
+  if (typeof uri === "undefined" || typeof uri !== "string" || !uri.length) {
     return false;
   }
   options = options || {};

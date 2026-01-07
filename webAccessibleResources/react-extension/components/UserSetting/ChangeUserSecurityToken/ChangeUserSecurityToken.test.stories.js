@@ -15,30 +15,32 @@
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import ChangeUserSecurityToken from "./ChangeUserSecurityToken";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 export default {
-  title: 'Components/UserSetting/ChangeUserSecurityToken',
+  title: "Components/UserSetting/ChangeUserSecurityToken",
   component: ChangeUserSecurityToken,
-  decorators: [(Story, {args}) =>
-    <AppContext.Provider value={args.context}>
-      <div id="container" className="page settings">
-        <div id="app" className="app" tabIndex="1000">
-          <div className="panel main">
-            <div className="panel middle">
-              <div className="middle-right">
-                <div className="breadcrumbs-and-grid">
-                  <div className="main-page">
-                    <Story {...args}/>
+  decorators: [
+    (Story, { args }) => (
+      <AppContext.Provider value={args.context}>
+        <div id="container" className="page settings">
+          <div id="app" className="app" tabIndex="1000">
+            <div className="panel main">
+              <div className="panel middle">
+                <div className="middle-right">
+                  <div className="breadcrumbs-and-grid">
+                    <div className="main-page">
+                      <Story {...args} />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </AppContext.Provider>
-  ]
+      </AppContext.Provider>
+    ),
+  ],
 };
 
 export const Initial = {
@@ -47,7 +49,7 @@ export const Initial = {
       userSettings: {
         getSecurityToken: () => ({
           code: "ABC",
-          backgroundColor: '#8bc34a'
+          backgroundColor: "#8bc34a",
         }),
       },
     }),

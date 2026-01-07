@@ -12,10 +12,12 @@
  * @since         3.8.0
  */
 
-import {mockMfaSettings, mockModel} from "../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+import {
+  mockMfaSettings,
+  mockModel,
+} from "../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import MfaModel from "./MfaModel";
-import {mockDefaultMfaModel} from '../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data';
-
+import { mockDefaultMfaModel } from "../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 
 describe("MFAModel", () => {
   describe("MFAModel::constructor", () => {
@@ -32,6 +34,3 @@ describe("MFAModel", () => {
     });
   });
 });
-
-
-

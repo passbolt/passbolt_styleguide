@@ -52,24 +52,18 @@ class AdfsSsoSettingsViewModel {
     const baseEntitySchema = AdfsSsoSettingsEntity.getSchema();
     return {
       type: "object",
-      required: [
-        "url",
-        "openid_configuration_path",
-        "scope",
-        "client_id",
-        "client_secret",
-      ],
+      required: ["url", "openid_configuration_path", "scope", "client_id", "client_secret"],
       properties: {
         id: {
-          "type": "string",
-          "format": "uuid",
+          type: "string",
+          format: "uuid",
         },
         url: baseEntitySchema.properties.url,
         openid_configuration_path: baseEntitySchema.properties.openid_configuration_path,
         scope: baseEntitySchema.properties.scope,
         client_id: baseEntitySchema.properties.client_id,
         client_secret: baseEntitySchema.properties.client_secret,
-      }
+      },
     };
   }
 
@@ -80,14 +74,8 @@ class AdfsSsoSettingsViewModel {
    * @returns {boolean}
    */
   static isDataDifferent(a, b) {
-    const keys = [
-      "url",
-      "openid_configuration_path",
-      "scope",
-      "client_id",
-      "client_secret",
-    ];
-    return keys.some(key => a[key] !== b[key]);
+    const keys = ["url", "openid_configuration_path", "scope", "client_id", "client_secret"];
+    return keys.some((key) => a[key] !== b[key]);
   }
 
   /**
@@ -180,7 +168,7 @@ class AdfsSsoSettingsViewModel {
         scope: this.scope,
         client_id: this.client_id,
         client_secret: this.client_secret,
-      }
+      },
     };
 
     return entityDto;

@@ -13,10 +13,13 @@
  */
 
 import EntityValidationError from "../abstract/entityValidationError";
-import {V4_TO_V5_RESOURCE_TYPE_MAPPING} from "../resourceType/resourceTypeSchemasDefinition";
+import { V4_TO_V5_RESOURCE_TYPE_MAPPING } from "../resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
 import MetadataKeysCollection from "./metadataKeysCollection";
-import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "./metadataTypesSettingsEntity";
+import MetadataTypesSettingsEntity, {
+  RESOURCE_TYPE_VERSION_4,
+  RESOURCE_TYPE_VERSION_5,
+} from "./metadataTypesSettingsEntity";
 import MigrateMetadataEntity from "./migrateMetadataEntity";
 
 class MigrateMetadataFormEntity extends MigrateMetadataEntity {
@@ -50,7 +53,12 @@ class MigrateMetadataFormEntity extends MigrateMetadataEntity {
     }
 
     let result = this._verifyGlobalHealth(metadataKeysCollection);
-    result = this._verifyMigrateResourcesToV5Health(result, resourceTypesCollection, metadataTypesSettings, metadataKeysCollection);
+    result = this._verifyMigrateResourcesToV5Health(
+      result,
+      resourceTypesCollection,
+      metadataTypesSettings,
+      metadataKeysCollection,
+    );
     result = this._verifyMigrateFoldersToV5Health(result, metadataTypesSettings, metadataKeysCollection);
     result = this._verifyMigrateTagsToV5Health(result, metadataTypesSettings, metadataKeysCollection);
     result = this._verifyMigrateCommentsToV5Health(result, metadataTypesSettings, metadataKeysCollection);
@@ -63,7 +71,7 @@ class MigrateMetadataFormEntity extends MigrateMetadataEntity {
    * @returns {EntityValidationError|null}
    */
   _verifyGlobalHealth(metadataKeysCollection) {
-    const activeMetadataKeysCollection = metadataKeysCollection.items.filter(metadataKey => !metadataKey.expired);
+    const activeMetadataKeysCollection = metadataKeysCollection.items.filter((metadataKey) => !metadataKey.expired);
     if (activeMetadataKeysCollection.length > 0) {
       return null;
     }
@@ -82,7 +90,11 @@ class MigrateMetadataFormEntity extends MigrateMetadataEntity {
   _verifyMigrateResourcesToV5Health(result, resourceTypesCollection, metadataTypesSettings) {
     if (this._props.migrate_resources_to_v5 && !metadataTypesSettings.allowCreationOfV5Resources) {
       result = result || new EntityValidationError();
-      result.addError("migrate_resources_to_v5", "allow_creation_of_v5_resources", "Resource types v5 creation is not allowed.");
+      result.addError(
+        "migrate_resources_to_v5",
+        "allow_creation_of_v5_resources",
+        "Resource types v5 creation is not allowed.",
+      );
     }
 
     const hasV5ResourceTypes = resourceTypesCollection.hasSomeOfVersion(RESOURCE_TYPE_VERSION_5);
@@ -92,11 +104,19 @@ class MigrateMetadataFormEntity extends MigrateMetadataEntity {
       return result;
     }
 
-    const v4ResourceTypes = resourceTypesCollection.items.filter(resourceType => resourceType.version === RESOURCE_TYPE_VERSION_4);
-    const hasAllMatchingV5ResourceTypes = v4ResourceTypes.every(resourceTypes => resourceTypesCollection.hasOneWithSlug(V4_TO_V5_RESOURCE_TYPE_MAPPING[resourceTypes.slug]));
+    const v4ResourceTypes = resourceTypesCollection.items.filter(
+      (resourceType) => resourceType.version === RESOURCE_TYPE_VERSION_4,
+    );
+    const hasAllMatchingV5ResourceTypes = v4ResourceTypes.every((resourceTypes) =>
+      resourceTypesCollection.hasOneWithSlug(V4_TO_V5_RESOURCE_TYPE_MAPPING[resourceTypes.slug]),
+    );
     if (this._props.migrate_resources_to_v5 && !hasAllMatchingV5ResourceTypes) {
       result = result || new EntityValidationError();
-      result.addError("migrate_resources_to_v5", "resource_types_v5_partially_deleted", "Some resource types v5 are missing.");
+      result.addError(
+        "migrate_resources_to_v5",
+        "resource_types_v5_partially_deleted",
+        "Some resource types v5 are missing.",
+      );
     }
 
     return result;
@@ -156,7 +176,11 @@ class MigrateMetadataFormEntity extends MigrateMetadataEntity {
 
     if (this._props.migrate_comments_to_v5 && !metadataTypesSettings.allowCreationOfV5Folders) {
       result = result || new EntityValidationError();
-      result.addError("migrate_comments_to_v5", "allow_creation_of_v5_comments", "Comments v5 creation is not allowed.");
+      result.addError(
+        "migrate_comments_to_v5",
+        "allow_creation_of_v5_comments",
+        "Comments v5 creation is not allowed.",
+      );
     }
 
     return result;

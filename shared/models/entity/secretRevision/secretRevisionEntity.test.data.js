@@ -12,10 +12,10 @@
  * @since         5.7.0
  */
 
-import {v4 as uuidv4} from "uuid";
-import {defaultUserDto} from "../user/userEntity.test.data";
-import {readSecret} from "../secret/secretEntity.test.data";
-import {TEST_RESOURCE_TYPE_V5_DEFAULT} from "../resourceType/resourceTypeEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultUserDto } from "../user/userEntity.test.data";
+import { readSecret } from "../secret/secretEntity.test.data";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../resourceType/resourceTypeEntity.test.data";
 
 /**
  * Build default secret revisions settings.
@@ -34,7 +34,7 @@ export const defaultSecretRevisionDto = (data = {}, options) => {
     created_by: uuidv4(),
     modified: "2025-08-04T18:59:11+00:00",
     modified_by: uuidv4(),
-    deleted: null
+    deleted: null,
   };
 
   if (!defaultData.creator && options?.withCreator) {
@@ -45,7 +45,7 @@ export const defaultSecretRevisionDto = (data = {}, options) => {
   }
 
   if (!defaultData.secrets && options?.withSecrets) {
-    defaultData.secrets = [readSecret({secret_revision_id: defaultData.id})];
+    defaultData.secrets = [readSecret({ secret_revision_id: defaultData.id })];
   }
 
   return Object.assign(defaultData, data);

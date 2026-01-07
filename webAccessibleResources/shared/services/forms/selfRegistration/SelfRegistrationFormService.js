@@ -12,8 +12,8 @@
  * @since         3.8.0
  */
 
-import DomainUtil from '../../../../react-extension/lib/Domain/DomainUtil';
-import MapObject from '../../../../react-extension/lib/Map/MapObject';
+import DomainUtil from "../../../../react-extension/lib/Domain/DomainUtil";
+import MapObject from "../../../../react-extension/lib/Map/MapObject";
 
 /**
  * Model related to the Self Registration form settings
@@ -78,7 +78,8 @@ class SelfRegistrationFormService {
    */
   checkDuplicateValue(inputErrors) {
     this.fields.forEach((value, key) => {
-      const hasDuplicate = MapObject.listValues(this.fields).filter(domain => domain === value && domain !== "").length > 1;
+      const hasDuplicate =
+        MapObject.listValues(this.fields).filter((domain) => domain === value && domain !== "").length > 1;
       if (hasDuplicate) {
         inputErrors.set(key, this.translate("This domain already exist"));
       }
@@ -86,4 +87,4 @@ class SelfRegistrationFormService {
   }
 }
 
-export default  SelfRegistrationFormService;
+export default SelfRegistrationFormService;

@@ -15,11 +15,11 @@
 /**
  * Unit tests on FilterResourcesByGroups in regard of specifications
  */
-import {defaultProps, groupsMock} from "./FilterResourcesByGroups.test.data";
+import { defaultProps, groupsMock } from "./FilterResourcesByGroups.test.data";
 import SidebarGroupFilterSectionPage from "./FilterResourcesByGroups.test.page";
 import MockPort from "../../../test/mock/MockPort";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -28,9 +28,11 @@ beforeEach(() => {
 describe("See groups", () => {
   let page; // The page to test against
   const props = defaultProps(); // The props to pass
-  props.context.port.addRequestListener('passbolt.groups.find-my-groups', async() => props.context.groups.filter(group => Boolean(group.my_group_user)));
+  props.context.port.addRequestListener("passbolt.groups.find-my-groups", async () =>
+    props.context.groups.filter((group) => Boolean(group.my_group_user)),
+  );
 
-  describe(' As LU I can see groups', () => {
+  describe(" As LU I can see groups", () => {
     /**
      * Given a user belongs to 10 groups
      * Then I should see the 10 groups on the left sidebar
@@ -42,7 +44,7 @@ describe("See groups", () => {
       page = new SidebarGroupFilterSectionPage(props);
     });
 
-    it('I should see the 10 groups made on the resource', async() => {
+    it("I should see the 10 groups made on the resource", async () => {
       await waitForTrue(() => page.title.hyperlink !== null);
       await page.title.click();
       await page.title.click();
@@ -50,20 +52,20 @@ describe("See groups", () => {
       expect(page.displayGroupList.count()).toBe(9);
     });
 
-    it('I should be able to identify each group name', async() => {
+    it("I should be able to identify each group name", async () => {
       await waitForTrue(() => page.title.hyperlink !== null);
-      expect(page.displayGroupList.name(1)).toBe('Leadership team');
-      expect(page.displayGroupList.name(2)).toBe('Management');
-      expect(page.displayGroupList.name(3)).toBe('Marketing');
-      expect(page.displayGroupList.name(4)).toBe('Operations');
-      expect(page.displayGroupList.name(5)).toBe('Procurement');
-      expect(page.displayGroupList.name(6)).toBe('Quality assurance');
-      expect(page.displayGroupList.name(7)).toBe('Resource planning');
-      expect(page.displayGroupList.name(8)).toBe('Sales');
-      expect(page.displayGroupList.name(9)).toBe('Traffic');
+      expect(page.displayGroupList.name(1)).toBe("Leadership team");
+      expect(page.displayGroupList.name(2)).toBe("Management");
+      expect(page.displayGroupList.name(3)).toBe("Marketing");
+      expect(page.displayGroupList.name(4)).toBe("Operations");
+      expect(page.displayGroupList.name(5)).toBe("Procurement");
+      expect(page.displayGroupList.name(6)).toBe("Quality assurance");
+      expect(page.displayGroupList.name(7)).toBe("Resource planning");
+      expect(page.displayGroupList.name(8)).toBe("Sales");
+      expect(page.displayGroupList.name(9)).toBe("Traffic");
     });
 
-    it('I should be able to see the filtered group name selected', async() => {
+    it("I should be able to see the filtered group name selected", async () => {
       await waitForTrue(() => page.title.hyperlink !== null);
       await page.displayGroupList.click(page.displayGroupList.group(8));
       expect(page.displayGroupList.groupSelected).not.toBeNull();
@@ -71,22 +73,22 @@ describe("See groups", () => {
         filter: {
           type: ResourceWorkspaceFilterTypes.GROUP,
           payload: {
-            group: groupsMock[8]
-          }
-        }
+            group: groupsMock[8],
+          },
+        },
       };
-      const pathname = '/app/passwords';
-      expect(props.history.push).toHaveBeenCalledWith({pathname, state});
+      const pathname = "/app/passwords";
+      expect(props.history.push).toHaveBeenCalledWith({ pathname, state });
     });
   });
 
-  describe(' As LU I shouldn\'t see the group section', () => {
+  describe(" As LU I shouldn't see the group section", () => {
     // force context to have no groups belongs to the user
     const context = {
       context: {
         port: new MockPort(),
-        groups: [groupsMock[3]]
-      }
+        groups: [groupsMock[3]],
+      },
     };
     const props = defaultProps(context); // The props
     /**
@@ -98,7 +100,7 @@ describe("See groups", () => {
       page = new SidebarGroupFilterSectionPage(props);
     });
 
-    it('I shouldn\'t see the groups section', () => {
+    it("I shouldn't see the groups section", () => {
       expect(page.displayGroupList.exists()).toBeFalsy();
     });
   });

@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../AppContext/AppContext";
+import { withAppContext } from "../AppContext/AppContext";
 import ResourceTypesCollection from "../../models/entity/resourceType/resourceTypesCollection";
 
 export const ResourceTypesLocalStorageContext = React.createContext({
@@ -87,7 +87,7 @@ export class ResourceTypesLocalStorageContextProvider extends React.Component {
    */
   set(resourceTypes) {
     const resourceTypesCollection = new ResourceTypesCollection(resourceTypes);
-    this.setState({resourceTypes: resourceTypesCollection});
+    this.setState({ resourceTypes: resourceTypesCollection });
   }
 
   /**
@@ -125,7 +125,7 @@ export class ResourceTypesLocalStorageContextProvider extends React.Component {
    */
   async updateLocalStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
-      this.runningLocalStorageUpdatePromise = this.props.context.port.request('passbolt.resource-type.get-or-find-all');
+      this.runningLocalStorageUpdatePromise = this.props.context.port.request("passbolt.resource-type.get-or-find-all");
       await this.runningLocalStorageUpdatePromise;
       this.runningLocalStorageUpdatePromise = null;
     } else {
@@ -161,16 +161,15 @@ export function withResourceTypesLocalStorage(WrappedComponent) {
     render() {
       return (
         <ResourceTypesLocalStorageContext.Consumer>
-          {
-            resourceTypesLocalStorageContext => <WrappedComponent
+          {(resourceTypesLocalStorageContext) => (
+            <WrappedComponent
               resourceTypesLocalStorageContext={resourceTypesLocalStorageContext}
               resourceTypes={resourceTypesLocalStorageContext.get()}
               {...this.props}
             />
-          }
+          )}
         </ResourceTypesLocalStorageContext.Consumer>
       );
     }
   };
 }
-

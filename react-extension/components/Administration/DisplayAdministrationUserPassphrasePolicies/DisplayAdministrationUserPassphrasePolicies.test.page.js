@@ -13,13 +13,13 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationUserPassphrasePoliciesActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationUserPassphrasePoliciesActions/DisplayAdministrationUserPassphrasePoliciesActions";
 import AdministrationUserPassphrasePoliciesContextProvider from "../../../contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
 import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministrationUserPassphrasePolicies";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 import userEvent from "@testing-library/user-event";
 
 /**
@@ -36,12 +36,12 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <AdministrationUserPassphrasePoliciesContextProvider {...props}>
-            <DisplayAdministrationUserPassphrasePoliciesActions {...props}/>
-            <DisplayAdministrationUserPassphrasePolicies {...props}/>
+            <DisplayAdministrationUserPassphrasePoliciesActions {...props} />
+            <DisplayAdministrationUserPassphrasePolicies {...props} />
           </AdministrationUserPassphrasePoliciesContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -78,7 +78,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this.select('#user-passphrase-policies-title');
+    return this.select("#user-passphrase-policies-title");
   }
 
   /**
@@ -86,7 +86,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    * @returns {HTMLElement}
    */
   get helpPageLink() {
-    return this.select('.sidebar-help-section a.button');
+    return this.select(".sidebar-help-section a.button");
   }
 
   /**
@@ -157,7 +157,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
   async clickOnEntropyLabel(elementIndex) {
     const entropyLabel = this.entropyLabel(elementIndex);
     await this.clickOn(entropyLabel);
-    await waitForTrue(() => entropyLabel.classList.contains('range-option--active'));
+    await waitForTrue(() => entropyLabel.classList.contains("range-option--active"));
   }
 
   /**
@@ -166,7 +166,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    */
   async clickOnSave() {
     await this.clickOn(this.saveSettingsButton);
-    await waitForTrue(() => !this.saveSettingsButton.getAttribute('disabled'));
+    await waitForTrue(() => !this.saveSettingsButton.getAttribute("disabled"));
   }
 
   /**

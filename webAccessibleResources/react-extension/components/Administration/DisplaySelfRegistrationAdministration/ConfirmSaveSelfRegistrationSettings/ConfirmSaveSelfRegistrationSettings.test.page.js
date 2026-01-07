@@ -14,8 +14,8 @@
 
 import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {render, fireEvent, waitFor} from '@testing-library/react';
-import {AdminSelfRegistrationContextProvider} from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import { render, fireEvent, waitFor } from "@testing-library/react";
+import { AdminSelfRegistrationContextProvider } from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
 import AppContext from "../../../../../shared/context/AppContext/AppContext";
 import ConfirmSaveSelfRegistrationSettings from "./ConfirmSaveSelfRegistrationSettings";
 /**
@@ -31,12 +31,12 @@ export default class ConfirmSaveSelfRegistrationSettingsPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <AdminSelfRegistrationContextProvider  {...props}>
-            <ConfirmSaveSelfRegistrationSettings {...props}/>
+          <AdminSelfRegistrationContextProvider {...props}>
+            <ConfirmSaveSelfRegistrationSettings {...props} />
           </AdminSelfRegistrationContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -44,21 +44,21 @@ export default class ConfirmSaveSelfRegistrationSettingsPage {
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.dialog-header-title').textContent;
+    return this._page.container.querySelector(".dialog-header-title").textContent;
   }
 
   /**
    * Returns the warning message
    */
   get warningMessage() {
-    return this._page.container.querySelector('.warning.message');
+    return this._page.container.querySelector(".warning.message");
   }
 
   /**
    * Returns the list of domains
    */
   get domainsList() {
-    return this._page.container.querySelector('#domains-list');
+    return this._page.container.querySelector("#domains-list");
   }
 
   /**
@@ -72,7 +72,7 @@ export default class ConfirmSaveSelfRegistrationSettingsPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -80,10 +80,8 @@ export default class ConfirmSaveSelfRegistrationSettingsPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 }
-

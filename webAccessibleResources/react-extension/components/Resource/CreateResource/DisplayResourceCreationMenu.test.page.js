@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourceCreationMenu from "./DisplayResourceCreationMenu";
@@ -27,9 +26,9 @@ export default class DisplayResourceCreationMenuPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourceCreationMenu {...props}/>
+        <DisplayResourceCreationMenu {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -53,7 +52,7 @@ export default class DisplayResourceCreationMenuPage {
    * @returns {ReactDOM}
    */
   get title() {
-    return this._page.container.querySelector('.dialog-header-title');
+    return this._page.container.querySelector(".dialog-header-title");
   }
 
   /**
@@ -61,7 +60,7 @@ export default class DisplayResourceCreationMenuPage {
    * @returns {ReactDOM}
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
@@ -69,7 +68,7 @@ export default class DisplayResourceCreationMenuPage {
    * @returns {ReactDOM}
    */
   get tabs() {
-    return this._page.container.querySelector('ul.tabs-nav');
+    return this._page.container.querySelector("ul.tabs-nav");
   }
 
   /**
@@ -77,7 +76,7 @@ export default class DisplayResourceCreationMenuPage {
    * @returns {ReactDOM}
    */
   get activeTab() {
-    return this.tabs.querySelector('.tab.active');
+    return this.tabs.querySelector(".tab.active");
   }
 
   /**
@@ -85,7 +84,7 @@ export default class DisplayResourceCreationMenuPage {
    * @returns {ReactDOM}
    */
   get encryptedMetadataTab() {
-    return this.tabs.querySelectorAll('.tab')[0].querySelector("button");
+    return this.tabs.querySelectorAll(".tab")[0].querySelector("button");
   }
 
   /**
@@ -93,7 +92,7 @@ export default class DisplayResourceCreationMenuPage {
    * @returns {ReactDOM}
    */
   get legacyCleartextMetadataTab() {
-    return this.tabs.querySelectorAll('.tab')[1].querySelector("button");
+    return this.tabs.querySelectorAll(".tab")[1].querySelector("button");
   }
 
   /**
@@ -101,7 +100,7 @@ export default class DisplayResourceCreationMenuPage {
    * @returns {NodeList}
    */
   get displayedContentTypes() {
-    return this._page.container.querySelectorAll('.grid button');
+    return this._page.container.querySelectorAll(".grid button");
   }
 
   /**
@@ -109,7 +108,7 @@ export default class DisplayResourceCreationMenuPage {
    * @returns {ReactDOM}
    */
   getContentTypeName(index) {
-    return this._page.container.querySelectorAll('.grid button')[index - 1]?.querySelector(".card-information .title");
+    return this._page.container.querySelectorAll(".grid button")[index - 1]?.querySelector(".card-information .title");
   }
 
   /**
@@ -117,15 +116,15 @@ export default class DisplayResourceCreationMenuPage {
    * @returns {ReactDOM}
    */
   getContentTypeDescription(index) {
-    return this._page.container.querySelectorAll('.grid button')[index - 1]?.querySelector(".card-information .info");
+    return this._page.container.querySelectorAll(".grid button")[index - 1]?.querySelector(".card-information .info");
   }
 
   /**
    * Simulates a press on the escape key
    */
-  pressEscapeKey()  {
+  pressEscapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.dialog, escapeKeyDown);
   }
 
@@ -133,8 +132,8 @@ export default class DisplayResourceCreationMenuPage {
    * Simulates a click on the given element
    * @param {ReactDOM} element
    */
-  clickOn(element)  {
-    const leftClick = {button: 0};
+  clickOn(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 }

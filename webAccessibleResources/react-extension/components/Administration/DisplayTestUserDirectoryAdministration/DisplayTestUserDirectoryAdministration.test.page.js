@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayTestUserDirectoryAdministration from "./DisplayTestUserDirectoryAdministration";
@@ -30,10 +30,10 @@ export default class DisplayTestUserDirectoryAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <DisplayTestUserDirectoryAdministration {...props}/>
+          <DisplayTestUserDirectoryAdministration {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -43,7 +43,9 @@ export default class DisplayTestUserDirectoryAdministrationPage {
    */
   setupPageObjects() {
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
-    this._displayTestUserDirectoryAdministrationDialog = new DisplayTestUserDirectoryAdministrationDialogPageObject(this._page.container);
+    this._displayTestUserDirectoryAdministrationDialog = new DisplayTestUserDirectoryAdministrationDialogPageObject(
+      this._page.container,
+    );
   }
 
   /**
@@ -94,98 +96,110 @@ class DisplayTestUserDirectoryAdministrationDialogPageObject {
    * Returns the dialog element
    */
   get dialog() {
-    return this._container.querySelector('.ldap-test-settings-dialog');
+    return this._container.querySelector(".ldap-test-settings-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._container.querySelector('.dialog-close');
+    return this._container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the test settings report element
    */
   get testSettingsReport() {
-    return this._container.querySelector('.ldap-test-settings-report');
+    return this._container.querySelector(".ldap-test-settings-report");
   }
 
   /**
    * Returns the users and groups found element
    */
   get usersAndGroupsFound() {
-    return this._container.querySelector('.ldap-test-settings-report p').textContent;
+    return this._container.querySelector(".ldap-test-settings-report p").textContent;
   }
 
   /**
    * Returns the list test report element
    */
   get list() {
-    return this._container.querySelector('.accordion.directory-list .accordion-header');
+    return this._container.querySelector(".accordion.directory-list .accordion-header");
   }
 
   /**
    * Returns the structure test report element
    */
   get structure() {
-    return this._container.querySelector('.accordion.accordion-directory-structure .accordion-header');
+    return this._container.querySelector(".accordion.accordion-directory-structure .accordion-header");
   }
 
   /**
    * Returns the errors test report element
    */
   get errorsList() {
-    return this._container.querySelector('.accordion.accordion-directory-errors .accordion-header');
+    return this._container.querySelector(".accordion.accordion-directory-errors .accordion-header");
   }
 
   /**
    * Returns the groups list element
    */
   get groupsList() {
-    return this._container.querySelectorAll('.accordion.directory-list .accordion-content table tbody tr')[1].querySelectorAll('td')[0].querySelectorAll('div');
+    return this._container
+      .querySelectorAll(".accordion.directory-list .accordion-content table tbody tr")[1]
+      .querySelectorAll("td")[0]
+      .querySelectorAll("div");
   }
 
   /**
    * Returns the users list element
    */
   get usersList() {
-    return this._container.querySelectorAll('.accordion.directory-list .accordion-content table tbody tr')[1].querySelectorAll('td')[1].querySelectorAll('div');
+    return this._container
+      .querySelectorAll(".accordion.directory-list .accordion-content table tbody tr")[1]
+      .querySelectorAll("td")[1]
+      .querySelectorAll("div");
   }
 
   /**
    * Returns the structure groups element
    */
   get structureGroups() {
-    return this._container.querySelectorAll('.accordion.accordion-directory-structure .accordion-content .directory-structure ul li.group ul li.group');
+    return this._container.querySelectorAll(
+      ".accordion.accordion-directory-structure .accordion-content .directory-structure ul li.group ul li.group",
+    );
   }
 
   /**
    * Returns the structure users element
    */
   get structureUsers() {
-    return this._container.querySelectorAll('.accordion.accordion-directory-structure .accordion-content .directory-structure ul li.group ul li.user');
+    return this._container.querySelectorAll(
+      ".accordion.accordion-directory-structure .accordion-content .directory-structure ul li.group ul li.user",
+    );
   }
 
   /**
    * Returns the number of errors element
    */
   get errors() {
-    return this._container.querySelector('.accordion-directory-errors + .warning').textContent;
+    return this._container.querySelector(".accordion-directory-errors + .warning").textContent;
   }
 
   /**
    * Returns the error textarea element
    */
   get errorsTextarea() {
-    return this._container.querySelector('.accordion.accordion-directory-errors .accordion-content .directory-errors textarea');
+    return this._container.querySelector(
+      ".accordion.accordion-directory-errors .accordion-content .directory-errors textarea",
+    );
   }
 
   /**
    * Returns the error textarea element
    */
   get buttonOk() {
-    return this._container.querySelector('button.primary');
+    return this._container.querySelector("button.primary");
   }
 
   /**
@@ -197,9 +211,8 @@ class DisplayTestUserDirectoryAdministrationDialogPageObject {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 }

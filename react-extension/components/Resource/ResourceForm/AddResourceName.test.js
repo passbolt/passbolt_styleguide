@@ -16,9 +16,9 @@
  * Unit tests on OrchestrateResourceForm in regard of specifications
  */
 
-import {defaultProps} from './AddResourceName.test.data';
-import AddResourceNamePage from './AddResourceName.test.page';
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultProps } from "./AddResourceName.test.data";
+import AddResourceNamePage from "./AddResourceName.test.page";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -28,12 +28,12 @@ describe("AddResourceName", () => {
   let page; // The page to test against
   const props = defaultProps({
     context: defaultAppContext({
-      getHierarchyFolderCache: () => [{name: "Folder"}, {name: "subfolder"}]
-    })
+      getHierarchyFolderCache: () => [{ name: "Folder" }, { name: "subfolder" }],
+    }),
   });
 
-  describe('As LU I can see the name field.', () => {
-    it('As LU I can see the resource password form.', () => {
+  describe("As LU I can see the name field.", () => {
+    it("As LU I can see the resource password form.", () => {
       expect.assertions(2);
 
       page = new AddResourceNamePage(props);
@@ -43,13 +43,12 @@ describe("AddResourceName", () => {
     });
   });
 
-  describe('Fill name field', () => {
-    it('Enter name should call callback function.', async() => {
+  describe("Fill name field", () => {
+    it("Enter name should call callback function.", async () => {
       expect.assertions(3);
 
-      let name,
-        value;
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      let name, value;
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });
@@ -62,11 +61,11 @@ describe("AddResourceName", () => {
     });
   });
 
-  describe('As LU I should see the name disabled.', () => {
-    it('As LU I can see the name form disabled.', async() => {
+  describe("As LU I should see the name disabled.", () => {
+    it("As LU I can see the name form disabled.", async () => {
       expect.assertions(1);
 
-      const props = defaultProps({disabled: true});
+      const props = defaultProps({ disabled: true });
       page = new AddResourceNamePage(props);
 
       expect(page.name.hasAttribute("disabled")).toBeTruthy();

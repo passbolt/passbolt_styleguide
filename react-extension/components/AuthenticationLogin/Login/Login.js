@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
 
 /**
@@ -23,8 +23,8 @@ import Password from "../../../../shared/components/Password/Password";
  * @type {Object}
  */
 export const LoginVariations = {
-  SIGN_IN: 'Sign in',
-  ACCOUNT_RECOVERY: 'Account recovery'
+  SIGN_IN: "Sign in",
+  ACCOUNT_RECOVERY: "Account recovery",
 };
 
 /**
@@ -47,10 +47,10 @@ class Login extends Component {
    */
   get defaultState() {
     return {
-      passphrase: '', // The passphrase
+      passphrase: "", // The passphrase
       rememberMe: false, // The remember me flag
       actions: {
-        processing: false // True if one's processing passphrase
+        processing: false, // True if one's processing passphrase
       },
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
@@ -83,7 +83,7 @@ class Login extends Component {
    * @returns {boolean}
    */
   get isValid() {
-    return Object.values(this.state.errors).every(value => !value);
+    return Object.values(this.state.errors).every((value) => !value);
   }
 
   /**
@@ -106,8 +106,7 @@ class Login extends Component {
    * Returns the user full name
    */
   get fullname() {
-    return this.props.userSettings?.fullName
-      || `${this.props.account?.first_name} ${this.props.account?.last_name}`;
+    return this.props.userSettings?.fullName || `${this.props.account?.first_name} ${this.props.account?.last_name}`;
   }
 
   /**
@@ -121,8 +120,7 @@ class Login extends Component {
    * Returns the trusted domain
    */
   get trustedDomain() {
-    return this.props.userSettings?.getTrustedDomain()
-      || this.props.account?.domain;
+    return this.props.userSettings?.getTrustedDomain() || this.props.account?.domain;
   }
 
   /**
@@ -206,9 +204,9 @@ class Login extends Component {
   onCheckPassphraseFailure(error) {
     // It can happen when the user has entered the wrong passphrase.
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({actions: {processing: false}, errors: {invalidPassphrase: true}});
-    } else if (error.name === 'GpgKeyError') {
-      this.setState({actions: {processing: false}, errors: {invalidGpgKey: true}});
+      this.setState({ actions: { processing: false }, errors: { invalidPassphrase: true } });
+    } else if (error.name === "GpgKeyError") {
+      this.setState({ actions: { processing: false }, errors: { invalidGpgKey: true } });
     } else {
       // Only controlled errors should hit the component.
       throw error;
@@ -228,14 +226,14 @@ class Login extends Component {
    * @param passphrase A passphrase
    */
   fillPassphrase(passphrase) {
-    this.setState({passphrase});
+    this.setState({ passphrase });
   }
 
   /**
    * Toggle the remember me flag value
    */
   toggleRememberMe() {
-    this.setState({rememberMe: !this.state.rememberMe});
+    this.setState({ rememberMe: !this.state.rememberMe });
   }
 
   /**
@@ -244,13 +242,13 @@ class Login extends Component {
    * @returns {booleans}
    */
   validate(passphrase) {
-    const isEmptyPassphrase = passphrase.trim() === '';
+    const isEmptyPassphrase = passphrase.trim() === "";
     const isValid = !isEmptyPassphrase;
     const state = {
       hasBeenValidated: true,
       errors: {
-        emptyPassphrase: isEmptyPassphrase
-      }
+        emptyPassphrase: isEmptyPassphrase,
+      },
     };
     this.setState(state);
     return isValid;
@@ -260,7 +258,7 @@ class Login extends Component {
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({actions: {processing: !this.state.actions.processing}});
+    this.setState({ actions: { processing: !this.state.actions.processing } });
   }
 
   /**
@@ -276,9 +274,11 @@ class Login extends Component {
    * @returns {Promise<void>}
    */
   async initDefaultRememberMeChoice() {
-    const defaultRememberMeChoice = await this.props.context.port.request('passbolt.remember-me.get-user-latest-choice');
+    const defaultRememberMeChoice = await this.props.context.port.request(
+      "passbolt.remember-me.get-user-latest-choice",
+    );
     if (defaultRememberMeChoice !== this.state.rememberMe) {
-      this.setState({rememberMe: defaultRememberMeChoice});
+      this.setState({ rememberMe: defaultRememberMeChoice });
     }
   }
 
@@ -287,11 +287,13 @@ class Login extends Component {
    * @returns {{backgroundColor, code, textColor}}
    */
   get securityToken() {
-    return this.props.userSettings?.getSecurityToken() || {
-      code: this.props.account.security_token.code,
-      backgroundColor: this.props.account.security_token.color,
-      textColor: this.props.account.security_token.textcolor
-    };
+    return (
+      this.props.userSettings?.getSecurityToken() || {
+        code: this.props.account.security_token.code,
+        backgroundColor: this.props.account.security_token.color,
+        textColor: this.props.account.security_token.textcolor,
+      }
+    );
   }
 
   /**
@@ -306,12 +308,12 @@ class Login extends Component {
    * Render the component
    */
   render() {
-    const processingClassName = this.isProcessing ? 'processing' : '';
+    const processingClassName = this.isProcessing ? "processing" : "";
     const securityToken = this.securityToken;
     return (
       <div className="login">
         <div className="login-user">
-          <UserAvatar user={this.props.account?.user} baseUrl={this.trustedDomain} className="big avatar user-avatar"/>
+          <UserAvatar user={this.props.account?.user} baseUrl={this.trustedDomain} className="big avatar user-avatar" />
           <p className="login-user-name">{this.fullname}</p>
           <p className="login-user-email">{this.username}</p>
         </div>
@@ -325,29 +327,39 @@ class Login extends Component {
               autoComplete="off"
               inputRef={this.passphraseInputRef}
               name="passphrase"
-              placeholder={this.props.t('Passphrase')}
+              placeholder={this.props.t("Passphrase")}
               value={this.state.passphrase}
               onChange={this.handleChangePassphrase}
               disabled={!this.areActionsAllowed}
               preview={true}
-              securityToken={securityToken}/>
-            {this.state.hasBeenValidated &&
-            <>
-              {this.state.errors.emptyPassphrase &&
-              <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
-              }
-              {this.state.errors.invalidPassphrase &&
-              <div className="invalid-passphrase error-message">
-                <Trans>The passphrase is invalid.</Trans> {this.props.isSsoAvailable && <button className="link" type="button" onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></button>}
-              </div>
-              }
-              {this.state.errors.invalidGpgKey &&
-              <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
-              }
-            </>
-            }
+              securityToken={securityToken}
+            />
+            {this.state.hasBeenValidated && (
+              <>
+                {this.state.errors.emptyPassphrase && (
+                  <div className="empty-passphrase error-message">
+                    <Trans>The passphrase should not be empty.</Trans>
+                  </div>
+                )}
+                {this.state.errors.invalidPassphrase && (
+                  <div className="invalid-passphrase error-message">
+                    <Trans>The passphrase is invalid.</Trans>{" "}
+                    {this.props.isSsoAvailable && (
+                      <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
+                        <Trans>Do you need help?</Trans>
+                      </button>
+                    )}
+                  </div>
+                )}
+                {this.state.errors.invalidGpgKey && (
+                  <div className="invalid-gpg-key error-message">
+                    <Trans>The private key is invalid.</Trans>
+                  </div>
+                )}
+              </>
+            )}
           </div>
-          {this.props.canRememberMe &&
+          {this.props.canRememberMe && (
             <div className="input checkbox">
               <input
                 id="remember-me"
@@ -355,32 +367,36 @@ class Login extends Component {
                 name="remember-me"
                 checked={this.state.rememberMe}
                 onChange={this.handleToggleRememberMe}
-                disabled={!this.areActionsAllowed}/>
+                disabled={!this.areActionsAllowed}
+              />
               <label htmlFor="remember-me">
                 <Trans>Remember until signed out.</Trans>
               </label>
             </div>
-          }
+          )}
           <div className="form-actions">
             <button
               type="submit"
               className={`button primary big full-width ${processingClassName}`}
-              disabled={this.isProcessing}>
-              {{
-                [LoginVariations.SIGN_IN]: <Trans>Sign in</Trans>,
-                [LoginVariations.ACCOUNT_RECOVERY]: <Trans>Complete recovery</Trans>,
-              }[this.props.displayAs]}
+              disabled={this.isProcessing}
+            >
+              {
+                {
+                  [LoginVariations.SIGN_IN]: <Trans>Sign in</Trans>,
+                  [LoginVariations.ACCOUNT_RECOVERY]: <Trans>Complete recovery</Trans>,
+                }[this.props.displayAs]
+              }
             </button>
-            {this.props.isSsoAvailable &&
+            {this.props.isSsoAvailable && (
               <button type="button" className="link switchToSso" onClick={this.handleSwitchToSso}>
                 <Trans>Sign in with Single Sign-On.</Trans>
               </button>
-            }
-            {!this.props.isSsoAvailable && !this.props.isDesktop &&
+            )}
+            {!this.props.isSsoAvailable && !this.props.isDesktop && (
               <button type="button" className="link" onClick={this.props.onSecondaryActionClick}>
                 <Trans>Help, I lost my passphrase.</Trans>
               </button>
-            }
+            )}
           </div>
         </form>
       </div>
@@ -393,10 +409,7 @@ Login.defaultProps = {
 };
 
 Login.propTypes = {
-  displayAs: PropTypes.oneOf([
-    LoginVariations.SIGN_IN,
-    LoginVariations.ACCOUNT_RECOVERY,
-  ]), // Defines how the form should be displayed and behaves
+  displayAs: PropTypes.oneOf([LoginVariations.SIGN_IN, LoginVariations.ACCOUNT_RECOVERY]), // Defines how the form should be displayed and behaves
   isSsoAvailable: PropTypes.bool, // true if SSO is available
   isDesktop: PropTypes.bool, // true if desktop is available
   context: PropTypes.any, // The application context
@@ -410,4 +423,4 @@ Login.propTypes = {
   ssoProvider: PropTypes.object, // The SSO provider if any
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation('common')(Login));
+export default withAppContext(withTranslation("common")(Login));

@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.2.0
  */
-import {resourceWithAppearance} from './AddResourceAppearance.test.data';
-import AddResourceAppearancePage from './AddResourceAppearance.test.page';
-import {defaultProps} from './AddResourceDescription.test.data';
+import { resourceWithAppearance } from "./AddResourceAppearance.test.data";
+import AddResourceAppearancePage from "./AddResourceAppearance.test.page";
+import { defaultProps } from "./AddResourceDescription.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("AddResourceAppearance", () => {
-  describe('As LU I can see the appearance form.', () => {
-    it('As LU I can see the appearancxe password form.', () => {
+  describe("As LU I can see the appearance form.", () => {
+    it("As LU I can see the appearancxe password form.", () => {
       expect.assertions(4);
 
       const page = new AddResourceAppearancePage(defaultProps());
@@ -33,8 +33,8 @@ describe("AddResourceAppearance", () => {
     });
   });
 
-  describe('Fill form appearance', () => {
-    it('can choose a color.', async() => {
+  describe("Fill form appearance", () => {
+    it("can choose a color.", async () => {
       expect.assertions(3);
 
       const props = defaultProps();
@@ -54,7 +54,7 @@ describe("AddResourceAppearance", () => {
       });
     });
 
-    it('can pick the transparent color.', async() => {
+    it("can pick the transparent color.", async () => {
       expect.assertions(3);
 
       const props = defaultProps();
@@ -74,7 +74,7 @@ describe("AddResourceAppearance", () => {
       });
     });
 
-    it('can switch back to the default color', async() => {
+    it("can switch back to the default color", async () => {
       expect.assertions(3);
 
       const props = resourceWithAppearance();
@@ -94,7 +94,7 @@ describe("AddResourceAppearance", () => {
       });
     });
 
-    it('can choose an icon.', async() => {
+    it("can choose an icon.", async () => {
       expect.assertions(4);
 
       const props = defaultProps();
@@ -120,7 +120,7 @@ describe("AddResourceAppearance", () => {
       });
     });
 
-    it('can switch back to the default icon', async() => {
+    it("can switch back to the default icon", async () => {
       expect.assertions(4);
 
       const props = resourceWithAppearance();

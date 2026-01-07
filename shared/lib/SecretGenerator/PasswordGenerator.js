@@ -15,7 +15,7 @@
  * @param configuration The generator configuration
  */
 
-import {MASKS, SecretGeneratorComplexity} from "./SecretGeneratorComplexity";
+import { MASKS, SecretGeneratorComplexity } from "./SecretGeneratorComplexity";
 
 /**
  * The list of look-alike substitution
@@ -67,12 +67,11 @@ function generate(configuration) {
   });
 
   const secretLength = configuration.length;
-  const canGenerate = availableMasks.length > 0
-    && secretLength >= configuration.min_length
-    && secretLength <=  configuration.max_length;
+  const canGenerate =
+    availableMasks.length > 0 && secretLength >= configuration.min_length && secretLength <= configuration.max_length;
 
   if (!canGenerate) {
-    return '';
+    return "";
   }
 
   // Build the mask to use to generate a secret.
@@ -86,13 +85,13 @@ function generate(configuration) {
    * Generate a password. Try to maximize the entropy of this one by fixing a goal entropy, if not reached keep
    * the password with the highest entropy. Try maximum 10 times.
    */
-  let secret = '';
+  let secret = "";
   let attempt = 0;
   let secretEntropy = 0;
   const goalEntropy = Math.floor(SecretGeneratorComplexity.calculEntropy(secretLength, mask.length));
 
   do {
-    let newSecret = '';
+    let newSecret = "";
     for (let i = 0; i < secretLength; i++) {
       newSecret += mask[randomNumberRange(0, mask.length - 1)];
     }
@@ -106,4 +105,4 @@ function generate(configuration) {
   return secret;
 }
 
-export const PasswordGenerator = {generate};
+export const PasswordGenerator = { generate };

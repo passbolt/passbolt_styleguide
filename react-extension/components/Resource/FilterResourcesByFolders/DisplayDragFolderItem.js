@@ -13,9 +13,9 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext, {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withDrag} from "../../../contexts/DragContext";
+import AppContext, { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withDrag } from "../../../contexts/DragContext";
 import CircleXSVG from "../../../../img/svg/circle_x.svg";
 
 class DisplayDragFolderItem extends React.Component {
@@ -37,7 +37,8 @@ class DisplayDragFolderItem extends React.Component {
     let canDragItems = draggedFolders.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     const draggedResources = draggedItems.resources;
-    canDragItems = canDragItems && draggedResources.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
+    canDragItems =
+      canDragItems && draggedResources.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     return canDragItems;
   }
@@ -52,7 +53,7 @@ class DisplayDragFolderItem extends React.Component {
       return true;
     }
 
-    const folderParent = this.props.context.folders.find(folder => folder.id === item.folder_parent_id);
+    const folderParent = this.props.context.folders.find((folder) => folder.id === item.folder_parent_id);
 
     // The user can always drag content from a personal folder.
     if (folderParent.personal) {
@@ -81,9 +82,7 @@ class DisplayDragFolderItem extends React.Component {
     const dragFeedbackText = canDrag ? this.draggedItems.folders[0].name : "You are not allowed to move this content";
     return (
       <div className="drag-and-drop item-1">
-        {!canDrag &&
-          <CircleXSVG/>
-        }
+        {!canDrag && <CircleXSVG />}
         <span className={`message ${!canDrag ? "not-allowed" : ""}`}>{dragFeedbackText}</span>
         <span className="count">1</span>
       </div>

@@ -22,11 +22,14 @@ class PendingAccountRecoveryRequestEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto = {}, options = {}) {
-    super(EntitySchema.validate(
-      PendingAccountRecoveryRequestEntity.ENTITY_NAME,
-      dto,
-      PendingAccountRecoveryRequestEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        PendingAccountRecoveryRequestEntity.ENTITY_NAME,
+        dto,
+        PendingAccountRecoveryRequestEntity.getSchema(),
+      ),
+      options,
+    );
   }
 
   /**
@@ -34,37 +37,34 @@ class PendingAccountRecoveryRequestEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "id",
-        "status"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["id", "status"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "status": {
-          "type": "string",
-          "enum": [STATUS_PENDING]
+        status: {
+          type: "string",
+          enum: [STATUS_PENDING],
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid"
+        created_by: {
+          type: "string",
+          format: "uuid",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid"
+        modified_by: {
+          type: "string",
+          format: "uuid",
         },
-      }
+      },
     };
   }
 

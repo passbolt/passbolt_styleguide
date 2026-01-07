@@ -16,18 +16,18 @@ import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import ResourceTypesFormEntity from "./resourceTypesFormEntity";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {resourceTypesCollectionDto} from "./resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "./resourceTypesCollection.test.data";
 import {
   defaultResourceTypesFormDto,
   resourceTypesCollectionWithCountDto,
   withDeletedResourceTypes,
-  withDeletedResourceTypesHavingResources
+  withDeletedResourceTypesHavingResources,
 } from "./resourceTypesFormEntity.test.data";
 import ResourceTypesCollection from "./resourceTypesCollection";
-import {defaultMetadataKeysDtos} from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
+import { defaultMetadataKeysDtos } from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
 import {
   defaultMetadataTypesSettingsV50FreshDto,
-  defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
+  defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto,
 } from "../metadata/metadataTypesSettingsEntity.test.data";
 import MetadataTypesSettingsEntity from "../metadata/metadataTypesSettingsEntity";
 import MetadataKeysCollection from "../metadata/metadataKeysCollection";
@@ -101,14 +101,21 @@ describe("ResourceTypesFormEntity", () => {
     it("validates resource_types property", () => {
       const dto = defaultResourceTypesFormDto();
       const successScenarios = [
-        {scenario: "valid resource_types collection", value: new ResourceTypesCollection(resourceTypesCollectionDto())},
-        {scenario: "valid resource_types collection dto", value: resourceTypesCollectionDto()},
+        {
+          scenario: "valid resource_types collection",
+          value: new ResourceTypesCollection(resourceTypesCollectionDto()),
+        },
+        { scenario: "valid resource_types collection dto", value: resourceTypesCollectionDto() },
       ];
-      const failScenarios = [
-        {scenario: "invalid resource_types type: integer", value: 42},
-      ];
+      const failScenarios = [{ scenario: "invalid resource_types type: integer", value: 42 }];
       assertEntityProperty.required(ResourceTypesFormEntity, "resource_types");
-      assertEntityProperty.assertAssociation(ResourceTypesFormEntity, "resource_types", dto, successScenarios, failScenarios);
+      assertEntityProperty.assertAssociation(
+        ResourceTypesFormEntity,
+        "resource_types",
+        dto,
+        successScenarios,
+        failScenarios,
+      );
     });
   });
 
@@ -124,17 +131,45 @@ describe("ResourceTypesFormEntity", () => {
       expect.assertions(1);
 
       const expectedError = new EntityValidationError();
-      expectedError.addError("password_v4", "has_content", "One (or more) resource type v4 having a password is deleted but its resources_count is not 0.");
-      expectedError.addError("password_v5", "has_content", "One (or more) resource type v4 having a totp is deleted but its resources_count is not 0.");
-      expectedError.addError("totp_v4", "has_content", "One (or more) resource type v5 having a password is deleted but its resources_count is not 0.");
-      expectedError.addError("totp_v5", "has_content", "One (or more) resource type v5 having a totp is deleted but its resources_count is not 0.");
-      expectedError.addError("note_v5", "has_content", "One (or more) resource type v5 having a note is deleted but its resources_count is not 0.");
+      expectedError.addError(
+        "password_v4",
+        "has_content",
+        "One (or more) resource type v4 having a password is deleted but its resources_count is not 0.",
+      );
+      expectedError.addError(
+        "password_v5",
+        "has_content",
+        "One (or more) resource type v4 having a totp is deleted but its resources_count is not 0.",
+      );
+      expectedError.addError(
+        "totp_v4",
+        "has_content",
+        "One (or more) resource type v5 having a password is deleted but its resources_count is not 0.",
+      );
+      expectedError.addError(
+        "totp_v5",
+        "has_content",
+        "One (or more) resource type v5 having a totp is deleted but its resources_count is not 0.",
+      );
+      expectedError.addError(
+        "note_v5",
+        "has_content",
+        "One (or more) resource type v5 having a note is deleted but its resources_count is not 0.",
+      );
 
       expectedError.addError("password_v4", "minimum_requirement", "At least one content type should be allowed");
       expectedError.addError("password_v5", "minimum_requirement", "At least one content type should be allowed");
       expectedError.addError("totp_v4", "minimum_requirement", "At least one content type should be allowed");
-      expectedError.addError("totp_v5", "has_cominimum_requirementntent", "At least one content type should be allowed");
-      expectedError.addError("note_v5", "has_cominimum_requirementntent", "At least one content type should be allowed");
+      expectedError.addError(
+        "totp_v5",
+        "has_cominimum_requirementntent",
+        "At least one content type should be allowed",
+      );
+      expectedError.addError(
+        "note_v5",
+        "has_cominimum_requirementntent",
+        "At least one content type should be allowed",
+      );
 
       const dto = withDeletedResourceTypesHavingResources();
       expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
@@ -144,7 +179,7 @@ describe("ResourceTypesFormEntity", () => {
       const expectedError = new EntityValidationError();
       expectedError.addError("resource_types", "type", "The resource_types is not a valid ResourceTypesCollection.");
 
-      const dto = withDeletedResourceTypesHavingResources({resource_types: []});
+      const dto = withDeletedResourceTypesHavingResources({ resource_types: [] });
       expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
     });
   });
@@ -153,7 +188,9 @@ describe("ResourceTypesFormEntity", () => {
     it("does not identify issues if no resource types are provided", () => {
       expect.assertions(1);
 
-      const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto());
+      const metadataTypesSettings = new MetadataTypesSettingsEntity(
+        defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto(),
+      );
       const metadataKeysCollection = new MetadataKeysCollection(defaultMetadataKeysDtos());
       const settings = new ResourceTypesFormEntity(defaultResourceTypesFormDto());
 
@@ -172,7 +209,9 @@ describe("ResourceTypesFormEntity", () => {
     it("throws if metadataKeysCollection parameter is not of the expected type", () => {
       expect.assertions(1);
 
-      const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto());
+      const metadataTypesSettings = new MetadataTypesSettingsEntity(
+        defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto(),
+      );
       const settings = new ResourceTypesFormEntity(defaultResourceTypesFormDto());
 
       expect(() => settings.verifyHealth(metadataTypesSettings, 42)).toThrow(TypeError);
@@ -182,20 +221,40 @@ describe("ResourceTypesFormEntity", () => {
       expect.assertions(1);
 
       const expectedError = new EntityValidationError();
-      expectedError.addError("totp_v4", "is_creation_alowed", "Creation of resource type v4 is allowed but all resource types having totp are deleted.");
-      expectedError.addError("password_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having passwords are deleted.");
-      expectedError.addError("totp_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having totp are deleted.");
-      expectedError.addError("note_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having note are deleted.");
+      expectedError.addError(
+        "totp_v4",
+        "is_creation_alowed",
+        "Creation of resource type v4 is allowed but all resource types having totp are deleted.",
+      );
+      expectedError.addError(
+        "password_v5",
+        "is_creation_alowed",
+        "Creation of resource type v5 is allowed but all resource types having passwords are deleted.",
+      );
+      expectedError.addError(
+        "totp_v5",
+        "is_creation_alowed",
+        "Creation of resource type v5 is allowed but all resource types having totp are deleted.",
+      );
+      expectedError.addError(
+        "note_v5",
+        "is_creation_alowed",
+        "Creation of resource type v5 is allowed but all resource types having note are deleted.",
+      );
 
       expectedError.addError("password_v5", "active_metadata_key", "No active metadata key defined.");
       expectedError.addError("totp_v5", "active_metadata_key", "No active metadata key defined.");
       expectedError.addError("note_v5", "active_metadata_key", "No active metadata key defined.");
 
-      const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v4_resources: true}));
+      const metadataTypesSettings = new MetadataTypesSettingsEntity(
+        defaultMetadataTypesSettingsV50FreshDto({ allow_creation_of_v4_resources: true }),
+      );
       const metadataKeysCollection = new MetadataKeysCollection([]);
-      const settings = new ResourceTypesFormEntity(withDeletedResourceTypes({
-        password_v4: true,
-      }));
+      const settings = new ResourceTypesFormEntity(
+        withDeletedResourceTypes({
+          password_v4: true,
+        }),
+      );
 
       const healthIssues = settings.verifyHealth(metadataTypesSettings, metadataKeysCollection);
       expect(healthIssues).toStrictEqual(expectedError);
@@ -205,14 +264,22 @@ describe("ResourceTypesFormEntity", () => {
       expect.assertions(1);
 
       const expectedError = new EntityValidationError();
-      expectedError.addError("password_v4", "is_creation_alowed", "Creation of resource type v4 is allowed but all resource types having passwords are deleted.");
+      expectedError.addError(
+        "password_v4",
+        "is_creation_alowed",
+        "Creation of resource type v4 is allowed but all resource types having passwords are deleted.",
+      );
 
-      const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v4_resources: true}));
+      const metadataTypesSettings = new MetadataTypesSettingsEntity(
+        defaultMetadataTypesSettingsV50FreshDto({ allow_creation_of_v4_resources: true }),
+      );
       const metadataKeysCollection = new MetadataKeysCollection([]);
-      const settings = new ResourceTypesFormEntity(defaultResourceTypesFormDto({
-        password_v4: false,
-        password_v4_count: 0,
-      }));
+      const settings = new ResourceTypesFormEntity(
+        defaultResourceTypesFormDto({
+          password_v4: false,
+          password_v4_count: 0,
+        }),
+      );
 
       const healthIssues = settings.verifyHealth(metadataTypesSettings, metadataKeysCollection);
       expect(healthIssues).toStrictEqual(expectedError);
@@ -226,7 +293,13 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError("password_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
       expectedError.addError("note_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
 
-      const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v5_resources: false, default_resource_types: "v4", allow_creation_of_v4_resources: true}));
+      const metadataTypesSettings = new MetadataTypesSettingsEntity(
+        defaultMetadataTypesSettingsV50FreshDto({
+          allow_creation_of_v5_resources: false,
+          default_resource_types: "v4",
+          allow_creation_of_v4_resources: true,
+        }),
+      );
       const metadataKeysCollection = new MetadataKeysCollection([]);
       const settings = new ResourceTypesFormEntity(defaultResourceTypesFormDto());
 

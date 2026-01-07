@@ -23,14 +23,14 @@ class UserDirectoryDTO {
   constructor(userDirectoryModel) {
     const directoryType = userDirectoryModel.directoryType;
     const isBasicAuthType = !userDirectoryModel.authenticationType || userDirectoryModel.authenticationType === "basic";
-    this.enabled =  userDirectoryModel.userDirectoryToggle;
+    this.enabled = userDirectoryModel.userDirectoryToggle;
     // DIRECTORY CONFIGURATION FIELDS
     this.group_path = userDirectoryModel.groupPath;
     this.user_path = userDirectoryModel.userPath;
     this.group_custom_filters = userDirectoryModel.groupCustomFilters;
     this.user_custom_filters = userDirectoryModel.userCustomFilters;
     this.group_object_class = directoryType === "openldap" ? userDirectoryModel.groupObjectClass : "";
-    this.user_object_class = directoryType === "openldap"  ? userDirectoryModel.userObjectClass : "";
+    this.user_object_class = directoryType === "openldap" ? userDirectoryModel.userObjectClass : "";
     this.use_email_prefix_suffix = directoryType === "openldap" ? userDirectoryModel.useEmailPrefix : false;
     this.email_prefix = directoryType === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailPrefix : "";
     this.email_suffix = directoryType === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailSuffix : "";
@@ -40,7 +40,7 @@ class UserDirectoryDTO {
     this.groups_parent_group = userDirectoryModel.groupsParentGroup;
     this.users_parent_group = userDirectoryModel.usersParentGroup;
     this.enabled_users_only = userDirectoryModel.enabledUsersOnly;
-    this.sync_users_create =  userDirectoryModel.createUsers;
+    this.sync_users_create = userDirectoryModel.createUsers;
     this.sync_users_delete = userDirectoryModel.deleteUsers;
     this.sync_users_update = userDirectoryModel.updateUsers;
     this.sync_groups_create = userDirectoryModel.createGroups;
@@ -63,10 +63,9 @@ class UserDirectoryDTO {
         base_dn: userDirectoryModel.baseDn,
         hosts: [userDirectoryModel.host],
         port: parseInt(userDirectoryModel.port, 10),
-      }
+      },
     };
   }
 }
 
 export default UserDirectoryDTO;
-

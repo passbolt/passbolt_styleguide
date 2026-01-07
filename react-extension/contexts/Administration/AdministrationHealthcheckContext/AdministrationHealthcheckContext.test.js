@@ -12,13 +12,14 @@
  * @since         4.6.0
  */
 
-import {mockApiResponse, mockApiResponseError} from '../../../../../test/mocks/mockApiResponse';
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {AdministrationHealthcheckContextProvider} from "./AdministrationHealthcheckContext";
+import { mockApiResponse, mockApiResponseError } from "../../../../../test/mocks/mockApiResponse";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { AdministrationHealthcheckContextProvider } from "./AdministrationHealthcheckContext";
 import {
   defaultProps,
-  mockHealthcheckData, mockHealthcheckDataAllChecksFail,
-  mockHealthcheckWrongData
+  mockHealthcheckData,
+  mockHealthcheckDataAllChecksFail,
+  mockHealthcheckWrongData,
 } from "./AdministrationHealthcheckContext.test.data";
 import HealthcheckEntity from "../../../../shared/models/entity/healthcheck/healthcheckEntity";
 
@@ -34,7 +35,7 @@ describe("AdministrationHealthcheckContext", () => {
   });
 
   describe("AdministrationHealthcheckContext::loadHealthcheckData", () => {
-    it("should fetch healthcheck data", async() => {
+    it("should fetch healthcheck data", async () => {
       expect.assertions(2);
       fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckData));
       await adminHealthcheckContext.state.loadHealthcheckData();
@@ -42,35 +43,37 @@ describe("AdministrationHealthcheckContext", () => {
       expect(adminHealthcheckContext.state.healthcheckData).not.toBeNull();
       expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(expectedData.toDto());
     });
-    it("should fail if healthcheck data are wrong", async() => {
+    it("should fail if healthcheck data are wrong", async () => {
       expect.assertions(1);
       fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckWrongData));
       await adminHealthcheckContext.state.loadHealthcheckData();
       expect(adminHealthcheckContext.props.actionFeedbackContext.displayError).toHaveBeenCalled();
     });
-    it("should fail if server response is failing", async() => {
+    it("should fail if server response is failing", async () => {
       expect.assertions(1);
       fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponseError());
       await adminHealthcheckContext.state.loadHealthcheckData();
       expect(adminHealthcheckContext.props.actionFeedbackContext.displayError).toHaveBeenCalled();
     });
-    it("should fail if no data received from server", async() => {
+    it("should fail if no data received from server", async () => {
       expect.assertions(1);
       fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(null));
       await adminHealthcheckContext.state.loadHealthcheckData();
-      expect(adminHealthcheckContext.props.actionFeedbackContext.displayError).toHaveBeenCalledWith('No data received from the server');
+      expect(adminHealthcheckContext.props.actionFeedbackContext.displayError).toHaveBeenCalledWith(
+        "No data received from the server",
+      );
     });
-    it("should load until data is received", async() => {
+    it("should load until data is received", async () => {
       expect.assertions(4);
       let updateResolve;
-      const requestPromise = new Promise(resolve => {
+      const requestPromise = new Promise((resolve) => {
         updateResolve = resolve;
       });
       fetch.doMockOnceIf(/healthcheck*/, () => requestPromise);
       const loadDataPromise = adminHealthcheckContext.state.loadHealthcheckData();
       expect(adminHealthcheckContext.state.processing).toBeTruthy();
       expect(adminHealthcheckContext.state.isProcessing()).toBeTruthy();
-      updateResolve(JSON.stringify({header: {}, body: mockHealthcheckData}));
+      updateResolve(JSON.stringify({ header: {}, body: mockHealthcheckData }));
       await loadDataPromise;
       expect(adminHealthcheckContext.state.processing).toBeFalsy();
       expect(adminHealthcheckContext.state.isProcessing()).toBeFalsy();
@@ -78,7 +81,7 @@ describe("AdministrationHealthcheckContext", () => {
   });
 
   describe("AdministrationHealthcheckContext::clearContext", () => {
-    it("should clear the context and set it by default", async() => {
+    it("should clear the context and set it by default", async () => {
       expect.assertions(4);
 
       //init context
@@ -95,7 +98,7 @@ describe("AdministrationHealthcheckContext", () => {
   });
 
   describe("AdministrationHealthcheckContext::refresh", () => {
-    it("should refresh the healthcheck data", async() => {
+    it("should refresh the healthcheck data", async () => {
       expect.assertions(4);
 
       fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckData));
@@ -113,11 +116,10 @@ describe("AdministrationHealthcheckContext", () => {
   });
 });
 
-
 function mockState(contextProvider) {
-  const setStateMock = state => {
+  const setStateMock = (state) => {
     let newState;
-    if (typeof state  === 'function') {
+    if (typeof state === "function") {
       newState = state(contextProvider.state);
     } else {
       newState = state;

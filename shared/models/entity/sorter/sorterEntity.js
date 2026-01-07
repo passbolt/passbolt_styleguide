@@ -14,8 +14,7 @@
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 
-
-const ENTITY_NAME = 'Sorter';
+const ENTITY_NAME = "Sorter";
 
 /**
  * Sorter entity for table to display with data
@@ -25,11 +24,7 @@ class SorterEntity extends Entity {
    * @inheritDoc
    */
   constructor(sorterDto, options = {}) {
-    super(EntitySchema.validate(
-      SorterEntity.ENTITY_NAME,
-      sorterDto,
-      SorterEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(SorterEntity.ENTITY_NAME, sorterDto, SorterEntity.getSchema()), options);
   }
 
   /**
@@ -38,19 +33,16 @@ class SorterEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "propertyName",
-        "asc"
-      ],
-      "properties": {
-        "propertyName": {
-          "type": "string"
+      type: "object",
+      required: ["propertyName", "asc"],
+      properties: {
+        propertyName: {
+          type: "string",
         },
-        "asc": {
-          "type": "boolean"
-        }
-      }
+        asc: {
+          type: "boolean",
+        },
+      },
     };
   }
 

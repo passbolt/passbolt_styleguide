@@ -14,10 +14,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import Select from "../../Common/Select/Select";
-import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { controlFunctions } from "../../../../shared/services/rbacs/controlFunctionEnumeration";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 
 class DisplayRbacItem extends React.Component {
@@ -43,13 +43,17 @@ class DisplayRbacItem extends React.Component {
    * @returns {[{label: string, value: string},{label: string, value: string}]}
    */
   get allowedCtlFunctions() {
-    const controls =  [
-      {value: controlFunctions.ALLOW, label: this.props.t('Allow')},
-      {value: controlFunctions.DENY, label: this.props.t('Deny')},
+    const controls = [
+      { value: controlFunctions.ALLOW, label: this.props.t("Allow") },
+      { value: controlFunctions.DENY, label: this.props.t("Deny") },
     ];
 
     if (this.props.actionName === uiActions.USERS_VIEW_WORKSPACE) {
-      controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager'), title: this.props.t('Allow group manager')});
+      controls.push({
+        value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP,
+        label: this.props.t("Allow group manager"),
+        title: this.props.t("Allow group manager"),
+      });
     }
     return controls;
   }
@@ -59,7 +63,7 @@ class DisplayRbacItem extends React.Component {
    * @returns {string}
    */
   get rowClassName() {
-    return this.props.actionName.toLowerCase().replaceAll(/[^\w]/ig, '-');
+    return this.props.actionName.toLowerCase().replaceAll(/[^\w]/gi, "-");
   }
 
   /**
@@ -68,8 +72,9 @@ class DisplayRbacItem extends React.Component {
    * @return {string|null}
    */
   getCtlFunctionForRole(role) {
-    const rbac = this.props.rbacsUpdated?.findRbacByRoleAndActionName(role, this.props.actionName)
-      || this.props.rbacs?.findRbacByRoleAndActionName(role, this.props.actionName);
+    const rbac =
+      this.props.rbacsUpdated?.findRbacByRoleAndActionName(role, this.props.actionName) ||
+      this.props.rbacs?.findRbacByRoleAndActionName(role, this.props.actionName);
     return rbac?.controlFunction || null;
   }
 
@@ -95,7 +100,9 @@ class DisplayRbacItem extends React.Component {
 
     return (
       <>
-        <div className={`rbac-row ${this.rowClassName} flex-container inner level-${this.props.level} ${this.hasChanged() ? 'highlighted' : ''}`}>
+        <div
+          className={`rbac-row ${this.rowClassName} flex-container inner level-${this.props.level} ${this.hasChanged() ? "highlighted" : ""}`}
+        >
           <div className="flex-item first">
             <span>{this.props.label}</span>
           </div>
@@ -104,21 +111,23 @@ class DisplayRbacItem extends React.Component {
               className={`admin inline`}
               items={this.allowedCtlFunctions}
               value={controlFunctions.ALLOW}
-              disabled={true}/>
+              disabled={true}
+            />
           </div>
-          {customizableRoles.items.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
-            <Select
-              className="inline"
-              items={this.allowedCtlFunctions}
-              value={this.getCtlFunctionForRole(role)}
-              disabled={!(this.props.rbacs?.length > 0) || !this.getCtlFunctionForRole(role)}
-              onChange={event => this.handleInputChange(event, role)}/>
-            {
-              !this.getCtlFunctionForRole(role) && <div className="warning-message">There is no valid setting found for this action.</div>
-            }
-
-          </div>
-          )}
+          {customizableRoles.items.map((role) => (
+            <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
+              <Select
+                className="inline"
+                items={this.allowedCtlFunctions}
+                value={this.getCtlFunctionForRole(role)}
+                disabled={!(this.props.rbacs?.length > 0) || !this.getCtlFunctionForRole(role)}
+                onChange={(event) => this.handleInputChange(event, role)}
+              />
+              {!this.getCtlFunctionForRole(role) && (
+                <div className="warning-message">There is no valid setting found for this action.</div>
+              )}
+            </div>
+          ))}
         </div>
       </>
     );
@@ -136,4 +145,4 @@ DisplayRbacItem.propTypes = {
   t: PropTypes.func, // The translation function.
 };
 
-export default withTranslation('common')(DisplayRbacItem);
+export default withTranslation("common")(DisplayRbacItem);

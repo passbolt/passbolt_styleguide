@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.1
  */
-import {defaultSessionKeysBundleDto} from "./sessionKeysBundleEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { defaultSessionKeysBundleDto } from "./sessionKeysBundleEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Default session keys bundles dtos

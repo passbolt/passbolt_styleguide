@@ -12,9 +12,9 @@
  * @since         3.6.0
  */
 import each from "jest-each";
-import {defaultProps} from "./AskForAuthenticationHelpCredentialLost.test.data";
+import { defaultProps } from "./AskForAuthenticationHelpCredentialLost.test.data";
 import AskForAuthenticationHelpCredentialLostTestPage from "./AskForAuthenticationHelpCredentialLost.test.page";
-import {AskForAuthenticationHelpCredentialLostVariations} from "./AskForAuthenticationHelpCredentialLost";
+import { AskForAuthenticationHelpCredentialLostVariations } from "./AskForAuthenticationHelpCredentialLost";
 
 beforeEach(() => {
   jest.resetModules();
@@ -22,9 +22,9 @@ beforeEach(() => {
 
 describe("AskForAuthenticationHelpCredentialLost", () => {
   each([
-    {displayAs: AskForAuthenticationHelpCredentialLostVariations.SETUP}, // Login
-    {displayAs: AskForAuthenticationHelpCredentialLostVariations.RECOVER}, // recover account
-  ]).describe("Common behavior to all context", _props => {
+    { displayAs: AskForAuthenticationHelpCredentialLostVariations.SETUP }, // Login
+    { displayAs: AskForAuthenticationHelpCredentialLostVariations.RECOVER }, // recover account
+  ]).describe("Common behavior to all context", (_props) => {
     let page, props;
 
     beforeEach(() => {
@@ -32,21 +32,21 @@ describe("AskForAuthenticationHelpCredentialLost", () => {
       page = new AskForAuthenticationHelpCredentialLostTestPage(props);
     });
 
-    it('As AN I should be able to request a new account', async() => {
+    it("As AN I should be able to request a new account", async () => {
       expect.assertions(1);
       await page.requestHelp();
       expect(props.onPrimaryActionClick).toHaveBeenCalled();
     });
 
-    it('As AN I should be able to try again', async() => {
+    it("As AN I should be able to try again", async () => {
       expect.assertions(1);
       await page.tryAgain();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
     });
 
     // @deprecated with v3.6 the request help feature was added with v3.6
-    it('As AN I cannot request help only try again if the canRequestHelp prop is set to false', async() => {
-      props = defaultProps({..._props, canRequestHelp: false});
+    it("As AN I cannot request help only try again if the canRequestHelp prop is set to false", async () => {
+      props = defaultProps({ ..._props, canRequestHelp: false });
       page = new AskForAuthenticationHelpCredentialLostTestPage(props);
       expect.assertions(1);
       await page.requestHelp();
@@ -54,4 +54,3 @@ describe("AskForAuthenticationHelpCredentialLost", () => {
     });
   });
 });
-

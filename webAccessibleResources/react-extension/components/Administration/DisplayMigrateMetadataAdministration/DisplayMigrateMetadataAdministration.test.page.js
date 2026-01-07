@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayMigrateMetadataAdministration from "./DisplayMigrateMetadataAdministration";
@@ -27,10 +27,10 @@ export default class DisplayMigrateMetadataAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-          <DisplayMigrateMetadataAdministration {...props}/>
+          <DisplayMigrateMetadataAdministration {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 

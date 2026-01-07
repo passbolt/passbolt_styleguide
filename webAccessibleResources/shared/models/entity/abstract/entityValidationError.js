@@ -19,9 +19,9 @@ class EntityValidationError extends Error {
    *
    * @param {string} message
    */
-  constructor(message = 'Entity validation error.') {
+  constructor(message = "Entity validation error.") {
     super(message);
-    this.name = 'EntityValidationError';
+    this.name = "EntityValidationError";
     this.details = {};
   }
 
@@ -33,14 +33,14 @@ class EntityValidationError extends Error {
    * @param {string} message example: the name is required
    */
   addError(property, rule, message) {
-    if (typeof property !== 'string') {
-      throw new TypeError('EntityValidationError addError property should be a string.');
+    if (typeof property !== "string") {
+      throw new TypeError("EntityValidationError addError property should be a string.");
     }
-    if (typeof rule !== 'string') {
-      throw new TypeError('EntityValidationError addError rule should be a string.');
+    if (typeof rule !== "string") {
+      throw new TypeError("EntityValidationError addError rule should be a string.");
     }
-    if (typeof message !== 'string') {
-      throw new TypeError('EntityValidationError addError message should be a string.');
+    if (typeof message !== "string") {
+      throw new TypeError("EntityValidationError addError message should be a string.");
     }
     if (!Object.prototype.hasOwnProperty.call(this.details, property)) {
       this.details[property] = {};
@@ -55,11 +55,11 @@ class EntityValidationError extends Error {
    * @param {EntityValidationError | CollectionValidationError} error
    */
   addAssociationError(associationName, error) {
-    if (typeof associationName !== 'string') {
-      throw new TypeError('EntityValidationError addAssociationError associationName should be a string.');
+    if (typeof associationName !== "string") {
+      throw new TypeError("EntityValidationError addAssociationError associationName should be a string.");
     }
     if (!(error instanceof EntityValidationError) && !(error instanceof CollectionValidationError)) {
-      throw new TypeError('EntityValidationError addAssociationError errorDetails should be an object.');
+      throw new TypeError("EntityValidationError addAssociationError errorDetails should be an object.");
     }
     this.details[associationName] = error;
   }
@@ -76,9 +76,7 @@ class EntityValidationError extends Error {
     }
 
     const errors = this.details[property];
-    return rule
-      ? errors[rule]
-      : errors;
+    return rule ? errors[rule] : errors;
   }
 
   /**
@@ -89,11 +87,11 @@ class EntityValidationError extends Error {
    * @returns {boolean} true if a given property as an error
    */
   hasError(property, rule) {
-    if (typeof property !== 'string') {
-      throw new TypeError('EntityValidationError hasError property should be a string.');
+    if (typeof property !== "string") {
+      throw new TypeError("EntityValidationError hasError property should be a string.");
     }
 
-    const hasError = (this.details && Object.prototype.hasOwnProperty.call(this.details, property));
+    const hasError = this.details && Object.prototype.hasOwnProperty.call(this.details, property);
     if (!hasError) {
       return false;
     }
@@ -101,8 +99,8 @@ class EntityValidationError extends Error {
     if (!rule) {
       return hasError;
     }
-    if (typeof rule !== 'string') {
-      throw new TypeError('EntityValidationError hasError rule should be a string.');
+    if (typeof rule !== "string") {
+      throw new TypeError("EntityValidationError hasError rule should be a string.");
     }
     return Object.prototype.hasOwnProperty.call(this.details[property], rule);
   }
@@ -113,7 +111,7 @@ class EntityValidationError extends Error {
    * @returns {boolean}
    */
   hasErrors() {
-    return (Object.keys(this.details).length > 0);
+    return Object.keys(this.details).length > 0;
   }
 
   /**

@@ -12,8 +12,7 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayUserWorkspaceActions from "./DisplayUserWorkspaceActions";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -29,9 +28,9 @@ export default class DisplayUserWorkspaceActionsPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayUserWorkspaceActions {...props}/>
+        <DisplayUserWorkspaceActions {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -40,7 +39,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {boolean} True if copy action is available
    */
   get canCopy() {
-    const element = this._page.container.querySelector('#copy-action');
+    const element = this._page.container.querySelector("#copy-action");
     return Boolean(element);
   }
 
@@ -49,7 +48,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {HTMLElement|null} The dropdown element or null if not found
    */
   get _getMoreActionsDropdown() {
-    return this._page.container.querySelector('.more.button-action-contextual');
+    return this._page.container.querySelector(".more.button-action-contextual");
   }
 
   /**
@@ -58,7 +57,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<boolean>} True if the action is available
    */
   async _canPerformAction(selector) {
-  // First check if the more actions dropdown exists
+    // First check if the more actions dropdown exists
     if (!this.hasMoreActionsDropdown) {
       return false;
     }
@@ -84,7 +83,7 @@ export default class DisplayUserWorkspaceActionsPage {
   async openMoreActionsDropdown() {
     const dropdown = this._getMoreActionsDropdown;
     if (dropdown) {
-      const leftClick = {button: 0};
+      const leftClick = { button: 0 };
       fireEvent.click(dropdown, leftClick);
       await waitFor(() => {});
     }
@@ -95,7 +94,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {boolean} True if edit action is available
    */
   get canEdit() {
-    const element = this._page.container.querySelector('#edit-user');
+    const element = this._page.container.querySelector("#edit-user");
     return Boolean(element);
   }
 
@@ -104,7 +103,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<boolean>} True if delete action is available
    */
   async canDelete() {
-    return this._canPerformAction('#delete-user');
+    return this._canPerformAction("#delete-user");
   }
 
   /**
@@ -112,7 +111,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {boolean} True if copy permalink action is available
    */
   get canCopyPermalink() {
-    const element = this._page.container.querySelector('#copy-user-permalink');
+    const element = this._page.container.querySelector("#copy-user-permalink");
     return Boolean(element);
   }
 
@@ -121,7 +120,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {boolean} True if copy email action is available
    */
   get canCopyUserEmail() {
-    const element = this._page.container.querySelector('#copy-user-email');
+    const element = this._page.container.querySelector("#copy-user-email");
     return Boolean(element);
   }
 
@@ -130,7 +129,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {boolean} True if copy public key action is available
    */
   get canCopyUserPublicKey() {
-    const element = this._page.container.querySelector('#copy-user-public-key');
+    const element = this._page.container.querySelector("#copy-user-public-key");
     return Boolean(element);
   }
 
@@ -139,7 +138,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {boolean} True if resend invite action is available
    */
   get canResendInvite() {
-    const element = this._page.container.querySelector('#resend-invite-user');
+    const element = this._page.container.querySelector("#resend-invite-user");
     return Boolean(element);
   }
 
@@ -148,7 +147,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<boolean>} True if disable MFA action is available
    */
   async canDisableMFA() {
-    return this._canPerformAction('#disable-mfa-action');
+    return this._canPerformAction("#disable-mfa-action");
   }
 
   /**
@@ -156,7 +155,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {boolean} True if review recovery action is available
    */
   get canReviewAccountRecovery() {
-    const element = this._page.container.querySelector('#review-recovery');
+    const element = this._page.container.querySelector("#review-recovery");
     return Boolean(element);
   }
 
@@ -165,7 +164,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {boolean} True if share metadata keys action is available
    */
   get canShareMissingMetadataKeys() {
-    const element = this._page.container.querySelector('#share-metadata-keys');
+    const element = this._page.container.querySelector("#share-metadata-keys");
     return Boolean(element);
   }
 
@@ -174,7 +173,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {boolean} True if remove from group action is available
    */
   get canRemoveFromGroup() {
-    const element = this._page.container.querySelector('#remove-user-from-group');
+    const element = this._page.container.querySelector("#remove-user-from-group");
     return Boolean(element);
   }
 
@@ -183,7 +182,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {HTMLElement|null} The button element or null if not found
    */
   get removeFromGroupButton() {
-    return this._page.container.querySelector('#remove-user-from-group');
+    return this._page.container.querySelector("#remove-user-from-group");
   }
 
   /**
@@ -192,7 +191,7 @@ export default class DisplayUserWorkspaceActionsPage {
    */
   async removeFromGroup() {
     const button = this.removeFromGroupButton;
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(button, leftClick);
     await waitFor(() => {});
   }
@@ -202,7 +201,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<void>}
    */
   async copyActions() {
-    const element = this._page.container.querySelector('#copy-action .dropdown button');
+    const element = this._page.container.querySelector("#copy-action .dropdown button");
     await this.click(element);
   }
 
@@ -211,7 +210,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<void>}
    */
   async copyPermalink() {
-    const element = this._page.container.querySelector('#copy-user-permalink');
+    const element = this._page.container.querySelector("#copy-user-permalink");
     await this.click(element);
   }
 
@@ -220,7 +219,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<void>}
    */
   async copyEmailAddress() {
-    const element = this._page.container.querySelector('#copy-user-email');
+    const element = this._page.container.querySelector("#copy-user-email");
     await this.click(element);
   }
 
@@ -229,7 +228,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<void>}
    */
   async copyPublicKey() {
-    const element = this._page.container.querySelector('#copy-user-public-key');
+    const element = this._page.container.querySelector("#copy-user-public-key");
     await this.click(element);
   }
 
@@ -238,7 +237,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<void>}
    */
   async resendInvite() {
-    const element = this._page.container.querySelector('#resend-invite-user');
+    const element = this._page.container.querySelector("#resend-invite-user");
     await this.click(element);
   }
 
@@ -248,7 +247,7 @@ export default class DisplayUserWorkspaceActionsPage {
    */
   async disableMfa() {
     await this.openMoreActionsDropdown();
-    const element = this._page.container.querySelector('#disable-mfa-action');
+    const element = this._page.container.querySelector("#disable-mfa-action");
     await this.click(element);
   }
 
@@ -257,7 +256,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<void>}
    */
   async reviewAccountRecovery() {
-    const element = this._page.container.querySelector('#review-recovery');
+    const element = this._page.container.querySelector("#review-recovery");
     await this.click(element);
   }
 
@@ -266,10 +265,9 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<void>}
    */
   async shareMetadataKeys() {
-    const element = this._page.container.querySelector('#share-metadata-keys');
+    const element = this._page.container.querySelector("#share-metadata-keys");
     await this.click(element);
   }
-
 
   /**
    * Clicks on an element
@@ -277,7 +275,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * @returns {Promise<void>}
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

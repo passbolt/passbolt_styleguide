@@ -13,21 +13,22 @@
  */
 
 import React from "react";
-import {MemoryRouter} from "react-router-dom/cjs/react-router-dom.min";
+import { MemoryRouter } from "react-router-dom/cjs/react-router-dom.min";
 import NotifyExpiredSession from "./NotifyExpiredSession";
-import {defaultProps} from "./NotifyExpiredSession.test.data";
+import { defaultProps } from "./NotifyExpiredSession.test.data";
 
 export default {
-  title: 'Components/Authentication/NotifyExpiredSession',
+  title: "Components/Authentication/NotifyExpiredSession",
   component: NotifyExpiredSession,
   decorators: [
-    (Story, {args}) =>
-      <MemoryRouter initialEntries={['/']}>
-        <Story {...args}/>
+    (Story, { args }) => (
+      <MemoryRouter initialEntries={["/"]}>
+        <Story {...args} />
       </MemoryRouter>
+    ),
   ],
 };
 
 export const Initial = {
-  args: defaultProps()
+  args: defaultProps(),
 };

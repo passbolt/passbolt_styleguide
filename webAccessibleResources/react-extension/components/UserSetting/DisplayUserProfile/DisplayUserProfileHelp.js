@@ -12,15 +12,15 @@
  * @since         5.0.0
  */
 
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { Trans, withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import UploadFileSVG from "../../../../img/svg/upload_file.svg";
 /**
  * This component displays the user profile help
@@ -72,33 +72,39 @@ class DisplayUserProfileHelp extends React.Component {
     return this.props.rbacContext.canIUseAction(uiActions.AVATAR_UPLOAD);
   }
 
-
   render() {
     return (
-      this.user &&
-          <div className="sidebar-help-section profile">
-            <h3><Trans>Avatar</Trans></h3>
-            <div className="avatar">
-              <div className="value">
-                <UserAvatar
-                  user={this.props.context.loggedInUser}
-                  baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                  className=""/>
-              </div>
+      this.user && (
+        <div className="sidebar-help-section profile">
+          <h3>
+            <Trans>Avatar</Trans>
+          </h3>
+          <div className="avatar">
+            <div className="value">
+              <UserAvatar
+                user={this.props.context.loggedInUser}
+                baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                className=""
+              />
             </div>
-            {
-              this.canIUseUploadAvatarCapability && <div className="upload-avatar">
-                <button
-                  className="button edit-avatar-action"
-                  title={this.translate("Upload a new avatar picture")}
-                  type="button"
-                  onClick={this.handleUploadPicture}>
-                  <UploadFileSVG/>
-                  <span className="help-text"><Trans>Upload a new avatar picture</Trans></span>
-                </button>
-              </div>
-            }
           </div>
+          {this.canIUseUploadAvatarCapability && (
+            <div className="upload-avatar">
+              <button
+                className="button edit-avatar-action"
+                title={this.translate("Upload a new avatar picture")}
+                type="button"
+                onClick={this.handleUploadPicture}
+              >
+                <UploadFileSVG />
+                <span className="help-text">
+                  <Trans>Upload a new avatar picture</Trans>
+                </span>
+              </button>
+            </div>
+          )}
+        </div>
+      )
     );
   }
 }
@@ -108,7 +114,7 @@ DisplayUserProfileHelp.propTypes = {
   rbacContext: PropTypes.object, // The rbac context
   dialogContext: PropTypes.object, // The dialog context
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
+  i18n: PropTypes.any, // The i18n context translation
 };
 
-export default withAppContext(withDialog(withRbac(withTranslation('common')(DisplayUserProfileHelp))));
+export default withAppContext(withDialog(withRbac(withTranslation("common")(DisplayUserProfileHelp))));

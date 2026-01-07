@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
 import ShareActionFeedback from "./ShareActionFeedback";
 
@@ -82,26 +82,29 @@ class DisplayActionFeedbacks extends React.Component {
   }
 
   render() {
-    const displayTimeInMs = this.length > 1 ? DisplayActionFeedbacks.DEFAULT_DISPLAY_MIN_TIME_IN_MS : DisplayActionFeedbacks.DEFAULT_DISPLAY_TIME_IN_MS;
+    const displayTimeInMs =
+      this.length > 1
+        ? DisplayActionFeedbacks.DEFAULT_DISPLAY_MIN_TIME_IN_MS
+        : DisplayActionFeedbacks.DEFAULT_DISPLAY_TIME_IN_MS;
 
     return (
       <>
-        {this.hasFeedbacks &&
-        <div className="notification-container">
-          <ShareActionFeedback
-            feedback={this.feedbackToDisplay}
-            onClose={() => this.close(this.feedbackToDisplay)}
-            displayTimeInMs={displayTimeInMs}/>
-        </div>
-        }
+        {this.hasFeedbacks && (
+          <div className="notification-container">
+            <ShareActionFeedback
+              feedback={this.feedbackToDisplay}
+              onClose={() => this.close(this.feedbackToDisplay)}
+              displayTimeInMs={displayTimeInMs}
+            />
+          </div>
+        )}
       </>
     );
   }
 }
 
 DisplayActionFeedbacks.propTypes = {
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
 };
 
 export default withActionFeedback(DisplayActionFeedbacks);
-

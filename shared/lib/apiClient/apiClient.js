@@ -15,7 +15,7 @@ import PassboltApiFetchError from "../Error/PassboltApiFetchError";
 import PassboltBadResponseError from "../Error/PassboltBadResponseError";
 import PassboltServiceUnavailableError from "../Error/PassboltServiceUnavailableError";
 
-const SUPPORTED_METHODS = ['GET', 'POST', 'PUT', 'DELETE'];
+const SUPPORTED_METHODS = ["GET", "POST", "PUT", "DELETE"];
 export class ApiClient {
   /**
    * Constructor
@@ -27,30 +27,30 @@ export class ApiClient {
   constructor(options) {
     this.options = options;
     if (!this.options.getBaseUrl()) {
-      throw new TypeError('ApiClient constructor error: baseUrl is required.');
+      throw new TypeError("ApiClient constructor error: baseUrl is required.");
     }
     if (!this.options.getResourceName()) {
-      throw new TypeError('ApiClient constructor error: resourceName is required.');
+      throw new TypeError("ApiClient constructor error: resourceName is required.");
     }
     try {
       let rawBaseUrl = this.options.getBaseUrl().toString();
-      if (rawBaseUrl.endsWith('/')) {
+      if (rawBaseUrl.endsWith("/")) {
         rawBaseUrl = rawBaseUrl.slice(0, -1);
       }
       let resourceName = this.options.getResourceName();
-      if (resourceName.startsWith('/')) {
+      if (resourceName.startsWith("/")) {
         resourceName = resourceName.slice(1);
       }
-      if (resourceName.endsWith('/')) {
+      if (resourceName.endsWith("/")) {
         resourceName = resourceName.slice(0, -1);
       }
       this.baseUrl = `${rawBaseUrl}/${resourceName}`;
       this.baseUrl = new URL(this.baseUrl);
     } catch (error) {
-      throw new TypeError('ApiClient constructor error: b.', {cause: error});
+      throw new TypeError("ApiClient constructor error: b.", { cause: error });
     }
 
-    this.apiVersion = 'api-version=v2';
+    this.apiVersion = "api-version=v2";
   }
 
   /**
@@ -59,8 +59,8 @@ export class ApiClient {
    */
   getDefaultHeaders() {
     return {
-      'Accept': 'application/json',
-      'content-type': 'application/json'
+      Accept: "application/json",
+      "content-type": "application/json",
     };
   }
 
@@ -71,8 +71,8 @@ export class ApiClient {
   async buildFetchOptions() {
     const optionHeaders = await this.options.getHeaders();
     return {
-      credentials: 'include',
-      headers: {...this.getDefaultHeaders(), ...optionHeaders}
+      credentials: "include",
+      headers: { ...this.getDefaultHeaders(), ...optionHeaders },
     };
   }
 
@@ -92,7 +92,7 @@ export class ApiClient {
   async get(id, urlOptions) {
     this.assertValidId(id);
     const url = this.buildUrl(`${this.baseUrl}/${id}`, urlOptions || {});
-    return this.fetchAndHandleResponse('GET', url);
+    return this.fetchAndHandleResponse("GET", url);
   }
 
   /**
@@ -113,7 +113,7 @@ export class ApiClient {
   async delete(id, body, urlOptions, dryRun) {
     this.assertValidId(id);
     let url;
-    if (typeof dryRun === 'undefined') {
+    if (typeof dryRun === "undefined") {
       dryRun = false;
     }
     if (!dryRun) {
@@ -125,7 +125,7 @@ export class ApiClient {
     if (body) {
       bodyString = this.buildBody(body);
     }
-    return this.fetchAndHandleResponse('DELETE', url, bodyString);
+    return this.fetchAndHandleResponse("DELETE", url, bodyString);
   }
 
   /**
@@ -141,7 +141,7 @@ export class ApiClient {
    */
   async findAll(urlOptions) {
     const url = this.buildUrl(this.baseUrl.toString(), urlOptions || {});
-    return this.fetchAndHandleResponse('GET', url);
+    return this.fetchAndHandleResponse("GET", url);
   }
 
   /**
@@ -159,7 +159,7 @@ export class ApiClient {
   async create(body, urlOptions) {
     const url = this.buildUrl(this.baseUrl.toString(), urlOptions || {});
     const bodyString = this.buildBody(body);
-    return this.fetchAndHandleResponse('POST', url, bodyString);
+    return this.fetchAndHandleResponse("POST", url, bodyString);
   }
 
   /**
@@ -180,7 +180,7 @@ export class ApiClient {
   async update(id, body, urlOptions, dryRun) {
     this.assertValidId(id);
     let url;
-    if (typeof dryRun === 'undefined') {
+    if (typeof dryRun === "undefined") {
       dryRun = false;
     }
     if (!dryRun) {
@@ -192,7 +192,7 @@ export class ApiClient {
     if (body) {
       bodyString = this.buildBody(body);
     }
-    return this.fetchAndHandleResponse('PUT', url, bodyString);
+    return this.fetchAndHandleResponse("PUT", url, bodyString);
   }
 
   /**
@@ -210,7 +210,7 @@ export class ApiClient {
   async updateAll(body, urlOptions = {}) {
     const url = this.buildUrl(this.baseUrl.toString(), urlOptions);
     const bodyString = body ? this.buildBody(body) : null;
-    return this.fetchAndHandleResponse('PUT', url, bodyString);
+    return this.fetchAndHandleResponse("PUT", url, bodyString);
   }
 
   /**
@@ -223,10 +223,10 @@ export class ApiClient {
    */
   assertValidId(id) {
     if (!id) {
-      throw new TypeError('ApiClient.assertValidId error: id cannot be empty');
+      throw new TypeError("ApiClient.assertValidId error: id cannot be empty");
     }
-    if (typeof id !== 'string') {
-      throw new TypeError('ApiClient.assertValidId error: id should be a string');
+    if (typeof id !== "string") {
+      throw new TypeError("ApiClient.assertValidId error: id should be a string");
     }
   }
 
@@ -236,8 +236,8 @@ export class ApiClient {
    * @private
    */
   assertMethod(method) {
-    if (typeof method !== 'string') {
-      throw new TypeError('ApiClient.assertValidMethod method should be a string.');
+    if (typeof method !== "string") {
+      throw new TypeError("ApiClient.assertValidMethod method should be a string.");
     }
 
     if (SUPPORTED_METHODS.indexOf(method.toUpperCase()) < 0) {
@@ -253,13 +253,13 @@ export class ApiClient {
    */
   assertUrl(url) {
     if (!url) {
-      throw new TypeError('ApliClient.assertUrl error: url is required.');
+      throw new TypeError("ApliClient.assertUrl error: url is required.");
     }
     if (!(url instanceof URL)) {
-      throw new TypeError('ApliClient.assertUrl error: url should be a valid URL object.');
+      throw new TypeError("ApliClient.assertUrl error: url should be a valid URL object.");
     }
     if (url.protocol !== "https:" && url.protocol !== "http:") {
-      throw new TypeError('ApliClient.assertUrl error: url protocol should only be https or http.');
+      throw new TypeError("ApliClient.assertUrl error: url protocol should only be https or http.");
     }
   }
 
@@ -272,7 +272,7 @@ export class ApiClient {
   assertBody(body) {
     // Body form data is needed to verify the server, and sign-in a user.
     const isFormData = body instanceof FormData;
-    if (!isFormData && typeof body !== 'string') {
+    if (!isFormData && typeof body !== "string") {
       throw new TypeError(`ApiClient.assertBody error: body should be a string or a FormData.`);
     }
   }
@@ -300,27 +300,27 @@ export class ApiClient {
    * @public
    */
   buildUrl(url, urlOptions) {
-    if (typeof url !== 'string') {
-      throw new TypeError('ApiClient.buildUrl error: url should be a string.');
+    if (typeof url !== "string") {
+      throw new TypeError("ApiClient.buildUrl error: url should be a string.");
     }
     const urlObj = new URL(`${url}.json?${this.apiVersion}`);
 
     urlOptions = urlOptions || {};
     for (const [key, value] of Object.entries(urlOptions)) {
-      if (typeof key !== 'string') {
-        throw new TypeError('ApiClient.buildUrl error: urlOptions key should be a string.');
+      if (typeof key !== "string") {
+        throw new TypeError("ApiClient.buildUrl error: urlOptions key should be a string.");
       }
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         // Example "filter[has-tag]": "<string>"
         urlObj.searchParams.append(key, value);
       } else {
         // Example "filter[has-id][]": "<uuid>"
         if (Array.isArray(value)) {
-          value.forEach(v => {
+          value.forEach((v) => {
             urlObj.searchParams.append(key, v);
           });
         } else {
-          throw new TypeError('ApiClient.buildUrl error: urlOptions value should be a string or array.');
+          throw new TypeError("ApiClient.buildUrl error: urlOptions value should be a string or array.");
         }
       }
     }
@@ -349,7 +349,7 @@ export class ApiClient {
     // eslint-disable-next-line no-undef
     const fetchStrategy = typeof customApiClientFetch !== "undefined" ? customApiClientFetch : fetch;
     const builtFecthOptions = await this.buildFetchOptions();
-    const fetchOptions = {...builtFecthOptions, ...options};
+    const fetchOptions = { ...builtFecthOptions, ...options };
     fetchOptions.method = method;
     if (body) {
       fetchOptions.body = body;
@@ -410,7 +410,7 @@ export class ApiClient {
       const message = responseJson.header.message;
       throw new PassboltApiFetchError(message, {
         code: response.status,
-        body: responseJson.body
+        body: responseJson.body,
       });
     }
 

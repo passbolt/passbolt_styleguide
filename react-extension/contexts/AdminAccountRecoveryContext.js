@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {withAccountRecovery} from "./AccountRecoveryUserContext";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { withAccountRecovery } from "./AccountRecoveryUserContext";
 
 export const AdminAccountRecoveryContext = React.createContext({
   currentPolicy: null, // The current policy
@@ -66,11 +66,11 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async findAccountRecoveryPolicy() {
-    if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
+    if (!this.props.context.siteSettings.canIUse("accountRecovery")) {
       return;
     }
     const currentPolicy = await this.props.context.port.request("passbolt.account-recovery.get-organization-policy");
-    this.setState({currentPolicy});
+    this.setState({ currentPolicy });
   }
 
   /**
@@ -93,7 +93,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
       delete policyChanges.publicKey;
     }
 
-    await this.setState({policyChanges});
+    await this.setState({ policyChanges });
   }
 
   /**
@@ -102,8 +102,8 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async changePublicKey(publicKey) {
-    const policyChanges = {...this.state.policyChanges, publicKey};
-    await this.setState({policyChanges});
+    const policyChanges = { ...this.state.policyChanges, publicKey };
+    await this.setState({ policyChanges });
   }
 
   /**
@@ -111,8 +111,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    * @returns {Boolean}
    */
   hasPolicyChanges() {
-    return Boolean(this.state.policyChanges?.publicKey)
-      || Boolean(this.state.policyChanges?.policy);
+    return Boolean(this.state.policyChanges?.publicKey) || Boolean(this.state.policyChanges?.policy);
   }
 
   /**
@@ -125,7 +124,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
       return null;
     }
 
-    return this.props.context.port.request('passbolt.keyring.get-key-info', armoredKey);
+    return this.props.context.port.request("passbolt.keyring.get-key-info", armoredKey);
   }
 
   /**
@@ -133,7 +132,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    */
   async resetChanges() {
     const policyChanges = {};
-    await this.setState({policyChanges});
+    await this.setState({ policyChanges });
   }
 
   /**
@@ -151,9 +150,13 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    */
   async save(privateGpgKeyDto) {
     const policySaveDto = this.buildPolicySaveDto();
-    const currentPolicy = await this.props.context.port.request('passbolt.account-recovery.save-organization-policy', policySaveDto, privateGpgKeyDto);
+    const currentPolicy = await this.props.context.port.request(
+      "passbolt.account-recovery.save-organization-policy",
+      policySaveDto,
+      privateGpgKeyDto,
+    );
     const policyChanges = {};
-    this.setState({currentPolicy, policyChanges});
+    this.setState({ currentPolicy, policyChanges });
     this.props.accountRecoveryContext.reloadAccountRecoveryPolicy();
   }
 
@@ -168,7 +171,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
     }
     if (this.state.policyChanges.publicKey) {
       policySaveDto.account_recovery_organization_public_key = {
-        armored_key: this.state.policyChanges.publicKey
+        armored_key: this.state.policyChanges.publicKey,
       };
     }
     return policySaveDto;
@@ -203,12 +206,11 @@ export function withAdminAccountRecovery(WrappedComponent) {
     render() {
       return (
         <AdminAccountRecoveryContext.Consumer>
-          {
-            adminAccountRecoveryContext => <WrappedComponent adminAccountRecoveryContext={adminAccountRecoveryContext} {...this.props} />
-          }
+          {(adminAccountRecoveryContext) => (
+            <WrappedComponent adminAccountRecoveryContext={adminAccountRecoveryContext} {...this.props} />
+          )}
         </AdminAccountRecoveryContext.Consumer>
       );
     }
   };
 }
-

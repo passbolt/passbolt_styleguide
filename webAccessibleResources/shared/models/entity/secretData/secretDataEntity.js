@@ -23,14 +23,14 @@ class SecretDataEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "object_type": {
-          "type": "string",
-          "enum": [SECRET_DATA_OBJECT_TYPE],
+      type: "object",
+      required: [],
+      properties: {
+        object_type: {
+          type: "string",
+          enum: [SECRET_DATA_OBJECT_TYPE],
         },
-      }
+      },
     };
   }
 

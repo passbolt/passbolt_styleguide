@@ -11,11 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component, memo} from "react";
+import React, { Component, memo } from "react";
 import PropTypes from "prop-types";
-import sanitizeUrl, {urlProtocols} from "../../../react-extension/lib/Sanitize/sanitizeUrl";
-import DisplayResourceUrisBadge
-  from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import sanitizeUrl, { urlProtocols } from "../../../react-extension/lib/Sanitize/sanitizeUrl";
+import DisplayResourceUrisBadge from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 
 /**
  * This component represents a table cell link
@@ -53,11 +52,12 @@ class CellUris extends Component {
    * @return {string}
    */
   safeLink(link) {
-    return sanitizeUrl(
-      link, {
+    return (
+      sanitizeUrl(link, {
         whiteListedProtocols: linkAuthorizedProtocols,
-        defaultProtocol: urlProtocols.HTTPS
-      }) || "";
+        defaultProtocol: urlProtocols.HTTPS,
+      }) || ""
+    );
   }
 
   /**
@@ -84,15 +84,18 @@ class CellUris extends Component {
     const safeLink = this.safeLink(this.mainUri);
     return (
       <div>
-        {safeLink &&
-          <button title={this.mainUri} className="no-border ellipsis" type="button" onClick={event => this.handleClick(event, safeLink)}><span>{this.mainUri}</span></button>
-        }
-        {!safeLink &&
-          <span title={this.mainUri}>{this.mainUri}</span>
-        }
-        {this.additionalUris?.length > 0 &&
-          <DisplayResourceUrisBadge additionalUris={this.additionalUris}/>
-        }
+        {safeLink && (
+          <button
+            title={this.mainUri}
+            className="no-border ellipsis"
+            type="button"
+            onClick={(event) => this.handleClick(event, safeLink)}
+          >
+            <span>{this.mainUri}</span>
+          </button>
+        )}
+        {!safeLink && <span title={this.mainUri}>{this.mainUri}</span>}
+        {this.additionalUris?.length > 0 && <DisplayResourceUrisBadge additionalUris={this.additionalUris} />}
       </div>
     );
   }
@@ -110,5 +113,5 @@ const linkAuthorizedProtocols = [
   urlProtocols.FTPS,
   urlProtocols.HTTPS,
   urlProtocols.HTTP,
-  urlProtocols.SSH
+  urlProtocols.SSH,
 ];

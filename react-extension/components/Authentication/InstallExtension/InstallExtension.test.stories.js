@@ -12,35 +12,36 @@
  * @since         3.0.0
  */
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import InstallExtension from "./InstallExtension";
 
 export default {
-  title: 'Components/Authentication/InstallExtension',
-  component: InstallExtension
+  title: "Components/Authentication/InstallExtension",
+  component: InstallExtension,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <InstallExtension {...args} {...routerProps}/>}/>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <InstallExtension {...args} {...routerProps} />} />
         </MemoryRouter>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 export const Firefox = Template.bind({});
 Firefox.loaders = [
-  async() => {
+  async () => {
     Object.defineProperty(window, "navigator", {
-      value: {userAgent: "Firefox"},
-      writable: true
+      value: { userAgent: "Firefox" },
+      writable: true,
     });
   },
 ];
@@ -48,10 +49,10 @@ Firefox.parameters = defaultParameters;
 
 export const Chrome = Template.bind({});
 Chrome.loaders = [
-  async() => {
+  async () => {
     Object.defineProperty(window, "navigator", {
-      value: {userAgent: "Chrome"},
-      writable: true
+      value: { userAgent: "Chrome" },
+      writable: true,
     });
   },
 ];
@@ -59,10 +60,10 @@ Chrome.parameters = defaultParameters;
 
 export const Edge = Template.bind({});
 Edge.loaders = [
-  async() => {
+  async () => {
     Object.defineProperty(window, "navigator", {
-      value: {userAgent: "Edge"},
-      writable: true
+      value: { userAgent: "Edge" },
+      writable: true,
     });
   },
 ];
@@ -70,10 +71,10 @@ Edge.parameters = defaultParameters;
 
 export const UnsupportedBrowser = Template.bind({});
 UnsupportedBrowser.loaders = [
-  async() => {
+  async () => {
     Object.defineProperty(window, "navigator", {
-      value: {userAgent: "Unsupported Browser"},
-      writable: true
+      value: { userAgent: "Unsupported Browser" },
+      writable: true,
     });
   },
 ];

@@ -12,8 +12,8 @@
  * @since        3.6.0
  */
 import React from "react";
-import {render} from "@testing-library/react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { render } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
 import HandleReviewAccountRecoveryRequestRoute from "./HandleReviewAccountRecoveryRequestRoute";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -29,10 +29,10 @@ export default class HandleReviewAccountRecoveryRequestRouteTestPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <HandleReviewAccountRecoveryRequestRoute {...props}/>
+          <HandleReviewAccountRecoveryRequestRoute {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 }

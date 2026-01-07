@@ -13,28 +13,29 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import SsoLogin from "./SsoLogin";
-import {defaultProps} from "./SsoLogin.test.data";
+import { defaultProps } from "./SsoLogin.test.data";
 
 export default {
-  title: 'Components/AuthenticationLogin/SsoLogin',
-  component: SsoLogin
+  title: "Components/AuthenticationLogin/SsoLogin",
+  component: SsoLogin,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <SsoLogin {...args} {...routerProps}/>}/>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <SsoLogin {...args} {...routerProps} />} />
         </MemoryRouter>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 export const Initial = Template.bind({});

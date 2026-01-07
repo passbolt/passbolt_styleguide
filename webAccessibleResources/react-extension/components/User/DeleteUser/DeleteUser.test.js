@@ -16,11 +16,11 @@
  * Unit tests on DeleteUserDialog in regard of specifications
  */
 
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {fireEvent, waitFor} from "@testing-library/react";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { fireEvent, waitFor } from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import DeleteUserPage from "./DeleteUser.test.page";
-import {defaultAppContext, defaultProps, mockUser} from "./DeleteUser.test.data";
+import { defaultAppContext, defaultProps, mockUser } from "./DeleteUser.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,9 +32,10 @@ describe("See Delete User Dialog", () => {
   const props = defaultProps(); // The props to pass
   const user = mockUser();
 
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(context.port, "request").mockImplementation(implementation);
 
-  describe('As AD I can delete a user', () => {
+  describe("As AD I can delete a user", () => {
     /**
      * Given a selected user
      * Then I should see the name of the user I can delete
@@ -43,11 +44,11 @@ describe("See Delete User Dialog", () => {
      */
 
     beforeEach(() => {
-      context.setContext({deleteUserDialogProps: {user}});
+      context.setContext({ deleteUserDialogProps: { user } });
       page = new DeleteUserPage(context, props);
     });
 
-    it('As AD I should know what user I am deleting', () => {
+    it("As AD I should know what user I am deleting", () => {
       expect(page.displayDeleteUserDialog.exists()).toBeTruthy();
       // title
       expect(page.displayDeleteUserDialog.dialogTitle).not.toBeNull();
@@ -56,33 +57,37 @@ describe("See Delete User Dialog", () => {
       expect(page.displayDeleteUserDialog.closeButton).not.toBeNull();
       // submit button
       expect(page.displayDeleteUserDialog.saveButton).not.toBeNull();
-      expect(page.displayDeleteUserDialog.saveButton.textContent).toBe('Delete');
+      expect(page.displayDeleteUserDialog.saveButton.textContent).toBe("Delete");
       // cancel button
       expect(page.displayDeleteUserDialog.cancelButton).not.toBeNull();
-      expect(page.displayDeleteUserDialog.cancelButton.textContent).toBe('Cancel');
+      expect(page.displayDeleteUserDialog.cancelButton.textContent).toBe("Cancel");
       // user name
-      expect(page.displayDeleteUserDialog.userName.textContent).toBe(`${user.profile.first_name} ${user.profile.last_name} (${user.username})`);
+      expect(page.displayDeleteUserDialog.userName.textContent).toBe(
+        `${user.profile.first_name} ${user.profile.last_name} (${user.username})`,
+      );
     });
 
-    it('As AD I should see a toaster message after deleting a user', async() => {
+    it("As AD I should see a toaster message after deleting a user", async () => {
       const submitButton = page.displayDeleteUserDialog.saveButton;
       // Mock the request function to make it the expected result
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.displayDeleteUserDialog.click(submitButton);
       expect(context.port.request).toHaveBeenCalledWith("passbolt.users.delete", user.id);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
-    it('As AD I should see a processing feedback while submitting the form', async() => {
+    it("As AD I should see a processing feedback while submitting the form", async () => {
       // Mock the request function to make it the expected result
       let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
+      const requestMockImpl = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            updateResolve = resolve;
+          }),
+      );
 
       // Mock the request function to make it the expected result
       mockContextRequest(context, requestMockImpl);
@@ -96,32 +101,32 @@ describe("See Delete User Dialog", () => {
       });
     });
 
-    it('As AD I should be able to cancel the operation by clicking on the close button', async() => {
+    it("As AD I should be able to cancel the operation by clicking on the close button", async () => {
       const closeButton = page.displayDeleteUserDialog.closeButton;
 
       await page.displayDeleteUserDialog.click(closeButton);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I should be able to cancel the operation by clicking on the cancel button', async() => {
+    it("As AD I should be able to cancel the operation by clicking on the cancel button", async () => {
       const cancelButton = page.displayDeleteUserDialog.cancelButton;
 
       await page.displayDeleteUserDialog.click(cancelButton);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I should be able to cancel the edition with the keyboard (escape)', () => {
+    it("As AD I should be able to cancel the edition with the keyboard (escape)", () => {
       // Escape key pressed event
-      const escapeKeyDown = {keyCode: 27};
+      const escapeKeyDown = { keyCode: 27 };
       fireEvent.keyDown(page.displayDeleteUserDialog.dialogTitle, escapeKeyDown);
 
       expect(props.onClose).toBeCalled();
     });
 
-    it('Displays an error when the API call fail', async() => {
+    it("Displays an error when the API call fail", async () => {
       const submitButton = page.displayDeleteUserDialog.saveButton;
       // Mock the request function to make it return an error.
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
 
@@ -131,7 +136,7 @@ describe("See Delete User Dialog", () => {
       expect(page.displayDeleteUserDialog.errorDialog).not.toBeNull();
       expect(page.displayDeleteUserDialog.errorDialogMessage).not.toBeNull();
     });
-    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+    it("As LU I want to see a long  resource/tag/folders name fitting its delete dialog", async () => {
       expect(page.displayDeleteUserDialog.userName.classList.contains("dialog-variable")).toBeTruthy();
     });
   });

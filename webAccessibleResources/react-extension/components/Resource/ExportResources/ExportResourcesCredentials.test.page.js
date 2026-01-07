@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
@@ -32,10 +31,10 @@ export default class ExportResourcesCredentialsPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <ExportResourcesCredentials {...props}/>
+          <ExportResourcesCredentials {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }
@@ -51,14 +50,14 @@ export default class ExportResourcesCredentialsPage {
    * Returns the dialog element
    */
   get dialog() {
-    return this._page.container.querySelector('.export-password-dialog');
+    return this._page.container.querySelector(".export-password-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
@@ -72,22 +71,21 @@ export default class ExportResourcesCredentialsPage {
    * Returns the import folder input element
    */
   get importFile() {
-    return this._page.container.querySelector('.input.file button.button.primary');
+    return this._page.container.querySelector(".input.file button.button.primary");
   }
-
 
   /**
    * Returns the password input element
    */
   get password() {
-    return this._page.container.querySelector('#password');
+    return this._page.container.querySelector("#password");
   }
 
   /**
    * Returns the password view element
    */
   get passwordView() {
-    return this._page.container.querySelector('.password-view');
+    return this._page.container.querySelector(".password-view");
   }
 
   /**
@@ -101,7 +99,7 @@ export default class ExportResourcesCredentialsPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -112,13 +110,13 @@ export default class ExportResourcesCredentialsPage {
   }
 
   /** Click on the element */
-  async click(element)  {
+  async click(element) {
     await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  async escapeKey()  {
-    await this.user.keyboard('{Escape}');
+  async escapeKey() {
+    await this.user.keyboard("{Escape}");
   }
 
   /** Click to import file */

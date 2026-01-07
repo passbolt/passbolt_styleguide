@@ -12,23 +12,21 @@
  * @since         4.12.0
  */
 
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import {
   defaultMetadataTypesSettingsV4Dto,
-  defaultMetadataTypesSettingsV6Dto
+  defaultMetadataTypesSettingsV6Dto,
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
-import {defaultMetadataKeysDtos} from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
+import { defaultMetadataKeysDtos } from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
 import PassboltResponsePaginationHeaderEntity from "../../../../shared/models/entity/apiService/PassboltResponsePaginationHeaderEntity";
-import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
+import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
 
 /**
  * Default props.
@@ -40,29 +38,33 @@ export function defaultProps(props = {}) {
     context: defaultAdministratorAppContext(),
     dialogContext: defaultDialogContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration:  AdministrationWorkspaceMenuTypes.MIGRATE_METADATA
+      selectedAdministration: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
     }),
     actionFeedbackContext: defaultActionFeedbackContext(),
     metadataSettingsServiceWorkerService: {
-      findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto({
-        allow_v4_v5_upgrade: true,
-      })),
-      saveTypesSettings: jest.fn(settings => new MetadataTypesSettingsEntity(settings.toDto())),
+      findTypesSettings: () =>
+        new MetadataTypesSettingsEntity(
+          defaultMetadataTypesSettingsV6Dto({
+            allow_v4_v5_upgrade: true,
+          }),
+        ),
+      saveTypesSettings: jest.fn((settings) => new MetadataTypesSettingsEntity(settings.toDto())),
     },
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection(defaultMetadataKeysDtos()),
     },
     metadataMigrateContentServiceWorkerService: {
-      findCountMetadataMigrateResources: () => new PassboltResponsePaginationHeaderEntity({
-        limit: null,
-        count: 31,
-        page: 1,
-      }),
+      findCountMetadataMigrateResources: () =>
+        new PassboltResponsePaginationHeaderEntity({
+          limit: null,
+          count: 31,
+          page: 1,
+        }),
     },
     createPortal: jest.fn,
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    t: text => text,
-    ...props
+    t: (text) => text,
+    ...props,
   };
 }
 
@@ -74,11 +76,12 @@ export function defaultProps(props = {}) {
 export function withMigrationFullyDone(props = {}) {
   return defaultProps({
     metadataMigrateContentServiceWorkerService: {
-      findCountMetadataMigrateResources: () => new PassboltResponsePaginationHeaderEntity({
-        limit: null,
-        count: 0,
-        page: 1,
-      }),
+      findCountMetadataMigrateResources: () =>
+        new PassboltResponsePaginationHeaderEntity({
+          limit: null,
+          count: 0,
+          page: 1,
+        }),
     },
     ...props,
   });
@@ -93,7 +96,7 @@ export function withMissingMetadataKeys(props = {}) {
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection([]),
     },
-    ...props
+    ...props,
   });
 }
 
@@ -106,9 +109,9 @@ export function withMissingResourceTypes(props = {}) {
   return defaultProps({
     metadataSettingsServiceWorkerService: {
       findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
-      saveTypesSettings: jest.fn(settings => new MetadataTypesSettingsEntity(settings.toDto())),
+      saveTypesSettings: jest.fn((settings) => new MetadataTypesSettingsEntity(settings.toDto())),
     },
     resourceTypes: new ResourceTypesCollection([]),
-    ...props
+    ...props,
   });
 }

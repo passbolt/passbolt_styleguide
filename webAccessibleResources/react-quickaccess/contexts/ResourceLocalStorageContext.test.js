@@ -12,11 +12,11 @@
  * @since         4.9.4
  */
 
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import mockComponentSetState from "../../react-extension/test/mock/components/React/mockSetState";
-import {defaultResourceDto} from "../../shared/models/entity/resource/resourceEntity.test.data";
-import {ResourceLocalStorageContextProvider} from "./ResourceLocalStorageContext";
-import {defaultProps} from "./ResourceLocalStorageContext.test.data";
+import { defaultResourceDto } from "../../shared/models/entity/resource/resourceEntity.test.data";
+import { ResourceLocalStorageContextProvider } from "./ResourceLocalStorageContext";
+import { defaultProps } from "./ResourceLocalStorageContext.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -35,7 +35,7 @@ describe("ResourceLocalStorageContext", () => {
       expect(contextProvider.state).toMatchObject({
         get: expect.any(Function),
         resources: null,
-        updateLocalStorage: expect.any(Function)
+        updateLocalStorage: expect.any(Function),
       });
     });
   });
@@ -95,7 +95,7 @@ describe("ResourceLocalStorageContext", () => {
       mockComponentSetState(contextProvider);
 
       contextProvider.handleStorageChange({
-        test: "something"
+        test: "something",
       });
 
       expect(contextProvider.setState).not.toHaveBeenCalled();
@@ -135,11 +135,11 @@ describe("ResourceLocalStorageContext", () => {
       expect(contextProvider.get()).toStrictEqual([]);
     });
 
-    it("should return null if the state hasn't been initiliased yet and set a blocking promise while the init occurs", async() => {
+    it("should return null if the state hasn't been initiliased yet and set a blocking promise while the init occurs", async () => {
       expect.assertions(3);
 
       const props = defaultProps();
-      props.context.storage.local.set({resources: null});
+      props.context.storage.local.set({ resources: null });
 
       const contextProvider = new ResourceLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
@@ -157,8 +157,8 @@ describe("ResourceLocalStorageContext", () => {
     it("should set the resources and sort them", () => {
       expect.assertions(2);
 
-      const resource1 = defaultResourceDto({metadata: {name: "Password B"}});
-      const resource2 = defaultResourceDto({metadata: {name: "Password A"}});
+      const resource1 = defaultResourceDto({ metadata: { name: "Password B" } });
+      const resource2 = defaultResourceDto({ metadata: { name: "Password A" } });
       const resources = [resource1, resource2];
 
       const contextProvider = new ResourceLocalStorageContextProvider(defaultProps());
@@ -167,23 +167,21 @@ describe("ResourceLocalStorageContext", () => {
       expect(contextProvider.state.resources).toBeNull();
       contextProvider.set(resources);
 
-      expect(contextProvider.state.resources).toStrictEqual([
-        resource2, resource1
-      ]);
+      expect(contextProvider.state.resources).toStrictEqual([resource2, resource1]);
     });
   });
 
   describe("::loadLocalStorage", () => {
-    it("should find the resources from the local storage, sort them and set the context state with it.", async() => {
+    it("should find the resources from the local storage, sort them and set the context state with it.", async () => {
       expect.assertions(1);
 
-      const resource1 = defaultResourceDto({metadata: {name: "Password B"}});
-      const resource2 = defaultResourceDto({metadata: {name: "Password A"}});
+      const resource1 = defaultResourceDto({ metadata: { name: "Password B" } });
+      const resource2 = defaultResourceDto({ metadata: { name: "Password A" } });
 
       const resourceFromLocalStorage = [resource1, resource2];
 
       const props = defaultProps();
-      props.context.storage.local.set({resources: resourceFromLocalStorage});
+      props.context.storage.local.set({ resources: resourceFromLocalStorage });
 
       const contextProvider = new ResourceLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
@@ -193,12 +191,12 @@ describe("ResourceLocalStorageContext", () => {
       expect(contextProvider.state.resources).toStrictEqual([resource2, resource1]);
     });
 
-    it("should call for updating the local storage if there is no resources in the local storage.", async() => {
+    it("should call for updating the local storage if there is no resources in the local storage.", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
-      props.context.storage.local.set({resources: null});
-      props.context.port.addRequestListener("passbolt.resources.update-local-storage", async() => {});
+      props.context.storage.local.set({ resources: null });
+      props.context.port.addRequestListener("passbolt.resources.update-local-storage", async () => {});
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 
@@ -213,12 +211,12 @@ describe("ResourceLocalStorageContext", () => {
   });
 
   describe("::updateLocalStorage", () => {
-    it("should call the service worker with the right event to trigger the local storage update.", async() => {
+    it("should call the service worker with the right event to trigger the local storage update.", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
-      props.context.storage.local.set({resources: null});
-      props.context.port.addRequestListener("passbolt.resources.update-local-storage", async() => {});
+      props.context.storage.local.set({ resources: null });
+      props.context.port.addRequestListener("passbolt.resources.update-local-storage", async () => {});
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 
@@ -231,14 +229,14 @@ describe("ResourceLocalStorageContext", () => {
       expect(spyOnRequest).toHaveBeenCalledWith("passbolt.resources.update-local-storage");
     });
 
-    it("should not call the service worker twice if a pending promise is running.", async() => {
+    it("should not call the service worker twice if a pending promise is running.", async () => {
       expect.assertions(4);
 
       const props = defaultProps();
       let resolveUpdadeLocalStoragePromise;
-      const spyOnRequest = jest.spyOn(props.context.port, "request").mockImplementation(
-        () => new Promise(resolve => resolveUpdadeLocalStoragePromise = resolve)
-      );
+      const spyOnRequest = jest
+        .spyOn(props.context.port, "request")
+        .mockImplementation(() => new Promise((resolve) => (resolveUpdadeLocalStoragePromise = resolve)));
 
       const contextProvider = new ResourceLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
@@ -261,11 +259,11 @@ describe("ResourceLocalStorageContext", () => {
       await resolveUpdadeLocalStoragePromise();
     });
 
-    it("should call the service worker again if the promise has been resolved.", async() => {
+    it("should call the service worker again if the promise has been resolved.", async () => {
       expect.assertions(5);
 
       const props = defaultProps();
-      props.context.port.addRequestListener("passbolt.resources.update-local-storage", async() => {});
+      props.context.port.addRequestListener("passbolt.resources.update-local-storage", async () => {});
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 

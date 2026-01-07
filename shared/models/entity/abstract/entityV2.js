@@ -15,7 +15,7 @@ import EntitySchema from "./entitySchema";
 import Entity from "./entity";
 import assertString from "validator/es/lib/util/assertString";
 import EntityValidationError from "./entityValidationError";
-import {snakeCaseToCamelCase} from "../../../utils/stringUtils";
+import { snakeCaseToCamelCase } from "../../../utils/stringUtils";
 import entityCollection from "./entityCollection";
 
 const SCALAR_PROPERTY_TYPES = ["string", "number", "integer", "boolean"];
@@ -54,7 +54,10 @@ class EntityV2 extends Entity {
     super(dtos, options);
     this.marshall();
     if (validate) {
-      this.validateSchema({schema: options?.schema, skipSchemaAssociationValidation: options?.skipSchemaAssociationValidation});
+      this.validateSchema({
+        schema: options?.schema,
+        skipSchemaAssociationValidation: options?.skipSchemaAssociationValidation,
+      });
     }
     this.createAssociations(options);
     if (validate) {
@@ -80,9 +83,10 @@ class EntityV2 extends Entity {
    */
   validate(options = {}) {
     try {
-      this.validateSchema(
-        {schema: options?.schema, skipSchemaAssociationValidation: options?.skipSchemaAssociationValidation}
-      );
+      this.validateSchema({
+        schema: options?.schema,
+        skipSchemaAssociationValidation: options?.skipSchemaAssociationValidation,
+      });
       this.validateBuildRules(options?.validateBuildRules);
       this.validateAssociations(options);
     } catch (error) {
@@ -106,20 +110,16 @@ class EntityV2 extends Entity {
   validateSchema(option = null) {
     let schema = option?.schema ?? this.cachedSchema;
     if (option?.skipSchemaAssociationValidation) {
-      schema = {...schema};
+      schema = { ...schema };
       /*
        * Remove required association in the schema to avoid an error on an entity already created.
        * As the association are not stored in the props, it can not be validated with the schema but rely on its entity validation
        */
       const requiredAssociations = Object.keys(this.constructor.associations);
-      const required = schema.required.filter(requiredSchema => !requiredAssociations.includes(requiredSchema));
+      const required = schema.required.filter((requiredSchema) => !requiredAssociations.includes(requiredSchema));
       schema.required = required;
     }
-    this._props = EntitySchema.validate(
-      this.constructor.name,
-      this._props,
-      schema
-    );
+    this._props = EntitySchema.validate(this.constructor.name, this._props, schema);
   }
 
   /**
@@ -170,7 +170,10 @@ class EntityV2 extends Entity {
           if (this._props[associationProp]) {
             // Get the association name and replace '_[a-z]' into [A-Z]  (example: associated_entity_v2 become associatedEntityV2)
             const associationPropName = snakeCaseToCamelCase(associationProp);
-            this[`_${associationPropName}`] = new associationEntityClass(this._props[associationProp], {...options, clone: false});
+            this[`_${associationPropName}`] = new associationEntityClass(this._props[associationProp], {
+              ...options,
+              clone: false,
+            });
             delete this._props[associationProp];
           }
         } catch (error) {
@@ -219,7 +222,7 @@ class EntityV2 extends Entity {
       throw new Error(`The property "${propName}" has no schema definition.`);
     }
     if (!SCALAR_PROPERTY_TYPES.includes(schemaProperties?.type)) {
-      throw new Error("The property \"associated_entity\" should reference scalar properties only.");
+      throw new Error('The property "associated_entity" should reference scalar properties only.');
     }
     return this._props[propName];
   }
@@ -259,9 +262,9 @@ class EntityV2 extends Entity {
         this.setArrayProp(propName, value, options);
       } else {
         if (schemaProperties?.type && !SCALAR_PROPERTY_TYPES.includes(schemaProperties?.type)) {
-          throw new Error("The property \"associated_entity\" should reference scalar properties only.");
-        } else if (schemaProperties?.anyOf?.some(property => !SCALAR_PROPERTY_TYPES.includes(property.type))) {
-          throw new Error("The property \"associated_entity\" should reference scalar properties only.");
+          throw new Error('The property "associated_entity" should reference scalar properties only.');
+        } else if (schemaProperties?.anyOf?.some((property) => !SCALAR_PROPERTY_TYPES.includes(property.type))) {
+          throw new Error('The property "associated_entity" should reference scalar properties only.');
         }
         if (validate) {
           EntitySchema.validateProp(basePropName, value, schemaProperties);
@@ -304,7 +307,7 @@ class EntityV2 extends Entity {
     }
 
     if (!SCALAR_PROPERTY_TYPES.includes(schemaProperties.items.type)) {
-      throw new Error("The property \"associated_entity\" with array type should reference scalar properties only.");
+      throw new Error('The property "associated_entity" with array type should reference scalar properties only.');
     }
     if (validate) {
       EntitySchema.validateProp(basePropName, value, schemaProperties.items);
@@ -320,7 +323,6 @@ class EntityV2 extends Entity {
       this._props[basePropName].splice(index, 1);
     }
   }
-
 
   /**
    * Set a collection of entities. The new array value will be validated by the entity against the entity schema unless validation is
@@ -371,7 +373,7 @@ class EntityV2 extends Entity {
           throw new Error(`The collection "${propNameSplit[0]}" has no item at the index "${propNameSplit[1]}".`);
         }
         // set value in array if not null or undefined
-        const concatenatedPropName = propNameSplit.slice(2).join('.');
+        const concatenatedPropName = propNameSplit.slice(2).join(".");
         this[`_${collectionPropName}`]._items[index].set(concatenatedPropName, value, options);
       } else {
         // set value in array if not null or undefined
@@ -414,13 +416,16 @@ class EntityV2 extends Entity {
       if (isPropertyAssociation) {
         if (!this[`_${associationPropName}`]) {
           // Instantiate a new empty association entity with no validation to set the value after
-          this[`_${associationPropName}`] = new this.constructor.associations[propNameSplit[0]]({}, {validate: false});
+          this[`_${associationPropName}`] = new this.constructor.associations[propNameSplit[0]](
+            {},
+            { validate: false },
+          );
         }
         if (this[`_${associationPropName}`] instanceof entityCollection) {
-          const collectionPropName = propNameSplit.toSpliced(0, 1, associationPropName).join('.');
+          const collectionPropName = propNameSplit.toSpliced(0, 1, associationPropName).join(".");
           this.setCollection(collectionPropName, value, options);
         } else {
-          const concatenatedPropName = propNameSplit.slice(1).join('.');
+          const concatenatedPropName = propNameSplit.slice(1).join(".");
           // loop to set the association prop name
           this[`_${associationPropName}`].set(concatenatedPropName, value, options);
         }
@@ -444,7 +449,7 @@ class EntityV2 extends Entity {
     const validationErrors = new EntityValidationError();
 
     if (Object.keys(this.constructor.associations).length > 0) {
-      Object.keys(this.constructor.associations).forEach(propsName => {
+      Object.keys(this.constructor.associations).forEach((propsName) => {
         const propsNameToCamelCase = snakeCaseToCamelCase(propsName);
         if (this[`_${propsNameToCamelCase}`]) {
           const association = this[propsNameToCamelCase];
@@ -477,13 +482,14 @@ class EntityV2 extends Entity {
    */
   diffProps(compareEntity) {
     if (!(compareEntity instanceof EntityV2)) {
-      throw new TypeError("The property \"compareEntity\" should be of \"EntityV2\" type.");
+      throw new TypeError('The property "compareEntity" should be of "EntityV2" type.');
     }
 
     const diff = {};
     const schema = this.constructor.getSchema();
-    const propertiesNamesToCompare = Object.keys(schema.properties)
-      .filter(propertyName => SCALAR_PROPERTY_TYPES.includes(schema.properties[propertyName].type));
+    const propertiesNamesToCompare = Object.keys(schema.properties).filter((propertyName) =>
+      SCALAR_PROPERTY_TYPES.includes(schema.properties[propertyName].type),
+    );
 
     for (const propertyName of propertiesNamesToCompare) {
       const propValue = this.get(propertyName);

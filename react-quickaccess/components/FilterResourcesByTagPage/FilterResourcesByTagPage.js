@@ -14,33 +14,26 @@
 
 import PropTypes from "prop-types";
 import React from "react";
-import {Link, withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { Link, withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {escapeRegExp, filterResourcesBySearch} from "../../../shared/utils/filterUtils";
-import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { escapeRegExp, filterResourcesBySearch } from "../../../shared/utils/filterUtils";
+import { withResourcesLocalStorage } from "../../contexts/ResourceLocalStorageContext";
 import memoize from "memoize-one";
-import {
-  withMetadataTypesSettingsLocalStorage
-} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
-import {
-  withResourceTypesLocalStorage
-} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withMetadataTypesSettingsLocalStorage } from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_SLUG
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import DisplayResourceUrisBadge
-  from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import DisplayResourceUrisBadge from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import CloseSVG from "../../../img/svg/close.svg";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  withMetadataKeysSettingsLocalStorage
-} from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 
 const BROWSED_RESOURCES_LIMIT = 100;
 const BROWSED_TAGS_LIMIT = 100;
@@ -106,7 +99,7 @@ class FilterResourcesByTagPage extends React.Component {
     this.props.context.updateSearch("");
 
     // Push the tag as state of the component.
-    this.props.history.push(`/webAccessibleResources/quickaccess/resources/tag/${tag.id}`, {selectedTag: tag});
+    this.props.history.push(`/webAccessibleResources/quickaccess/resources/tag/${tag.id}`, { selectedTag: tag });
   }
 
   /**
@@ -130,15 +123,15 @@ class FilterResourcesByTagPage extends React.Component {
    * Returns all the tags extracted from the available resources.
    * @returns {Array<Object>}
    */
-  getTagsFromResources = memoize(resources => {
+  getTagsFromResources = memoize((resources) => {
     const allTagsById = {};
 
-    resources.forEach(resource =>
-      resource.tags?.forEach(tag => {
+    resources.forEach((resource) =>
+      resource.tags?.forEach((tag) => {
         if (!allTagsById[tag.id]) {
           allTagsById[tag.id] = tag;
         }
-      })
+      }),
     );
 
     return Object.values(allTagsById).sort((tag1, tag2) => {
@@ -154,7 +147,9 @@ class FilterResourcesByTagPage extends React.Component {
    * @param {uuid} selectedTagId the id of the selected tag
    * @returns {Array<Object>}
    */
-  filterResourcesByTag = memoize((resources, selectedTagId) => resources.filter(resource => resource.tags?.some(tag => selectedTagId === tag.id)));
+  filterResourcesByTag = memoize((resources, selectedTagId) =>
+    resources.filter((resource) => resource.tags?.some((tag) => selectedTagId === tag.id)),
+  );
 
   /**
    * Get the resources to display
@@ -181,10 +176,10 @@ class FilterResourcesByTagPage extends React.Component {
     // Split the search by words
     const searches = search.split(/\s+/);
     // Prepare the regexes for each word contained in the search.
-    const regexes = searches.map(needle => new RegExp(escapeRegExp(needle), 'i'));
+    const regexes = searches.map((needle) => new RegExp(escapeRegExp(needle), "i"));
 
     let tagFoundCount = 0;
-    return tags.filter(tag => {
+    return tags.filter((tag) => {
       if (tagFoundCount > BROWSED_TAGS_LIMIT) {
         return false;
       }
@@ -237,7 +232,11 @@ class FilterResourcesByTagPage extends React.Component {
    * @return {boolean}
    */
   get shouldDisplayActionAbortedMissingMetadataKeys() {
-    return this.props.metadataTypeSettings.isDefaultResourceTypeV5 && this.userHasMissingKeys && !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
+    return (
+      this.props.metadataTypeSettings.isDefaultResourceTypeV5 &&
+      this.userHasMissingKeys &&
+      !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys
+    );
   }
 
   /**
@@ -255,7 +254,11 @@ class FilterResourcesByTagPage extends React.Component {
       if (listTagsOnly) {
         browsedTags = this.filterSearchedTags(this.props.resources, this.props.context.search);
       } else {
-        browsedResources = this.filterSearchedResources(this.props.resources, this.props.context.search, selectedTag?.id);
+        browsedResources = this.filterSearchedResources(
+          this.props.resources,
+          this.props.context.search,
+          selectedTag?.id,
+        );
       }
     }
 
@@ -263,90 +266,105 @@ class FilterResourcesByTagPage extends React.Component {
       <div className="index-list">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.props.t("Go back")}>
-            <CaretLeftSVG/>
-            <span className="primary-action-title">
-              {selectedTag?.slug || <Trans>Tags</Trans>}
-            </span>
+            <CaretLeftSVG />
+            <span className="primary-action-title">{selectedTag?.slug || <Trans>Tags</Trans>}</span>
           </a>
-          <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.props.t("Cancel")}>
-            <CloseSVG className="close"/>
-            <span className="visually-hidden"><Trans>Cancel</Trans></span>
+          <Link
+            to="/webAccessibleResources/quickaccess/home"
+            className="secondary-action button-transparent button"
+            title={this.props.t("Cancel")}
+          >
+            <CloseSVG className="close" />
+            <span className="visually-hidden">
+              <Trans>Cancel</Trans>
+            </span>
           </Link>
         </div>
         <div className="list-container">
           <ul className="list-items">
-            {!isReady &&
+            {!isReady && (
               <li className="empty-entry">
-                <SpinnerSVG/>
+                <SpinnerSVG />
                 <p className="processing-text">
                   <Trans>Retrieving your tags</Trans>
                 </p>
               </li>
-            }
-            {isReady &&
+            )}
+            {isReady && (
               <React.Fragment>
-                {browsedTags &&
+                {browsedTags && (
                   <React.Fragment>
-                    {(!browsedTags.length) &&
+                    {!browsedTags.length && (
                       <li className="empty-entry">
                         <p>
                           {isSearching && <Trans>No result match your search. Try with another search term.</Trans>}
-                          {!isSearching && <Trans>No passwords are yet tagged. It does feel a bit empty here, tag your first password.</Trans>}
+                          {!isSearching && (
+                            <Trans>
+                              No passwords are yet tagged. It does feel a bit empty here, tag your first password.
+                            </Trans>
+                          )}
                         </p>
                       </li>
-                    }
-                    {(browsedTags.length > 0) &&
-                      browsedTags.map(tag => (
+                    )}
+                    {browsedTags.length > 0 &&
+                      browsedTags.map((tag) => (
                         <li className="filter-entry" key={tag.id}>
-                          <a href="#" onClick={ev => this.handleSelectTagClick(ev, tag)}>
+                          <a href="#" onClick={(ev) => this.handleSelectTagClick(ev, tag)}>
                             <span className="filter">{tag.slug}</span>
                           </a>
                         </li>
-                      ))
-                    }
+                      ))}
                   </React.Fragment>
-                }
-                {!browsedTags &&
+                )}
+                {!browsedTags && (
                   <React.Fragment>
-                    {!browsedResources.length &&
+                    {!browsedResources.length && (
                       <li className="empty-entry">
                         <p>
                           <Trans>No result match your search. Try with another search term.</Trans>
                         </p>
                       </li>
-                    }
-                    {(browsedResources.length > 0) &&
-                      browsedResources.map(resource =>
+                    )}
+                    {browsedResources.length > 0 &&
+                      browsedResources.map((resource) => (
                         <li className="browse-resource-entry" key={resource.id}>
-                          <a href="#" onClick={ev => this.handleSelectResourceClick(ev, resource.id)}>
+                          <a href="#" onClick={(ev) => this.handleSelectResourceClick(ev, resource.id)}>
                             <div className="inline-resource-entry">
-                              <div className='inline-resource-name'>
+                              <div className="inline-resource-name">
                                 <span className="title">{resource.metadata.name}</span>
-                                <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
+                                <span className="username">
+                                  {" "}
+                                  {resource.metadata.username ? `(${resource.metadata.username})` : ""}
+                                </span>
                               </div>
                               <div className="uris">
                                 <span className="url">{resource.metadata.uris?.[0]}</span>
-                                {resource.metadata.uris?.length > 1 &&
-                                  <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
-                                }
+                                {resource.metadata.uris?.length > 1 && (
+                                  <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)} />
+                                )}
                               </div>
                             </div>
                           </a>
                         </li>
-                      )}
+                      ))}
                   </React.Fragment>
-                }
+                )}
               </React.Fragment>
-            }
+            )}
           </ul>
         </div>
-        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
-        <div className="submit-wrapper">
-          <Link to={`/webAccessibleResources/quickaccess/resources/${this.shouldDisplayActionAbortedMissingMetadataKeys ? "action-aborted-missing-metadata-keys" : "create"}`} id="popupAction" className="button primary big full-width" role="button">
-            <Trans>Create new</Trans>
-          </Link>
-        </div>
-        }
+        {this.hasMetadataTypesSettings() && this.canCreatePassword() && (
+          <div className="submit-wrapper">
+            <Link
+              to={`/webAccessibleResources/quickaccess/resources/${this.shouldDisplayActionAbortedMissingMetadataKeys ? "action-aborted-missing-metadata-keys" : "create"}`}
+              id="popupAction"
+              className="button primary big full-width"
+              role="button"
+            >
+              <Trans>Create new</Trans>
+            </Link>
+          </div>
+        )}
       </div>
     );
   }
@@ -365,4 +383,14 @@ FilterResourcesByTagPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withTranslation('common')(FilterResourcesByTagPage)))))));
+export default withAppContext(
+  withRouter(
+    withResourceTypesLocalStorage(
+      withResourcesLocalStorage(
+        withMetadataTypesSettingsLocalStorage(
+          withMetadataKeysSettingsLocalStorage(withTranslation("common")(FilterResourcesByTagPage)),
+        ),
+      ),
+    ),
+  ),
+);

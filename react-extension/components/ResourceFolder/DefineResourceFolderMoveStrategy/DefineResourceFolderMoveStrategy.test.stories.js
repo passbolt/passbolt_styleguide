@@ -13,29 +13,25 @@
  */
 import DefineResourceFolderMoveStrategy from "./DefineResourceFolderMoveStrategy";
 import MockPort from "../../../test/mock/MockPort";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 export default {
-  title: 'Components/ResourceFolder/DefineResourceFolderMoveStrategy',
-  component: DefineResourceFolderMoveStrategy
+  title: "Components/ResourceFolder/DefineResourceFolderMoveStrategy",
+  component: DefineResourceFolderMoveStrategy,
 };
 
 const defaultContext = {
-  folders: [
-    {id: 1, name: "My folder"}
-  ],
+  folders: [{ id: 1, name: "My folder" }],
   folderMoveStrategyProps: {
-    folders: [1]
+    folders: [1],
   },
   port: new MockPort(),
-  setContext: () => {}
+  setContext: () => {},
 };
-
 
 export const Initial = {
   args: {
     context: defaultAppContext(defaultContext),
-    onClose: () => {}
-  }
+    onClose: () => {},
+  },
 };

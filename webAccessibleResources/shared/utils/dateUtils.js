@@ -12,7 +12,7 @@
  * @since         4.4.0
  */
 
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 
 /**
  * Format date in time ago
@@ -25,12 +25,12 @@ export const formatDateTimeAgo = (date, translate, locale) => {
   if (date === null) {
     return "n/a";
   }
-  if (date === 'Infinity') {
+  if (date === "Infinity") {
     return translate("Never");
   }
   const dateTime = DateTime.fromISO(date);
   const duration = dateTime.diffNow().toMillis();
-  return duration > -1000 && duration < 0 ? translate("Just now") : dateTime.toRelative({locale});
+  return duration > -1000 && duration < 0 ? translate("Just now") : dateTime.toRelative({ locale });
 };
 
 /**
@@ -53,4 +53,4 @@ export const formatExpirationDateTimeAgo = (date, translate, locale) => {
  * @param {DateTime} date
  * @returns {string}
  */
-export const formatDateForApi = date => date?.toUTC().toISO() || null;
+export const formatDateForApi = (date) => date?.toUTC().toISO() || null;

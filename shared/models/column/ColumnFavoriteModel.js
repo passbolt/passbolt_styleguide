@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, { ColumnFields, ColumnModelTypes } from "./ColumnModel";
 
 /**
  * Model related to the column favorite use only with the UI
@@ -30,10 +30,9 @@ class ColumnFavoriteModel extends ColumnModel {
     columnDto.resizable = false;
     columnDto.draggable = false;
     columnDto.sortable = true;
-    columnDto.getValue = value => ({id: value.id, favorite: value.favorite});
+    columnDto.getValue = (value) => ({ id: value.id, favorite: value.favorite });
     super(columnDto);
   }
 }
 
 export default ColumnFavoriteModel;
-

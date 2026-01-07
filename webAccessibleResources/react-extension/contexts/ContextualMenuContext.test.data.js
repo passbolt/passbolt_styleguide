@@ -21,6 +21,6 @@ export function defaultContextualMenuContext(data = {}) {
   return {
     show: jest.fn(),
     hide: jest.fn(),
-    ...data
+    ...data,
   };
 }

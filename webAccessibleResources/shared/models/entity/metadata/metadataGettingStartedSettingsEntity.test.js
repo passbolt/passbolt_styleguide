@@ -14,12 +14,18 @@
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import MetadataGettingStartedSettingsEntity from "./metadataGettingStartedSettingsEntity";
-import {defaultMetadataGettingStartedSettingsDto, enableMetadataGettingStartedSettingsDto} from "./metadataGettingStartedSettingsEntity.test.data";
+import {
+  defaultMetadataGettingStartedSettingsDto,
+  enableMetadataGettingStartedSettingsDto,
+} from "./metadataGettingStartedSettingsEntity.test.data";
 
 describe("MetadataGettingStartedSettingsEntity", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(MetadataGettingStartedSettingsEntity.name, MetadataGettingStartedSettingsEntity.getSchema());
+      EntitySchema.validateSchema(
+        MetadataGettingStartedSettingsEntity.name,
+        MetadataGettingStartedSettingsEntity.getSchema(),
+      );
     });
 
     it("validates enabled property", () => {

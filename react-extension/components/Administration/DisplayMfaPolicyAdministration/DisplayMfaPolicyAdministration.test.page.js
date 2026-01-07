@@ -13,12 +13,12 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {AdminMfaPolicyContextProvider} from "../../../contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
+import { AdminMfaPolicyContextProvider } from "../../../contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
 import DisplayAdministrationMfaPolicyActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationMfaPolicyActions/DisplayAdministrationMfaPolicyActions";
-import DisplayMfaPolicyAdministration from './DisplayMfaPolicyAdministration';
+import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration";
 import userEvent from "@testing-library/user-event";
 /**
  * The DisplayMfaPolicyAdministration component represented as a page
@@ -33,13 +33,13 @@ export default class DisplayMfaPolicyAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <AdminMfaPolicyContextProvider  {...props}>
+          <AdminMfaPolicyContextProvider {...props}>
             <DisplayAdministrationMfaPolicyActions />
-            <DisplayMfaPolicyAdministration {...props}/>
+            <DisplayMfaPolicyAdministration {...props} />
           </AdminMfaPolicyContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -49,91 +49,91 @@ export default class DisplayMfaPolicyAdministrationPage {
    * Returns the self registration parent class
    */
   get mfaPolicy() {
-    return this._page.container.querySelector('.mfa-policy-settings');
+    return this._page.container.querySelector(".mfa-policy-settings");
   }
 
   /**
    * Returns the save settings button
    */
   get saveSettingsButton() {
-    return this._page.container.querySelector('#save-settings');
+    return this._page.container.querySelector("#save-settings");
   }
 
   /**
    * Returns the remember toggle
    */
   get toggleRemember() {
-    return this._page.container.querySelector('#remember-toggle-button');
+    return this._page.container.querySelector("#remember-toggle-button");
   }
 
   /**
    * Returns the mandatory policy radio box
    */
   get mandatoryPolicy() {
-    return this._page.container.querySelector('#mfa-policy-mandatory-radio');
+    return this._page.container.querySelector("#mfa-policy-mandatory-radio");
   }
 
   /**
    * Returns the mandatory policy name
    */
   get mandatoryPolicyName() {
-    return this._page.container.querySelector('#mfa-policy-mandatory .name');
+    return this._page.container.querySelector("#mfa-policy-mandatory .name");
   }
 
   /**
    * Returns the mandatory policy info
    */
   get mandatoryPolicyInfo() {
-    return this._page.container.querySelector('#mfa-policy-mandatory .info');
+    return this._page.container.querySelector("#mfa-policy-mandatory .info");
   }
 
   /**
    * Returns the opt-in policy radio box
    */
   get optInPolicy() {
-    return this._page.container.querySelector('#mfa-policy-opt-in-radio');
+    return this._page.container.querySelector("#mfa-policy-opt-in-radio");
   }
 
   /**
    * Returns the opt-in policy name
    */
   get optInPolicyName() {
-    return this._page.container.querySelector('#mfa-policy-opt-in .name');
+    return this._page.container.querySelector("#mfa-policy-opt-in .name");
   }
 
   /**
    * Returns the opt-in policy info
    */
   get optInPolicyInfo() {
-    return this._page.container.querySelector('#mfa-policy-opt-in .info');
+    return this._page.container.querySelector("#mfa-policy-opt-in .info");
   }
 
   /**
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelectorAll('.sidebar-help-section')[0];
+    return this._page.container.querySelectorAll(".sidebar-help-section")[0];
   }
 
   /**
    * Returns the help box title
    */
   get helpBoxTitle() {
-    return this.helpBox.querySelector('h3');
+    return this.helpBox.querySelector("h3");
   }
 
   /**
    * Returns the help box description
    */
   get helpBoxDescription() {
-    return this.helpBox.querySelector('p');
+    return this.helpBox.querySelector("p");
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('.button');
+    return this.helpBox.querySelector(".button");
   }
 
   /**
@@ -147,35 +147,35 @@ export default class DisplayMfaPolicyAdministrationPage {
    * Returns the subtitle
    */
   get subtitle() {
-    return this._page.container.querySelector('#mfa-policy-subtitle');
+    return this._page.container.querySelector("#mfa-policy-subtitle");
   }
 
   /**
    * Returns the description
    */
   get description() {
-    return this._page.container.querySelector('#mfa-policy-description');
+    return this._page.container.querySelector("#mfa-policy-description");
   }
 
   /**
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('#mfa-policy-settings-title');
+    return this._page.container.querySelector("#mfa-policy-settings-title");
   }
 
   /**
    * Returns the description
    */
   get subtitleRemember() {
-    return this._page.container.querySelector('#mfa-policy-remember-subtitle');
+    return this._page.container.querySelector("#mfa-policy-remember-subtitle");
   }
 
   /**
    * Returns the description
    */
   get toggleRememberLabel() {
-    return this._page.container.querySelector('.toggle-switch label');
+    return this._page.container.querySelector(".toggle-switch label");
   }
 
   /**

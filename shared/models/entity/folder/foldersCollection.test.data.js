@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.4
  */
-import {defaultFolderDto} from "./folderEntity.test.data";
+import { defaultFolderDto } from "./folderEntity.test.data";
 
 /**
  * Build dtos.
@@ -22,7 +22,7 @@ import {defaultFolderDto} from "./folderEntity.test.data";
 export const defaultFoldersCollectionDto = (foldersCount = 10, data = {}) => {
   const dtos = [];
   for (let i = 0; i < foldersCount; i++) {
-    const dto = defaultFolderDto({name: `folder ${i}`, ...data});
+    const dto = defaultFolderDto({ name: `folder ${i}`, ...data });
     dtos.push(dto);
   }
   return dtos;
@@ -43,7 +43,7 @@ export const nestedFoldersCollectionDto = (data = {}, options = {}) => {
     dto = defaultFolderDto({
       name: `folder ${i}`,
       folder_parent_id: i === 0 ? null : dto.id,
-      ...data
+      ...data,
     });
     dtos.push(dto);
   }

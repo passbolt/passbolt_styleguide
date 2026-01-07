@@ -16,9 +16,10 @@ import EntitySchema from "../abstract/entitySchema";
 import ExternalGpgSignatureEntity from "./externalGpgSignatureEntity";
 import {
   adaExternalGpgSignatureEntityDto,
-  adminExternalGpgSignatureEntityDto, bettyExternalGpgSignatureEntityDto
+  adminExternalGpgSignatureEntityDto,
+  bettyExternalGpgSignatureEntityDto,
 } from "./externalGpgSignatureEntity.test.data";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 describe("ExternalGpgSignatureEntity", () => {
   describe("::getSchema", () => {
@@ -58,17 +59,23 @@ describe("ExternalGpgSignatureEntity", () => {
 
     it("constructor fails if issuer fingerprint is malformed", () => {
       expect.assertions(1);
-      expect(() => new ExternalGpgSignatureEntity(adminExternalGpgSignatureEntityDto({issuer_fingerprint: "10"}))).toThrowEntityValidationError("issuer_fingerprint", "minLength");
+      expect(
+        () => new ExternalGpgSignatureEntity(adminExternalGpgSignatureEntityDto({ issuer_fingerprint: "10" })),
+      ).toThrowEntityValidationError("issuer_fingerprint", "minLength");
     });
 
     it("constructor fails if created is not a date", () => {
       expect.assertions(1);
-      expect(() => new ExternalGpgSignatureEntity(adminExternalGpgSignatureEntityDto({created: "not a date"}))).toThrowEntityValidationError("created", "format");
+      expect(
+        () => new ExternalGpgSignatureEntity(adminExternalGpgSignatureEntityDto({ created: "not a date" })),
+      ).toThrowEntityValidationError("created", "format");
     });
 
     it("constructor fails if is verified is not a boolean", () => {
       expect.assertions(1);
-      expect(() => new ExternalGpgSignatureEntity(adminExternalGpgSignatureEntityDto({is_verified: null}))).toThrowEntityValidationError("is_verified", "type");
+      expect(
+        () => new ExternalGpgSignatureEntity(adminExternalGpgSignatureEntityDto({ is_verified: null })),
+      ).toThrowEntityValidationError("is_verified", "type");
     });
   });
 
@@ -85,7 +92,7 @@ describe("ExternalGpgSignatureEntity", () => {
       expect.assertions(2);
       const dto = adaExternalGpgSignatureEntityDto();
       const entity1 = new ExternalGpgSignatureEntity(dto);
-      const entity2 = new ExternalGpgSignatureEntity(adaExternalGpgSignatureEntityDto({is_verified: false}));
+      const entity2 = new ExternalGpgSignatureEntity(adaExternalGpgSignatureEntityDto({ is_verified: false }));
 
       expect(entity1.isVerified).toBeTruthy();
       expect(entity2.isVerified).toBeFalsy();

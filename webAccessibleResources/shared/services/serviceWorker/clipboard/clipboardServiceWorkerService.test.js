@@ -21,7 +21,7 @@ beforeEach(() => {
 
 describe("ClipboardServiceWorkerService", () => {
   describe("::copyTemporarily", () => {
-    it("requests the service worker with the expected event and parameters.", async() => {
+    it("requests the service worker with the expected event and parameters.", async () => {
       expect.assertions(2);
       const port = new MockPort();
       const service = new ClipboardServiceWorkerService(port);
@@ -35,7 +35,7 @@ describe("ClipboardServiceWorkerService", () => {
       expect(port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", clipboardContent);
     });
 
-    it("should throw an error if the given parameter is not a valid string.", async() => {
+    it("should throw an error if the given parameter is not a valid string.", async () => {
       expect.assertions(1);
       const port = new MockPort();
       const service = new ClipboardServiceWorkerService(port);
@@ -47,7 +47,7 @@ describe("ClipboardServiceWorkerService", () => {
   });
 
   describe("::copy", () => {
-    it("requests the service worker with the expected event and parameters.", async() => {
+    it("requests the service worker with the expected event and parameters.", async () => {
       expect.assertions(2);
       const port = new MockPort();
       const service = new ClipboardServiceWorkerService(port);
@@ -61,7 +61,7 @@ describe("ClipboardServiceWorkerService", () => {
       expect(port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", clipboardContent);
     });
 
-    it("should throw an error if the given parameter is not a valid string.", async() => {
+    it("should throw an error if the given parameter is not a valid string.", async () => {
       expect.assertions(1);
       const port = new MockPort();
       const service = new ClipboardServiceWorkerService(port);

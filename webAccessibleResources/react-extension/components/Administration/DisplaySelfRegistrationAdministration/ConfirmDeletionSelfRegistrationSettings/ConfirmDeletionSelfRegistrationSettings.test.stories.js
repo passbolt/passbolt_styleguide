@@ -14,18 +14,17 @@
  * @since         3.8.3
  */
 
-import {defaultProps} from "../ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings.test.data";
+import { defaultProps } from "../ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings.test.data";
 import ConfirmDeletionSelfRegistrationSettings from "./ConfirmDeletionSelfRegistrationSettings";
 
-
 export default {
-  title: 'Components/Administration/ConfirmDeletionSelfRegistrationSettings',
+  title: "Components/Administration/ConfirmDeletionSelfRegistrationSettings",
   component: ConfirmDeletionSelfRegistrationSettings,
   parameters: {
-    css: "api_main"
-  }
+    css: "api_main",
+  },
 };
 
 export const Default = {
-  args: defaultProps()
+  args: defaultProps(),
 };

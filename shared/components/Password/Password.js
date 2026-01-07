@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import EyeOpenSVG from "../../../img/svg/eye_open.svg";
 import EyeCloseSVG from "../../../img/svg/eye_close.svg";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * This component represent a password input field with some additional properties
@@ -66,14 +66,14 @@ class Password extends Component {
    * Whenever the user focus on the password input
    */
   handlePasswordInputFocus() {
-    this.setState({hasPassphraseFocus: true});
+    this.setState({ hasPassphraseFocus: true });
   }
 
   /**
    * Whenever the user blurs on the password input
    */
   handlePasswordInputBlur() {
-    this.setState({hasPassphraseFocus: false});
+    this.setState({ hasPassphraseFocus: false });
   }
 
   /**
@@ -83,15 +83,21 @@ class Password extends Component {
     if (this.props.disabled) {
       return;
     }
-    this.setState({viewPassword: !this.state.viewPassword});
+    this.setState({ viewPassword: !this.state.viewPassword });
   }
 
   /**
    * Returns the style of the security token (color and text color)
    */
   get securityTokenStyle() {
-    const inverseStyle = {background: this.props.securityToken.textColor, color: this.props.securityToken.backgroundColor};
-    const fullStyle = {background: this.props.securityToken.backgroundColor, color: this.props.securityToken.textColor};
+    const inverseStyle = {
+      background: this.props.securityToken.textColor,
+      color: this.props.securityToken.backgroundColor,
+    };
+    const fullStyle = {
+      background: this.props.securityToken.backgroundColor,
+      color: this.props.securityToken.textColor,
+    };
     return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
   }
 
@@ -100,15 +106,17 @@ class Password extends Component {
    * @return {Object}
    */
   get passphraseInputStyle() {
-    if (!this.state.hasPassphraseFocus) { return undefined; }
+    if (!this.state.hasPassphraseFocus) {
+      return undefined;
+    }
 
-    const {backgroundColor} = this.props.securityToken;
+    const { backgroundColor } = this.props.securityToken;
     const textColor = this.getContrastTextColor(backgroundColor);
 
     return {
       background: backgroundColor,
       color: textColor,
-      '--passphrase-placeholder-color': textColor,
+      "--passphrase-placeholder-color": textColor,
     };
   }
 
@@ -116,16 +124,17 @@ class Password extends Component {
    * Returns the style of preview (icon color and icon background color)
    */
   get previewStyle() {
-    if (!this.state.hasPassphraseFocus) { return undefined; }
+    if (!this.state.hasPassphraseFocus) {
+      return undefined;
+    }
 
-    const {backgroundColor} = this.props.securityToken;
+    const { backgroundColor } = this.props.securityToken;
     const textColor = this.getContrastTextColor(backgroundColor);
     return {
-      '--icon-color': textColor,
-      '--icon-background-color': backgroundColor,
+      "--icon-color": textColor,
+      "--icon-background-color": backgroundColor,
     };
   }
-
 
   /**
    * Calculate the luminance of a color and return the appropriate text color variable.
@@ -134,7 +143,7 @@ class Password extends Component {
    */
   getContrastTextColor(backgroundColor) {
     // Convert hex color to RGB
-    const hex = backgroundColor.replace('#', '');
+    const hex = backgroundColor.replace("#", "");
     const bigint = parseInt(hex, 16);
     const red = (bigint >> 16) & 255;
     const green = (bigint >> 8) & 255;
@@ -145,23 +154,21 @@ class Password extends Component {
 
     // Return the appropriate CSS variable based on luminance
 
-    return luminance > 0.5
-      ? 'var(--Token-Token-text-and-icon)'
-      : 'var(--Token-Token-text-and-icon-reversed)';
+    return luminance > 0.5 ? "var(--Token-Token-text-and-icon)" : "var(--Token-Token-text-and-icon-reversed)";
   }
 
   /**
    * Handle the mouse down to set active item
    */
   handleMouseDown() {
-    this.setState({isPassphraseActive: true});
+    this.setState({ isPassphraseActive: true });
   }
 
   /**
    * Handle the mouse down to set active item to false
    */
   handleMouseUp() {
-    this.setState({isPassphraseActive: false});
+    this.setState({ isPassphraseActive: false });
   }
 
   /**
@@ -170,39 +177,52 @@ class Password extends Component {
    */
   render() {
     return (
-      <div className={`input password ${this.props.disabled ? "disabled" : ""} ${this.state.hasPassphraseFocus ? "" : "no-focus"} ${this.state.isPassphraseActive ? "active" : ""} ${this.props.securityToken ? "security" : ""}`} style={this.props.securityToken ? this.passphraseInputStyle : undefined}>
-        <input id={this.props.id} name={this.props.name}
+      <div
+        className={`input password ${this.props.disabled ? "disabled" : ""} ${this.state.hasPassphraseFocus ? "" : "no-focus"} ${this.state.isPassphraseActive ? "active" : ""} ${this.props.securityToken ? "security" : ""}`}
+        style={this.props.securityToken ? this.passphraseInputStyle : undefined}
+      >
+        <input
+          id={this.props.id}
+          name={this.props.name}
           maxLength="4096"
           placeholder={this.props.placeholder}
           type={this.state.viewPassword && !this.props.disabled ? "text" : "password"}
-          onKeyUp={this.props.onKeyUp} value={this.props.value}
-          onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
-          onChange={this.handleInputChange} disabled={this.props.disabled}
-          readOnly={this.props.readOnly} autoComplete={this.props.autoComplete}
+          onKeyUp={this.props.onKeyUp}
+          value={this.props.value}
+          onFocus={this.handlePasswordInputFocus}
+          onBlur={this.handlePasswordInputBlur}
+          onChange={this.handleInputChange}
+          disabled={this.props.disabled}
+          readOnly={this.props.readOnly}
+          autoComplete={this.props.autoComplete}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
-          aria-required={true} ref={this.props.inputRef} />
-        {this.props.preview &&
+          aria-required={true}
+          ref={this.props.inputRef}
+        />
+        {this.props.preview && (
           <div className="password-view-wrapper">
-            <button type="button" onClick={this.handleViewPasswordButtonClick} style={this.props.securityToken ? this.previewStyle : undefined}
-              className={`password-view infield button-transparent ${this.props.disabled ? "disabled" : ""}`}>
-              {!this.state.viewPassword &&
-                <EyeOpenSVG className='svg-icon eye-open'/>
-              }
-              {this.state.viewPassword &&
-                <EyeCloseSVG className='svg-icon eye-close'/>
-              }
-              <span className="visually-hidden"><Trans>View</Trans></span>
+            <button
+              type="button"
+              onClick={this.handleViewPasswordButtonClick}
+              style={this.props.securityToken ? this.previewStyle : undefined}
+              className={`password-view infield button-transparent ${this.props.disabled ? "disabled" : ""}`}
+            >
+              {!this.state.viewPassword && <EyeOpenSVG className="svg-icon eye-open" />}
+              {this.state.viewPassword && <EyeCloseSVG className="svg-icon eye-close" />}
+              <span className="visually-hidden">
+                <Trans>View</Trans>
+              </span>
             </button>
           </div>
-        }
-        {this.props.securityToken &&
+        )}
+        {this.props.securityToken && (
           <div className="security-token-wrapper">
             <span className="security-token" style={this.securityTokenStyle}>
               {this.props.securityToken.code}
             </span>
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -230,7 +250,7 @@ Password.propTypes = {
   securityToken: PropTypes.shape({
     code: PropTypes.string,
     backgroundColor: PropTypes.string,
-    textColor: PropTypes.string
+    textColor: PropTypes.string,
   }), // The securityTokenDto
 };
 

@@ -18,7 +18,7 @@
  * @param {string} value The string to escape
  * @returns {string}
  */
-export const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+export const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /**
  * Filter resources by keywords.
@@ -32,20 +32,21 @@ export const filterResourcesBySearch = (resources, needle, limit = Number.MAX_SA
   // Split the search by words
   const needles = needle.split(/\s+/);
   // Prepare the regexes for each word contained in the search.
-  const regexes = needles.map(needle => new RegExp(escapeRegExp(needle), 'i'));
+  const regexes = needles.map((needle) => new RegExp(escapeRegExp(needle), "i"));
 
   let filterCount = 0;
-  return resources.filter(resource => {
+  return resources.filter((resource) => {
     if (filterCount >= limit) {
       return false;
     }
 
     for (const i in regexes) {
       // To match a resource would have to match all the words of the search.
-      const match = (regexes[i].test(resource.metadata.name)
-        || regexes[i].test(resource.metadata.username)
-        || regexes[i].test(resource.metadata.uris?.[0])
-        || regexes[i].test(resource.metadata.description));
+      const match =
+        regexes[i].test(resource.metadata.name) ||
+        regexes[i].test(resource.metadata.username) ||
+        regexes[i].test(resource.metadata.uris?.[0]) ||
+        regexes[i].test(resource.metadata.description);
 
       if (!match) {
         //early exit, there is no need to search for more matches in that case

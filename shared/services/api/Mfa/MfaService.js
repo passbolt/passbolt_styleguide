@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {ApiClient} from "../../../lib/apiClient/apiClient";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
 
 const MFA_RESOURCE_NAME = "mfa";
 
@@ -73,4 +73,3 @@ class MFAService {
 }
 
 export default MFAService;
-

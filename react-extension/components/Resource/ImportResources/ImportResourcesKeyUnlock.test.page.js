@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -31,10 +31,10 @@ export default class ImportResourcesKeyUnlockPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <ImportResourcesKeyUnlock {...props}/>
+          <ImportResourcesKeyUnlock {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -51,14 +51,14 @@ export default class ImportResourcesKeyUnlockPage {
    * Returns the dialog element
    */
   get dialog() {
-    return this._page.container.querySelector('.import-password-dialog');
+    return this._page.container.querySelector(".import-password-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
@@ -72,28 +72,28 @@ export default class ImportResourcesKeyUnlockPage {
    * Returns the import folder input element
    */
   get importFile() {
-    return this._page.container.querySelector('.input.file button.button.primary');
+    return this._page.container.querySelector(".input.file button.button.primary");
   }
 
   /**
    * Returns the error mesage input element
    */
   get errorMessage() {
-    return this._page.container.querySelector('.error-message').textContent;
+    return this._page.container.querySelector(".error-message").textContent;
   }
 
   /**
    * Returns the password input element
    */
   get password() {
-    return this._page.container.querySelector('#import-password-dialog-password');
+    return this._page.container.querySelector("#import-password-dialog-password");
   }
 
   /**
    * Returns the password view element
    */
   get passwordView() {
-    return this._page.container.querySelector('.password-view');
+    return this._page.container.querySelector(".password-view");
   }
 
   /**
@@ -107,7 +107,7 @@ export default class ImportResourcesKeyUnlockPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -118,28 +118,28 @@ export default class ImportResourcesKeyUnlockPage {
   }
 
   /** Click on the element */
-  async click(element)  {
+  async click(element) {
     await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.dialog, escapeKeyDown);
   }
 
   /** Click to import file */
   async selectUnlockKeypassFile(file) {
     await this.click(this.importFile);
-    const data = {target: {files: [file]}};
+    const data = { target: { files: [file] } };
     fireEvent.change(this.inputFile, data);
     await waitFor(() => {});
   }
 
   /** checked import tag */
   async fillPassword(data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(this.password, dataInputEvent);
     await waitFor(() => {});
   }

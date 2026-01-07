@@ -12,9 +12,7 @@
  * @since         3.4.0
  */
 
-import {
-  defaultPasswordGeneratorSettingsDto
-} from "../../models/passwordPolicies/PasswordGeneratorSettingsDto.test.data";
+import { defaultPasswordGeneratorSettingsDto } from "../../models/passwordPolicies/PasswordGeneratorSettingsDto.test.data";
 
 /**
  * Default props.
@@ -25,12 +23,12 @@ export function defaultProps(props = {}) {
   const configuration = props?.configuration
     ? Object.assign({}, props.configuration)
     : defaultPasswordGeneratorSettingsDto({
-      min_length: 8, // @todo Check if it shouldn't be moveed into the default settings.
-      max_length: 24,
-    });
+        min_length: 8, // @todo Check if it shouldn't be moveed into the default settings.
+        max_length: 24,
+      });
 
   return {
-    onConfigurationChanged: jest.fn(newConfiguration => {
+    onConfigurationChanged: jest.fn((newConfiguration) => {
       Object.entries(newConfiguration).forEach(([fieldName]) => {
         configuration[fieldName] = newConfiguration[fieldName];
       });

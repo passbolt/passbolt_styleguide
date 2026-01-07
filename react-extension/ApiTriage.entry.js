@@ -26,7 +26,4 @@ document.body.appendChild(appDomElement);
  * const root = ReactDOM.createRoot(appDomElement);
  */
 /* eslint-disable react/no-deprecated */
-ReactDOM.render(
-  <ApiTriage/>,
-  appDomElement
-);
+ReactDOM.render(<ApiTriage />, appDomElement);

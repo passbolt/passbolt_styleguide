@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {render, waitFor} from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import userEvent from "@testing-library/user-event";
 
@@ -34,11 +33,11 @@ export default class PasswordSidebarActivitySectionPage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
-            <DisplayResourceDetailsActivity {...props}/>
+            <DisplayResourceDetailsActivity {...props} />
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -72,21 +71,21 @@ class DisplayActivityPageObject {
    * Returns the list elements of activities
    */
   get list() {
-    return this._container.querySelector('ul');
+    return this._container.querySelector("ul");
   }
 
   /**
    * Returns the loading element
    */
   get loadingMessage() {
-    return this._container.querySelector('.processing-text');
+    return this._container.querySelector(".processing-text");
   }
 
   /**
    * Returns the more button of activities
    */
   get moreButton() {
-    return this._container.querySelector('.action-logs-load-more');
+    return this._container.querySelector(".action-logs-load-more");
   }
 
   /**
@@ -104,14 +103,14 @@ class DisplayActivityPageObject {
    * Returns true
    */
   isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving activities';
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === "Retrieving activities";
   }
 
   /**
    * Returns the number of displayed activities
    */
   count() {
-    return this.list.querySelectorAll('.content').length;
+    return this.list.querySelectorAll(".content").length;
   }
 
   /**
@@ -119,7 +118,7 @@ class DisplayActivityPageObject {
    * @param index The display rank of creator's activity
    */
   creator(index) {
-    return this.list.querySelectorAll('.content')[index - 1].querySelector('.creator').textContent;
+    return this.list.querySelectorAll(".content")[index - 1].querySelector(".creator").textContent;
   }
 
   /**
@@ -127,7 +126,7 @@ class DisplayActivityPageObject {
    * @param index The display rank of activity
    */
   creationTime(index) {
-    return this.list.querySelectorAll('.content')[index - 1].querySelector('.subinfo').textContent;
+    return this.list.querySelectorAll(".content")[index - 1].querySelector(".subinfo").textContent;
   }
 
   /**
@@ -140,12 +139,7 @@ class DisplayActivityPageObject {
   }
 
   /** Click on the more button */
-  async moreButtonClick()  {
+  async moreButtonClick() {
     await this.user.click(this.moreButton);
   }
 }
-
-
-
-
-

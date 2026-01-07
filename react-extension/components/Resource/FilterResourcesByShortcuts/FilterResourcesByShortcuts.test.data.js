@@ -12,9 +12,9 @@
  * @since         2.13.0
  */
 
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 /**
  * Default props
@@ -24,11 +24,11 @@ export function defaultProps(data) {
   return {
     context: defaultUserAppContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      ...data?.resourceWorkspaceContext
+      ...data?.resourceWorkspaceContext,
     }),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     history: {
       push: jest.fn(),
-    }
+    },
   };
 }

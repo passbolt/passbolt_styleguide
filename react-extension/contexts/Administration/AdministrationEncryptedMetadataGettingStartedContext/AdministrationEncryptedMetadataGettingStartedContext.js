@@ -13,17 +13,14 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import FindMetadataGettingStartedSettingsService
-  from "../../../../shared/services/metadata/findMetadataGettingStartedSettingsService";
-import GettingStartedWithEncryptedMetadataServiceWorkerService
-  from "../../../../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
+import FindMetadataGettingStartedSettingsService from "../../../../shared/services/metadata/findMetadataGettingStartedSettingsService";
+import GettingStartedWithEncryptedMetadataServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
 
 export const AdministrationEncryptedMetadataGettingStartedContext = React.createContext({
   get: () => {}, // Get the metadata getting started from the API and init them if not the case already
   metadataGettingStartedSettings: null, // the current metadata getting started settings loaded from the API
   update: () => {}, // triggers an update
 });
-
 
 /**
  * The metadata getting started context provider
@@ -57,7 +54,7 @@ class AdministrationEncryptedMetadataGettingStartedContextProvider extends React
    * @private
    */
   set(metadataGettingStartedSettings) {
-    this.setState({metadataGettingStartedSettings});
+    this.setState({ metadataGettingStartedSettings });
   }
 
   /**
@@ -102,7 +99,10 @@ class AdministrationEncryptedMetadataGettingStartedContextProvider extends React
 }
 
 AdministrationEncryptedMetadataGettingStartedContextProvider.propTypes = {
-  service: PropTypes.oneOfType([PropTypes.instanceOf(FindMetadataGettingStartedSettingsService), PropTypes.instanceOf(GettingStartedWithEncryptedMetadataServiceWorkerService)]), // The service
+  service: PropTypes.oneOfType([
+    PropTypes.instanceOf(FindMetadataGettingStartedSettingsService),
+    PropTypes.instanceOf(GettingStartedWithEncryptedMetadataServiceWorkerService),
+  ]), // The service
   children: PropTypes.any, // The children components
 };
 export default AdministrationEncryptedMetadataGettingStartedContextProvider;
@@ -116,16 +116,17 @@ export function withAdministrationEncryptedMetadataGettingStarted(WrappedCompone
     render() {
       return (
         <AdministrationEncryptedMetadataGettingStartedContext.Consumer>
-          {
-            administrationEncryptedMetadataGettingStartedContext => <WrappedComponent
-              administrationEncryptedMetadataGettingStartedContext={administrationEncryptedMetadataGettingStartedContext}
+          {(administrationEncryptedMetadataGettingStartedContext) => (
+            <WrappedComponent
+              administrationEncryptedMetadataGettingStartedContext={
+                administrationEncryptedMetadataGettingStartedContext
+              }
               metadataGettingStartedSettings={administrationEncryptedMetadataGettingStartedContext.get()}
               {...this.props}
             />
-          }
+          )}
         </AdministrationEncryptedMetadataGettingStartedContext.Consumer>
       );
     }
   };
 }
-

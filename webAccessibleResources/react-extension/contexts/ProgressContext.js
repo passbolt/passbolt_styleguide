@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DisplayProgress from "../components/Common/Progress/DisplayProgress/DisplayProgress";
-import {withDialog} from "./DialogContext";
+import { withDialog } from "./DialogContext";
 
 /**
  * The progress context
@@ -26,7 +26,7 @@ export const ProgressContext = React.createContext({
   open: () => {}, // Open the dialog
   updateMessage: () => {}, // Update the dialog message
   updateGoals: () => {}, // Update the dialog goals
-  close: () => {} // Close the dialog
+  close: () => {}, // Close the dialog
 });
 
 /**
@@ -74,10 +74,10 @@ export class ProgressContextProvider extends React.Component {
    * @param {string} message The message
    */
   open(title, goals, message) {
-    const progressDialogProps = {title, goals, message};
-    this.setState({progressDialogProps});
+    const progressDialogProps = { title, goals, message };
+    this.setState({ progressDialogProps });
     const dialogIndex = this.props.dialogContext.open(DisplayProgress);
-    this.setState({dialogIndex});
+    this.setState({ dialogIndex });
   }
 
   /**
@@ -89,9 +89,9 @@ export class ProgressContextProvider extends React.Component {
     const progressDialogProps = {
       ...this.state.progressDialogProps,
       message: message || this.state.progressDialogProps.message,
-      completed
+      completed,
     };
-    this.setState({progressDialogProps});
+    this.setState({ progressDialogProps });
   }
 
   /**
@@ -101,9 +101,9 @@ export class ProgressContextProvider extends React.Component {
   async updateGoals(goals) {
     const progressDialogProps = {
       ...this.state.progressDialogProps,
-      goals: goals
+      goals: goals,
     };
-    this.setState({progressDialogProps});
+    this.setState({ progressDialogProps });
   }
 
   /**
@@ -113,7 +113,7 @@ export class ProgressContextProvider extends React.Component {
     this.props.dialogContext.close(this.state.dialogIndex);
     const progressDialogProps = {};
     const dialogIndex = null;
-    this.setState({progressDialogProps, dialogIndex});
+    this.setState({ progressDialogProps, dialogIndex });
   }
 
   /**
@@ -121,14 +121,10 @@ export class ProgressContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <ProgressContext.Provider value={this.state}>
-        {this.props.children}
-      </ProgressContext.Provider>
-    );
+    return <ProgressContext.Provider value={this.state}>{this.props.children}</ProgressContext.Provider>;
   }
 }
-ProgressContextProvider.displayName = 'ProgressContextProvider';
+ProgressContextProvider.displayName = "ProgressContextProvider";
 ProgressContextProvider.propTypes = {
   children: PropTypes.any,
   dialogContext: PropTypes.object, // The dialog context.
@@ -145,9 +141,7 @@ export function withProgress(WrappedComponent) {
     render() {
       return (
         <ProgressContext.Consumer>
-          {
-            progressContext => <WrappedComponent progressContext={progressContext} {...this.props} />
-          }
+          {(progressContext) => <WrappedComponent progressContext={progressContext} {...this.props} />}
         </ProgressContext.Consumer>
       );
     }

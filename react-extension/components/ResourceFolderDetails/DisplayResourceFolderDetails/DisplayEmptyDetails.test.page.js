@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         5.0.0
  */
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayEmptyDetails from "./DisplayEmptyDetails";
 
@@ -27,9 +26,9 @@ export default class DisplayEmptyDetailsPage {
   constructor() {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayEmptyDetails/>
+        <DisplayEmptyDetails />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,7 +37,7 @@ export default class DisplayEmptyDetailsPage {
    * @returns {boolean}
    */
   exists() {
-    return Boolean(this._page.container.querySelector('.sidebar.empty'));
+    return Boolean(this._page.container.querySelector(".sidebar.empty"));
   }
 
   /**
@@ -46,11 +45,6 @@ export default class DisplayEmptyDetailsPage {
    * @returns {string|null}
    */
   get content() {
-    return this._page.container.querySelector('p')?.textContent || null;
+    return this._page.container.querySelector("p")?.textContent || null;
   }
 }
-
-
-
-
-

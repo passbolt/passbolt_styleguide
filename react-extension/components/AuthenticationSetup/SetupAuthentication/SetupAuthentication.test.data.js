@@ -12,9 +12,9 @@
  * @since         5.3.0
  */
 
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
-export const defaultProps = data => ({
+export const defaultProps = (data) => ({
   ...data,
   context: defaultAppContext(data.context),
   authenticationSetupContext: {

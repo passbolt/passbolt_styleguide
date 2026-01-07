@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplaySsoProviderMismatchError from "./DisplaySsoProviderMismatchError";
 import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -27,9 +27,8 @@ export default class DisplaySsoProviderMismatchErrorPage {
   constructor(props = {}) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplaySsoProviderMismatchError {...props}/>
+        <DisplaySsoProviderMismatchError {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
   }
 
@@ -37,14 +36,14 @@ export default class DisplaySsoProviderMismatchErrorPage {
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.sso-provider-mismatch-error h1');
+    return this._page.container.querySelector(".sso-provider-mismatch-error h1");
   }
 
   /**
    * Returns paragraph containing the error message
    */
   get message() {
-    return this._page.container.querySelector('.sso-provider-mismatch-error p');
+    return this._page.container.querySelector(".sso-provider-mismatch-error p");
   }
 
   /**
@@ -65,7 +64,7 @@ export default class DisplaySsoProviderMismatchErrorPage {
    * Simulates a click on the confirmation checkbox
    */
   async clickOnConfirmationCheckbox() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.confirmationCheckbox, leftClick);
     await waitFor(() => {});
   }
@@ -74,7 +73,7 @@ export default class DisplaySsoProviderMismatchErrorPage {
    * Simulates a click on the "Sign in with passphrase" button
    */
   async clickOnAcceptNewProviderButton() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.acceptNewProviderButton, leftClick);
     await waitFor(() => {});
   }

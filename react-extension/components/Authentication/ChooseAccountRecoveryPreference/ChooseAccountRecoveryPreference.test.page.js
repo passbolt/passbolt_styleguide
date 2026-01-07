@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ChooseAccountRecoveryPreference from "./ChooseAccountRecoveryPreference";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -27,9 +27,8 @@ export default class ChooseAccountRecoveryPreferencePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ChooseAccountRecoveryPreference {...props}/>
+        <ChooseAccountRecoveryPreference {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
   }
 
@@ -37,24 +36,28 @@ export default class ChooseAccountRecoveryPreferencePage {
    * Returns the account recovery preference element
    */
   get accountRecoveryPreference() {
-    return this._page.container.querySelector('.recovery-account-setup-extension');
+    return this._page.container.querySelector(".recovery-account-setup-extension");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.recovery-account-setup-extension h1').textContent;
+    return this._page.container.querySelector(".recovery-account-setup-extension h1").textContent;
   }
 
   /**
    * Returns the reject radio button element
    */
   get rejectRadioButton() {
-    const element = this._page.container.querySelector('#statusRecoverAccountReject');
+    const element = this._page.container.querySelector("#statusRecoverAccountReject");
     return {
-      get element() { return element; },
-      get isChecked()  { return element.checked; }
+      get element() {
+        return element;
+      },
+      get isChecked() {
+        return element.checked;
+      },
     };
   }
 
@@ -62,10 +65,14 @@ export default class ChooseAccountRecoveryPreferencePage {
    * Returns the accept radio button element
    */
   get acceptRadioButton() {
-    const element = this._page.container.querySelector('#statusRecoverAccountAccept');
+    const element = this._page.container.querySelector("#statusRecoverAccountAccept");
     return {
-      get element() { return element; },
-      get isChecked()  { return element.checked; }
+      get element() {
+        return element;
+      },
+      get isChecked() {
+        return element.checked;
+      },
     };
   }
 
@@ -87,14 +94,14 @@ export default class ChooseAccountRecoveryPreferencePage {
    * Returns the generate new key button element
    */
   get generateNewKeyButton() {
-    return this._page.container.querySelector('.form-actions .generate-new-key');
+    return this._page.container.querySelector(".form-actions .generate-new-key");
   }
 
   /**
    * next process
    */
   async next() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.nextButton, leftClick);
     await waitFor(() => {});
   }
@@ -103,7 +110,7 @@ export default class ChooseAccountRecoveryPreferencePage {
    * Go to generate new key
    */
   async goToGenerateNewKey() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.generateNewKeyButton, leftClick);
     await waitFor(() => {});
   }

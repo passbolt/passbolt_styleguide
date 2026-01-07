@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.3.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {detectBrowserName} from "../../../../shared/lib/Browser/detectBrowserName";
+import { Trans, withTranslation } from "react-i18next";
+import { detectBrowserName } from "../../../../shared/lib/Browser/detectBrowserName";
 
 class IntroduceExtension extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class IntroduceExtension extends Component {
   getDefaultState() {
     return {
       browserName: detectBrowserName(),
-      processing: false
+      processing: false,
     };
   }
 
@@ -44,7 +44,7 @@ class IntroduceExtension extends Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+    await this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -71,16 +71,19 @@ class IntroduceExtension extends Component {
   render() {
     return (
       <div className="introduce-setup-extension">
-        <h1><Trans>Congratulation! Passbolt extension has been installed.</Trans></h1>
+        <h1>
+          <Trans>Congratulation! Passbolt extension has been installed.</Trans>
+        </h1>
         <form onSubmit={this.handleSubmit}>
-          <div className={`animated-setup-introduction ${this.state.browserName}`}/>
-          <div className="arrow"/>
+          <div className={`animated-setup-introduction ${this.state.browserName}`} />
+          <div className="arrow" />
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big full-width ${this.isProcessing ? 'disabled processing' : ''}`}
+              className={`button primary big full-width ${this.isProcessing ? "disabled processing" : ""}`}
               role="button"
-              disabled={this.isProcessing}>
+              disabled={this.isProcessing}
+            >
               <Trans>Next</Trans>
             </button>
           </div>

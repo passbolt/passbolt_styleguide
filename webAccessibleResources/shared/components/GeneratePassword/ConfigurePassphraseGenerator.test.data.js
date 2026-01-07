@@ -12,9 +12,7 @@
  * @since         3.4.0
  */
 
-import {
-  defaultPassphraseGeneratorSettingsDto
-} from "../../models/passwordPolicies/PassphraseGeneratorSettingsDto.test.data";
+import { defaultPassphraseGeneratorSettingsDto } from "../../models/passwordPolicies/PassphraseGeneratorSettingsDto.test.data";
 
 /**
  * Default props
@@ -28,10 +26,10 @@ export function defaultProps(props = {}) {
 
   return {
     configuration: configuration,
-    onConfigurationChanged: jest.fn(newConfiguration => {
+    onConfigurationChanged: jest.fn((newConfiguration) => {
       Object.entries(newConfiguration).forEach(([fieldName]) => {
         configuration[fieldName] = newConfiguration[fieldName];
       });
-    })
+    }),
   };
 }

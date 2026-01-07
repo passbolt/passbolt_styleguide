@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-export const defaultPasswordPoliciesViewModel = data => {
+export const defaultPasswordPoliciesViewModel = (data) => {
   const defaultData = {
     policyPassphraseExternalServices: true,
     passwordLength: 12,

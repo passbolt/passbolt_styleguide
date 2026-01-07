@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, { ColumnFields, ColumnModelTypes } from "./ColumnModel";
 
 /**
  * Model related to the column totp use only with the UI
@@ -30,10 +30,9 @@ class ColumnTotpModel extends ColumnModel {
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = false;
-    columnDto.getValue = value => value;
+    columnDto.getValue = (value) => value;
     super(columnDto);
   }
 }
 
 export default ColumnTotpModel;
-

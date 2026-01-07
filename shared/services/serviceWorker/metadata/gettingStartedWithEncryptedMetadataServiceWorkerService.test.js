@@ -15,7 +15,7 @@
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import GettingStartedWithEncryptedMetadataServiceWorkerService from "./gettingStartedWithEncryptedMetadataServiceWorkerService";
 import MetadataGettingStartedSettingsEntity from "../../../models/entity/metadata/metadataGettingStartedSettingsEntity";
-import {enableMetadataGettingStartedSettingsDto} from "../../../models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
+import { enableMetadataGettingStartedSettingsDto } from "../../../models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -23,7 +23,7 @@ beforeEach(() => {
 
 describe("GettingStartedWithEncryptedMetadataServiceWorkerService", () => {
   describe("::enableEncryptedMetadata", () => {
-    it("requests the service worker with the expected event and return metadata keys collection.", async() => {
+    it("requests the service worker with the expected event and return metadata keys collection.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.metadata.enable-encrypted-metadata-for-existing-instance";
@@ -39,7 +39,7 @@ describe("GettingStartedWithEncryptedMetadataServiceWorkerService", () => {
   });
 
   describe("::keepLegacyClearTextMetadata", () => {
-    it("requests the service worker with the expected event and return the request output.", async() => {
+    it("requests the service worker with the expected event and return the request output.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.metadata.keep-cleartext-metadata-for-existing-instance";
@@ -55,7 +55,7 @@ describe("GettingStartedWithEncryptedMetadataServiceWorkerService", () => {
   });
 
   describe("::findGettingStartedSettings", () => {
-    it("requests the service worker with the expected event and return the request output.", async() => {
+    it("requests the service worker with the expected event and return the request output.", async () => {
       expect.assertions(4);
 
       const dto = enableMetadataGettingStartedSettingsDto();

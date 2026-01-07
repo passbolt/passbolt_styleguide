@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.8.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 
 /**
@@ -61,12 +61,11 @@ class DeleteRole extends Component {
     this.props.onClose();
   }
 
-
   /**
    * Save the changes.
    */
   delete() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
     this.props.onSubmit(this.props.role);
   }
 
@@ -92,19 +91,28 @@ class DeleteRole extends Component {
         title={this.translate("Delete role?")}
         onClose={this.handleClose}
         disabled={this.state.processing}
-        className="delete-role-dialog">
+        className="delete-role-dialog"
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <p>
               <Trans>
-                Are you sure you want to delete the role <strong className="dialog-variable">{{roleName: this.props.role.name}}</strong>?
+                Are you sure you want to delete the role{" "}
+                <strong className="dialog-variable">{{ roleName: this.props.role.name }}</strong>?
               </Trans>
             </p>
-            <p><Trans>Once the role is deleted, it will be removed permanently and will not be recoverable.</Trans></p>
+            <p>
+              <Trans>Once the role is deleted, it will be removed permanently and will not be recoverable.</Trans>
+            </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Delete")}
+              warning={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -119,4 +127,4 @@ DeleteRole.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(DeleteRole);
+export default withTranslation("common")(DeleteRole);

@@ -15,8 +15,8 @@
 /**
  * Unit tests on DisplayResourceDetailsCustomFields in regard of specifications
  */
-import {plaintextSecretCustomFieldsDto} from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import { plaintextSecretCustomFieldsDto } from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import {
   defaultProps,
   propsWithApiFlagDisabled,
@@ -32,13 +32,13 @@ describe("See custom fields", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     resourceWithCustomFieldsDto = resourceWithCustomFields;
-    props = defaultProps({resourceWorkspaceContext: {details: {resource: resourceWithCustomFieldsDto}}});
-    jest.spyOn(props.context.port, 'request').mockImplementation(() => plaintextSecretCustomFieldsDto(
-      resourceWithCustomFieldsDto.metadata
-    ));
+    props = defaultProps({ resourceWorkspaceContext: { details: { resource: resourceWithCustomFieldsDto } } });
+    jest
+      .spyOn(props.context.port, "request")
+      .mockImplementation(() => plaintextSecretCustomFieldsDto(resourceWithCustomFieldsDto.metadata));
   });
 
-  it('As LU I see the encrypted custom fields of my resources', async() => {
+  it("As LU I see the encrypted custom fields of my resources", async () => {
     expect.assertions(7);
 
     const page = new DisplayResourceDetailsCustomFieldsPage(props);
@@ -56,7 +56,7 @@ describe("See custom fields", () => {
     expect(page.customFieldsSection).toBeNull();
   });
 
-  it('As LU I should be able to open and close the section', async() => {
+  it("As LU I should be able to open and close the section", async () => {
     expect.assertions(3);
 
     const page = new DisplayResourceDetailsCustomFieldsPage(props);
@@ -72,8 +72,8 @@ describe("See custom fields", () => {
     expect(page.isOpen).toBeTruthy();
   });
 
-  describe('As LU I can preview a dedicated custom field secret of a resource', () => {
-    it('See the decrypted custom field when clicking on the preview button', async() => {
+  describe("As LU I can preview a dedicated custom field secret of a resource", () => {
+    it("See the decrypted custom field when clicking on the preview button", async () => {
       expect.assertions(4);
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
@@ -83,7 +83,10 @@ describe("See custom fields", () => {
       await page.hover(page.getPreviewButton(0));
       await page.clickOn(page.getPreviewButton(0));
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.details.resource.id);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.details.resource.id,
+      );
       expect(page.getCustomFieldValue(0).textContent).toBe("I am a secret");
 
       await page.hover(page.getPreviewButton(0));
@@ -91,7 +94,7 @@ describe("See custom fields", () => {
 
       expect(page.getCustomFieldValue(0).textContent).toBe("There is no value");
     });
-    it('Should not run the decryption a second time for individual field', async() => {
+    it("Should not run the decryption a second time for individual field", async () => {
       expect.assertions(4);
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
@@ -105,11 +108,14 @@ describe("See custom fields", () => {
       await page.clickOn(page.getPreviewButton(1));
 
       expect(page.getCustomFieldValue(1).textContent).toBe("I am a secret 2");
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.details.resource.id);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.details.resource.id,
+      );
       expect(props.context.port.request).toHaveBeenCalledTimes(1);
     });
 
-    it('Should toggle individual custom field visibility correctly', async() => {
+    it("Should toggle individual custom field visibility correctly", async () => {
       expect.assertions(6);
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
@@ -134,14 +140,12 @@ describe("See custom fields", () => {
       expect(page.getCustomFieldValue(1).textContent).toBe("There is no value");
     });
 
-    it('AS LU, I cannot preview secret of a custom field if denied by RBAC', async() => {
+    it("AS LU, I cannot preview secret of a custom field if denied by RBAC", async () => {
       expect.assertions(1);
 
-      const props = propsWithDenyUiAction(
-        {
-          resource: resourceWithCustomFieldsDto
-        }
-      );
+      const props = propsWithDenyUiAction({
+        resource: resourceWithCustomFieldsDto,
+      });
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
 
       await page.hover(page.getCustomFieldValue(0));
@@ -149,14 +153,12 @@ describe("See custom fields", () => {
       expect(page.getPreviewButton(0)).toBeUndefined();
     });
 
-    it('AS LU, I cannot preview secret of a custom field if disable by API flag', async() => {
+    it("AS LU, I cannot preview secret of a custom field if disable by API flag", async () => {
       expect.assertions(1);
 
-      const props = propsWithApiFlagDisabled(
-        {
-          resource: resourceWithCustomFieldsDto
-        }
-      );
+      const props = propsWithApiFlagDisabled({
+        resource: resourceWithCustomFieldsDto,
+      });
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
 
       await page.hover(page.getCustomFieldValue(0));
@@ -165,8 +167,8 @@ describe("See custom fields", () => {
     });
   });
 
-  describe('As LU I can preview all custom field secrets of a resource', () => {
-    it('See all decrypted custom fields when clicking on "Show all" button', async() => {
+  describe("As LU I can preview all custom field secrets of a resource", () => {
+    it('See all decrypted custom fields when clicking on "Show all" button', async () => {
       expect.assertions(3);
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
@@ -178,7 +180,7 @@ describe("See custom fields", () => {
       expect(page.getCustomFieldValue(2).textContent).toBe("I am a secret 3");
     });
 
-    it('Should hide all custom fields when clicking "Hide all" button', async() => {
+    it('Should hide all custom fields when clicking "Hide all" button', async () => {
       expect.assertions(6);
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
@@ -196,10 +198,10 @@ describe("See custom fields", () => {
       expect(page.getCustomFieldValue(2).textContent).toBe("There is no value");
     });
 
-    it('Should not show empty secrets', async() => {
+    it("Should not show empty secrets", async () => {
       expect.assertions(3);
 
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({}));
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({}));
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
 
@@ -210,55 +212,53 @@ describe("See custom fields", () => {
       expect(page.getCustomFieldValue(2).textContent).toBe("There is no value");
     });
 
-    it('AS LU, I cannot preview all secrets of a custom field if denied by RBAC', async() => {
+    it("AS LU, I cannot preview all secrets of a custom field if denied by RBAC", async () => {
       expect.assertions(1);
 
-      const props = propsWithDenyUiAction(
-        {
-          resource: resourceWithCustomFieldsDto
-        }
-      );
+      const props = propsWithDenyUiAction({
+        resource: resourceWithCustomFieldsDto,
+      });
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
 
       expect(page.showAllButton).toBeNull();
     });
 
-    it('AS LU, I cannot preview  all secrets of a custom field if disable by API flag', async() => {
+    it("AS LU, I cannot preview  all secrets of a custom field if disable by API flag", async () => {
       expect.assertions(1);
 
-      const props = propsWithApiFlagDisabled(
-        {
-          resource: resourceWithCustomFieldsDto
-        }
-      );
+      const props = propsWithApiFlagDisabled({
+        resource: resourceWithCustomFieldsDto,
+      });
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
-
 
       expect(page.showAllButton).toBeNull();
     });
   });
 
-  describe(' As LU I can copy a custom field secret of a resource to clipboard', () => {
-    it('AS LU, I should be able to copy the secret of a resource to clipboard', async() => {
+  describe(" As LU I can copy a custom field secret of a resource to clipboard", () => {
+    it("AS LU, I should be able to copy the secret of a resource to clipboard", async () => {
       expect.assertions(2);
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.hover(page.getCustomFieldValue(0));
       await page.clickOn(page.getCustomFieldValueButton(0));
 
       expect(props.clipboardContext.copy).not.toHaveBeenCalledWith();
-      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith("I am a secret", "The custom field value has been copied to clipboard.");
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
+        "I am a secret",
+        "The custom field value has been copied to clipboard.",
+      );
     });
 
-    it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
+    it("AS LU, I cannot copy secret of resource if denied by RBAC", async () => {
       expect.assertions(2);
       const props = propsWithDenyUiAction({
-        resource: resourceWithCustomFieldsDto
+        resource: resourceWithCustomFieldsDto,
       });
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
 
@@ -270,27 +270,30 @@ describe("See custom fields", () => {
     });
   });
 
-  describe(' As LU I can copy a custom field key of a resource to clipboard', () => {
-    it('AS LU, I should be able to copy the key of a resource to clipboard', async() => {
+  describe(" As LU I can copy a custom field key of a resource to clipboard", () => {
+    it("AS LU, I should be able to copy the key of a resource to clipboard", async () => {
       expect.assertions(2);
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.hover(page.getCustomFieldLabel(0));
       await page.clickOn(page.getCustomFieldLabel(0));
 
-      expect(props.clipboardContext.copy).toHaveBeenCalledWith("API Key", "The custom field key has been copied to clipboard.");
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(
+        "API Key",
+        "The custom field key has been copied to clipboard.",
+      );
       expect(props.clipboardContext.copyTemporarily).not.toHaveBeenCalled();
     });
 
-    it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
+    it("AS LU, I cannot copy secret of resource if denied by RBAC", async () => {
       expect.assertions(2);
 
       const props = propsWithDenyUiAction({
-        resource: resourceWithCustomFieldsDto
+        resource: resourceWithCustomFieldsDto,
       });
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
 

@@ -13,8 +13,11 @@
  */
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
-import FavoriteServiceWorkerService, {ADD_RESOURCE_TO_FAVORITES, REMOVE_RESOURCE_FROM_FAVORITES} from "./FavoriteServiceWorkerService";
-import {v4 as uuidv4} from "uuid";
+import FavoriteServiceWorkerService, {
+  ADD_RESOURCE_TO_FAVORITES,
+  REMOVE_RESOURCE_FROM_FAVORITES,
+} from "./FavoriteServiceWorkerService";
+import { v4 as uuidv4 } from "uuid";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -29,7 +32,7 @@ describe("FavoriteServiceWorkerService", () => {
   });
 
   describe("::addToFavorites", () => {
-    it("should call the port with the correct action and resourceId", async() => {
+    it("should call the port with the correct action and resourceId", async () => {
       expect.assertions(2);
       jest.spyOn(port, "request").mockReturnValue(() => {});
       const resourceId = uuidv4();
@@ -41,7 +44,7 @@ describe("FavoriteServiceWorkerService", () => {
   });
 
   describe("::removeFromFavorites", () => {
-    it("should call the port with the correct action and resourceId", async() => {
+    it("should call the port with the correct action and resourceId", async () => {
       expect.assertions(2);
       jest.spyOn(port, "request").mockReturnValue(() => {});
       const resourceId = uuidv4();

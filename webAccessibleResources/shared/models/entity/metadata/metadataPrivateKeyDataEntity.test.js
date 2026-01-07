@@ -14,7 +14,10 @@
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import MetadataPrivateKeyDataEntity from "./metadataPrivateKeyDataEntity";
-import {defaultMetadataPrivateKeyDataDto, fullMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
+import {
+  defaultMetadataPrivateKeyDataDto,
+  fullMetadataPrivateKeyDataDto,
+} from "./metadataPrivateKeyDataEntity.test.data";
 
 describe("MetadataPrivateKeyDataEntity", () => {
   describe("::getSchema", () => {
@@ -25,7 +28,12 @@ describe("MetadataPrivateKeyDataEntity", () => {
     it("validates object_type property", () => {
       assertEntityProperty.string(MetadataPrivateKeyDataEntity, "object_type");
       assertEntityProperty.required(MetadataPrivateKeyDataEntity, "object_type");
-      assertEntityProperty.enumeration(MetadataPrivateKeyDataEntity, "object_type", ["PASSBOLT_METADATA_PRIVATE_KEY"], ["any other values"]);
+      assertEntityProperty.enumeration(
+        MetadataPrivateKeyDataEntity,
+        "object_type",
+        ["PASSBOLT_METADATA_PRIVATE_KEY"],
+        ["any other values"],
+      );
     });
 
     it("validates domain property", () => {

@@ -15,7 +15,7 @@
 import EntitySchema from "../../../../shared/models/entity/abstract/entitySchema";
 import AccountEntity from "./accountEntity";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultAccountDto} from "./accountEntity.test.data";
+import { defaultAccountDto } from "./accountEntity.test.data";
 
 describe("AccountEntity", () => {
   describe("AccountEntity::getSchema", () => {
@@ -35,13 +35,11 @@ describe("AccountEntity", () => {
     });
 
     it("validates user_key_fingerprint property", () => {
-      const successScenario = [
-        {scenario: "a valid fingerprint", value: "ABCD".repeat(10)},
-      ];
+      const successScenario = [{ scenario: "a valid fingerprint", value: "ABCD".repeat(10) }];
 
       const failingScenario = [
-        {scenario: "non hexadecimal fingerprint character set", value: "GHIJ".repeat(10)},
-        {scenario: "wrong fingerprint character case set", value: "abcd".repeat(10)},
+        { scenario: "non hexadecimal fingerprint character set", value: "GHIJ".repeat(10) },
+        { scenario: "wrong fingerprint character case set", value: "abcd".repeat(10) },
       ];
 
       assertEntityProperty.string(AccountEntity, "user_key_fingerprint");
@@ -84,10 +82,10 @@ describe("AccountEntity", () => {
 
     it("validates role_name property", () => {
       const successScenarios = [
-        {scenario: "valid role 'user'", value: 'user'},
-        {scenario: "valid role 'admin'", value: 'admin'},
-        {scenario: "valid role 'guest'", value: 'guest'},
-        {scenario: "valid role 'custom'", value: 'custom'},
+        { scenario: "valid role 'user'", value: "user" },
+        { scenario: "valid role 'admin'", value: "admin" },
+        { scenario: "valid role 'guest'", value: "guest" },
+        { scenario: "valid role 'custom'", value: "custom" },
       ];
 
       const failingScenarios = [
@@ -116,16 +114,16 @@ describe("AccountEntity", () => {
     it("should return the expected properties.", () => {
       expect.assertions(2);
       const expectedKeys = [
-        'type',
-        'domain',
-        'user_id',
-        'user_key_fingerprint',
-        'user_public_armored_key',
-        'server_public_armored_key',
-        'username',
-        'first_name',
-        'last_name',
-        'locale'
+        "type",
+        "domain",
+        "user_id",
+        "user_key_fingerprint",
+        "user_public_armored_key",
+        "server_public_armored_key",
+        "username",
+        "first_name",
+        "last_name",
+        "locale",
       ];
 
       const dto = defaultAccountDto();

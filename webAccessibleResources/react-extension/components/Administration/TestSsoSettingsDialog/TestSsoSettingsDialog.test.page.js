@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AdminSsoContextProvider from "../../../contexts/AdminSsoContext";
@@ -37,12 +37,14 @@ export default class TestSsoSettingsDialogPage {
    * @param {object} props the props of the components
    */
   render(props) {
-    this._page = render(<MockTranslationProvider>
-      <AdminSsoContextProvider {...props}>
-        <TestSsoSettingsDialog {...props}/>
-      </AdminSsoContextProvider>
-    </MockTranslationProvider>,
-    {legacyRoot: true});
+    this._page = render(
+      <MockTranslationProvider>
+        <AdminSsoContextProvider {...props}>
+          <TestSsoSettingsDialog {...props} />
+        </AdminSsoContextProvider>
+      </MockTranslationProvider>,
+      { legacyRoot: true },
+    );
   }
 
   /**
@@ -62,7 +64,7 @@ export default class TestSsoSettingsDialogPage {
    * @returns {Promise<void>}
    */
   async clickOn(element, callback) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {
       if (!callback()) {

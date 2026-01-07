@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import TransferToMobile from "./TransferToMobile";
@@ -30,10 +30,10 @@ export default class TransferToMobileTestPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <TransferToMobile {...props}/>
+          <TransferToMobile {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -41,28 +41,28 @@ export default class TransferToMobileTestPage {
    * Returns the user confirm passphrase element
    */
   get transferToMobile() {
-    return this._page.container.querySelector('.profile-mobile-transfer');
+    return this._page.container.querySelector(".profile-mobile-transfer");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.profile-mobile-transfer h3').textContent;
+    return this._page.container.querySelector(".profile-mobile-transfer h3").textContent;
   }
 
   /**
    * Start button
    */
   get startButton() {
-    return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-start button.button');
+    return this._page.container.querySelector(".profile-mobile-transfer .mobile-transfer-step-start button.button");
   }
 
   /**
    * Cancel button
    */
   get cancelButton() {
-    return this._page.container.querySelector('.profile-mobile-transfer button.cancel.button');
+    return this._page.container.querySelector(".profile-mobile-transfer button.cancel.button");
   }
 
   /**
@@ -72,18 +72,22 @@ export default class TransferToMobileTestPage {
    */
   isStep(step) {
     switch (step) {
-      case 'start':
-        return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-start') !== null;
-      case 'in progress':
-        return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-in-progress') !== null;
-      case 'cancel':
-        return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-cancel') !== null;
-      case 'complete':
-        return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-complete') !== null;
-      case 'https required':
-        return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-https-required') !== null;
+      case "start":
+        return this._page.container.querySelector(".profile-mobile-transfer .mobile-transfer-step-start") !== null;
+      case "in progress":
+        return (
+          this._page.container.querySelector(".profile-mobile-transfer .mobile-transfer-step-in-progress") !== null
+        );
+      case "cancel":
+        return this._page.container.querySelector(".profile-mobile-transfer .mobile-transfer-step-cancel") !== null;
+      case "complete":
+        return this._page.container.querySelector(".profile-mobile-transfer .mobile-transfer-step-complete") !== null;
+      case "https required":
+        return (
+          this._page.container.querySelector(".profile-mobile-transfer .mobile-transfer-step-https-required") !== null
+        );
       default:
-        throw new Error('Unknown step in TransferToMobile test page.');
+        throw new Error("Unknown step in TransferToMobile test page.");
     }
   }
 
@@ -95,8 +99,8 @@ export default class TransferToMobileTestPage {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

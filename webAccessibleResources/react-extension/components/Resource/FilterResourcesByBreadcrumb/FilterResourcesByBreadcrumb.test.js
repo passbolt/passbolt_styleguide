@@ -16,11 +16,10 @@
  * Unit tests on FilterResourcesByBreadcrumb in regard of specifications
  */
 
-
-import {defaultAppContext, defaultResourceWorkspaceContext} from "./FilterResourcesByBreadcrumb.test.data";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import { defaultAppContext, defaultResourceWorkspaceContext } from "./FilterResourcesByBreadcrumb.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByBreadcrumbPage from "./FilterResourcesByBreadcrumb.test.page";
-import {createMemoryHistory} from "history";
+import { createMemoryHistory } from "history";
 
 beforeEach(() => {
   jest.resetModules();
@@ -33,16 +32,19 @@ describe("As LU I can see a Breadcrumb", () => {
    */
   let page; // The page to test against
   const context = defaultAppContext({
-    getHierarchyFolderCache: () => [{name: "subfolder_1", id: "1"}, {name: "subfolder_2", id: "2"}]
+    getHierarchyFolderCache: () => [
+      { name: "subfolder_1", id: "1" },
+      { name: "subfolder_2", id: "2" },
+    ],
   }); // The applicative context
 
-  it('As LU I should not see a breadcrumb when items are not loaded yet', () => {
+  it("As LU I should not see a breadcrumb when items are not loaded yet", () => {
     const resourceWorkspaceContext = {
       filter: {
         type: ResourceWorkspaceFilterTypes.NONE,
-        payload: null
+        payload: null,
       },
-      filteredResources: null
+      filteredResources: null,
     };
     page = new FilterResourcesByBreadcrumbPage(context, resourceWorkspaceContext);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -50,7 +52,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toBeUndefined();
   });
 
-  it('As LU I should see a breadcrumb for home', () => {
+  it("As LU I should see a breadcrumb for home", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.ALL, null, 10); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -59,8 +61,8 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("10");
   });
 
-  it('As LU I should see a breadcrumb for a tag', () => {
-    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.TAG, {tag: {slug: "tag"}}, 5); // The props to pass
+  it("As LU I should see a breadcrumb for a tag", () => {
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.TAG, { tag: { slug: "tag" } }, 5); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
@@ -69,7 +71,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("5");
   });
 
-  it('As LU I should see a breadcrumb for resources shared with me', () => {
+  it("As LU I should see a breadcrumb for resources shared with me", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.SHARED_WITH_ME); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -79,7 +81,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
-  it('As LU I should see a breadcrumb for resources expired', () => {
+  it("As LU I should see a breadcrumb for resources expired", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.EXPIRED); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -89,7 +91,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
-  it('As LU I should see a breadcrumb for resources favorite', () => {
+  it("As LU I should see a breadcrumb for resources favorite", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.FAVORITE); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -99,7 +101,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
-  it('As LU I should see a breadcrumb for resources I own', () => {
+  it("As LU I should see a breadcrumb for resources I own", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.ITEMS_I_OWN); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -109,7 +111,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
-  it('As LU I should see a breadcrumb for prvaite resources', () => {
+  it("As LU I should see a breadcrumb for prvaite resources", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.PRIVATE); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -119,8 +121,12 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
-  it('As LU I should see a breadcrumb for a folder', async() => {
-    const resourceWorkspaceContext = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.FOLDER, {folder: {name: "folder", id: "3"}}, 1); // The props to pass
+  it("As LU I should see a breadcrumb for a folder", async () => {
+    const resourceWorkspaceContext = defaultResourceWorkspaceContext(
+      ResourceWorkspaceFilterTypes.FOLDER,
+      { folder: { name: "folder", id: "3" } },
+      1,
+    ); // The props to pass
     const history = createMemoryHistory();
     page = new FilterResourcesByBreadcrumbPage(context, resourceWorkspaceContext, history);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -135,8 +141,12 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(history.location.pathname).toStrictEqual(`/app/folders/view/1`);
   });
 
-  it('As LU I should see a breadcrumb for a group', () => {
-    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.GROUP, {group: {name: "group"}}, 100); // The props to pass
+  it("As LU I should see a breadcrumb for a group", () => {
+    const props = defaultResourceWorkspaceContext(
+      ResourceWorkspaceFilterTypes.GROUP,
+      { group: { name: "group" } },
+      100,
+    ); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
@@ -145,7 +155,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("100");
   });
 
-  it('As LU I should see a breadcrumb for none filter', () => {
+  it("As LU I should see a breadcrumb for none filter", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.NONE); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -153,7 +163,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
-  it('As LU I should see a breadcrumb for the root folder', () => {
+  it("As LU I should see a breadcrumb for the root folder", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.ROOT_FOLDER); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
@@ -162,7 +172,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
-  it('As LU I should see a breadcrumb for a search text', () => {
+  it("As LU I should see a breadcrumb for a search text", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.TEXT, "text", 3); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();

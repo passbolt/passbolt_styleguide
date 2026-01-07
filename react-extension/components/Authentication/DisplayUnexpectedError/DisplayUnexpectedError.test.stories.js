@@ -13,49 +13,50 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import DisplayUnexpectedError from "./DisplayUnexpectedError";
 import {
   defaultProps,
   passboltApiFetchErrorProps,
-  passboltEntityValidationErrorProps
+  passboltEntityValidationErrorProps,
 } from "./DisplayUnexpectedError.test.data";
 
 export default {
-  title: 'Components/Authentication/DisplayUnexpectedError',
+  title: "Components/Authentication/DisplayUnexpectedError",
   component: DisplayUnexpectedError,
-  decorators: [(Story, {args}) =>
-    <div id="container" className="container page login">
-      <div className="content">
-        <div className="login-form">
-          <MemoryRouter initialEntries={['/']}>
-            <Route component={routerProps => <Story {...args} {...routerProps}/>}/>
-          </MemoryRouter>
+  decorators: [
+    (Story, { args }) => (
+      <div id="container" className="container page login">
+        <div className="content">
+          <div className="login-form">
+            <MemoryRouter initialEntries={["/"]}>
+              <Route component={(routerProps) => <Story {...args} {...routerProps} />} />
+            </MemoryRouter>
+          </div>
         </div>
       </div>
-    </div>
+    ),
   ],
   parameters: {
-    css: "ext_authentication"
-  }
+    css: "ext_authentication",
+  },
 };
 
-
 export const Initial = {
-  args: defaultProps()
+  args: defaultProps(),
 };
 
 export const SignInError = {
   args: defaultProps({
     title: "Sorry, you have not been signed in.",
     message: "Something went wrong, the sign in failed with the following error",
-  })
+  }),
 };
 
 export const ErrorWithData = {
-  args: passboltApiFetchErrorProps()
+  args: passboltApiFetchErrorProps(),
 };
 
 export const ErrorWithDetails = {
-  args: passboltEntityValidationErrorProps()
+  args: passboltEntityValidationErrorProps(),
 };

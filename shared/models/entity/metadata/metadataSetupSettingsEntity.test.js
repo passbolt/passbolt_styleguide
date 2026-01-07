@@ -14,7 +14,10 @@
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import MetadataSetupSettingsEntity from "./metadataSetupSettingsEntity";
-import {defaultMetadataSetupSettingsDto, enableMetadataSetupSettingsDto} from "./metadataSetupSettingsEntity.test.data";
+import {
+  defaultMetadataSetupSettingsDto,
+  enableMetadataSetupSettingsDto,
+} from "./metadataSetupSettingsEntity.test.data";
 
 describe("MetadataSetupSettingsEntity", () => {
   describe("::getSchema", () => {

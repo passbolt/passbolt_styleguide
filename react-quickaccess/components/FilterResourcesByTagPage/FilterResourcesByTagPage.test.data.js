@@ -12,18 +12,14 @@
  * @since         3.7.4
  */
 
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
+import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {
-  defaultMetadataTypesSettingsV4Dto
-} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 /**
  * Default component props
  * @param props
@@ -31,13 +27,11 @@ import {
  */
 export const defaultProps = (data = {}) => ({
   context: defaultAppContext(data.context),
-  resources: [
-    defaultResourceDto({}, {withTags: true})
-  ],
+  resources: [defaultResourceDto({}, { withTags: true })],
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
-  ...data
+  ...data,
 });
 
 /**
@@ -51,7 +45,7 @@ export const noResourcesProps = (data = {}) => ({
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
-  ...data
+  ...data,
 });
 
 /**
@@ -65,7 +59,7 @@ export const noTagsProps = (data = {}) => ({
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
-  ...data
+  ...data,
 });
 
 /**
@@ -74,14 +68,17 @@ export const noTagsProps = (data = {}) => ({
  * @return {Object}
  */
 export const withFilteredResourcesProps = (data = {}) => {
-  const resource1 = defaultResourceDto({
-    metadata: {
-      name: "apache",
-      username: "www-data",
-      uris: ["http://www.apache.org/", "http://www.apache.org/projects"],
-      description: "Apache is the world\u0027s most used web server software.",
-    }
-  }, {withTags: true});
+  const resource1 = defaultResourceDto(
+    {
+      metadata: {
+        name: "apache",
+        username: "www-data",
+        uris: ["http://www.apache.org/", "http://www.apache.org/projects"],
+        description: "Apache is the world\u0027s most used web server software.",
+      },
+    },
+    { withTags: true },
+  );
 
   const resource2 = defaultResourceDto({
     metadata: {
@@ -90,7 +87,7 @@ export const withFilteredResourcesProps = (data = {}) => {
       uris: ["http://www.essaie.org/"],
       description: "",
     },
-    tags: resource1.tags
+    tags: resource1.tags,
   });
 
   return {
@@ -99,6 +96,6 @@ export const withFilteredResourcesProps = (data = {}) => {
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
-    ...data
+    ...data,
   };
 };

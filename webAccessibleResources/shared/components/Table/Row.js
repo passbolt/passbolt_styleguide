@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import CellWrapper from "./CellWrapper";
-import {withTable} from "./Context/TableContext";
+import { withTable } from "./Context/TableContext";
 import getPropValue from "../../../react-extension/lib/Object/getPropValue";
 
 /**
@@ -123,14 +123,23 @@ class Row extends Component {
   render() {
     const isSelected = this.isItemSelected;
     return (
-      <tr id={this.item.id} draggable={Boolean(this.props.onDragStart)} className={`${this.props.className} ${isSelected ? "selected" : ""}`}
+      <tr
+        id={this.item.id}
+        draggable={Boolean(this.props.onDragStart)}
+        className={`${this.props.className} ${isSelected ? "selected" : ""}`}
         onClick={this.handleClick}
         onContextMenu={this.handleContextMenu}
         onDragStart={this.handleDragStart}
-        onDragEnd={this.handleDragEnd}>
-        {this.columns.map(column =>
-          <CellWrapper key={column.id} column={column} isSelected={isSelected} value={this.getColumnValue(column, this.item)}/>
-        )}
+        onDragEnd={this.handleDragEnd}
+      >
+        {this.columns.map((column) => (
+          <CellWrapper
+            key={column.id}
+            column={column}
+            isSelected={isSelected}
+            value={this.getColumnValue(column, this.item)}
+          />
+        ))}
       </tr>
     );
   }
@@ -143,7 +152,7 @@ Row.propTypes = {
   onClick: PropTypes.func, // The onClick event
   onContextMenu: PropTypes.func, // The onContextMenu event
   onDragStart: PropTypes.func, // The onDragStart event
-  onDragEnd: PropTypes.func // The onDragEnd event
+  onDragEnd: PropTypes.func, // The onDragEnd event
 };
 
 export default withTable(Row);

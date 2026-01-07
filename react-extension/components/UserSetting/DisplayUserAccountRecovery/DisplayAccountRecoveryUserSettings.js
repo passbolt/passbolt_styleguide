@@ -12,21 +12,21 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
-import {Route} from "react-router-dom";
+import React, { Component } from "react";
+import { Route } from "react-router-dom";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
 import HandleAccountRecoveryUserSettingsRoute from "../../AccountRecovery/HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import {getUserStatus} from "../../../../shared/utils/userUtils";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
+import { getUserStatus } from "../../../../shared/utils/userUtils";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
-import {withRoles} from "../../../contexts/RoleContext";
+import { withRoles } from "../../../contexts/RoleContext";
 
 class DisplayAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -83,7 +83,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
    */
   handleReviewClick() {
     this.props.dialogContext.open(ManageAccountRecoveryUserSettings, {
-      organizationPolicy: this.props.accountRecoveryContext.getOrganizationPolicy()
+      organizationPolicy: this.props.accountRecoveryContext.getOrganizationPolicy(),
     });
   }
 
@@ -112,7 +112,11 @@ class DisplayAccountRecoveryUserSettings extends Component {
    * @returns {string}
    */
   get requestorName() {
-    return (<>{this.requestor.profile.first_name} {this.requestor.profile.last_name} ({this.requestor.username})</>);
+    return (
+      <>
+        {this.requestor.profile.first_name} {this.requestor.profile.last_name} ({this.requestor.username})
+      </>
+    );
   }
 
   /**
@@ -161,7 +165,9 @@ class DisplayAccountRecoveryUserSettings extends Component {
    * @returns {boolean}
    */
   get shouldDisplayReview() {
-    return this.isReady && this.isAccountRecoveryFeatureEnabled && this.hasNotApprovedStatus() && !this.isStatusApproved();
+    return (
+      this.isReady && this.isAccountRecoveryFeatureEnabled && this.hasNotApprovedStatus() && !this.isStatusApproved()
+    );
   }
 
   /**
@@ -181,14 +187,16 @@ class DisplayAccountRecoveryUserSettings extends Component {
     const requestorRole = this.requestorRoleName;
     return (
       <>
-        {this.props.context.loggedInUser && this.props.accountRecoveryContext.getOrganizationPolicy() &&
-          <Route exact path="/app/settings/account-recovery/edit" component={HandleAccountRecoveryUserSettingsRoute}/>
-        }
+        {this.props.context.loggedInUser && this.props.accountRecoveryContext.getOrganizationPolicy() && (
+          <Route exact path="/app/settings/account-recovery/edit" component={HandleAccountRecoveryUserSettingsRoute} />
+        )}
         <div className="main-column account-recovery-profile">
           <div className="main-content">
-            {this.isReady && this.isAccountRecoveryFeatureEnabled &&
+            {this.isReady && this.isAccountRecoveryFeatureEnabled && (
               <>
-                <h3><Trans>Account Recovery</Trans></h3>
+                <h3>
+                  <Trans>Account Recovery</Trans>
+                </h3>
                 <p>
                   <Trans>It is possible to share securely your recovery kit with the administrator.</Trans>&nbsp;
                   <Trans>They will be able to help you in case you lose it.</Trans>&nbsp;
@@ -197,53 +205,71 @@ class DisplayAccountRecoveryUserSettings extends Component {
                 <div className="account-recovery-status">
                   <div className="account-recovery-review">
                     <p className="status-wrapper">
-                      <span className="title"><Trans>Status</Trans></span>:
-                      <span className={`account-recovery-hints ${this.props.accountRecoveryContext.status}`}/>
+                      <span className="title">
+                        <Trans>Status</Trans>
+                      </span>
+                      :
+                      <span className={`account-recovery-hints ${this.props.accountRecoveryContext.status}`} />
                       <span className="status">{this.props.accountRecoveryContext.status}</span>
                     </p>
                   </div>
-                  {this.hasNotApprovedStatus() &&
-                  <ul>
-                    <li className="usercard-detailed-col-2">
-                      <div className="content-wrapper">
-                        <div className="content">
-                          <div>
-                            <TooltipPortal message={<Fingerprint fingerprint={this.requestorFingerprint} />}>
-                              <span className="name-with-tooltip">{this.requestorName}</span>
-                            </TooltipPortal>
-                            <span className="name"><Trans>requested this operation</Trans></span>
-                          </div>
-                          <div className="subinfo light">
-                            <span className="dateTimeAgo" title={this.requestedDate}>{formatDateTimeAgo(this.requestedDate, this.props.t, this.props.context.locale)}</span>
-                            <span className="chips-group">
-                              <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
-                              <span className={`chips user-role ${requestorRole}`}>{requestorRole}</span>
-                            </span>
+                  {this.hasNotApprovedStatus() && (
+                    <ul>
+                      <li className="usercard-detailed-col-2">
+                        <div className="content-wrapper">
+                          <div className="content">
+                            <div>
+                              <TooltipPortal message={<Fingerprint fingerprint={this.requestorFingerprint} />}>
+                                <span className="name-with-tooltip">{this.requestorName}</span>
+                              </TooltipPortal>
+                              <span className="name">
+                                <Trans>requested this operation</Trans>
+                              </span>
+                            </div>
+                            <div className="subinfo light">
+                              <span className="dateTimeAgo" title={this.requestedDate}>
+                                {formatDateTimeAgo(this.requestedDate, this.props.t, this.props.context.locale)}
+                              </span>
+                              <span className="chips-group">
+                                <span className={`chips user-status ${requestorStatus}`}>
+                                  {this.props.t(requestorStatus)}
+                                </span>
+                                <span className={`chips user-role ${requestorRole}`}>{requestorRole}</span>
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
-                    </li>
-                  </ul>
-                  }
+                        <UserAvatar
+                          user={this.requestor}
+                          baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                        />
+                      </li>
+                    </ul>
+                  )}
                 </div>
               </>
-            }
-            {this.isReady && !this.isAccountRecoveryFeatureEnabled &&
+            )}
+            {this.isReady && !this.isAccountRecoveryFeatureEnabled && (
               <>
-                <h3><Trans>Account Recovery</Trans></h3>
-                <h4 className="no-border"><Trans>Sorry the account recovery feature is not enabled for this organization.</Trans></h4>
+                <h3>
+                  <Trans>Account Recovery</Trans>
+                </h3>
+                <h4 className="no-border">
+                  <Trans>Sorry the account recovery feature is not enabled for this organization.</Trans>
+                </h4>
                 <p>
                   <Trans>Please contact your administrator to enable the account recovery feature.</Trans>
                 </p>
               </>
-            }
+            )}
           </div>
         </div>
         <div className="actions-wrapper">
-          {this.shouldDisplayReview &&
-            <button type='button' className="button primary form" onClick={this.handleReviewClick}><Trans>Review</Trans></button>
-          }
+          {this.shouldDisplayReview && (
+            <button type="button" className="button primary form" onClick={this.handleReviewClick}>
+              <Trans>Review</Trans>
+            </button>
+          )}
         </div>
       </>
     );
@@ -258,4 +284,6 @@ DisplayAccountRecoveryUserSettings.propTypes = {
   roleContext: PropTypes.object, // The role context
   dialogContext: PropTypes.object, // The dialog context
 };
-export default withAppContext(withAccountRecovery(withDialog(withRoles(withTranslation('common')(DisplayAccountRecoveryUserSettings)))));
+export default withAppContext(
+  withAccountRecovery(withDialog(withRoles(withTranslation("common")(DisplayAccountRecoveryUserSettings)))),
+);

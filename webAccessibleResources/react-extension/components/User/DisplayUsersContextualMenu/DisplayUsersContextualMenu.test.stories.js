@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayUsersContextualMenu from "./DisplayUsersContextualMenu";
@@ -20,33 +20,33 @@ import {
   defaultAppContext,
   defaultProps,
   propsWithUserMissingMetadataKeys,
-  propsWithUserTemporaryHasPendingAccountRecovery
+  propsWithUserTemporaryHasPendingAccountRecovery,
 } from "./DisplayUsersContextualMenu.test.data";
 
-
 export default {
-  title: 'Components/User/DisplayUsersContextualMenu',
+  title: "Components/User/DisplayUsersContextualMenu",
   component: DisplayUsersContextualMenu,
   decorators: [
-    (Story, args) =>
+    (Story, args) => (
       <MockTranslationProvider>
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <Story {...args} {...routerProps}/>}></Route>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <Story {...args} {...routerProps} />}></Route>
         </MemoryRouter>
       </MockTranslationProvider>
+    ),
   ],
 };
 
 export const AdminWithoutReviewRecovery = {
-  args: defaultProps({context: defaultAppContext()})
+  args: defaultProps({ context: defaultAppContext() }),
 };
 
 export const AdminWithReviewRecovery = {
-  args: propsWithUserTemporaryHasPendingAccountRecovery({context: defaultAppContext()})
+  args: propsWithUserTemporaryHasPendingAccountRecovery({ context: defaultAppContext() }),
 };
 
 export const AdminWithMissingMetadataKeys = {
-  args: propsWithUserMissingMetadataKeys({context: defaultAppContext()})
+  args: propsWithUserMissingMetadataKeys({ context: defaultAppContext() }),
 };
 
 export const User = {
@@ -54,7 +54,7 @@ export const User = {
     context: defaultAppContext({
       loggedInUser: {
         role: {
-          name: 'user',
+          name: "user",
         },
       },
     }),

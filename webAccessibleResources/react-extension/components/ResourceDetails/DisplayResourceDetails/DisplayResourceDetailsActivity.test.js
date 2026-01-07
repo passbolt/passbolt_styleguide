@@ -20,11 +20,11 @@ import {
   activitiesMock,
   defaultAppContext,
   defaultProps,
-  lastActivityMock
+  lastActivityMock,
 } from "./DisplayResourceDetailsActivity.test.data";
 import DisplayResourceDetailsActivityPage from "./DisplayResourceDetailsActivity.test.page";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
-import {act} from "react";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -35,13 +35,12 @@ describe("See activities", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
   const activitiesFoundRequestMockImpl = jest.fn(() => Promise.resolve(activitiesMock));
 
   const activitiesMoreFoundRequestMockImpl = jest.fn(() => Promise.resolve(lastActivityMock));
 
-
-  describe(' As LU I can see activities of a resource with at least one activity', () => {
+  describe(" As LU I can see activities of a resource with at least one activity", () => {
     /**
      * Given a selected resource having 4 activities
      * When I open the “Activity” section of the secondary sidebar
@@ -56,7 +55,7 @@ describe("See activities", () => {
       mockContextRequest(activitiesFoundRequestMockImpl);
     });
 
-    it('I should see the 4 activities made on the resource', async() => {
+    it("I should see the 4 activities made on the resource", async () => {
       expect.assertions(2);
       const page = new DisplayResourceDetailsActivityPage(context, props);
       mockContextRequest(activitiesFoundRequestMockImpl);
@@ -67,16 +66,16 @@ describe("See activities", () => {
       expect(page.displayActivityList.count()).toBe(4);
     });
 
-    it('I should be able to identify each activity creators', async() => {
+    it("I should be able to identify each activity creators", async () => {
       expect.assertions(4);
 
-      expect(page.displayActivityList.creator(1)).toBe('Admin User');
-      expect(page.displayActivityList.creator(2)).toBe('Ada User');
-      expect(page.displayActivityList.creator(3)).toBe('Admin Ada');
-      expect(page.displayActivityList.creator(4)).toBe('Admin User4');
+      expect(page.displayActivityList.creator(1)).toBe("Admin User");
+      expect(page.displayActivityList.creator(2)).toBe("Ada User");
+      expect(page.displayActivityList.creator(3)).toBe("Admin Ada");
+      expect(page.displayActivityList.creator(4)).toBe("Admin User4");
     });
 
-    it('I should be able to see each activity timestamps', async() => {
+    it("I should be able to see each activity timestamps", async () => {
       expect.assertions(4);
 
       expect(page.displayActivityList.creationTime(1)).toBeDefined();
@@ -85,7 +84,7 @@ describe("See activities", () => {
       expect(page.displayActivityList.creationTime(4)).toBeDefined();
     });
 
-    it('I should be able to see each other activities with more button ', async() => {
+    it("I should be able to see each other activities with more button ", async () => {
       expect.assertions(4);
       mockContextRequest(activitiesMoreFoundRequestMockImpl);
 
@@ -93,12 +92,12 @@ describe("See activities", () => {
 
       await page.displayActivityList.moreButtonClick();
       expect(page.displayActivityList.count()).toBe(5);
-      expect(page.displayActivityList.creator(5)).toBe('Admin User');
+      expect(page.displayActivityList.creator(5)).toBe("Admin User");
       expect(!page.displayActivityList.moreButtonExists()).toBeTruthy();
     });
   });
 
-  describe(' As LU I see a loading state when the activity are not loaded', () => {
+  describe(" As LU I see a loading state when the activity are not loaded", () => {
     /**
      * Given a selected resource having 4 activities
      * When I open the “Activity” section of the secondary sidebar
@@ -107,16 +106,19 @@ describe("See activities", () => {
      */
 
     let findResolve;
-    const loadingFindMockImpl = jest.fn(() => new Promise(resolve => {
-      findResolve = resolve;
-    }));
+    const loadingFindMockImpl = jest.fn(
+      () =>
+        new Promise((resolve) => {
+          findResolve = resolve;
+        }),
+    );
 
     beforeEach(() => {
       mockContextRequest(loadingFindMockImpl);
       page = new DisplayResourceDetailsActivityPage(context, props);
     });
 
-    it('I should see the loading message “Retrieving activities”', async() => {
+    it("I should see the loading message “Retrieving activities”", async () => {
       expect.assertions(2);
 
       const inProgressFn = () => {
@@ -128,7 +130,7 @@ describe("See activities", () => {
     });
   });
 
-  describe('As a logged in user, I should see an error displayed when there is an unexpected error', () => {
+  describe("As a logged in user, I should see an error displayed when there is an unexpected error", () => {
     /**
      * When I open the “Activity” section of the secondary sidebar
      * And the activities are not loaded due to an unexpected error
@@ -136,15 +138,13 @@ describe("See activities", () => {
      * I should still be able to see the more button
      * Clicking on more button should retry the fetch with activities Page value 1
      */
-    it('I should see an error toaster if the activities do not load due to an unexpected error', async() => {
+    it("I should see an error toaster if the activities do not load due to an unexpected error", async () => {
       expect.assertions(6);
 
-      const error = {message: "Unable to reach the server, an unexpected error occurred"};
+      const error = { message: "Unable to reach the server, an unexpected error occurred" };
       const mockRequest = jest.fn(() => Promise.reject(error));
       mockContextRequest(mockRequest);
-      await act(
-        async() => page = new DisplayResourceDetailsActivityPage(context, props)
-      );
+      await act(async () => (page = new DisplayResourceDetailsActivityPage(context, props)));
 
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledTimes(1);
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith(error.message);
@@ -162,7 +162,7 @@ describe("See activities", () => {
         "passbolt.actionlogs.find-all-for",
         "Resource",
         props.resourceWorkspaceContext.details.resource.id,
-        {limit: 5, page: 1}
+        { limit: 5, page: 1 },
       ]);
     });
 
@@ -173,13 +173,13 @@ describe("See activities", () => {
      * Then I should see an appropriate error message.
      * Clicking on 'more' button again should call fetch activitiesPage value 2
      */
-    it('When I click on more button and activities are not loaded due to unexpected error ', async() => {
+    it("When I click on more button and activities are not loaded due to unexpected error ", async () => {
       expect.assertions(6);
       mockContextRequest(activitiesFoundRequestMockImpl);
       page = new DisplayResourceDetailsActivityPage(context, props);
       await waitForTrue(() => page.displayActivityList.moreButtonExists());
 
-      const error = {message: "Unable to reach the server, an unexpected error occurred"};
+      const error = { message: "Unable to reach the server, an unexpected error occurred" };
       const mockRequest = jest.fn(() => Promise.reject(error));
       mockContextRequest(mockRequest);
 
@@ -204,7 +204,7 @@ describe("See activities", () => {
         "passbolt.actionlogs.find-all-for",
         "Resource",
         props.resourceWorkspaceContext.details.resource.id,
-        {limit: 5, page: 2}
+        { limit: 5, page: 2 },
       ]);
     });
   });

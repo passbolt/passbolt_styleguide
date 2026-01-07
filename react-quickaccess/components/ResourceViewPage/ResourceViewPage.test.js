@@ -17,14 +17,15 @@ import ResourceViewPagePage from "./ResourceViewPage.test.page";
 import {
   defaultProps,
   deniedRbacProps,
-  disabledApiFlagsProps, multipleUrisResourceProps,
+  disabledApiFlagsProps,
+  multipleUrisResourceProps,
   standaloneTotpResourceProps,
-  totpResourceProps
+  totpResourceProps,
 } from "./ResourceViewPage.test.data";
-import {waitFor} from "@testing-library/react";
-import {TotpCodeGeneratorService} from "../../../shared/services/otp/TotpCodeGeneratorService";
-import {denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultTotpViewModelDto} from "../../../shared/models/entity/totp/totpDto.test.data";
+import { waitFor } from "@testing-library/react";
+import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
+import { denyRbacContext } from "../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultTotpViewModelDto } from "../../../shared/models/entity/totp/totpDto.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,13 +33,14 @@ beforeEach(() => {
 });
 
 describe("ResourceViewPage", () => {
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementationOnce(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(context.port, "request").mockImplementationOnce(implementation);
 
-  describe('As LU, I should preview the secret.', () => {
-    it('As LU, I should preview the secret password of a resource ', async() => {
+  describe("As LU, I should preview the secret.", () => {
+    it("As LU, I should preview the secret password of a resource ", async () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
+      mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
@@ -48,7 +50,7 @@ describe("ResourceViewPage", () => {
       expect(page.passwordText).toStrictEqual("secret-decrypted");
     });
 
-    it('As LU, I should see username, URI of a resource', async() => {
+    it("As LU, I should see username, URI of a resource", async () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
       const page = new ResourceViewPagePage(props);
@@ -58,29 +60,33 @@ describe("ResourceViewPage", () => {
       expect(page.uri.textContent).toStrictEqual("https://passbolt.com");
     });
 
-    it('As LU, I shouldn\'t be able to preview secret password of a resource if disabled by API flag', async() => {
+    it("As LU, I shouldn't be able to preview secret password of a resource if disabled by API flag", async () => {
       expect.assertions(1);
       const props = disabledApiFlagsProps();
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
+      mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
       expect(page.previewPasswordButton).toBeNull();
     });
 
-    it('As LU, I shouldn\'t be able to preview secret password of a resource if denied by RBAC.', async() => {
+    it("As LU, I shouldn't be able to preview secret password of a resource if denied by RBAC.", async () => {
       expect.assertions(1);
       const props = deniedRbacProps(); // The props to pass
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
+      mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
       expect(page.previewPasswordButton).toBeNull();
     });
 
-    it('As LU, I should preview the secret totp of a resource ', async() => {
+    it("As LU, I should preview the secret totp of a resource ", async () => {
       expect.assertions(2);
       const props = totpResourceProps(); // The props to pass
       const totp = defaultTotpViewModelDto();
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description", totp: totp}));
+      mockContextRequest(props.context, () => ({
+        password: "secret-decrypted",
+        description: "description",
+        totp: totp,
+      }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
@@ -91,11 +97,11 @@ describe("ResourceViewPage", () => {
       expect(page.totpText.replace(/\s/, "")).toStrictEqual(code);
     });
 
-    it('As LU, I should not see username and password of a resource from a standalone totp', async() => {
+    it("As LU, I should not see username and password of a resource from a standalone totp", async () => {
       expect.assertions(3);
       const props = standaloneTotpResourceProps(); // The props to pass
       const totp = defaultTotpViewModelDto();
-      mockContextRequest(props.context, () => ({totp: totp}));
+      mockContextRequest(props.context, () => ({ totp: totp }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
@@ -104,30 +110,38 @@ describe("ResourceViewPage", () => {
       expect(page.totp).not.toBeNull();
     });
 
-    it('As LU, I shouldn\'t be able to preview secret totp of a resource if disabled by API flag', async() => {
+    it("As LU, I shouldn't be able to preview secret totp of a resource if disabled by API flag", async () => {
       expect.assertions(1);
       const props = disabledApiFlagsProps();
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description", totp: defaultTotpViewModelDto()}));
+      mockContextRequest(props.context, () => ({
+        password: "secret-decrypted",
+        description: "description",
+        totp: defaultTotpViewModelDto(),
+      }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
       expect(page.previewTotpButton).toBeNull();
     });
 
-    it('As LU, I shouldn\'t be able to preview secret totp of a resource if denied by RBAC.', async() => {
+    it("As LU, I shouldn't be able to preview secret totp of a resource if denied by RBAC.", async () => {
       expect.assertions(1);
       const props = deniedRbacProps(); // The props to pass
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description", totp: defaultTotpViewModelDto()}));
+      mockContextRequest(props.context, () => ({
+        password: "secret-decrypted",
+        description: "description",
+        totp: defaultTotpViewModelDto(),
+      }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
       expect(page.previewTotpButton).toBeNull();
     });
   });
 
-  describe('As LU, I should copy the secret.', () => {
-    it('As LU, I should be able to copy the secret password of resource by clicking on the password', async() => {
+  describe("As LU, I should copy the secret.", () => {
+    it("As LU, I should be able to copy the secret password of resource by clicking on the password", async () => {
       expect.assertions(4);
       const props = defaultProps(); // The props to pass
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
+      mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
@@ -136,24 +150,36 @@ describe("ResourceViewPage", () => {
 
       await page.click(page.password);
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', 'secret-decrypted');
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.context.storage.local.get(["resources"]).resources[0].id,
+      );
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.clipboard.copy-temporarily",
+        "secret-decrypted",
+      );
     });
 
-    it('As LU, I should be able to copy the secret password of resource by clicking on the copy icon', async() => {
+    it("As LU, I should be able to copy the secret password of resource by clicking on the copy icon", async () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
+      mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
       await page.click(page.copyPasswordButton);
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', 'secret-decrypted');
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.context.storage.local.get(["resources"]).resources[0].id,
+      );
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.clipboard.copy-temporarily",
+        "secret-decrypted",
+      );
     });
 
-    it('As LU, I should not be able to copy the secret password of resource  if denied by RBAC.', async() => {
+    it("As LU, I should not be able to copy the secret password of resource  if denied by RBAC.", async () => {
       expect.assertions(3);
       const props = deniedRbacProps(); // The props to pass
       const page = new ResourceViewPagePage(props);
@@ -164,11 +190,15 @@ describe("ResourceViewPage", () => {
       expect(page.copyPasswordButton).toBeNull();
     });
 
-    it('As LU, I should be able to copy the secret totp of resource by clicking on the password', async() => {
+    it("As LU, I should be able to copy the secret totp of resource by clicking on the password", async () => {
       expect.assertions(4);
       const props = totpResourceProps(); // The props to pass
       const totp = defaultTotpViewModelDto();
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description", totp: totp}));
+      mockContextRequest(props.context, () => ({
+        password: "secret-decrypted",
+        description: "description",
+        totp: totp,
+      }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
@@ -178,28 +208,38 @@ describe("ResourceViewPage", () => {
       await page.click(page.totp);
       const code = TotpCodeGeneratorService.generate(totp);
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', code);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.context.storage.local.get(["resources"]).resources[0].id,
+      );
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", code);
     });
 
-    it('As LU, I should be able to copy the secret totp of resource by clicking on the copy icon', async() => {
+    it("As LU, I should be able to copy the secret totp of resource by clicking on the copy icon", async () => {
       expect.assertions(2);
       const props = totpResourceProps(); // The props to pass
       const totp = defaultTotpViewModelDto();
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description", totp: totp}));
+      mockContextRequest(props.context, () => ({
+        password: "secret-decrypted",
+        description: "description",
+        totp: totp,
+      }));
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
       await page.click(page.copyTotpButton);
       const code = TotpCodeGeneratorService.generate(totp);
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', code);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.context.storage.local.get(["resources"]).resources[0].id,
+      );
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", code);
     });
 
-    it('As LU, I should not be able to copy the secret totp of resource  if denied by RBAC.', async() => {
+    it("As LU, I should not be able to copy the secret totp of resource  if denied by RBAC.", async () => {
       expect.assertions(3);
-      const props = totpResourceProps({rbacContext: denyRbacContext()}); // The props to pass
+      const props = totpResourceProps({ rbacContext: denyRbacContext() }); // The props to pass
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
@@ -209,8 +249,8 @@ describe("ResourceViewPage", () => {
     });
   });
 
-  describe('As LU, I should see additional uris.', () => {
-    it('As LU, I should be able to see additional uris', async() => {
+  describe("As LU, I should see additional uris.", () => {
+    it("As LU, I should be able to see additional uris", async () => {
       expect.assertions(1);
       const props = multipleUrisResourceProps(); // The props to pass
       const page = new ResourceViewPagePage(props);

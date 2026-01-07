@@ -12,15 +12,12 @@
  * @since         3.6.0
  */
 
-import {v4 as uuidv4} from "uuid";
-import {enableFetchMocks} from "jest-fetch-mock";
+import { v4 as uuidv4 } from "uuid";
+import { enableFetchMocks } from "jest-fetch-mock";
 import mockComponentSetState from "../test/mock/components/React/mockSetState";
-import {
-  ApiAccountRecoveryContextProvider,
-  ApiAccountRecoveryContextState
-} from "./ApiAccountRecoveryContext";
-import {defaultProps} from "./ApiAccountRecoveryContext.test.data";
-import {mockApiResponse} from "../../../test/mocks/mockApiResponse";
+import { ApiAccountRecoveryContextProvider, ApiAccountRecoveryContextState } from "./ApiAccountRecoveryContext";
+import { defaultProps } from "./ApiAccountRecoveryContext.test.data";
+import { mockApiResponse } from "../../../test/mocks/mockApiResponse";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -28,7 +25,7 @@ beforeEach(() => {
 
 describe("ApiAccountRecoveryContextProvider", () => {
   describe("ApiAccountRecoveryContextProvider::constructor", () => {
-    it("The machine state should be by default set to: INITIAL_STATE", async() => {
+    it("The machine state should be by default set to: INITIAL_STATE", async () => {
       const props = defaultProps();
       const contextProvider = new ApiAccountRecoveryContextProvider(props);
       mockComponentSetState(contextProvider);
@@ -39,8 +36,10 @@ describe("ApiAccountRecoveryContextProvider", () => {
   });
 
   describe("ApiAccountRecoveryContextProvider::initialize", () => {
-    it("should redirect the user to the unexpected error page if an uncaught error occurred during the 'can continue' check", async() => {
-      const mockApiContinueFetch = fetch.doMockOnceIf(/account-recovery\/continue/, () => Promise.reject(new Error("Unexpected Error")));
+    it("should redirect the user to the unexpected error page if an uncaught error occurred during the 'can continue' check", async () => {
+      const mockApiContinueFetch = fetch.doMockOnceIf(/account-recovery\/continue/, () =>
+        Promise.reject(new Error("Unexpected Error")),
+      );
 
       const props = defaultProps();
       const contextProvider = new ApiAccountRecoveryContextProvider(props);
@@ -52,11 +51,13 @@ describe("ApiAccountRecoveryContextProvider", () => {
       await contextProvider.onInitializeAccountRecoveryRequested();
       expect(mockApiContinueFetch).toHaveBeenCalled();
       expect(contextProvider.state.state).toEqual(ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE);
-      expect(contextProvider.state.unexpectedError.message).toEqual("Unable to reach the server, an unexpected error occurred");
+      expect(contextProvider.state.unexpectedError.message).toEqual(
+        "Unable to reach the server, an unexpected error occurred",
+      );
     });
 
-    it("should display a dedicated error if the user is already signed in and the machine state should be set to: ERROR_ALREADY_SIGNED_IN_STATE", async() => {
-      fetch.mockResponse(JSON.stringify({header: {}, body: {}}), {status: 403, ok: false});
+    it("should display a dedicated error if the user is already signed in and the machine state should be set to: ERROR_ALREADY_SIGNED_IN_STATE", async () => {
+      fetch.mockResponse(JSON.stringify({ header: {}, body: {} }), { status: 403, ok: false });
 
       const props = defaultProps();
       const contextProvider = new ApiAccountRecoveryContextProvider(props);
@@ -69,8 +70,11 @@ describe("ApiAccountRecoveryContextProvider", () => {
       expect(contextProvider.state.state).toEqual(ApiAccountRecoveryContextState.ERROR_ALREADY_SIGNED_IN_STATE);
     });
 
-    it("should display a dedicated error if the token is expired and the machine state should be set to: TOKEN_EXPIRED_STATE", async() => {
-      fetch.mockResponse(JSON.stringify({header: {}, body: {token: {isActive: "Inactive token message"}}}), {status: 400, ok: false});
+    it("should display a dedicated error if the token is expired and the machine state should be set to: TOKEN_EXPIRED_STATE", async () => {
+      fetch.mockResponse(JSON.stringify({ header: {}, body: { token: { isActive: "Inactive token message" } } }), {
+        status: 400,
+        ok: false,
+      });
 
       const props = defaultProps();
       const contextProvider = new ApiAccountRecoveryContextProvider(props);
@@ -83,7 +87,7 @@ describe("ApiAccountRecoveryContextProvider", () => {
       expect(contextProvider.state.state).toEqual(ApiAccountRecoveryContextState.TOKEN_EXPIRED_STATE);
     });
 
-    it("Should give the wrong browser feedback to the user in case of success and the machine state should be set to: RESTART_FROM_SCRATCH", async() => {
+    it("Should give the wrong browser feedback to the user in case of success and the machine state should be set to: RESTART_FROM_SCRATCH", async () => {
       const mockApiContinueFetch = fetch.doMockOnceIf(/account-recovery\/continue/, () => mockApiResponse());
 
       const props = defaultProps();

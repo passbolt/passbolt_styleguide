@@ -16,7 +16,7 @@
  * Unit tests on DisplayUserGroupDetailsInformation in regard of specifications
  */
 
-import {defaultAppContext, defaultProps} from "./DisplayUserGroupDetailsMembers.test.data";
+import { defaultAppContext, defaultProps } from "./DisplayUserGroupDetailsMembers.test.data";
 import DisplayUserGroupDetailsMembersPage from "./DisplayUserGroupDetailsMembers.test.page";
 
 beforeEach(() => {
@@ -32,11 +32,11 @@ describe("Display User Group Details Information", () => {
     page = new DisplayUserGroupDetailsMembersPage(context, props);
   });
 
-  it('As LU I should initially see the information area as expanded', () => {
+  it("As LU I should initially see the information area as expanded", () => {
     expect(page.isCollapsed).toBeTruthy();
   });
 
-  it('As LU I should not see the information area when I collapse the area', async() => {
+  it("As LU I should not see the information area when I collapse the area", async () => {
     await page.toggleCollapse();
     expect(page.isCollapsed).toBeFalsy();
 
@@ -44,13 +44,12 @@ describe("Display User Group Details Information", () => {
     expect(page.isCollapsed).toBeTruthy();
   });
 
-  it("As LU I should see the appropriate members of the group", async() => {
+  it("As LU I should see the appropriate members of the group", async () => {
     await page.toggleCollapse();
     expect(page.membersCount).toBe(2);
-    expect(page.member(1).name).toBe('Lynne Jolitz');
-    expect(page.member(1).role).toBe('Group manager');
-    expect(page.member(2).name).toBe('javascript:document.write(\'xss2\') javascript:document.write(\'xss2\')');
-    expect(page.member(2).role).toBe('Group manager');
+    expect(page.member(1).name).toBe("Lynne Jolitz");
+    expect(page.member(1).role).toBe("Group manager");
+    expect(page.member(2).name).toBe("javascript:document.write('xss2') javascript:document.write('xss2')");
+    expect(page.member(2).role).toBe("Group manager");
   });
 });
-

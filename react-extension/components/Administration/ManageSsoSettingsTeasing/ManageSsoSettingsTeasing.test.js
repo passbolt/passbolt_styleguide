@@ -12,9 +12,9 @@
  * @since         5.5.0
  */
 import "../../../../../test/mocks/mockPortal";
-import {defaultAppContext} from '../../../contexts/ApiAppContext.test.data';
-import {defaultProps} from './ManageSsoSettingsTeasing.test.data';
-import {waitFor} from '@testing-library/dom';
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
+import { defaultProps } from "./ManageSsoSettingsTeasing.test.data";
+import { waitFor } from "@testing-library/dom";
 import ManageSsoSettingsTeasingPage from "./ManageSsoSettingsTeasing.test.page";
 
 /**
@@ -37,28 +37,32 @@ describe("ManageSsoSettingsTeasing", () => {
    * And I should see the upgrade button
    * And the help text and documentation button
    */
-  it('As CE AD I should see all details in the Single Sign-on page', async() => {
+  it("As CE AD I should see all details in the Single Sign-on page", async () => {
     expect.assertions(11);
     page = new ManageSsoSettingsTeasingPage(context, props);
     const expectedSsoDescriptions = [
       "Reduce password fatigue and simplify login.",
       "Centralise user authentication management.",
-      "Support major identity providers like Google and Microsoft."
+      "Support major identity providers like Google and Microsoft.",
     ];
     await waitFor(() => {});
     expect(page.exists()).toBeTruthy();
     expect(page.title).toBe("Single Sign-On");
     expect(page.ssoPageFirstLine).toBe("Simplify secure access through integration with identity providers.");
     expect(page.upgradeButton).toBeTruthy();
-    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
+    expect(page.upgradeButton.getAttribute("href")).toBe(
+      "https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
+    );
 
-    const actualDescriptions = Array.from(page.ssoSettingsDescription).map(li => li.textContent.trim());
+    const actualDescriptions = Array.from(page.ssoSettingsDescription).map((li) => li.textContent.trim());
     expect(actualDescriptions).toEqual(expectedSsoDescriptions);
 
     await waitFor(() => {});
     expect(page.helpBox).not.toBeNull();
     expect(page.helpBoxTitle).toBe("Need some help?");
-    expect(page.helpBoxDescription).toBe("For more information about SSO, checkout the dedicated page on the help website.");
+    expect(page.helpBoxDescription).toBe(
+      "For more information about SSO, checkout the dedicated page on the help website.",
+    );
     expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
     expect(page.helpBoxButton.getAttribute("href")).toBe("https://passbolt.com/docs/admin/authentication/sso/");
   });

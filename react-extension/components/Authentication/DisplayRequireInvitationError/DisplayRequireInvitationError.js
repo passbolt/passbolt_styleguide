@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import React, { Component } from "react";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class DisplayRequireInvitationError extends Component {
   /**
@@ -24,13 +24,20 @@ class DisplayRequireInvitationError extends Component {
   render() {
     return (
       <div className="setup-error">
-        <h1><Trans>Access to this service requires an invitation.</Trans></h1>
-        <p><Trans>This email is not associated with any approved users on this domain.</Trans> <Trans>Please contact your administrator to request an invitation link.</Trans></p>
+        <h1>
+          <Trans>Access to this service requires an invitation.</Trans>
+        </h1>
+        <p>
+          <Trans>This email is not associated with any approved users on this domain.</Trans>{" "}
+          <Trans>Please contact your administrator to request an invitation link.</Trans>
+        </p>
         <div className="form-actions">
-          <a href={`${this.props.context.trustedDomain}/users/recover`}
+          <a
+            href={`${this.props.context.trustedDomain}/users/recover`}
             className="button primary big full-width"
             role="button"
-            rel="noopener noreferrer">
+            rel="noopener noreferrer"
+          >
             <Trans>Try with another email</Trans>
           </a>
         </div>

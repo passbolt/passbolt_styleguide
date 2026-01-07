@@ -14,8 +14,8 @@
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SessionKeyEntity from "./sessionKeyEntity";
-import {defaultSessionKeyDto} from "./sessionKeyEntity.test.data";
-import {assert} from "../../../../../test/assert/assertEntityProperty";
+import { defaultSessionKeyDto } from "./sessionKeyEntity.test.data";
+import { assert } from "../../../../../test/assert/assertEntityProperty";
 
 describe("SessionKeyEntity", () => {
   describe("::getSchema", () => {
@@ -42,7 +42,7 @@ describe("SessionKeyEntity", () => {
       assertEntityProperty.sessionKey(SessionKeyEntity, "session_key");
       // Support mobile session key format prior to v2.3.1.
       const SUCCESS_SESSION_KEY_SCENARIO = [
-        {scenario: "success session key", value: "901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC"},
+        { scenario: "success session key", value: "901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC" },
       ];
       assert(SessionKeyEntity, "session_key", SUCCESS_SESSION_KEY_SCENARIO, [], "pattern");
     });
@@ -53,7 +53,7 @@ describe("SessionKeyEntity", () => {
       assertEntityProperty.dateTime(SessionKeyEntity, "modified");
       // Support Android modified format prior to v2.3.1.
       const SUCCESS_DATETIME_SCENARIO = [
-        {scenario: "year, month, day and time", value: "2025-09-17T12:15:33.618450+02:00[Europe/Paris]"}
+        { scenario: "year, month, day and time", value: "2025-09-17T12:15:33.618450+02:00[Europe/Paris]" },
       ];
       assert(SessionKeyEntity, "modified", SUCCESS_DATETIME_SCENARIO, [], "format");
     });
@@ -73,7 +73,7 @@ describe("SessionKeyEntity", () => {
 
     it("constructor works if valid DTO is provided", () => {
       expect.assertions(4);
-      const dto = defaultSessionKeyDto({foreign_model: "Folder"});
+      const dto = defaultSessionKeyDto({ foreign_model: "Folder" });
       const entity = new SessionKeyEntity(dto);
 
       expect(entity._props.foreign_id).toStrictEqual(dto.foreign_id);
@@ -86,14 +86,16 @@ describe("SessionKeyEntity", () => {
   describe("::marshal", () => {
     it("marshals mobile session key secret prior to v2.3.1", () => {
       expect.assertions(1);
-      const dto1 = defaultSessionKeyDto({session_key: "901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC"});
+      const dto1 = defaultSessionKeyDto({
+        session_key: "901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC",
+      });
       const entity1 = new SessionKeyEntity(dto1);
       expect(entity1.toDto().session_key).toEqual("9:901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC");
     });
 
     it("marshals mobile modified date prior to v2.3.1", () => {
       expect.assertions(1);
-      const dto1 = defaultSessionKeyDto({modified: "2025-09-17T12:15:33.618450+02:00[Europe/Paris]"});
+      const dto1 = defaultSessionKeyDto({ modified: "2025-09-17T12:15:33.618450+02:00[Europe/Paris]" });
       const entity1 = new SessionKeyEntity(dto1);
       expect(entity1.toDto().modified).toEqual("2025-09-17T12:15:33.618450+02:00");
     });
@@ -105,7 +107,7 @@ describe("SessionKeyEntity", () => {
       const dto1 = defaultSessionKeyDto();
       const entity1 = new SessionKeyEntity(dto1);
 
-      const dto2 = defaultSessionKeyDto({foreign_model: "Tag"});
+      const dto2 = defaultSessionKeyDto({ foreign_model: "Tag" });
       const entity2 = new SessionKeyEntity(dto2);
 
       expect(entity1.foreignModel).toBe(dto1.foreign_model);

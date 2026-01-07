@@ -26,8 +26,8 @@ class SessionKeysBundleEntity extends EntityV2 {
     super(dto, options);
 
     // Associations
-    if (this._props.data && typeof this._props.data !== 'string') {
-      this._data = new SessionKeysBundleDataEntity(this._props.data, {...options, clone: false});
+    if (this._props.data && typeof this._props.data !== "string") {
+      this._data = new SessionKeysBundleDataEntity(this._props.data, { ...options, clone: false });
       delete this._props.data;
     }
   }
@@ -37,45 +37,46 @@ class SessionKeysBundleEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "data",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+      type: "object",
+      required: ["data"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "user_id": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+        user_id: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "created": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true,
+        created: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true,
+        modified: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+        created_by: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
         // Associated models
-        "data": {"anyOf": [
-          {
-            "type": "string",
-            "maxLength": PGP_STRING_MAX_LENGTH,
-            "pattern": /^-----BEGIN PGP MESSAGE-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP MESSAGE-----\s*$/
-          },
-          SessionKeysBundleDataEntity.getSchema()
-        ]},
+        data: {
+          anyOf: [
+            {
+              type: "string",
+              maxLength: PGP_STRING_MAX_LENGTH,
+              pattern:
+                /^-----BEGIN PGP MESSAGE-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP MESSAGE-----\s*$/,
+            },
+            SessionKeysBundleDataEntity.getSchema(),
+          ],
+        },
       },
     };
   }
@@ -140,7 +141,7 @@ class SessionKeysBundleEntity extends EntityV2 {
    */
   set data(data) {
     if (data instanceof SessionKeysBundleDataEntity) {
-      this._data = new SessionKeysBundleDataEntity(data.toDto(), {validate: false});
+      this._data = new SessionKeysBundleDataEntity(data.toDto(), { validate: false });
       delete this._props.data;
     } else if (typeof data === "object") {
       this._data = new SessionKeysBundleDataEntity(data);

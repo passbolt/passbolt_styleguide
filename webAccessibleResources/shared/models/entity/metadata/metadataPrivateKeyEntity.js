@@ -26,8 +26,8 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   constructor(dto, options = {}) {
     super(dto, options);
 
-    if (this._props.data && typeof this._props.data !== 'string') {
-      this._data = new MetadataPrivateKeyDataEntity(this._props.data, {...options, clone: false});
+    if (this._props.data && typeof this._props.data !== "string") {
+      this._data = new MetadataPrivateKeyDataEntity(this._props.data, { ...options, clone: false });
       delete this._props.data;
     }
   }
@@ -38,60 +38,61 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "user_id",
-        "data"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+      type: "object",
+      required: ["user_id", "data"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "metadata_key_id": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+        metadata_key_id: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "user_id": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+        user_id: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "data_signed_by_current_user": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+        data_signed_by_current_user: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "data": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": PGP_STRING_MAX_LENGTH,
-            "pattern": /^-----BEGIN PGP MESSAGE-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP MESSAGE-----\s*$/,
-          }, {
-            "type": "object",
-          }],
+        data: {
+          anyOf: [
+            {
+              type: "string",
+              maxLength: PGP_STRING_MAX_LENGTH,
+              pattern:
+                /^-----BEGIN PGP MESSAGE-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP MESSAGE-----\s*$/,
+            },
+            {
+              type: "object",
+            },
+          ],
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+        created_by: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+        modified_by: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-      }
+      },
     };
   }
 
@@ -117,9 +118,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
     const result = Object.assign({}, this._props);
 
     const data = this.data;
-    result.data = data instanceof MetadataPrivateKeyDataEntity
-      ? data.toDto()
-      : data;
+    result.data = data instanceof MetadataPrivateKeyDataEntity ? data.toDto() : data;
 
     if (!contain) {
       return result;
@@ -138,7 +137,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    */
   toDataDto() {
     const result = this.toDto();
-    return {data: result.data};
+    return { data: result.data };
   }
 
   /**
@@ -168,7 +167,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
     const cloneDto = {
       user_id: userId,
       metadata_key_id: this.metadataKeyId,
-      data: this.data
+      data: this.data,
     };
     return new MetadataPrivateKeyEntity(cloneDto);
   }
@@ -193,9 +192,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * @returns {string | MetadataPrivateKeyDataEntity}
    */
   get data() {
-    return this.isDecrypted
-      ? this._data
-      : this._props.data;
+    return this.isDecrypted ? this._data : this._props.data;
   }
 
   /**
@@ -291,7 +288,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
       this._props.data = data;
       delete this._data;
     } else {
-      this._data = new MetadataPrivateKeyDataEntity(data.toDto(), {clone: true, validate: false});
+      this._data = new MetadataPrivateKeyDataEntity(data.toDto(), { clone: true, validate: false });
       delete this._props.data;
     }
   }
@@ -303,7 +300,11 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * @throws {EntityValidationError} if the `dataSignedByCurrentUser` is not valid
    */
   set dataSignedByCurrentUser(value) {
-    EntitySchema.validateProp("data_signed_by_current_user", value, this.cachedSchema.properties.data_signed_by_current_user);
+    EntitySchema.validateProp(
+      "data_signed_by_current_user",
+      value,
+      this.cachedSchema.properties.data_signed_by_current_user,
+    );
     this._props.data_signed_by_current_user = value;
   }
 

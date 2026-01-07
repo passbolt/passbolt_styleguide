@@ -1,7 +1,7 @@
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterUsersByBreadcrumb from "./FilterUsersByBreadcrumb";
 
@@ -19,11 +19,11 @@ export default class FilterUsersByBreadcrumbPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
-            <FilterUsersByBreadcrumb {...props}/>
+            <FilterUsersByBreadcrumb {...props} />
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -32,13 +32,13 @@ export default class FilterUsersByBreadcrumbPage {
    * @param index The index of the breadcrumb label
    */
   breadcrumbLabels(index) {
-    const breadcrumbElements = this._page.container.querySelectorAll('li button');
+    const breadcrumbElements = this._page.container.querySelectorAll("li button");
     if (breadcrumbElements && breadcrumbElements.length > 1) {
       return breadcrumbElements[index - 1].innerHTML;
     } else if (index > 1) {
       return undefined;
     } else {
-      return this._page.container.querySelector('li button').innerHTML;
+      return this._page.container.querySelector("li button").innerHTML;
     }
   }
 
@@ -47,6 +47,6 @@ export default class FilterUsersByBreadcrumbPage {
    * @return {string | any}
    */
   get itemNumberDisplayed() {
-    return this._page.container.querySelector('.counter').textContent;
+    return this._page.container.querySelector(".counter").textContent;
   }
 }

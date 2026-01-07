@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -26,7 +25,7 @@ describe("getPropValue", () => {
       "element 0 value",
       "element 1 value",
       {
-        nestedFromArrayKey: "nestedFromArrayValue"
+        nestedFromArrayKey: "nestedFromArrayValue",
       },
     ],
   };
@@ -34,11 +33,15 @@ describe("getPropValue", () => {
   it("should return the expected value from the object and the path", () => {
     expect.assertions(6);
     expect(getPropValue(testObject, "directPropKey")).toStrictEqual(testObject.directPropKey);
-    expect(getPropValue(testObject, "nestedObjectKey.nestedPropKey")).toStrictEqual(testObject.nestedObjectKey.nestedPropKey);
+    expect(getPropValue(testObject, "nestedObjectKey.nestedPropKey")).toStrictEqual(
+      testObject.nestedObjectKey.nestedPropKey,
+    );
     expect(getPropValue(testObject, "undefinedPropKey")).toBeUndefined();
     expect(getPropValue(testObject, "arrayPropKey.0")).toStrictEqual(testObject.arrayPropKey[0]);
     expect(getPropValue(testObject, "arrayPropKey.1")).toStrictEqual(testObject.arrayPropKey[1]);
-    expect(getPropValue(testObject, "arrayPropKey.2.nestedFromArrayKey")).toStrictEqual(testObject.arrayPropKey[2].nestedFromArrayKey);
+    expect(getPropValue(testObject, "arrayPropKey.2.nestedFromArrayKey")).toStrictEqual(
+      testObject.arrayPropKey[2].nestedFromArrayKey,
+    );
   });
 
   it("should return undefined if there is no matching path", () => {

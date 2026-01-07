@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withLoading} from "../../../contexts/LoadingContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withLoading } from "../../../contexts/LoadingContext";
+import { Trans, withTranslation } from "react-i18next";
 import Select from "../../Common/Select/Select";
 
 /**
@@ -65,7 +65,7 @@ class DeleteUserWithConflicts extends Component {
    */
   getGroupsErrors() {
     const errors = this.props.context.deleteUserWithConflictsDialogProps.errors;
-    const groupsErrors = errors.groups && errors.groups.sole_manager || [];
+    const groupsErrors = (errors.groups && errors.groups.sole_manager) || [];
     const groupsSorterByName = (groupA, groupB) => groupA.name.localeCompare(groupB.name);
     return groupsErrors.sort(groupsSorterByName);
   }
@@ -77,7 +77,7 @@ class DeleteUserWithConflicts extends Component {
    */
   getFoldersErrors() {
     const errors = this.props.context.deleteUserWithConflictsDialogProps.errors;
-    const foldersErrors = errors.folders && errors.folders.sole_owner || [];
+    const foldersErrors = (errors.folders && errors.folders.sole_owner) || [];
     const foldersSorterByName = (folderA, folderB) => folderA.name.localeCompare(folderB.name);
     return foldersErrors.sort(foldersSorterByName);
   }
@@ -89,8 +89,9 @@ class DeleteUserWithConflicts extends Component {
    */
   getResourcesErrors() {
     const errors = this.props.context.deleteUserWithConflictsDialogProps.errors;
-    const resourcesErrors = errors.resources && errors.resources.sole_owner || [];
-    const resourcesSorterByName = (resourcesA, resourcesB) => resourcesA.metadata.name.localeCompare(resourcesB.metadata.name);
+    const resourcesErrors = (errors.resources && errors.resources.sole_owner) || [];
+    const resourcesSorterByName = (resourcesA, resourcesB) =>
+      resourcesA.metadata.name.localeCompare(resourcesB.metadata.name);
     return resourcesErrors.sort(resourcesSorterByName);
   }
 
@@ -99,7 +100,8 @@ class DeleteUserWithConflicts extends Component {
    * @returns {object}
    */
   getGroupsGroupsUsersOptionsMap() {
-    const reducer = (groupsGroupsUsersOptions, groupError) => Object.assign(groupsGroupsUsersOptions, {[groupError.id]: this.getGroupGroupsUsersOptions(groupError)});
+    const reducer = (groupsGroupsUsersOptions, groupError) =>
+      Object.assign(groupsGroupsUsersOptions, { [groupError.id]: this.getGroupGroupsUsersOptions(groupError) });
     return this.groupsErrors.reduce(reducer, {});
   }
 
@@ -125,7 +127,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {array}
    */
   filterOutUserToDeleteFromGroupsUsers(groupsUsers) {
-    const filterOutDeletedUserFromGroupsUsers = groupUser => groupUser.user_id !== this.userToDelete.id;
+    const filterOutDeletedUserFromGroupsUsers = (groupUser) => groupUser.user_id !== this.userToDelete.id;
     return groupsUsers.filter(filterOutDeletedUserFromGroupsUsers);
   }
 
@@ -135,7 +137,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {array}
    */
   decorateGroupsUsersWithUserEntity(groupsUsers) {
-    const decorateGroupsUsersWithUserEntity = groupUser => groupUser.user = this.getUser(groupUser.user_id);
+    const decorateGroupsUsersWithUserEntity = (groupUser) => (groupUser.user = this.getUser(groupUser.user_id));
     groupsUsers.forEach(decorateGroupsUsersWithUserEntity);
     return groupsUsers;
   }
@@ -146,7 +148,8 @@ class DeleteUserWithConflicts extends Component {
    * @returns {array}
    */
   sortGroupsUsersAlphabeticallyByUserFullName(groupsUsers) {
-    const sortGroupsUsersAlphabeticallyByUserFullName = (groupUserA, groupUserB) => this.getUserFullName(groupUserA.user).localeCompare(this.getUserFullName(groupUserB.user));
+    const sortGroupsUsersAlphabeticallyByUserFullName = (groupUserA, groupUserB) =>
+      this.getUserFullName(groupUserA.user).localeCompare(this.getUserFullName(groupUserB.user));
     return groupsUsers.sort(sortGroupsUsersAlphabeticallyByUserFullName);
   }
 
@@ -156,10 +159,10 @@ class DeleteUserWithConflicts extends Component {
    */
   getAcosPermissionsOptionsMap() {
     const acoPermissionsOptionsMap = {};
-    this.resourcesErrors.forEach(resourceError => {
+    this.resourcesErrors.forEach((resourceError) => {
       acoPermissionsOptionsMap[resourceError.id] = this.getAcoPermissionsOptions(resourceError);
     });
-    this.foldersErrors.forEach(folderError => {
+    this.foldersErrors.forEach((folderError) => {
       acoPermissionsOptionsMap[folderError.id] = this.getAcoPermissionsOptions(folderError);
     });
     return acoPermissionsOptionsMap;
@@ -187,7 +190,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {array}
    */
   filterOutUserToDeleteFromPermissions(permissions) {
-    const filterOutUserToDeleteFromPermissions = permission => permission.aro_foreign_key !== this.userToDelete.id;
+    const filterOutUserToDeleteFromPermissions = (permission) => permission.aro_foreign_key !== this.userToDelete.id;
     return permissions.filter(filterOutUserToDeleteFromPermissions);
   }
 
@@ -197,7 +200,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {array}
    */
   decoratePermissionWithAcoEntity(permissions) {
-    permissions.forEach(permission => {
+    permissions.forEach((permission) => {
       if (permission.aro === "Group") {
         permission.group = this.getGroup(permission.aro_foreign_key);
       } else {
@@ -214,8 +217,10 @@ class DeleteUserWithConflicts extends Component {
    */
   sortPermissionsAlphabeticallyByAcoName(permissions) {
     return permissions.sort((permissionA, permissionB) => {
-      const permissionAAcoName = permissionA.aro === "Group" ? permissionA.group.name : this.getUserFullName(permissionA.user);
-      const permissionBAcoName = permissionB.aro === "Group" ? permissionB.group.name : this.getUserFullName(permissionB.user);
+      const permissionAAcoName =
+        permissionA.aro === "Group" ? permissionA.group.name : this.getUserFullName(permissionA.user);
+      const permissionBAcoName =
+        permissionB.aro === "Group" ? permissionB.group.name : this.getUserFullName(permissionB.user);
       return permissionAAcoName.localeCompare(permissionBAcoName);
     });
   }
@@ -226,7 +231,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {object}
    */
   getUser(id) {
-    return this.props.context.users.find(user => user.id === id);
+    return this.props.context.users.find((user) => user.id === id);
   }
 
   /**
@@ -235,7 +240,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {object}
    */
   getGroup(id) {
-    return this.props.context.groups.find(group => group.id === id);
+    return this.props.context.groups.find((group) => group.id === id);
   }
 
   /**
@@ -265,7 +270,7 @@ class DeleteUserWithConflicts extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
-    this.props.context.setContext({deleteUserWithConflictsDialogProps: null});
+    this.props.context.setContext({ deleteUserWithConflictsDialogProps: null });
   }
 
   /**
@@ -278,8 +283,8 @@ class DeleteUserWithConflicts extends Component {
     const permissionId = target.value;
     const owners = this.state.owners;
     // assign the new folderId or resourceId with the permissionId
-    Object.assign(owners, {[id]: permissionId});
-    this.setState({owners});
+    Object.assign(owners, { [id]: permissionId });
+    this.setState({ owners });
   }
 
   /**
@@ -292,8 +297,8 @@ class DeleteUserWithConflicts extends Component {
     const permissionId = target.value;
     const managers = this.state.managers;
     // assign the new folderId or resourceId with the permissionId
-    Object.assign(managers, {[groupId]: permissionId});
-    this.setState({managers});
+    Object.assign(managers, { [groupId]: permissionId });
+    this.setState({ managers });
   }
 
   /**
@@ -304,7 +309,7 @@ class DeleteUserWithConflicts extends Component {
     if (this.state.owners != null) {
       const owners = [];
       for (const [key, value] of Object.entries(this.state.owners)) {
-        owners.push({id: value, aco_foreign_key: key});
+        owners.push({ id: value, aco_foreign_key: key });
       }
       return owners;
     }
@@ -319,7 +324,7 @@ class DeleteUserWithConflicts extends Component {
     if (this.state.managers !== null) {
       const managers = [];
       for (const [key, value] of Object.entries(this.state.managers)) {
-        managers.push({id: value, group_id: key});
+        managers.push({ id: value, group_id: key });
       }
       return managers;
     }
@@ -345,7 +350,7 @@ class DeleteUserWithConflicts extends Component {
    * Save the changes.
    */
   async delete() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
     try {
       const userDeleteTransfer = this.createUserDeleteTransfer();
       this.props.loadingContext.add();
@@ -353,24 +358,24 @@ class DeleteUserWithConflicts extends Component {
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been deleted successfully"));
       this.props.onClose();
-      this.props.context.setContext({deleteUserWithConflictsDialogProps: null});
+      this.props.context.setContext({ deleteUserWithConflictsDialogProps: null });
     } catch (error) {
       this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error.name === "UserAbortsOperationError") {
-        this.setState({processing: false});
+        this.setState({ processing: false });
       } else {
         // Unexpected error occurred.
         console.error(error);
         this.handleError(error);
-        this.setState({processing: false});
+        this.setState({ processing: false });
       }
     }
   }
 
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -382,7 +387,7 @@ class DeleteUserWithConflicts extends Component {
   populateDefaultOwners() {
     const owners = {};
     if (this.hasResourcesConflict()) {
-      this.resourcesErrors.forEach(resourceError => {
+      this.resourcesErrors.forEach((resourceError) => {
         const resourceDefaultOwner = this.acosPermissionsOptions[resourceError.id][0];
         if (resourceDefaultOwner) {
           owners[resourceError.id] = resourceDefaultOwner.id;
@@ -390,7 +395,7 @@ class DeleteUserWithConflicts extends Component {
       });
     }
     if (this.hasFolderConflict()) {
-      this.foldersErrors.forEach(folderError => {
+      this.foldersErrors.forEach((folderError) => {
         const folderDefaultOwner = this.acosPermissionsOptions[folderError.id][0];
         if (folderDefaultOwner) {
           owners[folderError.id] = folderDefaultOwner.id;
@@ -407,7 +412,7 @@ class DeleteUserWithConflicts extends Component {
   populateDefaultManagers() {
     return this.groupsErrors.reduce((groupsDefaultManagers, groupError) => {
       const groupDefaultManager = this.groupsGroupsUsersOptions[groupError.id][0];
-      return Object.assign(groupsDefaultManagers, {[groupError.id]: groupDefaultManager.id});
+      return Object.assign(groupsDefaultManagers, { [groupError.id]: groupDefaultManager.id });
     }, {});
   }
 
@@ -449,8 +454,13 @@ class DeleteUserWithConflicts extends Component {
    * @returns {*}
    */
   getAcoPermissionsList(id) {
-    const getLabel = permission => (permission.aro === "User" && this.getUserOptionLabel(permission.user)) || (permission.aro === "Group" && permission.group.name);
-    return this.acosPermissionsOptions[id]?.map(permission => ({value: permission.id, label: getLabel(permission)})) || [];
+    const getLabel = (permission) =>
+      (permission.aro === "User" && this.getUserOptionLabel(permission.user)) ||
+      (permission.aro === "Group" && permission.group.name);
+    return (
+      this.acosPermissionsOptions[id]?.map((permission) => ({ value: permission.id, label: getLabel(permission) })) ||
+      []
+    );
   }
 
   /**
@@ -459,7 +469,12 @@ class DeleteUserWithConflicts extends Component {
    * @returns {*}
    */
   getGroupUsersList(id) {
-    return this.groupsGroupsUsersOptions[id]?.map(groupUser => ({value: groupUser.id, label: this.getUserOptionLabel(groupUser.user)})) || [];
+    return (
+      this.groupsGroupsUsersOptions[id]?.map((groupUser) => ({
+        value: groupUser.id,
+        label: this.getUserOptionLabel(groupUser.user),
+      })) || []
+    );
   }
 
   /**
@@ -496,62 +511,104 @@ class DeleteUserWithConflicts extends Component {
         title={this.translate("You cannot delete this user!")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="delete-user-dialog">
+        className="delete-user-dialog"
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content intro">
-            <p><Trans>You are about to delete the user <strong className="dialog-variable">{{user: this.getUserFullName(this.userToDelete)}}</strong>.</Trans></p>
-            <p><Trans>This user is the sole owner of some content. You need to transfer the ownership to others to continue.</Trans></p>
+            <p>
+              <Trans>
+                You are about to delete the user{" "}
+                <strong className="dialog-variable">{{ user: this.getUserFullName(this.userToDelete) }}</strong>.
+              </Trans>
+            </p>
+            <p>
+              <Trans>
+                This user is the sole owner of some content. You need to transfer the ownership to others to continue.
+              </Trans>
+            </p>
             <div className="ownership-transfer no-margin">
-              {this.hasFolderConflict() &&
-              <div>
-                <h3><Trans>Folders</Trans></h3>
-                <ul className="ownership-transfer-items">
-                  {this.foldersErrors.map(folderError =>
-                    <li key={folderError.id}>
-                      <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                        <label htmlFor="transfer_folder_owner">{folderError.name} (<Trans>Folder</Trans>) <Trans>new owner</Trans>:</label>
-                        <Select className="form-element" value={this.state.owners[folderError.id]} items={this.getAcoPermissionsList(folderError.id)} onChange={event => this.handleOnChangeOwner(event, folderError.id)}/>
-                      </div>
-                    </li>
-                  )}
-                </ul>
-              </div>
-              }
-              {this.hasResourcesConflict() &&
-              <div>
-                <h3><Trans>Resources</Trans></h3>
-                <ul className="ownership-transfer-items">
-                  {this.resourcesErrors.map(resourceError =>
-                    <li key={resourceError.id}>
-                      <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                        <label htmlFor="transfer_resource_owner">{resourceError.metadata.name} (<Trans>Resource</Trans>) <Trans>new owner</Trans>:</label>
-                        <Select className="form-element" value={this.state.owners[resourceError.id]} items={this.getAcoPermissionsList(resourceError.id)} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}/>
-                      </div>
-                    </li>
-                  )}
-                </ul>
-              </div>
-              }
-              {this.hasGroupsConflict() &&
-              <div>
-                <h3><Trans>Groups</Trans></h3>
-                <ul className="ownership-transfer-items">
-                  {this.groupsErrors.map(groupError =>
-                    <li key={groupError.id}>
-                      <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                        <label htmlFor="transfer_group_manager">{groupError.name} (<Trans>Group</Trans>) <Trans>new manager</Trans>:</label>
-                        <Select className="form-element" value={this.state.managers[groupError.id]} items={this.getGroupUsersList(groupError.id)} onChange={event => this.handleOnChangeManager(event, groupError.id)}/>
-                      </div>
-                    </li>
-                  )}
-                </ul>
-              </div>
-              }
+              {this.hasFolderConflict() && (
+                <div>
+                  <h3>
+                    <Trans>Folders</Trans>
+                  </h3>
+                  <ul className="ownership-transfer-items">
+                    {this.foldersErrors.map((folderError) => (
+                      <li key={folderError.id}>
+                        <div className={`select-wrapper input required ${this.state.processing ? "disabled" : ""}`}>
+                          <label htmlFor="transfer_folder_owner">
+                            {folderError.name} (<Trans>Folder</Trans>) <Trans>new owner</Trans>:
+                          </label>
+                          <Select
+                            className="form-element"
+                            value={this.state.owners[folderError.id]}
+                            items={this.getAcoPermissionsList(folderError.id)}
+                            onChange={(event) => this.handleOnChangeOwner(event, folderError.id)}
+                          />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {this.hasResourcesConflict() && (
+                <div>
+                  <h3>
+                    <Trans>Resources</Trans>
+                  </h3>
+                  <ul className="ownership-transfer-items">
+                    {this.resourcesErrors.map((resourceError) => (
+                      <li key={resourceError.id}>
+                        <div className={`select-wrapper input required ${this.state.processing ? "disabled" : ""}`}>
+                          <label htmlFor="transfer_resource_owner">
+                            {resourceError.metadata.name} (<Trans>Resource</Trans>) <Trans>new owner</Trans>:
+                          </label>
+                          <Select
+                            className="form-element"
+                            value={this.state.owners[resourceError.id]}
+                            items={this.getAcoPermissionsList(resourceError.id)}
+                            onChange={(event) => this.handleOnChangeOwner(event, resourceError.id)}
+                          />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {this.hasGroupsConflict() && (
+                <div>
+                  <h3>
+                    <Trans>Groups</Trans>
+                  </h3>
+                  <ul className="ownership-transfer-items">
+                    {this.groupsErrors.map((groupError) => (
+                      <li key={groupError.id}>
+                        <div className={`select-wrapper input required ${this.state.processing ? "disabled" : ""}`}>
+                          <label htmlFor="transfer_group_manager">
+                            {groupError.name} (<Trans>Group</Trans>) <Trans>new manager</Trans>:
+                          </label>
+                          <Select
+                            className="form-element"
+                            value={this.state.managers[groupError.id]}
+                            items={this.getGroupUsersList(groupError.id)}
+                            onChange={(event) => this.handleOnChangeManager(event, groupError.id)}
+                          />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Delete")}
+              warning={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -568,4 +625,6 @@ DeleteUserWithConflicts.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteUserWithConflicts)))));
+export default withAppContext(
+  withLoading(withActionFeedback(withDialog(withTranslation("common")(DeleteUserWithConflicts)))),
+);

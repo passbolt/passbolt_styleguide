@@ -12,10 +12,10 @@
  * @since         3.1.0
  */
 
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultUserPassphrasePoliciesContext} from "../../../contexts/UserPassphrasePoliciesContext.test.data";
-import {defaultUserPassphrasePoliciesEntityDto} from "../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultUserPassphrasePoliciesContext } from "../../../contexts/UserPassphrasePoliciesContext.test.data";
+import { defaultUserPassphrasePoliciesEntityDto } from "../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
 
 /**
  * Default props
@@ -25,21 +25,23 @@ import {defaultUserPassphrasePoliciesEntityDto} from "../../../../shared/models/
 export const defaultProps = (props = {}) => ({
   context: defaultUserAppContext(),
   userSettingsContext: {
-    onUpdatePassphraseRequested: jest.fn(async() => {}),
+    onUpdatePassphraseRequested: jest.fn(async () => {}),
     onGoToIntroductionPassphraseRequested: jest.fn(),
   },
   userPassphrasePoliciesContext: defaultUserPassphrasePoliciesContext(),
   dialogContext: defaultDialogContext(),
-  ...props
+  ...props,
 });
 
 export const propsWithExternalDictionaryCheckDisabled = (data = {}) => {
   const defaultData = defaultProps({
     userPassphrasePoliciesContext: defaultUserPassphrasePoliciesContext({
-      getSettings: jest.fn(() => defaultUserPassphrasePoliciesEntityDto({
-        external_dictionary_check: false
-      }))
-    })
+      getSettings: jest.fn(() =>
+        defaultUserPassphrasePoliciesEntityDto({
+          external_dictionary_check: false,
+        }),
+      ),
+    }),
   });
 
   return Object.assign(defaultData, data);

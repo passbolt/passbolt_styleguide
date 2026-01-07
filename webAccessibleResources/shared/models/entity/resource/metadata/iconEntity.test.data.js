@@ -12,7 +12,7 @@
  * @since         5.2.0
  */
 
-import {ICON_TYPE_KEEPASS_ICON_SET} from "./IconEntity";
+import { ICON_TYPE_KEEPASS_ICON_SET } from "./IconEntity";
 
 /**
  * Build minimal icon dto.
@@ -29,8 +29,9 @@ export const minimalIconDto = (data = {}) => ({
  * @param {object} data The data to override the default dto.
  * @returns {object}
  */
-export const defaultIconDto = (data = {}) => minimalIconDto({
-  value: 42,
-  background_color: "#E64626",
-  ...data,
-});
+export const defaultIconDto = (data = {}) =>
+  minimalIconDto({
+    value: 42,
+    background_color: "#E64626",
+    ...data,
+  });

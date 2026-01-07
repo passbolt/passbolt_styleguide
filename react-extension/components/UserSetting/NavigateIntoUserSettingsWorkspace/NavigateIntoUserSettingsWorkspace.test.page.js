@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,11 +12,10 @@
  * @since         3.10.0
  */
 
-
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import NavigateIntoUserSettingsWorkspace from "./NavigateIntoUserSettingsWorkspace";
 
@@ -35,11 +33,11 @@ export default class NavigateIntoUserSettingsWorkspacePage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
-            <NavigateIntoUserSettingsWorkspace {...props}/>
+            <NavigateIntoUserSettingsWorkspace {...props} />
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -47,21 +45,20 @@ export default class NavigateIntoUserSettingsWorkspacePage {
    * Returns true if the badge for attention required is display for account recovery
    */
   get attentionRequired() {
-    return this._page.container.querySelectorAll('.attention-required');
+    return this._page.container.querySelectorAll(".attention-required");
   }
 
   /**
    * Returns the navigation item element for the mobile setup
    */
   get mobileTransferMenuItem() {
-    return this._page.container.querySelector('#navigation-item-mobile-setup');
+    return this._page.container.querySelector("#navigation-item-mobile-setup");
   }
 
   /**
    * Returns the navigation item element for the desktop app setup
    */
   get desktopTransferMenuItem() {
-    return this._page.container.querySelector('#navigation-item-desktop-setup');
+    return this._page.container.querySelector("#navigation-item-desktop-setup");
   }
 }
-

@@ -15,13 +15,13 @@
 import React from "react";
 import SettingsSVG from "../../../../../img/svg/settings.svg";
 import UsersSVG from "../../../../../img/svg/users.svg";
-import {Trans} from "react-i18next";
+import { Trans } from "react-i18next";
 import DropdownButton from "../../Dropdown/DropdownButton";
 import PropTypes from "prop-types";
 import Dropdown from "../../Dropdown/Dropdown";
 import DropdownMenu from "../../Dropdown/DropdownMenu";
 import DropdownMenuItem from "../../Dropdown/DropdownMenuItem";
-import {withNavigationContext} from "../../../../contexts/NavigationContext";
+import { withNavigationContext } from "../../../../contexts/NavigationContext";
 import CogSVG from "../../../../../img/svg/cog.svg";
 import HelpSVG from "../../../../../img/svg/help.svg";
 
@@ -42,27 +42,41 @@ class WorkspaceSwitcher extends React.PureComponent {
       <div id="workspace-switcher">
         <Dropdown>
           <DropdownButton className="button-transparent switcher">
-            <CogSVG className="cog"/>
+            <CogSVG className="cog" />
           </DropdownButton>
           <DropdownMenu direction="left" className="menu-switcher">
-            {this.props.isUserAdmin &&
+            {this.props.isUserAdmin && (
               <DropdownMenuItem>
-                <button type="button" className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.ORGANISATION_SETTINGS ? "active" : ""}`} onClick={this.props.navigationContext.onGoToAdministrationRequested}>
-                  <SettingsSVG/>
-                  <span><Trans>Organisation Settings</Trans></span>
+                <button
+                  type="button"
+                  className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.ORGANISATION_SETTINGS ? "active" : ""}`}
+                  onClick={this.props.navigationContext.onGoToAdministrationRequested}
+                >
+                  <SettingsSVG />
+                  <span>
+                    <Trans>Organisation Settings</Trans>
+                  </span>
                 </button>
               </DropdownMenuItem>
-            }
+            )}
             <DropdownMenuItem>
-              <button type="button" className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.USER_AND_GROUPS ? "active" : ""}`} onClick={this.props.navigationContext.onGoToUsersRequested}>
-                <UsersSVG/>
-                <span><Trans>Manage Users & Groups</Trans></span>
+              <button
+                type="button"
+                className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.USER_AND_GROUPS ? "active" : ""}`}
+                onClick={this.props.navigationContext.onGoToUsersRequested}
+              >
+                <UsersSVG />
+                <span>
+                  <Trans>Manage Users & Groups</Trans>
+                </span>
               </button>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <button type="button" className="no-border" onClick={this.props.navigationContext.onGoToHelpRequested}>
-                <HelpSVG/>
-                <span><Trans>Help</Trans></span>
+                <HelpSVG />
+                <span>
+                  <Trans>Help</Trans>
+                </span>
               </button>
             </DropdownMenuItem>
           </DropdownMenu>
@@ -71,7 +85,6 @@ class WorkspaceSwitcher extends React.PureComponent {
     );
   }
 }
-
 
 WorkspaceSwitcher.propTypes = {
   isUserAdmin: PropTypes.bool, // true if the current user is an admin

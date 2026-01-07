@@ -14,9 +14,11 @@
 
 import CollectionValidationError from "../models/entity/abstract/collectionValidationError"; // adjust path
 
-export function makeSerializableError({message = "Top-level", props = {}, cause} = {}) {
+export function makeSerializableError({ message = "Top-level", props = {}, cause } = {}) {
   const err = new Error(message);
-  if (cause) { err.cause = cause; }
+  if (cause) {
+    err.cause = cause;
+  }
   Object.assign(err, props);
   // Minimal toJSON polyfill for tests (browser/React apps often polyfill this)
   // eslint-disable-next-line func-names
@@ -31,7 +33,7 @@ export function makeSerializableError({message = "Top-level", props = {}, cause}
   return err;
 }
 
-export function makeErrorWhoseToJSONThrows({message = "Boom"} = {}) {
+export function makeErrorWhoseToJSONThrows({ message = "Boom" } = {}) {
   const err = new Error(message);
   err.toJSON = () => {
     throw new Error("toJSON exploded");
@@ -43,11 +45,11 @@ export function makeCollectionValidationErrorFixture() {
   // Leaf validation errors (must be serializable)
   const leaf1 = makeSerializableError({
     message: 'Field "name" is required',
-    props: {field: "name", code: "ERR_REQUIRED"}
+    props: { field: "name", code: "ERR_REQUIRED" },
   });
   const leaf2 = makeSerializableError({
     message: 'Field "url" is invalid',
-    props: {field: "url", code: "ERR_INVALID"}
+    props: { field: "url", code: "ERR_INVALID" },
   });
 
   // Your real CollectionValidationError class
@@ -68,10 +70,10 @@ export function makeCollectionValidationErrorFixture() {
       return {
         name: this.name || "CollectionValidationError",
         message: this.message,
-        stack: "mock-stack"
+        stack: "mock-stack",
       };
     };
   }
 
-  return {cve, leaves: [leaf1, leaf2]};
+  return { cve, leaves: [leaf1, leaf2] };
 }

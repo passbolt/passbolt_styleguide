@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component, memo} from "react";
+import React, { Component, memo } from "react";
 import PropTypes from "prop-types";
 
 /**
@@ -66,9 +66,11 @@ class CellButton extends Component {
   render() {
     return (
       <div title={this.value}>
-        {this.hasValue() &&
-          <button className="no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
-        }
+        {this.hasValue() && (
+          <button className="no-border" type="button" onClick={this.handleClick}>
+            <span>{this.value}</span>
+          </button>
+        )}
       </div>
     );
   }

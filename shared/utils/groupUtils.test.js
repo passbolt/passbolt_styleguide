@@ -12,15 +12,15 @@
  * @since         5.4.0
  */
 
-import {defaultGroupDto} from "../models/entity/group/groupEntity.test.data";
-import {getGroupFormattedName} from "./groupUtils";
+import { defaultGroupDto } from "../models/entity/group/groupEntity.test.data";
+import { getGroupFormattedName } from "./groupUtils";
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
 describe("groupUtils", () => {
-  const mockTranslation = jest.fn().mockImplementation(s => s);
+  const mockTranslation = jest.fn().mockImplementation((s) => s);
 
   describe("::getGroupFormattedName", () => {
     it("should return the group name when defined", () => {

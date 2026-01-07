@@ -12,18 +12,18 @@
  * @since         5.2.0
  */
 
-import {v4 as uuidv4} from "uuid";
-import {minimalMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
-import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { v4 as uuidv4 } from "uuid";
+import { minimalMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto } from "./metadataPrivateKeyEntity.test.data";
+import { defaultMetadataPrivateKeyDataDto } from "./metadataPrivateKeyDataEntity.test.data";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 export const defaultShareMetadataPrivateKeysDtos = (count = 2, data = {}) => {
   const user_id = uuidv4();
 
   const dtos = [];
   for (let i = 0; i < count; i += 2) {
-    const dto1 = defaultMetadataPrivateKeyDto({user_id, ...data});
-    const dto2 = defaultMetadataPrivateKeyDto({user_id: user_id, data: defaultMetadataPrivateKeyDataDto(), ...data});
+    const dto1 = defaultMetadataPrivateKeyDto({ user_id, ...data });
+    const dto2 = defaultMetadataPrivateKeyDto({ user_id: user_id, data: defaultMetadataPrivateKeyDataDto(), ...data });
     dtos.push(dto1, dto2);
   }
 
@@ -35,39 +35,31 @@ export const defaultMinimalShareMetadataPrivateKeysDtos = (count = 2, data = {})
   const user_id = uuidv4();
 
   for (let i = 0; i < count; i += 2) {
-    const dto1 = minimalMetadataPrivateKeyDto({user_id, ...data});
-    const dto2 = minimalMetadataPrivateKeyDto({user_id: user_id, data: defaultMetadataPrivateKeyDataDto(), ...data});
+    const dto1 = minimalMetadataPrivateKeyDto({ user_id, ...data });
+    const dto2 = minimalMetadataPrivateKeyDto({ user_id: user_id, data: defaultMetadataPrivateKeyDataDto(), ...data });
     dtos.push(dto1, dto2);
   }
 
   return dtos;
 };
 
-
 export const shareMetadataPrivateKeysWithSameMetadataKeyIdUserIdDtos = () => {
   const metadataKeyId = uuidv4();
   const userId = uuidv4();
   return defaultShareMetadataPrivateKeysDtos(2, {
     metadata_key_id: metadataKeyId,
-    user_id: userId
+    user_id: userId,
   });
 };
-
 
 export const shareMetadataPrivateKeysWithDecryptedKeyDtos = () => {
   const user_id = uuidv4();
   const data = defaultMetadataPrivateKeyDataDto();
-  return [
-    defaultMetadataPrivateKeyDto({user_id, data}),
-    defaultMetadataPrivateKeyDto({user_id, data}),
-  ];
+  return [defaultMetadataPrivateKeyDto({ user_id, data }), defaultMetadataPrivateKeyDto({ user_id, data })];
 };
 
 export const shareMetadataPrivateKeysWithEncryptedKeyDtos = () => {
   const user_id = uuidv4();
   const data = pgpKeys.metadataKey.encryptedMetadataPrivateKeyDataMessage;
-  return [
-    defaultMetadataPrivateKeyDto({user_id}),
-    defaultMetadataPrivateKeyDto({user_id, data}),
-  ];
+  return [defaultMetadataPrivateKeyDto({ user_id }), defaultMetadataPrivateKeyDto({ user_id, data })];
 };

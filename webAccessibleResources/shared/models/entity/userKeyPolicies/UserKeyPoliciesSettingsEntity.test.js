@@ -14,7 +14,10 @@
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import UserKeyPoliciesSettingsEntity from "./UserKeyPoliciesSettingsEntity";
-import {defaultUserKeyPoliciesSettingsDto, rsaUserKeyPoliciesSettingsDto} from "./UserKeyPoliciesSettingsEntity.test.data";
+import {
+  defaultUserKeyPoliciesSettingsDto,
+  rsaUserKeyPoliciesSettingsDto,
+} from "./UserKeyPoliciesSettingsEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
 
 describe("UserKeyPoliciesSettingsEntity", () => {
@@ -39,7 +42,9 @@ describe("UserKeyPoliciesSettingsEntity", () => {
     it("validates preferred_key_curve property", () => {
       assertEntityProperty.string(UserKeyPoliciesSettingsEntity, "preferred_key_curve");
       assertEntityProperty.notRequired(UserKeyPoliciesSettingsEntity, "preferred_key_curve");
-      assertEntityProperty.enumeration(UserKeyPoliciesSettingsEntity, "preferred_key_curve", ["curve25519_legacy+ed25519_legacy"]);
+      assertEntityProperty.enumeration(UserKeyPoliciesSettingsEntity, "preferred_key_curve", [
+        "curve25519_legacy+ed25519_legacy",
+      ]);
       assertEntityProperty.nullable(UserKeyPoliciesSettingsEntity, "preferred_key_curvepreferred_key_curve");
     });
 

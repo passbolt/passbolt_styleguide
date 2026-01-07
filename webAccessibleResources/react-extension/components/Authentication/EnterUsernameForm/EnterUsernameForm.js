@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withApiTriageContext } from "../../../contexts/ApiTriageContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
 
 class EnterUsernameForm extends Component {
@@ -43,7 +43,7 @@ class EnterUsernameForm extends Component {
       usernameError: null,
       agreedTerms: false,
       agreedTermsError: null,
-      hasAlreadyBeenValidated: false // True if the form has already been submitted once
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
     };
   }
 
@@ -54,7 +54,7 @@ class EnterUsernameForm extends Component {
    */
   componentDidMount() {
     if (this.props.context.siteSettings !== null) {
-      this.setState({loading: false}, () => {
+      this.setState({ loading: false }, () => {
         this.focusUsernameElement();
       });
     }
@@ -69,7 +69,7 @@ class EnterUsernameForm extends Component {
   async componentDidUpdate() {
     // If the component is still marked as loading when the site settings are retrieved, mark it as loaded and put the focus on the username field
     if (this.state.loading && this.props.context.siteSettings !== null) {
-      this.setState({loading: false}, () => {
+      this.setState({ loading: false }, () => {
         this.focusUsernameElement();
       });
     }
@@ -123,7 +123,7 @@ class EnterUsernameForm extends Component {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    await this.setState({[name]: value});
+    await this.setState({ [name]: value });
 
     if (this.state.hasAlreadyBeenValidated) {
       await this.validate();
@@ -149,7 +149,7 @@ class EnterUsernameForm extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
 
-    await this.setState({hasAlreadyBeenValidated: true});
+    await this.setState({ hasAlreadyBeenValidated: true });
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
@@ -170,7 +170,7 @@ class EnterUsernameForm extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return this.setState({processing: !prev});
+    return this.setState({ processing: !prev });
   }
 
   /**
@@ -178,10 +178,7 @@ class EnterUsernameForm extends Component {
    * @returns {Promise<boolean>}
    */
   async validate() {
-    await Promise.all([
-      this.validateUsernameInput(),
-      this.validateAgreedTerms()
-    ]);
+    await Promise.all([this.validateUsernameInput(), this.validateAgreedTerms()]);
     return this.hasValidationError();
   }
 
@@ -197,7 +194,7 @@ class EnterUsernameForm extends Component {
     } else if (!AppEmailValidatorService.validate(username, this.props.context.siteSettings)) {
       usernameError = this.translate("Please enter a valid email address.");
     }
-    return this.setState({username, usernameError});
+    return this.setState({ username, usernameError });
   }
 
   /**
@@ -211,7 +208,7 @@ class EnterUsernameForm extends Component {
     if (mustValidateTerms && !agreedTerms) {
       agreedTermsError = true;
     }
-    return this.setState({agreedTermsError});
+    return this.setState({ agreedTermsError });
   }
 
   /**
@@ -267,48 +264,89 @@ class EnterUsernameForm extends Component {
   render() {
     return (
       <div className="enter-username">
-        <h1><Trans>Please enter your email to continue.</Trans></h1>
+        <h1>
+          <Trans>Please enter your email to continue.</Trans>
+        </h1>
         <form acceptCharset="utf-8" onSubmit={this.handleFormSubmit} noValidate>
-          <div className={`input text required ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-            <label htmlFor="username"><Trans>Email</Trans></label>
-            <input id="username-input" type="text" ref={this.usernameRef} name="username" value={this.state.username}
-              onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange} placeholder={this.translate("you@organization.com")}
-              required="required" disabled={this.hasAllInputDisabled()}/>
-            {this.state.usernameError &&
-            <div className="error-message">{this.state.usernameError}</div>
-            }
-          </div>
-          {(this.privacyLink || this.termsLink) &&
-          <div className={`input checkbox ${this.state.agreedTermsError ? 'error' : ''}`}>
-            <input type="checkbox" name="agreedTerms" value={this.state.agreedTerms} onChange={this.handleInputChange}
-              id="checkbox-terms" disabled={this.hasAllInputDisabled()}/>
-            <label htmlFor="checkbox-terms">
-              {(this.privacyLink || this.termsLink) &&
-              <span>
-                {this.termsLink && !this.privacyLink &&
-                <Trans>I accept the <a href={this.termsLink} target="_blank" rel="noopener noreferrer">terms</a></Trans>
-                }
-                {!this.termsLink && this.privacyLink &&
-                <Trans>I accept the <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">privacy policy</a></Trans>
-                }
-                {this.termsLink && this.privacyLink &&
-                <Trans>I accept the <a href={this.termsLink} target="_blank" rel="noopener noreferrer">terms</a> and the <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">privacy policy</a></Trans>
-                }
-              </span>
-              }
+          <div
+            className={`input text required ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+          >
+            <label htmlFor="username">
+              <Trans>Email</Trans>
             </label>
+            <input
+              id="username-input"
+              type="text"
+              ref={this.usernameRef}
+              name="username"
+              value={this.state.username}
+              onKeyUp={this.handleUsernameInputOnKeyUp}
+              onChange={this.handleInputChange}
+              placeholder={this.translate("you@organization.com")}
+              required="required"
+              disabled={this.hasAllInputDisabled()}
+            />
+            {this.state.usernameError && <div className="error-message">{this.state.usernameError}</div>}
           </div>
-          }
+          {(this.privacyLink || this.termsLink) && (
+            <div className={`input checkbox ${this.state.agreedTermsError ? "error" : ""}`}>
+              <input
+                type="checkbox"
+                name="agreedTerms"
+                value={this.state.agreedTerms}
+                onChange={this.handleInputChange}
+                id="checkbox-terms"
+                disabled={this.hasAllInputDisabled()}
+              />
+              <label htmlFor="checkbox-terms">
+                {(this.privacyLink || this.termsLink) && (
+                  <span>
+                    {this.termsLink && !this.privacyLink && (
+                      <Trans>
+                        I accept the{" "}
+                        <a href={this.termsLink} target="_blank" rel="noopener noreferrer">
+                          terms
+                        </a>
+                      </Trans>
+                    )}
+                    {!this.termsLink && this.privacyLink && (
+                      <Trans>
+                        I accept the{" "}
+                        <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">
+                          privacy policy
+                        </a>
+                      </Trans>
+                    )}
+                    {this.termsLink && this.privacyLink && (
+                      <Trans>
+                        I accept the{" "}
+                        <a href={this.termsLink} target="_blank" rel="noopener noreferrer">
+                          terms
+                        </a>{" "}
+                        and the{" "}
+                        <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">
+                          privacy policy
+                        </a>
+                      </Trans>
+                    )}
+                  </span>
+                )}
+              </label>
+            </div>
+          )}
           <div className="form-actions">
             <FormSubmitButton
-              disabled={this.hasAllInputDisabled()} big={true} processing={this.state.processing} fullWidth={true}
+              disabled={this.hasAllInputDisabled()}
+              big={true}
+              processing={this.state.processing}
+              fullWidth={true}
               value={this.translate("Next")}
             />
-            {this.props.isSsoRecoverEnabled &&
+            {this.props.isSsoRecoverEnabled && (
               <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
                 <Trans>Continue with SSO.</Trans>
               </button>
-            }
+            )}
           </div>
         </form>
       </div>
@@ -317,7 +355,7 @@ class EnterUsernameForm extends Component {
 }
 
 EnterUsernameForm.defaultProps = {
-  isSsoRecoverEnabled: false
+  isSsoRecoverEnabled: false,
 };
 
 EnterUsernameForm.propTypes = {
@@ -328,4 +366,4 @@ EnterUsernameForm.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withApiTriageContext(withTranslation('common')(EnterUsernameForm)));
+export default withAppContext(withApiTriageContext(withTranslation("common")(EnterUsernameForm)));

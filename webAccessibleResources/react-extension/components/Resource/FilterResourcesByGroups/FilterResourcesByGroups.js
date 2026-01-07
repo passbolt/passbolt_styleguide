@@ -12,11 +12,11 @@
  * @since         2.13.0
  */
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import UsersSVG from "../../../../img/svg/users.svg";
@@ -59,9 +59,9 @@ class FilterResourcesByGroups extends React.Component {
    */
   async loadGroupsData() {
     if (!this.state.loading) {
-      this.setState({loading: true});
+      this.setState({ loading: true });
       const groups = await this.groupServiceWorkerService.findMyGroups();
-      this.setState({groups, loading: false});
+      this.setState({ groups, loading: false });
     }
   }
 
@@ -78,7 +78,7 @@ class FilterResourcesByGroups extends React.Component {
    */
   async handleTitleClickEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
 
     if (open) {
       await this.loadGroupsData();
@@ -90,8 +90,8 @@ class FilterResourcesByGroups extends React.Component {
    */
   handleClickGroupEvent(group) {
     // filter the resources by group;
-    const filter = {type: ResourceWorkspaceFilterTypes.GROUP, payload: {group}};
-    this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    const filter = { type: ResourceWorkspaceFilterTypes.GROUP, payload: { group } };
+    this.props.history.push({ pathname: "/app/passwords", state: { filter } });
   }
 
   /**
@@ -136,54 +136,55 @@ class FilterResourcesByGroups extends React.Component {
   render() {
     return (
       <>
-        {this.hasGroup() &&
-        <div className="navigation-secondary-tree navigation-secondary navigation-groups accordion">
-          <ul className="accordion-header">
-            <li className={`node root ${this.state.open ? "open" : "close"}`}>
-              <div className="row title" onClick={this.handleTitleClickEvent}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <h3 className="section-title">
-                      <span className="folders-label">
-                        <button type="button" className="link no-border">
-                          <div className="toggle-folder">
-                            {this.state.open
-                              ? <CarretDownSVG />
-                              : <CarretRightSVG />
-                            }
-                          </div>
-                          <UsersSVG />
-                          <span><Trans>Groups</Trans></span>
-                        </button>
-                      </span>
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-          {this.state.open &&
-          <div className="accordion-content">
-            <ul className="tree ready">
-              {this.groupsSorted.map(group =>
-                <li className="node root group-item" key={group.id}>
-                  <div className={`row ${this.isSelected(group.id) ? "selected" : ""}`} onClick={() => this.handleClickGroupEvent(group)}>
-                    <div className="main-cell-wrapper">
-                      <div className="main-cell">
-                        <button type="button" className="link no-border" title={group.name}>
-                          <span className="ellipsis">{group.name}</span>
-                        </button>
-                      </div>
+        {this.hasGroup() && (
+          <div className="navigation-secondary-tree navigation-secondary navigation-groups accordion">
+            <ul className="accordion-header">
+              <li className={`node root ${this.state.open ? "open" : "close"}`}>
+                <div className="row title" onClick={this.handleTitleClickEvent}>
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <h3 className="section-title">
+                        <span className="folders-label">
+                          <button type="button" className="link no-border">
+                            <div className="toggle-folder">
+                              {this.state.open ? <CarretDownSVG /> : <CarretRightSVG />}
+                            </div>
+                            <UsersSVG />
+                            <span>
+                              <Trans>Groups</Trans>
+                            </span>
+                          </button>
+                        </span>
+                      </h3>
                     </div>
                   </div>
-                </li>
-              )
-              }
+                </div>
+              </li>
             </ul>
+            {this.state.open && (
+              <div className="accordion-content">
+                <ul className="tree ready">
+                  {this.groupsSorted.map((group) => (
+                    <li className="node root group-item" key={group.id}>
+                      <div
+                        className={`row ${this.isSelected(group.id) ? "selected" : ""}`}
+                        onClick={() => this.handleClickGroupEvent(group)}
+                      >
+                        <div className="main-cell-wrapper">
+                          <div className="main-cell">
+                            <button type="button" className="link no-border" title={group.name}>
+                              <span className="ellipsis">{group.name}</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
-          }
-        </div>
-        }
+        )}
       </>
     );
   }

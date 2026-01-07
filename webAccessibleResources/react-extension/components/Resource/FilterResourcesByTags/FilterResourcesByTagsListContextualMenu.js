@@ -13,12 +13,12 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import EditResourceTag from "../../ResourceTag/EditResourceTag/EditResourceTag";
 import DeleteResourceTag from "../../ResourceTag/DeleteResourceTag/DeleteResourceTag";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import EditSVG from "../../../../img/svg/edit.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 
@@ -45,7 +45,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
    * Handle click on the edit tag menu option.
    */
   handleEditClickEvent() {
-    this.props.context.setContext({tagToEdit: this.props.selectedTag});
+    this.props.context.setContext({ tagToEdit: this.props.selectedTag });
     this.props.dialogContext.open(EditResourceTag);
     this.handleHide();
   }
@@ -54,7 +54,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
    * Handle click on the delete tag menu option.
    */
   handleDeleteClickEvent() {
-    this.props.context.setContext({tagToDelete: this.props.selectedTag});
+    this.props.context.setContext({ tagToDelete: this.props.selectedTag });
     this.props.dialogContext.open(DeleteResourceTag);
     this.handleHide();
   }
@@ -63,7 +63,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
    * Handle hide contextual menu
    */
   handleHide() {
-    if (typeof this.props.onBeforeHide === 'function') {
+    if (typeof this.props.onBeforeHide === "function") {
       this.props.onBeforeHide(this.props.selectedTag.id);
     }
     this.props.hide();
@@ -79,14 +79,17 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
         hide={this.handleHide}
         left={this.props.left}
         top={this.props.top}
-        className={this.props.className}>
+        className={this.props.className}
+      >
         <li key="option-edit-tag" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <button type="button" className="link no-border" id="edit-tag" onClick={this.handleEditClickEvent}>
                   <EditSVG />
-                  <span><Trans>Edit tag</Trans></span>
+                  <span>
+                    <Trans>Edit tag</Trans>
+                  </span>
                 </button>
               </div>
             </div>
@@ -98,7 +101,9 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
               <div className="main-cell">
                 <button type="button" className="link no-border" id="delete-tag" onClick={this.handleDeleteClickEvent}>
                   <DeleteSVG />
-                  <span><Trans>Delete Tag</Trans></span>
+                  <span>
+                    <Trans>Delete Tag</Trans>
+                  </span>
                 </button>
               </div>
             </div>

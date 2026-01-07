@@ -12,25 +12,23 @@
  * @since         2.11.0
  */
 
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultAdministratorRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import {
-  defaultResourceWorkspaceContext, resourceWorkspaceContextWithSelectedFolderICanRead,
-  resourceWorkspaceContextWithSelectedFolderIOwn
+  defaultAdministratorRbacContext,
+  denyRbacContext,
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {
+  defaultResourceWorkspaceContext,
+  resourceWorkspaceContextWithSelectedFolderICanRead,
+  resourceWorkspaceContextWithSelectedFolderIOwn,
 } from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {
-  defaultMetadataTypesSettingsV4Dto
-} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { defaultMetadataTypesSettingsV4Dto } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -46,7 +44,7 @@ export function defaultProps(data = {}) {
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
-    ...data
+    ...data,
   };
 }
 
@@ -64,7 +62,7 @@ export function defaultPropsFolderOwned(data = {}) {
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
-    ...data
+    ...data,
   };
 }
 
@@ -82,7 +80,7 @@ export function defaultPropsFolderNotOwned(data = {}) {
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
-    ...data
+    ...data,
   };
 }
 
@@ -94,6 +92,6 @@ export function defaultPropsFolderNotOwned(data = {}) {
 export function propsWithDenyUiAction(data = {}) {
   return defaultProps({
     rbacContext: denyRbacContext(),
-    ...data
+    ...data,
   });
 }

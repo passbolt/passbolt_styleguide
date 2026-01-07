@@ -12,7 +12,7 @@
  * @since         4.3.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 /*
  * ==================================================
@@ -27,7 +27,7 @@ import {v4 as uuidv4} from "uuid";
  */
 export const plaintextSecretPasswordStringDto = (data = {}) => ({
   password: "secret-password",
-  ...data
+  ...data,
 });
 
 /**
@@ -38,7 +38,7 @@ export const plaintextSecretPasswordStringDto = (data = {}) => ({
 export const plaintextSecretPasswordAndDescriptionDto = (data = {}) => ({
   password: "secret-password",
   description: "secret-description",
-  ...data
+  ...data,
 });
 
 /**
@@ -55,7 +55,7 @@ export const plaintextSecretPasswordDescriptionTotpDto = (data = {}) => ({
     period: 30,
     secret_key: "i73r3rn22atgcmdlqmotr2q7erukgmri46bvzxzlc6jbkckmtlpa",
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -70,7 +70,7 @@ export const plaintextSecretTotpDto = (data = {}) => ({
     period: 30,
     secret_key: "i73r3rn22atgcmdlqmotr2q7erukgmri46bvzxzlc6jbkckmtlpa",
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -83,17 +83,17 @@ export const plaintextSecretCustomFieldsDto = (data = {}) => ({
   custom_fields: [
     {
       id: data.custom_fields?.[0]?.id || uuidv4(),
-      secret_value: "I am a secret"
+      secret_value: "I am a secret",
     },
     {
       id: data.custom_fields?.[1]?.id || uuidv4(),
-      secret_value: "I am a secret 2"
+      secret_value: "I am a secret 2",
     },
     {
       id: data.custom_fields?.[2]?.id || uuidv4(),
-      secret_value: "I am a secret 3"
+      secret_value: "I am a secret 3",
     },
-  ]
+  ],
 });
 
 /*
@@ -104,27 +104,23 @@ export const plaintextSecretCustomFieldsDto = (data = {}) => ({
 
 export const plaintextSecretStringSchema = (data = {}) => ({
   type: "object",
-  required: [
-    "password"
-  ],
+  required: ["password"],
   properties: {
     password: {
       type: "string",
-      maxLength: 4096
+      maxLength: 4096,
     },
   },
-  ...data
+  ...data,
 });
 
 export const plaintextSecretPasswordAndDescriptionSchema = (data = {}) => ({
   type: "object",
-  required: [
-    "password"
-  ],
+  required: ["password"],
   properties: {
     password: {
       type: "string",
-      maxLength: 4096
+      maxLength: 4096,
     },
     description: {
       type: "string",
@@ -137,13 +133,11 @@ export const plaintextSecretPasswordAndDescriptionSchema = (data = {}) => ({
 
 export const plaintextSecretPasswordDescriptionAndTotpSchema = (data = {}) => ({
   type: "object",
-  required: [
-    "password"
-  ],
+  required: ["password"],
   properties: {
     password: {
       type: "string",
-      maxLength: 4096
+      maxLength: 4096,
     },
     description: {
       type: "string",
@@ -152,68 +146,58 @@ export const plaintextSecretPasswordDescriptionAndTotpSchema = (data = {}) => ({
     },
     totp: {
       type: "object",
-      required: [
-        "secret_key",
-        "digits",
-        "algorithm"
-      ],
+      required: ["secret_key", "digits", "algorithm"],
       properties: {
         algorithm: {
           type: "string",
           minLength: 4,
-          maxLength: 6
+          maxLength: 6,
         },
         secret_key: {
           type: "string",
-          maxLength: 1024
+          maxLength: 1024,
         },
         digits: {
           type: "number",
           minimum: 6,
-          maximum: 8
+          maximum: 8,
         },
         period: {
-          type: "number"
-        }
-      }
-    }
+          type: "number",
+        },
+      },
+    },
   },
-  ...data
+  ...data,
 });
 
 export const plaintextSecretStandaloneTotpSchema = (data = {}) => ({
   type: "object",
-  required: [
-    "totp"
-  ],
+  required: ["totp"],
   properties: {
     totp: {
       type: "object",
-      required: [
-        "secret_key",
-        "digits",
-        "algorithm"
-      ],
+      required: ["secret_key", "digits", "algorithm"],
       properties: {
         algorithm: {
           type: "string",
           minLength: 4,
-          maxLength: 6
+          maxLength: 6,
         },
         secret_key: {
           type: "string",
-          maxLength: 1024
+          maxLength: 1024,
         },
         digits: {
           type: "number",
           minimum: 6,
-          maximum: 8
+          maximum: 8,
         },
         period: {
-          type: "number"
-        }
-      }
-    }
+          type: "number",
+        },
+      },
+    },
   },
-  ...data
+  ...data,
 });

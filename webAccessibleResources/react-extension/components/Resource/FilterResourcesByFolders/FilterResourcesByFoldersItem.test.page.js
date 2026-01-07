@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,13 +12,12 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {DragContext} from "../../../contexts/DragContext";
+import { DragContext } from "../../../contexts/DragContext";
 
 /**
  * The FilterResourcesByFolders component represented as a page
@@ -34,11 +32,11 @@ export default class FilterResourcesByFoldersItemPage {
       <AppContext.Provider value={props.context}>
         <Router>
           <DragContext.Provider value={props.dragContext}>
-            <FilterResourcesByFoldersItem.WrappedComponent {...props}/>
+            <FilterResourcesByFoldersItem.WrappedComponent {...props} />
           </DragContext.Provider>
         </Router>
       </AppContext.Provider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -71,28 +69,30 @@ export class FilterResourcesByFoldersItemPageObject {
   }
 
   get component() {
-    return this._container.querySelector('.folder-item');
+    return this._container.querySelector(".folder-item");
   }
 
   /**
    * Returns the folder item for the index one
    */
   item(index) {
-    return this._container.querySelectorAll('.folder-name')[index - 1];
+    return this._container.querySelectorAll(".folder-name")[index - 1];
   }
 
   /**
    * Returns the folder item caret for the index one
    */
   itemCaret(index) {
-    return this._container.querySelectorAll('li.folder-item .row .main-cell-wrapper .main-cell button')[index - 1].querySelector('.toggle-folder');
+    return this._container
+      .querySelectorAll("li.folder-item .row .main-cell-wrapper .main-cell button")
+      [index - 1].querySelector(".toggle-folder");
   }
 
   /**
    * Returns the name of the folder selected
    */
   get selectedFolderName() {
-    return this._container.querySelector('li.folder-item .row.selected').textContent;
+    return this._container.querySelector("li.folder-item .row.selected").textContent;
   }
 
   /**
@@ -106,7 +106,7 @@ export class FilterResourcesByFoldersItemPageObject {
    * Returns the number of folders
    */
   get count() {
-    return this._container.querySelectorAll('.folder-name').length;
+    return this._container.querySelectorAll(".folder-name").length;
   }
 
   /**
@@ -120,7 +120,9 @@ export class FilterResourcesByFoldersItemPageObject {
    * Returns the folder item for the index one
    */
   moreButton(index) {
-    return this._container.querySelectorAll('li.folder-item .row .right-cell.more-ctrl')[index - 1].querySelector('button');
+    return this._container
+      .querySelectorAll("li.folder-item .row .right-cell.more-ctrl")
+      [index - 1].querySelector("button");
   }
 
   /**
@@ -145,45 +147,45 @@ export class FilterResourcesByFoldersItemPageObject {
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
 
   /** Right click on the component */
-  async rightClick(component)  {
+  async rightClick(component) {
     fireEvent.contextMenu(component);
     await waitFor(() => {});
   }
 
   /** Drag start on the component */
-  async dragStart(component)  {
-    const dataTransfer = {setDragImage: jest.fn()};
-    fireEvent.dragStart(component, {dataTransfer});
+  async dragStart(component) {
+    const dataTransfer = { setDragImage: jest.fn() };
+    fireEvent.dragStart(component, { dataTransfer });
     await waitFor(() => {});
   }
 
   /** Drag end on the component */
-  async dragEnd(component)  {
+  async dragEnd(component) {
     fireEvent.dragEnd(component);
     await waitFor(() => {});
   }
 
   /** Drop on the component */
-  async drop(component)  {
+  async drop(component) {
     fireEvent.drop(component);
     await waitFor(() => {});
   }
 
   /** Drag over on the component */
-  async dragOver(component)  {
+  async dragOver(component) {
     fireEvent.dragOver(component);
     await waitFor(() => {});
   }
 
   /** Drag over on the component */
-  async dragLeave(component)  {
+  async dragLeave(component) {
     fireEvent.dragLeave(component);
     await waitFor(() => {});
   }

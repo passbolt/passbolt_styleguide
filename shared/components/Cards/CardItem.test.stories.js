@@ -16,44 +16,44 @@ import CardItem from "./CardItem";
 import KeySVG from "../../../img/svg/key.svg";
 
 export default {
-  title: 'Foundations/CardsItems',
-  component: CardItem
+  title: "Foundations/CardsItems",
+  component: CardItem,
 };
 
 export const Default = {
   args: {
-    icon: <KeySVG/>,
+    icon: <KeySVG />,
     title: "Card item",
     description: "This is an example of a card",
     onClick: () => console.log("It clicked!"),
-  }
+  },
 };
 
 export const WithoutDescription = {
   args: {
-    icon: <KeySVG/>,
+    icon: <KeySVG />,
     title: "Card item",
     onClick: () => console.log("It clicked!"),
-  }
+  },
 };
 
 export const isBeta = {
   args: {
-    icon: <KeySVG/>,
+    icon: <KeySVG />,
     title: "Beta card item",
     description: "This is an example of a beta card item",
     isBeta: true,
     onClick: () => console.log("It clicked!"),
-  }
+  },
 };
 
 export const proTeasing = {
   args: {
-    icon: <KeySVG/>,
+    icon: <KeySVG />,
     title: "Pro Teasing card item",
     description: "This is an example of a PRO teasing card item",
     isBeta: false,
     onClick: () => console.log("It clicked!"),
     proTeasing: true,
-  }
+  },
 };

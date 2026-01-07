@@ -13,11 +13,11 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {ApiClient} from "../../shared/lib/apiClient/apiClient";
-import SelfRegistrationService from '../../shared/services/api/selfRegistration/selfRegistrationService';
-import {SelfRegistrationProviderTypes} from '../../shared/models/selfRegistration/SelfRegistrationEnumeration';
-import PassboltServiceUnavailableError from '../../shared/lib/Error/PassboltServiceUnavailableError';
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { ApiClient } from "../../shared/lib/apiClient/apiClient";
+import SelfRegistrationService from "../../shared/services/api/selfRegistration/selfRegistrationService";
+import { SelfRegistrationProviderTypes } from "../../shared/models/selfRegistration/SelfRegistrationEnumeration";
+import PassboltServiceUnavailableError from "../../shared/lib/Error/PassboltServiceUnavailableError";
 import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProviders.data";
 
 /**
@@ -28,20 +28,13 @@ export const ApiTriageContext = React.createContext({
   unexpectedError: null, // The unexpected error obejct if any
   state: null, // The current triage workflow state
   isSsoRecoverEnabled: false, // Is the organization feature flag sso_recover enabled
-  getSsoProviderId: () => {
-  }, // Returns the current SSO provider configured for the organisation
-  onInitializeTriageRequested: () => {
-  }, // Whenever the initialization of the triage is requested.
-  onTriageRequested: () => {
-  }, // Whenever the user wants to submit their username for triage
-  onRegistrationRequested: () => {
-  }, // Whenever the user wants to register
-  handleSwitchToSsoSignInState: () => {
-  }, // Whenever the user switches to SSO_SIGN_IN_STATE state
-  handleSwitchToUsernameState: () => {
-  }, // Whenever the user switches to USERNAME_STATE state
-  handleSwitchToEnterNameState: () => {
-  }, // Whenever the user needs to register after SSO sign in
+  getSsoProviderId: () => {}, // Returns the current SSO provider configured for the organisation
+  onInitializeTriageRequested: () => {}, // Whenever the initialization of the triage is requested.
+  onTriageRequested: () => {}, // Whenever the user wants to submit their username for triage
+  onRegistrationRequested: () => {}, // Whenever the user wants to register
+  handleSwitchToSsoSignInState: () => {}, // Whenever the user switches to SSO_SIGN_IN_STATE state
+  handleSwitchToUsernameState: () => {}, // Whenever the user switches to USERNAME_STATE state
+  handleSwitchToEnterNameState: () => {}, // Whenever the user needs to register after SSO sign in
 });
 
 /**
@@ -88,9 +81,7 @@ export class ApiTriageContextProvider extends React.Component {
     this.setState({
       ssoProviderId,
       isSsoRecoverEnabled,
-      state: isSsoRecoverEnabled
-        ? ApiTriageContextState.SSO_SIGN_IN_STATE
-        : ApiTriageContextState.USERNAME_STATE,
+      state: isSsoRecoverEnabled ? ApiTriageContextState.SSO_SIGN_IN_STATE : ApiTriageContextState.USERNAME_STATE,
     });
   }
 
@@ -100,8 +91,7 @@ export class ApiTriageContextProvider extends React.Component {
    * @returns {boolean}
    */
   isSsoAvailable() {
-    return this.props.context.siteSettings.canIUse("ssoRecover")
-      && this.props.context.siteSettings.canIUse("sso");
+    return this.props.context.siteSettings.canIUse("ssoRecover") && this.props.context.siteSettings.canIUse("sso");
   }
 
   /**
@@ -137,8 +127,7 @@ export class ApiTriageContextProvider extends React.Component {
       return null;
     }
 
-    const knownProvider = SsoProviders
-      .find(provider => provider.id === providerId);
+    const knownProvider = SsoProviders.find((provider) => provider.id === providerId);
 
     if (!knownProvider) {
       // The provider ID from the API is unknown to the Styleguide
@@ -163,20 +152,21 @@ export class ApiTriageContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onTriageRequested(username) {
-    const triageDto = {username};
+    const triageDto = { username };
     const apiClientOptions = this.props.context.getApiClientOptions();
     apiClientOptions.setResourceName("users/recover");
     const apiClient = new ApiClient(apiClientOptions);
-    await apiClient.create(triageDto)
+    await apiClient
+      .create(triageDto)
       .then(this.handleTriageSuccess.bind(this))
-      .catch(error => this.handleTriageError(error, username));
+      .catch((error) => this.handleTriageError(error, username));
   }
 
   /**
    * Handle send username success.
    */
   async handleTriageSuccess() {
-    return this.setState({state: ApiTriageContextState.CHECK_MAILBOX_STATE});
+    return this.setState({ state: ApiTriageContextState.CHECK_MAILBOX_STATE });
   }
 
   /**
@@ -192,12 +182,12 @@ export class ApiTriageContextProvider extends React.Component {
       } catch (exception) {
         const notAllowedErrorResponse = exception.data && (exception.data.code === 400 || exception.data.code === 403);
         if (!notAllowedErrorResponse) {
-          this.setState({unexpectedError: new PassboltServiceUnavailableError(exception.message)});
+          this.setState({ unexpectedError: new PassboltServiceUnavailableError(exception.message) });
           nextState = ApiTriageContextState.UNEXPECTED_ERROR_STATE;
         }
       }
     }
-    this.setState({username, state: nextState});
+    this.setState({ username, state: nextState });
     /*
      * @todo handle unexpected error.
      * else {
@@ -219,8 +209,8 @@ export class ApiTriageContextProvider extends React.Component {
       username: this.state.username,
       profile: {
         first_name: firstName,
-        last_name: lastName
-      }
+        last_name: lastName,
+      },
     };
     this.register(registrationDto);
   }
@@ -229,7 +219,7 @@ export class ApiTriageContextProvider extends React.Component {
    * Handle registration success
    */
   async handleRegistrationSuccess() {
-    return this.setState({state: ApiTriageContextState.CHECK_MAILBOX_STATE});
+    return this.setState({ state: ApiTriageContextState.CHECK_MAILBOX_STATE });
   }
 
   /**
@@ -237,21 +227,21 @@ export class ApiTriageContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async handleRegistrationError() {
-    this.setState({state: ApiTriageContextState.UNEXPECTED_ERROR_STATE});
+    this.setState({ state: ApiTriageContextState.UNEXPECTED_ERROR_STATE });
   }
 
   /**
    * Handle switch to SSO_SIGN_IN_STATE state
    */
   handleSwitchToSsoSignInState() {
-    this.setState({state: ApiTriageContextState.SSO_SIGN_IN_STATE});
+    this.setState({ state: ApiTriageContextState.SSO_SIGN_IN_STATE });
   }
 
   /**
    * Handle switch to USERNAME_STATE state
    */
   handleSwitchToUsernameState() {
-    this.setState({state: ApiTriageContextState.USERNAME_STATE});
+    this.setState({ state: ApiTriageContextState.USERNAME_STATE });
   }
 
   /**
@@ -261,7 +251,7 @@ export class ApiTriageContextProvider extends React.Component {
   handleSwitchToEnterNameState(username) {
     this.setState({
       username,
-      state: ApiTriageContextState.NAME_STATE
+      state: ApiTriageContextState.NAME_STATE,
     });
   }
 
@@ -270,7 +260,7 @@ export class ApiTriageContextProvider extends React.Component {
    * @returns {boolean}
    */
   get canIUseSelfRegistrationSettings() {
-    return this.props.context.siteSettings.canIUse('selfRegistration');
+    return this.props.context.siteSettings.canIUse("selfRegistration");
   }
 
   /**
@@ -281,7 +271,7 @@ export class ApiTriageContextProvider extends React.Component {
   async isDomainAllowedToSelfRegister(username) {
     const apiClientOptions = this.props.context.getApiClientOptions();
     const selfRegistrationService = new SelfRegistrationService(apiClientOptions);
-    const payload = {email: username, provider: SelfRegistrationProviderTypes.EMAILDOMAINS};
+    const payload = { email: username, provider: SelfRegistrationProviderTypes.EMAILDOMAINS };
     await selfRegistrationService.checkDomainAllowed(payload);
   }
 
@@ -291,10 +281,10 @@ export class ApiTriageContextProvider extends React.Component {
    * @returns {Promise<void>} - Resolves if the registration is successful, rejects otherwise
    */
   async register(registrationDto) {
-    const apiClientOptions = this.props.context.getApiClientOptions()
-      .setResourceName("users/register");
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("users/register");
     const apiClient = new ApiClient(apiClientOptions);
-    await apiClient.create(registrationDto)
+    await apiClient
+      .create(registrationDto)
       .then(this.handleRegistrationSuccess.bind(this))
       .catch(this.handleRegistrationError.bind(this));
   }
@@ -304,18 +294,14 @@ export class ApiTriageContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <ApiTriageContext.Provider value={this.state}>
-        {this.props.children}
-      </ApiTriageContext.Provider>
-    );
+    return <ApiTriageContext.Provider value={this.state}>{this.props.children}</ApiTriageContext.Provider>;
   }
 }
 
 ApiTriageContextProvider.propTypes = {
   context: PropTypes.any, // The application context
   value: PropTypes.any, // The initial value of the context
-  children: PropTypes.any // The children components
+  children: PropTypes.any, // The children components
 };
 export default withAppContext(ApiTriageContextProvider);
 
@@ -328,9 +314,7 @@ export function withApiTriageContext(WrappedComponent) {
     render() {
       return (
         <ApiTriageContext.Consumer>
-          {
-            context => <WrappedComponent apiTriageContext={context} {...this.props} />
-          }
+          {(context) => <WrappedComponent apiTriageContext={context} {...this.props} />}
         </ApiTriageContext.Consumer>
       );
     }
@@ -341,11 +325,11 @@ export function withApiTriageContext(WrappedComponent) {
  * The triage types of state
  */
 export const ApiTriageContextState = {
-  INITIAL_STATE: 'Initial State',
-  USERNAME_STATE: 'Enter username state',
-  SSO_SIGN_IN_STATE: 'SSO Sign in state',
-  CHECK_MAILBOX_STATE: 'Check mailbox state',
-  NAME_STATE: 'Enter name state',
-  USERNAME_NOT_FOUND_ERROR: 'Username not found error state',
-  UNEXPECTED_ERROR_STATE: 'Unexpected error state',
+  INITIAL_STATE: "Initial State",
+  USERNAME_STATE: "Enter username state",
+  SSO_SIGN_IN_STATE: "SSO Sign in state",
+  CHECK_MAILBOX_STATE: "Check mailbox state",
+  NAME_STATE: "Enter name state",
+  USERNAME_NOT_FOUND_ERROR: "Username not found error state",
+  UNEXPECTED_ERROR_STATE: "Unexpected error state",
 };

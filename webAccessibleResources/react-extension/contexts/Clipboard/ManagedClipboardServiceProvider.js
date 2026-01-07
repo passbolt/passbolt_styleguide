@@ -16,9 +16,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import assertString from "validator/es/lib/util/assertString";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {withActionFeedback} from "../../contexts/ActionFeedbackContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../contexts/ActionFeedbackContext";
 
 export const ManagedClipboardServiceContext = React.createContext({
   copyTemporarily: () => {},
@@ -67,7 +67,11 @@ export class ManagedClipboardServiceProvider extends React.Component {
 
     await this.clipboardServiceWorkerService.copyTemporarily(secret);
 
-    this.props.actionFeedbackContext.displaySuccess(<>{message} <Trans>It will clear in 30 seconds.</Trans></>);
+    this.props.actionFeedbackContext.displaySuccess(
+      <>
+        {message} <Trans>It will clear in 30 seconds.</Trans>
+      </>,
+    );
   }
 
   /**
@@ -119,9 +123,7 @@ export function withClipboard(WrappedComponent) {
     render() {
       return (
         <ManagedClipboardServiceContext.Consumer>
-          {
-            clipboard => <WrappedComponent clipboardContext={clipboard} {...this.props} />
-          }
+          {(clipboard) => <WrappedComponent clipboardContext={clipboard} {...this.props} />}
         </ManagedClipboardServiceContext.Consumer>
       );
     }

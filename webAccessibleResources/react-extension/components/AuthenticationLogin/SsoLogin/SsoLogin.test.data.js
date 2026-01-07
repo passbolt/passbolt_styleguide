@@ -12,7 +12,7 @@
  * @since         3.10.0
  */
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
 
 /**
@@ -22,19 +22,19 @@ import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.da
  */
 export function defaultProps(props = {}) {
   const userSettings = new UserSettings({
-    "user.settings.trustedDomain": (new URL(window.location.href)).origin,
+    "user.settings.trustedDomain": new URL(window.location.href).origin,
     "user.id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     "user.username": "admin@passbolt.com",
     "user.firstname": "Admin",
     "user.lastname": "User",
-    "user.settings.locale": "fr-FR"
+    "user.settings.locale": "fr-FR",
   });
   const defaultProps = {
-    context: defaultAppContext({userSettings}),
+    context: defaultAppContext({ userSettings }),
     userSettings: userSettings,
     onSignIn: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
-    ssoProvider: SsoProviders.find(provider => provider.id === "azure")
+    ssoProvider: SsoProviders.find((provider) => provider.id === "azure"),
   };
   return Object.assign(defaultProps, props);
 }

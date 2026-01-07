@@ -12,24 +12,18 @@
  * @since         3.7.4
  */
 
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import MockPort from "../../../react-extension/test/mock/MockPort";
-import {defaultAdministratorRbacContext, denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultResourceLocalStorageContext} from "../../contexts/ResourceLocalStorageContext.test.data";
+import { defaultAdministratorRbacContext, denyRbacContext } from "../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultResourceLocalStorageContext } from "../../contexts/ResourceLocalStorageContext.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {
-  defaultMetadataTypesSettingsV4Dto
-} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
-import {
-  defaultResourceMetadataDto
-} from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -46,7 +40,7 @@ export function defaultProps(data = {}) {
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     resources: null,
     getOpenerTabId: () => 1,
-    ...data
+    ...data,
   };
 }
 
@@ -56,7 +50,7 @@ export function defaultProps(data = {}) {
  */
 export function loadingProps() {
   const context = defaultAppContext();
-  return defaultProps({context});
+  return defaultProps({ context });
 }
 
 /**
@@ -65,7 +59,7 @@ export function loadingProps() {
  */
 export function noResourcesProps() {
   const context = defaultAppContext();
-  return defaultProps({context, resources: []});
+  return defaultProps({ context, resources: [] });
 }
 
 /**
@@ -76,7 +70,7 @@ export function searchNoResultProps() {
   const context = defaultAppContext({
     search: "apache",
   });
-  return defaultProps({context, resources: []});
+  return defaultProps({ context, resources: [] });
 }
 
 /**
@@ -87,7 +81,18 @@ export function searchWithResultProps() {
   const context = defaultAppContext({
     search: "apache",
   });
-  return defaultProps({context, resources: [defaultResourceDto({metadata: defaultResourceMetadataDto({name: "apache", uris: ["http://www.apache.org", "https://www.apache.org/projects"]})}), defaultResourceDto()]});
+  return defaultProps({
+    context,
+    resources: [
+      defaultResourceDto({
+        metadata: defaultResourceMetadataDto({
+          name: "apache",
+          uris: ["http://www.apache.org", "https://www.apache.org/projects"],
+        }),
+      }),
+      defaultResourceDto(),
+    ],
+  });
 }
 
 /**
@@ -100,7 +105,18 @@ export function suggestedResourcesProps() {
   const context = defaultAppContext({
     port: port,
   });
-  return defaultProps({context, resources: [defaultResourceDto({metadata: defaultResourceMetadataDto({name: "apache", uris: ["http://www.apache.org", "https://www.apache.org/projects"]})}), defaultResourceDto()]});
+  return defaultProps({
+    context,
+    resources: [
+      defaultResourceDto({
+        metadata: defaultResourceMetadataDto({
+          name: "apache",
+          uris: ["http://www.apache.org", "https://www.apache.org/projects"],
+        }),
+      }),
+      defaultResourceDto(),
+    ],
+  });
 }
 
 /**

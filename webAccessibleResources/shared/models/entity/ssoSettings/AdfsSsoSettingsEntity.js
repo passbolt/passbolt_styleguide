@@ -27,11 +27,10 @@ class AdfsSsoSettingsEntity extends Entity {
    * @inheritDoc
    */
   constructor(adfsSsoSettingsDto, options = {}) {
-    super(EntitySchema.validate(
-      AdfsSsoSettingsEntity.ENTITY_NAME,
-      adfsSsoSettingsDto,
-      AdfsSsoSettingsEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(AdfsSsoSettingsEntity.ENTITY_NAME, adfsSsoSettingsDto, AdfsSsoSettingsEntity.getSchema()),
+      options,
+    );
   }
 
   /**
@@ -40,36 +39,30 @@ class AdfsSsoSettingsEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "url",
-        "openid_configuration_path",
-        "scope",
-        "client_id",
-        "client_secret",
-      ],
-      "properties": {
-        "url": {
-          "type": "string",
-          "pattern": ADFS_SUPPORTED_URLS
+      type: "object",
+      required: ["url", "openid_configuration_path", "scope", "client_id", "client_secret"],
+      properties: {
+        url: {
+          type: "string",
+          pattern: ADFS_SUPPORTED_URLS,
         },
-        "openid_configuration_path": {
-          "type": "string",
-          "minLength": 1,
+        openid_configuration_path: {
+          type: "string",
+          minLength: 1,
         },
-        "scope": {
-          "type": "string",
-          "minLength": 1,
+        scope: {
+          type: "string",
+          minLength: 1,
         },
-        "client_id": {
-          "type": "string",
-          "minLength": 1,
+        client_id: {
+          type: "string",
+          minLength: 1,
         },
-        "client_secret": {
-          "type": "string",
-          "minLength": 1,
+        client_secret: {
+          type: "string",
+          minLength: 1,
         },
-      }
+      },
     };
   }
 
@@ -89,11 +82,11 @@ class AdfsSsoSettingsEntity extends Entity {
     try {
       url = new URL(value);
     } catch (error) {
-      throw new Error('The url should be a valid url.', {cause: error});
+      throw new Error("The url should be a valid url.", { cause: error });
     }
 
     if (url.protocol !== "https:") {
-      throw new Error('The url protocol should be HTTPS.');
+      throw new Error("The url protocol should be HTTPS.");
     }
   }
 

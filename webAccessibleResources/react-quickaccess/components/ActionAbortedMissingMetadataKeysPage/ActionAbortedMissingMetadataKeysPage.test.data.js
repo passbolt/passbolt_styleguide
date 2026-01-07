@@ -12,8 +12,8 @@
  * @since         5.4.0
  */
 
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import {createMemoryHistory} from "history";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
+import { createMemoryHistory } from "history";
 
 /**
  * Default props.
@@ -23,7 +23,7 @@ import {createMemoryHistory} from "history";
 export function defaultProps(data = {}) {
   return {
     context: defaultAppContext(),
-    history: createMemoryHistory({initialEntries: ["/home"], initialIndex: 1,}),
-    ...data
+    history: createMemoryHistory({ initialEntries: ["/home"], initialIndex: 1 }),
+    ...data,
   };
 }

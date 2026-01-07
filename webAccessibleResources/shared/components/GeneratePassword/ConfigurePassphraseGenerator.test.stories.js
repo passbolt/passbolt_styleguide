@@ -12,20 +12,21 @@
  * @since         3.2.0
  */
 
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import React from "react";
 import ConfigurePassphraseGenerator from "./ConfigurePassphraseGenerator";
-import {defaultProps} from "./ConfigurePassphraseGenerator.test.data";
+import { defaultProps } from "./ConfigurePassphraseGenerator.test.data";
 
 export default {
-  title: 'Components/ResourcePassword/ConfigurePassphraseGenerator',
-  component: ConfigurePassphraseGenerator
+  title: "Components/ResourcePassword/ConfigurePassphraseGenerator",
+  component: ConfigurePassphraseGenerator,
 };
 
-const Template = args =>
-  <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <ConfigurePassphraseGenerator {...args} {...routerProps}/>}></Route>
-  </MemoryRouter>;
+const Template = (args) => (
+  <MemoryRouter initialEntries={["/"]}>
+    <Route component={(routerProps) => <ConfigurePassphraseGenerator {...args} {...routerProps} />}></Route>
+  </MemoryRouter>
+);
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();

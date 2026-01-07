@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 
 class DownloadRecoveryKit extends Component {
@@ -42,7 +42,7 @@ class DownloadRecoveryKit extends Component {
    */
   get defaultState() {
     return {
-      isStoredRecoveryKitSafe: false
+      isStoredRecoveryKitSafe: false,
     };
   }
   /**
@@ -61,7 +61,7 @@ class DownloadRecoveryKit extends Component {
     const target = event.target;
     const value = target.checked;
     const name = target.name;
-    this.setState({[name]: value});
+    this.setState({ [name]: value });
   }
 
   /**
@@ -101,7 +101,9 @@ class DownloadRecoveryKit extends Component {
   render() {
     return (
       <div className="generate-key-feedback">
-        <h1><Trans>Store your recovery kit in a safe place.</Trans></h1>
+        <h1>
+          <Trans>Store your recovery kit in a safe place.</Trans>
+        </h1>
         <p>
           <strong>
             <Trans>You will need this recovery kit later to access your account (for example on a new device).</Trans>
@@ -111,8 +113,13 @@ class DownloadRecoveryKit extends Component {
           <Trans>A download of your recovery kit, containing your secret key, has automatically started.</Trans>
         </p>
         <div className="input checkbox">
-          <input type="checkbox" name="isStoredRecoveryKitSafe" checked={this.state.isStoredRecoveryKitSafe} onChange={this.handleInputChange}
-            id="checkbox-recovery-kit"/>
+          <input
+            type="checkbox"
+            name="isStoredRecoveryKitSafe"
+            checked={this.state.isStoredRecoveryKitSafe}
+            onChange={this.handleInputChange}
+            id="checkbox-recovery-kit"
+          />
           <label htmlFor="checkbox-recovery-kit">
             <Trans>I safely stored my recovery kit.</Trans>
           </label>
@@ -122,14 +129,11 @@ class DownloadRecoveryKit extends Component {
             type="submit"
             className={`button primary big full-width`}
             disabled={this.hasAllInputDisabled()}
-            onClick={this.handleNext}>
+            onClick={this.handleNext}
+          >
             <Trans>Next</Trans>
           </button>
-          <button
-            className="link"
-            type="button"
-            id="download-kit"
-            onClick={this.handleDownload}>
+          <button className="link" type="button" id="download-kit" onClick={this.handleDownload}>
             <Trans>Download the kit again!</Trans>
           </button>
         </div>

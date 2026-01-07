@@ -12,13 +12,16 @@
  * @since         2.11.0
  */
 
-import {defaultAdministratorRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {resourceWithTotpDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
-import {nestedFoldersCollectionDto} from "../../../../shared/models/entity/folder/foldersCollection.test.data";
+import {
+  defaultAdministratorRbacContext,
+  denyRbacContext,
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { resourceWithTotpDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import { nestedFoldersCollectionDto } from "../../../../shared/models/entity/folder/foldersCollection.test.data";
 
 /**
  * Default component props with folder having owner permission
@@ -34,7 +37,7 @@ export function defaultProps(data = {}) {
 
   return {
     context: defaultUserAppContext({
-      users: [resourceOwner]
+      users: [resourceOwner],
     }),
     rbacContext: defaultAdministratorRbacContext(),
     passwordExpiryContext: passwordExpiryContext,
@@ -44,9 +47,9 @@ export function defaultProps(data = {}) {
           created_by: resourceOwner.id,
           modified_by: resourceOwner.id,
         }),
-      }
+      },
     }),
-    ...data
+    ...data,
   };
 }
 
@@ -58,7 +61,7 @@ export function defaultProps(data = {}) {
 export function propsWithDenyUiAction(data = {}) {
   return defaultProps({
     rbacContext: denyRbacContext(),
-    ...data
+    ...data,
   });
 }
 
@@ -74,7 +77,7 @@ export function withNestedFoldersProps(data = {}) {
   return defaultProps({
     context: defaultUserAppContext({
       users: [resourceOwner],
-      getHierarchyFolderCache: () => folders
+      getHierarchyFolderCache: () => folders,
     }),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       details: {
@@ -85,6 +88,6 @@ export function withNestedFoldersProps(data = {}) {
         }),
       },
     }),
-    ...data
+    ...data,
   });
 }

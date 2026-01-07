@@ -16,13 +16,13 @@
  * Unit tests on ImportResourcesKeyUnlock in regard of specifications
  */
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import {waitFor} from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import ImportResourcesKeyUnlockPage from "./ImportResourcesKeyUnlock.test.page";
-import {defaultAppContext, defaultProps} from "./ImportResourcesKeyUnlock.test.data";
+import { defaultAppContext, defaultProps } from "./ImportResourcesKeyUnlock.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ImportResourcesResult from "./ImportResourcesResult";
-import {act} from "react";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import { act } from "react";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -33,26 +33,24 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
 
-  describe('As LU I can start unlock Keypass a file', () => {
+  describe("As LU I can start unlock Keypass a file", () => {
     /**
      * I should see the password unlock Keypass dialog
      */
-    beforeEach(async() => {
-      await act(
-        async() => page = new ImportResourcesKeyUnlockPage(context, props)
-      );
+    beforeEach(async () => {
+      await act(async () => (page = new ImportResourcesKeyUnlockPage(context, props)));
     });
 
-    it('As LU I see a success dialog after unlocking keypass file with success', async() => {
+    it("As LU I see a success dialog after unlocking keypass file with success", async () => {
       expect.assertions(8);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Enter the password and/or key file");
-      const file = new File(['test'], 'keyfile.txt', {type: 'txt'});
+      const file = new File(["test"], "keyfile.txt", { type: "txt" });
       await page.fillPassword("test");
       await page.click(page.passwordView);
-      expect(page.password.type).toBe('text');
+      expect(page.password.type).toBe("text");
       await page.selectUnlockKeypassFile(file);
 
       const requestMockImpl = jest.fn((message, data) => data);
@@ -61,33 +59,39 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
       await page.click(page.continueImportButton);
 
       const base64Content = "dGVzdA==";
-      const extension = 'kdbx';
-      const options = {credentials: {password: 'test', keyfile: base64Content}};
+      const extension = "kdbx";
+      const options = { credentials: { password: "test", keyfile: base64Content } };
       await waitForTrue(() => context.port.request.mock.calls.length > 0);
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.import-resources.import-file", extension, base64Content, options);
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.import-resources.import-file",
+        extension,
+        base64Content,
+        options,
+      );
       expect(props.resourceWorkspaceContext.onResourceFileImportResult).toHaveBeenCalled();
       expect(props.resourceWorkspaceContext.onResourceFileToImport).toHaveBeenCalled();
       expect(props.dialogContext.open).toHaveBeenCalledWith(ImportResourcesResult);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
-      const file = new File(['test'], 'keyfile.txt', {type: 'txt'});
+    it("As LU I cannot update the form fields and I should see a processing feedback while submitting the form", async () => {
+      const file = new File(["test"], "keyfile.txt", { type: "txt" });
       await page.fillPassword("test");
       await page.selectUnlockKeypassFile(file);
 
       // Mock the request function to make it the expected result
       let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
+      const requestMockImpl = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            updateResolve = resolve;
+          }),
+      );
       mockContextRequest(requestMockImpl);
       await page.click(page.continueImportButton);
 
-      await waitForTrue(() =>
-        page.importFile?.getAttribute("disabled") !== null
-      );
+      await waitForTrue(() => page.importFile?.getAttribute("disabled") !== null);
 
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
@@ -102,65 +106,65 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
       });
     });
 
-    it('As LU I shouldn’t be able to submit the form if there is an error in kdbx file', async() => {
+    it("As LU I shouldn’t be able to submit the form if there is an error in kdbx file", async () => {
       expect.assertions(1);
-      const file = new File(['test'], 'keyfile.txt', {type: 'txt'});
+      const file = new File(["test"], "keyfile.txt", { type: "txt" });
       await page.fillPassword("test");
       await page.selectUnlockKeypassFile(file);
-      const error = {name: "KdbxError", code: "InvalidKey"};
+      const error = { name: "KdbxError", code: "InvalidKey" };
 
       // Mock the request function to make it return an error.
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw error;
       });
 
-      await act(async() => {
+      await act(async () => {
         await page.click(page.continueImportButton);
       });
 
       expect(page.errorMessage).toBe("Cannot decrypt the file, invalid credentials.");
     });
 
-    it('As LU I can stop importing passwords by clicking on the cancel button', async() => {
+    it("As LU I can stop importing passwords by clicking on the cancel button", async () => {
       expect.assertions(1);
       await page.click(page.cancelButton);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I can stop importing passwords by closing the dialog', async() => {
+    it("As LU I can stop importing passwords by closing the dialog", async () => {
       expect.assertions(1);
       await page.click(page.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I should see the password field focused when the component is mounted', async() => {
+    it("As LU I should see the password field focused when the component is mounted", async () => {
       expect.assertions(1);
       await waitFor(() => {
         expect(document.activeElement === page.password).toBe(true);
       });
     });
 
-    it('As LU I can stop importing passwords with the keyboard (escape)', async() => {
+    it("As LU I can stop importing passwords with the keyboard (escape)", async () => {
       expect.assertions(1);
       await page.escapeKey();
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+    it("As LU I should see an error dialog if the submit operation fails for an unexpected reason", async () => {
       expect.assertions(1);
-      const file = new File(['test'], 'keyfile.txt', {type: 'txt'});
+      const file = new File(["test"], "keyfile.txt", { type: "txt" });
       await page.fillPassword("test");
       await page.selectUnlockKeypassFile(file);
       // Mock the request function to make it return an error.
       const error = new PassboltApiFetchError("Jest simulate API error.");
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw error;
       });
 
-      await act(async() => {
+      await act(async () => {
         await page.click(page.continueImportButton);
       });
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
   });
 });

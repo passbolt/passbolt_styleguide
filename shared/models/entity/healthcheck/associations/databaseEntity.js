@@ -8,11 +8,7 @@ class DatabaseEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      DatabaseEntity.ENTITY_NAME,
-      dto,
-      DatabaseEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(DatabaseEntity.ENTITY_NAME, dto, DatabaseEntity.getSchema()), options);
   }
 
   /**
@@ -21,31 +17,31 @@ class DatabaseEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["tablesCount", "info", "connect", "supportedBackend", "defaultContent"],
-      "properties": {
-        "tablesCount": {
-          "type": "boolean"
+      type: "object",
+      required: ["tablesCount", "info", "connect", "supportedBackend", "defaultContent"],
+      properties: {
+        tablesCount: {
+          type: "boolean",
         },
-        "info": {
-          "type": "object",
-          "required": ["tablesCount"],
-          "properties": {
-            "tablesCount": {
-              "type": "number"
-            }
-          }
+        info: {
+          type: "object",
+          required: ["tablesCount"],
+          properties: {
+            tablesCount: {
+              type: "number",
+            },
+          },
         },
-        "connect": {
-          "type": "boolean"
+        connect: {
+          type: "boolean",
         },
-        "supportedBackend": {
-          "type": "boolean"
+        supportedBackend: {
+          type: "boolean",
         },
-        "defaultContent": {
-          "type": "boolean"
-        }
-      }
+        defaultContent: {
+          type: "boolean",
+        },
+      },
     };
   }
 

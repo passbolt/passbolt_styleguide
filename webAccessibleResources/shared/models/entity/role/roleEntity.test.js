@@ -14,7 +14,7 @@
 import RoleEntity from "./roleEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 import EntitySchema from "../abstract/entitySchema";
-import {adminRoleDto, guestRoleDto, userRoleDto, customRoleDto} from "./roleEntity.test.data";
+import { adminRoleDto, guestRoleDto, userRoleDto, customRoleDto } from "./roleEntity.test.data";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 
 describe("Role entity", () => {
@@ -60,7 +60,7 @@ describe("Role entity", () => {
     it("constructor works if valid minimal DTO is provided", () => {
       expect.assertions(1);
 
-      const dto = {name: "test"};
+      const dto = { name: "test" };
       const entity = new RoleEntity(dto);
       expect(entity.toDto()).toEqual(dto);
     });
@@ -69,8 +69,8 @@ describe("Role entity", () => {
       expect.assertions(1);
 
       const dto = adminRoleDto({
-        'created': '2020-04-25 12:52:00',
-        'modified': '2020-04-25 12:52:01',
+        created: "2020-04-25 12:52:00",
+        modified: "2020-04-25 12:52:01",
       });
       const entity = new RoleEntity(dto);
       expect(entity.toDto()).toEqual(dto);
@@ -83,14 +83,14 @@ describe("Role entity", () => {
 
     it("validateBuildRules: should throw an error if the name has trailing spaces", () => {
       expect.assertions(5);
-      const dto1 = customRoleDto({name: " before"});
-      const dto2 = customRoleDto({name: "after "});
-      const dto3 = customRoleDto({name: " both "});
-      const dto4 = customRoleDto({name: "carriage return\n"});
-      const dto5 = customRoleDto({name: "null byte\0 "});
+      const dto1 = customRoleDto({ name: " before" });
+      const dto2 = customRoleDto({ name: "after " });
+      const dto3 = customRoleDto({ name: " both " });
+      const dto4 = customRoleDto({ name: "carriage return\n" });
+      const dto5 = customRoleDto({ name: "null byte\0 " });
 
       const expectedError = new EntityValidationError();
-      expectedError.addError("name", 'trailing-spaces', `The property (name) contains forbidden trailing spaces.`);
+      expectedError.addError("name", "trailing-spaces", `The property (name) contains forbidden trailing spaces.`);
       expect(() => new RoleEntity(dto1)).toThrow(expectedError);
       expect(() => new RoleEntity(dto2)).toThrow(expectedError);
       expect(() => new RoleEntity(dto3)).toThrow(expectedError);
@@ -141,12 +141,12 @@ describe("Role entity", () => {
 
     it("should not be bypassed using capital letters", () => {
       expect.assertions(12);
-      const role1 = new RoleEntity(customRoleDto({name: "Admin"}));
-      const role2 = new RoleEntity(customRoleDto({name: "adMiN"}));
-      const role3 = new RoleEntity(customRoleDto({name: "User"}));
-      const role4 = new RoleEntity(customRoleDto({name: "usER"}));
-      const role5 = new RoleEntity(customRoleDto({name: "Guest"}));
-      const role6 = new RoleEntity(customRoleDto({name: "guESt"}));
+      const role1 = new RoleEntity(customRoleDto({ name: "Admin" }));
+      const role2 = new RoleEntity(customRoleDto({ name: "adMiN" }));
+      const role3 = new RoleEntity(customRoleDto({ name: "User" }));
+      const role4 = new RoleEntity(customRoleDto({ name: "usER" }));
+      const role5 = new RoleEntity(customRoleDto({ name: "Guest" }));
+      const role6 = new RoleEntity(customRoleDto({ name: "guESt" }));
 
       expect(role1.isAdmin()).toStrictEqual(true);
       expect(role2.isAdmin()).toStrictEqual(true);
@@ -167,12 +167,12 @@ describe("Role entity", () => {
 
     it("should not be bypassed using capital letters or special characters", () => {
       expect.assertions(12);
-      const role1 = new RoleEntity(customRoleDto({name: "Admİn"}));
-      const role2 = new RoleEntity(customRoleDto({name: "adMi̇N"}));
-      const role3 = new RoleEntity(customRoleDto({name: "Usér"}));
-      const role4 = new RoleEntity(customRoleDto({name: "usÈR"}));
-      const role5 = new RoleEntity(customRoleDto({name: "Gùest"}));
-      const role6 = new RoleEntity(customRoleDto({name: "gũESt"}));
+      const role1 = new RoleEntity(customRoleDto({ name: "Admİn" }));
+      const role2 = new RoleEntity(customRoleDto({ name: "adMi̇N" }));
+      const role3 = new RoleEntity(customRoleDto({ name: "Usér" }));
+      const role4 = new RoleEntity(customRoleDto({ name: "usÈR" }));
+      const role5 = new RoleEntity(customRoleDto({ name: "Gùest" }));
+      const role6 = new RoleEntity(customRoleDto({ name: "gũESt" }));
 
       expect(role1.isAdmin()).toStrictEqual(false);
       expect(role2.isAdmin()).toStrictEqual(false);
@@ -196,15 +196,15 @@ describe("Role entity", () => {
     it("should return only name property", () => {
       expect.assertions(2);
       const dto = adminRoleDto({
-        'description': 'Admin role description',
-        'created': '2020-04-25 12:52:00',
-        'modified': '2020-04-25 12:52:01',
+        description: "Admin role description",
+        created: "2020-04-25 12:52:00",
+        modified: "2020-04-25 12:52:01",
       });
       const entity = new RoleEntity(dto);
       const updateDto = entity.toUpdateDto();
 
       expect(updateDto.name).toStrictEqual(dto.name);
-      expect(Object.keys(updateDto)).toEqual(['name']);
+      expect(Object.keys(updateDto)).toEqual(["name"]);
     });
 
     it("should not include id in the DTO", () => {
@@ -214,7 +214,7 @@ describe("Role entity", () => {
       const updateDto = entity.toUpdateDto();
 
       expect(updateDto.id).toBeUndefined();
-      expect(Object.keys(updateDto)).toEqual(['name']);
+      expect(Object.keys(updateDto)).toEqual(["name"]);
     });
   });
 });

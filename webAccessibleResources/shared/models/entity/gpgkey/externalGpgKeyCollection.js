@@ -17,8 +17,8 @@ import EntityCollection from "../abstract/entityCollection";
 import EntitySchema from "../abstract/entitySchema";
 import EntityCollectionError from "../abstract/entityCollectionError";
 
-const ENTITY_NAME = 'externalGpgKey';
-const RULE_UNIQUE_ID = 'fingerprint';
+const ENTITY_NAME = "externalGpgKey";
+const RULE_UNIQUE_ID = "fingerprint";
 
 class ExternalGpgKeyCollection extends EntityCollection {
   /**
@@ -26,25 +26,32 @@ class ExternalGpgKeyCollection extends EntityCollection {
    * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
    */
   constructor(externalGpgKeyCollectionDto, options = {}) {
-    super(EntitySchema.validate(
-      ExternalGpgKeyCollection.ENTITY_NAME,
-      externalGpgKeyCollectionDto,
-      ExternalGpgKeyCollection.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        ExternalGpgKeyCollection.ENTITY_NAME,
+        externalGpgKeyCollectionDto,
+        ExternalGpgKeyCollection.getSchema(),
+      ),
+      options,
+    );
 
     /**
      * Check if resource ids are unique
      * Why not this.push? It is faster than adding items one by one
      */
-    const ids = this._props.map(resource => resource.id);
+    const ids = this._props.map((resource) => resource.id);
     ids.sort().sort((a, b) => {
       if (a === b) {
-        throw new EntityCollectionError(0, ExternalGpgKeyCollection.RULE_UNIQUE_ID, `Gpgkey fingerprint ${a} already exists.`);
+        throw new EntityCollectionError(
+          0,
+          ExternalGpgKeyCollection.RULE_UNIQUE_ID,
+          `Gpgkey fingerprint ${a} already exists.`,
+        );
       }
     });
     // Directly push into the private property _items[]
-    this._props.forEach(resource => {
-      this._items.push(new ExternalGpgKeyEntity(resource, {clone: false}));
+    this._props.forEach((resource) => {
+      this._items.push(new ExternalGpgKeyEntity(resource, { clone: false }));
     });
 
     // We do not keep original props
@@ -58,8 +65,8 @@ class ExternalGpgKeyCollection extends EntityCollection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": ExternalGpgKeyEntity.getSchema(),
+      type: "array",
+      items: ExternalGpgKeyEntity.getSchema(),
     };
   }
 

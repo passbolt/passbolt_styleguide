@@ -20,27 +20,23 @@ class PassboltResponsePaginationHeaderEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "count",
-        "limit",
-        "page",
-      ],
-      "properties": {
-        "count": {
-          "type": "integer",
-          "minimum": 0
+      type: "object",
+      required: ["count", "limit", "page"],
+      properties: {
+        count: {
+          type: "integer",
+          minimum: 0,
         },
-        "limit": {
-          "type": "integer",
-          "minimum": 0,
-          "nullable": true,
+        limit: {
+          type: "integer",
+          minimum: 0,
+          nullable: true,
         },
-        "page": {
-          "type": "integer",
-          "minimum": 0
+        page: {
+          type: "integer",
+          minimum: 0,
         },
-      }
+      },
     };
   }
 

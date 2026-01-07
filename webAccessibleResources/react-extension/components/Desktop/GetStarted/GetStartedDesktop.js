@@ -13,9 +13,12 @@
  */
 
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {ImportAccountKitWorkflowStates, withImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
+import {
+  ImportAccountKitWorkflowStates,
+  withImportAccountKitContext,
+} from "../../../contexts/Desktop/ImportAccountKitContext";
 
 class GetStartedDesktop extends React.Component {
   /**
@@ -50,20 +53,27 @@ class GetStartedDesktop extends React.Component {
   render() {
     return (
       <div className="get-started-desktop">
-        <h1><Trans>Get started !</Trans></h1>
+        <h1>
+          <Trans>Get started !</Trans>
+        </h1>
         <p className="get-started-description">
-          <Trans>You need to upload an account kit to start using the desktop app. </Trans> <br/>
+          <Trans>You need to upload an account kit to start using the desktop app. </Trans> <br />
           <Trans>Please follow these instructions:</Trans>
         </p>
-        <p><span className="step">1</span>Authenticate on your browser extension</p>
-        <p><span className="step">2</span>Go to your profile</p>
-        <p><span className="step">3</span>Go to the Desktop app setup section</p>
-        <p><span className="step">4</span>Download the account kit</p>
+        <p>
+          <span className="step">1</span>Authenticate on your browser extension
+        </p>
+        <p>
+          <span className="step">2</span>Go to your profile
+        </p>
+        <p>
+          <span className="step">3</span>Go to the Desktop app setup section
+        </p>
+        <p>
+          <span className="step">4</span>Download the account kit
+        </p>
         <div className="form-actions">
-          <button
-            type="button"
-            onClick={this.handleStart}
-            className="button primary form get-started">
+          <button type="button" onClick={this.handleStart} className="button primary form get-started">
             <Trans>Start</Trans>
           </button>
         </div>
@@ -77,4 +87,4 @@ GetStartedDesktop.propTypes = {
   importAccountKitContext: PropTypes.any.isRequired, // The import account kit context
 };
 
-export default withImportAccountKitContext(withTranslation('common')(GetStartedDesktop));
+export default withImportAccountKitContext(withTranslation("common")(GetStartedDesktop));

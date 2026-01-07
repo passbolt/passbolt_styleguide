@@ -25,7 +25,7 @@ class SecretDataV4StandaloneTotpEntity extends SecretDataEntity {
 
     // Associations
     if (this._props.totp) {
-      this._totp = new TotpEntity(this._props.totp, {...options, clone: false});
+      this._totp = new TotpEntity(this._props.totp, { ...options, clone: false });
       delete this._props.totp;
     }
   }
@@ -35,13 +35,11 @@ class SecretDataV4StandaloneTotpEntity extends SecretDataEntity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "totp"
-      ],
-      "properties": {
-        "totp": TotpEntity.getSchema(),
-      }
+      type: "object",
+      required: ["totp"],
+      properties: {
+        totp: TotpEntity.getSchema(),
+      },
     };
   }
 
@@ -50,7 +48,7 @@ class SecretDataV4StandaloneTotpEntity extends SecretDataEntity {
    */
   static get associations() {
     return {
-      totp: TotpEntity
+      totp: TotpEntity,
     };
   }
 
@@ -62,10 +60,10 @@ class SecretDataV4StandaloneTotpEntity extends SecretDataEntity {
    */
   static createFromDefault(data = {}, options) {
     const defaultData = {
-      totp: TotpEntity.createFromDefault({}, {validate: false}).toDto()
+      totp: TotpEntity.createFromDefault({}, { validate: false }).toDto(),
     };
 
-    return new SecretDataV4StandaloneTotpEntity({...defaultData, ...data}, options);
+    return new SecretDataV4StandaloneTotpEntity({ ...defaultData, ...data }, options);
   }
 
   /**
@@ -77,7 +75,7 @@ class SecretDataV4StandaloneTotpEntity extends SecretDataEntity {
     assertString(propName);
     switch (propName) {
       case "totp":
-        return TotpEntity.createFromDefault({}, {validate: false}).toDto();
+        return TotpEntity.createFromDefault({}, { validate: false }).toDto();
       default:
         return;
     }
@@ -90,7 +88,7 @@ class SecretDataV4StandaloneTotpEntity extends SecretDataEntity {
    */
   areSecretsDifferent(secretDto) {
     const totp = this.totp.toDto();
-    return Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
+    return Object.keys(totp).some((key) => totp[key] !== secretDto.totp?.[key]);
   }
 
   /**

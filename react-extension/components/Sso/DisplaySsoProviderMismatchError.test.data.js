@@ -20,8 +20,8 @@ import SsoProviders from "../Administration/ManageSsoSettings/SsoProviders.data"
  */
 export function defaultProps(props = {}) {
   const defaultProps = {
-    newProvider: SsoProviders.find(provider => provider.id === "google"),
-    onAcceptNewProvider: jest.fn()
+    newProvider: SsoProviders.find((provider) => provider.id === "google"),
+    onAcceptNewProvider: jest.fn(),
   };
   return Object.assign(defaultProps, props);
 }

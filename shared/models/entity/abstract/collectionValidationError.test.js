@@ -95,22 +95,22 @@ describe("CollectionValidationError", () => {
       collectionValidationError2.addCollectionValidationError("rule_name_4", "error-message_4");
       error.addItemValidationError(57, collectionValidationError2);
       const expectedDetails = {
-        "2": {
-          "property_name": {
-            "rule_name": "error-message"
-          }
+        2: {
+          property_name: {
+            rule_name: "error-message",
+          },
         },
-        "15": {
-          "rule_name_3": "error-message_3"
+        15: {
+          rule_name_3: "error-message_3",
         },
-        "42": {
-          "property_name_2": {
-            "rule_name_2": "error-message_2"
-          }
+        42: {
+          property_name_2: {
+            rule_name_2: "error-message_2",
+          },
         },
-        "57": {
-          "rule_name_4": "error-message_4"
-        }
+        57: {
+          rule_name_4: "error-message_4",
+        },
       };
       expect(error.details).toEqual(expectedDetails);
     });

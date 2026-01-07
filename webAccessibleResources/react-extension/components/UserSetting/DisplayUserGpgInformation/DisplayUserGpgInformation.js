@@ -11,16 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 
-import React from 'react';
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {Trans, withTranslation} from "react-i18next";
+import React from "react";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import Select from "../../Common/Select/Select";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 import DownloadFileSVG from "../../../../img/svg/download_file.svg";
-import {GPG_KEY_TYPES} from '../../UserDetails/DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey';
+import { GPG_KEY_TYPES } from "../../UserDetails/DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey";
 
 /**
  * This component displays the user GPG information
@@ -63,7 +63,7 @@ class DisplayUserGpgInformation extends React.Component {
    */
   get defaultState() {
     return {
-      gpgKeyInfo: null
+      gpgKeyInfo: null,
     };
   }
 
@@ -80,7 +80,7 @@ class DisplayUserGpgInformation extends React.Component {
   async populate() {
     if (this.user) {
       const gpgKeyInfo = await this.fetchGpgkeyInfo();
-      await this.setState({gpgKeyInfo});
+      await this.setState({ gpgKeyInfo });
     }
   }
 
@@ -92,10 +92,9 @@ class DisplayUserGpgInformation extends React.Component {
     const canVoid = this.user && this.state.gpgKeyInfo;
     if (mustPopulate) {
       const gpgKeyInfo = await this.fetchGpgkeyInfo();
-      await this.setState({gpgKeyInfo});
+      await this.setState({ gpgKeyInfo });
     } else if (canVoid) {
-      this.populateIfNeeded = () => {
-      };
+      this.populateIfNeeded = () => {};
     }
   }
 
@@ -103,7 +102,10 @@ class DisplayUserGpgInformation extends React.Component {
    * Fetch the user key id
    */
   async fetchGpgkeyInfo() {
-    const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    const gpgkeyInfo = await this.props.context.port.request(
+      "passbolt.keyring.get-public-key-info-by-user",
+      this.user.id,
+    );
     // format the gpgkey info.
     const keyId = gpgkeyInfo.key_id;
     const type = GPG_KEY_TYPES[gpgkeyInfo.algorithm];
@@ -122,7 +124,7 @@ class DisplayUserGpgInformation extends React.Component {
     const fingerprint = gpgkeyInfo.fingerprint;
     const length = gpgkeyInfo.length;
 
-    return {keyId, type, uIds, created, expires, fingerprint, length, curve};
+    return { keyId, type, uIds, created, expires, fingerprint, length, curve };
   }
 
   /**
@@ -132,7 +134,9 @@ class DisplayUserGpgInformation extends React.Component {
    */
   formatDate(data) {
     try {
-      return DateTime.fromJSDate(new Date(data)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
+      return DateTime.fromJSDate(new Date(data))
+        .setLocale(this.props.context.locale)
+        .toLocaleString(DateTime.DATETIME_FULL);
     } catch (error) {
       console.error(`Failed to format date "${data}":`, error);
       return "";
@@ -154,8 +158,14 @@ class DisplayUserGpgInformation extends React.Component {
   get fingerprint() {
     let fingerprint = this.gpgKeyInfo.fingerprint;
     if (fingerprint) {
-      fingerprint = fingerprint.toUpperCase().replace(/.{4}(?=.)/g, '$& ');
-      fingerprint = <>{fingerprint.substr(0, 24)}<br/>{fingerprint.substr(25)}</>;
+      fingerprint = fingerprint.toUpperCase().replace(/.{4}(?=.)/g, "$& ");
+      fingerprint = (
+        <>
+          {fingerprint.substr(0, 24)}
+          <br />
+          {fingerprint.substr(25)}
+        </>
+      );
     }
     return fingerprint;
   }
@@ -199,73 +209,93 @@ class DisplayUserGpgInformation extends React.Component {
       <>
         <div className="main-column key-info">
           <div className="main-content">
-            <h3><Trans>Information for public and secret key</Trans></h3>
+            <h3>
+              <Trans>Information for public and secret key</Trans>
+            </h3>
             <table className="table-info" id="privkeyinfo">
               <tbody>
                 <tr>
-                  <td><Trans>Key Id</Trans></td>
+                  <td>
+                    <Trans>Key Id</Trans>
+                  </td>
                   <td className="keyId">
                     <Tooltip
                       message={this.translate("sorry you can only have one key set at the moment")}
-                      direction="top">
+                      direction="top"
+                    >
                       <Select
                         className="inline"
                         id="keyId"
                         value={this.gpgKeyInfo.keyId}
-                        items={[{value: this.gpgKeyInfo.keyId, label: this.gpgKeyInfo.keyId}]}
-                        disabled={true}/>
+                        items={[{ value: this.gpgKeyInfo.keyId, label: this.gpgKeyInfo.keyId }]}
+                        disabled={true}
+                      />
                     </Tooltip>
                   </td>
                 </tr>
                 <tr>
-                  <td><Trans>Uid</Trans></td>
+                  <td>
+                    <Trans>Uid</Trans>
+                  </td>
                   <td className="uid">{this.uId}</td>
                 </tr>
                 <tr>
-                  <td><Trans>Fingerprint</Trans></td>
-                  <td className="fingerprint">{this.gpgKeyInfo.fingerprint && <Fingerprint fingerprint={this.gpgKeyInfo.fingerprint}/>}</td>
+                  <td>
+                    <Trans>Fingerprint</Trans>
+                  </td>
+                  <td className="fingerprint">
+                    {this.gpgKeyInfo.fingerprint && <Fingerprint fingerprint={this.gpgKeyInfo.fingerprint} />}
+                  </td>
                 </tr>
                 <tr>
-                  <td><Trans>Created</Trans></td>
+                  <td>
+                    <Trans>Created</Trans>
+                  </td>
                   <td className="created">{this.gpgKeyInfo.created}</td>
                 </tr>
                 <tr>
-                  <td><Trans>Expires</Trans></td>
+                  <td>
+                    <Trans>Expires</Trans>
+                  </td>
                   <td className="expires">{this.gpgKeyInfo.expires}</td>
                 </tr>
                 <tr>
-                  <td><Trans>Key length</Trans></td>
+                  <td>
+                    <Trans>Key length</Trans>
+                  </td>
                   <td className="length">{this.gpgKeyInfo.length}</td>
                 </tr>
                 <tr>
-                  <td><Trans>Algorithm</Trans></td>
+                  <td>
+                    <Trans>Algorithm</Trans>
+                  </td>
                   <td className="algorithm">{this.gpgKeyInfo.type}</td>
                 </tr>
-                {this.gpgKeyInfo.curve &&
+                {this.gpgKeyInfo.curve && (
                   <tr>
-                    <td><Trans>Curve</Trans></td>
+                    <td>
+                      <Trans>Curve</Trans>
+                    </td>
                     <td className="curve">{this.gpgKeyInfo.curve}</td>
                   </tr>
-                }
+                )}
               </tbody>
             </table>
           </div>
         </div>
         <div className="actions-wrapper">
           <div className="left-actions-wrapper">
-            <button
-              type="button"
-              className="button secondary"
-              onClick={this.handleDownloadPublicKey}>
-              <DownloadFileSVG/>
-              <span><Trans>Public</Trans></span>
+            <button type="button" className="button secondary" onClick={this.handleDownloadPublicKey}>
+              <DownloadFileSVG />
+              <span>
+                <Trans>Public</Trans>
+              </span>
             </button>
-            <button
-              type="button"
-              className="button secondary"
-              onClick={this.handleDownloadPrivateKey}>
-              <DownloadFileSVG/>
-              <span><Trans>Private</Trans></span>
+            <button type="button" className="button secondary" onClick={this.handleDownloadPrivateKey}>
+              <DownloadFileSVG />
+              <span>
+                <Trans>Private</Trans>
+              </span>
             </button>
           </div>
         </div>
@@ -279,5 +309,4 @@ DisplayUserGpgInformation.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(DisplayUserGpgInformation));
-
+export default withAppContext(withTranslation("common")(DisplayUserGpgInformation));

@@ -112,7 +112,7 @@ class ResourceViewModel {
   cloneWithMutation(field, value) {
     const clone = {
       ...this,
-      [field]: value
+      [field]: value,
     };
     return new this.constructor(clone);
   }

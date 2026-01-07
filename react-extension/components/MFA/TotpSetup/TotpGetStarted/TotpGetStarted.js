@@ -12,16 +12,15 @@
  * @since         4.4.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
-import {Trans} from 'react-i18next';
-import {MfaSettingsWorkflowStates, withMfa} from "../../../../contexts/MFAContext";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import { withTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
+import { MfaSettingsWorkflowStates, withMfa } from "../../../../contexts/MFAContext";
+import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
 import TotpPhoneIllustration from "./TotpPhoneIllustration";
 import TotpSignInIllustration from "./TotpSignInIllustration";
 import TotpEnterCodeIllustration from "./TotpEnterCodeIllustration";
-
 
 /**
  * This component will display the get started Totp setup
@@ -61,36 +60,44 @@ class TotpGetStarted extends Component {
       <>
         <div className="main-column mfa-setup totp-get-started">
           <div className="main-content how-it-works">
-            <h3><Trans>Getting started with Time based One Time Password (TOTP)</Trans></h3>
-            <h4 className="no-border"><Trans>How does it work?</Trans></h4>
+            <h3>
+              <Trans>Getting started with Time based One Time Password (TOTP)</Trans>
+            </h3>
+            <h4 className="no-border">
+              <Trans>How does it work?</Trans>
+            </h4>
             <div className="instruction">
               <div className="step sign-in-illustration">
                 <TotpSignInIllustration />
-                <p><Trans>You sign in to passbolt just like you normally do.</Trans></p>
+                <p>
+                  <Trans>You sign in to passbolt just like you normally do.</Trans>
+                </p>
               </div>
               <div className="step phone-illustration">
                 <TotpPhoneIllustration />
-                <p><Trans>When using a new browser, you need an additional code from your phone.</Trans></p>
+                <p>
+                  <Trans>When using a new browser, you need an additional code from your phone.</Trans>
+                </p>
               </div>
               <div className="step enter-code-illustration">
                 <TotpEnterCodeIllustration />
-                <p><Trans>Once you enter this code, you can log in.</Trans></p>
+                <p>
+                  <Trans>Once you enter this code, you can log in.</Trans>
+                </p>
               </div>
             </div>
           </div>
         </div>
         <div className="actions-wrapper">
-          <button
-            className="button cancel secondary"
-            type='button'
-            onClick={this.handleCancelClick}>
-            <span><Trans>Cancel</Trans></span>
+          <button className="button cancel secondary" type="button" onClick={this.handleCancelClick}>
+            <span>
+              <Trans>Cancel</Trans>
+            </span>
           </button>
-          <button
-            className="button primary form"
-            type='button'
-            onClick={this.handleGetStartedClick}>
-            <span><Trans>Get started</Trans></span>
+          <button className="button primary form" type="button" onClick={this.handleGetStartedClick}>
+            <span>
+              <Trans>Get started</Trans>
+            </span>
           </button>
         </div>
       </>

@@ -19,6 +19,6 @@
 export function defaultProps() {
   return {
     onClose: jest.fn(),
-    onSubmit: jest.fn()
+    onSubmit: jest.fn(),
   };
 }

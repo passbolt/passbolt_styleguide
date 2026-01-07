@@ -11,9 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.3.0
  */
-import {isValidUuid} from "../../../utils/assertions";
+import { isValidUuid } from "../../../utils/assertions";
 
-export const RESOURCES_UPDATE_LOCAL_STORAGE_BY_PARENT_FOLDER_ID = "passbolt.resources.update-local-storage-by-folder-parent-id";
+export const RESOURCES_UPDATE_LOCAL_STORAGE_BY_PARENT_FOLDER_ID =
+  "passbolt.resources.update-local-storage-by-folder-parent-id";
 
 class ResourcesServiceWorkerService {
   /**

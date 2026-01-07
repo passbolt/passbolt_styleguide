@@ -15,9 +15,7 @@
 /**
  * Unit tests on ChooseAccountRecoveryPreference in regard of specifications
  */
-import {
-  defaultProps, optInPolicyProps, optOutPolicyProps,
-} from "./ChooseAccountRecoveryPreference.test.data";
+import { defaultProps, optInPolicyProps, optOutPolicyProps } from "./ChooseAccountRecoveryPreference.test.data";
 import ChooseAccountRecoveryPreferencePage from "./ChooseAccountRecoveryPreference.test.page";
 
 beforeEach(() => {
@@ -27,11 +25,11 @@ beforeEach(() => {
 describe("See the Choose Account Recovery Preference page", () => {
   let page; // The page to test again
 
-  describe('As user in the setup process, I can see the account recovery setup page', () => {
+  describe("As user in the setup process, I can see the account recovery setup page", () => {
     /**
      * I should see the account recovery setup page
      */
-    it('As user in the setup process who generated an OpenPGP key, I can see the Mandatory account recovery setup page', async() => {
+    it("As user in the setup process who generated an OpenPGP key, I can see the Mandatory account recovery setup page", async () => {
       expect.assertions(5);
       const props = defaultProps(); // The props to pass
       page = new ChooseAccountRecoveryPreferencePage(props);
@@ -47,10 +45,10 @@ describe("See the Choose Account Recovery Preference page", () => {
       expect(page.nextButton.textContent).toBe("Next");
 
       // generate new key button exists
-      expect(page.generateNewKeyButton.textContent).toBe('Generate new key instead');
+      expect(page.generateNewKeyButton.textContent).toBe("Generate new key instead");
     });
 
-    it('As user in the setup process who generated an OpenPGP key, I can see the Opt-out account recovery setup page', async() => {
+    it("As user in the setup process who generated an OpenPGP key, I can see the Opt-out account recovery setup page", async () => {
       expect.assertions(4);
       const props = optOutPolicyProps(); // The props to pass
       page = new ChooseAccountRecoveryPreferencePage(props);
@@ -64,7 +62,7 @@ describe("See the Choose Account Recovery Preference page", () => {
       expect(page.rejectRadioButton.isChecked).toBeFalsy();
     });
 
-    it('As user in the setup process who generated an OpenPGP key, I can see the Opt-in account recovery setup page', async() => {
+    it("As user in the setup process who generated an OpenPGP key, I can see the Opt-in account recovery setup page", async () => {
       expect.assertions(4);
       const props = optInPolicyProps(); // The props to pass
       page = new ChooseAccountRecoveryPreferencePage(props);
@@ -78,9 +76,9 @@ describe("See the Choose Account Recovery Preference page", () => {
       expect(page.rejectRadioButton.isChecked).toBeTruthy();
     });
 
-    it('As user I can go generate a new key', async() => {
+    it("As user I can go generate a new key", async () => {
       const onGenerateNewKeyInstead = jest.fn(() => Promise.resolve());
-      const props = defaultProps({onGenerateNewKeyInstead}); // The props to pass
+      const props = defaultProps({ onGenerateNewKeyInstead }); // The props to pass
       page = new ChooseAccountRecoveryPreferencePage(props);
 
       expect.assertions(2);

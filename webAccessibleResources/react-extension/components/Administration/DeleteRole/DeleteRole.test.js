@@ -15,7 +15,7 @@
 /**
  * Unit tests on DeleteRole in regard of specifications
  */
-import {defaultProps} from "./DeleteRole.test.data";
+import { defaultProps } from "./DeleteRole.test.data";
 import DeleteRolePage from "./DeleteRole.test.page";
 
 beforeEach(() => {
@@ -31,8 +31,8 @@ describe("Delete role", () => {
     page = new DeleteRolePage(props);
   });
 
-  describe('As AD I should delete a role', () => {
-    it('As AD I should submit an delete request with nothing updated', async() => {
+  describe("As AD I should delete a role", () => {
+    it("As AD I should submit an delete request with nothing updated", async () => {
       expect.assertions(2);
       await page.delete();
       expect(props.onSubmit).toHaveBeenCalledWith(props.role);
@@ -40,22 +40,22 @@ describe("Delete role", () => {
     });
   });
 
-  describe('AS AD I should cancel the operation', () => {
-    it('AS AD I should cancel the operation by closing the dialog', async() => {
+  describe("AS AD I should cancel the operation", () => {
+    it("AS AD I should cancel the operation by closing the dialog", async () => {
       expect.assertions(1);
       await page.close();
       expect(props.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it('AS AD I should cancel the operation by explicitly cancelling', async() => {
+    it("AS AD I should cancel the operation by explicitly cancelling", async () => {
       expect.assertions(1);
       await page.cancel();
       expect(props.onClose).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('AS AD I should not perform actions during the role deletion', () => {
-    it('AS AD I should not cancel, submit or change data during the role deletion', async() => {
+  describe("AS AD I should not perform actions during the role deletion", () => {
+    it("AS AD I should not cancel, submit or change data during the role deletion", async () => {
       expect.assertions(3);
       const inProgressFn = () => {
         expect(page.canCancel).toBeFalsy();

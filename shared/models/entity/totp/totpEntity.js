@@ -27,22 +27,17 @@ class TotpEntity extends EntityV2 {
   static getSchema() {
     return {
       type: "object",
-      required: [
-        "secret_key",
-        "period",
-        "digits",
-        "algorithm",
-      ],
+      required: ["secret_key", "period", "digits", "algorithm"],
       properties: {
         secret_key: {
           type: "string",
           minLength: 1,
           pattern: /^[A-Z2-7]+=*$/, // BASE32
-          maxLength: RESOURCE_TOTP_KEY_MAX_LENGTH
+          maxLength: RESOURCE_TOTP_KEY_MAX_LENGTH,
         },
         period: {
           type: "integer",
-          minimum: 1
+          minimum: 1,
         },
         digits: {
           type: "integer",
@@ -51,9 +46,9 @@ class TotpEntity extends EntityV2 {
         },
         algorithm: {
           type: "string",
-          enum: SUPPORTED_TOTP_ALGORITHMS
-        }
-      }
+          enum: SUPPORTED_TOTP_ALGORITHMS,
+        },
+      },
     };
   }
 
@@ -68,7 +63,7 @@ class TotpEntity extends EntityV2 {
      * - Remove all special characters.
      */
     if (typeof this._props.secret_key === "string") {
-      this._props.secret_key = this._props.secret_key?.replace(/(\W|_|\s)/g, '').toUpperCase();
+      this._props.secret_key = this._props.secret_key?.replace(/(\W|_|\s)/g, "").toUpperCase();
     }
 
     /*
@@ -92,10 +87,10 @@ class TotpEntity extends EntityV2 {
       secret_key: "",
       period: 30,
       digits: 6,
-      algorithm: DEFAULT_ALGORITHM
+      algorithm: DEFAULT_ALGORITHM,
     };
 
-    return new TotpEntity({...defaultData, ...data}, options);
+    return new TotpEntity({ ...defaultData, ...data }, options);
   }
 
   /**
@@ -106,10 +101,10 @@ class TotpEntity extends EntityV2 {
    */
   static createTotpFromUrl(url, options) {
     const totp = {
-      secret_key: url.searchParams.get('secret'),
-      algorithm: url.searchParams.get('algorithm') || DEFAULT_ALGORITHM,
-      digits: parseInt(url.searchParams.get('digits'), 10) || 6,
-      period: parseInt(url.searchParams.get('period'), 10) || 30,
+      secret_key: url.searchParams.get("secret"),
+      algorithm: url.searchParams.get("algorithm") || DEFAULT_ALGORITHM,
+      digits: parseInt(url.searchParams.get("digits"), 10) || 6,
+      period: parseInt(url.searchParams.get("period"), 10) || 30,
     };
     return new TotpEntity(totp, options);
   }

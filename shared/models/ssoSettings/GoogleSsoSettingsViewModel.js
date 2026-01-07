@@ -49,18 +49,15 @@ class GoogleSsoSettingsViewModel {
     const baseEntitySchema = GoogleSsoSettingsEntity.getSchema();
     return {
       type: "object",
-      required: [
-        "client_id",
-        "client_secret",
-      ],
+      required: ["client_id", "client_secret"],
       properties: {
         id: {
-          "type": "string",
-          "format": "uuid",
+          type: "string",
+          format: "uuid",
         },
         client_id: baseEntitySchema.properties.client_id,
         client_secret: baseEntitySchema.properties.client_secret,
-      }
+      },
     };
   }
 
@@ -71,11 +68,8 @@ class GoogleSsoSettingsViewModel {
    * @returns {boolean}
    */
   static isDataDifferent(a, b) {
-    const keys = [
-      "client_id",
-      "client_secret",
-    ];
-    return keys.some(key => a[key] !== b[key]);
+    const keys = ["client_id", "client_secret"];
+    return keys.some((key) => a[key] !== b[key]);
   }
 
   /**
@@ -159,7 +153,7 @@ class GoogleSsoSettingsViewModel {
       data: {
         client_id: this.client_id,
         client_secret: this.client_secret,
-      }
+      },
     };
 
     return entityDto;

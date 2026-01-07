@@ -17,136 +17,152 @@ import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import {
   defaultProps,
   propsWithAllResourcesSelected,
-  propsWithFilteredResources, propsWithFilteredResourcesAndColumnsHidden,
+  propsWithFilteredResources,
+  propsWithFilteredResourcesAndColumnsHidden,
   propsWithFilteredResourcesAndDenyUiAction,
   propsWithNoResourcesForFilter,
 } from "./DisplayResourcesList.test.data";
 import DisplayResourcesListPage from "./DisplayResourcesList.test.page";
-import {waitFor} from "@testing-library/dom";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import { waitFor } from "@testing-library/dom";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
-import {ColumnFields} from "../../../../shared/models/column/ColumnModel";
-import ColumnsResourceSettingCollection
-  from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
-import {defaultTotpViewModelDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import { ColumnFields } from "../../../../shared/models/column/ColumnModel";
+import ColumnsResourceSettingCollection from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
+import { defaultTotpViewModelDto } from "../../../../shared/models/entity/totp/totpDto.test.data";
 
 beforeEach(() => {
   jest.resetModules();
   // Need to mock client width value for column calculation
-  Object.defineProperty(HTMLElement.prototype, 'clientWidth', {
-    configurable: true, value: 1416
+  Object.defineProperty(HTMLElement.prototype, "clientWidth", {
+    configurable: true,
+    value: 1416,
   });
 });
 
 describe("Display Resources", () => {
   describe("As LU, I should see the appropriate list of resources", () => {
-    it('As LU, I should see initially an empty content when there are no resources', async() => {
+    it("As LU, I should see initially an empty content when there are no resources", async () => {
       const props = defaultProps();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
-    it('As LU, I should see an empty content when there are no resources matching the text search', async() => {
+    it("As LU, I should see an empty content when there are no resources matching the text search", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.TEXT));
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
-    it('As LU, I should see an empty content when there are no resources matching the favorite search', async() => {
+    it("As LU, I should see an empty content when there are no resources matching the favorite search", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.FAVORITE));
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
-    it('As LU, I should see an empty content when there are no resources matching the group filter', async() => {
+    it("As LU, I should see an empty content when there are no resources matching the group filter", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.GROUP));
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
-    it('As LU, I should see an empty content when there are no resources matching the folder filter', async() => {
+    it("As LU, I should see an empty content when there are no resources matching the folder filter", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.FOLDER));
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
-    it('As LU, I should see an empty content when there are no resources matching the shared with me search', async() => {
-      const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.SHARED_WITH_ME));
+    it("As LU, I should see an empty content when there are no resources matching the shared with me search", async () => {
+      const page = new DisplayResourcesListPage(
+        propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.SHARED_WITH_ME),
+      );
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
-    it('As LU, I should see an empty content when there are no resources matching the expired search', async() => {
+    it("As LU, I should see an empty content when there are no resources matching the expired search", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.EXPIRED));
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
-    it('As LU, I should see an empty content when there are no private resources matching the private resource search', async() => {
+    it("As LU, I should see an empty content when there are no private resources matching the private resource search", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.PRIVATE));
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
-
-    it('AS LU, I should see the appropriate filtered list of resources', async() => {
+    it("AS LU, I should see the appropriate filtered list of resources", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       expect(page.resourcesCount).toBe(6);
-      expect(page.resource(1).name).toBe('apache');
-      expect(page.resource(2).name).toBe('bower');
-      expect(page.resource(3).name).toBe('test');
-      expect(page.resource(4).name).toBe('totp');
-      expect(page.resource(5).name).toBe('standalone totp');
-      expect(page.resource(6).name).toBe('will-expire');
+      expect(page.resource(1).name).toBe("apache");
+      expect(page.resource(2).name).toBe("bower");
+      expect(page.resource(3).name).toBe("test");
+      expect(page.resource(4).name).toBe("totp");
+      expect(page.resource(5).name).toBe("standalone totp");
+      expect(page.resource(6).name).toBe("will-expire");
     });
   });
 
-  describe('As LU, I should select resources', () => {
-    it('As LU, I should select one resource', async() => {
+  describe("As LU, I should select resources", () => {
+    it("As LU, I should select one resource", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       await page.resource(1).select();
-      expect(props.resourceWorkspaceContext.onResourceSelected.single).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0]);
+      expect(props.resourceWorkspaceContext.onResourceSelected.single).toHaveBeenCalledWith(
+        props.resourceWorkspaceContext.filteredResources[0],
+      );
     });
 
-    it('As LU, I should unselect one resource', async() => {
+    it("As LU, I should unselect one resource", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       await page.resource(1).select();
-      expect(props.resourceWorkspaceContext.onResourceSelected.single).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0]);
+      expect(props.resourceWorkspaceContext.onResourceSelected.single).toHaveBeenCalledWith(
+        props.resourceWorkspaceContext.filteredResources[0],
+      );
       await page.resource(1).select();
-      expect(props.resourceWorkspaceContext.onResourceSelected.single).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0]);
+      expect(props.resourceWorkspaceContext.onResourceSelected.single).toHaveBeenCalledWith(
+        props.resourceWorkspaceContext.filteredResources[0],
+      );
     });
 
-    it('As LU, I should select multiple resources', async() => {
+    it("As LU, I should select multiple resources", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       await page.resource(1).selectWithCheckbox();
       await page.resource(2).selectWithCheckbox();
-      expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0]);
-      expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[1]);
+      expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(
+        props.resourceWorkspaceContext.filteredResources[0],
+      );
+      expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(
+        props.resourceWorkspaceContext.filteredResources[1],
+      );
     });
 
-    it('As LU, I should select a range of resources', async() => {
+    it("As LU, I should select a range of resources", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       await page.resource(1).selectWithCheckbox();
       await page.resource(3).selectRangeCheckbox();
-      expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0]);
-      expect(props.resourceWorkspaceContext.onResourceSelected.range).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[2]);
+      expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(
+        props.resourceWorkspaceContext.filteredResources[0],
+      );
+      expect(props.resourceWorkspaceContext.onResourceSelected.range).toHaveBeenCalledWith(
+        props.resourceWorkspaceContext.filteredResources[2],
+      );
     });
 
-    it('As LU, I should select all resources', async() => {
+    it("As LU, I should select all resources", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
@@ -154,7 +170,7 @@ describe("Display Resources", () => {
       expect(props.resourceWorkspaceContext.onResourceSelected.all).toHaveBeenCalled();
     });
 
-    it('As LU, I should unselect all resources', async() => {
+    it("As LU, I should unselect all resources", async () => {
       const props = propsWithAllResourcesSelected();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
@@ -163,7 +179,7 @@ describe("Display Resources", () => {
     });
   });
 
-  describe('As LU, I should sort the resource by property column', () => {
+  describe("As LU, I should sort the resource by property column", () => {
     let props, page;
 
     beforeEach(() => {
@@ -171,49 +187,51 @@ describe("Display Resources", () => {
       page = new DisplayResourcesListPage(props);
     });
 
-    it('As LU, I should sort the resources by favorite', async() => {
+    it("As LU, I should sort the resources by favorite", async () => {
       await page.sortByResourceFavorite();
       expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.FAVORITE);
     });
 
-    it('As LU, I should sort the resources by name', async() => {
+    it("As LU, I should sort the resources by name", async () => {
       await page.sortByResourceName();
       expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.METADATA_NAME);
     });
 
-    it('As LU, I should sort the resources by username', async() => {
-      jest.spyOn(props.resourceWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
+    it("As LU, I should sort the resources by username", async () => {
+      jest.spyOn(props.resourceWorkspaceContext, "onSorterChanged").mockImplementationOnce(() => {});
       await page.sortByUsername();
       expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.METADATA_USERNAME);
     });
 
-    it('As LU, I should sort the resources by modified', async() => {
+    it("As LU, I should sort the resources by modified", async () => {
       await page.sortByModified();
       expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.MODIFIED);
     });
 
-    it('As LU, I should sort the resources by uri', async() => {
+    it("As LU, I should sort the resources by uri", async () => {
       await page.sortByUri();
       expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.METADATA_URIS);
     });
 
-    it('As LU, I should sort the resources by expiration date', async() => {
+    it("As LU, I should sort the resources by expiration date", async () => {
       await page.sortByExpiry();
       expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.EXPIRED);
     });
   });
 
-  describe('As LU, I should be able to open the resource contextual menu', () => {
-    it('As LU, I should be able to open a contextual menu for a resource', async() => {
+  describe("As LU, I should be able to open the resource contextual menu", () => {
+    it("As LU, I should be able to open a contextual menu for a resource", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       await page.resource(1).openContextualMenu();
-      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(DisplayResourcesListContextualMenu, {resource: props.resourceWorkspaceContext.filteredResources[0]});
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(DisplayResourcesListContextualMenu, {
+        resource: props.resourceWorkspaceContext.filteredResources[0],
+      });
     });
   });
 
-  describe('As LU, I should favorite a resource', () => {
+  describe("As LU, I should favorite a resource", () => {
     let props, page;
 
     beforeEach(() => {
@@ -221,29 +239,35 @@ describe("Display Resources", () => {
       page = new DisplayResourcesListPage(props);
     });
 
-    it('As LU, I should be able to favorite a resources', async() => {
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => {});
+    it("As LU, I should be able to favorite a resources", async () => {
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => {});
       await page.resource(2).selectFavorite();
       await waitFor(() => {
-        expect(props.context.port.request).toHaveBeenCalledWith('passbolt.favorite.add', props.resourceWorkspaceContext.filteredResources[1].id);
+        expect(props.context.port.request).toHaveBeenCalledWith(
+          "passbolt.favorite.add",
+          props.resourceWorkspaceContext.filteredResources[1].id,
+        );
         expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       });
     });
 
-    it('As LU, I should be able to unfavorite a resources', async() => {
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => {});
+    it("As LU, I should be able to unfavorite a resources", async () => {
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => {});
       await page.resource(1).selectFavorite();
       await waitFor(() => {
-        expect(props.context.port.request).toHaveBeenCalledWith('passbolt.favorite.delete', props.resourceWorkspaceContext.filteredResources[0].id);
+        expect(props.context.port.request).toHaveBeenCalledWith(
+          "passbolt.favorite.delete",
+          props.resourceWorkspaceContext.filteredResources[0].id,
+        );
         expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       });
     });
   });
 
-  describe('As LU, I should copy the username.', () => {
-    it('As LU, I should be able to copy the username of a resource', async() => {
+  describe("As LU, I should copy the username.", () => {
+    it("As LU, I should be able to copy the username of a resource", async () => {
       expect.assertions(1);
 
       const props = propsWithFilteredResources();
@@ -251,87 +275,112 @@ describe("Display Resources", () => {
 
       await waitFor(() => {});
 
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
 
       await page.resource(1).selectUsername();
-      expect(props.clipboardContext.copy).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0].metadata.username, "The username has been copied to clipboard.");
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(
+        props.resourceWorkspaceContext.filteredResources[0].metadata.username,
+        "The username has been copied to clipboard.",
+      );
     });
   });
 
-  describe('As LU, I should copy the secret.', () => {
-    it('As LU, I should be able to copy the secret of resource', async() => {
+  describe("As LU, I should copy the secret.", () => {
+    it("As LU, I should be able to copy the secret of resource", async () => {
       expect.assertions(4);
       const props = propsWithFilteredResources();
       const totp = defaultTotpViewModelDto();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
 
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ password: "secret-password" }));
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
       await page.resource(1).selectPassword();
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[0].id);
-      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith('secret-password', "The password has been copied to clipboard.");
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.filteredResources[0].id,
+      );
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
+        "secret-password",
+        "The password has been copied to clipboard.",
+      );
 
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
+      jest
+        .spyOn(props.context.port, "request")
+        .mockImplementationOnce(() => ({ password: "secret-password", description: "", totp: totp }));
       await page.resource(4).selectTotp();
       const code = TotpCodeGeneratorService.generate(totp);
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[3].id);
-      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(code, "The TOTP has been copied to clipboard.");
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.filteredResources[3].id,
+      );
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
+        code,
+        "The TOTP has been copied to clipboard.",
+      );
     });
 
-    it('As LU, I should not be able to copy the secret of resource  if denied by RBAC.', async() => {
+    it("As LU, I should not be able to copy the secret of resource  if denied by RBAC.", async () => {
       expect.assertions(2);
       const props = propsWithFilteredResourcesAndDenyUiAction();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ password: "secret-password" }));
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
       expect(page.resource(1).copyPasswordLink.hasAttribute("disabled")).toBeTruthy();
       expect(page.resource(4).copyTotpLink.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
-  describe('As LU, I should preview the secret.', () => {
-    it('AS LU, I should preview the secret of a resource ', async() => {
+  describe("As LU, I should preview the secret.", () => {
+    it("AS LU, I should preview the secret of a resource ", async () => {
       expect.assertions(7);
       const props = propsWithFilteredResources();
       const totp = defaultTotpViewModelDto();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
 
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ password: "secret-password" }));
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
       await page.resource(1).selectViewPassword();
-      expect(page.resource(1).password).toBe('secret-password');
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[0].id);
+      expect(page.resource(1).password).toBe("secret-password");
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.filteredResources[0].id,
+      );
       await page.resource(1).selectViewPassword();
-      expect(page.resource(1).password).toBe('Copy to clipboard');
+      expect(page.resource(1).password).toBe("Copy to clipboard");
 
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
+      jest
+        .spyOn(props.context.port, "request")
+        .mockImplementationOnce(() => ({ password: "secret-password", description: "", totp: totp }));
       await page.resource(4).selectViewTotp();
       const code = TotpCodeGeneratorService.generate(totp);
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[3].id);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.filteredResources[3].id,
+      );
       expect(page.resource(4).totp.replaceAll(/\s+/g, "")).toBe(code);
       expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalledTimes(2);
       await page.resource(4).selectViewTotp();
-      expect(page.resource(4).totp).toBe('Copy TOTP to clipboard');
+      expect(page.resource(4).totp).toBe("Copy TOTP to clipboard");
     });
 
-    it('AS LU, I shouldn\'t be able to preview secret of a resource if disabled by API flag', async() => {
+    it("AS LU, I shouldn't be able to preview secret of a resource if disabled by API flag", async () => {
       const appContext = {
         siteSettings: {
-          getServerTimezone: () => '',
+          getServerTimezone: () => "",
           canIUse: () => false,
-        }
+        },
       };
       const context = defaultUserAppContext(appContext);
-      const props = propsWithFilteredResources({context}); // The props to pass
+      const props = propsWithFilteredResources({ context }); // The props to pass
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       await expect(page.resource(1).isViewPasswordExist).toBeFalsy();
     });
 
-    it('AS LU, I shouldn\'t be able to preview secret of a resource if denied by RBAC.', async() => {
+    it("AS LU, I shouldn't be able to preview secret of a resource if denied by RBAC.", async () => {
       const props = propsWithFilteredResourcesAndDenyUiAction();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
@@ -340,21 +389,19 @@ describe("Display Resources", () => {
     });
   });
 
-  describe('As LU, I should open the uri of a resource.', () => {
-    it('As LU, I should be able to follow the uri of a resource', async() => {
+  describe("As LU, I should open the uri of a resource.", () => {
+    it("As LU, I should be able to follow the uri of a resource", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {
-      });
-      jest.spyOn(props.resourceWorkspaceContext, 'onGoToResourceUriRequested').mockImplementationOnce(() => {
-      });
+      await waitFor(() => {});
+      jest.spyOn(props.resourceWorkspaceContext, "onGoToResourceUriRequested").mockImplementationOnce(() => {});
       await page.resource(1).selectUri();
       expect(props.resourceWorkspaceContext.onGoToResourceUriRequested).toHaveBeenCalled();
     });
   });
 
-  describe('As LU, I should go to the folder location of a resource.', () => {
-    it('As LU, I should be able to go to the folder root if a resource is not in a folder', async() => {
+  describe("As LU, I should go to the folder location of a resource.", () => {
+    it("As LU, I should be able to go to the folder root if a resource is not in a folder", async () => {
       expect.assertions(1);
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
@@ -363,7 +410,7 @@ describe("Display Resources", () => {
       expect(page.resource(1).locationLink).toStrictEqual("My workspace");
     });
 
-    it('As LU, I should be able to go to the folder location of a resource', async() => {
+    it("As LU, I should be able to go to the folder location of a resource", async () => {
       expect.assertions(1);
       const props = propsWithFilteredResourcesAndColumnsHidden();
       const page = new DisplayResourcesListPage(props);
@@ -373,8 +420,8 @@ describe("Display Resources", () => {
     });
   });
 
-  describe('As LU, I should resize columns of a resource.', () => {
-    it('As LU, I should be able to resize a column of a resource with mouse move', async() => {
+  describe("As LU, I should resize columns of a resource.", () => {
+    it("As LU, I should be able to resize a column of a resource with mouse move", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
@@ -421,7 +468,7 @@ describe("Display Resources", () => {
       expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(2 * resizableColumnCount);
     });
 
-    it('As LU, I should be able to resize a column to its default with double click', async() => {
+    it("As LU, I should be able to resize a column to its default with double click", async () => {
       expect.assertions(8);
 
       const props = propsWithFilteredResources();
@@ -447,16 +494,17 @@ describe("Display Resources", () => {
     });
   });
 
-  describe('As LU, I should reorder a column of a resource.', () => {
-    it('As LU, I should be able to reorder a column of a resource with mouse move', async() => {
+  describe("As LU, I should reorder a column of a resource.", () => {
+    it("As LU, I should be able to reorder a column of a resource with mouse move", async () => {
       expect.assertions(8);
 
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       // Need to resize before to check due to the actual width is negative
-      Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
-        configurable: true, value: 300
+      Object.defineProperty(HTMLElement.prototype, "offsetWidth", {
+        configurable: true,
+        value: 300,
       });
       // Reorder
       await page.columns(3).reorder(-250);
@@ -477,20 +525,21 @@ describe("Display Resources", () => {
     });
   });
 
-  describe('As LU, I should see columns of a resource with default value if at least one is negative.', () => {
-    it('As LU, I should see all columns width with default value value if one isnegative', async() => {
+  describe("As LU, I should see columns of a resource with default value if at least one is negative.", () => {
+    it("As LU, I should see all columns width with default value value if one isnegative", async () => {
       expect.assertions(9);
       const columnsResourceSetting = new ColumnsResourceSettingCollection([
-        {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "icon", label: "Icon", position: 2, show: true},
-        {id: "name", label: "Name", position: 3, show: true},
-        {id: "expired", label: "Expiry", position: 4, show: true},
-        {id: "username", label: "Username", position: 5, show: true, width: -100},
-        {id: "password", label: "Password", position: 6, show: true},
-        {id: "totp", label: "TOTP", position: 7, show: true},
-        {id: "uri", label: "URI", position: 8, show: true, width: 0},
-        {id: "modified", label: "Modified", position: 9, show: true},
-        {id: "location", label: "Location", position: 10, show: true}]);
+        { id: "favorite", label: "Favorite", position: 1, show: true },
+        { id: "icon", label: "Icon", position: 2, show: true },
+        { id: "name", label: "Name", position: 3, show: true },
+        { id: "expired", label: "Expiry", position: 4, show: true },
+        { id: "username", label: "Username", position: 5, show: true, width: -100 },
+        { id: "password", label: "Password", position: 6, show: true },
+        { id: "totp", label: "TOTP", position: 7, show: true },
+        { id: "uri", label: "URI", position: 8, show: true, width: 0 },
+        { id: "modified", label: "Modified", position: 9, show: true },
+        { id: "location", label: "Location", position: 10, show: true },
+      ]);
       const props = propsWithFilteredResources();
       props.resourceWorkspaceContext.columnsResourceSetting = columnsResourceSetting;
       const page = new DisplayResourcesListPage(props);
@@ -509,8 +558,8 @@ describe("Display Resources", () => {
     });
   });
 
-  describe('As LU, I should hide or show a column of a resource.', () => {
-    it('As LU, I should be able to hide or show a column of a resource', async() => {
+  describe("As LU, I should hide or show a column of a resource.", () => {
+    it("As LU, I should be able to hide or show a column of a resource", async () => {
       expect.assertions(4);
 
       const props = propsWithFilteredResourcesAndColumnsHidden();

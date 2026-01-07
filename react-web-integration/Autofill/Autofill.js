@@ -23,14 +23,14 @@ import InFormCallToActionField from "../lib/InForm/InFormCallToActionField";
  * - {string} secret The password to use
  * - {string} url to get domain
  */
-const fillForm = function(formData) {
+const fillForm = function (formData) {
   try {
     // Validate the fillForm parameters
     validateData(formData);
 
     // Check the requested document, current active document is initiated from same origin
     if (!isRequestInitiatedFromSameOrigin(formData.url, document.location.origin)) {
-      throw new Error('The request is not initiated from same origin');
+      throw new Error("The request is not initiated from same origin");
     }
 
     // Get password element
@@ -58,19 +58,19 @@ const fillForm = function(formData) {
       if (usernameElement !== null) {
         UserEventsService.autofill(usernameElement, formData.username);
       } else {
-        throw new Error('Unable to find the username element on this page.');
+        throw new Error("Unable to find the username element on this page.");
       }
     }
     // Throw an error when no password and username elements found on the page
     if (passwordElement === null && usernameElement === null) {
-      throw new Error('Unable to find the input elements on this page.');
+      throw new Error("Unable to find the input elements on this page.");
     } else {
       // Success message
-      port.emit(formData.requestId, 'SUCCESS');
+      port.emit(formData.requestId, "SUCCESS");
     }
   } catch (error) {
     console.error(error);
-    port.emit(formData.requestId, 'ERROR', {name: "Error", message: error.message});
+    port.emit(formData.requestId, "ERROR", { name: "Error", message: error.message });
   }
 };
 
@@ -81,7 +81,7 @@ const fillForm = function(formData) {
  * @param {string} documentUrl The current active document url
  * @return {Boolean} true
  */
-const isRequestInitiatedFromSameOrigin = function(requestedUrl, documentUrl) {
+const isRequestInitiatedFromSameOrigin = function (requestedUrl, documentUrl) {
   try {
     // requestedUrl - from quickaccess
     const parsedRequestedUrl = new URL(requestedUrl);
@@ -108,16 +108,16 @@ const isRequestInitiatedFromSameOrigin = function(requestedUrl, documentUrl) {
  * - {string} secret The autofill request secret parameter
  *  - {url} url The autofill request url parameter
  */
-const validateData = function(formData) {
-  const {username, secret, url} = formData;
-  if (typeof username !== 'string') {
-    throw new Error('The parameter username is not valid');
+const validateData = function (formData) {
+  const { username, secret, url } = formData;
+  if (typeof username !== "string") {
+    throw new Error("The parameter username is not valid");
   }
-  if (typeof secret !== 'string') {
-    throw new Error('The parameter secret is not valid');
+  if (typeof secret !== "string") {
+    throw new Error("The parameter secret is not valid");
   }
-  if (typeof url !== 'string') {
-    throw new Error('The parameter url is not valid');
+  if (typeof url !== "string") {
+    throw new Error("The parameter url is not valid");
   }
 };
 
@@ -126,7 +126,7 @@ const validateData = function(formData) {
  * @param {string} type - either `password` or `username` to find elements
  * @param {Object} formData - to check same origin request
  */
-const getInputElementFromIframe = function(type, formData) {
+const getInputElementFromIframe = function (type, formData) {
   const iframes = document.querySelectorAll("iframe");
   let inputElement = null;
   for (const iframe of iframes) {
@@ -145,7 +145,7 @@ const getInputElementFromIframe = function(type, formData) {
        */
       if (isRequestInitiatedFromSameOrigin(formData.url, contentDocument.location.origin)) {
         inputElement = findInputElementInIframe(type, contentDocument);
-        if (inputElement || '') {
+        if (inputElement || "") {
           break;
         }
       }
@@ -159,7 +159,7 @@ const getInputElementFromIframe = function(type, formData) {
  * @param {DomElement} iframe found on the page
  * @return {DomElement} iframe document
  */
-const getAccessedIframeContentDocument = function(iframe) {
+const getAccessedIframeContentDocument = function (iframe) {
   let iframeContentDocument = null;
   try {
     iframeContentDocument = iframe.contentDocument;
@@ -175,15 +175,15 @@ const getAccessedIframeContentDocument = function(iframe) {
  * @param {DomElement} iframe document to start the search.
  * @return {DomElement} iframe document
  */
-const findInputElementInIframe = function(type, iframeDocument) {
+const findInputElementInIframe = function (type, iframeDocument) {
   let inputElement = null;
-  if (type === 'password') {
+  if (type === "password") {
     inputElement = iframeDocument.querySelectorAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
     //  Password element has been found.
     if (inputElement.length) {
       return inputElement[0];
     }
-  } else if (type === 'username') {
+  } else if (type === "username") {
     inputElement = iframeDocument.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
     if (inputElement.length) {
       // When username element found, extract it from an array of dom elements.
@@ -201,7 +201,7 @@ const findInputElementInIframe = function(type, iframeDocument) {
  * Find the password element on the page.
  * @return {HTMLInputElement/null}
  */
-const getPasswordElement = function() {
+const getPasswordElement = function () {
   const passwordElements = InFormCallToActionField.findAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
 
   // A password element has been found.
@@ -221,9 +221,9 @@ const getPasswordElement = function() {
  * @param {DomElement} referenceElement The element reference to start the search.
  * @return {HTMLInputElement/null}
  */
-const getUsernameElementBasedOnPasswordElement = function(formData, referenceElement) {
+const getUsernameElementBasedOnPasswordElement = function (formData, referenceElement) {
   // No parent element found.
-  if (referenceElement || '') {
+  if (referenceElement || "") {
     const parentElement = referenceElement.parentElement;
     if (!parentElement) {
       return null;
@@ -252,7 +252,7 @@ const getUsernameElementBasedOnPasswordElement = function(formData, referenceEle
    * form in an iframe.
    */
   if (!usernameElement) {
-    usernameElement = getInputElementFromIframe('username', formData);
+    usernameElement = getInputElementFromIframe("username", formData);
   }
 
   // A username element has been found.
@@ -264,7 +264,7 @@ const getUsernameElementBasedOnPasswordElement = function(formData, referenceEle
  * @param {DomElement} fallbackUsernameElement The element reference to start the search.
  * @return {HTMLInputElement/null}
  */
-const getUsernameElement = function(formData, fallbackUsernameElement) {
+const getUsernameElement = function (formData, fallbackUsernameElement) {
   let usernameElement = null;
 
   // The username field can be an input field of type email or text.
@@ -279,7 +279,7 @@ const getUsernameElement = function(formData, fallbackUsernameElement) {
      * Search the username/email element in the page iframes. By instance reddit.com signup page serves its login
      * form in an iframe.
      */
-    usernameElement = getInputElementFromIframe('username', formData);
+    usernameElement = getInputElementFromIframe("username", formData);
   }
 
   // A username element has been found.
@@ -291,12 +291,12 @@ const getUsernameElement = function(formData, fallbackUsernameElement) {
  * @param {array} elements An array of dom elements
  * @return {DomElement/null}
  */
-const extractUsernameElementWithFallback = function(elements) {
+const extractUsernameElementWithFallback = function (elements) {
   let usernameElement = null;
   // Filter elements to find the field that has the highest odd to be the username field.
-  const inputAttributes = ['id', 'class', 'name', 'placeholder'];
+  const inputAttributes = ["id", "class", "name", "placeholder"];
   // @todo Translations should be added in order to increase the algorithm success.
-  const inputAttrValues = ['user', 'email', 'name', 'login'];
+  const inputAttrValues = ["user", "email", "name", "login"];
 
   // Iterate over visible input list to find the matching input based on filter elements.
   foundBreakPoint: {
@@ -323,4 +323,4 @@ const extractUsernameElementWithFallback = function(elements) {
   return usernameElement;
 };
 
-export const Autofill = {fillForm};
+export const Autofill = { fillForm };

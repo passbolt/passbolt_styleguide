@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.5.0
  */
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props.
@@ -25,5 +25,3 @@ export function defaultProps(props = {}) {
   delete props.context; // Treated in the default
   return Object.assign(defaultProps, props);
 }
-
-

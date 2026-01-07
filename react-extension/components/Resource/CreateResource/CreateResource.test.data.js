@@ -12,25 +12,23 @@
  * @since         5.0.0
  */
 
-import {defaultResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { defaultResourcePasswordGeneratorContext } from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {
   resourceTypeV5CustomFieldsDto,
-  resourceTypeV5DefaultDto, resourceTypeV5TotpDto,
+  resourceTypeV5DefaultDto,
+  resourceTypeV5TotpDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultPasswordPoliciesContext} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
-import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
-
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultPasswordPoliciesContext } from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
+import { defaultPasswordPoliciesDto } from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default props
@@ -40,7 +38,10 @@ export function defaultProps(data = {}) {
   const defaultData = {
     folderParentId: null,
     context: defaultAppContext({
-      getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}]
+      getHierarchyFolderCache: () => [
+        { name: "Folder", id: "1" },
+        { name: "subfolder", id: "2" },
+      ],
     }),
     actionFeedbackContext: defaultActionFeedbackContext(),
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
@@ -51,7 +52,7 @@ export function defaultProps(data = {}) {
     passwordPoliciesContext: defaultPasswordPoliciesContext({
       policies: defaultPasswordPoliciesDto({
         external_dictionary_check: false,
-      })
+      }),
     }),
     onClose: jest.fn(),
     dialogContext: defaultDialogContext(),

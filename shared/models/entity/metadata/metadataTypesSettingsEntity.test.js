@@ -14,7 +14,7 @@
 
 import MetadataTypesSettingsEntity, {
   RESOURCE_TYPE_VERSION_4,
-  RESOURCE_TYPE_VERSION_5
+  RESOURCE_TYPE_VERSION_5,
 } from "./metadataTypesSettingsEntity";
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
@@ -23,7 +23,7 @@ import {
   defaultMetadataTypesSettingsV50FreshDto,
   defaultMetadataTypesSettingsV50OMigratedFromV4WithSupportV4Dto,
   defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto,
-  defaultMetadataTypesSettingsV6Dto
+  defaultMetadataTypesSettingsV6Dto,
 } from "./metadataTypesSettingsEntity.test.data";
 
 describe("MetadataTypesSettings", () => {
@@ -40,25 +40,45 @@ describe("MetadataTypesSettings", () => {
 
     it("validates default_resource_types property", () => {
       assertEntityProperty.string(MetadataTypesSettingsEntity, "default_resource_types");
-      assertEntityProperty.enumeration(MetadataTypesSettingsEntity, "default_resource_types", [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5], ['not-valid-version', '']);
+      assertEntityProperty.enumeration(
+        MetadataTypesSettingsEntity,
+        "default_resource_types",
+        [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5],
+        ["not-valid-version", ""],
+      );
       assertEntityProperty.required(MetadataTypesSettingsEntity, "default_resource_types");
     });
 
     it("validates default_folder_type property", () => {
       assertEntityProperty.string(MetadataTypesSettingsEntity, "default_folder_type");
-      assertEntityProperty.enumeration(MetadataTypesSettingsEntity, "default_folder_type", [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5], ['not-valid-version', '']);
+      assertEntityProperty.enumeration(
+        MetadataTypesSettingsEntity,
+        "default_folder_type",
+        [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5],
+        ["not-valid-version", ""],
+      );
       assertEntityProperty.required(MetadataTypesSettingsEntity, "default_folder_type");
     });
 
     it("validates default_tag_type property", () => {
       assertEntityProperty.string(MetadataTypesSettingsEntity, "default_tag_type");
-      assertEntityProperty.enumeration(MetadataTypesSettingsEntity, "default_tag_type", [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5], ['not-valid-version', '']);
+      assertEntityProperty.enumeration(
+        MetadataTypesSettingsEntity,
+        "default_tag_type",
+        [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5],
+        ["not-valid-version", ""],
+      );
       assertEntityProperty.required(MetadataTypesSettingsEntity, "default_tag_type");
     });
 
     it("validates default_comment_type property", () => {
       assertEntityProperty.string(MetadataTypesSettingsEntity, "default_comment_type");
-      assertEntityProperty.enumeration(MetadataTypesSettingsEntity, "default_comment_type", [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5], ['not-valid-version', '']);
+      assertEntityProperty.enumeration(
+        MetadataTypesSettingsEntity,
+        "default_comment_type",
+        [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5],
+        ["not-valid-version", ""],
+      );
       assertEntityProperty.required(MetadataTypesSettingsEntity, "default_comment_type");
     });
 
@@ -117,15 +137,27 @@ describe("MetadataTypesSettings", () => {
     it("validates default_resource_types cannot be v4 if allow_creation_of_v4_resources is false", () => {
       const dto = defaultMetadataTypesSettingsV4Dto();
       dto.allow_creation_of_v4_resources = false;
-      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("allow_creation_of_v4_resources", "is_default");
-      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("default_resource_types", "allow_create_v4");
+      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError(
+        "allow_creation_of_v4_resources",
+        "is_default",
+      );
+      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError(
+        "default_resource_types",
+        "allow_create_v4",
+      );
     });
 
     it("validates default_resource_types cannot be v4 if allow_creation_of_v4_resources is false", () => {
       const dto = defaultMetadataTypesSettingsV50FreshDto();
       dto.allow_creation_of_v5_resources = false;
-      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("allow_creation_of_v5_resources", "is_default");
-      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("default_resource_types", "allow_create_v5");
+      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError(
+        "allow_creation_of_v5_resources",
+        "is_default",
+      );
+      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError(
+        "default_resource_types",
+        "allow_create_v5",
+      );
     });
   });
 

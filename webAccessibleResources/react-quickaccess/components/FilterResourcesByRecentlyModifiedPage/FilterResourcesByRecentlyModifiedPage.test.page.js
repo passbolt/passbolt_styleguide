@@ -12,12 +12,11 @@
  * @since         4.10.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {Router} from "react-router-dom";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import {createMemoryHistory} from "history";
+import { Router } from "react-router-dom";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import { createMemoryHistory } from "history";
 import FilterResourcesByRecentlyModifiedPage from "./FilterResourcesByRecentlyModifiedPage";
 
 /**
@@ -32,10 +31,10 @@ export default class FilterResourcesByRecentlyModifiedPagePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
-          <FilterResourcesByRecentlyModifiedPage {...props}/>
+          <FilterResourcesByRecentlyModifiedPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -69,7 +68,7 @@ export default class FilterResourcesByRecentlyModifiedPagePage {
    * @returns {HTMLElement}
    */
   get createButton() {
-    return this._page.container.querySelector('.submit-wrapper #popupAction');
+    return this._page.container.querySelector(".submit-wrapper #popupAction");
   }
 
   /**
@@ -86,7 +85,7 @@ export default class FilterResourcesByRecentlyModifiedPagePage {
    */
   async clickOnResource(index) {
     const element = this.getResource(index)?.querySelector(".inline-resource-entry");
-    fireEvent.click(element, {button: 0});
+    fireEvent.click(element, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -95,7 +94,7 @@ export default class FilterResourcesByRecentlyModifiedPagePage {
    * @returns {Promise<void>}
    */
   async clickOnBackButton() {
-    fireEvent.click(this.backButton, {button: 0});
+    fireEvent.click(this.backButton, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -104,7 +103,7 @@ export default class FilterResourcesByRecentlyModifiedPagePage {
    * @returns {Promise<void>}
    */
   async clickOnCreateButton() {
-    fireEvent.click(this.createButton, {button: 0});
+    fireEvent.click(this.createButton, { button: 0 });
     await waitFor(() => {});
   }
 }

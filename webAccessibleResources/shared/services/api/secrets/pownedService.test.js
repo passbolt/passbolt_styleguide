@@ -15,41 +15,41 @@
 
 import PownedService from "./pownedService";
 
-describe('PownedService', () => {
+describe("PownedService", () => {
   let port, pownedService;
 
   beforeEach(() => {
     port = {
-      request: jest.fn()
+      request: jest.fn(),
     };
     pownedService = new PownedService(port);
   });
 
-  describe('evaluateSecret', () => {
-    it('should returns inDictionary=false and isPwnedServiceAvailable=true for password not in dictionary', async() => {
+  describe("evaluateSecret", () => {
+    it("should returns inDictionary=false and isPwnedServiceAvailable=true for password not in dictionary", async () => {
       expect.assertions(1);
 
       port.request.mockResolvedValue(0);
-      const result = await pownedService.evaluateSecret('password123');
-      expect(result).toEqual({inDictionary: false, isPwnedServiceAvailable: true});
+      const result = await pownedService.evaluateSecret("password123");
+      expect(result).toEqual({ inDictionary: false, isPwnedServiceAvailable: true });
     });
 
-    it('should returns inDictionary=false and isPwnedServiceAvailable=false when checkIfPasswordPowned throws an error', async() => {
+    it("should returns inDictionary=false and isPwnedServiceAvailable=false when checkIfPasswordPowned throws an error", async () => {
       expect.assertions(1);
 
       port.request.mockRejectedValue(new Error());
-      const result = await pownedService.evaluateSecret('password123');
-      expect(result).toEqual({inDictionary: false, isPwnedServiceAvailable: false});
+      const result = await pownedService.evaluateSecret("password123");
+      expect(result).toEqual({ inDictionary: false, isPwnedServiceAvailable: false });
     });
   });
 
-  describe('checkIfPasswordPowned method', () => {
-    it('sould calls port.request with the correct arguments and returns the response', async() => {
+  describe("checkIfPasswordPowned method", () => {
+    it("sould calls port.request with the correct arguments and returns the response", async () => {
       expect.assertions(2);
 
       port.request.mockResolvedValue(1);
-      const result = await pownedService.checkIfPasswordPowned('password123');
-      expect(port.request).toHaveBeenCalledWith('passbolt.secrets.powned-password', 'password123');
+      const result = await pownedService.checkIfPasswordPowned("password123");
+      expect(port.request).toHaveBeenCalledWith("passbolt.secrets.powned-password", "password123");
       expect(result).toBe(true);
     });
   });

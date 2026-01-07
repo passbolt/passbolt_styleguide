@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 
 class TooltipMessageFingerprintLoading extends Component {
   /**

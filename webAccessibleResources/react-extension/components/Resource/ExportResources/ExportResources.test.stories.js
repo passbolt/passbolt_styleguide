@@ -13,22 +13,22 @@
  */
 
 import ExportResources from "./ExportResources";
-import {defaultAppContext} from "./ExportResources.test.data";
+import { defaultAppContext } from "./ExportResources.test.data";
 
 export default {
-  title: 'Components/Resource/ExportResources/ExportResources',
-  component: ExportResources
+  title: "Components/Resource/ExportResources/ExportResources",
+  component: ExportResources,
 };
 
 export const Initial = {
   args: {
     resourceWorkspaceContext: {
       resourcesToExport: {
-        foldersIds: [1, 2]
+        foldersIds: [1, 2],
       },
-      onResourcesToExport: () => {}
+      onResourcesToExport: () => {},
     },
     onClose: () => {},
     context: defaultAppContext(),
-  }
+  },
 };

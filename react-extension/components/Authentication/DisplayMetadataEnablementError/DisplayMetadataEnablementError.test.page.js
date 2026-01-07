@@ -12,7 +12,7 @@
  * @since         5.4.0
  */
 
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayMetadataEnablementError from "./DisplayMetadataEnablementError";
@@ -28,9 +28,9 @@ export default class DisplayMetadataEnablementErrorPage {
   constructor(props = {}) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayMetadataEnablementError {...props}/>
+        <DisplayMetadataEnablementError {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,7 +38,7 @@ export default class DisplayMetadataEnablementErrorPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.setup-error h1').textContent;
+    return this._page.container.querySelector(".setup-error h1").textContent;
   }
 
   /**
@@ -52,21 +52,21 @@ export default class DisplayMetadataEnablementErrorPage {
    * Returns the more details cta element
    */
   get moreDetailsCta() {
-    return this._page.container.querySelector('.error-details button');
+    return this._page.container.querySelector(".error-details button");
   }
 
   /**
    * Returns the more details element
    */
   get errorDetails() {
-    return this._page.container.querySelector('.error-details textarea');
+    return this._page.container.querySelector(".error-details textarea");
   }
 
   /**
    * Show error details
    */
   async clickOn(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 }

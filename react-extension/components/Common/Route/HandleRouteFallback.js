@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.0
  */
-import React, {Component} from "react";
-import {Redirect, withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { Redirect, withRouter } from "react-router-dom";
 
 // The default path to redirect the users to.
 const DEFAULT_PATH_NAME = "/app/passwords";
@@ -33,7 +33,7 @@ class HandleRouteFallback extends Component {
    * @return {JSX}
    */
   render() {
-    return <Redirect to={DEFAULT_PATH_NAME}/>;
+    return <Redirect to={DEFAULT_PATH_NAME} />;
   }
 }
 

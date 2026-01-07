@@ -15,10 +15,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../../img/svg/caret_right.svg"; import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * This component displays the user details about information
@@ -39,7 +40,7 @@ class DisplayUserDetailsGroups extends React.Component {
    */
   get defaultState() {
     return {
-      open: false // Flag for the expand / collapse mode
+      open: false, // Flag for the expand / collapse mode
     };
   }
 
@@ -54,7 +55,7 @@ class DisplayUserDetailsGroups extends React.Component {
    * The groups the current selected user belongs to
    */
   get groups() {
-    const {groups} = this.props.context;
+    const { groups } = this.props.context;
     // If the group haven't yet been loaded
     if (!groups) {
       return [];
@@ -62,13 +63,11 @@ class DisplayUserDetailsGroups extends React.Component {
 
     const selectedUser = this.props.userWorkspaceContext.details.user;
     if (selectedUser) {
-      const belongsToGroup = group => group.groups_users.some(group_user => group_user.user_id === selectedUser.id);
-      const groupUser = group => group.groups_users.find(group_user => group_user.user_id === selectedUser.id);
-      const userRole = groupUser => groupUser.is_admin ? this.translate("Group manager") : this.translate("Member");
-      const roleMapper = group => Object.assign({}, group, {role: userRole(groupUser(group))});
-      return groups
-        .filter(belongsToGroup)
-        .map(roleMapper);
+      const belongsToGroup = (group) => group.groups_users.some((group_user) => group_user.user_id === selectedUser.id);
+      const groupUser = (group) => group.groups_users.find((group_user) => group_user.user_id === selectedUser.id);
+      const userRole = (groupUser) => (groupUser.is_admin ? this.translate("Group manager") : this.translate("Member"));
+      const roleMapper = (group) => Object.assign({}, group, { role: userRole(groupUser(group)) });
+      return groups.filter(belongsToGroup).map(roleMapper);
     } else {
       return [];
     }
@@ -85,7 +84,7 @@ class DisplayUserDetailsGroups extends React.Component {
    * Handle the click on the title
    */
   handleTitleClicked() {
-    this.setState({open: !this.state.open});
+    this.setState({ open: !this.state.open });
   }
 
   /**
@@ -107,39 +106,36 @@ class DisplayUserDetailsGroups extends React.Component {
         <div className="accordion-header">
           <h4>
             <button type="button" className="link no-border section-opener" onClick={this.handleTitleClicked}>
-              <span className="accordion-title">
-              Groups
-              </span>
+              <span className="accordion-title">Groups</span>
 
-              {this.state.open && <CaretDownSVG/>}
-              {!this.state.open && <CaretRightSVG/>}
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
-        <div className="accordion-content">
-          <ul>
-            {hasGroups &&
-              groups.map(group => (
-                <div
-                  key={group.id}
-                  className="permission usercard-col-2">
-                  <GroupAvatar group={group}/>
-                  <div className="content-wrapper">
-                    <div className="content">
-                      <div className="name">{group.name}</div>
-                      <div className="subinfo">{group.role}</div>
+        {this.state.open && (
+          <div className="accordion-content">
+            <ul>
+              {hasGroups &&
+                groups.map((group) => (
+                  <div key={group.id} className="permission usercard-col-2">
+                    <GroupAvatar group={group} />
+                    <div className="content-wrapper">
+                      <div className="content">
+                        <div className="name">{group.name}</div>
+                        <div className="subinfo">{group.role}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
-            }
-          </ul>
-          {!hasGroups &&
-            <em className="empty-feedback empty-group-feedback"><Trans>The user is not a member of any group yet</Trans></em>
-          }
-        </div>
-        }
+                ))}
+            </ul>
+            {!hasGroups && (
+              <em className="empty-feedback empty-group-feedback">
+                <Trans>The user is not a member of any group yet</Trans>
+              </em>
+            )}
+          </div>
+        )}
       </div>
     );
   }
@@ -151,4 +147,4 @@ DisplayUserDetailsGroups.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserDetailsGroups)));
+export default withAppContext(withUserWorkspace(withTranslation("common")(DisplayUserDetailsGroups)));

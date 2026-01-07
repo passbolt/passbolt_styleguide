@@ -18,7 +18,7 @@
 jest.mock("../../../img/svg/Frame.svg", () => () => <svg data-testid="frame-svg" />);
 import React from "react";
 import CardItemPage from "./CardItem.test.page";
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 
 describe("Card Item", () => {
   it("should display the card with and icon, a title, a description and be able to be clicked", () => {
@@ -55,7 +55,7 @@ describe("Card Item", () => {
     expect(page.description).toBeNull();
   });
 
-  it("should display the card Pro teasing icon if proTeasing is true", async() => {
+  it("should display the card Pro teasing icon if proTeasing is true", async () => {
     expect.assertions(1);
 
     const props = {
@@ -72,7 +72,7 @@ describe("Card Item", () => {
     expect(page.proTeasingIcon).not.toBeNull();
   });
 
-  it("should not display the card Pro teasing icon if proTeasing is false", async() => {
+  it("should not display the card Pro teasing icon if proTeasing is false", async () => {
     expect.assertions(1);
 
     const props = {

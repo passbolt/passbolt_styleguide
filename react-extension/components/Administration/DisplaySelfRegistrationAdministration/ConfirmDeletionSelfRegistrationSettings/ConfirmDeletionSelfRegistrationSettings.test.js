@@ -15,10 +15,10 @@
 /**
  * Unit tests on ConfirmDeletionSelfRegistrationSettings in regard of specifications
  */
-import {waitFor} from "@testing-library/react";
-import {defaultAppContext} from "../../../../contexts/ApiAppContext.test.data";
-import {defaultProps} from "../ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings.test.data";
-import ConfirmDeletionSelfRegistrationSettingsPage from './ConfirmDeletionSelfRegistrationSettings.test.page';
+import { waitFor } from "@testing-library/react";
+import { defaultAppContext } from "../../../../contexts/ApiAppContext.test.data";
+import { defaultProps } from "../ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings.test.data";
+import ConfirmDeletionSelfRegistrationSettingsPage from "./ConfirmDeletionSelfRegistrationSettings.test.page";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,11 +27,11 @@ beforeEach(() => {
 describe("See the confirm disable self registration settings dialog", () => {
   let page; // The page to test agains
 
-  describe('As a logged in administrator ', () => {
+  describe("As a logged in administrator ", () => {
     /**
      * I should see the account recovery settings dialog
      */
-    it('As a logged in administrator I can reset the “User self registration” settings when I disable and enable the setting', async() => {
+    it("As a logged in administrator I can reset the “User self registration” settings when I disable and enable the setting", async () => {
       const props = defaultProps(); // The props to pass
       page = new ConfirmDeletionSelfRegistrationSettingsPage(defaultAppContext, props);
       await waitFor(() => {});
@@ -42,7 +42,9 @@ describe("See the confirm disable self registration settings dialog", () => {
       expect(page.closeButton).not.toBeNull();
 
       // domains list
-      expect(page.formContent.textContent).toBe('Are you sure to disable the self registration for the organization ?Users will not be able to self register anymore. Only administrators would be able to invite users to register. ');
+      expect(page.formContent.textContent).toBe(
+        "Are you sure to disable the self registration for the organization ?Users will not be able to self register anymore. Only administrators would be able to invite users to register. ",
+      );
       // Save button exists
       expect(page.saveButton.textContent).toBe("Save");
       // Cancel button exists
@@ -50,4 +52,3 @@ describe("See the confirm disable self registration settings dialog", () => {
     });
   });
 });
-

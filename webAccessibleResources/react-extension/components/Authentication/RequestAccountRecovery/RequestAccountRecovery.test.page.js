@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import RequestAccountRecovery from "./RequestAccountRecovery";
@@ -27,9 +27,8 @@ export default class RequestAccountRecoveryPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <RequestAccountRecovery {...props}/>
+        <RequestAccountRecovery {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
   }
 
@@ -37,21 +36,21 @@ export default class RequestAccountRecoveryPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('h1').textContent;
+    return this._page.container.querySelector("h1").textContent;
   }
 
   /**
    * Returns the request account recovery element
    */
   get requestAccountRecoveryButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns the secondary action link element
    */
   get secondaryActionLink() {
-    return this._page.container.querySelector('.form-actions button.link');
+    return this._page.container.querySelector(".form-actions button.link");
   }
 
   /**
@@ -59,7 +58,7 @@ export default class RequestAccountRecoveryPage {
    * @param inProgressFn Function called while the generation
    */
   async requestAccountRecovery(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.requestAccountRecoveryButton, leftClick);
     await waitFor(inProgressFn);
   }
@@ -68,7 +67,7 @@ export default class RequestAccountRecoveryPage {
    * Click on the secondary action link.
    */
   async clickSecondaryActionLink(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.secondaryActionLink, leftClick);
     await waitFor(inProgressFn);
   }

@@ -8,14 +8,14 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 export function defaultProps() {
   const props = {
     context: {
-      userSettings: new UserSettings(userSettingsFixture)
+      userSettings: new UserSettings(userSettingsFixture),
     },
     userSettingsContext: {
       onUpdateSecurityTokenRequested: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
-    }
+      open: jest.fn(),
+    },
   };
 
   return props;

@@ -21,10 +21,9 @@ export const defaultProps = (data = {}) => {
     },
     onClose: jest.fn(),
     navigationContext: {
-      onGoToUserSettingsMfaRequested: jest.fn()
-    }
+      onGoToUserSettingsMfaRequested: jest.fn(),
+    },
   };
 
   return Object.assign(defaultData, data);
 };
-

@@ -12,19 +12,19 @@
  * @since         5.4.0
  */
 import DisplayMetadataEnablementErrorPage from "./DisplayMetadataEnablementError.test.page";
-import {defaultProps} from "./DisplayMetadataEnablementError.test.data";
+import { defaultProps } from "./DisplayMetadataEnablementError.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("DisplayMetadataEnablementError", () => {
-  it('should display the given error', async() => {
+  it("should display the given error", async () => {
     expect.assertions(5);
 
     const error = new Error("Something went wrong");
     error.details = "It really went wrong";
-    const props = defaultProps({error});
+    const props = defaultProps({ error });
     jest.spyOn(props.context.port, "request").mockImplementation(() => {});
     const page = new DisplayMetadataEnablementErrorPage(props);
 
@@ -39,7 +39,7 @@ describe("DisplayMetadataEnablementError", () => {
     expect(props.onClickContinue).toHaveBeenCalledTimes(1);
   });
 
-  it('should not display the error details if there are none', async() => {
+  it("should not display the error details if there are none", async () => {
     expect.assertions(2);
     const props = defaultProps();
     const page = new DisplayMetadataEnablementErrorPage(props);

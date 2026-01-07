@@ -13,23 +13,30 @@
  */
 import React from "react";
 import ActionAbortedMissingMetadataKeysPage from "./ActionAbortedMissingMetadataKeysPage";
-import {MemoryRouter, Route} from "react-router-dom";
-import {defaultProps} from "./ActionAbortedMissingMetadataKeysPage.test.data";
+import { MemoryRouter, Route } from "react-router-dom";
+import { defaultProps } from "./ActionAbortedMissingMetadataKeysPage.test.data";
 
 export default {
-  title: 'Components/QuickAccess/ActionAbortedMissingMetadataKeysPage',
+  title: "Components/QuickAccess/ActionAbortedMissingMetadataKeysPage",
   component: ActionAbortedMissingMetadataKeysPage,
   decorators: [
-    (Story, {args}) =>
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <div className="container quickaccess"><Story {...args} {...routerProps}/></div>}/>
+    (Story, { args }) => (
+      <MemoryRouter initialEntries={["/"]}>
+        <Route
+          component={(routerProps) => (
+            <div className="container quickaccess">
+              <Story {...args} {...routerProps} />
+            </div>
+          )}
+        />
       </MemoryRouter>
+    ),
   ],
   parameters: {
-    css: "ext_quickaccess"
-  }
+    css: "ext_quickaccess",
+  },
 };
 
 export const Default = {
-  args: defaultProps()
+  args: defaultProps(),
 };

@@ -12,7 +12,7 @@
  * @since         5.3.2
  */
 
-export const defaultMetadataData = data => ({
+export const defaultMetadataData = (data) => ({
   canDecryptMetadataPrivateKey: true,
   ...data,
 });

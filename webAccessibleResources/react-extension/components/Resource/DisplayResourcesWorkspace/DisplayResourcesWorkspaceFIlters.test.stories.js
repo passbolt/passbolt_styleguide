@@ -13,51 +13,54 @@
  */
 import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters";
 import {
-  defaultProps, propsFilterByExpired,
+  defaultProps,
+  propsFilterByExpired,
   propsFilterByFavorite,
   propsFilterByPrivate,
-  propsFilterByShared
+  propsFilterByShared,
 } from "./DisplayResourcesWorkspaceFilters.test.data";
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 
 /**
  * DisplayResourcesWorkspaceFilters stories
  */
 export default {
-  title: 'Components/Resource/DisplayResourcesWorkspaceFilters',
+  title: "Components/Resource/DisplayResourcesWorkspaceFilters",
   decorators: [
-    Story => (
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps =>
-          <div className="top-bar">
-            <div className="action-bar">
-              <Story {...routerProps}/>
+    (Story) => (
+      <MemoryRouter initialEntries={["/"]}>
+        <Route
+          component={(routerProps) => (
+            <div className="top-bar">
+              <div className="action-bar">
+                <Story {...routerProps} />
+              </div>
             </div>
-          </div>}>
-        </Route>
+          )}
+        ></Route>
       </MemoryRouter>
     ),
   ],
-  component: DisplayResourcesWorkspaceFilters
+  component: DisplayResourcesWorkspaceFilters,
 };
 
 export const FilterResources = {
-  args: defaultProps()
+  args: defaultProps(),
 };
 
 export const FilterByFavorite = {
-  args: propsFilterByFavorite()
+  args: propsFilterByFavorite(),
 };
 
 export const FilterByShared = {
-  args: propsFilterByShared()
+  args: propsFilterByShared(),
 };
 
 export const FilterByPrivate = {
-  args: propsFilterByPrivate()
+  args: propsFilterByPrivate(),
 };
 
 export const FilterByExpired = {
-  args: propsFilterByExpired()
+  args: propsFilterByExpired(),
 };

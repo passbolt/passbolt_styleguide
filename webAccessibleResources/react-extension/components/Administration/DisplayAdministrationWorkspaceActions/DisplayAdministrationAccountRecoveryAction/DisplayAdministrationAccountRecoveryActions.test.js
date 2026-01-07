@@ -16,9 +16,8 @@
  * Unit tests on DisplayAdministrationAccountRecoveryActions in regard of specifications
  */
 
-
 import DisplayAdministrationAccountRecoveryActionsPage from "./DisplayAdministrationAccountRecoveryActions.test.page";
-import {defaultProps, hasChangedPolicyProps} from "./DisplayAdministrationAccountRecoveryActions.test.data";
+import { defaultProps, hasChangedPolicyProps } from "./DisplayAdministrationAccountRecoveryActions.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,7 +26,7 @@ beforeEach(() => {
 describe("As AD I can see the administration account recovery action", () => {
   let page; // The page to test against
 
-  it('As AD I should see both the save and the reset buttons disabled for administration account recovery action', async() => {
+  it("As AD I should see both the save and the reset buttons disabled for administration account recovery action", async () => {
     expect.assertions(4);
     const props = defaultProps();
     page = new DisplayAdministrationAccountRecoveryActionsPage(props);
@@ -37,7 +36,7 @@ describe("As AD I can see the administration account recovery action", () => {
     expect(page.resetButton.hasAttribute("disabled")).toBeTruthy();
   });
 
-  it('As AD I should see the all buttons enabled and triger reset', async() => {
+  it("As AD I should see the all buttons enabled and triger reset", async () => {
     expect.assertions(5);
     const props = hasChangedPolicyProps();
     page = new DisplayAdministrationAccountRecoveryActionsPage(props);
@@ -49,7 +48,7 @@ describe("As AD I can see the administration account recovery action", () => {
     expect(props.adminAccountRecoveryContext.resetChanges).toHaveBeenCalled();
   });
 
-  it('As AD I should see the all buttons enabled and trigger save', async() => {
+  it("As AD I should see the all buttons enabled and trigger save", async () => {
     expect.assertions(5);
     const props = hasChangedPolicyProps();
     page = new DisplayAdministrationAccountRecoveryActionsPage(props);

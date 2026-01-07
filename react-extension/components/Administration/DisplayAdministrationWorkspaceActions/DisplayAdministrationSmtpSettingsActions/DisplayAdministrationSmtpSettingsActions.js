@@ -14,10 +14,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAdminSmtpSettings} from "../../../../contexts/AdminSmtpSettingsContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAdminSmtpSettings } from "../../../../contexts/AdminSmtpSettingsContext";
 import SendTestMailDialog from "../../SendTestMailDialog/SendTestMailDialog";
-import {withDialog} from "../../../../contexts/DialogContext";
+import { withDialog } from "../../../../contexts/DialogContext";
 import PlugSVG from "../../../../../img/svg/plug.svg";
 
 /**
@@ -69,7 +69,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
       if (this.dialogId !== null) {
         this.handleCloseDialog();
       }
-      this.dialogId = await this.props.dialogContext.open(SendTestMailDialog, {handleClose: this.handleCloseDialog});
+      this.dialogId = await this.props.dialogContext.open(SendTestMailDialog, { handleClose: this.handleCloseDialog });
     }
   }
 
@@ -114,13 +114,29 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
     return (
       <div className="actions-wrapper">
         <div className="left-actions-wrapper">
-          <button type="button" className="button secondary" disabled={!this.isTestEnabled()} id="send-test-email" onClick={this.handleTestClick}>
-            <PlugSVG/>
-            <span><Trans>Send test email</Trans></span>
+          <button
+            type="button"
+            className="button secondary"
+            disabled={!this.isTestEnabled()}
+            id="send-test-email"
+            onClick={this.handleTestClick}
+          >
+            <PlugSVG />
+            <span>
+              <Trans>Send test email</Trans>
+            </span>
           </button>
         </div>
-        <button type="button" className="button primary form" id="save-settings" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-          <span><Trans>Save</Trans></span>
+        <button
+          type="button"
+          className="button primary form"
+          id="save-settings"
+          disabled={!this.isSaveEnabled()}
+          onClick={this.handleSaveClick}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );

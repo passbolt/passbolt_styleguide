@@ -12,11 +12,11 @@
  * @since         4.5.0
  */
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
-import {withAdminSso} from "../../../../contexts/AdminSsoContext";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
+import { withAdminSso } from "../../../../contexts/AdminSsoContext";
+import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
 import Select from "../../../Common/Select/Select";
 import Password from "../../../../../shared/components/Password/Password";
 import AzureSsoSettingsEntity from "../../../../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
@@ -24,7 +24,7 @@ import CopySVG from "../../../../../img/svg/copy.svg";
 import CalendarSVG from "../../../../../img/svg/calendar.svg";
 import CaretDownSVG from "../../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../../img/svg/caret_right.svg";
-import {withClipboard} from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withClipboard } from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component displays the Azure SSO settings form
@@ -73,7 +73,12 @@ class AzureSsoProviderForm extends React.Component {
     }
 
     const errors = this.props.adminSsoContext.getErrors();
-    const fieldToFocus = this.getFirstFieldInError(errors, ["client_id", "tenant_id", "client_secret", "client_secret_expiry"]);
+    const fieldToFocus = this.getFirstFieldInError(errors, [
+      "client_id",
+      "tenant_id",
+      "client_secret",
+      "client_secret_expiry",
+    ]);
 
     switch (fieldToFocus) {
       case "client_id":
@@ -124,7 +129,7 @@ class AzureSsoProviderForm extends React.Component {
    */
   handleAdvancedSettingsCLick() {
     this.setState({
-      advancedSettingsOpened: !this.state.advancedSettingsOpened
+      advancedSettingsOpened: !this.state.advancedSettingsOpened,
     });
   }
 
@@ -132,7 +137,10 @@ class AzureSsoProviderForm extends React.Component {
    * Handle the copy to clipboard button
    */
   async handleCopyRedirectUrl() {
-    await this.props.clipboardContext.copy(this.fullRedirectUrl, this.translate("The redirection URL has been copied to the clipboard."));
+    await this.props.clipboardContext.copy(
+      this.fullRedirectUrl,
+      this.translate("The redirection URL has been copied to the clipboard."),
+    );
   }
 
   /**
@@ -157,11 +165,11 @@ class AzureSsoProviderForm extends React.Component {
    * @returns {Array<{value: string, label: string}}
    */
   get availableUrlList() {
-    return AzureSsoSettingsEntity.SUPPORTED_URLS.map(url => ({
-      value: url, label: url,
+    return AzureSsoSettingsEntity.SUPPORTED_URLS.map((url) => ({
+      value: url,
+      label: url,
     }));
   }
-
 
   /**
    * Get the different options for email claim select input.
@@ -169,9 +177,9 @@ class AzureSsoProviderForm extends React.Component {
    */
   get emailClaimList() {
     return [
-      {value: "email", label: this.translate("Email")},
-      {value: "preferred_username", label: this.translate("Preferred username")},
-      {value: "upn", label: this.translate("UPN")},
+      { value: "email", label: this.translate("Email") },
+      { value: "preferred_username", label: this.translate("Preferred username") },
+      { value: "upn", label: this.translate("UPN") },
     ];
   }
 
@@ -181,8 +189,8 @@ class AzureSsoProviderForm extends React.Component {
    */
   get promptOptionList() {
     return [
-      {value: "login", label: this.translate("Login")},
-      {value: "none", label: this.translate("None")},
+      { value: "login", label: this.translate("Login") },
+      { value: "none", label: this.translate("None") },
     ];
   }
 
@@ -212,52 +220,116 @@ class AzureSsoProviderForm extends React.Component {
     const errors = ssoContext.getErrors();
     return (
       <>
-        <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label htmlFor="sso-azure-url-input"><Trans>Login URL</Trans></label>
-          <Select id="sso-azure-url-input" name="url" items={this.availableUrlList} value={ssoConfig.url} onChange={this.handleInputChange}/>
+        <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label htmlFor="sso-azure-url-input">
+            <Trans>Login URL</Trans>
+          </label>
+          <Select
+            id="sso-azure-url-input"
+            name="url"
+            items={this.availableUrlList}
+            value={ssoConfig.url}
+            onChange={this.handleInputChange}
+          />
           <p>
-            <Trans>The Azure AD authentication endpoint. See <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/authentication-national-cloud#azure-ad-authentication-endpoints" rel="noopener noreferrer" target="_blank">alternatives</a>.</Trans>
+            <Trans>
+              The Azure AD authentication endpoint. See{" "}
+              <a
+                href="https://learn.microsoft.com/en-us/azure/active-directory/develop/authentication-national-cloud#azure-ad-authentication-endpoints"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                alternatives
+              </a>
+              .
+            </Trans>
           </p>
         </div>
-        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Redirect URL</Trans></label>
+        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Redirect URL</Trans>
+          </label>
           <div className="button-inline">
-            <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
-              value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
+            <input
+              id="sso-redirect-url-input"
+              type="text"
+              className="fluid form-element disabled"
+              name="redirect_url"
+              value={this.fullRedirectUrl}
+              placeholder={this.translate("Redirect URL")}
+              readOnly
+              disabled={true}
+            />
             <button type="button" onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
-              <CopySVG/>
+              <CopySVG />
             </button>
           </div>
           <p>
             <Trans>The URL to provide to Azure when registering the application.</Trans>
           </p>
         </div>
-        <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Application (client) ID</Trans></label>
-          <input id="sso-azure-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
-            value={ssoConfig.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
-            disabled={this.hasAllInputDisabled()}/>
-          {errors?.hasError('client_id') &&
-            <div className="error-message">{this.displayErrors(errors.getError('client_id'))}</div>
-          }
+        <div className={`input text required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Application (client) ID</Trans>
+          </label>
+          <input
+            id="sso-azure-client-id-input"
+            type="text"
+            className="fluid form-element"
+            name="client_id"
+            ref={this.clientIdInputRef}
+            value={ssoConfig.client_id}
+            onChange={this.handleInputChange}
+            placeholder={this.translate("Application (client) ID")}
+            disabled={this.hasAllInputDisabled()}
+          />
+          {errors?.hasError("client_id") && (
+            <div className="error-message">{this.displayErrors(errors.getError("client_id"))}</div>
+          )}
           <p>
-            <Trans>The public identifier for the app in Azure in UUID format.</Trans> <a href="https://learn.microsoft.com/en-us/azure/healthcare-apis/register-application#application-id-client-id" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
+            <Trans>The public identifier for the app in Azure in UUID format.</Trans>{" "}
+            <a
+              href="https://learn.microsoft.com/en-us/azure/healthcare-apis/register-application#application-id-client-id"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Trans>Where to find it?</Trans>
+            </a>
           </p>
         </div>
-        <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Directory (tenant) ID</Trans></label>
-          <input id="sso-azure-tenant-id-input" type="text" className="fluid form-element" name="tenant_id" ref={this.tenantIdInputRef}
-            value={ssoConfig.tenant_id} onChange={this.handleInputChange} placeholder={this.translate("Directory ID")}
-            disabled={this.hasAllInputDisabled()}/>
-          {errors?.hasError('tenant_id') &&
-            <div className="error-message">{this.displayErrors(errors.getError('tenant_id'))}</div>
-          }
+        <div className={`input text required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Directory (tenant) ID</Trans>
+          </label>
+          <input
+            id="sso-azure-tenant-id-input"
+            type="text"
+            className="fluid form-element"
+            name="tenant_id"
+            ref={this.tenantIdInputRef}
+            value={ssoConfig.tenant_id}
+            onChange={this.handleInputChange}
+            placeholder={this.translate("Directory ID")}
+            disabled={this.hasAllInputDisabled()}
+          />
+          {errors?.hasError("tenant_id") && (
+            <div className="error-message">{this.displayErrors(errors.getError("tenant_id"))}</div>
+          )}
           <p>
-            <Trans>The Azure Active Directory tenant ID, in UUID format.</Trans> <a href="https://learn.microsoft.com/en-gb/azure/active-directory/fundamentals/active-directory-how-to-find-tenant" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
+            <Trans>The Azure Active Directory tenant ID, in UUID format.</Trans>{" "}
+            <a
+              href="https://learn.microsoft.com/en-gb/azure/active-directory/fundamentals/active-directory-how-to-find-tenant"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Trans>Where to find it?</Trans>
+            </a>
           </p>
         </div>
-        <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Secret</Trans></label>
+        <div className={`input text required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Secret</Trans>
+          </label>
           <Password
             id="sso-azure-secret-input"
             className="fluid form-element"
@@ -268,77 +340,140 @@ class AzureSsoProviderForm extends React.Component {
             disabled={this.hasAllInputDisabled()}
             value={ssoConfig.client_secret}
             preview={true}
-            inputRef={this.clientSecretInputRef}/>
-          {errors?.hasError('client_secret') &&
-            <div className="error-message">{this.displayErrors(errors.getError('client_secret'))}</div>
-          }
+            inputRef={this.clientSecretInputRef}
+          />
+          {errors?.hasError("client_secret") && (
+            <div className="error-message">{this.displayErrors(errors.getError("client_secret"))}</div>
+          )}
           <p>
-            <Trans>Allows Azure and Passbolt API to securely share information.</Trans> <a href="https://learn.microsoft.com/en-us/azure/marketplace/create-or-update-client-ids-and-secrets#add-a-client-id-and-client-secret" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
+            <Trans>Allows Azure and Passbolt API to securely share information.</Trans>{" "}
+            <a
+              href="https://learn.microsoft.com/en-us/azure/marketplace/create-or-update-client-ids-and-secrets#add-a-client-id-and-client-secret"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Trans>Where to find it?</Trans>
+            </a>
           </p>
         </div>
-        <div className={`input text date-wrapper required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Secret expiry</Trans></label>
+        <div className={`input text date-wrapper required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Secret expiry</Trans>
+          </label>
           <div className="button-inline">
-            <input id="sso-azure-secret-expiry-input" type="date" className={`fluid form-element ${ssoConfig.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry" ref={this.clientSecretExpiryInputRef}
-              value={ssoConfig.client_secret_expiry || ""} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-            <CalendarSVG className="svg-icon"/>
+            <input
+              id="sso-azure-secret-expiry-input"
+              type="date"
+              className={`fluid form-element ${ssoConfig.client_secret_expiry ? "" : "empty"}`}
+              name="client_secret_expiry"
+              ref={this.clientSecretExpiryInputRef}
+              value={ssoConfig.client_secret_expiry || ""}
+              onChange={this.handleInputChange}
+              disabled={this.hasAllInputDisabled()}
+            />
+            <CalendarSVG className="svg-icon" />
           </div>
-          {errors?.hasError('client_secret_expiry') &&
-            <div className="error-message">{this.displayErrors(errors.getError('client_secret_expiry'))}</div>
-          }
+          {errors?.hasError("client_secret_expiry") && (
+            <div className="error-message">{this.displayErrors(errors.getError("client_secret_expiry"))}</div>
+          )}
         </div>
         <div className="warning message">
           <div>
-            <Trans><b>Warning</b>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.</Trans>
+            <Trans>
+              <b>Warning</b>: This secret will expire after some time (typically a few months). Make sure you save the
+              expiry date and rotate it on time.
+            </Trans>
           </div>
         </div>
         <div>
           <div className={`accordion operation-details ${this.state.advancedSettingsOpened ? "" : "closed"}`}>
             <div className="accordion-header" onClick={this.handleAdvancedSettingsCLick}>
               <button type="button" className="link no-border" id="advanced-settings-panel-button">
-                {this.state.advancedSettingsOpened ? <CaretDownSVG className="caret-down"/> : <CaretRightSVG className="caret-right"/>}
+                {this.state.advancedSettingsOpened ? (
+                  <CaretDownSVG className="caret-down" />
+                ) : (
+                  <CaretRightSVG className="caret-right" />
+                )}
                 <Trans>Advanced settings</Trans>
               </button>
             </div>
           </div>
         </div>
-        {this.state.advancedSettingsOpened &&
+        {this.state.advancedSettingsOpened && (
           <>
-            <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="email-claim-input"><Trans>Email claim</Trans></label>
-              <Select id="email-claim-input" name="email_claim" items={this.emailClaimList} value={ssoConfig.email_claim} onChange={this.handleInputChange}/>
-              <p><Trans>Defines which Azure field needs to be used as Passbolt username.</Trans></p>
+            <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+              <label htmlFor="email-claim-input">
+                <Trans>Email claim</Trans>
+              </label>
+              <Select
+                id="email-claim-input"
+                name="email_claim"
+                items={this.emailClaimList}
+                value={ssoConfig.email_claim}
+                onChange={this.handleInputChange}
+              />
+              <p>
+                <Trans>Defines which Azure field needs to be used as Passbolt username.</Trans>
+              </p>
             </div>
-            {ssoConfig.email_claim === "upn" &&
+            {ssoConfig.email_claim === "upn" && (
               <div className="warning message">
                 <div>
-                  <Trans><b>Warning</b>: UPN is not active by default on Azure and requires a specific option set on Azure to be working.</Trans>
+                  <Trans>
+                    <b>Warning</b>: UPN is not active by default on Azure and requires a specific option set on Azure to
+                    be working.
+                  </Trans>
                 </div>
               </div>
-            }
-            {ssoConfig.email_claim === "email" &&
+            )}
+            {ssoConfig.email_claim === "email" && (
               <div className="warning message">
                 <div>
-                  <Trans><b>Warning</b>: using Azure email field to map with Passbolt username is generally unsafe (see. noauth vulnerability class).</Trans>
+                  <Trans>
+                    <b>Warning</b>: using Azure email field to map with Passbolt username is generally unsafe (see.
+                    noauth vulnerability class).
+                  </Trans>
                 </div>
               </div>
-            }
-            <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="prompt-input"><Trans>Prompt</Trans></label>
-              <Select id="prompt-input" name="prompt" items={this.promptOptionList} value={ssoConfig.prompt} onChange={this.handleInputChange}/>
-              <p><Trans>Defines the Azure login behaviour by prompting the user to fully login each time or not.</Trans></p>
+            )}
+            <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+              <label htmlFor="prompt-input">
+                <Trans>Prompt</Trans>
+              </label>
+              <Select
+                id="prompt-input"
+                name="prompt"
+                items={this.promptOptionList}
+                value={ssoConfig.prompt}
+                onChange={this.handleInputChange}
+              />
+              <p>
+                <Trans>Defines the Azure login behaviour by prompting the user to fully login each time or not.</Trans>
+              </p>
             </div>
             <div className="input-wrapper form-element">
-              <div className="toggle-swith-title"><Trans>Login hint</Trans></div>
+              <div className="toggle-swith-title">
+                <Trans>Login hint</Trans>
+              </div>
               <div className="input toggle-switch">
-                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="login_hint"
-                  onChange={this.handleInputChange} checked={ssoConfig.login_hint} disabled={this.hasAllInputDisabled()}
-                  id="login_hint-input"/>
-                <label htmlFor="login_hint-input"><Trans>If checked, users signing in with Microsoft Azure must use their Passbolt email address.</Trans></label>
+                <input
+                  type="checkbox"
+                  className="toggle-switch-checkbox checkbox"
+                  name="login_hint"
+                  onChange={this.handleInputChange}
+                  checked={ssoConfig.login_hint}
+                  disabled={this.hasAllInputDisabled()}
+                  id="login_hint-input"
+                />
+                <label htmlFor="login_hint-input">
+                  <Trans>
+                    If checked, users signing in with Microsoft Azure must use their Passbolt email address.
+                  </Trans>
+                </label>
               </div>
             </div>
           </>
-        }
+        )}
       </>
     );
   }
@@ -352,4 +487,6 @@ AzureSsoProviderForm.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withAdminSso(withClipboard(withTranslation('common')(AzureSsoProviderForm)))));
+export default withAppContext(
+  withActionFeedback(withAdminSso(withClipboard(withTranslation("common")(AzureSsoProviderForm)))),
+);

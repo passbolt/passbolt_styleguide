@@ -40,7 +40,9 @@ describe("As AN I should see the check mail box", () => {
       // title
       expect(page.title).toBe("Check your mailbox!");
       // message
-      expect(page.message).toBe("We sent you a link to verify your email.Check your spam folder if you do not hear from us after a while.");
+      expect(page.message).toBe(
+        "We sent you a link to verify your email.Check your spam folder if you do not hear from us after a while.",
+      );
     });
   });
 });

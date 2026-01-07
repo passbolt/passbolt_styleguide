@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
-import SVGLogo from '../../../../../img/svg/logo.svg';
+import React, { Component } from "react";
+import SVGLogo from "../../../../../img/svg/logo.svg";
 
 class Logo extends Component {
   /**
@@ -23,8 +23,10 @@ class Logo extends Component {
     return (
       <div className="top-bar-left">
         <div className="logo-svg no-img" title="Passbolt logo">
-          <SVGLogo width="15rem" height="2.6rem" role="img"/>
-          <h1><span>Passbolt</span></h1>
+          <SVGLogo width="15rem" height="2.6rem" role="img" />
+          <h1>
+            <span>Passbolt</span>
+          </h1>
         </div>
       </div>
     );

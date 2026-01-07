@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -15,18 +14,18 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {withLoading} from "./LoadingContext";
-import {withActionFeedback} from "./ActionFeedbackContext";
+import { withRouter } from "react-router-dom";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { withLoading } from "./LoadingContext";
+import { withActionFeedback } from "./ActionFeedbackContext";
 import EditUserGroup from "../components/UserGroup/EditUserGroup/EditUserGroup";
-import {withDialog} from "./DialogContext";
-import {DateTime} from "luxon";
-import {withTranslation} from "react-i18next";
-import {isUserSuspended, isAccountRecoveryRequested, isMissingMetadataKey} from "../../shared/utils/userUtils";
-import {withRbac} from "../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
-import {withRoles} from "./RoleContext";
+import { withDialog } from "./DialogContext";
+import { DateTime } from "luxon";
+import { withTranslation } from "react-i18next";
+import { isUserSuspended, isAccountRecoveryRequested, isMissingMetadataKey } from "../../shared/utils/userUtils";
+import { withRbac } from "../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../shared/services/rbacs/uiActionEnumeration";
+import { withRoles } from "./RoleContext";
 import RolesCollection from "../../shared/models/entity/role/rolesCollection";
 
 /**
@@ -35,21 +34,21 @@ import RolesCollection from "../../shared/models/entity/role/rolesCollection";
 export const UserWorkspaceContext = React.createContext({
   filter: {
     type: null, // Filter type
-    payload: null // Filter payload
+    payload: null, // Filter payload
   },
   sorter: {
-    propertyName: 'user', // The name of the property to sort on
-    asc: false // True if the sort must be descendant
+    propertyName: "user", // The name of the property to sort on
+    asc: false, // True if the sort must be descendant
   },
   filteredUsers: [], // The current list of filtered users
   selectedUsers: [], // The current list of selected users
   details: {
     user: null, // The user to focus details on
     group: null, // The user group to focus details on
-    locked: true // The details display is locked
+    locked: true, // The details display is locked
   },
   scrollTo: {
-    user: null // The user to scroll to
+    user: null, // The user to scroll to
   },
   groupToEdit: null, // The group to edit
   isAccessAllowed: () => {}, // is the current user allowed to access the user workspace
@@ -58,9 +57,9 @@ export const UserWorkspaceContext = React.createContext({
   onSorterChanged: () => {}, // Whenever the sorter changed
   onUserSelected: {
     single: () => {}, // Whenever a single user has been selected
-    none: () => {} // Whenever none users have been selected
+    none: () => {}, // Whenever none users have been selected
   },
-  onRefreshSelectedUsers:  () => {}, // Whenever a component request to refresh the selected users
+  onRefreshSelectedUsers: () => {}, // Whenever a component request to refresh the selected users
   onGroupToEdit: () => {}, // Whenever a group will be edited
   shouldDisplaySuspendedUsersFilter: () => {}, // returns true if the 'Suspended user' filter should be displayed in the UI
 });
@@ -84,20 +83,20 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      filter: {type: UserWorkspaceFilterTypes.NONE}, // The current user search filter
+      filter: { type: UserWorkspaceFilterTypes.NONE }, // The current user search filter
       sorter: {
-        propertyName: 'modified', // The name of the property to sort on
-        asc: false // True if the sort must be descendant
+        propertyName: "modified", // The name of the property to sort on
+        asc: false, // True if the sort must be descendant
       },
       filteredUsers: [], // The current list of filtered users
       selectedUsers: [], // The current list of selected users
       details: {
         user: null, // The user to focus details on
         group: null, // The group to focus details on
-        locked: true // The details display is locked
+        locked: true, // The details display is locked
       },
       scrollTo: {
-        user: null // The user to scroll to
+        user: null, // The user to scroll to
       },
       groupToEdit: null, // The group to edit
       isAccessAllowed: this.isAccessAllowed.bind(this), // is the current user allowed to access the user workspace
@@ -110,7 +109,7 @@ class UserWorkspaceContextProvider extends React.Component {
         none: this.handleNoneUsersSelected.bind(this), // Whenever none users have been selected
       },
       onGroupToEdit: this.handleGroupToEdit.bind(this), // Whenever a group will be edited
-      onRefreshSelectedUsers:  this.handleRefreshSelectedUsers.bind(this), // Whenever a component request to refresh the selected users
+      onRefreshSelectedUsers: this.handleRefreshSelectedUsers.bind(this), // Whenever a component request to refresh the selected users
       isAttentionRequired: this.isAttentionRequired.bind(this), // Whenever a user needs attention
       shouldDisplaySuspendedUsersFilter: this.shouldDisplaySuspendedUsersFilter.bind(this), // returns true if the 'Suspended user' filter should be displayed in the UI
     };
@@ -204,9 +203,9 @@ class UserWorkspaceContextProvider extends React.Component {
    * @returns {void}
    */
   handleRefreshSelectedUsers() {
-    const selectedUserIds = new Set(this.state.selectedUsers.map(user => user.id));
-    const selectedUsers = this.props.context.users.filter(user => selectedUserIds.has(user.id));
-    this.setState({selectedUsers});
+    const selectedUserIds = new Set(this.state.selectedUsers.map((user) => user.id));
+    const selectedUsers = this.props.context.users.filter((user) => selectedUserIds.has(user.id));
+    this.setState({ selectedUsers });
   }
 
   /**
@@ -239,18 +238,20 @@ class UserWorkspaceContextProvider extends React.Component {
     if (hasUsersAndGroups) {
       const groupId = this.props.match.params.selectedGroupId;
       if (groupId && this.props.context.groups) {
-        const group = this.props.context.groups.find(group => group.id === groupId);
-        if (group) { // Known group
-          await this.search({type: UserWorkspaceFilterTypes.GROUP, payload: {group}});
+        const group = this.props.context.groups.find((group) => group.id === groupId);
+        if (group) {
+          // Known group
+          await this.search({ type: UserWorkspaceFilterTypes.GROUP, payload: { group } });
           await this.detailGroup(group);
 
           // Case of edit path
-          const isEditRoute = this.props.location.pathname.includes('edit');
+          const isEditRoute = this.props.location.pathname.includes("edit");
           if (isEditRoute) {
             await this.updateGroupToEdit(group);
             this.props.dialogContext.open(EditUserGroup);
           }
-        } else { // Unknown group
+        } else {
+          // Unknown group
           this.handleUnknownGroup();
         }
       }
@@ -261,14 +262,17 @@ class UserWorkspaceContextProvider extends React.Component {
    * Handle the user view route change
    */
   async handleUserRouteChange() {
-    const isUserLocation = this.props.location.pathname.includes('users')
-      || this.props.location.pathname.includes('account-recovery-requests/review');
+    const isUserLocation =
+      this.props.location.pathname.includes("users") ||
+      this.props.location.pathname.includes("account-recovery-requests/review");
 
     if (isUserLocation) {
       const userId = this.props.match.params.selectedUserId;
-      if (userId) { // Case of user view
+      if (userId) {
+        // Case of user view
         await this.handleSingleUserRouteChange(userId);
-      } else { // Case of all and applied filters
+      } else {
+        // Case of all and applied filters
         await this.handleAllUserRouteChange();
       }
     }
@@ -281,10 +285,11 @@ class UserWorkspaceContextProvider extends React.Component {
   async handleSingleUserRouteChange(userId) {
     const hasUsers = this.users !== null;
     if (hasUsers) {
-      const user = this.users.find(user => user.id === userId);
+      const user = this.users.find((user) => user.id === userId);
       const hasNoneFilter = this.state.filter.type === UserWorkspaceFilterTypes.NONE;
-      if (hasNoneFilter) { // Case of user view by url bar inputting
-        await this.search({type: UserWorkspaceFilterTypes.ALL});
+      if (hasNoneFilter) {
+        // Case of user view by url bar inputting
+        await this.search({ type: UserWorkspaceFilterTypes.ALL });
       }
       // If the user does not exist, it should display an error
       if (user) {
@@ -304,7 +309,7 @@ class UserWorkspaceContextProvider extends React.Component {
   async handleAllUserRouteChange() {
     const hasUsers = this.users !== null;
     if (hasUsers) {
-      const filter = this.props.location.state?.filter || {type: UserWorkspaceFilterTypes.ALL};
+      const filter = this.props.location.state?.filter || { type: UserWorkspaceFilterTypes.ALL };
       await this.search(filter);
       await this.detailNothing();
     }
@@ -322,7 +327,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   handleUnknownUser() {
     this.props.actionFeedbackContext.displayError("The user does not exist");
-    this.props.history.push({pathname: "/app/users"});
+    this.props.history.push({ pathname: "/app/users" });
   }
 
   /**
@@ -330,7 +335,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   handleUnknownGroup() {
     this.props.actionFeedbackContext.displayError("The group does not exist");
-    this.props.history.push({pathname: "/app/users"});
+    this.props.history.push({ pathname: "/app/users" });
   }
 
   /**
@@ -423,7 +428,9 @@ class UserWorkspaceContextProvider extends React.Component {
       [UserWorkspaceFilterTypes.RECENTLY_MODIFIED]: this.searchByRecentlyModified.bind(this),
       [UserWorkspaceFilterTypes.SUSPENDED_USER]: this.searchBySuspendedUsers.bind(this),
       [UserWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
-      [UserWorkspaceFilterTypes.NONE]: () => { /* No search */ },
+      [UserWorkspaceFilterTypes.NONE]: () => {
+        /* No search */
+      },
       [UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST]: this.searchByAccountRecoveryRequestUsers.bind(this),
       [UserWorkspaceFilterTypes.MISSING_METADATA_KEY]: this.searchByMissingMetadataKeyUsers.bind(this),
     };
@@ -440,7 +447,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param {string} filter The All filter
    */
   async searchAll(filter) {
-    this.setState({filter, filteredUsers: this.users});
+    this.setState({ filter, filteredUsers: this.users });
   }
 
   /**
@@ -449,9 +456,9 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async searchByGroup(filter) {
     const group = filter.payload.group;
-    const usersGroupIds = group.groups_users.map(groupUser => groupUser.user_id);
-    const filteredUsers = this.users.filter(user => usersGroupIds.some(userId => userId === user.id));
-    this.setState({filter, filteredUsers});
+    const usersGroupIds = group.groups_users.map((groupUser) => groupUser.user_id);
+    const filteredUsers = this.users.filter((user) => usersGroupIds.some((userId) => userId === user.id));
+    this.setState({ filter, filteredUsers });
   }
 
   /**
@@ -460,20 +467,21 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async searchByText(filter) {
     const text = filter.payload;
-    const words =  (text && text.split(/\s+/)) || [''];
+    const words = (text && text.split(/\s+/)) || [""];
 
     // Test match of some escaped test words against the name / username
-    const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
+    const escapeWord = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const wordToRegex = (word) => new RegExp(escapeWord(word), "i");
     const matchWord = (word, value) => wordToRegex(word).test(value);
 
     const matchUsernameProperty = (word, user) => matchWord(word, user.username);
-    const matchNameProperty = (word, user) =>  matchWord(word, user.profile.first_name) || matchWord(word, user.profile.last_name);
+    const matchNameProperty = (word, user) =>
+      matchWord(word, user.profile.first_name) || matchWord(word, user.profile.last_name);
     const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
-    const matchText = user => words.every(word => matchUser(word, user));
+    const matchText = (user) => words.every((word) => matchUser(word, user));
 
     const filteredUsers = this.users.filter(matchText);
-    this.setState({filter, filteredUsers});
+    this.setState({ filter, filteredUsers });
   }
 
   /**
@@ -481,9 +489,10 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param {string} filter A recently modified filter
    */
   async searchByRecentlyModified(filter) {
-    const recentlyModifiedSorter = (user1, user2) => DateTime.fromISO(user2.modified) < DateTime.fromISO(user1.modified) ? -1 : 1;
+    const recentlyModifiedSorter = (user1, user2) =>
+      DateTime.fromISO(user2.modified) < DateTime.fromISO(user1.modified) ? -1 : 1;
     const filteredUsers = this.users.sort(recentlyModifiedSorter);
-    this.setState({filter, filteredUsers});
+    this.setState({ filter, filteredUsers });
   }
 
   /**
@@ -491,8 +500,8 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param {string} filter A suspended users filter
    */
   async searchBySuspendedUsers(filter) {
-    const filteredUsers = this.users.filter(u => isUserSuspended(u));
-    this.setState({filter, filteredUsers});
+    const filteredUsers = this.users.filter((u) => isUserSuspended(u));
+    this.setState({ filter, filteredUsers });
   }
 
   /**
@@ -500,8 +509,8 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param {string} filter A account recovery request users filter
    */
   async searchByAccountRecoveryRequestUsers(filter) {
-    const filteredUsers = this.users.filter(user => isAccountRecoveryRequested(user));
-    this.setState({filter, filteredUsers});
+    const filteredUsers = this.users.filter((user) => isAccountRecoveryRequested(user));
+    this.setState({ filter, filteredUsers });
   }
 
   /**
@@ -509,8 +518,8 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param {string} filter A missing metadata key users filter
    */
   async searchByMissingMetadataKeyUsers(filter) {
-    const filteredUsers = this.users.filter(user => isMissingMetadataKey(user));
-    this.setState({filter, filteredUsers});
+    const filteredUsers = this.users.filter((user) => isMissingMetadataKey(user));
+    this.setState({ filter, filteredUsers });
   }
 
   /**
@@ -519,14 +528,16 @@ class UserWorkspaceContextProvider extends React.Component {
   async refreshSearchFilter() {
     const hasGroupFilter = this.state.filter.type === UserWorkspaceFilterTypes.GROUP;
     if (hasGroupFilter) {
-      const isGroupStillExist = this.groups.some(group => group.id === this.state.filter.payload.group.id);
-      if (isGroupStillExist) { // Case of group exists but may have somme applied changes on it
-        const updatedGroup = this.groups.find(group => group.id === this.state.filter.payload.group.id);
-        const filter = Object.assign(this.state.filter, {payload: {group: updatedGroup}});
+      const isGroupStillExist = this.groups.some((group) => group.id === this.state.filter.payload.group.id);
+      if (isGroupStillExist) {
+        // Case of group exists but may have somme applied changes on it
+        const updatedGroup = this.groups.find((group) => group.id === this.state.filter.payload.group.id);
+        const filter = Object.assign(this.state.filter, { payload: { group: updatedGroup } });
         await this.search(filter);
-      } else { // Case of filter group deleted
-        const filter = {type: UserWorkspaceFilterTypes.ALL};
-        this.props.history.push({pathname: '/app/users', state: {filter}});
+      } else {
+        // Case of filter group deleted
+        const filter = { type: UserWorkspaceFilterTypes.ALL };
+        this.props.history.push({ pathname: "/app/users", state: { filter } });
       }
     }
   }
@@ -539,7 +550,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async select(user) {
     const mustUnselect = this.state.selectedUsers.length === 1 && this.state.selectedUsers[0].id === user.id;
-    this.setState({selectedUsers: mustUnselect ? [] : [user]});
+    this.setState({ selectedUsers: mustUnselect ? [] : [user] });
   }
 
   /**
@@ -548,7 +559,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async selectFromRoute(user) {
     const selectedUsers = [user];
-    this.setState({selectedUsers});
+    this.setState({ selectedUsers });
   }
 
   /**
@@ -557,7 +568,7 @@ class UserWorkspaceContextProvider extends React.Component {
   async unselectAll() {
     const hasSelectedUsers = this.state.selectedUsers.length !== 0;
     if (hasSelectedUsers) {
-      this.setState({selectedUsers: []});
+      this.setState({ selectedUsers: [] });
     }
   }
 
@@ -565,10 +576,10 @@ class UserWorkspaceContextProvider extends React.Component {
    * Remove from the selected users those which are not present in regard of the current displayed list
    */
   async unselectUsersNotFiltered() {
-    const matchId = selectedUser => user => user.id === selectedUser.id;
-    const matchSelectedUser = selectedUser => this.state.filteredUsers.some(matchId(selectedUser));
+    const matchId = (selectedUser) => (user) => user.id === selectedUser.id;
+    const matchSelectedUser = (selectedUser) => this.state.filteredUsers.some(matchId(selectedUser));
     const selectedUsers = this.state.selectedUsers.filter(matchSelectedUser);
-    this.setState({selectedUsers});
+    this.setState({ selectedUsers });
   }
 
   /**
@@ -578,26 +589,27 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasUsersAndGroups = this.users !== null && this.groups !== null;
     if (hasUsersAndGroups) {
       const hasUserSelected = this.state.selectedUsers.length === 1;
-      if (hasUserSelected) { // Case of selected user
+      if (hasUserSelected) {
+        // Case of selected user
         this.props.history.push(`/app/users/view/${this.state.selectedUsers[0].id}`);
       } else {
-        const {filter} = this.state;
+        const { filter } = this.state;
         const isGroupFilter = filter.type === UserWorkspaceFilterTypes.GROUP;
         if (isGroupFilter) {
-          const mustRedirect = this.props.location.pathname !== `/app/groups/view/${this.state.filter.payload.group.id}`;
+          const mustRedirect =
+            this.props.location.pathname !== `/app/groups/view/${this.state.filter.payload.group.id}`;
           if (mustRedirect) {
-            this.props.history.push({pathname: `/app/groups/view/${this.state.filter.payload.group.id}`});
+            this.props.history.push({ pathname: `/app/groups/view/${this.state.filter.payload.group.id}` });
           }
         } else {
-          const mustRedirect = this.props.location.pathname !== '/app/users';
+          const mustRedirect = this.props.location.pathname !== "/app/users";
           if (mustRedirect) {
-            this.props.history.push({pathname: `/app/users`, state: {filter}});
+            this.props.history.push({ pathname: `/app/users`, state: { filter } });
           }
         }
       }
     }
   }
-
 
   /** USER SORTER **/
 
@@ -607,43 +619,53 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async updateSorter(propertyName) {
     const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
-    const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
-    const sorter = {propertyName, asc};
-    this.setState({sorter});
+    const asc = hasSortPropertyChanged || !this.state.sorter.asc;
+    const sorter = { propertyName, asc };
+    this.setState({ sorter });
   }
 
   /**
    * Reset the user sorter
    */
   async resetSorter() {
-    const sorter = {propertyName: 'modified', asc: false};
-    this.setState({sorter});
+    const sorter = { propertyName: "modified", asc: false };
+    this.setState({ sorter });
   }
 
   /**
    * Sort the users given the current sorter
    */
   async sort() {
-    const reverseSorter = sorter => (s1, s2) => -sorter(s1, s2);
-    const baseSorter =  sorter => this.state.sorter.asc ? sorter : reverseSorter(sorter);
+    const reverseSorter = (sorter) => (s1, s2) => -sorter(s1, s2);
+    const baseSorter = (sorter) => (this.state.sorter.asc ? sorter : reverseSorter(sorter));
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
-    const plainObjectSorter = sorter => baseSorter(sorter);
+    const plainObjectSorter = (sorter) => baseSorter(sorter);
 
-    const dateSorter = (d1, d2) => !d1 ? -1 : (!d2 ? 1 : DateTime.fromISO(d1) < DateTime.fromISO(d2) ? -1 : 1);
+    const dateSorter = (d1, d2) => (!d1 ? -1 : !d2 ? 1 : DateTime.fromISO(d1) < DateTime.fromISO(d2) ? -1 : 1);
     const stringSorter = (s1, s2) => (s1 || "").localeCompare(s2 || "");
-    const mfaSorter = (u1, u2) => (u2.is_mfa_enabled === u1.is_mfa_enabled) ? 0 : u2.is_mfa_enabled ? -1 : 1;
-    const accountRecoveryUserSettingStatusSorter = (u1, u2) => (u2?.account_recovery_user_setting?.status === u1?.account_recovery_user_setting?.status) ? 0 : u2?.account_recovery_user_setting?.status ? -1 : 1;
-    const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;
+    const mfaSorter = (u1, u2) => (u2.is_mfa_enabled === u1.is_mfa_enabled ? 0 : u2.is_mfa_enabled ? -1 : 1);
+    const accountRecoveryUserSettingStatusSorter = (u1, u2) =>
+      u2?.account_recovery_user_setting?.status === u1?.account_recovery_user_setting?.status
+        ? 0
+        : u2?.account_recovery_user_setting?.status
+          ? -1
+          : 1;
+    const getUserFullName = (user) => `${user.profile.first_name} ${user.profile.last_name}`;
     const nameSorter = (u1, u2) => getUserFullName(u1).localeCompare(getUserFullName(u2));
-    const roleNameSorter = (roleIdU1, roleIdU2) => this.getTranslatedRoleName(roleIdU1).localeCompare(this.getTranslatedRoleName(roleIdU2));
-    const suspendedSorter = (u1, u2) => (isUserSuspended(u1) === isUserSuspended(u2)) ? 0 : isUserSuspended(u2) ? -1 : 1;
-    const dateOrStringSorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
+    const roleNameSorter = (roleIdU1, roleIdU2) =>
+      this.getTranslatedRoleName(roleIdU1).localeCompare(this.getTranslatedRoleName(roleIdU2));
+    const suspendedSorter = (u1, u2) =>
+      isUserSuspended(u1) === isUserSuspended(u2) ? 0 : isUserSuspended(u2) ? -1 : 1;
+    const dateOrStringSorter = ["modified", "last_logged_in"].includes(this.state.sorter.propertyName)
+      ? dateSorter
+      : stringSorter;
 
-    const isNameProperty = this.state.sorter.propertyName === 'profile';
-    const isMfaProperty = this.state.sorter.propertyName === 'is_mfa_enabled';
-    const isRoleNameProperty = this.state.sorter.propertyName === 'role_id';
-    const isSuspendedProperty = this.state.sorter.propertyName === 'disabled';
-    const isAccountRecoveryUserSettingStatusProperty = this.state.sorter.propertyName === 'account_recovery_user_setting.status';
+    const isNameProperty = this.state.sorter.propertyName === "profile";
+    const isMfaProperty = this.state.sorter.propertyName === "is_mfa_enabled";
+    const isRoleNameProperty = this.state.sorter.propertyName === "role_id";
+    const isSuspendedProperty = this.state.sorter.propertyName === "disabled";
+    const isAccountRecoveryUserSettingStatusProperty =
+      this.state.sorter.propertyName === "account_recovery_user_setting.status";
 
     let propertySorter;
     if (isNameProperty) {
@@ -660,7 +682,7 @@ class UserWorkspaceContextProvider extends React.Component {
       propertySorter = keySorter(this.state.sorter.propertyName, dateOrStringSorter);
     }
 
-    this.setState({filteredUsers: this.state.filteredUsers.sort(propertySorter)});
+    this.setState({ filteredUsers: this.state.filteredUsers.sort(propertySorter) });
   }
 
   /** USER DETAILS  **/
@@ -671,7 +693,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async detailGroup(group) {
     const locked = this.state.details.locked;
-    this.setState({details: {group, user: null, locked}});
+    this.setState({ details: { group, user: null, locked } });
   }
 
   /**
@@ -680,7 +702,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async detailUser(user) {
     const locked = this.state.details.locked;
-    this.setState({details: {group: null, user, locked}});
+    this.setState({ details: { group: null, user, locked } });
   }
 
   /**
@@ -690,7 +712,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasDetails = this.state.details.user || this.state.details.group;
     if (hasDetails) {
       const locked = this.state.details.locked;
-      this.setState({details: {group: null, user: null, locked}});
+      this.setState({ details: { group: null, user: null, locked } });
     }
   }
 
@@ -701,7 +723,7 @@ class UserWorkspaceContextProvider extends React.Component {
   async lockDetails() {
     const details = this.state.details;
     const locked = this.state.details.locked;
-    this.setState({details: Object.assign({}, details, {locked: !locked})});
+    this.setState({ details: Object.assign({}, details, { locked: !locked }) });
   }
 
   /**
@@ -713,12 +735,15 @@ class UserWorkspaceContextProvider extends React.Component {
     if (hasDetails) {
       const hasUserDetails = this.state.details.user;
       const locked = this.state.details.locked;
-      if (hasUserDetails) { // Case of user details
-        const updatedUserDetails = this.state.filteredUsers.find(user => user.id === this.state.details.user.id) || null;
-        this.setState({details: {user: updatedUserDetails, group: null, locked}});
-      } else { // Case of group details
-        const updatedGroupDetails = this.groups.find(group => group.id === this.state.details.group.id);
-        this.setState({details: {group: updatedGroupDetails, user: null, locked}});
+      if (hasUserDetails) {
+        // Case of user details
+        const updatedUserDetails =
+          this.state.filteredUsers.find((user) => user.id === this.state.details.user.id) || null;
+        this.setState({ details: { user: updatedUserDetails, group: null, locked } });
+      } else {
+        // Case of group details
+        const updatedGroupDetails = this.groups.find((group) => group.id === this.state.details.group.id);
+        this.setState({ details: { group: updatedGroupDetails, user: null, locked } });
       }
     }
   }
@@ -730,14 +755,14 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param user A user
    */
   async scrollTo(user) {
-    this.setState({scrollTo: {user}});
+    this.setState({ scrollTo: { user } });
   }
 
   /**
    * Unset the user to scroll to
    */
   async scrollNothing() {
-    this.setState({scrollTo: {}});
+    this.setState({ scrollTo: {} });
   }
 
   /** GROUP EDIT **/
@@ -747,7 +772,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param groupToEdit The group to edit
    */
   async updateGroupToEdit(groupToEdit) {
-    this.setState({groupToEdit});
+    this.setState({ groupToEdit });
   }
 
   /** Common roles getters **/
@@ -769,9 +794,7 @@ class UserWorkspaceContextProvider extends React.Component {
      * this.translate("admin")
      * this.translate("user")
      */
-    return role.isAReservedRole()
-      ? this.props.t(role.name)
-      : role.name; //it is a custom role, we do not handle translation
+    return role.isAReservedRole() ? this.props.t(role.name) : role.name; //it is a custom role, we do not handle translation
   }
 
   /**
@@ -779,7 +802,9 @@ class UserWorkspaceContextProvider extends React.Component {
    * @returns {boolean}
    */
   shouldDisplaySuspendedUsersFilter() {
-    return this.props.context.siteSettings.canIUse('disableUser') && this.props.context.loggedInUser.role.name === "admin";
+    return (
+      this.props.context.siteSettings.canIUse("disableUser") && this.props.context.loggedInUser.role.name === "admin"
+    );
   }
 
   /**
@@ -787,15 +812,11 @@ class UserWorkspaceContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <UserWorkspaceContext.Provider value={this.state}>
-        {this.props.children}
-      </UserWorkspaceContext.Provider>
-    );
+    return <UserWorkspaceContext.Provider value={this.state}>{this.props.children}</UserWorkspaceContext.Provider>;
   }
 }
 
-UserWorkspaceContextProvider.displayName = 'UserWorkspaceContextProvider';
+UserWorkspaceContextProvider.displayName = "UserWorkspaceContextProvider";
 UserWorkspaceContextProvider.propTypes = {
   context: PropTypes.any, // The application context
   children: PropTypes.any, // The component children
@@ -811,7 +832,13 @@ UserWorkspaceContextProvider.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withRbac(withDialog(withActionFeedback(withLoading(withRoles(withTranslation('common')(UserWorkspaceContextProvider))))))));
+export default withAppContext(
+  withRouter(
+    withRbac(
+      withDialog(withActionFeedback(withLoading(withRoles(withTranslation("common")(UserWorkspaceContextProvider))))),
+    ),
+  ),
+);
 
 /**
  * User Workspace Context Consumer HOC
@@ -822,9 +849,7 @@ export function withUserWorkspace(WrappedComponent) {
     render() {
       return (
         <UserWorkspaceContext.Consumer>
-          {
-            UserWorkspaceContext => <WrappedComponent userWorkspaceContext={UserWorkspaceContext} {...this.props} />
-          }
+          {(UserWorkspaceContext) => <WrappedComponent userWorkspaceContext={UserWorkspaceContext} {...this.props} />}
         </UserWorkspaceContext.Consumer>
       );
     }
@@ -835,12 +860,12 @@ export function withUserWorkspace(WrappedComponent) {
  * The list of user workspace search filter types
  */
 export const UserWorkspaceFilterTypes = {
-  NONE: 'NONE', // Initial filter at page load
-  ALL: 'ALL', // All users
-  GROUP: 'FILTER-BY-GROUP', // Users for a given group
-  TEXT: 'FILTER-BY-TEXT-SEARCH', // Users matching some text words
-  RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIED', // Keep recently modified users
-  SUSPENDED_USER: 'FILTER-BY-SUSPENDED-USER', // Keep only suspended users
-  ACCOUNT_RECOVERY_REQUEST: 'ACCOUNT_RECOVERY_REQUEST',
-  MISSING_METADATA_KEY: 'MISSING_METADATA_KEY',
+  NONE: "NONE", // Initial filter at page load
+  ALL: "ALL", // All users
+  GROUP: "FILTER-BY-GROUP", // Users for a given group
+  TEXT: "FILTER-BY-TEXT-SEARCH", // Users matching some text words
+  RECENTLY_MODIFIED: "FILTER-BY-RECENTLY-MODIFIED", // Keep recently modified users
+  SUSPENDED_USER: "FILTER-BY-SUSPENDED-USER", // Keep only suspended users
+  ACCOUNT_RECOVERY_REQUEST: "ACCOUNT_RECOVERY_REQUEST",
+  MISSING_METADATA_KEY: "MISSING_METADATA_KEY",
 };

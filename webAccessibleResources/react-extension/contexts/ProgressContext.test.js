@@ -13,8 +13,8 @@
  */
 
 import mockComponentSetState from "../test/mock/components/React/mockSetState";
-import {ProgressContextProvider} from "./ProgressContext";
-import {defaultProps} from "./ProgressContext.test.data";
+import { ProgressContextProvider } from "./ProgressContext";
+import { defaultProps } from "./ProgressContext.test.data";
 import DisplayProgress from "../components/Common/Progress/DisplayProgress/DisplayProgress";
 
 beforeEach(() => {
@@ -23,7 +23,7 @@ beforeEach(() => {
 });
 
 describe("ProgressContext", () => {
-  it("Should initialiaze with default state values.", async() => {
+  it("Should initialiaze with default state values.", async () => {
     const contextProvider = new ProgressContextProvider(defaultProps());
     mockComponentSetState(contextProvider);
 
@@ -33,21 +33,25 @@ describe("ProgressContext", () => {
     expect(contextProvider.state.dialogIndex).toBeNull();
   });
 
-  it("Should open dialog with given progress details.", async() => {
+  it("Should open dialog with given progress details.", async () => {
     const props = defaultProps();
     const contextProvider = new ProgressContextProvider(props);
     mockComponentSetState(contextProvider);
-    jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => 42);
+    jest.spyOn(props.dialogContext, "open").mockImplementationOnce(() => 42);
 
     expect.assertions(3);
 
     contextProvider.open("Progress dialog test title", 2, "Progress dialog test message");
     expect(props.dialogContext.open).toHaveBeenCalledWith(DisplayProgress);
-    expect(contextProvider.state.progressDialogProps).toEqual({"goals": 2, "message": "Progress dialog test message", "title": "Progress dialog test title"});
+    expect(contextProvider.state.progressDialogProps).toEqual({
+      goals: 2,
+      message: "Progress dialog test message",
+      title: "Progress dialog test title",
+    });
     expect(contextProvider.state.dialogIndex).toEqual(42);
   });
 
-  it("Should update existing dialog message.", async() => {
+  it("Should update existing dialog message.", async () => {
     const props = defaultProps();
     const contextProvider = new ProgressContextProvider(props);
     mockComponentSetState(contextProvider);
@@ -57,10 +61,15 @@ describe("ProgressContext", () => {
     contextProvider.open("Progress dialog test title", 2, "Progress dialog test message");
     contextProvider.updateMessage("Progress dialog test message updated", true);
 
-    expect(contextProvider.state.progressDialogProps).toEqual({"goals": 2, "message": "Progress dialog test message updated", "title": "Progress dialog test title", "completed": true});
+    expect(contextProvider.state.progressDialogProps).toEqual({
+      goals: 2,
+      message: "Progress dialog test message updated",
+      title: "Progress dialog test title",
+      completed: true,
+    });
   });
 
-  it("Should update existing dialog goals.", async() => {
+  it("Should update existing dialog goals.", async () => {
     const props = defaultProps();
     const contextProvider = new ProgressContextProvider(props);
     mockComponentSetState(contextProvider);
@@ -70,14 +79,18 @@ describe("ProgressContext", () => {
     contextProvider.open("Progress dialog test title", 2, "Progress dialog test message");
     contextProvider.updateGoals(42);
 
-    expect(contextProvider.state.progressDialogProps).toEqual({"goals": 42, "message": "Progress dialog test message", "title": "Progress dialog test title"});
+    expect(contextProvider.state.progressDialogProps).toEqual({
+      goals: 42,
+      message: "Progress dialog test message",
+      title: "Progress dialog test title",
+    });
   });
 
-  it("Should close dialog.", async() => {
+  it("Should close dialog.", async () => {
     const props = defaultProps();
     const contextProvider = new ProgressContextProvider(props);
     mockComponentSetState(contextProvider);
-    jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => 42);
+    jest.spyOn(props.dialogContext, "open").mockImplementationOnce(() => 42);
 
     expect.assertions(1);
 

@@ -15,11 +15,11 @@
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import RbacsCollection from "../../../models/entity/rbac/rbacsCollection";
 import RbacServiceWorkerService from "./rbacServiceWorkerService";
-import {userSettingsRbacsCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
+import { userSettingsRbacsCollectionData } from "../../../models/entity/rbac/rbacsCollection.test.data";
 
 describe("RbacServiceWorkerService", () => {
   describe("::findAll", () => {
-    it("should call for the right service worker event and return the right collection", async() => {
+    it("should call for the right service worker event and return the right collection", async () => {
       expect.assertions(4);
 
       const event = "passbolt.rbacs.find-me";

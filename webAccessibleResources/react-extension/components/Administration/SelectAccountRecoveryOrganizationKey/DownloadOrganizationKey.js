@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 
 /**
@@ -65,24 +65,29 @@ class DownloadOrganizationKey extends React.Component {
         title={this.props.t("Confirm Organization Recovery Key download")}
         onClose={this.handleCloseClick}
         disabled={false}
-        className="organization-recover-key-download-dialog">
+        className="organization-recover-key-download-dialog"
+      >
         <div className="dialog-body">
-          <p><Trans>A download of the organization private key has automatically started.</Trans></p>
-          <p><Trans>Make sure your print it or store it in a safe place. You may need it later!</Trans></p>
+          <p>
+            <Trans>A download of the organization private key has automatically started.</Trans>
+          </p>
+          <p>
+            <Trans>Make sure your print it or store it in a safe place. You may need it later!</Trans>
+          </p>
         </div>
         <div className="dialog-footer clearfix">
-          <button
-            className="button button-left cancel medium"
-            type="button"
-            onClick={this.props.handleDownloadAgain}>
+          <button className="button button-left cancel medium" type="button" onClick={this.props.handleDownloadAgain}>
             <Trans>Download again</Trans>
           </button>
           <button
             className="button primary form"
-            type='button'
+            type="button"
             onClick={this.handleCloseClick}
-            disabled={this.isProcessing}>
-            <span><Trans>Ok</Trans></span>
+            disabled={this.isProcessing}
+          >
+            <span>
+              <Trans>Ok</Trans>
+            </span>
           </button>
         </div>
       </DialogWrapper>
@@ -97,4 +102,4 @@ DownloadOrganizationKey.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(DownloadOrganizationKey);
+export default withTranslation("common")(DownloadOrganizationKey);

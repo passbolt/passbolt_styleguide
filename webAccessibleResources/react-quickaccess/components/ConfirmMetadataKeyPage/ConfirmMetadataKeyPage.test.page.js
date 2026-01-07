@@ -12,11 +12,10 @@
  * @since         5.1.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ConfirmMetadataKeyPage from "./ConfirmMetadataKeyPage";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 /**
  * The ConfirmMetadataKeyPage component represented as a page
  */
@@ -28,9 +27,9 @@ export default class ConfirmMetadataKeyPageTest {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ConfirmMetadataKeyPage {...props}/>
+        <ConfirmMetadataKeyPage {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,28 +37,28 @@ export default class ConfirmMetadataKeyPageTest {
    * Returns the confirm metadata key element
    */
   get confirmMetadataKey() {
-    return this._page.container.querySelector('.confirm-metadata-key');
+    return this._page.container.querySelector(".confirm-metadata-key");
   }
 
   /**
    * Returns the more information button element
    */
   get moreInformationButton() {
-    return this._page.container.querySelector('.accordion-header button');
+    return this._page.container.querySelector(".accordion-header button");
   }
 
   /**
    * Returns the more information button element
    */
   get fingerprint() {
-    return this._page.container.querySelector('.fingerprint');
+    return this._page.container.querySelector(".fingerprint");
   }
 
   /**
    * Returns the dialog close element
    */
   get closeButton() {
-    return this._page.container.querySelector('a.secondary-action');
+    return this._page.container.querySelector("a.secondary-action");
   }
 
   /**
@@ -80,7 +79,7 @@ export default class ConfirmMetadataKeyPageTest {
    * Saves the change on the group
    */
   async submit() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.submitButton, leftClick);
     await waitFor(() => {});
   }
@@ -89,7 +88,7 @@ export default class ConfirmMetadataKeyPageTest {
    * Close the dialog
    */
   async close() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.closeButton, leftClick);
     await waitFor(() => {});
   }
@@ -98,7 +97,7 @@ export default class ConfirmMetadataKeyPageTest {
    * Go to renew key
    */
   async openMoreInformation() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.moreInformationButton, leftClick);
     await waitFor(() => {});
   }

@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import SearchSVG from "../../../../../img/svg/search.svg";
 import CloseSVG from "../../../../../img/svg/close.svg";
 
@@ -60,7 +60,7 @@ class SearchBar extends Component {
    */
   clearSearchInput() {
     this.searchInputRef.current.focus();
-    this.props.onSearch('');
+    this.props.onSearch("");
   }
 
   get placeholderLabel() {
@@ -75,24 +75,37 @@ class SearchBar extends Component {
     return (
       <div className="col2 search-wrapper">
         <div className="search">
-          <div className={`input search required ${this.props.disabled ? 'disabled' : ''}`}>
-            <label className="visuallyhidden"><Trans>Search</Trans></label>
-            <input ref={this.searchInputRef} className="required" type="search"
+          <div className={`input search required ${this.props.disabled ? "disabled" : ""}`}>
+            <label className="visuallyhidden">
+              <Trans>Search</Trans>
+            </label>
+            <input
+              ref={this.searchInputRef}
+              className="required"
+              type="search"
               disabled={this.props.disabled}
               onChange={this.handleChangeEvent}
               placeholder={this.placeholderLabel}
-              value={this.props.value}/>
+              value={this.props.value}
+            />
             <div className="search-button-wrapper">
-              { this.props.value ?
-                <button className="button button-transparent" name="clear-button" type="button" onClick={this.clearSearchInput}>
-                  <CloseSVG/>
-                  <span className="visuallyhidden"><Trans>Clear</Trans></span>
+              {this.props.value ? (
+                <button
+                  className="button button-transparent"
+                  name="clear-button"
+                  type="button"
+                  onClick={this.clearSearchInput}
+                >
+                  <CloseSVG />
+                  <span className="visuallyhidden">
+                    <Trans>Clear</Trans>
+                  </span>
                 </button>
-                :
+              ) : (
                 <div className="search-icon">
-                  <SearchSVG name="search"/>
+                  <SearchSVG name="search" />
                 </div>
-              }
+              )}
             </div>
           </div>
         </div>

@@ -12,9 +12,9 @@
  * @since         3.0.0
  */
 
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
-import {defaultUserPassphrasePoliciesEntityDto} from "../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
-import {CheckPassphraseVariations} from "./CheckPassphrase";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
+import { defaultUserPassphrasePoliciesEntityDto } from "../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
+import { CheckPassphraseVariations } from "./CheckPassphrase";
 
 /**
  * Default props
@@ -38,7 +38,8 @@ export const defaultProps = (props = {}) => {
  * @param {object} props the props to override
  * @returns {object}
  */
-export const defaultPropsForRecover = (props = {}) => defaultProps({
-  displayAs: CheckPassphraseVariations.RECOVER,
-  ...props
-});
+export const defaultPropsForRecover = (props = {}) =>
+  defaultProps({
+    displayAs: CheckPassphraseVariations.RECOVER,
+    ...props,
+  });

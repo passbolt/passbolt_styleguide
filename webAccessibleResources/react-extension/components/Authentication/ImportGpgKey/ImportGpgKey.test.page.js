@@ -11,10 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ImportGpgKey from "./ImportGpgKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The CreateGpgKeyPage component represented as a page
@@ -27,24 +28,25 @@ export default class ImportGpgKeyPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ImportGpgKey {...props}/>
+        <ImportGpgKey {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('h1').textContent;
+    return this._page.container.querySelector("h1").textContent;
   }
 
   /**
    * Returns the private key input
    */
   get privateKeyInput() {
-    return this._page.container.querySelector('textarea');
+    return this._page.container.querySelector("textarea");
   }
 
   /**
@@ -58,53 +60,53 @@ export default class ImportGpgKeyPage {
    * Returns true if an empty private key error appears
    */
   get hasEmptyPrivateKeyError() {
-    return Boolean(this._page.container.querySelector('.empty-private-key'));
+    return Boolean(this._page.container.querySelector(".empty-private-key"));
   }
 
   /**
    * Returns true if an invalid private key error appears
    */
   get hasInvalidPrivateKeyError() {
-    return Boolean(this._page.container.querySelector('.invalid-private-key'));
+    return Boolean(this._page.container.querySelector(".invalid-private-key"));
   }
 
   /**
    * Returns true if an invalid private key error appears
    */
   get invalidPrivateKeyErrorMessage() {
-    return this._page.container.querySelector('.invalid-private-key').textContent;
+    return this._page.container.querySelector(".invalid-private-key").textContent;
   }
 
   /**
    * Returns the verify button element
    */
   get verifyButton() {
-    return this._page.container.querySelector('.form-actions .button.primary');
+    return this._page.container.querySelector(".form-actions .button.primary");
   }
 
   /**
    * Returns the secondary action link element
    */
   get secondaryActionLink() {
-    return this._page.container.querySelector('.form-actions button.link');
+    return this._page.container.querySelector(".form-actions button.link");
   }
 
   /**
    * Returns true if one is processing
    */
   get isProcessing() {
-    return this.verifyButton.classList.contains('processing');
+    return this.verifyButton.classList.contains("processing");
   }
 
   /**
    * Returns true if the user can change something like the passphrase
    */
   get canChange() {
-    return !this.privateKeyInput.hasAttribute('disabled');
+    return !this.privateKeyInput.hasAttribute("disabled");
   }
 
   get warningMessage() {
-    return this._page.container.querySelector('.warning-message').textContent;
+    return this._page.container.querySelector(".warning-message").textContent;
   }
 
   /**
@@ -112,7 +114,7 @@ export default class ImportGpgKeyPage {
    * @param privateKey The new passphrase
    */
   async fill(privateKey) {
-    fireEvent.change(this.privateKeyInput, {target: {value: privateKey}});
+    fireEvent.change(this.privateKeyInput, { target: { value: privateKey } });
     await waitFor(() => {});
   }
 
@@ -121,8 +123,7 @@ export default class ImportGpgKeyPage {
    * @param inProgressFn Function called while the generation
    */
   async verifyKey(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
-    fireEvent.click(this.verifyButton, leftClick);
+    await this.user.click(this.verifyButton);
     await waitFor(inProgressFn);
   }
 
@@ -130,7 +131,7 @@ export default class ImportGpgKeyPage {
    * Click on the secondary action link.
    */
   async clickSecondaryActionLink(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.secondaryActionLink, leftClick);
     await waitFor(inProgressFn);
   }

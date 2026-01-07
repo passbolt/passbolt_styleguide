@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplaySynchronizeUserDirectoryAdministration from "./DisplaySynchronizeUserDirectoryAdministration";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {AdminUserDirectoryContextProvider} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import { AdminUserDirectoryContextProvider } from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 
 /**
  * The DisplaySynchronizeUserDirectoryAdministration component represented as a page
@@ -32,11 +32,11 @@ export default class DisplaySynchronizeUserDirectoryAdministrationPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <AdminUserDirectoryContextProvider {...props}>
-            <DisplaySynchronizeUserDirectoryAdministration {...props}/>
+            <DisplaySynchronizeUserDirectoryAdministration {...props} />
           </AdminUserDirectoryContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -46,7 +46,8 @@ export default class DisplaySynchronizeUserDirectoryAdministrationPage {
    */
   setupPageObjects() {
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
-    this._displaySynchronizeUserDirectoryAdministrationDialog = new DisplaySynchronizeUserDirectoryAdministrationDialogPageObject(this._page.container);
+    this._displaySynchronizeUserDirectoryAdministrationDialog =
+      new DisplaySynchronizeUserDirectoryAdministrationDialogPageObject(this._page.container);
   }
 
   /**
@@ -97,77 +98,77 @@ class DisplaySynchronizeUserDirectoryAdministrationDialogPageObject {
    * Returns the dialog element
    */
   get dialog() {
-    return this._container.querySelector('.ldap-simulate-synchronize-dialog');
+    return this._container.querySelector(".ldap-simulate-synchronize-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._container.querySelector('.dialog-close');
+    return this._container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the respurce synchronize report element
    */
   get resourceSynchronize() {
-    return this._container.querySelector('#resources-synchronize').textContent;
+    return this._container.querySelector("#resources-synchronize").textContent;
   }
 
   /**
    * Returns the no resource element
    */
   get noResource() {
-    return this._container.querySelector('#no-resources');
+    return this._container.querySelector("#no-resources");
   }
 
   /**
    * Returns the error element
    */
   get error() {
-    return this._container.querySelector('.warning.message').textContent;
+    return this._container.querySelector(".warning.message").textContent;
   }
 
   /**
    * Returns the full report element
    */
   get fullReport() {
-    return this._container.querySelector('.accordion.operation-details .accordion-header');
+    return this._container.querySelector(".accordion.operation-details .accordion-header");
   }
 
   /**
    * Returns the errors test report element
    */
   get textareaReport() {
-    return this._container.querySelector('.accordion-content .input.text textarea');
+    return this._container.querySelector(".accordion-content .input.text textarea");
   }
 
   /**
    * Returns the synchronize button element
    */
   get synchronize() {
-    return this._container.querySelector('.submit-wrapper button.primary');
+    return this._container.querySelector(".submit-wrapper button.primary");
   }
 
   /**
    * Returns the users list element
    */
   get cancel() {
-    return this._container.querySelector('.submit-wrapper .cancel');
+    return this._container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
    * Returns the Download the Full Report link
    */
   get downloadReportLink() {
-    return this._container.querySelector('button.link.download-full-report');
+    return this._container.querySelector("button.link.download-full-report");
   }
 
   /**
    * Returns the nothing to synchronize message
    */
   get noReportMessage() {
-    return this._container.querySelector('#no-report-message').textContent;
+    return this._container.querySelector("#no-report-message").textContent;
   }
   /**
    * Returns true if the page object exists in the container
@@ -178,9 +179,8 @@ class DisplaySynchronizeUserDirectoryAdministrationDialogPageObject {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 }

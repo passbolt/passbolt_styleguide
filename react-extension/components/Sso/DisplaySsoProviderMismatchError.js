@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class DisplaySsoProviderMismatchError extends Component {
   /**
@@ -34,8 +34,8 @@ class DisplaySsoProviderMismatchError extends Component {
       hasAccepted: false, //  True if the user did explicitly accept the new SSO provider
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
-        hasNotAccepted: false // True if the user did not explicitly accept the new SSO provider
-      }
+        hasNotAccepted: false, // True if the user did not explicitly accept the new SSO provider
+      },
     };
   }
 
@@ -43,7 +43,7 @@ class DisplaySsoProviderMismatchError extends Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    return Object.values(this.state.errors).every(value => !value);
+    return Object.values(this.state.errors).every((value) => !value);
   }
 
   /**
@@ -77,7 +77,7 @@ class DisplaySsoProviderMismatchError extends Component {
    */
   handleAcceptChange() {
     const hasAccepted = !this.state.hasAccepted;
-    this.setState({hasAccepted});
+    this.setState({ hasAccepted });
     if (this.state.hasBeenValidated) {
       this.validate(hasAccepted);
     }
@@ -99,8 +99,8 @@ class DisplaySsoProviderMismatchError extends Component {
     this.setState({
       hasBeenValidated: true,
       errors: {
-        hasNotAccepted: !isValid
-      }
+        hasNotAccepted: !isValid,
+      },
     });
 
     return isValid;
@@ -111,23 +111,31 @@ class DisplaySsoProviderMismatchError extends Component {
    * @returns {JSX}
    */
   render() {
-    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
+    const disabledClassName = this.mustBeDisabled ? "disabled" : "";
     const ssoProviderName = this.props.newProvider.name;
     return (
       <div className="sso-provider-mismatch-error">
-        <h1><Trans>Sorry, the SSO provider has changed.</Trans></h1>
-        <p><Trans>For security reasons please check with your administrator that this is a change that they initiated.</Trans><br/>
-          <Trans>The new SSO provider: {{ssoProviderName}}</Trans></p>
-        <form
-          acceptCharset="utf-8"
-          onSubmit={this.handleSubmit}>
-          <div className={`input checkbox ${this.state.hasBeenValidated && this.state.errors.hasNotAccepted ? "error" : ""}`}>
+        <h1>
+          <Trans>Sorry, the SSO provider has changed.</Trans>
+        </h1>
+        <p>
+          <Trans>
+            For security reasons please check with your administrator that this is a change that they initiated.
+          </Trans>
+          <br />
+          <Trans>The new SSO provider: {{ ssoProviderName }}</Trans>
+        </p>
+        <form acceptCharset="utf-8" onSubmit={this.handleSubmit}>
+          <div
+            className={`input checkbox ${this.state.hasBeenValidated && this.state.errors.hasNotAccepted ? "error" : ""}`}
+          >
             <input
               id="accept-new-provider"
               type="checkbox"
               name="accept-new-provider"
               value={this.state.hasAccepted}
-              onChange={this.handleAcceptChange}/>
+              onChange={this.handleAcceptChange}
+            />
             <label htmlFor="accept-new-provider">
               <Trans>Yes I checked and it is all fine.</Trans>
             </label>
@@ -137,7 +145,8 @@ class DisplaySsoProviderMismatchError extends Component {
               type="submit"
               className={`button primary big full-width ${disabledClassName}`}
               role="button"
-              disabled={this.mustBeDisabled}>
+              disabled={this.mustBeDisabled}
+            >
               <Trans>Accept the new SSO provider</Trans>
             </button>
           </div>

@@ -13,43 +13,43 @@
  */
 import ConfirmCreateEdit, {
   ConfirmEditCreateOperationVariations,
-  ConfirmEditCreateRuleVariations
+  ConfirmEditCreateRuleVariations,
 } from "./ConfirmCreateEdit";
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 export default {
-  title: 'Components/Resource/ConfirmCreateEdit',
-  component: ConfirmCreateEdit
+  title: "Components/Resource/ConfirmCreateEdit",
+  component: ConfirmCreateEdit,
 };
 
 export const CreateConfirmPwnedPassword = {
   args: {
     operation: ConfirmEditCreateOperationVariations.CREATE,
     rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
-    resourceName: defaultResourceDto().metadata.name
-  }
+    resourceName: defaultResourceDto().metadata.name,
+  },
 };
 
 export const CreateConfirmMinimumEntropyPassword = {
   args: {
     operation: ConfirmEditCreateOperationVariations.CREATE,
     rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
-    resourceName: defaultResourceDto().metadata.name
-  }
+    resourceName: defaultResourceDto().metadata.name,
+  },
 };
 
 export const EditConfirmPwnedPassword = {
   args: {
     operation: ConfirmEditCreateOperationVariations.EDIT,
     rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
-    resourceName: defaultResourceDto().metadata.name
-  }
+    resourceName: defaultResourceDto().metadata.name,
+  },
 };
 
 export const EditConfirmMinimumEntropyPassword = {
   args: {
     operation: ConfirmEditCreateOperationVariations.EDIT,
     rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
-    resourceName: defaultResourceDto().metadata.name
-  }
+    resourceName: defaultResourceDto().metadata.name,
+  },
 };

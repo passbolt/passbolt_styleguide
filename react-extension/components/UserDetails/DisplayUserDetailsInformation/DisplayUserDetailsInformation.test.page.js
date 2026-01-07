@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,12 +12,12 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
+import { UserWorkspaceContext } from "../../../contexts/UserWorkspaceContext";
 import DisplayUserDetailsInformation from "./DisplayUserDetailsInformation";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {RoleContext} from "../../../contexts/RoleContext";
+import { RoleContext } from "../../../contexts/RoleContext";
 
 /**
  * The DisplayUserDetailsInformationPage component represented as a page
@@ -33,11 +32,11 @@ export default class DisplayUserDetailsInformationPage {
       <MockTranslationProvider>
         <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
           <RoleContext.Provider value={props.roleContext}>
-            <DisplayUserDetailsInformation {...props}/>
+            <DisplayUserDetailsInformation {...props} />
           </RoleContext.Provider>
         </UserWorkspaceContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -45,50 +44,50 @@ export default class DisplayUserDetailsInformationPage {
    * Returns the detailed user role
    */
   get role() {
-    return this._page.container.querySelector('.role.value').innerHTML;
+    return this._page.container.querySelector(".role.value").innerHTML;
   }
 
   /**
    * Returns the detailed user status
    */
   get status() {
-    return this._page.container.querySelector('.status.value').textContent;
+    return this._page.container.querySelector(".status.value").textContent;
   }
 
   /**
    * Returns the detailed account recovery status
    */
   get accountRecoveryStatus() {
-    return this._page.container.querySelector('.account-recovery-status.value').textContent;
+    return this._page.container.querySelector(".account-recovery-status.value").textContent;
   }
 
   /**
    * Returns the detailed mfa status
    */
   get mfaStatus() {
-    return this._page.container.querySelector('.mfa.value').textContent;
+    return this._page.container.querySelector(".mfa.value").textContent;
   }
 
   /**
    * Returns the detailed metadata keys status
    */
   get metadataKeysStatus() {
-    return this._page.container.querySelector('.metadata-keys.value').textContent;
+    return this._page.container.querySelector(".metadata-keys.value").textContent;
   }
 
   /**
    * Returns true if the component is in a collapsed mode
    */
   get isCollapsed() {
-    return this._page.container.querySelector('.closed');
+    return this._page.container.querySelector(".closed");
   }
 
   /**
    * Toggle the collapse / expand component hbehavior
    */
   async toggleCollapse() {
-    const element = this._page.container.querySelector('button');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector("button");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

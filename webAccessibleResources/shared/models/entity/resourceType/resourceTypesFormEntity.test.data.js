@@ -20,9 +20,9 @@ import {
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5PasswordStringDto,
   resourceTypeV5StandaloneNoteDto,
-  resourceTypeV5TotpDto
+  resourceTypeV5TotpDto,
 } from "./resourceTypeEntity.test.data";
-import {resourceTypesCollectionDto} from "./resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "./resourceTypesCollection.test.data";
 
 export const defaultResourceTypesFormDto = (data = {}) => ({
   password_v4: true,
@@ -43,32 +43,34 @@ export const defaultResourceTypesFormDto = (data = {}) => ({
   ...data,
 });
 
-export const withDeletedResourceTypesHavingResources = (data = {}) => defaultResourceTypesFormDto({
-  password_v4: false,
-  password_v5: false,
-  totp_v4: false,
-  totp_v5: false,
-  note_v5: false,
-  ...data,
-});
+export const withDeletedResourceTypesHavingResources = (data = {}) =>
+  defaultResourceTypesFormDto({
+    password_v4: false,
+    password_v5: false,
+    totp_v4: false,
+    totp_v5: false,
+    note_v5: false,
+    ...data,
+  });
 
-export const withDeletedResourceTypes = (data = {}) => withDeletedResourceTypesHavingResources({
-  password_v4_count: 0,
-  password_v5_count: 0,
-  totp_v4_count: 0,
-  totp_v5_count: 0,
-  note_v5_count: 0,
-  ...data,
-});
+export const withDeletedResourceTypes = (data = {}) =>
+  withDeletedResourceTypesHavingResources({
+    password_v4_count: 0,
+    password_v5_count: 0,
+    totp_v4_count: 0,
+    totp_v5_count: 0,
+    note_v5_count: 0,
+    ...data,
+  });
 
-export const resourceTypesCollectionWithCountDto = () => ([
-  resourceTypePasswordStringDto({resources_count: 5}),
-  resourceTypePasswordAndDescriptionDto({resources_count: 6}),
-  resourceTypePasswordDescriptionTotpDto({resources_count: 7}),
-  resourceTypeTotpDto({resources_count: 8}),
-  resourceTypeV5DefaultDto({resources_count: 9}),
-  resourceTypeV5PasswordStringDto({resources_count: 3}),
-  resourceTypeV5DefaultTotpDto({resources_count: 2}),
-  resourceTypeV5TotpDto({resources_count: 1}),
-  resourceTypeV5StandaloneNoteDto({resources_count: 1})
-]);
+export const resourceTypesCollectionWithCountDto = () => [
+  resourceTypePasswordStringDto({ resources_count: 5 }),
+  resourceTypePasswordAndDescriptionDto({ resources_count: 6 }),
+  resourceTypePasswordDescriptionTotpDto({ resources_count: 7 }),
+  resourceTypeTotpDto({ resources_count: 8 }),
+  resourceTypeV5DefaultDto({ resources_count: 9 }),
+  resourceTypeV5PasswordStringDto({ resources_count: 3 }),
+  resourceTypeV5DefaultTotpDto({ resources_count: 2 }),
+  resourceTypeV5TotpDto({ resources_count: 1 }),
+  resourceTypeV5StandaloneNoteDto({ resources_count: 1 }),
+];

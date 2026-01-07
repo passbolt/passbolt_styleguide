@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayUnexpectedError from "./DisplayUnexpectedError";
@@ -28,9 +28,8 @@ export default class DisplayUnexpectedErrorTestPage {
   constructor(props = {}) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayUnexpectedError {...props}/>
+        <DisplayUnexpectedError {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
   }
 
@@ -38,35 +37,35 @@ export default class DisplayUnexpectedErrorTestPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.setup-error h1').textContent;
+    return this._page.container.querySelector(".setup-error h1").textContent;
   }
 
   /**
    * Returns the try again element
    */
   get tryAgainButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns the more details cta element
    */
   get moreDetailsCta() {
-    return this._page.container.querySelector('.error-details button');
+    return this._page.container.querySelector(".error-details button");
   }
 
   /**
    * Returns the more details element
    */
   get errorDetails() {
-    return this._page.container.querySelector('.error-details textarea');
+    return this._page.container.querySelector(".error-details textarea");
   }
 
   /**
    * Request new account
    */
   async tryAgain() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.tryAgainButton, leftClick);
   }
 
@@ -74,7 +73,7 @@ export default class DisplayUnexpectedErrorTestPage {
    * Show error details
    */
   async showErrorDetails() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.moreDetailsCta, leftClick);
   }
 }

@@ -12,23 +12,23 @@
  * @since         3.3.0
  */
 
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import AppContext, {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import QRCode from 'qrcode';
-import {sha512} from "../../../lib/Crypto/sha512";
-import {Trans, withTranslation} from "react-i18next";
-import {withUserSettings} from "../../../contexts/UserSettingsContext";
+import AppContext, { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import QRCode from "qrcode";
+import { sha512 } from "../../../lib/Crypto/sha512";
+import { Trans, withTranslation } from "react-i18next";
+import { withUserSettings } from "../../../contexts/UserSettingsContext";
 import ShowErrorDetails from "../../Common/Error/ShowErrorDetails/ShowErrorDetails";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 import MobileTransferIcon from "../../Common/Icons/MobileTransferIcon";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
-import {createSafePortal} from '../../../../shared/utils/portals';
+import { createSafePortal } from "../../../../shared/utils/portals";
 
 // Ref. http://blog.qr4.nl/page/QR-Code-Data-Capacity.aspx
 const QRCODE_VERSION = 27;
-const QRCODE_ERROR_CORRECTION = 'L';
+const QRCODE_ERROR_CORRECTION = "L";
 const QRCODE_MAXSLICE = 1465;
 const QRCODE_MARGIN = 4;
 const QRCCODE_PROTOCOL_VERSION = 1;
@@ -38,12 +38,12 @@ const FETCH_INTERVAL = 333; //in ms
 const MAX_UINT8 = 255;
 
 const TransferToMobileSteps = {
-  HTTPS_REQUIRED: 'https required',
-  START: 'start',
-  IN_PROGRESS: 'in progress',
-  COMPLETE: 'complete',
-  CANCEL: 'cancel',
-  ERROR: 'error',
+  HTTPS_REQUIRED: "https required",
+  START: "start",
+  IN_PROGRESS: "in progress",
+  COMPLETE: "complete",
+  CANCEL: "cancel",
+  ERROR: "error",
 };
 
 /**
@@ -66,9 +66,7 @@ class TransferToMobile extends React.Component {
    * Returns the component default state
    */
   get defaultState() {
-    const step = this.isRunningUnderHttps
-      ? TransferToMobileSteps.START
-      : TransferToMobileSteps.HTTPS_REQUIRED;
+    const step = this.isRunningUnderHttps ? TransferToMobileSteps.START : TransferToMobileSteps.HTTPS_REQUIRED;
 
     return {
       step: step,
@@ -78,7 +76,7 @@ class TransferToMobile extends React.Component {
       debug: true,
       error: undefined,
       showErrorDetails: false,
-      transferDto: undefined
+      transferDto: undefined,
     };
   }
 
@@ -142,26 +140,26 @@ class TransferToMobile extends React.Component {
   async buildFirstQrCode(transferDto, totalPages, hash) {
     // sanity checks
     if (!transferDto) {
-      throw new Error(this.translate('Server response is empty.'));
+      throw new Error(this.translate("Server response is empty."));
     }
 
     if (transferDto.total_pages !== totalPages || transferDto.hash !== hash) {
-      const error = new Error(this.translate('Server response does not match initial request.'));
-      error.data = {transferDto: transferDto, totalPages, hash};
+      const error = new Error(this.translate("Server response does not match initial request."));
+      error.data = { transferDto: transferDto, totalPages, hash };
       throw error;
     }
 
     if (!transferDto.authentication_token || !transferDto.authentication_token.token) {
-      throw new Error(this.translate('Authentication token is missing from server response.'));
+      throw new Error(this.translate("Authentication token is missing from server response."));
     }
 
     const str = this.getTransferMetadataDataAsString(transferDto);
     const slices = this.stringToSlices(str, 0);
     if (!slices || slices.length === 0) {
-      throw new Error(this.translate('Sorry, it is not possible to proceed. The first QR code is empty.'));
+      throw new Error(this.translate("Sorry, it is not possible to proceed. The first QR code is empty."));
     }
     if (slices.length > 1) {
-      throw new Error(this.translate('Sorry, it is not possible to proceed. The first QR code is too big.'));
+      throw new Error(this.translate("Sorry, it is not possible to proceed. The first QR code is too big."));
     }
     return await this.getQrCode(slices[0]);
   }
@@ -184,7 +182,7 @@ class TransferToMobile extends React.Component {
       domain: this.domain,
       total_pages: transferDto.total_pages,
       hash: transferDto.hash,
-      authentication_token: transferDto.authentication_token.token
+      authentication_token: transferDto.authentication_token.token,
     });
   }
 
@@ -197,7 +195,7 @@ class TransferToMobile extends React.Component {
   async getTransferDataAsString() {
     const fingerprint = await this.getFingerprint();
     const privateKey = await this.getPrivateKey();
-    return JSON.stringify({user_id: this.user.id, fingerprint, armored_key: privateKey});
+    return JSON.stringify({ user_id: this.user.id, fingerprint, armored_key: privateKey });
   }
 
   /**
@@ -251,9 +249,9 @@ class TransferToMobile extends React.Component {
     const sliceNeeded = Math.ceil(data.length / sliceSize);
 
     if (sliceNeeded > MAX_UINT8) {
-      throw new Error('Cannot transfer the data, the private key is too big.');
+      throw new Error("Cannot transfer the data, the private key is too big.");
     }
-    if (typeof startPage === 'undefined') {
+    if (typeof startPage === "undefined") {
       startPage = 0;
     }
 
@@ -268,20 +266,18 @@ class TransferToMobile extends React.Component {
        * Unfortunately we we cannot send these numbers as bytes.
        * This sub optimal encoding is due to compatibility issues with iOS QR Code scanning library
        */
-      const version = (QRCCODE_PROTOCOL_VERSION.toString(16));
-      const page = (pageCounter.toString(16)).padStart(2, '0');
-      const uint8Header = new Uint8ClampedArray([
-        version.charCodeAt(0), page.charCodeAt(0), page.charCodeAt(1)
-      ]);
+      const version = QRCCODE_PROTOCOL_VERSION.toString(16);
+      const page = pageCounter.toString(16).padStart(2, "0");
+      const uint8Header = new Uint8ClampedArray([version.charCodeAt(0), page.charCodeAt(0), page.charCodeAt(1)]);
 
       /*
        * Data
        * Similar encoding, but since data is just ASCII chars, one less step
        * "F" => 102
        */
-      const start = (i === 0) ? 0 : (i * sliceSize);
-      let end = (i === 0) ? (sliceSize) : (sliceSize * (i + 1));
-      end = (end > data.length) ? data.length : end;
+      const start = i === 0 ? 0 : i * sliceSize;
+      let end = i === 0 ? sliceSize : sliceSize * (i + 1);
+      end = end > data.length ? data.length : end;
       const slicedData = data.slice(start, end);
       const uint8Data = this.str2bytes(slicedData);
 
@@ -313,16 +309,21 @@ class TransferToMobile extends React.Component {
   async getQrCode(content) {
     try {
       const data = new TextDecoder().decode(content);
-      return await QRCode.toDataURL([{
-        data: data,
-        mode: 'byte'
-      }], {
-        version: QRCODE_VERSION,
-        errorCorrectionLevel: QRCODE_ERROR_CORRECTION,
-        type: 'image/jpeg',
-        quality: 1,
-        margin: QRCODE_MARGIN,
-      });
+      return await QRCode.toDataURL(
+        [
+          {
+            data: data,
+            mode: "byte",
+          },
+        ],
+        {
+          version: QRCODE_VERSION,
+          errorCorrectionLevel: QRCODE_ERROR_CORRECTION,
+          type: "image/jpeg",
+          quality: 1,
+          margin: QRCODE_MARGIN,
+        },
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -337,7 +338,7 @@ class TransferToMobile extends React.Component {
    * Fetch the user key id
    */
   async getPrivateKey() {
-    return await this.context.port.request('passbolt.keyring.get-private-key');
+    return await this.context.port.request("passbolt.keyring.get-private-key");
   }
 
   /**
@@ -347,9 +348,9 @@ class TransferToMobile extends React.Component {
    * @returns {Promise<String>} fingerprint
    */
   async getFingerprint() {
-    const key = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    const key = await this.context.port.request("passbolt.keyring.get-public-key-info-by-user", this.user.id);
     if (!key || !key.fingerprint) {
-      throw new Error('The user fingerprint is not set.');
+      throw new Error("The user fingerprint is not set.");
     }
     return key.fingerprint;
   }
@@ -372,11 +373,11 @@ class TransferToMobile extends React.Component {
     const totalPages = qrCodes.length + 1; // +1 for the first QR code with hash and auth token
 
     try {
-      const data = {total_pages: totalPages, hash: hash};
-      const transferDto = await this.context.port.request('passbolt.mobile.transfer.create', data);
+      const data = { total_pages: totalPages, hash: hash };
+      const transferDto = await this.context.port.request("passbolt.mobile.transfer.create", data);
       const firstQrCode = await this.buildFirstQrCode(transferDto, totalPages, hash);
       qrCodes.unshift(firstQrCode);
-      this.setState({qrCodes, step: 'in progress', page: 0, transferDto}, () => {
+      this.setState({ qrCodes, step: "in progress", page: 0, transferDto }, () => {
         this.setInterval();
       });
     } catch (error) {
@@ -393,7 +394,7 @@ class TransferToMobile extends React.Component {
     let transferDto;
     try {
       this.request = 1;
-      transferDto = await this.context.port.request('passbolt.mobile.transfer.get', this.state.transferDto.id);
+      transferDto = await this.context.port.request("passbolt.mobile.transfer.get", this.state.transferDto.id);
       this.request = 0;
     } catch (error) {
       // if there is an error, consider the transfer cancelled
@@ -421,7 +422,7 @@ class TransferToMobile extends React.Component {
           await this.handleTransferCancelled();
           break;
         default:
-          await this.handleTransferError(new Error('Unsupported status'));
+          await this.handleTransferError(new Error("Unsupported status"));
           break;
       }
     }
@@ -435,7 +436,7 @@ class TransferToMobile extends React.Component {
    * @returns {Promise<void>}
    */
   async handleTransferUpdated(transferDto) {
-    this.setState({transferDto, step: TransferToMobileSteps.IN_PROGRESS, page: transferDto.current_page});
+    this.setState({ transferDto, step: TransferToMobileSteps.IN_PROGRESS, page: transferDto.current_page });
   }
 
   /**
@@ -450,8 +451,8 @@ class TransferToMobile extends React.Component {
     try {
       // cancel server side if we had the time to create a transfer entity there
       if (this.state.transferDto && this.state.transferDto !== TransferToMobileSteps.CANCEL) {
-        const transferDto = {id: this.state.transferDto.id, status: TransferToMobileSteps.CANCEL};
-        await this.context.port.request('passbolt.mobile.transfer.update', transferDto);
+        const transferDto = { id: this.state.transferDto.id, status: TransferToMobileSteps.CANCEL };
+        await this.context.port.request("passbolt.mobile.transfer.update", transferDto);
       }
     } catch (error) {
       // not much to recover from
@@ -490,7 +491,7 @@ class TransferToMobile extends React.Component {
   async handleTransferError(error) {
     this.clearInterval();
     if (!error) {
-      const msg = this.translate('The transfer was cancelled because the other client returned an error.');
+      const msg = this.translate("The transfer was cancelled because the other client returned an error.");
       error = new Error(msg);
     }
     this.handleError(error);
@@ -561,8 +562,8 @@ class TransferToMobile extends React.Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return new Promise(resolve => {
-      this.setState({processing: !prev}, resolve());
+    return new Promise((resolve) => {
+      this.setState({ processing: !prev }, resolve());
     });
   }
 
@@ -577,7 +578,7 @@ class TransferToMobile extends React.Component {
    */
   handleError(error) {
     console.error(error);
-    this.setState({step: TransferToMobileSteps.ERROR, error});
+    this.setState({ step: TransferToMobileSteps.ERROR, error });
   }
 
   /**
@@ -585,9 +586,9 @@ class TransferToMobile extends React.Component {
    * @returns {string|*}
    */
   getCurrentQrCodeSrc() {
-    if (typeof this.state.qrCodes[this.state.page] === 'undefined') {
+    if (typeof this.state.qrCodes[this.state.page] === "undefined") {
       // TODO display something...
-      return '';
+      return "";
     }
     return this.state.qrCodes[this.state.page];
   }
@@ -599,9 +600,7 @@ class TransferToMobile extends React.Component {
    * @returns {ReactDOM}
    */
   highlightIfCurrentStep(reactDomElement, targetStep) {
-    return this.state.step === targetStep
-      ? <strong>{reactDomElement}</strong>
-      : reactDomElement;
+    return this.state.step === targetStep ? <strong>{reactDomElement}</strong> : reactDomElement;
   }
 
   /**
@@ -619,41 +618,70 @@ class TransferToMobile extends React.Component {
    * @returns {JSX.Element}
    */
   render() {
-    const processingClassName = this.state.processing ? 'processing' : '';
+    const processingClassName = this.state.processing ? "processing" : "";
     return (
       <>
         <div className="main-column profile-mobile-transfer">
-          {this.state.step === TransferToMobileSteps.START &&
+          {this.state.step === TransferToMobileSteps.START && (
             <div className="profile main-content mobile-transfer-step-start">
-              <h3><Trans>Welcome to the mobile app setup</Trans></h3>
-              <h4 className="no-border"><Trans>Download the mobile app</Trans></h4>
+              <h3>
+                <Trans>Welcome to the mobile app setup</Trans>
+              </h3>
+              <h4 className="no-border">
+                <Trans>Download the mobile app</Trans>
+              </h4>
               <p>
                 <Trans>Passbolt is available on AppStore & PlayStore</Trans>
               </p>
               <div className="stores">
-                <a className="app-store" href="https://apps.apple.com/lv/app/passbolt-password-manager/id1569629432" target="_blank" rel="noopener noreferrer"></a>
-                <a className="play-store" href="https://play.google.com/store/apps/details?id=com.passbolt.mobile.android" target="_blank" rel="noopener noreferrer"></a>
+                <a
+                  className="app-store"
+                  href="https://apps.apple.com/lv/app/passbolt-password-manager/id1569629432"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a>
+                <a
+                  className="play-store"
+                  href="https://play.google.com/store/apps/details?id=com.passbolt.mobile.android"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a>
               </div>
-              <h4><Trans>Transfer your account key</Trans></h4>
+              <h4>
+                <Trans>Transfer your account key</Trans>
+              </h4>
               <div className="transfer-account">
-                <MobileTransferIcon/>
+                <MobileTransferIcon />
                 <div className="transfer-account-description">
-                  <p><Trans>Click start once the mobile application is installed and opened on your phone and you are ready to scan QR codes.</Trans></p>
+                  <p>
+                    <Trans>
+                      Click start once the mobile application is installed and opened on your phone and you are ready to
+                      scan QR codes.
+                    </Trans>
+                  </p>
                 </div>
               </div>
             </div>
-          }
-          {this.state.step === TransferToMobileSteps.IN_PROGRESS &&
+          )}
+          {this.state.step === TransferToMobileSteps.IN_PROGRESS && (
             <div className="profile main-content mobile-transfer-step-in-progress">
-              <h3><Trans>Transfer in progress...</Trans></h3>
-              <img id="qr-canvas" style={{width: `${QRCODE_WIDTH}px`, height: `${QRCODE_WIDTH}px`}} src={this.getCurrentQrCodeSrc()}/>
+              <h3>
+                <Trans>Transfer in progress...</Trans>
+              </h3>
+              <img
+                id="qr-canvas"
+                style={{ width: `${QRCODE_WIDTH}px`, height: `${QRCODE_WIDTH}px` }}
+                src={this.getCurrentQrCodeSrc()}
+              />
             </div>
-          }
-          {this.state.step === TransferToMobileSteps.COMPLETE &&
+          )}
+          {this.state.step === TransferToMobileSteps.COMPLETE && (
             <div className="profile main-content mobile-transfer-step-complete">
-              <h3><Trans>Transfer complete!</Trans></h3>
+              <h3>
+                <Trans>Transfer complete!</Trans>
+              </h3>
               <div className="feedback-card">
-                <AnimatedFeedback name='success' />
+                <AnimatedFeedback name="success" />
                 <div className="additional-information">
                   <p>
                     <Trans>You are now ready to continue the setup on your phone.</Trans>&nbsp;
@@ -662,97 +690,158 @@ class TransferToMobile extends React.Component {
                 </div>
               </div>
             </div>
-          }
-          {this.state.step === TransferToMobileSteps.CANCEL &&
+          )}
+          {this.state.step === TransferToMobileSteps.CANCEL && (
             <div className="profile main-content mobile-transfer-step-error">
-              <h3><Trans>The operation was cancelled.</Trans></h3>
+              <h3>
+                <Trans>The operation was cancelled.</Trans>
+              </h3>
               <div className="feedback-card">
-                <AnimatedFeedback name='error' />
+                <AnimatedFeedback name="error" />
                 <div className="additional-information">
                   <p>
-                    <Trans>If there was an issue during the transfer, either the operation was cancelled on the mobile side,
-                      or the authentication token expired.</Trans>&nbsp;
+                    <Trans>
+                      If there was an issue during the transfer, either the operation was cancelled on the mobile side,
+                      or the authentication token expired.
+                    </Trans>
+                    &nbsp;
                     <Trans>Please try again later or contact your administrator.</Trans>
                   </p>
                 </div>
               </div>
             </div>
-          }
-          {this.state.step === TransferToMobileSteps.ERROR &&
+          )}
+          {this.state.step === TransferToMobileSteps.ERROR && (
             <div className="profile main-content mobile-transfer-step-error">
-              <h3><Trans>Oops, something went wrong</Trans></h3>
+              <h3>
+                <Trans>Oops, something went wrong</Trans>
+              </h3>
               <div className="feedback-card">
-                <AnimatedFeedback name='error' />
+                <AnimatedFeedback name="error" />
                 <div className="additional-information">
                   <p>
-                    <Trans>There was an issue during the transfer. Please try again later or contact your administrator.</Trans>
+                    <Trans>
+                      There was an issue during the transfer. Please try again later or contact your administrator.
+                    </Trans>
                   </p>
                 </div>
               </div>
               <ShowErrorDetails error={this.state.error} />
             </div>
-          }
-          {this.state.step === TransferToMobileSteps.HTTPS_REQUIRED &&
+          )}
+          {this.state.step === TransferToMobileSteps.HTTPS_REQUIRED && (
             <div className="profile main-content mobile-transfer-step-https-required">
-              <h3><Trans>Mobile Apps</Trans></h3>
-              <h4 className="no-border"><Trans>Sorry the Mobile app setup feature is only available in a secure context (HTTPS).</Trans></h4>
+              <h3>
+                <Trans>Mobile Apps</Trans>
+              </h3>
+              <h4 className="no-border">
+                <Trans>Sorry the Mobile app setup feature is only available in a secure context (HTTPS).</Trans>
+              </h4>
               <p>
                 <Trans>Please contact your administrator to fix this issue.</Trans>
               </p>
             </div>
-          }
+          )}
         </div>
-        <div className='actions-wrapper'>
-          {this.state.step === TransferToMobileSteps.START &&
-            <button type="button" className={`button primary form ${processingClassName}`} role="button" onClick={this.handleClickStart}>
+        <div className="actions-wrapper">
+          {this.state.step === TransferToMobileSteps.START && (
+            <button
+              type="button"
+              className={`button primary form ${processingClassName}`}
+              role="button"
+              onClick={this.handleClickStart}
+            >
               <Trans>Start</Trans>
             </button>
-          }
-          {this.state.step === TransferToMobileSteps.IN_PROGRESS &&
+          )}
+          {this.state.step === TransferToMobileSteps.IN_PROGRESS && (
             <button className={`button cancel ${processingClassName}`} type="button" onClick={this.handleClickCancel}>
               <Trans>Cancel</Trans>
             </button>
-          }
-          {this.state.step === TransferToMobileSteps.COMPLETE  &&
-            <button className={`button primary form ${processingClassName}`} type="button" onClick={this.handleClickDone}>
+          )}
+          {this.state.step === TransferToMobileSteps.COMPLETE && (
+            <button
+              className={`button primary form ${processingClassName}`}
+              type="button"
+              onClick={this.handleClickDone}
+            >
               <Trans>Configure another phone</Trans>
             </button>
-          }
-          {(this.state.step === TransferToMobileSteps.CANCEL || this.state.step === TransferToMobileSteps.ERROR) &&
-            <button className={`button primary form ${processingClassName}`} type="button" onClick={this.handleClickStart}>
+          )}
+          {(this.state.step === TransferToMobileSteps.CANCEL || this.state.step === TransferToMobileSteps.ERROR) && (
+            <button
+              className={`button primary form ${processingClassName}`}
+              type="button"
+              onClick={this.handleClickStart}
+            >
               <Trans>Restart</Trans>
             </button>
-          }
+          )}
         </div>
         {createSafePortal(
           <div className="sidebar-help-section">
-            {[TransferToMobileSteps.START, TransferToMobileSteps.IN_PROGRESS, TransferToMobileSteps.COMPLETE].includes(this.state.step) &&
+            {[TransferToMobileSteps.START, TransferToMobileSteps.IN_PROGRESS, TransferToMobileSteps.COMPLETE].includes(
+              this.state.step,
+            ) && (
               <>
-                <h3><Trans>Get started in 5 easy steps</Trans></h3>
-                <p><Trans>1. Install the application from the store.</Trans></p>
-                <p><Trans>2. Open the application on your phone.</Trans></p>
-                <p>{this.highlightIfCurrentStep(<Trans>3. Click start in your browser.</Trans>, TransferToMobileSteps.START)}</p>
-                <p>{this.highlightIfCurrentStep(<Trans>4. Scan the QR codes with your phone.</Trans>, TransferToMobileSteps.IN_PROGRESS)}</p>
-                <p>{this.highlightIfCurrentStep(<Trans>5. And you are done!</Trans>, TransferToMobileSteps.COMPLETE)}</p>
+                <h3>
+                  <Trans>Get started in 5 easy steps</Trans>
+                </h3>
+                <p>
+                  <Trans>1. Install the application from the store.</Trans>
+                </p>
+                <p>
+                  <Trans>2. Open the application on your phone.</Trans>
+                </p>
+                <p>
+                  {this.highlightIfCurrentStep(
+                    <Trans>3. Click start in your browser.</Trans>,
+                    TransferToMobileSteps.START,
+                  )}
+                </p>
+                <p>
+                  {this.highlightIfCurrentStep(
+                    <Trans>4. Scan the QR codes with your phone.</Trans>,
+                    TransferToMobileSteps.IN_PROGRESS,
+                  )}
+                </p>
+                <p>
+                  {this.highlightIfCurrentStep(<Trans>5. And you are done!</Trans>, TransferToMobileSteps.COMPLETE)}
+                </p>
                 <a className="button" href="https://passbolt.com/docs" target="_blank" rel="noopener noreferrer">
                   <FileTextSVG />
-                  <span><Trans>Read the documentation</Trans></span>
+                  <span>
+                    <Trans>Read the documentation</Trans>
+                  </span>
                 </a>
               </>
-            }
-            {[TransferToMobileSteps.CANCEL, TransferToMobileSteps.ERROR, TransferToMobileSteps.HTTPS_REQUIRED].includes(this.state.step) &&
+            )}
+            {[TransferToMobileSteps.CANCEL, TransferToMobileSteps.ERROR, TransferToMobileSteps.HTTPS_REQUIRED].includes(
+              this.state.step,
+            ) && (
               <>
-                <h3><Trans>Need some help?</Trans></h3>
-                <p><Trans>Contact your administrator with details about what went wrong.</Trans></p>
-                <p><Trans>Alternatively you can also get in touch with support on community forum or via the paid support channels.</Trans></p>
+                <h3>
+                  <Trans>Need some help?</Trans>
+                </h3>
+                <p>
+                  <Trans>Contact your administrator with details about what went wrong.</Trans>
+                </p>
+                <p>
+                  <Trans>
+                    Alternatively you can also get in touch with support on community forum or via the paid support
+                    channels.
+                  </Trans>
+                </p>
                 <a className="button" href="https://passbolt.com/docs" target="_blank" rel="noopener noreferrer">
                   <FileTextSVG />
-                  <span><Trans>Help site</Trans></span>
+                  <span>
+                    <Trans>Help site</Trans>
+                  </span>
                 </a>
               </>
-            }
+            )}
           </div>,
-          document.querySelector(".help-panel .sidebar-help")
+          document.querySelector(".help-panel .sidebar-help"),
         )}
       </>
     );
@@ -765,7 +854,7 @@ TransferToMobile.propTypes = {
   dialogContext: PropTypes.object, // The dialog context
   userSettingsContext: PropTypes.object, // The user settings context
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
+  i18n: PropTypes.any, // The i18n context translation
 };
 
-export default withAppContext(withDialog(withUserSettings(withTranslation('common')(TransferToMobile))));
+export default withAppContext(withDialog(withUserSettings(withTranslation("common")(TransferToMobile))));
