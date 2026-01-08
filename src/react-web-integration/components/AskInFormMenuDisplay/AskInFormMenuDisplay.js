@@ -148,8 +148,15 @@ class AskInFormMenuDisplay extends React.Component {
   /**
    * Perform the call-to-action
    */
-  execute() {
-    this.props.context.port.request("passbolt.in-form-cta.execute");
+  async execute() {
+    const isApplicationOverlaid = await this.props.context.port.request(
+      "passbolt.in-form-cta.is-application-overlaid",
+      this.props.context.applicationId,
+    );
+    if (isApplicationOverlaid) {
+      return;
+    }
+    await this.props.context.port.request("passbolt.in-form-cta.execute");
   }
 
   /**

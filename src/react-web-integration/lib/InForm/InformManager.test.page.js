@@ -199,7 +199,7 @@ export default class InformManagerPage {
    */
   async autofillPassword(password) {
     InFormManager.menuField = {
-      removeMenuIframe: () => {},
+      removeIframe: () => {},
       destroy: () => {},
     };
     await port.emit("passbolt.web-integration.fill-password", password);
