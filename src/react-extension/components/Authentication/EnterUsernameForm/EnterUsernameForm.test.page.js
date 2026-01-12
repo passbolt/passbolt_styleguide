@@ -31,7 +31,6 @@ export default class EnterUsernameFormPage {
       <MockTranslationProvider>
         <EnterUsernameForm {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -112,8 +111,8 @@ export default class EnterUsernameFormPage {
 
   /** fill the input element with data */
   async fillInput(element, data) {
-    await userEvent.clear(element);
-    await userEvent.type(element, data);
+    await this.user.clear(element);
+    await this.user.type(element, data);
   }
 
   /** fill the username input element with data */

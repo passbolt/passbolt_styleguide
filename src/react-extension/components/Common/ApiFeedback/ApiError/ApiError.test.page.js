@@ -30,7 +30,6 @@ export default class ApiErrorPage {
       <MockTranslationProvider>
         <ApiError {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
