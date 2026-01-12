@@ -98,9 +98,10 @@ class ResourceCreatePage extends React.Component {
    * @returns {Promise<void>}
    */
   async componentDidMount() {
-    await this.props.passwordExpiryContext.findSettings();
-    this.initPwnedPasswordService();
-    this.initResourceViewModel();
+    this.props.passwordExpiryContext.findSettings();
+    const policies = await this.props.passwordPoliciesContext.loadPolicies();
+    this.initPwnedPasswordService(policies);
+    await this.initResourceViewModel();
   }
 
   async initResourceViewModel() {
@@ -155,8 +156,8 @@ class ResourceCreatePage extends React.Component {
   /**
    * Initialize the pwned password service
    */
-  initPwnedPasswordService() {
-    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+  initPwnedPasswordService(policies) {
+    const isPasswordDictionaryCheckRequested = policies?.external_dictionary_check;
 
     if (isPasswordDictionaryCheckRequested) {
       this.pownedService = new PownedService(this.props.context.port);

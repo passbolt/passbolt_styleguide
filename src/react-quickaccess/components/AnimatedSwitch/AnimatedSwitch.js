@@ -270,11 +270,19 @@ class AnimatedSwitch extends React.Component {
     // If no transition, the previous component should be hidden immediately.
     const transitionTimeout = transition !== "slideNoTransition" ? 210 : 0;
     this._previousLocationPathname = currentLocationPathname;
+    const nodeRef = React.createRef();
 
     return (
       <TransitionGroup enter={true} exit={true}>
-        <CSSTransition classNames={transition} key={currentLocationPathname} timeout={transitionTimeout}>
-          <Switch location={this.props.location}>{children}</Switch>
+        <CSSTransition
+          nodeRef={nodeRef}
+          classNames={transition}
+          key={currentLocationPathname}
+          timeout={transitionTimeout}
+        >
+          <div ref={nodeRef}>
+            <Switch location={this.props.location}>{children}</Switch>
+          </div>
         </CSSTransition>
       </TransitionGroup>
     );

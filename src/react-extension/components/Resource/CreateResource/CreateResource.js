@@ -95,19 +95,19 @@ class CreateResource extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    await Promise.all([
+    const [, policies] = await Promise.all([
       this.props.passwordExpiryContext.findSettings(),
-      this.props.passwordPoliciesContext.findPolicies(),
+      this.props.passwordPoliciesContext.loadPolicies(),
     ]);
 
-    this.initPwnedPasswordService();
+    this.initPwnedPasswordService(policies);
   }
 
   /**
    * Initialize the pwned password service
    */
-  initPwnedPasswordService() {
-    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+  initPwnedPasswordService(policies) {
+    const isPasswordDictionaryCheckRequested = policies?.external_dictionary_check;
 
     if (isPasswordDictionaryCheckRequested) {
       this.pownedService = new PownedService(this.props.context.port);
