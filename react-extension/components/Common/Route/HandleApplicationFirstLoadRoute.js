@@ -46,7 +46,7 @@ class HandleApplicationFirstLoadRoute extends Component {
    * @returns {boolean}
    */
   validatePathname(pathname) {
-    return /^[A-Za-z0-9\-\/]*$/.test(pathname);
+    return /^[A-Z/-9\-]*$/i.test(pathname);
   }
 
   /**

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.2.0
  */
-import i18n from "i18next";
+import { createInstance } from "i18next";
 import { I18nextProvider } from "react-i18next";
 import HttpApi from "i18next-http-backend";
 import React, { Component } from "react";
@@ -73,7 +73,7 @@ class TranslationProvider extends Component {
    * @returns {Promise<void>}
    */
   async initI18next() {
-    const i18next = i18n.createInstance();
+    const i18next = createInstance();
     await i18next
       // I18next plugin used to load the translations json over http.
       .use(HttpApi)

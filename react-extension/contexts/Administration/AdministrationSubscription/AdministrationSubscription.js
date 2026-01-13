@@ -68,7 +68,7 @@ export class AdminSubscriptionContextProvider extends React.Component {
     let subscription = new SubscriptionModel();
     try {
       const result = await this.props.context.onGetSubscriptionKeyRequested();
-      subscription = new SubscriptionModel(result.toDto());
+      subscription = new SubscriptionModel(result);
     } catch (error) {
       if (error.name === "PassboltSubscriptionError") {
         subscription = new SubscriptionModel(error.subscription);

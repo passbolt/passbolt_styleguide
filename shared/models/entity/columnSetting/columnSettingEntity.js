@@ -43,12 +43,12 @@ class ColumnSettingEntity extends Entity {
       properties: {
         id: {
           type: "string",
-          pattern: /^[a-zA-Z_]+$/,
+          pattern: /^[a-z_]+$/i,
           maxLength: COLUMN_ID_MAX_LENGTH,
         },
         label: {
           type: "string",
-          pattern: /^[a-zA-Z ]+$/,
+          pattern: /^[a-z ]+$/i,
           maxLength: COLUMN_LABEL_MAX_LENGTH,
         },
         width: {

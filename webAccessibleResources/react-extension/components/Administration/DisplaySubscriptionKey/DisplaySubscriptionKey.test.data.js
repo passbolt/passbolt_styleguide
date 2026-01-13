@@ -17,11 +17,10 @@
  * @returns {*}
  */
 import { DateTime } from "luxon";
-import MockPort from "../../../test/mock/MockPort";
 import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
-import SubscriptionEntity from "../../../../shared/models/entity/subscription/subscriptionEntity";
+import MockPort from "../../../test/mock/MockPort";
 
 /**
  * Default component props
@@ -32,7 +31,7 @@ export function defaultProps(props = {}) {
   const port = new MockPort();
   port.addRequestListener("passbolt.users.get-all", () => mockUsers);
   const defaultContext = {
-    onGetSubscriptionKeyRequested: () => new SubscriptionEntity(mockSubscription),
+    onGetSubscriptionKeyRequested: () => mockSubscription,
     port: port,
   };
 

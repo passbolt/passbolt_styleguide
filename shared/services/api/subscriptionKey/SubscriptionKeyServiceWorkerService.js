@@ -13,7 +13,6 @@
  */
 
 import assertString from "validator/es/lib/util/assertString";
-import SubscriptionEntity from "../../../models/entity/subscription/subscriptionEntity";
 
 export const GET_SUBSCRIPTION_KEY = "passbolt.subscription.get";
 export const UPDATE_SUBSCRIPTION_KEY = "passbolt.subscription.update";
@@ -32,8 +31,7 @@ class SubscriptionKeyServiceWorkerService {
    * @returns {Promise<SubscriptionEntity>} The subscription key
    */
   async findOrganizationSubscriptionKey() {
-    const response = await this.port.request(GET_SUBSCRIPTION_KEY);
-    return new SubscriptionEntity(response);
+    return this.port.request(GET_SUBSCRIPTION_KEY);
   }
 
   /**
@@ -44,11 +42,9 @@ class SubscriptionKeyServiceWorkerService {
   async updateOrganizationSubscriptionKey(subscriptionKey) {
     assertString(subscriptionKey);
 
-    const response = await this.port.request(UPDATE_SUBSCRIPTION_KEY, {
+    return this.port.request(UPDATE_SUBSCRIPTION_KEY, {
       data: subscriptionKey,
     });
-
-    return new SubscriptionEntity(response);
   }
 }
 

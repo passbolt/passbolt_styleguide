@@ -15,12 +15,11 @@
 /**
  * Unit tests on FilterResourcesByFolders in regard of specifications
  */
-import { defaultProps } from "./FilterResourcesByFolders.test.data";
+import { defaultProps, foldersMock } from "./FilterResourcesByFolders.test.data";
 import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByRootFolderContextualMenu from "./FilterResourcesByRootFolderContextualMenu";
 import FilterResourcesByFoldersPage from "./FilterResourcesByFolders.test.page";
 import { defaultResourcesDtos } from "../../../../shared/models/entity/resource/resourcesCollection.test.data";
-import { foldersMock } from "./FilterResourcesByFolders.test.data";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";

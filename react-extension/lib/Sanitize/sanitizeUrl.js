@@ -44,7 +44,7 @@ export default (uri, options) => {
   const defaultProtocol = options.defaultProtocol || "";
 
   // If the uri doesn't have a protocol and a default one is provided, then prepend it to the uri.
-  if (!/^((?!:\/\/).)*:\/\//.test(uri) && defaultProtocol) {
+  if (!/^(?:(?!:\/\/).)*:\/\//.test(uri) && defaultProtocol) {
     uri = `${defaultProtocol}//${uri}`;
   }
 
