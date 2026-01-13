@@ -130,7 +130,6 @@ export default [
       "n/no-missing-require": "off", // Handled by import plugin
 
       // Muted during migration
-      "import/named": "off",
       "import/no-named-as-default": "off",
       "no-empty": "off",
       "react/jsx-uses-react": "error", // Marks React as used when JSX is present
