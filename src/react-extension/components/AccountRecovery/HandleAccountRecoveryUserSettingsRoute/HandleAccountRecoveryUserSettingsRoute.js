@@ -17,9 +17,8 @@ import { withRouter } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import { withDialog } from "../../../contexts/DialogContext";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
-import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
+import { withAccountRecovery, AccountRecoveryUserContextProvider } from "../../../contexts/AccountRecoveryUserContext";
 import ManageAccountRecoveryUserSettings from "../ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
-import { AccountRecoveryUserContextProvider } from "../../../contexts/AccountRecoveryUserContext";
 
 class HandleAccountRecoveryUserSettingsRoute extends React.Component {
   /**
