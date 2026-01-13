@@ -16,10 +16,10 @@ import { AdminMfaContextProvider } from "../../../../react-extension/contexts/Ad
 import {
   defaultProps,
   mockDuoError,
+  mockYubikeyError,
 } from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import { enableFetchMocks } from "jest-fetch-mock";
 import MfaFormService from "./MfaFormService";
-import { mockYubikeyError } from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 
 beforeEach(() => {
   jest.resetModules();
