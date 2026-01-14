@@ -27,7 +27,7 @@ export default class CanUse {
     // Desktop action should always be driven by rbac
     if (window.chrome?.webview) {
       const rbac = rbacs.findRbacByActionName(actionName);
-      return this.getByRbacOrDefault(rbac, actionName, user);
+      return this.getByRbacOrDefaultForDesktop(rbac, actionName, user);
     }
 
     const role = new RoleEntity(user.role);
@@ -56,6 +56,30 @@ export default class CanUse {
     }
 
     // Fallback on user default.
+    const fallbackControlFunction = GetControlFunctionService.getDefaultForUserAndAction(actionName);
+    return fallbackControlFunction.execute();
+  }
+
+  /**
+   * Check if a role can use a UI action or return the default based on user role (desktop specific).
+   * @param {RbacEntity} rbac The rbac entity
+   * @param {string} actionName The action name to check the control function
+   * @param {object} user The logged in user.
+   * @returns {boolean}
+   */
+  static getByRbacOrDefaultForDesktop(rbac, actionName, user) {
+    if (rbac) {
+      const rbacControlFunction = GetControlFunctionService.getByRbac(rbac);
+      return rbacControlFunction.execute(user);
+    }
+
+    // Fallback based on user role
+    const role = new RoleEntity(user.role);
+    if (role.isAdmin()) {
+      const fallbackControlFunction = GetControlFunctionService.getDefaultForAdminAndAction(actionName);
+      return fallbackControlFunction.execute();
+    }
+
     const fallbackControlFunction = GetControlFunctionService.getDefaultForUserAndAction(actionName);
     return fallbackControlFunction.execute();
   }

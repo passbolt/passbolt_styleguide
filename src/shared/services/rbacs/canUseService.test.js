@@ -69,7 +69,7 @@ describe("CanUseService", () => {
       global.window.chrome = { webview: true };
 
       jest.spyOn(rbacs, "findRbacByActionName");
-      jest.spyOn(GetControlFunctionService, "getByRbac");
+      jest.spyOn(CanUse, "getByRbacOrDefaultForDesktop");
 
       const result = CanUse.canRoleUseAction(user, rbacs, uiActions.RESOURCES_EXPORT);
 
@@ -78,7 +78,7 @@ describe("CanUseService", () => {
 
       expect(result).toBe(true);
       expect(rbacs.findRbacByActionName).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
-      expect(GetControlFunctionService.getByRbac).toHaveBeenCalled();
+      expect(CanUse.getByRbacOrDefaultForDesktop).toHaveBeenCalled();
     });
 
     it("should return false if rbac is Deny for ui action", () => {
@@ -159,6 +159,42 @@ describe("CanUseService", () => {
 
       expect(result).toBeTruthy();
       expect(GetControlFunctionService.getDefaultForUserAndAction).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
+    });
+  });
+
+  describe("::getByRbacOrDefaultForDesktop", () => {
+    it("should return the rbac function and execute it when rbac is defined", () => {
+      expect.assertions(2);
+
+      const rbac = new RbacEntity(defaultSettingsRbacsCollectionData[0]);
+      jest.spyOn(GetControlFunctionService, "getByRbac");
+
+      const result = CanUse.getByRbacOrDefaultForDesktop(rbac, uiActions.RESOURCES_EXPORT, user);
+
+      expect(result).toBeTruthy();
+      expect(GetControlFunctionService.getByRbac).toHaveBeenCalledWith(rbac);
+    });
+
+    it("should return admin fallback control function when rbac is not defined and user is admin", () => {
+      expect.assertions(2);
+
+      jest.spyOn(GetControlFunctionService, "getDefaultForAdminAndAction");
+
+      const result = CanUse.getByRbacOrDefaultForDesktop(null, actions.GROUPS_ADD, defaultAdminUserDto());
+
+      expect(result).toBeTruthy();
+      expect(GetControlFunctionService.getDefaultForAdminAndAction).toHaveBeenCalledWith(actions.GROUPS_ADD);
+    });
+
+    it("should return user fallback control function when rbac is not defined and user is not admin", () => {
+      expect.assertions(2);
+
+      jest.spyOn(GetControlFunctionService, "getDefaultForUserAndAction");
+
+      const result = CanUse.getByRbacOrDefaultForDesktop(null, actions.GROUPS_ADD, user);
+
+      expect(result).toBeFalsy();
+      expect(GetControlFunctionService.getDefaultForUserAndAction).toHaveBeenCalledWith(actions.GROUPS_ADD);
     });
   });
 });
