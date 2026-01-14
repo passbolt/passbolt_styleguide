@@ -24,10 +24,16 @@ export default class CanUse {
    * @returns {boolean}
    */
   static canRoleUseAction(user, rbacs, actionName) {
-    // Desktop action should always be driven by rbac
+    // Desktop action should always be driven by rbac if defined
     if (window.chrome?.webview) {
       const rbac = rbacs.findRbacByActionName(actionName);
-      return this.getByRbacOrDefaultForDesktop(rbac, actionName, user);
+      if (rbac) {
+        // Prior we check if the desktop app has defined rbac limitation
+        // if not we do not need to go further
+        const rbacControlFunction = GetControlFunctionService.getByRbac(rbac);
+        return rbacControlFunction.execute(user);
+      }
+      // If no rbac defined for desktop, fall through to normal role-based logic
     }
 
     const role = new RoleEntity(user.role);
@@ -56,30 +62,6 @@ export default class CanUse {
     }
 
     // Fallback on user default.
-    const fallbackControlFunction = GetControlFunctionService.getDefaultForUserAndAction(actionName);
-    return fallbackControlFunction.execute();
-  }
-
-  /**
-   * Check if a role can use a UI action or return the default based on user role (desktop specific).
-   * @param {RbacEntity} rbac The rbac entity
-   * @param {string} actionName The action name to check the control function
-   * @param {object} user The logged in user.
-   * @returns {boolean}
-   */
-  static getByRbacOrDefaultForDesktop(rbac, actionName, user) {
-    if (rbac) {
-      const rbacControlFunction = GetControlFunctionService.getByRbac(rbac);
-      return rbacControlFunction.execute(user);
-    }
-
-    // Fallback based on user role
-    const role = new RoleEntity(user.role);
-    if (role.isAdmin()) {
-      const fallbackControlFunction = GetControlFunctionService.getDefaultForAdminAndAction(actionName);
-      return fallbackControlFunction.execute();
-    }
-
     const fallbackControlFunction = GetControlFunctionService.getDefaultForUserAndAction(actionName);
     return fallbackControlFunction.execute();
   }
