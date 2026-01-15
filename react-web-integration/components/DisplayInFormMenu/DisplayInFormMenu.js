@@ -346,21 +346,33 @@ class DisplayInFormMenu extends React.Component {
   /**
    * Whenever the user requests to create a new credential
    */
-  handleCreateNewCredentialsRequestedEvent() {
+  async handleCreateNewCredentialsRequestedEvent() {
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      return;
+    }
     this.props.context.port.request("passbolt.in-form-menu.create-new-credentials");
   }
 
   /**
    * Whenever the user requests to browse credentials
    */
-  handleBrowseCredentialsRequestedEvent() {
+  async handleBrowseCredentialsRequestedEvent() {
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      return;
+    }
     this.props.context.port.request("passbolt.in-form-menu.browse-credentials");
   }
 
   /**
    * Whenever the user requests to save the credentials
    */
-  handleSaveCredentialsRequestedEvent() {
+  async handleSaveCredentialsRequestedEvent() {
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      return;
+    }
     this.props.context.port.request("passbolt.in-form-menu.save-credentials");
   }
 
@@ -369,6 +381,11 @@ class DisplayInFormMenu extends React.Component {
    * @param resourceId
    */
   async handleUseSuggestedResourceRequestedEvent(resourceId) {
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      return;
+    }
+
     this.setState({ resourceIdProcessing: resourceId });
     try {
       await this.props.context.port.request("passbolt.in-form-menu.use-suggested-resource", resourceId);
@@ -381,8 +398,23 @@ class DisplayInFormMenu extends React.Component {
   /**
    * Whenever the user request to generate a password for the current page
    */
-  handleGeneratePasswordRequestedEvent() {
+  async handleGeneratePasswordRequestedEvent() {
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      return;
+    }
     this.props.context.port.request("passbolt.in-form-menu.fill-password", this.state.generatedPassword);
+  }
+
+  /**
+   * Handle the check if application is overlaid
+   * @return {Promise<boolean>}
+   */
+  handleApplicationOverlaidRequestedEvent() {
+    return this.props.context.port.request(
+      "passbolt.in-form-menu.is-application-overlaid",
+      this.props.context.applicationId,
+    );
   }
 
   /**

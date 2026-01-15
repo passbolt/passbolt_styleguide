@@ -45,6 +45,7 @@ class ExtInForm extends React.Component {
       storage: this.props.storage,
       account: null,
       loggedInUser: null,
+      applicationId: this.props.applicationId,
     };
   }
 
@@ -105,6 +106,7 @@ class ExtInForm extends React.Component {
 ExtInForm.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,
+  applicationId: PropTypes.string,
 };
 
 export default ExtInForm;

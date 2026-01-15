@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.2.0
  */
-import { use, changeLanguage } from "i18next";
+import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import HttpApi from "i18next-http-backend";
 import React, { Component } from "react";
@@ -43,7 +43,9 @@ class TranslationProvider extends Component {
   }
 
   async componentDidMount() {
-    await use(initReactI18next)
+    await i18n
+      // pass the i18n instance to react-i18next.
+      .use(initReactI18next)
       .use(HttpApi)
       // init i18next, for all options read: https://www.i18next.com/overview/configuration-options
       .init({
@@ -140,7 +142,7 @@ class TranslationProvider extends Component {
   async handleLocaleChange(previousLocale) {
     const hasLocaleChanged = this.locale !== previousLocale;
     if (hasLocaleChanged) {
-      await changeLanguage(this.locale);
+      await i18n.changeLanguage(this.locale);
     }
   }
 

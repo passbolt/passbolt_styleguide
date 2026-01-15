@@ -28,13 +28,15 @@ class InFormMenuField {
   constructor(field, shadowRoot) {
     /** The field to which the in-form is attached */
     this.field = field;
+    /** A unique identifier for the InFormCallToActionField */
+    this.id = uuidv4();
     /** An unique identifier for the iframe */
     this.iframeId = uuidv4();
     /** Flag telling if the user is mousing over the menu (iframe) */
     this.isMenuMousingOver = false;
     /** The scrollable field parent */
     this.scrollableFieldParent = null;
-
+    /** The shadow root **/
     this.shadowRoot = shadowRoot;
 
     this.bindCallbacks();
@@ -48,7 +50,7 @@ class InFormMenuField {
    */
   bindCallbacks() {
     this.removeInFormMenu = this.removeInFormMenu.bind(this);
-    this.removeMenuIframe = this.removeMenuIframe.bind(this);
+    this.removeIframe = this.removeIframe.bind(this);
     this.destroy = this.destroy.bind(this);
   }
 
@@ -88,7 +90,7 @@ class InFormMenuField {
     iframe.style.width = "370px"; // width of the menu 350px + 20px to display shadows
     iframe.style.height = "220px"; // For 3 items in a row to be display
     iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
-    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-menu.html?passbolt=${portId}`;
+    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-menu.html?passbolt=${portId}&applicationId=${this.id}`;
     return iframe;
   }
 
@@ -162,14 +164,14 @@ class InFormMenuField {
     const isIframeMouseOver = this.isMenuMousingOver;
     const isActiveElement = document.activeElement === this.field;
     if (!isIframeMouseOver && !isActiveElement) {
-      this.removeMenuIframe();
+      this.removeIframe();
     }
   }
 
   /**
    * Remove the menu (iframe)
    */
-  removeMenuIframe() {
+  removeIframe() {
     const iframes = this.shadowRoot.querySelectorAll("iframe");
     iframes.forEach((iframe) => {
       const identifierToMatch = this.iframeId;
@@ -188,7 +190,7 @@ class InFormMenuField {
   handleScrollEvent() {
     // Remove the in form menu
     this.scrollableFieldParent = DomUtils.getScrollParent(this.field);
-    this.scrollableFieldParent.addEventListener("scroll", this.removeMenuIframe);
+    this.scrollableFieldParent.addEventListener("scroll", this.removeIframe);
   }
 
   /** DESTROY */
@@ -198,8 +200,8 @@ class InFormMenuField {
    */
   destroy() {
     this.field.removeEventListener("blur", this.removeInFormMenu);
-    this.scrollableFieldParent.removeEventListener("scroll", this.removeMenuIframe);
-    this.removeMenuIframe();
+    this.scrollableFieldParent.removeEventListener("scroll", this.removeIframe);
+    this.removeIframe();
   }
 }
 

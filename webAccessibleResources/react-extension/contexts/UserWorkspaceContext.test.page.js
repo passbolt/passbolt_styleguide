@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import { use } from "i18next";
+import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import enTranslations from "../../locales/en-UK/common.json";
 import { fireEvent, render, waitFor } from "@testing-library/react";
@@ -44,7 +44,9 @@ export default class UserWorkspaceContextPage {
    * by making it equals to ALL instead of the desired value when the check is done.
    */
   configureTranslation() {
-    use(initReactI18next)
+    i18n
+      // pass the i18n instance to react-i18next.
+      .use(initReactI18next)
       // init i18next, for all options read: https://www.i18next.com/overview/configuration-options
       .init({
         lng: "en-UK",

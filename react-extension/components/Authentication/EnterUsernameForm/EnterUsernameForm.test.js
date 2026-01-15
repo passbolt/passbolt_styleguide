@@ -85,14 +85,22 @@ describe("As AN I should see the Enter Username Form Page", () => {
 
       expect(page.exists()).toBeTruthy();
       await page.isReady();
-      await page.next();
-
-      // Throw error message
-      expect(page.usernameErrorMessage).toBe("A username is required.");
 
       await page.insertUsername("admin");
       await page.next();
       expect(page.usernameErrorMessage).toBe("Please enter a valid email address.");
+    });
+
+    it("As AN I shouldn’t be able to submit the form if the field is empty", async () => {
+      const props = defaultProps();
+      page = new EnterUsernameFormPage(props);
+
+      expect(page.exists()).toBeTruthy();
+      await page.isReady();
+      await page.next();
+
+      // Throw error message
+      expect(page.usernameErrorMessage).toBe("A username is required.");
     });
   });
 

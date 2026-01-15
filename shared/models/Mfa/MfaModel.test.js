@@ -15,9 +15,9 @@
 import {
   mockMfaSettings,
   mockModel,
-  mockDefaultMfaModel,
 } from "../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import MfaModel from "./MfaModel";
+import { mockDefaultMfaModel } from "../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 
 describe("MFAModel", () => {
   describe("MFAModel::constructor", () => {

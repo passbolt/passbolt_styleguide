@@ -19,6 +19,7 @@ import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetch
 import { waitFor } from "@testing-library/react";
 import { defaultProps, propsWithDenyUiAction } from "./ImportResources.test.data";
 import ImportResourcesResult from "./ImportResourcesResult";
+import ImportResourcesKeyUnlock from "./ImportResourcesResult";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ImportResourcesPage from "./ImportResources.test.page";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
@@ -161,7 +162,7 @@ describe("ImportResources", () => {
       );
 
       expect(props.resourceWorkspaceContext.onResourceFileToImport).toHaveBeenCalledWith(resourceFileToImport);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ImportResourcesResult);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ImportResourcesKeyUnlock);
     });
 
     it("As LU I can stop importing passwords by clicking on the cancel button", async () => {

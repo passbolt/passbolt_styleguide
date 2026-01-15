@@ -11,11 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import EnterNameForm from "./EnterNameForm";
 import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The EnterNameForm component represented as a page
@@ -32,8 +33,8 @@ export default class EnterNameFormPage {
           <EnterNameForm {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -101,15 +102,7 @@ export default class EnterNameFormPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
-  }
-
-  /** Click without wait for on the element */
-  clickWithoutWaitFor(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
+    await this.user.click(element);
   }
 
   /** fill the input element with data */
@@ -135,6 +128,6 @@ export default class EnterNameFormPage {
 
   /** click register without wait for */
   registerWithoutWaitFor() {
-    this.clickWithoutWaitFor(this.registerButton);
+    this.click(this.registerButton);
   }
 }

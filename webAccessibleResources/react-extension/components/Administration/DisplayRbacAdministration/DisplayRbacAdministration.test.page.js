@@ -47,7 +47,7 @@ export default class DisplayRbacAdministrationPage {
    * @returns {string}
    */
   formatActionNameInClassName(actionName) {
-    return actionName.toLowerCase().replaceAll(/\W/g, "-");
+    return actionName.toLowerCase().replaceAll(/[^\w]/g, "-");
   }
 
   /**

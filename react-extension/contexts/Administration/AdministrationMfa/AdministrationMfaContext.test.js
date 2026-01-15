@@ -12,16 +12,16 @@
  * @since         3.8.0
  */
 
-import {
-  defaultProps,
-  mockMfaSettings,
-  mockDuoError,
-  mockDefaultMfaModel,
-} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+import { defaultProps } from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import { AdminMfaContextProvider } from "./AdministrationMfaContext";
 import { enableFetchMocks } from "jest-fetch-mock";
+import {
+  mockMfaSettings,
+  mockDuoError,
+} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 import MfaModel from "../../../../shared/models/Mfa/MfaModel";
+import { mockDefaultMfaModel } from "../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import MfaDTO from "../../../../shared/models/Mfa/MfaDTO";
 
 describe("AdminMfaContext", () => {

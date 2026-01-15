@@ -24,10 +24,16 @@ export default class CanUse {
    * @returns {boolean}
    */
   static canRoleUseAction(user, rbacs, actionName) {
-    // Desktop action should always be driven by rbac
+    // Desktop action should always be driven by rbac if defined
     if (window.chrome?.webview) {
       const rbac = rbacs.findRbacByActionName(actionName);
-      return this.getByRbacOrDefault(rbac, actionName, user);
+      if (rbac) {
+        // Prior we check if the desktop app has defined rbac limitation
+        // if not we do not need to go further
+        const rbacControlFunction = GetControlFunctionService.getByRbac(rbac);
+        return rbacControlFunction.execute(user);
+      }
+      // If no rbac defined for desktop, fall through to normal role-based logic
     }
 
     const role = new RoleEntity(user.role);

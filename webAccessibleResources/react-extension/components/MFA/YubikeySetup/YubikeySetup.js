@@ -14,7 +14,8 @@
 
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withTranslation, Trans } from "react-i18next";
+import { withTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import { MfaSettingsWorkflowStates, withMfa } from "../../../contexts/MFAContext";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 

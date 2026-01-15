@@ -13,6 +13,8 @@
  */
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
+import SubscriptionEntity from "../../../models/entity/subscription/subscriptionEntity";
+import { minimalSubscriptionDto } from "../../../models/entity/subscription/subscriptionEntity.test.data";
 import SubscriptionKeyServiceWorkerService, {
   GET_SUBSCRIPTION_KEY,
   UPDATE_SUBSCRIPTION_KEY,
@@ -28,9 +30,6 @@ describe("SubscriptionKeyServiceWorkerService", () => {
      */
     service;
 
-  const key = "a perfectly valid subscription key";
-  const keyDto = { data: key };
-
   beforeEach(() => {
     port = new MockPort();
     service = new SubscriptionKeyServiceWorkerService(port);
@@ -38,28 +37,30 @@ describe("SubscriptionKeyServiceWorkerService", () => {
 
   describe("::findOrganizationSubscriptionKey", () => {
     it("requests the service worker for the organisation subscription key", async () => {
-      const mockGetSubscriptionKey = jest.fn().mockResolvedValue(keyDto);
+      expect.assertions(2);
+      const dto = minimalSubscriptionDto();
+      const mockGetSubscriptionKey = jest.fn().mockResolvedValue(dto);
       port.addRequestListener(GET_SUBSCRIPTION_KEY, mockGetSubscriptionKey);
 
       const result = await service.findOrganizationSubscriptionKey();
       expect(mockGetSubscriptionKey).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(keyDto);
+      expect(result).toEqual(new SubscriptionEntity(dto));
     });
   });
 
   describe("::updateOrganizationSubscriptionKey", () => {
     it("requests the service worker to update the organisation subscription key", async () => {
-      const newKey = "another perfectly valid key";
-      const newKeyDto = { data: newKey };
-
-      const mockUpdateSubscriptionKey = jest.fn().mockResolvedValue(newKeyDto);
+      expect.assertions(3);
+      const newKey = "new key";
+      const dto = minimalSubscriptionDto({ data: newKey });
+      const mockUpdateSubscriptionKey = jest.fn().mockResolvedValue(dto);
       port.addRequestListener(UPDATE_SUBSCRIPTION_KEY, mockUpdateSubscriptionKey);
 
       const result = await service.updateOrganizationSubscriptionKey(newKey);
       expect(mockUpdateSubscriptionKey).toHaveBeenCalledTimes(1);
       // Can't use `toHaveBeenCalledWith` because MockPort forces an additional argument
-      expect(mockUpdateSubscriptionKey.mock.calls[0][0]).toEqual(newKeyDto);
-      expect(result).toEqual(newKeyDto);
+      expect(mockUpdateSubscriptionKey.mock.calls[0][0]).toEqual({ data: newKey });
+      expect(result).toEqual(new SubscriptionEntity(dto));
     });
   });
 });

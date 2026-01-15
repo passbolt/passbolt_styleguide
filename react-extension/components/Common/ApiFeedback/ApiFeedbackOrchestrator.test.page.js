@@ -33,7 +33,6 @@ export default class ApiErrorPage {
           {successMessage && <div id="api-success">{successMessage}</div>}
         </>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

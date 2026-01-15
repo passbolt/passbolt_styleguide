@@ -22,6 +22,7 @@ import {
   defaultHealthcheckDataWithoutDirectorySync,
   defaultHealthcheckDataWithoutSso,
 } from "./associations/healthcheckEntity.test.data";
+import healthcheckEntity from "./healthcheckEntity";
 import DatabaseEntity from "./associations/databaseEntity";
 import SslEntity from "./associations/sslEntity";
 import ApplicationEntity from "./associations/applicationEntity";
@@ -43,8 +44,8 @@ describe("HealthcheckEntity", () => {
     it("it should instantiate the entity with the default dto", () => {
       expect.assertions(11);
       const dto = defaultHealthcheckData();
-      const entity = new HealthcheckEntity(dto);
-      expect(entity).toBeInstanceOf(HealthcheckEntity);
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
       expect(entity.ssl.toDto()).toEqual(dto.ssl);
       expect(entity.database.toDto()).toEqual(dto.database);
       expect(entity.application.toDto()).toEqual(dto.application);
@@ -60,8 +61,8 @@ describe("HealthcheckEntity", () => {
     it("it should not break the entity if sso and directorySync are not present", () => {
       expect.assertions(9);
       const dto = defaultHealthcheckCEdata();
-      const entity = new HealthcheckEntity(dto);
-      expect(entity).toBeInstanceOf(HealthcheckEntity);
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
       expect(entity.ssl.toDto()).toEqual(dto.ssl);
       expect(entity.database.toDto()).toEqual(dto.database);
       expect(entity.application.toDto()).toEqual(dto.application);
@@ -75,8 +76,8 @@ describe("HealthcheckEntity", () => {
     it("it should instantiate the entity with the airgapped dto", () => {
       expect.assertions(11);
       const dto = defaultHealthcheckAirgappedData();
-      const entity = new HealthcheckEntity(dto);
-      expect(entity).toBeInstanceOf(HealthcheckEntity);
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
       expect(entity.ssl.toDto()).toEqual(dto.ssl);
       expect(entity.database.toDto()).toEqual(dto.database);
       expect(entity.application.toDto()).toEqual(dto.application);
@@ -92,8 +93,8 @@ describe("HealthcheckEntity", () => {
     it("it should instantiate the entity without directorySync dto", () => {
       expect.assertions(11);
       const dto = defaultHealthcheckDataWithoutDirectorySync();
-      const entity = new HealthcheckEntity(dto);
-      expect(entity).toBeInstanceOf(HealthcheckEntity);
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
       expect(entity.ssl.toDto()).toEqual(dto.ssl);
       expect(entity.database.toDto()).toEqual(dto.database);
       expect(entity.application.toDto()).toEqual(dto.application);
@@ -109,8 +110,8 @@ describe("HealthcheckEntity", () => {
     it("it should instantiate the entity without SSO dto", () => {
       expect.assertions(11);
       const dto = defaultHealthcheckDataWithoutSso();
-      const entity = new HealthcheckEntity(dto);
-      expect(entity).toBeInstanceOf(HealthcheckEntity);
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
       expect(entity.ssl.toDto()).toEqual(dto.ssl);
       expect(entity.database.toDto()).toEqual(dto.database);
       expect(entity.application.toDto()).toEqual(dto.application);
@@ -126,8 +127,8 @@ describe("HealthcheckEntity", () => {
     it("it should instantiate the entity without directorySync and SSO dto", () => {
       expect.assertions(11);
       const dto = defaultHealthcheckDataWithoutDirectorySyncAndSso();
-      const entity = new HealthcheckEntity(dto);
-      expect(entity).toBeInstanceOf(HealthcheckEntity);
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
       expect(entity.ssl.toDto()).toEqual(dto.ssl);
       expect(entity.database.toDto()).toEqual(dto.database);
       expect(entity.application.toDto()).toEqual(dto.application);

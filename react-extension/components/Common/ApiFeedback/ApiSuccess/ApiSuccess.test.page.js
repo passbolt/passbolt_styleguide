@@ -30,7 +30,6 @@ export default class ApiSuccessPage {
       <MockTranslationProvider>
         <ApiSuccess {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

@@ -62,7 +62,9 @@ class InFormCallToActionField {
     this.field = field;
     /** Type of the field ("username" or "password") */
     this.fieldType = fieldType;
-    /** An unique identifier for the iframe */
+    /** A unique identifier for the InFormCallToActionField */
+    this.id = uuidv4();
+    /** A unique identifier for the iframe */
     this.iframeId = uuidv4();
     /** The scrollable field parent */
     this.scrollableFieldParent = null;
@@ -72,7 +74,7 @@ class InFormCallToActionField {
     this.callToActionClickWatcher = null;
     /** In-form call-to-action click listener callback */
     this.callToActionClickCallback = null;
-
+    /** The shadow root **/
     this.shadowRoot = shadowRoot;
 
     this.bindCallbacks();
@@ -88,7 +90,7 @@ class InFormCallToActionField {
     this.insertInformCallToActionIframe = this.insertInformCallToActionIframe.bind(this);
     this.removeInFormCallToActionWhenMouseOut = this.removeInFormCallToActionWhenMouseOut.bind(this);
     this.removeInFormCallToAction = this.removeInFormCallToAction.bind(this);
-    this.removeCallToActionIframe = this.removeCallToActionIframe.bind(this);
+    this.removeIframe = this.removeIframe.bind(this);
     this.destroy = this.destroy.bind(this);
   }
 
@@ -147,7 +149,7 @@ class InFormCallToActionField {
     iframe.style.width = "18px";
     iframe.style.height = "18px";
     iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
-    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}`;
+    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}&applicationId=${this.id}`;
     return iframe;
   }
 
@@ -185,7 +187,7 @@ class InFormCallToActionField {
       x = left + width - 25;
       y = top + Math.floor(height / 2) - 9;
     } else {
-      // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment )
+      // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical alignment )
       x = x + leftBody + width - 25;
       y = y + topBody + Math.floor(height / 2) - 9; // Calculate the middle position of the input, 9 is the half of the iframe height
     }
@@ -236,7 +238,7 @@ class InFormCallToActionField {
     const isIframeMouseOver = this.isCallToActionMousingOver;
     const isActiveElementAnAuthenticationField = document.activeElement === this.field;
     if (!isIframeMouseOver && !isActiveElementAnAuthenticationField) {
-      this.removeCallToActionIframe();
+      this.removeIframe();
     }
   }
 
@@ -248,14 +250,14 @@ class InFormCallToActionField {
     const isNotCallToActionIframe = event.relatedTarget !== this.shadowRoot.host;
     const isActiveElementAnAuthenticationField = document.activeElement === this.field;
     if (isNotCallToActionIframe && !isActiveElementAnAuthenticationField) {
-      this.removeCallToActionIframe();
+      this.removeIframe();
     }
   }
 
   /**
    * Remove the call-to-action (iframe)
    */
-  removeCallToActionIframe() {
+  removeIframe() {
     const iframes = this.shadowRoot.querySelectorAll("iframe");
     iframes.forEach((iframe) => {
       const identifierToMatch = this.iframeId;
@@ -274,7 +276,7 @@ class InFormCallToActionField {
   handleScrollEvent() {
     // Remove the call-to-action
     this.scrollableFieldParent = DomUtils.getScrollParent(this.field);
-    this.scrollableFieldParent.addEventListener("scroll", this.removeCallToActionIframe);
+    this.scrollableFieldParent.addEventListener("scroll", this.removeIframe);
   }
 
   /** DESTROY */
@@ -287,8 +289,8 @@ class InFormCallToActionField {
     this.field.removeEventListener("focus", this.insertInformCallToActionIframe);
     this.field.removeEventListener("mouseout", this.removeInFormCallToActionWhenMouseOut);
     this.field.removeEventListener("blur", this.removeInFormCallToAction);
-    this.scrollableFieldParent.removeEventListener("scroll", this.removeCallToActionIframe);
-    this.removeCallToActionIframe();
+    this.scrollableFieldParent.removeEventListener("scroll", this.removeIframe);
+    this.removeIframe();
   }
 }
 

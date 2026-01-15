@@ -69,7 +69,7 @@ export const rejectedAccountRecoveryResponseDto = (data) => {
   return Object.assign(defaultData, data || {});
 };
 
-export const AccountRecoveryRequestEntityTestData = {
+exports.AccountRecoveryRequestEntityTestData = {
   default: {
     id: "d4c0e643-3967-443b-93b3-102d902c4510",
     account_recovery_request_id: "d4c0e643-3967-443b-93b3-102d902c4511",

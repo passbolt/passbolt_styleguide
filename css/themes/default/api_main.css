@@ -6622,6 +6622,10 @@ html.launching .launching-screen p {
   right: 0;
   margin-top: 0.3rem;
 }
+#administration-home-page .main-content .grid .card svg {
+  stroke-width: 2;
+  --icon-stroke-width: 0.2rem;
+}
 .page.administration .app .panel.main .panel.middle .breadcrumbs-and-grid {
   align-items: flex-start;
   background: none;

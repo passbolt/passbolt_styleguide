@@ -15,9 +15,10 @@
 import React from "react";
 import DisplaySynchronizeUserDirectoryAdministration from "./DisplaySynchronizeUserDirectoryAdministration";
 import { AdminUserDirectoryContextProvider } from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
-import { defaultProps, mockSynchronizeBody } from "./DisplaySynchronizeUserDirectoryAdministration.test.data";
+import { defaultProps } from "./DisplaySynchronizeUserDirectoryAdministration.test.data";
 import MockFetch from "../../../test/mock/MockFetch";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import { mockSynchronizeBody } from "./DisplaySynchronizeUserDirectoryAdministration.test.data";
 
 export default {
   title: "Components/Administration/DisplaySynchronizeUserDirectoryAdministration",

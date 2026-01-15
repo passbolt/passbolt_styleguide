@@ -256,7 +256,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       await page.copyTotp();
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.find-by-resource-id", props.resource.id);
       expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{6}/),
+        expect.stringMatching(/^[0-9]{6}/),
         "The TOTP has been copied to clipboard.",
       );
       expect(props.hide).toHaveBeenCalled();
@@ -303,7 +303,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       await page.copyTotp();
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.find-by-resource-id", props.resource.id);
       expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{6}/),
+        expect.stringMatching(/^[0-9]{6}/),
         "The TOTP has been copied to clipboard.",
       );
       expect(props.hide).toHaveBeenCalled();

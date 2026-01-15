@@ -14,11 +14,12 @@
 
 import React from "react";
 import { MemoryRouter, Route } from "react-router-dom";
+import DisplayRequireInvitationError from "./DisplayRestartFromScratchError";
 import DisplayRestartFromScratchError from "./DisplayRestartFromScratchError";
 
 export default {
   title: "Components/AuthenticationAccountRecovery/DisplayRestartFromScratchError",
-  component: DisplayRestartFromScratchError,
+  component: DisplayRequireInvitationError,
 };
 
 const Template = (args) => (

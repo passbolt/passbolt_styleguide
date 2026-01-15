@@ -13,8 +13,9 @@
  */
 
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import { Trans, withTranslation } from "react-i18next";
 import { SecretGenerator } from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import { withPrepareResourceContext } from "../../contexts/PrepareResourceContext";

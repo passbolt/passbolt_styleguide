@@ -18,11 +18,11 @@
 import IdentifyWithSsoPage from "./IdentifyWithSso.test.page";
 import { defaultProps } from "./IdentifyWithSso.test.data";
 import IdentifyViaSsoService from "../../../../shared/services/sso/IdentifyViaSsoService";
-import { waitFor } from "@testing-library/dom";
 import GetUrlForSsoIdentificationService from "../../../../shared/services/api/sso/GetUrlForSsoIdentificationService";
 import SsoPopupHandlerService from "../../../../shared/services/sso/SsoPopupHandlerService";
 import { v4 as uuid } from "uuid";
 import GetRecoverUrlService from "../../../../shared/services/api/sso/GetRecoverUrlService";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -34,7 +34,6 @@ describe("IdentifyWithSso", () => {
       expect.assertions(4);
       const props = defaultProps();
       const page = new IdentifyWithSsoPage(props);
-      await waitFor(() => {});
 
       expect(page.exists()).toBeTruthy();
       expect(page.title.textContent).toBe("Welcome back!");
@@ -70,11 +69,10 @@ describe("IdentifyWithSso", () => {
 
       const props = defaultProps();
       const page = new IdentifyWithSsoPage(props);
-      await waitFor(() => {});
 
       // start the SSO process
       await page.clickOnSsoButton();
-      await waitFor(() => {});
+
       expect(window.location.href).toStrictEqual(expectedUrl);
 
       window.location = location;
@@ -100,18 +98,17 @@ describe("IdentifyWithSso", () => {
 
       const props = defaultProps({ onUserRegistrationRequired });
       const page = new IdentifyWithSsoPage(props);
-      await waitFor(() => {});
 
       // start the SSO process
       await page.clickOnSsoButton();
-      await waitFor(() => {});
     });
 
     it("As a user without the extension configured, I can cancel and retry the SSO process", async () => {
       expect.assertions(3);
       const props = defaultProps();
-      const page = new IdentifyWithSsoPage(props);
-      await waitFor(() => {});
+
+      let page;
+      await act(async () => (page = new IdentifyWithSsoPage(props)));
 
       let rejectPromise = null;
       jest.spyOn(IdentifyViaSsoService.prototype, "exec").mockImplementation(
@@ -125,8 +122,11 @@ describe("IdentifyWithSso", () => {
       expect(page.isProcessing()).toBeFalsy();
       await page.clickOnSsoButton();
       expect(page.isProcessing()).toBeTruthy();
-      rejectPromise(new Error("User closed the popup"));
-      await waitFor(() => {});
+
+      await act(async () => {
+        rejectPromise(new Error("User closed the popup"));
+      });
+
       expect(page.isProcessing()).toBeFalsy();
     });
 
@@ -136,7 +136,6 @@ describe("IdentifyWithSso", () => {
         onSecondaryActionClick: jest.fn(),
       });
       const page = new IdentifyWithSsoPage(props);
-      await waitFor(() => {});
 
       await page.clickOnSecondaryAction();
 

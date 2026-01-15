@@ -141,7 +141,7 @@ class ResourceTypeEntity extends EntityV2 {
             },
             background_color: {
               type: "string",
-              pattern: /^#(?:[0-9A-F]{6}|[0-9A-F]{8})$/i,
+              pattern: /^#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/,
               nullable: true,
             },
           },

@@ -63,7 +63,7 @@ class TotpEntity extends EntityV2 {
      * - Remove all special characters.
      */
     if (typeof this._props.secret_key === "string") {
-      this._props.secret_key = this._props.secret_key?.replace(/([\W_])/g, "").toUpperCase();
+      this._props.secret_key = this._props.secret_key?.replace(/(\W|_|\s)/g, "").toUpperCase();
     }
 
     /*

@@ -17,7 +17,7 @@ import EntitySchema from "../abstract/entitySchema";
 const ENTITY_NAME = "OAuth2SsoSettings";
 const OAUTH2 = "oauth2";
 
-const OAUTH2_SUPPORTED_URLS = /^https:\/\/.+[^/]$/;
+const OAUTH2_SUPPORTED_URLS = /^https:\/\/.+[^\/]$/;
 
 /**
  * Entity related to the SSO settings

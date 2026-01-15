@@ -21,6 +21,8 @@ import debounce from "debounce-promise";
 import UserEventsService from "../User/UserEventsService";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
 
+const Z_INDEX_MAX = 2147483647;
+
 /**
  * Manages the in-form web integration including call-to-action and menu
  */
@@ -63,7 +65,7 @@ class InFormManager {
      */
     this.host.setAttribute(
       "style",
-      "all: initial; position: fixed !important; display: block !important; z-index: 2147483647 !important",
+      `all: initial; position: fixed !important; display: block !important; z-index: ${Z_INDEX_MAX} !important`,
     );
     // Block any setter and getter property style, however it can be bypassed with setAttribute.
     Object.defineProperty(this.host, "style", {
@@ -120,6 +122,7 @@ class InFormManager {
     this.handleFillCredentials();
     this.handleFillPassword();
     this.handleClipboardEvent();
+    this.handleApplicationOverlaidEvent();
     this.handleDomStyleMutation();
   }
 
@@ -238,7 +241,7 @@ class InFormManager {
   removeCallToActionFieldsNotMatches(newFields) {
     const matchField = (callToActionField) => (fieldToMatch) => callToActionField.field === fieldToMatch;
     const callToActionFieldsToRemove = this.callToActionFields.filter((field) => !newFields.some(matchField(field)));
-    callToActionFieldsToRemove.forEach((field) => field.removeCallToActionIframe());
+    callToActionFieldsToRemove.forEach((field) => field.removeIframe());
   }
 
   /**
@@ -273,8 +276,8 @@ class InFormManager {
    * Clean the DOM of in-form entities
    */
   clean() {
-    this.callToActionFields.forEach((field) => field.removeCallToActionIframe());
-    this.menuField?.removeMenuIframe();
+    this.callToActionFields.forEach((field) => field.removeIframe());
+    this.menuField?.removeIframe();
   }
 
   /**
@@ -343,6 +346,7 @@ class InFormManager {
    */
   handleInFormMenuInsertionEvent() {
     port.on("passbolt.in-form-menu.open", () => {
+      this.menuField?.destroy();
       this.menuField = new InFormMenuField(this.lastCallToActionFieldClicked.field, this.shadowRoot);
     });
   }
@@ -352,7 +356,7 @@ class InFormManager {
    */
   handleInFormMenuRemoveEvent() {
     port.on("passbolt.in-form-menu.close", () => {
-      this.menuField.removeMenuIframe();
+      this.menuField.removeIframe();
     });
   }
 
@@ -452,7 +456,7 @@ class InFormManager {
         (callToActionField) =>
           !callToActionField.field.value && UserEventsService.autofill(callToActionField.field, password),
       );
-      this.menuField.removeMenuIframe();
+      this.menuField.removeIframe();
       // Listen the auto-save on the appropriate form field
       const formField = this.credentialsFormFields.find((formField) =>
         formField.field.contains(this.lastCallToActionFieldClicked.field),
@@ -474,6 +478,61 @@ class InFormManager {
    */
   handleClipboardChange() {
     this.clipboardServiceWorkerService.cancelClipboardFlush();
+  }
+
+  /**
+   * Whenever one requested to check if the application is overlaid
+   */
+  handleApplicationOverlaidEvent() {
+    port.on("passbolt.web-integration.is-application-overlaid", async (requestId, applicationId) => {
+      const application =
+        this.menuField?.id === applicationId
+          ? this.menuField
+          : this.callToActionFields.find((field) => field.id === applicationId);
+      const isOverlay = this.isApplicationOverlaid(application);
+      await port.emit(requestId, "SUCCESS", isOverlay);
+      if (isOverlay) {
+        application.removeIframe();
+      }
+    });
+  }
+
+  /**
+   * Is application overlaid
+   * @param application
+   * @return {boolean}
+   */
+  isApplicationOverlaid(application) {
+    const iframe = this.shadowRoot.getElementById(application.iframeId);
+    // Get all elements having pointer-event none
+    const pointerEventNoneElements = this.elementsWithPointerEventNone;
+    // Set pointer-event to auto to enable the detection of an overlay on application
+    pointerEventNoneElements.forEach((pointerEl) => pointerEl.style.setProperty("pointer-events", "auto", "important"));
+    const points = DomUtils.generateUniquePointsInElement(iframe);
+    // Elements with pointer-events set to none will be ignored, and the element below it will be returned.
+    const elements = points.map((point) => document.elementFromPoint(point.x, point.y));
+    // Set back pointer-event to none
+    pointerEventNoneElements.forEach((pointerEl) => (pointerEl.style.pointerEvents = "none"));
+    return elements.some((element) => element !== this.host);
+  }
+
+  /**
+   * Get elements with pointer event none
+   * @return {[]}
+   */
+  get elementsWithPointerEventNone() {
+    const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, {
+      acceptNode: function (node) {
+        const style = window.getComputedStyle(node);
+        return style.pointerEvents === "none" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      },
+    });
+    const elements = [];
+    let currentNode;
+    while ((currentNode = treeWalker.nextNode())) {
+      elements.push(currentNode);
+    }
+    return elements;
   }
 
   /**
