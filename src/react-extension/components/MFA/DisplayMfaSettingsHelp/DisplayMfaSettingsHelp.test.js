@@ -30,7 +30,9 @@ describe("DisplayMfaSettingsHelp", () => {
         "Multi-factor authentication (MFA) is a method of confirming a user's identity that requires presenting two or more pieces of evidence (or factor).",
       );
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute("href")).toEqual("https://help.passbolt.com/start");
+      expect(page.helpBoxButton.getAttribute("href")).toEqual(
+        "https://www.passbolt.com/docs/admin/authentication/mfa-policy",
+      );
     });
 
     it("As a logged user I should see an help box in the scan totp screen ", async () => {
@@ -49,7 +51,9 @@ describe("DisplayMfaSettingsHelp", () => {
         "To proceed you need to install an application that supports Time Based One Time Passwords (TOTP) on your phone or tablet such as: Google Authenticator or FreeOTP.",
       );
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute("href")).toEqual("https://help.passbolt.com/start");
+      expect(page.helpBoxButton.getAttribute("href")).toEqual(
+        "https://www.passbolt.com/docs/admin/authentication/mfa/totp",
+      );
     });
 
     it("As a logged user I should see an help box in the duo screen ", async () => {
@@ -68,7 +72,9 @@ describe("DisplayMfaSettingsHelp", () => {
         "To proceed, you need to install the Duo mobile application or to have a device to authenticate which is supported by Duo. For the list of supported devices, see: Duo authentication methods.",
       );
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute("href")).toEqual("https://help.passbolt.com/start");
+      expect(page.helpBoxButton.getAttribute("href")).toEqual(
+        "https://www.passbolt.com/docs/admin/authentication/mfa/duo",
+      );
     });
   });
 });

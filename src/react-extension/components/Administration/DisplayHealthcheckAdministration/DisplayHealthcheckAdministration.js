@@ -143,7 +143,7 @@ class DisplayHealthcheckAdministration extends Component {
                   <Trans>
                     Check{" "}
                     <a
-                      href="https://help.passbolt.com/faq/hosting/troubleshoot-ssl"
+                      href="https://www.passbolt.com/docs/hosting/configure/tls/"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -179,7 +179,7 @@ class DisplayHealthcheckAdministration extends Component {
                   <Trans>
                     Check{" "}
                     <a
-                      href="https://help.passbolt.com/faq/hosting/troubleshoot-ssl"
+                      href="https://www.passbolt.com/docs/hosting/configure/tls/"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -1030,7 +1030,7 @@ class DisplayHealthcheckAdministration extends Component {
                 <span>
                   <Trans>
                     See{" "}
-                    <a href="https://help.passbolt.com/hosting/update" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.passbolt.com/docs/hosting/update" target="_blank" rel="noopener noreferrer">
                       this guide
                     </a>
                   </Trans>
@@ -1054,7 +1054,7 @@ class DisplayHealthcheckAdministration extends Component {
                 <span>
                   <Trans>
                     To confirm that you are running the latest version, check{" "}
-                    <a href="https://help.passbolt.com/releases/" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.passbolt.com/changelog/api-bext" target="_blank" rel="noopener noreferrer">
                       all the releases notes
                     </a>
                   </Trans>
