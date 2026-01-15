@@ -73,12 +73,42 @@ describe("CanUseService", () => {
 
       const result = CanUse.canRoleUseAction(user, rbacs, uiActions.RESOURCES_EXPORT);
 
-      // Delete to avoid other test running inn desktop app mode
+      // Delete to avoid other test running in desktop app mode
       delete global.window.chrome;
 
       expect(result).toBe(true);
       expect(rbacs.findRbacByActionName).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
       expect(GetControlFunctionService.getByRbac).toHaveBeenCalled();
+    });
+
+    it("should fallback to admin default for desktop admin user when no RBAC exists", () => {
+      expect.assertions(2);
+      global.window.chrome = { webview: true };
+
+      const emptyRbacs = new RbacsCollection([]);
+      jest.spyOn(GetControlFunctionService, "getDefaultForAdminAndAction");
+
+      const result = CanUse.canRoleUseAction(defaultAdminUserDto(), emptyRbacs, actions.GROUPS_ADD);
+
+      delete global.window.chrome;
+
+      expect(result).toBeTruthy();
+      expect(GetControlFunctionService.getDefaultForAdminAndAction).toHaveBeenCalledWith(actions.GROUPS_ADD);
+    });
+
+    it("should fallback to user default for desktop non-admin user when no RBAC exists", () => {
+      expect.assertions(2);
+      global.window.chrome = { webview: true };
+
+      const emptyRbacs = new RbacsCollection([]);
+      jest.spyOn(GetControlFunctionService, "getDefaultForUserAndAction");
+
+      const result = CanUse.canRoleUseAction(user, emptyRbacs, actions.GROUPS_ADD);
+
+      delete global.window.chrome;
+
+      expect(result).toBeFalsy();
+      expect(GetControlFunctionService.getDefaultForUserAndAction).toHaveBeenCalledWith(actions.GROUPS_ADD);
     });
 
     it("should return false if rbac is Deny for ui action", () => {
