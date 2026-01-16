@@ -1,1 +1,1 @@
-This version introduces a design fix for the Yubikey login page.
+This version is WIP for paginated requests. It is required by the browser extension to pass its CI as `assertNumber` is now used on both the Styleguide and the bext, so the method has been moved in the styleguide.
