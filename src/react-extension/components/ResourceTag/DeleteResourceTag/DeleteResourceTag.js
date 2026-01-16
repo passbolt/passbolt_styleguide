@@ -22,6 +22,7 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import { withLoading } from "../../../contexts/LoadingContext";
 import { Trans, withTranslation } from "react-i18next";
+import TagsServiceWorkerService from "../../../../shared/services/api/tags/TagsServiceWorkerService";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -73,7 +74,8 @@ class DeleteResourceTag extends Component {
 
     try {
       this.props.loadingContext.add();
-      await this.props.context.port.request("passbolt.tags.delete", this.props.context.tagToDelete.id);
+      const tagsService = new TagsServiceWorkerService(this.props.context.port);
+      await tagsService.delete(this.props.context.tagToDelete.id);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The tag has been deleted successfully"));
       this.props.onClose();

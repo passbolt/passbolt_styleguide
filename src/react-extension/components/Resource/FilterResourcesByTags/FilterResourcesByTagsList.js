@@ -24,6 +24,7 @@ import { withDrag } from "../../../contexts/DragContext";
 import { withDialog } from "../../../contexts/DialogContext";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import TagsServiceWorkerService from "../../../../shared/services/api/tags/TagsServiceWorkerService";
 
 class FilterResourcesByTagsList extends React.Component {
   /**
@@ -161,7 +162,8 @@ class FilterResourcesByTagsList extends React.Component {
     this.setState({ draggingOverTagId: null });
     try {
       const resources = this.props.dragContext.draggedItems.resources.map((resource) => resource.id);
-      this.props.context.port.request("passbolt.tags.add-resources-tag", { resources, tag });
+      const tagsService = new TagsServiceWorkerService(this.props.context.port);
+      await tagsService.addResourcesTag(resources, tag);
     } catch (error) {
       this.onUnexpectedError(error);
     }
