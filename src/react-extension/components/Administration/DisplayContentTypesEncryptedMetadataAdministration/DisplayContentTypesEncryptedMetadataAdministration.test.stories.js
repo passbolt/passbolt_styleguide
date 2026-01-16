@@ -13,7 +13,6 @@
  */
 
 import React from "react";
-import { within } from "@storybook/test";
 import {
   allowedVersionErrorProps,
   defaultProps,
@@ -23,7 +22,6 @@ import DisplayContentTypesEncryptedEncryptedMetadataAdministration from "./Displ
 import { MemoryRouter } from "react-router-dom";
 import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
 import DisplayAdministrationWorkspaceBreadcrumb from "../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
-import { waitFor } from "@testing-library/react";
 
 export default {
   title: "Components/Administration/DisplayContentTypesEncryptedMetadataAdministration",
@@ -76,12 +74,6 @@ export const Initial = {
 
 export const WithValidationError = {
   args: allowedVersionErrorProps(),
-  // Trigger the form validation.
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const form = await waitFor(() => canvas.getByTestId("submit-form"));
-    form.requestSubmit();
-  },
 };
 
 export const WithWarnings = {
