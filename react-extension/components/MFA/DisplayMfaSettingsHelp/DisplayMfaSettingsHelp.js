@@ -48,7 +48,12 @@ class DisplayMfaSettingsHelp extends Component {
                 presenting two or more pieces of evidence (or factor).
               </Trans>
             </p>
-            <a className="button" href="https://help.passbolt.com/start" target="_blank" rel="noopener noreferrer">
+            <a
+              className="button"
+              href="https://www.passbolt.com/docs/admin/authentication/mfa-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FileTextSVG />
               <span>
                 <Trans>Read the documentation</Trans>
@@ -76,7 +81,12 @@ class DisplayMfaSettingsHelp extends Component {
               </a>
               .
             </p>
-            <a className="button" href="https://help.passbolt.com/start" target="_blank" rel="noopener noreferrer">
+            <a
+              className="button"
+              href="https://www.passbolt.com/docs/admin/authentication/mfa/duo"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FileTextSVG />
               <span>
                 <Trans>Read the documentation</Trans>
@@ -103,7 +113,12 @@ class DisplayMfaSettingsHelp extends Component {
               </a>
               .
             </p>
-            <a className="button" href="https://help.passbolt.com/start" target="_blank" rel="noopener noreferrer">
+            <a
+              className="button"
+              href="https://www.passbolt.com/docs/admin/authentication/mfa/totp"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FileTextSVG />
               <span>
                 <Trans>Read the documentation</Trans>

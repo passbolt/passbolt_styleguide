@@ -62,6 +62,13 @@ export default class InstallExtensionTestPage {
   }
 
   /**
+   * Returns the download button url
+   */
+  get downloadUrl() {
+    return this._page.container.querySelector(".install-extension .form-actions .button.primary.big").href;
+  }
+
+  /**
    * Returns the link to refresh
    */
   get link() {

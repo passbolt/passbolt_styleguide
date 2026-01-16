@@ -246,7 +246,7 @@ class SendTestMailDialog extends React.Component {
                 <br />
                 <a
                   className="faq-link"
-                  href="https://help.passbolt.com/faq/hosting/why-email-not-sent"
+                  href="https://www.passbolt.com/docs/hosting/troubleshooting/email"
                   rel="noopener noreferrer"
                   target="_blank"
                 >

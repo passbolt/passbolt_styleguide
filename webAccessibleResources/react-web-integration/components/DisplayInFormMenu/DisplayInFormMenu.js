@@ -33,6 +33,7 @@ import SearchSVG from "../../../img/svg/search.svg";
 import ResourceIcon from "../../../shared/components/Icons/ResourceIcon";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import Logger from "../../../shared/utils/logger";
 
 /** The maximum length of visibility of a generated password */
 const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
@@ -349,6 +350,7 @@ class DisplayInFormMenu extends React.Component {
   async handleCreateNewCredentialsRequestedEvent() {
     const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
     if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
       return;
     }
     this.props.context.port.request("passbolt.in-form-menu.create-new-credentials");
@@ -360,6 +362,7 @@ class DisplayInFormMenu extends React.Component {
   async handleBrowseCredentialsRequestedEvent() {
     const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
     if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
       return;
     }
     this.props.context.port.request("passbolt.in-form-menu.browse-credentials");
@@ -371,6 +374,7 @@ class DisplayInFormMenu extends React.Component {
   async handleSaveCredentialsRequestedEvent() {
     const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
     if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
       return;
     }
     this.props.context.port.request("passbolt.in-form-menu.save-credentials");
@@ -383,6 +387,7 @@ class DisplayInFormMenu extends React.Component {
   async handleUseSuggestedResourceRequestedEvent(resourceId) {
     const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
     if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
       return;
     }
 
@@ -401,6 +406,7 @@ class DisplayInFormMenu extends React.Component {
   async handleGeneratePasswordRequestedEvent() {
     const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
     if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
       return;
     }
     this.props.context.port.request("passbolt.in-form-menu.fill-password", this.state.generatedPassword);

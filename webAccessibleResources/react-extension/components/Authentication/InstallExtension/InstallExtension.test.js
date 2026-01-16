@@ -18,6 +18,7 @@
 
 import InstallExtensionTestPage from "./InstallExtension.test.page";
 import { defaultProps } from "./InstallExtension.test.data";
+import { CHROME_STORE_BROWSER_EXTENSION_URL } from "./InstallExtension";
 
 beforeAll(() => {
   Object.defineProperty(window, "matchMedia", {
@@ -80,6 +81,8 @@ describe("As AN I should see install extension page", () => {
       expect(page.message).toBe("Please download the browser extension and refresh this page to continue.");
       // download
       expect(page.download).toBe("Download extension");
+      // download
+      expect(page.downloadUrl).toBe(CHROME_STORE_BROWSER_EXTENSION_URL);
       // link
       expect(page.linkContent).toBe("Refresh to detect extension");
     });

@@ -286,7 +286,7 @@ class ImportOrganizationKey extends React.Component {
               <Trans>
                 Learn how to{" "}
                 <a
-                  href="https://help.passbolt.com/configure/account-recovery"
+                  href="https://www.passbolt.com/docs/admin/faq/generate-openpgp-key/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

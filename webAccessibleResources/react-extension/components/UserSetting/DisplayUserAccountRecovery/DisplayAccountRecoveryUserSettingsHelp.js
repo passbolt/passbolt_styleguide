@@ -32,7 +32,7 @@ class DisplayAccountRecoveryUserSettingsHelp extends Component {
         </p>
         <a
           className="button"
-          href="https://help.passbolt.com/faq/start/account-recovery/subscribe"
+          href="https://www.passbolt.com/docs/user/quickstart/browser/admin-assisted-recovery"
           target="_blank"
           rel="noopener noreferrer"
         >

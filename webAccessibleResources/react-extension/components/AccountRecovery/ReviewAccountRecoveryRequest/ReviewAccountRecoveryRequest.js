@@ -282,7 +282,7 @@ class ReviewAccountRecoveryRequest extends Component {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://help.passbolt.com/faq/start/account-recovery/review-request"
+              href="https://www.passbolt.com/docs/admin/authentication/account-recovery"
               className={`button button-left ${this.isProcessing ? "disabled" : ""}`}
               disabled={this.isProcessing}
             >
