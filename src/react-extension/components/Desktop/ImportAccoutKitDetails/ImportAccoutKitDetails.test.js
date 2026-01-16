@@ -21,25 +21,23 @@ afterEach(() => {
   jest.clearAllTimers();
 });
 
-import {ImportAccountKitWorkflowStates} from "../../../contexts/Desktop/ImportAccountKitContext";
+import { ImportAccountKitWorkflowStates } from "../../../contexts/Desktop/ImportAccountKitContext";
 import MockPort from "../../../test/mock/MockPort";
-import {defaultContextProps} from "./ImportAccoutKitDetails.test.data";
+import { defaultContextProps } from "./ImportAccoutKitDetails.test.data";
 import ImportAccoutKitDetailsPage from "./ImportAccoutKitDetails.test.page";
 
 describe("ImportAccoutKitDetails", () => {
-  let page,
-    props,
-    accountKit;
+  let page, props, accountKit;
   const passphrase = "ada@passbolt.com";
 
   beforeEach(() => {
-    props = defaultContextProps({context: {port: new MockPort()}});
+    props = defaultContextProps({ context: { port: new MockPort() } });
     accountKit = props.importAccountKitContext.accountKit;
     page = new ImportAccoutKitDetailsPage(props);
   });
 
   describe("As an unknown user configuring the desktop app I should see the detail of the account kit & verify my passphrase when importing an account", () => {
-    it('As an unknown user configuring the desktop app I should see the detail of the account kit I am importing', () => {
+    it("As an unknown user configuring the desktop app I should see the detail of the account kit I am importing", () => {
       expect.assertions(4);
 
       expect(page.exists()).toBeTruthy();
@@ -48,7 +46,7 @@ describe("ImportAccoutKitDetails", () => {
       expect(page.domain).toEqual(accountKit.domain);
     });
 
-    it('As an unknown user configuring the desktop app I should be able to verify my passphrase', async() => {
+    it("As an unknown user configuring the desktop app I should be able to verify my passphrase", async () => {
       expect.assertions(1);
 
       jest.spyOn(props.importAccountKitContext, "verifyPassphrase").mockImplementation(() => jest.fn());
@@ -59,10 +57,12 @@ describe("ImportAccoutKitDetails", () => {
       expect(props.importAccountKitContext.verifyPassphrase).toHaveBeenCalledWith(passphrase);
     });
 
-    it('As an unknown user configuring the desktop app I should be warned if I entered a wrong passphrase', async() => {
+    it("As an unknown user configuring the desktop app I should be warned if I entered a wrong passphrase", async () => {
       expect.assertions(2);
 
-      jest.spyOn(props.importAccountKitContext, "verifyPassphrase").mockImplementation(() => Promise.reject({name: 'InvalidMasterPasswordError'}));
+      jest
+        .spyOn(props.importAccountKitContext, "verifyPassphrase")
+        .mockImplementation(() => Promise.reject({ name: "InvalidMasterPasswordError" }));
       await page.fillPassphrase(passphrase);
       await page.clickOnNextButton();
 
@@ -70,10 +70,12 @@ describe("ImportAccoutKitDetails", () => {
       expect(page.invalidPassphrase.textContent).toEqual("The passphrase is invalid.");
     });
 
-    it('As an unknown user configuring the desktop app I should be warned if I entered a wrong private key', async() => {
+    it("As an unknown user configuring the desktop app I should be warned if I entered a wrong private key", async () => {
       expect.assertions(2);
 
-      jest.spyOn(props.importAccountKitContext, "verifyPassphrase").mockImplementation(() => Promise.reject({name: 'GpgKeyError'}));
+      jest
+        .spyOn(props.importAccountKitContext, "verifyPassphrase")
+        .mockImplementation(() => Promise.reject({ name: "GpgKeyError" }));
       await page.fillPassphrase(passphrase);
       await page.clickOnNextButton();
 
@@ -81,13 +83,15 @@ describe("ImportAccoutKitDetails", () => {
       expect(page.invalidGPGKey.textContent).toEqual("The private key is invalid.");
     });
 
-    it('As an unknown user configuring the desktop app I should be able to import another account', async() => {
+    it("As an unknown user configuring the desktop app I should be able to import another account", async () => {
       expect.assertions(1);
 
       jest.spyOn(props.importAccountKitContext, "navigate");
       await page.clickSecondaryActionLink();
 
-      expect(props.importAccountKitContext.navigate).toHaveBeenCalledWith(ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT);
+      expect(props.importAccountKitContext.navigate).toHaveBeenCalledWith(
+        ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT,
+      );
     });
   });
 });

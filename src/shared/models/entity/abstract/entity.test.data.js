@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.7.0
  */
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 import Entity from "./entity";
 import EntitySchema from "./entitySchema";
 
@@ -20,33 +20,39 @@ export class TestEntity extends Entity {
     super(EntitySchema.validate(TestEntity.name, dto, TestEntity.getSchema()), options);
     // Association manual process
     if (this._props.associated_entity) {
-      this._groups_users = new TestAssociatedEntity(this._props.associated_entity, {...options, clone: false});
+      this._groups_users = new TestAssociatedEntity(this._props.associated_entity, { ...options, clone: false });
       delete this._props.associated_entity;
     }
   }
 
   static getSchema() {
     return {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "id": {
-          "anyOf": [{
-            "type": "string",
-            "format": "uuid"
-          }, {
-            "type": "null"
-          }],
+      type: "object",
+      required: [],
+      properties: {
+        id: {
+          anyOf: [
+            {
+              type: "string",
+              format: "uuid",
+            },
+            {
+              type: "null",
+            },
+          ],
         },
-        "name": {
-          "anyOf": [{
-            "type": "string"
-          }, {
-            "type": "null"
-          }],
+        name: {
+          anyOf: [
+            {
+              type: "string",
+            },
+            {
+              type: "null",
+            },
+          ],
         },
-        "associated_entity": TestAssociatedEntity.getSchema()
-      }
+        associated_entity: TestAssociatedEntity.getSchema(),
+      },
     };
   }
 
@@ -73,18 +79,21 @@ export class TestAssociatedEntity extends Entity {
 
   static getSchema() {
     return {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "id": {
-          "anyOf": [{
-            "type": "string",
-            "format": "uuid"
-          }, {
-            "type": "null"
-          }],
-        }
-      }
+      type: "object",
+      required: [],
+      properties: {
+        id: {
+          anyOf: [
+            {
+              type: "string",
+              format: "uuid",
+            },
+            {
+              type: "null",
+            },
+          ],
+        },
+      },
     };
   }
 
@@ -93,13 +102,13 @@ export class TestAssociatedEntity extends Entity {
   }
 }
 
-export const defaultTestEntityDto = data => ({
+export const defaultTestEntityDto = (data) => ({
   id: uuid(),
   name: "test name",
-  ...data
+  ...data,
 });
 
-export const defaultAssociatedTestEntityDto = data => ({
+export const defaultAssociatedTestEntityDto = (data) => ({
   id: uuid(),
-  ...data
+  ...data,
 });

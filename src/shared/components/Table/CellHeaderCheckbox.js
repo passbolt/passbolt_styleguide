@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 /**
@@ -31,7 +31,8 @@ class CellHeaderCheckbox extends Component {
           name="select all"
           disabled={this.props.disabled}
           checked={this.props.checked}
-          onChange={this.props.onChange}/>
+          onChange={this.props.onChange}
+        />
       </div>
     );
   }
@@ -40,7 +41,7 @@ class CellHeaderCheckbox extends Component {
 CellHeaderCheckbox.propTypes = {
   checked: PropTypes.bool.isRequired, // The checked value
   onChange: PropTypes.func, // The onChange function property
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };
 
 export default CellHeaderCheckbox;

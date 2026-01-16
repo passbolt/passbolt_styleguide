@@ -11,13 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Avatar/UserAvatar";
 import GroupAvatar from "../../Avatar/GroupAvatar";
-import {isUserSuspended} from "../../../../../shared/utils/userUtils";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import { isUserSuspended } from "../../../../../shared/utils/userUtils";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
 import TooltipPortal from "../../Tooltip/TooltipPortal";
 import TooltipMessageFingerprintLoading from "../../Tooltip/TooltipMessageFingerprintLoading";
 import Fingerprint from "../../Fingerprint/Fingerprint";
@@ -72,7 +72,7 @@ class AutocompleteItem extends Component {
     if (this.props.user) {
       return this.props.user.username;
     } else if (this.props.group) {
-      return this.props.t("{{count}} group member", {count: this.props.group.user_count});
+      return this.props.t("{{count}} group member", { count: this.props.group.user_count });
     }
     return "";
   }
@@ -86,9 +86,12 @@ class AutocompleteItem extends Component {
       return;
     }
 
-    const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.props.user.id);
-    const tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint}/>;
-    this.setState({tooltipFingerprintMessage});
+    const gpgkey = await this.props.context.port.request(
+      "passbolt.keyring.get-public-key-info-by-user",
+      this.props.user.id,
+    );
+    const tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint} />;
+    this.setState({ tooltipFingerprintMessage });
   }
 
   /**
@@ -97,9 +100,9 @@ class AutocompleteItem extends Component {
    */
   getClassName() {
     if (this.props.selected) {
-      return 'row selected';
+      return "row selected";
     }
-    return 'row';
+    return "row";
   }
 
   /**
@@ -122,27 +125,32 @@ class AutocompleteItem extends Component {
    */
   render() {
     return (
-      <li className={`autocomplete-item ${this.isCurrentUserSuspended  ? "suspended" : ""}`}>
+      <li className={`autocomplete-item ${this.isCurrentUserSuspended ? "suspended" : ""}`}>
         <div className={this.getClassName()}>
           <div className="main-cell-wrapper">
             <div className="main-cell ">
               <button type="button" className="link no-border" onClick={this.handleClick}>
-                {this.props.user &&
-                <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl}/>
-                }
-                {this.props.group &&
-                <GroupAvatar group={this.props.group}/>
-                }
+                {this.props.user && <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl} />}
+                {this.props.group && <GroupAvatar group={this.props.group} />}
                 <div className="user">
                   <span className="user-fullname-container">
-                    <span className="name ellipsis">{this.getTitle()}{this.isCurrentUserSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
-                    {this.props.user &&
+                    <span className="name ellipsis">
+                      {this.getTitle()}
+                      {this.isCurrentUserSuspended && (
+                        <span className="suspended">
+                          {" "}
+                          <Trans>(suspended)</Trans>
+                        </span>
+                      )}
+                    </span>
+                    {this.props.user && (
                       <TooltipPortal
                         message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
-                        onMouseHover={this.onTooltipFingerprintMouseHover}>
-                        <FingerprintSVG/>
+                        onMouseHover={this.onTooltipFingerprintMouseHover}
+                      >
+                        <FingerprintSVG />
                       </TooltipPortal>
-                    }
+                    )}
                   </span>
                   <span className="details ellipsis">{this.getSubtitle()}</span>
                 </div>
@@ -156,7 +164,7 @@ class AutocompleteItem extends Component {
 }
 
 AutocompleteItem.defaultProps = {
-  canShowUserAsSuspended: false
+  canShowUserAsSuspended: false,
 };
 
 AutocompleteItem.propTypes = {

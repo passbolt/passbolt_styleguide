@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,10 +12,10 @@
  * @since         3.1.0
  */
 
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withUserSettings } from "../../../contexts/UserSettingsContext";
+import { Trans, withTranslation } from "react-i18next";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 
 /**
@@ -58,18 +57,29 @@ class DownloadRecoveryKit extends React.Component {
       <>
         <div className="main-column recovery-kit">
           <div className="main-content">
-            <h3><Trans>The passphrase was updated!</Trans></h3>
+            <h3>
+              <Trans>The passphrase was updated!</Trans>
+            </h3>
             <div className="feedback-card">
-              <AnimatedFeedback name='success'/>
+              <AnimatedFeedback name="success" />
               <div className="additional-information">
-                <p><Trans>Your passphrase has been changed. Make sure you keep a backup of your secret key encrypted with this new passphrase.</Trans></p>
-                <p><Trans>Keep this backup in a safe place, you will need it in case of emergency.</Trans></p>
+                <p>
+                  <Trans>
+                    Your passphrase has been changed. Make sure you keep a backup of your secret key encrypted with this
+                    new passphrase.
+                  </Trans>
+                </p>
+                <p>
+                  <Trans>Keep this backup in a safe place, you will need it in case of emergency.</Trans>
+                </p>
               </div>
             </div>
           </div>
           <div className="message warning">
             <p>
-              <Trans><strong>Warning</strong>: This recovery kit replace the old one.</Trans>
+              <Trans>
+                <strong>Warning</strong>: This recovery kit replace the old one.
+              </Trans>
             </p>
             <p>
               <Trans>You will need this recovery kit later to access your account (for example on a new device).</Trans>
@@ -77,7 +87,9 @@ class DownloadRecoveryKit extends React.Component {
           </div>
         </div>
         <div className="actions-wrapper">
-          <button type="button" className="button primary form" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></button>
+          <button type="button" className="button primary form" onClick={this.handleDownloadBackup}>
+            <Trans>Download backup</Trans>
+          </button>
         </div>
       </>
     );
@@ -85,7 +97,7 @@ class DownloadRecoveryKit extends React.Component {
 }
 
 DownloadRecoveryKit.propTypes = {
-  userSettingsContext: PropTypes.object // The user settings context
+  userSettingsContext: PropTypes.object, // The user settings context
 };
 
 export default withUserSettings(withTranslation("common")(DownloadRecoveryKit));

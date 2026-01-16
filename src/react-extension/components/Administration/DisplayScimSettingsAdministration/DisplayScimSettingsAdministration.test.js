@@ -12,11 +12,15 @@
  * @since         5.5.0
  */
 
-import {defaultProps, defaultScimSettingsConfiguredProps, defaultScimSettingsDisabledProps} from './DisplayScimSettingsAdministration.test.data';
-import DisplayScimSettingsAdministrationPage from './DisplayScimSettingsAdministration.test.page';
-import {waitFor} from '@testing-library/dom';
+import {
+  defaultProps,
+  defaultScimSettingsConfiguredProps,
+  defaultScimSettingsDisabledProps,
+} from "./DisplayScimSettingsAdministration.test.data";
+import DisplayScimSettingsAdministrationPage from "./DisplayScimSettingsAdministration.test.page";
+import { waitFor } from "@testing-library/dom";
 
-describe('DisplayScimSettingsAdministration', () => {
+describe("DisplayScimSettingsAdministration", () => {
   let page, props;
 
   beforeEach(() => {
@@ -24,13 +28,15 @@ describe('DisplayScimSettingsAdministration', () => {
     page = new DisplayScimSettingsAdministrationPage(props);
   });
 
-  it('should display the title and description', async() => {
+  it("should display the title and description", async () => {
     expect.assertions(2);
-    expect(page.title).toBe('SCIM');
-    expect(page.description).toBe('SCIM is a standard protocol that automates user provisioning and deprovisioning with identity providers.');
+    expect(page.title).toBe("SCIM");
+    expect(page.description).toBe(
+      "SCIM is a standard protocol that automates user provisioning and deprovisioning with identity providers.",
+    );
   });
 
-  it('should allow disabling SCIM settings', async() => {
+  it("should allow disabling SCIM settings", async () => {
     expect.assertions(4);
 
     jest.spyOn(props.context.port, "request");
@@ -46,7 +52,7 @@ describe('DisplayScimSettingsAdministration', () => {
     expect(props.scimSettingsServiceWorkerService.disableSettings).toHaveBeenCalled();
   });
 
-  it('should allow enabling SCIM settings', async() => {
+  it("should allow enabling SCIM settings", async () => {
     expect.assertions(4);
 
     props = new defaultScimSettingsDisabledProps();
@@ -63,13 +69,13 @@ describe('DisplayScimSettingsAdministration', () => {
     expect(props.scimSettingsServiceWorkerService.createSettings).toHaveBeenCalled();
   });
 
-  it('scim url should be disabled by default', async() => {
+  it("scim url should be disabled by default", async () => {
     expect.assertions(1);
 
     expect(page.isScimUrlInputDisabled).toBeTruthy();
   });
 
-  it('should not be able to copy secret token if not exist', async() => {
+  it("should not be able to copy secret token if not exist", async () => {
     expect.assertions(3);
 
     props = new defaultScimSettingsConfiguredProps();
@@ -80,29 +86,29 @@ describe('DisplayScimSettingsAdministration', () => {
     expect(page.isCopySecretTokenButtonDisabled).toBeTruthy();
   });
 
-  it('should allow copying SCIM URL', async() => {
+  it("should allow copying SCIM URL", async () => {
     expect.assertions(1);
 
     await page.clickCopyScimUrlButton();
 
     expect(props.clipboardContext.copy).toHaveBeenCalledWith(
       page.scimUrlInput.value,
-      "The SCIM URL has been copied to the clipboard."
+      "The SCIM URL has been copied to the clipboard.",
     );
   });
 
-  it('should allow copying secret token', async() => {
+  it("should allow copying secret token", async () => {
     expect.assertions(1);
 
     await page.clickCopySecretTokenButton();
 
     expect(props.clipboardContext.copy).toHaveBeenCalledWith(
       page.scimSecretTokenInput.value,
-      "The SCIM secret token has been copied to the clipboard."
+      "The SCIM secret token has been copied to the clipboard.",
     );
   });
 
-  it('should allow regenerating secret token', async() => {
+  it("should allow regenerating secret token", async () => {
     expect.assertions(3);
 
     const oldToken = page.scimSecretTokenInput.value;

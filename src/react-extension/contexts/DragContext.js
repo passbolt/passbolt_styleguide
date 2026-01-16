@@ -67,7 +67,7 @@ export default class dragContextProvider extends React.Component {
    * @param draggedItems
    */
   async handleDragStart(event, draggedItemComponent, draggedItems) {
-    await this.setState({displayDraggedItemsComponent: [{draggedItemComponent}], dragging: true, draggedItems});
+    await this.setState({ displayDraggedItemsComponent: [{ draggedItemComponent }], dragging: true, draggedItems });
     event.dataTransfer.setDragImage(this.elementRef.current, 10, 10);
   }
 
@@ -75,7 +75,7 @@ export default class dragContextProvider extends React.Component {
    * Handle drag end
    */
   async handleDragEnd() {
-    await this.setState({displayDraggedItemsComponent: [], dragging: false, draggedItems: null});
+    await this.setState({ displayDraggedItemsComponent: [], dragging: false, draggedItems: null });
   }
 
   /**
@@ -86,11 +86,9 @@ export default class dragContextProvider extends React.Component {
     return (
       <DragContext.Provider value={this.state}>
         <div className="drag-and-drop-wrapper" ref={this.elementRef}>
-          {this.state.displayDraggedItemsComponent.map((displayDraggedItemComponent, index) =>
-            <displayDraggedItemComponent.draggedItemComponent
-              key={index}/>
-          )
-          }
+          {this.state.displayDraggedItemsComponent.map((displayDraggedItemComponent, index) => (
+            <displayDraggedItemComponent.draggedItemComponent key={index} />
+          ))}
         </div>
         {this.props.children}
       </DragContext.Provider>
@@ -98,9 +96,9 @@ export default class dragContextProvider extends React.Component {
   }
 }
 
-dragContextProvider.displayName = 'dragContextProvider';
+dragContextProvider.displayName = "dragContextProvider";
 dragContextProvider.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 /**
@@ -112,9 +110,7 @@ export function withDrag(WrappedComponent) {
     render() {
       return (
         <DragContext.Consumer>
-          {
-            dragContext => <WrappedComponent dragContext={dragContext} {...this.props} />
-          }
+          {(dragContext) => <WrappedComponent dragContext={dragContext} {...this.props} />}
         </DragContext.Consumer>
       );
     }

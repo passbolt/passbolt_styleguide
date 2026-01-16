@@ -24,17 +24,17 @@ import {
   defaultAppContext,
   defaultProps,
   propsWithUserMissingMetadataKeys,
-  propsWithUserTemporaryHasPendingAccountRecovery
+  propsWithUserTemporaryHasPendingAccountRecovery,
 } from "./DisplayUsersContextualMenu.test.data";
 import DisplayUsersContextualMenuPage from "./DisplayUsersContextualMenu.test.page";
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import EditUser from "../EditUser/EditUser";
 import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import DeleteUser from "../DeleteUser/DeleteUser";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import HandleReviewAccountRecoveryWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -47,49 +47,58 @@ describe("Display Users Contextual Menu", () => {
   const contextualUserId = props.user.id;
   props.hide = jest.fn();
 
-  it("As LU I should copy an user permalink", async() => {
+  it("As LU I should copy an user permalink", async () => {
     expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
-    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+    jest.spyOn(props, "hide").mockImplementationOnce(() => {});
     await page.copyPermalink();
-    expect(props.clipboardContext.copy).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/users/view/${contextualUserId}`, "The permalink has been copied to clipboard.");
+    expect(props.clipboardContext.copy).toHaveBeenCalledWith(
+      `${context.userSettings.getTrustedDomain()}/app/users/view/${contextualUserId}`,
+      "The permalink has been copied to clipboard.",
+    );
     expect(props.hide).toHaveBeenCalled();
   });
 
-  it("As LU I should copy an user public key", async() => {
+  it("As LU I should copy an user public key", async () => {
     expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
     const gpgKey = "some key";
-    jest.spyOn(context.port, 'request').mockImplementation(() => ({armored_key: gpgKey}));
-    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+    jest.spyOn(context.port, "request").mockImplementation(() => ({ armored_key: gpgKey }));
+    jest.spyOn(props, "hide").mockImplementationOnce(() => {});
     await page.copyPublicKey();
-    expect(props.clipboardContext.copy).toHaveBeenLastCalledWith(gpgKey, "The public key has been copied to clipboard.");
+    expect(props.clipboardContext.copy).toHaveBeenLastCalledWith(
+      gpgKey,
+      "The public key has been copied to clipboard.",
+    );
     expect(props.hide).toHaveBeenCalled();
   });
 
-  it("As LU I should copy an user email address", async() => {
+  it("As LU I should copy an user email address", async () => {
     expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
-    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+    jest.spyOn(props, "hide").mockImplementationOnce(() => {});
     await page.copyEmail();
-    expect(props.clipboardContext.copy).toHaveBeenLastCalledWith("ada@passbolt.com", "The email has been copied to clipboard.");
+    expect(props.clipboardContext.copy).toHaveBeenLastCalledWith(
+      "ada@passbolt.com",
+      "The email has been copied to clipboard.",
+    );
     expect(props.hide).toHaveBeenCalled();
   });
 
-  it("As LU I should not edit an user if I don't have the capability to do it", async() => {
+  it("As LU I should not edit an user if I don't have the capability to do it", async () => {
     expect.assertions(1);
     page = new DisplayUsersContextualMenuPage(contextWithoutEdit(), props);
     await waitFor(() => {});
     expect(page.canEdit).toBeFalsy();
   });
 
-  it("As LU I should edit an user if I have the capability to do it", async() => {
+  it("As LU I should edit an user if I have the capability to do it", async () => {
     expect.assertions(4);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
@@ -97,25 +106,25 @@ describe("Display Users Contextual Menu", () => {
     // The logged user is admin
     expect(page.canEdit).toBeTruthy();
 
-    jest.spyOn(context, 'setContext').mockImplementationOnce(() => {});
-    jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => {});
-    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+    jest.spyOn(context, "setContext").mockImplementationOnce(() => {});
+    jest.spyOn(props.dialogContext, "open").mockImplementationOnce(() => {});
+    jest.spyOn(props, "hide").mockImplementationOnce(() => {});
 
     await page.edit();
 
-    expect(context.setContext).toHaveBeenLastCalledWith({editUserDialogProps: {id: contextualUserId}});
+    expect(context.setContext).toHaveBeenLastCalledWith({ editUserDialogProps: { id: contextualUserId } });
     expect(props.dialogContext.open).toHaveBeenCalledWith(EditUser);
     expect(props.hide).toHaveBeenCalled();
   });
 
-  it("As LU I should not resend an invite to an user if I don't have the capability to do it", async() => {
+  it("As LU I should not resend an invite to an user if I don't have the capability to do it", async () => {
     expect.assertions(1);
     page = new DisplayUsersContextualMenuPage(contextWithoutEdit(), props);
     await waitFor(() => {});
     expect(page.canResendInvite).toBeFalsy();
   });
 
-  it("As LU I should resend an invite to an user if I have the capability to do it", async() => {
+  it("As LU I should resend an invite to an user if I have the capability to do it", async () => {
     expect.assertions(2);
     const propsUserInactive = Object.assign(props, {});
     propsUserInactive.user.active = false;
@@ -124,14 +133,14 @@ describe("Display Users Contextual Menu", () => {
 
     // The logged user is admin
     expect(page.canResendInvite).toBeTruthy();
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => Promise.resolve());
+    jest.spyOn(context.port, "request").mockImplementationOnce(() => Promise.resolve());
 
     await page.resendInvite();
 
     expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.resend-invite", "ada@passbolt.com");
   });
 
-  it("As LU I should not disable an user MFA if I don't have the capability to do it", async() => {
+  it("As LU I should not disable an user MFA if I don't have the capability to do it", async () => {
     expect.assertions(1);
     page = new DisplayUsersContextualMenuPage(contextWithoutDisableMFA(), props);
     await waitFor(() => {});
@@ -139,7 +148,7 @@ describe("Display Users Contextual Menu", () => {
     expect(page.canDisableMFA).toBeFalsy();
   });
 
-  it("As LU I should disable an user MFA if I have the capability to do it", async() => {
+  it("As LU I should disable an user MFA if I have the capability to do it", async () => {
     expect.assertions(3);
     const propsUserMfaActive = Object.assign(props, {});
     propsUserMfaActive.user.is_mfa_enabled = true;
@@ -148,8 +157,8 @@ describe("Display Users Contextual Menu", () => {
 
     expect(page.canDisableMFA).toBeTruthy();
 
-    jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => {});
-    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+    jest.spyOn(props.dialogContext, "open").mockImplementationOnce(() => {});
+    jest.spyOn(props, "hide").mockImplementationOnce(() => {});
 
     await page.disableMFA();
 
@@ -157,41 +166,41 @@ describe("Display Users Contextual Menu", () => {
     expect(props.hide).toHaveBeenCalled();
   });
 
-  it("As LU I should not  delete an user if I don't have the capability to do it", async() => {
+  it("As LU I should not  delete an user if I don't have the capability to do it", async () => {
     expect.assertions(1);
     page = new DisplayUsersContextualMenuPage(contextWithoutDelete(), props);
     await waitFor(() => {});
     expect(page.canDelete).toBeFalsy();
   });
 
-  it("As LU I should delete an user if I have the capability to do it", async() => {
+  it("As LU I should delete an user if I have the capability to do it", async () => {
     expect.assertions(5);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
     expect(page.canDelete).toBeTruthy();
 
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
-    jest.spyOn(context, 'setContext').mockImplementationOnce(() => {});
-    jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => {});
-    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+    jest.spyOn(context.port, "request").mockImplementationOnce(() => {});
+    jest.spyOn(context, "setContext").mockImplementationOnce(() => {});
+    jest.spyOn(props.dialogContext, "open").mockImplementationOnce(() => {});
+    jest.spyOn(props, "hide").mockImplementationOnce(() => {});
 
     await page.delete();
 
     expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", contextualUserId);
-    expect(context.setContext).toHaveBeenLastCalledWith({deleteUserDialogProps: {user: props.user}});
+    expect(context.setContext).toHaveBeenLastCalledWith({ deleteUserDialogProps: { user: props.user } });
     expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteUser);
     expect(props.hide).toHaveBeenCalled();
   });
 
-  it('As LU I should see an error message if the delete went wrong', async() => {
+  it("As LU I should see an error message if the delete went wrong", async () => {
     expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
-    const error = {message: 'some error'};
-    const errorDialogProps = {error: error};
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => Promise.reject({message: error.message}));
+    const error = { message: "some error" };
+    const errorDialogProps = { error: error };
+    jest.spyOn(context.port, "request").mockImplementationOnce(() => Promise.reject({ message: error.message }));
 
     await page.delete();
 
@@ -199,13 +208,13 @@ describe("Display Users Contextual Menu", () => {
     expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, errorDialogProps);
   });
 
-  it('As LU I should see an delete dry error message if the delete request has a delete dry error', async() => {
+  it("As LU I should see an delete dry error message if the delete request has a delete dry error", async () => {
     expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
-    const error = {name: 'DeleteDryRunError', errors: ['some errors']};
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => Promise.reject({message: error.message}));
+    const error = { name: "DeleteDryRunError", errors: ["some errors"] };
+    jest.spyOn(context.port, "request").mockImplementationOnce(() => Promise.reject({ message: error.message }));
 
     await page.delete();
 
@@ -213,7 +222,7 @@ describe("Display Users Contextual Menu", () => {
     expect(props.dialogContext.open).toHaveBeenCalled();
   });
 
-  it("As LU I should review an account recovery of a user if I have the capability to do it", async() => {
+  it("As LU I should review an account recovery of a user if I have the capability to do it", async () => {
     expect.assertions(3);
     const props = propsWithUserTemporaryHasPendingAccountRecovery();
     page = new DisplayUsersContextualMenuPage(context, props);
@@ -222,18 +231,20 @@ describe("Display Users Contextual Menu", () => {
     // The logged user is admin
     expect(page.canEdit).toBeTruthy();
 
-    jest.spyOn(context, 'setContext').mockImplementationOnce(() => {});
-    jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => {});
-    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+    jest.spyOn(context, "setContext").mockImplementationOnce(() => {});
+    jest.spyOn(props.dialogContext, "open").mockImplementationOnce(() => {});
+    jest.spyOn(props, "hide").mockImplementationOnce(() => {});
 
     await page.reviewRecovery();
 
     const accountRecoveryRequestId = props.user.pending_account_recovery_request.id;
-    expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryWorkflow, {accountRecoveryRequestId});
+    expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryWorkflow, {
+      accountRecoveryRequestId,
+    });
     expect(props.hide).toHaveBeenCalled();
   });
 
-  it("As AD I should share missing metadata keys with a user if I have the capability to do it", async() => {
+  it("As AD I should share missing metadata keys with a user if I have the capability to do it", async () => {
     expect.assertions(3);
     const props = propsWithUserMissingMetadataKeys();
     page = new DisplayUsersContextualMenuPage(context, props);
@@ -242,17 +253,19 @@ describe("Display Users Contextual Menu", () => {
     // The logged user is admin
     expect(page.canEdit).toBeTruthy();
 
-    jest.spyOn(context, 'setContext').mockImplementationOnce(() => {});
-    jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => {});
-    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+    jest.spyOn(context, "setContext").mockImplementationOnce(() => {});
+    jest.spyOn(props.dialogContext, "open").mockImplementationOnce(() => {});
+    jest.spyOn(props, "hide").mockImplementationOnce(() => {});
 
     await page.shareMissingMetadataKeys();
 
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmShareMissingMetadataKeys, {"user": {"missing_metadata_key_ids": ["54c6278e-f824-5fda-91ff-3e946b18d997"]}});
+    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmShareMissingMetadataKeys, {
+      user: { missing_metadata_key_ids: ["54c6278e-f824-5fda-91ff-3e946b18d997"] },
+    });
     expect(props.hide).toHaveBeenCalled();
   });
 
-  it('As AD I should not be able to share missing metadata key with user role', async() => {
+  it("As AD I should not be able to share missing metadata key with user role", async () => {
     expect.assertions(1);
     const props = propsWithUserMissingMetadataKeys();
     page = new DisplayUsersContextualMenuPage(defaultUserAppContext(), props);
@@ -261,10 +274,10 @@ describe("Display Users Contextual Menu", () => {
     expect(page.canShareMissingMetadataKeys).toBeFalsy();
   });
 
-  it('As AD with missing keys I should not be able to share missing metadata key myself', async() => {
+  it("As AD with missing keys I should not be able to share missing metadata key myself", async () => {
     expect.assertions(1);
     const props = propsWithUserMissingMetadataKeys({
-      id: context.loggedInUser.id
+      id: context.loggedInUser.id,
     });
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});

@@ -15,8 +15,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import EditResourceTagsItemViewer from "../../ResourceTag/EditResourceTags/EditResourceTagsItemViewer";
 import EditResourceTags from "../../ResourceTag/EditResourceTags/EditResourceTags";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
@@ -39,7 +39,7 @@ class DisplayResourceDetailsTag extends React.Component {
   getDefaultState() {
     return {
       open: false,
-      showTagEditor: false
+      showTagEditor: false,
     };
   }
 
@@ -56,7 +56,7 @@ class DisplayResourceDetailsTag extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
   }
 
   /**
@@ -71,7 +71,7 @@ class DisplayResourceDetailsTag extends React.Component {
    */
   toggleInputTagEditor() {
     const showTagEditor = !this.state.showTagEditor;
-    this.setState({showTagEditor});
+    this.setState({ showTagEditor });
   }
 
   /**
@@ -80,7 +80,7 @@ class DisplayResourceDetailsTag extends React.Component {
    */
   render() {
     const hasResource = this.resource;
-    const isOwner =  hasResource && this.resource.permission.type === 15;
+    const isOwner = hasResource && this.resource.permission.type === 15;
     const tags = hasResource && this.resource.tags;
 
     return (
@@ -91,38 +91,34 @@ class DisplayResourceDetailsTag extends React.Component {
               <span className="accordion-title">
                 <Trans>Tags</Trans>
               </span>
-              {this.state.open &&
-                <CaretDownSVG/>
-              }
-              {!this.state.open &&
-                <CaretRightSVG/>
-              }
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className="accordion-content">
-            {!this.state.showTagEditor &&
+            {!this.state.showTagEditor && (
               <>
-                <EditResourceTagsItemViewer
-                  tags={tags}/>
+                <EditResourceTagsItemViewer tags={tags} />
                 <div className="edit-tags">
                   <button type="button" className="section-action" onClick={this.toggleInputTagEditor}>
-                    <EditSVG/>
+                    <EditSVG />
                     <Trans>Edit tags</Trans>
                   </button>
                 </div>
               </>
-            }
-            {this.state.showTagEditor &&
+            )}
+            {this.state.showTagEditor && (
               <EditResourceTags
                 tags={tags}
                 isOwner={isOwner}
                 toggleInputTagEditor={this.toggleInputTagEditor}
-                resourceId={this.resource.id}/>
-            }
+                resourceId={this.resource.id}
+              />
+            )}
           </div>
-        }
+        )}
       </div>
     );
   }

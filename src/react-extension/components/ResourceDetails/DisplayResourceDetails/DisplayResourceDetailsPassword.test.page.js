@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
@@ -27,9 +27,9 @@ export default class DisplayResourceDetailsPasswordPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourceDetailsPassword {...props}/>
+        <DisplayResourceDetailsPassword {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -51,63 +51,63 @@ export default class DisplayResourceDetailsPasswordPage {
    * Returns the username label elements of information
    */
   get usernameLabel() {
-    return this._page.container.querySelector('.information-label .username').textContent;
+    return this._page.container.querySelector(".information-label .username").textContent;
   }
 
   /**
    * Returns the username elements of information
    */
   get username() {
-    return this._page.container.querySelector('.information-value .username button');
+    return this._page.container.querySelector(".information-value .username button");
   }
 
   /**
    * Returns the password label elements of information
    */
   get passwordLabel() {
-    return this._page.container.querySelector('.information-label .password.label').textContent;
+    return this._page.container.querySelector(".information-label .password.label").textContent;
   }
 
   /**
    * Returns the password link element of information
    */
   get passwordLink() {
-    return this._page.container.querySelector('.information-value .secret-password button');
+    return this._page.container.querySelector(".information-value .secret-password button");
   }
 
   /**
    * Returns the password elements of information
    */
   get password() {
-    return this.passwordLink.querySelector('span');
+    return this.passwordLink.querySelector("span");
   }
 
   /**
    * Returns the view password elements of information
    */
   get viewPassword() {
-    return this._page.container.querySelector('.information-value .password-value .password-view');
+    return this._page.container.querySelector(".information-value .password-value .password-view");
   }
 
   /**
    * Get view password exist
    */
   get isViewPasswordExist() {
-    return Boolean(this._page.container.querySelector('.information-value .password-value .password-view'));
+    return Boolean(this._page.container.querySelector(".information-value .password-value .password-view"));
   }
 
   /**
    * Returns the uri elements of information
    */
   get uri() {
-    return this._page.container.querySelector('.information-value .uri.value button');
+    return this._page.container.querySelector(".information-value .uri.value button");
   }
 
   /**
    * Returns the uri label elements of information
    */
   get uriLabel() {
-    return this._page.container.querySelector('.information-label .uri').textContent;
+    return this._page.container.querySelector(".information-label .uri").textContent;
   }
 
   /**
@@ -118,8 +118,8 @@ export default class DisplayResourceDetailsPasswordPage {
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

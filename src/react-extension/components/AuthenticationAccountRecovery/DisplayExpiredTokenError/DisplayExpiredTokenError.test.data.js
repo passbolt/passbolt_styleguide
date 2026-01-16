@@ -19,7 +19,7 @@
  */
 export function defaultAppContext(appContext = {}) {
   const defaultAppContext = {
-    trustedDomain: "https://passbolt.local"
+    trustedDomain: "https://passbolt.local",
   };
   return Object.assign(defaultAppContext, appContext);
 }

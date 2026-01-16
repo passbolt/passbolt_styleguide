@@ -27,16 +27,24 @@ class AccountRecoveryPrivateKeyEntity extends Entity {
    * on their id.
    */
   constructor(accountRecoveryPrivateKeyDto, options = {}) {
-    super(EntitySchema.validate(
-      AccountRecoveryPrivateKeyEntity.ENTITY_NAME,
-      accountRecoveryPrivateKeyDto,
-      AccountRecoveryPrivateKeyEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        AccountRecoveryPrivateKeyEntity.ENTITY_NAME,
+        accountRecoveryPrivateKeyDto,
+        AccountRecoveryPrivateKeyEntity.getSchema(),
+      ),
+      options,
+    );
 
     // Associations
     if (this._props.account_recovery_private_key_passwords) {
-      const sanitizedCollection = AccountRecoveryPrivateKeyPasswordsCollection.sanitizeDto(this._props.account_recovery_private_key_passwords);
-      this._account_recovery_private_key_passwords = new AccountRecoveryPrivateKeyPasswordsCollection(sanitizedCollection, {...options, clone: false});
+      const sanitizedCollection = AccountRecoveryPrivateKeyPasswordsCollection.sanitizeDto(
+        this._props.account_recovery_private_key_passwords,
+      );
+      this._account_recovery_private_key_passwords = new AccountRecoveryPrivateKeyPasswordsCollection(
+        sanitizedCollection,
+        { ...options, clone: false },
+      );
       delete this._props.account_recovery_private_key_passwords;
     }
   }
@@ -47,38 +55,38 @@ class AccountRecoveryPrivateKeyEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: [],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "user_id": {
-          "type": "string",
-          "format": "uuid"
+        user_id: {
+          type: "string",
+          format: "uuid",
         },
-        "data": {
-          "type": "string"
+        data: {
+          type: "string",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid"
+        created_by: {
+          type: "string",
+          format: "uuid",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid"
+        modified_by: {
+          type: "string",
+          format: "uuid",
         },
-        "account_recovery_private_key_passwords": AccountRecoveryPrivateKeyPasswordsCollection.getSchema(),
-      }
+        account_recovery_private_key_passwords: AccountRecoveryPrivateKeyPasswordsCollection.getSchema(),
+      },
     };
   }
 

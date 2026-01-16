@@ -14,10 +14,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withDialog} from "../../../../contexts/DialogContext";
-import {withActionFeedback} from '../../../../contexts/ActionFeedbackContext';
-import {withAdminUserPassphrasePolicies} from "../../../../contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withDialog } from "../../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
+import { withAdminUserPassphrasePolicies } from "../../../../contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
 import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 
 /**
@@ -82,7 +82,7 @@ class DisplayAdministrationUserPassphrasePoliciesActions extends React.Component
   async handleSaveError(error) {
     console.error(error);
     await this.props.actionFeedbackContext.displayError(error.message);
-    this.props.dialogContext.open(NotifyError, {error});
+    this.props.dialogContext.open(NotifyError, { error });
   }
 
   /**
@@ -93,8 +93,16 @@ class DisplayAdministrationUserPassphrasePoliciesActions extends React.Component
     const isDisabled = !this.isActionEnabled;
     return (
       <div className="actions-wrapper">
-        <button type="button" className="button primary form" disabled={isDisabled} id="save-settings" onClick={this.handleSave}>
-          <span><Trans>Save</Trans></span>
+        <button
+          type="button"
+          className="button primary form"
+          disabled={isDisabled}
+          id="save-settings"
+          onClick={this.handleSave}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );
@@ -108,4 +116,6 @@ DisplayAdministrationUserPassphrasePoliciesActions.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAdminUserPassphrasePolicies(withActionFeedback(withDialog(withTranslation("common")(DisplayAdministrationUserPassphrasePoliciesActions))));
+export default withAdminUserPassphrasePolicies(
+  withActionFeedback(withDialog(withTranslation("common")(DisplayAdministrationUserPassphrasePoliciesActions))),
+);

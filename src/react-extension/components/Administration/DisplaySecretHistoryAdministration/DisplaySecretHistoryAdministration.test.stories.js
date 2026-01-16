@@ -13,54 +13,50 @@
  */
 
 import React from "react";
-import {defaultProps} from "./DisplaySecretHistoryAdministration.test.data";
-import {MemoryRouter} from "react-router-dom/cjs/react-router-dom.min";
+import { defaultProps } from "./DisplaySecretHistoryAdministration.test.data";
+import { MemoryRouter } from "react-router-dom/cjs/react-router-dom.min";
 import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
 import DisplayAdministrationWorkspaceBreadcrumb from "../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
 import DisplaySecretHistoryAdministration from "./DisplaySecretHistoryAdministration";
-import {
-  defaultSecretRevisionsSettingsDto
-} from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
-import SecretRevisionsSettingsEntity
-  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
+import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import DisplaySecretHistoryAdministrationHelp from "./DisplaySecretHistoryAdministrationHelp";
 
 export default {
-  title: 'Components/Administration/DisplaySecretHistoryAdministration',
+  title: "Components/Administration/DisplaySecretHistoryAdministration",
   component: DisplaySecretHistoryAdministration,
   decorators: [
-    (Story, {args}) =>
-      <MemoryRouter initialEntries={['/app/administration/secret-history']}>
+    (Story, { args }) => (
+      <MemoryRouter initialEntries={["/app/administration/secret-history"]}>
         <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
           <div id="container" className="page administration">
-            <div id="app" className="app" style={{margin: "-1rem"}}>
+            <div id="app" className="app" style={{ margin: "-1rem" }}>
               <div className="panel main">
                 <div className="panel left">
                   <div className="sidebar-content">
                     <div className="top-bar-left-navigation">
-                      <div className="navigation">
-                      </div>
+                      <div className="navigation"></div>
                     </div>
-                    <div className="sidebar-content-left">
-                    </div>
+                    <div className="sidebar-content-left"></div>
                   </div>
                 </div>
                 <div className="panel middle">
-                  <div className="header">
-                  </div>
+                  <div className="header"></div>
                   <div className="middle-right">
                     <div className="breadcrumbs-and-grid">
                       <div className="top-bar">
-                        <DisplayAdministrationWorkspaceBreadcrumb administrationWorkspaceContext={args.administrationWorkspaceContext}/>
+                        <DisplayAdministrationWorkspaceBreadcrumb
+                          administrationWorkspaceContext={args.administrationWorkspaceContext}
+                        />
                       </div>
                       <div className="main-page">
-                        <Story {...args}/>
+                        <Story {...args} />
                       </div>
                     </div>
                     <div className="help-panel">
                       <div className="sidebar-help">
                         <div id="administration-help-panel">
-                          <DisplaySecretHistoryAdministrationHelp/>
+                          <DisplaySecretHistoryAdministrationHelp />
                         </div>
                       </div>
                     </div>
@@ -71,19 +67,30 @@ export default {
           </div>
         </TranslationProvider>
       </MemoryRouter>
-  ]
+    ),
+  ],
 };
 
 const props = defaultProps();
-props.context.port.addRequestListener("passbolt.secret-revisions.find-settings", () => defaultSecretRevisionsSettingsDto());
-props.context.port.addRequestListener("passbolt.secret-revisions.save-settings", settings => new SecretRevisionsSettingsEntity(settings.toDto()));
+props.context.port.addRequestListener("passbolt.secret-revisions.find-settings", () =>
+  defaultSecretRevisionsSettingsDto(),
+);
+props.context.port.addRequestListener(
+  "passbolt.secret-revisions.save-settings",
+  (settings) => new SecretRevisionsSettingsEntity(settings.toDto()),
+);
 export const Initial = {
-  args: props
+  args: props,
 };
 
 const propsWithoutSettings = defaultProps();
-propsWithoutSettings.context.port.addRequestListener("passbolt.secret-revisions.find-settings", () => SecretRevisionsSettingsEntity.createFromDefault().toDto());
-propsWithoutSettings.context.port.addRequestListener("passbolt.secret-revisions.save-settings", settings => new SecretRevisionsSettingsEntity(settings.toDto()));
+propsWithoutSettings.context.port.addRequestListener("passbolt.secret-revisions.find-settings", () =>
+  SecretRevisionsSettingsEntity.createFromDefault().toDto(),
+);
+propsWithoutSettings.context.port.addRequestListener(
+  "passbolt.secret-revisions.save-settings",
+  (settings) => new SecretRevisionsSettingsEntity(settings.toDto()),
+);
 export const NoSettings = {
-  args: propsWithoutSettings
+  args: propsWithoutSettings,
 };

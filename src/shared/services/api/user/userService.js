@@ -13,7 +13,7 @@
  */
 import AbstractService from "../abstract/abstractService";
 import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
-import {isValidUuid} from "../../../utils/assertions";
+import { isValidUuid } from "../../../utils/assertions";
 
 const USER_DIRECTORY_RESOURCE_NAME = "users";
 
@@ -38,15 +38,15 @@ class UserService extends AbstractService {
    */
   static getSupportedContainOptions() {
     return [
-      'is_mfa_enabled',
-      'last_logged_in',
-      'gpgkey',
-      'groups_users',
-      'profile',
-      'role',
-      'account_recovery_user_setting',
-      'pending_account_recovery_request',
-      'missing_metadata_key_ids'
+      "is_mfa_enabled",
+      "last_logged_in",
+      "gpgkey",
+      "groups_users",
+      "profile",
+      "role",
+      "account_recovery_user_setting",
+      "pending_account_recovery_request",
+      "missing_metadata_key_ids",
     ];
   }
 
@@ -56,14 +56,7 @@ class UserService extends AbstractService {
    * @returns {Array<string>} list of supported option
    */
   static getSupportedFiltersOptions() {
-    return [
-      'search',
-      'has-groups',
-      'has-access',
-      'is-admin',
-      'is-active',
-      'has-role-id'
-    ];
+    return ["search", "has-groups", "has-access", "is-admin", "is-active", "has-role-id"];
   }
 
   /**
@@ -75,7 +68,7 @@ class UserService extends AbstractService {
   async findAll(contains = {}, filters = {}) {
     contains = contains ? this.formatContainOptions(contains, UserService.getSupportedContainOptions()) : null;
     filters = filters ? this.formatFilterOptions(filters, UserService.getSupportedFiltersOptions()) : null;
-    const options = {...contains, ...filters};
+    const options = { ...contains, ...filters };
     const response = await this.apiClient.findAll(options);
     return new PassboltResponseEntity(response);
   }
@@ -88,7 +81,7 @@ class UserService extends AbstractService {
    */
   async findByRoleId(roleId) {
     isValidUuid(roleId);
-    return this.findAll({}, {"has-role-id": roleId});
+    return this.findAll({}, { "has-role-id": roleId });
   }
 
   /**
@@ -103,4 +96,3 @@ class UserService extends AbstractService {
 }
 
 export default UserService;
-

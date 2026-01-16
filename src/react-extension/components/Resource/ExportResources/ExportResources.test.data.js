@@ -10,7 +10,7 @@ export function defaultAppContext(appContext) {
     port: new MockPort(),
     resources,
     folders,
-    setContext: function(newContext) {
+    setContext: function (newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
@@ -26,32 +26,32 @@ export function defaultProps() {
   return {
     onClose: jest.fn(),
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
     resourceWorkspaceContext: {
       onResourcesToExport: jest.fn(),
       resourcesToExport: {
-        foldersIds: [{id: "1"}],
-        resourcesIds: [{id: "1"}, {id: "2"}]
-      }
-    }
+        foldersIds: [{ id: "1" }],
+        resourcesIds: [{ id: "1" }, { id: "2" }],
+      },
+    },
   };
 }
 
 export const folders = [
   {
     id: "1",
-    name: "folder"
-  }
+    name: "folder",
+  },
 ];
 
 export const resources = [
   {
     id: "1",
-    name: "resource1"
+    name: "resource1",
   },
   {
     id: "2",
-    name: "resource2"
+    name: "resource2",
   },
 ];

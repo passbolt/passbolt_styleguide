@@ -16,7 +16,7 @@ class ExternalServiceUnavailableError extends Error {
   constructor(message) {
     message = message || "The external service is unavailable";
     super(message);
-    this.name = 'ExternalServiceUnavailableError';
+    this.name = "ExternalServiceUnavailableError";
   }
 }
 

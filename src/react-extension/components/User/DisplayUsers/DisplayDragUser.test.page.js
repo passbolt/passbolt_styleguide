@@ -13,10 +13,10 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayDragUser from "./DisplayDragUser";
-import {defaultContext, defaultUserWorkspaceContext} from "./DisplayDragUser.test.data";
+import { defaultContext, defaultUserWorkspaceContext } from "./DisplayDragUser.test.data";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -24,14 +24,9 @@ import MockTranslationProvider from "../../../test/mock/components/International
  */
 jest.mock("../../Common/Avatar/UserAvatar", () => ({
   __esModule: true,
-  default: ({user, baseUrl, className}) => (
-    <div
-      data-testid="user-avatar"
-      data-username={user?.username}
-      data-baseurl={baseUrl}
-      className={className}
-    />
-  )
+  default: ({ user, baseUrl, className }) => (
+    <div data-testid="user-avatar" data-username={user?.username} data-baseurl={baseUrl} className={className} />
+  ),
 }));
 
 /**
@@ -47,18 +42,15 @@ export default class DisplayDragUserPage {
     this._context = props.context || defaultContext;
     this._userWorkspaceContext = {
       ...defaultUserWorkspaceContext,
-      ...props.userWorkspaceContext
+      ...props.userWorkspaceContext,
     };
 
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={this._context}>
-          <DisplayDragUser
-            context={this._context}
-            userWorkspaceContext={this._userWorkspaceContext}
-          />
+          <DisplayDragUser context={this._context} userWorkspaceContext={this._userWorkspaceContext} />
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
     );
   }
 
@@ -66,14 +58,14 @@ export default class DisplayDragUserPage {
    * Returns the drag and drop container element
    */
   get dragAndDropContainer() {
-    return this._page.container.querySelector('.drag-and-drop');
+    return this._page.container.querySelector(".drag-and-drop");
   }
 
   /**
    * Returns the count badge element
    */
   get countBadge() {
-    return this._page.container.querySelector('.count');
+    return this._page.container.querySelector(".count");
   }
 
   /**
@@ -87,7 +79,7 @@ export default class DisplayDragUserPage {
    * Returns the message span element
    */
   get messageElement() {
-    return this._page.container.querySelector('.message');
+    return this._page.container.querySelector(".message");
   }
 
   /**
@@ -124,14 +116,14 @@ export default class DisplayDragUserPage {
    * Returns the avatar's data-username attribute
    */
   get avatarUsername() {
-    return this.userAvatar?.getAttribute('data-username');
+    return this.userAvatar?.getAttribute("data-username");
   }
 
   /**
    * Returns the avatar's data-baseurl attribute
    */
   get avatarBaseUrl() {
-    return this.userAvatar?.getAttribute('data-baseurl');
+    return this.userAvatar?.getAttribute("data-baseurl");
   }
 
   /**
@@ -158,18 +150,15 @@ export default class DisplayDragUserPage {
     const context = props.context || defaultContext;
     const userWorkspaceContext = {
       ...defaultUserWorkspaceContext,
-      ...props.userWorkspaceContext
+      ...props.userWorkspaceContext,
     };
 
     this._page.rerender(
       <MockTranslationProvider>
         <AppContext.Provider value={context}>
-          <DisplayDragUser
-            context={context}
-            userWorkspaceContext={userWorkspaceContext}
-          />
+          <DisplayDragUser context={context} userWorkspaceContext={userWorkspaceContext} />
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
     );
   }
 }

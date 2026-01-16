@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.7.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AppContext from "../../../shared/context/AppContext/AppContext";
@@ -33,12 +32,12 @@ export default class DisplayResourceSecretHistoryPage {
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
           <DialogContextProvider>
-            <ManageDialogs/>
-            <DisplayResourceSecretHistory {...props}/>
+            <ManageDialogs />
+            <DisplayResourceSecretHistory {...props} />
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -48,13 +47,13 @@ export default class DisplayResourceSecretHistoryPage {
    * Returns the dialog element
    */
   get dialog() {
-    return this._page.container.querySelector('.resource-secret-history');
+    return this._page.container.querySelector(".resource-secret-history");
   }
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
@@ -84,20 +83,23 @@ export default class DisplayResourceSecretHistoryPage {
    * @returns {{readonly element: *, readonly name: string|string|*, readonly username: string|string|*, readonly status: string|string|*}|*|string|string}
    */
   getSecretRevisionCreatorItem(index) {
-    const element = this._page.container.querySelector('.left-sidebar .sidebar-content-sections').querySelectorAll('.section-content')[index - 1].querySelector("button.no-border");
+    const element = this._page.container
+      .querySelector(".left-sidebar .sidebar-content-sections")
+      .querySelectorAll(".section-content")
+      [index - 1].querySelector("button.no-border");
     return {
       get element() {
         return element;
       },
       get name() {
-        return element.querySelector('.creator .profile .name')?.textContent;
+        return element.querySelector(".creator .profile .name")?.textContent;
       },
       get username() {
-        return element.querySelector('.creator .username')?.textContent;
+        return element.querySelector(".creator .username")?.textContent;
       },
       get status() {
-        return element.querySelector('.additional-information .status')?.textContent;
-      }
+        return element.querySelector(".additional-information .status")?.textContent;
+      },
     };
   }
 
@@ -106,7 +108,7 @@ export default class DisplayResourceSecretHistoryPage {
    * @returns {Element}
    */
   get secretRevisionLength() {
-    return this._page.container.querySelectorAll('.left-sidebar .sidebar-content-sections .section-content').length;
+    return this._page.container.querySelectorAll(".left-sidebar .sidebar-content-sections .section-content").length;
   }
 
   /**
@@ -114,18 +116,20 @@ export default class DisplayResourceSecretHistoryPage {
    * @returns {{readonly name: string|string|*, readonly username: string|string|*, readonly status: string|string|*}|*|string|string}
    */
   get secretRevisionCreatorItemSelected() {
-    const element = this._page.container.querySelector('.left-sidebar .sidebar-content-sections .section-content .selected');
+    const element = this._page.container.querySelector(
+      ".left-sidebar .sidebar-content-sections .section-content .selected",
+    );
 
     return {
       get name() {
-        return element.querySelector('.creator .profile .name')?.textContent;
+        return element.querySelector(".creator .profile .name")?.textContent;
       },
       get username() {
-        return element.querySelector('.creator .username')?.textContent;
+        return element.querySelector(".creator .username")?.textContent;
       },
       get status() {
-        return element.querySelector('.additional-information .status')?.textContent;
-      }
+        return element.querySelector(".additional-information .status")?.textContent;
+      },
     };
   }
 
@@ -134,7 +138,7 @@ export default class DisplayResourceSecretHistoryPage {
    * @returns {Element}
    */
   get secretRevisionContentTitle() {
-    return this._page.container.querySelector('.resource-secret-history-workspace .title');
+    return this._page.container.querySelector(".resource-secret-history-workspace .title");
   }
 
   /**
@@ -142,7 +146,9 @@ export default class DisplayResourceSecretHistoryPage {
    * @returns {Element}
    */
   get secretRevisionContent() {
-    return this._page.container.querySelector('.resource-secret-history-workspace .content .secret-history-fields .json-object');
+    return this._page.container.querySelector(
+      ".resource-secret-history-workspace .content .secret-history-fields .json-object",
+    );
   }
 
   /**
@@ -153,14 +159,14 @@ export default class DisplayResourceSecretHistoryPage {
   }
 
   /** Click on the element */
-  async click(element)  {
+  async click(element) {
     await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.dialog, escapeKeyDown);
   }
 }

@@ -14,9 +14,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withRouter } from "react-router-dom";
+import { UserWorkspaceFilterTypes, withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 import HomeSVG from "../../../../img/svg/home.svg";
 
 /**
@@ -66,24 +66,24 @@ class FilterUsersByShortcut extends React.Component {
    * Whenever the shortcut "Home" has been selected
    */
   handleAllItemsClick() {
-    const filter = {type: UserWorkspaceFilterTypes.ALL};
-    this.props.history.push({pathname: '/app/users', state: {filter}});
+    const filter = { type: UserWorkspaceFilterTypes.ALL };
+    this.props.history.push({ pathname: "/app/users", state: { filter } });
   }
 
   /**
    * Whenever the shortcut "Recently modified" has been selected
    */
   handleRecentlyModifiedClick() {
-    const filter = {type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED};
-    this.props.history.push({pathname: '/app/users', state: {filter}});
+    const filter = { type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED };
+    this.props.history.push({ pathname: "/app/users", state: { filter } });
   }
 
   /**
    * Whenever the shortcut "Suspended users" has been selected
    */
   handleSuspendedUsersClick() {
-    const filter = {type: UserWorkspaceFilterTypes.SUSPENDED_USER};
-    this.props.history.push({pathname: '/app/users', state: {filter}});
+    const filter = { type: UserWorkspaceFilterTypes.SUSPENDED_USER };
+    this.props.history.push({ pathname: "/app/users", state: { filter } });
   }
 
   /**
@@ -97,14 +97,16 @@ class FilterUsersByShortcut extends React.Component {
   render() {
     return (
       <div className="navigation-secondary navigation-shortcuts">
-        <ul >
+        <ul>
           <li>
             <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`} onClick={this.handleAllItemsClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" id="all-users">
                     <HomeSVG />
-                    <span><Trans>Home</Trans></span>
+                    <span>
+                      <Trans>Home</Trans>
+                    </span>
                   </button>
                 </div>
               </div>

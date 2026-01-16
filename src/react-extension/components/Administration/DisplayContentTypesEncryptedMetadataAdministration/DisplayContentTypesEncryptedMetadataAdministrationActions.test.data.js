@@ -21,6 +21,6 @@ export function defaultProps(props = {}) {
   return {
     isProcessing: false,
     onSaveRequested: jest.fn,
-    ... props
+    ...props,
   };
 }

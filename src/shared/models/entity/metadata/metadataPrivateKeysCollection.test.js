@@ -12,13 +12,16 @@
  * @since         4.10.0
  */
 import EntitySchema from "../abstract/entitySchema";
-import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
+import { defaultMetadataPrivateKeyDataDto } from "./metadataPrivateKeyDataEntity.test.data";
 import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
-import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import { defaultMetadataPrivateKeyDto } from "./metadataPrivateKeyEntity.test.data";
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
-import {defaultMetadataPrivateKeysDtos, defaultMinimalMetadataPrivateKeysDtos} from "./metadataPrivateKeysCollection.test.data";
-import {v4 as uuidv4} from "uuid";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import {
+  defaultMetadataPrivateKeysDtos,
+  defaultMinimalMetadataPrivateKeysDtos,
+} from "./metadataPrivateKeysCollection.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 describe("MetadataPrivateKeysCollection", () => {
   describe("::getSchema", () => {
@@ -77,8 +80,7 @@ describe("MetadataPrivateKeysCollection", () => {
     it("should throw if the collection schema does not validate", () => {
       expect.assertions(1);
 
-      expect(() => new MetadataPrivateKeysCollection({}))
-        .toThrowEntityValidationError("items");
+      expect(() => new MetadataPrivateKeysCollection({})).toThrowEntityValidationError("items");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate their schema", () => {
@@ -88,7 +90,7 @@ describe("MetadataPrivateKeysCollection", () => {
       delete dtos[1].data;
       delete dtos[1].armored_key;
 
-      const collection = new MetadataPrivateKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new MetadataPrivateKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
@@ -100,8 +102,7 @@ describe("MetadataPrivateKeysCollection", () => {
       const dtos = defaultMetadataPrivateKeysDtos();
       dtos[1].id = dtos[0].id;
 
-      expect(() => new MetadataPrivateKeysCollection(dtos))
-        .toThrowCollectionValidationError("1.id.unique");
+      expect(() => new MetadataPrivateKeysCollection(dtos)).toThrowCollectionValidationError("1.id.unique");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate the unique id build rule", () => {
@@ -110,7 +111,7 @@ describe("MetadataPrivateKeysCollection", () => {
       const dtos = defaultMetadataPrivateKeysDtos();
       dtos[1].id = dtos[0].id;
 
-      const collection = new MetadataPrivateKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new MetadataPrivateKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
@@ -122,8 +123,7 @@ describe("MetadataPrivateKeysCollection", () => {
       const dtos = defaultMetadataPrivateKeysDtos();
       dtos[1].user_id = dtos[0].user_id;
 
-      expect(() => new MetadataPrivateKeysCollection(dtos))
-        .toThrowCollectionValidationError("1.user_id.unique");
+      expect(() => new MetadataPrivateKeysCollection(dtos)).toThrowCollectionValidationError("1.user_id.unique");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate the unique user_id build rule", () => {
@@ -132,7 +132,7 @@ describe("MetadataPrivateKeysCollection", () => {
       const dtos = defaultMetadataPrivateKeysDtos();
       dtos[1].user_id = dtos[0].user_id;
 
-      const collection = new MetadataPrivateKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new MetadataPrivateKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
@@ -144,8 +144,9 @@ describe("MetadataPrivateKeysCollection", () => {
       const dtos = defaultMetadataPrivateKeysDtos();
       dtos[1].metadata_key_id = uuidv4();
 
-      expect(() => new MetadataPrivateKeysCollection(dtos))
-        .toThrowCollectionValidationError("1.metadata_key_id.same_metadata_key");
+      expect(() => new MetadataPrivateKeysCollection(dtos)).toThrowCollectionValidationError(
+        "1.metadata_key_id.same_metadata_key",
+      );
     });
 
     it("should not throw if the collection has many items without metadata_key_id", () => {
@@ -168,8 +169,9 @@ describe("MetadataPrivateKeysCollection", () => {
       delete dtos[1].metadata_key_id;
       dtos[3].metadata_key_id = uuidv4();
 
-      expect(() => new MetadataPrivateKeysCollection(dtos))
-        .toThrowCollectionValidationError("3.metadata_key_id.same_metadata_key");
+      expect(() => new MetadataPrivateKeysCollection(dtos)).toThrowCollectionValidationError(
+        "3.metadata_key_id.same_metadata_key",
+      );
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate the unique same_metadata_key build rule", () => {
@@ -178,7 +180,7 @@ describe("MetadataPrivateKeysCollection", () => {
       const dtos = defaultMetadataPrivateKeysDtos(4);
       dtos[2].metadata_key_id = uuidv4();
 
-      const collection = new MetadataPrivateKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new MetadataPrivateKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(3);
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
@@ -194,8 +196,8 @@ describe("MetadataPrivateKeysCollection", () => {
       const metadata_key_id = uuidv4();
       const data = defaultMetadataPrivateKeyDataDto();
       const dtos = [
-        defaultMetadataPrivateKeyDto({metadata_key_id}),
-        defaultMetadataPrivateKeyDto({metadata_key_id, data}),
+        defaultMetadataPrivateKeyDto({ metadata_key_id }),
+        defaultMetadataPrivateKeyDto({ metadata_key_id, data }),
       ];
 
       const collection = new MetadataPrivateKeysCollection(dtos);
@@ -208,8 +210,8 @@ describe("MetadataPrivateKeysCollection", () => {
 
       const metadata_key_id = uuidv4();
       const dtos = [
-        defaultMetadataPrivateKeyDto({metadata_key_id}),
-        defaultMetadataPrivateKeyDto({metadata_key_id}),
+        defaultMetadataPrivateKeyDto({ metadata_key_id }),
+        defaultMetadataPrivateKeyDto({ metadata_key_id }),
       ];
       const collection = new MetadataPrivateKeysCollection(dtos);
 
@@ -232,8 +234,8 @@ describe("MetadataPrivateKeysCollection", () => {
       const metadata_key_id = uuidv4();
       const data = pgpKeys.metadataKey.encryptedMetadataPrivateKeyDataMessage;
       const dtos = [
-        defaultMetadataPrivateKeyDto({metadata_key_id}),
-        defaultMetadataPrivateKeyDto({metadata_key_id, data}),
+        defaultMetadataPrivateKeyDto({ metadata_key_id }),
+        defaultMetadataPrivateKeyDto({ metadata_key_id, data }),
       ];
 
       const collection = new MetadataPrivateKeysCollection(dtos);
@@ -247,8 +249,8 @@ describe("MetadataPrivateKeysCollection", () => {
       const metadata_key_id = uuidv4();
       const data = defaultMetadataPrivateKeyDataDto();
       const dtos = [
-        defaultMetadataPrivateKeyDto({metadata_key_id, data}),
-        defaultMetadataPrivateKeyDto({metadata_key_id, data}),
+        defaultMetadataPrivateKeyDto({ metadata_key_id, data }),
+        defaultMetadataPrivateKeyDto({ metadata_key_id, data }),
       ];
       const collection = new MetadataPrivateKeysCollection(dtos);
 
@@ -265,7 +267,7 @@ describe("MetadataPrivateKeysCollection", () => {
   });
 
   describe("::pushMany", () => {
-    it("[performance] should ensure performance adding large dataset remains effective.", async() => {
+    it("[performance] should ensure performance adding large dataset remains effective.", async () => {
       const count = 10_000;
       const dtos = defaultMetadataPrivateKeysDtos(count);
 

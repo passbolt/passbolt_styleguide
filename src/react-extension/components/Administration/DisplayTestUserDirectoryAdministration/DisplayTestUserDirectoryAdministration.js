@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import DisplayStructureGroupsUsersTreeItem from "./DisplayStructureGroupsUsersTreeItem";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
@@ -63,28 +63,28 @@ class DisplayTestUserDirectoryAdministration extends Component {
    * @return {void}
    */
   componentDidMount() {
-    this.setState({loading: false});
+    this.setState({ loading: false });
   }
 
   /**
    * Handle the click on the list groups users
    */
   handleListGroupsUsersClicked() {
-    this.setState({openListGroupsUsers: !this.state.openListGroupsUsers});
+    this.setState({ openListGroupsUsers: !this.state.openListGroupsUsers });
   }
 
   /**
    * Handle the click on the structure groups users
    */
   handleStructureGroupsUsersClicked() {
-    this.setState({openStructureGroupsUsers: !this.state.openStructureGroupsUsers});
+    this.setState({ openStructureGroupsUsers: !this.state.openStructureGroupsUsers });
   }
 
   /**
    * Handle the click on the errors
    */
   handleErrorsClicked() {
-    this.setState({openErrors: !this.state.openErrors});
+    this.setState({ openErrors: !this.state.openErrors });
   }
 
   /**
@@ -93,7 +93,7 @@ class DisplayTestUserDirectoryAdministration extends Component {
    */
   handleClose() {
     this.props.onClose();
-    this.props.context.setContext({displayTestUserDirectoryDialogProps: null});
+    this.props.context.setContext({ displayTestUserDirectoryDialogProps: null });
   }
 
   /**
@@ -158,8 +158,12 @@ class DisplayTestUserDirectoryAdministration extends Component {
    */
   render() {
     return (
-      <DialogWrapper className='ldap-test-settings-dialog' title={this.translate("Test settings report")}
-        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+      <DialogWrapper
+        className="ldap-test-settings-dialog"
+        title={this.translate("Test settings report")}
+        onClose={this.handleClose}
+        disabled={this.hasAllInputDisabled()}
+      >
         <div className="form-content">
           <p>
             <strong>
@@ -168,26 +172,25 @@ class DisplayTestUserDirectoryAdministration extends Component {
           </p>
           <div className="ldap-test-settings-report">
             <p>
-              {this.users.length > 0 &&
-                <>
-                  {this.translate("{{count}} user has been found.", {count: this.users.length})}
-                </>
-              }
-              {this.users.length > 0 && this.groups.length > 0 && <br/>}
-              {this.groups.length > 0 &&
-                <>
-                  {this.translate("{{count}} group has been found.", {count: this.groups.length})}
-                </>
-              }
+              {this.users.length > 0 && (
+                <>{this.translate("{{count}} user has been found.", { count: this.users.length })}</>
+              )}
+              {this.users.length > 0 && this.groups.length > 0 && <br />}
+              {this.groups.length > 0 && (
+                <>{this.translate("{{count}} group has been found.", { count: this.groups.length })}</>
+              )}
             </p>
             <div className={`accordion directory-list ${this.state.openListGroupsUsers ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleListGroupsUsersClicked}>
                 <button type="button" className="link no-border">
-                  <span><Trans>See list</Trans></span>
-                  {this.state.openListGroupsUsers
-                    ? <CaretDownSVG className="baseline svg-icon"/>
-                    : <CaretRightSVG className="baseline svg-icon"/>
-                  }
+                  <span>
+                    <Trans>See list</Trans>
+                  </span>
+                  {this.state.openListGroupsUsers ? (
+                    <CaretDownSVG className="baseline svg-icon" />
+                  ) : (
+                    <CaretRightSVG className="baseline svg-icon" />
+                  )}
                 </button>
               </div>
               <div className="accordion-content">
@@ -195,26 +198,37 @@ class DisplayTestUserDirectoryAdministration extends Component {
                   <table>
                     <tbody>
                       <tr>
-                        <td><Trans>Groups</Trans></td>
-                        <td><Trans>Users</Trans></td>
+                        <td>
+                          <Trans>Groups</Trans>
+                        </td>
+                        <td>
+                          <Trans>Users</Trans>
+                        </td>
                       </tr>
                       <tr>
                         <td>
-                          {this.groups.map(group =>
-                            ((group.errors && <div key={group.id}><span className="error">{group.directory_name}</span></div>)
-                              ||
-                            <div key={group.id}>{group.group.name}</div>
-                            )
-                          )
-                          }
+                          {this.groups.map(
+                            (group) =>
+                              (group.errors && (
+                                <div key={group.id}>
+                                  <span className="error">{group.directory_name}</span>
+                                </div>
+                              )) || <div key={group.id}>{group.group.name}</div>,
+                          )}
                         </td>
                         <td>
-                          {this.users.map(user =>
-                            user.errors && <div key={user.id}><span className="error">{user.directory_name}</span></div>
-                            ||
-                            <div key={user.id}>{this.displayUserName(user.user)} <em>({user.user.username})</em></div>
-                          )
-                          }
+                          {this.users.map(
+                            (user) =>
+                              (user.errors && (
+                                <div key={user.id}>
+                                  <span className="error">{user.directory_name}</span>
+                                </div>
+                              )) || (
+                                <div key={user.id}>
+                                  {this.displayUserName(user.user)} <em>({user.user.username})</em>
+                                </div>
+                              ),
+                          )}
                         </td>
                       </tr>
                     </tbody>
@@ -222,14 +236,19 @@ class DisplayTestUserDirectoryAdministration extends Component {
                 </div>
               </div>
             </div>
-            <div className={`accordion accordion-directory-structure ${this.state.openStructureGroupsUsers ? "" : "closed"}`}>
+            <div
+              className={`accordion accordion-directory-structure ${this.state.openStructureGroupsUsers ? "" : "closed"}`}
+            >
               <div className="accordion-header" onClick={this.handleStructureGroupsUsersClicked}>
                 <button type="button" className="link no-border">
-                  <span><Trans>See structure</Trans></span>
-                  {this.state.openStructureGroupsUsers
-                    ? <CaretDownSVG className="baseline svg-icon"/>
-                    : <CaretRightSVG className="baseline svg-icon"/>
-                  }
+                  <span>
+                    <Trans>See structure</Trans>
+                  </span>
+                  {this.state.openStructureGroupsUsers ? (
+                    <CaretDownSVG className="baseline svg-icon" />
+                  ) : (
+                    <CaretRightSVG className="baseline svg-icon" />
+                  )}
                 </button>
               </div>
               <div className="accordion-content">
@@ -237,42 +256,55 @@ class DisplayTestUserDirectoryAdministration extends Component {
                   <ul>
                     <li className="group">
                       Root
-                      {Object.values(this.tree).map(node => <DisplayStructureGroupsUsersTreeItem
-                        key={`tree-${node.id}`}
-                        node={node}
-                      />)}
+                      {Object.values(this.tree).map((node) => (
+                        <DisplayStructureGroupsUsersTreeItem key={`tree-${node.id}`} node={node} />
+                      ))}
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-            {this.errors.length > 0 &&
+            {this.errors.length > 0 && (
               <>
                 <div className={`accordion accordion-directory-errors ${this.state.openErrors ? "" : "closed"}`}>
                   <div className="accordion-header" onClick={this.handleErrorsClicked}>
                     <button type="button" className="link no-border">
-                      <span><Trans>See error details</Trans></span>
-                      {this.state.openErrors
-                        ? <CaretDownSVG className="baseline svg-icon"/>
-                        : <CaretRightSVG className="baseline svg-icon"/>
-                      }
+                      <span>
+                        <Trans>See error details</Trans>
+                      </span>
+                      {this.state.openErrors ? (
+                        <CaretDownSVG className="baseline svg-icon" />
+                      ) : (
+                        <CaretRightSVG className="baseline svg-icon" />
+                      )}
                     </button>
                   </div>
                   <div className="accordion-content">
                     <div className="directory-errors">
-                      <textarea value={JSON.stringify(this.errors, null, ' ')} readOnly={true}/>
+                      <textarea value={JSON.stringify(this.errors, null, " ")} readOnly={true} />
                     </div>
                   </div>
                 </div>
                 <div className="warning message no-margin">
-                  <p className="">{this.translate("{{count}} entry had errors and will be ignored during synchronization.", {count: this.errors.length})}</p>
+                  <p className="">
+                    {this.translate("{{count}} entry had errors and will be ignored during synchronization.", {
+                      count: this.errors.length,
+                    })}
+                  </p>
                 </div>
               </>
-            }
+            )}
           </div>
         </div>
         <div className="submit-wrapper clearfix">
-          <button type="button" disabled={this.hasAllInputDisabled()} className="primary button form" onClick={this.handleClose}><Trans>Ok</Trans></button>
+          <button
+            type="button"
+            disabled={this.hasAllInputDisabled()}
+            className="primary button form"
+            onClick={this.handleClose}
+          >
+            <Trans>Ok</Trans>
+          </button>
         </div>
       </DialogWrapper>
     );
@@ -285,4 +317,4 @@ DisplayTestUserDirectoryAdministration.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(DisplayTestUserDirectoryAdministration));
+export default withAppContext(withTranslation("common")(DisplayTestUserDirectoryAdministration));

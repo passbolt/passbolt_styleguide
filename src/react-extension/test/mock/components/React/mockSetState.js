@@ -16,7 +16,7 @@
  * Mock the context provider setState in order to be able to access the provider state in the test.
  * @param {React.Component} contextProvider The component to mock.
  */
-export default contextProvider => {
-  const setStateMock = state => contextProvider.state = Object.assign(contextProvider.state, state);
-  jest.spyOn(contextProvider, 'setState').mockImplementation(setStateMock);
+export default (contextProvider) => {
+  const setStateMock = (state) => (contextProvider.state = Object.assign(contextProvider.state, state));
+  jest.spyOn(contextProvider, "setState").mockImplementation(setStateMock);
 };

@@ -15,7 +15,8 @@
 import assertString from "validator/es/lib/util/assertString";
 import ResourceSecretRevisionsCollection from "../../../models/entity/secretRevision/resourceSecretRevisionsCollection";
 
-export const SECRET_REVISIONS_FIND_ALL_BY_RESOURCE_ID_FOR_DISPLAY = "passbolt.secret-revisions.find-all-by-resource-id-for-display";
+export const SECRET_REVISIONS_FIND_ALL_BY_RESOURCE_ID_FOR_DISPLAY =
+  "passbolt.secret-revisions.find-all-by-resource-id-for-display";
 
 export default class SecretRevisionsResourceServiceWorkerService {
   /**
@@ -33,8 +34,11 @@ export default class SecretRevisionsResourceServiceWorkerService {
    */
   async findAllByResourceIdForDisplay(resourceId) {
     assertString(resourceId);
-    const secretRevisionsCollection = await this.port.request(SECRET_REVISIONS_FIND_ALL_BY_RESOURCE_ID_FOR_DISPLAY, resourceId);
+    const secretRevisionsCollection = await this.port.request(
+      SECRET_REVISIONS_FIND_ALL_BY_RESOURCE_ID_FOR_DISPLAY,
+      resourceId,
+    );
     // TODO: remove validate false when the data in the Secret entity will be able to handle string and decrypted object
-    return new ResourceSecretRevisionsCollection(secretRevisionsCollection, {validate: false});
+    return new ResourceSecretRevisionsCollection(secretRevisionsCollection, { validate: false });
   }
 }

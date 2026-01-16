@@ -14,16 +14,16 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Select from "../../Common/Select/Select";
 
 /**
@@ -47,8 +47,8 @@ class ExportResources extends React.Component {
     return {
       selectedExportFormat: this.exportFormats[0].value, // The selected export format
       actions: {
-        processing: false // Actions flag about processing
-      }
+        processing: false, // Actions flag about processing
+      },
     };
   }
 
@@ -77,7 +77,7 @@ class ExportResources extends React.Component {
   findContentToExport() {
     const foldersIds = this.findFoldersIdsToExport();
     const resourcesIds = this.findResourcesIdsToExport(foldersIds);
-    this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds, foldersIds});
+    this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds, foldersIds });
   }
 
   /**
@@ -118,7 +118,7 @@ class ExportResources extends React.Component {
       return [];
     }
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
-    const childrenFoldersIds = foldersIds.map(folderId => this.getChildrenFoldersIds(folderId)).flat();
+    const childrenFoldersIds = foldersIds.map((folderId) => this.getChildrenFoldersIds(folderId)).flat();
     return [...foldersIds, ...childrenFoldersIds];
   }
 
@@ -129,14 +129,14 @@ class ExportResources extends React.Component {
   getChildrenFoldersIds(folderId) {
     const folders = this.props.context.folders;
     const childrenFoldersIds = folders
-      .filter(folder => folder.folder_parent_id === folderId)
-      .map(folder => folder.id);
+      .filter((folder) => folder.folder_parent_id === folderId)
+      .map((folder) => folder.id);
 
     const hasChildren = childrenFoldersIds.length !== 0;
     if (!hasChildren) {
       return [];
     } else {
-      const grandChildrenFolders = childrenFoldersIds.map(childFolderId => this.getChildrenFoldersIds(childFolderId));
+      const grandChildrenFolders = childrenFoldersIds.map((childFolderId) => this.getChildrenFoldersIds(childFolderId));
       return [...childrenFoldersIds, ...grandChildrenFolders.flat()];
     }
   }
@@ -156,8 +156,8 @@ class ExportResources extends React.Component {
    * @param foldersIds The folders to look into
    */
   getResourcesIdsOfFoldersToExport(foldersIds) {
-    const belongsToFolder = resource => foldersIds.some(folderId => folderId === resource.folder_parent_id);
-    return this.props.context.resources.filter(belongsToFolder).map(resource => resource.id);
+    const belongsToFolder = (resource) => foldersIds.some((folderId) => folderId === resource.folder_parent_id);
+    return this.props.context.resources.filter(belongsToFolder).map((resource) => resource.id);
   }
 
   /**
@@ -165,18 +165,18 @@ class ExportResources extends React.Component {
    */
   get exportFormats() {
     return [
-      {label: "kdbx (keepass)", value: "kdbx"},
-      {label: "kdbx (keepassXC & others)", value: "kdbx-others"},
-      {label: "csv (keepass)", value: "csv-kdbx"},
-      {label: "csv (lastpass)", value: "csv-lastpass"},
-      {label: "csv (1password)", value: "csv-1password"},
-      {label: "csv (chromium based browsers)", value: "csv-chromium"},
-      {label: "csv (bitwarden)", value: "csv-bitwarden"},
-      {label: "csv (mozilla)", value: "csv-mozilla"},
-      {label: "csv (safari)", value: "csv-safari"},
-      {label: "csv (dashlane)", value: "csv-dashlane"},
-      {label: "csv (nordpass)", value: "csv-nordpass"},
-      {label: "csv (logmeonce)", value: "csv-logmeonce"}
+      { label: "kdbx (keepass)", value: "kdbx" },
+      { label: "kdbx (keepassXC & others)", value: "kdbx-others" },
+      { label: "csv (keepass)", value: "csv-kdbx" },
+      { label: "csv (lastpass)", value: "csv-lastpass" },
+      { label: "csv (1password)", value: "csv-1password" },
+      { label: "csv (chromium based browsers)", value: "csv-chromium" },
+      { label: "csv (bitwarden)", value: "csv-bitwarden" },
+      { label: "csv (mozilla)", value: "csv-mozilla" },
+      { label: "csv (safari)", value: "csv-safari" },
+      { label: "csv (dashlane)", value: "csv-dashlane" },
+      { label: "csv (nordpass)", value: "csv-nordpass" },
+      { label: "csv (logmeonce)", value: "csv-logmeonce" },
     ];
   }
 
@@ -195,13 +195,13 @@ class ExportResources extends React.Component {
   async handleExport(event) {
     event.preventDefault();
     const isCsv = this.state.selectedExportFormat.startsWith("csv");
-    if (isCsv) { // CSV case
-      await this.setState({actions: {processing: true}});
-      this.export()
-        .then(this.onExportSuccess.bind(this))
-        .catch(this.onExportFailure.bind(this));
-    } else { // KDBX case
-      await this.props.dialogContext.open(ExportResourcesCredentials, {format: this.state.selectedExportFormat});
+    if (isCsv) {
+      // CSV case
+      await this.setState({ actions: { processing: true } });
+      this.export().then(this.onExportSuccess.bind(this)).catch(this.onExportFailure.bind(this));
+    } else {
+      // KDBX case
+      await this.props.dialogContext.open(ExportResourcesCredentials, { format: this.state.selectedExportFormat });
       this.close();
     }
   }
@@ -210,7 +210,7 @@ class ExportResources extends React.Component {
    * Whenever the export is cancelled
    */
   async handleCancel() {
-    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
+    await this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds: null, foldersIds: null });
     this.close();
   }
 
@@ -218,7 +218,7 @@ class ExportResources extends React.Component {
    * Whenever the dialog is closed
    */
   async handleClose() {
-    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
+    await this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds: null, foldersIds: null });
     this.close();
   }
 
@@ -227,7 +227,7 @@ class ExportResources extends React.Component {
    * @param selectedExportFormat The selected export format
    */
   selectFormat(selectedExportFormat) {
-    this.setState({selectedExportFormat});
+    this.setState({ selectedExportFormat });
   }
 
   /**
@@ -239,7 +239,7 @@ class ExportResources extends React.Component {
     const exportDto = {
       format: this.state.selectedExportFormat,
       folders_ids: foldersIds,
-      resources_ids: resourcesIds
+      resources_ids: resourcesIds,
     };
     await this.props.context.port.request("passbolt.export-resources.export-to-file", exportDto);
   }
@@ -248,9 +248,11 @@ class ExportResources extends React.Component {
    * Whenever the export has been performed successfully
    */
   async onExportSuccess() {
-    await this.setState({actions: {processing: false}});
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The passwords have been exported successfully"));
-    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
+    await this.setState({ actions: { processing: false } });
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.translate("The passwords have been exported successfully"),
+    );
+    await this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds: null, foldersIds: null });
     this.close();
   }
 
@@ -260,14 +262,14 @@ class ExportResources extends React.Component {
   onExportFailure(error) {
     const isUserAbortsOperation = error.name === "UserAbortsOperationError";
     if (isUserAbortsOperation) {
-      this.setState({actions: {processing: false}});
+      this.setState({ actions: { processing: false } });
       return;
     }
 
     const errorDialogProps = {
-      error: error
+      error: error,
     };
-    this.setState({actions: {processing: false}});
+    this.setState({ actions: { processing: false } });
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
@@ -290,52 +292,61 @@ class ExportResources extends React.Component {
    * Render the component
    */
   render() {
-    const foldersIdsToExport = this.hasFoldersToExport && this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
-    const resourcesIdsToExport = this.hasResourcesToExport && this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
+    const foldersIdsToExport =
+      this.hasFoldersToExport && this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
+    const resourcesIdsToExport =
+      this.hasResourcesToExport && this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
 
     return (
       <DialogWrapper
         title={this.translate("Export passwords")}
         onClose={this.handleClose}
-        disabled={!this.areActionsAllowed}>
-        <form
-          onSubmit={this.handleExport}
-          noValidate>
-
+        disabled={!this.areActionsAllowed}
+      >
+        <form onSubmit={this.handleExport} noValidate>
           <div className="form-content">
-
-            <div className={`select-wrapper input required ${!this.areActionsAllowed ? 'disabled' : ''}`}>
-              <label htmlFor="export-format"><Trans>Choose the export format (csv and kdbx are supported)</Trans></label>
+            <div className={`select-wrapper input required ${!this.areActionsAllowed ? "disabled" : ""}`}>
+              <label htmlFor="export-format">
+                <Trans>Choose the export format (csv and kdbx are supported)</Trans>
+              </label>
               <Select
                 id="export-format"
                 value={this.state.selectedExportFormat}
                 items={this.exportFormats}
                 onChange={this.handleExportFormatSelected}
-                disabled={!this.areActionsAllowed}/>
+                disabled={!this.areActionsAllowed}
+              />
             </div>
-            {this.hasFoldersToExport &&
+            {this.hasFoldersToExport && (
               <p>
-                <em>{this.translate("{{count}} folder is going to be exported.", {count: foldersIdsToExport.length})}</em>
+                <em>
+                  {this.translate("{{count}} folder is going to be exported.", { count: foldersIdsToExport.length })}
+                </em>
               </p>
-            }
-            {this.hasResourcesToExport &&
+            )}
+            {this.hasResourcesToExport && (
               <p>
-                <em>{this.translate("{{count}} password is going to be exported.", {count: resourcesIdsToExport.length})}</em>
+                <em>
+                  {this.translate("{{count}} password is going to be exported.", {
+                    count: resourcesIdsToExport.length,
+                  })}
+                </em>
               </p>
-            }
+            )}
           </div>
 
           <div className="submit-wrapper clearfix">
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
-              onClick={this.handleCancel}/>
+              onClick={this.handleCancel}
+            />
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
-              value={this.translate("Export")}/>
+              value={this.translate("Export")}
+            />
           </div>
-
         </form>
       </DialogWrapper>
     );
@@ -351,4 +362,6 @@ ExportResources.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(ExportResources)))));
+export default withAppContext(
+  withActionFeedback(withDialog(withResourceWorkspace(withTranslation("common")(ExportResources)))),
+);

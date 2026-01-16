@@ -12,8 +12,8 @@
  * @since         3.10.0
  */
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import LoginPage from "./LoginPage";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -29,10 +29,10 @@ export default class LoginPageTest {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <LoginPage {...props}/>
+          <LoginPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -66,7 +66,7 @@ export default class LoginPageTest {
    * @returns {Promise<void>}
    */
   async clickOn(element, callback) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {
       if (!callback()) {
@@ -112,7 +112,7 @@ export default class LoginPageTest {
    * @returns {HTMLElement}
    */
   get ssoErrorMessage() {
-    return this.select('.sso-login-form .error-message');
+    return this.select(".sso-login-form .error-message");
   }
 
   /**

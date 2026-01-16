@@ -12,10 +12,10 @@
  * @since         5.8.0
  */
 
-import React from 'react';
-import {render} from '@testing-library/react';
-import MockTranslationProvider from '../../../test/mock/components/Internationalisation/MockTranslationProvider';
-import DisplayUserSecurityTokenHelp from './DisplayUserSecurityTokenHelp';
+import React from "react";
+import { render } from "@testing-library/react";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import DisplayUserSecurityTokenHelp from "./DisplayUserSecurityTokenHelp";
 
 /**
  * The DisplayUserSecurityTokenHelp component represented as a page
@@ -24,8 +24,8 @@ export default class DisplayUserSecurityTokenHelpPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayUserSecurityTokenHelp {...props}/>
-      </MockTranslationProvider>
+        <DisplayUserSecurityTokenHelp {...props} />
+      </MockTranslationProvider>,
     );
   }
 
@@ -33,13 +33,13 @@ export default class DisplayUserSecurityTokenHelpPage {
    * Returns the phishing definition link
    */
   get phishingDefinitionLink() {
-    return this._page.container.querySelector('a[data-testid=phishingLink]');
+    return this._page.container.querySelector("a[data-testid=phishingLink]");
   }
 
   /**
    * Returns the security token documentation link
    */
   get tokenDocumentationLink() {
-    return this._page.container.querySelector('a.button');
+    return this._page.container.querySelector("a.button");
   }
 }

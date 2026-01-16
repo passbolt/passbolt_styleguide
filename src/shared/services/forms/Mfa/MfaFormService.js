@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         3.8.0
  */
 
-import XRegExp from 'xregexp';
+import XRegExp from "xregexp";
 
 /**
  * Model related to the MFA form settings
@@ -74,7 +73,10 @@ class MfaFormService {
    * @returns {Promise<void>}
    */
   validateYubikeyClientIdentifier(value) {
-    const messages = {required: "A client identifier is required.", regex: "The client identifier should be an integer."};
+    const messages = {
+      required: "A client identifier is required.",
+      regex: "The client identifier should be an integer.",
+    };
     const result = this.validateInput(value, "^[0-9]{1,64}$", messages);
     this.context.setError("yubikeyClientIdentifierError", result);
     return result;
@@ -85,9 +87,9 @@ class MfaFormService {
    * @returns {Promise<void>}
    */
   validateYubikeySecretKey(value) {
-    const messages = {required: "A secret key is required.", regex: "This secret key is not valid."};
+    const messages = { required: "A secret key is required.", regex: "This secret key is not valid." };
     const result = this.validateInput(value, "^[a-zA-Z0-9\\/=+]{10,128}$", messages);
-    this.context.setError('yubikeySecretKeyError', result);
+    this.context.setError("yubikeySecretKeyError", result);
     return result;
   }
 
@@ -96,7 +98,7 @@ class MfaFormService {
    * @returns {Promise<void>}
    */
   validateDuoHostname(value) {
-    const messages = {required: "A hostname is required.", regex: "This is not a valid hostname."};
+    const messages = { required: "A hostname is required.", regex: "This is not a valid hostname." };
     const result = this.validateInput(value, "^api-[a-fA-F0-9]{8,16}\\.duosecurity\\.com$", messages);
     this.context.setError("duoHostnameError", result);
     return result;
@@ -107,7 +109,7 @@ class MfaFormService {
    * @returns {Promise<void>}
    */
   validateDuoClientId(value) {
-    const messages = {required: "A client id is required.", regex: "This is not a valid client id."};
+    const messages = { required: "A client id is required.", regex: "This is not a valid client id." };
     const result = this.validateInput(value, "^[a-zA-Z0-9]{16,32}$", messages);
     this.context.setError("duoClientIdError", result);
     return result;
@@ -118,7 +120,7 @@ class MfaFormService {
    * @returns {Promise<void>}
    */
   validateDuoClientSecret(value) {
-    const messages = {required: "A client secret is required.", regex: "This is not a valid client secret."};
+    const messages = { required: "A client secret is required.", regex: "This is not a valid client secret." };
     const result = this.validateInput(value, "^[a-zA-Z0-9]{32,128}$", messages);
     this.context.setError("duoClientSecretError", result);
     return result;
@@ -137,9 +139,9 @@ class MfaFormService {
     if (settings.yubikeyToggle) {
       yubikeyClientIdentifierError = this.validateYubikeyClientIdentifier(settings.yubikeyClientIdentifier);
       yubikeySecretKeyError = this.validateYubikeySecretKey(settings.yubikeySecretKey);
-      result = {yubikeyClientIdentifierError, yubikeySecretKeyError};
+      result = { yubikeyClientIdentifierError, yubikeySecretKeyError };
     }
-    return  result;
+    return result;
   }
 
   /**
@@ -154,10 +156,10 @@ class MfaFormService {
 
     const settings = this.context.getSettings();
     if (settings.duoToggle) {
-      duoHostnameError = this.validateDuoHostname(settings.duoHostname),
-      duoClientIdError = this.validateDuoClientId(settings.duoClientId),
-      duoClientSecretError = this.validateDuoClientSecret(settings.duoClientSecret);
-      result =  {duoHostnameError, duoClientIdError, duoClientSecretError};
+      ((duoHostnameError = this.validateDuoHostname(settings.duoHostname)),
+        (duoClientIdError = this.validateDuoClientId(settings.duoClientId)),
+        (duoClientSecretError = this.validateDuoClientSecret(settings.duoClientSecret)));
+      result = { duoHostnameError, duoClientIdError, duoClientSecretError };
     }
     return result;
   }
@@ -172,9 +174,8 @@ class MfaFormService {
 
     await this.context.setErrors(validation);
     //Check if we have errors
-    return Object.values(validation).filter(x => x).length === 0;
+    return Object.values(validation).filter((x) => x).length === 0;
   }
 }
 
 export default MfaFormService;
-

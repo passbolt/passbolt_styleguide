@@ -1,31 +1,33 @@
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceFolderDetailsInformation from "./DisplayResourceFolderDetailsInformation";
-import {defaultProps} from "./DisplayResourceFolderDetailsInformation.test.data";
-
+import { defaultProps } from "./DisplayResourceFolderDetailsInformation.test.data";
 
 export default {
-  title: 'Components/ResourceFolderDetails/DisplayResourceFolderDetailsInformation',
-  component: DisplayResourceFolderDetailsInformation
+  title: "Components/ResourceFolderDetails/DisplayResourceFolderDetailsInformation",
+  component: DisplayResourceFolderDetailsInformation,
 };
 
 const context = {
   siteSettings: {
-    getServerTimezone: () => new Date().toDateString()
-  }
+    getServerTimezone: () => new Date().toDateString(),
+  },
 };
 
-const Template = args =>
+const Template = (args) => (
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={["/"]}>
       <div className="panel aside">
-        <Route component={routerProps => <DisplayResourceFolderDetailsInformation {...args} {...routerProps}/>}></Route>
+        <Route
+          component={(routerProps) => <DisplayResourceFolderDetailsInformation {...args} {...routerProps} />}
+        ></Route>
       </div>
     </MemoryRouter>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 export const Initial = Template.bind({});
 Initial.args = {
-  ...defaultProps()
+  ...defaultProps(),
 };

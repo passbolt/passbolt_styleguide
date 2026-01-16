@@ -12,18 +12,14 @@
  * @since         5.0.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import LockSVG from "../../../../img/svg/lock.svg";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  RESOURCE_TYPE_PASSWORD_STRING_SLUG
-} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import { RESOURCE_TYPE_PASSWORD_STRING_SLUG } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class AddResourceDescription extends Component {
@@ -100,14 +96,16 @@ class AddResourceDescription extends Component {
     return (
       <>
         <div className="title">
-          <h2><Trans>Description</Trans></h2>
+          <h2>
+            <Trans>Description</Trans>
+          </h2>
         </div>
         <div className="content">
           <div className="description-fields">
-            <div className={`input textarea ${this.props.disabled ? 'disabled' : ''}`}>
+            <div className={`input textarea ${this.props.disabled ? "disabled" : ""}`}>
               <label htmlFor="resource-description">
                 <Trans>Content</Trans>
-                {this.isMaxLengthWarnings("description", "metadata") && <AttentionSVG className="attention-required"/>}
+                {this.isMaxLengthWarnings("description", "metadata") && <AttentionSVG className="attention-required" />}
               </label>
               <textarea
                 id="resource-description"
@@ -116,30 +114,39 @@ class AddResourceDescription extends Component {
                 placeholder={this.translate("Add a description")}
                 onChange={this.handleInputChange}
                 disabled={this.props.disabled}
-                value={this.props.resource?.metadata?.description}>
-              </textarea>
-              {this.isMaxLengthError("description") &&
-                <div className="description error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
-              }
-              {this.isMaxLengthWarnings("description", "metadata") &&
-                <div className="description warning-message">
-                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                value={this.props.resource?.metadata?.description}
+              ></textarea>
+              {this.isMaxLengthError("description") && (
+                <div className="description error-message">
+                  <Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans>
                 </div>
-              }
+              )}
+              {this.isMaxLengthWarnings("description", "metadata") && (
+                <div className="description warning-message">
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              )}
             </div>
           </div>
         </div>
-        {this.isResourceTypeV4PasswordString && this.canHaveSecretNote &&
+        {this.isResourceTypeV4PasswordString && this.canHaveSecretNote && (
           <div className="message notice">
             <p className="text">
-              <strong><Trans>Information</Trans>:</strong> <Trans>Description is a searchable metadata.</Trans> <Trans>If you want it to be a secret, you can convert it into a note.</Trans>
+              <strong>
+                <Trans>Information</Trans>:
+              </strong>{" "}
+              <Trans>Description is a searchable metadata.</Trans>{" "}
+              <Trans>If you want it to be a secret, you can convert it into a note.</Trans>
             </p>
             <button id="convert-to-note" type="button" className="button" onClick={this.props.onConvertToNote}>
-              <LockSVG/>
+              <LockSVG />
               <Trans>Convert to note</Trans>
             </button>
           </div>
-        }
+        )}
       </>
     );
   }
@@ -154,8 +161,7 @@ AddResourceDescription.propTypes = {
   disabled: PropTypes.bool, // The disabled property
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
-  errors: PropTypes.object // The errors entity error validation
+  errors: PropTypes.object, // The errors entity error validation
 };
 
-export default  withResourceTypesLocalStorage(withTranslation('common')(AddResourceDescription));
-
+export default withResourceTypesLocalStorage(withTranslation("common")(AddResourceDescription));

@@ -1,4 +1,4 @@
-import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
+import { defaultUserWorkspaceContext } from "../../../contexts/UserWorkspaceContext.test.data";
 import MockPort from "../../../test/mock/MockPort";
 
 /**
@@ -13,7 +13,6 @@ export function defaultAppContext(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 }
 
-
 /**
  * Default props
  * @returns {any}
@@ -23,6 +22,6 @@ export function defaultProps() {
     history: {
       push: jest.fn(),
     },
-    userWorkspaceContext: defaultUserWorkspaceContext()
+    userWorkspaceContext: defaultUserWorkspaceContext(),
   };
 }

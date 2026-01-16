@@ -16,17 +16,17 @@ import PropTypes from "prop-types";
 import DisplayResourceFolderDetailsInformation from "./DisplayResourceFolderDetailsInformation";
 import DisplayResourceFolderDetailsPermissions from "./DisplayResourceFolderDetailsPermissions";
 import DisplayResourceFolderDetailsActivity from "./DisplayResourceFolderDetailsActivity";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {Trans, withTranslation} from "react-i18next";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { Trans, withTranslation } from "react-i18next";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 import FolderSidebarSVG from "../../../../img/svg/folder-sidebar.svg";
 import LinkSVG from "../../../../img/svg/link.svg";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class DisplayResourceFolderDetails extends React.Component {
   /**
@@ -71,10 +71,8 @@ class DisplayResourceFolderDetails extends React.Component {
 
     return (
       <>
-        <DisplayResourceFolderDetailsInformation/>
-        {canViewShare &&
-          <DisplayResourceFolderDetailsPermissions/>
-        }
+        <DisplayResourceFolderDetailsInformation />
+        {canViewShare && <DisplayResourceFolderDetailsPermissions />}
       </>
     );
   }
@@ -84,41 +82,51 @@ class DisplayResourceFolderDetails extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canUseAuditLog = (this.props.context.siteSettings.canIUse("auditLog")
-    || this.props.context.siteSettings.canIUse("audit_log")) // @deprecated remove with v4
-    && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_SEE_ACTIVITIES);
+    const canUseAuditLog =
+      (this.props.context.siteSettings.canIUse("auditLog") || this.props.context.siteSettings.canIUse("audit_log")) && // @deprecated remove with v4
+      this.props.rbacContext.canIUseAction(uiActions.RESOURCES_SEE_ACTIVITIES);
 
     return (
       <div className="sidebar resource">
         <div className={`sidebar-header ${canUseAuditLog ? "" : "with-separator"}`}>
           <div className="teaser-image">
-            <FolderSidebarSVG/>
+            <FolderSidebarSVG />
           </div>
           <div className="title-area">
             <h3>
               <div className="title-wrapper">
                 <span className="name">{this.props.resourceWorkspaceContext.details.folder.name}</span>
               </div>
-              <span className="subtitle"><Trans>folder</Trans></span>
+              <span className="subtitle">
+                <Trans>folder</Trans>
+              </span>
             </h3>
-            <button type="button" className="title-link button-transparent inline" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
-              <LinkSVG/>
-              <span className="visuallyhidden"><Trans>Copy the link to this folder</Trans></span>
+            <button
+              type="button"
+              className="title-link button-transparent inline"
+              title={this.translate("Copy the link to this folder")}
+              onClick={this.handlePermalinkClick}
+            >
+              <LinkSVG />
+              <span className="visuallyhidden">
+                <Trans>Copy the link to this folder</Trans>
+              </span>
             </button>
           </div>
         </div>
         <div className="sidebar-content">
-          {!canUseAuditLog
-            ? this.renderFolderDetail()
-            : <Tabs activeTabName='Details'>
-              <Tab key='Details' name={this.props.t('Details')} type='Details'>
+          {!canUseAuditLog ? (
+            this.renderFolderDetail()
+          ) : (
+            <Tabs activeTabName="Details">
+              <Tab key="Details" name={this.props.t("Details")} type="Details">
                 {this.renderFolderDetail()}
               </Tab>
-              <Tab key='Activity' name={this.props.t('Activity')} type='Activity'>
+              <Tab key="Activity" name={this.props.t("Activity")} type="Activity">
                 <DisplayResourceFolderDetailsActivity />
               </Tab>
             </Tabs>
-          }
+          )}
         </div>
       </div>
     );
@@ -139,4 +147,8 @@ DisplayResourceFolderDetails.propTypes = {
   rbacContext: PropTypes.any, // The role based access control context
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withClipboard(withActionFeedback(withTranslation('common')(DisplayResourceFolderDetails))))));
+export default withAppContext(
+  withRbac(
+    withResourceWorkspace(withClipboard(withActionFeedback(withTranslation("common")(DisplayResourceFolderDetails)))),
+  ),
+);

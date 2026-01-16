@@ -12,18 +12,18 @@
  * @since         3.8.3
  */
 
-import SelfRegistrationDto from './SelfRegistrationDto';
-import {SelfRegistrationProviderTypes} from './SelfRegistrationEnumeration';
+import SelfRegistrationDto from "./SelfRegistrationDto";
+import { SelfRegistrationProviderTypes } from "./SelfRegistrationEnumeration";
 
 describe("SelfRegistrationDto", () => {
   describe("SelfRegistrationDto::clone", () => {
-    const selfRegistrationDomains = {allowedDomains: new Map()};
+    const selfRegistrationDomains = { allowedDomains: new Map() };
     it("should init data with SelfRegistrationDomainsViewModel", () => {
       expect.assertions(3);
 
-      selfRegistrationDomains.allowedDomains.set('uuid1', "passbolt.com");
-      selfRegistrationDomains.allowedDomains.set('uuid2', "passbolt.io");
-      const dto = new SelfRegistrationDto(selfRegistrationDomains, {id: "uuid", provider: "SSO"});
+      selfRegistrationDomains.allowedDomains.set("uuid1", "passbolt.com");
+      selfRegistrationDomains.allowedDomains.set("uuid2", "passbolt.io");
+      const dto = new SelfRegistrationDto(selfRegistrationDomains, { id: "uuid", provider: "SSO" });
 
       expect(dto.id).toEqual("uuid");
       expect(dto.provider).toEqual("SSO");
@@ -33,16 +33,15 @@ describe("SelfRegistrationDto", () => {
     it("should init provider with email_domains if provider is missing", () => {
       expect.assertions(1);
 
-      const dto = new SelfRegistrationDto(selfRegistrationDomains, {id: "uuid"});
+      const dto = new SelfRegistrationDto(selfRegistrationDomains, { id: "uuid" });
       expect(dto.provider).toEqual(SelfRegistrationProviderTypes.EMAILDOMAINS);
     });
 
     it("should init allowedDomains with empty array if we did not provide it", () => {
       expect.assertions(1);
 
-      const dto = new SelfRegistrationDto({}, {id: "uuid"});
+      const dto = new SelfRegistrationDto({}, { id: "uuid" });
       expect(dto.data.allowed_domains).toEqual([]);
     });
   });
 });
-

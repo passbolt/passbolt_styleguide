@@ -12,21 +12,21 @@
  * @since         2.14.0
  */
 
-import {MemoryRouter} from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import React from "react";
 import DeleteUserGroupWithConflicts from "./DeleteUserGroupWithConflicts";
-import {mockFolders, mockGroups, mockResources, mockUsers} from "./DeleteUserGroupWithConflicts.test.data";
+import { mockFolders, mockGroups, mockResources, mockUsers } from "./DeleteUserGroupWithConflicts.test.data";
 import MockPort from "../../../test/mock/MockPort";
 
-
 export default {
-  title: 'Components/UserGroup/DeleteUserGroupWithConflicts',
+  title: "Components/UserGroup/DeleteUserGroupWithConflicts",
   component: DeleteUserGroupWithConflicts,
   decorators: [
-    (Story, {args}) =>
-      <MemoryRouter initialEntries={['/']}>
-        <Story {...args}/>
+    (Story, { args }) => (
+      <MemoryRouter initialEntries={["/"]}>
+        <Story {...args} />
       </MemoryRouter>
+    ),
   ],
 };
 
@@ -35,7 +35,7 @@ const context = {
   groups: mockGroups,
   deleteGroupWithConflictsDialogProps: {
     group: {
-      id: 1
+      id: 1,
     },
     errors: {
       resources: {
@@ -43,16 +43,16 @@ const context = {
       },
       folders: {
         sole_owner: mockFolders,
-      }
-    }
+      },
+    },
   },
   setContext: () => {},
-  port: new MockPort()
+  port: new MockPort(),
 };
 
 export const Initial = {
   args: {
     context: context,
-    onClose: () => {}
+    onClose: () => {},
   },
 };

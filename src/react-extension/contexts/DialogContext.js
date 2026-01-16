@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -15,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * The dialog context
@@ -23,7 +22,7 @@ import {v4 as uuidv4} from "uuid";
 export const DialogContext = React.createContext({
   dialogs: [], // The current of displayed dialogs
   open: () => {}, // Open a dialog
-  close: () => {} // Close a dialog
+  close: () => {}, // Close a dialog
 });
 
 /**
@@ -47,11 +46,11 @@ export default class DialogContextProvider extends React.Component {
       dialogs: [],
       open: (Dialog, DialogProps) => {
         const dialogKey = uuidv4();
-        this.setState({dialogs: [...this.state.dialogs, {key: dialogKey, Dialog, DialogProps}]});
+        this.setState({ dialogs: [...this.state.dialogs, { key: dialogKey, Dialog, DialogProps }] });
         return dialogKey;
       },
-      close: dialogKey => this.setState({dialogs: this.state.dialogs.filter(dialog => dialogKey !== dialog.key)}),
-      closeAll: () => this.setState({dialogs: []})
+      close: (dialogKey) => this.setState({ dialogs: this.state.dialogs.filter((dialog) => dialogKey !== dialog.key) }),
+      closeAll: () => this.setState({ dialogs: [] }),
     };
   }
 
@@ -60,16 +59,12 @@ export default class DialogContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <DialogContext.Provider value={this.state}>
-        {this.props.children}
-      </DialogContext.Provider>
-    );
+    return <DialogContext.Provider value={this.state}>{this.props.children}</DialogContext.Provider>;
   }
 }
-DialogContextProvider.displayName = 'DialogContextProvider';
+DialogContextProvider.displayName = "DialogContextProvider";
 DialogContextProvider.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 /**
@@ -81,9 +76,7 @@ export function withDialog(WrappedComponent) {
     render() {
       return (
         <DialogContext.Consumer>
-          {
-            dialogContext => <WrappedComponent dialogContext={dialogContext} {...this.props} />
-          }
+          {(dialogContext) => <WrappedComponent dialogContext={dialogContext} {...this.props} />}
         </DialogContext.Consumer>
       );
     }

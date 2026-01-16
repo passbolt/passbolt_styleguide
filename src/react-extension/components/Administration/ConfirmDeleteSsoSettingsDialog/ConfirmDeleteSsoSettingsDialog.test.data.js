@@ -15,9 +15,13 @@
 export function defaultProps(props = {}) {
   const _props = {
     adminSsoContext: {
-      deleteSettings: () => { console.log("Delete settings confirmed!"); }
+      deleteSettings: () => {
+        console.log("Delete settings confirmed!");
+      },
     },
-    onClose: () => { console.log("Close dialog called"); }
+    onClose: () => {
+      console.log("Close dialog called");
+    },
   };
   return Object.assign(_props, props);
 }

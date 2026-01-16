@@ -12,15 +12,14 @@
  * @since         5.2.0
  */
 
-
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceFormDto } from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
-import {resourceTypeV5DefaultDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import {defaultResourceMetadataDto} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
-import {defaultIconDto} from "../../../../shared/models/entity/resource/metadata/iconEntity.test.data";
+import { resourceTypeV5DefaultDto } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { defaultResourceMetadataDto } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultIconDto } from "../../../../shared/models/entity/resource/metadata/iconEntity.test.data";
 
 /**
  * Default props
@@ -33,7 +32,7 @@ export const defaultProps = (data = {}) => ({
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),
   resource: defaultResourceFormDto(),
-  ...data
+  ...data,
 });
 
 /**
@@ -49,7 +48,7 @@ export const resourceWithAppearance = (data = {}) => ({
   resource: defaultResourceFormDto({
     metadata: defaultResourceMetadataDto({
       icon: defaultIconDto(),
-    })
+    }),
   }),
-  ...data
+  ...data,
 });

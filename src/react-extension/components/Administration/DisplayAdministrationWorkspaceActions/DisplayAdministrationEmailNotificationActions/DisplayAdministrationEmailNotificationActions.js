@@ -14,11 +14,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAdminEmailNotification} from "../../../../contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
-import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
-
-
+import { Trans, withTranslation } from "react-i18next";
+import { withAdminEmailNotification } from "../../../../contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
+import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -53,7 +51,10 @@ class DisplayAdministrationEmailNotificationActions extends React.Component {
    * @returns {boolean}
    */
   isSaveEnabled() {
-    return !this.props.adminEmailNotificationContext.isProcessing() && this.props.adminEmailNotificationContext.hasSettingsChanges();
+    return (
+      !this.props.adminEmailNotificationContext.isProcessing() &&
+      this.props.adminEmailNotificationContext.hasSettingsChanges()
+    );
   }
 
   /**
@@ -67,7 +68,9 @@ class DisplayAdministrationEmailNotificationActions extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The email notification settings were updated."));
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.props.t("The email notification settings were updated."),
+    );
   }
   /**
    * Handle save operation error.
@@ -90,7 +93,6 @@ class DisplayAdministrationEmailNotificationActions extends React.Component {
     await this.props.actionFeedbackContext.displayError(error.message);
   }
 
-
   /**
    * Render the component
    * @returns {JSX}
@@ -98,8 +100,16 @@ class DisplayAdministrationEmailNotificationActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button className="button primary form" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick} id="save-settings">
-          <span><Trans>Save</Trans></span>
+        <button
+          className="button primary form"
+          type="button"
+          disabled={!this.isSaveEnabled()}
+          onClick={this.handleSaveClick}
+          id="save-settings"
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );
@@ -112,4 +122,6 @@ DisplayAdministrationEmailNotificationActions.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAdminEmailNotification(withActionFeedback(withTranslation("common")(DisplayAdministrationEmailNotificationActions)));
+export default withAdminEmailNotification(
+  withActionFeedback(withTranslation("common")(DisplayAdministrationEmailNotificationActions)),
+);

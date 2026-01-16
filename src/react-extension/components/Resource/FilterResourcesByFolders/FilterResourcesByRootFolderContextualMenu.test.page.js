@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import FilterResourcesByRootFolderContextualMenu from "./FilterResourcesByRootFolderContextualMenu";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,9 @@ export default class FoldersTreeRootFolderContextualMenuPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <FilterResourcesByRootFolderContextualMenu {...props}/>
+        <FilterResourcesByRootFolderContextualMenu {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -63,19 +63,19 @@ export class FoldersTreeRootFolderContextualMenuPageObject {
    * Returns the menu RootFolder clickable for the index one
    */
   menuRootFolder(index) {
-    return this._container.querySelectorAll('li .row .main-cell-wrapper .main-cell button')[index - 1];
+    return this._container.querySelectorAll("li .row .main-cell-wrapper .main-cell button")[index - 1];
   }
 
   /**
    * Returns the name for the index one
    */
   name(index) {
-    return this._container.querySelectorAll('li .row .main-cell-wrapper .main-cell button')[index - 1].textContent;
+    return this._container.querySelectorAll("li .row .main-cell-wrapper .main-cell button")[index - 1].textContent;
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

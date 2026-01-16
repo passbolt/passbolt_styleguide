@@ -16,7 +16,7 @@ import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "..//abstract/entityValidationError";
 import UserPassphrasePoliciesEntity from "./userPassphrasePoliciesEntity";
-import {defaultUserPassphrasePoliciesDto} from "./userPassphrasePoliciesEntity.test.data";
+import { defaultUserPassphrasePoliciesDto } from "./userPassphrasePoliciesEntity.test.data";
 
 describe("UserPassphrasePolicies entity", () => {
   it("schema must validate", () => {
@@ -51,28 +51,28 @@ describe("UserPassphrasePolicies entity", () => {
   });
 
   each([
-    {dto: {id: "string but not uuid"}, errorType: "format"},
-    {dto: {id: -1}, errorType: "type"},
+    { dto: { id: "string but not uuid" }, errorType: "format" },
+    { dto: { id: -1 }, errorType: "type" },
 
-    {dto: {external_dictionary_check: 0}, errorType: "type"},
+    { dto: { external_dictionary_check: 0 }, errorType: "type" },
 
-    {dto: {entropy_minimum: true}, errorType: "type"},
-    {dto: {entropy_minimum: "50"}, errorType: "type"},
-    {dto: {entropy_minimum: 30}, errorType: "minimum"},
-    {dto: {entropy_minimum: 250}, errorType: "maximum"},
+    { dto: { entropy_minimum: true }, errorType: "type" },
+    { dto: { entropy_minimum: "50" }, errorType: "type" },
+    { dto: { entropy_minimum: 30 }, errorType: "minimum" },
+    { dto: { entropy_minimum: 250 }, errorType: "maximum" },
 
-    {dto: {created: "string but not a date"}, errorType: "format"},
-    {dto: {created: -1}, errorType: "type"},
+    { dto: { created: "string but not a date" }, errorType: "format" },
+    { dto: { created: -1 }, errorType: "type" },
 
-    {dto: {created_by: "string but not uuid"}, errorType: "format"},
-    {dto: {created_by: -1}, errorType: "type"},
+    { dto: { created_by: "string but not uuid" }, errorType: "format" },
+    { dto: { created_by: -1 }, errorType: "type" },
 
-    {dto: {modified: "string but not a date"}, errorType: "format"},
-    {dto: {modified: -1}, errorType: "type"},
+    { dto: { modified: "string but not a date" }, errorType: "format" },
+    { dto: { modified: -1 }, errorType: "type" },
 
-    {dto: {modified_by: "string but not uuid"}, errorType: "format"},
-    {dto: {modified_by: -1}, errorType: "type"},
-  ]).describe("should throw an exception if DTO contains invalid values", scenario => {
+    { dto: { modified_by: "string but not uuid" }, errorType: "format" },
+    { dto: { modified_by: -1 }, errorType: "type" },
+  ]).describe("should throw an exception if DTO contains invalid values", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(2);
       const fieldName = Object.keys(scenario.dto)[0];

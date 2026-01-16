@@ -12,7 +12,7 @@
  * @since         5.4.0
  */
 
-import {fireEvent, waitFor, cleanup} from '@testing-library/react';
+import { fireEvent, waitFor, cleanup } from "@testing-library/react";
 import SearchBarTestPage from "./SearchBar.test.page";
 
 // Reset the modules before each test.
@@ -24,7 +24,7 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("SearchBar", () => {
-  it("clearSearchInput should call onSearch with empty string", async() => {
+  it("clearSearchInput should call onSearch with empty string", async () => {
     const onSearchMock = jest.fn();
     const props = {
       value: "search keywords",
@@ -36,7 +36,7 @@ describe("SearchBar", () => {
     expect(page.clearButton).toBeTruthy();
     page.searchInput.focus = jest.fn();
 
-    const event = {button: 0};
+    const event = { button: 0 };
     fireEvent.click(page.clearButton, event);
     await waitFor(() => () => {
       expect(onSearchMock).toHaveBeenCalledWith("");

@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import AdministrationWorkspace from "./AdministrationWorkspace";
 import ExtAppContextProvider from "../../contexts/ExtAppContext";
 import RbacContextProvider from "../../../shared/context/Rbac/RbacContext";
@@ -28,7 +28,9 @@ import AdminSsoContextProvider from "../../contexts/AdminSsoContext";
 import AdminPasswordPoliciesContextProvider from "../../contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
 import AdministrationUserPassphrasePoliciesContextProvider from "../../contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
 import AdministrationPasswordExpiryContextProvider from "../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
-import AdministrationWorkspaceContextProvider, {AdministrationWorkspaceMenuTypes} from "../../contexts/AdministrationWorkspaceContext";
+import AdministrationWorkspaceContextProvider, {
+  AdministrationWorkspaceMenuTypes,
+} from "../../contexts/AdministrationWorkspaceContext";
 import MfaContextProvider from "../../contexts/MFAContext";
 import PasswordPoliciesContext from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import AccountRecoveryUserContextProvider from "../../contexts/AccountRecoveryUserContext";
@@ -41,95 +43,105 @@ import TranslationProvider from "../Common/Internationalisation/TranslationProvi
 import ExtAppAccountRecoveryUserService from "../../../shared/services/api/accountRecovery/ExtAppAccountRecoveryUserService";
 import mockStorage from "../../../../test/mocks/mockStorage";
 import mockPort from "../../../../test/mocks/mockPort";
-import {siteSettingsCe} from "../../test/fixture/Settings/siteSettings";
-import {defaultAdministrationWorkspaceContext} from "../../contexts/AdministrationWorkspaceContext.test.data";
+import { siteSettingsCe } from "../../test/fixture/Settings/siteSettings";
+import { defaultAdministrationWorkspaceContext } from "../../contexts/AdministrationWorkspaceContext.test.data";
 import AdministrationEncryptedMetadataGettingStartedContextProvider from "../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
-import {ResizableSidebarContextProvider} from "../../contexts/ResizeSidebar/ResizeSidebarContext";
+import { ResizableSidebarContextProvider } from "../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 const fakeAdminGettingStartedService = {
-  findGettingStartedSettings: () => ({enabled: false})
+  findGettingStartedSettings: () => ({ enabled: false }),
 };
 
 /**
  * AdministrationWorkspace stories
  */
 export default {
-  title: 'Workspaces/Administration',
+  title: "Workspaces/Administration",
   component: AdministrationWorkspace,
-  decorators: [(Story, {args}) =>
-    <MemoryRouter initialEntries={[args.routerInitialEntry]}>
-      <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-        <ExtAppContextProvider storage={args.storage} port={args.port}>
-          <RbacContextProvider>
-            <AccountRecoveryUserContextProvider accountRecoveryUserService={new ExtAppAccountRecoveryUserService(args.port)}>
-              <PasswordPoliciesContext>
-                <MfaContextProvider>
-                  <WorkflowContextProvider>
-                    <ActionFeedbackContextProvider>
-                      <DialogContextProvider>
-                        <AnnouncementContextProvider>
-                          <ContextualMenuContextProvider>
-                            <LoadingContextProvider>
-                              <ProgressContextProvider>
-                                <ResizableSidebarContextProvider>
-                                  { /* Action Feedback Management */}
-                                  <DisplayActionFeedbacks/>
-                                  <Route path={[
-                                    "/app/administration",
-                                    "/app/administration/account-recovery",
-                                    "/app/administration/email-notification",
-                                    "/app/administration/mfa",
-                                    "/app/administration/password-expiry",
-                                    "/app/administration/password-policies",
-                                    "/app/administration/smtp-settings",
-                                    "/app/administration/sso",
-                                    "/app/administration/subscription",
-                                    "/app/administration/user-passphrase-policies",
-                                    "/app/administration/content-types/metadata",
-                                    "/app/administration/account-recovery-teasing",
-                                    "/app/administration/password-policies-teasing",
-                                    "/app/administration/sso-teasing",
-                                    "/app/administration/user-passphrase-policies-teasing",
-                                    "/app/administration/subscription-teasing",
-                                    "/app/administration/mfa-policy-teasing"
-                                  ]}>
-                                    <AdministrationWorkspaceContextProvider value={args.administrationWorkspaceContext}>
-                                      <AdminAccountRecoveryContextProvider>
-                                        <AdminSubscriptionContextProvider>
-                                          <AdminSsoContextProvider>
-                                            <AdminPasswordPoliciesContextProvider>
-                                              <AdministrationUserPassphrasePoliciesContextProvider>
-                                                <AdministrationPasswordExpiryContextProvider>
-                                                  <AdministrationEncryptedMetadataGettingStartedContextProvider service={fakeAdminGettingStartedService}>
-                                                    <ManageDialogs/>
-                                                    <ManageWorkflows/>
-                                                    <div style={{margin: "-1rem"}}>
-                                                      <Story {...args}/>
-                                                    </div>
-                                                  </AdministrationEncryptedMetadataGettingStartedContextProvider>
-                                                </AdministrationPasswordExpiryContextProvider>
-                                              </AdministrationUserPassphrasePoliciesContextProvider>
-                                            </AdminPasswordPoliciesContextProvider>
-                                          </AdminSsoContextProvider>
-                                        </AdminSubscriptionContextProvider>
-                                      </AdminAccountRecoveryContextProvider>
-                                    </AdministrationWorkspaceContextProvider>
-                                  </Route>
-                                </ResizableSidebarContextProvider>
-                              </ProgressContextProvider>
-                            </LoadingContextProvider>
-                          </ContextualMenuContextProvider>
-                        </AnnouncementContextProvider>
-                      </DialogContextProvider>
-                    </ActionFeedbackContextProvider>
-                  </WorkflowContextProvider>
-                </MfaContextProvider>
-              </PasswordPoliciesContext>
-            </AccountRecoveryUserContextProvider>
-          </RbacContextProvider>
-        </ExtAppContextProvider>
-      </TranslationProvider>
-    </MemoryRouter>
+  decorators: [
+    (Story, { args }) => (
+      <MemoryRouter initialEntries={[args.routerInitialEntry]}>
+        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+          <ExtAppContextProvider storage={args.storage} port={args.port}>
+            <RbacContextProvider>
+              <AccountRecoveryUserContextProvider
+                accountRecoveryUserService={new ExtAppAccountRecoveryUserService(args.port)}
+              >
+                <PasswordPoliciesContext>
+                  <MfaContextProvider>
+                    <WorkflowContextProvider>
+                      <ActionFeedbackContextProvider>
+                        <DialogContextProvider>
+                          <AnnouncementContextProvider>
+                            <ContextualMenuContextProvider>
+                              <LoadingContextProvider>
+                                <ProgressContextProvider>
+                                  <ResizableSidebarContextProvider>
+                                    {/* Action Feedback Management */}
+                                    <DisplayActionFeedbacks />
+                                    <Route
+                                      path={[
+                                        "/app/administration",
+                                        "/app/administration/account-recovery",
+                                        "/app/administration/email-notification",
+                                        "/app/administration/mfa",
+                                        "/app/administration/password-expiry",
+                                        "/app/administration/password-policies",
+                                        "/app/administration/smtp-settings",
+                                        "/app/administration/sso",
+                                        "/app/administration/subscription",
+                                        "/app/administration/user-passphrase-policies",
+                                        "/app/administration/content-types/metadata",
+                                        "/app/administration/account-recovery-teasing",
+                                        "/app/administration/password-policies-teasing",
+                                        "/app/administration/sso-teasing",
+                                        "/app/administration/user-passphrase-policies-teasing",
+                                        "/app/administration/subscription-teasing",
+                                        "/app/administration/mfa-policy-teasing",
+                                      ]}
+                                    >
+                                      <AdministrationWorkspaceContextProvider
+                                        value={args.administrationWorkspaceContext}
+                                      >
+                                        <AdminAccountRecoveryContextProvider>
+                                          <AdminSubscriptionContextProvider>
+                                            <AdminSsoContextProvider>
+                                              <AdminPasswordPoliciesContextProvider>
+                                                <AdministrationUserPassphrasePoliciesContextProvider>
+                                                  <AdministrationPasswordExpiryContextProvider>
+                                                    <AdministrationEncryptedMetadataGettingStartedContextProvider
+                                                      service={fakeAdminGettingStartedService}
+                                                    >
+                                                      <ManageDialogs />
+                                                      <ManageWorkflows />
+                                                      <div style={{ margin: "-1rem" }}>
+                                                        <Story {...args} />
+                                                      </div>
+                                                    </AdministrationEncryptedMetadataGettingStartedContextProvider>
+                                                  </AdministrationPasswordExpiryContextProvider>
+                                                </AdministrationUserPassphrasePoliciesContextProvider>
+                                              </AdminPasswordPoliciesContextProvider>
+                                            </AdminSsoContextProvider>
+                                          </AdminSubscriptionContextProvider>
+                                        </AdminAccountRecoveryContextProvider>
+                                      </AdministrationWorkspaceContextProvider>
+                                    </Route>
+                                  </ResizableSidebarContextProvider>
+                                </ProgressContextProvider>
+                              </LoadingContextProvider>
+                            </ContextualMenuContextProvider>
+                          </AnnouncementContextProvider>
+                        </DialogContextProvider>
+                      </ActionFeedbackContextProvider>
+                    </WorkflowContextProvider>
+                  </MfaContextProvider>
+                </PasswordPoliciesContext>
+              </AccountRecoveryUserContextProvider>
+            </RbacContextProvider>
+          </ExtAppContextProvider>
+        </TranslationProvider>
+      </MemoryRouter>
+    ),
   ],
 };
 
@@ -140,7 +152,7 @@ export const proVersion = {
   args: {
     port: port,
     storage: storage,
-    routerInitialEntry: "/app/administration"
+    routerInitialEntry: "/app/administration",
   },
 };
 
@@ -151,7 +163,7 @@ export const ceVersion = {
   args: {
     port: cePort,
     storage: ceStorage,
-    routerInitialEntry: "/app/administration"
+    routerInitialEntry: "/app/administration",
   },
 };
 
@@ -160,9 +172,9 @@ export const SubscriptionPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION
+      selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION,
     }),
-    routerInitialEntry: "/app/administration/subscription"
+    routerInitialEntry: "/app/administration/subscription",
   },
 };
 
@@ -171,9 +183,9 @@ export const SubscriptionPageTeasing = {
     port: cePort,
     storage: ceStorage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION
+      selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION,
     }),
-    routerInitialEntry: "/app/administration/subscription-teasing"
+    routerInitialEntry: "/app/administration/subscription-teasing",
   },
 };
 
@@ -182,9 +194,9 @@ export const UsersDirectoryTeasing = {
     port: cePort,
     storage: ceStorage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY
+      selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
     }),
-    routerInitialEntry: "/app/administration/users-directory-teasing"
+    routerInitialEntry: "/app/administration/users-directory-teasing",
   },
 };
 
@@ -193,9 +205,9 @@ export const PasswordExpiryPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY
+      selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY,
     }),
-    routerInitialEntry: "/app/administration/password-expiry"
+    routerInitialEntry: "/app/administration/password-expiry",
   },
 };
 
@@ -204,13 +216,13 @@ export const MfaPolicyPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.MFA_POLICY
+      selectedAdministration: AdministrationWorkspaceMenuTypes.MFA_POLICY,
     }),
-    routerInitialEntry: "/app/administration/mfa-policy"
+    routerInitialEntry: "/app/administration/mfa-policy",
   },
   parameters: {
-    css: "api_main"
-  }
+    css: "api_main",
+  },
 };
 
 export const MfaPolicyPageTeasing = {
@@ -218,13 +230,13 @@ export const MfaPolicyPageTeasing = {
     port: cePort,
     storage: ceStorage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.MFA_POLICY
+      selectedAdministration: AdministrationWorkspaceMenuTypes.MFA_POLICY,
     }),
-    routerInitialEntry: "/app/administration/mfa-policy-teasing"
+    routerInitialEntry: "/app/administration/mfa-policy-teasing",
   },
   parameters: {
-    css: "api_main"
-  }
+    css: "api_main",
+  },
 };
 
 export const PasswordPoliciesPage = {
@@ -232,9 +244,9 @@ export const PasswordPoliciesPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES
+      selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES,
     }),
-    routerInitialEntry: "/app/administration/password-policies"
+    routerInitialEntry: "/app/administration/password-policies",
   },
 };
 
@@ -243,9 +255,9 @@ export const PasswordPoliciesPageTeasing = {
     port: cePort,
     storage: ceStorage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES
+      selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES,
     }),
-    routerInitialEntry: "/app/administration/password-policies-teasing"
+    routerInitialEntry: "/app/administration/password-policies-teasing",
   },
 };
 
@@ -254,9 +266,9 @@ export const SingleSignOnPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.SSO
+      selectedAdministration: AdministrationWorkspaceMenuTypes.SSO,
     }),
-    routerInitialEntry: "/app/administration/sso"
+    routerInitialEntry: "/app/administration/sso",
   },
 };
 
@@ -265,9 +277,9 @@ export const SingleSignOnPageTeasing = {
     port: cePort,
     storage: ceStorage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.SSO
+      selectedAdministration: AdministrationWorkspaceMenuTypes.SSO,
     }),
-    routerInitialEntry: "/app/administration/sso-teasing"
+    routerInitialEntry: "/app/administration/sso-teasing",
   },
 };
 
@@ -276,9 +288,9 @@ export const AccountRecoveryPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY
+      selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY,
     }),
-    routerInitialEntry: "/app/administration/account-recovery"
+    routerInitialEntry: "/app/administration/account-recovery",
   },
 };
 
@@ -287,9 +299,9 @@ export const AccountRecoveryPageTeasing = {
     port: cePort,
     storage: ceStorage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY
+      selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY,
     }),
-    routerInitialEntry: "/app/administration/account-recovery-teasing"
+    routerInitialEntry: "/app/administration/account-recovery-teasing",
   },
 };
 
@@ -298,9 +310,9 @@ export const UserPassphrasePoliciesPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES
+      selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES,
     }),
-    routerInitialEntry: "/app/administration/user-passphrase-policies"
+    routerInitialEntry: "/app/administration/user-passphrase-policies",
   },
 };
 
@@ -311,7 +323,7 @@ export const UserPassphrasePoliciesPageTeasing = {
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
       selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES,
     }),
-    routerInitialEntry: "/app/administration/user-passphrase-policies-teasing"
+    routerInitialEntry: "/app/administration/user-passphrase-policies-teasing",
   },
 };
 
@@ -320,9 +332,9 @@ export const ContentTypesEncryptedMetadataPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA
+      selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA,
     }),
-    routerInitialEntry: "/app/administration/content-types/metadata"
+    routerInitialEntry: "/app/administration/content-types/metadata",
   },
 };
 
@@ -331,9 +343,9 @@ export const ContentTypesMetadataKeyPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY
+      selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY,
     }),
-    routerInitialEntry: "/app/administration/content-types/metadata-key"
+    routerInitialEntry: "/app/administration/content-types/metadata-key",
   },
 };
 
@@ -342,9 +354,9 @@ export const MigrateMetadataPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA
+      selectedAdministration: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
     }),
-    routerInitialEntry: "/app/administration/migrate-metadata"
+    routerInitialEntry: "/app/administration/migrate-metadata",
   },
 };
 
@@ -353,9 +365,9 @@ export const SecretHistoryPage = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.SECRET_HISTORY
+      selectedAdministration: AdministrationWorkspaceMenuTypes.SECRET_HISTORY,
     }),
-    routerInitialEntry: "/app/administration/secret-history"
+    routerInitialEntry: "/app/administration/secret-history",
   },
 };
 
@@ -364,9 +376,9 @@ export const error403 = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.HTTP_403_ACCESS_DENIED
+      selectedAdministration: AdministrationWorkspaceMenuTypes.HTTP_403_ACCESS_DENIED,
     }),
-    routerInitialEntry: "/app/administration"
+    routerInitialEntry: "/app/administration",
   },
 };
 
@@ -375,8 +387,8 @@ export const error404 = {
     port: port,
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND
+      selectedAdministration: AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND,
     }),
-    routerInitialEntry: "/app/administration"
+    routerInitialEntry: "/app/administration",
   },
 };

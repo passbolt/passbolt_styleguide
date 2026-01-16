@@ -12,12 +12,12 @@
  * @since         4.3.0
  */
 
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 
 export const defaultUserPassphrasePoliciesDto = (data = {}) => {
   const defaultData = {
     entropy_minimum: 50,
-    external_dictionary_check: true
+    external_dictionary_check: true,
   };
   return Object.assign(defaultData, data);
 };
@@ -28,7 +28,7 @@ export const userPassphrasePoliciesDtoFromApi = (data = {}) => {
     created: "2023-08-06T10:05:46+00:00",
     created_by: uuid(),
     modified: "2023-08-06T10:05:46+00:00",
-    modified_by: uuid()
+    modified_by: uuid(),
   });
 
   return Object.assign(defaultData, data);

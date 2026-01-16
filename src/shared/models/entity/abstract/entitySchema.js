@@ -31,13 +31,13 @@ class EntitySchema {
     if (!schema.type) {
       throw new TypeError(`Could not validate entity ${name}. Type missing.`);
     }
-    if (schema.type === 'array') {
+    if (schema.type === "array") {
       if (!schema.items) {
         throw new TypeError(`Could not validate entity ${name}. Schema error: missing item definition.`);
       }
       return;
     }
-    if (schema.type === 'object') {
+    if (schema.type === "object") {
       if (!schema.required || !Array.isArray(schema.required)) {
         throw new TypeError(`Could not validate entity ${name}. Schema error: no required properties.`);
       }
@@ -47,7 +47,10 @@ class EntitySchema {
       const schemaProps = schema.properties;
       for (const propName in schemaProps) {
         // Check type is defined
-        if (!Object.prototype.hasOwnProperty.call(schemaProps, propName) || (!schemaProps[propName].type && !schemaProps[propName].anyOf)) {
+        if (
+          !Object.prototype.hasOwnProperty.call(schemaProps, propName) ||
+          (!schemaProps[propName].type && !schemaProps[propName].anyOf)
+        ) {
           throw TypeError(`Invalid schema. Type missing for ${propName}...`);
         }
         // In case there is multiple types
@@ -77,9 +80,9 @@ class EntitySchema {
     }
 
     switch (schema.type) {
-      case 'object':
+      case "object":
         return EntitySchema.validateObject(name, dto, schema);
-      case 'array':
+      case "array":
         return EntitySchema.validateArray(name, dto, schema);
       default:
         throw new TypeError(`Could not validate entity ${name}. Unsupported type.`);
@@ -98,17 +101,25 @@ class EntitySchema {
   static validateArray(name, dto, schema) {
     let validationError;
 
-    const parsedItems = EntitySchema.validateProp('items', dto, schema);
+    const parsedItems = EntitySchema.validateProp("items", dto, schema);
 
-    if (typeof(schema.minItems) === 'number') {
+    if (typeof schema.minItems === "number") {
       if (!EntitySchema.isGreaterThanOrEqual(dto.length, schema.minItems)) {
-        validationError = EntitySchema.handleCollectionValidationError('minItems', `The items array should contain at least ${schema.minItems} item(s).`, validationError);
+        validationError = EntitySchema.handleCollectionValidationError(
+          "minItems",
+          `The items array should contain at least ${schema.minItems} item(s).`,
+          validationError,
+        );
       }
     }
 
-    if (typeof(schema.maxItems) === 'number') {
+    if (typeof schema.maxItems === "number") {
       if (!EntitySchema.isLessThanOrEqual(dto.length, schema.maxItems)) {
-        validationError = EntitySchema.handleCollectionValidationError('maxItems', `The items array should contain at maximum ${schema.maxItems} item(s).`, validationError);
+        validationError = EntitySchema.handleCollectionValidationError(
+          "maxItems",
+          `The items array should contain at maximum ${schema.maxItems} item(s).`,
+          validationError,
+        );
       }
     }
 
@@ -143,7 +154,7 @@ class EntitySchema {
       // check if property is null
       if (dto?.[propName] === null) {
         // the prop is explicitly null, is it explicitly nullable?
-        if ((schemaProps[propName]?.nullable) === true) {
+        if (schemaProps[propName]?.nullable === true) {
           result[propName] = null;
           continue;
         }
@@ -158,7 +169,7 @@ class EntitySchema {
       if (requiredProps.includes(propName)) {
         if (!Object.prototype.hasOwnProperty.call(dto, propName)) {
           validationError = EntitySchema.getOrInitEntityValidationError(name, validationError);
-          validationError.addError(propName, 'required', `The ${propName} is required.`);
+          validationError.addError(propName, "required", `The ${propName} is required.`);
           continue;
         }
       } else {
@@ -230,34 +241,34 @@ class EntitySchema {
 
     // Additional rules by types
     switch (propSchema.type) {
-      case 'string':
+      case "string":
         // maxLength, minLength, length, regex, etc.
         EntitySchema.validatePropTypeString(propName, prop, propSchema);
         break;
-        /*
-         * Note on 'array' - unchecked as not in use beyond array of objects in passbolt
-         * Currently it must be done manually when bootstrapping collections
-         * example: foldersCollection, permissionsCollection, etc.
-         *
-         * Note on 'object' - we do not check if property of type 'object' validate (or array of objects, see above)
-         * Currently it must be done manually in the entities when bootstrapping associations
-         *
-         * Note on 'integer' and 'number' - Min / max supported, not needed in passbolt
-         */
-      case 'integer':
-      case 'number':
+      /*
+       * Note on 'array' - unchecked as not in use beyond array of objects in passbolt
+       * Currently it must be done manually when bootstrapping collections
+       * example: foldersCollection, permissionsCollection, etc.
+       *
+       * Note on 'object' - we do not check if property of type 'object' validate (or array of objects, see above)
+       * Currently it must be done manually in the entities when bootstrapping associations
+       *
+       * Note on 'integer' and 'number' - Min / max supported, not needed in passbolt
+       */
+      case "integer":
+      case "number":
         EntitySchema.validatePropTypeNumber(propName, prop, propSchema);
         break;
-      case 'array':
+      case "array":
         EntitySchema.validatePropTypeArray(propName, prop, propSchema);
         break;
-      case 'object':
-      case 'boolean':
-      case 'blob':
-      case 'null':
+      case "object":
+      case "boolean":
+      case "blob":
+      case "null":
         // No additional checks
         break;
-      case 'x-custom':
+      case "x-custom":
         EntitySchema.validatePropCustom(propName, prop, propSchema);
         break;
       default:
@@ -279,7 +290,11 @@ class EntitySchema {
    */
   static validatePropType(propName, prop, propSchema) {
     if (!EntitySchema.isValidPropType(prop, propSchema.type)) {
-      throw EntitySchema.handlePropertyValidationError(propName, 'type',  `The ${propName} is not a valid ${propSchema.type}.`);
+      throw EntitySchema.handlePropertyValidationError(
+        propName,
+        "type",
+        `The ${propName} is not a valid ${propSchema.type}.`,
+      );
     }
   }
 
@@ -297,7 +312,11 @@ class EntitySchema {
     try {
       propSchema.validationCallback(prop);
     } catch (e) {
-      throw EntitySchema.handlePropertyValidationError(propName, 'custom',  `The ${propName} is not valid: ${e.message}`);
+      throw EntitySchema.handlePropertyValidationError(
+        propName,
+        "custom",
+        `The ${propName} is not valid: ${e.message}`,
+      );
     }
   }
 
@@ -315,32 +334,62 @@ class EntitySchema {
     let validationError;
     if (propSchema.format) {
       if (!EntitySchema.isValidStringFormat(prop, propSchema.format)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'format', `The ${propName} is not a valid ${propSchema.format}.`, validationError);
+        validationError = EntitySchema.handlePropertyValidationError(
+          propName,
+          "format",
+          `The ${propName} is not a valid ${propSchema.format}.`,
+          validationError,
+        );
       }
     }
     if (propSchema.length) {
       if (!EntitySchema.isValidStringLength(prop, propSchema.length, propSchema.length)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'length', `The ${propName} should be ${propSchema.length} character in length.`, validationError);
+        validationError = EntitySchema.handlePropertyValidationError(
+          propName,
+          "length",
+          `The ${propName} should be ${propSchema.length} character in length.`,
+          validationError,
+        );
       }
     }
     if (propSchema.minLength) {
       if (!EntitySchema.isValidStringLength(prop, propSchema.minLength)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'minLength', `The ${propName} should be ${propSchema.minLength} character in length minimum.`, validationError);
+        validationError = EntitySchema.handlePropertyValidationError(
+          propName,
+          "minLength",
+          `The ${propName} should be ${propSchema.minLength} character in length minimum.`,
+          validationError,
+        );
       }
     }
     if (propSchema.maxLength) {
       if (!EntitySchema.isValidStringLength(prop, 0, propSchema.maxLength)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'maxLength', `The ${propName} should be ${propSchema.maxLength} character in length maximum.`, validationError);
+        validationError = EntitySchema.handlePropertyValidationError(
+          propName,
+          "maxLength",
+          `The ${propName} should be ${propSchema.maxLength} character in length maximum.`,
+          validationError,
+        );
       }
     }
     if (propSchema.pattern) {
       if (!Validator.matches(prop, propSchema.pattern)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'pattern', `The ${propName} is not valid.`, validationError);
+        validationError = EntitySchema.handlePropertyValidationError(
+          propName,
+          "pattern",
+          `The ${propName} is not valid.`,
+          validationError,
+        );
       }
     }
     if (propSchema.custom) {
       if (!propSchema.custom(prop)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'custom', `The ${propName} is not valid.`, validationError);
+        validationError = EntitySchema.handlePropertyValidationError(
+          propName,
+          "custom",
+          `The ${propName} is not valid.`,
+          validationError,
+        );
       }
     }
     if (validationError) {
@@ -393,14 +442,24 @@ class EntitySchema {
    */
   static validatePropTypeNumber(propName, prop, propSchema) {
     let validationError;
-    if (typeof(propSchema.minimum) === 'number') {
+    if (typeof propSchema.minimum === "number") {
       if (!EntitySchema.isGreaterThanOrEqual(prop, propSchema.minimum)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'minimum', `The ${propName} should be greater or equal to ${propSchema.minimum}.`, validationError);
+        validationError = EntitySchema.handlePropertyValidationError(
+          propName,
+          "minimum",
+          `The ${propName} should be greater or equal to ${propSchema.minimum}.`,
+          validationError,
+        );
       }
     }
-    if (typeof(propSchema.maximum) === 'number') {
+    if (typeof propSchema.maximum === "number") {
       if (!EntitySchema.isLesserThanOrEqual(prop, propSchema.maximum)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'maximum', `The ${propName} should be lesser or equal to ${propSchema.maximum}.`, validationError);
+        validationError = EntitySchema.handlePropertyValidationError(
+          propName,
+          "maximum",
+          `The ${propName} should be lesser or equal to ${propSchema.maximum}.`,
+          validationError,
+        );
       }
     }
 
@@ -423,7 +482,7 @@ class EntitySchema {
     let validationError;
 
     // Do not validate array items if no schema items schema defined.
-    if (!propSchema?.items || !(typeof propSchema.items === 'object')) {
+    if (!propSchema?.items || !(typeof propSchema.items === "object")) {
       return;
     }
 
@@ -435,7 +494,7 @@ class EntitySchema {
         if (error instanceof EntityValidationError) {
           validationError = EntitySchema.getOrInitEntityValidationError(propName, validationError);
           const errorDetails = error.details[propItemName];
-          validationError.details[propName] = {...validationError.details[propName], [index]: errorDetails};
+          validationError.details[propName] = { ...validationError.details[propName], [index]: errorDetails };
         } else {
           throw error;
         }
@@ -459,7 +518,7 @@ class EntitySchema {
   static validatePropEnum(propName, prop, propSchema) {
     if (!EntitySchema.isPropInEnum(prop, propSchema.enum)) {
       const validationError = new EntityValidationError(`Could not validate property ${propName}.`);
-      validationError.addError(propName, 'enum', `The ${propName} value is not included in the supported list.`);
+      validationError.addError(propName, "enum", `The ${propName} value is not included in the supported list.`);
       throw validationError;
     }
   }
@@ -483,7 +542,7 @@ class EntitySchema {
       }
     }
     const validationError = new EntityValidationError(`Could not validate property ${propName}.`);
-    validationError.addError(propName, 'type',  `The ${propName} does not match any of the supported types.`);
+    validationError.addError(propName, "type", `The ${propName} does not match any of the supported types.`);
     throw validationError;
   }
 
@@ -497,32 +556,32 @@ class EntitySchema {
    */
   static isValidPropType(prop, type) {
     if (Array.isArray(type)) {
-      throw new TypeError('EntitySchema isValidPropType multiple types are not supported.');
+      throw new TypeError("EntitySchema isValidPropType multiple types are not supported.");
     }
-    if (typeof type !== 'string') {
-      throw new TypeError('EntitySchema isValidPropType type is invalid.');
+    if (typeof type !== "string") {
+      throw new TypeError("EntitySchema isValidPropType type is invalid.");
     }
     switch (type) {
-      case 'null':
+      case "null":
         return prop === null;
-      case 'boolean':
-        return typeof prop === 'boolean';
-      case 'string':
-        return typeof prop === 'string';
-      case 'integer':
+      case "boolean":
+        return typeof prop === "boolean";
+      case "string":
+        return typeof prop === "string";
+      case "integer":
         return Number.isInteger(prop);
-      case 'number':
-        return typeof prop === 'number';
-      case 'object':
-        return typeof prop === 'object';
-      case 'array':
+      case "number":
+        return typeof prop === "number";
+      case "object":
+        return typeof prop === "object";
+      case "array":
         return Array.isArray(prop);
-      case 'blob':
+      case "blob":
         return prop instanceof Blob;
-      case 'x-custom':
+      case "x-custom":
         return true;
       default:
-        throw new TypeError('EntitySchema validation type not supported.');
+        throw new TypeError("EntitySchema validation type not supported.");
     }
   }
 
@@ -535,31 +594,31 @@ class EntitySchema {
    * @throws TypeError if format is not supported
    */
   static isValidStringFormat(prop, format) {
-    if (typeof format !== 'string') {
-      throw new TypeError('EntitySchema validPropFormat format is invalid.');
+    if (typeof format !== "string") {
+      throw new TypeError("EntitySchema validPropFormat format is invalid.");
     }
     switch (format) {
-      case 'uuid':
+      case "uuid":
         return Validator.isUUID(prop);
-      case 'email':
-      case 'idn-email':
+      case "email":
+      case "idn-email":
         return Validator.isEmail(prop);
-      case 'date-time':
+      case "date-time":
         return Validator.isISO8601(prop);
-        /*
-         * case 'ipv4':
-         *   return Validator.isIP(prop, '4');
-         * case 'ipv6':
-         *   return Validator.isIP(prop, '6');
-         */
+      /*
+       * case 'ipv4':
+       *   return Validator.isIP(prop, '4');
+       * case 'ipv6':
+       *   return Validator.isIP(prop, '6');
+       */
 
       /*
        * Not in json-schema but needed by passbolt
        * cowboy style section 🤠
        */
-      case 'x-hex-color':
+      case "x-hex-color":
         return Validator.isHexColor(prop);
-      case 'x-base64':
+      case "x-base64":
         return Validator.isBase64(prop);
 
       // Not supported - Not needed

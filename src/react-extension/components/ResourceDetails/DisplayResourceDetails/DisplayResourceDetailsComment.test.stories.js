@@ -12,24 +12,24 @@
  * @since         5.0.0
  */
 import React from "react";
-import {defaultProps} from "./DisplayResourceDetailsComment.test.data";
+import { defaultProps } from "./DisplayResourceDetailsComment.test.data";
 import DisplayResourceDetailsComment from "./DisplayResourceDetailsComment";
-import {commentsMock} from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList.test.data";
+import { commentsMock } from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList.test.data";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 
 /**
  * DisplayResourceDetailsComment stories
  */
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetailsComment',
+  title: "Components/ResourceDetails/DisplayResourceDetailsComment",
   component: DisplayResourceDetailsComment,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <div className="page">
-        <div className="app" style={{margin: "-1rem"}}>
+        <div className="app" style={{ margin: "-1rem" }}>
           <div className="panel main">
             <div className="panel middle">
-              <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+              <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <div className="panel aside">
                   <div className="sidebar resource">
                     <div className="sidebar-content">
@@ -44,13 +44,13 @@ export default {
           </div>
         </div>
       </div>
-    )
-  ]
+    ),
+  ],
 };
 
 const props = defaultProps();
 props.context.port.addRequestListener("passbolt.comments.find-all-by-resource", () => commentsMock);
 
 export const Default = {
-  args: props
+  args: props,
 };

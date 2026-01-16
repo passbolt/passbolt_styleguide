@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.4.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 
 /**
@@ -46,11 +46,17 @@ class DisplayExpiredAccountRecovery extends Component {
    */
   render() {
     return (
-      <DialogWrapper className="expired-account-recover-dialog" title={this.props.t("Account recovery error")}
-        onClose={this.handleClose}>
+      <DialogWrapper
+        className="expired-account-recover-dialog"
+        title={this.props.t("Account recovery error")}
+        onClose={this.handleClose}
+      >
         <div className="form-content">
           <p>
-            <Trans>Sorry, this account recovery request has expired and cannot be updated, or was already handled by another administrator.</Trans>
+            <Trans>
+              Sorry, this account recovery request has expired and cannot be updated, or was already handled by another
+              administrator.
+            </Trans>
             &nbsp;<Trans>Please double check with the user in case they still need some help to log in.</Trans>
           </p>
         </div>

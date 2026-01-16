@@ -14,13 +14,9 @@
 
 import CollectionValidationError from "./collectionValidationError";
 import EntityValidationError from "./entityValidationError";
-import {TestEntityV2Collection} from "./entityV2Collection.test.data";
+import { TestEntityV2Collection } from "./entityV2Collection.test.data";
 import EntityV2Collection from "./entityV2Collection";
-import {
-  defaultAssociatedTestEntityV2Dto,
-  defaultTestEntityV2Dto,
-  TestEntityV2,
-} from "./entityV2.test.data";
+import { defaultAssociatedTestEntityV2Dto, defaultTestEntityV2Dto, TestEntityV2 } from "./entityV2.test.data";
 
 beforeEach(() => {
   TestEntityV2Collection._cachedSchema = {};
@@ -121,7 +117,7 @@ describe("EntityV2Collection", () => {
 
       jest.spyOn(TestEntityV2Collection.prototype, "validateSchema");
 
-      new TestEntityV2Collection([defaultTestEntityV2Dto()], {validate: false});
+      new TestEntityV2Collection([defaultTestEntityV2Dto()], { validate: false });
 
       expect(TestEntityV2Collection.prototype.validateSchema).not.toHaveBeenCalled();
     });
@@ -203,7 +199,7 @@ describe("EntityV2Collection", () => {
 
     it("should throw if the data does not validate the collection entity schema", () => {
       const collection = new TestEntityV2Collection([]);
-      const dto = defaultTestEntityV2Dto({id: 42});
+      const dto = defaultTestEntityV2Dto({ id: 42 });
 
       expect.assertions(2);
       try {
@@ -218,7 +214,7 @@ describe("EntityV2Collection", () => {
       const collection = new TestEntityV2Collection([]);
       const entity1 = new TestEntityV2(defaultTestEntityV2Dto());
       const entity2 = new TestEntityV2(defaultTestEntityV2Dto());
-      const entity3 = new TestEntityV2(defaultTestEntityV2Dto({id: entity1.id}));
+      const entity3 = new TestEntityV2(defaultTestEntityV2Dto({ id: entity1.id }));
 
       expect.assertions(4);
       expect(() => collection.push(entity1)).not.toThrow();
@@ -236,30 +232,36 @@ describe("EntityV2Collection", () => {
      * Any change on the schema validation might change the default behavior of Entity and not protect by default
      * the entities against original data alteraiton.
      */
-    it.failing("should, with disabling clone option, not protect collection entities against original data alteration", () => {
-      const collection = new TestEntityV2Collection([]);
-      const dto = defaultTestEntityV2Dto();
+    it.failing(
+      "should, with disabling clone option, not protect collection entities against original data alteration",
+      () => {
+        const collection = new TestEntityV2Collection([]);
+        const dto = defaultTestEntityV2Dto();
 
-      expect.assertions(2);
-      collection.push(dto, {clone: false});
-      expect(collection.items[0]._props.name).toEqual(dto.name);
-      dto.name = "name altered";
-      expect(collection.items[0]._props.name).toEqual(dto.name);
-    });
+        expect.assertions(2);
+        collection.push(dto, { clone: false });
+        expect(collection.items[0]._props.name).toEqual(dto.name);
+        dto.name = "name altered";
+        expect(collection.items[0]._props.name).toEqual(dto.name);
+      },
+    );
 
     /*
      * Same comment as the previous test
      */
-    it.failing("should, with disabling clone option, not protect collection entities against original entity alteration", () => {
-      const collection = new TestEntityV2Collection([]);
-      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+    it.failing(
+      "should, with disabling clone option, not protect collection entities against original entity alteration",
+      () => {
+        const collection = new TestEntityV2Collection([]);
+        const entity = new TestEntityV2(defaultTestEntityV2Dto());
 
-      expect.assertions(2);
-      collection.push(entity, {clone: false});
-      expect(collection.items[0]._props.name).toEqual(entity.name);
-      entity._props.name = "name altered";
-      expect(collection.items[0]._props.name).toEqual(entity.name);
-    });
+        expect.assertions(2);
+        collection.push(entity, { clone: false });
+        expect(collection.items[0]._props.name).toEqual(entity.name);
+        entity._props.name = "name altered";
+        expect(collection.items[0]._props.name).toEqual(entity.name);
+      },
+    );
 
     it("should call the onItemPushed callback when an item is added to the collection", () => {
       const collection = new TestEntityV2Collection([]);
@@ -267,18 +269,18 @@ describe("EntityV2Collection", () => {
       const onItemPushed = jest.fn();
 
       expect.assertions(1);
-      collection.push(entity, {}, {onItemPushed});
+      collection.push(entity, {}, { onItemPushed });
       expect(onItemPushed).toHaveBeenLastCalledWith(entity);
     });
 
     it("should pass along validateBuildRules options", () => {
       const collection = new TestEntityV2Collection([]);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      const validateBuildRules = {opt1: "value1"};
+      const validateBuildRules = { opt1: "value1" };
       jest.spyOn(collection, "validateBuildRules");
 
       expect.assertions(1);
-      collection.push(entity, {}, {validateBuildRules});
+      collection.push(entity, {}, { validateBuildRules });
       expect(collection.validateBuildRules).toHaveBeenLastCalledWith(entity, validateBuildRules);
     });
   });
@@ -311,7 +313,7 @@ describe("EntityV2Collection", () => {
       expect.assertions(4);
       const entityDto1 = defaultTestEntityV2Dto();
       const collection = new TestEntityV2Collection([entityDto1]);
-      const entityDto2 = defaultTestEntityV2Dto({id: entityDto1.id, name: "test name updated"});
+      const entityDto2 = defaultTestEntityV2Dto({ id: entityDto1.id, name: "test name updated" });
       collection.pushOrReplace(entityDto2);
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]).toBeInstanceOf(TestEntityV2);
@@ -324,8 +326,8 @@ describe("EntityV2Collection", () => {
       const entityDto1 = defaultTestEntityV2Dto();
       const entityDto2 = defaultTestEntityV2Dto();
       const collection = new TestEntityV2Collection([entityDto1, entityDto2]);
-      const entityDto3 = defaultTestEntityV2Dto({name: entityDto1.name});
-      collection.pushOrReplace(entityDto3, {}, {replacePropertyName: "name"});
+      const entityDto3 = defaultTestEntityV2Dto({ name: entityDto1.name });
+      collection.pushOrReplace(entityDto3, {}, { replacePropertyName: "name" });
       expect(collection.items).toHaveLength(2);
       expect(collection.items[0]).toBeInstanceOf(TestEntityV2);
       expect(collection.items[0].id).toEqual(entityDto3.id);
@@ -336,8 +338,8 @@ describe("EntityV2Collection", () => {
       expect.assertions(4);
       const entityDto1 = defaultTestEntityV2Dto();
       const collection = new TestEntityV2Collection([entityDto1]);
-      const entityDto2 = defaultTestEntityV2Dto({name: entityDto1.name});
-      collection.pushOrReplace(entityDto2, {}, {replacePropertyName: "name"});
+      const entityDto2 = defaultTestEntityV2Dto({ name: entityDto1.name });
+      collection.pushOrReplace(entityDto2, {}, { replacePropertyName: "name" });
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]).toBeInstanceOf(TestEntityV2);
       expect(collection.items[0].id).toEqual(entityDto2.id);
@@ -348,10 +350,10 @@ describe("EntityV2Collection", () => {
       expect.assertions(1);
       const collection = new TestEntityV2Collection([]);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      const validateBuildRules = {opt1: "value1"};
+      const validateBuildRules = { opt1: "value1" };
       jest.spyOn(collection, "validateBuildRules");
 
-      collection.pushOrReplace(entity, {}, {validateBuildRules});
+      collection.pushOrReplace(entity, {}, { validateBuildRules });
       expect(collection.validateBuildRules).toHaveBeenLastCalledWith(entity, validateBuildRules);
     });
 
@@ -359,18 +361,18 @@ describe("EntityV2Collection", () => {
       expect.assertions(1);
       const entity1 = new TestEntityV2(defaultTestEntityV2Dto());
       const collection = new TestEntityV2Collection([entity1]);
-      const entity2 = new TestEntityV2(defaultTestEntityV2Dto({id: entity1.id}));
-      const validateBuildRules = {opt1: "value1"};
+      const entity2 = new TestEntityV2(defaultTestEntityV2Dto({ id: entity1.id }));
+      const validateBuildRules = { opt1: "value1" };
       jest.spyOn(collection, "validateBuildRules");
 
-      collection.pushOrReplace(entity2, {}, {validateBuildRules});
+      collection.pushOrReplace(entity2, {}, { validateBuildRules });
       expect(collection.validateBuildRules).toHaveBeenLastCalledWith(entity2, validateBuildRules);
     });
 
     it("throws if the data does not validate the collection entity schema", () => {
       expect.assertions(1);
       const collection = new TestEntityV2Collection([]);
-      const dto = defaultTestEntityV2Dto({id: 42});
+      const dto = defaultTestEntityV2Dto({ id: 42 });
       expect(() => collection.push(dto)).toThrowEntityValidationError("id", "type");
     });
   });
@@ -386,10 +388,10 @@ describe("EntityV2Collection", () => {
     it("validates the entity in the collection.", () => {
       expect.assertions(3);
       const collection = new TestEntityV2Collection([]);
-      const entity = new TestEntityV2({id: 42}, {validate: false});
+      const entity = new TestEntityV2({ id: 42 }, { validate: false });
       jest.spyOn(TestEntityV2.prototype, "validate");
 
-      collection.push(entity, {validate: false});
+      collection.push(entity, { validate: false });
       const result = collection.validate();
       expect(result.hasErrors()).toBeTruthy();
       expect(result.details[0].id.type).toBeDefined();
@@ -447,7 +449,7 @@ describe("EntityV2Collection", () => {
     it("should throw if the data does not validate the collection entity schema", () => {
       const collection = new TestEntityV2Collection([]);
       const entityDto1 = defaultTestEntityV2Dto();
-      const entityDto2 = defaultTestEntityV2Dto({id: 42});
+      const entityDto2 = defaultTestEntityV2Dto({ id: 42 });
 
       expect.assertions(2);
       try {
@@ -467,7 +469,7 @@ describe("EntityV2Collection", () => {
     it("should throw if the data does not validate the collection entity associated entity schema", () => {
       const collection = new TestEntityV2Collection([]);
       const entityDto1 = defaultTestEntityV2Dto();
-      const entityDto2 = defaultTestEntityV2Dto({associated_entity: defaultAssociatedTestEntityV2Dto({id: 42})});
+      const entityDto2 = defaultTestEntityV2Dto({ associated_entity: defaultAssociatedTestEntityV2Dto({ id: 42 }) });
 
       expect.assertions(3);
       try {
@@ -484,7 +486,7 @@ describe("EntityV2Collection", () => {
     it("should throw if the build rules do not validate", () => {
       const collection = new TestEntityV2Collection([]);
       const entity1 = new TestEntityV2(defaultTestEntityV2Dto());
-      const entity2 = new TestEntityV2(defaultTestEntityV2Dto({id: entity1.id}));
+      const entity2 = new TestEntityV2(defaultTestEntityV2Dto({ id: entity1.id }));
       const entity3 = new TestEntityV2(defaultTestEntityV2Dto());
 
       expect.assertions(2);
@@ -499,11 +501,11 @@ describe("EntityV2Collection", () => {
     it("should, with enabling the ignore invalid option, ignore entities not validating their schema", () => {
       const collection = new TestEntityV2Collection([]);
       const entity1 = defaultTestEntityV2Dto();
-      const entity2 = defaultTestEntityV2Dto({id: 42});
+      const entity2 = defaultTestEntityV2Dto({ id: 42 });
       const entity3 = defaultTestEntityV2Dto();
 
       expect.assertions(5);
-      collection.pushMany([entity1, entity2, entity3], {ignoreInvalidEntity: true});
+      collection.pushMany([entity1, entity2, entity3], { ignoreInvalidEntity: true });
       expect(collection.items).toHaveLength(2);
       expect(collection.items[0]).toBeInstanceOf(TestEntityV2);
       expect(collection.items[0].id).toEqual(entity1.id);
@@ -514,11 +516,11 @@ describe("EntityV2Collection", () => {
     it("should, with enabling the ignore invalid option, ignore entities not validating the collection build rules", () => {
       const collection = new TestEntityV2Collection([]);
       const entity1 = defaultTestEntityV2Dto();
-      const entity2 = defaultTestEntityV2Dto({id: entity1.id});
+      const entity2 = defaultTestEntityV2Dto({ id: entity1.id });
       const entity3 = defaultTestEntityV2Dto();
 
       expect.assertions(5);
-      collection.pushMany([entity1, entity2, entity3], {ignoreInvalidEntity: true});
+      collection.pushMany([entity1, entity2, entity3], { ignoreInvalidEntity: true });
       expect(collection.items).toHaveLength(2);
       expect(collection.items[0]).toBeInstanceOf(TestEntityV2);
       expect(collection.items[0].id).toEqual(entity1.id);
@@ -529,8 +531,8 @@ describe("EntityV2Collection", () => {
     it("should pass along entities options and local options to push function", () => {
       const collection = new TestEntityV2Collection([]);
       const entity = defaultTestEntityV2Dto();
-      const entitiesOptions = {ignoreInvalidEntity: true};
-      const options = {opt1: "value1"};
+      const entitiesOptions = { ignoreInvalidEntity: true };
+      const options = { opt1: "value1" };
       jest.spyOn(collection, "push");
 
       expect.assertions(1);

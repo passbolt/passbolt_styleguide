@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAnnouncement} from "../../../contexts/AnnouncementContext";
+import { withAnnouncement } from "../../../contexts/AnnouncementContext";
 
 /**
  * This component acts as an anchor for the different project announcements.
@@ -50,13 +50,9 @@ class ManageAnnouncements extends React.Component {
   render() {
     return (
       <>
-        {
-          this.props.announcementContext.announcements.map(({key, Announcement, AnnouncementProps}) =>
-            <Announcement
-              key={key}
-              onClose={ () => this.close(key)}
-              {...AnnouncementProps} />)
-        }
+        {this.props.announcementContext.announcements.map(({ key, Announcement, AnnouncementProps }) => (
+          <Announcement key={key} onClose={() => this.close(key)} {...AnnouncementProps} />
+        ))}
         {this.props.children}
       </>
     );
@@ -65,7 +61,7 @@ class ManageAnnouncements extends React.Component {
 
 ManageAnnouncements.propTypes = {
   announcementContext: PropTypes.any,
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 export default withAnnouncement(ManageAnnouncements);

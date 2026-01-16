@@ -14,9 +14,12 @@
 
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
-import {rolesCollectionDto} from "../../../../shared/models/entity/role/rolesCollection.test.data";
-import {settingsRbacsCollectionData, settingsRbacsCollectionFromRoleCollectionData} from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
-import {defaultAppContext} from "../../ApiAppContext.test.data";
+import { rolesCollectionDto } from "../../../../shared/models/entity/role/rolesCollection.test.data";
+import {
+  settingsRbacsCollectionData,
+  settingsRbacsCollectionFromRoleCollectionData,
+} from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
+import { defaultAppContext } from "../../ApiAppContext.test.data";
 
 /**
  * Default props.
@@ -48,7 +51,7 @@ export function defaultAdministrationRbacContext(context = {}) {
     clearContext: jest.fn(),
     save: jest.fn(),
     hasSettingsChanges: jest.fn(),
-    ...context
+    ...context,
   };
 }
 
@@ -62,7 +65,7 @@ export function populatedAdministrationRbacContext(context = {}) {
   return defaultAdministrationRbacContext({
     rbacs: new RbacsCollection(settingsRbacsCollectionFromRoleCollectionData(rolesCollection)),
     roles: new RolesCollection(rolesCollection),
-    ...context
+    ...context,
   });
 }
 
@@ -75,7 +78,7 @@ export function populatedAdministrationWithMissingRbacContext(context = {}) {
   return defaultAdministrationRbacContext({
     rbacs: new RbacsCollection(settingsRbacsCollectionData()),
     roles: new RolesCollection(rolesCollectionDto),
-    ...context
+    ...context,
   });
 }
 
@@ -90,6 +93,6 @@ export function administrationRbacContextWithUpdatedRbac(context = {}) {
   return populatedAdministrationRbacContext({
     rbacs,
     rbacsUpdated,
-    ...context
+    ...context,
   });
 }

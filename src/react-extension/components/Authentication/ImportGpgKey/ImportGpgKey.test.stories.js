@@ -12,34 +12,35 @@
  * @since         3.0.0
  */
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
-import ImportGpgKey, {ImportGpgKeyVariations} from "./ImportGpgKey";
-import {defaultProps} from "./ImportGpgKey.test.data";
+import { MemoryRouter, Route } from "react-router-dom";
+import ImportGpgKey, { ImportGpgKeyVariations } from "./ImportGpgKey";
+import { defaultProps } from "./ImportGpgKey.test.data";
 
 export default {
-  title: 'Components/Authentication/ImportGpgKey',
-  component: ImportGpgKey
+  title: "Components/Authentication/ImportGpgKey",
+  component: ImportGpgKey,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <ImportGpgKey {...args} {...routerProps}/>}/>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <ImportGpgKey {...args} {...routerProps} />} />
         </MemoryRouter>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 export const Setup = Template.bind({});
-Setup.args = defaultProps({displayAs: ImportGpgKeyVariations.SETUP});
+Setup.args = defaultProps({ displayAs: ImportGpgKeyVariations.SETUP });
 Setup.parameters = defaultParameters;
 
 export const Recover = Template.bind({});
-Recover.args = defaultProps({displayAs: ImportGpgKeyVariations.RECOVER});
+Recover.args = defaultProps({ displayAs: ImportGpgKeyVariations.RECOVER });
 Recover.parameters = defaultParameters;

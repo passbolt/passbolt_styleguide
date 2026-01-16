@@ -14,35 +14,33 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
-import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
-import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import {
-  withResourceTypesLocalStorage
-} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { withPrepareResourceContext } from "../../contexts/PrepareResourceContext";
+import { withPasswordExpiry } from "../../../react-extension/contexts/PasswordExpirySettingsContext";
+import { withPasswordPolicies } from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_SLUG
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import CloseSVG from "../../../img/svg/close.svg";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {withMetadataTypesSettingsLocalStorage} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { withMetadataTypesSettingsLocalStorage } from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import ResourceMetadataEntity from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
-import {SECRET_DATA_OBJECT_TYPE} from "../../../shared/models/entity/secretData/secretDataEntity";
+import { SECRET_DATA_OBJECT_TYPE } from "../../../shared/models/entity/secretData/secretDataEntity";
 
 /**
  * The component display error variations.
  * @type {Object}
  */
 export const ConfirmCreatePageRuleVariations = {
-  IN_DICTIONARY: 'In dictionary',
-  MINIMUM_ENTROPY: 'Minimum entropy'
+  IN_DICTIONARY: "In dictionary",
+  MINIMUM_ENTROPY: "Minimum entropy",
 };
 
 class ConfirmCreatePage extends React.PureComponent {
@@ -81,8 +79,8 @@ class ConfirmCreatePage extends React.PureComponent {
     // Caution: Hack to notify the previous component that the resource is part of a dictionary, it does not handle previous page original state.
     const backPath = "/webAccessibleResources/quickaccess/resources/create";
     const isPasswordInDictionary = this.props.location.state.rule === ConfirmCreatePageRuleVariations.IN_DICTIONARY;
-    const additionalState = {passwordInDictionary: isPasswordInDictionary};
-    this.props.history.replace({pathname: backPath, state: additionalState});
+    const additionalState = { passwordInDictionary: isPasswordInDictionary };
+    this.props.history.replace({ pathname: backPath, state: additionalState });
     this.props.history.goBack();
   }
   /**
@@ -118,7 +116,7 @@ class ConfirmCreatePage extends React.PureComponent {
     };
     const secretDto = {
       password: preparedResource.password,
-      description: ""
+      description: "",
     };
 
     if (isV5) {
@@ -126,7 +124,7 @@ class ConfirmCreatePage extends React.PureComponent {
       secretDto.object_type = SECRET_DATA_OBJECT_TYPE;
     }
 
-    this.setState({processing: true});
+    this.setState({ processing: true });
     try {
       const resource = await this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
       /*
@@ -135,7 +133,7 @@ class ConfirmCreatePage extends React.PureComponent {
        * password details page.
        */
       const goToComponentState = {
-        goBackEntriesCount: -3
+        goBackEntriesCount: -3,
       };
       this.props.prepareResourceContext.resetSecretGeneratorSettings();
       this.props.history.push(`/webAccessibleResources/quickaccess/resources/view/${resource.id}`, goToComponentState);
@@ -150,12 +148,12 @@ class ConfirmCreatePage extends React.PureComponent {
    */
   handleSubmitError(error) {
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     } else {
       // An unexpected error occurred.
       this.setState({
         error: error.message,
-        processing: false
+        processing: false,
       });
     }
   }
@@ -172,40 +170,61 @@ class ConfirmCreatePage extends React.PureComponent {
     return (
       <div className="confirm-create">
         <div className="back-link">
-          <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Edit password")}>
-            <CaretLeftSVG/>
-            <span className="primary-action-title"><Trans>Confirm password creation</Trans></span>
+          <a
+            href="#"
+            className="primary-action"
+            onClick={this.handleGoBackClick}
+            title={this.translate("Edit password")}
+          >
+            <CaretLeftSVG />
+            <span className="primary-action-title">
+              <Trans>Confirm password creation</Trans>
+            </span>
           </a>
-          <a href="#" className="secondary-action button-transparent button" onClick={this.handleGoBackClick} title={this.translate("Reject")}>
-            <CloseSVG className="close"/>
-            <span className="visually-hidden"><Trans>Reject</Trans></span>
+          <a
+            href="#"
+            className="secondary-action button-transparent button"
+            onClick={this.handleGoBackClick}
+            title={this.translate("Reject")}
+          >
+            <CloseSVG className="close" />
+            <span className="visually-hidden">
+              <Trans>Reject</Trans>
+            </span>
           </a>
         </div>
         <div className="form-container">
           <p>
-            {{
-              [ConfirmCreatePageRuleVariations.IN_DICTIONARY]: <Trans>The password is part of an exposed data breach.</Trans>,
-              [ConfirmCreatePageRuleVariations.MINIMUM_ENTROPY]: <Trans>The password is very weak and might be part of an exposed data breach.</Trans>,
-            }[this.props.location.state.rule]}
+            {
+              {
+                [ConfirmCreatePageRuleVariations.IN_DICTIONARY]: (
+                  <Trans>The password is part of an exposed data breach.</Trans>
+                ),
+                [ConfirmCreatePageRuleVariations.MINIMUM_ENTROPY]: (
+                  <Trans>The password is very weak and might be part of an exposed data breach.</Trans>
+                ),
+              }[this.props.location.state.rule]
+            }
           </p>
           <p>
             <Trans>
-              Are you sure you want to create the resource <strong>{{resourceName: this.props.location.state.resourceName}}</strong>?
+              Are you sure you want to create the resource{" "}
+              <strong>{{ resourceName: this.props.location.state.resourceName }}</strong>?
             </Trans>
           </p>
         </div>
         <div className="submit-wrapper input">
-          <button type="button" onClick={this.handleConfirmClick}
+          <button
+            type="button"
+            onClick={this.handleConfirmClick}
             className={`button primary attention big full-width ${this.state.processing ? "processing" : ""}`}
-            role="button" disabled={this.state.processing}>
+            role="button"
+            disabled={this.state.processing}
+          >
             <Trans>Proceed anyway</Trans>
-            {this.state.processing &&
-              <SpinnerSVG/>
-            }
+            {this.state.processing && <SpinnerSVG />}
           </button>
-          {this.state.error &&
-            <div className="error-message">{this.state.error}</div>
-          }
+          {this.state.error && <div className="error-message">{this.state.error}</div>}
         </div>
       </div>
     );
@@ -225,4 +244,14 @@ ConfirmCreatePage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ConfirmCreatePage))))))));
+export default withAppContext(
+  withRouter(
+    withResourceTypesLocalStorage(
+      withMetadataTypesSettingsLocalStorage(
+        withPrepareResourceContext(
+          withPasswordExpiry(withPasswordPolicies(withTranslation("common")(ConfirmCreatePage))),
+        ),
+      ),
+    ),
+  ),
+);

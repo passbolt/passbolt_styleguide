@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import FilterResourcesByShortcuts from "./FilterResourcesByShortcuts";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -33,11 +32,11 @@ export default class FilterResourcesByShortcutsPage {
       <Router>
         <AppContext.Provider value={props.context}>
           <MockTranslationProvider>
-            <FilterResourcesByShortcuts.WrappedComponent {...props}/>
+            <FilterResourcesByShortcuts.WrappedComponent {...props} />
           </MockTranslationProvider>
         </AppContext.Provider>
       </Router>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -45,22 +44,22 @@ export default class FilterResourcesByShortcutsPage {
    * Returns the filter resources by shortcuts
    */
   get filterResourcesByShortcuts() {
-    return this._page.container.querySelector('.navigation-secondary.navigation-shortcuts');
+    return this._page.container.querySelector(".navigation-secondary.navigation-shortcuts");
   }
 
   /**
    * Returns the item selected element
    */
   get itemSelected() {
-    return this._page.container.querySelector('.row.selected .main-cell-wrapper .main-cell button span').textContent;
+    return this._page.container.querySelector(".row.selected .main-cell-wrapper .main-cell button span").textContent;
   }
 
   /**
    * Returns the item element
    */
   async selectItem(index) {
-    const element = this._page.container.querySelectorAll('.row .main-cell-wrapper .main-cell button')[index - 1];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll(".row .main-cell-wrapper .main-cell button")[index - 1];
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -72,8 +71,3 @@ export default class FilterResourcesByShortcutsPage {
     return this.filterResourcesByShortcuts !== null;
   }
 }
-
-
-
-
-

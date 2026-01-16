@@ -13,22 +13,22 @@
  */
 
 import React from "react";
-import {defaultProps, propsWithDenyUiAction, standaloneTotpProps} from "./DisplayResourceDetailsTotp.test.data";
+import { defaultProps, propsWithDenyUiAction, standaloneTotpProps } from "./DisplayResourceDetailsTotp.test.data";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
 
 /**
  * DisplayResourceDetailsInformation stories
  */
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetailsTotp',
+  title: "Components/ResourceDetails/DisplayResourceDetailsTotp",
   component: DisplayResourceDetailsTotp,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <div className="page">
-        <div className="app" style={{margin: "-1rem"}}>
+        <div className="app" style={{ margin: "-1rem" }}>
           <div className="panel main">
             <div className="panel middle">
-              <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+              <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <div className="panel aside">
                   <div className="sidebar resource">
                     <div className="sidebar-content">
@@ -41,20 +41,18 @@ export default {
           </div>
         </div>
       </div>
-    )
-  ]
+    ),
+  ],
 };
 
-
-
 export const Default = {
-  args: defaultProps()
+  args: defaultProps(),
 };
 
 export const standaloneTotp = {
-  args: standaloneTotpProps()
+  args: standaloneTotpProps(),
 };
 
 export const DenyUiActionProps = {
-  args: propsWithDenyUiAction()
+  args: propsWithDenyUiAction(),
 };

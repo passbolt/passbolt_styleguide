@@ -14,16 +14,16 @@
 import NotifyError from "./NotifyError";
 
 export default {
-  title: 'Components/Common/Error/NotifyError',
-  component: NotifyError
+  title: "Components/Common/Error/NotifyError",
+  component: NotifyError,
 };
 
 export const Default = {
   args: {
     error: {
-      message: "The error message"
-    }
-  }
+      message: "The error message",
+    },
+  },
 };
 
 const error = new Error("The error message");
@@ -32,5 +32,5 @@ error.details = {
 };
 
 export const WithDetails = {
-  args: {error}
+  args: { error },
 };

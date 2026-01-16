@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,16 +12,16 @@
  * @since         2.13.0
  */
 
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * This component displays the user profile information
@@ -46,14 +45,15 @@ class UploadUserProfileAvatar extends React.Component {
     return {
       avatarFile: null, // The avatar to upload
       actions: {
-        processing: false // Actions flag about processing
+        processing: false, // Actions flag about processing
       },
-      errors: { // The list of errors
-        message: null // error message
+      errors: {
+        // The list of errors
+        message: null, // error message
       },
       validation: {
-        hasAlreadyBeenValidated: false // True if the form has been already validated once
-      }
+        hasAlreadyBeenValidated: false, // True if the form has been already validated once
+      },
     };
   }
 
@@ -151,7 +151,7 @@ class UploadUserProfileAvatar extends React.Component {
    * @param avatarFile
    */
   async select(avatarFile) {
-    await this.setState({avatarFile});
+    await this.setState({ avatarFile });
   }
 
   /**
@@ -163,7 +163,7 @@ class UploadUserProfileAvatar extends React.Component {
       return;
     }
 
-    await this.setState({validation: {hasAlreadyBeenValidated: true}});
+    await this.setState({ validation: { hasAlreadyBeenValidated: true } });
 
     await this.toggleProcessing();
     await this.validateAvatarInput();
@@ -173,7 +173,8 @@ class UploadUserProfileAvatar extends React.Component {
       return;
     }
     const avatarDto = await this.createAvatarDto();
-    await this.props.context.port.request("passbolt.users.update-avatar", this.user.id, avatarDto)
+    await this.props.context.port
+      .request("passbolt.users.update-avatar", this.user.id, avatarDto)
       .then(this.onUploadSuccess.bind(this))
       .catch(this.onUploadFailure.bind(this));
   }
@@ -183,9 +184,9 @@ class UploadUserProfileAvatar extends React.Component {
    * @returns {{filename: string, mimeType, fileBase64}}
    */
   async createAvatarDto() {
-    const {fileBase64, mimeType} = await this.readFile();
+    const { fileBase64, mimeType } = await this.readFile();
     const filename = this.selectedFilename;
-    return {fileBase64, mimeType, filename};
+    return { fileBase64, mimeType, filename };
   }
 
   /**
@@ -198,7 +199,7 @@ class UploadUserProfileAvatar extends React.Component {
     if (!avatarFile) {
       message = this.translate("A file is required.");
     }
-    return this.setState({errors: {message}});
+    return this.setState({ errors: { message } });
   }
 
   /**
@@ -218,10 +219,10 @@ class UploadUserProfileAvatar extends React.Component {
     console.error(error);
     await this.toggleProcessing();
     if (this.hasFileError(error.data)) {
-      this.setState({errors: {message: error.data.body.profile.avatar.file.validMimeType}});
+      this.setState({ errors: { message: error.data.body.profile.avatar.file.validMimeType } });
     } else {
       const errorDialogProps = {
-        error: error
+        error: error,
       };
       this.props.dialogContext.open(NotifyError, errorDialogProps);
     }
@@ -233,7 +234,14 @@ class UploadUserProfileAvatar extends React.Component {
    * @returns {*}
    */
   hasFileError(errorData) {
-    return errorData && errorData.body && errorData.body.profile && errorData.body.profile.avatar && errorData.body.profile.avatar.file && errorData.body.profile.avatar.file.validMimeType;
+    return (
+      errorData &&
+      errorData.body &&
+      errorData.body.profile &&
+      errorData.body.profile.avatar &&
+      errorData.body.profile.avatar.file &&
+      errorData.body.profile.avatar.file.validMimeType
+    );
   }
 
   /**
@@ -249,12 +257,12 @@ class UploadUserProfileAvatar extends React.Component {
   readFile() {
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
-      reader.onloadend = event => {
+      reader.onloadend = (event) => {
         try {
           const base64Url = event.target.result;
           const fileBase64 = base64Url.split(",")[1];
-          const mimeType = base64Url.split(',')[0].split(':')[1].split(';')[0];
-          resolve({fileBase64, mimeType});
+          const mimeType = base64Url.split(",")[0].split(":")[1].split(";")[0];
+          resolve({ fileBase64, mimeType });
         } catch (e) {
           reject(e);
         }
@@ -269,7 +277,7 @@ class UploadUserProfileAvatar extends React.Component {
    */
   async toggleProcessing() {
     const previousValue = this.state.actions.processing;
-    await this.setState({actions: Object.assign(this.state.actions, {processing: !previousValue})});
+    await this.setState({ actions: Object.assign(this.state.actions, { processing: !previousValue }) });
   }
 
   /**
@@ -277,7 +285,7 @@ class UploadUserProfileAvatar extends React.Component {
    */
   async refreshUserProfile() {
     const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user", true);
-    this.props.context.setContext({loggedInUser});
+    this.props.context.setContext({ loggedInUser });
   }
 
   /**
@@ -285,7 +293,7 @@ class UploadUserProfileAvatar extends React.Component {
    * @return {string}
    */
   get selectedFilename() {
-    return this.state.avatarFile ? this.state.avatarFile.name : '';
+    return this.state.avatarFile ? this.state.avatarFile.name : "";
   }
 
   /**
@@ -305,19 +313,21 @@ class UploadUserProfileAvatar extends React.Component {
         className="update-avatar-dialog"
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}
-        title={this.translate("Edit Avatar")}>
-        <form
-          onSubmit={this.handleUpload} noValidate>
-
+        title={this.translate("Edit Avatar")}
+      >
+        <form onSubmit={this.handleUpload} noValidate>
           <div className="form-content">
-            <div className={`input file required ${this.areActionsAllowed ? "" : "disabled"} ${this.hasValidationError ? "error" : ""}`}>
+            <div
+              className={`input file required ${this.areActionsAllowed ? "" : "disabled"} ${this.hasValidationError ? "error" : ""}`}
+            >
               <input
                 aria-required={true}
                 id="dialog-upload-avatar-input"
                 type="file"
                 ref={this.fileUploaderRef}
                 onChange={this.handleAvatarFileSelected}
-                accept="image/*"/>
+                accept="image/*"
+              />
               <label htmlFor="dialog-upload-avatar-input">
                 <Trans>Avatar</Trans>
               </label>
@@ -326,18 +336,20 @@ class UploadUserProfileAvatar extends React.Component {
                   type="text"
                   disabled={true}
                   placeholder={this.translate("No file selected")}
-                  defaultValue={this.selectedFilename}/>
+                  defaultValue={this.selectedFilename}
+                />
                 <button
-                  type='button'
+                  type="button"
                   disabled={!this.areActionsAllowed}
                   className="primary"
-                  onClick={this.handleSelectFile}>
-                  <span className='ellipsis'><Trans>Choose a file</Trans></span>
+                  onClick={this.handleSelectFile}
+                >
+                  <span className="ellipsis">
+                    <Trans>Choose a file</Trans>
+                  </span>
                 </button>
               </div>
-              {this.state.errors.message &&
-              <div className="error-message">{this.state.errors.message}</div>
-              }
+              {this.state.errors.message && <div className="error-message">{this.state.errors.message}</div>}
             </div>
           </div>
 
@@ -345,13 +357,14 @@ class UploadUserProfileAvatar extends React.Component {
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
-              onClick={this.handleCancel}/>
+              onClick={this.handleCancel}
+            />
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
-              value={this.translate("Save")}/>
+              value={this.translate("Save")}
+            />
           </div>
-
         </form>
       </DialogWrapper>
     );
@@ -366,4 +379,4 @@ UploadUserProfileAvatar.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(UploadUserProfileAvatar))));
+export default withAppContext(withActionFeedback(withDialog(withTranslation("common")(UploadUserProfileAvatar))));

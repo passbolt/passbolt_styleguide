@@ -12,7 +12,6 @@ export function defaultAppContext(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 }
 
-
 /**
  * Default props
  * @returns {any}
@@ -21,6 +20,6 @@ export function defaultProps() {
   return {
     history: {
       push: jest.fn(),
-    }
+    },
   };
 }

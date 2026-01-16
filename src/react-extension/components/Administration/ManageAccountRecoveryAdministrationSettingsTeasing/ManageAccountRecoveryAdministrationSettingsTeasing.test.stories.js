@@ -13,25 +13,27 @@
  */
 import React from "react";
 import ManageAccountRecoveryAdministrationSettingsTeasing from "./ManageAccountRecoveryAdministrationSettingsTeasing";
-import {defaultProps} from "./ManageAccountRecoveryAdministrationSettingsTeasing.test.data";
+import { defaultProps } from "./ManageAccountRecoveryAdministrationSettingsTeasing.test.data";
 
 export default {
-  title: 'Components/Administration/ManageAccountRecoveryAdministrationSettingsTeasing',
+  title: "Components/Administration/ManageAccountRecoveryAdministrationSettingsTeasing",
   component: ManageAccountRecoveryAdministrationSettingsTeasing,
-  decorators: [(Story, {args}) =>
-    <div className="page administration">
-      <div className="app" >
-        <div className="panel main">
-          <div className="panel middle">
-            <div className="middle-right">
-              <div className="main-page password-policies-settings">
-                <Story {...args}/>
+  decorators: [
+    (Story, { args }) => (
+      <div className="page administration">
+        <div className="app">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="main-page password-policies-settings">
+                  <Story {...args} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    ),
   ],
 };
 

@@ -15,12 +15,15 @@
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultMetadataKeysDtos} from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
-import {defaultMetadataTypesSettingsV4Dto, defaultMetadataTypesSettingsV50FreshDto} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { defaultMetadataKeysDtos } from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
+import {
+  defaultMetadataTypesSettingsV4Dto,
+  defaultMetadataTypesSettingsV50FreshDto,
+} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import {
   resourceTypePasswordAndDescriptionDto,
   resourceTypePasswordDescriptionTotpDto,
@@ -29,10 +32,10 @@ import {
   resourceTypeV5DefaultDto,
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5PasswordStringDto,
-  resourceTypeV5TotpDto
+  resourceTypeV5TotpDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
+import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
 
 /**
  * Default props.
@@ -44,11 +47,11 @@ export const defaultProps = (props = {}) => ({
   dialogContext: defaultDialogContext(),
   actionFeedbackContext: defaultActionFeedbackContext(),
   administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-    selectedAdministration: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES
+    selectedAdministration: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES,
   }),
   metadataSettingsServiceWorkerService: {
     findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
-    saveTypesSettings: jest.fn(settings => new MetadataTypesSettingsEntity(settings.toDto())),
+    saveTypesSettings: jest.fn((settings) => new MetadataTypesSettingsEntity(settings.toDto())),
   },
   createPortal: jest.fn,
   resourceTypesServiceWorkerService: {
@@ -57,48 +60,53 @@ export const defaultProps = (props = {}) => ({
   metadataKeysServiceWorkerService: {
     findAll: () => new MetadataKeysCollection(defaultMetadataKeysDtos()),
   },
-  ...props
-});
-
-export const withoutMetadataKeys = (props = {}) => defaultProps({
-  metadataKeysServiceWorkerService: {
-    findAll: () => new MetadataKeysCollection([]),
-  },
   ...props,
 });
 
-const deleted = {deleted: "2025-02-24T09:00:00+00:00"};
-export const withOnlyTotpV5Enabled = (props = {}) => defaultProps({
-  resourceTypesServiceWorkerService: {
-    findAllByDeletedAndNonDeleted: () => new ResourceTypesCollection([
-      resourceTypePasswordStringDto(deleted),
-      resourceTypePasswordAndDescriptionDto(deleted),
-      resourceTypePasswordDescriptionTotpDto(deleted),
-      resourceTypeTotpDto(deleted),
-      resourceTypeV5DefaultDto(deleted),
-      resourceTypeV5PasswordStringDto(deleted),
-      resourceTypeV5DefaultTotpDto(deleted),
-      resourceTypeV5TotpDto(),
-    ]),
-  },
-  ...props,
-});
+export const withoutMetadataKeys = (props = {}) =>
+  defaultProps({
+    metadataKeysServiceWorkerService: {
+      findAll: () => new MetadataKeysCollection([]),
+    },
+    ...props,
+  });
 
-export const withOnlyTotpV4Enabled = (props = {}) => defaultProps({
-  resourceTypesServiceWorkerService: {
-    findAllByDeletedAndNonDeleted: () => new ResourceTypesCollection([
-      resourceTypePasswordStringDto(deleted),
-      resourceTypePasswordAndDescriptionDto(deleted),
-      resourceTypePasswordDescriptionTotpDto(deleted),
-      resourceTypeTotpDto(),
-      resourceTypeV5DefaultDto(deleted),
-      resourceTypeV5PasswordStringDto(deleted),
-      resourceTypeV5DefaultTotpDto(deleted),
-      resourceTypeV5TotpDto(deleted),
-    ]),
-  },
-  metadataSettingsServiceWorkerService: {
-    findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
-  },
-  ...props,
-});
+const deleted = { deleted: "2025-02-24T09:00:00+00:00" };
+export const withOnlyTotpV5Enabled = (props = {}) =>
+  defaultProps({
+    resourceTypesServiceWorkerService: {
+      findAllByDeletedAndNonDeleted: () =>
+        new ResourceTypesCollection([
+          resourceTypePasswordStringDto(deleted),
+          resourceTypePasswordAndDescriptionDto(deleted),
+          resourceTypePasswordDescriptionTotpDto(deleted),
+          resourceTypeTotpDto(deleted),
+          resourceTypeV5DefaultDto(deleted),
+          resourceTypeV5PasswordStringDto(deleted),
+          resourceTypeV5DefaultTotpDto(deleted),
+          resourceTypeV5TotpDto(),
+        ]),
+    },
+    ...props,
+  });
+
+export const withOnlyTotpV4Enabled = (props = {}) =>
+  defaultProps({
+    resourceTypesServiceWorkerService: {
+      findAllByDeletedAndNonDeleted: () =>
+        new ResourceTypesCollection([
+          resourceTypePasswordStringDto(deleted),
+          resourceTypePasswordAndDescriptionDto(deleted),
+          resourceTypePasswordDescriptionTotpDto(deleted),
+          resourceTypeTotpDto(),
+          resourceTypeV5DefaultDto(deleted),
+          resourceTypeV5PasswordStringDto(deleted),
+          resourceTypeV5DefaultTotpDto(deleted),
+          resourceTypeV5TotpDto(deleted),
+        ]),
+    },
+    metadataSettingsServiceWorkerService: {
+      findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
+    },
+    ...props,
+  });

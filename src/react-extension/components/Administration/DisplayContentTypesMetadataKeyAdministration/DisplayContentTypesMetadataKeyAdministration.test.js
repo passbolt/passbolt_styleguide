@@ -17,25 +17,23 @@ import {
   defaultProps,
   defaultSettingsAndMultipleActiveKeysProps,
   defaultSettingsAndMultipleKeysProps,
-  defaultSettingsAndSingleActiveKeyProps
+  defaultSettingsAndSingleActiveKeyProps,
 } from "./DisplayContentTypesMetadataKeyAdministration.test.data";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
+import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {screen, waitFor} from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultAdminUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultAdminUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 import expect from "expect";
 import ConfirmMetadataKeyRotationDialog from "./ConfirmMetadataKeyRotationDialog";
-import {defaultMetadataKeyDto} from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
+import { defaultMetadataKeyDto } from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
-import {act} from "react";
+import { act } from "react";
 
 describe("DisplayContentTypesMetadataKeyAdministration", () => {
   beforeEach(() => {
@@ -44,7 +42,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
   });
 
   describe("As a signed-in administrator I can see the content type metadata key administration", () => {
-    it("As a signed-in administrator I can see the default settings", async() => {
+    it("As a signed-in administrator I can see the default settings", async () => {
       expect.assertions(11);
       const props = defaultProps();
 
@@ -58,20 +56,20 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
       expect(page.metadataActiveKeysWrapper).toBeNull();
       expect(page.noMetadataActiveKeysWrapper).not.toBeNull();
-      expect(page.noMetadataActiveKeysWrapper.textContent).toContain("You need to generate a new shared key to enable encrypted metadata.");
+      expect(page.noMetadataActiveKeysWrapper.textContent).toContain(
+        "You need to generate a new shared key to enable encrypted metadata.",
+      );
       expect(page.generateKeyButton).not.toBeNull();
       expect(page.generateKeyButton.textContent).toContain("Generate key");
       expect(page.metadataExpiredKeysWrapper).toBeNull();
     });
 
-    it("As a signed-in administrator I can see the settings configured with an active metadata key.", async() => {
+    it("As a signed-in administrator I can see the settings configured with an active metadata key.", async () => {
       expect.assertions(12);
       const props = defaultSettingsAndSingleActiveKeyProps();
 
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
 
       expect(page.title.textContent).toBe("Metadata key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
@@ -79,7 +77,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
       expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
@@ -87,24 +85,24 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.metadataExpiredKeysWrapper).toBeNull();
     });
 
-    it("As a signed-in administrator I can rotate metadata key if there is one active.", async() => {
+    it("As a signed-in administrator I can rotate metadata key if there is one active.", async () => {
       expect.assertions(13);
       const props = defaultSettingsAndSingleActiveKeyProps();
 
-      const metadataKeysDto = [defaultMetadataKeyDto({
-        armored_key: pgpKeys.eddsa_ed25519.public,
-        fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
-      })];
+      const metadataKeysDto = [
+        defaultMetadataKeyDto({
+          armored_key: pgpKeys.eddsa_ed25519.public,
+          fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
+        }),
+      ];
 
       jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
       jest.spyOn(props.metadataKeysServiceWorkerService, "rotate");
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
 
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
@@ -112,87 +110,89 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
       expect(page.metadataExpiredKeysWrapper).toBeNull();
 
-      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+      jest
+        .spyOn(props.metadataKeysServiceWorkerService, "findAll")
+        .mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
       await page.click(page.rotateKeyButton);
 
       expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmMetadataKeyRotationDialog, expect.anything());
       expect(props.metadataKeysServiceWorkerService.rotate).toHaveBeenCalled();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(
+        pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, "$& "),
+      );
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
     });
 
-    it("As a signed-in administrator I can see the settings configured with multiple active metadata keys.", async() => {
+    it("As a signed-in administrator I can see the settings configured with multiple active metadata keys.", async () => {
       expect.assertions(15);
       const props = defaultSettingsAndMultipleActiveKeysProps();
 
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
       expect(page.title.textContent).toBe("Metadata key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
       expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
       expect(page.metadataExpiredKeysWrapper).toBeNull();
     });
 
-    it("As a signed-in administrator I can resume rotate metadata key if there are multiple active.", async() => {
+    it("As a signed-in administrator I can resume rotate metadata key if there are multiple active.", async () => {
       expect.assertions(15);
       const props = defaultSettingsAndMultipleActiveKeysProps();
 
-      const metadataKeysDto = [defaultMetadataKeyDto({
-        armored_key: pgpKeys.betty.public,
-        fingerprint: pgpKeys.betty.fingerprint,
-      })];
+      const metadataKeysDto = [
+        defaultMetadataKeyDto({
+          armored_key: pgpKeys.betty.public,
+          fingerprint: pgpKeys.betty.fingerprint,
+        }),
+      ];
 
       jest.spyOn(props.metadataKeysServiceWorkerService, "resumeRotation");
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
 
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
       expect(page.rotateKeyButton.textContent).toStrictEqual("Resume rotation");
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
       expect(page.metadataExpiredKeysWrapper).toBeNull();
 
-      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+      jest
+        .spyOn(props.metadataKeysServiceWorkerService, "findAll")
+        .mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
       await page.click(page.rotateKeyButton);
 
       expect(props.metadataKeysServiceWorkerService.resumeRotation).toHaveBeenCalled();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
     });
 
-    it("As a signed-in administrator I can see the settings configured with multiple active and expired metadata keys.", async() => {
+    it("As a signed-in administrator I can see the settings configured with multiple active and expired metadata keys.", async () => {
       expect.assertions(24);
       const props = defaultSettingsAndMultipleKeysProps();
 
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
 
       expect(page.title.textContent).toBe("Metadata key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
@@ -200,27 +200,29 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
       expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
       expect(page.metadataExpiredKeysWrapper).not.toBeNull();
-      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.algorithm.toLowerCase());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.length.toString());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00")); // created date
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-03-04T13:59:11+00:00")); // expired date
-      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(
+        pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, "$& "),
+      );
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2023-10-04T15:11:45+00:00")); // expired date
     });
 
-    it("As a signed-in administrator I can resume rotate metadata key if there are multiple active and expired.", async() => {
+    it("As a signed-in administrator I can resume rotate metadata key if there are multiple active and expired.", async () => {
       expect.assertions(26);
       const props = defaultSettingsAndMultipleKeysProps();
 
@@ -238,62 +240,68 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
           armored_key: pgpKeys.eddsa_ed25519.public,
           fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
           expired: "2023-10-04T15:11:45+00:00",
-        })
+        }),
       ];
 
       jest.spyOn(props.metadataKeysServiceWorkerService, "resumeRotation");
       jest.spyOn(props.metadataKeysServiceWorkerService, "rotate");
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
 
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
       expect(page.metadataExpiredKeysWrapper).not.toBeNull();
-      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.algorithm.toLowerCase());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.length.toString());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00")); // created date
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-03-04T13:59:11+00:00")); // expired date
-      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(
+        pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, "$& "),
+      );
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2023-10-04T15:11:45+00:00")); // expired date
       expect(page.rotateKeyButton.textContent).toStrictEqual("Resume rotation");
       expect(page.resumeRotateKeyButton.textContent).toStrictEqual("Resume rotation");
 
-      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+      jest
+        .spyOn(props.metadataKeysServiceWorkerService, "findAll")
+        .mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
       await page.click(page.rotateKeyButton);
 
       metadataKeysDto.splice(1, 1);
-      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+      jest
+        .spyOn(props.metadataKeysServiceWorkerService, "findAll")
+        .mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
       await page.click(page.resumeRotateKeyButton);
 
       metadataKeysDto.splice(1, 1);
-      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+      jest
+        .spyOn(props.metadataKeysServiceWorkerService, "findAll")
+        .mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
       await page.click(page.resumeRotateKeyButton);
 
       expect(props.metadataKeysServiceWorkerService.resumeRotation).toHaveBeenCalledTimes(3);
       expect(props.metadataKeysServiceWorkerService.rotate).toHaveBeenCalledTimes(0);
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
     });
   });
 
   describe("As a signed-in administrator, I should be able to modify the settings ", () => {
-    it("displays a changes warning message when I modify the settings", async() => {
+    it("displays a changes warning message when I modify the settings", async () => {
       expect.assertions(2);
       const props = defaultProps();
 
@@ -301,15 +309,21 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       await waitForTrue(() => page.exists());
       await page.click(page.disallowUsageOfPersonalKeysInput);
       expect(page.formBanner).not.toBeNull();
-      expect(page.formBanner.textContent).toEqual("Warning: Don't forget to save your settings to apply your modification.");
+      expect(page.formBanner.textContent).toEqual(
+        "Warning: Don't forget to save your settings to apply your modification.",
+      );
     });
 
-    it("blocks the form edition when loading the settings", async() => {
+    it("blocks the form edition when loading the settings", async () => {
       expect.assertions(12);
       let requestGetPromiseResolver;
       const props = defaultProps();
-      jest.spyOn(props.metadataSettingsServiceWorkerService, "findKeysSettings")
-        .mockImplementation(() => new Promise(resolve => { requestGetPromiseResolver = resolve; }));
+      jest.spyOn(props.metadataSettingsServiceWorkerService, "findKeysSettings").mockImplementation(
+        () =>
+          new Promise((resolve) => {
+            requestGetPromiseResolver = resolve;
+          }),
+      );
 
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
       await waitForTrue(() => page.exists());
@@ -339,7 +353,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
   });
 
   describe("As a signed-in administrator, I can generate a shared metadata key if none are active", () => {
-    it("displays a changes warning message when I generate a key", async() => {
+    it("displays a changes warning message when I generate a key", async () => {
       expect.assertions(2);
       const props = defaultProps();
 
@@ -347,10 +361,12 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       await waitForTrue(() => page.exists());
       await page.click(page.generateKeyButton);
       expect(page.formBanner).not.toBeNull();
-      expect(page.formBanner.textContent).toEqual("Warning: Don't forget to save your settings to apply your modification.");
+      expect(page.formBanner.textContent).toEqual(
+        "Warning: Don't forget to save your settings to apply your modification.",
+      );
     });
 
-    it("displays the new key details when I generate a key", async() => {
+    it("displays the new key details when I generate a key", async () => {
       expect.assertions(7);
       const props = defaultProps();
 
@@ -359,7 +375,9 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       await page.click(page.generateKeyButton);
 
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(
+        pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, "$& "),
+      );
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
       expect(page.metadataActiveKeysWrapper.textContent).toContain("Pending");
@@ -367,7 +385,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.metadataExpiredKeysWrapper).toBeNull();
     });
 
-    it("displays an unexpected error dialog if the key cannot be generated", async() => {
+    it("displays an unexpected error dialog if the key cannot be generated", async () => {
       expect.assertions(1);
       const error = new Error("Unexpected test error");
       const props = defaultProps();
@@ -378,67 +396,73 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
       await waitForTrue(() => page.exists());
       await page.click(page.generateKeyButton);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error });
     });
 
-    it("does not display the generate key button if there is already an active key", async() => {
+    it("does not display the generate key button if there is already an active key", async () => {
       expect.assertions(1);
       const props = defaultSettingsAndSingleActiveKeyProps();
 
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
     });
   });
 
   describe("As a signed-in administrator, I cannot save if the settings does not validate", () => {
-    it("displays error messages when there is no active keys and I did not generate one", async() => {
+    it("displays error messages when there is no active keys and I did not generate one", async () => {
       expect.assertions(5);
       const props = defaultProps();
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
-      const saveButton = await screen.findByRole("button", {name: /save/i});
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
+      const saveButton = await screen.findByRole("button", { name: /save/i });
       await page.click(saveButton);
       expect(page.errorMessagesCount).toBe(1);
       expect(page.requiredSharedMetadataKeyError).not.toBeNull();
       expect(page.requiredSharedMetadataKeyError.textContent).toContain("A shared metadata key is required.");
       expect(page.formBanner).not.toBeNull();
-      expect(page.formBanner.textContent).toEqual("Warning: A shared metadata key is required to save the metadata keys settings.");
+      expect(page.formBanner.textContent).toEqual(
+        "Warning: A shared metadata key is required to save the metadata keys settings.",
+      );
     });
 
-    it("I can see the form disabled if administrator has missing keys", async() => {
+    it("I can see the form disabled if administrator has missing keys", async () => {
       expect.assertions(3);
-      const props = defaultProps({context: defaultAdministratorAppContext({loggedInUser: defaultAdminUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})})});
+      const props = defaultProps({
+        context: defaultAdministratorAppContext({
+          loggedInUser: defaultAdminUserDto({ missing_metadata_key_ids: [uuidv4()] }, { withRole: true }),
+        }),
+      });
 
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
       await waitForTrue(() => page.exists());
 
       expect(page.exists()).toStrictEqual(true);
-      expect(page.select('.actions-wrapper button.button.primary').hasAttribute("disabled")).toBeTruthy();
+      expect(page.select(".actions-wrapper button.button.primary").hasAttribute("disabled")).toBeTruthy();
 
-      expect(page.formBanner.textContent).toBe("Warning: You are missing shared metadata keys. Ask another administrator to share them with you to update the metadata keys settings.");
+      expect(page.formBanner.textContent).toBe(
+        "Warning: You are missing shared metadata keys. Ask another administrator to share them with you to update the metadata keys settings.",
+      );
     });
   });
 
   describe("As a signed-in administrator, I can save the settings", () => {
-    it("saves a newly generated key", async() => {
+    it("saves a newly generated key", async () => {
       expect.assertions(10);
       const props = defaultProps();
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
       await page.click(page.generateKeyButton);
-      const saveButton = await screen.findByRole("button", {name: /save/i});
+      const saveButton = await screen.findByRole("button", { name: /save/i });
       await page.click(saveButton);
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The metadata key settings were updated.");
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
+        "The metadata key settings were updated.",
+      );
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(
+        pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, "$& "),
+      );
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
@@ -447,19 +471,19 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.formBanner).toBeNull();
     });
 
-    it("saves again the original settings", async() => {
+    it("saves again the original settings", async () => {
       expect.assertions(10);
       const props = defaultSettingsAndSingleActiveKeyProps();
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
-      const saveButton = await screen.findByRole("button", {name: /save/i});
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
+      const saveButton = await screen.findByRole("button", { name: /save/i });
       await page.click(saveButton);
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The metadata key settings were updated.");
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
+        "The metadata key settings were updated.",
+      );
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
-      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, "$& "));
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
@@ -468,7 +492,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.formBanner).toBeNull();
     });
 
-    it("displays an unexpected error dialog if the settings cannot be saved", async() => {
+    it("displays an unexpected error dialog if the settings cannot be saved", async () => {
       expect.assertions(1);
       const props = defaultSettingsAndSingleActiveKeyProps();
       const error = new Error("Unexpected test error");
@@ -476,12 +500,10 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
         throw error;
       });
       let page;
-      await act(
-        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
-      );
-      const saveButton = await screen.findByRole("button", {name: /save/i});
+      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
+      const saveButton = await screen.findByRole("button", { name: /save/i });
       await page.click(saveButton);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error });
     });
   });
 });

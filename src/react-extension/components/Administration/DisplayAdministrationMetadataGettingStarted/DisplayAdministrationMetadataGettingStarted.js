@@ -13,16 +13,16 @@
  */
 
 import PropTypes from "prop-types";
-import React, {Component} from 'react';
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { createSafePortal } from "../../../../shared/utils/portals";
 import InfoSVG from "../../../../img/svg/info.svg";
-import {withAdministrationEncryptedMetadataGettingStarted} from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
+import { withAdministrationEncryptedMetadataGettingStarted } from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 import GettingStartedWithEncryptedMetadataServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
-import {withRouter} from "react-router-dom/cjs/react-router-dom.min";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
+import { withDialog } from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class DisplayAdministrationMetadataGettingStarted extends Component {
@@ -46,7 +46,7 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
     }
 
     const canBeConfigured = this.props.metadataGettingStartedSettings?.enabled === true;
-    this.setState({canBeConfigured});
+    this.setState({ canBeConfigured });
   }
 
   /**
@@ -57,7 +57,7 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
     return {
       canBeConfigured: this.props.metadataGettingStartedSettings?.enabled ?? null,
       isProcessing: false,
-      enableEncryptedMetadata: true
+      enableEncryptedMetadata: true,
     };
   }
 
@@ -79,9 +79,9 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
     if (this.hasAllInputDisabled()) {
       return;
     }
-    const {value, name} = event.target;
+    const { value, name } = event.target;
     this.setState({
-      [name]: value === "true"
+      [name]: value === "true",
     });
   }
 
@@ -90,7 +90,11 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
    * @returns {boolean}
    */
   hasAllInputDisabled() {
-    return this.state.canBeConfigured !== true || this.props.context.siteSettings.isFeatureBeta("metadata") || this.state.isProcessing;
+    return (
+      this.state.canBeConfigured !== true ||
+      this.props.context.siteSettings.isFeatureBeta("metadata") ||
+      this.state.isProcessing
+    );
   }
 
   /**
@@ -111,7 +115,7 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
       return;
     }
     const service = new GettingStartedWithEncryptedMetadataServiceWorkerService(this.props.context.port);
-    this.setState({isProcessing: true});
+    this.setState({ isProcessing: true });
 
     try {
       if (this.state.enableEncryptedMetadata) {
@@ -120,11 +124,13 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
         await service.keepLegacyClearTextMetadata();
       }
       await this.props.administrationEncryptedMetadataGettingStartedContext.update();
-      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The metadata encryption strategy has been saved successfully."));
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.props.t("The metadata encryption strategy has been saved successfully."),
+      );
       this.props.history.push("/app/administration");
     } catch (error) {
       console.error(error);
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
     }
 
     this.setState({
@@ -143,71 +149,129 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
         <div id="metadata-getting-started" className="main-column">
           <div className="main-content">
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
-              <h3 className="title"><label><Trans>Getting started</Trans></label></h3>
+              <h3 className="title">
+                <label>
+                  <Trans>Getting started</Trans>
+                </label>
+              </h3>
               <p className="description">
-                <Trans>Some of the latest features such as the new resource types require the encrypted metadata feature to be enabled.</Trans><br/>
-                <Trans>Here you can choose to enable it or do it later when ready. We recommend making a backup before, just in case.</Trans>
+                <Trans>
+                  Some of the latest features such as the new resource types require the encrypted metadata feature to
+                  be enabled.
+                </Trans>
+                <br />
+                <Trans>
+                  Here you can choose to enable it or do it later when ready. We recommend making a backup before, just
+                  in case.
+                </Trans>
               </p>
 
-              <h4><Trans>Enable Encrypted Metadata</Trans></h4>
+              <h4>
+                <Trans>Enable Encrypted Metadata</Trans>
+              </h4>
               <div className="radiolist-alt">
-                <div className={`input radio ${this.state.enableEncryptedMetadata ? 'checked' : ''}`}>
-                  <input type="radio"
+                <div className={`input radio ${this.state.enableEncryptedMetadata ? "checked" : ""}`}>
+                  <input
+                    type="radio"
                     value="true"
                     onChange={this.handleInputChange}
                     name="enableEncryptedMetadata"
                     checked={this.state.enableEncryptedMetadata}
                     id="enable-encrypted-metadata"
-                    disabled={this.hasAllInputDisabled()} />
+                    disabled={this.hasAllInputDisabled()}
+                  />
                   <label htmlFor="enable-encrypted-metadata">
-                    <span className="name bold"><Trans>Enable encrypted metadata and new resource types (recommended)</Trans></span>
+                    <span className="name bold">
+                      <Trans>Enable encrypted metadata and new resource types (recommended)</Trans>
+                    </span>
                     <span className="info">
-                      <Trans>Selecting this option will improve the security; enable encrypted metadata and new resource types.</Trans>
+                      <Trans>
+                        Selecting this option will improve the security; enable encrypted metadata and new resource
+                        types.
+                      </Trans>
                     </span>
                   </label>
                 </div>
 
-                <div className={`input radio ${!this.state.enableEncryptedMetadata ? 'checked' : ''}`}>
-                  <input type="radio"
+                <div className={`input radio ${!this.state.enableEncryptedMetadata ? "checked" : ""}`}>
+                  <input
+                    type="radio"
                     value="false"
                     onChange={this.handleInputChange}
                     name="enableEncryptedMetadata"
                     checked={!this.state.enableEncryptedMetadata}
                     id="keep-legacy-cleartext-metadata"
-                    disabled={this.hasAllInputDisabled()} />
+                    disabled={this.hasAllInputDisabled()}
+                  />
                   <label htmlFor="keep-legacy-cleartext-metadata">
-                    <span className="name bold"><Trans>Keep legacy cleartext metadata</Trans></span>
+                    <span className="name bold">
+                      <Trans>Keep legacy cleartext metadata</Trans>
+                    </span>
                     <span className="info">
-                      <Trans>Selecting this option will not change your current configuration. You will be able to enable encrypted metadata and new resource types later.</Trans>
+                      <Trans>
+                        Selecting this option will not change your current configuration. You will be able to enable
+                        encrypted metadata and new resource types later.
+                      </Trans>
                     </span>
                   </label>
                 </div>
               </div>
             </form>
           </div>
-          {isFeatureBeta &&
+          {isFeatureBeta && (
             <div className="warning message">
               <div className="form-banner">
-                <b><Trans>Warning:</Trans></b> <Trans>Your current API version includes beta support for encrypted metadata and new resource types.</Trans> <Trans>To ensure stability and avoid potential issues, upgrade to the latest version before enabling these features.</Trans>
+                <b>
+                  <Trans>Warning:</Trans>
+                </b>{" "}
+                <Trans>
+                  Your current API version includes beta support for encrypted metadata and new resource types.
+                </Trans>{" "}
+                <Trans>
+                  To ensure stability and avoid potential issues, upgrade to the latest version before enabling these
+                  features.
+                </Trans>
               </div>
             </div>
-          }
+          )}
         </div>
         <div className="actions-wrapper">
-          <button id="save-settings" className="button primary form" type="button" disabled={this.hasAllInputDisabled()} onClick={this.handleFormSubmit}>
-            <span><Trans>Save</Trans></span>
+          <button
+            id="save-settings"
+            className="button primary form"
+            type="button"
+            disabled={this.hasAllInputDisabled()}
+            onClick={this.handleFormSubmit}
+          >
+            <span>
+              <Trans>Save</Trans>
+            </span>
           </button>
         </div>
         {createSafePortal(
           <div className="sidebar-help-section">
-            <h3><Trans>Need help?</Trans></h3>
-            <p><Trans>For more information about the content type support and migration, checkout the dedicated page on the official website.</Trans></p>
-            <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/docs/admin/metadata-encryption/" >
+            <h3>
+              <Trans>Need help?</Trans>
+            </h3>
+            <p>
+              <Trans>
+                For more information about the content type support and migration, checkout the dedicated page on the
+                official website.
+              </Trans>
+            </p>
+            <a
+              className="button"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.passbolt.com/docs/admin/metadata-encryption/"
+            >
               <InfoSVG />
-              <span><Trans>Read the documentation</Trans></span>
+              <span>
+                <Trans>Read the documentation</Trans>
+              </span>
             </a>
           </div>,
-          document.getElementById("administration-help-panel")
+          document.getElementById("administration-help-panel"),
         )}
       </div>
     );
@@ -225,4 +289,14 @@ DisplayAdministrationMetadataGettingStarted.propTypes = {
   t: PropTypes.func, // translation function
 };
 
-export default withAppContext(withRouter(withActionFeedback(withDialog(withAdministrationEncryptedMetadataGettingStarted(withTranslation('common')(DisplayAdministrationMetadataGettingStarted))))));
+export default withAppContext(
+  withRouter(
+    withActionFeedback(
+      withDialog(
+        withAdministrationEncryptedMetadataGettingStarted(
+          withTranslation("common")(DisplayAdministrationMetadataGettingStarted),
+        ),
+      ),
+    ),
+  ),
+);

@@ -11,26 +11,26 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.7.0
  */
-import {defaultApiClientOptions} from '../../../lib/apiClient/apiClientOptions.test.data';
-import {enableFetchMocks} from "jest-fetch-mock";
+import { defaultApiClientOptions } from "../../../lib/apiClient/apiClientOptions.test.data";
+import { enableFetchMocks } from "jest-fetch-mock";
 import AuthLogoutService from "./AuthLogoutService";
-import {mockApiResponse, mockApiResponseError} from "../../../../../test/mocks/mockApiResponse";
+import { mockApiResponse, mockApiResponseError } from "../../../../../test/mocks/mockApiResponse";
 import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 
-beforeEach(async() => {
+beforeEach(async () => {
   enableFetchMocks();
   jest.clearAllMocks();
 });
 
 describe("AuthLogoutService", () => {
   describe("AuthLogoutService::exec", () => {
-    it("Should call the API on logout endpoint with a POST request", async() => {
+    it("Should call the API on logout endpoint with a POST request", async () => {
       expect.assertions(1);
 
       const apiClientOptions = defaultApiClientOptions();
       const service = new AuthLogoutService(apiClientOptions);
 
-      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("POST");
         return mockApiResponse({});
       });
@@ -38,18 +38,18 @@ describe("AuthLogoutService", () => {
       await service.logout();
     });
 
-    it("Should call the API on logout endpoint with a POST request then a GET request if the POST endpoint is not found", async() => {
+    it("Should call the API on logout endpoint with a POST request then a GET request if the POST endpoint is not found", async () => {
       expect.assertions(2);
 
       const apiClientOptions = defaultApiClientOptions();
       const service = new AuthLogoutService(apiClientOptions);
 
-      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("POST");
         return mockApiResponseError(404, "Use the legacy endpoint instead");
       });
 
-      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         return mockApiResponse({});
       });
@@ -57,18 +57,18 @@ describe("AuthLogoutService", () => {
       await service.logout();
     });
 
-    it("Should throw an exception if the POST logout endpoint does not exists and the GET endpoint sends an error", async() => {
+    it("Should throw an exception if the POST logout endpoint does not exists and the GET endpoint sends an error", async () => {
       expect.assertions(3);
 
       const apiClientOptions = defaultApiClientOptions();
       const service = new AuthLogoutService(apiClientOptions);
 
-      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("POST");
         return mockApiResponseError(404, "Use the legacy endpoint instead");
       });
 
-      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/auth\/logout\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         return mockApiResponseError(500, "Something went wrong");
       });
@@ -76,7 +76,9 @@ describe("AuthLogoutService", () => {
       try {
         await service.logout();
       } catch (e) {
-        const expectedError = new PassboltApiFetchError('An unexpected error happened during the legacy logout process');
+        const expectedError = new PassboltApiFetchError(
+          "An unexpected error happened during the legacy logout process",
+        );
         expect(e).toStrictEqual(expectedError);
       }
     });

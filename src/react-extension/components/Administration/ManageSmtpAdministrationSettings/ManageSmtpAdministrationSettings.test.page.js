@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import ManageSmtpAdministrationSettings from "./ManageSmtpAdministrationSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -43,21 +43,22 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @param {boolean} withManagePanel should the ManageSmtpAdministrationSettings be rendered
    */
   render(props, withManagePanel = true) {
-    const contentToRender = <MockTranslationProvider>
-      <DialogContextProvider>
-        <AdminSmtpSettingsContextProvider {...props}>
-          {withManagePanel && <ManageSmtpAdministrationSettings {...props}/>}
-          <SendTestMailDialog {...props}/>
-          <DisplayAdministrationSmtpSettingsActions/>
-        </AdminSmtpSettingsContextProvider>
-      </DialogContextProvider>
-    </MockTranslationProvider>;
+    const contentToRender = (
+      <MockTranslationProvider>
+        <DialogContextProvider>
+          <AdminSmtpSettingsContextProvider {...props}>
+            {withManagePanel && <ManageSmtpAdministrationSettings {...props} />}
+            <SendTestMailDialog {...props} />
+            <DisplayAdministrationSmtpSettingsActions />
+          </AdminSmtpSettingsContextProvider>
+        </DialogContextProvider>
+      </MockTranslationProvider>
+    );
 
     if (this._page) {
       this._page.rerender(contentToRender);
     } else {
-      this._page = render(contentToRender,
-        {legacyRoot: true});
+      this._page = render(contentToRender, { legacyRoot: true });
     }
 
     this.user = userEvent.setup();
@@ -138,7 +139,10 @@ export default class ManageSmtpAdministrationSettingsPage {
    */
   async runTestFromDialog() {
     const currentDialogTitle = this.sendTestEmailDialogTitle.textContent;
-    await this.clickOn(this.submitFormDialogButton, () => currentDialogTitle !== this.sendTestEmailDialogTitle.textContent);
+    await this.clickOn(
+      this.submitFormDialogButton,
+      () => currentDialogTitle !== this.sendTestEmailDialogTitle.textContent,
+    );
   }
 
   /**
@@ -194,7 +198,10 @@ export default class ManageSmtpAdministrationSettingsPage {
 
     await this.clickOn(this.authenticationMethod, () => true);
     const authenticationMethodItem = this.authenticationMethodSelectFieldItems[authenticationMethodIndex];
-    await this.clickOn(authenticationMethodItem, () => currentAuthenticationMethodValue !== this.authenticationMethodValue);
+    await this.clickOn(
+      authenticationMethodItem,
+      () => currentAuthenticationMethodValue !== this.authenticationMethodValue,
+    );
   }
 
   /**
@@ -205,7 +212,7 @@ export default class ManageSmtpAdministrationSettingsPage {
   async setFormWith(formData) {
     let key;
     for (key in formData) {
-      fireEvent.input(this[key], {target: {value: formData[key]}});
+      fireEvent.input(this[key], { target: { value: formData[key] } });
     }
   }
 
@@ -227,7 +234,9 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async showAdvancedSettings() {
-    return await this.clickOn(this.select(".smtp-settings .accordion-header button.link"), () => Boolean(this.advancedSettings));
+    return await this.clickOn(this.select(".smtp-settings .accordion-header button.link"), () =>
+      Boolean(this.advancedSettings),
+    );
   }
 
   /**
@@ -554,6 +563,6 @@ export default class ManageSmtpAdministrationSettingsPage {
    * Returns the html element that contains the sentence about the source of information
    */
   get settingsSource() {
-    return this._page.container.querySelector('#smtp-settings-source p');
+    return this._page.container.querySelector("#smtp-settings-source p");
   }
 }

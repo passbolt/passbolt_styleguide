@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 
 /**
@@ -38,8 +38,8 @@ class AcceptLoginServerKeyChange extends Component {
       hasAccepted: false, //  True if the user did explicitly accept the new ggg key
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
-        hasNotAccepted: false // True if the user did not explicitly accepted the new gpg key
-      }
+        hasNotAccepted: false, // True if the user did not explicitly accepted the new gpg key
+      },
     };
   }
 
@@ -57,17 +57,23 @@ class AcceptLoginServerKeyChange extends Component {
    * @returns {Promise<void>}
    */
   async fetchServerKey() {
-    let {fingerprint} = await this.props.serverKey;
-    fingerprint = fingerprint.replace(/.{4}/g, '$& ');
-    fingerprint = <>{fingerprint.substr(0, 24)}<br/>{fingerprint.substr(25)}</>;
-    this.setState({fingerprint});
+    let { fingerprint } = await this.props.serverKey;
+    fingerprint = fingerprint.replace(/.{4}/g, "$& ");
+    fingerprint = (
+      <>
+        {fingerprint.substr(0, 24)}
+        <br />
+        {fingerprint.substr(25)}
+      </>
+    );
+    this.setState({ fingerprint });
   }
 
   /**
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    return Object.values(this.state.errors).every(value => !value);
+    return Object.values(this.state.errors).every((value) => !value);
   }
 
   /**
@@ -116,7 +122,7 @@ class AcceptLoginServerKeyChange extends Component {
    * Toggle the accept checkbox
    */
   async toggleAccept() {
-    await this.setState({hasAccepted: !this.state.hasAccepted});
+    await this.setState({ hasAccepted: !this.state.hasAccepted });
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
@@ -126,34 +132,42 @@ class AcceptLoginServerKeyChange extends Component {
    * Validate the security token data
    */
   async validate() {
-    const {hasAccepted} = this.state;
+    const { hasAccepted } = this.state;
     if (!hasAccepted) {
-      await this.setState({hasBeenValidated: true, errors: {hasNotAccepted: true}});
+      await this.setState({ hasBeenValidated: true, errors: { hasNotAccepted: true } });
       return;
     }
-    await this.setState({hasBeenValidated: true, errors: {}});
+    await this.setState({ hasBeenValidated: true, errors: {} });
   }
 
   /**
    * Render the component
    */
   render() {
-    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
+    const disabledClassName = this.mustBeDisabled ? "disabled" : "";
     return (
       <div>
-        <h1><Trans>Sorry, the server key has changed.</Trans></h1>
-        <p><Trans>For security reasons please check with your administrator that this is a change that they initiated. The new fingerprint:</Trans> </p>
+        <h1>
+          <Trans>Sorry, the server key has changed.</Trans>
+        </h1>
+        <p>
+          <Trans>
+            For security reasons please check with your administrator that this is a change that they initiated. The new
+            fingerprint:
+          </Trans>{" "}
+        </p>
         <pre>{this.state.fingerprint}</pre>
-        <form
-          acceptCharset="utf-8"
-          onSubmit={this.handleSubmit}>
-          <div className={`input checkbox ${this.state.hasBeenValidated && this.state.errors.hasNotAccepted ? "error" : ""}`}>
+        <form acceptCharset="utf-8" onSubmit={this.handleSubmit}>
+          <div
+            className={`input checkbox ${this.state.hasBeenValidated && this.state.errors.hasNotAccepted ? "error" : ""}`}
+          >
             <input
               id="accept-new-key"
               type="checkbox"
               name="accept-new-key"
               value={this.state.hasAccepted}
-              onChange={this.handleAcceptChange}/>
+              onChange={this.handleAcceptChange}
+            />
             <label htmlFor="accept-new-key">
               <Trans>Yes I checked and it is all fine.</Trans>
             </label>
@@ -162,7 +176,8 @@ class AcceptLoginServerKeyChange extends Component {
             <button
               type="submit"
               className={`button primary big full-width ${disabledClassName}`}
-              disabled={this.mustBeDisabled}>
+              disabled={this.mustBeDisabled}
+            >
               <Trans>Accept new key</Trans>
             </button>
           </div>

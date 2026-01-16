@@ -14,31 +14,26 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import DisplayInFormMenuItem from "./DisplayInFormMenuItem";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
-import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import {
-  withResourceTypesLocalStorage
-} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {
-  withMetadataTypesSettingsLocalStorage
-} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { SecretGenerator } from "../../../shared/lib/SecretGenerator/SecretGenerator";
+import { withPasswordPolicies } from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withMetadataTypesSettingsLocalStorage } from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_SLUG
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import DiceSVG from "../../../img/svg/dice.svg";
 import AddSVG from "../../../img/svg/add.svg";
 import SearchSVG from "../../../img/svg/search.svg";
 import ResourceIcon from "../../../shared/components/Icons/ResourceIcon";
-import {
-  withMetadataKeysSettingsLocalStorage
-} from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import Logger from "../../../shared/utils/logger";
 
 /** The maximum length of visibility of a generated password */
 const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
@@ -72,11 +67,11 @@ class DisplayInFormMenu extends React.Component {
    */
   componentDidMount() {
     this.handleDisplayConfigurationReceivedEvent();
-    document.addEventListener('click', this.handleInFormMenuClickEvent, {capture: true});
+    document.addEventListener("click", this.handleInFormMenuClickEvent, { capture: true });
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleInFormMenuClickEvent, {capture: true});
+    document.removeEventListener("click", this.handleInFormMenuClickEvent, { capture: true });
   }
 
   /**
@@ -88,7 +83,7 @@ class DisplayInFormMenu extends React.Component {
     if (this.inFormMenuRef.current.contains(event.target)) {
       return;
     }
-    this.props.context.port.request('passbolt.in-form-menu.close');
+    this.props.context.port.request("passbolt.in-form-menu.close");
   }
 
   /**
@@ -130,28 +125,28 @@ class DisplayInFormMenu extends React.Component {
    * Returns true if the component has a "username" display configuration
    */
   get isUsernameConfiguration() {
-    return this.state.configuration.inputType === 'username';
+    return this.state.configuration.inputType === "username";
   }
 
   /**
    * Returns true if the username field has been (
    */
   get isUsernameFilled() {
-    return this.state.configuration.inputValue && this.state.configuration.inputValue !== '';
+    return this.state.configuration.inputValue && this.state.configuration.inputValue !== "";
   }
 
   /**
    * Returns true if the component has a "password" display configuration
    */
   get isPasswordConfiguration() {
-    return this.state.configuration.inputType === 'password';
+    return this.state.configuration.inputType === "password";
   }
 
   /**
    * Returns true if the password field has been (
    */
   get isPasswordFilled() {
-    return this.state.configuration.inputValue && this.state.configuration.inputValue !== '';
+    return this.state.configuration.inputValue && this.state.configuration.inputValue !== "";
   }
 
   /**
@@ -173,7 +168,10 @@ class DisplayInFormMenu extends React.Component {
    */
   get truncatedGeneratedPassword() {
     if (this.state.generatedPassword) {
-      const uplimitIndex = Math.min(TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH, Math.floor(this.state.generatedPassword.length / 2));
+      const uplimitIndex = Math.min(
+        TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH,
+        Math.floor(this.state.generatedPassword.length / 2),
+      );
       return this.state.generatedPassword.substring(0, uplimitIndex);
     }
     return this.state.generatedPassword;
@@ -239,14 +237,19 @@ class DisplayInFormMenu extends React.Component {
   get generateNewPasswordItem() {
     const disabled = this.state.generatedPassword === null;
 
-    return <DisplayInFormMenuItem
-      key="generate-password"
-      onClick={this.handleGeneratePasswordRequestedEvent}
-      title={this.props.t("Generate a new password securely")}
-      subtitle={<span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}</span>}
-      description={this.props.t("You will be able to save it after submitting")}
-      icon={<DiceSVG />}
-      disabled={disabled}/>;
+    return (
+      <DisplayInFormMenuItem
+        key="generate-password"
+        onClick={this.handleGeneratePasswordRequestedEvent}
+        title={this.props.t("Generate a new password securely")}
+        subtitle={
+          <span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}</span>
+        }
+        description={this.props.t("You will be able to save it after submitting")}
+        icon={<DiceSVG />}
+        disabled={disabled}
+      />
+    );
   }
 
   /**
@@ -254,13 +257,15 @@ class DisplayInFormMenu extends React.Component {
    * @returns {JSX.Element}
    */
   get saveAsNewCredentialItem() {
-    return <DisplayInFormMenuItem
-      key="save-credentials"
-      onClick={this.handleSaveCredentialsRequestedEvent}
-      title={this.props.t("Save as new credential")}
-      description={this.props.t("Save the data entered as a new credential")}
-      icon={<AddSVG />}
-    />;
+    return (
+      <DisplayInFormMenuItem
+        key="save-credentials"
+        onClick={this.handleSaveCredentialsRequestedEvent}
+        title={this.props.t("Save as new credential")}
+        description={this.props.t("Save the data entered as a new credential")}
+        icon={<AddSVG />}
+      />
+    );
   }
 
   /**
@@ -268,13 +273,15 @@ class DisplayInFormMenu extends React.Component {
    * @returns {JSX.Element}
    */
   get createNewCredentialItem() {
-    return <DisplayInFormMenuItem
-      key="create-new-credentials"
-      onClick={this.handleCreateNewCredentialsRequestedEvent}
-      title={this.props.t("Create a new credential")}
-      description={this.props.t("Create and customize it yourself")}
-      icon={<AddSVG />}
-    />;
+    return (
+      <DisplayInFormMenuItem
+        key="create-new-credentials"
+        onClick={this.handleCreateNewCredentialsRequestedEvent}
+        title={this.props.t("Create a new credential")}
+        description={this.props.t("Create and customize it yourself")}
+        icon={<AddSVG />}
+      />
+    );
   }
 
   /**
@@ -282,13 +289,15 @@ class DisplayInFormMenu extends React.Component {
    * @returns {JSX.Element}
    */
   get browseCredentialsItem() {
-    return <DisplayInFormMenuItem
-      key="browse-credentials"
-      onClick={this.handleBrowseCredentialsRequestedEvent}
-      title={this.props.t("Browse credentials")}
-      description={this.props.t("Search among available credentials")}
-      icon={<SearchSVG />}
-    />;
+    return (
+      <DisplayInFormMenuItem
+        key="browse-credentials"
+        onClick={this.handleBrowseCredentialsRequestedEvent}
+        title={this.props.t("Browse credentials")}
+        description={this.props.t("Search among available credentials")}
+        icon={<SearchSVG />}
+      />
+    );
   }
 
   /**
@@ -296,25 +305,29 @@ class DisplayInFormMenu extends React.Component {
    */
   get suggestedResourcesItems() {
     const suggestedResources = (this.state.configuration && this.state.configuration.suggestedResources) || [];
-    return suggestedResources.reduce((menuItems, resource) => menuItems.concat([
-      <DisplayInFormMenuItem
-        key={resource.id}
-        onClick={() => this.handleUseSuggestedResourceRequestedEvent(resource.id)}
-        processing={this.state.resourceIdProcessing === resource.id}
-        disabled={this.state.resourceIdProcessing === resource.id}
-        title={resource.metadata.name}
-        description={resource.metadata?.username}
-        icon={<ResourceIcon resource={resource}/>}
-      />
-    ]), []);
+    return suggestedResources.reduce(
+      (menuItems, resource) =>
+        menuItems.concat([
+          <DisplayInFormMenuItem
+            key={resource.id}
+            onClick={() => this.handleUseSuggestedResourceRequestedEvent(resource.id)}
+            processing={this.state.resourceIdProcessing === resource.id}
+            disabled={this.state.resourceIdProcessing === resource.id}
+            title={resource.metadata.name}
+            description={resource.metadata?.username}
+            icon={<ResourceIcon resource={resource} />}
+          />,
+        ]),
+      [],
+    );
   }
 
   /**
    * Whenever the display configuration of the menu is received
    */
   async handleDisplayConfigurationReceivedEvent() {
-    const configuration = await this.props.context.port.request('passbolt.in-form-menu.init');
-    this.setState({configuration});
+    const configuration = await this.props.context.port.request("passbolt.in-form-menu.init");
+    this.setState({ configuration });
     if (!this.isPasswordFilled) {
       // Pre-generate the password
       this.generateSecret();
@@ -326,30 +339,45 @@ class DisplayInFormMenu extends React.Component {
    * @returns {Promise<void>}
    */
   async generateSecret() {
-    const passwordPolicies = await this.props.context.port.request('passbolt.password-policies.get', true);
+    const passwordPolicies = await this.props.context.port.request("passbolt.password-policies.get", true);
     const generatedPassword = SecretGenerator.generate(passwordPolicies);
-    this.setState({generatedPassword});
+    this.setState({ generatedPassword });
   }
 
   /**
    * Whenever the user requests to create a new credential
    */
-  handleCreateNewCredentialsRequestedEvent() {
-    this.props.context.port.request('passbolt.in-form-menu.create-new-credentials');
+  async handleCreateNewCredentialsRequestedEvent() {
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
+      return;
+    }
+    this.props.context.port.request("passbolt.in-form-menu.create-new-credentials");
   }
 
   /**
    * Whenever the user requests to browse credentials
    */
-  handleBrowseCredentialsRequestedEvent() {
-    this.props.context.port.request('passbolt.in-form-menu.browse-credentials');
+  async handleBrowseCredentialsRequestedEvent() {
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
+      return;
+    }
+    this.props.context.port.request("passbolt.in-form-menu.browse-credentials");
   }
 
   /**
    * Whenever the user requests to save the credentials
    */
-  handleSaveCredentialsRequestedEvent() {
-    this.props.context.port.request('passbolt.in-form-menu.save-credentials');
+  async handleSaveCredentialsRequestedEvent() {
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
+      return;
+    }
+    this.props.context.port.request("passbolt.in-form-menu.save-credentials");
   }
 
   /**
@@ -357,20 +385,42 @@ class DisplayInFormMenu extends React.Component {
    * @param resourceId
    */
   async handleUseSuggestedResourceRequestedEvent(resourceId) {
-    this.setState({resourceIdProcessing: resourceId});
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
+      return;
+    }
+
+    this.setState({ resourceIdProcessing: resourceId });
     try {
-      await this.props.context.port.request('passbolt.in-form-menu.use-suggested-resource', resourceId);
+      await this.props.context.port.request("passbolt.in-form-menu.use-suggested-resource", resourceId);
     } catch (error) {
       console.error(error);
     }
-    this.setState({resourceIdProcessing: null});
+    this.setState({ resourceIdProcessing: null });
   }
 
   /**
    * Whenever the user request to generate a password for the current page
    */
-  handleGeneratePasswordRequestedEvent() {
-    this.props.context.port.request('passbolt.in-form-menu.fill-password', this.state.generatedPassword);
+  async handleGeneratePasswordRequestedEvent() {
+    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
+    if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
+      return;
+    }
+    this.props.context.port.request("passbolt.in-form-menu.fill-password", this.state.generatedPassword);
+  }
+
+  /**
+   * Handle the check if application is overlaid
+   * @return {Promise<boolean>}
+   */
+  handleApplicationOverlaidRequestedEvent() {
+    return this.props.context.port.request(
+      "passbolt.in-form-menu.is-application-overlaid",
+      this.props.context.applicationId,
+    );
   }
 
   /**
@@ -389,7 +439,10 @@ class DisplayInFormMenu extends React.Component {
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
       const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
       const userHasMissingKeys = this.props.context.loggedInUser?.missing_metadata_key_ids?.length > 0;
-      return !(isMetadataSharedKeyEnforced && userHasMissingKeys) && this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+      return (
+        !(isMetadataSharedKeyEnforced && userHasMissingKeys) &&
+        this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG)
+      );
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     } else {
@@ -407,7 +460,7 @@ class DisplayInFormMenu extends React.Component {
 
     const items = this.items;
     return (
-      <div className={`in-form-menu ${items.length > 3 && 'in-form-menu--scrollable'}`} ref={this.inFormMenuRef}>
+      <div className={`in-form-menu ${items.length > 3 && "in-form-menu--scrollable"}`} ref={this.inFormMenuRef}>
         {items}
       </div>
     );
@@ -423,4 +476,10 @@ DisplayInFormMenu.propTypes = {
   passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withPasswordPolicies(withTranslation('common')(DisplayInFormMenu))))));
+export default withAppContext(
+  withResourceTypesLocalStorage(
+    withMetadataTypesSettingsLocalStorage(
+      withMetadataKeysSettingsLocalStorage(withPasswordPolicies(withTranslation("common")(DisplayInFormMenu))),
+    ),
+  ),
+);

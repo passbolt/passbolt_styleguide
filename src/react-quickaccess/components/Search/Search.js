@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation, Trans} from "react-i18next";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withTranslation, Trans } from "react-i18next";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import SearchSVG from "../../../img/svg/search.svg";
 import CloseSVG from "../../../img/svg/close.svg";
 
@@ -59,7 +59,7 @@ class Search extends React.Component {
    * Handle clearing of search text
    */
   clearSearchInput() {
-    this.props.context.updateSearch('');
+    this.props.context.updateSearch("");
     this.searchInputRef.current.focus();
   }
 
@@ -67,20 +67,32 @@ class Search extends React.Component {
     return (
       <div className="search-wrapper">
         <div className="input search required">
-          <label className="visually-hidden"><Trans>Search</Trans></label>
-          <input name="search" maxLength="50" type="search" placeholder={this.translate("Search")} autoComplete="off"
-            ref={this.searchInputRef} onChange={this.handleInputChange} value={this.props.context.search} />
+          <label className="visually-hidden">
+            <Trans>Search</Trans>
+          </label>
+          <input
+            name="search"
+            maxLength="50"
+            type="search"
+            placeholder={this.translate("Search")}
+            autoComplete="off"
+            ref={this.searchInputRef}
+            onChange={this.handleInputChange}
+            value={this.props.context.search}
+          />
           <div className="search-button-wrapper">
-            { this.props.context.search ?
+            {this.props.context.search ? (
               <button className="button button-transparent" name="clear-button" onClick={this.clearSearchInput}>
-                <CloseSVG/>
-                <span className="visuallyhidden"><Trans>Clear</Trans></span>
+                <CloseSVG />
+                <span className="visuallyhidden">
+                  <Trans>Clear</Trans>
+                </span>
               </button>
-              :
+            ) : (
               <div className="search-icon">
-                <SearchSVG/>
+                <SearchSVG />
               </div>
-            }
+            )}
           </div>
         </div>
       </div>
@@ -93,4 +105,4 @@ Search.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common', {withRef: true})(Search));
+export default withAppContext(withTranslation("common", { withRef: true })(Search));

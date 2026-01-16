@@ -14,14 +14,14 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 
 // The authentication account recovery workflow states.
 export const AuthenticationAccountRecoveryWorkflowStates = {
   VERIFY_PASSPHRASE: "Validate Passphrase",
   RECOVERING_ACCOUNT: "Recovering Account",
-  SIGNING_IN: 'Signing in',
-  DOWNLOAD_RECOVERY_KIT: 'Downloading Recovery Kit',
+  SIGNING_IN: "Signing in",
+  DOWNLOAD_RECOVERY_KIT: "Downloading Recovery Kit",
   LOADING: "Loading",
   UNEXPECTED_ERROR: "Unexpected Error",
   HELP_CREDENTIALS_LOST: "Help Credentials lost",
@@ -39,20 +39,13 @@ export const AuthenticationAccountRecoveryContext = React.createContext({
   error: null, // The current error
 
   // Workflow mutators.
-  verifyPassphrase: () => {
-  }, // Verify the user wants to check the account recovery temporary gpgkey passphrase
-  complete: () => {
-  }, // Complete the account recovery
-  needHelpCredentialsLost: () => {
-  }, // Whenever the user lost its passphrase.
-  goToValidatePassphrase: () => {
-  }, // Whenever the user wants to go to the validate passphrase.
-  requestHelpCredentialsLost: () => {
-  }, // Whenever the user wants to request help because it lost its credentials.
-  downloadRecoveryKit: () => {
-  }, // Go to the download recovery kit step
-  handleRecoveryKitDownloaded: () => {
-  }, // Go to the step after the download recovery kit
+  verifyPassphrase: () => {}, // Verify the user wants to check the account recovery temporary gpgkey passphrase
+  complete: () => {}, // Complete the account recovery
+  needHelpCredentialsLost: () => {}, // Whenever the user lost its passphrase.
+  goToValidatePassphrase: () => {}, // Whenever the user wants to go to the validate passphrase.
+  requestHelpCredentialsLost: () => {}, // Whenever the user wants to request help because it lost its credentials.
+  downloadRecoveryKit: () => {}, // Go to the download recovery kit step
+  handleRecoveryKitDownloaded: () => {}, // Go to the step after the download recovery kit
 });
 
 /**
@@ -134,7 +127,7 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
   async goToValidatePassphrase() {
     try {
       const account = await this.props.context.port.request("passbolt.account-recovery.get-account");
-      await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.VERIFY_PASSPHRASE, account: account});
+      await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.VERIFY_PASSPHRASE, account: account });
     } catch (error) {
       await this.handleUnexpectedError(error);
     }
@@ -165,12 +158,12 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
    * @returns {Promise<void>}
    */
   async complete(passphrase, rememberMe = false) {
-    await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.RECOVERING_ACCOUNT});
+    await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.RECOVERING_ACCOUNT });
     try {
       await this.props.context.port.request("passbolt.account-recovery.recover-account", passphrase);
       this.passphrase = passphrase;
       this.rememberMe = rememberMe;
-      this.setState({state: AuthenticationAccountRecoveryWorkflowStates.DOWNLOAD_RECOVERY_KIT});
+      this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.DOWNLOAD_RECOVERY_KIT });
     } catch (error) {
       await this.handleUnexpectedError(error);
     }
@@ -182,9 +175,9 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
    */
   async downloadRecoveryKit() {
     try {
-      await this.props.context.port.request('passbolt.account-recovery.download-recovery-kit');
+      await this.props.context.port.request("passbolt.account-recovery.download-recovery-kit");
     } catch (error) {
-      this.setState({state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error});
+      this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -205,7 +198,7 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
    * @returns {Promise<void>}
    */
   async signIn(passphrase, rememberMe = false) {
-    this.setState({state: AuthenticationAccountRecoveryWorkflowStates.SIGNING_IN});
+    this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.SIGNING_IN });
     try {
       await this.props.context.port.request("passbolt.account-recovery.sign-in", passphrase, rememberMe);
     } catch (error) {
@@ -219,7 +212,7 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
    * @returns {Promise<void>}
    */
   async handleUnexpectedError(error) {
-    await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error});
+    await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error });
   }
 
   /**
@@ -227,7 +220,7 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
    * @returns {Promise<void>}
    */
   async needHelpCredentialsLost() {
-    await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.HELP_CREDENTIALS_LOST});
+    await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.HELP_CREDENTIALS_LOST });
   }
 
   /**
@@ -236,10 +229,10 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
    */
   async requestHelpCredentialsLost() {
     try {
-      await this.props.context.port.request('passbolt.account-recovery.request-help-credentials-lost');
-      await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.CHECK_MAILBOX});
+      await this.props.context.port.request("passbolt.account-recovery.request-help-credentials-lost");
+      await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.CHECK_MAILBOX });
     } catch (error) {
-      await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error});
+      await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -258,7 +251,7 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
 
 AuthenticationAccountRecoveryContextProvider.propTypes = {
   context: PropTypes.any, // The application context
-  children: PropTypes.any // The children components
+  children: PropTypes.any, // The children components
 };
 export default withAppContext(AuthenticationAccountRecoveryContextProvider);
 
@@ -271,10 +264,12 @@ export function withAuthenticationAccountRecoveryContext(WrappedComponent) {
     render() {
       return (
         <AuthenticationAccountRecoveryContext.Consumer>
-          {
-            authenticationAccountRecoveryContext => <WrappedComponent
-              authenticationAccountRecoveryContext={authenticationAccountRecoveryContext} {...this.props} />
-          }
+          {(authenticationAccountRecoveryContext) => (
+            <WrappedComponent
+              authenticationAccountRecoveryContext={authenticationAccountRecoveryContext}
+              {...this.props}
+            />
+          )}
         </AuthenticationAccountRecoveryContext.Consumer>
       );
     }

@@ -12,7 +12,7 @@
  * @since         3.3.0
  */
 import React from "react";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import IconBadgeInactiveSVG from "../../../img/logo/icon-inactive.svg";
 import IconWithoutBadgeSVG from "../../../img/logo/icon-without-badge.svg";
@@ -22,6 +22,7 @@ import IconBadge3SVG from "../../../img/logo/icon-badge-3.svg";
 import IconBadge4SVG from "../../../img/logo/icon-badge-4.svg";
 import IconBadge5SVG from "../../../img/logo/icon-badge-5.svg";
 import IconBadge5PlusSVG from "../../../img/logo/icon-badge-5+.svg";
+import Logger from "../../../shared/utils/logger";
 /**
  * This component is a call-to-action integrated into a target web page which includes
  * an identified authentication form. When some Passbolt actions are available, the performed call-to-action
@@ -55,7 +56,7 @@ class AskInFormMenuDisplay extends React.Component {
     this.setState({
       status: {
         isActive: true,
-        suggestedResourcesCount
+        suggestedResourcesCount,
       },
     });
   }
@@ -67,7 +68,7 @@ class AskInFormMenuDisplay extends React.Component {
     this.setState({
       status: {
         isActive: false,
-        suggestedResourcesCount: 0
+        suggestedResourcesCount: 0,
       },
     });
   }
@@ -80,8 +81,8 @@ class AskInFormMenuDisplay extends React.Component {
       isReady: false, // True if the component is ready to be rendered
       status: {
         isActive: false, // By default, inactive call-to-action
-        suggestedResourcesCount: null // The number of resources to suggest
-      }
+        suggestedResourcesCount: null, // The number of resources to suggest
+      },
     };
   }
 
@@ -103,7 +104,9 @@ class AskInFormMenuDisplay extends React.Component {
    * Check the user authentication status
    */
   async checkAuthenticationStatus() {
-    const {isAuthenticated, isMfaRequired} = await this.props.context.port.request("passbolt.in-form-cta.check-status");
+    const { isAuthenticated, isMfaRequired } = await this.props.context.port.request(
+      "passbolt.in-form-cta.check-status",
+    );
     const isActive = isAuthenticated && !isMfaRequired;
 
     const suggestedResourcesCount = isActive
@@ -114,7 +117,7 @@ class AskInFormMenuDisplay extends React.Component {
       isReady: true,
       status: {
         isActive,
-        suggestedResourcesCount
+        suggestedResourcesCount,
       },
     });
   }
@@ -125,29 +128,37 @@ class AskInFormMenuDisplay extends React.Component {
    */
   get informLogo() {
     if (!this.state.status.isActive) {
-      return <IconBadgeInactiveSVG className="in-form-icon-logo inactive"/>;
+      return <IconBadgeInactiveSVG className="in-form-icon-logo inactive" />;
     }
 
     const count = this.state.status.suggestedResourcesCount;
     if (count > 5) {
-      return <IconBadge5PlusSVG className="in-form-icon-logo"/>;
+      return <IconBadge5PlusSVG className="in-form-icon-logo" />;
     }
 
     return {
-      0: <IconWithoutBadgeSVG className="in-form-icon-logo"/>,
-      1: <IconBadge1SVG className="in-form-icon-logo"/>,
-      2: <IconBadge2SVG className="in-form-icon-logo"/>,
-      3: <IconBadge3SVG className="in-form-icon-logo"/>,
-      4: <IconBadge4SVG className="in-form-icon-logo"/>,
-      5: <IconBadge5SVG className="in-form-icon-logo"/>,
+      0: <IconWithoutBadgeSVG className="in-form-icon-logo" />,
+      1: <IconBadge1SVG className="in-form-icon-logo" />,
+      2: <IconBadge2SVG className="in-form-icon-logo" />,
+      3: <IconBadge3SVG className="in-form-icon-logo" />,
+      4: <IconBadge4SVG className="in-form-icon-logo" />,
+      5: <IconBadge5SVG className="in-form-icon-logo" />,
     }[count];
   }
 
   /**
    * Perform the call-to-action
    */
-  execute() {
-    this.props.context.port.request("passbolt.in-form-cta.execute");
+  async execute() {
+    const isApplicationOverlaid = await this.props.context.port.request(
+      "passbolt.in-form-cta.is-application-overlaid",
+      this.props.context.applicationId,
+    );
+    if (isApplicationOverlaid) {
+      Logger.error("Overlap detected, action interrupted for safety reasons");
+      return;
+    }
+    await this.props.context.port.request("passbolt.in-form-cta.execute");
   }
 
   /**
@@ -160,16 +171,14 @@ class AskInFormMenuDisplay extends React.Component {
 
     return (
       <a onClick={this.handleIconClick}>
-        <div className="in-form-icon">
-          {this.informLogo}
-        </div>
+        <div className="in-form-icon">{this.informLogo}</div>
       </a>
     );
   }
 }
 
 AskInFormMenuDisplay.propTypes = {
-  context: PropTypes.any // The application context
+  context: PropTypes.any, // The application context
 };
 
 export default withAppContext(AskInFormMenuDisplay);

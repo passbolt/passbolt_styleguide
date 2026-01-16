@@ -14,23 +14,22 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {withRouter} from "react-router-dom";
-import {withActionFeedback} from "./ActionFeedbackContext";
-import {withLoading} from "./LoadingContext";
-import sanitizeUrl, {urlProtocols} from "../lib/Sanitize/sanitizeUrl";
-import {DateTime} from "luxon";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { withRouter } from "react-router-dom";
+import { withActionFeedback } from "./ActionFeedbackContext";
+import { withLoading } from "./LoadingContext";
+import sanitizeUrl, { urlProtocols } from "../lib/Sanitize/sanitizeUrl";
+import { DateTime } from "luxon";
 import SorterEntity from "../../shared/models/entity/sorter/sorterEntity";
 import GridUserSettingEntity from "../../shared/models/entity/gridUserSetting/gridUserSettingEntity";
-import GridResourceUserSettingServiceWorkerService
-  from "../../shared/services/serviceWorker/gridResourceUserSetting/GridResourceUserSettingServiceWorkerService";
+import GridResourceUserSettingServiceWorkerService from "../../shared/services/serviceWorker/gridResourceUserSetting/GridResourceUserSettingServiceWorkerService";
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
-import {withPasswordExpiry} from "./PasswordExpirySettingsContext";
-import {withRbac} from "../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
-import {ColumnModelTypes} from "../../shared/models/column/ColumnModel";
+import { withPasswordExpiry } from "./PasswordExpirySettingsContext";
+import { withRbac } from "../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../shared/services/rbacs/uiActionEnumeration";
+import { ColumnModelTypes } from "../../shared/models/column/ColumnModel";
 import getPropValue from "../lib/Object/getPropValue";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import RowsSettingEntity from "../../shared/models/entity/rowsSetting/rowsSettingEntity";
 import ResourcesServiceWorkerService from "../../shared/services/serviceWorker/resources/resourcesServiceWorkerService";
 
@@ -40,11 +39,11 @@ import ResourcesServiceWorkerService from "../../shared/services/serviceWorker/r
 export const ResourceWorkspaceContext = React.createContext({
   filter: {
     type: null, // Filter type
-    payload: null // Filter payload
+    payload: null, // Filter payload
   },
   sorter: {
-    propertyName: 'modified', // The name of the property to sort on
-    asc: false // True if the sort must be descendant
+    propertyName: "modified", // The name of the property to sort on
+    asc: false, // True if the sort must be descendant
   },
   filteredResources: [], // The current list of filtered resources
   selectedResources: [], // The current list of selected resources
@@ -56,17 +55,17 @@ export const ResourceWorkspaceContext = React.createContext({
   },
   scrollTo: {
     resource: null, // The resource to scroll to
-    folder: null // The folder to scroll to
+    folder: null, // The folder to scroll to
   },
   refresh: {
-    permissions: false // Flag to force the refresh of the permissions
+    permissions: false, // Flag to force the refresh of the permissions
   },
   resourceFileToImport: null, // The resource file to import
   resourceFileImportResult: null, // The resource file import result
   lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
   resourcesToExport: {
     resourcesIds: null, // The resources ids to export
-    foldersIds: null // The folders ids to export
+    foldersIds: null, // The folders ids to export
   },
   onLockDetail: () => {}, // Lock or unlock detail (hide or display the folder or password sidebar)
   onResourceScrolled: () => {}, // Whenever one scrolled to a resource
@@ -83,8 +82,8 @@ export const ResourceWorkspaceContext = React.createContext({
     all: () => {}, // Whenever all the resources have been selected
     none: () => {}, // Whenever none resources have been selected
     multiple: () => {}, // Whenever a resource has been selected in a multiple mode
-    range:  () => {}, // Whenever a resource has been selected in a multiple mode
-    single: () => {}// Whenever a single resource has been selected
+    range: () => {}, // Whenever a resource has been selected in a multiple mode
+    single: () => {}, // Whenever a single resource has been selected
   },
   onResourceFileToImport: () => {}, // Whenever a resource file will be imported
   onResourceFileImportResult: () => {}, // Whenever the import result has been provided
@@ -120,8 +119,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   get defaultSorter() {
     return new SorterEntity({
-      propertyName: 'modified', // The name of the property to sort on
-      asc: false // True if the sort must be descendant
+      propertyName: "modified", // The name of the property to sort on
+      asc: false, // True if the sort must be descendant
     });
   }
 
@@ -130,7 +129,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      filter: {type: ResourceWorkspaceFilterTypes.NONE}, // The current resource search filter
+      filter: { type: ResourceWorkspaceFilterTypes.NONE }, // The current resource search filter
       sorter: this.defaultSorter, // The default sorter
       filteredResources: null, // The current list of filtered resources
       selectedResources: [], // The current list of selected resources
@@ -142,11 +141,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       },
       scrollTo: {
         resource: null, // The resource to scroll to
-        folder: null // The folder to scroll to
+        folder: null, // The folder to scroll to
       },
       refresh: {
         activities: false, // Flag to force the refresh of the activities
-        permissions: false // Flag to force the refresh of the permissions
+        permissions: false, // Flag to force the refresh of the permissions
       },
       resourceFileToImport: null, // The resource file to import
       resourceFileImportResult: null, // The resource file import result
@@ -159,7 +158,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onResourceDescriptionEdited: this.handleResourceDescriptionEdited.bind(this), // Whenever a resource description has been edited
       onResourceDescriptionDecrypted: this.handleResourceDescriptionDecryted.bind(this), // Whenever a resource description has been decrypted
       onResourceShared: this.handleResourceShared.bind(this), // Whenever a resource is shared
-      onResourcePermissionsRefreshed:  this.handleResourcePermissionsRefreshed.bind(this), // Whenever the resource permissions have been refreshed
+      onResourcePermissionsRefreshed: this.handleResourcePermissionsRefreshed.bind(this), // Whenever the resource permissions have been refreshed
       onResourceCopied: this.handleResourceCopied.bind(this), // Whenever a resource (password) has been copied
       onResourcePreviewed: this.handleResourcePreviewed.bind(this), // Whenever a resource (password) has been copied
       onResourceActivitiesRefreshed: this.handleResourceActivitiesRefreshed.bind(this), // Whenever the resource activities have been refreshed
@@ -168,8 +167,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         all: this.handleAllResourcesSelected.bind(this), // Whenever all the resources have been selected
         none: this.handleNoneResourcesSelected.bind(this), // Whenever none resources have been selected
         multiple: this.handleMultipleResourcesSelected.bind(this), // Whenever a resource has been selected in a multiple mode
-        range:  this.handleResourceRangeSelected.bind(this), // Whenever a resource has been selected in a multiple mode
-        single: this.handleResourceSelected.bind(this)// Whenever a single resource has been selected
+        range: this.handleResourceRangeSelected.bind(this), // Whenever a resource has been selected in a multiple mode
+        single: this.handleResourceSelected.bind(this), // Whenever a single resource has been selected
       },
       onResourceFileToImport: this.handleResourceFileToImport.bind(this), // Whenever a resource file will be imported
       onResourceFileImportResult: this.handleResourceFileImportResult.bind(this), // Whenever the import result has been provided
@@ -254,8 +253,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       }
       await this.unselectAll();
 
-      if (this.state.filter.type !== ResourceWorkspaceFilterTypes.GROUP
-        && this.state.filter.type !== ResourceWorkspaceFilterTypes.FOLDER) {
+      if (
+        this.state.filter.type !== ResourceWorkspaceFilterTypes.GROUP &&
+        this.state.filter.type !== ResourceWorkspaceFilterTypes.FOLDER
+      ) {
         this.populate();
       }
     }
@@ -314,7 +315,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       return;
     }
 
-    const folder = this.props.context.folders.find(folder => folder.id === folderId);
+    const folder = this.props.context.folders.find((folder) => folder.id === folderId);
     // Unknown folder
     if (!folder) {
       this.handleUnknownFolder();
@@ -326,7 +327,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     }
 
     this.resourcesServiceWorkerService.updateResourceLocalStorageForParentFolderId(folder.id);
-    await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
+    await this.search({ type: ResourceWorkspaceFilterTypes.FOLDER, payload: { folder } });
 
     // Multiple resource selected, do not show details folder
     const hasMultipleResourceSelected = this.state.selectedResources.length > 1;
@@ -342,7 +343,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the resource view route change
    */
   async handleResourceRouteChange() {
-    const isResourceLocation = this.props.location.pathname.includes('passwords');
+    const isResourceLocation = this.props.location.pathname.includes("passwords");
     if (!isResourceLocation) {
       return;
     }
@@ -354,7 +355,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     }
 
     const resourceId = this.props.match.params.selectedResourceId;
-    if (resourceId) { // Case of password view
+    if (resourceId) {
+      // Case of password view
       this.handleSingleResourceRouteChange(resourceId);
       return;
     }
@@ -370,10 +372,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async handleSingleResourceRouteChange(resourceId) {
     const hasResources = this.resources !== null;
     if (hasResources) {
-      const resource = this.resources.find(resource => resource.id === resourceId);
+      const resource = this.resources.find((resource) => resource.id === resourceId);
       const hasNoneFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.NONE;
-      if (hasNoneFilter) { // Case of password view by url bar inputting
-        await this.search({type: ResourceWorkspaceFilterTypes.ALL});
+      if (hasNoneFilter) {
+        // Case of password view by url bar inputting
+        await this.search({ type: ResourceWorkspaceFilterTypes.ALL });
       }
 
       // If the resource does not exist , it should display an error
@@ -397,7 +400,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       return;
     }
 
-    const filter = this.props.location.state?.filter || {type: ResourceWorkspaceFilterTypes.ALL};
+    const filter = this.props.location.state?.filter || { type: ResourceWorkspaceFilterTypes.ALL };
     const isSameFilter = this.state.filter === filter;
     await this.detailNothing();
     if (!isSameFilter) {
@@ -414,7 +417,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     if (!hasResources) {
       return;
     }
-    const filter = {type: ResourceWorkspaceFilterTypes.EXPIRED};
+    const filter = { type: ResourceWorkspaceFilterTypes.EXPIRED };
     const isSameFilter = this.state.filter === filter;
     await this.detailNothing();
     if (!isSameFilter) {
@@ -428,7 +431,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleLockDetail() {
     const lockDisplayDetail = !this.state.lockDisplayDetail;
-    this.setState({lockDisplayDetail});
+    this.setState({ lockDisplayDetail });
   }
 
   /**
@@ -436,7 +439,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   handleUnknownResource() {
     this.props.actionFeedbackContext.displayError("The resource does not exist");
-    this.props.history.push({pathname: `/app/passwords`});
+    this.props.history.push({ pathname: `/app/passwords` });
   }
 
   /**
@@ -444,7 +447,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   handleUnknownFolder() {
     this.props.actionFeedbackContext.displayError("The folder does not exist");
-    this.props.history.push({pathname: `/app/passwords`});
+    this.props.history.push({ pathname: `/app/passwords` });
   }
 
   /**
@@ -541,9 +544,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleNoneResourcesSelected() {
     await this.unselectAll();
-    const {filter} = this.state;
+    const { filter } = this.state;
     const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
-    if (isFolderFilter) { // Case of folder filter after unselect, should display folder details
+    if (isFolderFilter) {
+      // Case of folder filter after unselect, should display folder details
       await this.handleFolderRouteChange();
       return;
     }
@@ -613,8 +617,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param resourcesIds The resources ids to export
    * @param foldersIds The folders ids to export
    */
-  async handleResourcesToExportChange({resourcesIds, foldersIds}) {
-    await this.updateResourcesToExport({resourcesIds, foldersIds});
+  async handleResourcesToExportChange({ resourcesIds, foldersIds }) {
+    await this.updateResourcesToExport({ resourcesIds, foldersIds });
   }
 
   /**
@@ -624,11 +628,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   onGoToResourceUriRequested(uri) {
     const safeUri = sanitizeUrl(uri, {
       whiteListedProtocols: resourceLinkAuthorizedProtocols,
-      defaultProtocol: urlProtocols.HTTPS
+      defaultProtocol: urlProtocols.HTTPS,
     });
 
     if (safeUri) {
-      window.open(safeUri, '_blank', 'noopener,noreferrer');
+      window.open(safeUri, "_blank", "noopener,noreferrer");
     }
   }
 
@@ -637,8 +641,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @returns {boolean}
    */
   get canUseFolders() {
-    return this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
+    return (
+      this.props.context.siteSettings.canIUse("folders") && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE)
+    );
   }
 
   /**
@@ -660,8 +665,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.resources.update-local-storage");
     } catch (error) {
       console.error(error);
-      const message = this.props.t("Unable to load/refresh the resources.")
-        + (error?.message ? ` ${error?.message}` : "");
+      const message =
+        this.props.t("Unable to load/refresh the resources.") + (error?.message ? ` ${error?.message}` : "");
       await this.props.actionFeedbackContext.displayError(message);
     }
   }
@@ -690,7 +695,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async search(filter) {
     // To prevent the filtered resources to be loaded before the columns
     if (this.state.columnsResourceSetting === null) {
-      this.setState({filter});
+      this.setState({ filter });
       return;
     }
 
@@ -706,7 +711,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.seachBySharedWithMe.bind(this),
       [ResourceWorkspaceFilterTypes.EXPIRED]: this.seachByExpired.bind(this),
       [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
-      [ResourceWorkspaceFilterTypes.NONE]: () => { /* No search */ }
+      [ResourceWorkspaceFilterTypes.NONE]: () => {
+        /* No search */
+      },
     };
 
     await searchOperations[filter.type](filter);
@@ -719,25 +726,24 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter The All filter
    */
   searchAll(filter) {
-    this.setState({filter, filteredResources: this.resources}, this.sort);
+    this.setState({ filter, filteredResources: this.resources }, this.sort);
   }
 
   /**
    * Filter the resources which belongs to the filter root folder
    */
   searchByRootFolder(filter) {
-    const folderResources = this.resources.filter(resource => ! resource.folder_parent_id);
-    this.setState({filter, filteredResources: folderResources}, this.sort);
+    const folderResources = this.resources.filter((resource) => !resource.folder_parent_id);
+    this.setState({ filter, filteredResources: folderResources }, this.sort);
   }
-
 
   /**
    * Filter the resources which belongs to the filter folder
    */
   searchByFolder(filter) {
     const folderId = filter.payload.folder.id;
-    const folderResources = this.resources.filter(resource => resource.folder_parent_id === folderId);
-    this.setState({filter, filteredResources: folderResources}, this.sort);
+    const folderResources = this.resources.filter((resource) => resource.folder_parent_id === folderId);
+    this.setState({ filter, filteredResources: folderResources }, this.sort);
   }
 
   /**
@@ -745,8 +751,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   searchByTag(filter) {
     const tagId = filter.payload.tag.id;
-    const tagResources = this.resources.filter(resource => resource.tags && resource.tags.length > 0 && resource.tags.filter(tag => tag.id === tagId).length > 0);
-    this.setState({filter, filteredResources: tagResources}, this.sort);
+    const tagResources = this.resources.filter(
+      (resource) =>
+        resource.tags && resource.tags.length > 0 && resource.tags.filter((tag) => tag.id === tagId).length > 0,
+    );
+    this.setState({ filter, filteredResources: tagResources }, this.sort);
   }
 
   /**
@@ -755,18 +764,20 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   searchByText(filter) {
     const text = filter.payload;
-    const words =  (text && text.split(/\s+/)) || [''];
+    const words = (text && text.split(/\s+/)) || [""];
     const canUseTags = this.props.context.siteSettings.canIUse("tags");
     const foldersMatchCache = {};
 
     // Test match of some escaped test words against the name / username / uri / description /tags resource properties
-    const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
+    const escapeWord = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const wordToRegex = (word) => new RegExp(escapeWord(word), "i");
     const matchWord = (word, value) => wordToRegex(word).test(value);
 
-    const getFolderById = id => this.props.context.foldersMapById[id];
+    const getFolderById = (id) => this.props.context.foldersMapById[id];
     const matchFolderNameProperty = (word, folder) => matchWord(word, folder?.name);
-    const matchFolder = (word, folder) => matchFolderNameProperty(word, folder) || (folder?.folder_parent_id && matchFolderCache(word, folder.folder_parent_id));
+    const matchFolder = (word, folder) =>
+      matchFolderNameProperty(word, folder) ||
+      (folder?.folder_parent_id && matchFolderCache(word, folder.folder_parent_id));
     const matchFolderCache = (word, id) => {
       const key = word + id;
       if (typeof foldersMatchCache[key] === "undefined") {
@@ -774,15 +785,22 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       }
       return foldersMatchCache[key];
     };
-    const matchTagProperty = (word, resource) => resource.tags?.some(tag => matchWord(word, tag.slug));
-    const matchUrisProperty = (word, resource) => resource.metadata?.uris?.some(uri => matchWord(word, uri));
-    const matchCustomFieldsProperty = (word, resource) => resource.metadata?.custom_fields?.some(customField => matchWord(word, customField.metadata_key));
-    const matchStringProperty = (word, resource) => ['name', 'username', 'description'].some(key => matchWord(word, resource.metadata?.[key]));
-    const matchResource = (word, resource) => matchStringProperty(word, resource) || matchUrisProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || matchCustomFieldsProperty(word, resource) || (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
-    const matchText = resource => words.every(word => matchResource(word, resource));
+    const matchTagProperty = (word, resource) => resource.tags?.some((tag) => matchWord(word, tag.slug));
+    const matchUrisProperty = (word, resource) => resource.metadata?.uris?.some((uri) => matchWord(word, uri));
+    const matchCustomFieldsProperty = (word, resource) =>
+      resource.metadata?.custom_fields?.some((customField) => matchWord(word, customField.metadata_key));
+    const matchStringProperty = (word, resource) =>
+      ["name", "username", "description"].some((key) => matchWord(word, resource.metadata?.[key]));
+    const matchResource = (word, resource) =>
+      matchStringProperty(word, resource) ||
+      matchUrisProperty(word, resource) ||
+      (canUseTags && matchTagProperty(word, resource)) ||
+      matchCustomFieldsProperty(word, resource) ||
+      (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
+    const matchText = (resource) => words.every((word) => matchResource(word, resource));
 
     const filteredResources = this.resources.filter(matchText);
-    this.setState({filter, filteredResources}, this.sort);
+    this.setState({ filter, filteredResources }, this.sort);
   }
 
   /**
@@ -804,11 +822,15 @@ export class ResourceWorkspaceContextProvider extends React.Component {
      * The execution order of the callback from the local storage and the state change (that calls componentDidUpdate)
      * produces an infinite loop in Firefox.
      */
-    this.setState({filter, selectedResources: []}, async() => {
-      const resourceIds = await this.props.context.port.request('passbolt.resources.find-all-ids-by-is-shared-with-group', filter.payload.group.id) || [];
+    this.setState({ filter, selectedResources: [] }, async () => {
+      const resourceIds =
+        (await this.props.context.port.request(
+          "passbolt.resources.find-all-ids-by-is-shared-with-group",
+          filter.payload.group.id,
+        )) || [];
       // keep only the resource with the group
-      const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
-      this.setState({filteredResources: groupResources}, this.sort);
+      const groupResources = this.resources.filter((resource) => resourceIds.includes(resource.id));
+      this.setState({ filteredResources: groupResources }, this.sort);
       this.props.loadingContext.remove();
     });
   }
@@ -818,8 +840,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter The filter
    */
   searchByItemsIOwn(filter) {
-    const filteredResources = this.resources.filter(resource => resource.permission.type === 15);
-    this.setState({filter, filteredResources}, this.sort);
+    const filteredResources = this.resources.filter((resource) => resource.permission.type === 15);
+    this.setState({ filter, filteredResources }, this.sort);
   }
 
   /**
@@ -827,24 +849,24 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter The filter
    */
   searchByPrivate(filter) {
-    const filteredResources = this.resources.filter(resource => Boolean(resource.personal));
-    this.setState({filter, filteredResources}, this.sort);
+    const filteredResources = this.resources.filter((resource) => Boolean(resource.personal));
+    this.setState({ filter, filteredResources }, this.sort);
   }
 
   /**
    * Filter the resources which are the current user favorites one
    */
   searchByFavorite(filter) {
-    const filteredResources = this.resources.filter(resource => resource.favorite !== null);
-    this.setState({filter, filteredResources}, this.sort);
+    const filteredResources = this.resources.filter((resource) => resource.favorite !== null);
+    this.setState({ filter, filteredResources }, this.sort);
   }
 
   /**
    * Filter the resources which are shared wit the current user
    */
   seachBySharedWithMe(filter) {
-    const filteredResources = this.resources.filter(resource => resource.permission.type < 15);
-    this.setState({filter, filteredResources}, this.sort);
+    const filteredResources = this.resources.filter((resource) => resource.permission.type < 15);
+    this.setState({ filter, filteredResources }, this.sort);
   }
 
   /**
@@ -852,9 +874,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter A recently modified filter
    */
   searchByRecentlyModified(filter) {
-    const recentlyModifiedSorter = (resource1, resource2) => DateTime.fromISO(resource2.modified) < DateTime.fromISO(resource1.modified) ? -1 : 1;
+    const recentlyModifiedSorter = (resource1, resource2) =>
+      DateTime.fromISO(resource2.modified) < DateTime.fromISO(resource1.modified) ? -1 : 1;
     const filteredResources = this.resources.sort(recentlyModifiedSorter);
-    this.setState({filter, filteredResources}, this.sort);
+    this.setState({ filter, filteredResources }, this.sort);
   }
 
   /**
@@ -862,8 +885,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter A "expired" filter
    */
   seachByExpired(filter) {
-    const filteredResources = this.resources.filter(resource => resource.expired && new Date(resource.expired) <= new Date());
-    this.setState({filter, filteredResources}, this.sort);
+    const filteredResources = this.resources.filter(
+      (resource) => resource.expired && new Date(resource.expired) <= new Date(),
+    );
+    this.setState({ filter, filteredResources }, this.sort);
   }
 
   /**
@@ -872,14 +897,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async refreshSearchFilter() {
     const hasFolderFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.FOLDER;
     if (hasFolderFilter) {
-      const isFolderStillExist = this.folders.some(folder => folder.id === this.state.filter.payload.folder.id);
-      if (isFolderStillExist) { // Case of folder exists but may have somme applied changes on it
-        const updatedFolder = this.folders.find(folder => folder.id === this.state.filter.payload.folder.id);
-        const filter = Object.assign(this.state.filter, {payload: {folder: updatedFolder}});
-        await this.setState({filter});
-      } else { // Case of filter folder deleted
-        const filter = {type: ResourceWorkspaceFilterTypes.ALL};
-        this.props.history.push({pathname: '/app/passwords', state: {filter}});
+      const isFolderStillExist = this.folders.some((folder) => folder.id === this.state.filter.payload.folder.id);
+      if (isFolderStillExist) {
+        // Case of folder exists but may have somme applied changes on it
+        const updatedFolder = this.folders.find((folder) => folder.id === this.state.filter.payload.folder.id);
+        const filter = Object.assign(this.state.filter, { payload: { folder: updatedFolder } });
+        await this.setState({ filter });
+      } else {
+        // Case of filter folder deleted
+        const filter = { type: ResourceWorkspaceFilterTypes.ALL };
+        this.props.history.push({ pathname: "/app/passwords", state: { filter } });
       }
     }
   }
@@ -891,8 +918,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param resource The resource to select
    */
   async select(resource) {
-    const mustUnselect = this.state.selectedResources.length === 1 && this.state.selectedResources[0].id === resource.id;
-    await this.setState({selectedResources: mustUnselect ? [] : [resource]});
+    const mustUnselect =
+      this.state.selectedResources.length === 1 && this.state.selectedResources[0].id === resource.id;
+    await this.setState({ selectedResources: mustUnselect ? [] : [resource] });
   }
 
   /**
@@ -901,10 +929,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async selectFromRoute(resource) {
-    const isAlreadySelected = this.state.selectedResources.length === 1 && this.state.selectedResources[0].id === resource.id;
+    const isAlreadySelected =
+      this.state.selectedResources.length === 1 && this.state.selectedResources[0].id === resource.id;
     if (!isAlreadySelected) {
       const selectedResources = [resource];
-      await this.setState({selectedResources});
+      await this.setState({ selectedResources });
     }
   }
 
@@ -914,11 +943,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async selectMultiple(resource) {
-    const hasNotSameId = selectedResource => selectedResource.id !== resource.id;
+    const hasNotSameId = (selectedResource) => selectedResource.id !== resource.id;
     const selectionWithoutResource = this.state.selectedResources.filter(hasNotSameId);
     const mustUnselect = this.state.selectedResources.length !== selectionWithoutResource.length;
     const selectedResources = mustUnselect ? selectionWithoutResource : [...this.state.selectedResources, resource];
-    await this.setState({selectedResources});
+    await this.setState({ selectedResources });
   }
 
   /**
@@ -932,18 +961,20 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     if (hasNoSelection) {
       await this.select(resource);
     } else {
-      const hasSameId = resource => selectedResource => selectedResource.id === resource.id;
-      const findIndex = resource => this.state.filteredResources.findIndex(hasSameId(resource));
+      const hasSameId = (resource) => (selectedResource) => selectedResource.id === resource.id;
+      const findIndex = (resource) => this.state.filteredResources.findIndex(hasSameId(resource));
       const startRangeIndex = findIndex(this.state.selectedResources[0]);
       const endRangeIndex = findIndex(resource);
 
       let selectedResources;
-      if (startRangeIndex > endRangeIndex) { // Down range selection
+      if (startRangeIndex > endRangeIndex) {
+        // Down range selection
         selectedResources = this.state.filteredResources.slice(endRangeIndex, startRangeIndex + 1).reverse();
-      } else { // Up range selection
+      } else {
+        // Up range selection
         selectedResources = this.state.filteredResources.slice(startRangeIndex, endRangeIndex + 1);
       }
-      await this.setState({selectedResources});
+      await this.setState({ selectedResources });
     }
   }
 
@@ -951,7 +982,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Select all the resources
    */
   async selectAll() {
-    await this.setState({selectedResources: [...this.state.filteredResources]});
+    await this.setState({ selectedResources: [...this.state.filteredResources] });
   }
 
   /**
@@ -960,7 +991,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async unselectAll() {
     const hasSelectedResources = this.state.selectedResources.length !== 0;
     if (hasSelectedResources) {
-      await this.setState({selectedResources: []});
+      await this.setState({ selectedResources: [] });
     }
   }
 
@@ -968,12 +999,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Remove from the selected resources those which are not known resources in regard of the current resources list
    */
   async unselectUnknownResources() {
-    const matchId = selectedResource => resource => resource.id === selectedResource.id;
-    const matchSelectedResource = selectedResource => this.state.selectedResources.some(matchId(selectedResource));
+    const matchId = (selectedResource) => (resource) => resource.id === selectedResource.id;
+    const matchSelectedResource = (selectedResource) => this.state.selectedResources.some(matchId(selectedResource));
     const resources = this.resources.filter(matchSelectedResource);
-    const matchFilteredResources = resource => this.state.filteredResources.includes(resource);
+    const matchFilteredResources = (resource) => this.state.filteredResources.includes(resource);
     const selectedResources = resources.filter(matchFilteredResources);
-    await this.setState({selectedResources});
+    await this.setState({ selectedResources });
   }
 
   /**
@@ -996,12 +1027,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     }
 
     // Case of multiple selected resources
-    const {filter} = this.state;
+    const { filter } = this.state;
     const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
-    if (isFolderFilter) { // Case of folder
+    if (isFolderFilter) {
+      // Case of folder
       const mustRedirect = this.props.location.pathname !== `/app/folders/view/${this.state.filter.payload.folder.id}`;
       if (mustRedirect) {
-        this.props.history.push({pathname: `/app/folders/view/${this.state.filter.payload.folder.id}`});
+        this.props.history.push({ pathname: `/app/folders/view/${this.state.filter.payload.folder.id}` });
       }
       return;
     }
@@ -1011,15 +1043,15 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     if (isExpiredFilter) {
       const mustRedirect = this.props.location.pathname !== `/app/passwords/filter/expired`;
       if (mustRedirect) {
-        this.props.history.push({pathname: `/app/passwords/filter/expired`});
+        this.props.history.push({ pathname: `/app/passwords/filter/expired` });
       }
       return;
     }
 
     // Case of resources
-    const mustRedirect = this.props.location.pathname !== '/app/passwords';
+    const mustRedirect = this.props.location.pathname !== "/app/passwords";
     if (mustRedirect) {
-      this.props.history.push({pathname: `/app/passwords`, state: {filter}});
+      this.props.history.push({ pathname: `/app/passwords`, state: { filter } });
     }
   }
 
@@ -1032,31 +1064,31 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async updateSorter(propertyName) {
     const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
     const asc = hasSortPropertyChanged || !this.state.sorter.asc;
-    const sorter = new SorterEntity({propertyName, asc});
-    this.setState({sorter}, () => this.updateGridSetting());
+    const sorter = new SorterEntity({ propertyName, asc });
+    this.setState({ sorter }, () => this.updateGridSetting());
   }
 
   /**
    * Reset the user sorter
    */
   async resetSorter() {
-    const sorter = new SorterEntity({propertyName: 'modified', asc: false});
-    this.setState({sorter}, () => this.updateGridSetting());
+    const sorter = new SorterEntity({ propertyName: "modified", asc: false });
+    this.setState({ sorter }, () => this.updateGridSetting());
   }
 
   /**
    * Sort the resources given the current sorter
    */
   async sort() {
-    const reverseSorter = sorter => (s1, s2) => -sorter(s1, s2);
-    const baseSorter =  sorter => this.state.sorter.asc ? sorter : reverseSorter(sorter);
+    const reverseSorter = (sorter) => (s1, s2) => -sorter(s1, s2);
+    const baseSorter = (sorter) => (this.state.sorter.asc ? sorter : reverseSorter(sorter));
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(getPropValue(s1, key), getPropValue(s2, key)));
     const stringSorter = (s1, s2) => (s1 || "").localeCompare(s2 || "");
-    const booleanSorter = (s1, s2) => s1 === s2 ? 0 : s1 ? -1 : 1;
+    const booleanSorter = (s1, s2) => (s1 === s2 ? 0 : s1 ? -1 : 1);
     const sorter = this.state.sorter.propertyName === "favorite" ? booleanSorter : stringSorter;
     const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
     if (this.state.filteredResources !== null) {
-      await this.setState({filteredResources: [...this.state.filteredResources.sort(propertySorter)]});
+      await this.setState({ filteredResources: [...this.state.filteredResources.sort(propertySorter)] });
     }
   }
 
@@ -1067,7 +1099,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param folder The folder to focus on
    */
   async detailFolder(folder) {
-    await this.setState({details: {folder: folder, resource: null}});
+    await this.setState({ details: { folder: folder, resource: null } });
   }
 
   /**
@@ -1075,7 +1107,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param resource The resource to focus on
    */
   async detailResource(resource) {
-    await this.setState({details: {folder: null, resource: resource}});
+    await this.setState({ details: { folder: null, resource: resource } });
   }
 
   /**
@@ -1084,7 +1116,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async detailNothing() {
     const hasDetails = this.state.details.resource || this.state.details.folder;
     if (hasDetails) {
-      await this.setState({details: {folder: null, resource: null}});
+      await this.setState({ details: { folder: null, resource: null } });
     }
   }
 
@@ -1108,12 +1140,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const hasDetails = this.state.details.resource || this.state.details.folder;
     if (hasDetails) {
       const hasResourceDetails = this.state.details.resource;
-      if (hasResourceDetails) { // Case of resource details
-        const updatedResourceDetails = this.resources.find(resource => resource.id === this.state.details.resource.id);
-        await this.setState({details: {resource: updatedResourceDetails}});
-      } else { // Case of folder details
-        const updatedFolderDetails = this.folders.find(folder => folder.id === this.state.details.folder.id);
-        await this.setState({details: {folder: updatedFolderDetails}});
+      if (hasResourceDetails) {
+        // Case of resource details
+        const updatedResourceDetails = this.resources.find(
+          (resource) => resource.id === this.state.details.resource.id,
+        );
+        await this.setState({ details: { resource: updatedResourceDetails } });
+      } else {
+        // Case of folder details
+        const updatedFolderDetails = this.folders.find((folder) => folder.id === this.state.details.folder.id);
+        await this.setState({ details: { folder: updatedFolderDetails } });
       }
     }
   }
@@ -1125,7 +1161,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param resource A resource
    */
   async scrollToResource(resource) {
-    await this.setState({scrollTo: {resource}});
+    await this.setState({ scrollTo: { resource } });
   }
 
   /**
@@ -1133,14 +1169,14 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param folder A folder
    */
   async scrollToFolder(folder) {
-    await this.setState({scrollTo: {folder}});
+    await this.setState({ scrollTo: { folder } });
   }
 
   /**
    * Unset the resource to scroll to
    */
   async scrollNothing() {
-    await this.setState({scrollTo: {}});
+    await this.setState({ scrollTo: {} });
   }
 
   /** RESOURCE ACTIVITIES */
@@ -1149,16 +1185,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Refresh the activities of the current selected resource
    */
   async refreshSelectedResourceActivities() {
-    const refresh = Object.assign({}, this.state.refresh, {activities: true});
-    await this.setState({refresh});
+    const refresh = Object.assign({}, this.state.refresh, { activities: true });
+    await this.setState({ refresh });
   }
 
   /**
    * Set the resources activitie as refreshed
    */
   async setResourceActivitiesAsRefreshed() {
-    const refresh = Object.assign({}, this.state.refresh, {activities: false});
-    await this.setState({refresh});
+    const refresh = Object.assign({}, this.state.refresh, { activities: false });
+    await this.setState({ refresh });
   }
 
   /** RESOURCE PERMISSION */
@@ -1167,16 +1203,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Refresh the permissions of the current selected  resources
    */
   async refreshSelectedResourcePermissions() {
-    const refresh = Object.assign({}, this.state.refresh, {permissions: true});
-    await this.setState({refresh});
+    const refresh = Object.assign({}, this.state.refresh, { permissions: true });
+    await this.setState({ refresh });
   }
 
   /**
    * Set the resources permissions as refreshed
    */
   async setResourcesPermissionsAsRefreshed() {
-    const refresh = Object.assign({}, this.state.refresh, {permissions: false});
-    await this.setState({refresh});
+    const refresh = Object.assign({}, this.state.refresh, { permissions: false });
+    await this.setState({ refresh });
   }
 
   /** RESOURCE IMPORT */
@@ -1186,7 +1222,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param resourceFile A resource file to import
    */
   async import(resourceFile) {
-    await this.setState({resourceFileToImport: resourceFile});
+    await this.setState({ resourceFileToImport: resourceFile });
   }
 
   /**
@@ -1194,7 +1230,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param result The import result
    */
   async updateImportResult(result) {
-    await this.setState({resourceFileImportResult: result});
+    await this.setState({ resourceFileImportResult: result });
   }
 
   /** Resource export */
@@ -1204,8 +1240,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param resourcesIds The resources ids to export
    * @param foldersIds The folders ids to export
    */
-  async updateResourcesToExport({resourcesIds, foldersIds}) {
-    await this.setState({resourcesToExport: {resourcesIds, foldersIds}});
+  async updateResourcesToExport({ resourcesIds, foldersIds }) {
+    await this.setState({ resourcesToExport: { resourcesIds, foldersIds } });
   }
 
   /**
@@ -1216,8 +1252,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async loadGridResourceSetting() {
     const gridUserSettingEntity = await this.gridResourceUserSetting.getSetting();
     // Merge the columns setting collection by ID
-    const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting, {keepUnknownValue: false});
-    if (!this.props.context.siteSettings.canIUse('totpResourceTypes')) {
+    const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(
+      gridUserSettingEntity?.columnsSetting,
+      { keepUnknownValue: false },
+    );
+    if (!this.props.context.siteSettings.canIUse("totpResourceTypes")) {
       columnsResourceSetting.removeById(ColumnModelTypes.TOTP);
     }
     if (!this.props.passwordExpiryContext.isFeatureEnabled()) {
@@ -1229,7 +1268,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const sorter = gridUserSettingEntity?.sorter || this.defaultSorter;
     const rowsSetting = gridUserSettingEntity?.rowsSetting;
     // process the search after the grid setting is loaded
-    this.setState({columnsResourceSetting, sorter, rowsSetting}, async() => {
+    this.setState({ columnsResourceSetting, sorter, rowsSetting }, async () => {
       await this.search(this.state.filter);
       /*
        * we run scrollTo again here as all data is loaded and the previous sort is loaded as well.
@@ -1261,7 +1300,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async handleChangeColumnView(id, show) {
     const columnsResourceSetting = new ColumnsResourceSettingCollection(this.state.columnsResourceSetting.toDto());
     columnsResourceSetting.updateColumnShowValueFromDefault(id, show);
-    this.setState({columnsResourceSetting}, () => this.updateGridSetting());
+    this.setState({ columnsResourceSetting }, () => this.updateGridSetting());
   }
 
   /**
@@ -1270,8 +1309,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleChangeColumnsSettings(columns) {
     // Merge the columns setting
-    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(new ColumnsResourceSettingCollection(columns), {keepUnknownValue: false});
-    this.setState({columnsResourceSetting}, () => this.updateGridSetting());
+    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(
+      new ColumnsResourceSettingCollection(columns),
+      { keepUnknownValue: false },
+    );
+    this.setState({ columnsResourceSetting }, () => this.updateGridSetting());
   }
 
   /**
@@ -1282,7 +1324,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const rowsSetting = new RowsSettingEntity(this.state.rowsSetting);
     rowsSetting.set("height", rowsSettingHeight);
     this.rowsSetting = rowsSetting;
-    this.setState({rowsSetting: rowsSetting.toDto()}, () => this.updateGridSetting());
+    this.setState({ rowsSetting: rowsSetting.toDto() }, () => this.updateGridSetting());
   }
 
   /**
@@ -1298,20 +1340,17 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     await this.gridResourceUserSetting.setSetting(gridUserSettingEntity);
   }
 
-
   /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <ResourceWorkspaceContext.Provider value={this.state}>
-        {this.props.children}
-      </ResourceWorkspaceContext.Provider>
+      <ResourceWorkspaceContext.Provider value={this.state}>{this.props.children}</ResourceWorkspaceContext.Provider>
     );
   }
 }
-ResourceWorkspaceContextProvider.displayName = 'ResourceWorkspaceContextProvider';
+ResourceWorkspaceContextProvider.displayName = "ResourceWorkspaceContextProvider";
 ResourceWorkspaceContextProvider.propTypes = {
   context: PropTypes.any, // The application context
   children: PropTypes.any,
@@ -1325,7 +1364,13 @@ ResourceWorkspaceContextProvider.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withPasswordExpiry(withLoading(withActionFeedback(withRouter(withTranslation('common')(ResourceWorkspaceContextProvider)))))));
+export default withAppContext(
+  withRbac(
+    withPasswordExpiry(
+      withLoading(withActionFeedback(withRouter(withTranslation("common")(ResourceWorkspaceContextProvider)))),
+    ),
+  ),
+);
 
 /**
  * Resource Workspace Context Consumer HOC
@@ -1336,9 +1381,9 @@ export function withResourceWorkspace(WrappedComponent) {
     render() {
       return (
         <ResourceWorkspaceContext.Consumer>
-          {
-            ResourceWorkspaceContext => <WrappedComponent resourceWorkspaceContext={ResourceWorkspaceContext} {...this.props} />
-          }
+          {(ResourceWorkspaceContext) => (
+            <WrappedComponent resourceWorkspaceContext={ResourceWorkspaceContext} {...this.props} />
+          )}
         </ResourceWorkspaceContext.Consumer>
       );
     }
@@ -1349,18 +1394,18 @@ export function withResourceWorkspace(WrappedComponent) {
  * The list of resource workspace search filter types
  */
 export const ResourceWorkspaceFilterTypes = {
-  NONE: 'NONE', // Initial filter at page load
-  ALL: 'ALL', // All resources
-  FOLDER: 'FILTER-BY-FOLDER', // Resources in a given folder
-  ROOT_FOLDER: 'FILTER-BY-ROOT-FOLDER', // Resources at the root folder
-  TAG: 'FILTER-BY-TAG', // Resources marked with a given tag
-  GROUP: 'FILTER-BY-GROUP', // Resources shared with a given group
-  TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
-  ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Resources the users is owner of
-  PRIVATE: 'PRIVATE', // User's private resources
-  FAVORITE: 'FILTER-BY-FAVORITE', // Favorite resources
-  SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Resources shared with the current user (who is not the owner)
-  EXPIRED: 'FILTER-BY-EXPIRED', // Resources recently modified
+  NONE: "NONE", // Initial filter at page load
+  ALL: "ALL", // All resources
+  FOLDER: "FILTER-BY-FOLDER", // Resources in a given folder
+  ROOT_FOLDER: "FILTER-BY-ROOT-FOLDER", // Resources at the root folder
+  TAG: "FILTER-BY-TAG", // Resources marked with a given tag
+  GROUP: "FILTER-BY-GROUP", // Resources shared with a given group
+  TEXT: "FILTER-BY-TEXT-SEARCH", // Resources matching some text words
+  ITEMS_I_OWN: "FILTER-BY-ITEMS-I-OWN", // Resources the users is owner of
+  PRIVATE: "PRIVATE", // User's private resources
+  FAVORITE: "FILTER-BY-FAVORITE", // Favorite resources
+  SHARED_WITH_ME: "FILTER-BY-SHARED-WITH-ME", // Resources shared with the current user (who is not the owner)
+  EXPIRED: "FILTER-BY-EXPIRED", // Resources recently modified
 };
 
 /**
@@ -1371,5 +1416,5 @@ export const resourceLinkAuthorizedProtocols = [
   urlProtocols.FTPS,
   urlProtocols.HTTPS,
   urlProtocols.HTTP,
-  urlProtocols.SSH
+  urlProtocols.SSH,
 ];

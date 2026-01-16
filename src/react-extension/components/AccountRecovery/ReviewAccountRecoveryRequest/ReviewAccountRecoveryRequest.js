@@ -11,21 +11,21 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import {getUserStatus} from "../../../../shared/utils/userUtils";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
+import { getUserStatus } from "../../../../shared/utils/userUtils";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
-import {withRoles} from "../../../contexts/RoleContext";
+import { withRoles } from "../../../contexts/RoleContext";
 
 class ReviewAccountRecoveryRequest extends Component {
   constructor(props) {
@@ -40,7 +40,7 @@ class ReviewAccountRecoveryRequest extends Component {
   getDefaultState() {
     return {
       status: "rejected",
-      processing: false
+      processing: false,
     };
   }
 
@@ -57,7 +57,7 @@ class ReviewAccountRecoveryRequest extends Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+    await this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -102,7 +102,7 @@ class ReviewAccountRecoveryRequest extends Component {
    */
   onUnexpectedError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -117,7 +117,7 @@ class ReviewAccountRecoveryRequest extends Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -152,7 +152,11 @@ class ReviewAccountRecoveryRequest extends Component {
    * @returns {JSX}
    */
   get creatorName() {
-    return (<>{this.creator.profile.first_name} {this.creator.profile.last_name} ({this.creator.username})</>);
+    return (
+      <>
+        {this.creator.profile.first_name} {this.creator.profile.last_name} ({this.creator.username})
+      </>
+    );
   }
 
   /**
@@ -192,7 +196,8 @@ class ReviewAccountRecoveryRequest extends Component {
         title={this.translate("Review account recovery request")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="review-account-recovery-dialog">
+        className="review-account-recovery-dialog"
+      >
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
             <ul>
@@ -200,13 +205,19 @@ class ReviewAccountRecoveryRequest extends Component {
                 <div className="content-wrapper">
                   <div className="content">
                     <div>
-                      <TooltipPortal message={<Fingerprint fingerprint={this.props.accountRecoveryRequest.fingerprint} />}>
+                      <TooltipPortal
+                        message={<Fingerprint fingerprint={this.props.accountRecoveryRequest.fingerprint} />}
+                      >
                         <span className="name-with-tooltip">{this.creatorName}</span>
                       </TooltipPortal>
-                      <span className="name"><Trans>requested an account recovery</Trans></span>
+                      <span className="name">
+                        <Trans>requested an account recovery</Trans>
+                      </span>
                     </div>
                     <div className="subinfo light">
-                      <span className="dateTimeAgo" title={this.date}>{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
+                      <span className="dateTimeAgo" title={this.date}>
+                        {formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}
+                      </span>
                       <span className="chips-group">
                         <span className={`chips user-status ${creatorStatus}`}>{this.props.t(creatorStatus)}</span>
                         <span className={`chips user-role ${this.isRoleAdmin ? "admin" : "user"}`}>{creatorRole}</span>
@@ -217,38 +228,51 @@ class ReviewAccountRecoveryRequest extends Component {
                 <UserAvatar
                   user={this.creator}
                   baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                  attentionRequired={true}/>
+                  attentionRequired={true}
+                />
               </li>
             </ul>
-            <label><Trans>How do you want to proceed?</Trans></label>
+            <label>
+              <Trans>How do you want to proceed?</Trans>
+            </label>
             <div className="radiolist-alt">
               <div className={`input radio ${this.state.status === "rejected" ? "checked" : ""}`}>
-                <input type="radio"
+                <input
+                  type="radio"
                   value="rejected"
                   onChange={this.handleInputChange}
                   name="status"
                   checked={this.state.status === "rejected"}
                   id="statusRecoverAccountReject"
-                  disabled={this.isProcessing}/>
+                  disabled={this.isProcessing}
+                />
                 <label htmlFor="statusRecoverAccountReject">
-                  <span className="name"><Trans>Reject</Trans></span>
+                  <span className="name">
+                    <Trans>Reject</Trans>
+                  </span>
                   <span className="info">
                     <Trans>{creatorName} did not initiate this request.</Trans>
                   </span>
                 </label>
               </div>
               <div className={`input radio ${this.state.status === "approved" ? "checked" : ""}`}>
-                <input type="radio"
+                <input
+                  type="radio"
                   value="approved"
                   onChange={this.handleInputChange}
                   name="status"
                   checked={this.state.status === "approved"}
                   id="statusRecoverAccountAccept"
-                  disabled={this.isProcessing}/>
+                  disabled={this.isProcessing}
+                />
                 <label htmlFor="statusRecoverAccountAccept">
-                  <span className="name"><Trans>Approve</Trans></span>
+                  <span className="name">
+                    <Trans>Approve</Trans>
+                  </span>
                   <span className="info">
-                    <Trans>I verified with <span>{creatorName}</span> that the request is valid.</Trans>
+                    <Trans>
+                      I verified with <span>{creatorName}</span> that the request is valid.
+                    </Trans>
                   </span>
                 </label>
               </div>
@@ -256,19 +280,20 @@ class ReviewAccountRecoveryRequest extends Component {
           </div>
           <div className="submit-wrapper clearfix">
             <a
-              target="_blank" rel="noopener noreferrer"
-              href="https://help.passbolt.com/faq/start/account-recovery/review-request"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.passbolt.com/docs/admin/authentication/account-recovery"
               className={`button button-left ${this.isProcessing ? "disabled" : ""}`}
-              disabled={this.isProcessing}>
+              disabled={this.isProcessing}
+            >
               <Trans>Learn more</Trans>
             </a>
-            <FormCancelButton
-              disabled={this.isProcessing}
-              onClick={this.handleCloseClick}/>
+            <FormCancelButton disabled={this.isProcessing} onClick={this.handleCloseClick} />
             <FormSubmitButton
               value={this.translate("Submit")}
               disabled={this.isProcessing}
-              processing={this.isProcessing}/>
+              processing={this.isProcessing}
+            />
           </div>
         </form>
       </DialogWrapper>

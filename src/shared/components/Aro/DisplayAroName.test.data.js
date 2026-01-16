@@ -11,16 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.4.0
  */
-import {defaultGroupDto} from "../../models/entity/group/groupEntity.test.data";
-import {defaultUserDto} from "../../models/entity/user/userEntity.test.data";
+import { defaultGroupDto } from "../../models/entity/group/groupEntity.test.data";
+import { defaultUserDto } from "../../models/entity/user/userEntity.test.data";
 
-export const defaultUserProps = data => ({
+export const defaultUserProps = (data) => ({
   displayAs: "User",
   user: defaultUserDto(),
   ...data,
 });
 
-export const defaultGroupProps = data => ({
+export const defaultGroupProps = (data) => ({
   displayAs: "Group",
   group: defaultGroupDto(),
   ...data,

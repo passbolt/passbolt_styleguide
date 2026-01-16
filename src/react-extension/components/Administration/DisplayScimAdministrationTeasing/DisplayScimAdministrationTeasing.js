@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import RedCheck from "../../../../img/svg/red_check.svg";
 import FrameSVG from "../../../../img/svg/Frame.svg";
 
@@ -28,16 +28,37 @@ class DisplayScimAdministrationTeasing extends React.Component {
       <div className="row">
         <div className="scim-teasing main-column">
           <div className="main-content">
-            <h3 className="title" id="scim-title"><Trans>SCIM</Trans><FrameSVG className="pro-teasing-icon"/></h3>
-            <p><Trans>Automate user identity management and provisioning via standardised SCIM integration.</Trans></p>
+            <h3 className="title" id="scim-title">
+              <Trans>SCIM</Trans>
+              <FrameSVG className="pro-teasing-icon" />
+            </h3>
+            <p>
+              <Trans>Automate user identity management and provisioning via standardised SCIM integration.</Trans>
+            </p>
             <div className="scim-info">
               <ul className="scim-description">
-                <li><RedCheck/><Trans>Efficiently manage user identities in the cloud.</Trans></li>
-                <li><RedCheck/><Trans>Simplify onboarding and offboarding processes.</Trans></li>
-                <li><RedCheck/><Trans>Reduce manual administrative overhead and errors.</Trans></li>
+                <li>
+                  <RedCheck />
+                  <Trans>Efficiently manage user identities in the cloud.</Trans>
+                </li>
+                <li>
+                  <RedCheck />
+                  <Trans>Simplify onboarding and offboarding processes.</Trans>
+                </li>
+                <li>
+                  <RedCheck />
+                  <Trans>Reduce manual administrative overhead and errors.</Trans>
+                </li>
               </ul>
               <div>
-                <a className="button primary" href="https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product" target="_blank" rel="noopener noreferrer"><Trans>Upgrade to Passbolt Pro</Trans></a>
+                <a
+                  className="button primary"
+                  href="https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Trans>Upgrade to Passbolt Pro</Trans>
+                </a>
               </div>
             </div>
           </div>
@@ -64,4 +85,4 @@ DisplayScimAdministrationTeasing.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(DisplayScimAdministrationTeasing));
+export default withAppContext(withTranslation("common")(DisplayScimAdministrationTeasing));

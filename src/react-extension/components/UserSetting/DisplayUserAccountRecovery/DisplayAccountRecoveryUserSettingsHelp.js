@@ -12,8 +12,8 @@
  * @since         5.0.0
  */
 
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
 
 class DisplayAccountRecoveryUserSettingsHelp extends Component {
@@ -24,15 +24,26 @@ class DisplayAccountRecoveryUserSettingsHelp extends Component {
   render() {
     return (
       <div className="sidebar-help-section">
-        <h3><Trans>Need some help?</Trans></h3>
-        <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
-        <a className="button" href="https://help.passbolt.com/faq/start/account-recovery/subscribe" target="_blank" rel="noopener noreferrer">
-          <FileTextSVG/>
-          <span><Trans>Read the documentation</Trans></span>
+        <h3>
+          <Trans>Need some help?</Trans>
+        </h3>
+        <p>
+          <Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans>
+        </p>
+        <a
+          className="button"
+          href="https://www.passbolt.com/docs/user/quickstart/browser/admin-assisted-recovery"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FileTextSVG />
+          <span>
+            <Trans>Read the documentation</Trans>
+          </span>
         </a>
       </div>
     );
   }
 }
 
-export default withTranslation('common')(DisplayAccountRecoveryUserSettingsHelp);
+export default withTranslation("common")(DisplayAccountRecoveryUserSettingsHelp);

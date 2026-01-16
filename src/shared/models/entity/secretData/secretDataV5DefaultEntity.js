@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 
-import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import SecretDataEntity, { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
 import CustomFieldsCollection from "../customField/customFieldsCollection";
 import CustomFieldEntity from "../customField/customFieldEntity";
@@ -24,25 +24,22 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "object_type",
-        "password",
-      ],
-      "properties": {
+      type: "object",
+      required: ["object_type", "password"],
+      properties: {
         ...SecretDataEntity.getSchema().properties,
-        "password": {
-          "type": "string",
-          "maxLength": 4096,
-          "nullable": true
+        password: {
+          type: "string",
+          maxLength: 4096,
+          nullable: true,
         },
-        "description": {
-          "type": "string",
-          "maxLength": 50000,
-          "nullable": true,
+        description: {
+          type: "string",
+          maxLength: 50000,
+          nullable: true,
         },
-        "custom_fields": CustomFieldsCollection.getSchema(),
-      }
+        custom_fields: CustomFieldsCollection.getSchema(),
+      },
     };
   }
 
@@ -77,7 +74,7 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
       password: "",
     };
 
-    return new SecretDataV5DefaultEntity({...defaultData, ...data}, options);
+    return new SecretDataV5DefaultEntity({ ...defaultData, ...data }, options);
   }
 
   /**
@@ -109,15 +106,19 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
       return true;
     }
 
-    const isCustomFieldDefined = typeof(this.customFields) !== "undefined" && this.customFields !== null;
-    const isOtherCustomFieldDefined = typeof(secretDto.custom_fields) !== "undefined" && secretDto.custom_fields !== null;
+    const isCustomFieldDefined = typeof this.customFields !== "undefined" && this.customFields !== null;
+    const isOtherCustomFieldDefined =
+      typeof secretDto.custom_fields !== "undefined" && secretDto.custom_fields !== null;
     if (!isCustomFieldDefined && !isOtherCustomFieldDefined) {
       return false;
-    } else if (!isCustomFieldDefined && isOtherCustomFieldDefined || isCustomFieldDefined && !isOtherCustomFieldDefined) {
+    } else if (
+      (!isCustomFieldDefined && isOtherCustomFieldDefined) ||
+      (isCustomFieldDefined && !isOtherCustomFieldDefined)
+    ) {
       return true;
     }
 
-    const otherCollection = new CustomFieldsCollection(secretDto.custom_fields, {validate: false});
+    const otherCollection = new CustomFieldsCollection(secretDto.custom_fields, { validate: false });
     return CustomFieldsCollection.areCollectionsDifferent(this.customFields, otherCollection);
   }
 

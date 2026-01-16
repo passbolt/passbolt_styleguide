@@ -46,8 +46,8 @@ class UserDirectoryModel {
     this.hostError = null;
     this.port = defaultDomain?.port?.toString() || "389";
     this.portError = null;
-    this.username =  defaultDomain?.username || "";
-    this.password =  defaultDomain?.password || "";
+    this.username = defaultDomain?.username || "";
+    this.password = defaultDomain?.password || "";
     this.domain = defaultDomain?.domain_name || "";
     this.domainError = null;
     this.baseDn = defaultDomain?.base_dn || "";
@@ -138,40 +138,52 @@ class UserDirectoryModel {
   static defaultFieldsMapping(data = {}) {
     return {
       ad: {
-        user: Object.assign({
-          id: 'objectGuid',
-          firstname: 'givenName',
-          lastname: 'sn',
-          username: DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE,
-          created: 'whenCreated',
-          modified: 'whenChanged',
-          groups: 'memberOf',
-          enabled: 'userAccountControl',
-        }, data?.ad?.user),
-        group: Object.assign({
-          id: 'objectGuid',
-          name: 'cn',
-          created: 'whenCreated',
-          modified: 'whenChanged',
-          users: 'member',
-        }, data?.ad?.group)
+        user: Object.assign(
+          {
+            id: "objectGuid",
+            firstname: "givenName",
+            lastname: "sn",
+            username: DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE,
+            created: "whenCreated",
+            modified: "whenChanged",
+            groups: "memberOf",
+            enabled: "userAccountControl",
+          },
+          data?.ad?.user,
+        ),
+        group: Object.assign(
+          {
+            id: "objectGuid",
+            name: "cn",
+            created: "whenCreated",
+            modified: "whenChanged",
+            users: "member",
+          },
+          data?.ad?.group,
+        ),
       },
       openldap: {
-        user: Object.assign({
-          id: 'entryUuid',
-          firstname: 'givenname',
-          lastname: 'sn',
-          username: 'mail',
-          created: 'createtimestamp',
-          modified: 'modifytimestamp',
-        }, data?.openldap?.user),
-        group: Object.assign({
-          id: 'entryUuid',
-          name: 'cn',
-          created: 'createtimestamp',
-          modified: 'modifytimestamp',
-          users: DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE,
-        }, data?.openldap?.group)
+        user: Object.assign(
+          {
+            id: "entryUuid",
+            firstname: "givenname",
+            lastname: "sn",
+            username: "mail",
+            created: "createtimestamp",
+            modified: "modifytimestamp",
+          },
+          data?.openldap?.user,
+        ),
+        group: Object.assign(
+          {
+            id: "entryUuid",
+            name: "cn",
+            created: "createtimestamp",
+            modified: "modifytimestamp",
+            users: DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE,
+          },
+          data?.openldap?.group,
+        ),
       },
     };
   }
@@ -184,9 +196,12 @@ class UserDirectoryModel {
    */
   static defaultFallbackFields(data = {}) {
     return {
-      ad: Object.assign({
-        username: "",
-      }, data?.ad)
+      ad: Object.assign(
+        {
+          username: "",
+        },
+        data?.ad,
+      ),
     };
   }
 

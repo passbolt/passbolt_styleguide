@@ -12,7 +12,7 @@
  * @since         4.4.0
  */
 
-import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, { ColumnFields, ColumnModelTypes } from "./ColumnModel";
 
 /**
  * Model related to the column "attention required" use only with the UI
@@ -35,4 +35,3 @@ class ColumnAttentionRequiredModel extends ColumnModel {
 }
 
 export default ColumnAttentionRequiredModel;
-

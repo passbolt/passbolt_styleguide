@@ -14,8 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withDropdown} from "./DropdownContext";
-
+import { withDropdown } from "./DropdownContext";
 
 /**
  * This component acts as a dropdown item.
@@ -34,10 +33,11 @@ class DropdownMenu extends React.Component {
    */
   render() {
     return (
-      this.dropdownMenuMustShow &&
-          <ul className={`dropdown-content menu visible ${this.props.className} ${this.props.direction}`}>
-            {this.props.children}
-          </ul>
+      this.dropdownMenuMustShow && (
+        <ul className={`dropdown-content menu visible ${this.props.className} ${this.props.direction}`}>
+          {this.props.children}
+        </ul>
+      )
     );
   }
 }
@@ -50,7 +50,7 @@ DropdownMenu.propTypes = {
   direction: PropTypes.string, // The direction property
   className: PropTypes.string, // The className property
   dropdownContext: PropTypes.any, // The dropdown context
-  children: PropTypes.any // The children property
+  children: PropTypes.any, // The children property
 };
 
 export default withDropdown(DropdownMenu);

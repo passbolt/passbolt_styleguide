@@ -17,23 +17,20 @@
  */
 
 import DisplayInFormMenuTestPage from "./DisplayInformMenu.test.page";
-import {defaultProps, defaultPropsWithMissingMetadataKey} from "./DisplayInformMenu.test.data";
-import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import {waitFor} from "@testing-library/dom";
+import { defaultProps, defaultPropsWithMissingMetadataKey } from "./DisplayInformMenu.test.data";
+import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultPasswordPoliciesDto } from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {
-  defaultMetadataTypesSettingsV6Dto
-} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { defaultMetadataTypesSettingsV6Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
-  resourceTypesV4CollectionDto, resourceTypesV5CollectionDto
+  resourceTypesV4CollectionDto,
+  resourceTypesV5CollectionDto,
 } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -41,160 +38,152 @@ beforeEach(() => {
 });
 
 describe("See the Inform Menu", () => {
-  describe('As a signed-in user I should see menu items', () => {
-    it('I should see all menu items for username with not value in input', async() => {
+  let page;
+  describe("As a signed-in user I should see menu items", () => {
+    it("I should see all menu items for username with not value in input", async () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "username", inputValue: "", suggestedResources: resources};
+      const configuration = { inputType: "username", inputValue: "", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(4);
     });
 
-    it('I should see all menu items for username with value in input', async() => {
+    it("I should see all menu items for username with value in input", async () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "username", inputValue: "test@passbolt.com", suggestedResources: resources};
+      const configuration = { inputType: "username", inputValue: "test@passbolt.com", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(4);
     });
 
-    it('I should see all menu items for password with not value in input', async() => {
+    it("I should see all menu items for password with not value in input", async () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "password", inputValue: "", suggestedResources: resources};
+      const configuration = { inputType: "password", inputValue: "", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(5);
     });
 
-    it('I should see all menu items for password with value in input', async() => {
+    it("I should see all menu items for password with value in input", async () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "password", inputValue: "thisisapassword", suggestedResources: resources};
+      const configuration = { inputType: "password", inputValue: "thisisapassword", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(4);
     });
 
-    it('I should  see create credentials menu items if I am missing the shared metadata key but it is not enforced', async() => {
+    it("I should  see create credentials menu items if I am missing the shared metadata key but it is not enforced", async () => {
       expect.assertions(1);
-      const props = defaultPropsWithMissingMetadataKey({metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto())});
+      const props = defaultPropsWithMissingMetadataKey({
+        metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
+      });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "username", inputValue: "", suggestedResources: resources};
+      const configuration = { inputType: "username", inputValue: "", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(4);
     });
 
-    it('I should not see create credentials menu items if metadata type setting is not loaded', async() => {
+    it("I should not see create credentials menu items if metadata type setting is not loaded", async () => {
       expect.assertions(1);
-      const props = defaultProps({metadataTypeSettings: null});
+      const props = defaultProps({ metadataTypeSettings: null });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "username", inputValue: "", suggestedResources: resources};
+      const configuration = { inputType: "username", inputValue: "", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
 
-    it('I should not see create credentials menu items if I am missing the shared metadata key and it is enforced', async() => {
+    it("I should not see create credentials menu items if I am missing the shared metadata key and it is enforced", async () => {
       expect.assertions(1);
       const props = defaultPropsWithMissingMetadataKey();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "username", inputValue: "", suggestedResources: resources};
+      const configuration = { inputType: "username", inputValue: "", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
 
-    it('I should not see create credentials menu items if metadata type setting allow only v5 and resource type has only v4', async() => {
+    it("I should not see create credentials menu items if metadata type setting allow only v5 and resource type has only v4", async () => {
       expect.assertions(1);
       const metadataTypeSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
       const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
-      const props = defaultProps({metadataTypeSettings, resourceTypes});
+      const props = defaultProps({ metadataTypeSettings, resourceTypes });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "username", inputValue: "test@passbolt.com", suggestedResources: resources};
+      const configuration = { inputType: "username", inputValue: "test@passbolt.com", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
 
-    it('I should not see create credentials menu items if metadata type setting allow only v4 and resource type has only v5', async() => {
+    it("I should not see create credentials menu items if metadata type setting allow only v4 and resource type has only v5", async () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
-      const props = defaultProps({resourceTypes});
+      const props = defaultProps({ resourceTypes });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "password", inputValue: "", suggestedResources: resources};
+      const configuration = { inputType: "password", inputValue: "", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
 
-    it('I should not see save credentials menu items if metadata type setting is not loaded', async() => {
+    it("I should not see save credentials menu items if metadata type setting is not loaded", async () => {
       expect.assertions(1);
-      const props = defaultProps({metadataTypeSettings: null});
+      const props = defaultProps({ metadataTypeSettings: null });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "password", inputValue: "thisisapassword", suggestedResources: resources};
+      const configuration = { inputType: "password", inputValue: "thisisapassword", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
 
-    it('I should not see save credentials menu items if I am missing shared metadata keys', async() => {
+    it("I should not see save credentials menu items if I am missing shared metadata keys", async () => {
       expect.assertions(1);
       const props = defaultPropsWithMissingMetadataKey();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = {inputType: "password", inputValue: "thisisapassword", suggestedResources: resources};
+      const configuration = { inputType: "password", inputValue: "thisisapassword", suggestedResources: resources };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });

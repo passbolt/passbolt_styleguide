@@ -17,8 +17,8 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -28,24 +28,23 @@ export function defaultAppContext(appContext = {}) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
-    port: new MockPort()
+    port: new MockPort(),
   };
   return Object.assign(defaultAppContext, appContext);
 }
-
 
 /**
  * Default props
  * @returns {*}
  */
 export function defaultProps(props = {}) {
-  const defaultProps =  {
+  const defaultProps = {
     context: defaultAppContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     dialogContext: defaultDialogContext(),
     loadingContext: {
       add: jest.fn(),
-      remove: jest.fn()
+      remove: jest.fn(),
     },
   };
   return Object.assign(defaultProps, props);
@@ -53,19 +52,19 @@ export function defaultProps(props = {}) {
 
 export const themes = [
   {
-    id:  'default',
-    name: 'default',
+    id: "default",
+    name: "default",
   },
   {
-    id:  'midgar',
-    name: 'midgar',
+    id: "midgar",
+    name: "midgar",
   },
   {
-    id:  'solarized_dark',
-    name: 'solarized_dark',
+    id: "solarized_dark",
+    name: "solarized_dark",
   },
   {
-    id:  'solarized_light',
-    name: 'solarized_light',
+    id: "solarized_light",
+    name: "solarized_light",
   },
 ];

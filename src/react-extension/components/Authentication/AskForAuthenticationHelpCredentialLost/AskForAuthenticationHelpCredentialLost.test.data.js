@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {AskForAuthenticationHelpCredentialLostVariations} from "./AskForAuthenticationHelpCredentialLost";
+import { AskForAuthenticationHelpCredentialLostVariations } from "./AskForAuthenticationHelpCredentialLost";
 
 /**
  * Returns the default app context for the unit test
@@ -21,7 +21,7 @@ import {AskForAuthenticationHelpCredentialLostVariations} from "./AskForAuthenti
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
-    trustedDomain: "https://passbolt.local"
+    trustedDomain: "https://passbolt.local",
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

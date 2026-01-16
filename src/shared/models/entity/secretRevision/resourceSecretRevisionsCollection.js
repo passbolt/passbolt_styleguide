@@ -47,8 +47,8 @@ class ResourceSecretRevisionsCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": SecretRevisionEntity.getSchema(),
+      type: "array",
+      items: SecretRevisionEntity.getSchema(),
     };
   }
 
@@ -59,7 +59,7 @@ class ResourceSecretRevisionsCollection extends EntityV2Collection {
    * @throws {EntityValidationError} If a secret revision does not have the same resource id.
    */
   validateBuildRules(item, options = {}) {
-    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
+    this.assertNotExist("id", item._props.id, { haystackSet: options?.uniqueIdsSetCache });
     this.assertSameResourceId(item);
   }
 
@@ -89,7 +89,9 @@ class ResourceSecretRevisionsCollection extends EntityV2Collection {
    * If no secret revision is found in the collection, do nothing.
    */
   sortByModified() {
-    this._items.sort((secretRevisionEntityA, secretRevisionEntityB) => secretRevisionEntityB.modified > secretRevisionEntityA.modified ? 1 : -1);
+    this._items.sort((secretRevisionEntityA, secretRevisionEntityB) =>
+      secretRevisionEntityB.modified > secretRevisionEntityA.modified ? 1 : -1,
+    );
   }
 
   /**
@@ -97,7 +99,7 @@ class ResourceSecretRevisionsCollection extends EntityV2Collection {
    * @returns {array}
    */
   toDto(contains = SecretRevisionEntity.ALL_CONTAIN_OPTIONS) {
-    return this._items.map(entity => entity.toDto(contains));
+    return this._items.map((entity) => entity.toDto(contains));
   }
 
   /*
@@ -111,14 +113,14 @@ class ResourceSecretRevisionsCollection extends EntityV2Collection {
    */
   pushMany(data, entityOptions = {}, options = {}) {
     const uniqueIdsSetCache = new Set(this.extract("id"));
-    const onItemPushed = item => {
+    const onItemPushed = (item) => {
       uniqueIdsSetCache.add(item._props.id);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueIdsSetCache },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);
@@ -128,7 +130,7 @@ class ResourceSecretRevisionsCollection extends EntityV2Collection {
    * Filter out the items which have encrypted secrets.
    */
   filterOutItemsHavingSecretDataEncrypted() {
-    this.filterByCallback(resourceRevision => !resourceRevision.secrets?.hasSecretsDataEncrypted());
+    this.filterByCallback((resourceRevision) => !resourceRevision.secrets?.hasSecretsDataEncrypted());
   }
 }
 

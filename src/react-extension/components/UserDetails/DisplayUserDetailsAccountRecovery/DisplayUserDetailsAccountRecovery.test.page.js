@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayUserDetailsAccountRecovery from "./DisplayUserDetailsAccountRecovery";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,9 @@ export default class DisplayUserDetailsAccountRecoveryPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayUserDetailsAccountRecovery {...props}/>
+        <DisplayUserDetailsAccountRecovery {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,58 +38,57 @@ export default class DisplayUserDetailsAccountRecoveryPage {
    * Returns the current status label
    */
   get currentStatus() {
-    return this._page.container.querySelector('.pending-request-status.label').textContent;
+    return this._page.container.querySelector(".pending-request-status.label").textContent;
   }
 
   /**
    * Returns the current status button
    */
   get currentStatusButton() {
-    return this._page.container.querySelector('.review-request');
+    return this._page.container.querySelector(".review-request");
   }
-
 
   /**
    * Returns the previous recovery request value
    */
   get previousRecoveryRequest() {
-    return this._page.container.querySelector('.previous-request.value').textContent;
+    return this._page.container.querySelector(".previous-request.value").textContent;
   }
 
   /**
    * Returns the number of request value
    */
   get numberOfRecovery() {
-    return this._page.container.querySelector('.requests-count.value').textContent;
+    return this._page.container.querySelector(".requests-count.value").textContent;
   }
 
   /**
    * Returns true if the component is in a collapsed mode
    */
   get title() {
-    return this._page.container.querySelector('h4 button').textContent;
+    return this._page.container.querySelector("h4 button").textContent;
   }
 
   /**
    * Returns the loading element
    */
   get loadingMessage() {
-    return this._page.container.querySelector('.processing-text');
+    return this._page.container.querySelector(".processing-text");
   }
 
   /**
    * Returns true
    */
   isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving account recovery';
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === "Retrieving account recovery";
   }
 
   /**
    * Toggle the collapse / expand component behavior
    */
   async toggleCollapse() {
-    const element = this._page.container.querySelector('h4 button');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector("h4 button");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -107,7 +106,7 @@ export default class DisplayUserDetailsAccountRecoveryPage {
    * Review account recovery
    */
   async reviewAccountRecovery() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.currentStatusButton, leftClick);
     await waitFor(() => {});
   }

@@ -12,7 +12,7 @@
  * @since         4.3.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayUserTheme from "./DisplayUserTheme";
@@ -29,9 +29,9 @@ export default class DisplayUserThemePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayUserTheme {...props}/>
+        <DisplayUserTheme {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }
@@ -40,7 +40,7 @@ export default class DisplayUserThemePage {
    * Returns the number of displayed themes
    */
   get themesCount() {
-    return this._page.container.querySelectorAll('.themes button').length;
+    return this._page.container.querySelectorAll(".themes button").length;
   }
 
   /**
@@ -48,7 +48,7 @@ export default class DisplayUserThemePage {
    * @index The resource index
    */
   theme(index) {
-    const element = this._page.container.querySelectorAll('.themes button')[index - 1];
+    const element = this._page.container.querySelectorAll(".themes button")[index - 1];
     const self = this;
     return {
       get name() {
@@ -56,7 +56,7 @@ export default class DisplayUserThemePage {
       },
       async select() {
         await self.user.click(element);
-      }
+      },
     };
   }
 }

@@ -11,30 +11,28 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.4.0
  */
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import React from "react";
 import DisplayUsers from "./DisplayUsers";
-import {defaultProps, propsWithFirstUserAttentionRequired} from "./DisplayUsers.test.data";
+import { defaultProps, propsWithFirstUserAttentionRequired } from "./DisplayUsers.test.data";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
+import { UserWorkspaceContext } from "../../../contexts/UserWorkspaceContext";
 
 export default {
-  title: 'Components/User/DisplayUsers',
+  title: "Components/User/DisplayUsers",
   component: DisplayUsers,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <AppContext.Provider value={args.context}>
         <UserWorkspaceContext.Provider value={args.userWorkspaceContext}>
-          <MemoryRouter initialEntries={['/']}>
+          <MemoryRouter initialEntries={["/"]}>
             <div id="container" className="page user">
-              <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
+              <div id="app" className="app ready" tabIndex="1000" style={{ margin: "-1rem" }}>
                 <div className="panel main">
                   <div className="panel middle">
                     <div className="middle-right">
                       <div className="breadcrumbs-and-grid">
-                        <Route component={routerProps =>
-                          <Story {...args} {...routerProps}/>}>
-                        </Route>
+                        <Route component={(routerProps) => <Story {...args} {...routerProps} />}></Route>
                       </div>
                     </div>
                   </div>
@@ -45,7 +43,7 @@ export default {
         </UserWorkspaceContext.Provider>
       </AppContext.Provider>
     ),
-  ]
+  ],
 };
 
 export const Default = {

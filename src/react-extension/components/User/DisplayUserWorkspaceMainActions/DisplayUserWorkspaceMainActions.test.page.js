@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
@@ -35,12 +34,12 @@ export default class DisplayUserWorkspaceMainActionsTestPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
-            <ManageDialogs/>
-            <DisplayUserWorkspaceMainActions {...props}/>
+            <ManageDialogs />
+            <DisplayUserWorkspaceMainActions {...props} />
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -76,30 +75,29 @@ class DisplayUserWorkspaceMainActionsPageObject {
    * Returns the menu elements
    */
   get menu() {
-    return this._container.querySelector('.dropdown');
+    return this._container.querySelector(".dropdown");
   }
 
   /**
    * Returns the create menu elements
    */
   get createMenu() {
-    return this._container.querySelector('.dropdown .create.primary');
+    return this._container.querySelector(".dropdown .create.primary");
   }
 
   /**
    * Returns the new user menu elements
    */
   get newUserMenu() {
-    return this._container.querySelector('#user_action');
+    return this._container.querySelector("#user_action");
   }
 
   /**
    * Returns the new group menu elements
    */
   get newGroupMenu() {
-    return this._container.querySelector('#group_action');
+    return this._container.querySelector("#group_action");
   }
-
 
   /**
    * Returns true if the page object exists in the container
@@ -109,8 +107,8 @@ class DisplayUserWorkspaceMainActionsPageObject {
   }
 
   /** Click on the action menu */
-  async clickOnMenu(element)  {
-    const leftClick = {button: 0};
+  async clickOnMenu(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

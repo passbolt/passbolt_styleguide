@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayMfaProviderConfiguration from "./DisplayMfaProviderConfiguration";
 
@@ -28,9 +28,9 @@ export default class DisplayMfaProviderConfigurationPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayMfaProviderConfiguration {...props}/>
+        <DisplayMfaProviderConfiguration {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,49 +38,49 @@ export default class DisplayMfaProviderConfigurationPage {
    * Returns the mfa configuration element
    */
   get mfaConfiguration() {
-    return this._page.container.querySelector('.mfa-configuration');
+    return this._page.container.querySelector(".mfa-configuration");
   }
 
   /**
    * Returns mfa provider configuration title
    */
   get title() {
-    return this._page.container.querySelector('h3');
+    return this._page.container.querySelector("h3");
   }
 
   /**
    * Returns the success icon
    */
   get successIcon() {
-    return this._page.container.querySelector('.success');
+    return this._page.container.querySelector(".success");
   }
 
   /**
    * Returns the description provider configuration
    */
   get description() {
-    return this._page.container.querySelector('.additional-information p');
+    return this._page.container.querySelector(".additional-information p");
   }
 
   /**
    * Returns the verified provider configuration date
    */
   get verifiedDate() {
-    return this._page.container.querySelector('.created.date');
+    return this._page.container.querySelector(".created.date");
   }
 
   /**
    * Returns the turn off button
    */
   get turnedOffButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns the Manage provider button
    */
   get manageProviderButton() {
-    return this._page.container.querySelector('.button.cancel');
+    return this._page.container.querySelector(".button.cancel");
   }
 
   /**
@@ -110,7 +110,7 @@ export default class DisplayMfaProviderConfigurationPage {
    * @param {Element} element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

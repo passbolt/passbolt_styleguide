@@ -16,12 +16,12 @@
  * Unit tests on DisplayMfaAdministration in regard of specifications
  */
 import "../../../../../test/mocks/mockPortal.js";
-import {defaultProps, mockMfaSettings} from "./DisplayMfaAdministration.test.data";
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import { defaultProps, mockMfaSettings } from "./DisplayMfaAdministration.test.data";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 import DisplayMfaAdministrationPage from "./DisplayMfaAdministration.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import {enableFetchMocks} from 'jest-fetch-mock';
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import { enableFetchMocks } from "jest-fetch-mock";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -33,7 +33,7 @@ describe("See the MFA settings", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  describe('As AD I should see the MFA provider activation state on the administration settings page', () => {
+  describe("As AD I should see the MFA provider activation state on the administration settings page", () => {
     /**
      * I should see the MFA provider activation state on the administration settings page
      */
@@ -42,7 +42,7 @@ describe("See the MFA settings", () => {
       page = new DisplayMfaAdministrationPage(context, props);
     });
 
-    it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
+    it("As AD I should see if all fields is available for my Passbolt instance on the administration settings page", async () => {
       expect.assertions(9);
 
       expect(page.exists()).toBeTruthy();
@@ -59,47 +59,50 @@ describe("See the MFA settings", () => {
       expect(page.duoClientSecret).toBe(null);
     });
 
-    it('As a logged in administrator I can see an help box in the MFA policy administration screen ', async() => {
+    it("As a logged in administrator I can see an help box in the MFA policy administration screen ", async () => {
       expect.assertions(6);
 
       expect(page.exists()).toBeTruthy();
       expect(page.helpBox).not.toBeNull();
       expect(page.helpBoxTitle.textContent).toBe("Need some help?");
-      expect(page.helpBoxDescription.textContent).toBe("Check out our Multi Factor Authentication configuration guide.");
+      expect(page.helpBoxDescription.textContent).toBe(
+        "Check out our Multi Factor Authentication configuration guide.",
+      );
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://passbolt.com/docs/admin/authentication/mfa/');
+      expect(page.helpBoxButton.getAttribute("href")).toEqual("https://passbolt.com/docs/admin/authentication/mfa/");
     });
 
-    it('As AD I should save mfa on the administration settings page', async() => {
+    it("As AD I should save mfa on the administration settings page", async () => {
       //button should be disable by default
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       //Call to save the settings
       fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse({}));
       //Call to API to retrieve the settings
       fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.checkYubikey();
       await page.saveSettings();
 
       expect.assertions(3);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The multi factor authentication settings for the organization were updated.");
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The multi factor authentication settings for the organization were updated.",
+      );
       // We expect the button to be disable
       expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
 
-    it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+    it("As AD I should see an error toaster if the submit operation fails for an unexpected reason", async () => {
       //button should be disable by default
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       await page.checkYubikey();
 
       // Mock the request function to make it return an error.
-      const error = {message: "Unable to reach the server, an unexpected error occurred"};
+      const error = { message: "Unable to reach the server, an unexpected error occurred" };
 
       fetch.doMockOnceIf(/mfa\/settings*/, () => Promise.reject(error));
 
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displayError").mockImplementation(() => {});
       await page.saveSettings();
 
       expect.assertions(2);
@@ -107,7 +110,7 @@ describe("See the MFA settings", () => {
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(error.message);
     });
 
-    it('As AD I should see an error message if inputs are empty', async() => {
+    it("As AD I should see an error message if inputs are empty", async () => {
       //button should be disable by default
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       page.fillYubikeySecret("");
@@ -127,8 +130,7 @@ describe("See the MFA settings", () => {
       expect(page.duoClientSecretErrorMessage).toBe("A client secret is required.");
     });
 
-
-    it('As AD I should not be able to click on save if there is no change', async() => {
+    it("As AD I should not be able to click on save if there is no change", async () => {
       expect.assertions(2);
       //button should be disable by default
       expect(page.isSaveButtonEnabled()).toBeFalsy();
@@ -139,7 +141,7 @@ describe("See the MFA settings", () => {
       expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
 
-    it('As AD I want to see the passwords I entered in the MFA administration settings forms', async() => {
+    it("As AD I want to see the passwords I entered in the MFA administration settings forms", async () => {
       await page.toggleObfuscate(page.duoClientSecretButton);
       await page.toggleObfuscate(page.yubikeySecretKeyButton);
 
@@ -149,7 +151,7 @@ describe("See the MFA settings", () => {
       expect(page.isObfuscated(page.duoClientSecretButton)).toBeFalsy();
     });
 
-    it('I should see all fields disabled”', () => {
+    it("I should see all fields disabled”", () => {
       fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
 
       expect.assertions(3);
@@ -165,11 +167,13 @@ describe("See the MFA settings", () => {
     it("Should display a message to the admin explaining the reason why the form is not displayed", () => {
       expect.assertions(1);
       const context = defaultAppContext({
-        trustedDomain: "http://localhost"
+        trustedDomain: "http://localhost",
       }); // The applicative context
-      const props = defaultProps({context}); // The props to pass
+      const props = defaultProps({ context }); // The props to pass
       const page = new DisplayMfaAdministrationPage(context, props);
-      expect(page.formNotDisplayedMessage.textContent).toStrictEqual("Sorry the multi factor authentication feature is only available in a secure context (HTTPS).");
+      expect(page.formNotDisplayedMessage.textContent).toStrictEqual(
+        "Sorry the multi factor authentication feature is only available in a secure context (HTTPS).",
+      );
     });
   });
 });

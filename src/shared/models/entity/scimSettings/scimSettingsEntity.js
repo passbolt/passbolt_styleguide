@@ -32,31 +32,29 @@ class ScimSettingsEntity extends EntityV2 {
   static getSchema() {
     return {
       type: "object",
-      required: [
-        "scim_user_id",
-      ],
+      required: ["scim_user_id"],
       properties: {
         id: {
           type: "string",
           format: "uuid",
-          nullable: true
+          nullable: true,
         },
         scim_user_id: {
           type: "string",
-          format: "uuid"
+          format: "uuid",
         },
         setting_id: {
           type: "string",
           format: "uuid",
-          nullable: true
+          nullable: true,
         },
         secret_token: {
           type: "string",
           length: SECRET_TOKEN_LENGTH,
           pattern: SECRET_TOKEN_PATTERN,
-          nullable: true
-        }
-      }
+          nullable: true,
+        },
+      },
     };
   }
 
@@ -144,8 +142,8 @@ class ScimSettingsEntity extends EntityV2 {
    * @returns {string} A secret token starting with "pb_" followed by 36 random alphanumeric characters
    */
   static generateScimSecretToken() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const prefix = 'pb_';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const prefix = "pb_";
     const secretLength = ScimSettingsEntity.SECRET_TOKEN_LENGTH - prefix.length;
 
     // Rejection sampling to avoid modulo bias
@@ -163,9 +161,8 @@ class ScimSettingsEntity extends EntityV2 {
       }
     }
 
-    return prefix + secret.join('');
+    return prefix + secret.join("");
   }
-
 
   /**
    * Create a SCIM settings entity from a DTO

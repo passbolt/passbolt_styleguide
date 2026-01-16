@@ -12,7 +12,7 @@
  * @since         5.6.0
  */
 
-import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import SecretDataEntity, { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV5StandaloneNoteEntity extends SecretDataEntity {
@@ -22,18 +22,15 @@ class SecretDataV5StandaloneNoteEntity extends SecretDataEntity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "object_type",
-        "description",
-      ],
-      "properties": {
+      type: "object",
+      required: ["object_type", "description"],
+      properties: {
         ...SecretDataEntity.getSchema().properties,
-        "description": {
-          "type": "string",
-          "maxLength": 50000,
+        description: {
+          type: "string",
+          maxLength: 50000,
         },
-      }
+      },
     };
   }
 
@@ -49,7 +46,7 @@ class SecretDataV5StandaloneNoteEntity extends SecretDataEntity {
       description: "",
     };
 
-    return new SecretDataV5StandaloneNoteEntity({...defaultData, ...data}, options);
+    return new SecretDataV5StandaloneNoteEntity({ ...defaultData, ...data }, options);
   }
 
   /**

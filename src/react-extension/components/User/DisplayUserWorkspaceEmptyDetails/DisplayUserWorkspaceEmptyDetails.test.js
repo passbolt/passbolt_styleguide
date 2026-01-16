@@ -17,7 +17,7 @@ import DisplayUserWorkspaceEmptyDetailsPage from "./DisplayUserWorkspaceEmptyDet
  * Unit tests on DisplayUserWorkspaceEmptyDetails in regard of specifications
  */
 describe("DisplayUserWorkspaceEmptyDetails", () => {
-  it('As LU I see the empty sidebar with its content', () => {
+  it("As LU I see the empty sidebar with its content", () => {
     expect.assertions(2);
 
     const page = new DisplayUserWorkspaceEmptyDetailsPage();

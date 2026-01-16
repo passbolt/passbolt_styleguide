@@ -12,14 +12,14 @@
  * @since         5.0.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ResourceTypesCollection from "../../models/entity/resourceType/resourceTypesCollection";
-import {withResourceTypesLocalStorage} from "../../context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {KEEPASS_ICON_LIST} from "../../../react-extension/components/Resource/ResourceForm/keepassIconList.data";
-import {ICON_TYPE_KEEPASS_ICON_SET, COLOR_TRANSPARENT} from "../../models/entity/resource/metadata/IconEntity";
-import {getContrastedColor} from "../../utils/color";
-import {PASSBOLT_DEFAULT_RESOURCE_TYPE_ICON_MAP} from "../../../react-extension/components/Resource/ResourceForm/passboltDefaultResourceTypeIcons.data";
+import { withResourceTypesLocalStorage } from "../../context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { KEEPASS_ICON_LIST } from "../../../react-extension/components/Resource/ResourceForm/keepassIconList.data";
+import { ICON_TYPE_KEEPASS_ICON_SET, COLOR_TRANSPARENT } from "../../models/entity/resource/metadata/IconEntity";
+import { getContrastedColor } from "../../utils/color";
+import { PASSBOLT_DEFAULT_RESOURCE_TYPE_ICON_MAP } from "../../../react-extension/components/Resource/ResourceForm/passboltDefaultResourceTypeIcons.data";
 
 export class ResourceIcon extends Component {
   static resourceTypeIdIconMap = {};
@@ -30,7 +30,10 @@ export class ResourceIcon extends Component {
    * @returns {JSX}
    */
   getResourceIcon() {
-    if (typeof(this.props.resource.metadata?.icon?.value) !== "number" || this.props.resource.metadata?.icon?.type !== ICON_TYPE_KEEPASS_ICON_SET) {
+    if (
+      typeof this.props.resource.metadata?.icon?.value !== "number" ||
+      this.props.resource.metadata?.icon?.type !== ICON_TYPE_KEEPASS_ICON_SET
+    ) {
       return ResourceIcon.getDefaultResourceTypeIcon(this.props.resource.resource_type_id, this.props.resourceTypes);
     }
     return KEEPASS_ICON_LIST[this.props.resource.metadata.icon.value];
@@ -43,7 +46,7 @@ export class ResourceIcon extends Component {
   getResourceColor() {
     const color = this.props.resource.metadata?.icon?.background_color;
     if (color) {
-      return {backgroundColor: color};
+      return { backgroundColor: color };
     }
     return null;
   }
@@ -64,9 +67,7 @@ export class ResourceIcon extends Component {
     }
 
     const contrastedColor = getContrastedColor(color.backgroundColor);
-    return contrastedColor === "#000000"
-      ? "dark-stroke"
-      : "clear-stroke";
+    return contrastedColor === "#000000" ? "dark-stroke" : "clear-stroke";
   }
 
   /**

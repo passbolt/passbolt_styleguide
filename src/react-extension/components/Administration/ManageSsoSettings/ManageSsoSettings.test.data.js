@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props.
@@ -25,11 +25,11 @@ export function defaultProps(data = {}) {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn(),
       must: {
-        save: jest.fn()
-      }
+        save: jest.fn(),
+      },
     },
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
   };
   delete data.context; // Treated in the default
@@ -39,7 +39,7 @@ export function defaultProps(data = {}) {
 export function disabledSso(data = {}) {
   const defaultData = {
     provider: null,
-    providers: ["azure", "google"]
+    providers: ["azure", "google"],
   };
   return Object.assign(defaultData, data);
 }
@@ -56,7 +56,7 @@ export function azureConfiguredSso(data = {}) {
       client_secret_expiry: "2022-11-02",
       email_claim: "email",
       prompt: "login",
-    }
+    },
   };
   return disabledSso(Object.assign(defaultData, data));
 }

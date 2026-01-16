@@ -23,7 +23,7 @@ class SessionKeysBundleDataEntity extends EntityV2 {
 
     // Associations
     if (this._props.session_keys) {
-      this._session_keys = new SessionKeysCollection(this._props.session_keys, {...options, clone: false});
+      this._session_keys = new SessionKeysCollection(this._props.session_keys, { ...options, clone: false });
       delete this._props.session_keys;
     }
   }
@@ -34,18 +34,15 @@ class SessionKeysBundleDataEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "object_type",
-        "session_keys"
-      ],
-      "properties": {
-        "object_type": {
-          "type": "string",
-          "enum": ["PASSBOLT_SESSION_KEYS"]
+      type: "object",
+      required: ["object_type", "session_keys"],
+      properties: {
+        object_type: {
+          type: "string",
+          enum: ["PASSBOLT_SESSION_KEYS"],
         },
-        "session_keys": SessionKeysCollection.getSchema(),
-      }
+        session_keys: SessionKeysCollection.getSchema(),
+      },
     };
   }
 
@@ -56,11 +53,11 @@ class SessionKeysBundleDataEntity extends EntityV2 {
    */
   static createFromSessionKeys(sessionKeys) {
     if (!(sessionKeys instanceof SessionKeysCollection)) {
-      throw new TypeError("The parameter \"sessionKey\" should be a SessionKeysCollection.");
+      throw new TypeError('The parameter "sessionKey" should be a SessionKeysCollection.');
     }
     const dto = {
       object_type: "PASSBOLT_SESSION_KEYS",
-      session_keys: sessionKeys
+      session_keys: sessionKeys,
     };
 
     return new SessionKeysBundleDataEntity(dto);

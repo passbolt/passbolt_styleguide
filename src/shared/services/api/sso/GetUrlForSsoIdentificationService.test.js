@@ -15,11 +15,11 @@
 /**
  * Unit tests on GetUrlForSsoIdentificationService in regard of specifications
  */
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
+import { ApiClientOptions } from "../../../lib/apiClient/apiClientOptions";
 import GetUrlForSsoIdentificationService from "./GetUrlForSsoIdentificationService";
-import {enableFetchMocks} from "jest-fetch-mock";
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
-import each from 'jest-each';
+import { enableFetchMocks } from "jest-fetch-mock";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import each from "jest-each";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -27,41 +27,39 @@ beforeEach(() => {
 });
 
 const scenarios = [
-  {providerId: 'azure', expectedUrl: "https://login.microsoftonline.us"},
-  {providerId: 'google', expectedUrl: "https://accounts.google.com"},
+  { providerId: "azure", expectedUrl: "https://login.microsoftonline.us" },
+  { providerId: "google", expectedUrl: "https://accounts.google.com" },
 ];
 
-each(scenarios).describe("GetUrlForSsoIdentificationService", scenario => {
+each(scenarios).describe("GetUrlForSsoIdentificationService", (scenario) => {
   describe(`GetUrlForSsoIdentificationService::getUrl (with provider '${scenario.providerId}')`, () => {
-    it('Should return an URL for SSO identification given the provider id', async() => {
+    it("Should return an URL for SSO identification given the provider id", async () => {
       expect.assertions(3);
       const baseUrl = "http://localhost:6006";
-      const apiClientOptions = new ApiClientOptions()
-        .setBaseUrl(baseUrl);
+      const apiClientOptions = new ApiClientOptions().setBaseUrl(baseUrl);
 
       const expectedUrlCall = `${baseUrl}/sso/recover/${scenario.providerId}.json?api-version=v2`;
 
       const service = new GetUrlForSsoIdentificationService(apiClientOptions);
 
-      fetch.doMockOnce(req => {
+      fetch.doMockOnce((req) => {
         expect(req.method).toStrictEqual("POST");
         expect(req.url).toStrictEqual(expectedUrlCall);
-        return mockApiResponse({url: scenario.expectedUrl});
+        return mockApiResponse({ url: scenario.expectedUrl });
       });
 
       return expect(service.getUrl(scenario.providerId)).resolves.toStrictEqual(new URL(scenario.expectedUrl));
     });
 
-    it('Should throw an Error if the domain in the response is not the exoected one', () => {
+    it("Should throw an Error if the domain in the response is not the exoected one", () => {
       expect.assertions(1);
-      const apiClientOptions = new ApiClientOptions()
-        .setBaseUrl("http://localhost:6006");
+      const apiClientOptions = new ApiClientOptions().setBaseUrl("http://localhost:6006");
 
       const service = new GetUrlForSsoIdentificationService(apiClientOptions);
 
-      fetch.doMockOnce(() => mockApiResponse({url: 'https://evil.com'}));
+      fetch.doMockOnce(() => mockApiResponse({ url: "https://evil.com" }));
 
-      const exepectedError = new Error('The url should be part of the list of supported single sign-on urls.');
+      const exepectedError = new Error("The url should be part of the list of supported single sign-on urls.");
       return expect(service.getUrl(scenario.providerId)).rejects.toStrictEqual(exepectedError);
     });
   });

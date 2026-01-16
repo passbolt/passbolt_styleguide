@@ -15,12 +15,16 @@
 /**
  * Unit tests on SessionExpired in regard of specifications
  */
-import {defaultProps, defaultAccountRecoveryUserService, getOrganizationAccountRecoveryPolicy} from "./HandleStatusCheck.test.data";
+import {
+  defaultProps,
+  defaultAccountRecoveryUserService,
+  getOrganizationAccountRecoveryPolicy,
+} from "./HandleStatusCheck.test.data";
 import HandleStatusCheck from "./HandleStatusCheck.test.page";
 import AccountRecoveryInviteUserSettingPreferenceDialog from "../../components/AccountRecovery/AccountRecoveryInviteUserSettingPreferenceDialog/AccountRecoveryInviteUserSettingPreferenceDialog";
 import MfaInviteUserSettingsPreferenceDialog from "../MFA/MfaInviteUserSettingsPreferenceDialog/MfaInviteUserSettingsPreferenceDialog";
-import {MfaPolicyEnumerationTypes} from "../../../shared/models/mfaPolicy/MfaPolicyEnumeration";
-import {waitForTrue} from "../../../../test/utils/waitFor";
+import { MfaPolicyEnumerationTypes } from "../../../shared/models/mfaPolicy/MfaPolicyEnumeration";
+import { waitForTrue } from "../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -41,20 +45,23 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * Then I'm redirected to my account recovery user settings
    * And  I am prompted to join the account recovery program
    */
-  it('As a logged in user who has a pending organization account recovery policy, I can see a dialog prompting me to join the account recovery program if the policy is “opt-out” after logging in.', async() => {
+  it("As a logged in user who has a pending organization account recovery policy, I can see a dialog prompting me to join the account recovery program if the policy is “opt-out” after logging in.", async () => {
     expect.assertions(2);
 
     const props = defaultProps(); // The props to pass
-    const organizationPolicy = getOrganizationAccountRecoveryPolicy({policy: "opt-out"});
+    const organizationPolicy = getOrganizationAccountRecoveryPolicy({ policy: "opt-out" });
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
 
     // The user didn't postponed the account recovery program enrollment
-    props.context.port.addRequestListener("passbolt.account-recovery.has-user-postponed-user-setting-invitation", () => false);
+    props.context.port.addRequestListener(
+      "passbolt.account-recovery.has-user-postponed-user-setting-invitation",
+      () => false,
+    );
 
     let isFunctionCalled = false;
     props.dialogContext.open.mockImplementation((component, data) => {
       expect(component).toBe(AccountRecoveryInviteUserSettingPreferenceDialog);
-      expect(data).toStrictEqual({policy: "opt-out"});
+      expect(data).toStrictEqual({ policy: "opt-out" });
       isFunctionCalled = true;
     });
     new HandleStatusCheck(props, mockedAccountRecoveryUserService);
@@ -71,20 +78,23 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * Then I'm redirected to my account recovery user settings
    * And  I am prompted to join the account recovery program
    */
-  it('As a logged in user who has a pending organization account recovery policy, I can see a dialog prompting me to join the account recovery program if the policy is “mandatory” after logging in.', async() => {
+  it("As a logged in user who has a pending organization account recovery policy, I can see a dialog prompting me to join the account recovery program if the policy is “mandatory” after logging in.", async () => {
     expect.assertions(2);
 
     const props = defaultProps(); // The props to pass
-    const organizationPolicy = getOrganizationAccountRecoveryPolicy({policy: "mandatory"});
+    const organizationPolicy = getOrganizationAccountRecoveryPolicy({ policy: "mandatory" });
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
 
     // The user didn't postponed the account recovery program enrollment
-    props.context.port.addRequestListener("passbolt.account-recovery.has-user-postponed-user-setting-invitation", () => false);
+    props.context.port.addRequestListener(
+      "passbolt.account-recovery.has-user-postponed-user-setting-invitation",
+      () => false,
+    );
 
     let isFunctionCalled = false;
     props.dialogContext.open.mockImplementation((component, data) => {
       expect(component).toBe(AccountRecoveryInviteUserSettingPreferenceDialog);
-      expect(data).toStrictEqual({policy: "mandatory"});
+      expect(data).toStrictEqual({ policy: "mandatory" });
       isFunctionCalled = true;
     });
 
@@ -100,19 +110,22 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * And  I have postponed my enrollement for the account recovery program
    * Then I'm not prompted to join the account recovery program
    */
-  it("As a logged in user who has postponed my account recovery enrollement, I'm not aksed again to enroll.", async() => {
+  it("As a logged in user who has postponed my account recovery enrollement, I'm not aksed again to enroll.", async () => {
     expect.assertions(1);
 
     const props = defaultProps(); // The props to pass
-    const organizationPolicy = getOrganizationAccountRecoveryPolicy({policy: "mandatory"});
+    const organizationPolicy = getOrganizationAccountRecoveryPolicy({ policy: "mandatory" });
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
 
     // The user postponed the account recovery program enrollment
     let isFunctionCalled = false;
-    props.context.port.addRequestListener("passbolt.account-recovery.has-user-postponed-user-setting-invitation", () => {
-      isFunctionCalled = true;
-      return true;
-    });
+    props.context.port.addRequestListener(
+      "passbolt.account-recovery.has-user-postponed-user-setting-invitation",
+      () => {
+        isFunctionCalled = true;
+        return true;
+      },
+    );
 
     new HandleStatusCheck(props, mockedAccountRecoveryUserService);
     await waitForTrue(() => isFunctionCalled);
@@ -127,19 +140,22 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * When	I sign-in
    * Then	I see a “Enable Multi Factor Authentication” dialog
    */
-  it("As a user signing I am requested to enable MFA when the MFA policy is 'Mandatory'", async() => {
+  it("As a user signing I am requested to enable MFA when the MFA policy is 'Mandatory'", async () => {
     expect.assertions(1);
 
     const props = defaultProps(); // The props to pass
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService();
-    jest.spyOn(props.context.siteSettings, 'canIUse').mockImplementation(feature => feature === "mfaPolicies");
+    jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((feature) => feature === "mfaPolicies");
     jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.MANDATORY);
 
     // Mock the call for mfa-policy
-    props.context.port.addRequestListener('passbolt.mfa-policy.has-user-postponed-user-setting-invitation', async() => false);
+    props.context.port.addRequestListener(
+      "passbolt.mfa-policy.has-user-postponed-user-setting-invitation",
+      async () => false,
+    );
 
     let isFunctionCalled = false;
-    props.dialogContext.open.mockImplementationOnce(component => {
+    props.dialogContext.open.mockImplementationOnce((component) => {
       expect(component).toBe(MfaInviteUserSettingsPreferenceDialog);
       isFunctionCalled = true;
     });
@@ -156,21 +172,24 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * When	I sign-in
    * Then	I do not see a “Enable Multi Factor Authentication” dialog
    */
-  it("As a user signing I am requested to enable MFA when the MFA policy is 'Mandatory'", async() => {
+  it("As a user signing I am requested to enable MFA when the MFA policy is 'Mandatory'", async () => {
     expect.assertions(1);
 
     const props = defaultProps(); // The props to pass
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService();
-    jest.spyOn(props.context.siteSettings, 'canIUse').mockImplementation(feature => feature === "mfaPolicies");
+    jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((feature) => feature === "mfaPolicies");
     jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.OPTIN);
 
     // Mock the call for mfa-policy
 
     let isFunctionCalled = false;
-    props.context.port.addRequestListener('passbolt.mfa-policy.has-user-postponed-user-setting-invitation', async() => {
-      isFunctionCalled = true;
-      return false;
-    });
+    props.context.port.addRequestListener(
+      "passbolt.mfa-policy.has-user-postponed-user-setting-invitation",
+      async () => {
+        isFunctionCalled = true;
+        return false;
+      },
+    );
 
     //Should not with OPT-in
     new HandleStatusCheck(props, mockedAccountRecoveryUserService);
@@ -187,20 +206,23 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * And	I refresh the page
    * Then	I should not be requested to configure MFA
    */
-  it("As a user signing I can postpone the MFA configuration request to the next sign-in operation", async() => {
+  it("As a user signing I can postpone the MFA configuration request to the next sign-in operation", async () => {
     expect.assertions(1);
 
     const props = defaultProps(); // The props to pass
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService();
-    jest.spyOn(props.context.siteSettings, 'canIUse').mockImplementation(feature => feature === "mfaPolicies");
+    jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((feature) => feature === "mfaPolicies");
     jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.MANDATORY);
 
     // Mock the call for mfa-policy
     let isFunctionCalled = false;
-    props.context.port.addRequestListener('passbolt.mfa-policy.has-user-postponed-user-setting-invitation', async() => {
-      isFunctionCalled = true;
-      return true;
-    });
+    props.context.port.addRequestListener(
+      "passbolt.mfa-policy.has-user-postponed-user-setting-invitation",
+      async () => {
+        isFunctionCalled = true;
+        return true;
+      },
+    );
 
     new HandleStatusCheck(props, mockedAccountRecoveryUserService);
     await waitForTrue(() => isFunctionCalled);
@@ -215,14 +237,17 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * When	I sign-in
    * Then	I should not see the  “Enable Multi Factor Authentication” dialog
    */
-  it("As a user signing I am not requested to enable MFA when the MFA policy is “Mandatory” if I already setup MFA", async() => {
+  it("As a user signing I am not requested to enable MFA when the MFA policy is “Mandatory” if I already setup MFA", async () => {
     expect.assertions(1);
 
     const props = defaultProps(); // The props to pass
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService();
-    jest.spyOn(props.context.siteSettings, 'canIUse').mockImplementation(feature => feature === "mfaPolicies");
+    jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((feature) => feature === "mfaPolicies");
     // Mock the call for mfa-policy
-    props.context.port.addRequestListener('passbolt.mfa-policy.has-user-postponed-user-setting-invitation', async() => false);
+    props.context.port.addRequestListener(
+      "passbolt.mfa-policy.has-user-postponed-user-setting-invitation",
+      async () => false,
+    );
     jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.MANDATORY);
     jest.spyOn(props.mfaContext, "hasMfaSettings").mockImplementationOnce(() => true);
 
@@ -241,24 +266,30 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * Then	I see the account recovery program request dialog
    * And	I should not see the MFA configuration request dialo
    */
-  it("As a signed-in user who is required to enable MFA & account recovery I should see the account recovery program request first", async() => {
+  it("As a signed-in user who is required to enable MFA & account recovery I should see the account recovery program request first", async () => {
     expect.assertions(2);
 
     const props = defaultProps(); // The props to pass
-    const organizationPolicy = getOrganizationAccountRecoveryPolicy({policy: "mandatory"});
+    const organizationPolicy = getOrganizationAccountRecoveryPolicy({ policy: "mandatory" });
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
     // Mock the first call for account-recovery
-    jest.spyOn(props.context.siteSettings, 'canIUse').mockImplementation(() => true);
+    jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(() => true);
     jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.MANDATORY);
 
     // The user didn't postponed the account recovery program enrollment
-    props.context.port.addRequestListener('passbolt.account-recovery.has-user-postponed-user-setting-invitation', async() => false);
-    props.context.port.addRequestListener('passbolt.mfa-policy.has-user-postponed-user-setting-invitation', async() => false);
+    props.context.port.addRequestListener(
+      "passbolt.account-recovery.has-user-postponed-user-setting-invitation",
+      async () => false,
+    );
+    props.context.port.addRequestListener(
+      "passbolt.mfa-policy.has-user-postponed-user-setting-invitation",
+      async () => false,
+    );
 
     let isFunctionCalled = false;
     props.dialogContext.open.mockImplementation((component, data) => {
       expect(component).toBe(AccountRecoveryInviteUserSettingPreferenceDialog);
-      expect(data).toStrictEqual({policy: "mandatory"});
+      expect(data).toStrictEqual({ policy: "mandatory" });
       isFunctionCalled = true;
     });
     new HandleStatusCheck(props, mockedAccountRecoveryUserService);

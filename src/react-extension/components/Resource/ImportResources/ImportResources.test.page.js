@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ImportResources from "./ImportResources";
@@ -28,9 +28,9 @@ export default class ImportResourcesPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ImportResources {...props}/>
+        <ImportResources {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -47,14 +47,14 @@ export default class ImportResourcesPage {
    * Returns the dialog element
    */
   get dialog() {
-    return this._page.container.querySelector('.import-password-dialog');
+    return this._page.container.querySelector(".import-password-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
@@ -68,28 +68,28 @@ export default class ImportResourcesPage {
    * Returns the import folder input element
    */
   get importFile() {
-    return this._page.container.querySelector('.input-file-inline button.button');
+    return this._page.container.querySelector(".input-file-inline button.button");
   }
 
   /**
    * Returns the error mesage input element
    */
   get errorMessage() {
-    return this._page.container.querySelector('.error-message').textContent;
+    return this._page.container.querySelector(".error-message").textContent;
   }
 
   /**
    * Returns the import tag input element
    */
   get importTag() {
-    return this._page.container.querySelector('#dialog-import-passwords-import-tags');
+    return this._page.container.querySelector("#dialog-import-passwords-import-tags");
   }
 
   /**
    * Returns the import tag input element
    */
   get importFolder() {
-    return this._page.container.querySelector('#dialog-import-passwords-import-folders');
+    return this._page.container.querySelector("#dialog-import-passwords-import-folders");
   }
 
   /**
@@ -103,7 +103,7 @@ export default class ImportResourcesPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -114,13 +114,13 @@ export default class ImportResourcesPage {
   }
 
   /** Click on the element */
-  async click(element)  {
+  async click(element) {
     await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  async escapeKey()  {
-    await this.user.keyboard('{Escape}');
+  async escapeKey() {
+    await this.user.keyboard("{Escape}");
   }
 
   /** Click to import file */

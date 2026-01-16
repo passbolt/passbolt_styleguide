@@ -12,8 +12,8 @@
  * @since         5.3.0
  */
 
-import {defaultCustomFieldsCollection} from "../customField/customFieldsCollection.test.data";
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { defaultCustomFieldsCollection } from "../customField/customFieldsCollection.test.data";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 
 /**
  * Returns a minimum DTO object suitable for the SecretDataV5StandaloneCustomFieldsCollection

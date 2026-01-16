@@ -14,10 +14,10 @@
 import EntityV2 from "../abstract/entityV2";
 import EntityValidationError from "../abstract/entityValidationError";
 
-const ENTITY_NAME = 'Role';
-const ROLE_ADMIN = 'admin';
-const ROLE_USER = 'user';
-const ROLE_GUEST = 'guest';
+const ENTITY_NAME = "Role";
+const ROLE_ADMIN = "admin";
+const ROLE_USER = "user";
+const ROLE_GUEST = "guest";
 const ROLE_NAME_MAX_LENGTH = 50;
 const ROLE_DESCRIPTION_MAX_LENGTH = 255;
 
@@ -28,34 +28,32 @@ export default class RoleEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "name",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["name"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": ROLE_NAME_MAX_LENGTH
+        name: {
+          type: "string",
+          minLength: 1,
+          maxLength: ROLE_NAME_MAX_LENGTH,
         },
-        "description": {
-          "type": "string",
-          "maxLength": ROLE_DESCRIPTION_MAX_LENGTH,
-          "nullable": true,
+        description: {
+          type: "string",
+          maxLength: ROLE_DESCRIPTION_MAX_LENGTH,
+          nullable: true,
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-      }
+      },
     };
   }
 
@@ -123,9 +121,7 @@ export default class RoleEntity extends EntityV2 {
    * @returns {boolean}
    */
   isAReservedRole() {
-    return this.isAdmin()
-      || this.isUser()
-      || this.isGuest();
+    return this.isAdmin() || this.isUser() || this.isGuest();
   }
 
   /**
@@ -136,11 +132,7 @@ export default class RoleEntity extends EntityV2 {
     let error = null;
     if (this.name.length === ROLE_NAME_MAX_LENGTH) {
       error = new EntityValidationError();
-      error.addError(
-        `name`,
-        "maxLength",
-        `name reached maximum length limit`
-      );
+      error.addError(`name`, "maxLength", `name reached maximum length limit`);
     }
     return error;
   }
@@ -156,7 +148,7 @@ export default class RoleEntity extends EntityV2 {
     const trimmedPropValue = propValue.trim();
     if (trimmedPropValue !== propValue) {
       const error = new EntityValidationError();
-      error.addError(propName, 'trailing-spaces', `The property (${propName}) contains forbidden trailing spaces.`);
+      error.addError(propName, "trailing-spaces", `The property (${propName}) contains forbidden trailing spaces.`);
       throw error;
     }
   }
@@ -218,7 +210,7 @@ export default class RoleEntity extends EntityV2 {
    */
   toUpdateDto() {
     return {
-      name: this.name
+      name: this.name,
     };
   }
 }

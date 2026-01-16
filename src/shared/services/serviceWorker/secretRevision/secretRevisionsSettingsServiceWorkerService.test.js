@@ -15,11 +15,11 @@
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import SecretRevisionsSettingsEntity from "../../../models/entity/secretRevision/secretRevisionsSettingsEntity";
 import SecretRevisionsSettingsServiceWorkerService from "./secretRevisionsSettingsServiceWorkerService";
-import {defaultSecretRevisionsSettingsDto} from "../../../models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
+import { defaultSecretRevisionsSettingsDto } from "../../../models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
 
 describe("SecretRevisionsSettingsServiceWorkerService", () => {
   describe("::findSettings", () => {
-    it("should call for the right service worker event and return the right entity", async() => {
+    it("should call for the right service worker event and return the right entity", async () => {
       expect.assertions(4);
 
       const event = "passbolt.secret-revisions.find-settings";
@@ -40,7 +40,7 @@ describe("SecretRevisionsSettingsServiceWorkerService", () => {
   });
 
   describe("::saveSettings", () => {
-    it("should call for the right service worker event and return the right entity", async() => {
+    it("should call for the right service worker event and return the right entity", async () => {
       expect.assertions(2);
       const event = "passbolt.secret-revisions.save-settings";
       const entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto());
@@ -56,7 +56,7 @@ describe("SecretRevisionsSettingsServiceWorkerService", () => {
       expect(port.request).toHaveBeenCalledWith(event, entity);
     });
 
-    it("should assert its parameters", async() => {
+    it("should assert its parameters", async () => {
       expect.assertions(1);
       const wrongEntity = defaultSecretRevisionsSettingsDto();
       const port = new MockPort();
@@ -67,7 +67,7 @@ describe("SecretRevisionsSettingsServiceWorkerService", () => {
   });
 
   describe("::deleteSettings", () => {
-    it("should call for the right service worker event and return the right entity", async() => {
+    it("should call for the right service worker event and return the right entity", async () => {
       expect.assertions(2);
       const event = "passbolt.secret-revisions.delete-settings";
       const secretRevisions = defaultSecretRevisionsSettingsDto();

@@ -18,6 +18,4 @@
  * @param path
  * @returns {string|undefined}
  */
-export default (obj, path) => path
-  .split('.')
-  .reduce((accumulator, key) => accumulator?.[key], obj);
+export default (obj, path) => path.split(".").reduce((accumulator, key) => accumulator?.[key], obj);

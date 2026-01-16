@@ -16,10 +16,9 @@
  * Unit tests on FilterResourcesByText in regard of specifications
  */
 
-
-import {defaultAppContext, defaultProps} from "./FilterResourcesByText.test.data";
-import {waitFor} from "@testing-library/react";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import { defaultAppContext, defaultProps } from "./FilterResourcesByText.test.data";
+import { waitFor } from "@testing-library/react";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByTextPage from "./FilterResourcesByText.test.page";
 
 beforeEach(() => {
@@ -31,7 +30,7 @@ describe("See Resource SearchBar", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  describe(' As LU I can see a search bar', () => {
+  describe(" As LU I can see a search bar", () => {
     /**
      * As LU I should see the searchBar
      * And I should be able to search
@@ -41,7 +40,7 @@ describe("See Resource SearchBar", () => {
       page = new FilterResourcesByTextPage(context, props);
     });
 
-    it('I should see a search bar', () => {
+    it("I should see a search bar", () => {
       expect(page.displaySearchBar.exists()).toBeTruthy();
       expect(page.displaySearchBar.label.textContent).toBe("Search");
       expect(page.displaySearchBar.inputText).not.toBeNull();
@@ -49,21 +48,21 @@ describe("See Resource SearchBar", () => {
       expect(page.displaySearchBar.searchIcon).toBeNull();
     });
 
-    it('I should be able to search', async() => {
+    it("I should be able to search", async () => {
       page.displaySearchBar.searchText("searchText");
-      const pathname = '/app/passwords';
+      const pathname = "/app/passwords";
       const state = {
         filter: {
           type: ResourceWorkspaceFilterTypes.TEXT,
-          payload: "searchText"
-        }
+          payload: "searchText",
+        },
       };
       await waitFor(() => {
-        expect(props.history.push).toBeCalledWith({pathname, state});
+        expect(props.history.push).toBeCalledWith({ pathname, state });
       });
     });
 
-    it('I should see a close button when I type at least one character', async() => {
+    it("I should see a close button when I type at least one character", async () => {
       page.displaySearchBar.searchText("searchText");
       await waitFor(() => {
         expect(page.displaySearchBar.button.textContent).toBe("Clear");
@@ -71,7 +70,7 @@ describe("See Resource SearchBar", () => {
       });
     });
 
-    it('I should not see a close button when I delete all characters inside the search field', async() => {
+    it("I should not see a close button when I delete all characters inside the search field", async () => {
       page.displaySearchBar.searchText("");
       await waitFor(() => {
         expect(page.displaySearchBar.inputText.value).toStrictEqual("");

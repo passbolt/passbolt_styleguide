@@ -45,7 +45,7 @@ class MigrateMetadataEntity extends EntityV2 {
         migrate_personal_content: {
           type: "boolean",
         },
-      }
+      },
     };
   }
 

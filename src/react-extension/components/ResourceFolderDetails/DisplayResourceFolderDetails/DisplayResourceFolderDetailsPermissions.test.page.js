@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -30,10 +30,10 @@ export default class DisplayResourceFolderDetailsPermissionsPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <DisplayResourceFolderDetailsPermissions {...props}/>
+          <DisplayResourceFolderDetailsPermissions {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -82,8 +82,8 @@ class TitleHeaderPageObject {
   }
 
   /** Click on the title */
-  async click()  {
-    const leftClick = {button: 0};
+  async click() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.hyperlink, leftClick);
     await waitFor(() => {});
   }
@@ -102,14 +102,14 @@ class DisplayPermissionPageObject {
    * Returns the list elements of activities
    */
   get list() {
-    return this._container.querySelector('ul');
+    return this._container.querySelector("ul");
   }
 
   /**
    * Returns the loading element
    */
   get loadingMessage() {
-    return this._container.querySelector('.processing-text');
+    return this._container.querySelector(".processing-text");
   }
 
   /**
@@ -123,14 +123,14 @@ class DisplayPermissionPageObject {
    * Returns true
    */
   isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving permissions';
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === "Retrieving permissions";
   }
 
   /**
    * Returns the number of displayed activities
    */
   count() {
-    return this.list.querySelectorAll('.content').length;
+    return this.list.querySelectorAll(".content").length;
   }
 
   /**
@@ -138,7 +138,7 @@ class DisplayPermissionPageObject {
    * @param index The display rank of name's permission
    */
   name(index) {
-    return this.list.querySelectorAll('.content')[index - 1].querySelector('.name').textContent;
+    return this.list.querySelectorAll(".content")[index - 1].querySelector(".name").textContent;
   }
 
   /**
@@ -146,7 +146,7 @@ class DisplayPermissionPageObject {
    * @param index The display rank of permission
    */
   type(index) {
-    return this.list.querySelectorAll('.content')[index - 1].querySelector('.subinfo').textContent;
+    return this.list.querySelectorAll(".content")[index - 1].querySelector(".subinfo").textContent;
   }
 
   /**
@@ -159,14 +159,9 @@ class DisplayPermissionPageObject {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 }
-
-
-
-
-

@@ -18,10 +18,10 @@
  */
 export function defaultProps(props) {
   const defaultProps = {
-    policy: 'mandatory',
+    policy: "mandatory",
     onComplete: () => {},
     canGenerateNewKeyInstead: true,
-    onGenerateNewKeyInstead: () => {}
+    onGenerateNewKeyInstead: () => {},
   };
   return Object.assign(defaultProps, props || {});
 }
@@ -32,7 +32,7 @@ export function defaultProps(props) {
  */
 export function mandatoryPolicyProps() {
   return defaultProps({
-    policy: 'mandatory',
+    policy: "mandatory",
   });
 }
 
@@ -42,7 +42,7 @@ export function mandatoryPolicyProps() {
  */
 export function optInPolicyProps() {
   return defaultProps({
-    policy: 'opt-in',
+    policy: "opt-in",
   });
 }
 
@@ -52,7 +52,7 @@ export function optInPolicyProps() {
  */
 export function optOutPolicyProps() {
   return defaultProps({
-    policy: 'opt-out',
+    policy: "opt-out",
   });
 }
 
@@ -62,7 +62,7 @@ export function optOutPolicyProps() {
  */
 export function mandatoryPolicyPropsWithImportedKey() {
   return defaultProps({
-    policy: 'mandatory',
+    policy: "mandatory",
     canGenerateNewKeyInstead: true,
   });
 }
@@ -73,7 +73,7 @@ export function mandatoryPolicyPropsWithImportedKey() {
  */
 export function optInPolicyPropsWithImportedKey() {
   return defaultProps({
-    policy: 'opt-in',
+    policy: "opt-in",
     canGenerateNewKeyInstead: true,
   });
 }
@@ -84,7 +84,7 @@ export function optInPolicyPropsWithImportedKey() {
  */
 export function optOutPolicyPropsWithImportedKey() {
   return defaultProps({
-    policy: 'opt-out',
+    policy: "opt-out",
     canGenerateNewKeyInstead: true,
   });
 }

@@ -13,16 +13,18 @@
  */
 import React from "react";
 import WorkspaceSwitcher from "./WorkspaceSwitcher";
-import {defaultProps} from "./WorkspaceSwitcher.test.data";
+import { defaultProps } from "./WorkspaceSwitcher.test.data";
 
 export default {
-  title: 'Foundations/WorkspaceSwitcher',
-  component: WorkspaceSwitcher
+  title: "Foundations/WorkspaceSwitcher",
+  component: WorkspaceSwitcher,
 };
 
 export const DefaultWorkspaceSwitcher = {
   args: defaultProps(),
-  render: args => <div style={{paddingLeft: "25rem", display: "flex"}}>
-    <WorkspaceSwitcher {...args}/>
-  </div>
+  render: (args) => (
+    <div style={{ paddingLeft: "25rem", display: "flex" }}>
+      <WorkspaceSwitcher {...args} />
+    </div>
+  ),
 };

@@ -12,14 +12,13 @@
  * @since         5.6.0
  */
 import ConfirmMetadataKeyRotationDialog from "./ConfirmMetadataKeyRotationDialog";
-import {defaultProps} from "./ConfirmMetadataKeyRotationDialog.test.data";
+import { defaultProps } from "./ConfirmMetadataKeyRotationDialog.test.data";
 
 export default {
-  title: 'Components/Administration/ConfirmMetadataKeyRotationDialog',
+  title: "Components/Administration/ConfirmMetadataKeyRotationDialog",
   component: ConfirmMetadataKeyRotationDialog,
 };
 
-
 export const Initial = {
-  args: defaultProps()
+  args: defaultProps(),
 };

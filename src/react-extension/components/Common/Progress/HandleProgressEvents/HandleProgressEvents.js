@@ -12,10 +12,10 @@
  * @since         2.12.0
  */
 
-import React from 'react';
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import React from "react";
+import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import {withProgress} from "../../../../contexts/ProgressContext";
+import { withProgress } from "../../../../contexts/ProgressContext";
 
 /**
  * This component listens any event related to progress dialog actions to perform
@@ -35,7 +35,7 @@ class HandleProgressEvents extends React.Component {
    */
   get defaultState() {
     return {
-      dialogIndex: null // The index of the opened dialog
+      dialogIndex: null, // The index of the opened dialog
     };
   }
 
@@ -60,10 +60,10 @@ class HandleProgressEvents extends React.Component {
    * Listen the progress dialog event from the context and acts accordingly
    */
   listen() {
-    this.props.context.port.on('passbolt.progress.open-progress-dialog', this.handleProgressDialogOpenEvent);
+    this.props.context.port.on("passbolt.progress.open-progress-dialog", this.handleProgressDialogOpenEvent);
     this.props.context.port.on("passbolt.progress.update", this.handleProgressDialogUpdateEvent);
     this.props.context.port.on("passbolt.progress.update-goals", this.handleProgressDialogUpdateGoalsEvent);
-    this.props.context.port.on('passbolt.progress.close-progress-dialog', this.handleProgressDialogCloseEvent);
+    this.props.context.port.on("passbolt.progress.close-progress-dialog", this.handleProgressDialogCloseEvent);
   }
 
   /**

@@ -13,45 +13,44 @@
  */
 
 import React from "react";
-import {defaultProps} from "./EnterNewPassphrase.test.data";
+import { defaultProps } from "./EnterNewPassphrase.test.data";
 import EnterNewPassphrase from "./EnterNewPassphrase";
 import EnterNewPassphraseHelp from "./EnterNewPassphraseHelp";
 
 export default {
-  title: 'Components/UserSetting/EnterNewPassphrase',
+  title: "Components/UserSetting/EnterNewPassphrase",
   component: EnterNewPassphrase,
-  decorators: [(Story, {args}) =>
-    <div id="container" className="page settings">
-      <div id="app" className="app" tabIndex="1000" style={{margin: "-1rem"}}>
-        <div className="panel main">
-          <div className="panel left">
-            <div className="sidebar-content">
+  decorators: [
+    (Story, { args }) => (
+      <div id="container" className="page settings">
+        <div id="app" className="app" tabIndex="1000" style={{ margin: "-1rem" }}>
+          <div className="panel main">
+            <div className="panel left">
+              <div className="sidebar-content"></div>
             </div>
-          </div>
-          <div className="panel middle">
-            <div className="header">
-            </div>
-            <div className="middle-right">
-              <div className="breadcrumbs-and-grid">
-                <div className="top-bar">
+            <div className="panel middle">
+              <div className="header"></div>
+              <div className="middle-right">
+                <div className="breadcrumbs-and-grid">
+                  <div className="top-bar"></div>
+                  <div className="main-page">
+                    <Story {...args} />
+                  </div>
                 </div>
-                <div className="main-page">
-                  <Story {...args}/>
-                </div>
-              </div>
-              <div className="help-panel">
-                <div className="sidebar-help">
-                  <EnterNewPassphraseHelp {...args}/>
+                <div className="help-panel">
+                  <div className="sidebar-help">
+                    <EnterNewPassphraseHelp {...args} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    ),
   ],
 };
 
 export const Initial = {
-  args: defaultProps()
+  args: defaultProps(),
 };

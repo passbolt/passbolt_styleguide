@@ -12,9 +12,9 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import CustomPropTypes from "../../../../shared/lib/PropTypes/CustomPropTypes";
 import SearchSVG from "../../../../img/svg/search.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
@@ -43,7 +43,7 @@ class Select extends Component {
       selectedValue: props.value, // The selected value
       search: "", // The search value
       open: false, // The open select dropdown
-      style: undefined // The style of the select field
+      style: undefined, // The style of the select field
     };
   }
 
@@ -53,7 +53,7 @@ class Select extends Component {
    */
   get listItemsFiltered() {
     // Don't keep the selected item in the list
-    const isNotSelectedItem = item => item.value !== this.state.selectedValue;
+    const isNotSelectedItem = (item) => item.value !== this.state.selectedValue;
     const itemsFiltered = this.props.items.filter(isNotSelectedItem);
 
     if (this.props.search && this.state.search !== "") {
@@ -67,8 +67,8 @@ class Select extends Component {
    * @returns {*|string}
    */
   get selectedItemLabel() {
-    const item = this.props.items && this.props.items.find(item => item.value === this.state.selectedValue);
-    return item && item.label || <>&nbsp;</>;
+    const item = this.props.items && this.props.items.find((item) => item.value === this.state.selectedValue);
+    return (item && item.label) || <>&nbsp;</>;
   }
 
   /**
@@ -117,10 +117,10 @@ class Select extends Component {
    * Component did mount
    */
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-    document.addEventListener('scroll', this.handleDocumentScrollEvent, {capture: true});
+    document.addEventListener("click", this.handleDocumentClickEvent, { capture: true });
+    document.addEventListener("contextmenu", this.handleDocumentContextualMenuEvent, { capture: true });
+    document.addEventListener("dragstart", this.handleDocumentDragStartEvent, { capture: true });
+    document.addEventListener("scroll", this.handleDocumentScrollEvent, { capture: true });
   }
 
   /**
@@ -129,10 +129,10 @@ class Select extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-    document.removeEventListener('scroll', this.handleDocumentScrollEvent, {capture: true});
+    document.removeEventListener("click", this.handleDocumentClickEvent, { capture: true });
+    document.removeEventListener("contextmenu", this.handleDocumentContextualMenuEvent, { capture: true });
+    document.removeEventListener("dragstart", this.handleDocumentDragStartEvent, { capture: true });
+    document.removeEventListener("scroll", this.handleDocumentScrollEvent, { capture: true });
   }
 
   /**
@@ -189,7 +189,7 @@ class Select extends Component {
     if (!this.props.disabled) {
       const open = !this.state.open;
       open ? this.forceVisibilitySelect() : this.resetStyleSelect();
-      this.setState({open});
+      this.setState({ open });
     } else {
       this.closeSelect();
     }
@@ -212,8 +212,8 @@ class Select extends Component {
    */
   forceVisibilitySelect() {
     const boundingRect = this.selectedItemRef.current.getBoundingClientRect();
-    const {width, height} = boundingRect;
-    let {top, left} = boundingRect;
+    const { width, height } = boundingRect;
+    let { top, left } = boundingRect;
 
     const relativeParent = this.getFirstParentWithTransform();
     if (relativeParent) {
@@ -222,14 +222,14 @@ class Select extends Component {
       left -= relativeParentPosition.left;
     }
     const style = {
-      position: 'fixed',
+      position: "fixed",
       zIndex: 1,
       width,
       height,
       top,
-      left
+      left,
     };
-    this.setState({style});
+    this.setState({ style });
   }
 
   /**
@@ -247,7 +247,7 @@ class Select extends Component {
    */
   closeSelect() {
     this.resetStyleSelect();
-    this.setState({open: false});
+    this.setState({ open: false });
   }
 
   /**
@@ -255,7 +255,7 @@ class Select extends Component {
    */
   resetStyleSelect() {
     const style = undefined;
-    this.setState({style});
+    this.setState({ style });
   }
 
   /**
@@ -267,7 +267,7 @@ class Select extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState({[name]: value});
+    this.setState({ [name]: value });
   }
 
   /**
@@ -277,9 +277,9 @@ class Select extends Component {
    * @returns {void}
    */
   handleItemClick(item) {
-    this.setState({selectedValue: item.value, open: false});
-    if (typeof this.props.onChange == 'function') {
-      const event = {target: {value: item.value, name: this.props.name}};
+    this.setState({ selectedValue: item.value, open: false });
+    if (typeof this.props.onChange == "function") {
+      const event = { target: { value: item.value, name: this.props.name } };
       this.props.onChange(event);
     }
     this.closeSelect();
@@ -292,14 +292,14 @@ class Select extends Component {
    * @returns {*}
    */
   getItemsMatch(items, keyword) {
-    const words = (keyword && keyword.split(/\s+/)) || [''];
+    const words = (keyword && keyword.split(/\s+/)) || [""];
 
     // Test match of some escaped test words
-    const escapeWord = word => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const wordToRegex = word => new RegExp(escapeWord(word), 'i');
+    const escapeWord = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const wordToRegex = (word) => new RegExp(escapeWord(word), "i");
     const matchWord = (word, value) => wordToRegex(word).test(value);
 
-    const matchText = item => words.every(word => matchWord(word, item.label));
+    const matchText = (item) => words.every((word) => matchWord(word, item.label));
 
     return items.filter(matchText);
   }
@@ -368,7 +368,9 @@ class Select extends Component {
       case 38:
         event.stopPropagation(); // avoid side effect
         event.preventDefault(); // avoid scrolling with keyboard
-        event.target.previousSibling ? event.target.previousSibling.focus() : this.focusItem(this.listItemsFiltered.length - 1);
+        event.target.previousSibling
+          ? event.target.previousSibling.focus()
+          : this.focusItem(this.listItemsFiltered.length - 1);
         return;
       default:
         return;
@@ -385,36 +387,58 @@ class Select extends Component {
 
   render() {
     return (
-      <div className={`select-container ${this.props.className}`} style={{width: this.state.style?.width, height: this.state.style?.height}}>
-        <div onKeyDown={this.handleSelectKeyDown} onBlur={this.handleBlur} id={this.props.id} className={`select ${this.props.direction} ${this.state.open ? 'open' : ''}`} style={this.state.style}>
-          <div ref={this.selectedItemRef}
-            className={`selected-value ${this.props.disabled ? 'disabled' : ''}`}
+      <div
+        className={`select-container ${this.props.className}`}
+        style={{ width: this.state.style?.width, height: this.state.style?.height }}
+      >
+        <div
+          onKeyDown={this.handleSelectKeyDown}
+          onBlur={this.handleBlur}
+          id={this.props.id}
+          className={`select ${this.props.direction} ${this.state.open ? "open" : ""}`}
+          style={this.state.style}
+        >
+          <div
+            ref={this.selectedItemRef}
+            className={`selected-value ${this.props.disabled ? "disabled" : ""}`}
             tabIndex={this.props.disabled ? -1 : 0}
-            onClick={this.handleSelectClick}>
+            onClick={this.handleSelectClick}
+          >
             <span className="value">{this.selectedItemLabel}</span>
-            <CaretDownSVG/>
+            <CaretDownSVG />
           </div>
-          <div ref={this.selectItemsRef} className={`select-items ${this.state.open ? 'visible' : ''}`}>
-            {this.props.search &&
+          <div ref={this.selectItemsRef} className={`select-items ${this.state.open ? "visible" : ""}`}>
+            {this.props.search && (
               <>
-                <input className="search-input" name="search"
-                  value={this.state.search} onChange={this.handleInputChange} type="text"/>
-                <SearchSVG className="search"/>
+                <input
+                  className="search-input"
+                  name="search"
+                  value={this.state.search}
+                  onChange={this.handleInputChange}
+                  type="text"
+                />
+                <SearchSVG className="search" />
               </>
-            }
+            )}
             <ul ref={this.itemsRef} className="items">
               {this.hasFilteredItems() &&
-                this.listItemsFiltered.map(item =>
-                  <li tabIndex={item.disabled ? -1 : 0} key={item.value} title={item.title} className={`option ${item.value}`} onKeyDown={event => this.handleItemKeyDown(event, item)} onClick={() => this.handleItemClick(item)}>
+                this.listItemsFiltered.map((item) => (
+                  <li
+                    tabIndex={item.disabled ? -1 : 0}
+                    key={item.value}
+                    title={item.title}
+                    className={`option ${item.value}`}
+                    onKeyDown={(event) => this.handleItemKeyDown(event, item)}
+                    onClick={() => this.handleItemClick(item)}
+                  >
                     {item.label}
                   </li>
-                )
-              }
-              {!this.hasFilteredItems() && this.props.search &&
+                ))}
+              {!this.hasFilteredItems() && this.props.search && (
                 <li className="option no-results">
                   <Trans>No results match</Trans> <span>{this.state.search}</span>
                 </li>
-              }
+              )}
             </ul>
           </div>
         </div>
@@ -427,7 +451,7 @@ Select.defaultProps = {
   id: "",
   name: "select",
   className: "",
-  direction: 'bottom'
+  direction: "bottom",
 };
 
 /**
@@ -441,10 +465,8 @@ const isValueInItems = (props, propName, componentName) => {
   const value = props[propName];
   // value must be in the items
   const items = props.items;
-  if (value !== null && items.length > 0 && items.every(item => item.value !== value)) {
-    return new Error(
-      `Invalid prop ${propName} passed to ${componentName}. Expected the value ${value} in items.`
-    );
+  if (value !== null && items.length > 0 && items.every((item) => item.value !== value)) {
+    return new Error(`Invalid prop ${propName} passed to ${componentName}. Expected the value ${value} in items.`);
   }
 };
 
@@ -452,10 +474,10 @@ const isValueInItems = (props, propName, componentName) => {
  * enumeration for select direction
  */
 export const DirectionEnum = {
-  top: 'top',
-  bottom: 'bottom',
-  left: 'left',
-  right: 'right'
+  top: "top",
+  bottom: "bottom",
+  left: "left",
+  right: "right",
 };
 
 Select.propTypes = {
@@ -467,7 +489,7 @@ Select.propTypes = {
   items: PropTypes.array, // The item list of the select field
   value: CustomPropTypes.allPropTypes(
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
-    isValueInItems
+    isValueInItems,
   ), // The item selected of the select field
   disabled: PropTypes.bool, // The current select field disabled property
   onChange: PropTypes.func, // The on change event callback

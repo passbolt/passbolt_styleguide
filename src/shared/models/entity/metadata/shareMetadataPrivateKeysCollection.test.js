@@ -14,13 +14,22 @@
 
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import ShareMetadataPrivateKeysCollection from "./shareMetadataPrivateKeysCollection";
-import {defaultMinimalShareMetadataPrivateKeysDtos, defaultShareMetadataPrivateKeysDtos, shareMetadataPrivateKeysWithDecryptedKeyDtos, shareMetadataPrivateKeysWithEncryptedKeyDtos, shareMetadataPrivateKeysWithSameMetadataKeyIdUserIdDtos} from "./shareMetadataPrivateKeysCollection.test.data";
+import {
+  defaultMinimalShareMetadataPrivateKeysDtos,
+  defaultShareMetadataPrivateKeysDtos,
+  shareMetadataPrivateKeysWithDecryptedKeyDtos,
+  shareMetadataPrivateKeysWithEncryptedKeyDtos,
+  shareMetadataPrivateKeysWithSameMetadataKeyIdUserIdDtos,
+} from "./shareMetadataPrivateKeysCollection.test.data";
 import MetadataPrivateKeyEntity from "passbolt-styleguide/src/shared/models/entity/metadata/metadataPrivateKeyEntity";
 
 describe("ShareMetadataPrivateKeysCollection", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(ShareMetadataPrivateKeysCollection.name, ShareMetadataPrivateKeysCollection.getSchema());
+      EntitySchema.validateSchema(
+        ShareMetadataPrivateKeysCollection.name,
+        ShareMetadataPrivateKeysCollection.getSchema(),
+      );
     });
   });
 
@@ -72,8 +81,7 @@ describe("ShareMetadataPrivateKeysCollection", () => {
     it("should throw if the collection schema does not validate", () => {
       expect.assertions(1);
 
-      expect(() => new ShareMetadataPrivateKeysCollection({}))
-        .toThrowEntityValidationError("items");
+      expect(() => new ShareMetadataPrivateKeysCollection({})).toThrowEntityValidationError("items");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate their schema", () => {
@@ -83,7 +91,7 @@ describe("ShareMetadataPrivateKeysCollection", () => {
       delete dtos[1].data;
       delete dtos[1].armored_key;
 
-      const collection = new ShareMetadataPrivateKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new ShareMetadataPrivateKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
@@ -94,8 +102,9 @@ describe("ShareMetadataPrivateKeysCollection", () => {
 
       const dtos = shareMetadataPrivateKeysWithSameMetadataKeyIdUserIdDtos();
 
-      expect(() => new ShareMetadataPrivateKeysCollection(dtos))
-        .toThrowCollectionValidationError("1.metadata_key_id:user_id.unique");
+      expect(() => new ShareMetadataPrivateKeysCollection(dtos)).toThrowCollectionValidationError(
+        "1.metadata_key_id:user_id.unique",
+      );
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate the unique metadata_key_id user_id build rule", () => {
@@ -103,7 +112,7 @@ describe("ShareMetadataPrivateKeysCollection", () => {
 
       const dtos = shareMetadataPrivateKeysWithSameMetadataKeyIdUserIdDtos();
 
-      const collection = new ShareMetadataPrivateKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new ShareMetadataPrivateKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);

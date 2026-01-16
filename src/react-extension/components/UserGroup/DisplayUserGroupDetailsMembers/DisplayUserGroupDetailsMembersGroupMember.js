@@ -14,11 +14,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {Trans, withTranslation} from "react-i18next";
-import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import { Trans, withTranslation } from "react-i18next";
+import { isUserSuspended } from "../../../../shared/utils/userUtils";
 
 /**
  * This component displays a group member for the group details members
@@ -29,7 +29,7 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
    * @return {object}
    */
   get user() {
-    return this.props.context.users.find(user => user.id === this.props.groupUser.user_id);
+    return this.props.context.users.find((user) => user.id === this.props.groupUser.user_id);
   }
 
   /**
@@ -51,17 +51,21 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
    * Render the component
    */
   render() {
-    const isSuspended = this.props.context.siteSettings.canIUse('siteSettings') && isUserSuspended(this.user);
+    const isSuspended = this.props.context.siteSettings.canIUse("siteSettings") && isUserSuspended(this.user);
     return (
-      <div
-        key={this.user.id}
-        className={`permission usercard-col-2 ${isSuspended ? "suspended" : ""}`}>
-        <UserAvatar
-          user={this.user}
-          baseUrl={this.baseUrl}/>
+      <div key={this.user.id} className={`permission usercard-col-2 ${isSuspended ? "suspended" : ""}`}>
+        <UserAvatar user={this.user} baseUrl={this.baseUrl} />
         <div className="content-wrapper">
           <div className="content">
-            <div className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}{isSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</div>
+            <div className="name">
+              {`${this.user.profile.first_name} ${this.user.profile.last_name}`}
+              {isSuspended && (
+                <span className="suspended">
+                  {" "}
+                  <Trans>(suspended)</Trans>
+                </span>
+              )}
+            </div>
             <div className="subinfo">{this.props.t(this.roleName)}</div>
           </div>
         </div>
@@ -77,4 +81,4 @@ DisplayUserGroupDetailsMembersGroupMember.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsMembersGroupMember)));
+export default withAppContext(withUserWorkspace(withTranslation("common")(DisplayUserGroupDetailsMembersGroupMember)));

@@ -13,10 +13,10 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 import AdministrationPasswordExpiryContextProvider from "../../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
 import DisplayAdministrationPasswordExpiryActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationPasswordExpiryActions/DisplayAdministrationPasswordExpiryActions";
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry";
@@ -36,13 +36,13 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <AdministrationPasswordExpiryContextProvider {...props}>
-            <DisplayAdministrationPasswordExpiryActions {...props}/>
-            <DisplayAdministrationPasswordExpiry {...props}/>
+            <DisplayAdministrationPasswordExpiryActions {...props} />
+            <DisplayAdministrationPasswordExpiry {...props} />
             <div id="administration-help-panel"></div>
           </AdministrationPasswordExpiryContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -70,7 +70,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this.select('#password-expiry-settings-title');
+    return this.select("#password-expiry-settings-title");
   }
 
   /**
@@ -78,7 +78,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get featureToggle() {
-    return this.select('#passwordExpirySettingsToggle');
+    return this.select("#passwordExpirySettingsToggle");
   }
 
   /**
@@ -86,7 +86,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get helpPageLink() {
-    return this.select('#administration-help-panel a.button');
+    return this.select("#administration-help-panel a.button");
   }
 
   /**
@@ -94,7 +94,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get passwordExpirySettingsForm() {
-    return this.select('.password-expiry-settings-form');
+    return this.select(".password-expiry-settings-form");
   }
 
   /**
@@ -137,7 +137,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    */
   async clickOnSave() {
     await this.clickOn(this.saveSettingsButton);
-    await waitForTrue(() => !this.saveSettingsButton.getAttribute('disabled'));
+    await waitForTrue(() => !this.saveSettingsButton.getAttribute("disabled"));
   }
 
   /**

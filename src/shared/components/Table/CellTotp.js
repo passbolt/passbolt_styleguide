@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Totp from "../Totp/Totp";
 import EyeCloseSVG from "../../../img/svg/eye_close.svg";
@@ -81,29 +81,34 @@ class CellTotp extends Component {
 
     return (
       <>
-        {hasTotp &&
+        {hasTotp && (
           <>
-            <div className={`secret secret-totp ${this.previewedTotp ? "" : "secret-copy"}`}
-              title={this.props.title}>
-              {this.previewedTotp &&
-                <Totp
-                  totp={this.previewedTotp}
-                  canClick={this.props.canCopy}
-                  onClick={this.handleTotpClick}/>
-              }
-              {!this.previewedTotp &&
-                <button type="button" className="no-border" onClick={this.handleTotpClick} disabled={!this.props.canCopy}>
+            <div className={`secret secret-totp ${this.previewedTotp ? "" : "secret-copy"}`} title={this.props.title}>
+              {this.previewedTotp && (
+                <Totp totp={this.previewedTotp} canClick={this.props.canCopy} onClick={this.handleTotpClick} />
+              )}
+              {!this.previewedTotp && (
+                <button
+                  type="button"
+                  className="no-border"
+                  onClick={this.handleTotpClick}
+                  disabled={!this.props.canCopy}
+                >
                   <span>Copy TOTP to clipboard</span>
                 </button>
-              }
+              )}
             </div>
-            {this.props.canPreview &&
-              <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view inline button-transparent">
-                {this.previewedTotp ? <EyeCloseSVG/> : <EyeOpenSVG/>}
+            {this.props.canPreview && (
+              <button
+                type="button"
+                onClick={this.handlePreviewTotpButtonClick}
+                className="totp-view inline button-transparent"
+              >
+                {this.previewedTotp ? <EyeCloseSVG /> : <EyeOpenSVG />}
               </button>
-            }
+            )}
           </>
-        }
+        )}
       </>
     );
   }
@@ -111,7 +116,7 @@ class CellTotp extends Component {
 
 CellTotp.defaultProps = {
   canPreviewSecret: false,
-  canCopySecret: false
+  canCopySecret: false,
 };
 
 CellTotp.propTypes = {

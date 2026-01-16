@@ -12,7 +12,7 @@
  * @since         5.3.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayResourceDetailsURIs from "./DisplayResourceDetailsURIs";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,9 @@ export default class DisplayResourceDetailsURIsPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourceDetailsURIs {...props}/>
+        <DisplayResourceDetailsURIs {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -45,56 +45,56 @@ export default class DisplayResourceDetailsURIsPage {
    * Return the page object of the title header
    */
   get title() {
-    return this._page.container.querySelector('.accordion-header button');
+    return this._page.container.querySelector(".accordion-header button");
   }
 
   /**
    * Returns the page object of URIs section
    */
   get urisSection() {
-    return this._page.container.querySelector('.accordion-content');
+    return this._page.container.querySelector(".accordion-content");
   }
 
   /**
    * Returns the information labels container
    */
   get informationLabels() {
-    return this._page.container.querySelector('.information-label');
+    return this._page.container.querySelector(".information-label");
   }
 
   /**
    * Returns the information values container
    */
   get informationValues() {
-    return this._page.container.querySelector('.information-value');
+    return this._page.container.querySelector(".information-value");
   }
 
   /**
    * Returns the main URI label
    */
   get mainUriLabel() {
-    return this._page.container.querySelector('.main-uri.label');
+    return this._page.container.querySelector(".main-uri.label");
   }
 
   /**
    * Returns the main URI value
    */
   get mainUriValue() {
-    return this._page.container.querySelector('.main-uri.value button');
+    return this._page.container.querySelector(".main-uri.value button");
   }
 
   /**
    * Returns the additional URIs label
    */
   get additionalUrisLabel() {
-    return this._page.container.querySelector('.addictional-uris.label');
+    return this._page.container.querySelector(".addictional-uris.label");
   }
 
   /**
    * Returns the additional URIs values
    */
   get additionalUrisValues() {
-    return this._page.container.querySelectorAll('.additional-uris.value button');
+    return this._page.container.querySelectorAll(".additional-uris.value button");
   }
 
   /**
@@ -113,7 +113,7 @@ export default class DisplayResourceDetailsURIsPage {
 
   /** Click on the component */
   async clickOn(component) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

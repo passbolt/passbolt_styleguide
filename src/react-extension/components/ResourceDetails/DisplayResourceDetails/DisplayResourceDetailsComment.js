@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -17,8 +16,8 @@ import React from "react";
 import AddResourceComment from "../../ResourceComment/AddResourceComment/AddResourceComment";
 import PropTypes from "prop-types";
 import DisplayResourceCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 import ReplySVG from "../../../../img/svg/reply.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
@@ -81,7 +80,7 @@ class DisplayResourceDetailsComment extends React.Component {
       return;
     }
 
-    await this.setState({mustRefresh: true});
+    await this.setState({ mustRefresh: true });
   }
 
   /**
@@ -89,7 +88,7 @@ class DisplayResourceDetailsComment extends React.Component {
    */
   async handleTitleClickedEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
   }
 
   /**
@@ -97,21 +96,21 @@ class DisplayResourceDetailsComment extends React.Component {
    * @returns {Promise<void>}
    */
   async handleAddedEvent() {
-    await this.setState({mustRefresh: true, canAdd: false, canAddByIcon: true});
+    await this.setState({ mustRefresh: true, canAdd: false, canAddByIcon: true });
   }
 
   /**
    * Whenever the user cancelled the adding of new comment
    */
   async handleCancelledAddEvent() {
-    await this.setState({canAdd: false});
+    await this.setState({ canAdd: false });
   }
 
   /**
    * Whenever the user requested to add a new comment ( call-to-action )
    */
   async handleRequestedAddEvent() {
-    await this.setState({canAdd: true});
+    await this.setState({ canAdd: true });
   }
 
   /**
@@ -121,7 +120,7 @@ class DisplayResourceDetailsComment extends React.Component {
 
   async handleFetchedEvent(comments) {
     const hasComments = comments && comments.length > 0;
-    await this.setState({mustRefresh: false, canAdd: !hasComments, canAddByIcon: hasComments});
+    await this.setState({ mustRefresh: false, canAdd: !hasComments, canAddByIcon: hasComments });
   }
 
   /**
@@ -152,42 +151,36 @@ class DisplayResourceDetailsComment extends React.Component {
               <span className="accordion-title">
                 <Trans>Comments</Trans>
               </span>
-              {this.state.open &&
-                <CaretDownSVG/>
-              }
-              {!this.state.open &&
-                <CaretRightSVG/>
-              }
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className="accordion-content">
-            {this.mustShowAddComment &&
+            {this.mustShowAddComment && (
               <div className="add-comments">
-                <button
-                  type="button"
-                  className="section-action"
-                  onClick={this.handleRequestedAddEvent}>
-                  <ReplySVG/>
+                <button type="button" className="section-action" onClick={this.handleRequestedAddEvent}>
+                  <ReplySVG />
                   <Trans>Add comment</Trans>
                 </button>
               </div>
-            }
-            {this.state.canAdd &&
+            )}
+            {this.state.canAdd && (
               <AddResourceComment
                 resource={this.resource}
                 onAdd={this.handleAddedEvent}
                 onCancel={this.handleCancelledAddEvent}
-                cancellable={this.state.canAddByIcon}/>
-            }
+                cancellable={this.state.canAddByIcon}
+              />
+            )}
             <DisplayResourceCommentList
               resource={this.resource}
               onFetch={this.handleFetchedEvent}
-              mustRefresh={this.state.mustRefresh}/>
+              mustRefresh={this.state.mustRefresh}
+            />
           </div>
-        }
-
+        )}
       </div>
     );
   }

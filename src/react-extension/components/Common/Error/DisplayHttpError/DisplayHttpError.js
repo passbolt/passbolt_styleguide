@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 
 /**
  * This component allows to display an HTTP error page
@@ -69,4 +69,4 @@ DisplayHttpError.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(DisplayHttpError);
+export default withTranslation("common")(DisplayHttpError);

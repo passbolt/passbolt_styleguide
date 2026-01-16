@@ -12,7 +12,6 @@
  * @since         3.6.0
  */
 
-import {ApiClientOptions} from "./apiClientOptions";
+import { ApiClientOptions } from "./apiClientOptions";
 
-export const defaultApiClientOptions = () => (new ApiClientOptions())
-  .setBaseUrl("https://localhost");
+export const defaultApiClientOptions = () => new ApiClientOptions().setBaseUrl("https://localhost");

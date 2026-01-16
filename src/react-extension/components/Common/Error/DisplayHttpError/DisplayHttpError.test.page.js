@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         4.5.3
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayHttpError from "./DisplayHttpError";
@@ -30,9 +29,9 @@ export default class DisplayHttpErrorPage {
   constructor(errorCode) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayHttpError errorCode={errorCode}/>
+        <DisplayHttpError errorCode={errorCode} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -41,7 +40,7 @@ export default class DisplayHttpErrorPage {
    * @returns {string}
    */
   get errorCode() {
-    return this._page.container.querySelector('h3').textContent;
+    return this._page.container.querySelector("h3").textContent;
   }
 
   /**
@@ -49,16 +48,14 @@ export default class DisplayHttpErrorPage {
    * @returns {string}
    */
   get title() {
-    return this._page.container.querySelector('h4').textContent;
+    return this._page.container.querySelector("h4").textContent;
   }
-
 
   /**
    * Returns the page error code description
    * @returns {string}
    */
   get description() {
-    return this._page.container.querySelector('p').textContent;
+    return this._page.container.querySelector("p").textContent;
   }
 }
-

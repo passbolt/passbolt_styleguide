@@ -11,19 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {
-  ResourceWorkspaceFilterTypes,
-  withResourceWorkspace
-} from "../../../contexts/ResourceWorkspaceContext";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
-import {formatDateTimeAgo, formatExpirationDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
+import { formatDateTimeAgo, formatExpirationDateTimeAgo } from "../../../../shared/utils/dateUtils";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
 import FolderSVG from "../../../../img/svg/folder.svg";
@@ -84,9 +81,13 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @returns {Promise<void>}
    */
   async loadUserInformation() {
-    const resourceInformation = await this.props.context.port.request("passbolt.resources.find-details", this.resource.id);
-    const hasInformationChanged = this.resource.created_by !== resourceInformation.created_by
-      || this.resource.modified_by !== resourceInformation.modified_by;
+    const resourceInformation = await this.props.context.port.request(
+      "passbolt.resources.find-details",
+      this.resource.id,
+    );
+    const hasInformationChanged =
+      this.resource.created_by !== resourceInformation.created_by ||
+      this.resource.modified_by !== resourceInformation.modified_by;
 
     if (hasInformationChanged) {
       //current selected resource might have changed and the information received doesn't match anymore. In such case we don't update the state.
@@ -106,21 +107,22 @@ class DisplayResourceDetailsInformation extends React.Component {
     const hasResourceChanged = this.resource.id !== previousResource.id;
     const hasResourceUpdated = this.resource.modified !== previousResource.modified;
     if ((hasResourceChanged || hasResourceUpdated) && this.state.open) {
-      this.setState({plaintextSecretDto: null, previewedSecret: null});
+      this.setState({ plaintextSecretDto: null, previewedSecret: null });
     }
 
     if (!hasResourceChanged) {
       return;
     }
 
-    const hasModifierOrCreatorChanged = this.resource.created_by !== previousResource.created_by
-      || this.resource.modified_by !== previousResource.modified_by;
+    const hasModifierOrCreatorChanged =
+      this.resource.created_by !== previousResource.created_by ||
+      this.resource.modified_by !== previousResource.modified_by;
 
     if (!hasModifierOrCreatorChanged) {
       return;
     }
 
-    this.setState({creator: null, modifier: null});
+    this.setState({ creator: null, modifier: null });
     if (this.state.open) {
       this.loadUserInformation();
     }
@@ -134,20 +136,21 @@ class DisplayResourceDetailsInformation extends React.Component {
     return this.props.resourceWorkspaceContext.details.resource;
   }
 
-
   /**
    * Handle when the user selects the folder parent.
    */
   handleFolderParentClickEvent() {
-    if (this.resource.folder_parent_id) { // Case of specific folder
-      const folderParent = this.props.context.folders.find(item => item.id === this.resource.folder_parent_id);
+    if (this.resource.folder_parent_id) {
+      // Case of specific folder
+      const folderParent = this.props.context.folders.find((item) => item.id === this.resource.folder_parent_id);
       const filterIsDifferent = this.props.resourceWorkspaceContext.filter.payload?.folder?.id !== folderParent.id;
       if (filterIsDifferent) {
         this.props.history.push(`/app/folders/view/${folderParent.id}`);
       }
-    } else { // Case of root folder
-      const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
-      this.props.history.push(`/app/passwords`, {filter});
+    } else {
+      // Case of root folder
+      const filter = { type: ResourceWorkspaceFilterTypes.ROOT_FOLDER };
+      this.props.history.push(`/app/passwords`, { filter });
     }
   }
 
@@ -156,10 +159,10 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
 
     if (!open) {
-      this.setState({creator: null, modifier: null});
+      this.setState({ creator: null, modifier: null });
     } else {
       this.loadUserInformation();
     }
@@ -176,7 +179,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     }
 
     if (this.props.context.folders) {
-      const folder = this.props.context.folders.find(item => item.id === folderParentId);
+      const folder = this.props.context.folders.find((item) => item.id === folderParentId);
       if (folder) {
         return folder.name;
       }
@@ -193,7 +196,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     const isShared = false;
 
     if (this.resource.folder_parent_id !== null && this.props.context.folders) {
-      const folder = this.props.context.folders.find(item => item.id === this.resource.folder_parent_id);
+      const folder = this.props.context.folders.find((item) => item.id === this.resource.folder_parent_id);
       if (folder) {
         return !folder.personal;
       }
@@ -249,17 +252,19 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   renderTooltipFolderStructure(folderStructure) {
     if (folderStructure.length === 0) {
-      return <span><Trans>My workspace</Trans></span>;
+      return (
+        <span>
+          <Trans>My workspace</Trans>
+        </span>
+      );
     }
 
-    return folderStructure?.map((folder, index) =>
-      <div key={folder.id} className="folder-level" style={{marginLeft: `${5 * index}px`}}>
-        {folder.folder_parent_id !== null &&
-          <span className="caret">›</span>
-        }
+    return folderStructure?.map((folder, index) => (
+      <div key={folder.id} className="folder-level" style={{ marginLeft: `${5 * index}px` }}>
+        {folder.folder_parent_id !== null && <span className="caret">›</span>}
         <span>{folder.name}</span>
       </div>
-    );
+    ));
   }
 
   /**
@@ -267,8 +272,8 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
+    const canUseFolders =
+      this.props.context.siteSettings.canIUse("folders") && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
     const canUsePasswordExpiry = this.props.passwordExpiryContext.isFeatureEnabled();
 
     const creatorUsername = this.state.creator?.username || "";
@@ -284,74 +289,86 @@ class DisplayResourceDetailsInformation extends React.Component {
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
               <span className="accordion-title">
                 <Trans>Information</Trans>
-                {canUsePasswordExpiry && this.isAttentionRequired && <AttentionSVG className="attention-required"/>}
+                {canUsePasswordExpiry && this.isAttentionRequired && <AttentionSVG className="attention-required" />}
               </span>
-              {this.state.open
-                ? <CaretDownSVG/>
-                : <CaretRightSVG/>
-              }
+              {this.state.open ? <CaretDownSVG /> : <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className="accordion-content">
             <div className="information-label">
-              <span className="created label"><Trans>Created</Trans></span>
-              <span className="created-by label"><Trans>Created by</Trans></span>
-              <span className="modified label"><Trans>Modified</Trans></span>
-              <span className="modified-by label"><Trans>Modified by</Trans></span>
-              {canUseFolders &&
-                <span className="location label"><Trans>Location</Trans></span>
-              }
-              {canUsePasswordExpiry &&
+              <span className="created label">
+                <Trans>Created</Trans>
+              </span>
+              <span className="created-by label">
+                <Trans>Created by</Trans>
+              </span>
+              <span className="modified label">
+                <Trans>Modified</Trans>
+              </span>
+              <span className="modified-by label">
+                <Trans>Modified by</Trans>
+              </span>
+              {canUseFolders && (
+                <span className="location label">
+                  <Trans>Location</Trans>
+                </span>
+              )}
+              {canUsePasswordExpiry && (
                 <div className="expiry label label-with-icon">
                   <span className="ellipsis">
                     <Trans>Expiry</Trans>
                   </span>
-                  {this.isAttentionRequiredOnExpiryDate &&
-                    <AttentionSVG className="attention-required"/>
-                  }
+                  {this.isAttentionRequiredOnExpiryDate && <AttentionSVG className="attention-required" />}
                 </div>
-              }
+              )}
             </div>
             <div className="information-value">
-              <span className="created value" title={this.resource.created}>{createdDateTimeAgo}</span>
+              <span className="created value" title={this.resource.created}>
+                {createdDateTimeAgo}
+              </span>
               <span className="created-by value">{creatorUsername}</span>
-              <span className="modified value" title={this.resource.modified}>{modifiedDateTimeAgo}</span>
+              <span className="modified value" title={this.resource.modified}>
+                {modifiedDateTimeAgo}
+              </span>
               <span className="modified-by value">{modifierUsername}</span>
-              {canUseFolders &&
+              {canUseFolders && (
                 <span className="location value">
                   <TooltipPortal message={this.renderTooltipFolderStructure(folderStructure)}>
-                    <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="no-border">
-                      {this.resource.folder_parent_id === null &&
+                    <button
+                      type="button"
+                      onClick={this.handleFolderParentClickEvent}
+                      disabled={!this.props.context.folders}
+                      className="no-border"
+                    >
+                      {this.resource.folder_parent_id === null && (
                         <>
                           <CabinetSVG />
-                          <span><Trans>My workspace</Trans></span>
+                          <span>
+                            <Trans>My workspace</Trans>
+                          </span>
                         </>
-                      }
-                      {this.resource.folder_parent_id !== null &&
+                      )}
+                      {this.resource.folder_parent_id !== null && (
                         <>
-                          {this.isFolderParentShared() ? <ShareFolderSVG/> : <FolderSVG/>}
-                          {folderStructure.map(folder =>
+                          {this.isFolderParentShared() ? <ShareFolderSVG /> : <FolderSVG />}
+                          {folderStructure.map((folder) => (
                             <Fragment key={folder.id}>
-                              {folder.folder_parent_id !== null &&
-                                <span className="caret">›</span>
-                              }
+                              {folder.folder_parent_id !== null && <span className="caret">›</span>}
                               <span>{folder.name}</span>
                             </Fragment>
-                          )}
+                          ))}
                         </>
-                      }
+                      )}
                     </button>
                   </TooltipPortal>
                 </span>
-              }
-              {canUsePasswordExpiry &&
-                <span className="expiry value">{this.resourceExpirationStatus}</span>
-              }
+              )}
+              {canUsePasswordExpiry && <span className="expiry value">{this.resourceExpirationStatus}</span>}
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -368,4 +385,8 @@ DisplayResourceDetailsInformation.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withResourceWorkspace(withPasswordExpiry(withTranslation('common')(DisplayResourceDetailsInformation))))));
+export default withAppContext(
+  withRbac(
+    withRouter(withResourceWorkspace(withPasswordExpiry(withTranslation("common")(DisplayResourceDetailsInformation)))),
+  ),
+);

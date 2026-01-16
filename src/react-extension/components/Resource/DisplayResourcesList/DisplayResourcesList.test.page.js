@@ -12,9 +12,9 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesList from "./DisplayResourcesList";
 
@@ -30,10 +30,10 @@ export default class DisplayResourcesListPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <DisplayResourcesList {...props}/>
+          <DisplayResourcesList {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -41,21 +41,21 @@ export default class DisplayResourcesListPage {
    * Returns true if the content is empty
    */
   get hasEmptyContent() {
-    return Boolean(this._page.container.querySelector('.empty-content'));
+    return Boolean(this._page.container.querySelector(".empty-content"));
   }
 
   /**
    * Returns the number of displayed resources
    */
   get resourcesCount() {
-    return this._page.container.querySelectorAll('table tbody tr').length;
+    return this._page.container.querySelectorAll("table tbody tr").length;
   }
 
   /**
    * Returns the number of displayed columns
    */
   get columnsCount() {
-    return this._page.container.querySelectorAll('table thead tr th').length;
+    return this._page.container.querySelectorAll("table thead tr th").length;
   }
 
   /**
@@ -63,8 +63,8 @@ export default class DisplayResourcesListPage {
    * @index The column index
    */
   columns(index) {
-    const element = this._page.container.querySelector('table thead tr').querySelectorAll('th')[index - 1];
-    const resizer = element.querySelector('.resizer');
+    const element = this._page.container.querySelector("table thead tr").querySelectorAll("th")[index - 1];
+    const resizer = element.querySelector(".resizer");
     return {
       get width() {
         return getComputedStyle(element).width;
@@ -76,7 +76,7 @@ export default class DisplayResourcesListPage {
       async resize(moveInPx) {
         fireEvent.mouseDown(resizer);
         await waitFor(() => {});
-        fireEvent.mouseMove(resizer, {clientX: moveInPx});
+        fireEvent.mouseMove(resizer, { clientX: moveInPx });
         await waitFor(() => {});
         fireEvent.mouseUp(resizer);
       },
@@ -88,10 +88,10 @@ export default class DisplayResourcesListPage {
       async reorder(moveInPx) {
         fireEvent.mouseDown(element);
         await waitFor(() => {});
-        fireEvent.mouseMove(element, {clientX: moveInPx});
+        fireEvent.mouseMove(element, { clientX: moveInPx });
         await waitFor(() => {});
         fireEvent.mouseUp(element);
-      }
+      },
     };
   }
 
@@ -100,70 +100,70 @@ export default class DisplayResourcesListPage {
    * @index The resource index
    */
   resource(index) {
-    const element = this._page.container.querySelectorAll('table tbody tr')[index - 1];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll("table tbody tr")[index - 1];
+    const leftClick = { button: 0 };
     return {
       get name() {
-        return element.querySelector('.cell-name div').textContent;
+        return element.querySelector(".cell-name div").textContent;
       },
       get password() {
-        return element.querySelector('.cell-password .secret button span').textContent;
+        return element.querySelector(".cell-password .secret button span").textContent;
       },
       get isViewPasswordExist() {
-        return Boolean(element.querySelector('.cell-password .password-view'));
+        return Boolean(element.querySelector(".cell-password .password-view"));
       },
       get copyPasswordLink() {
-        return element.querySelector('.cell-password .secret-copy button');
+        return element.querySelector(".cell-password .secret-copy button");
       },
       get totp() {
-        return element.querySelector('.cell-totp .secret button span').textContent;
+        return element.querySelector(".cell-totp .secret button span").textContent;
       },
       get isViewTotpExist() {
-        return Boolean(element.querySelector('.cell-totp .totp-view'));
+        return Boolean(element.querySelector(".cell-totp .totp-view"));
       },
       get copyTotpLink() {
-        return element.querySelector('.cell-totp .secret-copy button');
+        return element.querySelector(".cell-totp .secret-copy button");
       },
       get locationLink() {
-        return element.querySelector('.cell-location button').textContent;
+        return element.querySelector(".cell-location button").textContent;
       },
       async selectFavorite() {
-        const favorite = element.querySelector('.cell-favorite button');
+        const favorite = element.querySelector(".cell-favorite button");
         fireEvent.click(favorite, leftClick);
         await waitFor(() => {});
       },
       async selectUsername() {
-        const username = element.querySelector('.cell-username div button');
+        const username = element.querySelector(".cell-username div button");
         fireEvent.click(username, leftClick);
         await waitFor(() => {});
       },
       async selectPassword() {
-        const password = element.querySelector('.cell-password .secret button');
+        const password = element.querySelector(".cell-password .secret button");
         fireEvent.click(password, leftClick);
         await waitFor(() => {});
       },
       async selectViewPassword() {
-        const viewPassword = element.querySelector('.cell-password .password-view');
+        const viewPassword = element.querySelector(".cell-password .password-view");
         fireEvent.click(viewPassword, leftClick);
         await waitFor(() => {});
       },
       async selectTotp() {
-        const password = element.querySelector('.cell-totp .secret button');
+        const password = element.querySelector(".cell-totp .secret button");
         fireEvent.click(password, leftClick);
         await waitFor(() => {});
       },
       async selectViewTotp() {
-        const viewPassword = element.querySelector('.cell-totp .totp-view');
+        const viewPassword = element.querySelector(".cell-totp .totp-view");
         fireEvent.click(viewPassword, leftClick);
         await waitFor(() => {});
       },
       async selectUri() {
-        const uri = element.querySelector('.cell-uri div button');
+        const uri = element.querySelector(".cell-uri div button");
         fireEvent.click(uri, leftClick);
         await waitFor(() => {});
       },
       async selectLocation() {
-        const location = element.querySelector('.cell-location button');
+        const location = element.querySelector(".cell-location button");
         fireEvent.click(location, leftClick);
         await waitFor(() => {});
       },
@@ -172,19 +172,19 @@ export default class DisplayResourcesListPage {
         await waitFor(() => {});
       },
       async selectWithCheckbox() {
-        const checkbox = element.querySelector('td.cell-checkbox input');
+        const checkbox = element.querySelector("td.cell-checkbox input");
         fireEvent.click(checkbox, leftClick);
         await waitFor(() => {});
       },
       async selectRangeCheckbox() {
-        const checkbox = element.querySelector('td.cell-checkbox input');
-        fireEvent.click(checkbox, {button: 0, shiftKey: true});
+        const checkbox = element.querySelector("td.cell-checkbox input");
+        fireEvent.click(checkbox, { button: 0, shiftKey: true });
         await waitFor(() => {});
       },
       async openContextualMenu() {
         fireEvent.contextMenu(element, leftClick);
         await waitFor(() => {});
-      }
+      },
     };
   }
 
@@ -192,8 +192,8 @@ export default class DisplayResourcesListPage {
    * select the all resources
    */
   async selectAll() {
-    const element = this._page.container.querySelector('thead tr th.cell-checkbox div input');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector("thead tr th.cell-checkbox div input");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -202,8 +202,8 @@ export default class DisplayResourcesListPage {
    * Sort the resources by favorite
    */
   async sortByResourceFavorite() {
-    const element = this._page.container.querySelectorAll('thead th button')[0];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll("thead th button")[0];
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -212,8 +212,8 @@ export default class DisplayResourcesListPage {
    * Sort the resources by their name
    */
   async sortByResourceName() {
-    const element = this._page.container.querySelectorAll('thead th button')[1];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll("thead th button")[1];
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -222,8 +222,8 @@ export default class DisplayResourcesListPage {
    * Sort the resources by their last date of modification
    */
   async sortByExpiry() {
-    const element = this._page.container.querySelectorAll('thead th button')[2];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll("thead th button")[2];
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -232,8 +232,8 @@ export default class DisplayResourcesListPage {
    * Sort the resources by their username
    */
   async sortByUsername() {
-    const element = this._page.container.querySelectorAll('thead th button')[3];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll("thead th button")[3];
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -242,8 +242,8 @@ export default class DisplayResourcesListPage {
    * Sort the resources by their uri
    */
   async sortByUri() {
-    const element = this._page.container.querySelectorAll('thead th button')[4];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll("thead th button")[4];
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -252,8 +252,8 @@ export default class DisplayResourcesListPage {
    * Sort the resources by their last date of modification
    */
   async sortByModified() {
-    const element = this._page.container.querySelectorAll('thead th button')[5];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll("thead th button")[5];
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

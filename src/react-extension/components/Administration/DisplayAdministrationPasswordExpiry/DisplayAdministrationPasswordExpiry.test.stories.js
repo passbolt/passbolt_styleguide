@@ -13,36 +13,37 @@
  */
 
 import React from "react";
-import {defaultPropsCE, defaultPropsPro} from "./DisplayAdministrationPasswordExpiry.test.data";
+import { defaultPropsCE, defaultPropsPro } from "./DisplayAdministrationPasswordExpiry.test.data";
 import AdministrationPasswordExpiryContextProvider from "../../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry";
 
 export default {
-  title: 'Components/Administration/DisplayAdministrationPasswordExpiry',
+  title: "Components/Administration/DisplayAdministrationPasswordExpiry",
   component: DisplayAdministrationPasswordExpiry,
-  decorators: [(Story, {args}) =>
-    <div className="page administration">
-      <div className="app" >
-        <div className="panel main">
-          <div className="panel middle">
-            <div className="middle-right">
-              <div className="main-page">
-                <AdministrationPasswordExpiryContextProvider {...args}>
-                  <Story {...args}/>
-                </AdministrationPasswordExpiryContextProvider>
+  decorators: [
+    (Story, { args }) => (
+      <div className="page administration">
+        <div className="app">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="main-page">
+                  <AdministrationPasswordExpiryContextProvider {...args}>
+                    <Story {...args} />
+                  </AdministrationPasswordExpiryContextProvider>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  ]
+    ),
+  ],
 };
 
 export const ProVersion = {
   args: defaultPropsPro(),
 };
-
 
 export const CeVersion = {
   args: defaultPropsCE(),

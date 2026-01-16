@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import CloseIcon from "../../../../../img/svg/close.svg";
 
@@ -48,9 +48,16 @@ class DialogCloseButton extends Component {
    */
   render() {
     return (
-      <button type="button" disabled={this.props.disabled} className="dialog-close button button-transparent" onClick={this.handleCloseClick}>
-        <CloseIcon className="svg-icon close"/>
-        <span className="visually-hidden"><Trans>Close</Trans></span>
+      <button
+        type="button"
+        disabled={this.props.disabled}
+        className="dialog-close button button-transparent"
+        onClick={this.handleCloseClick}
+      >
+        <CloseIcon className="svg-icon close" />
+        <span className="visually-hidden">
+          <Trans>Close</Trans>
+        </span>
       </button>
     );
   }
@@ -58,7 +65,7 @@ class DialogCloseButton extends Component {
 
 DialogCloseButton.propTypes = {
   onClose: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };
 
 export default withTranslation("common")(DialogCloseButton);

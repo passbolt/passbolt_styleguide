@@ -45,6 +45,7 @@ class ExtInForm extends React.Component {
       storage: this.props.storage,
       account: null,
       loggedInUser: null,
+      applicationId: this.props.applicationId,
     };
   }
 
@@ -53,8 +54,8 @@ class ExtInForm extends React.Component {
    * @returns {Promise<void>}
    */
   async initLocale() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
-    this.setState({locale});
+    const { locale } = await this.props.port.request("passbolt.locale.get");
+    this.setState({ locale });
   }
 
   /**
@@ -64,7 +65,7 @@ class ExtInForm extends React.Component {
   async getAccount() {
     const accountDto = await this.props.port.request("passbolt.account.get");
     const account = new AccountEntity(accountDto);
-    this.setState({account});
+    this.setState({ account });
   }
 
   /**
@@ -72,7 +73,7 @@ class ExtInForm extends React.Component {
    */
   async getLoggedInUser() {
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
-    this.setState({loggedInUser});
+    this.setState({ loggedInUser });
   }
 
   /**
@@ -81,13 +82,16 @@ class ExtInForm extends React.Component {
   render() {
     return (
       <AppContext.Provider value={this.state}>
-        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json" locale={this.state.locale}>
+        <TranslationProvider
+          loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json"
+          locale={this.state.locale}
+        >
           <ResourceTypesLocalStorageContextProvider>
             <MetadataTypesSettingsLocalStorageContextProvider>
               <MetadataKeysSettingsLocalStorageContextProvider>
                 <PasswordPoliciesContext>
                   <div className="web-integration">
-                    <DisplayInFormMenu/>
+                    <DisplayInFormMenu />
                   </div>
                 </PasswordPoliciesContext>
               </MetadataKeysSettingsLocalStorageContextProvider>
@@ -101,7 +105,8 @@ class ExtInForm extends React.Component {
 
 ExtInForm.propTypes = {
   port: PropTypes.object,
-  storage: PropTypes.object
+  storage: PropTypes.object,
+  applicationId: PropTypes.string,
 };
 
 export default ExtInForm;

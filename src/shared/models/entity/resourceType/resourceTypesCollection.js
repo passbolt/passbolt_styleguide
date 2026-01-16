@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import EntityV2Collection from "../../entity/abstract/entityV2Collection";
-import {RESOURCE_TYPE_VERSION_4} from "../metadata/metadataTypesSettingsEntity";
+import { RESOURCE_TYPE_VERSION_4 } from "../metadata/metadataTypesSettingsEntity";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
@@ -23,9 +23,9 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
 } from "./resourceTypeSchemasDefinition";
-import ResourceTypeEntity, {PASSWORD_RESOURCE_TYPES} from "./resourceTypeEntity";
+import ResourceTypeEntity, { PASSWORD_RESOURCE_TYPES } from "./resourceTypeEntity";
 import assertString from "validator/es/lib/util/assertString";
 
 const SUPPORTED_RESOURCE_TYPES = [
@@ -38,7 +38,7 @@ const SUPPORTED_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
 ];
 
 class ResourceTypesCollection extends EntityV2Collection {
@@ -65,8 +65,8 @@ class ResourceTypesCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": ResourceTypeEntity.getSchema(),
+      type: "array",
+      items: ResourceTypeEntity.getSchema(),
     };
   }
 
@@ -77,8 +77,8 @@ class ResourceTypesCollection extends EntityV2Collection {
    * @throws {EntityValidationError} If a permission already exists with the same id.
    */
   validateBuildRules(item, options = {}) {
-    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
-    this.assertNotExist("slug", item._props.slug, {haystackSet: options?.uniqueSlugsSetCache});
+    this.assertNotExist("id", item._props.id, { haystackSet: options?.uniqueIdsSetCache });
+    this.assertNotExist("slug", item._props.slug, { haystackSet: options?.uniqueSlugsSetCache });
   }
 
   /*
@@ -93,7 +93,7 @@ class ResourceTypesCollection extends EntityV2Collection {
    * @return {boolean}
    */
   isResourceTypeIdPresent(id) {
-    return this._items.some(resourceType => resourceType.id === id);
+    return this._items.some((resourceType) => resourceType.id === id);
   }
 
   /*
@@ -116,7 +116,7 @@ class ResourceTypesCollection extends EntityV2Collection {
    * @return {void} The function alters the collection itself.
    */
   filterByResourceTypeVersion(version) {
-    this.filterByCallback(resourceType => resourceType.version === version);
+    this.filterByCallback((resourceType) => resourceType.version === version);
   }
 
   /*
@@ -158,7 +158,7 @@ class ResourceTypesCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSomePasswordResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
-    return this.items.some(resourceType => resourceType.hasPassword() && resourceType.version === version);
+    return this.items.some((resourceType) => resourceType.hasPassword() && resourceType.version === version);
   }
 
   /**
@@ -167,7 +167,7 @@ class ResourceTypesCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSomeTotpResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
-    return this.items.some(resourceType => resourceType.hasTotp() && resourceType.version === version);
+    return this.items.some((resourceType) => resourceType.hasTotp() && resourceType.version === version);
   }
 
   /**
@@ -176,7 +176,7 @@ class ResourceTypesCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSomeCustomFieldsResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
-    return this.items.some(resourceType => resourceType.hasCustomFields() && resourceType.version === version);
+    return this.items.some((resourceType) => resourceType.hasCustomFields() && resourceType.version === version);
   }
 
   /**
@@ -185,7 +185,7 @@ class ResourceTypesCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSomeNoteResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
-    return this.items.some(resourceType => resourceType.hasSecretDescription() && resourceType.version === version);
+    return this.items.some((resourceType) => resourceType.hasSecretDescription() && resourceType.version === version);
   }
 
   /**
@@ -194,7 +194,7 @@ class ResourceTypesCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSomeMetadataDescriptionResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
-    return this.items.some(resourceType => resourceType.hasMetadataDescription() && resourceType.version === version);
+    return this.items.some((resourceType) => resourceType.hasMetadataDescription() && resourceType.version === version);
   }
 
   /**
@@ -203,7 +203,7 @@ class ResourceTypesCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSomeOfVersion(version = RESOURCE_TYPE_VERSION_4) {
-    return this.items.some(resourceType => resourceType.version === version);
+    return this.items.some((resourceType) => resourceType.version === version);
   }
 
   /**
@@ -258,11 +258,11 @@ class ResourceTypesCollection extends EntityV2Collection {
       const secretsFields = Object.keys(resourceType.definition.secret.properties);
 
       // Check if all secret fields from the DTO are in the resource type secret property fields
-      const hasAllPropertyFields = resourceSecretFields.every(secretField => secretsFields.includes(secretField));
+      const hasAllPropertyFields = resourceSecretFields.every((secretField) => secretsFields.includes(secretField));
 
       if (hasAllPropertyFields) {
         // Get the number of properties that is not set to match the resource type
-        const unsetPropertyCount = secretsFields.filter(field => !resourceSecretFields.includes(field)).length;
+        const unsetPropertyCount = secretsFields.filter((field) => !resourceSecretFields.includes(field)).length;
 
         // If all properties are set, that is a perfect match
         if (unsetPropertyCount === 0) {
@@ -292,15 +292,15 @@ class ResourceTypesCollection extends EntityV2Collection {
     const uniqueIdsSetCache = new Set(this.extract("id"));
     const uniqueSlugsSetCache = new Set(this.extract("slug"));
 
-    const onItemPushed = item => {
+    const onItemPushed = (item) => {
       uniqueIdsSetCache.add(item.id);
       uniqueSlugsSetCache.add(item.slug);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache, uniqueSlugsSetCache},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueIdsSetCache, uniqueSlugsSetCache },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);

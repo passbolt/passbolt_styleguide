@@ -12,15 +12,16 @@
  * @since         5.2.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { getContrastedColor } from "../../../../shared/utils/color";
+import { KEEPASS_ICON_LIST } from "./keepassIconList.data";
 import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {getContrastedColor} from "../../../../shared/utils/color";
-import {KEEPASS_ICON_LIST} from "./keepassIconList.data";
-import {ICON_TYPE_KEEPASS_ICON_SET, COLOR_TRANSPARENT} from "../../../../shared/models/entity/resource/metadata/IconEntity";
+  ICON_TYPE_KEEPASS_ICON_SET,
+  COLOR_TRANSPARENT,
+} from "../../../../shared/models/entity/resource/metadata/IconEntity";
 
 const COLOR_LIST = [
   "#DFDFDF",
@@ -136,7 +137,7 @@ class AddResourceAppearance extends Component {
    * @returns {boolean}
    */
   isDefaultIconSelected() {
-    return typeof(this.props.resource?.metadata?.icon?.value) !== "number";
+    return typeof this.props.resource?.metadata?.icon?.value !== "number";
   }
 
   /**
@@ -148,11 +149,15 @@ class AddResourceAppearance extends Component {
       <div className="appearance-workspace">
         <div className="appearance-form">
           <div className="title">
-            <h2><Trans>Appearance</Trans></h2>
+            <h2>
+              <Trans>Appearance</Trans>
+            </h2>
           </div>
           <div className="content">
             <div className="color-section">
-              <h3><Trans>Color</Trans></h3>
+              <h3>
+                <Trans>Color</Trans>
+              </h3>
               <span className="input toggle-switch form-element">
                 <label htmlFor="default-color">
                   <input
@@ -162,41 +167,54 @@ class AddResourceAppearance extends Component {
                     onChange={this.switchToDefaultColor}
                     checked={this.isDefaultColorSelected()}
                     disabled={Boolean(this.props.disabled)}
-                    id="default-color"/>
-                  <Trans>Default color</Trans></label>
+                    id="default-color"
+                  />
+                  <Trans>Default color</Trans>
+                </label>
               </span>
               <div className="color-picker">
-                {COLOR_LIST.map(color =>
+                {COLOR_LIST.map((color) => (
                   <span
                     key={color}
                     className="color-picker-item"
-                    style={{backgroundColor: color}}
+                    style={{ backgroundColor: color }}
                     onClick={() => this.handleSelectColor(color)}
                   >
-                    {this.isColorSelected(color) &&
+                    {this.isColorSelected(color) && (
                       <svg viewBox="0 0 25 24" fill="none" className="checked">
-                        <path d="M18.5967 7.875L10.3467 16.125L6.59668 12.375" stroke={getContrastedColor(color)} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path
+                          d="M18.5967 7.875L10.3467 16.125L6.59668 12.375"
+                          stroke={getContrastedColor(color)}
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
-                    }
+                    )}
                   </span>
-                )}
+                ))}
                 <span
                   key={COLOR_TRANSPARENT}
                   className="color-picker-item transparent"
                   onClick={() => this.handleSelectColor(COLOR_TRANSPARENT)}
                 >
-                  {this.isColorSelected(COLOR_TRANSPARENT) &&
+                  {this.isColorSelected(COLOR_TRANSPARENT) && (
                     <svg viewBox="0 0 25 24" fill="none" className="checked">
-                      <path d="M18.5967 7.875L10.3467 16.125L6.59668 12.375" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path
+                        d="M18.5967 7.875L10.3467 16.125L6.59668 12.375"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
-                  }
+                  )}
                   <svg width="36" height="36" viewBox="0 0 36 36">
                     <g clipPath="url(#strike-clip)">
-                      <path d="M0 0L36 36" stroke="#D40101" strokeWidth="2"/>
+                      <path d="M0 0L36 36" stroke="#D40101" strokeWidth="2" />
                     </g>
                     <defs>
                       <clipPath id="strike-clip">
-                        <rect x="0" width="36" height="36" rx="18"/>
+                        <rect x="0" width="36" height="36" rx="18" />
                       </clipPath>
                     </defs>
                   </svg>
@@ -204,7 +222,9 @@ class AddResourceAppearance extends Component {
               </div>
             </div>
             <div className="icons-section">
-              <h3><Trans>Icons</Trans></h3>
+              <h3>
+                <Trans>Icons</Trans>
+              </h3>
               <span className="input toggle-switch form-element">
                 <label htmlFor="default-icon">
                   <input
@@ -214,11 +234,13 @@ class AddResourceAppearance extends Component {
                     onChange={this.switchToDefaultIcon}
                     checked={this.isDefaultIconSelected()}
                     disabled={Boolean(this.props.disabled)}
-                    id="default-icon"/>
-                  <Trans>Default icon</Trans></label>
+                    id="default-icon"
+                  />
+                  <Trans>Default icon</Trans>
+                </label>
               </span>
               <div className="icon-picker">
-                {KEEPASS_ICON_LIST.map((icon, index) =>
+                {KEEPASS_ICON_LIST.map((icon, index) => (
                   <span
                     key={index}
                     className={`icon-picker-item ${this.isIconSelected(index) ? "selected" : ""}`}
@@ -226,7 +248,7 @@ class AddResourceAppearance extends Component {
                   >
                     {icon}
                   </span>
-                )}
+                ))}
               </div>
             </div>
           </div>
@@ -243,5 +265,4 @@ AddResourceAppearance.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withResourceTypesLocalStorage(withTranslation('common')(AddResourceAppearance));
-
+export default withResourceTypesLocalStorage(withTranslation("common")(AddResourceAppearance));

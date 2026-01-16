@@ -12,8 +12,8 @@
  * @since         4.6.0
  */
 
-import {defaultAdministrationRbacContext} from "../../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext.test.data.js";
-import {defaultProps} from "../../DisplayRbacAdministration/DisplayRbacAdministration.test.data.js";
+import { defaultAdministrationRbacContext } from "../../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext.test.data.js";
+import { defaultProps } from "../../DisplayRbacAdministration/DisplayRbacAdministration.test.data.js";
 
 /**
  * Has changes props.

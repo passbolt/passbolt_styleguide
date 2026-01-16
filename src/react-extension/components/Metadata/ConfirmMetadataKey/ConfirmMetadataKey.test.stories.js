@@ -12,17 +12,17 @@
  * @since         5.1.0
  */
 import ConfirmMetadataKey from "./ConfirmMetadataKey";
-import {defaultProps, defaultPropsWithRollback} from "./ConfirmMetadataKey.test.data";
+import { defaultProps, defaultPropsWithRollback } from "./ConfirmMetadataKey.test.data";
 
 export default {
-  title: 'Components/Metadata/ConfirmMetadataKey',
-  component: ConfirmMetadataKey
+  title: "Components/Metadata/ConfirmMetadataKey",
+  component: ConfirmMetadataKey,
 };
 
 export const MetadataKeyRotation = {
-  args: defaultProps()
+  args: defaultProps(),
 };
 
 export const MetadataKeyRollback = {
-  args: defaultPropsWithRollback()
+  args: defaultPropsWithRollback(),
 };

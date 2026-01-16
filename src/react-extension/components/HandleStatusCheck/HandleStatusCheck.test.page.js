@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import AccountRecoveryUserContextProvider from "../../contexts/AccountRecoveryUserContext";
 import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
 import HandleStatusCheck from "./HandleStatusCheck";
@@ -28,14 +28,17 @@ export default class HandleStatusCheckPage {
    */
   constructor(props, mockedAccountRecoveryUserService) {
     this._page = render(
-      <AccountRecoveryUserContextProvider accountRecoveryUserService={mockedAccountRecoveryUserService} context={props.context}>
+      <AccountRecoveryUserContextProvider
+        accountRecoveryUserService={mockedAccountRecoveryUserService}
+        context={props.context}
+      >
         <MockTranslationProvider>
           <Router>
-            <HandleStatusCheck {...props}/>
+            <HandleStatusCheck {...props} />
           </Router>
         </MockTranslationProvider>
       </AccountRecoveryUserContextProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 }

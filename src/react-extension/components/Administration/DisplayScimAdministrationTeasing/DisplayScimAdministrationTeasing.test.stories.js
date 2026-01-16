@@ -13,25 +13,27 @@
  */
 import React from "react";
 import DisplayScimAdministrationTeasing from "./DisplayScimAdministrationTeasing";
-import {defaultProps} from "./DisplayScimAdministrationTeasing.test.data";
+import { defaultProps } from "./DisplayScimAdministrationTeasing.test.data";
 
 export default {
-  title: 'Components/Administration/DisplayScimAdministrationTeasing',
+  title: "Components/Administration/DisplayScimAdministrationTeasing",
   component: DisplayScimAdministrationTeasing,
-  decorators: [(Story, {args}) =>
-    <div className="page administration">
-      <div className="app" >
-        <div className="panel main">
-          <div className="panel middle">
-            <div className="middle-right">
-              <div className="main-page scim-teasing">
-                <Story {...args}/>
+  decorators: [
+    (Story, { args }) => (
+      <div className="page administration">
+        <div className="app">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="main-page scim-teasing">
+                  <Story {...args} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    ),
   ],
 };
 

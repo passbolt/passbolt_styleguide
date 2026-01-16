@@ -17,13 +17,11 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
-import React from 'react';
-import {
-  defaultAppContext, defaultProps
-} from "./DisplayResourceFolderDetails.test.data";
+import React from "react";
+import { defaultAppContext, defaultProps } from "./DisplayResourceFolderDetails.test.data";
 import DisplayResourceFolderDetailsPage from "./DisplayResourceFolderDetails.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 jest.mock("./DisplayResourceFolderDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceFolderDetailsActivity", () => () => <></>);
@@ -37,10 +35,10 @@ describe("See Resource Sidebar", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
   const copyClipboardMockImpl = jest.fn();
 
-  describe('As LU I can see a folder', () => {
+  describe("As LU I can see a folder", () => {
     /**
      * Given a selected resource
      * Then I should see the secondary sidebar
@@ -52,36 +50,38 @@ describe("See Resource Sidebar", () => {
       page = new DisplayResourceFolderDetailsPage(context, props);
     });
 
-    it('As LU I should see the folder details', () => {
+    it("As LU I should see the folder details", () => {
       expect(page.exists()).toBeTruthy();
     });
 
-    it('As LU I should be able to identify the name and the permalink', async() => {
+    it("As LU I should be able to identify the name and the permalink", async () => {
       expect.assertions(3);
       mockContextRequest(copyClipboardMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-      jest.spyOn(props.clipboardContext, 'copy').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(props.clipboardContext, "copy").mockImplementation(() => {});
 
       expect(page.name).toBe(props.resourceWorkspaceContext.details.folder.name);
-      expect(page.subtitle).toBe('folder');
+      expect(page.subtitle).toBe("folder");
       await page.selectPermalink();
-      expect(props.clipboardContext.copy).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/folders/view/${props.resourceWorkspaceContext.details.folder.id}`, "The permalink has been copied to clipboard.");
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(
+        `${context.userSettings.getTrustedDomain()}/app/folders/view/${props.resourceWorkspaceContext.details.folder.id}`,
+        "The permalink has been copied to clipboard.",
+      );
     });
 
-    it("I should see the share option when rbac is available", async() => {
+    it("I should see the share option when rbac is available", async () => {
       expect.assertions(1);
 
       expect(props.shareWith).not.toBeNull();
     });
 
-
-    it("I should see the share option when rbac is not defined", async() => {
+    it("I should see the share option when rbac is not defined", async () => {
       expect.assertions(1);
 
       expect(props.shareWith).not.toBeNull();
     });
 
-    it("I should not see the share option when rbac is unavailable", async() => {
+    it("I should not see the share option when rbac is unavailable", async () => {
       expect.assertions(1);
 
       const props = defaultProps(); // The props to pass

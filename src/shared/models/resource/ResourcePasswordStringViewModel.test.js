@@ -14,11 +14,11 @@
 
 import EntitySchema from "../entity/abstract/entitySchema";
 import ResourcePasswordStringViewModel from "./ResourcePasswordStringViewModel";
-import {v4 as uuid} from "uuid";
-import {defaultResourceViewModelDto, minimalResourceViewModelDto} from "./resourceViewModel.test.data";
-import {defaultResourceDto} from "../entity/resource/resourceEntity.test.data";
-import {TEST_RESOURCE_TYPE_PASSWORD_STRING} from "../entity/resourceType/resourceTypeEntity.test.data";
-import {DateTime} from "luxon";
+import { v4 as uuid } from "uuid";
+import { defaultResourceViewModelDto, minimalResourceViewModelDto } from "./resourceViewModel.test.data";
+import { defaultResourceDto } from "../entity/resource/resourceEntity.test.data";
+import { TEST_RESOURCE_TYPE_PASSWORD_STRING } from "../entity/resourceType/resourceTypeEntity.test.data";
+import { DateTime } from "luxon";
 import ResourceViewModel from "./ResourceViewModel";
 
 describe("ResourcePasswordStringViewModel", () => {
@@ -167,7 +167,7 @@ describe("ResourcePasswordStringViewModel", () => {
 
     it("should return a dto with an id if it is set", () => {
       expect.assertions(1);
-      const dto = minimalResourceViewModelDto({id: uuid()});
+      const dto = minimalResourceViewModelDto({ id: uuid() });
       const viewModel = new ResourcePasswordStringViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
@@ -179,7 +179,7 @@ describe("ResourcePasswordStringViewModel", () => {
     it("should return the password as a pure string", () => {
       expect.assertions(1);
       const expectedPassword = "this is the expected password";
-      const viewModel = new ResourcePasswordStringViewModel({password: expectedPassword});
+      const viewModel = new ResourcePasswordStringViewModel({ password: expectedPassword });
       expect(viewModel.toSecretDto()).toStrictEqual(expectedPassword);
     });
   });
@@ -221,7 +221,7 @@ describe("ResourcePasswordStringViewModel", () => {
       expect.assertions(1);
       const originalDto = {
         password: "a password",
-        description: ""
+        description: "",
       };
       const viewModel1 = new ResourcePasswordStringViewModel(originalDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(true);
@@ -229,15 +229,15 @@ describe("ResourcePasswordStringViewModel", () => {
 
     it("should return false if both secret have a similar structure and content", () => {
       expect.assertions(1);
-      const originalDto = {password: "test"};
+      const originalDto = { password: "test" };
       const viewModel1 = new ResourcePasswordStringViewModel(originalDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(false);
     });
 
     it("should return true if the data structure is the same but the secret is different", () => {
       expect.assertions(1);
-      const originalDto = {password: "test"};
-      const viewModel1 = new ResourcePasswordStringViewModel({password: "something else"});
+      const originalDto = { password: "test" };
+      const viewModel1 = new ResourcePasswordStringViewModel({ password: "something else" });
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(true);
     });
   });

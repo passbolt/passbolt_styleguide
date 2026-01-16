@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.3.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../../img/svg/caret_right.svg";
 
@@ -33,7 +33,7 @@ class ShowErrorDetails extends Component {
    */
   get defaultState() {
     return {
-      showErrorDetails: false
+      showErrorDetails: false,
     };
   }
 
@@ -50,7 +50,7 @@ class ShowErrorDetails extends Component {
    */
   get errorData() {
     if (!this.props.error) {
-      return 'No data available.';
+      return "No data available.";
     }
 
     let msg = "";
@@ -81,7 +81,7 @@ class ShowErrorDetails extends Component {
    * Toggle the display of the error details
    */
   toggleErrorDetails() {
-    this.setState({showErrorDetails: !this.state.showErrorDetails});
+    this.setState({ showErrorDetails: !this.state.showErrorDetails });
   }
 
   /**
@@ -89,7 +89,7 @@ class ShowErrorDetails extends Component {
    * @returns {String|string} return default if string is empty
    */
   get message() {
-    return this.props.error.message || 'No message.';
+    return this.props.error.message || "No message.";
   }
 
   /**
@@ -101,23 +101,24 @@ class ShowErrorDetails extends Component {
       <div className="accordion error-details">
         <div className="accordion-header">
           <button type="button" className="link no-border" onClick={this.handleErrorDetailsToggle}>
-            {this.state.showErrorDetails
-              ? <CaretDownSVG className="caret-down"/>
-              : <CaretRightSVG className="caret-right"/>
-            }
+            {this.state.showErrorDetails ? (
+              <CaretDownSVG className="caret-down" />
+            ) : (
+              <CaretRightSVG className="caret-right" />
+            )}
             <Trans>Error details</Trans>
           </button>
         </div>
-        {this.state.showErrorDetails &&
-        <div className="accordion-content">
-          <div className="input text">
-            <label htmlFor="show-error-details" className="visuallyhidden">
-              {this.props.error.message}
-            </label>
-            <textarea id="show-error-details" defaultValue={`${this.errorData}`} readOnly/>
+        {this.state.showErrorDetails && (
+          <div className="accordion-content">
+            <div className="input text">
+              <label htmlFor="show-error-details" className="visuallyhidden">
+                {this.props.error.message}
+              </label>
+              <textarea id="show-error-details" defaultValue={`${this.errorData}`} readOnly />
+            </div>
           </div>
-        </div>
-        }
+        )}
       </div>
     );
   }

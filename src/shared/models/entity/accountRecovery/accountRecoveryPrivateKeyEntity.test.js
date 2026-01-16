@@ -14,11 +14,14 @@
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import AccountRecoveryPrivateKeyEntity from "./accountRecoveryPrivateKeyEntity";
-import {defaultAccountRecoveryPrivateKeyDto} from "./accountRecoveryPrivateKeyEntity.test.data";
+import { defaultAccountRecoveryPrivateKeyDto } from "./accountRecoveryPrivateKeyEntity.test.data";
 
 describe("AccountRecoveryPrivateKey entity", () => {
   it("schema must validate", () => {
-    EntitySchema.validateSchema(AccountRecoveryPrivateKeyEntity.ENTITY_NAME, AccountRecoveryPrivateKeyEntity.getSchema());
+    EntitySchema.validateSchema(
+      AccountRecoveryPrivateKeyEntity.ENTITY_NAME,
+      AccountRecoveryPrivateKeyEntity.getSchema(),
+    );
   });
 
   it("constructor works if valid DTO is provided", () => {
@@ -33,9 +36,8 @@ describe("AccountRecoveryPrivateKey entity", () => {
     } catch (error) {
       expect(error instanceof EntityValidationError).toBe(true);
       expect(error.details).toEqual({
-        data: {required: 'The data is required.'},
+        data: { required: "The data is required." },
       });
     }
   });
 });
-

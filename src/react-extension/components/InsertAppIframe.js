@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.0
  */
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
 class InsertAppIframe extends Component {
@@ -76,7 +76,12 @@ class InsertAppIframe extends Component {
    */
   render() {
     return (
-      <iframe id="passbolt-iframe-app" ref={this.iframeRef} className="full-screen" allow={`clipboard-write ${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-app.html`}/>
+      <iframe
+        id="passbolt-iframe-app"
+        ref={this.iframeRef}
+        className="full-screen"
+        allow={`clipboard-write ${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-app.html`}
+      />
     );
   }
 }

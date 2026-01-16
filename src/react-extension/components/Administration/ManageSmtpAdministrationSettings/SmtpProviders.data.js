@@ -13,26 +13,26 @@
  */
 
 const portsData = {
-  "25": {
+  25: {
     port: 25,
-    tls: false
+    tls: false,
   },
-  "2525": {
+  2525: {
     port: 2525,
-    tls: false
+    tls: false,
   },
-  "587": {
+  587: {
     port: 587,
-    tls: true
+    tls: true,
   },
-  "588": {
+  588: {
     port: 588,
-    tls: true
+    tls: true,
   },
-  "465": {
+  465: {
     port: 465,
-    tls: true
-  }
+    tls: true,
+  },
 };
 
 /**
@@ -49,7 +49,7 @@ function generateConfiguration(endpointList, portList) {
       const portData = portsData[portList[j].toString()];
       configurations.push({
         host: endpoint,
-        ...portData
+        ...portData,
       });
     }
   }
@@ -62,20 +62,27 @@ function generateConfiguration(endpointList, portList) {
  */
 function getAllAwsEnpoint() {
   const awsRegion = [
-    "us-east-2", "us-east-1",
-    "us-west-1", "us-west-2",
+    "us-east-2",
+    "us-east-1",
+    "us-west-1",
+    "us-west-2",
     "ap-south-1",
-    "ap-northeast-3", "ap-northeast-2", "ap-northeast-1",
-    "ap-southeast-1", "ap-southeast-2",
+    "ap-northeast-3",
+    "ap-northeast-2",
+    "ap-northeast-1",
+    "ap-southeast-1",
+    "ap-southeast-2",
     "ca-central-1",
     "eu-central-1",
-    "eu-west-1", "eu-west-2", "eu-west-3",
+    "eu-west-1",
+    "eu-west-2",
+    "eu-west-3",
     "sa-east-1",
-    "us-gov-west-1"
+    "us-gov-west-1",
   ];
 
   const endpoints = [];
-  awsRegion.forEach(region => {
+  awsRegion.forEach((region) => {
     endpoints.push(`email-smtp.${region}.amazonaws.com`);
   });
 
@@ -90,15 +97,15 @@ function getAllAwsEnpoint() {
  * @returns {StmpSettings}
  */
 function getConfiguration(smtpProvider, port, host) {
-  return smtpProvider.availableConfigurations.find(config => (!host || config.host === host) && config.port === port);
+  return smtpProvider.availableConfigurations.find((config) => (!host || config.host === host) && config.port === port);
 }
 
-const AwsSes =  {
+const AwsSes = {
   id: "aws-ses",
   name: "AWS SES",
   icon: "aws-ses.svg",
   help_page: "https://docs.aws.amazon.com/ses/latest/dg/send-email-smtp.html",
-  availableConfigurations: generateConfiguration(getAllAwsEnpoint(), [25, 2525, 587])
+  availableConfigurations: generateConfiguration(getAllAwsEnpoint(), [25, 2525, 587]),
 };
 AwsSes.defaultConfiguration = getConfiguration(AwsSes, 587, "email-smtp.eu-central-1.amazonaws.com");
 
@@ -107,10 +114,7 @@ const ElasticEmail = {
   name: "ElasticEmail",
   icon: "elastic-email.svg",
   help_page: "https://help.elasticemail.com/en/articles/4803409-smtp-settings",
-  availableConfigurations: generateConfiguration(
-    ["smtp.elasticemail.com", "smtp25.elasticemail.com"],
-    [25, 2525, 587]
-  )
+  availableConfigurations: generateConfiguration(["smtp.elasticemail.com", "smtp25.elasticemail.com"], [25, 2525, 587]),
 };
 ElasticEmail.defaultConfiguration = getConfiguration(ElasticEmail, 587, "smtp.elasticemail.com");
 
@@ -119,7 +123,7 @@ const GoogleWorkspace = {
   name: "Google Workspace",
   icon: "gmail.svg",
   help_page: "https://support.google.com/a/answer/2956491",
-  availableConfigurations: generateConfiguration(["smtp-relay.gmail.com"], [25, 587])
+  availableConfigurations: generateConfiguration(["smtp-relay.gmail.com"], [25, 587]),
 };
 GoogleWorkspace.defaultConfiguration = getConfiguration(GoogleWorkspace, 587);
 
@@ -128,7 +132,7 @@ const GoogleMail = {
   name: "Google Mail",
   icon: "gmail.svg",
   help_page: "https://support.google.com/a/answer/2956491",
-  availableConfigurations: generateConfiguration(["smtp.gmail.com"], [587])
+  availableConfigurations: generateConfiguration(["smtp.gmail.com"], [587]),
 };
 GoogleMail.defaultConfiguration = getConfiguration(GoogleMail, 587);
 
@@ -137,7 +141,7 @@ const MailGun = {
   name: "MailGun",
   icon: "mailgun.svg",
   help_page: "https://documentation.mailgun.com/en/latest/quickstart-sending.html",
-  availableConfigurations: generateConfiguration(["smtp.mailgun.com"], [587])
+  availableConfigurations: generateConfiguration(["smtp.mailgun.com"], [587]),
 };
 MailGun.defaultConfiguration = MailGun.availableConfigurations[0];
 
@@ -146,7 +150,7 @@ const Mailjet = {
   name: "Mailjet",
   icon: "mailjet.svg",
   help_page: "https://dev.mailjet.com/smtp-relay/configuration/",
-  availableConfigurations: generateConfiguration(["in-v3.mailjet.com"], [25, 2525, 587, 588])
+  availableConfigurations: generateConfiguration(["in-v3.mailjet.com"], [25, 2525, 587, 588]),
 };
 Mailjet.defaultConfiguration = getConfiguration(Mailjet, 587);
 
@@ -155,7 +159,7 @@ const Mandrill = {
   name: "Mandrill",
   icon: "mandrill.svg",
   help_page: "https://mailchimp.com/developer/transactional/docs/smtp-integration/",
-  availableConfigurations: generateConfiguration(["smtp.mandrillapp.com"], [25, 2525, 587])
+  availableConfigurations: generateConfiguration(["smtp.mandrillapp.com"], [25, 2525, 587]),
 };
 Mandrill.defaultConfiguration = getConfiguration(Mandrill, 587);
 
@@ -163,8 +167,9 @@ const Office365 = {
   id: "office-365",
   name: "Office 365",
   icon: "office365.svg",
-  help_page: "https://learn.microsoft.com/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365",
-  availableConfigurations: generateConfiguration(["smtp.office365.com"], [25, 587])
+  help_page:
+    "https://learn.microsoft.com/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365",
+  availableConfigurations: generateConfiguration(["smtp.office365.com"], [25, 587]),
 };
 Office365.defaultConfiguration = getConfiguration(Office365, 587);
 
@@ -172,8 +177,9 @@ const Outlook = {
   id: "outlook",
   name: "Outlook",
   icon: "outlook.svg",
-  help_page: "https://support.microsoft.com/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040",
-  availableConfigurations: generateConfiguration(["smtp-mail.outlook.com"], [587])
+  help_page:
+    "https://support.microsoft.com/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040",
+  availableConfigurations: generateConfiguration(["smtp-mail.outlook.com"], [587]),
 };
 Outlook.defaultConfiguration = getConfiguration(Outlook, 587);
 
@@ -182,7 +188,7 @@ const Sendgrid = {
   name: "Sendgrid",
   icon: "sendgrid.svg",
   help_page: "https://docs.sendgrid.com/for-developers/sending-email/integrating-with-the-smtp-api",
-  availableConfigurations: generateConfiguration(["smtp.sendgrid.net"], [25, 2525, 587])
+  availableConfigurations: generateConfiguration(["smtp.sendgrid.net"], [25, 2525, 587]),
 };
 Sendgrid.defaultConfiguration = getConfiguration(Sendgrid, 587);
 
@@ -191,7 +197,7 @@ const Sendinblue = {
   name: "Sendinblue",
   icon: "sendinblue.svg",
   help_page: "https://help.sendinblue.com/hc/en-us/articles/209462765",
-  availableConfigurations: generateConfiguration(["smtp-relay.sendinblue.com"], [25, 587])
+  availableConfigurations: generateConfiguration(["smtp-relay.sendinblue.com"], [25, 587]),
 };
 Sendinblue.defaultConfiguration = getConfiguration(Sendinblue, 587);
 
@@ -200,7 +206,7 @@ const Zoho = {
   name: "Zoho",
   icon: "zoho.svg",
   help_page: "https://www.zoho.com/mail/help/zoho-smtp.html",
-  availableConfigurations: generateConfiguration(["smtp.zoho.eu", "smtppro.zoho.eu"], [587])
+  availableConfigurations: generateConfiguration(["smtp.zoho.eu", "smtppro.zoho.eu"], [587]),
 };
 Zoho.defaultConfiguration = getConfiguration(Zoho, 587, "smtp.zoho.eu");
 
@@ -212,8 +218,8 @@ const Other = {
   defaultConfiguration: {
     host: "",
     port: "",
-    tls: true
-  }
+    tls: true,
+  },
 };
 
 const SmtpProviders = [
@@ -229,7 +235,7 @@ const SmtpProviders = [
   Sendgrid,
   Sendinblue,
   Zoho,
-  Other
+  Other,
 ];
 
 export default SmtpProviders;

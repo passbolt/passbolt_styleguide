@@ -13,17 +13,17 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {DateTime} from "luxon";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { DateTime } from "luxon";
+import { withAdministrationWorkspace } from "../../../contexts/AdministrationWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
-import SubscriptionActionService from '../../../../shared/services/actions/subscription/SubscriptionActionService';
-import {withAdminSubscription} from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import SubscriptionActionService from "../../../../shared/services/actions/subscription/SubscriptionActionService";
+import { withAdminSubscription } from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
+import { createSafePortal } from "../../../../shared/utils/portals";
 import EmailSVG from "../../../../img/svg/email.svg";
 
 /**
@@ -48,7 +48,7 @@ class DisplaySubscriptionKey extends React.Component {
   get defaultState() {
     return {
       // active users
-      activeUsers: null // The number of active users
+      activeUsers: null, // The number of active users
     };
   }
 
@@ -85,7 +85,7 @@ class DisplaySubscriptionKey extends React.Component {
    */
   async findActiveUsers() {
     const activeUsers = await this.props.adminSubscriptionContext.getActiveUsers();
-    this.setState({activeUsers});
+    this.setState({ activeUsers });
   }
 
   /**
@@ -101,9 +101,13 @@ class DisplaySubscriptionKey extends React.Component {
   handleRenewKey() {
     const subscription = this.props.adminSubscriptionContext.getSubscription();
     if (this.hasLimitUsersExceeded()) {
-      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${subscription.subscriptionId}&customer_id=${subscription.customerId}`);
+      this.props.navigationContext.onGoToNewTab(
+        `https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${subscription.subscriptionId}&customer_id=${subscription.customerId}`,
+      );
     } else if (this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire()) {
-      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${subscription.subscriptionId}&customer_id=${subscription.customerId}`);
+      this.props.navigationContext.onGoToNewTab(
+        `https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${subscription.subscriptionId}&customer_id=${subscription.customerId}`,
+      );
     }
   }
 
@@ -127,7 +131,10 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasSubscriptionKeyGoingToExpire() {
-    return DateTime.fromISO(this.props.adminSubscriptionContext.getSubscription().expiry) < DateTime.now().plus({days: 30}) && !this.hasSubscriptionKeyExpired();
+    return (
+      DateTime.fromISO(this.props.adminSubscriptionContext.getSubscription().expiry) <
+        DateTime.now().plus({ days: 30 }) && !this.hasSubscriptionKeyExpired()
+    );
   }
 
   /**
@@ -143,7 +150,10 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   get shouldShowRenewKey() {
-    return this.hasSubscriptionKey() && (this.hasLimitUsersExceeded() || this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire());
+    return (
+      this.hasSubscriptionKey() &&
+      (this.hasLimitUsersExceeded() || this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire())
+    );
   }
 
   /**
@@ -160,8 +170,7 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasValidSubscription() {
-    return this.hasSubscriptionKey() && !this.hasLimitUsersExceeded()
-      && !this.hasSubscriptionKeyExpired();
+    return this.hasSubscriptionKey() && !this.hasLimitUsersExceeded() && !this.hasSubscriptionKeyExpired();
   }
 
   /**
@@ -203,84 +212,136 @@ class DisplaySubscriptionKey extends React.Component {
     const isProcessing = this.props.adminSubscriptionContext.isProcessing();
     return (
       <div className="row">
-        {!isProcessing &&
-        <>
-          <div className="subscription-key main-column">
-            <div className="main-content">
-              <h3 className="title"><Trans>Subscription key details</Trans></h3>
-              <div className="feedback-card">
-                {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
-                <AnimatedFeedback name="success" />
-                }
-                {this.hasInvalidSubscription() &&
-                <AnimatedFeedback name="error" />
-                }
-                {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
-                <AnimatedFeedback name="warning" />
-                }
-                <div className="subscription-information">
-                  {!this.hasSubscriptionKey() &&
-                  <>
-                    <h4 className="subscription-information-subtitle"><Trans>Your subscription key is either missing or not valid.</Trans></h4>
-                    <p><Trans>Sorry your subscription is either missing or not readable.</Trans><br/>
-                      <Trans>Update the subscription key and try again.</Trans> <Trans>If this does not work get in touch with support.</Trans>
-                    </p>
-                  </>
-                  }
-                  {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
-                  <h4 className="subscription-information-subtitle"><Trans>Your subscription key is going to expire.</Trans></h4>
-                  }
-                  {this.hasSubscriptionKey() && this.hasInvalidSubscription() &&
-                  <h4 className="subscription-information-subtitle"><Trans>Your subscription key is not valid.</Trans></h4>
-                  }
-                  {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
-                  <h4 className="subscription-information-subtitle"><Trans>Your subscription key is valid and up to date!</Trans></h4>
-                  }
-                  {this.hasSubscriptionKey() &&
-                    <div className="information">
-                      <div className="information-label">
-                        <span className="customer-id label"><Trans>Customer id:</Trans></span>
-                        <span className="subscription-id label"><Trans>Subscription id:</Trans></span>
-                        <span className="email label"><Trans>Email:</Trans></span>
-                        <span className="users label"><Trans>Users limit:</Trans></span>
-                        <span className="created label"><Trans>Valid from:</Trans></span>
-                        <span className="expiry label"><Trans>Expires on:</Trans></span>
+        {!isProcessing && (
+          <>
+            <div className="subscription-key main-column">
+              <div className="main-content">
+                <h3 className="title">
+                  <Trans>Subscription key details</Trans>
+                </h3>
+                <div className="feedback-card">
+                  {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() && (
+                    <AnimatedFeedback name="success" />
+                  )}
+                  {this.hasInvalidSubscription() && <AnimatedFeedback name="error" />}
+                  {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() && (
+                    <AnimatedFeedback name="warning" />
+                  )}
+                  <div className="subscription-information">
+                    {!this.hasSubscriptionKey() && (
+                      <>
+                        <h4 className="subscription-information-subtitle">
+                          <Trans>Your subscription key is either missing or not valid.</Trans>
+                        </h4>
+                        <p>
+                          <Trans>Sorry your subscription is either missing or not readable.</Trans>
+                          <br />
+                          <Trans>Update the subscription key and try again.</Trans>{" "}
+                          <Trans>If this does not work get in touch with support.</Trans>
+                        </p>
+                      </>
+                    )}
+                    {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() && (
+                      <h4 className="subscription-information-subtitle">
+                        <Trans>Your subscription key is going to expire.</Trans>
+                      </h4>
+                    )}
+                    {this.hasSubscriptionKey() && this.hasInvalidSubscription() && (
+                      <h4 className="subscription-information-subtitle">
+                        <Trans>Your subscription key is not valid.</Trans>
+                      </h4>
+                    )}
+                    {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() && (
+                      <h4 className="subscription-information-subtitle">
+                        <Trans>Your subscription key is valid and up to date!</Trans>
+                      </h4>
+                    )}
+                    {this.hasSubscriptionKey() && (
+                      <div className="information">
+                        <div className="information-label">
+                          <span className="customer-id label">
+                            <Trans>Customer id:</Trans>
+                          </span>
+                          <span className="subscription-id label">
+                            <Trans>Subscription id:</Trans>
+                          </span>
+                          <span className="email label">
+                            <Trans>Email:</Trans>
+                          </span>
+                          <span className="users label">
+                            <Trans>Users limit:</Trans>
+                          </span>
+                          <span className="created label">
+                            <Trans>Valid from:</Trans>
+                          </span>
+                          <span className="expiry label">
+                            <Trans>Expires on:</Trans>
+                          </span>
+                        </div>
+                        <div className="information-value">
+                          <span className="customer-id value">{subscription.customerId}</span>
+                          <span className="subscription-id value">{subscription.subscriptionId}</span>
+                          <span className="email value">{subscription.email}</span>
+                          <span className={`users value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>
+                            {subscription.users}{" "}
+                            <span className="secondary-information">
+                              (<Trans>currently:</Trans> {this.state.activeUsers})
+                            </span>
+                          </span>
+                          <span className="created value">{this.formatDate(subscription.created)}</span>
+                          <span
+                            className={`expiry value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}
+                          >
+                            {this.formatDate(subscription.expiry)}{" "}
+                            <span className="secondary-information" title={subscription.expiry}>
+                              (
+                              {`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${formatDateTimeAgo(subscription.expiry, this.props.t, this.props.context.locale)}`}
+                              )
+                            </span>
+                          </span>
+                        </div>
                       </div>
-                      <div className="information-value">
-                        <span className="customer-id value">{subscription.customerId}</span>
-                        <span className="subscription-id value">{subscription.subscriptionId}</span>
-                        <span className="email value">{subscription.email}</span>
-                        <span className={`users value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{subscription.users} <span className="secondary-information">(<Trans>currently:</Trans> {this.state.activeUsers})</span></span>
-                        <span className="created value">{this.formatDate(subscription.created)}</span>
-                        <span className={`expiry value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} <span className="secondary-information" title={subscription.expiry}>({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${formatDateTimeAgo(subscription.expiry, this.props.t, this.props.context.locale)}`})</span></span>
-                      </div>
-                    </div>
-                  }
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="actions-wrapper">
-            {this.shouldShowRenewKey &&
-              <button className="button secondary" type="button" onClick={this.handleRenewKey}><Trans>Renew key</Trans></button>
-            }
-            {this.hasSubscriptionKey()
-              ? <button className="button primary form" type="button" onClick={this.handleUpdateKey}><Trans>Update key</Trans></button>
-              : <button className="button primary form" type="button" onClick={this.handleUpdateKey}><Trans>Add key</Trans></button>
-            }
-          </div>
-        </>
-        }
+            <div className="actions-wrapper">
+              {this.shouldShowRenewKey && (
+                <button className="button secondary" type="button" onClick={this.handleRenewKey}>
+                  <Trans>Renew key</Trans>
+                </button>
+              )}
+              {this.hasSubscriptionKey() ? (
+                <button className="button primary form" type="button" onClick={this.handleUpdateKey}>
+                  <Trans>Update key</Trans>
+                </button>
+              ) : (
+                <button className="button primary form" type="button" onClick={this.handleUpdateKey}>
+                  <Trans>Add key</Trans>
+                </button>
+              )}
+            </div>
+          </>
+        )}
         {createSafePortal(
           <div className="sidebar-help-section">
-            <h3><Trans>Need help?</Trans></h3>
-            <p><Trans>For any change or question related to your passbolt subscription, kindly contact our sales team.</Trans></p>
+            <h3>
+              <Trans>Need help?</Trans>
+            </h3>
+            <p>
+              <Trans>
+                For any change or question related to your passbolt subscription, kindly contact our sales team.
+              </Trans>
+            </p>
             <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/contact">
               <EmailSVG />
-              <span><Trans>Contact Sales</Trans></span>
+              <span>
+                <Trans>Contact Sales</Trans>
+              </span>
             </a>
           </div>,
-          document.getElementById("administration-help-panel")
+          document.getElementById("administration-help-panel"),
         )}
       </div>
     );
@@ -296,4 +357,8 @@ DisplaySubscriptionKey.propTypes = {
   t: PropTypes.func,
 };
 
-export default withAppContext(withNavigationContext(withAdminSubscription(withAdministrationWorkspace(withDialog(withTranslation('common')(DisplaySubscriptionKey))))));
+export default withAppContext(
+  withNavigationContext(
+    withAdminSubscription(withAdministrationWorkspace(withDialog(withTranslation("common")(DisplaySubscriptionKey)))),
+  ),
+);

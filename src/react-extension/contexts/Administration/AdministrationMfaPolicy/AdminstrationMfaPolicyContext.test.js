@@ -12,12 +12,15 @@
  * @since         3.10.0
  */
 
-import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {AdminMfaPolicyContextProvider} from './AdministrationMfaPolicyContext';
-import MfaPolicyViewModel from '../../../../shared/models/mfaPolicy/MfaPolicyViewModel';
-import {MfaPolicyEnumerationTypes} from '../../../../shared/models/mfaPolicy/MfaPolicyEnumeration';
-import {settingDto, defaultProps} from '../../../components/Administration/DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration.test.data';
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { AdminMfaPolicyContextProvider } from "./AdministrationMfaPolicyContext";
+import MfaPolicyViewModel from "../../../../shared/models/mfaPolicy/MfaPolicyViewModel";
+import { MfaPolicyEnumerationTypes } from "../../../../shared/models/mfaPolicy/MfaPolicyEnumeration";
+import {
+  settingDto,
+  defaultProps,
+} from "../../../components/Administration/DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration.test.data";
 
 describe("AdministrationMfaPolicyContext", () => {
   let adminMfaPolicyContextProvider; // The adminMfaPolicyContextProvider to test
@@ -28,7 +31,7 @@ describe("AdministrationMfaPolicyContext", () => {
   };
 
   //Initialize context by default
-  const initContext = async() => {
+  const initContext = async () => {
     mockApiCalls();
     await adminMfaPolicyContextProvider.findSettings();
   };
@@ -41,7 +44,7 @@ describe("AdministrationMfaPolicyContext", () => {
   });
 
   describe("AdministrationMfaPolicyContext::findSettings", () => {
-    it("should get the current settings and store it in its state", async() => {
+    it("should get the current settings and store it in its state", async () => {
       expect.assertions(3);
 
       // Mock the call to API
@@ -52,7 +55,7 @@ describe("AdministrationMfaPolicyContext", () => {
       expect(adminMfaPolicyContextProvider.getCurrentSettings()).toEqual(expectedResult);
       expect(adminMfaPolicyContextProvider.isProcessing()).toBeFalsy();
     });
-    it("should set processing to true when loading settings", async() => {
+    it("should set processing to true when loading settings", async () => {
       expect.assertions(1);
 
       adminMfaPolicyContextProvider.setProcessing(false);
@@ -65,7 +68,7 @@ describe("AdministrationMfaPolicyContext", () => {
   });
 
   describe("AdministrationMfaPolicyContext::hasSettingsChanges", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
     it("should return true if settings is different then current setting", () => {
@@ -84,7 +87,7 @@ describe("AdministrationMfaPolicyContext", () => {
   });
 
   describe("AdministrationMfaPolicyContext::clearContext", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
     it("should clear the context and set it by default", () => {
@@ -100,10 +103,10 @@ describe("AdministrationMfaPolicyContext", () => {
   });
 
   describe("AdministrationMfaPolicyContext::save", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
-    it("As a logged in administrator I can update the “MFA policy” setting", async() => {
+    it("As a logged in administrator I can update the “MFA policy” setting", async () => {
       expect.assertions(3);
 
       fetch.doMockOnceIf(/mfa-policies\/settings*/, () => mockApiResponse({}));
@@ -119,11 +122,10 @@ describe("AdministrationMfaPolicyContext", () => {
   });
 });
 
-
 function mockState(adminMfaPolicyContextProvider) {
-  const setStateMock = state => {
+  const setStateMock = (state) => {
     let newState;
-    if (typeof state  === 'function') {
+    if (typeof state === "function") {
       newState = state(adminMfaPolicyContextProvider.state);
     } else {
       newState = state;

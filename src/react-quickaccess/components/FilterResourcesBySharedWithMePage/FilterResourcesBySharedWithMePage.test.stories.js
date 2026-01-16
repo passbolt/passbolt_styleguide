@@ -13,30 +13,41 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import FilterResourcesBySharedWithMePage from "./FilterResourcesBySharedWithMePage";
-import {defaultProps, noFilteredResourcesProps, withFilteredResourcesProps} from "./FilterResourcesBySharedWithMePage.test.data";
+import {
+  defaultProps,
+  noFilteredResourcesProps,
+  withFilteredResourcesProps,
+} from "./FilterResourcesBySharedWithMePage.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {
-  title: 'Components/QuickAccess/FilterResourcesBySharedWithMe',
-  component: FilterResourcesBySharedWithMePage
+  title: "Components/QuickAccess/FilterResourcesBySharedWithMe",
+  component: FilterResourcesBySharedWithMePage,
 };
 
-const Template = ({context, ...args}) =>
+const Template = ({ context, ...args }) => (
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <div className="container quickaccess"><FilterResourcesBySharedWithMePage {...args} {...routerProps}/></div>}/>
+    <MemoryRouter initialEntries={["/"]}>
+      <Route
+        component={(routerProps) => (
+          <div className="container quickaccess">
+            <FilterResourcesBySharedWithMePage {...args} {...routerProps} />
+          </div>
+        )}
+      />
     </MemoryRouter>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 Template.propTypes = {
   context: PropTypes.object,
 };
 
 const parameters = {
-  css: "ext_quickaccess"
+  css: "ext_quickaccess",
 };
 
 export const InitialLoad = Template.bind({});

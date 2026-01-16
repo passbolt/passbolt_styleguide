@@ -14,32 +14,35 @@
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import RemoveUserFromGroup from "./RemoveUserFromGroup";
-import {defaultAppContext, mockGroup, mockUser} from "./RemoveUserFromGroup.test.data";
+import { defaultAppContext, mockGroup, mockUser } from "./RemoveUserFromGroup.test.data";
 
 export default {
-  title: 'Components/User/RemoveUserFromGroup',
+  title: "Components/User/RemoveUserFromGroup",
   component: RemoveUserFromGroup,
   decorators: [
-    (Story, {args}) =>
+    (Story, { args }) => (
       <AppContext.Provider value={args.context}>
         <Story {...args} />
       </AppContext.Provider>
+    ),
   ],
 };
 
 export const Initial = {
   args: {
     context: defaultAppContext(),
-    onClose: () => {}
-  }
+    onClose: () => {},
+  },
 };
 
 export const LongUserAndGroupNames = {
   args: {
-    context: defaultAppContext({removeUserFromGroupDialogProps: {
-      user: mockUser({username: "repeat".repeat(10)}),
-      group: mockGroup({name: "repeat".repeat(10)})
-    }}),
-    onClose: () => {}
-  }
+    context: defaultAppContext({
+      removeUserFromGroupDialogProps: {
+        user: mockUser({ username: "repeat".repeat(10) }),
+        group: mockGroup({ name: "repeat".repeat(10) }),
+      },
+    }),
+    onClose: () => {},
+  },
 };

@@ -16,19 +16,16 @@ import PropTypes from "prop-types";
 import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace,
-  PRO_TEASING_MENUITEMS
+  PRO_TEASING_MENUITEMS,
 } from "../../../contexts/AdministrationWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import {
-  withAdministrationEncryptedMetadataGettingStarted
-} from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
-import MetadataGettingStartedSettingsEntity
-  from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
+import { withAdministrationEncryptedMetadataGettingStarted } from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
+import MetadataGettingStartedSettingsEntity from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
 import FrameSVG from "../../../../img/svg/Frame.svg";
 
 /**
@@ -70,7 +67,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isProTeasingMenuItem(item) {
-    return (PRO_TEASING_MENUITEMS.includes(item) && this.isCommunityEdition());
+    return PRO_TEASING_MENUITEMS.includes(item) && this.isCommunityEdition();
   }
 
   /**
@@ -86,7 +83,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get isMfaEnabled() {
-    return this.canIUse('multiFactorAuthentication');
+    return this.canIUse("multiFactorAuthentication");
   }
 
   /**
@@ -94,7 +91,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get isUserDirectoryEnabled() {
-    return this.canIUse('directorySync') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.USER_DIRECTORY);
+    return this.canIUse("directorySync") || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.USER_DIRECTORY);
   }
 
   /**
@@ -102,7 +99,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseEE() {
-    return this.canIUse('ee') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.SUBSCRIPTION);
+    return this.canIUse("ee") || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.SUBSCRIPTION);
   }
 
   /**
@@ -110,7 +107,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @type {boolean}
    */
   get canIUseLocale() {
-    return this.canIUse('locale');
+    return this.canIUse("locale");
   }
 
   /**
@@ -118,7 +115,9 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseAccountRecovery() {
-    return this.canIUse('accountRecovery') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY);
+    return (
+      this.canIUse("accountRecovery") || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY)
+    );
   }
 
   /**
@@ -126,7 +125,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseSmtpSettings() {
-    return this.canIUse('smtpSettings');
+    return this.canIUse("smtpSettings");
   }
 
   /**
@@ -134,7 +133,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseSelfRegistrationSettings() {
-    return this.canIUse('selfRegistration');
+    return this.canIUse("selfRegistration");
   }
 
   /**
@@ -142,7 +141,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseSso() {
-    return this.canIUse('sso') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.SSO);
+    return this.canIUse("sso") || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.SSO);
   }
 
   /**
@@ -150,7 +149,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseMfaPolicy() {
-    return this.canIUse('mfaPolicies') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.MFA_POLICY);
+    return this.canIUse("mfaPolicies") || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.MFA_POLICY);
   }
 
   /**
@@ -158,7 +157,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUsePasswordPolicies() {
-    return this.canIUse('passwordPoliciesUpdate') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES);
+    return (
+      this.canIUse("passwordPoliciesUpdate") ||
+      this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES)
+    );
   }
 
   /**
@@ -166,7 +168,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseSecretHistory() {
-    return this.canIUse('secretRevisions');
+    return this.canIUse("secretRevisions");
   }
 
   /**
@@ -174,7 +176,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseRbacs() {
-    return this.canIUse('rbacs');
+    return this.canIUse("rbacs");
   }
 
   /**
@@ -182,7 +184,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseUserPassphrasePolicies() {
-    return this.canIUse('userPassphrasePolicies') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES);
+    return (
+      this.canIUse("userPassphrasePolicies") ||
+      this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES)
+    );
   }
 
   /**
@@ -190,7 +195,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUsePasswordExpiry() {
-    return this.canIUse('passwordExpiry');
+    return this.canIUse("passwordExpiry");
   }
 
   /**
@@ -198,7 +203,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseHealthcheck() {
-    return this.canIUse('healthcheckUi');
+    return this.canIUse("healthcheckUi");
   }
 
   /**
@@ -206,7 +211,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseMetadata() {
-    return this.canIUse('metadata');
+    return this.canIUse("metadata");
   }
 
   /**
@@ -214,7 +219,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseScim() {
-    return this.canIUse('scim')  || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.SCIM);
+    return this.canIUse("scim") || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.SCIM);
   }
 
   /**
@@ -253,7 +258,7 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleSubmenuClick(subMenuItem) {
     const newState = {
-      [subMenuItem]: !this.state[subMenuItem]
+      [subMenuItem]: !this.state[subMenuItem],
     };
     this.setState(newState);
   }
@@ -276,7 +281,9 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the user directory menu
    */
   handleUserDirectoryClick() {
-    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing() : this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested();
+    this.isCommunityEdition()
+      ? this.props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing()
+      : this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested();
   }
 
   /**
@@ -290,7 +297,9 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the subscription menu
    */
   handleSubscriptionClick() {
-    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing() : this.props.navigationContext.onGoToAdministrationSubscriptionRequested();
+    this.isCommunityEdition()
+      ? this.props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing()
+      : this.props.navigationContext.onGoToAdministrationSubscriptionRequested();
   }
 
   /**
@@ -304,7 +313,9 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the account recovery menu
    */
   handleAccountRecoveryClick() {
-    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationAccountRecoveryRequestedTeasing() : this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested();
+    this.isCommunityEdition()
+      ? this.props.navigationContext.onGoToAdministrationAccountRecoveryRequestedTeasing()
+      : this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested();
   }
 
   /**
@@ -325,7 +336,9 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the sso menu
    */
   handleSsoClick() {
-    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationSsoRequestedTeasing() : this.props.navigationContext.onGoToAdministrationSsoRequested();
+    this.isCommunityEdition()
+      ? this.props.navigationContext.onGoToAdministrationSsoRequestedTeasing()
+      : this.props.navigationContext.onGoToAdministrationSsoRequested();
   }
 
   /**
@@ -339,14 +352,18 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the Mfa policy settings menu
    */
   handleMfaPolicyClick() {
-    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationMfaPolicyRequestedTeasing() : this.props.navigationContext.onGoToAdministrationMfaPolicyRequested();
+    this.isCommunityEdition()
+      ? this.props.navigationContext.onGoToAdministrationMfaPolicyRequestedTeasing()
+      : this.props.navigationContext.onGoToAdministrationMfaPolicyRequested();
   }
 
   /**
    * Handle when the user click on the Password policies settings menu
    */
   handlePasswordPoliciesClick() {
-    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing() : this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested();
+    this.isCommunityEdition()
+      ? this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing()
+      : this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested();
   }
 
   /**
@@ -360,7 +377,9 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the User Passphrase Policies menu
    */
   handleUserPassphrasePoliciesClick() {
-    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing() : this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested();
+    this.isCommunityEdition()
+      ? this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing()
+      : this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested();
   }
 
   /**
@@ -402,7 +421,9 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the SCIM settings menu
    */
   handleScimClick() {
-    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationScimRequestedTeasing() : this.props.navigationContext.onGoToAdministrationScimRequested();
+    this.isCommunityEdition()
+      ? this.props.navigationContext.onGoToAdministrationScimRequestedTeasing()
+      : this.props.navigationContext.onGoToAdministrationScimRequested();
   }
 
   /**
@@ -424,8 +445,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isHomeSelected() {
-    return AdministrationWorkspaceMenuTypes.NONE === this.props.administrationWorkspaceContext.selectedAdministration
-      || AdministrationWorkspaceMenuTypes.HOME === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.NONE === this.props.administrationWorkspaceContext.selectedAdministration ||
+      AdministrationWorkspaceMenuTypes.HOME === this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -441,7 +464,9 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isMfaPolicySelected() {
-    return AdministrationWorkspaceMenuTypes.MFA_POLICY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.MFA_POLICY === this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -449,7 +474,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isPasswordPoliciesSelected() {
-    return AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -457,7 +485,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isSecretHistorySelected() {
-    return AdministrationWorkspaceMenuTypes.SECRET_HISTORY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.SECRET_HISTORY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -465,7 +496,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isUserDirectorySelected() {
-    return AdministrationWorkspaceMenuTypes.USER_DIRECTORY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.USER_DIRECTORY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -473,7 +507,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isEmailNotificationsSelected() {
-    return AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -481,7 +518,9 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isSubscriptionSelected() {
-    return AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -489,7 +528,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isInternationalizationSelected() {
-    return AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -497,7 +539,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isAccountRecoverySelected() {
-    return AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -521,7 +566,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isSmtpSettingsSelected() {
-    return AdministrationWorkspaceMenuTypes.SMTP_SETTINGS === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.SMTP_SETTINGS ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -529,7 +577,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isSelfRegistrationSettingsSelected() {
-    return AdministrationWorkspaceMenuTypes.SELF_REGISTRATION === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.SELF_REGISTRATION ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -537,7 +588,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isUserPassphrasePoliciesSelected() {
-    return AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -545,7 +599,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isPasswordExpirySettingsSelected() {
-    return AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -553,7 +610,9 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isHealthcheckSelected() {
-    return AdministrationWorkspaceMenuTypes.HEALTHCHECK === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.HEALTHCHECK === this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -561,7 +620,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isContentTypesEncryptedMetadataSelected() {
-    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -569,7 +631,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isContentTypesMetadataKeySelected() {
-    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -577,7 +642,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isMetadataGettingStartedSelected() {
-    return AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -585,7 +653,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isMigrateMetadataSelected() {
-    return AdministrationWorkspaceMenuTypes.MIGRATE_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.MIGRATE_METADATA ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -593,7 +664,10 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isAllowedContentTypesSelected() {
-    return AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -609,9 +683,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   canSeeResourceConfiguration() {
-    return this.canIUsePasswordExpiry
-      || this.canIUsePasswordPolicies
-      || this.canIUseSecretHistory;
+    return this.canIUsePasswordExpiry || this.canIUsePasswordPolicies || this.canIUseSecretHistory;
   }
 
   /**
@@ -619,11 +691,13 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   canSeeAuthentication() {
-    return this.canIUseUserPassphrasePolicies
-      || this.canIUseAccountRecovery
-      || this.canIUseSso
-      || this.canIUseMfaPolicy
-      || this.isMfaEnabled;
+    return (
+      this.canIUseUserPassphrasePolicies ||
+      this.canIUseAccountRecovery ||
+      this.canIUseSso ||
+      this.canIUseMfaPolicy ||
+      this.isMfaEnabled
+    );
   }
 
   /**
@@ -675,66 +749,90 @@ class DisplayAdministrationMenu extends React.Component {
     return (
       <div className="navigation-secondary navigation-administration">
         <ul id="administration_menu" className="clearfix menu ready">
-          {this.isReady &&
+          {this.isReady && (
             <>
               <li id="home">
                 <div className={`row ${this.isHomeSelected() ? "selected" : ""}`}>
                   <div className="main-cell-wrapper">
                     <div className="main-cell">
-                      <button className="link no-border" type="button" onClick={this.handleHomeClick}><span><Trans>Home</Trans></span></button>
+                      <button className="link no-border" type="button" onClick={this.handleHomeClick}>
+                        <span>
+                          <Trans>Home</Trans>
+                        </span>
+                      </button>
                     </div>
                   </div>
                 </div>
               </li>
-              {this.canIUseEE &&
+              {this.canIUseEE && (
                 <li id="subscription_menu">
                   <div className={`row ${this.isSubscriptionSelected() ? "selected" : ""}`}>
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
                         <button className="link no-border" type="button" onClick={this.handleSubscriptionClick}>
-                          <span><Trans>Subscription</Trans></span>
+                          <span>
+                            <Trans>Subscription</Trans>
+                          </span>
                         </button>
                       </div>
                     </div>
                   </div>
                 </li>
-              }
-              {this.canIUseMetadata &&
+              )}
+              {this.canIUseMetadata && (
                 <li id="content-types" className="accordion-header">
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isContentTypesOpened")}>
+                        <button
+                          className="link no-border"
+                          type="button"
+                          onClick={() => this.handleSubmenuClick("isContentTypesOpened")}
+                        >
                           {this.state.isContentTypesOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                          <span><Trans>Resource types</Trans></span>
+                          <span>
+                            <Trans>Resource types</Trans>
+                          </span>
                         </button>
                       </div>
                     </div>
                   </div>
-                  {this.state.isContentTypesOpened &&
+                  {this.state.isContentTypesOpened && (
                     <ul id="administration-sub-menu-content-type" className="menu">
-                      {this.shouldShowGettingStartedMenu &&
+                      {this.shouldShowGettingStartedMenu && (
                         <li id="metadata_getting_started_menu">
                           <div className={`row  ${this.isMetadataGettingStartedSelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleMetadataGettingStartedClick}>
-                                  <span><Trans>Getting started</Trans></span>
+                                <button
+                                  className="link no-border"
+                                  type="button"
+                                  onClick={this.handleMetadataGettingStartedClick}
+                                >
+                                  <span>
+                                    <Trans>Getting started</Trans>
+                                  </span>
                                   <span className="chips new">new</span>
                                 </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
-                      {!this.shouldShowGettingStartedMenu &&
+                      )}
+                      {!this.shouldShowGettingStartedMenu && (
                         <>
                           <li id="metadata_key_menu">
                             <div className={`row  ${this.isContentTypesMetadataKeySelected() ? "selected" : ""}`}>
                               <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                  <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
-                                    <span><Trans>Metadata key</Trans></span>
+                                  <button
+                                    className="link no-border"
+                                    type="button"
+                                    onClick={this.handleContentTypesMetadataKeyClick}
+                                  >
+                                    <span>
+                                      <Trans>Metadata key</Trans>
+                                    </span>
                                     {this.isBeta("metadata") && <span className="chips beta">beta</span>}
                                   </button>
                                 </div>
@@ -745,8 +843,14 @@ class DisplayAdministrationMenu extends React.Component {
                             <div className={`row  ${this.isContentTypesEncryptedMetadataSelected() ? "selected" : ""}`}>
                               <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                  <button className="link no-border" type="button" onClick={this.handleContentTypesEncryptedMetadataClick}>
-                                    <span><Trans>Encrypted metadata</Trans></span>
+                                  <button
+                                    className="link no-border"
+                                    type="button"
+                                    onClick={this.handleContentTypesEncryptedMetadataClick}
+                                  >
+                                    <span>
+                                      <Trans>Encrypted metadata</Trans>
+                                    </span>
                                     {this.isBeta("metadata") && <span className="chips beta">beta</span>}
                                   </button>
                                 </div>
@@ -757,8 +861,14 @@ class DisplayAdministrationMenu extends React.Component {
                             <div className={`row  ${this.isMigrateMetadataSelected() ? "selected" : ""}`}>
                               <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                  <button className="link no-border" type="button" onClick={this.handleMigrateMetadataClick}>
-                                    <span><Trans>Migrate metadata</Trans></span>
+                                  <button
+                                    className="link no-border"
+                                    type="button"
+                                    onClick={this.handleMigrateMetadataClick}
+                                  >
+                                    <span>
+                                      <Trans>Migrate metadata</Trans>
+                                    </span>
                                     {this.isBeta("metadata") && <span className="chips beta">beta</span>}
                                   </button>
                                 </div>
@@ -769,8 +879,14 @@ class DisplayAdministrationMenu extends React.Component {
                             <div className={`row  ${this.isAllowedContentTypesSelected() ? "selected" : ""}`}>
                               <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                  <button className="link no-border" type="button" onClick={this.handleAllowedContentTypesClick}>
-                                    <span><Trans>Allow content types</Trans></span>
+                                  <button
+                                    className="link no-border"
+                                    type="button"
+                                    onClick={this.handleAllowedContentTypesClick}
+                                  >
+                                    <span>
+                                      <Trans>Allow content types</Trans>
+                                    </span>
                                     {this.isBeta("metadata") && <span className="chips beta">beta</span>}
                                   </button>
                                 </div>
@@ -778,286 +894,386 @@ class DisplayAdministrationMenu extends React.Component {
                             </div>
                           </li>
                         </>
-                      }
+                      )}
                     </ul>
-                  }
+                  )}
                 </li>
-              }
-              {this.canSeeResourceConfiguration() &&
+              )}
+              {this.canSeeResourceConfiguration() && (
                 <li id="password-configuration" className="accordion-header">
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isResourceConfigurationOpened")}>
+                        <button
+                          className="link no-border"
+                          type="button"
+                          onClick={() => this.handleSubmenuClick("isResourceConfigurationOpened")}
+                        >
                           {this.state.isResourceConfigurationOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                          <span><Trans>Resource policies</Trans></span>
+                          <span>
+                            <Trans>Resource policies</Trans>
+                          </span>
                         </button>
                       </div>
                     </div>
                   </div>
-                  {this.state.isResourceConfigurationOpened &&
+                  {this.state.isResourceConfigurationOpened && (
                     <ul>
-                      {this.canIUsePasswordExpiry &&
+                      {this.canIUsePasswordExpiry && (
                         <li id="password_expiry_menu">
                           <div className={`row ${this.isPasswordExpirySettingsSelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handlePasswordExpirySettingsClick}>
-                                  <span><Trans>Password Expiry</Trans></span>
+                                <button
+                                  className="link no-border"
+                                  type="button"
+                                  onClick={this.handlePasswordExpirySettingsClick}
+                                >
+                                  <span>
+                                    <Trans>Password Expiry</Trans>
+                                  </span>
                                 </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
-                      {this.canIUsePasswordPolicies &&
-                          <li id="password_policy_menu">
-                            <div className={`row ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
-                              <div className="main-cell-wrapper">
-                                <div className="main-cell">
-                                  <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span>{ this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }</button>
-                                </div>
+                      )}
+                      {this.canIUsePasswordPolicies && (
+                        <li id="password_policy_menu">
+                          <div className={`row ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button
+                                  className="link no-border"
+                                  type="button"
+                                  onClick={this.handlePasswordPoliciesClick}
+                                >
+                                  <span>
+                                    <Trans>Password Policy</Trans>
+                                  </span>
+                                  {this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon" />}
+                                </button>
                               </div>
                             </div>
-                          </li>
-                      }
-                      {this.canIUseSecretHistory &&
+                          </div>
+                        </li>
+                      )}
+                      {this.canIUseSecretHistory && (
                         <li id="secret_history_menu">
                           <div className={`row ${this.isSecretHistorySelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleSecretHistoryClick}>
-                                  <span><Trans>Secret history</Trans></span>
+                                <button
+                                  className="link no-border"
+                                  type="button"
+                                  onClick={this.handleSecretHistoryClick}
+                                >
+                                  <span>
+                                    <Trans>Secret history</Trans>
+                                  </span>
                                   {this.isBeta("secretRevisions") && <span className="chips beta">beta</span>}
                                 </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
+                      )}
                     </ul>
-                  }
+                  )}
                 </li>
-              }
-              {this.canSeeAuthentication() &&
+              )}
+              {this.canSeeAuthentication() && (
                 <li id="authentication" className="accordion-header">
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isAuthenticationOpened")}>
+                        <button
+                          className="link no-border"
+                          type="button"
+                          onClick={() => this.handleSubmenuClick("isAuthenticationOpened")}
+                        >
                           {this.state.isAuthenticationOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                          <span><Trans>Authentication</Trans></span>
+                          <span>
+                            <Trans>Authentication</Trans>
+                          </span>
                         </button>
                       </div>
                     </div>
                   </div>
-                  {this.state.isAuthenticationOpened &&
+                  {this.state.isAuthenticationOpened && (
                     <ul>
-                      {this.canIUseUserPassphrasePolicies &&
+                      {this.canIUseUserPassphrasePolicies && (
                         <li id="user_passphrase_policies_menu">
                           <div className={`row ${this.isUserPassphrasePoliciesSelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleUserPassphrasePoliciesClick}>
-                                  <span><Trans>User Passphrase Policies</Trans></span>
-                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                <button
+                                  className="link no-border"
+                                  type="button"
+                                  onClick={this.handleUserPassphrasePoliciesClick}
+                                >
+                                  <span>
+                                    <Trans>User Passphrase Policies</Trans>
+                                  </span>
+                                  {this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon" />}
                                 </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
-                      {this.canIUseAccountRecovery &&
+                      )}
+                      {this.canIUseAccountRecovery && (
                         <li id="account_recovery_menu">
                           <div className={`row ${this.isAccountRecoverySelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleAccountRecoveryClick}>
-                                  <span><Trans>Account Recovery</Trans></span>
-                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                <button
+                                  className="link no-border"
+                                  type="button"
+                                  onClick={this.handleAccountRecoveryClick}
+                                >
+                                  <span>
+                                    <Trans>Account Recovery</Trans>
+                                  </span>
+                                  {this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon" />}
                                 </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
-                      {this.canIUseSso &&
+                      )}
+                      {this.canIUseSso && (
                         <li id="sso_menu">
                           <div className={`row ${this.isSsoSelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleSsoClick}>
-                                  <span><Trans>Single Sign-On</Trans></span>
-                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                  <span>
+                                    <Trans>Single Sign-On</Trans>
+                                  </span>
+                                  {this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon" />}
                                 </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
-                      {this.canIUseMfaPolicy &&
+                      )}
+                      {this.canIUseMfaPolicy && (
                         <li id="mfa_policy_menu">
                           <div className={`row ${this.isMfaPolicySelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span>
-                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }</button>
+                                <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}>
+                                  <span>
+                                    <Trans>MFA Policy</Trans>
+                                  </span>
+                                  {this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon" />}
+                                </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
-                      {this.isMfaEnabled &&
+                      )}
+                      {this.isMfaEnabled && (
                         <li id="mfa_menu">
                           <div className={`row ${this.isMfaSelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleMfaClick}><span><Trans>Multi Factor Authentication</Trans></span></button>
+                                <button className="link no-border" type="button" onClick={this.handleMfaClick}>
+                                  <span>
+                                    <Trans>Multi Factor Authentication</Trans>
+                                  </span>
+                                </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
+                      )}
                     </ul>
-                  }
+                  )}
                 </li>
-              }
-              {this.canSeeUserProvisionning() &&
+              )}
+              {this.canSeeUserProvisionning() && (
                 <li id="user-provisionning" className="accordion-header">
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isUserProvisionningOpened")}>
+                        <button
+                          className="link no-border"
+                          type="button"
+                          onClick={() => this.handleSubmenuClick("isUserProvisionningOpened")}
+                        >
                           {this.state.isUserProvisionningOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                          <span><Trans>User provisionning</Trans></span>
+                          <span>
+                            <Trans>User provisionning</Trans>
+                          </span>
                         </button>
                       </div>
                     </div>
                   </div>
-                  {this.state.isUserProvisionningOpened &&
+                  {this.state.isUserProvisionningOpened && (
                     <ul>
-                      {this.canIUseScim &&
+                      {this.canIUseScim && (
                         <li id="scim_menu">
                           <div className={`row ${this.isScimSelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleScimClick}>
-                                  <span><Trans>SCIM</Trans></span>
+                                  <span>
+                                    <Trans>SCIM</Trans>
+                                  </span>
                                   {this.isBeta("scim") && <span className="chips beta">beta</span>}
-                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                  {this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon" />}
                                 </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
-                      {this.isUserDirectoryEnabled &&
+                      )}
+                      {this.isUserDirectoryEnabled && (
                         <li id="user_directory_menu">
                           <div className={`row ${this.isUserDirectorySelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span>
-                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                <button
+                                  className="link no-border"
+                                  type="button"
+                                  onClick={this.handleUserDirectoryClick}
+                                >
+                                  <span>
+                                    <Trans>Users Directory</Trans>
+                                  </span>
+                                  {this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon" />}
                                 </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
-                      {this.canIUseSelfRegistrationSettings &&
+                      )}
+                      {this.canIUseSelfRegistrationSettings && (
                         <li id="self_registration_menu">
                           <div className={`row ${this.isSelfRegistrationSettingsSelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleSelfRegistrationClick}>
-                                  <span><Trans>Self Registration</Trans></span>
+                                <button
+                                  className="link no-border"
+                                  type="button"
+                                  onClick={this.handleSelfRegistrationClick}
+                                >
+                                  <span>
+                                    <Trans>Self Registration</Trans>
+                                  </span>
                                 </button>
                               </div>
                             </div>
                           </div>
                         </li>
-                      }
+                      )}
                     </ul>
-                  }
+                  )}
                 </li>
-              }
+              )}
               <li id="emails" className="accordion-header">
                 <div className="row">
                   <div className="main-cell-wrapper">
                     <div className="main-cell">
-                      <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isEmailsOpened")}>
+                      <button
+                        className="link no-border"
+                        type="button"
+                        onClick={() => this.handleSubmenuClick("isEmailsOpened")}
+                      >
                         {this.state.isEmailsOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                        <span><Trans>Emails</Trans></span>
+                        <span>
+                          <Trans>Emails</Trans>
+                        </span>
                       </button>
                     </div>
                   </div>
                 </div>
-                {this.state.isEmailsOpened &&
+                {this.state.isEmailsOpened && (
                   <ul>
-                    {this.canIUseSmtpSettings &&
+                    {this.canIUseSmtpSettings && (
                       <li id="smtp_settings_menu">
                         <div className={`row ${this.isSmtpSettingsSelected() ? "selected" : ""}`}>
                           <div className="main-cell-wrapper">
                             <div className="main-cell">
                               <button className="link no-border" type="button" onClick={this.handleSmtpSettingsClick}>
-                                <span><Trans>Email server</Trans></span>
+                                <span>
+                                  <Trans>Email server</Trans>
+                                </span>
                               </button>
                             </div>
                           </div>
                         </div>
                       </li>
-                    }
+                    )}
                     <li id="email_notification_menu">
                       <div className={`row ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
                         <div className="main-cell-wrapper">
                           <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handleEmailNotificationsClick}><span><Trans>Email Notifications</Trans></span></button>
+                            <button
+                              className="link no-border"
+                              type="button"
+                              onClick={this.handleEmailNotificationsClick}
+                            >
+                              <span>
+                                <Trans>Email Notifications</Trans>
+                              </span>
+                            </button>
                           </div>
                         </div>
                       </div>
                     </li>
                   </ul>
-                }
+                )}
               </li>
-              {this.canIUseRbacs &&
+              {this.canIUseRbacs && (
                 <li id="rbacs_menu">
                   <div className={`row ${this.isRbacSelected() ? "selected" : ""}`}>
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
                         <button className="link no-border" type="button" onClick={this.handleRbacsClick}>
-                          <span><Trans>Role-Based Access Control</Trans></span>
+                          <span>
+                            <Trans>Role-Based Access Control</Trans>
+                          </span>
                         </button>
                       </div>
                     </div>
                   </div>
                 </li>
-              }
-              {this.canIUseLocale &&
+              )}
+              {this.canIUseLocale && (
                 <li id="internationalization_menu">
                   <div className={`row ${this.isInternationalizationSelected() ? "selected" : ""}`}>
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <button className="link no-border" type="button" onClick={this.handleInternationalizationClick}><span><Trans>Internationalisation</Trans></span></button>
+                        <button className="link no-border" type="button" onClick={this.handleInternationalizationClick}>
+                          <span>
+                            <Trans>Internationalisation</Trans>
+                          </span>
+                        </button>
                       </div>
                     </div>
                   </div>
                 </li>
-              }
-              {this.canIUseHealthcheck &&
+              )}
+              {this.canIUseHealthcheck && (
                 <li id="healthcheck_menu">
                   <div className={`row ${this.isHealthcheckSelected() ? "selected" : ""}`}>
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
                         <button className="link no-border" type="button" onClick={this.handleHealthcheckClick}>
-                          <span><Trans>Passbolt API Status</Trans></span>
+                          <span>
+                            <Trans>Passbolt API Status</Trans>
+                          </span>
                         </button>
                       </div>
                     </div>
                   </div>
                 </li>
-              }
+              )}
             </>
-          }
+          )}
         </ul>
       </div>
     );
@@ -1072,4 +1288,12 @@ DisplayAdministrationMenu.propTypes = {
   metadataGettingStartedSettings: PropTypes.instanceOf(MetadataGettingStartedSettingsEntity), // The metadata getting started settings
 };
 
-export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace(withAdministrationEncryptedMetadataGettingStarted(withTranslation("common")(DisplayAdministrationMenu))))));
+export default withRouter(
+  withAppContext(
+    withNavigationContext(
+      withAdministrationWorkspace(
+        withAdministrationEncryptedMetadataGettingStarted(withTranslation("common")(DisplayAdministrationMenu)),
+      ),
+    ),
+  ),
+);

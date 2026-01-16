@@ -17,7 +17,6 @@
  * @returns {{}}
  */
 export function defaultProps(props) {
-  const defaultProps = {
-  };
+  const defaultProps = {};
   return Object.assign(defaultProps, props || {});
 }

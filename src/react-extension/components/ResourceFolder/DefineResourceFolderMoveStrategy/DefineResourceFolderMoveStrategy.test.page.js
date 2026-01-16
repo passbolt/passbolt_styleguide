@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {render, waitFor} from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -32,11 +31,11 @@ export default class DefineResourceFolderMoveStrategyPage {
   constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider  value={appContext}>
+        <AppContext.Provider value={appContext}>
           <DefineResourceFolderMoveStrategy {...props}></DefineResourceFolderMoveStrategy>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }
@@ -47,10 +46,10 @@ export default class DefineResourceFolderMoveStrategyPage {
    */
   async setOption(value) {
     let element;
-    if (value === 'change') {
-      element = this._page.container.querySelector('#moveOptionChange');
-    } else if (value === 'keep') {
-      element = this._page.container.querySelector('#moveOptionKeep');
+    if (value === "change") {
+      element = this._page.container.querySelector("#moveOptionChange");
+    } else if (value === "keep") {
+      element = this._page.container.querySelector("#moveOptionKeep");
     }
 
     if (element) {
@@ -62,29 +61,29 @@ export default class DefineResourceFolderMoveStrategyPage {
    * Returns true it one can cancel the operation
    */
   get canCancel() {
-    return !this._page.container.querySelector('.cancel').hasAttribute('disabled');
+    return !this._page.container.querySelector(".cancel").hasAttribute("disabled");
   }
 
   /**
    * Returns true it one can close the dialog
    */
   get canClose() {
-    return !this._page.container.querySelector('.dialog-close').hasAttribute('disabled');
+    return !this._page.container.querySelector(".dialog-close").hasAttribute("disabled");
   }
 
   /**
    * Returns true it one can submit the create operation
    */
   get canSubmit() {
-    return !this._page.container.querySelector('button[type="submit"]').hasAttribute('disabled');
+    return !this._page.container.querySelector('button[type="submit"]').hasAttribute("disabled");
   }
 
   /**
    * Returns true it one can change the data
    */
   get canChangeData() {
-    const changeOption = this._page.container.querySelector('#moveOptionChange').hasAttribute('disabled');
-    const keepOption = this._page.container.querySelector('#moveOptionKeep').hasAttribute('disabled');
+    const changeOption = this._page.container.querySelector("#moveOptionChange").hasAttribute("disabled");
+    const keepOption = this._page.container.querySelector("#moveOptionKeep").hasAttribute("disabled");
     return Boolean(changeOption).valueOf() || Boolean(keepOption).valueOf();
   }
 
@@ -94,7 +93,6 @@ export default class DefineResourceFolderMoveStrategyPage {
   get moveButton() {
     return this._page.container.querySelector('button[type=\"submit\"]');
   }
-
 
   /**
    * Returns the cancel button element
@@ -121,14 +119,12 @@ export default class DefineResourceFolderMoveStrategyPage {
     await waitFor(inProgressFn);
   }
 
-
   /**
    * Cancels the create operation
    */
   async cancel() {
     await this.user.click(this.cancelButton);
   }
-
 
   /**
    * Close the create operation

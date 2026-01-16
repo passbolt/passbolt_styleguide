@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 import MockPort from "../../../test/mock/MockPort";
 
 /**
@@ -22,22 +22,22 @@ export function defaultProps() {
   return {
     context: {
       port: new MockPort(),
-      onGetSubscriptionKeyRequested: jest.fn()
+      onGetSubscriptionKeyRequested: jest.fn(),
     },
     announcementContext: {
       announcements: [],
       show: jest.fn(),
       close: jest.fn(),
-    }
+    },
   };
 }
 
 export const mockSubscriptionGoingToExpired = {
-  "customer_id": "1n6BPvHRWfizhmARz",
-  "subscription_id": "1n6BPvHRWfizhmARz",
-  "users": 5,
-  "email": "ada@passbolt.com",
-  "created": "2020-12-01",
-  "expiry": DateTime.now().minus({days: 10}).toISO(),
-  "data": "data"
+  customer_id: "1n6BPvHRWfizhmARz",
+  subscription_id: "1n6BPvHRWfizhmARz",
+  users: 5,
+  email: "ada@passbolt.com",
+  created: "2020-12-01",
+  expiry: DateTime.now().minus({ days: 10 }).toISO(),
+  data: "data",
 };

@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayExpiredTokenError from "./DisplayExpiredTokenError";
@@ -28,9 +28,9 @@ export default class DisplayExpiredTokenErrorTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayExpiredTokenError {...props}/>
+        <DisplayExpiredTokenError {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,14 +38,14 @@ export default class DisplayExpiredTokenErrorTestPage {
    * Returns the restart from scratch button
    */
   get restartFromScratchButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * restart from scratch
    */
   async restartFromScratch() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.restartFromScratchButton, leftClick);
   }
 }

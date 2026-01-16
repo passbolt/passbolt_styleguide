@@ -14,19 +14,21 @@
 
 import React from "react";
 import DisplaySynchronizeUserDirectoryAdministration from "./DisplaySynchronizeUserDirectoryAdministration";
-import {AdminUserDirectoryContextProvider} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
-import {defaultProps} from "./DisplaySynchronizeUserDirectoryAdministration.test.data";
-import MockFetch from '../../../test/mock/MockFetch';
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
-import {mockSynchronizeBody} from "./DisplaySynchronizeUserDirectoryAdministration.test.data";
+import { AdminUserDirectoryContextProvider } from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import { defaultProps } from "./DisplaySynchronizeUserDirectoryAdministration.test.data";
+import MockFetch from "../../../test/mock/MockFetch";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import { mockSynchronizeBody } from "./DisplaySynchronizeUserDirectoryAdministration.test.data";
 
 export default {
-  title: 'Components/Administration/DisplaySynchronizeUserDirectoryAdministration',
+  title: "Components/Administration/DisplaySynchronizeUserDirectoryAdministration",
   component: DisplaySynchronizeUserDirectoryAdministration,
   decorators: [
-    (Story, {args}) => <AdminUserDirectoryContextProvider {...args}>
-      <Story {...args}/>
-    </AdminUserDirectoryContextProvider>
+    (Story, { args }) => (
+      <AdminUserDirectoryContextProvider {...args}>
+        <Story {...args} />
+      </AdminUserDirectoryContextProvider>
+    ),
   ],
   parameters: {
     css: "api_main",
@@ -34,7 +36,7 @@ export default {
 };
 
 const mockFetch = new MockFetch();
-mockFetch.addPostFetchRequest(/directorysync\/synchronize*/, async() => mockApiResponse(mockSynchronizeBody));
+mockFetch.addPostFetchRequest(/directorysync\/synchronize*/, async () => mockApiResponse(mockSynchronizeBody));
 
 export const Initial = {
   args: defaultProps(),

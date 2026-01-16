@@ -12,14 +12,17 @@
  * @since         3.8.0
  */
 
-import {defaultProps} from "../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {AdminUserDirectoryContextProvider} from "./AdministrationUserDirectoryContext";
-import {mockApiResponse, mockApiResponseError} from '../../../../../test/mocks/mockApiResponse';
-import {mockResult, mockUsers} from '../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data';
-import UserDirectoryModel from '../../../../shared/models/userDirectory/UserDirectoryModel';
-import UserDirectoryDTO from '../../../../shared/models/userDirectory/UserDirectoryDTO';
-import {mockErrors} from '../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data';
+import { defaultProps } from "../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { AdminUserDirectoryContextProvider } from "./AdministrationUserDirectoryContext";
+import { mockApiResponse, mockApiResponseError } from "../../../../../test/mocks/mockApiResponse";
+import {
+  mockResult,
+  mockUsers,
+} from "../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
+import UserDirectoryModel from "../../../../shared/models/userDirectory/UserDirectoryModel";
+import UserDirectoryDTO from "../../../../shared/models/userDirectory/UserDirectoryDTO";
+import { mockErrors } from "../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
 import NotifyError from "../../../components/Common/Error/NotifyError/NotifyError";
 
 describe("AdminUserDirectoryContext", () => {
@@ -32,7 +35,7 @@ describe("AdminUserDirectoryContext", () => {
   };
 
   //Initialize context by default
-  const initContext = async() => {
+  const initContext = async () => {
     mockApiCalls();
     await adminUserDirectoryContext.findUserDirectorySettings();
   };
@@ -40,13 +43,14 @@ describe("AdminUserDirectoryContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminUserDirectoryContext = new AdminUserDirectoryContextProvider(props);
-    const setStateMock = state => adminUserDirectoryContext.state = Object.assign(adminUserDirectoryContext.state, state);
+    const setStateMock = (state) =>
+      (adminUserDirectoryContext.state = Object.assign(adminUserDirectoryContext.state, state));
     jest.spyOn(adminUserDirectoryContext, "setState").mockImplementation(setStateMock);
     enableFetchMocks();
   });
 
   describe("AdminUserDirectoryContext::findUserDirectorySettings", () => {
-    it("should get the current settings and store it in its state", async() => {
+    it("should get the current settings and store it in its state", async () => {
       expect.assertions(3);
 
       // Mock the call to API
@@ -54,13 +58,12 @@ describe("AdminUserDirectoryContext", () => {
       const expectedResult = new UserDirectoryModel(mockResult);
       await adminUserDirectoryContext.findUserDirectorySettings();
 
-
       expect(adminUserDirectoryContext.getSettings()).toEqual(expectedResult);
       expect(adminUserDirectoryContext.getCurrentSettings()).toEqual(expectedResult);
       expect(adminUserDirectoryContext.isProcessing()).toBeFalsy();
     });
 
-    it("should sort users", async() => {
+    it("should sort users", async () => {
       expect.assertions(2);
 
       // Mock the call to API
@@ -73,7 +76,7 @@ describe("AdminUserDirectoryContext", () => {
       expect(adminUserDirectoryContext.getUsers()).toEqual(adminUserDirectoryContext.sortUsers(mockUsers));
     });
 
-    it("should set processing to true when loading settings", async() => {
+    it("should set processing to true when loading settings", async () => {
       expect.assertions(1);
       adminUserDirectoryContext.setProcessing(false);
       try {
@@ -83,7 +86,7 @@ describe("AdminUserDirectoryContext", () => {
       }
     });
 
-    it("should show an error dialog if the settings couldn't be loaded from the API and still load the user settings", async() => {
+    it("should show an error dialog if the settings couldn't be loaded from the API and still load the user settings", async () => {
       expect.assertions(3);
 
       const errorMessage = "Something went wrong! Probably due to a server key change";
@@ -99,12 +102,12 @@ describe("AdminUserDirectoryContext", () => {
       await adminUserDirectoryContext.findUserDirectorySettings();
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: expectedError});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: expectedError });
       expect(hasUserEndpointBeenCalled).toBe(true);
     });
   });
   describe("AdminUserDirectoryContext::hasSettingsChanges", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
     it("should return true if settings is different then current setting", () => {
@@ -126,7 +129,7 @@ describe("AdminUserDirectoryContext", () => {
   });
 
   describe("AdminUserDirectoryContext::clearContext", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
     it("should clear the context and set it by default", () => {
@@ -142,17 +145,19 @@ describe("AdminUserDirectoryContext", () => {
   });
 
   describe("AdminUserDirectoryContext::save", () => {
-    it("should save settings and call findUserDirectorySettings", async() => {
+    it("should save settings and call findUserDirectorySettings", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/directorysync\/settings.json/, async req => {
+      fetch.doMockOnceIf(/directorysync\/settings.json/, async (req) => {
         const body = await JSON.parse(await req.text());
         const expectedDto = Object.assign({}, new UserDirectoryDTO(new UserDirectoryModel()));
         expect(body).toStrictEqual(expectedDto);
         return mockApiResponse(expectedDto);
       });
 
-      const findSettings = jest.spyOn(adminUserDirectoryContext, "findUserDirectorySettings").mockImplementation(() => null);
+      const findSettings = jest
+        .spyOn(adminUserDirectoryContext, "findUserDirectorySettings")
+        .mockImplementation(() => null);
 
       await adminUserDirectoryContext.save();
 
@@ -162,7 +167,7 @@ describe("AdminUserDirectoryContext", () => {
   });
 
   describe("AdminUserDirectoryContext::delete", () => {
-    it("should delete settings and call findUserDirectorySettings", async() => {
+    it("should delete settings and call findUserDirectorySettings", async () => {
       expect.assertions(2);
 
       fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse({}));
@@ -176,7 +181,7 @@ describe("AdminUserDirectoryContext", () => {
   });
 
   describe("AdminUserDirectoryContext::test", () => {
-    it("should test configuration", async() => {
+    it("should test configuration", async () => {
       expect.assertions(2);
 
       fetch.doMockOnceIf(/directorysync\/settings\/test*/, () => mockApiResponse(mockResult));
@@ -187,9 +192,8 @@ describe("AdminUserDirectoryContext", () => {
     });
   });
 
-
   describe("AdminUserDirectoryContext::simulateUsers", () => {
-    it("should simulate configuration", async() => {
+    it("should simulate configuration", async () => {
       expect.assertions(1);
 
       fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse(mockResult));
@@ -200,7 +204,7 @@ describe("AdminUserDirectoryContext", () => {
   });
 
   describe("AdminUserDirectoryContext::synchronizeUsers", () => {
-    it("should synchronize configuration", async() => {
+    it("should synchronize configuration", async () => {
       expect.assertions(1);
 
       fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockResult));
@@ -211,7 +215,7 @@ describe("AdminUserDirectoryContext", () => {
   });
 
   describe("AdminUserDirectoryContext::setSettings", () => {
-    it("should update settings object and not the current object", async() => {
+    it("should update settings object and not the current object", async () => {
       expect.assertions(2);
 
       await initContext();
@@ -223,7 +227,7 @@ describe("AdminUserDirectoryContext", () => {
   });
 
   describe("AdminUserDirectoryContext::errors", () => {
-    it("should update error object with targeted property", async() => {
+    it("should update error object with targeted property", async () => {
       expect.assertions(1);
 
       await initContext();
@@ -232,12 +236,12 @@ describe("AdminUserDirectoryContext", () => {
       expect(adminUserDirectoryContext.getErrors().hostError).toBe("error");
     });
 
-    it("should init errors with default property", async() => {
+    it("should init errors with default property", async () => {
       expect.assertions(1);
       expect(adminUserDirectoryContext.getErrors()).toEqual(adminUserDirectoryContext.initErrors());
     });
 
-    it("should update error object with all properties ", async() => {
+    it("should update error object with all properties ", async () => {
       expect.assertions(3);
 
       const mockError = mockErrors();
@@ -248,4 +252,3 @@ describe("AdminUserDirectoryContext", () => {
     });
   });
 });
-

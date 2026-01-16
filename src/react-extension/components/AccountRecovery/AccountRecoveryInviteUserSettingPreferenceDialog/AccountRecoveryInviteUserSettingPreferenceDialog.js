@@ -11,21 +11,21 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withRouter} from "react-router-dom";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withRouter } from "react-router-dom";
 
 /**
  * The component display variations.
  * @type {Object}
  */
 export const PolicyVariations = {
-  MANDATORY: 'mandatory',
-  OPT_OUT: 'opt-out'
+  MANDATORY: "mandatory",
+  OPT_OUT: "opt-out",
 };
 
 class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
@@ -49,14 +49,14 @@ class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     this.props.onClose();
-    await this.props.history.push({pathname: "/app/settings/account-recovery/edit"});
+    await this.props.history.push({ pathname: "/app/settings/account-recovery/edit" });
   }
 
   /**
    * Handle click on cancel buttons
    */
   async handleCancel() {
-    await this.props.context.port.request('passbolt.account-recovery.postpone-user-setting-invitation');
+    await this.props.context.port.request("passbolt.account-recovery.postpone-user-setting-invitation");
     this.props.onClose();
   }
 
@@ -77,20 +77,34 @@ class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
       <DialogWrapper
         title={`${this.translate("Account recovery enrollment")}`}
         onClose={this.handleCancel}
-        className="recovery-account-policy-dialog">
+        className="recovery-account-policy-dialog"
+      >
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
             <p>
-              {{
-                [PolicyVariations.MANDATORY]: <Trans>It is mandatory to share securely a copy of your private key with your organization recovery contacts. Would you like to continue?</Trans>,
-                [PolicyVariations.OPT_OUT]: <Trans>It is recommended to share securely a copy of your private key with your organization recovery contacts. Would you like to continue?</Trans>,
-              }[this.props.policy]}
+              {
+                {
+                  [PolicyVariations.MANDATORY]: (
+                    <Trans>
+                      It is mandatory to share securely a copy of your private key with your organization recovery
+                      contacts. Would you like to continue?
+                    </Trans>
+                  ),
+                  [PolicyVariations.OPT_OUT]: (
+                    <Trans>
+                      It is recommended to share securely a copy of your private key with your organization recovery
+                      contacts. Would you like to continue?
+                    </Trans>
+                  ),
+                }[this.props.policy]
+              }
             </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <button type="button" className="link cancel" onClick={this.handleCancel}><Trans>Later</Trans></button>
-            <FormSubmitButton
-              value={this.translate("Continue")}/>
+            <button type="button" className="link cancel" onClick={this.handleCancel}>
+              <Trans>Later</Trans>
+            </button>
+            <FormSubmitButton value={this.translate("Continue")} />
           </div>
         </form>
       </DialogWrapper>

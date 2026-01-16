@@ -24,10 +24,10 @@ class UserEventsService {
   static autofill(field, value) {
     // Check if field is not null
     if (field) {
-      const keydownEvent = new KeyboardEvent("keydown", {bubbles: true});
-      const inputEvent = new InputEvent("input", {inputType: "insertText", data: value, bubbles: true});
-      const keyupEvent = new KeyboardEvent("keyup", {bubbles: true});
-      const changeEvent = new Event("change", {bubbles: true});
+      const keydownEvent = new KeyboardEvent("keydown", { bubbles: true });
+      const inputEvent = new InputEvent("input", { inputType: "insertText", data: value, bubbles: true });
+      const keyupEvent = new KeyboardEvent("keyup", { bubbles: true });
+      const changeEvent = new Event("change", { bubbles: true });
 
       // Click on the field
       field.click();

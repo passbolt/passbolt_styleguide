@@ -17,9 +17,14 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
-import {defaultAppContext, defaultProps, mockGpgKey, mockInvalidGpgKey} from "./DisplayUserDetailsPublicKey.test.data";
+import {
+  defaultAppContext,
+  defaultProps,
+  mockGpgKey,
+  mockInvalidGpgKey,
+} from "./DisplayUserDetailsPublicKey.test.data";
 import DisplayUserDetailsPublicKeyPage from "./DisplayUserDetailsPublicKey.test.page";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 
 beforeEach(() => {
   jest.resetModules();
@@ -39,7 +44,8 @@ describe("Display User Details Information", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(context.port, "request").mockImplementation(implementation);
 
   beforeEach(() => {
     page = new DisplayUserDetailsPublicKeyPage(context, props);
@@ -47,12 +53,12 @@ describe("Display User Details Information", () => {
     mockContextRequest(context, requestGpgMockImpl);
   });
 
-  it('As LU I should not initially see the information area as expanded', () => {
+  it("As LU I should not initially see the information area as expanded", () => {
     expect.assertions(1);
     expect(page.isCollapsed).toBeTruthy();
   });
 
-  it('As LU I should see the information area when I collapse the area', async() => {
+  it("As LU I should see the information area when I collapse the area", async () => {
     expect.assertions(2);
     await page.toggleCollapse();
     expect(page.isCollapsed).toBeFalsy();
@@ -61,22 +67,21 @@ describe("Display User Details Information", () => {
     expect(page.isCollapsed).toBeTruthy();
   });
 
-
-  it('As LU I should see the appropriate detailed user fingerprint', async() => {
+  it("As LU I should see the appropriate detailed user fingerprint", async () => {
     expect.assertions(2);
     await page.toggleCollapse();
-    expect(page.fingerprint).toContain('03F6 0E95 8F4C B297 23AC<br>DF76 1353 B5B1 5D9B 054F');
-    expect(page.type).toBe('RSA');
+    expect(page.fingerprint).toContain("03F6 0E95 8F4C B297 23AC<br>DF76 1353 B5B1 5D9B 054F");
+    expect(page.type).toBe("RSA");
   });
 
-  it('As LU I should see the details of an invalid key', async() => {
+  it("As LU I should see the details of an invalid key", async () => {
     expect.assertions(4);
-    jest.spyOn(context.port, 'request').mockImplementation(jest.fn(() => mockInvalidGpgKey));
+    jest.spyOn(context.port, "request").mockImplementation(jest.fn(() => mockInvalidGpgKey));
 
     await page.toggleCollapse();
-    expect(page.fingerprint).toContain('C694 577F F69D E85C 0793<br>5DF3 10FC 3004 99AE 900B');
-    expect(page.type).toBe('RSA');
-    expect(page.created).toBe(formatDate('2020-08-19T14:56:54+00:00'));
-    expect(page.expires).toBe('n/a');
+    expect(page.fingerprint).toContain("C694 577F F69D E85C 0793<br>5DF3 10FC 3004 99AE 900B");
+    expect(page.type).toBe("RSA");
+    expect(page.created).toBe(formatDate("2020-08-19T14:56:54+00:00"));
+    expect(page.expires).toBe("n/a");
   });
 });

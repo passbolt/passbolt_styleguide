@@ -12,8 +12,8 @@
  * @since         3.3.0
  */
 
-import {QuickAccessEvent} from "./Events/Quickaccess/QuickAccessEvent";
-import {AuthLogin} from "./AuthLogin/AuthLogin";
+import { QuickAccessEvent } from "./Events/Quickaccess/QuickAccessEvent";
+import { AuthLogin } from "./AuthLogin/AuthLogin";
 import InFormManager from "./lib/InForm/InFormManager";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 
@@ -26,7 +26,7 @@ async function init() {
   QuickAccessEvent.fillForm();
 
   const siteSettings = await getSiteSettings();
-  if (siteSettings?.canIUse('inFormIntegration')) {
+  if (siteSettings?.canIUse("inFormIntegration")) {
     InFormManager.initialize();
   }
 }
@@ -37,11 +37,11 @@ async function init() {
  */
 async function getSiteSettings() {
   try {
-    const siteSettingsDto = await port.request('passbolt.organization-settings.get', false);
+    const siteSettingsDto = await port.request("passbolt.organization-settings.get", false);
     return new SiteSettings(siteSettingsDto);
   } catch (error) {
     console.error(error);
   }
 }
 
-export const BrowserIntegrationBootstrap = {init};
+export const BrowserIntegrationBootstrap = { init };

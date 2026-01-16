@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component, memo} from "react";
+import React, { Component, memo } from "react";
 import PropTypes from "prop-types";
 
 /**

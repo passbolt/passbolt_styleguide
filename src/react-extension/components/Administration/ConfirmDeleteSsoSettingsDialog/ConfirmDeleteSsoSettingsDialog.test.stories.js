@@ -12,14 +12,13 @@
  * @since         3.9.0
  */
 import ConfirmDeleteSsoSettingsDialog from "./ConfirmDeleteSsoSettingsDialog";
-import {defaultProps} from "./ConfirmDeleteSsoSettingsDialog.test.data";
-
+import { defaultProps } from "./ConfirmDeleteSsoSettingsDialog.test.data";
 
 export default {
-  title: 'Components/Administration/ConfirmDeleteSsoSettingsDialog',
-  component: ConfirmDeleteSsoSettingsDialog
+  title: "Components/Administration/ConfirmDeleteSsoSettingsDialog",
+  component: ConfirmDeleteSsoSettingsDialog,
 };
 
 export const Default = {
-  args: defaultProps()
+  args: defaultProps(),
 };

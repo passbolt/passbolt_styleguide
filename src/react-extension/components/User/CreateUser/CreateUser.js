@@ -11,23 +11,23 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {Trans, withTranslation} from "react-i18next";
-import {maxSizeValidation} from "../../../lib/Error/InputValidator";
-import {USER_INPUT_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { Trans, withTranslation } from "react-i18next";
+import { maxSizeValidation } from "../../../lib/Error/InputValidator";
+import { USER_INPUT_MAX_LENGTH } from "../../../../shared/constants/inputs.const";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 import Select from "../../Common/Select/Select";
-import {capitalizeFirstLetter} from "../../../../shared/utils/stringUtils";
-import {withRoles} from "../../../contexts/RoleContext";
+import { capitalizeFirstLetter } from "../../../../shared/utils/stringUtils";
+import { withRoles } from "../../../contexts/RoleContext";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 
@@ -50,7 +50,7 @@ class CreateUser extends Component {
    */
   componentDidMount() {
     this.props.roleContext.refreshRoles();
-    this.setState({loading: false}, () => {
+    this.setState({ loading: false }, () => {
       this.firstNameRef.current.focus();
     });
   }
@@ -63,7 +63,7 @@ class CreateUser extends Component {
   componentDidUpdate() {
     // Set the role id if not in case of the lazy loading of roles
     if (this.state.role_id == null && this.props.roles?.items.length > 0) {
-      this.setState({role_id: this.props.roles.getFirst("name", RoleEntity.ROLE_USER)?.id});
+      this.setState({ role_id: this.props.roles.getFirst("name", RoleEntity.ROLE_USER)?.id });
     }
   }
 
@@ -88,7 +88,7 @@ class CreateUser extends Component {
       usernameError: null,
       usernameWarning: "",
       role_id: this.props.roles?.getFirst("name", RoleEntity.ROLE_USER)?.id, // Get the user role id
-      hasAlreadyBeenValidated: false // True if the form has already been submitted once
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
     };
   }
 
@@ -133,7 +133,7 @@ class CreateUser extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState({[name]: value});
+    this.setState({ [name]: value });
   }
 
   /**
@@ -145,7 +145,7 @@ class CreateUser extends Component {
     const target = event.target;
     const checked = target.checked;
     const name = target.name;
-    this.setState({[name]: checked});
+    this.setState({ [name]: checked });
   }
 
   /**
@@ -157,7 +157,7 @@ class CreateUser extends Component {
       this.setState(state);
     } else {
       const first_nameWarning = maxSizeValidation(this.state.first_name, USER_INPUT_MAX_LENGTH, this.translate);
-      this.setState({first_nameWarning});
+      this.setState({ first_nameWarning });
     }
   }
 
@@ -170,7 +170,7 @@ class CreateUser extends Component {
       this.setState(state);
     } else {
       const last_nameWarning = maxSizeValidation(this.state.last_name, USER_INPUT_MAX_LENGTH, this.translate);
-      this.setState({last_nameWarning});
+      this.setState({ last_nameWarning });
     }
   }
 
@@ -183,7 +183,7 @@ class CreateUser extends Component {
       this.setState(state);
     } else {
       const usernameWarning = maxSizeValidation(this.state.username, USER_INPUT_MAX_LENGTH, this.translate);
-      this.setState({usernameWarning});
+      this.setState({ usernameWarning });
     }
   }
 
@@ -196,7 +196,7 @@ class CreateUser extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
 
-    await this.setState({hasAlreadyBeenValidated: true});
+    await this.setState({ hasAlreadyBeenValidated: true });
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
@@ -232,14 +232,14 @@ class CreateUser extends Component {
   handleSaveError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     } else if (this.hasUsernameAlreadyExists(error.data)) {
-      this.setState({processing: false, usernameError: error.data.body.username.uniqueUsername});
+      this.setState({ processing: false, usernameError: error.data.body.username.uniqueUsername });
     } else {
       // Unexpected error occurred.
       console.error(error);
       this.handleError(error);
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -258,7 +258,7 @@ class CreateUser extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -269,7 +269,7 @@ class CreateUser extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return this.setState({processing: !prev});
+    return this.setState({ processing: !prev });
   }
 
   /**
@@ -294,10 +294,10 @@ class CreateUser extends Component {
     const userDto = {
       profile: {
         first_name: this.state.first_name,
-        last_name: this.state.last_name
+        last_name: this.state.last_name,
       },
       username: this.state.username.trim(),
-      role_id: this.state.role_id
+      role_id: this.state.role_id,
     };
     return await this.props.context.port.request("passbolt.users.create", userDto);
   }
@@ -308,11 +308,7 @@ class CreateUser extends Component {
    */
   async validate() {
     // Validate the form inputs.
-    await Promise.all([
-      this.validateFirstNameInput(),
-      this.validateLastNameInput(),
-      this.validateUsernameInput()
-    ]);
+    await Promise.all([this.validateFirstNameInput(), this.validateLastNameInput(), this.validateUsernameInput()]);
     return this.hasValidationError();
   }
 
@@ -326,7 +322,7 @@ class CreateUser extends Component {
     if (!first_name.length) {
       first_nameError = this.translate("A first name is required.");
     }
-    return this.setState({first_nameError});
+    return this.setState({ first_nameError });
   }
 
   /**
@@ -339,7 +335,7 @@ class CreateUser extends Component {
     if (!last_name.length) {
       last_nameError = this.translate("A last name is required.");
     }
-    return this.setState({last_nameError});
+    return this.setState({ last_nameError });
   }
 
   /**
@@ -354,7 +350,7 @@ class CreateUser extends Component {
     } else if (!AppEmailValidatorService.validate(username, this.props.context.siteSettings)) {
       usernameError = this.translate("The username should be a valid username address.");
     }
-    return this.setState({usernameError});
+    return this.setState({ usernameError });
   }
 
   /**
@@ -362,7 +358,9 @@ class CreateUser extends Component {
    * @returns {boolean}
    */
   hasValidationError() {
-    return this.state.first_nameError !== null || this.state.last_nameError !== null || this.state.usernameError !== null;
+    return (
+      this.state.first_nameError !== null || this.state.last_nameError !== null || this.state.usernameError !== null
+    );
   }
 
   /**
@@ -379,9 +377,11 @@ class CreateUser extends Component {
    */
   get rolesList() {
     if (this.props.roles) {
-      return this.props.roles.items.map(role => role.isAReservedRole()
-        ? ({value: role.id, label: capitalizeFirstLetter(this.translate(role.name))})
-        : ({value: role.id, label: role.name}));
+      return this.props.roles.items.map((role) =>
+        role.isAReservedRole()
+          ? { value: role.id, label: capitalizeFirstLetter(this.translate(role.name)) }
+          : { value: role.id, label: role.name },
+      );
     }
     return [];
   }
@@ -400,80 +400,133 @@ class CreateUser extends Component {
    */
   render() {
     return (
-      <DialogWrapper className='user-create-dialog' title={this.translate("Add User")}
-        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+      <DialogWrapper
+        className="user-create-dialog"
+        title={this.translate("Add User")}
+        onClose={this.handleClose}
+        disabled={this.hasAllInputDisabled()}
+      >
         <form className="user-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="user-first-name-input"><Trans>First name</Trans>{this.state.first_nameWarning &&
-                <AttentionSVG className="attention-required"/>
-              }</label>
-              <input id="user-first-name-input" name="first_name"
+            <div
+              className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+            >
+              <label htmlFor="user-first-name-input">
+                <Trans>First name</Trans>
+                {this.state.first_nameWarning && <AttentionSVG className="attention-required" />}
+              </label>
+              <input
+                id="user-first-name-input"
+                name="first_name"
                 ref={this.firstNameRef}
-                type="text" value={this.state.first_name} placeholder={this.translate("First name")}
-                required="required" disabled={this.hasAllInputDisabled()}
+                type="text"
+                value={this.state.first_name}
+                placeholder={this.translate("First name")}
+                required="required"
+                disabled={this.hasAllInputDisabled()}
                 maxLength="128"
-                onKeyUp={this.handleFirstNameInputKeyUp} onChange={this.handleInputChange}
-                autoComplete='off' autoFocus={true}
+                onKeyUp={this.handleFirstNameInputKeyUp}
+                onChange={this.handleInputChange}
+                autoComplete="off"
+                autoFocus={true}
               />
-              {this.state.first_nameError &&
-              <div className="first_name error-message">{this.state.first_nameError}</div>
-              }
+              {this.state.first_nameError && (
+                <div className="first_name error-message">{this.state.first_nameError}</div>
+              )}
               {this.state.first_nameWarning && (
                 <div className="firstname warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.first_nameWarning}
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.first_nameWarning}
                 </div>
               )}
             </div>
-            <div className={`input text required ${this.state.last_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="user-last-name-input"><Trans>Last name</Trans>{this.state.last_nameWarning &&
-                <AttentionSVG className="attention-required"/>
-              }</label>
-              <input id="user-last-name-input" name="last_name"
+            <div
+              className={`input text required ${this.state.last_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+            >
+              <label htmlFor="user-last-name-input">
+                <Trans>Last name</Trans>
+                {this.state.last_nameWarning && <AttentionSVG className="attention-required" />}
+              </label>
+              <input
+                id="user-last-name-input"
+                name="last_name"
                 ref={this.lastNameRef}
                 maxLength="128"
-                type="text" value={this.state.last_name} placeholder={this.translate("Last name")}
-                required="required" disabled={this.hasAllInputDisabled()}
-                onKeyUp={this.handleLastNameInputOnKeyUp} onChange={this.handleInputChange}
-                autoComplete='off' autoFocus={true}
+                type="text"
+                value={this.state.last_name}
+                placeholder={this.translate("Last name")}
+                required="required"
+                disabled={this.hasAllInputDisabled()}
+                onKeyUp={this.handleLastNameInputOnKeyUp}
+                onChange={this.handleInputChange}
+                autoComplete="off"
+                autoFocus={true}
               />
-              {this.state.last_nameError &&
-              <div className="last_name error-message">{this.state.last_nameError}</div>
-              }
+              {this.state.last_nameError && <div className="last_name error-message">{this.state.last_nameError}</div>}
               {this.state.last_nameWarning && (
                 <div className="lastname warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.last_nameWarning}
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.last_nameWarning}
                 </div>
               )}
             </div>
-            <div className={`input text required ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="user-username-input"><Trans>Username / Email</Trans>{this.state.usernameWarning &&
-                <AttentionSVG className="attention-required"/>
-              }</label>
-              <input id="user-username-input" name="username"
+            <div
+              className={`input text required ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+            >
+              <label htmlFor="user-username-input">
+                <Trans>Username / Email</Trans>
+                {this.state.usernameWarning && <AttentionSVG className="attention-required" />}
+              </label>
+              <input
+                id="user-username-input"
+                name="username"
                 maxLength="128"
-                ref={this.usernameRef} type="text" value={this.state.username} placeholder={this.translate("Email")}
-                required="required" disabled={this.hasAllInputDisabled()}
-                onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange}
-                autoComplete='off' autoFocus={true}
+                ref={this.usernameRef}
+                type="text"
+                value={this.state.username}
+                placeholder={this.translate("Email")}
+                required="required"
+                disabled={this.hasAllInputDisabled()}
+                onKeyUp={this.handleUsernameInputOnKeyUp}
+                onChange={this.handleInputChange}
+                autoComplete="off"
+                autoFocus={true}
               />
-              {this.state.usernameError &&
-              <div className="username error-message">{this.state.usernameError}</div>
-              }
+              {this.state.usernameError && <div className="username error-message">{this.state.usernameError}</div>}
               {this.state.usernameWarning && (
                 <div className="username warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.usernameWarning}
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.usernameWarning}
                 </div>
               )}
             </div>
-            <div className={`input select-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="select_role"><Trans>Role</Trans></label>
-              <Select id="select_role" disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()} name="role_id" items={this.rolesList} value={this.state.role_id} onChange={this.handleInputChange}/>
+            <div className={`input select-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+              <label htmlFor="select_role">
+                <Trans>Role</Trans>
+              </label>
+              <Select
+                id="select_role"
+                disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()}
+                name="role_id"
+                items={this.rolesList}
+                value={this.state.role_id}
+                onChange={this.handleInputChange}
+              />
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Save")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -491,4 +544,4 @@ CreateUser.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withRoles(withDialog(withTranslation('common')(CreateUser)))));
+export default withAppContext(withActionFeedback(withRoles(withDialog(withTranslation("common")(CreateUser)))));

@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 import assertString from "validator/es/lib/util/assertString";
-import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
+import { ResourceEditCreateFormEnumerationTypes } from "../../resource/ResourceEditCreateFormEnumerationTypes";
 import EntityV2 from "../abstract/entityV2";
 import EntityValidationError from "../abstract/entityValidationError";
 import {
@@ -40,7 +40,7 @@ import SecretDataV5PasswordStringEntity from "../secretData/secretDataV5Password
 import SecretDataV5StandaloneCustomFieldsCollection from "../secretData/secretDataV5StandaloneCustomFieldsCollection";
 import SecretDataV5StandaloneTotpEntity from "../secretData/secretDataV5StandaloneTotpEntity";
 import ResourceMetadataEntity from "./metadata/resourceMetadataEntity";
-import {CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH} from "../customField/customFieldEntity";
+import { CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH } from "../customField/customFieldEntity";
 import SecretDataV5StandaloneNoteEntity from "../secretData/secretDataV5StandaloneNoteEntity";
 
 class ResourceFormEntity extends EntityV2 {
@@ -58,7 +58,7 @@ class ResourceFormEntity extends EntityV2 {
   static get associations() {
     return {
       metadata: ResourceMetadataEntity,
-      secret: SecretDataEntity
+      secret: SecretDataEntity,
     };
   }
 
@@ -68,45 +68,43 @@ class ResourceFormEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "metadata",
-        "resource_type_id",
-        "secret"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["metadata", "resource_type_id", "secret"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "resource_type_id": {
-          "type": "string",
-          "format": "uuid"
+        resource_type_id: {
+          type: "string",
+          format: "uuid",
         },
-        "folder_parent_id": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+        folder_parent_id: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "expired": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true,
+        expired: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
         // Associated models
-        "metadata": ResourceMetadataEntity.getSchema(),
-        "secret": {"anyOf": [
-          SecretDataV5DefaultEntity.getSchema(),
-          SecretDataV5DefaultTotpEntity.getSchema(),
-          SecretDataV5StandaloneTotpEntity.getSchema(),
-          SecretDataV5PasswordStringEntity.getSchema(),
-          SecretDataV4DefaultEntity.getSchema(),
-          SecretDataV4DefaultTotpEntity.getSchema(),
-          SecretDataV4StandaloneTotpEntity.getSchema(),
-          SecretDataV4PasswordStringEntity.getSchema(),
-          SecretDataV5StandaloneCustomFieldsCollection.getSchema(),
-        ]},
-      }
+        metadata: ResourceMetadataEntity.getSchema(),
+        secret: {
+          anyOf: [
+            SecretDataV5DefaultEntity.getSchema(),
+            SecretDataV5DefaultTotpEntity.getSchema(),
+            SecretDataV5StandaloneTotpEntity.getSchema(),
+            SecretDataV5PasswordStringEntity.getSchema(),
+            SecretDataV4DefaultEntity.getSchema(),
+            SecretDataV4DefaultTotpEntity.getSchema(),
+            SecretDataV4StandaloneTotpEntity.getSchema(),
+            SecretDataV4PasswordStringEntity.getSchema(),
+            SecretDataV5StandaloneCustomFieldsCollection.getSchema(),
+          ],
+        },
+      },
     };
   }
 
@@ -225,14 +223,17 @@ class ResourceFormEntity extends EntityV2 {
       // Set an empty value to have the property defined and find the matching resource type (Will be set with a default value later)
       resourceDto.secret[secretPropName] = "";
       // Get the resource type slug to mutate when adding secret
-      const mutateResourceType = this.resourceTypes.getResourceTypeMatchingResource(resourceDto, currentResourceType.version);
+      const mutateResourceType = this.resourceTypes.getResourceTypeMatchingResource(
+        resourceDto,
+        currentResourceType.version,
+      );
       // Get the secret entity class associate
       const secretEntityClass = this.getSecretEntityClassByResourceType(mutateResourceType.slug);
       if (!secretEntityClass) {
         throw new Error("No secret association class has been found in resource types.");
       }
       // Set the secret with the actual secret data
-      this.set("secret", new secretEntityClass(this.secret.toDto(), {validate: false}));
+      this.set("secret", new secretEntityClass(this.secret.toDto(), { validate: false }));
       // If current resource type is V4 and password string
       if (currentResourceType.isV4() && currentResourceType.isPasswordString()) {
         // Set the secret description with the metadata description
@@ -277,7 +278,10 @@ class ResourceFormEntity extends EntityV2 {
     // Get the current resource type
     const currentResourceType = this.resourceTypes.getFirstById(this.resourceTypeId);
     // Get the resource type slug to mutate when deleting secret
-    const mutateResourceType = this.resourceTypes.getResourceTypeMatchingResource(resourceDto, currentResourceType.version);
+    const mutateResourceType = this.resourceTypes.getResourceTypeMatchingResource(
+      resourceDto,
+      currentResourceType.version,
+    );
     if (currentResourceType.id !== mutateResourceType.id) {
       // Get the secret entity class associate
       const secretEntityClass = this.getSecretEntityClassByResourceType(mutateResourceType.slug);
@@ -459,7 +463,7 @@ class ResourceFormEntity extends EntityV2 {
         this.secret.toDto(),
         this.secret,
         validationError,
-        'secret'
+        "secret",
       );
       // Verify secret totp association
       if (this.secret.totp) {
@@ -467,15 +471,12 @@ class ResourceFormEntity extends EntityV2 {
           this.secret.totp.toDto(),
           this.secret.totp,
           validationError,
-          'secret.totp'
+          "secret.totp",
         );
       }
 
       if (this.secret.customFields) {
-        validationError = this.validateCustomFields(
-          this.secret.customFields,
-          validationError,
-        );
+        validationError = this.validateCustomFields(this.secret.customFields, validationError);
       }
     }
     // Verify metadata
@@ -484,7 +485,7 @@ class ResourceFormEntity extends EntityV2 {
         this.metadata.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN),
         this.metadata,
         validationError,
-        'metadata'
+        "metadata",
       );
     }
 
@@ -500,14 +501,16 @@ class ResourceFormEntity extends EntityV2 {
    * @return {EntityValidationError|null} The updated or unchanged error object
    * @private
    */
-  validateMaxLengthAgainstSchema(dataObject, entity, currentError, associationName = '') {
+  validateMaxLengthAgainstSchema(dataObject, entity, currentError, associationName = "") {
     let error = currentError;
     Object.entries(dataObject).forEach(([fieldName, fieldValue]) => {
       const fieldSchema = entity.constructor.getSchema().properties[fieldName];
 
-      if (!fieldSchema) { return; }
+      if (!fieldSchema) {
+        return;
+      }
       if (fieldSchema.type === "array" && Array.isArray(fieldValue)) {
-      // Validate array elements
+        // Validate array elements
         const maxItemLength = fieldSchema.items?.maxLength;
         if (typeof maxItemLength !== "undefined") {
           fieldValue.forEach((value, index) => {
@@ -516,20 +519,20 @@ class ResourceFormEntity extends EntityV2 {
               error.addError(
                 `${associationName}.${fieldName}.${index}`,
                 "maxLength",
-                `${associationName}.${fieldName} at index ${index} exceeds maximum length limit`
+                `${associationName}.${fieldName} at index ${index} exceeds maximum length limit`,
               );
             }
           });
         }
       } else {
-      // Validate simple fields
+        // Validate simple fields
         const maxLength = fieldSchema.maxLength;
         if (typeof maxLength !== "undefined" && fieldValue?.length >= maxLength) {
           error = error || new EntityValidationError();
           error.addError(
             `${associationName}.${fieldName}`,
             "maxLength",
-            `${associationName}.${fieldName} exceeds maximum length limit`
+            `${associationName}.${fieldName} exceeds maximum length limit`,
           );
         }
       }
@@ -567,11 +570,19 @@ class ResourceFormEntity extends EntityV2 {
         error = error || new EntityValidationError();
 
         if (isKeyTooLong) {
-          error.addError(`custom_fields.${i}.key`, "maxLength", `The custom field key at index ${i} reached the maximum length`);
+          error.addError(
+            `custom_fields.${i}.key`,
+            "maxLength",
+            `The custom field key at index ${i} reached the maximum length`,
+          );
         }
 
         if (isValueTooLong) {
-          error.addError(`custom_fields.${i}.value`, "maxLength", `The custom field value at index ${i} reached the maximum length`);
+          error.addError(
+            `custom_fields.${i}.value`,
+            "maxLength",
+            `The custom field value at index ${i} reached the maximum length`,
+          );
         }
       }
     }
@@ -586,12 +597,11 @@ class ResourceFormEntity extends EntityV2 {
      * options.skipSchemaAssociationValidation remove the schema required validation on the associations
      * Required association is not part of the props after the entity is created
      */
-    const validationErrors = super.validate(Object.assign(
-      options,
-      {
-        skipSchemaAssociationValidation: true
-      }
-    ));
+    const validationErrors = super.validate(
+      Object.assign(options, {
+        skipSchemaAssociationValidation: true,
+      }),
+    );
     return validationErrors;
   }
 

@@ -17,13 +17,14 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
-import {defaultAppContext, defaultProps} from "./DisplayUserGroupDetails.test.data";
+import { defaultAppContext, defaultProps } from "./DisplayUserGroupDetails.test.data";
 import DisplayUserGroupDetailsPage from "./DisplayUserGroupDetails.test.page";
 
 describe("Display User Details", () => {
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(context.port, "request").mockImplementation(implementation);
 
-  it('As LU I should follow a permalink to see the details of a group', async() => {
+  it("As LU I should follow a permalink to see the details of a group", async () => {
     expect.assertions(1);
 
     const context = defaultAppContext();
@@ -35,6 +36,9 @@ describe("Display User Details", () => {
 
     await page.copyPermalink();
 
-    expect(props.clipboardContext.copy).toHaveBeenCalledWith("http://localhost/app/groups/view/516c2db6-0aed-52d8-854f-b3f3499995e7", "The permalink has been copied to clipboard.");
+    expect(props.clipboardContext.copy).toHaveBeenCalledWith(
+      "http://localhost/app/groups/view/516c2db6-0aed-52d8-854f-b3f3499995e7",
+      "The permalink has been copied to clipboard.",
+    );
   });
 });

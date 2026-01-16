@@ -15,11 +15,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {Trans, withTranslation} from "react-i18next";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import { Trans, withTranslation } from "react-i18next";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
@@ -89,10 +89,10 @@ class DisplayUserDetailsActivity extends React.Component {
     }
 
     // Reset the component, and fetch activities for the new user.
-    const state = Object.assign({}, this.getDefaultState(), {open: true});
+    const state = Object.assign({}, this.getDefaultState(), { open: true });
     await this.setState(state);
     await this.fetch();
-    this.setState({loading: false});
+    this.setState({ loading: false });
   }
 
   /**
@@ -117,9 +117,9 @@ class DisplayUserDetailsActivity extends React.Component {
       const defaultState = this.getDefaultState();
       this.setState(defaultState);
     } else {
-      await this.setState({loading: true, open: true});
+      await this.setState({ loading: true, open: true });
       await this.fetch();
-      this.setState({loading: false});
+      this.setState({ loading: false });
     }
   }
 
@@ -130,9 +130,9 @@ class DisplayUserDetailsActivity extends React.Component {
   async handleMoreClickEvent() {
     const activitiesPage = this.state.activitiesPage + 1;
     const loadingMore = true;
-    await this.setState({activitiesPage, loadingMore});
+    await this.setState({ activitiesPage, loadingMore });
     await this.fetch();
-    this.setState({loadingMore: false});
+    this.setState({ loadingMore: false });
   }
 
   /**
@@ -142,8 +142,13 @@ class DisplayUserDetailsActivity extends React.Component {
   async fetch() {
     const limit = LIMIT_ACTIVITIES_PER_PAGE;
     const page = this.state.activitiesPage;
-    const options = {limit, page};
-    const newActivities = await this.props.context.port.request("passbolt.actionlogs.find-all-for", "User", this.user.id, options);
+    const options = { limit, page };
+    const newActivities = await this.props.context.port.request(
+      "passbolt.actionlogs.find-all-for",
+      "User",
+      this.user.id,
+      options,
+    );
 
     let activities;
     // For the first page need to reset activities state
@@ -152,7 +157,7 @@ class DisplayUserDetailsActivity extends React.Component {
     } else {
       activities = [...newActivities];
     }
-    this.setState({activities});
+    this.setState({ activities });
   }
 
   /**
@@ -187,13 +192,15 @@ class DisplayUserDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> requested an account recovery
+                <span className="creator">{{ activityCreatorName }}</span> requested an account recovery
               </Trans>
             </div>
-            <div className="subinfo third-level light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo third-level light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -214,13 +221,18 @@ class DisplayUserDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <a rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> rejected the account recovery request
+                <a rel="noopener noreferrer" href={userLink}>
+                  <span className="creator">{{ activityCreatorName }}</span>
+                </a>{" "}
+                rejected the account recovery request
               </Trans>
             </div>
-            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -241,13 +253,18 @@ class DisplayUserDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <a rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> accepted the account recovery request
+                <a rel="noopener noreferrer" href={userLink}>
+                  <span className="creator">{{ activityCreatorName }}</span>
+                </a>{" "}
+                accepted the account recovery request
               </Trans>
             </div>
-            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -267,13 +284,15 @@ class DisplayUserDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> rejected the account recovery policy
+                <span className="creator">{{ activityCreatorName }}</span> rejected the account recovery policy
               </Trans>
             </div>
-            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -293,13 +312,15 @@ class DisplayUserDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> accepted the account recovery policy
+                <span className="creator">{{ activityCreatorName }}</span> accepted the account recovery policy
               </Trans>
             </div>
-            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -320,13 +341,18 @@ class DisplayUserDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <a rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> created the user account
+                <a rel="noopener noreferrer" href={userLink}>
+                  <span className="creator">{{ activityCreatorName }}</span>
+                </a>{" "}
+                created the user account
               </Trans>
             </div>
-            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>
+              {activityFormattedDate}
+            </div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl} />
       </li>
     );
   }
@@ -393,7 +419,7 @@ class DisplayUserDetailsActivity extends React.Component {
    * @return {boolean}
    */
   mustDisplayMoreButton() {
-    return !this.state.activities.some(activity => activity.type === "Users.created");
+    return !this.state.activities.some((activity) => activity.type === "Users.created");
   }
 
   /**
@@ -414,34 +440,38 @@ class DisplayUserDetailsActivity extends React.Component {
           <h4>
             <button type="button" className="link no-border" onClick={this.handleTitleClickEvent}>
               <Trans>Activity</Trans>
-              {this.state.open
-                ? <CaretDownSVG className="caret-down"/>
-                : <CaretRightSVG className="caret-right"/>
-              }
+              {this.state.open ? <CaretDownSVG className="caret-down" /> : <CaretRightSVG className="caret-right" />}
             </button>
           </h4>
         </div>
         <div className="accordion-content">
-          {this.state.loading &&
-          <div className="processing-wrapper">
-            <SpinnerSVG/>
-            <span className="processing-text"><Trans>Retrieving activities</Trans></span>
-          </div>
-          }
-          {!this.state.loading &&
-          <React.Fragment>
-            <ul className="ready">
-              {this.state.activities.map(activity => this.renderActivity(activity))}
-            </ul>
-            {this.mustDisplayMoreButton() &&
-            <div className="actions">
-              <button type="button" disabled={this.state.loadingMore} onClick={this.handleMoreClickEvent} className={`action-logs-load-more ${this.state.loadingMore ? "processing" : ""}`}>
-                <span><Trans>More</Trans></span>
-              </button>
+          {this.state.loading && (
+            <div className="processing-wrapper">
+              <SpinnerSVG />
+              <span className="processing-text">
+                <Trans>Retrieving activities</Trans>
+              </span>
             </div>
-            }
-          </React.Fragment>
-          }
+          )}
+          {!this.state.loading && (
+            <React.Fragment>
+              <ul className="ready">{this.state.activities.map((activity) => this.renderActivity(activity))}</ul>
+              {this.mustDisplayMoreButton() && (
+                <div className="actions">
+                  <button
+                    type="button"
+                    disabled={this.state.loadingMore}
+                    onClick={this.handleMoreClickEvent}
+                    className={`action-logs-load-more ${this.state.loadingMore ? "processing" : ""}`}
+                  >
+                    <span>
+                      <Trans>More</Trans>
+                    </span>
+                  </button>
+                </div>
+              )}
+            </React.Fragment>
+          )}
         </div>
       </div>
     );
@@ -454,4 +484,4 @@ DisplayUserDetailsActivity.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserDetailsActivity)));
+export default withAppContext(withUserWorkspace(withTranslation("common")(DisplayUserDetailsActivity)));

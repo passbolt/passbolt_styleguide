@@ -13,11 +13,11 @@
  */
 
 import ImportResourcesKeyUnlock from "./ImportResourcesKeyUnlock";
-import {defaultAppContext} from "./ImportResourcesKeyUnlock.test.data";
+import { defaultAppContext } from "./ImportResourcesKeyUnlock.test.data";
 
 export default {
-  title: 'Components/Resource/ImportResources/ImportResourcesKeyUnlock',
-  component: ImportResourcesKeyUnlock
+  title: "Components/Resource/ImportResources/ImportResourcesKeyUnlock",
+  component: ImportResourcesKeyUnlock,
 };
 
 export const Initial = {
@@ -25,8 +25,8 @@ export const Initial = {
     onClose: () => {},
     resourceWorkspaceContext: {
       onResourceFileToImport: () => {},
-      resourceFileToImport: "test"
+      resourceFileToImport: "test",
     },
     context: defaultAppContext(),
-  }
+  },
 };

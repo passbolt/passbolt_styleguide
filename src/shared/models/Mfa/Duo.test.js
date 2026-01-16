@@ -14,11 +14,10 @@
 
 import Duo from "./Duo";
 
-
 describe("Duo model", () => {
   const randomClientId = "random-client-id";
   const randomHostname = "random-hostname";
-  const randomClientSecret  = "random-client-secret";
+  const randomClientSecret = "random-client-secret";
 
   describe("Duo::constructor", () => {
     it("should init with hostName, integrationKey, salt and secretKey", () => {
@@ -37,4 +36,3 @@ describe("Duo model", () => {
     });
   });
 });
-

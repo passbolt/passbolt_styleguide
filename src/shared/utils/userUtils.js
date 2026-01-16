@@ -32,27 +32,27 @@ export const USER_STATUS = {
  * @param {User} user the user to check the suspended state
  * @returns {boolean}
  */
-export const isUserSuspended = user => Boolean(user?.disabled && new Date(user.disabled) <= new Date());
+export const isUserSuspended = (user) => Boolean(user?.disabled && new Date(user.disabled) <= new Date());
 
 /**
  * Returns true if the user has requested Account Recovery
  * @param {User} user the user to check the attention state
  * @returns {boolean}
  */
-export const isAccountRecoveryRequested = user => Boolean(user?.pending_account_recovery_request);
+export const isAccountRecoveryRequested = (user) => Boolean(user?.pending_account_recovery_request);
 
 /**
  * Returns true if the user has missing metadata keys
  * @param {User} user the user to check the attention state
  * @returns {boolean}
  */
-export const isMissingMetadataKey = user => user?.missing_metadata_key_ids?.length > 0;
+export const isMissingMetadataKey = (user) => user?.missing_metadata_key_ids?.length > 0;
 /**
  * Returns the given user's status
  * @param {User} user
  * @returns {string<USER_STATUS>}
  */
-export const getUserStatus = user => {
+export const getUserStatus = (user) => {
   const isDeleted = Boolean(user?.deleted);
   if (isDeleted) {
     return USER_STATUS.DELETED;
@@ -73,7 +73,7 @@ export const getUserStatus = user => {
  * @param {object} [options] options to pass to the formatting function
  * @returns {string}
  */
-export const getUserFormattedName = (user, t = null, options = {withUsername: false}) => {
+export const getUserFormattedName = (user, t = null, options = { withUsername: false }) => {
   const profile = user?.profile;
   if (!profile) {
     return t("Unknown user");

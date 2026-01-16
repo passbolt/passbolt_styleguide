@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 import MockPort from "../../../test/mock/MockPort";
@@ -29,35 +29,35 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-const getAppContext = function(appContext) {
+const getAppContext = function (appContext) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
     port: new MockPort(),
-    setContext: () => {}
+    setContext: () => {},
   };
 
-  defaultAppContext.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
+  defaultAppContext.port.addRequestListener("passbolt.remember-me.get-user-latest-choice", async () => false);
   return Object.assign(defaultAppContext, appContext || {});
 };
 
-const renderInputPassphrase = function(appContext, props) {
+const renderInputPassphrase = function (appContext, props) {
   appContext = getAppContext(appContext);
   props = props || {};
   return render(
     <MockTranslationProvider>
       <AppContext.Provider value={appContext}>
-        <InputPassphrase debug t={text => text} onClose={props.onClose || jest.fn()}/>
+        <InputPassphrase debug t={(text) => text} onClose={props.onClose || jest.fn()} />
       </AppContext.Provider>
     </MockTranslationProvider>,
-    {legacyRoot: true}
+    { legacyRoot: true },
   );
 };
 
 describe("InputPassphrase", () => {
   it("matches the styleguide.", () => {
     const context = getAppContext();
-    const {container} = renderInputPassphrase();
+    const { container } = renderInputPassphrase();
 
     // Dialog title exists and correct.
     const dialogTitle = container.querySelector(".dialog-header h2");
@@ -75,7 +75,7 @@ describe("InputPassphrase", () => {
 
     // Passphrase input field exists.
     const passphraseWrapper = container.querySelector(".input.password");
-    const passphraseInput = container.querySelector("[type=\"password\"][name=\"passphrase\"]");
+    const passphraseInput = container.querySelector('[type="password"][name="passphrase"]');
     expect(passphraseInput).not.toBeNull();
 
     // Is focus.
@@ -104,7 +104,7 @@ describe("InputPassphrase", () => {
      */
 
     // Remember me checkbox exists.
-    const rememberMeInput = container.querySelector("[name=\"rememberMe\"]");
+    const rememberMeInput = container.querySelector('[name="rememberMe"]');
     expect(rememberMeInput).not.toBeNull();
     expect(rememberMeInput.checked).toBe(false);
 
@@ -113,13 +113,16 @@ describe("InputPassphrase", () => {
     expect(rememberMeDurationSelect).not.toBeNull();
     const rememberMeOptions = context.siteSettings.getRememberMeOptions();
     Object.keys(rememberMeOptions).forEach((optionKey, index) => {
-      const rememberMeDurationOption = index === 0 ? container.querySelector(".select-container .select .selected-value .value") : container.querySelectorAll(".select-container .select .option")[index - 1];
+      const rememberMeDurationOption =
+        index === 0
+          ? container.querySelector(".select-container .select .selected-value .value")
+          : container.querySelectorAll(".select-container .select .option")[index - 1];
       expect(rememberMeDurationOption).not.toBeNull();
       expect(rememberMeDurationOption.textContent).toBe(rememberMeOptions[optionKey]);
     });
 
     // Submit button exists.
-    const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
+    const submitButton = container.querySelector('.submit-wrapper [type="submit"]');
     expect(submitButton).not.toBeNull();
 
     // Cancel button exists.
@@ -131,27 +134,27 @@ describe("InputPassphrase", () => {
     const siteSettingsFixtureWithoutRememberMe = JSON.parse(JSON.stringify(siteSettingsFixture));
     siteSettingsFixtureWithoutRememberMe.passbolt.plugins.rememberMe.options = {};
     const siteSettings = new SiteSettings(siteSettingsFixtureWithoutRememberMe);
-    const appContext = getAppContext({siteSettings});
-    const {container} = renderInputPassphrase(appContext);
+    const appContext = getAppContext({ siteSettings });
+    const { container } = renderInputPassphrase(appContext);
 
     // Remember me checkbox exists.
-    const rememberMeInput = container.querySelector("[name=\"rememberMe\"]");
+    const rememberMeInput = container.querySelector('[name="rememberMe"]');
     expect(rememberMeInput).toBeNull();
 
     // Remember me duration options exists.
-    const rememberMeDurationSelect = container.querySelector("[name=\"rememberMeDuration\"]");
+    const rememberMeDurationSelect = container.querySelector('[name="rememberMeDuration"]');
     expect(rememberMeDurationSelect).toBeNull();
   });
 
   it("calls onClose props when clicking on the close button.", () => {
     const context = getAppContext();
     const props = {
-      onClose: jest.fn()
+      onClose: jest.fn(),
     };
-    const {container} = renderInputPassphrase(context, props);
+    const { container } = renderInputPassphrase(context, props);
 
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
-    const leftClick = {button: 0};
+    jest.spyOn(context.port, "emit").mockImplementation(jest.fn());
+    const leftClick = { button: 0 };
     const dialogCloseIcon = container.querySelector(".dialog-close");
     fireEvent.click(dialogCloseIcon, leftClick);
     expect(props.onClose).toBeCalled();
@@ -162,12 +165,12 @@ describe("InputPassphrase", () => {
   it("calls onClose props when clicking on the cancel button.", () => {
     const context = getAppContext();
     const props = {
-      onClose: jest.fn()
+      onClose: jest.fn(),
     };
-    const {container} = renderInputPassphrase(context, props);
+    const { container } = renderInputPassphrase(context, props);
 
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
-    const leftClick = {button: 0};
+    jest.spyOn(context.port, "emit").mockImplementation(jest.fn());
+    const leftClick = { button: 0 };
     const cancelButton = container.querySelector(".submit-wrapper .cancel");
     fireEvent.click(cancelButton, leftClick);
     expect(props.onClose).toBeCalled();
@@ -176,10 +179,10 @@ describe("InputPassphrase", () => {
   });
 
   it("changes the style of its security token when the passphrase input get or lose focus.", () => {
-    const {container} = renderInputPassphrase();
+    const { container } = renderInputPassphrase();
 
     const passphraseWrapper = container.querySelector(".input.password");
-    const passphraseInput = container.querySelector("[name=\"passphrase\"]");
+    const passphraseInput = container.querySelector('[name="passphrase"]');
     const securityTokenElement = container.querySelector(".security-token");
 
     /*
@@ -210,24 +213,26 @@ describe("InputPassphrase", () => {
     expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
   });
 
-  it("Should validate the passphrase.", async() => {
+  it("Should validate the passphrase.", async () => {
     const context = getAppContext();
-    const {container} = renderInputPassphrase(context);
+    const { container } = renderInputPassphrase(context);
 
     // Mock the request function to make it return an error.
-    jest.spyOn(context.port, 'request').mockImplementation(jest.fn(message => {
-      if (message === "passbolt.keyring.private.checkpassphrase") {
-        throw new Error();
-      }
-    }));
+    jest.spyOn(context.port, "request").mockImplementation(
+      jest.fn((message) => {
+        if (message === "passbolt.keyring.private.checkpassphrase") {
+          throw new Error();
+        }
+      }),
+    );
 
     // Fill the passphrase input.
-    const passphraseInput = container.querySelector("[name=\"passphrase\"]");
-    const passphraseInputEvent = {target: {value: "ada@passbolt.com"}};
+    const passphraseInput = container.querySelector('[name="passphrase"]');
+    const passphraseInputEvent = { target: { value: "ada@passbolt.com" } };
     fireEvent.change(passphraseInput, passphraseInputEvent);
 
     // Submit.
-    const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
+    const submitButton = container.querySelector('.submit-wrapper [type="submit"]');
 
     await userEvent.click(submitButton);
 
@@ -240,31 +245,32 @@ describe("InputPassphrase", () => {
     expect(errorMessage.textContent).toBe("This is not a valid passphrase.");
   });
 
-  it("Should allow only 3 attempts.", async() => {
+  it("Should allow only 3 attempts.", async () => {
     const context = getAppContext();
     const props = {
-      onClose: jest.fn()
+      onClose: jest.fn(),
     };
-    const {container} = renderInputPassphrase(context, props);
+    const { container } = renderInputPassphrase(context, props);
 
     // Mock the request function to make it return an error.
-    jest.spyOn(context.port, 'request').mockImplementation(jest.fn(message => {
-      if (message === "passbolt.keyring.private.checkpassphrase") {
-        throw new Error();
-      }
-    }));
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(context.port, "request").mockImplementation(
+      jest.fn((message) => {
+        if (message === "passbolt.keyring.private.checkpassphrase") {
+          throw new Error();
+        }
+      }),
+    );
+    jest.spyOn(context.port, "emit").mockImplementation(jest.fn());
 
     // Attempting 3 times with a wrong passphrase.
-    const passphraseInput = container.querySelector("[name=\"passphrase\"]");
-    const passphraseInputEvent = {target: {value: "ada@passbolt.com"}};
+    const passphraseInput = container.querySelector('[name="passphrase"]');
+    const passphraseInputEvent = { target: { value: "ada@passbolt.com" } };
     fireEvent.change(passphraseInput, passphraseInputEvent);
-    const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
-    const leftClick = {button: 0};
+    const submitButton = container.querySelector('.submit-wrapper [type="submit"]');
+    const leftClick = { button: 0 };
     for (let i = 0; i < 3; i++) {
       fireEvent.click(submitButton, leftClick);
-      await waitFor(() => {
-      });
+      await waitFor(() => {});
     }
 
     // Dialog label does not exist.
@@ -288,23 +294,23 @@ describe("InputPassphrase", () => {
     expect(context.port.emit).toBeCalledWith(undefined, "ERROR", error);
   });
 
-  it("Should capture passphrase.", async() => {
+  it("Should capture passphrase.", async () => {
     const context = getAppContext();
     const props = {
-      onClose: jest.fn()
+      onClose: jest.fn(),
     };
-    const {container} = renderInputPassphrase(context, props);
+    const { container } = renderInputPassphrase(context, props);
 
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
-    const leftClick = {button: 0};
+    jest.spyOn(context.port, "emit").mockImplementation(jest.fn());
+    const leftClick = { button: 0 };
 
     // Fill passphrase.
-    const passphraseInput = container.querySelector("[name=\"passphrase\"]");
-    const passphraseInputEvent = {target: {value: "ada@passbolt.com"}};
+    const passphraseInput = container.querySelector('[name="passphrase"]');
+    const passphraseInputEvent = { target: { value: "ada@passbolt.com" } };
     fireEvent.change(passphraseInput, passphraseInputEvent);
 
     // Submit.
-    const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
+    const submitButton = container.querySelector('.submit-wrapper [type="submit"]');
     fireEvent.click(submitButton, leftClick);
 
     await waitFor(() => {
@@ -312,28 +318,28 @@ describe("InputPassphrase", () => {
       expect(props.onClose).toBeCalled();
       expect(context.port.emit).toBeCalledWith(undefined, "SUCCESS", {
         passphrase: "ada@passbolt.com",
-        rememberMe: false
+        rememberMe: false,
       });
     });
   });
 
-  it("Should capture passphrase and the remember me duration.", async() => {
+  it("Should capture passphrase and the remember me duration.", async () => {
     const context = getAppContext();
     const props = {
-      onClose: jest.fn()
+      onClose: jest.fn(),
     };
-    const {container} = renderInputPassphrase(context, props);
+    const { container } = renderInputPassphrase(context, props);
 
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
-    const leftClick = {button: 0};
+    jest.spyOn(context.port, "emit").mockImplementation(jest.fn());
+    const leftClick = { button: 0 };
 
     // Fill passphrase.
-    const passphraseInput = container.querySelector("[name=\"passphrase\"]");
-    const passphraseInputEvent = {target: {value: "ada@passbolt.com"}};
+    const passphraseInput = container.querySelector('[name="passphrase"]');
+    const passphraseInputEvent = { target: { value: "ada@passbolt.com" } };
     fireEvent.change(passphraseInput, passphraseInputEvent);
 
     // Check remember me.
-    const rememberMeInput = container.querySelector("[name=\"rememberMe\"]");
+    const rememberMeInput = container.querySelector('[name="rememberMe"]');
     fireEvent.click(rememberMeInput, leftClick);
 
     // Select a remember me duration.
@@ -345,7 +351,7 @@ describe("InputPassphrase", () => {
     // The click on the second select item.
     fireEvent.click(secondSelectItem, leftClick);
     // Submit.
-    const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
+    const submitButton = container.querySelector('.submit-wrapper [type="submit"]');
     fireEvent.click(submitButton, leftClick);
 
     await waitFor(() => {
@@ -353,28 +359,28 @@ describe("InputPassphrase", () => {
       expect(props.onClose).toBeCalled();
       expect(context.port.emit).toBeCalledWith(undefined, "SUCCESS", {
         passphrase: "ada@passbolt.com",
-        rememberMe: 1800
+        rememberMe: 1800,
       });
     });
   });
 
-  it("Should capture passphrase when no remember me options are provided.", async() => {
+  it("Should capture passphrase when no remember me options are provided.", async () => {
     const context = getAppContext();
     const props = {
-      onClose: jest.fn()
+      onClose: jest.fn(),
     };
-    const {container} = renderInputPassphrase(context, props);
+    const { container } = renderInputPassphrase(context, props);
 
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
-    const leftClick = {button: 0};
+    jest.spyOn(context.port, "emit").mockImplementation(jest.fn());
+    const leftClick = { button: 0 };
 
     // Fill passphrase.
-    const passphraseInput = container.querySelector("[name=\"passphrase\"]");
-    const passphraseInputEvent = {target: {value: "ada@passbolt.com"}};
+    const passphraseInput = container.querySelector('[name="passphrase"]');
+    const passphraseInputEvent = { target: { value: "ada@passbolt.com" } };
     fireEvent.change(passphraseInput, passphraseInputEvent);
 
     // Submit button exists.
-    const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
+    const submitButton = container.querySelector('.submit-wrapper [type="submit"]');
     fireEvent.click(submitButton, leftClick);
 
     await waitFor(() => {
@@ -382,7 +388,7 @@ describe("InputPassphrase", () => {
       expect(props.onClose).toBeCalled();
       expect(context.port.emit).toBeCalledWith(undefined, "SUCCESS", {
         passphrase: "ada@passbolt.com",
-        rememberMe: false
+        rememberMe: false,
       });
     });
   });

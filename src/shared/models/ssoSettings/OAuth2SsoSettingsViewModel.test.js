@@ -43,12 +43,12 @@ describe("OAuth2SsoSettingsViewModel", () => {
 
   describe("::isDataDifferent", () => {
     each([
-      {url: "https://openid.passbolt.com/test"},
-      {client_id: "client-id"},
-      {client_secret: "this is a secret"},
-      {openid_configuration_path: "/.not-very-well-known/openid-configuration"},
-      {scope: "openid"},
-    ]).describe("should return true if at least 1 difference is found between 2 ViewModel", scenario => {
+      { url: "https://openid.passbolt.com/test" },
+      { client_id: "client-id" },
+      { client_secret: "this is a secret" },
+      { openid_configuration_path: "/.not-very-well-known/openid-configuration" },
+      { scope: "openid" },
+    ]).describe("should return true if at least 1 difference is found between 2 ViewModel", (scenario) => {
       it(`for: ${JSON.stringify(scenario)}`, () => {
         expect.assertions(1);
 
@@ -122,10 +122,7 @@ describe("OAuth2SsoSettingsViewModel", () => {
   });
 
   describe("::validate", () => {
-    each([
-      "client_id",
-      "client_secret",
-    ]).describe("should validates the required field", requiredField => {
+    each(["client_id", "client_secret"]).describe("should validates the required field", (requiredField) => {
       it(`for: ${requiredField}`, () => {
         expect.assertions(2);
         const viewModel = new OAuth2SsoSettingsViewModel();
@@ -147,12 +144,12 @@ describe("OAuth2SsoSettingsViewModel", () => {
           client_secret: 42,
         },
         expectedErrors: {
-          url: {type: "The url is not a valid string."},
-          openid_configuration_path: {type: "The openid_configuration_path is not a valid string."},
-          scope: {type: "The scope is not a valid string."},
-          client_id: {type: "The client_id is not a valid string."},
-          client_secret: {type: "The client_secret is not a valid string."},
-        }
+          url: { type: "The url is not a valid string." },
+          openid_configuration_path: { type: "The openid_configuration_path is not a valid string." },
+          scope: { type: "The scope is not a valid string." },
+          client_id: { type: "The client_id is not a valid string." },
+          client_secret: { type: "The client_secret is not a valid string." },
+        },
       },
       {
         dto: {
@@ -163,14 +160,16 @@ describe("OAuth2SsoSettingsViewModel", () => {
           client_secret: "",
         },
         expectedErrors: {
-          url: {pattern: "The url is not valid."},
-          openid_configuration_path: {minLength: "The openid_configuration_path should be 1 character in length minimum."},
-          scope: {minLength: "The scope should be 1 character in length minimum."},
-          client_id: {minLength: "The client_id should be 1 character in length minimum."},
-          client_secret: {minLength: "The client_secret should be 1 character in length minimum."},
-        }
+          url: { pattern: "The url is not valid." },
+          openid_configuration_path: {
+            minLength: "The openid_configuration_path should be 1 character in length minimum.",
+          },
+          scope: { minLength: "The scope should be 1 character in length minimum." },
+          client_id: { minLength: "The client_id should be 1 character in length minimum." },
+          client_secret: { minLength: "The client_secret should be 1 character in length minimum." },
+        },
       },
-    ]).describe("should validate the current data set", scenario => {
+    ]).describe("should validate the current data set", (scenario) => {
       it(`for: ${JSON.stringify(scenario.dto)}`, () => {
         const expectedErroneousField = Object.keys(scenario.expectedErrors);
         const expectedErroneousFieldCount = expectedErroneousField.length;

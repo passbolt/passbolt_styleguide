@@ -11,24 +11,26 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import React from "react";
 import ConfirmSaveAccountRecoverySettings from "./ConfirmSaveAccountRecoverySettings";
 import {
-  disabledPolicyProps, mandatoryPolicyPropsWithOrganisationKey,
-  optInPolicyPropsWithOrganisationKey, optOutPolicyPropsWithOrganisationKey
+  disabledPolicyProps,
+  mandatoryPolicyPropsWithOrganisationKey,
+  optInPolicyPropsWithOrganisationKey,
+  optOutPolicyPropsWithOrganisationKey,
 } from "./ConfirmSaveAccountRecoverySettings.test.data";
 
-
 export default {
-  title: 'Components/Administration/ConfirmSaveAccountRecoverySettings',
-  component: ConfirmSaveAccountRecoverySettings
+  title: "Components/Administration/ConfirmSaveAccountRecoverySettings",
+  component: ConfirmSaveAccountRecoverySettings,
 };
 
-const Template = args =>
-  <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <ConfirmSaveAccountRecoverySettings {...args} {...routerProps}/>}></Route>
-  </MemoryRouter>;
+const Template = (args) => (
+  <MemoryRouter initialEntries={["/"]}>
+    <Route component={(routerProps) => <ConfirmSaveAccountRecoverySettings {...args} {...routerProps} />}></Route>
+  </MemoryRouter>
+);
 
 export const Disabled = Template.bind({});
 Disabled.args = disabledPolicyProps();

@@ -12,9 +12,9 @@
  * @since         5.0.0
  */
 
-import React from 'react';
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {Trans, withTranslation} from "react-i18next";
+import React from "react";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 
 /**
@@ -49,7 +49,7 @@ class DisplayUserGpgInformationHelp extends React.Component {
    */
   get defaultState() {
     return {
-      gpgKeyInfo: null
+      gpgKeyInfo: null,
     };
   }
 
@@ -66,7 +66,7 @@ class DisplayUserGpgInformationHelp extends React.Component {
   async populate() {
     if (this.user) {
       const gpgKeyInfo = await this.fetchGpgkeyInfo();
-      await this.setState({gpgKeyInfo});
+      await this.setState({ gpgKeyInfo });
     }
   }
 
@@ -78,10 +78,9 @@ class DisplayUserGpgInformationHelp extends React.Component {
     const canVoid = this.user && this.state.gpgKeyInfo;
     if (mustPopulate) {
       const gpgKeyInfo = await this.fetchGpgkeyInfo();
-      await this.setState({gpgKeyInfo});
+      await this.setState({ gpgKeyInfo });
     } else if (canVoid) {
-      this.populateIfNeeded = () => {
-      };
+      this.populateIfNeeded = () => {};
     }
   }
 
@@ -89,11 +88,14 @@ class DisplayUserGpgInformationHelp extends React.Component {
    * Fetch the user key id
    */
   async fetchGpgkeyInfo() {
-    const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    const gpgkeyInfo = await this.props.context.port.request(
+      "passbolt.keyring.get-public-key-info-by-user",
+      this.user.id,
+    );
     // format the gpgkey info.
     const armoredKey = gpgkeyInfo.armored_key;
 
-    return {armoredKey};
+    return { armoredKey };
   }
 
   /**
@@ -118,12 +120,11 @@ class DisplayUserGpgInformationHelp extends React.Component {
   render() {
     return (
       <div className="sidebar-help-section">
-        <h3><Trans>Public key block</Trans></h3>
+        <h3>
+          <Trans>Public key block</Trans>
+        </h3>
         <div className="input textarea gpgkey" rel="publicKey">
-          <textarea
-            defaultValue={this.gpgKeyInfo.armoredKey}
-            className="fluid code"
-            readOnly={true}/>
+          <textarea defaultValue={this.gpgKeyInfo.armoredKey} className="fluid code" readOnly={true} />
         </div>
       </div>
     );
@@ -135,5 +136,4 @@ DisplayUserGpgInformationHelp.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(DisplayUserGpgInformationHelp));
-
+export default withAppContext(withTranslation("common")(DisplayUserGpgInformationHelp));

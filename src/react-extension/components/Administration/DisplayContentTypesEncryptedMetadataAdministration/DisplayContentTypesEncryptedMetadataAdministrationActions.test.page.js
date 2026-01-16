@@ -12,7 +12,7 @@
  * @since         4.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayContentTypesEncryptedMetadataAdministrationActions from "./DisplayContentTypesEncryptedMetadataAdministrationActions";
@@ -28,9 +28,9 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationActionsPa
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayContentTypesEncryptedMetadataAdministrationActions {...props}/>
+        <DisplayContentTypesEncryptedMetadataAdministrationActions {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,7 +38,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationActionsPa
    * Returns the workspace action
    */
   get workspaceAction() {
-    return this._page.container.querySelector('.actions-wrapper');
+    return this._page.container.querySelector(".actions-wrapper");
   }
 
   /**
@@ -52,7 +52,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationActionsPa
    * Returns the save button
    */
   get saveButton() {
-    return this._page.container.querySelector('button');
+    return this._page.container.querySelector("button");
   }
 
   /** Click on the save element */
@@ -62,11 +62,8 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationActionsPa
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 }
-
-

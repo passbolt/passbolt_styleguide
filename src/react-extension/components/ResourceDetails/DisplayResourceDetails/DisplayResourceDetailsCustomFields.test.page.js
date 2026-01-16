@@ -12,7 +12,7 @@
  * @since         5.3.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,9 @@ export default class DisplayResourceDetailsCustomFieldsPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourceDetailsCustomFields {...props}/>
+        <DisplayResourceDetailsCustomFields {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -45,63 +45,63 @@ export default class DisplayResourceDetailsCustomFieldsPage {
    * Return the page object of the title header
    */
   get title() {
-    return this._page.container.querySelector('.accordion-header button');
+    return this._page.container.querySelector(".accordion-header button");
   }
 
   /**
    * Returns the page object of custom fields section
    */
   get customFieldsSection() {
-    return this._page.container.querySelector('.accordion-content');
+    return this._page.container.querySelector(".accordion-content");
   }
 
   /**
    * Returns the information labels container
    */
   get informationLabels() {
-    return this._page.container.querySelector('.information-label');
+    return this._page.container.querySelector(".information-label");
   }
 
   /**
    * Returns the information values container
    */
   get informationValues() {
-    return this._page.container.querySelector('.information-value');
+    return this._page.container.querySelector(".information-value");
   }
 
   /**
    * Returns all custom field labels
    */
   get customFieldLabels() {
-    return this._page.container.querySelectorAll('.information-label .label');
+    return this._page.container.querySelectorAll(".information-label .label");
   }
 
   /**
    * Returns all custom field values
    */
   get customFieldValues() {
-    return this._page.container.querySelectorAll('.information-value .field-secret-value');
+    return this._page.container.querySelectorAll(".information-value .field-secret-value");
   }
 
   /**
    * Returns all preview buttons (eye icons)
    */
   get previewButtons() {
-    return this._page.container.querySelectorAll('.password-view');
+    return this._page.container.querySelectorAll(".password-view");
   }
 
   /**
    * Returns the "Show all" button
    */
   get showAllButton() {
-    return this._page.container.querySelector('#show-all-button');
+    return this._page.container.querySelector("#show-all-button");
   }
 
   /**
    * Returns the "Hide all" button
    */
   get hideAllButton() {
-    return this._page.container.querySelector('#hide-all-button');
+    return this._page.container.querySelector("#hide-all-button");
   }
 
   /**
@@ -152,7 +152,7 @@ export default class DisplayResourceDetailsCustomFieldsPage {
 
   /** Click on the component */
   async clickOn(component) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

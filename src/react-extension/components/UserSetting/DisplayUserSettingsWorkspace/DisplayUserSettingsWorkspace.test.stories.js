@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import DisplayUserSettingsWorkspace from "./DisplayUserSettingsWorkspace";
 import UserSettingsContextProvider from "../../../contexts/UserSettingsContext";
 import UserPassphrasePoliciesContextProvider from "../../../contexts/UserPassphrasePoliciesContext";
@@ -22,8 +22,7 @@ import TranslationProvider from "../../Common/Internationalisation/TranslationPr
 import ExtAppContextProvider from "../../../contexts/ExtAppContext";
 import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 import AccountRecoveryUserContextProvider from "../../../contexts/AccountRecoveryUserContext";
-import ExtAppAccountRecoveryUserService
-  from "../../../../shared/services/api/accountRecovery/ExtAppAccountRecoveryUserService";
+import ExtAppAccountRecoveryUserService from "../../../../shared/services/api/accountRecovery/ExtAppAccountRecoveryUserService";
 import PasswordPoliciesContext from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import MfaContextProvider from "../../../contexts/MFAContext";
 import WorkflowContextProvider from "../../../contexts/WorkflowContext";
@@ -37,58 +36,67 @@ import DisplayActionFeedbacks from "../../Common/ActionFeedback/DisplayActionFee
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import mockStorage from "../../../../../test/mocks/mockStorage";
 import mockPort from "../../../../../test/mocks/mockPort";
-import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
+import { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * UserSettingsWorkspace stories
  */
 export default {
-  title: 'Workspaces/Profile',
+  title: "Workspaces/Profile",
   component: DisplayUserSettingsWorkspace,
-  decorators: [(Story, {args}) =>
-    <MemoryRouter initialEntries={[args.initialEntries || '/app/settings']}>
-      <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-        <ExtAppContextProvider storage={args.storage} port={args.port}>
-          <RbacContextProvider>
-            <AccountRecoveryUserContextProvider accountRecoveryUserService={new ExtAppAccountRecoveryUserService(args.port)}>
-              <PasswordPoliciesContext>
-                <MfaContextProvider>
-                  <WorkflowContextProvider>
-                    <ActionFeedbackContextProvider>
-                      <DialogContextProvider>
-                        <AnnouncementContextProvider>
-                          <ContextualMenuContextProvider>
-                            <LoadingContextProvider>
-                              <ProgressContextProvider>
-                                { /* Action Feedback Management */}
-                                <DisplayActionFeedbacks/>
-                                <Route path={"/app/settings"}>
-                                  <UserSettingsContextProvider>
-                                    <UserPassphrasePoliciesContextProvider>
-                                      <ManageDialogs/>
-                                      <ManageAnnouncements/>
-                                      <div id="container" className="page settings">
-                                        <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
-                                          <Story {...args}/>
+  decorators: [
+    (Story, { args }) => (
+      <MemoryRouter initialEntries={[args.initialEntries || "/app/settings"]}>
+        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+          <ExtAppContextProvider storage={args.storage} port={args.port}>
+            <RbacContextProvider>
+              <AccountRecoveryUserContextProvider
+                accountRecoveryUserService={new ExtAppAccountRecoveryUserService(args.port)}
+              >
+                <PasswordPoliciesContext>
+                  <MfaContextProvider>
+                    <WorkflowContextProvider>
+                      <ActionFeedbackContextProvider>
+                        <DialogContextProvider>
+                          <AnnouncementContextProvider>
+                            <ContextualMenuContextProvider>
+                              <LoadingContextProvider>
+                                <ProgressContextProvider>
+                                  {/* Action Feedback Management */}
+                                  <DisplayActionFeedbacks />
+                                  <Route path={"/app/settings"}>
+                                    <UserSettingsContextProvider>
+                                      <UserPassphrasePoliciesContextProvider>
+                                        <ManageDialogs />
+                                        <ManageAnnouncements />
+                                        <div id="container" className="page settings">
+                                          <div
+                                            id="app"
+                                            className="app ready"
+                                            tabIndex="1000"
+                                            style={{ margin: "-1rem" }}
+                                          >
+                                            <Story {...args} />
+                                          </div>
                                         </div>
-                                      </div>
-                                    </UserPassphrasePoliciesContextProvider>
-                                  </UserSettingsContextProvider>
-                                </Route>
-                              </ProgressContextProvider>
-                            </LoadingContextProvider>
-                          </ContextualMenuContextProvider>
-                        </AnnouncementContextProvider>
-                      </DialogContextProvider>
-                    </ActionFeedbackContextProvider>
-                  </WorkflowContextProvider>
-                </MfaContextProvider>
-              </PasswordPoliciesContext>
-            </AccountRecoveryUserContextProvider>
-          </RbacContextProvider>
-        </ExtAppContextProvider>
-      </TranslationProvider>
-    </MemoryRouter>
+                                      </UserPassphrasePoliciesContextProvider>
+                                    </UserSettingsContextProvider>
+                                  </Route>
+                                </ProgressContextProvider>
+                              </LoadingContextProvider>
+                            </ContextualMenuContextProvider>
+                          </AnnouncementContextProvider>
+                        </DialogContextProvider>
+                      </ActionFeedbackContextProvider>
+                    </WorkflowContextProvider>
+                  </MfaContextProvider>
+                </PasswordPoliciesContext>
+              </AccountRecoveryUserContextProvider>
+            </RbacContextProvider>
+          </ExtAppContextProvider>
+        </TranslationProvider>
+      </MemoryRouter>
+    ),
   ],
 };
 
@@ -98,7 +106,7 @@ const port = mockPort(storage);
 export const proVersion = {
   args: {
     port: port,
-    storage: storage
+    storage: storage,
   },
 };
 
@@ -108,7 +116,7 @@ cePort.addRequestListener("passbolt.organization-settings.get", () => siteSettin
 export const ceVersion = {
   args: {
     port: cePort,
-    storage: ceStorage
+    storage: ceStorage,
   },
 };
 
@@ -116,7 +124,7 @@ export const UserProfile = {
   args: {
     port: port,
     storage: storage,
-    initialEntries: "/app/settings/profile"
+    initialEntries: "/app/settings/profile",
   },
 };
 
@@ -124,7 +132,7 @@ export const gpgKeyInformation = {
   args: {
     port: port,
     storage: storage,
-    initialEntries: "/app/settings/keys"
+    initialEntries: "/app/settings/keys",
   },
 };
 
@@ -132,7 +140,7 @@ export const changePassphrase = {
   args: {
     port: port,
     storage: storage,
-    initialEntries: "/app/settings/passphrase"
+    initialEntries: "/app/settings/passphrase",
   },
 };
 
@@ -140,15 +148,15 @@ export const accountRecovery = {
   args: {
     port: port,
     storage: storage,
-    initialEntries: "/app/settings/account-recovery"
-  }
+    initialEntries: "/app/settings/account-recovery",
+  },
 };
 
 export const securityToken = {
   args: {
     port: port,
     storage: storage,
-    initialEntries: "/app/settings/security-token"
+    initialEntries: "/app/settings/security-token",
   },
 };
 
@@ -156,14 +164,14 @@ export const theme = {
   args: {
     port: port,
     storage: storage,
-    initialEntries: "/app/settings/theme"
+    initialEntries: "/app/settings/theme",
   },
 };
 
 const transfertToMobileStorage = mockStorage();
 const _passbolt_data = transfertToMobileStorage.local.get(["_passbolt_data"])["_passbolt_data"];
 _passbolt_data.config["user.settings.trustedDomain"] = "https://storybook.passbolt.com";
-transfertToMobileStorage.local.set({_passbolt_data});
+transfertToMobileStorage.local.set({ _passbolt_data });
 
 export const mobile = {
   args: {
@@ -176,7 +184,9 @@ export const mobile = {
 const transferToMobilePortWithOperationError = mockPort(transfertToMobileStorage);
 const error = new Error("Something went wrong!");
 error.data = "Additionnal data error";
-transferToMobilePortWithOperationError.addRequestListener("passbolt.mobile.transfer.get", () => { throw error; });
+transferToMobilePortWithOperationError.addRequestListener("passbolt.mobile.transfer.get", () => {
+  throw error;
+});
 export const mobileError = {
   args: {
     port: transferToMobilePortWithOperationError,
@@ -186,7 +196,9 @@ export const mobileError = {
 };
 
 const transferToMobilePortWithOperationCanceled = mockPort(transfertToMobileStorage);
-transferToMobilePortWithOperationCanceled.addRequestListener("passbolt.mobile.transfer.get", () => ({status: "cancel"}));
+transferToMobilePortWithOperationCanceled.addRequestListener("passbolt.mobile.transfer.get", () => ({
+  status: "cancel",
+}));
 export const mobileCanceled = {
   args: {
     port: transferToMobilePortWithOperationCanceled,
@@ -199,6 +211,6 @@ export const desktop = {
   args: {
     port: port,
     storage: storage,
-    initialEntries: "/app/settings/desktop"
+    initialEntries: "/app/settings/desktop",
   },
 };

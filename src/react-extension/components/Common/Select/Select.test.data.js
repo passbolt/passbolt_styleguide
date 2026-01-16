@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {DirectionEnum} from "./Select";
+import { DirectionEnum } from "./Select";
 
 /**
  * Default props
@@ -22,7 +22,7 @@ export function defaultProps(props = {}) {
   const defaultProps = {
     items: items(),
     value: "0",
-    onChange: () => jest.fn()
+    onChange: () => jest.fn(),
   };
   return Object.assign(defaultProps, props || {});
 }
@@ -33,13 +33,13 @@ export function defaultProps(props = {}) {
  */
 export function items() {
   return [
-    {value: "0", label: "list item #1"},
-    {value: "1", label: "list item #2"},
-    {value: "2", label: "list item #3"},
-    {value: "3", label: "list item #4"},
-    {value: "4", label: "list item #5"},
-    {value: "5", label: "list item #6"},
-    {value: "6", label: "list item #7"},
+    { value: "0", label: "list item #1" },
+    { value: "1", label: "list item #2" },
+    { value: "2", label: "list item #3" },
+    { value: "3", label: "list item #4" },
+    { value: "4", label: "list item #5" },
+    { value: "5", label: "list item #6" },
+    { value: "6", label: "list item #7" },
   ];
 }
 /**
@@ -53,7 +53,7 @@ export function defaultAllProps() {
     className: "inline",
     disabled: true,
     search: true,
-    direction: DirectionEnum.top
+    direction: DirectionEnum.top,
   });
 }
 
@@ -64,13 +64,13 @@ export function defaultAllProps() {
 export function defaultInlineProps(props = {}) {
   const defaultProps = {
     items: [
-      {value: "0", label: "can read"},
-      {value: "1", label: "can update"},
-      {value: "2", label: "is owner"},
-      {value: "-1", label: "varies"},
+      { value: "0", label: "can read" },
+      { value: "1", label: "can update" },
+      { value: "2", label: "is owner" },
+      { value: "-1", label: "varies" },
     ],
     value: "0",
-    onChange: () => jest.fn()
+    onChange: () => jest.fn(),
   };
   return Object.assign(defaultProps, props || {});
 }
@@ -82,13 +82,13 @@ export function defaultInlineProps(props = {}) {
 export function defaultInlineLdapProps(props = {}) {
   const defaultProps = {
     items: [
-      {value: "0", label: "ldap://"},
-      {value: "1", label: "http://"},
-      {value: "2", label: "https://"},
-      {value: "3", label: "ftp://"},
+      { value: "0", label: "ldap://" },
+      { value: "1", label: "http://" },
+      { value: "2", label: "https://" },
+      { value: "3", label: "ftp://" },
     ],
     value: "0",
-    onChange: () => jest.fn()
+    onChange: () => jest.fn(),
   };
   return Object.assign(defaultProps, props || {});
 }
@@ -102,6 +102,3 @@ export function defaultPropsWithSearch(props = {}) {
   _props.search = true;
   return Object.assign(_props, props || {});
 }
-
-
-

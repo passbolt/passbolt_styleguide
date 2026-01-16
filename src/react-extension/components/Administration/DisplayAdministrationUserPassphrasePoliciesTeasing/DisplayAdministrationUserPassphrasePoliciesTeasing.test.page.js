@@ -12,7 +12,7 @@
  * @since         5.5.0
  */
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationUserPassphrasePoliciesTeasing from "./DisplayAdministrationUserPassphrasePoliciesTeasing";
@@ -30,10 +30,10 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <DisplayAdministrationUserPassphrasePoliciesTeasing {...props}/>
+          <DisplayAdministrationUserPassphrasePoliciesTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -42,7 +42,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
    * @returns {HTMLElement}
    */
   get userPassphrasePolicies() {
-    return this._page.container.querySelector('.user-passphrase-policies-settings-teasing');
+    return this._page.container.querySelector(".user-passphrase-policies-settings-teasing");
   }
 
   /**
@@ -50,7 +50,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this._page.container.querySelector('#user-passphrase-policies-title').textContent;
+    return this._page.container.querySelector("#user-passphrase-policies-title").textContent;
   }
 
   /**
@@ -58,7 +58,8 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
    * @returns {HTMLElement}
    */
   get userPassphrasePolicyFirstLine() {
-    return this._page.container.querySelector('.user-passphrase-policies-settings-teasing .main-content > p').textContent;
+    return this._page.container.querySelector(".user-passphrase-policies-settings-teasing .main-content > p")
+      .textContent;
   }
 
   /**
@@ -66,7 +67,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help-section');
+    return this._page.container.querySelector(".sidebar-help-section");
   }
 
   /**
@@ -74,7 +75,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBoxTitle() {
-    return this.helpBox.querySelector('h3').textContent;
+    return this.helpBox.querySelector("h3").textContent;
   }
 
   /**
@@ -82,7 +83,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBoxDescription() {
-    return this.helpBox.querySelector('p').textContent;
+    return this.helpBox.querySelector("p").textContent;
   }
 
   /**
@@ -90,7 +91,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('.button');
+    return this.helpBox.querySelector(".button");
   }
 
   /**
@@ -105,7 +106,9 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
    * Returns all li elements
    */
   get userPassphrasePoliciesDescription() {
-    return this._page.container.querySelectorAll(".user-passphrase-policies-info > .user-passphrase-policies-description > li");
+    return this._page.container.querySelectorAll(
+      ".user-passphrase-policies-info > .user-passphrase-policies-description > li",
+    );
   }
 
   /**
@@ -129,7 +132,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

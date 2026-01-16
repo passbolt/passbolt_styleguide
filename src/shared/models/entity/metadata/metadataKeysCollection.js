@@ -45,8 +45,8 @@ class MetadataKeysCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": MetadataKeyEntity.getSchema(),
+      type: "array",
+      items: MetadataKeyEntity.getSchema(),
     };
   }
 
@@ -58,8 +58,8 @@ class MetadataKeysCollection extends EntityV2Collection {
    * @throws {EntityValidationError} If a metadata key already exists with the same fingerprint.
    */
   validateBuildRules(item, options = {}) {
-    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
-    this.assertNotExist("fingerprint", item._props.fingerprint, {haystackSet: options?.uniqueFingerprintsSetCache});
+    this.assertNotExist("id", item._props.id, { haystackSet: options?.uniqueIdsSetCache });
+    this.assertNotExist("fingerprint", item._props.fingerprint, { haystackSet: options?.uniqueFingerprintsSetCache });
   }
 
   /**
@@ -108,7 +108,7 @@ class MetadataKeysCollection extends EntityV2Collection {
    * @returns {array}
    */
   toDto(contains = {}) {
-    return this._items.map(entity => entity.toDto(contains));
+    return this._items.map((entity) => entity.toDto(contains));
   }
 
   /**
@@ -116,7 +116,7 @@ class MetadataKeysCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasDecryptedKeys() {
-    return this._items.some(metadataKey => metadataKey.metadataPrivateKeys?.hasDecryptedPrivateKeys());
+    return this._items.some((metadataKey) => metadataKey.metadataPrivateKeys?.hasDecryptedPrivateKeys());
   }
 
   /**
@@ -124,14 +124,14 @@ class MetadataKeysCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasEncryptedKeys() {
-    return this._items.some(metadataKey => metadataKey.metadataPrivateKeys?.hasEncryptedPrivateKeys());
+    return this._items.some((metadataKey) => metadataKey.metadataPrivateKeys?.hasEncryptedPrivateKeys());
   }
 
   /**
    * Filter out the resources which metadata is encrypted.
    */
   filterOutMissingMetadataPrivateKeys() {
-    this.filterByCallback(metadataKey => metadataKey.metadataPrivateKeys?.length);
+    this.filterByCallback((metadataKey) => metadataKey.metadataPrivateKeys?.length);
   }
 
   /*
@@ -146,15 +146,15 @@ class MetadataKeysCollection extends EntityV2Collection {
   pushMany(data, entityOptions = {}, options = {}) {
     const uniqueIdsSetCache = new Set(this.extract("id"));
     const uniqueFingerprintsSetCache = new Set(this.extract("fingerprint"));
-    const onItemPushed = item => {
+    const onItemPushed = (item) => {
       uniqueIdsSetCache.add(item._props.id);
       uniqueFingerprintsSetCache.add(item._props.fingerprint);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache, uniqueFingerprintsSetCache},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueIdsSetCache, uniqueFingerprintsSetCache },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);

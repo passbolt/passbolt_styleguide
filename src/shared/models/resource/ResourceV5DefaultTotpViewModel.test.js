@@ -14,14 +14,18 @@
 
 import EntitySchema from "../entity/abstract/entitySchema";
 import ResourceV5DefaultTotpViewModel from "./ResourceV5DefaultTotpViewModel";
-import {v4 as uuid} from "uuid";
-import {defaultResourcePasswordDescriptionTotpViewModelDto, defaultResourceViewModelDto, minimalResourceViewModelDto} from "./resourceViewModel.test.data";
-import {TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP} from "../entity/resourceType/resourceTypeEntity.test.data";
-import {DateTime} from "luxon";
-import {defaultResourceDto} from "../entity/resource/resourceEntity.test.data";
+import { v4 as uuid } from "uuid";
+import {
+  defaultResourcePasswordDescriptionTotpViewModelDto,
+  defaultResourceViewModelDto,
+  minimalResourceViewModelDto,
+} from "./resourceViewModel.test.data";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP } from "../entity/resourceType/resourceTypeEntity.test.data";
+import { DateTime } from "luxon";
+import { defaultResourceDto } from "../entity/resource/resourceEntity.test.data";
 import ResourceViewModel from "./ResourceViewModel";
-import {defaultTotpViewModelDto} from "../entity/totp/totpDto.test.data";
-import {SECRET_DATA_OBJECT_TYPE} from "../entity/secretData/secretDataEntity";
+import { defaultTotpViewModelDto } from "../entity/totp/totpDto.test.data";
+import { SECRET_DATA_OBJECT_TYPE } from "../entity/secretData/secretDataEntity";
 
 describe("ResourceV5DefaultTotpViewModel", () => {
   describe("::createFromEntity", () => {
@@ -90,7 +94,7 @@ describe("ResourceV5DefaultTotpViewModel", () => {
         description: "another description as well",
         totp: defaultTotpViewModelDto({
           secret_key: "a new totp secret key",
-        })
+        }),
       };
 
       const newViewModel = viewModel.updateSecret(secretDto);
@@ -171,7 +175,7 @@ describe("ResourceV5DefaultTotpViewModel", () => {
 
     it("should return a dto with an id if it is set", () => {
       expect.assertions(1);
-      const dto = minimalResourceViewModelDto({id: uuid()});
+      const dto = minimalResourceViewModelDto({ id: uuid() });
       const viewModel = new ResourceV5DefaultTotpViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
@@ -280,7 +284,7 @@ describe("ResourceV5DefaultTotpViewModel", () => {
         password: "test",
         description: "a description",
         totp: defaultTotpViewModelDto({
-          secret_key: "it's dangerous to go alone"
+          secret_key: "it's dangerous to go alone",
         }),
       };
       const otherDto = {

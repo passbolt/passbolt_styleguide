@@ -14,17 +14,17 @@
 
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 import {
   resourceTypesCollectionDto,
   resourceTypesV4CollectionDto,
-  resourceTypesV5CollectionDto
+  resourceTypesV5CollectionDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {
   defaultMetadataTypesSettingsV4Dto,
   defaultMetadataTypesSettingsV50FreshDto,
-  defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
+  defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto,
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import {
   resourceTypePasswordAndDescriptionDto,
@@ -34,12 +34,10 @@ import {
   resourceTypeV5DefaultDto,
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5PasswordStringDto,
-  resourceTypeV5TotpDto
+  resourceTypeV5TotpDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default props
@@ -51,12 +49,14 @@ export const defaultProps = (data = {}) => ({
   ...data,
   context: defaultAppContext(data?.context),
   resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    ...data?.resourceWorkspaceContext
+    ...data?.resourceWorkspaceContext,
   }),
-  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
-    default_resource_types: "v5",
-    ...data?.metadataTypeSettings
-  })),
+  metadataTypeSettings: new MetadataTypesSettingsEntity(
+    defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
+      default_resource_types: "v5",
+      ...data?.metadataTypeSettings,
+    }),
+  ),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto(data?.metadataKeysSettings)),
   dialogContext: {
     open: jest.fn(),
@@ -67,68 +67,81 @@ export const defaultProps = (data = {}) => ({
  * Props with only v5 content types available
  * @returns {object}
  */
-export const onlyV5ContentTypesProps = (data = {}) => defaultProps({
-  resourceTypes: new ResourceTypesCollection(resourceTypesV5CollectionDto()),
-  ...data,
-  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto(data?.metadataTypeSettings)),
-});
+export const onlyV5ContentTypesProps = (data = {}) =>
+  defaultProps({
+    resourceTypes: new ResourceTypesCollection(resourceTypesV5CollectionDto()),
+    ...data,
+    metadataTypeSettings: new MetadataTypesSettingsEntity(
+      defaultMetadataTypesSettingsV50FreshDto(data?.metadataTypeSettings),
+    ),
+  });
 
 /**
  * Props with only v5 content types available
  * @returns {object}
  */
-export const onlyV4ContentTypesProps = (data = {}) => defaultProps({
-  resourceTypes: new ResourceTypesCollection(resourceTypesV4CollectionDto()),
-  ...data,
-  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings)),
-});
+export const onlyV4ContentTypesProps = (data = {}) =>
+  defaultProps({
+    resourceTypes: new ResourceTypesCollection(resourceTypesV4CollectionDto()),
+    ...data,
+    metadataTypeSettings: new MetadataTypesSettingsEntity(
+      defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings),
+    ),
+  });
 
 /**
  * Props with full v5 content types and some v4 available
  * @returns {object}
  */
-export const fullV5AndPartialV4ContentTypes = (data = {}) => defaultProps({
-  resourceTypes: new ResourceTypesCollection([
-    resourceTypePasswordStringDto(),
-    resourceTypePasswordAndDescriptionDto(),
-    resourceTypeV5DefaultDto(),
-    resourceTypeV5PasswordStringDto(),
-    resourceTypeV5DefaultTotpDto(),
-    resourceTypeV5TotpDto()
-  ]),
-  ...data,
-  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings)),
-});
+export const fullV5AndPartialV4ContentTypes = (data = {}) =>
+  defaultProps({
+    resourceTypes: new ResourceTypesCollection([
+      resourceTypePasswordStringDto(),
+      resourceTypePasswordAndDescriptionDto(),
+      resourceTypeV5DefaultDto(),
+      resourceTypeV5PasswordStringDto(),
+      resourceTypeV5DefaultTotpDto(),
+      resourceTypeV5TotpDto(),
+    ]),
+    ...data,
+    metadataTypeSettings: new MetadataTypesSettingsEntity(
+      defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings),
+    ),
+  });
 
 /**
  * Props with full v4 content types and some v5 available
  * @returns {object}
  */
-export const fullV4AndPartialV5ContentTypes = (data = {}) => defaultProps({
-  resourceTypes: new ResourceTypesCollection([
-    resourceTypePasswordStringDto(),
-    resourceTypePasswordAndDescriptionDto(),
-    resourceTypePasswordDescriptionTotpDto(),
-    resourceTypeTotpDto(),
-    resourceTypeV5TotpDto()
-  ]),
-  ...data,
-  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings)),
-});
+export const fullV4AndPartialV5ContentTypes = (data = {}) =>
+  defaultProps({
+    resourceTypes: new ResourceTypesCollection([
+      resourceTypePasswordStringDto(),
+      resourceTypePasswordAndDescriptionDto(),
+      resourceTypePasswordDescriptionTotpDto(),
+      resourceTypeTotpDto(),
+      resourceTypeV5TotpDto(),
+    ]),
+    ...data,
+    metadataTypeSettings: new MetadataTypesSettingsEntity(
+      defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings),
+    ),
+  });
 
-export const onlyTotpV5ContentTypes = (data = {}) => defaultProps({
-  resourceTypes: new ResourceTypesCollection([
-    resourceTypeV5TotpDto()
-  ]),
-  ...data,
-  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings)),
-});
+export const onlyTotpV5ContentTypes = (data = {}) =>
+  defaultProps({
+    resourceTypes: new ResourceTypesCollection([resourceTypeV5TotpDto()]),
+    ...data,
+    metadataTypeSettings: new MetadataTypesSettingsEntity(
+      defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings),
+    ),
+  });
 
-export const onlyPasswordV5ContentTypes = (data = {}) => defaultProps({
-  resourceTypes: new ResourceTypesCollection([
-    resourceTypeV5DefaultDto(),
-    resourceTypeV5PasswordStringDto(),
-  ]),
-  ...data,
-  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings)),
-});
+export const onlyPasswordV5ContentTypes = (data = {}) =>
+  defaultProps({
+    resourceTypes: new ResourceTypesCollection([resourceTypeV5DefaultDto(), resourceTypeV5PasswordStringDto()]),
+    ...data,
+    metadataTypeSettings: new MetadataTypesSettingsEntity(
+      defaultMetadataTypesSettingsV4Dto(data?.metadataTypeSettings),
+    ),
+  });

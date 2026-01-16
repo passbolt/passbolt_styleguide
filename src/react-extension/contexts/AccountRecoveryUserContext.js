@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
 
 export const AccountRecoveryUserContext = React.createContext({
   accountRecoveryOrganizationPolicy: null, // The current organization policy
@@ -33,11 +33,11 @@ export const AccountRecoveryUserContext = React.createContext({
   isReady: () => {},
 });
 
-const ACCOUNT_RECOVERY_STATUS_PENDING = 'pending';
+const ACCOUNT_RECOVERY_STATUS_PENDING = "pending";
 const ACCOUNT_RECOVERY_POLICY_MANDATORY = "mandatory";
 const ACCOUNT_RECOVERY_POLICY_OPT_OUT = "opt-out";
-const ACCOUNT_RECOVERY_POLICY_DISABLED = 'disabled';
-const ACCOUNT_RECOVERY_STATUS_APPROVED = 'approved';
+const ACCOUNT_RECOVERY_POLICY_DISABLED = "disabled";
+const ACCOUNT_RECOVERY_STATUS_APPROVED = "approved";
 /**
  * The related context provider
  */
@@ -96,7 +96,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
    * Find the account recovery policy
    */
   async findAccountRecoveryPolicy() {
-    if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
+    if (!this.props.context.siteSettings.canIUse("accountRecovery")) {
       return;
     }
 
@@ -105,12 +105,14 @@ export class AccountRecoveryUserContextProvider extends React.Component {
       return;
     }
 
-    const accountRecoveryOrganizationPolicy = await this.props.accountRecoveryUserService.getOrganizationAccountRecoverySettings();
-    const status = loggedInUser.account_recovery_user_setting?.status || AccountRecoveryUserContextProvider.STATUS_PENDING;
+    const accountRecoveryOrganizationPolicy =
+      await this.props.accountRecoveryUserService.getOrganizationAccountRecoverySettings();
+    const status =
+      loggedInUser.account_recovery_user_setting?.status || AccountRecoveryUserContextProvider.STATUS_PENDING;
     this.setState({
       accountRecoveryOrganizationPolicy,
       status,
-      isDataLoaded: true
+      isDataLoaded: true,
     });
   }
 
@@ -167,7 +169,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
    * @param {string} status
    */
   setUserAccountRecoveryStatus(status) {
-    this.setState({status: status});
+    this.setState({ status: status });
   }
 
   /**
@@ -182,8 +184,10 @@ export class AccountRecoveryUserContextProvider extends React.Component {
     }
 
     const policy = this.getPolicy();
-    return this.state.status === AccountRecoveryUserContextProvider.STATUS_PENDING
-      && policy !== AccountRecoveryUserContextProvider.POLICY_DISABLED;
+    return (
+      this.state.status === AccountRecoveryUserContextProvider.STATUS_PENDING &&
+      policy !== AccountRecoveryUserContextProvider.POLICY_DISABLED
+    );
   }
 
   /**
@@ -231,7 +235,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
 AccountRecoveryUserContextProvider.propTypes = {
   context: PropTypes.any.isRequired, // The application context
   children: PropTypes.any, // The children components
-  accountRecoveryUserService: PropTypes.object.isRequired // The service responsible to fetch the account recovery user data
+  accountRecoveryUserService: PropTypes.object.isRequired, // The service responsible to fetch the account recovery user data
 };
 export default withAppContext(AccountRecoveryUserContextProvider);
 
@@ -244,9 +248,9 @@ export function withAccountRecovery(WrappedComponent) {
     render() {
       return (
         <AccountRecoveryUserContext.Consumer>
-          {
-            accountRecoveryContext => <WrappedComponent accountRecoveryContext={accountRecoveryContext} {...this.props} />
-          }
+          {(accountRecoveryContext) => (
+            <WrappedComponent accountRecoveryContext={accountRecoveryContext} {...this.props} />
+          )}
         </AccountRecoveryUserContext.Consumer>
       );
     }

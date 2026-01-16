@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.1.0
  */
-import React, {Component} from "react";
-import {CirclePicker} from "react-color";
+import React, { Component } from "react";
+import { CirclePicker } from "react-color";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withUserSettings } from "../../../contexts/UserSettingsContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
-import {Trans, withTranslation} from "react-i18next";
-import {isValidSecurityToken} from "../../../../shared/utils/assertions";
+import { Trans, withTranslation } from "react-i18next";
+import { isValidSecurityToken } from "../../../../shared/utils/assertions";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import InfoSVG from "../../../../img/svg/info.svg";
 
@@ -53,17 +53,17 @@ class ChangeUserSecurityToken extends Component {
    */
   get defaultState() {
     return {
-      background: '', // The token color
-      code: '', // The token code
+      background: "", // The token color
+      code: "", // The token code
       actions: {
-        processing: false // True if one's processing passphrase
+        processing: false, // True if one's processing passphrase
       },
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyCode: false, // True if the token code is empty
         lengthCode: false, // True if the token code length is > 3
-        invalidRegex: false // True if the regex is not valid
-      }
+        invalidRegex: false, // True if the regex is not valid
+      },
     };
   }
 
@@ -73,7 +73,7 @@ class ChangeUserSecurityToken extends Component {
   getSecurityTokenFromLoggedInUser() {
     const background = this.props.context.userSettings.getSecurityToken().backgroundColor;
     const code = this.props.context.userSettings.getSecurityToken().code;
-    this.setState({background, code});
+    this.setState({ background, code });
   }
 
   /**
@@ -81,9 +81,18 @@ class ChangeUserSecurityToken extends Component {
    */
   get defaultColors() {
     return [
-      '#f44336', '#9c27b0', '#3f51b5', '#03a9f4',
-      '#009688', '#8bc34a', '#ffeb3b', '#ff9800',
-      '#795548', '#607d8b', '#000000', '#f6f6f6'
+      "#f44336",
+      "#9c27b0",
+      "#3f51b5",
+      "#03a9f4",
+      "#009688",
+      "#8bc34a",
+      "#ffeb3b",
+      "#ff9800",
+      "#795548",
+      "#607d8b",
+      "#000000",
+      "#f6f6f6",
     ];
   }
 
@@ -95,8 +104,8 @@ class ChangeUserSecurityToken extends Component {
     const r = parseInt(c[0], 16);
     const g = parseInt(c[1], 16);
     const b = parseInt(c[2], 16);
-    const l = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-    return l > 125 ? '#000000' : '#ffffff';
+    const l = (r * 299 + g * 587 + b * 114) / 1000;
+    return l > 125 ? "#000000" : "#ffffff";
   }
 
   /**
@@ -107,7 +116,7 @@ class ChangeUserSecurityToken extends Component {
     if (this.state.background) {
       return {
         backgroundColor: this.state.background,
-        color: this.textColor
+        color: this.textColor,
       };
     } else {
       return undefined;
@@ -125,7 +134,7 @@ class ChangeUserSecurityToken extends Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    return Object.values(this.state.errors).every(value => !value);
+    return Object.values(this.state.errors).every((value) => !value);
   }
 
   /**
@@ -205,11 +214,13 @@ class ChangeUserSecurityToken extends Component {
     const securityTokenDto = {
       color: this.state.background,
       textcolor: this.textColor,
-      code: this.state.code
+      code: this.state.code,
     };
     try {
       await this.props.userSettingsContext.onUpdateSecurityTokenRequested(securityTokenDto);
-      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The security token has been updated successfully"));
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.props.t("The security token has been updated successfully"),
+      );
       await this.toggleProcessing();
     } catch (error) {
       await this.onSaveFailure(error);
@@ -222,7 +233,7 @@ class ChangeUserSecurityToken extends Component {
    */
   async onSaveFailure(error) {
     await this.toggleProcessing();
-    const ErrorDialogProps = {error: error};
+    const ErrorDialogProps = { error: error };
     this.props.dialogContext.open(NotifyError, ErrorDialogProps);
   }
 
@@ -232,7 +243,7 @@ class ChangeUserSecurityToken extends Component {
    */
   async selectColor(color) {
     if (color.hex !== this.state.background) {
-      await this.setState({background: color.hex});
+      await this.setState({ background: color.hex });
     }
   }
 
@@ -241,7 +252,7 @@ class ChangeUserSecurityToken extends Component {
    * @param code A code
    */
   async selectCode(code) {
-    await this.setState({code});
+    await this.setState({ code });
   }
 
   /**
@@ -263,7 +274,7 @@ class ChangeUserSecurityToken extends Component {
     do {
       const number = parseInt(SecretComplexity.generate(3, ["digit"])) % this.defaultColors.length;
       color = {
-        hex: this.defaultColors[number]
+        hex: this.defaultColors[number],
       };
     } while (color.hex === this.state.background);
     await this.selectColor(color);
@@ -273,34 +284,34 @@ class ChangeUserSecurityToken extends Component {
    * Validate the security token data
    */
   async validate() {
-    const {code} = this.state;
+    const { code } = this.state;
 
-    const emptyCode = code.trim() === '';
+    const emptyCode = code.trim() === "";
     if (emptyCode) {
-      await this.setState({hasBeenValidated: true, errors: {emptyCode}});
+      await this.setState({ hasBeenValidated: true, errors: { emptyCode } });
       return;
     }
 
     const lengthCode = code.trim().length !== 3;
     if (lengthCode) {
-      await this.setState({hasBeenValidated: true, errors: {lengthCode}});
+      await this.setState({ hasBeenValidated: true, errors: { lengthCode } });
       return;
     }
 
     const invalidRegex = !isValidSecurityToken(code.trim());
     if (invalidRegex) {
-      await this.setState({hasBeenValidated: true, errors: {invalidRegex}});
+      await this.setState({ hasBeenValidated: true, errors: { invalidRegex } });
       return;
     }
 
-    await this.setState({hasBeenValidated: true, errors: {}});
+    await this.setState({ hasBeenValidated: true, errors: {} });
   }
 
   /**
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({actions: {processing: !this.state.actions.processing}});
+    await this.setState({ actions: { processing: !this.state.actions.processing } });
   }
 
   /**
@@ -308,30 +319,34 @@ class ChangeUserSecurityToken extends Component {
    * @return {bool}
    */
   get hasErrors() {
-    return this.state.errors
-      && (this.state.errors.emptyCode
-        || this.state.errors.lengthCode
-        || this.state.errors.invalidRegex);
+    return (
+      this.state.errors &&
+      (this.state.errors.emptyCode || this.state.errors.lengthCode || this.state.errors.invalidRegex)
+    );
   }
 
   /**
    * Render the component
    */
   render() {
-    const processingClassName = this.isProcessing ? 'processing' : '';
+    const processingClassName = this.isProcessing ? "processing" : "";
     return (
       <>
         <div className="main-column profile-choose-security-token">
           <div className="main-content">
             <form onSubmit={this.handleSubmit}>
-              <h3><Trans>Update the Security Token</Trans></h3>
-              <div className={`input-security-token input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
+              <h3>
+                <Trans>Update the Security Token</Trans>
+              </h3>
+              <div
+                className={`input-security-token input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}
+              >
                 <div className="label-required-inline">
                   <label htmlFor="security-token-text">
                     <Trans>Security token</Trans>
                   </label>
                   <Tooltip message={this.props.t("Only alphanumeric, dash and underscore characters are accepted.")}>
-                    <InfoSVG className="baseline svg-icon"/>
+                    <InfoSVG className="baseline svg-icon" />
                   </Tooltip>
                 </div>
                 <input
@@ -345,9 +360,10 @@ class ChangeUserSecurityToken extends Component {
                   style={this.securityTokenStyle}
                   value={this.state.code}
                   onChange={this.handleChangeCode}
-                  disabled={!this.areActionsAllowed}/>
-                <input type="hidden" id="security-token-background-color" name="security-token-background-color"/>
-                <input type="hidden" id="security-token-text-color" name="security-token-text-color"/>
+                  disabled={!this.areActionsAllowed}
+                />
+                <input type="hidden" id="security-token-background-color" name="security-token-background-color" />
+                <input type="hidden" id="security-token-text-color" name="security-token-text-color" />
                 <CirclePicker
                   color={this.state.background}
                   onChange={this.handleSelectColor}
@@ -361,29 +377,43 @@ class ChangeUserSecurityToken extends Component {
                     type="button"
                     className={`randomize-button link ${this.isProcessing ? "disabled" : ""}`}
                     disabled={this.isProcessing}
-                    onClick={this.handleRandomize}>
+                    onClick={this.handleRandomize}
+                  >
                     <Trans>Randomize</Trans>
                   </button>
                 </div>
               </div>
-              {this.state.hasBeenValidated &&
-              <div className="input text">
-                {this.state.errors.emptyCode &&
-                  <div className="empty-code error-message"><Trans>The security token code should not be empty.</Trans></div>
-                }
-                {this.state.errors.lengthCode &&
-                  <div className="not-good-length-code error-message"><Trans>The security token code should be 3 characters long.</Trans></div>
-                }
-                {this.state.errors.invalidRegex &&
-                  <div className="not-good-regex-code error-message"><Trans>The security token code should contains only alphanumeric, dash and underscore characters.</Trans></div>
-                }
-              </div>
-              }
+              {this.state.hasBeenValidated && (
+                <div className="input text">
+                  {this.state.errors.emptyCode && (
+                    <div className="empty-code error-message">
+                      <Trans>The security token code should not be empty.</Trans>
+                    </div>
+                  )}
+                  {this.state.errors.lengthCode && (
+                    <div className="not-good-length-code error-message">
+                      <Trans>The security token code should be 3 characters long.</Trans>
+                    </div>
+                  )}
+                  {this.state.errors.invalidRegex && (
+                    <div className="not-good-regex-code error-message">
+                      <Trans>
+                        The security token code should contains only alphanumeric, dash and underscore characters.
+                      </Trans>
+                    </div>
+                  )}
+                </div>
+              )}
             </form>
           </div>
         </div>
         <div className="actions-wrapper">
-          <button className={`button primary form ${processingClassName}`} type="submit" disabled={this.isProcessing} onClick={this.handleSubmit}>
+          <button
+            className={`button primary form ${processingClassName}`}
+            type="submit"
+            disabled={this.isProcessing}
+            onClick={this.handleSubmit}
+          >
             <Trans>Save</Trans>
           </button>
         </div>
@@ -400,4 +430,6 @@ ChangeUserSecurityToken.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withActionFeedback(withUserSettings(withTranslation('common')(ChangeUserSecurityToken)))));
+export default withAppContext(
+  withDialog(withActionFeedback(withUserSettings(withTranslation("common")(ChangeUserSecurityToken)))),
+);

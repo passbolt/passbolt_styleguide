@@ -12,13 +12,12 @@
  * @since         3.3.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import { BrowserRouter as Router } from "react-router-dom";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import GeneratePasswordPage from "./GeneratePasswordPage";
-import {waitForTrue} from "../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../test/utils/waitFor";
 
 /**
  * The GeneratePasswordPage component represented as a page
@@ -32,10 +31,10 @@ export default class GeneratePasswordTestPage {
     this._page = render(
       <Router>
         <MockTranslationProvider>
-          <GeneratePasswordPage.WrappedComponent {...props}/>
+          <GeneratePasswordPage.WrappedComponent {...props} />
         </MockTranslationProvider>
       </Router>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -43,42 +42,42 @@ export default class GeneratePasswordTestPage {
    * Get the title
    */
   get title() {
-    return this._page.container.querySelector('.primary-action-title').textContent;
+    return this._page.container.querySelector(".primary-action-title").textContent;
   }
 
   /**
    * Returns the password value
    */
   get password() {
-    return this._page.container.querySelector('.input.password input').value;
+    return this._page.container.querySelector(".input.password input").value;
   }
 
   /**
    * Returns the generate password button
    */
   get generatePasswordButton() {
-    return this._page.container.querySelector('a.password-generate');
+    return this._page.container.querySelector("a.password-generate");
   }
 
   /**
    * Returns the copy password button
    */
   get copyPasswordButton() {
-    return this._page.container.querySelector('a.copy-to-clipboard');
+    return this._page.container.querySelector("a.copy-to-clipboard");
   }
 
   /**
    * Returns the complexity of a password
    */
   get complexityText() {
-    return this._page.container.querySelector('.complexity-text').textContent;
+    return this._page.container.querySelector(".complexity-text").textContent;
   }
 
   /**
    * Returns the active tab
    */
   get activeTab() {
-    return this._page.container.querySelector('.tab.active button').textContent;
+    return this._page.container.querySelector(".tab.active button").textContent;
   }
 
   /**
@@ -87,14 +86,14 @@ export default class GeneratePasswordTestPage {
    * @returns {*}
    */
   tab(index) {
-    return this._page.container.querySelectorAll('.tab')[index - 1].querySelector('.tab-link');
+    return this._page.container.querySelectorAll(".tab")[index - 1].querySelector(".tab-link");
   }
 
   /**
    * Returns true it one can submit the apply operation
    */
   get canSubmit() {
-    return this._page.container.querySelector('button[type="submit"]').getAttribute('disabled') !== '';
+    return this._page.container.querySelector('button[type="submit"]').getAttribute("disabled") !== "";
   }
 
   /**
@@ -108,7 +107,9 @@ export default class GeneratePasswordTestPage {
    * Returns all the mask buttons.
    */
   get maskButtons() {
-    return this._page.container.querySelectorAll('label[for="configure-password-generator-form-masks"] + div .button-toggle');
+    return this._page.container.querySelectorAll(
+      'label[for="configure-password-generator-form-masks"] + div .button-toggle',
+    );
   }
 
   /**
@@ -130,7 +131,7 @@ export default class GeneratePasswordTestPage {
    * @returns {HTMLElement}
    */
   get passwordLengthInput() {
-    return this._page.container.querySelector('#configure-password-generator-form-length');
+    return this._page.container.querySelector("#configure-password-generator-form-length");
   }
 
   /**
@@ -138,7 +139,7 @@ export default class GeneratePasswordTestPage {
    * @returns {HTMLElement}
    */
   get passphraseLengthInput() {
-    return this._page.container.querySelector('#configure-passphrase-generator-form-word-count');
+    return this._page.container.querySelector("#configure-passphrase-generator-form-word-count");
   }
 
   /**
@@ -170,7 +171,9 @@ export default class GeneratePasswordTestPage {
    * @returns {NodeList}
    */
   get wordCaseOptions() {
-    return this._page.container.querySelectorAll("#configure-passphrase-generator-form-words-case .select-items .items li");
+    return this._page.container.querySelectorAll(
+      "#configure-passphrase-generator-form-words-case .select-items .items li",
+    );
   }
 
   /**
@@ -178,7 +181,7 @@ export default class GeneratePasswordTestPage {
    * @param {HTMLElement} element
    */
   async clickOn(element, inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     return waitFor(inProgressFn);
   }
@@ -226,7 +229,7 @@ export default class GeneratePasswordTestPage {
    */
   async setPasswordLength(passwordLength) {
     const element = this.passwordLengthInput;
-    fireEvent.input(element, {target: {value: passwordLength}});
+    fireEvent.input(element, { target: { value: passwordLength } });
     await waitForTrue(() => element.value.toString() === passwordLength.toString());
   }
 
@@ -240,9 +243,9 @@ export default class GeneratePasswordTestPage {
     for (let i = 0; i < fieldNames.length; i++) {
       const field = this[fieldNames[i]];
       const targetState = masksOptions[fieldNames[i]];
-      if (targetState !== field.classList.contains('selected')) {
-        fireEvent.click(field, {button: 0});
-        await waitForTrue(() => targetState === field.classList.contains('selected'));
+      if (targetState !== field.classList.contains("selected")) {
+        fireEvent.click(field, { button: 0 });
+        await waitForTrue(() => targetState === field.classList.contains("selected"));
       }
     }
   }
@@ -262,7 +265,7 @@ export default class GeneratePasswordTestPage {
    */
   async setPassphraseLength(wordsCounts) {
     const element = this.passphraseLengthInput;
-    fireEvent.input(element, {target: {value: wordsCounts}});
+    fireEvent.input(element, { target: { value: wordsCounts } });
     await waitForTrue(() => element.value.toString() === wordsCounts.toString());
   }
 
@@ -273,7 +276,7 @@ export default class GeneratePasswordTestPage {
    */
   async setWordSeparator(wordsSeparator) {
     const element = this.passphraseWordsSeparatorInput;
-    fireEvent.input(element, {target: {value: wordsSeparator}});
+    fireEvent.input(element, { target: { value: wordsSeparator } });
     await waitForTrue(() => element.value === wordsSeparator);
   }
 

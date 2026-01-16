@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,8 +12,7 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -30,9 +28,9 @@ export default class PasswordSidebarDescriptionSectionPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourceDetailsDescription  {...props}/>
+        <DisplayResourceDetailsDescription {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -80,8 +78,8 @@ class TitleHeaderPageObject {
   }
 
   /** Click on the title */
-  async click()  {
-    const leftClick = {button: 0};
+  async click() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.hyperlink, leftClick);
     await waitFor(() => {});
   }
@@ -100,28 +98,28 @@ class PasswordSidebarDescriptionSectionPageObject {
    * Returns the content elements of description
    */
   get content() {
-    return this._container.querySelector('.accordion-content');
+    return this._container.querySelector(".accordion-content");
   }
 
   /**
    * Returns the edit icon element
    */
   get editIcon() {
-    return this._container.querySelector('.section-action');
+    return this._container.querySelector(".section-action");
   }
 
   /**
    * Returns the empty element
    */
   get emptyMessage() {
-    return this._container.querySelector('.empty-content');
+    return this._container.querySelector(".empty-content");
   }
 
   /**
    * Returns the empty element
    */
   get description() {
-    return this._container.querySelector('.description-content');
+    return this._container.querySelector(".description-content");
   }
 
   /**
@@ -132,8 +130,8 @@ class PasswordSidebarDescriptionSectionPageObject {
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

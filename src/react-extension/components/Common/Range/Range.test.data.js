@@ -12,7 +12,7 @@
  * @since         v4.3.0
  */
 
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from "uuid";
 
 /**
  * Default props
@@ -21,7 +21,7 @@ import {v4 as uuid} from 'uuid';
 export function defaultProps(props = {}) {
   const defaultProps = {
     id: uuid(),
-    onChange: () => jest.fn()
+    onChange: () => jest.fn(),
   };
   return Object.assign(defaultProps, props);
 }

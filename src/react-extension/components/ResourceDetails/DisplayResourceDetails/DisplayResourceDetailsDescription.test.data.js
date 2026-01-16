@@ -1,10 +1,14 @@
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {ownerPermissionDto, readPermissionDto, updatePermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {
+  ownerPermissionDto,
+  readPermissionDto,
+  updatePermissionDto,
+} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
-  TEST_RESOURCE_TYPE_V5_DEFAULT
+  TEST_RESOURCE_TYPE_V5_DEFAULT,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 export function defaultProps(props) {
   const defaultProps = {
@@ -23,7 +27,7 @@ export const resourceWithDescriptionMock = defaultResourceDto({
     description: "Apache is the world's most used web server software.",
     uris: ["http://www.apache.org/"],
   },
-  permission: updatePermissionDto()
+  permission: updatePermissionDto(),
 });
 
 /**
@@ -38,7 +42,7 @@ export const resourceOwnedWithNoDescriptionMock = defaultResourceDto({
     uris: ["http://www.apache.org/"],
     description: "",
   },
-  permission: ownerPermissionDto()
+  permission: ownerPermissionDto(),
 });
 
 /**
@@ -51,5 +55,5 @@ export const resourceOnlyReadWithNoDescriptionMock = {
     description: "Apache is the world's most used web server software.",
     uris: ["http://www.apache.org/"],
   },
-  permission: readPermissionDto()
+  permission: readPermissionDto(),
 };

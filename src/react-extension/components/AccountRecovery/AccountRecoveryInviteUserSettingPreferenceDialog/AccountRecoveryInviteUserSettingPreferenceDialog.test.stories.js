@@ -13,22 +13,23 @@
  */
 
 import React from "react";
-import {MemoryRouter} from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import AccountRecoveryInviteUserSettingPreferenceDialog from "./AccountRecoveryInviteUserSettingPreferenceDialog";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import MockPort from "../../../test/mock/MockPort";
 
 export default {
-  title: 'Components/AccountRecovery/AccountRecoveryInviteUserSettingPreferenceDialog',
-  component: AccountRecoveryInviteUserSettingPreferenceDialog
+  title: "Components/AccountRecovery/AccountRecoveryInviteUserSettingPreferenceDialog",
+  component: AccountRecoveryInviteUserSettingPreferenceDialog,
 };
 
-const Template = args =>
+const Template = (args) => (
   <MockTranslationProvider>
-    <MemoryRouter initialEntries={['/']}>
-      <AccountRecoveryInviteUserSettingPreferenceDialog {...args}/>
+    <MemoryRouter initialEntries={["/"]}>
+      <AccountRecoveryInviteUserSettingPreferenceDialog {...args} />
     </MemoryRouter>
-  </MockTranslationProvider>;
+  </MockTranslationProvider>
+);
 
 export const Mandatory = Template.bind({});
 Mandatory.args = {
@@ -37,7 +38,7 @@ Mandatory.args = {
     locale: "en-US",
   },
   policy: "mandatory",
-  onClose: () => {}
+  onClose: () => {},
 };
 
 export const OptOut = Template.bind({});
@@ -47,5 +48,5 @@ OptOut.args = {
     locale: "en-US",
   },
   policy: "opt-out",
-  onClose: () => {}
+  onClose: () => {},
 };

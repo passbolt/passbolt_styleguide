@@ -13,53 +13,48 @@
  */
 
 import React from "react";
-import {within} from '@storybook/test';
 import {
   allowedVersionErrorProps,
   defaultProps,
-  resourceTypesDeletedProps
+  resourceTypesDeletedProps,
 } from "./DisplayContentTypesEncryptedMetadataAdministration.test.data";
 import DisplayContentTypesEncryptedEncryptedMetadataAdministration from "./DisplayContentTypesEncryptedMetadataAdministration";
-import {MemoryRouter} from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
-import DisplayAdministrationWorkspaceBreadcrumb
-  from "../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
-import {waitFor} from "@testing-library/react";
+import DisplayAdministrationWorkspaceBreadcrumb from "../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
 
 export default {
-  title: 'Components/Administration/DisplayContentTypesEncryptedMetadataAdministration',
+  title: "Components/Administration/DisplayContentTypesEncryptedMetadataAdministration",
   component: DisplayContentTypesEncryptedEncryptedMetadataAdministration,
-  decorators: [(Story, {args}) =>
-    <MemoryRouter initialEntries={['/app/administration']}>
-      <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-        <div id="container" className="page administration">
-          <div id="app" className="app" style={{margin: "-1rem"}}>
-            <div className="panel main">
-              <div className="panel left">
-                <div className="sidebar-content">
-                  <div className="top-bar-left-navigation">
-                    <div className="navigation">
+  decorators: [
+    (Story, { args }) => (
+      <MemoryRouter initialEntries={["/app/administration"]}>
+        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+          <div id="container" className="page administration">
+            <div id="app" className="app" style={{ margin: "-1rem" }}>
+              <div className="panel main">
+                <div className="panel left">
+                  <div className="sidebar-content">
+                    <div className="top-bar-left-navigation">
+                      <div className="navigation"></div>
                     </div>
-                  </div>
-                  <div className="sidebar-content-left">
+                    <div className="sidebar-content-left"></div>
                   </div>
                 </div>
-              </div>
-              <div className="panel middle">
-                <div className="header">
-                </div>
-                <div className="middle-right">
-                  <div className="breadcrumbs-and-grid">
-                    <div className="top-bar">
-                      <DisplayAdministrationWorkspaceBreadcrumb/>
+                <div className="panel middle">
+                  <div className="header"></div>
+                  <div className="middle-right">
+                    <div className="breadcrumbs-and-grid">
+                      <div className="top-bar">
+                        <DisplayAdministrationWorkspaceBreadcrumb />
+                      </div>
+                      <div className="main-page">
+                        <Story {...args} />
+                      </div>
                     </div>
-                    <div className="main-page">
-                      <Story {...args}/>
-                    </div>
-                  </div>
-                  <div className="help-panel">
-                    <div className="sidebar-help">
-                      <div id="administration-help-panel">
+                    <div className="help-panel">
+                      <div className="sidebar-help">
+                        <div id="administration-help-panel"></div>
                       </div>
                     </div>
                   </div>
@@ -67,26 +62,20 @@ export default {
               </div>
             </div>
           </div>
-        </div>
-      </TranslationProvider>
-    </MemoryRouter>
+        </TranslationProvider>
+      </MemoryRouter>
+    ),
   ],
 };
 
 export const Initial = {
-  args: defaultProps()
+  args: defaultProps(),
 };
 
 export const WithValidationError = {
   args: allowedVersionErrorProps(),
-  // Trigger the form validation.
-  play:  async({canvasElement}) => {
-    const canvas = within(canvasElement);
-    const form = await waitFor(() => canvas.getByTestId("submit-form"));
-    form.requestSubmit();
-  }
 };
 
 export const WithWarnings = {
-  args: resourceTypesDeletedProps()
+  args: resourceTypesDeletedProps(),
 };

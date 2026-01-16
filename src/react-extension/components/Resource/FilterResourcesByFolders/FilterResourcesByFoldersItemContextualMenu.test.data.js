@@ -12,13 +12,17 @@
  * @since         2.11.0
  */
 
-import {defaultAdministratorRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {
+  defaultAdministratorRbacContext,
+  denyRbacContext,
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import {
   defaultFolderDto,
-  folderWithReadPermissionDto, folderWithUpdatePermissionDto
+  folderWithReadPermissionDto,
+  folderWithUpdatePermissionDto,
 } from "../../../../shared/models/entity/folder/folderEntity.test.data";
 
 /**
@@ -36,7 +40,7 @@ export function defaultProps(data = {}) {
     hide: jest.fn(),
     left: 0,
     top: 0,
-    ...data
+    ...data,
   };
 }
 
@@ -48,7 +52,7 @@ export function defaultProps(data = {}) {
 export function propsWithFolderPermissionRead(data = {}) {
   return defaultProps({
     folder: folderWithReadPermissionDto(),
-    ...data
+    ...data,
   });
 }
 
@@ -60,7 +64,7 @@ export function propsWithFolderPermissionRead(data = {}) {
 export function propsWithFolderPermissionUpdate(data = {}) {
   return defaultProps({
     folder: folderWithUpdatePermissionDto(),
-    ...data
+    ...data,
   });
 }
 
@@ -72,6 +76,6 @@ export function propsWithFolderPermissionUpdate(data = {}) {
 export function propsWithDenyUiAction(data = {}) {
   return defaultProps({
     rbacContext: denyRbacContext(),
-    ...data
+    ...data,
   });
 }

@@ -12,13 +12,13 @@
  * @since         3.6.0
  */
 
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 export const adaExternalGpgSignatureEntityDto = (data = {}) => {
   const defaultData = {
-    "issuer_fingerprint": pgpKeys.ada.fingerprint,
-    "created": pgpKeys.ada.created,
-    "is_verified": true,
+    issuer_fingerprint: pgpKeys.ada.fingerprint,
+    created: pgpKeys.ada.created,
+    is_verified: true,
   };
 
   return Object.assign(defaultData, data);
@@ -26,9 +26,9 @@ export const adaExternalGpgSignatureEntityDto = (data = {}) => {
 
 export const adminExternalGpgSignatureEntityDto = (data = {}) => {
   const defaultData = {
-    "issuer_fingerprint": pgpKeys.admin.fingerprint,
-    "created": pgpKeys.admin.created,
-    "is_verified": true,
+    issuer_fingerprint: pgpKeys.admin.fingerprint,
+    created: pgpKeys.admin.created,
+    is_verified: true,
   };
 
   return Object.assign(defaultData, data);
@@ -36,9 +36,9 @@ export const adminExternalGpgSignatureEntityDto = (data = {}) => {
 
 export const bettyExternalGpgSignatureEntityDto = (data = {}) => {
   const defaultData = {
-    "issuer_fingerprint": pgpKeys.betty.fingerprint,
-    "created": pgpKeys.betty.created,
-    "is_verified": true,
+    issuer_fingerprint: pgpKeys.betty.fingerprint,
+    created: pgpKeys.betty.created,
+    is_verified: true,
   };
 
   return Object.assign(defaultData, data);

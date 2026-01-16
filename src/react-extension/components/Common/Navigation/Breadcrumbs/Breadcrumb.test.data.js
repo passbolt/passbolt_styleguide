@@ -15,15 +15,14 @@
 import Breadcrumb from "./Breadcrumb";
 import React from "react";
 
-
 const breadcrumbWithFolders = [
   <Breadcrumb key="bread-1" name="Home" />,
-  <Breadcrumb key="bread-2" name="Folder"/>,
-  <Breadcrumb key="bread-3" name="Subfolder"/>,
+  <Breadcrumb key="bread-2" name="Folder" />,
+  <Breadcrumb key="bread-3" name="Subfolder" />,
 ];
 export const defaultBreadcrumbs = (data = {}) => {
   const defaultData = {
-    items: breadcrumbWithFolders
+    items: breadcrumbWithFolders,
   };
   return Object.assign(defaultData, data);
 };

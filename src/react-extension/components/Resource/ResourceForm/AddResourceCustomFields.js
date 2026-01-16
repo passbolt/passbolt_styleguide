@@ -13,16 +13,14 @@
  */
 
 import PropTypes from "prop-types";
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import AddSVG from "../../../../img/svg/add.svg";
 import SecureTextarea from "../../../../shared/components/SecureTextarea/SecureTextarea";
 import CustomFieldEntity from "../../../../shared/models/entity/customField/customFieldEntity";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import {
-  CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE
-} from "../../../../shared/models/entity/customField/customFieldsCollection";
+import { CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE } from "../../../../shared/models/entity/customField/customFieldsCollection";
 
 class AddResourceCustomFields extends Component {
   constructor(props) {
@@ -72,8 +70,8 @@ class AddResourceCustomFields extends Component {
     const eventCustomField = {
       target: {
         name: `secret.custom_fields.${this.customFieldsLength}`,
-        value: CustomFieldEntity.createFromDefault()
-      }
+        value: CustomFieldEntity.createFromDefault(),
+      },
     };
     this.props.onChange?.(eventCustomField);
   }
@@ -86,8 +84,8 @@ class AddResourceCustomFields extends Component {
     const eventCustomField = {
       target: {
         name: `secret.custom_fields.${index}`,
-        value: null
-      }
+        value: null,
+      },
     };
     this.props.onChange?.(eventCustomField);
   }
@@ -116,9 +114,15 @@ class AddResourceCustomFields extends Component {
    */
   addTooltipOnDisabledElement(content, isDisabled) {
     if (isDisabled) {
-      return this.customFieldsLength === 32
-        ? <Tooltip message={<Trans>You have reached the row limit.</Trans>} direction="bottom">{content}</Tooltip>
-        : <Tooltip message={<Trans>You have reached the maximum content size limit.</Trans>} direction="bottom">{content}</Tooltip>;
+      return this.customFieldsLength === 32 ? (
+        <Tooltip message={<Trans>You have reached the row limit.</Trans>} direction="bottom">
+          {content}
+        </Tooltip>
+      ) : (
+        <Tooltip message={<Trans>You have reached the maximum content size limit.</Trans>} direction="bottom">
+          {content}
+        </Tooltip>
+      );
     } else {
       return <>{content}</>;
     }
@@ -141,9 +145,11 @@ class AddResourceCustomFields extends Component {
    * @returns {boolean}
    */
   isMaxLengthKeyAndValueWarning(index) {
-    return this.props.warnings?.hasError(`custom_fields.${index}.key`, "maxLength")
-      && this.props.warnings?.hasError(`custom_fields.${index}.value`, "maxLength")
-      && !this.isCustomFieldsCollectionMaxContentSizeReached;
+    return (
+      this.props.warnings?.hasError(`custom_fields.${index}.key`, "maxLength") &&
+      this.props.warnings?.hasError(`custom_fields.${index}.value`, "maxLength") &&
+      !this.isCustomFieldsCollectionMaxContentSizeReached
+    );
   }
 
   /**
@@ -152,7 +158,10 @@ class AddResourceCustomFields extends Component {
    * @returns {number}
    */
   customFieldValueMaxLengthAllowed(index) {
-    const currentCustomFieldValueMaxLengthAllowed = (CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE - this.customFieldsValueLength) + this.props.resource?.secret.custom_fields[index].secret_value.length;
+    const currentCustomFieldValueMaxLengthAllowed =
+      CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE -
+      this.customFieldsValueLength +
+      this.props.resource?.secret.custom_fields[index].secret_value.length;
     return Math.min(20000, currentCustomFieldValueMaxLengthAllowed);
   }
 
@@ -161,7 +170,10 @@ class AddResourceCustomFields extends Component {
    * @returns {*}
    */
   get customFieldsValueLength() {
-    return this.props.resource?.secret.custom_fields.reduce((total, custom_field) => total + custom_field.secret_value.length, 0);
+    return this.props.resource?.secret.custom_fields.reduce(
+      (total, custom_field) => total + custom_field.secret_value.length,
+      0,
+    );
   }
 
   /**
@@ -181,19 +193,29 @@ class AddResourceCustomFields extends Component {
     return (
       <>
         <div className="title">
-          <h2><Trans>Custom fields</Trans></h2>
+          <h2>
+            <Trans>Custom fields</Trans>
+          </h2>
         </div>
         <div className="header">
           <div className="key">
-            <span className="label"><Trans>Key</Trans></span>
-            <span className="subinfo"><Trans>Searchable Metadata</Trans></span>
+            <span className="label">
+              <Trans>Key</Trans>
+            </span>
+            <span className="subinfo">
+              <Trans>Searchable Metadata</Trans>
+            </span>
           </div>
           <div className="divider-wrapper">
             <span className="divider"></span>
           </div>
           <div className="value">
-            <span className="label"><Trans>Value</Trans></span>
-            <span className="subinfo"><Trans>Non-Searchable Secret</Trans></span>
+            <span className="label">
+              <Trans>Value</Trans>
+            </span>
+            <span className="subinfo">
+              <Trans>Non-Searchable Secret</Trans>
+            </span>
           </div>
         </div>
         <div className="content">
@@ -201,7 +223,18 @@ class AddResourceCustomFields extends Component {
             {this.props.resource?.secret.custom_fields?.map((custom_field, index) => (
               <div key={index} className="input custom-field-row">
                 <div className="input custom-field">
-                  <input id={`resource-custom-fields-key-${index}`} autoFocus={index + 1 === this.customFieldsLength} disabled={this.props.disabled} name={`secret.custom_fields.${index}.metadata_key`} maxLength="255" type="text" autoComplete="off" placeholder={this.translate("Key")} value={custom_field.metadata_key} onChange={this.handleInputChange}/>
+                  <input
+                    id={`resource-custom-fields-key-${index}`}
+                    autoFocus={index + 1 === this.customFieldsLength}
+                    disabled={this.props.disabled}
+                    name={`secret.custom_fields.${index}.metadata_key`}
+                    maxLength="255"
+                    type="text"
+                    autoComplete="off"
+                    placeholder={this.translate("Key")}
+                    value={custom_field.metadata_key}
+                    onChange={this.handleInputChange}
+                  />
                   <SecureTextarea
                     id={`resource-custom-fields-value-${index}`}
                     name={`secret.custom_fields.${index}.secret_value`}
@@ -211,51 +244,63 @@ class AddResourceCustomFields extends Component {
                     onChange={this.handleInputChange}
                     disabled={this.props.disabled}
                   />
-                  {this.customFieldsLength > 1 &&
-                    <button type="button" className="button-transparent inline" id={`resource-delete-custom-field-${index}`} onClick={() => this.handleDeleteCustomFieldClick(index)}><DeleteSVG/></button>
-                  }
+                  {this.customFieldsLength > 1 && (
+                    <button
+                      type="button"
+                      className="button-transparent inline"
+                      id={`resource-delete-custom-field-${index}`}
+                      onClick={() => this.handleDeleteCustomFieldClick(index)}
+                    >
+                      <DeleteSVG />
+                    </button>
+                  )}
                 </div>
-                {this.isWarnings(`custom_fields.${index}.key`, "unique") &&
+                {this.isWarnings(`custom_fields.${index}.key`, "unique") && (
                   <div className={`resource-custom-fields-key-warning-${index} warning-message`}>
                     <Trans>The key name is already used.</Trans>
                   </div>
-                }
-                {this.isMaxLengthKeyAndValueWarning(index)
-                  ? <div className={`resource-custom-fields-warning-${index} warning-message`}>
-                    <Trans>The key and the value reach the character limit, make sure your data won’t be truncated.</Trans>
+                )}
+                {this.isMaxLengthKeyAndValueWarning(index) ? (
+                  <div className={`resource-custom-fields-warning-${index} warning-message`}>
+                    <Trans>
+                      The key and the value reach the character limit, make sure your data won’t be truncated.
+                    </Trans>
                   </div>
-                  : <>
-                    {this.isWarnings(`custom_fields.${index}.key`, "maxLength") &&
+                ) : (
+                  <>
+                    {this.isWarnings(`custom_fields.${index}.key`, "maxLength") && (
                       <div className={`resource-custom-fields-key-warning-${index} warning-message`}>
                         <Trans>The key reaches the character limit, make sure your data won’t be truncated.</Trans>
                       </div>
-                    }
-                    {this.isWarnings(`custom_fields.${index}.value`, "maxLength") && !this.isCustomFieldsCollectionMaxContentSizeReached &&
-                      <div className={`resource-custom-fields-value-warning-${index} warning-message`}>
-                        <Trans>The value reaches the character limit, make sure your data won’t be truncated.</Trans>
-                      </div>
-                    }
+                    )}
+                    {this.isWarnings(`custom_fields.${index}.value`, "maxLength") &&
+                      !this.isCustomFieldsCollectionMaxContentSizeReached && (
+                        <div className={`resource-custom-fields-value-warning-${index} warning-message`}>
+                          <Trans>The value reaches the character limit, make sure your data won’t be truncated.</Trans>
+                        </div>
+                      )}
                   </>
-                }
+                )}
               </div>
-            ))
-            }
+            ))}
             <div className="custom-field-add">
               {this.addTooltipOnDisabledElement(
                 <button type="button" disabled={!this.canAddCustomField} onClick={this.handleAddCustomFieldsClick}>
-                  <AddSVG/>
-                  <span><Trans>Add Row</Trans></span>
+                  <AddSVG />
+                  <span>
+                    <Trans>Add Row</Trans>
+                  </span>
                 </button>,
-                !this.canAddCustomField
+                !this.canAddCustomField,
               )}
             </div>
           </div>
         </div>
-        {this.isCustomFieldsCollectionMaxContentSizeReached &&
+        {this.isCustomFieldsCollectionMaxContentSizeReached && (
           <div className="warning message no-margin">
             <Trans>You have reached the maximum content size limit.</Trans>
           </div>
-        }
+        )}
       </>
     );
   }
@@ -266,8 +311,7 @@ AddResourceCustomFields.propTypes = {
   onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
-  disabled: PropTypes.bool // The disabled property
+  disabled: PropTypes.bool, // The disabled property
 };
 
-export default  withTranslation('common')(AddResourceCustomFields);
-
+export default withTranslation("common")(AddResourceCustomFields);

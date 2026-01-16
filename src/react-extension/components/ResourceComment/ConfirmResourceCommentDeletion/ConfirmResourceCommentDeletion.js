@@ -11,15 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import React, {Component} from "react";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import React, { Component } from "react";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withLoading} from "../../../contexts/LoadingContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withLoading } from "../../../contexts/LoadingContext";
+import { Trans, withTranslation } from "react-i18next";
 import CommentsServiceWorkerService from "../CommentsServiceWorkerService";
 
 class ConfirmDeleteDialog extends Component {
@@ -41,7 +41,8 @@ class ConfirmDeleteDialog extends Component {
    */
   get defaultState() {
     return {
-      actions: { // The ongoing action
+      actions: {
+        // The ongoing action
         processing: false, // An action is processing
       },
     };
@@ -65,7 +66,7 @@ class ConfirmDeleteDialog extends Component {
     event.preventDefault();
 
     try {
-      await this.setState({actions: {processing: true}});
+      await this.setState({ actions: { processing: true } });
 
       // Start loading bar
       this.props.loadingContext.add();
@@ -77,24 +78,26 @@ class ConfirmDeleteDialog extends Component {
       this.props.loadingContext.remove();
 
       // Asks for a success  message
-      await this.props.actionFeedbackContext.displaySuccess(this.translate("The comment has been deleted successfully"));
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.translate("The comment has been deleted successfully"),
+      );
 
       // Stop processing
-      await this.setState({actions: {processing: false}});
+      await this.setState({ actions: { processing: false } });
 
       // Update the context
-      this.props.context.setContext({resourceCommentId: null, mustRefreshComments: true});
+      this.props.context.setContext({ resourceCommentId: null, mustRefreshComments: true });
 
       // Hides the dialog
       this.props.onClose();
     } catch (error) {
-      await this.setState({actions: {processing: false}});
+      await this.setState({ actions: { processing: false } });
 
       // Show the error
       await this.props.actionFeedbackContext.displayError(error);
 
       // Update the context
-      this.props.context.setContext({resourceCommentId: null, mustRefreshComments: false});
+      this.props.context.setContext({ resourceCommentId: null, mustRefreshComments: false });
 
       // Hides the dialog
       this.props.onClose();
@@ -105,7 +108,7 @@ class ConfirmDeleteDialog extends Component {
    * Handle close button click.
    */
   handleClose() {
-    this.props.context.setContext({resourceCommentId: null});
+    this.props.context.setContext({ resourceCommentId: null });
     this.props.onClose();
   }
 
@@ -121,27 +124,28 @@ class ConfirmDeleteDialog extends Component {
     return (
       <div>
         <DialogWrapper
-          className='comment-delete-dialog'
+          className="comment-delete-dialog"
           title={this.translate("Delete comment?")}
           onClose={this.handleClose}
-          disabled={this.state.actions.processing}>
-          <form
-            className="comment-delete-form"
-            onSubmit={this.handleConfirm}
-            noValidate>
+          disabled={this.state.actions.processing}
+        >
+          <form className="comment-delete-form" onSubmit={this.handleConfirm} noValidate>
             <div className="form-content">
-              <p><Trans>Are you sure you want to delete the comment?</Trans></p>
-              <p><Trans>Once the comment is deleted, it will be removed permanently and will not be recoverable.</Trans></p>
+              <p>
+                <Trans>Are you sure you want to delete the comment?</Trans>
+              </p>
+              <p>
+                <Trans>Once the comment is deleted, it will be removed permanently and will not be recoverable.</Trans>
+              </p>
             </div>
             <div className="submit-wrapper clearfix">
-              <FormCancelButton
-                disabled={this.state.actions.processing}
-                onClick={this.handleClose} />
+              <FormCancelButton disabled={this.state.actions.processing} onClick={this.handleClose} />
               <FormSubmitButton
                 disabled={this.state.actions.processing}
                 processing={this.state.processing}
                 value={this.translate("Delete")}
-                warning={true}/>
+                warning={true}
+              />
             </div>
           </form>
         </DialogWrapper>
@@ -158,4 +162,4 @@ ConfirmDeleteDialog.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withLoading(withActionFeedback(withTranslation('common')(ConfirmDeleteDialog))));
+export default withAppContext(withLoading(withActionFeedback(withTranslation("common")(ConfirmDeleteDialog))));

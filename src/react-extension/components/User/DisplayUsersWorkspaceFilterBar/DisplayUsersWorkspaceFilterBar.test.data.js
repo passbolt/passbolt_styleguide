@@ -11,13 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
-import {defaultUserWorkspaceContext, users, usersWithAttentionRequiredStates} from "../../../contexts/UserWorkspaceContext.test.data";
+import { defaultAppContext, defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { UserWorkspaceFilterTypes } from "../../../contexts/UserWorkspaceContext";
+import {
+  defaultUserWorkspaceContext,
+  users,
+  usersWithAttentionRequiredStates,
+} from "../../../contexts/UserWorkspaceContext.test.data";
 import {
   defaultAdministratorRbacContext,
   defaultUserRbacContext,
-  denyRbacContext
+  denyRbacContext,
 } from "../../../../shared/context/Rbac/RbacContext.test.data";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 
@@ -33,7 +37,7 @@ export function defaultProps(data = {}) {
     history: {
       push: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }
 
@@ -44,8 +48,8 @@ export function defaultProps(data = {}) {
  */
 export function propsFilterBySuspended(data = {}) {
   return defaultProps({
-    userWorkspaceContext: defaultUserWorkspaceContext({filter: {type: UserWorkspaceFilterTypes.SUSPENDED_USER}}),
-    ...data
+    userWorkspaceContext: defaultUserWorkspaceContext({ filter: { type: UserWorkspaceFilterTypes.SUSPENDED_USER } }),
+    ...data,
   });
 }
 
@@ -53,13 +57,13 @@ export function defaultPropsWithoutAttentionRequiredUsers(data = {}) {
   return {
     userWorkspaceContext: defaultUserWorkspaceContext(),
     context: defaultAppContext({
-      users: users
+      users: users,
     }),
     rbacContext: denyRbacContext(),
     history: {
       push: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }
 
@@ -67,13 +71,13 @@ export function defaultPropsWithAttentionRequiredUsers(data = {}) {
   return {
     userWorkspaceContext: defaultUserWorkspaceContext(),
     context: defaultAppContext({
-      users: usersWithAttentionRequiredStates
+      users: usersWithAttentionRequiredStates,
     }),
     rbacContext: defaultAdministratorRbacContext(),
     history: {
       push: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }
 
@@ -81,13 +85,13 @@ export function propsWithAttentionFilter(data = {}) {
   return {
     userWorkspaceContext: defaultUserWorkspaceContext(),
     context: defaultAppContext({
-      users: usersWithAttentionRequiredStates
+      users: usersWithAttentionRequiredStates,
     }),
     rbacContext: defaultAdministratorRbacContext(),
     history: {
       push: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }
 
@@ -101,7 +105,7 @@ export function propsWithAttentionRequiredUsersNotAdmin(data = {}) {
     history: {
       push: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }
 
@@ -115,34 +119,38 @@ export function propsWithAttentionRequiredUsersNotAdminWithRbacAllowed(data = {}
     history: {
       push: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }
 
 export function propsWithUsersFilteredByAccountRecovery(data = {}) {
   return {
-    userWorkspaceContext: defaultUserWorkspaceContext({filter: {type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST}}),
+    userWorkspaceContext: defaultUserWorkspaceContext({
+      filter: { type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST },
+    }),
     context: defaultAppContext({
-      users: usersWithAttentionRequiredStates
+      users: usersWithAttentionRequiredStates,
     }),
     rbacContext: defaultUserRbacContext(),
     history: {
       push: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }
 
 export function propsWithUsersFilteredByMissingMetadata(data = {}) {
   return {
-    userWorkspaceContext: defaultUserWorkspaceContext({filter: {type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY}}),
+    userWorkspaceContext: defaultUserWorkspaceContext({
+      filter: { type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY },
+    }),
     context: defaultAppContext({
-      users: usersWithAttentionRequiredStates
+      users: usersWithAttentionRequiredStates,
     }),
     rbacContext: defaultAdministratorRbacContext(),
     history: {
       push: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }

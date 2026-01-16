@@ -13,15 +13,15 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import DeleteUserGroupWithConflicts from "../../UserGroup/DeleteUserGroup/DeleteUserGroupWithConflicts";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import DeleteUserGroup from "../../UserGroup/DeleteUserGroup/DeleteUserGroup";
 import EditUserGroup from "../../UserGroup/EditUserGroup/EditUserGroup";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 import EditSVG from "../../../../img/svg/edit.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 
@@ -74,9 +74,9 @@ class DisplayGroupContextualMenu extends React.Component {
    */
   displayDeleteGroupDialog() {
     const deleteGroupDialogProps = {
-      group: this.group
+      group: this.group,
     };
-    this.props.context.setContext({deleteGroupDialogProps});
+    this.props.context.setContext({ deleteGroupDialogProps });
     this.props.dialogContext.open(DeleteUserGroup);
   }
 
@@ -86,9 +86,9 @@ class DisplayGroupContextualMenu extends React.Component {
   displayDeleteGroupWithConflictsDialog(errors) {
     const deleteGroupWithConflictsDialogProps = {
       group: this.group,
-      errors
+      errors,
     };
-    this.props.context.setContext({deleteGroupWithConflictsDialogProps});
+    this.props.context.setContext({ deleteGroupWithConflictsDialogProps });
     this.props.dialogContext.open(DeleteUserGroupWithConflicts);
   }
 
@@ -98,12 +98,10 @@ class DisplayGroupContextualMenu extends React.Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
-
-
 
   /**
    * Handle the will of edit a group
@@ -118,7 +116,7 @@ class DisplayGroupContextualMenu extends React.Component {
    * Handle hide contextual menu
    */
   handleHide() {
-    if (typeof this.props.onBeforeHide === 'function') {
+    if (typeof this.props.onBeforeHide === "function") {
       this.props.onBeforeHide(this.props.group.id);
     }
     this.props.hide();
@@ -134,18 +132,17 @@ class DisplayGroupContextualMenu extends React.Component {
         hide={this.handleHide}
         left={this.props.left}
         top={this.props.top}
-        className={this.props.className}>
+        className={this.props.className}
+      >
         <li key="option-filter-all-groups" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button
-                  type="button"
-                  className="link no-border"
-                  id="edit-group"
-                  onClick={this.handleEditGroup}>
+                <button type="button" className="link no-border" id="edit-group" onClick={this.handleEditGroup}>
                   <EditSVG />
-                  <span><Trans>Edit</Trans></span>
+                  <span>
+                    <Trans>Edit</Trans>
+                  </span>
                 </button>
               </div>
             </div>
@@ -159,9 +156,12 @@ class DisplayGroupContextualMenu extends React.Component {
                   type="button"
                   className="link no-border"
                   id="delete-group"
-                  onClick={this.handleDeleteClickEvent}>
+                  onClick={this.handleDeleteClickEvent}
+                >
                   <DeleteSVG />
-                  <span><Trans>Delete</Trans></span>
+                  <span>
+                    <Trans>Delete</Trans>
+                  </span>
                 </button>
               </div>
             </div>

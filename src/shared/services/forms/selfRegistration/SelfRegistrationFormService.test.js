@@ -13,13 +13,12 @@
  * @since         3.8.3
  */
 
-
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {AdminSelfRegistrationContextProvider} from "../../../../react-extension/contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
-import {defaultProps} from '../../../../react-extension/components/Administration/DisplaySelfRegistrationAdministration/ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings.test.data';
-import SelfRegistrationFormService from './SelfRegistrationFormService';
-import SelfRegistrationDomainsViewModel from '../../../models/selfRegistration/SelfRegistrationDomainsViewModel';
-import MapObject from '../../../../react-extension/lib/Map/MapObject';
+import { enableFetchMocks } from "jest-fetch-mock";
+import { AdminSelfRegistrationContextProvider } from "../../../../react-extension/contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import { defaultProps } from "../../../../react-extension/components/Administration/DisplaySelfRegistrationAdministration/ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings.test.data";
+import SelfRegistrationFormService from "./SelfRegistrationFormService";
+import SelfRegistrationDomainsViewModel from "../../../models/selfRegistration/SelfRegistrationDomainsViewModel";
+import MapObject from "../../../../react-extension/lib/Map/MapObject";
 
 beforeEach(() => {
   jest.resetModules();
@@ -28,7 +27,7 @@ beforeEach(() => {
 describe("SelfRegistrationFormService", () => {
   let selfRegistrationContext, // The selfRegistrationContext to test
     selfRegistrationFormService;
-  const translation = message => message;
+  const translation = (message) => message;
   const props = defaultProps(); // The props to pass
   const uuid = "2bb8b096-06ce-4c9a-a627-ec30ce045a83";
 
@@ -40,23 +39,22 @@ describe("SelfRegistrationFormService", () => {
     enableFetchMocks();
   });
 
-
   describe("UserDirectoryFormService::validateInput", () => {
-    it("should return required message", async() => {
+    it("should return required message", async () => {
       expect.assertions(1);
       const errors = new Map();
       await selfRegistrationFormService.validateInput(uuid, "", errors);
       expect(errors.get(uuid)).toEqual("A domain is required.");
     });
 
-    it("should return a message to reject domain format", async() => {
+    it("should return a message to reject domain format", async () => {
       expect.assertions(1);
       const errors = new Map();
       await selfRegistrationFormService.validateInput(uuid, "localhost", errors);
       expect(errors.get(uuid)).toEqual("This should be a valid domain");
     });
 
-    it("should call checkDuplicateValue", async() => {
+    it("should call checkDuplicateValue", async () => {
       jest.spyOn(selfRegistrationFormService, "checkDuplicateValue");
       const errors = new Map();
       await selfRegistrationFormService.validateInput(uuid, "hello.world", errors);
@@ -66,7 +64,7 @@ describe("SelfRegistrationFormService", () => {
   });
 
   describe("UserDirectoryFormService::checkDuplicateValue", () => {
-    it("should return a message which indicate that the domain already exist", async() => {
+    it("should return a message which indicate that the domain already exist", async () => {
       selfRegistrationFormService.fields = ["passbolt.com", "passbolt.com"];
       expect.assertions(1);
       const errors = new Map();
@@ -74,10 +72,8 @@ describe("SelfRegistrationFormService", () => {
       expect(MapObject.listValues(errors)).toEqual(["This domain already exist", "This domain already exist"]);
     });
 
-    it("should not return a message", async() => {
-      const domains = new SelfRegistrationDomainsViewModel(
-        {data: {"allowed_domains": ["passbolt.com"]}}
-      );
+    it("should not return a message", async () => {
+      const domains = new SelfRegistrationDomainsViewModel({ data: { allowed_domains: ["passbolt.com"] } });
       await selfRegistrationContext.setDomains(domains);
       expect.assertions(1);
       const errors = new Map();
@@ -88,9 +84,9 @@ describe("SelfRegistrationFormService", () => {
 });
 
 function mockState(adminSelfRegistrationContext) {
-  const setStateMock = state => {
+  const setStateMock = (state) => {
     let newState;
-    if (typeof state  === 'function') {
+    if (typeof state === "function") {
       newState = state(adminSelfRegistrationContext.state);
     } else {
       newState = state;

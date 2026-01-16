@@ -72,9 +72,9 @@ describe("IsEmailValidator", () => {
       "example@host.COM",
       "example@HOST.ORG",
       "EXAMPLE@HOST.LU",
-      "ÊXÃMPLÊ@HÕST.LU"
-    ]).describe("Should accept.", value => {
-      it(`should accept: ${value}`, async() => {
+      "ÊXÃMPLÊ@HÕST.LU",
+    ]).describe("Should accept.", (value) => {
+      it(`should accept: ${value}`, async () => {
         expect.assertions(1);
         expect(IsEmailValidator.validate(value)).toBeTruthy();
       });
@@ -106,9 +106,9 @@ describe("IsEmailValidator", () => {
       true,
       false,
       {},
-      []
-    ]).describe("Should not accept.", value => {
-      it(`should not accept: ${value}`, async() => {
+      [],
+    ]).describe("Should not accept.", (value) => {
+      it(`should not accept: ${value}`, async () => {
         expect.assertions(1);
         expect(IsEmailValidator.validate(value)).toBeFalsy();
       });

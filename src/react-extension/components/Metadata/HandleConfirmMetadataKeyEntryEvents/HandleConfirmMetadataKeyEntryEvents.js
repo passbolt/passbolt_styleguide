@@ -12,9 +12,9 @@
  * @since         5.1.0
  */
 
-import React from 'react';
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import React from "react";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 import ConfirmMetadataKey from "../ConfirmMetadataKey/ConfirmMetadataKey";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -64,12 +64,12 @@ class HandleConfirmMetadataKeyEntryEvents extends React.Component {
   async handleConfirmMetadataEntryRequestEvent(requestId, data) {
     try {
       // Set validation to false as data is required for the entity used by the service worker but should not be sent to the content code.
-      const metadataKey = new MetadataKeyEntity(data.metadata_key, {validate: false});
+      const metadataKey = new MetadataKeyEntity(data.metadata_key, { validate: false });
       const metadataTrustedKey = new MetadataTrustedKeyEntity(data.metadata_trusted_key);
-      this.props.dialogContext.open(ConfirmMetadataKey, {requestId, metadataKey, metadataTrustedKey});
+      this.props.dialogContext.open(ConfirmMetadataKey, { requestId, metadataKey, metadataTrustedKey });
     } catch (error) {
       console.log(error);
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
     }
   }
 

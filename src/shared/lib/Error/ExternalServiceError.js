@@ -16,7 +16,7 @@ class ExternalServiceError extends Error {
   constructor(message) {
     message = message || "An error occurred when requesting the external service.";
     super(message);
-    this.name = 'ExternalServiceError';
+    this.name = "ExternalServiceError";
   }
 }
 

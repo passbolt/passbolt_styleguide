@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {defaultAppContext} from "./ApiAppContext.test.data";
+import { defaultAppContext } from "./ApiAppContext.test.data";
 
 /**
  * Default props.
@@ -23,6 +23,6 @@ export function defaultProps(props = {}) {
   const defaultProps = {};
   return {
     ...defaultProps,
-    context: defaultAppContext(props?.context)
+    context: defaultAppContext(props?.context),
   };
 }

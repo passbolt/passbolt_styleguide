@@ -14,8 +14,6 @@
 
 import ScimSettingsEntity from "../../../models/entity/scimSettings/scimSettingsEntity";
 
-
-
 export const SCIM_FIND_SETTINGS_EVENT = "passbolt.scim.find-settings";
 export const SCIM_CREATE_SETTINGS_EVENT = "passbolt.scim.create-settings";
 export const SCIM_UPDATE_SETTINGS_EVENT = "passbolt.scim.update-settings";
@@ -70,7 +68,7 @@ class ScimSettingsServiceWorkerService {
       throw new TypeError("The 'settings' property should be of type 'ScimSettingsEntity'.");
     }
     const updated = formSettings.toDto();
-    const savedSettingsDto = await this.port.request('passbolt.scim.update-settings', id, updated);
+    const savedSettingsDto = await this.port.request("passbolt.scim.update-settings", id, updated);
     return new ScimSettingsEntity(savedSettingsDto);
   }
 

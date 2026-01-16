@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.3.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import AnimatedFeedbackSuccessSVG from "../../../img/svg/success.svg";
 import AnimatedFeedbackWarningSVG from "../../../img/svg/warning.svg";
@@ -20,10 +20,10 @@ import AnimatedFeedbackErrorSVG from "../../../img/svg/fail.svg";
 import AnimatedFeedbackInfinitySVG from "../../../img/svg/infinity_illustration.svg";
 
 const animatedIconsSVG = {
-  success: <AnimatedFeedbackSuccessSVG/>,
-  warning: <AnimatedFeedbackWarningSVG/>,
-  attention: <AnimatedFeedbackAttentionSVG/>,
-  error: <AnimatedFeedbackErrorSVG/>,
+  success: <AnimatedFeedbackSuccessSVG />,
+  warning: <AnimatedFeedbackWarningSVG />,
+  attention: <AnimatedFeedbackAttentionSVG />,
+  error: <AnimatedFeedbackErrorSVG />,
   infinity_illustration: <AnimatedFeedbackInfinitySVG />,
 };
 
@@ -38,9 +38,7 @@ class AnimatedFeedback extends Component {
   render() {
     return (
       <div className="illustration icon-feedback">
-        <div className={this.props.name}>
-          {this.animatedIconSVG}
-        </div>
+        <div className={this.props.name}>{this.animatedIconSVG}</div>
       </div>
     );
   }

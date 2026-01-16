@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,41 +12,39 @@
  * @since         2.13.0
  */
 
-import React from 'react';
-import {Route, withRouter, Switch} from "react-router-dom";
+import React from "react";
+import { Route, withRouter, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
 import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";
 import DisplayUserTheme from "../DisplayUserTheme/DisplayUserTheme";
-import DisplayUserSettingsWorkspaceBreadcrumb
-  from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
+import DisplayUserSettingsWorkspaceBreadcrumb from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
 import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserGpgInformation";
 import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUserSecurityToken";
 import TransferToMobile from "../TransferToMobile/TransferToMobile";
-import DisplayAccountRecoveryUserSettings from '../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettings';
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import {withMfa} from '../../../contexts/MFAContext';
-import ExportAccountToDesktop from '../ExportAccountToDesktop/ExportAccountToDesktop';
-import OrchestrateMfaSettings from '../../MFA/OrchestrateMfaSettings/OrchestrateMfaSettings';
-import {withRbac} from '../../../../shared/context/Rbac/RbacContext';
-import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
+import DisplayAccountRecoveryUserSettings from "../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettings";
+import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
+import { withMfa } from "../../../contexts/MFAContext";
+import ExportAccountToDesktop from "../ExportAccountToDesktop/ExportAccountToDesktop";
+import OrchestrateMfaSettings from "../../MFA/OrchestrateMfaSettings/OrchestrateMfaSettings";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
-import {Trans, withTranslation} from "react-i18next";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
 import DisplayUserProfileHelp from "../DisplayUserProfile/DisplayUserProfileHelp";
 import Footer from "../../Common/Footer/Footer";
 import DisplayUserGpgInformationHelp from "../DisplayUserGpgInformation/DisplayUserGpgInformationHelp";
 import ChangeUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
 import ChangeUserPassphraseHelp from "../ChangeUserPassphrase/ChangeUserPassphraseHelp";
-import DisplayAccountRecoveryUserSettingsHelp
-  from "../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettingsHelp";
+import DisplayAccountRecoveryUserSettingsHelp from "../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettingsHelp";
 import DisplayUserSecurityTokenHelp from "../ChangeUserSecurityToken/DisplayUserSecurityTokenHelp";
-import ExportAccountToDesktopHelp from '../ExportAccountToDesktop/ExportAccountToDesktopHelp';
-import DisplayMfaSettingsHelp from '../../MFA/DisplayMfaSettingsHelp/DisplayMfaSettingsHelp';
-import WorkspaceSwitcher, {WORKSPACE_ENUM} from '../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher';
-import RoleEntity from '../../../../shared/models/entity/role/roleEntity';
+import ExportAccountToDesktopHelp from "../ExportAccountToDesktop/ExportAccountToDesktopHelp";
+import DisplayMfaSettingsHelp from "../../MFA/DisplayMfaSettingsHelp/DisplayMfaSettingsHelp";
+import WorkspaceSwitcher, { WORKSPACE_ENUM } from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
+import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -75,7 +72,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseThemeCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse("accountSettings");
   }
 
   /**
@@ -84,7 +81,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get canIUseMobileTransferCapability() {
     const canViewMobileTransfer = this.props.rbacContext.canIUseAction(uiActions.MOBILE_TRANSFER);
-    return canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+    return (
+      canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse("mobile")
+    );
   }
 
   /**
@@ -93,7 +92,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get canIUseDesktopExportCapability() {
     const canViewDesktopTransfer = this.props.rbacContext.canIUseAction(uiActions.DESKTOP_TRANSFER);
-    return canViewDesktopTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
+    return (
+      canViewDesktopTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse("desktop")
+    );
   }
 
   /**
@@ -102,7 +103,11 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get canIUseAccountRecoveryCapability() {
     const canViewAccountRecovery = this.props.rbacContext.canIUseAction(uiActions.PROFIL_ACCOUNT_RECOVERY);
-    return canViewAccountRecovery && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
+    return (
+      canViewAccountRecovery &&
+      this.props.context.siteSettings &&
+      this.props.context.siteSettings.canIUse("accountRecovery")
+    );
   }
 
   /**
@@ -119,7 +124,10 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get isUserAdmin() {
     const loggedInUser = this.props.context.loggedInUser;
-    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
+    return (
+      loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN &&
+      this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE)
+    );
   }
 
   /**
@@ -142,7 +150,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @return {JSX}
    */
   render() {
-    const {path} = this.props.match;
+    const { path } = this.props.match;
     return (
       <div className="panel main">
         <div className="panel left">
@@ -150,46 +158,54 @@ class DisplayUserSettingsWorkspace extends React.Component {
             <div className="top-bar-left-navigation">
               <div className="navigation">
                 <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
-                  <ArrowLeftSVG/>
+                  <ArrowLeftSVG />
                 </button>
-                <span className="title my-profile"><Trans>My Profile</Trans></span>
+                <span className="title my-profile">
+                  <Trans>My Profile</Trans>
+                </span>
               </div>
             </div>
             <div className="sidebar-content-left">
               <NavigateIntoUserSettingsWorkspace
                 hasPendingMfaChoice={this.isMfaChoiceRequired}
-                hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
+                hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}
+              />
             </div>
           </div>
         </div>
         <div className="panel middle">
           <div className="header">
             <div className="header-right">
-              <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={this.isUserWorkspaceVisible} currentWorkspace={WORKSPACE_ENUM.USER_PROFILE}/>
-              <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+              <WorkspaceSwitcher
+                isUserAdmin={this.isUserAdmin}
+                isUserWorkspaceVisible={this.isUserWorkspaceVisible}
+                currentWorkspace={WORKSPACE_ENUM.USER_PROFILE}
+              />
+              <DisplayUserBadgeMenu
+                baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                user={this.props.context.loggedInUser}
+              />
             </div>
           </div>
           <div className="middle-right">
             <div className="breadcrumbs-and-grid">
               <div className="top-bar">
-                <DisplayUserSettingsWorkspaceBreadcrumb/>
+                <DisplayUserSettingsWorkspaceBreadcrumb />
               </div>
               <div className="main-page">
-                <Route path={`${path}/profile`} component={DisplayUserProfile}/>
-                <Route path={`${path}/passphrase`} component={ChangeUserPassphrase}/>
+                <Route path={`${path}/profile`} component={DisplayUserProfile} />
+                <Route path={`${path}/passphrase`} component={ChangeUserPassphrase} />
                 <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
-                {this.canIUseThemeCapability &&
-                  <Route path={`${path}/theme`} component={DisplayUserTheme}/>
-                }
-                {this.canIUseMobileTransferCapability &&
+                {this.canIUseThemeCapability && <Route path={`${path}/theme`} component={DisplayUserTheme} />}
+                {this.canIUseMobileTransferCapability && (
                   <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
-                }
-                {this.canIUseDesktopExportCapability &&
+                )}
+                {this.canIUseDesktopExportCapability && (
                   <Route path={`${path}/desktop`} component={ExportAccountToDesktop}></Route>
-                }
-                {this.canIUseAccountRecoveryCapability &&
+                )}
+                {this.canIUseAccountRecoveryCapability && (
                   <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
-                }
+                )}
                 <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={OrchestrateMfaSettings}></Route>
                 <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
               </div>
@@ -199,17 +215,20 @@ class DisplayUserSettingsWorkspace extends React.Component {
               <Route>
                 <div className="help-panel">
                   <div className="sidebar-help">
-                    <Route path={`${path}/profile`} component={DisplayUserProfileHelp}/>
+                    <Route path={`${path}/profile`} component={DisplayUserProfileHelp} />
                     <Route path={`${path}/keys`} component={DisplayUserGpgInformationHelp}></Route>
-                    <Route path={`${path}/passphrase`} component={ChangeUserPassphraseHelp}/>
+                    <Route path={`${path}/passphrase`} component={ChangeUserPassphraseHelp} />
                     <Route path={`${path}/security-token`} component={DisplayUserSecurityTokenHelp}></Route>
                     <Route path={`${path}/desktop`} component={ExportAccountToDesktopHelp}></Route>
-                    {this.canIUseAccountRecoveryCapability &&
-                      <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettingsHelp}></Route>
-                    }
+                    {this.canIUseAccountRecoveryCapability && (
+                      <Route
+                        path={`${path}/account-recovery`}
+                        component={DisplayAccountRecoveryUserSettingsHelp}
+                      ></Route>
+                    )}
                     <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={DisplayMfaSettingsHelp}></Route>
                   </div>
-                  <Footer/>
+                  <Footer />
                 </div>
               </Route>
             </Switch>
@@ -230,4 +249,10 @@ DisplayUserSettingsWorkspace.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withRbac(withAccountRecovery(withMfa(withNavigationContext(withTranslation('common')(DisplayUserSettingsWorkspace)))))));
+export default withRouter(
+  withAppContext(
+    withRbac(
+      withAccountRecovery(withMfa(withNavigationContext(withTranslation("common")(DisplayUserSettingsWorkspace)))),
+    ),
+  ),
+);

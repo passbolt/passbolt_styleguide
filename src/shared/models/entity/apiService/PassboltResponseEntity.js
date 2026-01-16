@@ -29,24 +29,24 @@ class PassboltResponseEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "header",
-        "body",
-      ],
-      "properties": {
-        "header": {
-          "type": "object",
+      type: "object",
+      required: ["header", "body"],
+      properties: {
+        header: {
+          type: "object",
         },
-        "body": {
-          "anyOf": [{
-            "type": "string",
-          }, {
-            "type": "object"
-          }],
-          "nullable": true,
-        }
-      }
+        body: {
+          anyOf: [
+            {
+              type: "string",
+            },
+            {
+              type: "object",
+            },
+          ],
+          nullable: true,
+        },
+      },
     };
   }
 

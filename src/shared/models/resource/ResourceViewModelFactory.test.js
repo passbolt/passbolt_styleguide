@@ -16,7 +16,7 @@ import ResourcePasswordDescriptionViewModel from "./ResourcePasswordDescriptionV
 import ResourcePasswordStringViewModel from "./ResourcePasswordStringViewModel";
 import {
   defaultResourcePasswordDescriptionTotpViewModelDto,
-  defaultResourceViewModelDto
+  defaultResourceViewModelDto,
 } from "./resourceViewModel.test.data";
 import ResourceTypeEntity from "../entity/resourceType/resourceTypeEntity";
 import {
@@ -24,20 +24,21 @@ import {
   resourceTypePasswordDescriptionTotpDto,
   resourceTypePasswordStringDto,
   resourceTypeV5DefaultDto,
-  resourceTypeV5DefaultTotpDto, resourceTypeV5PasswordStringDto,
+  resourceTypeV5DefaultTotpDto,
+  resourceTypeV5PasswordStringDto,
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_V5_DEFAULT,
   TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
-  TEST_RESOURCE_TYPE_V5_PASSWORD_STRING
+  TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
 } from "../entity/resourceType/resourceTypeEntity.test.data";
 import ResourceV5DefaultViewModel from "./ResourceV5DefaultViewModel";
 import ResourceV5DefaultTotpViewModel from "./ResourceV5DefaultTotpViewModel";
 import ResourceViewModelFactory from "./ResourceViewModelFactory";
-import {defaultResourceDto} from "../entity/resource/resourceEntity.test.data";
-import {DateTime} from "luxon";
-import {v4 as uuid} from "uuid";
+import { defaultResourceDto } from "../entity/resource/resourceEntity.test.data";
+import { DateTime } from "luxon";
+import { v4 as uuid } from "uuid";
 import ResourceV5PasswordStringViewModel from "./ResourceV5PasswordStringViewModel";
 
 describe("ResourceViewModelFactory", () => {
@@ -46,7 +47,10 @@ describe("ResourceViewModelFactory", () => {
       expect.assertions(1);
       const dto = defaultResourceViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto());
-      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
+      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(
+        resourceType,
+        dto,
+      );
       expect(resourceViewModel instanceof ResourcePasswordDescriptionViewModel).toBeTruthy();
     });
 
@@ -54,7 +58,10 @@ describe("ResourceViewModelFactory", () => {
       expect.assertions(1);
       const dto = defaultResourceViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypePasswordStringDto());
-      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
+      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(
+        resourceType,
+        dto,
+      );
       expect(resourceViewModel instanceof ResourcePasswordStringViewModel).toBeTruthy();
     });
 
@@ -62,7 +69,10 @@ describe("ResourceViewModelFactory", () => {
       expect.assertions(1);
       const dto = defaultResourcePasswordDescriptionTotpViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypePasswordDescriptionTotpDto());
-      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
+      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(
+        resourceType,
+        dto,
+      );
       expect(resourceViewModel instanceof ResourcePasswordDescriptionTotpViewModel).toBeTruthy();
     });
 
@@ -70,7 +80,10 @@ describe("ResourceViewModelFactory", () => {
       expect.assertions(1);
       const dto = defaultResourceViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypeV5DefaultDto());
-      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
+      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(
+        resourceType,
+        dto,
+      );
       expect(resourceViewModel instanceof ResourceV5DefaultViewModel).toBeTruthy();
     });
 
@@ -78,7 +91,10 @@ describe("ResourceViewModelFactory", () => {
       expect.assertions(1);
       const dto = defaultResourcePasswordDescriptionTotpViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypeV5DefaultTotpDto());
-      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
+      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(
+        resourceType,
+        dto,
+      );
       expect(resourceViewModel instanceof ResourceV5DefaultTotpViewModel).toBeTruthy();
     });
 
@@ -86,7 +102,10 @@ describe("ResourceViewModelFactory", () => {
       expect.assertions(1);
       const dto = defaultResourceViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypeV5PasswordStringDto());
-      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
+      const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(
+        resourceType,
+        dto,
+      );
       expect(resourceViewModel instanceof ResourceV5PasswordStringViewModel).toBeTruthy();
     });
 
@@ -95,7 +114,9 @@ describe("ResourceViewModelFactory", () => {
       const dto = defaultResourcePasswordDescriptionTotpViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypeV5DefaultDto());
       resourceType._props.slug = "test";
-      expect(() => ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto)).toThrowError(new Error("No ViewModel has been found for the resource type."));
+      expect(() =>
+        ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto),
+      ).toThrowError(new Error("No ViewModel has been found for the resource type."));
     });
   });
 
@@ -201,7 +222,9 @@ describe("ResourceViewModelFactory", () => {
       const dto = defaultResourcePasswordDescriptionTotpViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypeV5DefaultDto());
       resourceType._props.slug = "test";
-      expect(() => ResourceViewModelFactory.createFromResourceTypeAndEntityDto(resourceType, dto)).toThrowError(new Error("No ViewModel has been found for the resource type."));
+      expect(() => ResourceViewModelFactory.createFromResourceTypeAndEntityDto(resourceType, dto)).toThrowError(
+        new Error("No ViewModel has been found for the resource type."),
+      );
     });
   });
 });

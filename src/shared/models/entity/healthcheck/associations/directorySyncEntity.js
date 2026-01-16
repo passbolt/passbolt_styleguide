@@ -22,11 +22,7 @@ class DirectorySyncEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      DirectorySyncEntity.ENTITY_NAME,
-      dto,
-      DirectorySyncEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(DirectorySyncEntity.ENTITY_NAME, dto, DirectorySyncEntity.getSchema()), options);
   }
 
   /**
@@ -35,11 +31,11 @@ class DirectorySyncEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["endpointsDisabled"],
-      "properties": {
-        "endpointsDisabled": {"type": "boolean"},
-      }
+      type: "object",
+      required: ["endpointsDisabled"],
+      properties: {
+        endpointsDisabled: { type: "boolean" },
+      },
     };
   }
 

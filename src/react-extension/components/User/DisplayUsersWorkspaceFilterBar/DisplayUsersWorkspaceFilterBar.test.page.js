@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayUsersWorkspaceFilterBar from "./DisplayUsersWorkspaceFilterBar";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -29,10 +29,10 @@ export default class DisplayUsersWorkspaceFilterBarPage {
     this._page = render(
       <Router>
         <MockTranslationProvider>
-          <DisplayUsersWorkspaceFilterBar.WrappedComponent {...props}/>
+          <DisplayUsersWorkspaceFilterBar.WrappedComponent {...props} />
         </MockTranslationProvider>
       </Router>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -40,14 +40,14 @@ export default class DisplayUsersWorkspaceFilterBarPage {
    * Returns the filter users
    */
   get filterUsers() {
-    return this._page.container.querySelector('.actions-filter');
+    return this._page.container.querySelector(".actions-filter");
   }
 
   /**
    * Returns the filter selected element
    */
   get filterSelected() {
-    return this._page.container.querySelector('.actions-filter div.button-action-filtered span')?.textContent;
+    return this._page.container.querySelector(".actions-filter div.button-action-filtered span")?.textContent;
   }
 
   /**
@@ -55,7 +55,7 @@ export default class DisplayUsersWorkspaceFilterBarPage {
    * @returns {Element}
    */
   get dropdownFilterButton() {
-    return this._page.container.querySelector('.dropdown .button-dropdown');
+    return this._page.container.querySelector(".dropdown .button-dropdown");
   }
 
   /**
@@ -63,7 +63,7 @@ export default class DisplayUsersWorkspaceFilterBarPage {
    * @returns {Element}
    */
   get attentionRequiredFilterButton() {
-    return this._page.container.querySelectorAll('.actions-filter .dropdown')[1]?.querySelector('.button-dropdown');
+    return this._page.container.querySelectorAll(".actions-filter .dropdown")[1]?.querySelector(".button-dropdown");
   }
 
   /**
@@ -71,7 +71,7 @@ export default class DisplayUsersWorkspaceFilterBarPage {
    * @returns {Element}
    */
   get attentionFilterOptions() {
-    return this._page.container.querySelectorAll('.actions-filter .dropdown ul.dropdown-content li button');
+    return this._page.container.querySelectorAll(".actions-filter .dropdown ul.dropdown-content li button");
   }
 
   /**
@@ -79,7 +79,7 @@ export default class DisplayUsersWorkspaceFilterBarPage {
    * @returns {Promise<void>}
    */
   async openDropdownFilterButton() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.dropdownFilterButton, leftClick);
     await waitFor(() => {});
   }
@@ -88,7 +88,7 @@ export default class DisplayUsersWorkspaceFilterBarPage {
    * Open the attention required filter button
    */
   async openAttentionRequiredFilterButton() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.attentionRequiredFilterButton, leftClick);
     await waitFor(() => {});
   }
@@ -97,15 +97,15 @@ export default class DisplayUsersWorkspaceFilterBarPage {
    * Returns the number of filter item element
    */
   get filterItemsLength() {
-    return this._page.container.querySelectorAll('.dropdown .dropdown-content.menu button').length;
+    return this._page.container.querySelectorAll(".dropdown .dropdown-content.menu button").length;
   }
 
   /**
    * Returns the filter element
    */
   async selectFilter(index) {
-    const element = this._page.container.querySelectorAll('.dropdown .dropdown-content.menu button')[index - 1];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll(".dropdown .dropdown-content.menu button")[index - 1];
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -115,8 +115,10 @@ export default class DisplayUsersWorkspaceFilterBarPage {
    * @returns {Promise<void>}
    */
   async removeSelectedFilter() {
-    const element = this._page.container.querySelector('.actions-filter div.button-action-filtered button.button-transparent');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector(
+      ".actions-filter div.button-action-filtered button.button-transparent",
+    );
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

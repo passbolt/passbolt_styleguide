@@ -13,23 +13,23 @@
  */
 
 import AppContext from "../../context/AppContext/AppContext";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import React from "react";
 import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";
-import {defaultProps} from "./ConfigurePasswordGenerator.test.data";
+import { defaultProps } from "./ConfigurePasswordGenerator.test.data";
 
 export default {
-  title: 'Components/ResourcePassword/ConfigurePasswordGenerator',
-  component: ConfigurePasswordGenerator
+  title: "Components/ResourcePassword/ConfigurePasswordGenerator",
+  component: ConfigurePasswordGenerator,
 };
 
-const Template = args =>
+const Template = (args) => (
   <AppContext.Provider>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <ConfigurePasswordGenerator {...args} {...routerProps}/>}>
-      </Route>
+    <MemoryRouter initialEntries={["/"]}>
+      <Route component={(routerProps) => <ConfigurePasswordGenerator {...args} {...routerProps} />}></Route>
     </MemoryRouter>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();

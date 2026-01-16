@@ -42,19 +42,19 @@ describe("GoogleSsoSettingsViewModel", () => {
   });
 
   describe("::isDataDifferent", () => {
-    each([
-      {client_id: "client-id"},
-      {client_secret: "this is a secret"},
-    ]).describe("should return true if at least 1 difference is found between 2 ViewModel", scenario => {
-      it(`for: ${JSON.stringify(scenario)}`, () => {
-        expect.assertions(1);
+    each([{ client_id: "client-id" }, { client_secret: "this is a secret" }]).describe(
+      "should return true if at least 1 difference is found between 2 ViewModel",
+      (scenario) => {
+        it(`for: ${JSON.stringify(scenario)}`, () => {
+          expect.assertions(1);
 
-        const viewModelA = new GoogleSsoSettingsViewModel(defaultGoogleSsoSettingsViewModelDto());
-        const viewModelB = new GoogleSsoSettingsViewModel(defaultGoogleSsoSettingsViewModelDto(scenario));
+          const viewModelA = new GoogleSsoSettingsViewModel(defaultGoogleSsoSettingsViewModelDto());
+          const viewModelB = new GoogleSsoSettingsViewModel(defaultGoogleSsoSettingsViewModelDto(scenario));
 
-        expect(viewModelA.isDataDifferent(viewModelB)).toStrictEqual(true);
-      });
-    });
+          expect(viewModelA.isDataDifferent(viewModelB)).toStrictEqual(true);
+        });
+      },
+    );
 
     it("should return false if no difference is found between 2 ViewModel", () => {
       expect.assertions(1);
@@ -120,10 +120,7 @@ describe("GoogleSsoSettingsViewModel", () => {
   });
 
   describe("::validate", () => {
-    each([
-      "client_id",
-      "client_secret",
-    ]).describe("should validates the required field", requiredField => {
+    each(["client_id", "client_secret"]).describe("should validates the required field", (requiredField) => {
       it(`for: ${requiredField}`, () => {
         expect.assertions(2);
         const viewModel = new GoogleSsoSettingsViewModel();
@@ -142,11 +139,11 @@ describe("GoogleSsoSettingsViewModel", () => {
           client_secret: 42,
         },
         expectedErrors: {
-          client_id: {type: "The client_id is not a valid string."},
-          client_secret: {type: "The client_secret is not a valid string."},
-        }
-      }
-    ]).describe("should validate the current data set", scenario => {
+          client_id: { type: "The client_id is not a valid string." },
+          client_secret: { type: "The client_secret is not a valid string." },
+        },
+      },
+    ]).describe("should validate the current data set", (scenario) => {
       it(`for: ${JSON.stringify(scenario.dto)}`, () => {
         const expectedErroneousField = Object.keys(scenario.expectedErrors);
         const expectedErroneousFieldCount = expectedErroneousField.length;

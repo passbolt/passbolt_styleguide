@@ -13,9 +13,9 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
 class EditResourceTagsItemViewer extends React.Component {
@@ -43,8 +43,8 @@ class EditResourceTagsItemViewer extends React.Component {
   handleOnClickTag(event, tag) {
     event.stopPropagation();
     // filter by the resources by tag
-    const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: tag}};
-    this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    const filter = { type: ResourceWorkspaceFilterTypes.TAG, payload: { tag: tag } };
+    this.props.history.push({ pathname: "/app/passwords", state: { filter } });
   }
 
   isLoading() {
@@ -66,25 +66,28 @@ class EditResourceTagsItemViewer extends React.Component {
     const isLoading = this.isLoading();
     return (
       <div className="tags-list">
-        {isLoading &&
-        <div className="processing-wrapper">
-          <SpinnerSVG/>
-          <span className="processing-text"><Trans>Retrieving tags</Trans></span>
-        </div>
-        }
-        {!isLoading && this.props.tags.length === 0 &&
-        <span className="empty-content"><Trans>There is no tag.</Trans></span>
-        }
-        {!isLoading && this.props.tags.length > 0 &&
-          this.getTags().map(tag =>
+        {isLoading && (
+          <div className="processing-wrapper">
+            <SpinnerSVG />
+            <span className="processing-text">
+              <Trans>Retrieving tags</Trans>
+            </span>
+          </div>
+        )}
+        {!isLoading && this.props.tags.length === 0 && (
+          <span className="empty-content">
+            <Trans>There is no tag.</Trans>
+          </span>
+        )}
+        {!isLoading &&
+          this.props.tags.length > 0 &&
+          this.getTags().map((tag) => (
             <div key={tag.id} className="tag-list-item">
-              <button type="button" onClick={event => this.handleOnClickTag(event, tag)} className="tag">
-                <span className="tag-content ellipsis">
-                  {tag.slug}
-                </span>
+              <button type="button" onClick={(event) => this.handleOnClickTag(event, tag)} className="tag">
+                <span className="tag-content ellipsis">{tag.slug}</span>
               </button>
-            </div>)
-        }
+            </div>
+          ))}
       </div>
     );
   }

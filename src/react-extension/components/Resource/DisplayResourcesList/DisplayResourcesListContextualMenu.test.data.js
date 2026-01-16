@@ -12,29 +12,25 @@
  * @since         2.11.0
  */
 
-import {defaultUserRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserRbacContext, denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import {
-  defaultResourceDto, resourceStandaloneTotpDto, resourceWithReadPermissionDto, resourceWithTotpDto,
-  resourceWithUpdatePermissionDto
+  defaultResourceDto,
+  resourceStandaloneTotpDto,
+  resourceWithReadPermissionDto,
+  resourceWithTotpDto,
+  resourceWithUpdatePermissionDto,
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
-import SecretRevisionsSettingsEntity
-  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
-import {
-  defaultSecretRevisionsSettingsDto
-} from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -52,11 +48,11 @@ export function defaultProps(data = {}) {
     dialogContext: defaultDialogContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
+    passwordExpiryContext: defaultPasswordExpirySettingsContext({ policy_override: true }),
     clipboardContext: defaultClipboardContext(),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     secretRevisionsSettings: new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto()),
-    ...data
+    ...data,
   };
 }
 
@@ -111,6 +107,6 @@ export function propsResourceWithUpdatePermission() {
 export function propsDenyUIActions() {
   return {
     ...defaultProps(),
-    rbacContext: denyRbacContext()
+    rbacContext: denyRbacContext(),
   };
 }

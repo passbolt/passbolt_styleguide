@@ -12,11 +12,11 @@
  * @since         3.6.0
  */
 import SearchBar from "./SearchBar";
-import {defaultProps} from "./SearchBar.test.data";
+import { defaultProps } from "./SearchBar.test.data";
 
 export default {
-  title: 'Foundations/Search',
-  component: SearchBar
+  title: "Foundations/Search",
+  component: SearchBar,
 };
 
 export const DefaultSearchBar = {

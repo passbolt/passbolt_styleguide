@@ -12,7 +12,7 @@
  * @since         5.5.0
  */
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayScimAdministrationTeasing from "./DisplayScimAdministrationTeasing";
@@ -30,10 +30,10 @@ export default class DisplayScimAdministrationTeasingPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <DisplayScimAdministrationTeasing {...props}/>
+          <DisplayScimAdministrationTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -42,7 +42,7 @@ export default class DisplayScimAdministrationTeasingPage {
    * @returns {HTMLElement}
    */
   get scim() {
-    return this._page.container.querySelector('.scim-teasing');
+    return this._page.container.querySelector(".scim-teasing");
   }
 
   /**
@@ -50,7 +50,7 @@ export default class DisplayScimAdministrationTeasingPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this._page.container.querySelector('#scim-title').textContent;
+    return this._page.container.querySelector("#scim-title").textContent;
   }
 
   /**
@@ -58,7 +58,7 @@ export default class DisplayScimAdministrationTeasingPage {
    * @returns {HTMLElement}
    */
   get scimFirstLine() {
-    return this._page.container.querySelector('.scim-teasing .main-content > p').textContent;
+    return this._page.container.querySelector(".scim-teasing .main-content > p").textContent;
   }
 
   /**
@@ -66,7 +66,7 @@ export default class DisplayScimAdministrationTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help-section');
+    return this._page.container.querySelector(".sidebar-help-section");
   }
 
   /**
@@ -105,7 +105,7 @@ export default class DisplayScimAdministrationTeasingPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

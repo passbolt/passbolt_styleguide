@@ -12,8 +12,7 @@
  * @since         4.3.0
  */
 
-import {ImportAccountKitWorkflowStates} from "../../../contexts/Desktop/ImportAccountKitContext";
-
+import { ImportAccountKitWorkflowStates } from "../../../contexts/Desktop/ImportAccountKitContext";
 
 export const defaultProps = (data = {}) => {
   const defaultData = {
@@ -24,10 +23,9 @@ export const defaultProps = (data = {}) => {
     },
     importAccountKitContext: {
       navigate: jest.fn(),
-      state: ImportAccountKitWorkflowStates.GET_STARTED
-    }
+      state: ImportAccountKitWorkflowStates.GET_STARTED,
+    },
   };
 
   return Object.assign(defaultData, data);
 };
-

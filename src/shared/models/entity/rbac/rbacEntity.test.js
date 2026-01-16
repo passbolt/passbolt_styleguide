@@ -19,11 +19,11 @@ import {
   defaultRbacData,
   defaultRbacWithActionData,
   defaultRbacWithAllAssociationData,
-  defaultRbacWithUiActionData
+  defaultRbacWithUiActionData,
 } from "./rbacEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
-import {defaultActionData} from "./actionEntity.test.data";
-import {defaultUiActionData} from "./uiActionEntity.test.data";
+import { defaultActionData } from "./actionEntity.test.data";
+import { defaultUiActionData } from "./uiActionEntity.test.data";
 
 describe("RbacEntity", () => {
   describe("RbacEntity:constructor", () => {
@@ -70,123 +70,123 @@ describe("RbacEntity", () => {
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'valid uuid', rule: 'format', value: 'invalid-id'},
-    ]).describe("Should validate the id", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+      { scenario: "valid uuid", rule: "format", value: "invalid-id" },
+    ]).describe("Should validate the id", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({
-          id: test.value
+          id: test.value,
         });
         try {
           new RbacEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('id', test.rule)).toBeTruthy();
+          expect(error.hasError("id", test.rule)).toBeTruthy();
         }
       });
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'valid uuid', rule: 'format', value: 'invalid-id'},
-    ]).describe("Should validate the role id", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+      { scenario: "valid uuid", rule: "format", value: "invalid-id" },
+    ]).describe("Should validate the role id", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({
-          role_id: test.value
+          role_id: test.value,
         });
         try {
           new RbacEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('role_id', test.rule)).toBeTruthy();
+          expect(error.hasError("role_id", test.rule)).toBeTruthy();
         }
       });
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'valid foreign model', rule: 'enum', value: 'invalidForeignModel'},
-    ]).describe("Should validate the foreign model", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+      { scenario: "valid foreign model", rule: "enum", value: "invalidForeignModel" },
+    ]).describe("Should validate the foreign model", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({
-          foreign_model: test.value
+          foreign_model: test.value,
         });
         try {
           new RbacEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('foreign_model', test.rule)).toBeTruthy();
+          expect(error.hasError("foreign_model", test.rule)).toBeTruthy();
         }
       });
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'valid uuid', rule: 'format', value: 'invalid-id'},
-    ]).describe("Should validate the foreign id", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+      { scenario: "valid uuid", rule: "format", value: "invalid-id" },
+    ]).describe("Should validate the foreign id", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({
-          foreign_id: test.value
+          foreign_id: test.value,
         });
         try {
           new RbacEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('foreign_id', test.rule)).toBeTruthy();
+          expect(error.hasError("foreign_id", test.rule)).toBeTruthy();
         }
       });
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'enum', rule: 'enum', value: 'invalid-control-function'},
-    ]).describe("Should validate the control function", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+      { scenario: "enum", rule: "enum", value: "invalid-control-function" },
+    ]).describe("Should validate the control function", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({
-          control_function: test.value
+          control_function: test.value,
         });
         try {
           new RbacEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('control_function', test.rule)).toBeTruthy();
+          expect(error.hasError("control_function", test.rule)).toBeTruthy();
         }
       });
     });
 
-    it('Should not accept invalid associated action', async() => {
+    it("Should not accept invalid associated action", async () => {
       expect.assertions(2);
       const dto = defaultRbacData({
-        action: defaultActionData({id: "invalid-id"})
+        action: defaultActionData({ id: "invalid-id" }),
       });
       try {
         new RbacEntity(dto);
       } catch (error) {
         expect(error).toBeInstanceOf(EntityValidationError);
-        expect(error.hasError('id', 'format')).toBeTruthy();
+        expect(error.hasError("id", "format")).toBeTruthy();
       }
     });
 
-    it('Should not accept invalid associated ui action', async() => {
+    it("Should not accept invalid associated ui action", async () => {
       expect.assertions(2);
       const dto = defaultRbacData({
-        action: defaultUiActionData({id: "invalid-id"})
+        action: defaultUiActionData({ id: "invalid-id" }),
       });
       try {
         new RbacEntity(dto);
       } catch (error) {
         expect(error).toBeInstanceOf(EntityValidationError);
-        expect(error.hasError('id', 'format')).toBeTruthy();
+        expect(error.hasError("id", "format")).toBeTruthy();
       }
     });
   });
@@ -194,13 +194,7 @@ describe("RbacEntity", () => {
   describe("RbacEntity:toDto", () => {
     it("should return the expected properties.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        "id",
-        "role_id",
-        "foreign_model",
-        "foreign_id",
-        "control_function"
-      ];
+      const expectedKeys = ["id", "role_id", "foreign_model", "foreign_id", "control_function"];
 
       const dto = defaultRbacData();
       const entity = new RbacEntity(dto);
@@ -212,18 +206,11 @@ describe("RbacEntity", () => {
 
     it("should return the expected properties containing the associated action.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        "id",
-        "role_id",
-        "foreign_model",
-        "foreign_id",
-        "control_function",
-        "action"
-      ];
+      const expectedKeys = ["id", "role_id", "foreign_model", "foreign_id", "control_function", "action"];
 
       const dto = defaultRbacWithActionData();
       const entity = new RbacEntity(dto);
-      const resultDto = entity.toDto({action: true});
+      const resultDto = entity.toDto({ action: true });
       const keys = Object.keys(resultDto);
       expect(keys).toEqual(expectedKeys);
       expect(Object.keys(resultDto).length).toBe(expectedKeys.length);
@@ -231,18 +218,11 @@ describe("RbacEntity", () => {
 
     it("should return the expected properties containing the associated ui action.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        "id",
-        "role_id",
-        "foreign_model",
-        "foreign_id",
-        "control_function",
-        "ui_action"
-      ];
+      const expectedKeys = ["id", "role_id", "foreign_model", "foreign_id", "control_function", "ui_action"];
 
       const dto = defaultRbacWithUiActionData();
       const entity = new RbacEntity(dto);
-      const resultDto = entity.toDto({ui_action: true});
+      const resultDto = entity.toDto({ ui_action: true });
       const keys = Object.keys(resultDto);
       expect(keys).toEqual(expectedKeys);
       expect(Object.keys(resultDto).length).toBe(expectedKeys.length);
@@ -250,15 +230,7 @@ describe("RbacEntity", () => {
 
     it("should return the expected properties containing all the associated entities.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        "id",
-        "role_id",
-        "foreign_model",
-        "foreign_id",
-        "control_function",
-        "action",
-        "ui_action"
-      ];
+      const expectedKeys = ["id", "role_id", "foreign_model", "foreign_id", "control_function", "action", "ui_action"];
 
       const dto = defaultRbacWithAllAssociationData();
       const entity = new RbacEntity(dto);

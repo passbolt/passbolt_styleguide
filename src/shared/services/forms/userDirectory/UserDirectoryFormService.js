@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import XRegExp from 'xregexp';
+import XRegExp from "xregexp";
 
 /**
  * Model related to the User Directory form settings
@@ -66,7 +66,7 @@ class UserDirectoryFormService {
 
     this.context.setErrors(validation);
     //Check if we have errors
-    return Object.values(validation).filter(x => x !== null).length === 0;
+    return Object.values(validation).filter((x) => x !== null).length === 0;
   }
 
   /**
@@ -110,7 +110,9 @@ class UserDirectoryFormService {
     if (!value || value.trim() === "") {
       fieldsMappingAdUserUsernameError = this.translate("The user username field mapping cannot be empty");
     } else if (value.length > 128) {
-      fieldsMappingAdUserUsernameError = this.translate("The user username field mapping cannot exceed 128 characters.");
+      fieldsMappingAdUserUsernameError = this.translate(
+        "The user username field mapping cannot exceed 128 characters.",
+      );
     }
 
     return fieldsMappingAdUserUsernameError;
@@ -128,7 +130,9 @@ class UserDirectoryFormService {
     if (!value || value.trim() === "") {
       fieldsMappingOpenLdapGroupUsersError = this.translate("The group users field mapping cannot be empty");
     } else if (value.length > 128) {
-      fieldsMappingOpenLdapGroupUsersError = this.translate("The group users field mapping cannot exceed 128 characters.");
+      fieldsMappingOpenLdapGroupUsersError = this.translate(
+        "The group users field mapping cannot exceed 128 characters.",
+      );
     }
 
     return fieldsMappingOpenLdapGroupUsersError;

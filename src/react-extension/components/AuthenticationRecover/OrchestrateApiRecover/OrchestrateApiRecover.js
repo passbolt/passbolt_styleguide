@@ -11,15 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
-import {ApiRecoverContextState, withApiRecoverContext} from "../../../contexts/ApiRecoverContext";
+import { ApiRecoverContextState, withApiRecoverContext } from "../../../contexts/ApiRecoverContext";
 import InstallExtension from "../../Authentication/InstallExtension/InstallExtension";
 import DisplayBrowserNotSupported from "../../Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
 import DisplayRequireInvitationError from "../../Authentication/DisplayRequireInvitationError/DisplayRequireInvitationError";
 import DisplayExpiredTokenError from "../../Authentication/DisplayExpiredTokenError/DisplayExpiredTokenError";
-import DisplayAlreadyLoggedInError, {DisplayAlreadyLoggedInErrorVariations} from "../../Authentication/DisplayAlreadyLoggedInError/DisplayAlreadyLoggedInError";
+import DisplayAlreadyLoggedInError, {
+  DisplayAlreadyLoggedInErrorVariations,
+} from "../../Authentication/DisplayAlreadyLoggedInError/DisplayAlreadyLoggedInError";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 
 /**
@@ -47,24 +49,24 @@ class OrchestrateApiRecover extends Component {
   render() {
     switch (this.props.apiRecoverContext.state) {
       case ApiRecoverContextState.INSTALL_EXTENSION_STATE:
-        return <InstallExtension/>;
+        return <InstallExtension />;
       case ApiRecoverContextState.DOWNLOAD_SUPPORTED_BROWSER_STATE:
-        return <DisplayBrowserNotSupported/>;
+        return <DisplayBrowserNotSupported />;
       case ApiRecoverContextState.TOKEN_EXPIRED_STATE:
-        return <DisplayExpiredTokenError/>;
+        return <DisplayExpiredTokenError />;
       case ApiRecoverContextState.ERROR_ALREADY_SIGNED_IN_STATE:
-        return <DisplayAlreadyLoggedInError
-          onLogoutButtonClick={this.props.apiRecoverContext.logoutUserAndRefresh}
-          displayAs={DisplayAlreadyLoggedInErrorVariations.RECOVER}
-        />;
+        return (
+          <DisplayAlreadyLoggedInError
+            onLogoutButtonClick={this.props.apiRecoverContext.logoutUserAndRefresh}
+            displayAs={DisplayAlreadyLoggedInErrorVariations.RECOVER}
+          />
+        );
       case ApiRecoverContextState.REQUEST_INVITATION_ERROR:
-        return <DisplayRequireInvitationError/>;
+        return <DisplayRequireInvitationError />;
       case ApiRecoverContextState.UNEXPECTED_ERROR_STATE:
-        return <DisplayUnexpectedError
-          error={this.props.apiRecoverContext.unexpectedError}
-        />;
+        return <DisplayUnexpectedError error={this.props.apiRecoverContext.unexpectedError} />;
       default:
-        return <LoadingSpinner/>;
+        return <LoadingSpinner />;
     }
   }
 }

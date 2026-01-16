@@ -14,12 +14,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAdminAccountRecovery} from "../../../../contexts/AdminAccountRecoveryContext";
-import {AccountRecoveryUserContextProvider} from "../../../../contexts/AccountRecoveryUserContext";
-import {withWorkflow} from "../../../../contexts/WorkflowContext";
-import HandleSaveAccountRecoveryOrganizationPolicyWorkflow
-  from "../../HandleSaveAccountRecoveryOrganizationPolicyWorkflow/HandleSaveAccountRecoveryOrganizationPolicyWorkflow";
+import { Trans, withTranslation } from "react-i18next";
+import { withAdminAccountRecovery } from "../../../../contexts/AdminAccountRecoveryContext";
+import { AccountRecoveryUserContextProvider } from "../../../../contexts/AccountRecoveryUserContext";
+import { withWorkflow } from "../../../../contexts/WorkflowContext";
+import HandleSaveAccountRecoveryOrganizationPolicyWorkflow from "../../HandleSaveAccountRecoveryOrganizationPolicyWorkflow/HandleSaveAccountRecoveryOrganizationPolicyWorkflow";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -61,13 +60,14 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   isSaveEnabled() {
-    if (!this.props.adminAccountRecoveryContext.hasPolicyChanges()) { //there is currently no change
+    if (!this.props.adminAccountRecoveryContext.hasPolicyChanges()) {
+      //there is currently no change
       return false;
     }
     const changes = this.props.adminAccountRecoveryContext.policyChanges;
     const currentPolicy = this.props.adminAccountRecoveryContext.currentPolicy;
 
-    if (changes?.policy ===  AccountRecoveryUserContextProvider.POLICY_DISABLED) {
+    if (changes?.policy === AccountRecoveryUserContextProvider.POLICY_DISABLED) {
       // the new policy type to save is now disabled, there is no need to check for the key, we can save
       return true;
     }
@@ -97,12 +97,26 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
     return (
       <div className="actions-wrapper">
         <div className="left-actions-wrapper">
-          <button type="button" className="button secondary" disabled={!this.isResetEnabled()} onClick={this.handleEditSubscriptionClick}>
-            <span><Trans>Reset settings</Trans></span>
+          <button
+            type="button"
+            className="button secondary"
+            disabled={!this.isResetEnabled()}
+            onClick={this.handleEditSubscriptionClick}
+          >
+            <span>
+              <Trans>Reset settings</Trans>
+            </span>
           </button>
         </div>
-        <button type="button" className="button primary form" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-          <span><Trans>Save</Trans></span>
+        <button
+          type="button"
+          className="button primary form"
+          disabled={!this.isSaveEnabled()}
+          onClick={this.handleSaveClick}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );

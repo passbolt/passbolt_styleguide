@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {SecretGeneratorComplexity} from "../../lib/SecretGenerator/SecretGeneratorComplexity";
+import { Trans, withTranslation } from "react-i18next";
+import { SecretGeneratorComplexity } from "../../lib/SecretGenerator/SecretGeneratorComplexity";
 import Tooltip from "../../../react-extension/components/Common/Tooltip/Tooltip";
 import InfoSVG from "../../../img/svg/info.svg";
 
@@ -36,7 +36,7 @@ function hexToRgb(hex) {
     const red = parseInt(result[1], 16);
     const green = parseInt(result[2], 16);
     const blue = parseInt(result[3], 16);
-    return {red, green, blue};
+    return { red, green, blue };
   }
   return null;
 }
@@ -59,9 +59,11 @@ class PasswordComplexity extends Component {
    * @returns {JSX}
    */
   get tooltipMessage() {
-    return (<>
-      <Trans>Entropy:</Trans> {this.entropy} bits
-    </>);
+    return (
+      <>
+        <Trans>Entropy:</Trans> {this.entropy} bits
+      </>
+    );
   }
 
   /**
@@ -71,7 +73,7 @@ class PasswordComplexity extends Component {
   get passwordStrengthLabel() {
     const shouldDisplayEntropyLabel = this.hasEntropy() || this.hasError();
     if (!shouldDisplayEntropyLabel) {
-      return (<Trans>Quality</Trans>);
+      return <Trans>Quality</Trans>;
     }
 
     /*
@@ -85,7 +87,7 @@ class PasswordComplexity extends Component {
      * this.translate("Very strong")
      */
     const strength = SecretGeneratorComplexity.strength(this.props.entropy);
-    return (<>{strength.label}</>);
+    return <>{strength.label}</>;
   }
 
   /**
@@ -93,8 +95,7 @@ class PasswordComplexity extends Component {
    * @returns {boolean}
    */
   hasEntropy() {
-    return this.props.entropy !== null
-      && typeof this.props.entropy !== "undefined";
+    return this.props.entropy !== null && typeof this.props.entropy !== "undefined";
   }
 
   /**
@@ -111,7 +112,7 @@ class PasswordComplexity extends Component {
    */
   getProgresseBarStyle() {
     const relativePositionForEntropy = this.getRelativeEntropyPosition();
-    return {width: `${relativePositionForEntropy}%`, backgroundColor: this.colorGradient(relativePositionForEntropy)};
+    return { width: `${relativePositionForEntropy}%`, backgroundColor: this.colorGradient(relativePositionForEntropy) };
   }
 
   /**
@@ -121,7 +122,7 @@ class PasswordComplexity extends Component {
    */
   colorGradient(fadeFraction) {
     let rgbColor1, rgbColor2;
-    let fade = fadeFraction / 100 * 2;
+    let fade = (fadeFraction / 100) * 2;
 
     // Find which interval to use and adjust the fade percentage
     if (fade >= 1) {
@@ -146,7 +147,7 @@ class PasswordComplexity extends Component {
    */
   getRelativeEntropyPosition() {
     // Power curve with an asymptote at 100%. It will never reach 100% but will get infinitely closer.
-    return (100 - (99 / (1 + Math.pow(this.props.entropy / 90, 10))));
+    return 100 - 99 / (1 + Math.pow(this.props.entropy / 90, 10));
   }
 
   /**
@@ -158,12 +159,15 @@ class PasswordComplexity extends Component {
       <div className="password-complexity">
         <span className="complexity-text">
           <Tooltip message={this.tooltipMessage}>
-            {this.passwordStrengthLabel} <InfoSVG/>
+            {this.passwordStrengthLabel} <InfoSVG />
           </Tooltip>
         </span>
         <span className="progress">
-          <span className="progress-bar background"/>
-          <span className={`progress-bar foreground ${this.hasError() ? "error" : ""}`} style={this.hasEntropy() ? this.getProgresseBarStyle(this.props.entropy) : null}/>
+          <span className="progress-bar background" />
+          <span
+            className={`progress-bar foreground ${this.hasError() ? "error" : ""}`}
+            style={this.hasEntropy() ? this.getProgresseBarStyle(this.props.entropy) : null}
+          />
         </span>
       </div>
     );
@@ -171,7 +175,7 @@ class PasswordComplexity extends Component {
 }
 
 PasswordComplexity.defaultProps = {
-  entropy: null
+  entropy: null,
 };
 
 PasswordComplexity.propTypes = {

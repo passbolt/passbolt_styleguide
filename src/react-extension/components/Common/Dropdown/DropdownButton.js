@@ -14,8 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withDropdown} from "./DropdownContext";
-
+import { withDropdown } from "./DropdownContext";
 
 /**
  * This component acts as an anchor for the dropdown button.
@@ -58,7 +57,12 @@ class DropdownButton extends React.Component {
    */
   render() {
     return (
-      <button type="button" className={`${this.props.className} ${this.dropdownOpen ? "open" : ""}`} disabled={this.props.disabled} onClick={this.handleDropdownMenuClickEvent}>
+      <button
+        type="button"
+        className={`${this.props.className} ${this.dropdownOpen ? "open" : ""}`}
+        disabled={this.props.disabled}
+        onClick={this.handleDropdownMenuClickEvent}
+      >
         {this.props.children}
       </button>
     );
@@ -68,7 +72,7 @@ class DropdownButton extends React.Component {
 DropdownButton.defaultProps = {
   disabled: false,
   direction: "right",
-  className: "button-dropdown"
+  className: "button-dropdown",
 };
 
 DropdownButton.propTypes = {
@@ -76,7 +80,7 @@ DropdownButton.propTypes = {
   disabled: PropTypes.bool, // The disabled property
   direction: PropTypes.string, // The direction property
   dropdownContext: PropTypes.any, // The dropdown context
-  children: PropTypes.any // The children property
+  children: PropTypes.any, // The children property
 };
 
 export default withDropdown(DropdownButton);

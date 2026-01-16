@@ -14,19 +14,19 @@
 import React from "react";
 import DialogWrapper from "./DialogWrapper";
 
-const DialogHeader = args =>  <DialogWrapper {...args}/>;
+const DialogHeader = (args) => <DialogWrapper {...args} />;
 
 export default {
-  title: 'Components/Common/DialogHeader',
-  component: DialogHeader
+  title: "Components/Common/DialogHeader",
+  component: DialogHeader,
 };
 
 export const Default = {
   args: {
     title: "Title",
     subtitle: "Subtitle",
-    onClose: () => {}
-  }
+    onClose: () => {},
+  },
 };
 
 export const Tooltip = {
@@ -34,7 +34,6 @@ export const Tooltip = {
     title: "Title",
     subtitle: "Subtitle",
     tooltip: "Tool tip placeholder",
-    onClose: () => {}
-  }
+    onClose: () => {},
+  },
 };
-

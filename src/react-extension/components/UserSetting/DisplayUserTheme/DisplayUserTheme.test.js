@@ -12,11 +12,10 @@
  * @since         4.3.0
  */
 
-
-import {defaultProps, themes} from "./DisplayUserTheme.test.data";
+import { defaultProps, themes } from "./DisplayUserTheme.test.data";
 import DisplayUserThemePage from "./DisplayUserTheme.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {screen} from "@testing-library/react";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -28,14 +27,14 @@ describe("Display user theme", () => {
 
   beforeEach(() => {
     props = defaultProps();
-    props.context.port.addRequestListener('passbolt.themes.find-all', () => themes);
+    props.context.port.addRequestListener("passbolt.themes.find-all", () => themes);
     page = new DisplayUserThemePage(props);
   });
 
   describe("As LU, I should see the appropriate list of themes", () => {
-    it('As LU, I should see initially an empty content when there are no resources', async() => {
+    it("As LU, I should see initially an empty content when there are no resources", async () => {
       expect.assertions(4);
-      const themeButtons = await screen.findAllByRole('button');
+      const themeButtons = await screen.findAllByRole("button");
       expect(themeButtons.length).toBeGreaterThan(0);
       expect(page.themesCount).toStrictEqual(4);
       expect(props.loadingContext.add).toHaveBeenCalledTimes(1);
@@ -43,13 +42,13 @@ describe("Display user theme", () => {
     });
   });
 
-  describe('As LU, I should select themes', () => {
-    it('As LU, I should select midgar theme', async() => {
+  describe("As LU, I should select themes", () => {
+    it("As LU, I should select midgar theme", async () => {
       expect.assertions(5);
 
       jest.spyOn(props.context.port, "request");
 
-      const themeButtons = await screen.findAllByRole('button');
+      const themeButtons = await screen.findAllByRole("button");
       expect(themeButtons.length).toBeGreaterThan(0);
       await page.theme(2).select();
 
@@ -59,12 +58,12 @@ describe("Display user theme", () => {
       expect(props.loadingContext.remove).toHaveBeenCalledTimes(2);
     });
 
-    it('As LU selecting the already selected theme should not trigger a change', async() => {
+    it("As LU selecting the already selected theme should not trigger a change", async () => {
       expect.assertions(4);
 
       jest.spyOn(props.context.port, "request");
 
-      const themeButtons = await screen.findAllByRole('button');
+      const themeButtons = await screen.findAllByRole("button");
       expect(themeButtons.length).toBeGreaterThan(0);
 
       await page.theme(2).select();
@@ -74,16 +73,16 @@ describe("Display user theme", () => {
       expect(props.context.port.request).toHaveBeenCalledTimes(1);
     });
 
-    it('As LU, I should select a theme with failure', async() => {
+    it("As LU, I should select a theme with failure", async () => {
       expect.assertions(6);
-      const themeButtons = await screen.findAllByRole('button');
+      const themeButtons = await screen.findAllByRole("button");
       expect(themeButtons.length).toBeGreaterThan(0);
 
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject("error"));
       await page.theme(3).select();
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.themes.change", "solarized_dark");
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(0);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: "error"});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: "error" });
       expect(props.loadingContext.add).toHaveBeenCalledTimes(2);
       expect(props.loadingContext.remove).toHaveBeenCalledTimes(2);
     });

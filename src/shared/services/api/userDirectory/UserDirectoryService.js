@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {ApiClient} from "../../../lib/apiClient/apiClient";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
 
 const USER_DIRECTORY_RESOURCE_NAME = "directorysync";
 
@@ -50,7 +50,7 @@ class UserDirectoryService {
   async update(userDirectoryDto) {
     this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}`);
     const apiClient = new ApiClient(this.apiClientOptions);
-    return (await apiClient.update('settings', userDirectoryDto)).body;
+    return (await apiClient.update("settings", userDirectoryDto)).body;
   }
 
   /**
@@ -62,7 +62,6 @@ class UserDirectoryService {
     const apiClient = new ApiClient(this.apiClientOptions);
     return apiClient.delete("settings");
   }
-
 
   /**
    * Whenever the test users directory is requested.

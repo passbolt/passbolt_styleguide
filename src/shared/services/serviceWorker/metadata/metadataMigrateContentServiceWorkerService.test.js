@@ -14,8 +14,10 @@
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import PassboltResponsePaginationHeaderEntity from "../../../models/entity/apiService/PassboltResponsePaginationHeaderEntity";
-import {defaultPassboltResponsePaginationHeaderDto} from "../../../models/entity/apiService/PassboltResponsePaginationHeaderEntity.test.data";
-import MetadataMigrateContentServiceWorkerService, {METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT} from "./metadataMigrateContentServiceWorkerService";
+import { defaultPassboltResponsePaginationHeaderDto } from "../../../models/entity/apiService/PassboltResponsePaginationHeaderEntity.test.data";
+import MetadataMigrateContentServiceWorkerService, {
+  METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT,
+} from "./metadataMigrateContentServiceWorkerService";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -23,7 +25,7 @@ beforeEach(() => {
 
 describe("MetadataMigrateContentServiceWorkerService", () => {
   describe("::findCountMetadataMigrateResources", () => {
-    it("requests the service worker with the expected event and return the count details.", async() => {
+    it("requests the service worker with the expected event and return the count details.", async () => {
       expect.assertions(4);
 
       const dto = defaultPassboltResponsePaginationHeaderDto();
@@ -40,7 +42,7 @@ describe("MetadataMigrateContentServiceWorkerService", () => {
       expect(countDetails.toDto()).toEqual(dto);
     });
 
-    it("requests the service worker for count details of shared resources only .", async() => {
+    it("requests the service worker for count details of shared resources only .", async () => {
       expect.assertions(4);
 
       const dto = defaultPassboltResponsePaginationHeaderDto();

@@ -13,35 +13,36 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import EnterUsernameForm from "./EnterUsernameForm";
 
 export default {
-  title: 'Components/Authentication/EnterUsernameForm',
-  component: EnterUsernameForm
+  title: "Components/Authentication/EnterUsernameForm",
+  component: EnterUsernameForm,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <EnterUsernameForm {...args} {...routerProps}/>}/>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <EnterUsernameForm {...args} {...routerProps} />} />
         </MemoryRouter>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 export const Initial = Template.bind({});
 Initial.parameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 export const WithSsoRecoverEnabled = Template.bind({});
 WithSsoRecoverEnabled.parameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 WithSsoRecoverEnabled.args = {
-  isSsoRecoverEnabled: true
+  isSsoRecoverEnabled: true,
 };

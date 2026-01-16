@@ -16,8 +16,8 @@
  * Unit tests on TransferToMobile in regard of specifications
  */
 import TransferToMobilePage from "./TransferToMobile.test.page";
-import {defaultProps} from "./TransferToMobile.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultProps } from "./TransferToMobile.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,12 +27,12 @@ describe("As LU I should be able to configure my account on my mobile phone", ()
   let page; // The page to test against
   const context = defaultAppContext({
     userSettings: {
-      getTrustedDomain: () => "https://localhost:6006"
-    }
+      getTrustedDomain: () => "https://localhost:6006",
+    },
   }); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  describe('As LU I can start the mobile phone account transfer', () => {
+  describe("As LU I can start the mobile phone account transfer", () => {
     /**
      * Prerequisite:
      * Given I am a logged in user
@@ -42,11 +42,11 @@ describe("As LU I should be able to configure my account on my mobile phone", ()
       page = new TransferToMobilePage(context, props);
     });
 
-    it('As LU I should be able to start the transfer to mobile', async() => {
+    it("As LU I should be able to start the transfer to mobile", async () => {
       expect.assertions(3);
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toContain('mobile');
-      expect(page.isStep('start')).toBe(true);
+      expect(page.title).toContain("mobile");
+      expect(page.isStep("start")).toBe(true);
 
       /*
        * await page.clickStart();
@@ -64,18 +64,18 @@ describe("As LU I should be able to configure my account on my mobile phone", ()
     });
   });
 
-  describe('Ensure the feature is running only under HTTPS', () => {
-    it('As LU I should see a message telling me the feature needs Passbolt to run under HTTPS', async() => {
+  describe("Ensure the feature is running only under HTTPS", () => {
+    it("As LU I should see a message telling me the feature needs Passbolt to run under HTTPS", async () => {
       expect.assertions(2);
       const context = defaultAppContext({
         userSettings: {
-          getTrustedDomain: () => "http://localhost"
-        }
+          getTrustedDomain: () => "http://localhost",
+        },
       }); // The applicative context
       const props = defaultProps(); // The props to pass
       const page = new TransferToMobilePage(context, props);
       expect(page.exists()).toBeTruthy();
-      expect(page.isStep('https required')).toBe(true);
+      expect(page.isStep("https required")).toBe(true);
     });
   });
 });

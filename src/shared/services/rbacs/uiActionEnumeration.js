@@ -31,5 +31,3 @@ export const uiActions = {
   AVATAR_UPLOAD: "Avatar.upload",
   SHARE_FOLDER: "Folders.share",
 };
-
-

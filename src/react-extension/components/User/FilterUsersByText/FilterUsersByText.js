@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import SearchBar from "../../Common/Navigation/Search/SearchBar";
-import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import { UserWorkspaceFilterTypes, withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { withTranslation } from "react-i18next";
 
 /**
  * This component allows to filter the list of users by text
@@ -45,8 +45,8 @@ class FilterUsersByText extends Component {
    */
   get defaultState() {
     return {
-      text: '', // Current search text
-      debounceTimeoutIt: null // Set the debounce timeout identifier
+      text: "", // Current search text
+      debounceTimeoutIt: null, // Set the debounce timeout identifier
     };
   }
 
@@ -72,7 +72,7 @@ class FilterUsersByText extends Component {
     const isTextFilter = this.props.userWorkspaceContext.filter.type === UserWorkspaceFilterTypes.TEXT;
     const isNotTextFilterAnymore = wasTextFilter && !isTextFilter;
     if (isNotTextFilterAnymore) {
-      this.setState({text: ''});
+      this.setState({ text: "" });
     }
   }
 
@@ -91,10 +91,10 @@ class FilterUsersByText extends Component {
   search(text) {
     clearTimeout(this.state.debounceTimeoutId);
     const debounceTimeoutId = setTimeout(() => {
-      const filter = {type: UserWorkspaceFilterTypes.TEXT, payload: text};
-      this.props.history.push({pathname: '/app/users', state: {filter}});
+      const filter = { type: UserWorkspaceFilterTypes.TEXT, payload: text };
+      this.props.history.push({ pathname: "/app/users", state: { filter } });
     }, 300);
-    this.setState({debounceTimeoutId, text});
+    this.setState({ debounceTimeoutId, text });
   }
 
   /**
@@ -107,7 +107,8 @@ class FilterUsersByText extends Component {
         disabled={this.props.disabled}
         onSearch={this.handleSearchEvent}
         placeholder={this.props.t("Search users")}
-        value={this.state.text} />
+        value={this.state.text}
+      />
     );
   }
 }
@@ -119,6 +120,4 @@ FilterUsersByText.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-
-export default withRouter(withUserWorkspace(withTranslation('common')(FilterUsersByText)));
-
+export default withRouter(withUserWorkspace(withTranslation("common")(FilterUsersByText)));

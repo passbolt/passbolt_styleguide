@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import ManageSsoSettings from "./ManageSsoSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -20,7 +20,7 @@ import DisplayAdministrationSsoSettingsActions from "../DisplayAdministrationWor
 import DialogContextProvider from "../../../contexts/DialogContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 /**
  * The ManageSsoSettings component represented as a page
@@ -42,18 +42,20 @@ export default class ManageSsoSettingsPage {
    * @param {object} props the props of the components
    */
   render(props) {
-    this._page = render(<MockTranslationProvider>
-      <AppContext.Provider value={props.context}>
-        <DialogContextProvider>
-          <AdminSsoContextProvider {...props}>
-            <ManageDialogs/>
-            <ManageSsoSettings {...props}/>
-            <DisplayAdministrationSsoSettingsActions/>
-          </AdminSsoContextProvider>
-        </DialogContextProvider>
-      </AppContext.Provider>
-    </MockTranslationProvider>,
-    {legacyRoot: true});
+    this._page = render(
+      <MockTranslationProvider>
+        <AppContext.Provider value={props.context}>
+          <DialogContextProvider>
+            <AdminSsoContextProvider {...props}>
+              <ManageDialogs />
+              <ManageSsoSettings {...props} />
+              <DisplayAdministrationSsoSettingsActions />
+            </AdminSsoContextProvider>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </MockTranslationProvider>,
+      { legacyRoot: true },
+    );
   }
 
   /**
@@ -92,7 +94,7 @@ export default class ManageSsoSettingsPage {
    * @returns {Promise<void>}
    */
   async clickOn(element, callback) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitForTrue(() => callback());
   }
@@ -108,9 +110,7 @@ export default class ManageSsoSettingsPage {
     for (const key in formData) {
       const element = this[key];
       const value = formData[key];
-      await (this.isSelectElement(element)
-        ? this.setSelectField(element, value)
-        : this.setInputField(element, value));
+      await (this.isSelectElement(element) ? this.setSelectField(element, value) : this.setInputField(element, value));
     }
   }
 
@@ -122,10 +122,10 @@ export default class ManageSsoSettingsPage {
    * @returns {Promise<void>}
    */
   async setSelectField(element, value) {
-    await this.clickOn(element, () => element.querySelectorAll('.option').length > 0);
-    const availableValues = Array.from(element.querySelectorAll('.option'));
-    const targetOptionElement = availableValues.find(el => el.textContent === value);
-    await this.clickOn(targetOptionElement, () => value === element.querySelector('.value').textContent);
+    await this.clickOn(element, () => element.querySelectorAll(".option").length > 0);
+    const availableValues = Array.from(element.querySelectorAll(".option"));
+    const targetOptionElement = availableValues.find((el) => el.textContent === value);
+    await this.clickOn(targetOptionElement, () => value === element.querySelector(".value").textContent);
   }
 
   /**
@@ -135,7 +135,7 @@ export default class ManageSsoSettingsPage {
    * @returns {Promise<void>}
    */
   async setInputField(element, value) {
-    fireEvent.input(element, {target: {value: value}});
+    fireEvent.input(element, { target: { value: value } });
     await waitForTrue(() => element.value === value);
   }
 
@@ -145,9 +145,11 @@ export default class ManageSsoSettingsPage {
    * @returns {boolean}
    */
   isSelectElement(element) {
-    return element?.nodeName === 'DIV'
-      && element?.classList.contains('select')
-      && element.parentElement.classList.contains('select-container');
+    return (
+      element?.nodeName === "DIV" &&
+      element?.classList.contains("select") &&
+      element.parentElement.classList.contains("select-container")
+    );
   }
 
   /**

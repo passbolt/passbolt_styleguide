@@ -25,22 +25,22 @@ export default class IconEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET]
+      type: "object",
+      required: [],
+      properties: {
+        type: {
+          type: "string",
+          enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
         },
-        "value": {
-          "type": "integer",
-          "minimum": 0,
-          "nullable": true,
+        value: {
+          type: "integer",
+          minimum: 0,
+          nullable: true,
         },
-        "background_color": {
-          "type": "string",
-          "pattern": /^#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/,
-          "nullable": true,
+        background_color: {
+          type: "string",
+          pattern: /^#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/,
+          nullable: true,
         },
       },
     };

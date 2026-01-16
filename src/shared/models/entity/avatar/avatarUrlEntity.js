@@ -24,19 +24,16 @@ class AvatarUrlEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        AvatarUrlEntity.AVATAR_URL_SIZE_MEDIUM,
-        AvatarUrlEntity.AVATAR_URL_SIZE_SMALL
-      ],
-      "properties": {
-        "medium": {
-          "type": "string",
+      type: "object",
+      required: [AvatarUrlEntity.AVATAR_URL_SIZE_MEDIUM, AvatarUrlEntity.AVATAR_URL_SIZE_SMALL],
+      properties: {
+        medium: {
+          type: "string",
         },
-        "small": {
-          "type": "string",
-        }
-      }
+        small: {
+          type: "string",
+        },
+      },
     };
   }
 

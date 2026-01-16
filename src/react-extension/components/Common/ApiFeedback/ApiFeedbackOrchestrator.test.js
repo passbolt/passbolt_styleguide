@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.10.0
  */
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import ApiFeedbackOrchestratorPage from "./ApiFeedbackOrchestrator.test.page";
 
 beforeEach(() => {
@@ -19,10 +19,10 @@ beforeEach(() => {
 });
 
 describe("ApiFeedbackOrchestrator", () => {
-  it('Should display the given error log message from the content of the page', async() => {
+  it("Should display the given error log message from the content of the page", async () => {
     expect.assertions(4);
     const props = {
-      errorMessage: "This is an error message to be displayed in the log details"
+      errorMessage: "This is an error message to be displayed in the log details",
     };
     const page = new ApiFeedbackOrchestratorPage(props);
     await waitFor(() => {});
@@ -36,10 +36,10 @@ describe("ApiFeedbackOrchestrator", () => {
     expect(page.logDetails).toBeTruthy();
   });
 
-  it('Should display the given success message from the content of the page', async() => {
+  it("Should display the given success message from the content of the page", async () => {
     expect.assertions(4);
     const props = {
-      successMessage: "You successfully authenticated."
+      successMessage: "You successfully authenticated.",
     };
     const page = new ApiFeedbackOrchestratorPage(props);
     await waitFor(() => {});

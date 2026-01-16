@@ -16,7 +16,7 @@ import {
   mockUserFullProfile,
   mockUserFirstNameOnly,
   mockUserLastNameOnly,
-  createMockUsers
+  createMockUsers,
 } from "./DisplayDragUser.test.data";
 import DisplayDragUserPage from "./DisplayDragUser.test.page";
 
@@ -31,8 +31,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(page.messageText).toContain("John Doe");
@@ -45,8 +45,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFirstNameOnly]
-        }
+          selectedUsers: [mockUserFirstNameOnly],
+        },
       });
 
       expect(page.messageText).toContain("Alice");
@@ -57,8 +57,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserLastNameOnly]
-        }
+          selectedUsers: [mockUserLastNameOnly],
+        },
       });
 
       expect(page.messageText).toContain("Johnson");
@@ -69,8 +69,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(page.hasClass("item-1")).toBe(true);
@@ -86,8 +86,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: users
-        }
+          selectedUsers: users,
+        },
       });
 
       expect(page.messageText).toContain("FirstName0 LastName0");
@@ -101,8 +101,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: users
-        }
+          selectedUsers: users,
+        },
       });
 
       expect(page.countText).toBe("3");
@@ -116,8 +116,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: users
-        }
+          selectedUsers: users,
+        },
       });
 
       expect(page.hasClass("item-n")).toBe(true);
@@ -132,8 +132,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: users
-        }
+          selectedUsers: users,
+        },
       });
 
       expect(page.hasCountBadge).toBe(true);
@@ -149,8 +149,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: users
-        }
+          selectedUsers: users,
+        },
       });
 
       expect(page.countText).toBe("50");
@@ -163,8 +163,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: users
-        }
+          selectedUsers: users,
+        },
       });
 
       expect(page.countText).toBe("99+");
@@ -177,8 +177,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: users
-        }
+          selectedUsers: users,
+        },
       });
 
       expect(page.countText).toBe("99+");
@@ -191,8 +191,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(page.userAvatar).toBeTruthy();
@@ -203,8 +203,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(page.avatarUsername).toBe("john.doe@passbolt.com");
@@ -215,8 +215,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(page.avatarBaseUrl).toBe("https://passbolt.test");
@@ -227,8 +227,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(page.avatarHasClass("drag-image")).toBe(true);
@@ -241,8 +241,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: users
-        }
+          selectedUsers: users,
+        },
       });
 
       expect(page.avatarUsername).toBe("user0@passbolt.com");
@@ -255,8 +255,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(page.messageElement).toBeTruthy();
@@ -268,8 +268,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(page.dragAndDropContainer).toBeTruthy();
@@ -280,16 +280,16 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(page.hasCountBadge).toBe(false);
 
       page.rerender({
         userWorkspaceContext: {
-          selectedUsers: createMockUsers(2)
-        }
+          selectedUsers: createMockUsers(2),
+        },
       });
 
       expect(page.hasCountBadge).toBe(true);
@@ -303,15 +303,15 @@ describe("DisplayDragUser", () => {
       const mockGetTrustedDomain = jest.fn(() => "https://custom.domain.test");
       const testContext = {
         userSettings: {
-          getTrustedDomain: mockGetTrustedDomain
-        }
+          getTrustedDomain: mockGetTrustedDomain,
+        },
       };
 
       const page = new DisplayDragUserPage({
         context: testContext,
         userWorkspaceContext: {
-          selectedUsers: [mockUserFullProfile]
-        }
+          selectedUsers: [mockUserFullProfile],
+        },
       });
 
       expect(mockGetTrustedDomain).toHaveBeenCalled();
@@ -325,8 +325,8 @@ describe("DisplayDragUser", () => {
 
       const page = new DisplayDragUserPage({
         userWorkspaceContext: {
-          selectedUsers: users
-        }
+          selectedUsers: users,
+        },
       });
 
       expect(page.countText).toBe("3");

@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -29,10 +29,10 @@ export default class DisplayResourcesWorkspaceFiltersPage {
     this._page = render(
       <Router>
         <MockTranslationProvider>
-          <DisplayResourcesWorkspaceFilters.WrappedComponent {...props}/>
+          <DisplayResourcesWorkspaceFilters.WrappedComponent {...props} />
         </MockTranslationProvider>
       </Router>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -40,14 +40,14 @@ export default class DisplayResourcesWorkspaceFiltersPage {
    * Returns the filter resources
    */
   get filterResources() {
-    return this._page.container.querySelector('.actions-filter');
+    return this._page.container.querySelector(".actions-filter");
   }
 
   /**
    * Returns the filter selected element
    */
   get filterSelected() {
-    return this._page.container.querySelector('.actions-filter div.button-action-filtered span')?.textContent;
+    return this._page.container.querySelector(".actions-filter div.button-action-filtered span")?.textContent;
   }
 
   /**
@@ -55,7 +55,7 @@ export default class DisplayResourcesWorkspaceFiltersPage {
    * @returns {Element}
    */
   get dropdownFilterButton() {
-    return this._page.container.querySelector('.dropdown .button-dropdown');
+    return this._page.container.querySelector(".dropdown .button-dropdown");
   }
 
   /**
@@ -63,7 +63,7 @@ export default class DisplayResourcesWorkspaceFiltersPage {
    * @returns {Promise<void>}
    */
   async openDropdownFilterButton() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.dropdownFilterButton, leftClick);
     await waitFor(() => {});
   }
@@ -72,15 +72,15 @@ export default class DisplayResourcesWorkspaceFiltersPage {
    * Returns the number of filter item element
    */
   get filterItemsLength() {
-    return this._page.container.querySelectorAll('.dropdown .dropdown-content.menu button').length;
+    return this._page.container.querySelectorAll(".dropdown .dropdown-content.menu button").length;
   }
 
   /**
    * Returns the filter element
    */
   async selectFilter(index) {
-    const element = this._page.container.querySelectorAll('.dropdown .dropdown-content.menu button')[index - 1];
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelectorAll(".dropdown .dropdown-content.menu button")[index - 1];
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -90,8 +90,10 @@ export default class DisplayResourcesWorkspaceFiltersPage {
    * @returns {Promise<void>}
    */
   async removeSelectedFilter() {
-    const element = this._page.container.querySelector('.actions-filter div.button-action-filtered button.button-transparent');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector(
+      ".actions-filter div.button-action-filtered button.button-transparent",
+    );
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

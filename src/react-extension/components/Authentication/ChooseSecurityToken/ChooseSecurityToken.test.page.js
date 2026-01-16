@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ChooseSecurityToken from "./ChooseSecurityToken";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,8 @@ export default class ChooseSecurityTokenPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ChooseSecurityToken {...props}/>
+        <ChooseSecurityToken {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
   }
 
@@ -45,7 +44,7 @@ export default class ChooseSecurityTokenPage {
    * REturns token code input
    */
   get codeInput() {
-    return  this._page.container.querySelector('#security-token-text');
+    return this._page.container.querySelector("#security-token-text");
   }
 
   /**
@@ -59,63 +58,63 @@ export default class ChooseSecurityTokenPage {
    * Returns the randomize link element
    */
   get randomizeLink() {
-    return this._page.container.querySelector('.randomize-button-wrapper button');
+    return this._page.container.querySelector(".randomize-button-wrapper button");
   }
 
   /**
    * Returns the phishing definition link
    */
   get phishingDefinitionLink() {
-    return this._page.container.querySelector('a[data-testid=phishingLink]');
+    return this._page.container.querySelector("a[data-testid=phishingLink]");
   }
 
   /**
    * Returns the security token documentation link
    */
   get tokenDocumentationLink() {
-    return this._page.container.querySelector('a[data-testid=tokenDocumentationLink]');
+    return this._page.container.querySelector("a[data-testid=tokenDocumentationLink]");
   }
 
   /**
    * Returns the next button element
    */
   get nextButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns true if the user can change something like the token code
    */
   get canChange() {
-    return !this.codeInput.hasAttribute('disabled');
+    return !this.codeInput.hasAttribute("disabled");
   }
 
   /**
    * Returns true if one is processing
    */
   get isProcessing() {
-    return this.nextButton.getAttribute('class').indexOf('processing') > -1;
+    return this.nextButton.getAttribute("class").indexOf("processing") > -1;
   }
 
   /**
    * Returns true if the empty error message is displayed
    */
   get hasEmptyCodeError() {
-    return Boolean(this._page.container.querySelector('.empty-code'));
+    return Boolean(this._page.container.querySelector(".empty-code"));
   }
 
   /**
    * Returns true if the not good code length error message is displayed
    */
   get hasNotGoodLengthCode() {
-    return Boolean(this._page.container.querySelector('.not-good-length-code'));
+    return Boolean(this._page.container.querySelector(".not-good-length-code"));
   }
 
   /**
    * Returns true if the not good code regex error message is displayed
    */
   get hasNotGoodRegexCode() {
-    return Boolean(this._page.container.querySelector('.not-good-regex-code'));
+    return Boolean(this._page.container.querySelector(".not-good-regex-code"));
   }
 
   /**
@@ -124,7 +123,7 @@ export default class ChooseSecurityTokenPage {
    */
   async selectColor(color) {
     const element = this._page.container.querySelector(`div[title="${color}"]`);
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -134,7 +133,7 @@ export default class ChooseSecurityTokenPage {
    * @param code The token code
    */
   async fillCode(code) {
-    fireEvent.change(this.codeInput, {target: {value: code}});
+    fireEvent.change(this.codeInput, { target: { value: code } });
     await waitFor(() => {});
   }
 
@@ -142,7 +141,7 @@ export default class ChooseSecurityTokenPage {
    * Randomize a token code
    */
   async randomize() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.randomizeLink, leftClick);
     await waitFor(() => {});
   }
@@ -152,7 +151,7 @@ export default class ChooseSecurityTokenPage {
    * @param inProgressFn The function called while saving
    */
   async save(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.nextButton, leftClick);
     await waitFor(inProgressFn);
   }

@@ -13,131 +13,130 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import DisplayUserDetailsActivity from "./DisplayUserDetailsActivity";
 
 export default {
-  title: 'Components/UserDetails/DisplayUserDetailsActivity',
-  component: DisplayUserDetailsActivity
+  title: "Components/UserDetails/DisplayUserDetailsActivity",
+  component: DisplayUserDetailsActivity,
 };
 
 const firstActivityDataSet = [
   {
-    "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf",
-    "type": "AccountRecovery.Requests.initiated",
-    "creator": {
-      "profile": {
-        "first_name": "Ada",
-        "last_name": "Lovelace"
-      }
+    id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf",
+    type: "AccountRecovery.Requests.initiated",
+    creator: {
+      profile: {
+        first_name: "Ada",
+        last_name: "Lovelace",
+      },
     },
-    "created": "2021-12-17T16:37:12+00:00"
+    created: "2021-12-17T16:37:12+00:00",
   },
   {
-    "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dd0",
-    "type": "AccountRecovery.Requests.accepted",
-    "creator": {
-      "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3eee",
-      "profile": {
-        "first_name": "Admin",
-        "last_name": "admin"
-      }
+    id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dd0",
+    type: "AccountRecovery.Requests.accepted",
+    creator: {
+      id: "6aada140-fe8b-5e69-a90f-ae0cec6d3eee",
+      profile: {
+        first_name: "Admin",
+        last_name: "admin",
+      },
     },
-    "created": "2021-10-17T16:37:12+00:00"
+    created: "2021-10-17T16:37:12+00:00",
   },
   {
-    "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dd2",
-    "type": "AccountRecovery.Policies.rejected",
-    "creator": {
-      "profile": {
-        "first_name": "Ada",
-        "last_name": "Lovelace"
-      }
+    id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dd2",
+    type: "AccountRecovery.Policies.rejected",
+    creator: {
+      profile: {
+        first_name: "Ada",
+        last_name: "Lovelace",
+      },
     },
-    "created": "2021-08-17T16:37:12+00:00"
+    created: "2021-08-17T16:37:12+00:00",
   },
   {
-    "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dd1",
-    "type": "AccountRecovery.Policies.accepted",
-    "creator": {
-      "profile": {
-        "first_name": "Ada",
-        "last_name": "Lovelace"
-      }
+    id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dd1",
+    type: "AccountRecovery.Policies.accepted",
+    creator: {
+      profile: {
+        first_name: "Ada",
+        last_name: "Lovelace",
+      },
     },
-    "created": "2021-04-17T16:37:12+00:00"
+    created: "2021-04-17T16:37:12+00:00",
   },
   {
-    "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dd3",
-    "type": "UnknowActivityType",
-    "creator": {
-      "profile": {
-        "first_name": "Ada",
-        "last_name": "Lovelace"
-      }
-    }
-  }
+    id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dd3",
+    type: "UnknowActivityType",
+    creator: {
+      profile: {
+        first_name: "Ada",
+        last_name: "Lovelace",
+      },
+    },
+  },
 ];
 
 const lastActivityDataSet = [
   {
-    "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dd4",
-    "type": "AccountRecovery.Requests.rejected",
-    "creator": {
-      "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3eee",
-      "profile": {
-        "first_name": "Admin",
-        "last_name": "admin"
-      }
+    id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dd4",
+    type: "AccountRecovery.Requests.rejected",
+    creator: {
+      id: "6aada140-fe8b-5e69-a90f-ae0cec6d3eee",
+      profile: {
+        first_name: "Admin",
+        last_name: "admin",
+      },
     },
-    "created": "2020-08-17T16:37:12+00:00"
+    created: "2020-08-17T16:37:12+00:00",
   },
   {
-    "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dd5",
-    "type": "Users.created",
-    "creator": {
-      "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3eee",
-      "profile": {
-        "first_name": "Admin",
-        "last_name": "admin"
-      }
+    id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dd5",
+    type: "Users.created",
+    creator: {
+      id: "6aada140-fe8b-5e69-a90f-ae0cec6d3eee",
+      profile: {
+        first_name: "Admin",
+        last_name: "admin",
+      },
     },
-    "created": "2020-08-17T16:37:12+00:00"
-  }
+    created: "2020-08-17T16:37:12+00:00",
+  },
 ];
 
 const userActivityData = [firstActivityDataSet, lastActivityDataSet];
 let activityDataSetIndex = 0;
 const context = {
   siteSettings: {
-    getServerTimezone: () => new Date().toDateString()
+    getServerTimezone: () => new Date().toDateString(),
   },
   userSettings: new UserSettings(userSettingsFixture),
   port: {
-    request: () => userActivityData[activityDataSetIndex++ % userActivityData.length]
-  }
+    request: () => userActivityData[activityDataSetIndex++ % userActivityData.length],
+  },
 };
 
-const Template = args =>
+const Template = (args) => (
   <AppContext.Provider value={args.context}>
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={["/"]}>
       <div className="panel aside">
-        <Route component={routerProps => <DisplayUserDetailsActivity {...args} {...routerProps}/>}></Route>
+        <Route component={(routerProps) => <DisplayUserDetailsActivity {...args} {...routerProps} />}></Route>
       </div>
     </MemoryRouter>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 export const Initial = Template.bind({});
 Initial.args = {
   context: context,
   userWorkspaceContext: {
     details: {
-      user: {
-
-      }
-    }
-  }
+      user: {},
+    },
+  },
 };

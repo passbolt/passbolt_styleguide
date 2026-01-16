@@ -17,8 +17,8 @@
  */
 
 import DisplayUserWorkspaceMainActionsTestPage from "./DisplayUserWorkspaceMainActions.test.page";
-import {defaultAppContext, defaultProps} from "./DisplayUserWorkspaceMainActions.test.data";
-import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultAppContext, defaultProps } from "./DisplayUserWorkspaceMainActions.test.data";
+import { denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -30,27 +30,27 @@ describe("See Workspace Main Menu", () => {
   const props = defaultProps(); // The props to pass
   const adminUser = {
     role: {
-      name: "admin"
+      name: "admin",
     },
   };
   const user = {
     role: {
-      name: "user"
+      name: "user",
     },
   };
 
-  describe('As AD I can start adding a user or a group via the workspace main menu', () => {
+  describe("As AD I can start adding a user or a group via the workspace main menu", () => {
     /**
      * Given a AD user
      * Then I should see the create resource menu
      */
 
     beforeEach(() => {
-      context.setContext({loggedInUser: adminUser});
+      context.setContext({ loggedInUser: adminUser });
       page = new DisplayUserWorkspaceMainActionsTestPage(context, props);
     });
 
-    it('As AD I can adding a user via the create menu', async() => {
+    it("As AD I can adding a user via the create menu", async () => {
       expect.assertions(3);
       expect(page.displayUserWorkspaceMainActions.exists()).toBeTruthy();
       expect(page.displayUserWorkspaceMainActions.createMenu).not.toBeNull();
@@ -58,7 +58,7 @@ describe("See Workspace Main Menu", () => {
       expect(page.displayUserWorkspaceMainActions.newUserMenu).not.toBeNull();
     });
 
-    it('As AD I can adding a group via the create menu', async() => {
+    it("As AD I can adding a group via the create menu", async () => {
       expect.assertions(3);
       expect(page.displayUserWorkspaceMainActions.exists()).toBeTruthy();
       expect(page.displayUserWorkspaceMainActions.createMenu).not.toBeNull();
@@ -67,36 +67,36 @@ describe("See Workspace Main Menu", () => {
     });
   });
 
-  describe('As LU I can\'t see the workspace create menu', () => {
+  describe("As LU I can't see the workspace create menu", () => {
     /**
      * Given a LU
      * Then I shouldn't see the create resource menu
      */
 
     beforeEach(() => {
-      context.setContext({loggedInUser: user});
-      const props = defaultProps({rbacContext: denyRbacContext()});
+      context.setContext({ loggedInUser: user });
+      const props = defaultProps({ rbacContext: denyRbacContext() });
       page = new DisplayUserWorkspaceMainActionsTestPage(context, props);
     });
 
-    it('As LU I cannot start adding a user via the workspace create menu', () => {
+    it("As LU I cannot start adding a user via the workspace create menu", () => {
       expect.assertions(1);
       expect(page.displayUserWorkspaceMainActions.exists()).toBeFalsy();
     });
   });
 
-  describe('As LU I can see the workspace create menu with only group', () => {
+  describe("As LU I can see the workspace create menu with only group", () => {
     /**
      * Given a LU
      * Then I should see the create resource menu with group
      */
 
     beforeEach(() => {
-      context.setContext({loggedInUser: user});
+      context.setContext({ loggedInUser: user });
       page = new DisplayUserWorkspaceMainActionsTestPage(context, props);
     });
 
-    it('As LU I cannot start adding a user via the workspace create menu', async() => {
+    it("As LU I cannot start adding a user via the workspace create menu", async () => {
       expect.assertions(3);
       expect(page.displayUserWorkspaceMainActions.exists()).toBeTruthy();
       await page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);

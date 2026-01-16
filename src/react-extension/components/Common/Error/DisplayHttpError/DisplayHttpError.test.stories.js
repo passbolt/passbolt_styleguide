@@ -16,10 +16,10 @@ import React from "react";
 import DisplayHttpError from "./DisplayHttpError";
 
 export default {
-  title: 'Components/Common/Error/DisplayHttpError',
+  title: "Components/Common/Error/DisplayHttpError",
   component: DisplayHttpError,
   decorators: [
-    (Story, {args}) =>
+    (Story, { args }) => (
       <div className="panel main">
         <div className="panel middle">
           <div className="main-page">
@@ -27,17 +27,18 @@ export default {
           </div>
         </div>
       </div>
+    ),
   ],
 };
 
 export const Error404 = {
   args: {
-    errorCode: 404
-  }
+    errorCode: 404,
+  },
 };
 
 export const Error403 = {
   args: {
-    errorCode: 403
-  }
+    errorCode: 403,
+  },
 };

@@ -15,41 +15,51 @@ import EntityCollectionError from "./entityCollectionError";
 
 describe("EntityCollectionError", () => {
   it("constructor throw exception if position is empty", () => {
-    const t = () => { new EntityCollectionError(null, null, null); };
+    const t = () => {
+      new EntityCollectionError(null, null, null);
+    };
     expect(t).toThrow(TypeError);
   });
 
   it("constructor throw exception if position is not a number", () => {
-    const t = () => { new EntityCollectionError('test', 'test', 'test'); };
+    const t = () => {
+      new EntityCollectionError("test", "test", "test");
+    };
     expect(t).toThrow(TypeError);
   });
 
   it("constructor throw exception if rule is empty", () => {
-    const t = () => { new EntityCollectionError(0, null, null); };
+    const t = () => {
+      new EntityCollectionError(0, null, null);
+    };
     expect(t).toThrow(TypeError);
   });
 
   it("constructor throw exception if rule is not a string", () => {
-    const t = () => { new EntityCollectionError(0, [], 'test'); };
+    const t = () => {
+      new EntityCollectionError(0, [], "test");
+    };
     expect(t).toThrow(TypeError);
   });
 
   it("constructor use default mesage if empty", () => {
-    const e = new EntityCollectionError(0, 'test');
+    const e = new EntityCollectionError(0, "test");
     expect(e.position).toBe(0);
-    expect(e.rule).toBe('test');
-    expect(e.message).toBe('Entity collection error.');
+    expect(e.rule).toBe("test");
+    expect(e.message).toBe("Entity collection error.");
   });
 
   it("constructor throw exception if mesage is not a string", () => {
-    const t = () => { new EntityCollectionError(0, 'test', []); };
+    const t = () => {
+      new EntityCollectionError(0, "test", []);
+    };
     expect(t).toThrow(TypeError);
   });
 
   it("constructor throw exception if mesage is not a string", () => {
-    const e = new EntityCollectionError(0, 'test', 'test');
+    const e = new EntityCollectionError(0, "test", "test");
     expect(e.position).toBe(0);
-    expect(e.rule).toBe('test');
-    expect(e.message).toBe('test');
+    expect(e.rule).toBe("test");
+    expect(e.message).toBe("test");
   });
 });

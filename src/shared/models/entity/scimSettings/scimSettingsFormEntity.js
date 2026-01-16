@@ -13,7 +13,7 @@
  */
 
 import ScimSettingsEntity from "./scimSettingsEntity";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 class ScimSettingsFormEntity extends ScimSettingsEntity {
   /**
@@ -23,16 +23,12 @@ class ScimSettingsFormEntity extends ScimSettingsEntity {
   static getSchema() {
     return {
       type: "object",
-      required: [
-        "scim_user_id",
-        "setting_id",
-      ],
+      required: ["scim_user_id", "setting_id"],
       properties: {
         ...ScimSettingsEntity.getSchema().properties,
-      }
+      },
     };
   }
-
 
   /**
    * Create default SCIM settings for a user

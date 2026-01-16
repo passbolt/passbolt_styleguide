@@ -12,7 +12,7 @@
  * @since         3.9.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ApiError from "./ApiError";
@@ -28,9 +28,8 @@ export default class ApiErrorPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ApiError {...props}/>
+        <ApiError {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
   }
 
@@ -60,7 +59,7 @@ export default class ApiErrorPage {
    * @returns {Promise<void>}
    */
   async clickOn(element, callback) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {
       if (!callback()) {
@@ -74,7 +73,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get panel() {
-    return this.select('.api-feedback-card');
+    return this.select(".api-feedback-card");
   }
 
   /**
@@ -82,7 +81,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get logToggle() {
-    return this.select('.api-feedback-card .accordion-header button');
+    return this.select(".api-feedback-card .accordion-header button");
   }
 
   /**
@@ -90,7 +89,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get logDetails() {
-    return this.select('.api-feedback-card .accordion-content textarea');
+    return this.select(".api-feedback-card .accordion-content textarea");
   }
 
   /**

@@ -11,13 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.3.0
  */
-import {defaultColumnSettingData} from "../columnSetting/columnSettingEntity.test.data";
-import {defaultSorterData} from "../sorter/sorterEntity.test.data";
+import { defaultColumnSettingData } from "../columnSetting/columnSettingEntity.test.data";
+import { defaultSorterData } from "../sorter/sorterEntity.test.data";
 
 export const defaultGridUserSettingData = (data = {}) => {
   const defaultData = {
-    "columns_setting": [defaultColumnSettingData(), defaultColumnSettingData({id: "idB"})],
-    "sorter": defaultSorterData()
+    columns_setting: [defaultColumnSettingData(), defaultColumnSettingData({ id: "idB" })],
+    sorter: defaultSorterData(),
   };
 
   return Object.assign(defaultData, data);

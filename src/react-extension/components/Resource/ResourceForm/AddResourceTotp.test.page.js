@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,17 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
-import {
-  ResourceTypesLocalStorageContext
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceTypesLocalStorageContext } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { ResourcePasswordGeneratorContext } from "../../../contexts/ResourcePasswordGeneratorContext";
 import AddResourceTotp from "./AddResourceTotp";
-import {ManagedClipboardServiceContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { ManagedClipboardServiceContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 /**
  * The Add resource totp component represented as a page
  */
@@ -35,7 +32,9 @@ export default class AddResourceTotpPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-          <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+          <ResourceTypesLocalStorageContext.Provider
+            value={{ get: () => props.resourceTypes, resourceTypes: props.resourceTypes }}
+          >
             <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
               <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
                 <ManagedClipboardServiceContext.Provider value={props.clipboardContext}>
@@ -46,10 +45,9 @@ export default class AddResourceTotpPage {
           </ResourceTypesLocalStorageContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
-
 
   /**
    * Returns the clickable area of the header
@@ -62,13 +60,13 @@ export default class AddResourceTotpPage {
    * Returns the uri input element
    */
   get uri() {
-    return this._page.container.querySelector('#resource-uri');
+    return this._page.container.querySelector("#resource-uri");
   }
   /**
    * Returns the resource totp key input element
    */
   get resourceTotpKey() {
-    return this._page.container.querySelector('#resource-totp-key');
+    return this._page.container.querySelector("#resource-totp-key");
   }
 
   /**
@@ -76,21 +74,21 @@ export default class AddResourceTotpPage {
    * @return {Element}
    */
   get advancedSettings() {
-    return this._page.container.querySelector('.additional-information button');
+    return this._page.container.querySelector(".additional-information button");
   }
   /**
    * Return the period input element
    * @return {Element}
    */
   get period() {
-    return this._page.container.querySelector('#resource-totp-period');
+    return this._page.container.querySelector("#resource-totp-period");
   }
   /**
    * Return the algorithm input element
    * @return {Element}
    */
   get algorithm() {
-    return this._page.container.querySelector('#resource-totp-algorithm .selected-value');
+    return this._page.container.querySelector("#resource-totp-algorithm .selected-value");
   }
 
   /**
@@ -98,7 +96,7 @@ export default class AddResourceTotpPage {
    * @return {Element}
    */
   get firstItemOption() {
-    return this._page.container.querySelector('#resource-totp-algorithm .select-items .option');
+    return this._page.container.querySelector("#resource-totp-algorithm .select-items .option");
   }
 
   /**
@@ -106,14 +104,14 @@ export default class AddResourceTotpPage {
    * @return {Element}
    */
   get digits() {
-    return this._page.container.querySelector('#resource-totp-digits');
+    return this._page.container.querySelector("#resource-totp-digits");
   }
 
   /**
    * Returns the import Qr code button element
    */
   get uploadQrCode() {
-    return this._page.container.querySelector('#import-qr-code');
+    return this._page.container.querySelector("#import-qr-code");
   }
 
   /**
@@ -128,21 +126,21 @@ export default class AddResourceTotpPage {
    * @returns {Element}
    */
   get warningImportMessage() {
-    return this._page.container.querySelector('.totp-form .message.warning');
+    return this._page.container.querySelector(".totp-form .message.warning");
   }
 
   /**
    * Returns the resource totp code element
    */
   get resourceTotpCode() {
-    return this._page.container.querySelector('.totp-wrapper .secret-totp button');
+    return this._page.container.querySelector(".totp-wrapper .secret-totp button");
   }
 
   /**
    * Returns the resource totp code element
    */
   get copyTotpButton() {
-    return this._page.container.querySelector('#copy-totp');
+    return this._page.container.querySelector("#copy-totp");
   }
 
   /**
@@ -154,9 +152,9 @@ export default class AddResourceTotpPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => { });
+    await waitFor(() => {});
   }
 
   /**
@@ -165,15 +163,17 @@ export default class AddResourceTotpPage {
    * @param {string} data - The data to fill the input element with.
    */
   async fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
-    await waitFor(() => { element.value === data; });
+    await waitFor(() => {
+      element.value === data;
+    });
   }
 
   /** Click to import file */
   async selectImportFile(file) {
     await this.click(this.uploadQrCode);
-    const data = {target: {files: [file]}};
+    const data = { target: { files: [file] } };
     fireEvent.change(this.inputFile, data);
     await waitFor(() => {});
   }

@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {sortResourcesAlphabetically} from "../../shared/utils/sortUtils";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { sortResourcesAlphabetically } from "../../shared/utils/sortUtils";
 
 export const ResourceLocalStorageContext = React.createContext({
   get: () => {}, // Get the resources from the local storage and/or init them if not the case already
@@ -87,7 +87,7 @@ export class ResourceLocalStorageContextProvider extends React.Component {
    */
   set(resources) {
     sortResourcesAlphabetically(resources);
-    this.setState({resources});
+    this.setState({ resources });
   }
 
   /**
@@ -125,7 +125,9 @@ export class ResourceLocalStorageContextProvider extends React.Component {
    */
   async updateLocalStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
-      this.runningLocalStorageUpdatePromise = this.props.context.port.request('passbolt.resources.update-local-storage');
+      this.runningLocalStorageUpdatePromise = this.props.context.port.request(
+        "passbolt.resources.update-local-storage",
+      );
       await this.runningLocalStorageUpdatePromise;
       this.runningLocalStorageUpdatePromise = null;
     } else {
@@ -161,16 +163,15 @@ export function withResourcesLocalStorage(WrappedComponent) {
     render() {
       return (
         <ResourceLocalStorageContext.Consumer>
-          {
-            resourceLocalStorageContext => <WrappedComponent
+          {(resourceLocalStorageContext) => (
+            <WrappedComponent
               resourcesLocalStorageContext={resourceLocalStorageContext}
               resources={resourceLocalStorageContext.get()}
               {...this.props}
             />
-          }
+          )}
         </ResourceLocalStorageContext.Consumer>
       );
     }
   };
 }
-

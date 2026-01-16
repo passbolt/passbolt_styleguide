@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 import ExternalGpgKeyPairEntity from "./externalGpgKeyPairEntity";
-import {ExternalGpgKeyEntityFixtures} from "../externalGpgKeyEntity.test.fixtures";
+import { ExternalGpgKeyEntityFixtures } from "../externalGpgKeyEntity.test.fixtures";
 import EntitySchema from "../../abstract/entitySchema";
 import EntityValidationError from "../../abstract/entityValidationError";
 
@@ -26,7 +26,7 @@ describe("ExternalGpgKey entity", () => {
     const externalGpgKeyDto = ExternalGpgKeyEntityFixtures.minimal_dto;
     const dto = {
       public_key: externalGpgKeyDto,
-      private_key: externalGpgKeyDto
+      private_key: externalGpgKeyDto,
     };
 
     const entity = new ExternalGpgKeyPairEntity(dto);
@@ -37,7 +37,7 @@ describe("ExternalGpgKey entity", () => {
     expect.assertions(1);
     const dto = {
       public_key: ExternalGpgKeyEntityFixtures.full_dto,
-      private_key: ExternalGpgKeyEntityFixtures.private_key_dto
+      private_key: ExternalGpgKeyEntityFixtures.private_key_dto,
     };
 
     const entity = new ExternalGpgKeyPairEntity(dto);
@@ -50,8 +50,8 @@ describe("ExternalGpgKey entity", () => {
       new ExternalGpgKeyPairEntity({});
     } catch (error) {
       expect(error instanceof EntityValidationError).toBe(true);
-      expect(error.hasError('private_key', 'required')).toBe(true);
-      expect(error.hasError('public_key', 'required')).toBe(true);
+      expect(error.hasError("private_key", "required")).toBe(true);
+      expect(error.hasError("public_key", "required")).toBe(true);
     }
   });
 });

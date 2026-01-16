@@ -14,11 +14,11 @@
 
 import EntitySchema from "../entity/abstract/entitySchema";
 import ResourcePasswordDescriptionViewModel from "./ResourcePasswordDescriptionViewModel";
-import {v4 as uuid} from "uuid";
-import {defaultResourceViewModelDto, minimalResourceViewModelDto} from "./resourceViewModel.test.data";
-import {defaultResourceDto} from "../entity/resource/resourceEntity.test.data";
-import {TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION} from "../entity/resourceType/resourceTypeEntity.test.data";
-import {DateTime} from "luxon";
+import { v4 as uuid } from "uuid";
+import { defaultResourceViewModelDto, minimalResourceViewModelDto } from "./resourceViewModel.test.data";
+import { defaultResourceDto } from "../entity/resource/resourceEntity.test.data";
+import { TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION } from "../entity/resourceType/resourceTypeEntity.test.data";
+import { DateTime } from "luxon";
 import ResourceViewModel from "./ResourceViewModel";
 
 describe("ResourcePasswordDescriptionViewModel", () => {
@@ -48,7 +48,10 @@ describe("ResourcePasswordDescriptionViewModel", () => {
 
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(ResourcePasswordDescriptionViewModel.name, ResourcePasswordDescriptionViewModel.getSchema());
+      EntitySchema.validateSchema(
+        ResourcePasswordDescriptionViewModel.name,
+        ResourcePasswordDescriptionViewModel.getSchema(),
+      );
     });
 
     it("schema not have 'id' field set as required in CREATE_MODE", () => {
@@ -165,7 +168,7 @@ describe("ResourcePasswordDescriptionViewModel", () => {
 
     it("should return a dto with an id if it is set", () => {
       expect.assertions(1);
-      const dto = minimalResourceViewModelDto({id: uuid()});
+      const dto = minimalResourceViewModelDto({ id: uuid() });
       const viewModel = new ResourcePasswordDescriptionViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
@@ -231,7 +234,7 @@ describe("ResourcePasswordDescriptionViewModel", () => {
       const originalDto = {
         password: "a password",
         description: "",
-        totp: {}
+        totp: {},
       };
       const viewModel1 = new ResourcePasswordDescriptionViewModel(originalDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(true);
@@ -241,7 +244,7 @@ describe("ResourcePasswordDescriptionViewModel", () => {
       expect.assertions(1);
       const originalDto = {
         password: "test",
-        description: "a description"
+        description: "a description",
       };
       const viewModel1 = new ResourcePasswordDescriptionViewModel(originalDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(false);
@@ -251,11 +254,11 @@ describe("ResourcePasswordDescriptionViewModel", () => {
       expect.assertions(1);
       const originalDto = {
         password: "test",
-        description: "a description"
+        description: "a description",
       };
       const otherDto = {
         password: "test-other",
-        description: "a description"
+        description: "a description",
       };
       const viewModel1 = new ResourcePasswordDescriptionViewModel(otherDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(true);

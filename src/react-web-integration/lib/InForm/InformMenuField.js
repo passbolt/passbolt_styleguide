@@ -12,7 +12,7 @@
  * @since         3.3.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import browser from "webextension-polyfill";
 import DomUtils from "../Dom/DomUtils";
 
@@ -28,14 +28,15 @@ class InFormMenuField {
   constructor(field, shadowRoot) {
     /** The field to which the in-form is attached */
     this.field = field;
+    /** A unique identifier for the InFormCallToActionField */
+    this.id = uuidv4();
     /** An unique identifier for the iframe */
     this.iframeId = uuidv4();
     /** Flag telling if the user is mousing over the menu (iframe) */
     this.isMenuMousingOver = false;
     /** The scrollable field parent */
     this.scrollableFieldParent = null;
-
-
+    /** The shadow root **/
     this.shadowRoot = shadowRoot;
 
     this.bindCallbacks();
@@ -49,7 +50,7 @@ class InFormMenuField {
    */
   bindCallbacks() {
     this.removeInFormMenu = this.removeInFormMenu.bind(this);
-    this.removeMenuIframe = this.removeMenuIframe.bind(this);
+    this.removeIframe = this.removeIframe.bind(this);
     this.destroy = this.destroy.bind(this);
   }
 
@@ -59,10 +60,10 @@ class InFormMenuField {
    * Insert an in-form menu iframe
    */
   async insertInformMenuIframe() {
-    const iframes = this.shadowRoot.querySelectorAll('iframe');
+    const iframes = this.shadowRoot.querySelectorAll("iframe");
     // Use of Array prototype some method cause NodeList is not an array !
     const iframeId = this.iframeId;
-    const isIframeAlreadyInserted = Array.prototype.some.call(iframes, iframe => iframe.id === iframeId);
+    const isIframeAlreadyInserted = Array.prototype.some.call(iframes, (iframe) => iframe.id === iframeId);
     if (!isIframeAlreadyInserted) {
       const iframe = await this.createMenuIframe();
       this.handleMenuClicked(iframe);
@@ -75,9 +76,9 @@ class InFormMenuField {
    */
   async createMenuIframe() {
     // IMPORTANT: Calculate position before inserting iframe in document to avoid issue
-    const {top, left} = this.calculateIframePosition();
+    const { top, left } = this.calculateIframePosition();
     const portId = await port.request("passbolt.port.generate-id", "InFormMenu");
-    const iframe = document.createElement('iframe');
+    const iframe = document.createElement("iframe");
     this.shadowRoot.appendChild(iframe);
     const browserExtensionUrl = browser.runtime.getURL("/");
     iframe.id = this.iframeId;
@@ -86,10 +87,10 @@ class InFormMenuField {
     iframe.style.top = `${top}px`;
     iframe.style.left = `${left}px`;
     iframe.style.border = "none";
-    iframe.style.width = '370px'; // width of the menu 350px + 20px to display shadows
-    iframe.style.height = '220px'; // For 3 items in a row to be display
+    iframe.style.width = "370px"; // width of the menu 350px + 20px to display shadows
+    iframe.style.height = "220px"; // For 3 items in a row to be display
     iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
-    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-menu.html?passbolt=${portId}`;
+    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-menu.html?passbolt=${portId}&applicationId=${this.id}`;
     return iframe;
   }
 
@@ -103,9 +104,11 @@ class InFormMenuField {
     let currentElement = this.field;
     let hasScroll = false;
     const isInIframe = this.field.ownerDocument !== document;
-    const {top, left, height, width} = this.field.getBoundingClientRect();
+    const { top, left, height, width } = this.field.getBoundingClientRect();
     // If the field is in iframe get the top and left of the iframe else get the top and the left of the body
-    const {top: topBody, left: leftBody} = isInIframe ? this.field.ownerDocument.defaultView.frameElement.getBoundingClientRect() : document.documentElement.getBoundingClientRect();
+    const { top: topBody, left: leftBody } = isInIframe
+      ? this.field.ownerDocument.defaultView.frameElement.getBoundingClientRect()
+      : document.documentElement.getBoundingClientRect();
     /*
      * We loop to calculate the cumulated position of the field
      * from its ancestors and itself differential offset / scroll position
@@ -129,7 +132,7 @@ class InFormMenuField {
       y = y + topBody + height; // Calculate the bottom position of the input
     }
     // If x is negative force zero
-    return {top: y, left: x < 0 ? 0 : x};
+    return { top: y, left: x < 0 ? 0 : x };
   }
 
   /**
@@ -141,8 +144,8 @@ class InFormMenuField {
      * We need to know which iframe the user click on. We cannot add a listener on iframe
      * since there are from different domains (target page vs extension pagemods)
      */
-    iframe.addEventListener('mouseover', () => this.isMenuMousingOver = true);
-    iframe.addEventListener('mouseout', () => this.isMenuMousingOver = false);
+    iframe.addEventListener("mouseover", () => (this.isMenuMousingOver = true));
+    iframe.addEventListener("mouseout", () => (this.isMenuMousingOver = false));
   }
 
   /** MENU REMOVE */
@@ -151,7 +154,7 @@ class InFormMenuField {
    * Whenever the menu must be removed
    */
   handleRemoveEvent() {
-    this.field.addEventListener("blur",  this.removeInFormMenu);
+    this.field.addEventListener("blur", this.removeInFormMenu);
   }
 
   /**
@@ -161,16 +164,16 @@ class InFormMenuField {
     const isIframeMouseOver = this.isMenuMousingOver;
     const isActiveElement = document.activeElement === this.field;
     if (!isIframeMouseOver && !isActiveElement) {
-      this.removeMenuIframe();
+      this.removeIframe();
     }
   }
 
   /**
    * Remove the menu (iframe)
    */
-  removeMenuIframe() {
-    const iframes = this.shadowRoot.querySelectorAll('iframe');
-    iframes.forEach(iframe => {
+  removeIframe() {
+    const iframes = this.shadowRoot.querySelectorAll("iframe");
+    iframes.forEach((iframe) => {
       const identifierToMatch = this.iframeId;
       if (iframe.id === identifierToMatch) {
         iframe.parentNode.removeChild(iframe);
@@ -187,7 +190,7 @@ class InFormMenuField {
   handleScrollEvent() {
     // Remove the in form menu
     this.scrollableFieldParent = DomUtils.getScrollParent(this.field);
-    this.scrollableFieldParent.addEventListener('scroll', this.removeMenuIframe);
+    this.scrollableFieldParent.addEventListener("scroll", this.removeIframe);
   }
 
   /** DESTROY */
@@ -196,9 +199,9 @@ class InFormMenuField {
    * Remove all listener and iframe to clean the page and avoid issue on extension update
    */
   destroy() {
-    this.field.removeEventListener("blur",  this.removeInFormMenu);
-    this.scrollableFieldParent.removeEventListener('scroll', this.removeMenuIframe);
-    this.removeMenuIframe();
+    this.field.removeEventListener("blur", this.removeInFormMenu);
+    this.scrollableFieldParent.removeEventListener("scroll", this.removeIframe);
+    this.removeIframe();
   }
 }
 

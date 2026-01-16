@@ -16,11 +16,12 @@
  * Default props
  * @returns {*}
  */
-import {DateTime} from "luxon";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultNavigationContext} from "../../../contexts/NavigationContext.test.data";
+import { DateTime } from "luxon";
 import MockPort from "../../../test/mock/MockPort";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
+import SubscriptionEntity from "../../../../shared/models/entity/subscription/subscriptionEntity";
 
 /**
  * Default component props
@@ -29,9 +30,9 @@ import MockPort from "../../../test/mock/MockPort";
  */
 export function defaultProps(props = {}) {
   const port = new MockPort();
-  port.addRequestListener('passbolt.users.get-all', () => mockUsers);
+  port.addRequestListener("passbolt.users.get-all", () => mockUsers);
   const defaultContext = {
-    onGetSubscriptionKeyRequested: () => mockSubscription,
+    onGetSubscriptionKeyRequested: () => new SubscriptionEntity(mockSubscription),
     port: port,
   };
 
@@ -39,7 +40,7 @@ export function defaultProps(props = {}) {
     context: defaultAppContext(Object.assign(defaultContext, props?.context)),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
-      resetDisplayAdministrationWorkspaceAction: jest.fn()
+      resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
     dialogContext: defaultDialogContext(),
     navigationContext: defaultNavigationContext(),
@@ -57,7 +58,7 @@ export function goingToExpireProps() {
   const context = {
     onGetSubscriptionKeyRequested: () => mockSubscriptionGoingToExpire,
   };
-  return defaultProps({context});
+  return defaultProps({ context });
 }
 
 /**
@@ -68,7 +69,7 @@ export function expiredProps() {
   const context = {
     onGetSubscriptionKeyRequested: () => mockSubscriptionExpired,
   };
-  return defaultProps({context});
+  return defaultProps({ context });
 }
 
 /**
@@ -79,7 +80,7 @@ export function usersExceededProps() {
   const context = {
     onGetSubscriptionKeyRequested: () => mockSubscriptionUsersExceeded,
   };
-  return defaultProps({context});
+  return defaultProps({ context });
 }
 
 /**
@@ -90,7 +91,7 @@ export function notFoundProps() {
   const context = {
     onGetSubscriptionKeyRequested: () => {},
   };
-  return defaultProps({context});
+  return defaultProps({ context });
 }
 
 /**
@@ -100,7 +101,7 @@ export function notFoundProps() {
  */
 export function formatDate(date) {
   try {
-    return DateTime.fromISO(date).setLocale('en-UK').toLocaleString(DateTime.DATE_SHORT);
+    return DateTime.fromISO(date).setLocale("en-UK").toLocaleString(DateTime.DATE_SHORT);
   } catch (error) {
     console.error(`Failed to format date "${date}":`, error);
     return "";
@@ -114,84 +115,84 @@ const goingToExpireDate = new Date();
 goingToExpireDate.setDate(goingToExpireDate.getDate() + 3);
 
 export const mockSubscription = {
-  "customer_id": "1n6BPvHRWfizhmARz",
-  "subscription_id": "1n6BPvHRWfizhmARz",
-  "users": 5,
-  "email": "ada@passbolt.com",
-  "created": "2020-12-01T00:00:00.661Z",
-  "expiry": expiredDate.toISOString(),
-  "data": "data"
+  customer_id: "1n6BPvHRWfizhmARz",
+  subscription_id: "1n6BPvHRWfizhmARz",
+  users: 5,
+  email: "ada@passbolt.com",
+  created: "2020-12-01T00:00:00.661Z",
+  expiry: expiredDate.toISOString(),
+  data: "data",
 };
 
 export const mockSubscriptionModel = {
-  "created": "2020-12-01T00:00:00.661Z",
-  "customerId": "1n6BPvHRWfizhmARz",
-  "data": "data",
-  "email": "ada@passbolt.com",
-  "expiry": expiredDate.toISOString(),
-  "subscriptionId": "1n6BPvHRWfizhmARz",
-  "users": 5,
+  created: "2020-12-01T00:00:00.661Z",
+  customerId: "1n6BPvHRWfizhmARz",
+  data: "data",
+  email: "ada@passbolt.com",
+  expiry: expiredDate.toISOString(),
+  subscriptionId: "1n6BPvHRWfizhmARz",
+  users: 5,
 };
 
 export const mockSubscriptionUsersExceeded = {
-  "customer_id": "1n6BPvHRWfizhmARz",
-  "subscription_id": "1n6BPvHRWfizhmARz",
-  "users": 2,
-  "email": "ada@passbolt.com",
-  "created": "2020-12-01T00:00:00.661Z",
-  "expiry": "2021-12-01T00:00:00.661Z",
-  "data": "data"
+  customer_id: "1n6BPvHRWfizhmARz",
+  subscription_id: "1n6BPvHRWfizhmARz",
+  users: 2,
+  email: "ada@passbolt.com",
+  created: "2020-12-01T00:00:00.661Z",
+  expiry: "2021-12-01T00:00:00.661Z",
+  data: "data",
 };
 
 export const mockSubscriptionGoingToExpire = {
-  "customer_id": "1n6BPvHRWfizhmARz",
-  "subscription_id": "1n6BPvHRWfizhmARz",
-  "users": 5,
-  "email": "ada@passbolt.com",
-  "created": "2019-12-01T00:00:00.661Z",
-  "expiry": goingToExpireDate.toISOString(),
-  "data": "data"
+  customer_id: "1n6BPvHRWfizhmARz",
+  subscription_id: "1n6BPvHRWfizhmARz",
+  users: 5,
+  email: "ada@passbolt.com",
+  created: "2019-12-01T00:00:00.661Z",
+  expiry: goingToExpireDate.toISOString(),
+  data: "data",
 };
 
 export const mockSubscriptionExpired = {
-  "customer_id": "1n6BPvHRWfizhmARz",
-  "subscription_id": "1n6BPvHRWfizhmARz",
-  "users": 5,
-  "email": "ada@passbolt.com",
-  "created": "2019-12-01T00:00:00.661Z",
-  "expiry": "2020-11-01T00:00:00.661Z",
-  "data": "data"
+  customer_id: "1n6BPvHRWfizhmARz",
+  subscription_id: "1n6BPvHRWfizhmARz",
+  users: 5,
+  email: "ada@passbolt.com",
+  created: "2019-12-01T00:00:00.661Z",
+  expiry: "2020-11-01T00:00:00.661Z",
+  data: "data",
 };
 
 export const mockSubscriptionUpdated = {
-  "customer_id": "1n6BPvHRWfizhmARz",
-  "subscription_id": "1n6BPvHRWfizhmARz",
-  "users": 10,
-  "email": "admin@passbolt.com",
-  "created": "2020-12-16T00:00:00.661Z",
-  "expiry": "2021-12-16T00:00:00.661Z",
-  "data": "data"
+  customer_id: "1n6BPvHRWfizhmARz",
+  subscription_id: "1n6BPvHRWfizhmARz",
+  users: 10,
+  email: "admin@passbolt.com",
+  created: "2020-12-16T00:00:00.661Z",
+  expiry: "2021-12-16T00:00:00.661Z",
+  data: "data",
 };
 
 export const mockUsers = [
   {
     active: true,
-    name: "1"
+    name: "1",
   },
   {
     active: true,
-    name: "2"
+    name: "2",
   },
   {
     active: true,
-    name: "3"
+    name: "3",
   },
   {
     active: true,
-    name: "4"
+    name: "4",
   },
   {
     active: true,
-    name: "5"
+    name: "5",
   },
 ];

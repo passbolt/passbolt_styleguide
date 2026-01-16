@@ -14,9 +14,9 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultSecretRevisionsSettingsDto} from "./secretRevisionsSettingsEntity.test.data";
+import { defaultSecretRevisionsSettingsDto } from "./secretRevisionsSettingsEntity.test.data";
 import SecretRevisionsSettingsEntity from "./secretRevisionsSettingsEntity";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 describe("SecretRevisionsSettings", () => {
   describe("::getSchema", () => {
@@ -76,7 +76,11 @@ describe("SecretRevisionsSettings", () => {
     it("creates from default metadata keys settings with data overridden", () => {
       expect.assertions(3);
       const id = uuidv4();
-      const entity = SecretRevisionsSettingsEntity.createFromDefault({id: id, max_revisions: 10, allow_sharing_revisions: true});
+      const entity = SecretRevisionsSettingsEntity.createFromDefault({
+        id: id,
+        max_revisions: 10,
+        allow_sharing_revisions: true,
+      });
 
       expect(entity._props.id).toStrictEqual(id);
       expect(entity._props.max_revisions).toStrictEqual(10);
@@ -87,7 +91,7 @@ describe("SecretRevisionsSettings", () => {
   describe("::maxRevisions", () => {
     it("get max_revisions property value", () => {
       expect.assertions(1);
-      const entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto({max_revisions: 10}));
+      const entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto({ max_revisions: 10 }));
       expect(entity.maxRevisions).toStrictEqual(10);
     });
   });
@@ -97,7 +101,7 @@ describe("SecretRevisionsSettings", () => {
       expect.assertions(2);
       let entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto());
       expect(entity.allowSharingRevisions).toBeFalsy();
-      entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto({allow_sharing_revisions: true}));
+      entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto({ allow_sharing_revisions: true }));
       expect(entity.allowSharingRevisions).toBeTruthy();
     });
   });

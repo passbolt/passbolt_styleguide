@@ -11,14 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.11.0
  */
-import {isValidEmail, isValidUuid} from "../../utils/assertions";
+import { isValidEmail, isValidUuid } from "../../utils/assertions";
 
 const SSO_POPUP_WINDOW_HEIGHT = 600;
 const SSO_POPUP_WINDOW_WIDTH = 380;
 
 export const AUTHENTICATION_SUCCESS_CASES = {
   DEFAULT: "default",
-  REGISTRATION_REQUIRED: "registration_required"
+  REGISTRATION_REQUIRED: "registration_required",
 };
 
 /**
@@ -49,7 +49,11 @@ class SsoPopupHandlerService {
    * @returns {Promise<string>} returns a promise that resolve with the code from the third party
    */
   getSsoTokenFromThirdParty(url) {
-    this.popup = window.open(undefined, "__blank", `popup,width=${SSO_POPUP_WINDOW_WIDTH},height=${SSO_POPUP_WINDOW_HEIGHT}`);
+    this.popup = window.open(
+      undefined,
+      "__blank",
+      `popup,width=${SSO_POPUP_WINDOW_WIDTH},height=${SSO_POPUP_WINDOW_HEIGHT}`,
+    );
     this.popup.opener = null;
     this.popup.location.href = url.toString();
     return new Promise(this.handlePopupVerification);
@@ -111,7 +115,7 @@ class SsoPopupHandlerService {
 
     this.resolvePromise({
       case: AUTHENTICATION_SUCCESS_CASES.DEFAULT,
-      token: token
+      token: token,
     });
     this.close();
   }
@@ -133,7 +137,7 @@ class SsoPopupHandlerService {
 
     this.resolvePromise({
       case: AUTHENTICATION_SUCCESS_CASES.REGISTRATION_REQUIRED,
-      email: email
+      email: email,
     });
 
     this.close();

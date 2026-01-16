@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourceFolderDetailsActivity from "./DisplayResourceFolderDetailsActivity";
 
@@ -32,11 +32,11 @@ export default class DisplayResourceFolderDetailsActivityPage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
-            <DisplayResourceFolderDetailsActivity {...props}/>
+            <DisplayResourceFolderDetailsActivity {...props} />
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -58,14 +58,14 @@ export default class DisplayResourceFolderDetailsActivityPage {
    * Returns true
    */
   isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving activities';
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === "Retrieving activities";
   }
 
   /**
    * Returns the number of displayed activities
    */
   count() {
-    return this._page.container.querySelectorAll('.content').length;
+    return this._page.container.querySelectorAll(".content").length;
   }
 
   /**
@@ -73,7 +73,7 @@ export default class DisplayResourceFolderDetailsActivityPage {
    * @param index The display rank of creator's activity
    */
   creator(index) {
-    return this._page.container.querySelectorAll('.content')[index - 1].querySelector('.creator').textContent;
+    return this._page.container.querySelectorAll(".content")[index - 1].querySelector(".creator").textContent;
   }
 
   /**
@@ -81,28 +81,28 @@ export default class DisplayResourceFolderDetailsActivityPage {
    * @param index The display rank of activity
    */
   creationTime(index) {
-    return this._page.container.querySelectorAll('.content')[index - 1].querySelector('.subinfo').textContent;
+    return this._page.container.querySelectorAll(".content")[index - 1].querySelector(".subinfo").textContent;
   }
 
   /**
    * Returns the list elements of activities
    */
   get list() {
-    return this._page.container.querySelector('ul');
+    return this._page.container.querySelector("ul");
   }
 
   /**
    * Returns the loading element
    */
   get loadingMessage() {
-    return this._page.container.querySelector('.processing-text');
+    return this._page.container.querySelector(".processing-text");
   }
 
   /**
    * Returns the more button of activities
    */
   get moreButton() {
-    return this._page.container.querySelector('.action-logs-load-more');
+    return this._page.container.querySelector(".action-logs-load-more");
   }
 
   /**
@@ -115,14 +115,9 @@ export default class DisplayResourceFolderDetailsActivityPage {
   }
 
   /** Click on the more button */
-  async moreButtonClick()  {
-    const leftClick = {button: 0};
+  async moreButtonClick() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.moreButton, leftClick);
     await waitFor(() => {});
   }
 }
-
-
-
-
-

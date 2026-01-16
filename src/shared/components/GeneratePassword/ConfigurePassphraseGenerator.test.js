@@ -16,7 +16,7 @@
  * Unit tests on ConfigurePassphraseGenerator in regard of specifications
  */
 import ConfigurePassphraseGeneratorPage from "./ConfigurePassphraseGenerator.test.page";
-import {defaultProps} from "./ConfigurePassphraseGenerator.test.data";
+import { defaultProps } from "./ConfigurePassphraseGenerator.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -31,8 +31,8 @@ describe("Configure Passphrase Generator", () => {
     page = new ConfigurePassphraseGeneratorPage(props);
   });
 
-  describe('As LU I should update the passphrase configuration', () => {
-    it('As LU I should change the range of word count', async() => {
+  describe("As LU I should update the passphrase configuration", () => {
+    it("As LU I should change the range of word count", async () => {
       expect.assertions(5);
       expect(page.rangeWordCount.value).toBe("9");
       expect(page.numberWordCount.value).toBe("9");
@@ -43,7 +43,7 @@ describe("Configure Passphrase Generator", () => {
       expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
-    it('As LU I should change the number of word count', async() => {
+    it("As LU I should change the number of word count", async () => {
       expect.assertions(5);
       expect(page.rangeWordCount.value).toBe("9");
       expect(page.numberWordCount.value).toBe("9");
@@ -54,21 +54,21 @@ describe("Configure Passphrase Generator", () => {
       expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
-    it('As LU I should change the separator', async() => {
+    it("As LU I should change the separator", async () => {
       expect.assertions(3);
-      expect(page.separator.value).toBe(' ');
-      await page.changeSeparator('{}');
+      expect(page.separator.value).toBe(" ");
+      await page.changeSeparator("{}");
       page.rerender(props);
-      expect(page.separator.value).toBe('{}');
+      expect(page.separator.value).toBe("{}");
       expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
-    it('As LU I should change the separator', async() => {
+    it("As LU I should change the separator", async () => {
       expect.assertions(3);
-      expect(page.wordCase.textContent).toBe('Lower case');
+      expect(page.wordCase.textContent).toBe("Lower case");
       await page.changeWordCase();
       page.rerender(props);
-      expect(page.wordCase.textContent).toBe('Upper case');
+      expect(page.wordCase.textContent).toBe("Upper case");
       expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
   });

@@ -13,26 +13,26 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {BROWSER_NAMES, detectBrowserName} from "../../../shared/lib/Browser/detectBrowserName";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { BROWSER_NAMES, detectBrowserName } from "../../../shared/lib/Browser/detectBrowserName";
 
 // The authentication recover workflow states.
 export const AuthenticationRecoverWorkflowStates = {
-  CHECK_ACCOUNT_RECOVERY_EMAIL: 'Check account recovery email',
-  CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN: 'Choose account recovery security token',
-  CHOOSE_SECURITY_TOKEN: 'Choose security token',
-  GENERATE_ACCOUNT_RECOVERY_GPG_KEY: 'Generate account recovery gpg key',
-  HELP_CREDENTIALS_LOST: 'Help credentials lost',
-  IMPORT_GPG_KEY: 'Import gpg key',
-  INITIATE_ACCOUNT_RECOVERY: 'Initiate account recovery',
-  INTRODUCE_EXTENSION: 'Introduce extension',
-  LOADING: 'Loading',
-  REQUESTING_ACCOUNT_RECOVERY: 'Requesting account recovery',
-  SIGNING_IN: 'Signing in',
-  COMPLETING_RECOVER: 'Completing recover',
-  UNEXPECTED_ERROR: 'Unexpected Error',
-  VALIDATE_PASSPHRASE: 'Validate passphrase',
-  CHECK_MAILBOX: 'Check mailbox',
+  CHECK_ACCOUNT_RECOVERY_EMAIL: "Check account recovery email",
+  CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN: "Choose account recovery security token",
+  CHOOSE_SECURITY_TOKEN: "Choose security token",
+  GENERATE_ACCOUNT_RECOVERY_GPG_KEY: "Generate account recovery gpg key",
+  HELP_CREDENTIALS_LOST: "Help credentials lost",
+  IMPORT_GPG_KEY: "Import gpg key",
+  INITIATE_ACCOUNT_RECOVERY: "Initiate account recovery",
+  INTRODUCE_EXTENSION: "Introduce extension",
+  LOADING: "Loading",
+  REQUESTING_ACCOUNT_RECOVERY: "Requesting account recovery",
+  SIGNING_IN: "Signing in",
+  COMPLETING_RECOVER: "Completing recover",
+  UNEXPECTED_ERROR: "Unexpected Error",
+  VALIDATE_PASSPHRASE: "Validate passphrase",
+  CHECK_MAILBOX: "Check mailbox",
 };
 
 /**
@@ -46,28 +46,17 @@ export const AuthenticationRecoverContext = React.createContext({
   error: null, // The current error
 
   // Workflow mutators.
-  goToImportGpgKey: () => {
-  }, // Whenever the user wants to go to the import key step.
-  importGpgKey: () => {
-  }, // Whenever the user imports its gpg key.
-  checkPassphrase: () => {
-  }, // Whenever the user want to check the passphrase of its imported gpg key.
-  chooseSecurityToken: () => {
-  }, // Whenever the user wants to choose its security token preference.
-  needHelpCredentialsLost: () => {
-  }, // Whenever the user who lost its credentials needs help.
-  initiateAccountRecovery: () => {
-  }, // Whenever the user wants to initiate an account recovery.
-  generateAccountRecoveryGpgKey: () => {
-  }, // Whenever the user wants to create an account recovery gpg key.
-  chooseAccountRecoverySecurityToken: () => {
-  }, // Whenever the user chose its account recovery security token preferences.
-  validatePrivateKey: () => {
-  }, // Whenever we need to verify the imported private key
-  requestHelpCredentialsLost: () => {
-  }, // Whenever the user wants to request help because it lost its credentials.
-  hasKeyExpirationDate: () => {
-  }, // Whenever the key to check has an expiration date
+  goToImportGpgKey: () => {}, // Whenever the user wants to go to the import key step.
+  importGpgKey: () => {}, // Whenever the user imports its gpg key.
+  checkPassphrase: () => {}, // Whenever the user want to check the passphrase of its imported gpg key.
+  chooseSecurityToken: () => {}, // Whenever the user wants to choose its security token preference.
+  needHelpCredentialsLost: () => {}, // Whenever the user who lost its credentials needs help.
+  initiateAccountRecovery: () => {}, // Whenever the user wants to initiate an account recovery.
+  generateAccountRecoveryGpgKey: () => {}, // Whenever the user wants to create an account recovery gpg key.
+  chooseAccountRecoverySecurityToken: () => {}, // Whenever the user chose its account recovery security token preferences.
+  validatePrivateKey: () => {}, // Whenever we need to verify the imported private key
+  requestHelpCredentialsLost: () => {}, // Whenever the user wants to request help because it lost its credentials.
+  hasKeyExpirationDate: () => {}, // Whenever the key to check has an expiration date
 });
 
 /**
@@ -122,29 +111,34 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async initialize() {
-    await this.props.context.port.request('passbolt.recover.start');
-    const userPassphrasePolicies = await this.props.context.port.request('passbolt.recover.get-user-passphrase-policies');
+    await this.props.context.port.request("passbolt.recover.start");
+    const userPassphrasePolicies = await this.props.context.port.request(
+      "passbolt.recover.get-user-passphrase-policies",
+    );
     // The user locale is retrieved by the recover start, update the application locale
     await this.props.context.initLocale();
 
-    const isLostPassphraseCase = await this.props.context.port.request('passbolt.recover.lost-passphrase-case');
+    const isLostPassphraseCase = await this.props.context.port.request("passbolt.recover.lost-passphrase-case");
     if (isLostPassphraseCase) {
-      const hasUserEnrolledToAccountRecovery = await this.props.context.port.request('passbolt.recover.has-user-enabled-account-recovery');
+      const hasUserEnrolledToAccountRecovery = await this.props.context.port.request(
+        "passbolt.recover.has-user-enabled-account-recovery",
+      );
       const state = hasUserEnrolledToAccountRecovery
         ? AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY
         : AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST;
-      this.setState({state, userPassphrasePolicies});
+      this.setState({ state, userPassphrasePolicies });
       return;
     }
 
-    const isFirstInstall = await this.props.context.port.request('passbolt.recover.first-install');
+    const isFirstInstall = await this.props.context.port.request("passbolt.recover.first-install");
     const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
 
-    const state = isFirstInstall && isChromeBrowser
-      ? AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION
-      : AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
+    const state =
+      isFirstInstall && isChromeBrowser
+        ? AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION
+        : AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
 
-    this.setState({state, userPassphrasePolicies});
+    this.setState({ state, userPassphrasePolicies });
   }
 
   /**
@@ -153,7 +147,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    */
   async goToImportGpgKey() {
     await this.setState({
-      state: AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY
+      state: AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY,
     });
   }
 
@@ -167,12 +161,12 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async importGpgKey(armoredKey) {
     try {
       await this.props.context.port.request("passbolt.recover.import-key", armoredKey);
-      await this.setState({state: AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE});
+      await this.setState({ state: AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE });
     } catch (error) {
       if (error.name === "GpgKeyError") {
         throw error;
       } else {
-        await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
+        await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
       }
     }
   }
@@ -190,13 +184,13 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.recover.verify-passphrase", passphrase);
       this.setState({
         state: AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN,
-        rememberMe: rememberMe
+        rememberMe: rememberMe,
       });
     } catch (error) {
       if (error.name === "InvalidMasterPasswordError") {
         throw error;
       } else {
-        this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
+        this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
       }
     }
   }
@@ -209,13 +203,13 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async chooseSecurityToken(securityTokenDto) {
     try {
       await this.props.context.port.request("passbolt.recover.set-security-token", securityTokenDto);
-      this.setState({state: AuthenticationRecoverWorkflowStates.COMPLETING_RECOVER});
-      await this.props.context.port.request('passbolt.recover.complete');
-      this.setState({state: AuthenticationRecoverWorkflowStates.SIGNING_IN});
+      this.setState({ state: AuthenticationRecoverWorkflowStates.COMPLETING_RECOVER });
+      await this.props.context.port.request("passbolt.recover.complete");
+      this.setState({ state: AuthenticationRecoverWorkflowStates.SIGNING_IN });
       await this.props.context.port.request("passbolt.recover.sign-in", this.state.rememberMe);
       await this.props.context.port.request("passbolt.auth.post-login-redirect");
     } catch (error) {
-      await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
+      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -224,11 +218,13 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async needHelpCredentialsLost() {
-    const hasUserAccountRecoveryEnabled = await this.props.context.port.request("passbolt.recover.has-user-enabled-account-recovery");
+    const hasUserAccountRecoveryEnabled = await this.props.context.port.request(
+      "passbolt.recover.has-user-enabled-account-recovery",
+    );
     if (hasUserAccountRecoveryEnabled) {
-      await this.setState({state: AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY});
+      await this.setState({ state: AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY });
     } else {
-      await this.setState({state: AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST});
+      await this.setState({ state: AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST });
     }
   }
 
@@ -237,7 +233,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async initiateAccountRecovery() {
-    await this.setState({state: AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY});
+    await this.setState({ state: AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY });
   }
 
   /**
@@ -246,10 +242,10 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    */
   async requestHelpCredentialsLost() {
     try {
-      await this.props.context.port.request('passbolt.recover.request-help-credentials-lost');
-      await this.setState({state: AuthenticationRecoverWorkflowStates.CHECK_MAILBOX});
+      await this.props.context.port.request("passbolt.recover.request-help-credentials-lost");
+      await this.setState({ state: AuthenticationRecoverWorkflowStates.CHECK_MAILBOX });
     } catch (error) {
-      await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
+      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -259,12 +255,12 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async generateAccountRecoveryGpgKey(passphrase) {
-    const generateKeyDto = {passphrase};
+    const generateKeyDto = { passphrase };
     try {
-      await this.props.context.port.request('passbolt.recover.generate-account-recovery-request-key', generateKeyDto);
-      await this.setState({state: AuthenticationRecoverWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN});
+      await this.props.context.port.request("passbolt.recover.generate-account-recovery-request-key", generateKeyDto);
+      await this.setState({ state: AuthenticationRecoverWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN });
     } catch (error) {
-      await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
+      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -275,12 +271,12 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    */
   async chooseAccountRecoverySecurityToken(securityTokenDto) {
     try {
-      await this.props.context.port.request('passbolt.recover.set-security-token', securityTokenDto);
-      this.setState({state: AuthenticationRecoverWorkflowStates.REQUESTING_ACCOUNT_RECOVERY});
-      await this.props.context.port.request('passbolt.recover.initiate-account-recovery-request');
-      this.setState({state: AuthenticationRecoverWorkflowStates.CHECK_ACCOUNT_RECOVERY_EMAIL});
+      await this.props.context.port.request("passbolt.recover.set-security-token", securityTokenDto);
+      this.setState({ state: AuthenticationRecoverWorkflowStates.REQUESTING_ACCOUNT_RECOVERY });
+      await this.props.context.port.request("passbolt.recover.initiate-account-recovery-request");
+      this.setState({ state: AuthenticationRecoverWorkflowStates.CHECK_ACCOUNT_RECOVERY_EMAIL });
     } catch (error) {
-      await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
+      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -289,7 +285,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    * @param {string} key the private to check in its armored form
    */
   async validatePrivateKey(key) {
-    await this.props.context.port.request('passbolt.recover.validate-private-key', key);
+    await this.props.context.port.request("passbolt.recover.validate-private-key", key);
   }
 
   /**
@@ -298,8 +294,8 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    * @returns {Promise<boolean>}
    */
   async hasKeyExpirationDate(armoredKey) {
-    const keyInfo = await this.props.context.port.request('passbolt.keyring.get-key-info', armoredKey);
-    return keyInfo.expires && keyInfo.expires !== 'Infinity';
+    const keyInfo = await this.props.context.port.request("passbolt.keyring.get-key-info", armoredKey);
+    return keyInfo.expires && keyInfo.expires !== "Infinity";
   }
 
   /**
@@ -317,7 +313,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
 
 AuthenticationRecoverContextProvider.propTypes = {
   context: PropTypes.any, // The application context
-  children: PropTypes.any // The children components
+  children: PropTypes.any, // The children components
 };
 export default withAppContext(AuthenticationRecoverContextProvider);
 
@@ -330,10 +326,9 @@ export function withAuthenticationRecoverContext(WrappedComponent) {
     render() {
       return (
         <AuthenticationRecoverContext.Consumer>
-          {
-            AuthenticationRecoverContext => <WrappedComponent
-              authenticationRecoverContext={AuthenticationRecoverContext} {...this.props} />
-          }
+          {(AuthenticationRecoverContext) => (
+            <WrappedComponent authenticationRecoverContext={AuthenticationRecoverContext} {...this.props} />
+          )}
         </AuthenticationRecoverContext.Consumer>
       );
     }

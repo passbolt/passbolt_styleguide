@@ -12,9 +12,8 @@
  * @since         4.4.0
  */
 
-import {defaultProps} from "./YubikeySetup.test.data";
+import { defaultProps } from "./YubikeySetup.test.data";
 import YubikeySetupPage from "./YubikeySetup.test.page";
-
 
 /**
  * Unit tests on YubikeySetup in regard of specifications
@@ -22,14 +21,13 @@ import YubikeySetupPage from "./YubikeySetup.test.page";
 
 describe("YubikeySetup", () => {
   describe("As a logged user I should be able to scan a enter the yubikey code to setup the yubikey provider", () => {
-    let page,
-      props;
+    let page, props;
 
     beforeEach(() => {
       props = defaultProps();
       page = new YubikeySetupPage(props);
     });
-    it('I should have access to the yubikey setup screen', () => {
+    it("I should have access to the yubikey setup screen", () => {
       expect.assertions(4);
 
       expect(page.exists()).toBeTruthy();
@@ -38,7 +36,7 @@ describe("YubikeySetup", () => {
       expect(page.inputLabelOtp.textContent).toEqual("Yubikey OTP");
     });
 
-    it('I should be able to cancel the setup', async() => {
+    it("I should be able to cancel the setup", async () => {
       expect.assertions(1);
 
       await page.clickOnCancelButton();
@@ -46,7 +44,7 @@ describe("YubikeySetup", () => {
       expect(props.mfaContext.goToProviderList).toHaveBeenCalled();
     });
 
-    it('I should see an error message if the otp input is empty', async() => {
+    it("I should see an error message if the otp input is empty", async () => {
       expect.assertions(1);
 
       await page.clickOnValidateButton();
@@ -54,21 +52,20 @@ describe("YubikeySetup", () => {
       expect(page.errorMessage.textContent).toEqual("A OTP code is required.");
     });
 
-    it('I should see an error message if the otp input is invalid', async() => {
+    it("I should see an error message if the otp input is invalid", async () => {
       expect.assertions(1);
 
       jest.spyOn(props.mfaContext, "validateYubikeyCode").mockImplementation(() => Promise.reject());
 
-      await page.fillOtpInput('notavalidcode');
+      await page.fillOtpInput("notavalidcode");
       await page.clickOnValidateButton();
 
       expect(page.errorMessage.textContent).toEqual("This OTP is not valid.");
     });
 
-
-    it('I should be able to valide the otp code and navigate to the configuration screen', async() => {
+    it("I should be able to valide the otp code and navigate to the configuration screen", async () => {
       expect.assertions(4);
-      const code = 'yubikey-code';
+      const code = "yubikey-code";
       jest.spyOn(props.mfaContext, "validateYubikeyCode").mockImplementation(() => Promise.resolve());
 
       await page.fillOtpInput(code);

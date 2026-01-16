@@ -15,34 +15,41 @@
 import React from "react";
 import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecoveryAdministrationSettings";
 import {
-  disabledPolicyProps, disabledPolicyPropsWithOrganisationKey,
-  mandatoryPolicyProps, mandatoryPolicyPropsWithOrganisationKey, optInPolicyProps, optInPolicyPropsWithOrganisationKey,
-  optOutPolicyProps, optOutPolicyPropsWithOrganisationKey
+  disabledPolicyProps,
+  disabledPolicyPropsWithOrganisationKey,
+  mandatoryPolicyProps,
+  mandatoryPolicyPropsWithOrganisationKey,
+  optInPolicyProps,
+  optInPolicyPropsWithOrganisationKey,
+  optOutPolicyProps,
+  optOutPolicyPropsWithOrganisationKey,
 } from "./ManageAccountRecoveryAdministrationSettings.test.data";
-import {AdminSubscriptionContextProvider} from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
+import { AdminSubscriptionContextProvider } from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
 
 export default {
-  title: 'Components/Administration/ManageAccountRecoveryAdministrationSettings',
+  title: "Components/Administration/ManageAccountRecoveryAdministrationSettings",
   component: ManageAccountRecoveryAdministrationSettings,
-  decorators: [(Story, {args}) =>
-    <AdminSubscriptionContextProvider {...args}>
-      <div id="container" className="page administration">
-        <div id="app" className="app" tabIndex="1000">
-          <div className="panel main">
-            <div className="panel middle">
-              <div className="middle-right">
-                <div className="breadcrumbs-and-grid">
-                  <div className="main-page">
-                    <Story {...args}/>
+  decorators: [
+    (Story, { args }) => (
+      <AdminSubscriptionContextProvider {...args}>
+        <div id="container" className="page administration">
+          <div id="app" className="app" tabIndex="1000">
+            <div className="panel main">
+              <div className="panel middle">
+                <div className="middle-right">
+                  <div className="breadcrumbs-and-grid">
+                    <div className="main-page">
+                      <Story {...args} />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </AdminSubscriptionContextProvider>
-  ]
+      </AdminSubscriptionContextProvider>
+    ),
+  ],
 };
 
 export const Default = {

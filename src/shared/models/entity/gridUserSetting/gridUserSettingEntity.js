@@ -17,8 +17,7 @@ import ColumnsSettingCollection from "../columnSetting/columnsSettingCollection"
 import RowsSettingEntity from "../rowsSetting/rowsSettingEntity";
 import SorterEntity from "../sorter/sorterEntity";
 
-
-const ENTITY_NAME = 'GridUserSetting';
+const ENTITY_NAME = "GridUserSetting";
 
 /**
  * Grid setting entity
@@ -28,21 +27,20 @@ class GridUserSettingEntity extends Entity {
    * @inheritDoc
    */
   constructor(gridSettingDto, options = {}) {
-    super(EntitySchema.validate(
-      GridUserSettingEntity.ENTITY_NAME,
-      gridSettingDto,
-      GridUserSettingEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(GridUserSettingEntity.ENTITY_NAME, gridSettingDto, GridUserSettingEntity.getSchema()),
+      options,
+    );
 
     // Associations
     if (this._props.columns_setting) {
-      this._columns_setting = new ColumnsSettingCollection(this._props.columns_setting, {clone: false});
+      this._columns_setting = new ColumnsSettingCollection(this._props.columns_setting, { clone: false });
     }
 
     this._rows_setting = RowsSettingEntity.createFromDefault(this._props.rows_setting);
 
     if (this._props.sorter) {
-      this._sorter = new SorterEntity(this._props.sorter, {clone: false});
+      this._sorter = new SorterEntity(this._props.sorter, { clone: false });
     }
 
     delete this._props._columns_setting;
@@ -56,16 +54,13 @@ class GridUserSettingEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "columns_setting",
-        "sorter"
-      ],
-      "properties": {
-        "columns_setting": ColumnsSettingCollection.getSchema(),
-        "sorter": SorterEntity.getSchema(),
-        "rows_setting": RowsSettingEntity.getSchema(),
-      }
+      type: "object",
+      required: ["columns_setting", "sorter"],
+      properties: {
+        columns_setting: ColumnsSettingCollection.getSchema(),
+        sorter: SorterEntity.getSchema(),
+        rows_setting: RowsSettingEntity.getSchema(),
+      },
     };
   }
 
@@ -154,7 +149,7 @@ class GridUserSettingEntity extends Entity {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {columns_setting: true, sorter: true};
+    return { columns_setting: true, sorter: true };
   }
 }
 

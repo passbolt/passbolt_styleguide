@@ -14,12 +14,12 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withRouter } from "react-router-dom";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 
 /**
@@ -38,7 +38,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseThemeCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse("accountSettings");
   }
 
   /**
@@ -47,7 +47,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    */
   get canIUseMobileCapability() {
     const canViewMobileTransfer = this.props.rbacContext.canIUseAction(uiActions.MOBILE_TRANSFER);
-    return canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+    return (
+      canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse("mobile")
+    );
   }
 
   /**
@@ -56,7 +58,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    */
   get canIUseDesktopCapability() {
     const canViewDesktopTransfer = this.props.rbacContext.canIUseAction(uiActions.DESKTOP_TRANSFER);
-    return canViewDesktopTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
+    return (
+      canViewDesktopTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse("desktop")
+    );
   }
 
   /**
@@ -65,143 +69,186 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    */
   get canIUseAccountRecoveryCapability() {
     const canViewAccountRecovery = this.props.rbacContext.canIUseAction(uiActions.PROFIL_ACCOUNT_RECOVERY);
-    return canViewAccountRecovery && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
+    return (
+      canViewAccountRecovery &&
+      this.props.context.siteSettings &&
+      this.props.context.siteSettings.canIUse("accountRecovery")
+    );
   }
 
   /**
    * Render the component
    */
   render() {
-    const isSelected = pathSuffix => this.props.location.pathname.endsWith(pathSuffix);
+    const isSelected = (pathSuffix) => this.props.location.pathname.endsWith(pathSuffix);
     return (
       <div className="navigation-secondary navigation-profile">
-        <ul >
+        <ul>
           <li>
-            <div
-              className={`row ${isSelected('profile') ? 'selected' : ''}`}>
+            <div className={`row ${isSelected("profile") ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}>
-                    <span><Trans>Profile</Trans></span>
+                  <button
+                    className="link no-border"
+                    type="button"
+                    onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}
+                  >
+                    <span>
+                      <Trans>Profile</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
           <li>
-            <div
-              className={`row ${isSelected('keys') ? 'selected' : ''}`}>
+            <div className={`row ${isSelected("keys") ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
-                    <span><Trans>Keys inspector</Trans></span>
+                  <button
+                    className="link no-border"
+                    type="button"
+                    onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}
+                  >
+                    <span>
+                      <Trans>Keys inspector</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
           <li>
-            <div
-              className={`row ${isSelected('passphrase') ? 'selected' : ''}`}>
+            <div className={`row ${isSelected("passphrase") ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsPassphraseRequested}>
-                    <span><Trans>Passphrase</Trans></span>
+                  <button
+                    className="link no-border"
+                    type="button"
+                    onClick={this.props.navigationContext.onGoToUserSettingsPassphraseRequested}
+                  >
+                    <span>
+                      <Trans>Passphrase</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
           <li>
-            <div
-              className={`row ${isSelected('security-token') ? 'selected' : ''}`}>
+            <div className={`row ${isSelected("security-token") ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsSecurityTokenRequested}>
-                    <span><Trans>Security token</Trans></span>
+                  <button
+                    className="link no-border"
+                    type="button"
+                    onClick={this.props.navigationContext.onGoToUserSettingsSecurityTokenRequested}
+                  >
+                    <span>
+                      <Trans>Security token</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
-          {this.canIUseThemeCapability &&
-          <li>
-            <div
-              className={`row ${isSelected('theme') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}>
-                    <span><Trans>Theme</Trans></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-          }
-          {this.isMfaEnabled &&
+          {this.canIUseThemeCapability && (
             <li>
-              <div
-                className={`row ${isSelected('mfa') ? 'selected' : ''}`}>
+              <div className={`row ${isSelected("theme") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
-                      <span><Trans>Multi Factor Authentication</Trans></span>
-                      {this.props.hasPendingMfaChoice &&
-                        <AttentionSVG className="attention-required"/>
-                      }
+                    <button
+                      className="link no-border"
+                      type="button"
+                      onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}
+                    >
+                      <span>
+                        <Trans>Theme</Trans>
+                      </span>
                     </button>
                   </div>
                 </div>
               </div>
             </li>
-          }
-          {this.canIUseAccountRecoveryCapability &&
-          <li>
-            <div
-              className={`row ${isSelected('account-recovery') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsAccountRecoveryRequested}>
-                    <span>
-                      <Trans>Account Recovery</Trans>
-                    </span>
-                    {this.props.hasPendingAccountRecoveryChoice &&
-                      <AttentionSVG className="attention-required"/>
-                    }
-                  </button>
+          )}
+          {this.isMfaEnabled && (
+            <li>
+              <div className={`row ${isSelected("mfa") ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      className="link no-border"
+                      type="button"
+                      onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}
+                    >
+                      <span>
+                        <Trans>Multi Factor Authentication</Trans>
+                      </span>
+                      {this.props.hasPendingMfaChoice && <AttentionSVG className="attention-required" />}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-          }
-          {this.canIUseMobileCapability &&
-          <li id="navigation-item-mobile-setup">
-            <div
-              className={`row ${isSelected('mobile') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}>
-                    <span><Trans>Mobile setup</Trans></span>
-                  </button>
+            </li>
+          )}
+          {this.canIUseAccountRecoveryCapability && (
+            <li>
+              <div className={`row ${isSelected("account-recovery") ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      className="link no-border"
+                      type="button"
+                      onClick={this.props.navigationContext.onGoToUserSettingsAccountRecoveryRequested}
+                    >
+                      <span>
+                        <Trans>Account Recovery</Trans>
+                      </span>
+                      {this.props.hasPendingAccountRecoveryChoice && <AttentionSVG className="attention-required" />}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-          }
-          {this.canIUseDesktopCapability &&
-          <li id="navigation-item-desktop-setup">
-            <div
-              className={`row ${isSelected('desktop') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsDesktopRequested}>
-                    <span><Trans>Desktop app setup</Trans></span>
-                  </button>
+            </li>
+          )}
+          {this.canIUseMobileCapability && (
+            <li id="navigation-item-mobile-setup">
+              <div className={`row ${isSelected("mobile") ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      className="link no-border"
+                      type="button"
+                      onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}
+                    >
+                      <span>
+                        <Trans>Mobile setup</Trans>
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-          }
+            </li>
+          )}
+          {this.canIUseDesktopCapability && (
+            <li id="navigation-item-desktop-setup">
+              <div className={`row ${isSelected("desktop") ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      className="link no-border"
+                      type="button"
+                      onClick={this.props.navigationContext.onGoToUserSettingsDesktopRequested}
+                    >
+                      <span>
+                        <Trans>Desktop app setup</Trans>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          )}
         </ul>
       </div>
     );
@@ -218,4 +265,6 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   rbacContext: PropTypes.any, // The role based access control context
 };
 
-export default withAppContext(withRbac(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace)))));
+export default withAppContext(
+  withRbac(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace)))),
+);

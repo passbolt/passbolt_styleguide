@@ -25,16 +25,12 @@ class Dropdown extends React.Component {
    * @returns {JSX.Element}
    */
   render() {
-    return (
-      <DropdownContextProvider>
-        {this.props.children}
-      </DropdownContextProvider>
-    );
+    return <DropdownContextProvider>{this.props.children}</DropdownContextProvider>;
   }
 }
 
 Dropdown.propTypes = {
-  children: PropTypes.any.isRequired // The children property
+  children: PropTypes.any.isRequired, // The children property
 };
 
 export default Dropdown;

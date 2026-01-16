@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class Breadcrumbs extends Component {
@@ -24,10 +24,11 @@ class Breadcrumbs extends Component {
     return (
       <div className="breadcrumbs">
         <ul className="menu">
-          {(this.props.items && this.props.items.map(breadcrumb => {
-            index++;
-            return <li key={index}>{breadcrumb}</li>;
-          }))}
+          {this.props.items &&
+            this.props.items.map((breadcrumb) => {
+              index++;
+              return <li key={index}>{breadcrumb}</li>;
+            })}
         </ul>
         {this.props.children}
       </div>

@@ -12,7 +12,7 @@
  * @since         3.9.0
  */
 
-import {SelfRegistrationProviderTypes} from "./SelfRegistrationEnumeration";
+import { SelfRegistrationProviderTypes } from "./SelfRegistrationEnumeration";
 
 /**
  * Model related to the self registration dto for API
@@ -34,9 +34,8 @@ class SelfRegistrationDto {
    * @param {Map} domains
    */
   mapData(domains = new Map()) {
-    return {allowed_domains: Array.from(domains.values())};
+    return { allowed_domains: Array.from(domains.values()) };
   }
 }
 
 export default SelfRegistrationDto;
-

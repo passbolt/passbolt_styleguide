@@ -11,28 +11,29 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.1.0
  */
-import {defaultProps, defaultPropsWithRollback} from "./ConfirmMetadataKeyPage.test.data";
+import { defaultProps, defaultPropsWithRollback } from "./ConfirmMetadataKeyPage.test.data";
 import ConfirmMetadataKeyPage from "./ConfirmMetadataKeyPage";
 import React from "react";
 
 export default {
-  title: 'Components/QuickAccess/ConfirmMetadataKeyPage',
+  title: "Components/QuickAccess/ConfirmMetadataKeyPage",
   component: ConfirmMetadataKeyPage,
   decorators: [
-    (Story, {args}) =>
+    (Story, { args }) => (
       <div className="container quickaccess">
         <Story {...args} />
       </div>
+    ),
   ],
   parameters: {
-    css: "ext_quickaccess"
-  }
+    css: "ext_quickaccess",
+  },
 };
 
 export const MetadataKeyRotation = {
-  args: defaultProps()
+  args: defaultProps(),
 };
 
 export const MetadataKeyRollback = {
-  args: defaultPropsWithRollback()
+  args: defaultPropsWithRollback(),
 };

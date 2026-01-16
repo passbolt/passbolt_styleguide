@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,9 +12,9 @@
  * @since         3.1.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {UserSettingsContextState, withUserSettings} from "../../../contexts/UserSettingsContext";
+import { UserSettingsContextState, withUserSettings } from "../../../contexts/UserSettingsContext";
 import DisplayChangePassphraseIntroduction from "./DisplayChangePassphraseIntroduction";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import ConfirmPassphrase from "./ConfirmPassphrase";
@@ -52,17 +51,17 @@ class ChangeUserPassphrase extends Component {
    * Render the component
    */
   render() {
-    switch (this.userSettingsContext.state)  {
+    switch (this.userSettingsContext.state) {
       case UserSettingsContextState.PASSPHRASE_INTRODUCTION:
-        return <DisplayChangePassphraseIntroduction/>;
+        return <DisplayChangePassphraseIntroduction />;
       case UserSettingsContextState.PASSPHRASE_TO_PROVIDE_REQUESTED:
-        return <ConfirmPassphrase/>;
+        return <ConfirmPassphrase />;
       case UserSettingsContextState.PASSPHRASE_TO_PROVIDE_CHECKED:
-        return <EnterNewPassphrase/>;
+        return <EnterNewPassphrase />;
       case UserSettingsContextState.PASSPHRASE_UPDATED:
-        return <DownloadRecoveryKit/>;
+        return <DownloadRecoveryKit />;
       default:
-        return <LoadingSpinner/>;
+        return <LoadingSpinner />;
     }
   }
 }

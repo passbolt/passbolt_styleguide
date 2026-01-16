@@ -15,10 +15,10 @@
 /**
  * Unit tests on ConfirmSaveSelfRegistrationSettings in regard of specifications
  */
-import {waitFor} from "@testing-library/react";
-import {defaultAppContext} from "../../../../contexts/ApiAppContext.test.data";
-import {propsWithMockDomains} from "./ConfirmSaveSelfRegistrationSettings.test.data";
-import ConfirmSaveSelfRegistrationSettingsPage from './ConfirmSaveSelfRegistrationSettings.test.page';
+import { waitFor } from "@testing-library/react";
+import { defaultAppContext } from "../../../../contexts/ApiAppContext.test.data";
+import { propsWithMockDomains } from "./ConfirmSaveSelfRegistrationSettings.test.data";
+import ConfirmSaveSelfRegistrationSettingsPage from "./ConfirmSaveSelfRegistrationSettings.test.page";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,11 +27,11 @@ beforeEach(() => {
 describe("See the Confirm Save Self Registration Settings", () => {
   let page; // The page to test agains
 
-  describe('As a logged in administrator ', () => {
+  describe("As a logged in administrator ", () => {
     /**
      * I should see the account recovery settings dialog
      */
-    it('As a logged in administrator I can save a list of domains when there is no error and at least one domain filled in', async() => {
+    it("As a logged in administrator I can save a list of domains when there is no error and at least one domain filled in", async () => {
       const props = propsWithMockDomains(); // The props to pass
       page = new ConfirmSaveSelfRegistrationSettingsPage(defaultAppContext, props);
       await waitFor(() => {});
@@ -42,7 +42,7 @@ describe("See the Confirm Save Self Registration Settings", () => {
       expect(page.closeButton).not.toBeNull();
 
       // domains list
-      expect(page.domainsList.innerHTML).toBe('<li>passbolt.com</li><li>passbolt.lu</li>');
+      expect(page.domainsList.innerHTML).toBe("<li>passbolt.com</li><li>passbolt.lu</li>");
       // Save button exists
       expect(page.saveButton.textContent).toBe("Save");
 
@@ -51,4 +51,3 @@ describe("See the Confirm Save Self Registration Settings", () => {
     });
   });
 });
-

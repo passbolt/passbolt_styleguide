@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 
@@ -49,8 +49,8 @@ class Autocomplete extends Component {
       autocompleteItems: null,
 
       // Fields and errors
-      name: 'loading...',
-      nameError: false
+      name: "loading...",
+      nameError: false,
     };
   }
 
@@ -60,10 +60,10 @@ class Autocomplete extends Component {
    * @return {void}
    */
   componentDidMount() {
-    this.setState({loading: false, name: ''}, () => {
+    this.setState({ loading: false, name: "" }, () => {
       this.inputRef.current.focus();
     });
-    document.addEventListener("keydown", this.handleKeyDown, {capture: true});
+    document.addEventListener("keydown", this.handleKeyDown, { capture: true });
   }
 
   /**
@@ -83,7 +83,7 @@ class Autocomplete extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown, {capture: true});
+    document.removeEventListener("keydown", this.handleKeyDown, { capture: true });
   }
 
   /**
@@ -114,7 +114,7 @@ class Autocomplete extends Component {
    * @returns {Promise<void>}
    */
   async getItems(keyword) {
-    this.setState({processing: true});
+    this.setState({ processing: true });
     return await this.props.searchCallback(keyword);
   }
 
@@ -125,10 +125,10 @@ class Autocomplete extends Component {
    * @returns {Promise<*>}
    */
   async autocompleteSearch(keyword) {
-    if (!this.cache[keyword] || this.cache[keyword].cacheExpiry < (new Date()).getTime()) {
+    if (!this.cache[keyword] || this.cache[keyword].cacheExpiry < new Date().getTime()) {
       const results = await this.getItems(keyword);
       this.cache[keyword] = results;
-      this.cache[keyword].cacheExpiry = (new Date()).getTime() + this.cacheExpiry;
+      this.cache[keyword].cacheExpiry = new Date().getTime() + this.cacheExpiry;
     }
     return this.cache[keyword];
   }
@@ -139,7 +139,7 @@ class Autocomplete extends Component {
    */
   closeAutocomplete() {
     this.cache = {};
-    this.setState({processing: false, autocompleteItems: null, selected: null});
+    this.setState({ processing: false, autocompleteItems: null, selected: null });
     this.props.onClose();
   }
 
@@ -152,17 +152,20 @@ class Autocomplete extends Component {
     if (this.state.disabled || this.state.processing || this.state.autocompleteItems === null) {
       return;
     }
-    if (event.keyCode === 40) { // key down
+    if (event.keyCode === 40) {
+      // key down
       event.preventDefault();
       this.selectNext();
       return;
     }
-    if (event.keyCode === 38) { // key up
+    if (event.keyCode === 38) {
+      // key up
       event.preventDefault();
       this.selectPrevious();
       return;
     }
-    if (event.keyCode === 13 || event.keyCode === 9) { // enter key or tab
+    if (event.keyCode === 13 || event.keyCode === 9) {
+      // enter key or tab
       if (this.state.selected === null) {
         return;
       }
@@ -179,7 +182,7 @@ class Autocomplete extends Component {
   handleSelect(selected) {
     const obj = this.state.autocompleteItems[selected];
     this.cache = {};
-    this.setState({name: ''});
+    this.setState({ name: "" });
     this.props.onSelect(obj);
     this.closeAutocomplete();
   }
@@ -194,9 +197,9 @@ class Autocomplete extends Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
-    if (name === 'name') {
+    if (name === "name") {
       this.handleNameUpdate(value);
     }
   }
@@ -208,7 +211,7 @@ class Autocomplete extends Component {
    */
   handleNameUpdate(value) {
     if (value) {
-      if (!value.endsWith(' ')) {
+      if (!value.endsWith(" ")) {
         this.handleAutocompleteChangeDebounced(value);
       }
     } else {
@@ -236,14 +239,14 @@ class Autocomplete extends Component {
       this.props.onOpen();
       // This verification avoid that a long promise erase the last call
       if (keyword === this.state.name) {
-        return new Promise(resolve => {
-          this.setState({autocompleteItems, processing: false, selected: selected}, resolve());
+        return new Promise((resolve) => {
+          this.setState({ autocompleteItems, processing: false, selected: selected }, resolve());
         });
       }
     } catch (error) {
       console.error(error);
       this.closeAutocomplete();
-      this.setState({serviceError: error.message});
+      this.setState({ serviceError: error.message });
     }
   }
 
@@ -253,9 +256,9 @@ class Autocomplete extends Component {
    */
   selectPrevious() {
     if (this.state.selected === 0 || this.state.selected === null) {
-      this.setState({selected: (this.state.autocompleteItems.length - 1)});
+      this.setState({ selected: this.state.autocompleteItems.length - 1 });
     } else {
-      this.setState({selected: (this.state.selected - 1)});
+      this.setState({ selected: this.state.selected - 1 });
     }
     this.scrollToSelectedItem();
   }
@@ -265,10 +268,10 @@ class Autocomplete extends Component {
    * @return {void}
    */
   selectNext() {
-    if (this.state.selected === null || (this.state.selected === this.state.autocompleteItems.length - 1)) {
-      this.setState({selected: 0});
+    if (this.state.selected === null || this.state.selected === this.state.autocompleteItems.length - 1) {
+      this.setState({ selected: 0 });
     } else {
-      this.setState({selected: (this.state.selected + 1)});
+      this.setState({ selected: this.state.selected + 1 });
     }
     this.scrollToSelectedItem();
   }
@@ -292,7 +295,7 @@ class Autocomplete extends Component {
    */
   getPlaceholder() {
     if (this.props.disabled) {
-      return 'please wait...';
+      return "please wait...";
     } else {
       return this.props.placeholder;
     }
@@ -303,7 +306,7 @@ class Autocomplete extends Component {
    * @returns {Boolean}
    */
   isInputDisabled() {
-    return (this.state.loading || this.props.disabled);
+    return this.state.loading || this.props.disabled;
   }
 
   /**
@@ -318,14 +321,14 @@ class Autocomplete extends Component {
       const itemHeight = totalHeight / this.state.autocompleteItems.length;
       const visibleHeight = this.listRef.current.clientHeight;
       const howManyFits = Math.round(visibleHeight / itemHeight);
-      const fitOffset = visibleHeight - (itemHeight * howManyFits);
+      const fitOffset = visibleHeight - itemHeight * howManyFits;
       const currentItemPosition = itemHeight * this.state.selected;
       const currentScroll = this.listRef.current.scrollTop;
       if (currentItemPosition === 0) {
         this.listRef.current.scrollTop = 0;
-      } else if ((currentItemPosition - fitOffset) < currentScroll) {
+      } else if (currentItemPosition - fitOffset < currentScroll) {
         this.listRef.current.scrollTop = this.listRef.current.scrollTop - visibleHeight;
-      } else if (currentItemPosition > (currentScroll + visibleHeight)) {
+      } else if (currentItemPosition > currentScroll + visibleHeight) {
         this.listRef.current.scrollTop = currentItemPosition;
       }
     }
@@ -355,11 +358,15 @@ class Autocomplete extends Component {
     return (
       <div>
         <div>
-          <div className={`input text autocomplete ${this.isInputDisabled() ? 'disabled' : ''} ${this.shouldShowAutocompleteContent ? 'no-focus' : ''}`}>
+          <div
+            className={`input text autocomplete ${this.isInputDisabled() ? "disabled" : ""} ${this.shouldShowAutocompleteContent ? "no-focus" : ""}`}
+          >
             <label htmlFor={this.props.id}>{this.props.label}</label>
-            <input id={this.props.id}
+            <input
+              id={this.props.id}
               name={this.props.name}
-              ref={this.inputRef} maxLength="64"
+              ref={this.inputRef}
+              maxLength="64"
               type="text"
               placeholder={this.getPlaceholder()}
               autoComplete="off"
@@ -368,35 +375,47 @@ class Autocomplete extends Component {
               onChange={this.handleInputChange}
             />
           </div>
-          {this.shouldShowAutocompleteContent &&
-          <div className="autocomplete-wrapper">
-            <div className="autocomplete-content scroll" ref={this.listRef}>
-              <ul>
-                {this.state.processing && this.state.name &&
-                <AutocompleteItemLoading/>
-                }
-                {!this.state.processing && (!this.state.autocompleteItems || !this.state.autocompleteItems.length) &&
-                <AutocompleteItemEmpty/>
-                }
-                {!this.state.processing && this.state.autocompleteItems && (this.state.autocompleteItems).map((item, key) => {
-                  if (item.username) {
-                    return <AutocompleteItem
-                      key={key} id={key}
-                      onClick={this.handleSelect}
-                      baseUrl={this.props.baseUrl}
-                      canShowUserAsSuspended={this.props.canShowUserAsSuspended}
-                      user={item}
-                      selected={this.isItemSelected(key)}
-                    />;
-                  } else {
-                    return <AutocompleteItem key={key} id={key} group={item} selected={this.isItemSelected(key)}
-                      onClick={this.handleSelect} baseUrl={this.props.baseUrl}/>;
-                  }
-                })}
-              </ul>
+          {this.shouldShowAutocompleteContent && (
+            <div className="autocomplete-wrapper">
+              <div className="autocomplete-content scroll" ref={this.listRef}>
+                <ul>
+                  {this.state.processing && this.state.name && <AutocompleteItemLoading />}
+                  {!this.state.processing &&
+                    (!this.state.autocompleteItems || !this.state.autocompleteItems.length) && (
+                      <AutocompleteItemEmpty />
+                    )}
+                  {!this.state.processing &&
+                    this.state.autocompleteItems &&
+                    this.state.autocompleteItems.map((item, key) => {
+                      if (item.username) {
+                        return (
+                          <AutocompleteItem
+                            key={key}
+                            id={key}
+                            onClick={this.handleSelect}
+                            baseUrl={this.props.baseUrl}
+                            canShowUserAsSuspended={this.props.canShowUserAsSuspended}
+                            user={item}
+                            selected={this.isItemSelected(key)}
+                          />
+                        );
+                      } else {
+                        return (
+                          <AutocompleteItem
+                            key={key}
+                            id={key}
+                            group={item}
+                            selected={this.isItemSelected(key)}
+                            onClick={this.handleSelect}
+                            baseUrl={this.props.baseUrl}
+                          />
+                        );
+                      }
+                    })}
+                </ul>
+              </div>
             </div>
-          </div>
-          }
+          )}
         </div>
       </div>
     );
@@ -404,7 +423,7 @@ class Autocomplete extends Component {
 }
 
 Autocomplete.defaultProps = {
-  canShowUserAsSuspended: false
+  canShowUserAsSuspended: false,
 };
 
 Autocomplete.propTypes = {

@@ -13,9 +13,9 @@
  */
 
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {resourceWorkspaceContextWithSelectedResourcesAndVariousPermission} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { resourceWorkspaceContextWithSelectedResourcesAndVariousPermission } from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 /**
  * Default props

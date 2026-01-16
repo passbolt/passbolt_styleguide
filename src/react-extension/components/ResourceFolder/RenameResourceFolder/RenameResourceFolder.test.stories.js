@@ -14,28 +14,24 @@
 import RenameResourceFolder from "./RenameResourceFolder";
 import MockPort from "../../../test/mock/MockPort";
 
-
 export default {
-  title: 'Components/ResourceFolder/RenameResourceFolder',
-  component: RenameResourceFolder
+  title: "Components/ResourceFolder/RenameResourceFolder",
+  component: RenameResourceFolder,
 };
 
 const mockedPort = new MockPort();
-mockedPort.addRequestListener("passbolt.folders.update", data => data);
+mockedPort.addRequestListener("passbolt.folders.update", (data) => data);
 
 const defaultContext = {
-  folders: [
-    {id: 1, name: "My folder"}
-  ],
-  folder: {id: 1},
+  folders: [{ id: 1, name: "My folder" }],
+  folder: { id: 1 },
   setContext: () => {},
-  port: mockedPort
+  port: mockedPort,
 };
-
 
 export const Initial = {
   args: {
     context: defaultContext,
-    onClose: () => {}
-  }
+    onClose: () => {},
+  },
 };

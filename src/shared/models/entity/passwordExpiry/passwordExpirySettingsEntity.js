@@ -15,18 +15,21 @@
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 
-const ENTITY_NAME = 'PasswordExpirySettings';
+const ENTITY_NAME = "PasswordExpirySettings";
 
 class PasswordExpirySettingsEntity extends Entity {
   /**
    * @inheritDoc
    */
   constructor(PasswordExpirySettingsDto, options = {}) {
-    super(EntitySchema.validate(
-      PasswordExpirySettingsEntity.ENTITY_NAME,
-      PasswordExpirySettingsDto,
-      PasswordExpirySettingsEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        PasswordExpirySettingsEntity.ENTITY_NAME,
+        PasswordExpirySettingsDto,
+        PasswordExpirySettingsEntity.getSchema(),
+      ),
+      options,
+    );
   }
 
   /**
@@ -35,45 +38,42 @@ class PasswordExpirySettingsEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "automatic_expiry",
-        "automatic_update",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid",
+      type: "object",
+      required: ["automatic_expiry", "automatic_update"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "default_expiry_period": {
-          "type": "null"
+        default_expiry_period: {
+          type: "null",
         },
-        "policy_override": {
-          "type": "boolean",
+        policy_override: {
+          type: "boolean",
         },
-        "automatic_expiry": {
-          "type": "boolean",
+        automatic_expiry: {
+          type: "boolean",
         },
-        "automatic_update": {
-          "type": "boolean",
+        automatic_update: {
+          type: "boolean",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid"
+        created_by: {
+          type: "string",
+          format: "uuid",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid"
+        modified_by: {
+          type: "string",
+          format: "uuid",
         },
-      }
+      },
     };
   }
 
@@ -121,7 +121,7 @@ class PasswordExpirySettingsEntity extends Entity {
       automatic_update: false,
     };
 
-    const dto = {...defaultData, ...data};
+    const dto = { ...defaultData, ...data };
     return new PasswordExpirySettingsEntity(dto);
   }
 }

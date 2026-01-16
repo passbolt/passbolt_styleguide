@@ -13,13 +13,16 @@
  */
 
 import "../../../../../test/mocks/mockPortal";
-import each from 'jest-each';
-import {defaultAppContext} from '../../../contexts/ApiAppContext.test.data';
-import {defaultProps} from './DisplayAdministrationUserPassphrasePolicies.test.data';
-import {defaultUserPassphrasePoliciesEntityDto, userPassphrasePoliciesEntityDtoFromApi} from '../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data';
-import DisplayAdministrationUserPassphrasePoliciesPage from './DisplayAdministrationUserPassphrasePolicies.test.page';
-import {waitForTrue} from '../../../../../test/utils/waitFor';
-import NotifyError from '../../Common/Error/NotifyError/NotifyError';
+import each from "jest-each";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
+import { defaultProps } from "./DisplayAdministrationUserPassphrasePolicies.test.data";
+import {
+  defaultUserPassphrasePoliciesEntityDto,
+  userPassphrasePoliciesEntityDtoFromApi,
+} from "../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
+import DisplayAdministrationUserPassphrasePoliciesPage from "./DisplayAdministrationUserPassphrasePolicies.test.page";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 /**
  * Unit tests on DisplayAdministrationUserPassphrasePolicies in regard of specifications
@@ -31,7 +34,7 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
   });
 
   describe("As a signed-in administrator I can see the user passphrase policy settings", () => {
-    it('The component loads properly', async() => {
+    it("The component loads properly", async () => {
       expect.assertions(2);
       const context = defaultAppContext();
       const props = defaultProps();
@@ -44,7 +47,7 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       expect(page.title.textContent).toBe("User Passphrase Policies");
     });
 
-    it('As an administrator I can access the user passphrase policies help page', async() => {
+    it("As an administrator I can access the user passphrase policies help page", async () => {
       expect.assertions(3);
       const context = defaultAppContext();
       const props = defaultProps();
@@ -55,11 +58,13 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
 
       const helpPageLink = page.helpPageLink;
       expect(helpPageLink).not.toBeNull();
-      expect(helpPageLink.getAttribute('rel')).toStrictEqual("noopener noreferrer");
-      expect(helpPageLink.getAttribute('href')).toStrictEqual("https://passbolt.com/docs/admin/authentication/user-passphrase-policies/");
+      expect(helpPageLink.getAttribute("rel")).toStrictEqual("noopener noreferrer");
+      expect(helpPageLink.getAttribute("href")).toStrictEqual(
+        "https://passbolt.com/docs/admin/authentication/user-passphrase-policies/",
+      );
     });
 
-    it('As an administrator I should see the default settings', async() => {
+    it("As an administrator I should see the default settings", async () => {
       expect.assertions(2);
       const context = defaultAppContext();
       const props = defaultProps();
@@ -73,11 +78,11 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
     });
 
     each([
-      {external_dictionary_check: true, entropy_minimum: 64},
-      {external_dictionary_check: false, entropy_minimum: 128},
-      {external_dictionary_check: true, entropy_minimum: 50},
-    ]).describe("As an administrator I should see the custom settings", dto => {
-      it(`with ${JSON.stringify(dto)}`, async() => {
+      { external_dictionary_check: true, entropy_minimum: 64 },
+      { external_dictionary_check: false, entropy_minimum: 128 },
+      { external_dictionary_check: true, entropy_minimum: 50 },
+    ]).describe("As an administrator I should see the custom settings", (dto) => {
+      it(`with ${JSON.stringify(dto)}`, async () => {
         expect.assertions(2);
 
         const context = defaultAppContext();
@@ -93,8 +98,8 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
     });
   });
 
-  describe('As a signed-in administrator I can customise the user passphrase policy settings', () => {
-    it('As an administrator when I modify a field, I can see a changes warning message', async() => {
+  describe("As a signed-in administrator I can customise the user passphrase policy settings", () => {
+    it("As an administrator when I modify a field, I can see a changes warning message", async () => {
       expect.assertions(1);
       const context = defaultAppContext();
       const props = defaultProps();
@@ -108,12 +113,12 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       expect(page.saveWarningBanner).not.toBeNull();
     });
 
-    it('As an administrator I should be warned if I define weak settings', async() => {
+    it("As an administrator I should be warned if I define weak settings", async () => {
       expect.assertions(1);
       const context = defaultAppContext();
       const props = defaultProps();
       const strongEntityDto = defaultUserPassphrasePoliciesEntityDto({
-        entropy_minimum: 112
+        entropy_minimum: 112,
       });
       props.context.port.addRequestListener("passbolt.user-passphrase-policies.find", () => strongEntityDto);
 
@@ -126,7 +131,7 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       expect(page.weakSettingsWarningBanner).not.toBeNull();
     });
 
-    it('As an administrator when I save the policy, I can see a success feedback', async() => {
+    it("As an administrator when I save the policy, I can see a success feedback", async () => {
       expect.assertions(3);
       const context = defaultAppContext();
       const props = defaultProps();
@@ -147,20 +152,20 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
     });
 
-    it('As an administrator I can save the policy', async() => {
+    it("As an administrator I can save the policy", async () => {
       expect.assertions(2);
       const context = defaultAppContext();
       const props = defaultProps();
       const entityDto = userPassphrasePoliciesEntityDtoFromApi({
         entropy_minimum: 50,
-        external_dictionary_check: false
+        external_dictionary_check: false,
       });
       const expectedData = {
         entropy_minimum: 128,
-        external_dictionary_check: true
+        external_dictionary_check: true,
       };
       props.context.port.addRequestListener("passbolt.user-passphrase-policies.find", () => entityDto);
-      props.context.port.addRequestListener("passbolt.user-passphrase-policies.save", entityDtoToSave => {
+      props.context.port.addRequestListener("passbolt.user-passphrase-policies.save", (entityDtoToSave) => {
         expect(entityDtoToSave?.entropy_minimum).toStrictEqual(expectedData.entropy_minimum);
         expect(entityDtoToSave?.external_dictionary_check).toStrictEqual(expectedData.external_dictionary_check);
         return expectedData;
@@ -175,7 +180,7 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       await page.clickOnSave();
     });
 
-    it('As an administrator when I save the policy, I cannot update any form fields', async() => {
+    it("As an administrator when I save the policy, I cannot update any form fields", async () => {
       expect.assertions(2);
       const context = defaultAppContext();
       const props = defaultProps();
@@ -183,25 +188,29 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       props.context.port.addRequestListener("passbolt.user-passphrase-policies.find", () => entityDto);
 
       let savePromise;
-      props.context.port.addRequestListener("passbolt.user-passphrase-policies.save", () => new Promise(resolve => {
-        savePromise = resolve;
-      }));
+      props.context.port.addRequestListener(
+        "passbolt.user-passphrase-policies.save",
+        () =>
+          new Promise((resolve) => {
+            savePromise = resolve;
+          }),
+      );
 
       const page = new DisplayAdministrationUserPassphrasePoliciesPage(context, props);
       await waitForTrue(() => page.exists());
 
       page.clickOn(page.saveSettingsButton);
 
-      await waitForTrue(() => page.externalDictionaryCheck.hasAttribute('disabled'));
-      expect(page.externalDictionaryCheck.hasAttribute('disabled')).toStrictEqual(true);
+      await waitForTrue(() => page.externalDictionaryCheck.hasAttribute("disabled"));
+      expect(page.externalDictionaryCheck.hasAttribute("disabled")).toStrictEqual(true);
 
       await savePromise(entityDto);
 
-      await waitForTrue(() => !page.externalDictionaryCheck.hasAttribute('disabled'));
-      expect(page.externalDictionaryCheck.hasAttribute('disabled')).toStrictEqual(false);
+      await waitForTrue(() => !page.externalDictionaryCheck.hasAttribute("disabled"));
+      expect(page.externalDictionaryCheck.hasAttribute("disabled")).toStrictEqual(false);
     });
 
-    it('As an administrator when I save the policy, I cannot trigger an action on settings page', async() => {
+    it("As an administrator when I save the policy, I cannot trigger an action on settings page", async () => {
       expect.assertions(2);
       const context = defaultAppContext();
       const props = defaultProps();
@@ -209,39 +218,45 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       props.context.port.addRequestListener("passbolt.user-passphrase-policies.find", () => entityDto);
 
       let savePromise;
-      props.context.port.addRequestListener("passbolt.user-passphrase-policies.save", () => new Promise(resolve => {
-        savePromise = resolve;
-      }));
+      props.context.port.addRequestListener(
+        "passbolt.user-passphrase-policies.save",
+        () =>
+          new Promise((resolve) => {
+            savePromise = resolve;
+          }),
+      );
 
       const page = new DisplayAdministrationUserPassphrasePoliciesPage(context, props);
       await waitForTrue(() => page.exists());
 
       page.clickOn(page.saveSettingsButton);
 
-      await waitForTrue(() => page.saveSettingsButton.hasAttribute('disabled'));
-      expect(page.saveSettingsButton.hasAttribute('disabled')).toStrictEqual(true);
+      await waitForTrue(() => page.saveSettingsButton.hasAttribute("disabled"));
+      expect(page.saveSettingsButton.hasAttribute("disabled")).toStrictEqual(true);
 
       await savePromise(entityDto);
 
-      await waitForTrue(() => !page.saveSettingsButton.hasAttribute('disabled'));
-      expect(page.saveSettingsButton.hasAttribute('disabled')).toStrictEqual(false);
+      await waitForTrue(() => !page.saveSettingsButton.hasAttribute("disabled"));
+      expect(page.saveSettingsButton.hasAttribute("disabled")).toStrictEqual(false);
     });
 
-    it('As an administrator when an unexpected error happened while saving the policy, I should see the error dialog', async() => {
+    it("As an administrator when an unexpected error happened while saving the policy, I should see the error dialog", async () => {
       expect.assertions(3);
       const context = defaultAppContext();
       const props = defaultProps();
       const entityDto = defaultUserPassphrasePoliciesEntityDto();
       const expectedError = new Error("Something went wrong!");
       props.context.port.addRequestListener("passbolt.user-passphrase-policies.find", () => entityDto);
-      props.context.port.addRequestListener("passbolt.user-passphrase-policies.save", () => { throw expectedError; });
+      props.context.port.addRequestListener("passbolt.user-passphrase-policies.save", () => {
+        throw expectedError;
+      });
 
       const page = new DisplayAdministrationUserPassphrasePoliciesPage(context, props);
       await waitForTrue(() => page.exists());
       await page.clickOnSave();
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledTimes(1);
       expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: expectedError});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: expectedError });
     });
   });
 });

@@ -12,12 +12,12 @@
  * @since         3.6.0
  */
 
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import {
   activitiesMock,
   defaultAppContext,
   defaultProps,
-  lastActivityMock
+  lastActivityMock,
 } from "./DisplayUserDetailsActivity.test.data";
 import DisplayUserDetailsActivityPage from "./DisplayUserDetailsActivity.test.page";
 
@@ -34,9 +34,9 @@ describe("See user activities", () => {
    * And I should be able to identify each activities creator
    * And I should be able to see each activities timestamps
    */
-  it('As LU I can see activities of a user with at least one activity', async() => {
+  it("As LU I can see activities of a user with at least one activity", async () => {
     const context = defaultAppContext();
-    context.port.addRequestListener('passbolt.actionlogs.find-all-for', () => activitiesMock);
+    context.port.addRequestListener("passbolt.actionlogs.find-all-for", () => activitiesMock);
     const page = new DisplayUserDetailsActivityPage(context, props);
     await page.clickOnTitle();
 
@@ -44,10 +44,10 @@ describe("See user activities", () => {
     expect(page.displayActivityList).not.toBeNull();
     expect(page.displayActivityList.length).toBe(4);
 
-    expect(page.displayedActivityCreator(0)).toBe('Ada Lovelace');
-    expect(page.displayedActivityCreator(1)).toBe('Admin admin');
-    expect(page.displayedActivityCreator(2)).toBe('Ada Lovelace');
-    expect(page.displayedActivityCreator(3)).toBe('Ada Lovelace');
+    expect(page.displayedActivityCreator(0)).toBe("Ada Lovelace");
+    expect(page.displayedActivityCreator(1)).toBe("Admin admin");
+    expect(page.displayedActivityCreator(2)).toBe("Ada Lovelace");
+    expect(page.displayedActivityCreator(3)).toBe("Ada Lovelace");
 
     expect(page.displayedActivityCreationTime(0)).toBeDefined();
     expect(page.displayedActivityCreationTime(1)).toBeDefined();
@@ -55,11 +55,11 @@ describe("See user activities", () => {
     expect(page.displayedActivityCreationTime(3)).toBeDefined();
   });
 
-  it('I should be able to see other activities with more button', async() => {
+  it("I should be able to see other activities with more button", async () => {
     const dataSet = [activitiesMock, lastActivityMock];
     let currentDataSetIndex = 0;
     const context = defaultAppContext();
-    context.port.addRequestListener('passbolt.actionlogs.find-all-for', () => dataSet[currentDataSetIndex++]);
+    context.port.addRequestListener("passbolt.actionlogs.find-all-for", () => dataSet[currentDataSetIndex++]);
 
     const page = new DisplayUserDetailsActivityPage(context, props);
     await page.clickOnTitle();
@@ -70,7 +70,7 @@ describe("See user activities", () => {
     await page.moreButtonClick(expectedActivityCount);
 
     expect(page.displayActivityList.length).toBe(expectedActivityCount);
-    expect(page.displayedActivityCreator(4)).toBe('Admin admin');
+    expect(page.displayedActivityCreator(4)).toBe("Admin admin");
     const baseUrl = context.userSettings.getTrustedDomain();
     const userId = lastActivityMock[0].creator.id;
     expect(page.link(4).href).toBe(`${baseUrl}/app/users/view/${userId}`);
@@ -82,11 +82,14 @@ describe("See user activities", () => {
    * And the activity are not loaded yet
    * Then I should see the loading message “Retrieving activities”
    */
-  it('I should see the loading message “Retrieving activities”', async() => {
+  it("I should see the loading message “Retrieving activities”", async () => {
     const context = defaultAppContext();
     let resolveFindAllForRequest = null;
 
-    context.port.addRequestListener('passbolt.actionlogs.find-all-for', () => new Promise(resolve => resolveFindAllForRequest = resolve));
+    context.port.addRequestListener(
+      "passbolt.actionlogs.find-all-for",
+      () => new Promise((resolve) => (resolveFindAllForRequest = resolve)),
+    );
     const page = new DisplayUserDetailsActivityPage(context, props);
 
     expect.assertions(3);

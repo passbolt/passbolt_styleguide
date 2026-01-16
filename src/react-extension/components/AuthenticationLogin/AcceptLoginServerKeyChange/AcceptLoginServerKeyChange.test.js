@@ -16,8 +16,8 @@
  * Unit tests on AcceptLoginServerKeyChange in regard of specifications
  */
 import AcceptLoginServerKeyChangePage from "./AcceptLoginServerKeyChange.test.page";
-import {defaultProps} from "./AcceptLoginServerKeyChange.test.data";
-
+import { defaultProps } from "./AcceptLoginServerKeyChange.test.data";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,25 +26,28 @@ beforeEach(() => {
 describe("AcceptLoginServerKeyChange", () => {
   let page, props;
 
-  beforeEach(() => {
-    props = defaultProps(); // The props to pass
-    page = new AcceptLoginServerKeyChangePage(props);
-  });
-
-  it('As AN I should be aware to identify the new server key by its fingerprint', async() => {
+  it("As AN I should be aware to identify the new server key by its fingerprint", async () => {
     expect.assertions(1);
+    props = defaultProps(); // The props to pass
+    await act(async () => {
+      page = new AcceptLoginServerKeyChangePage(props);
+    });
     expect(page.serverKeyFingerprint.length).toBeGreaterThan(0);
   });
 
-  it('As AN I should be able to accept a new server key change', async() => {
+  it("As AN I should be able to accept a new server key change", async () => {
     expect.assertions(1);
+    props = defaultProps(); // The props to pass
+    page = new AcceptLoginServerKeyChangePage(props);
     await page.toggleChecked();
     await page.accept();
     expect(props.onAccept).toHaveBeenCalled();
   });
 
-  it('As AN I should be not able to accept a new server key change without checking it before', async() => {
+  it("As AN I should be not able to accept a new server key change without checking it before", async () => {
     expect.assertions(2);
+    props = defaultProps(); // The props to pass
+    page = new AcceptLoginServerKeyChangePage(props);
     await page.accept();
     expect(props.onAccept).not.toHaveBeenCalled();
     expect(page.inputContainer.className).toBe("input checkbox error");

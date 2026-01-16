@@ -61,7 +61,7 @@ class Entity {
    * @private one should not access props directly
    */
   _hasProp(propName) {
-    if (!propName.includes('.')) {
+    if (!propName.includes(".")) {
       const normalizedPropName = Entity._normalizePropName(propName);
       return Object.prototype.hasOwnProperty.call(this._props, normalizedPropName);
     }
@@ -84,7 +84,7 @@ class Entity {
    */
   _getPropByPath(path) {
     const normalizedPath = Entity._normalizePropName(path);
-    return normalizedPath.split('.').reduce((obj, i) => {
+    return normalizedPath.split(".").reduce((obj, i) => {
       if (Object.prototype.hasOwnProperty.call(obj, i)) {
         return obj[i];
       }
@@ -101,7 +101,7 @@ class Entity {
    */
   static _normalizePropName(name) {
     return name
-      .replace(/([A-Z])/g,  (x, y) => `_${y.toLowerCase()}`) // add underscore where is a cap
+      .replace(/([A-Z])/g, (x, y) => `_${y.toLowerCase()}`) // add underscore where is a cap
       .replace(/\._/, ".") // remove leading underscore in front of dots
       .replace(/^_/, "") // remove leading underscore
       .replace(/^\./, ""); // remove leading dots

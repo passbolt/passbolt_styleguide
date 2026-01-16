@@ -13,16 +13,16 @@
  */
 
 import DisplayRbacItemPage from "./DisplayRbacItem.test.page";
-import {defaultProps} from "./DisplayRbacItem.test.data";
-import {waitFor} from "@testing-library/dom";
-import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { defaultProps } from "./DisplayRbacItem.test.data";
+import { waitFor } from "@testing-library/dom";
+import { controlFunctions } from "../../../../shared/services/rbacs/controlFunctionEnumeration";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 describe("DisplayRbacItem", () => {
   const adminRoleIndex = 2;
   const userRoleIndex = 3;
 
-  it("displays the select input for each role", async() => {
+  it("displays the select input for each role", async () => {
     expect.assertions(3);
 
     const props = defaultProps();
@@ -34,30 +34,30 @@ describe("DisplayRbacItem", () => {
     expect(page.selectRole(userRoleIndex)).not.toBeNull();
   });
 
-  it("should disable admin select by default", async() => {
+  it("should disable admin select by default", async () => {
     expect.assertions(1);
 
     const props = defaultProps();
     const page = new DisplayRbacItemPage(props);
     await waitFor(() => {});
 
-    expect(page.selectedRoleOption(adminRoleIndex).classList.contains('disabled')).toBeTruthy();
+    expect(page.selectedRoleOption(adminRoleIndex).classList.contains("disabled")).toBeTruthy();
   });
 
-  it("should disable all select if not rbacs are defined", async() => {
+  it("should disable all select if not rbacs are defined", async () => {
     expect.assertions(2);
 
     const props = defaultProps({
-      rbacs: null
+      rbacs: null,
     });
     const page = new DisplayRbacItemPage(props);
     await waitFor(() => {});
 
-    expect(page.selectedRoleOption(userRoleIndex).classList.contains('disabled')).toBeTruthy();
-    expect(page.selectedRoleOption(adminRoleIndex).classList.contains('disabled')).toBeTruthy();
+    expect(page.selectedRoleOption(userRoleIndex).classList.contains("disabled")).toBeTruthy();
+    expect(page.selectedRoleOption(adminRoleIndex).classList.contains("disabled")).toBeTruthy();
   });
 
-  it("should display the default value for role other than admin", async() => {
+  it("should display the default value for role other than admin", async () => {
     expect.assertions(3);
 
     const props = defaultProps();
@@ -66,12 +66,12 @@ describe("DisplayRbacItem", () => {
     //Click on select to open dropdown
     await page.clickOnSelect(userRoleIndex);
 
-    expect(page.selectedRoleOption(userRoleIndex).classList.contains('disabled')).toBeFalsy();
+    expect(page.selectedRoleOption(userRoleIndex).classList.contains("disabled")).toBeFalsy();
     expect(page.getRoleOption(userRoleIndex, controlFunctions.DENY)).not.toBeNull();
     expect(page.getRoleOption(userRoleIndex, controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).toBeNull();
   });
 
-  it("should display the an extra option for group manager when ", async() => {
+  it("should display the an extra option for group manager when ", async () => {
     expect.assertions(3);
 
     const props = defaultProps({
@@ -82,7 +82,7 @@ describe("DisplayRbacItem", () => {
     //Click on select to open dropdown
     await page.clickOnSelect(userRoleIndex);
 
-    expect(page.selectedRoleOption(userRoleIndex).classList.contains('disabled')).toBeFalsy();
+    expect(page.selectedRoleOption(userRoleIndex).classList.contains("disabled")).toBeFalsy();
     expect(page.getRoleOption(userRoleIndex, controlFunctions.ALLOW)).not.toBeNull();
     expect(page.getRoleOption(userRoleIndex, controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).not.toBeNull();
   });

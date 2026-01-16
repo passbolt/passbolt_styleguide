@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,12 +12,11 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
-import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
+import { BrowserRouter as Router } from "react-router-dom";
+import { UserWorkspaceContext } from "../../../contexts/UserWorkspaceContext";
 import DisplayUserDetailsPublicKey from "./DisplayUserDetailsPublicKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -37,12 +35,12 @@ export default class DisplayUserDetailsPublicKeyPage {
         <AppContext.Provider value={appContext}>
           <Router>
             <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
-              <DisplayUserDetailsPublicKey {...props}/>
+              <DisplayUserDetailsPublicKey {...props} />
             </UserWorkspaceContext.Provider>
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -50,43 +48,43 @@ export default class DisplayUserDetailsPublicKeyPage {
    * Returns the detailed user fingerprint
    */
   get fingerprint() {
-    return this._page.container.querySelector('.fingerprint.value').innerHTML;
+    return this._page.container.querySelector(".fingerprint.value").innerHTML;
   }
 
   /**
    * Returns the detailed user key type
    */
   get type() {
-    return this._page.container.querySelector('.type.value').innerHTML;
+    return this._page.container.querySelector(".type.value").innerHTML;
   }
 
   /**
    * Returns the detailed user creation date of the key
    */
   get created() {
-    return this._page.container.querySelector('.created.value').innerHTML;
+    return this._page.container.querySelector(".created.value").innerHTML;
   }
 
   /**
    * Returns the detailed user expiration date of the kye
    */
   get expires() {
-    return this._page.container.querySelector('.expires.value').innerHTML;
+    return this._page.container.querySelector(".expires.value").innerHTML;
   }
 
   /**
    * Returns true if the component is in a collapsed mode
    */
   get isCollapsed() {
-    return this._page.container.querySelector('.closed');
+    return this._page.container.querySelector(".closed");
   }
 
   /**
    * Toggle the collapse / expand component hbehavior
    */
   async toggleCollapse() {
-    const element = this._page.container.querySelector('button');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector("button");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

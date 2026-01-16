@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,12 +12,11 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
-import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
+import { BrowserRouter as Router } from "react-router-dom";
+import { UserWorkspaceContext } from "../../../contexts/UserWorkspaceContext";
 import DisplayUserGroupDetailsInformation from "./DisplayUserGroupDetailsInformation";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -37,43 +35,42 @@ export default class DisplayUserGroupDetailsInformationPage {
         <AppContext.Provider value={appContext}>
           <Router>
             <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
-              <DisplayUserGroupDetailsInformation {...props}/>
+              <DisplayUserGroupDetailsInformation {...props} />
             </UserWorkspaceContext.Provider>
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
-
 
   /**
    * Returns the name of the last modificator on the gorup
    */
   get modifiedBy() {
-    return this._page.container.querySelector('.modified-by.value').textContent;
+    return this._page.container.querySelector(".modified-by.value").textContent;
   }
 
   /**
    * Returns the members count of the group
    */
   get membersCount() {
-    return this._page.container.querySelector('.members.value').textContent;
+    return this._page.container.querySelector(".members.value").textContent;
   }
 
   /**
    * Returns true if the component is in a collapsed mode
    */
   get isCollapsed() {
-    return Boolean(this._page.container.querySelector('.closed'));
+    return Boolean(this._page.container.querySelector(".closed"));
   }
 
   /**
    * Toggle the collapse / expand component hbehavior
    */
   async toggleCollapse() {
-    const element = this._page.container.querySelector('button');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector("button");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

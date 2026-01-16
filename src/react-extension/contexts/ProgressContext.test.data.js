@@ -12,7 +12,7 @@
  * @since         4.3.0
  */
 
-import {defaultDialogContext} from "./DialogContext.test.data";
+import { defaultDialogContext } from "./DialogContext.test.data";
 
 /**
  * Returns the default progress context props
@@ -22,7 +22,7 @@ import {defaultDialogContext} from "./DialogContext.test.data";
 export function defaultProps(context = {}) {
   return {
     dialogContext: defaultDialogContext(),
-    ...context
+    ...context,
   };
 }
 
@@ -39,7 +39,7 @@ export function defaultProgressContext(context = {}) {
     updateMessage: jest.fn(),
     updateGoals: jest.fn(),
     close: jest.fn(),
-    ...context
+    ...context,
   };
 }
 
@@ -53,7 +53,7 @@ export function infiniteProgressBarProgressContext(context = {}) {
     progressDialogProps: {
       title: "Progress dialog test title",
     },
-    ...context
+    ...context,
   });
 }
 
@@ -68,8 +68,8 @@ export function progressiveProgressBarProgressContext(context = {}) {
       title: "Progress dialog &#x2F; test title",
       goals: 2,
       message: "Step &#x2F; 0",
-      completed: 0
+      completed: 0,
     },
-    ...context
+    ...context,
   });
 }

@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withRouter } from "react-router-dom";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 
 /**
  * This component tracks any navigation changes and handle it
@@ -32,8 +32,8 @@ class HandleExtAppRouteChanged extends Component {
    * Notify the background page to update the browser url.
    */
   handleRouteChanged() {
-    this.props.history.listen(location => {
-      this.props.context.port.emit('passbolt.app.route-changed', location.pathname);
+    this.props.history.listen((location) => {
+      this.props.context.port.emit("passbolt.app.route-changed", location.pathname);
     });
   }
 
@@ -42,15 +42,12 @@ class HandleExtAppRouteChanged extends Component {
    * @return {JSX}
    */
   render() {
-    return (
-      <></>
-    );
+    return <></>;
   }
 }
 
 HandleExtAppRouteChanged.propTypes = {
   context: PropTypes.any, // The application context
-  history: PropTypes.object
+  history: PropTypes.object,
 };
 export default withAppContext(withRouter(HandleExtAppRouteChanged));
-

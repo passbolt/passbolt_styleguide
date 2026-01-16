@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.0.0
  */
-import {defaultProps} from "./DisplaySsoDisabledError.test.data";
+import { defaultProps } from "./DisplaySsoDisabledError.test.data";
 import DisplaySsoDisabledErrorPage from "./DisplaySsoDisabledError.test.page";
 
 beforeEach(() => {
@@ -19,14 +19,16 @@ beforeEach(() => {
 });
 
 describe("DisplaySsoDisabledError", () => {
-  it('As a registered user I am informed that the SSO feature has been disabled', async() => {
+  it("As a registered user I am informed that the SSO feature has been disabled", async () => {
     expect.assertions(5);
     const props = defaultProps();
     const page = new DisplaySsoDisabledErrorPage(props);
 
     expect(page.title).toBeTruthy();
     expect(page.title.textContent).toStrictEqual("SSO feature has been disabled");
-    expect(page.message.textContent).toStrictEqual("For security reasons please check with your administrator that this is a change that they initiated.");
+    expect(page.message.textContent).toStrictEqual(
+      "For security reasons please check with your administrator that this is a change that they initiated.",
+    );
     await page.clickOnSignInWithPassphrase();
 
     expect(props.onSignInWithPassphraseClick).not.toHaveBeenCalled();
@@ -37,4 +39,3 @@ describe("DisplaySsoDisabledError", () => {
     expect(props.onSignInWithPassphraseClick).toHaveBeenCalledTimes(1);
   });
 });
-

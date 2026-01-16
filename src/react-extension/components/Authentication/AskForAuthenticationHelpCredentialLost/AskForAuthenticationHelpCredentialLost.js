@@ -11,18 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 
 /**
  * The component display variations.
  * @type {Object}
  */
 export const AskForAuthenticationHelpCredentialLostVariations = {
-  SIGN_IN: 'Sign in',
-  RECOVER: 'Recover',
+  SIGN_IN: "Sign in",
+  RECOVER: "Recover",
 };
 
 /**
@@ -36,35 +36,51 @@ class AskForAuthenticationHelpCredentialLost extends Component {
   render() {
     return (
       <div className="ask-for-authentication-help">
-        <h1><Trans>Sorry... maybe an administrator can help?</Trans></h1>
+        <h1>
+          <Trans>Sorry... maybe an administrator can help?</Trans>
+        </h1>
         <p>
-          {{
-            [AskForAuthenticationHelpCredentialLostVariations.SIGN_IN]: <><Trans>Your passphrase is required to sign-in.</Trans> <Trans>If you do not have access, you can request help to an administrator.</Trans></>,
-            [AskForAuthenticationHelpCredentialLostVariations.RECOVER]: <><Trans>Both the private key and passphrase are required to recover your account.</Trans> <Trans>If you do not have access, you can request help to an administrator.</Trans></>,
-          }[this.props.displayAs]}
+          {
+            {
+              [AskForAuthenticationHelpCredentialLostVariations.SIGN_IN]: (
+                <>
+                  <Trans>Your passphrase is required to sign-in.</Trans>{" "}
+                  <Trans>If you do not have access, you can request help to an administrator.</Trans>
+                </>
+              ),
+              [AskForAuthenticationHelpCredentialLostVariations.RECOVER]: (
+                <>
+                  <Trans>Both the private key and passphrase are required to recover your account.</Trans>{" "}
+                  <Trans>If you do not have access, you can request help to an administrator.</Trans>
+                </>
+              ),
+            }[this.props.displayAs]
+          }
         </p>
         <div className="form-actions">
-          {this.props.canRequestHelp &&
-          <>
+          {this.props.canRequestHelp && (
+            <>
+              <button
+                onClick={this.props.onPrimaryActionClick.bind(this)}
+                className="button primary big full-width"
+                rel="noopener noreferrer"
+              >
+                <Trans>Request help</Trans>
+              </button>
+              <button type="button" className="link" onClick={this.props.onSecondaryActionClick.bind(this)}>
+                <Trans>I want to try again.</Trans>
+              </button>
+            </>
+          )}
+          {!this.props.canRequestHelp && (
             <button
-              onClick={this.props.onPrimaryActionClick.bind(this)}
+              onClick={this.props.onSecondaryActionClick.bind(this)}
               className="button primary big full-width"
-              rel="noopener noreferrer">
-              <Trans>Request help</Trans>
-            </button>
-            <button type="button" className="link" onClick={this.props.onSecondaryActionClick.bind(this)}>
+              rel="noopener noreferrer"
+            >
               <Trans>I want to try again.</Trans>
             </button>
-          </>
-          }
-          {!this.props.canRequestHelp &&
-          <button
-            onClick={this.props.onSecondaryActionClick.bind(this)}
-            className="button primary big full-width"
-            rel="noopener noreferrer">
-            <Trans>I want to try again.</Trans>
-          </button>
-          }
+          )}
         </div>
       </div>
     );

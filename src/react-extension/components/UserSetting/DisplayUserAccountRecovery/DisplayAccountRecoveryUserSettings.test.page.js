@@ -12,9 +12,9 @@
  * @since         3.6.0
  */
 
-import {render, fireEvent} from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAccountRecoveryUserSettings from "./DisplayAccountRecoveryUserSettings";
 /**
@@ -30,10 +30,10 @@ export default class DisplayAccountRecoveryUserSettingsPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <DisplayAccountRecoveryUserSettings {...props}/>
+          <DisplayAccountRecoveryUserSettings {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -59,7 +59,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this.selector('.account-recovery-profile h3');
+    return this.selector(".account-recovery-profile h3");
   }
 
   /**
@@ -67,7 +67,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get status() {
-    return this.selector('.account-recovery-profile .account-recovery-status .status-wrapper .status');
+    return this.selector(".account-recovery-profile .account-recovery-status .status-wrapper .status");
   }
 
   /**
@@ -75,7 +75,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get requestorName() {
-    return this.selector('.account-recovery-profile .account-recovery-status ul li .name-with-tooltip');
+    return this.selector(".account-recovery-profile .account-recovery-status ul li .name-with-tooltip");
   }
 
   /**
@@ -83,7 +83,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get requestDate() {
-    return this.selector('.account-recovery-profile .account-recovery-status ul li .subinfo .dateTimeAgo');
+    return this.selector(".account-recovery-profile .account-recovery-status ul li .subinfo .dateTimeAgo");
   }
 
   /**
@@ -91,7 +91,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get fingerprint() {
-    return this.selector('.account-recovery-profile .account-recovery-status ul li .tooltip .tooltip-text').innerHTML;
+    return this.selector(".account-recovery-profile .account-recovery-status ul li .tooltip .tooltip-text").innerHTML;
   }
 
   /**
@@ -99,7 +99,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get description() {
-    return this.selector('.account-recovery-profile p');
+    return this.selector(".account-recovery-profile p");
   }
 
   /**
@@ -107,7 +107,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get reviewButton() {
-    return this.selector('.actions-wrapper button');
+    return this.selector(".actions-wrapper button");
   }
 
   /**
@@ -123,6 +123,6 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {Promise<void>}
    */
   async clickOnReview() {
-    fireEvent.click(this.reviewButton, {button: 0});
+    fireEvent.click(this.reviewButton, { button: 0 });
   }
 }

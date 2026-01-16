@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {defaultAppContext} from "./ExtAppContext.test.data";
+import { defaultAppContext } from "./ExtAppContext.test.data";
 
 /**
  * Default context
@@ -21,10 +21,10 @@ import {defaultAppContext} from "./ExtAppContext.test.data";
  */
 export function defaultAdminAccountRecoveryContext(context = {}) {
   const defaultKeyInfo = {
-    amored_key: "armored-key"
+    amored_key: "armored-key",
   };
   const defaultContext = {
-    currentPolicy: {policy: "disabled"},
+    currentPolicy: { policy: "disabled" },
     policyChanges: {},
     findAccountRecoveryPolicy: jest.fn(),
     getKeyInfo: jest.fn(() => defaultKeyInfo),
@@ -32,7 +32,7 @@ export function defaultAdminAccountRecoveryContext(context = {}) {
     changePolicy: jest.fn(),
     changePublicKey: jest.fn(),
     resetChanges: jest.fn(),
-    save: jest.fn()
+    save: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }
@@ -46,9 +46,9 @@ export function hasPolicyChangesAdminAccountRecoveryContext(context = {}) {
   const defaultContext = {
     policyChanges: {
       policy: "opt-in",
-      publicKey: "new-public-key"
+      publicKey: "new-public-key",
     },
-    hasPolicyChanges: jest.fn(() => true)
+    hasPolicyChanges: jest.fn(() => true),
   };
   return defaultAdminAccountRecoveryContext(Object.assign(defaultContext, context));
 }
@@ -62,8 +62,8 @@ export function defaultProps(props = {}) {
   const defaultProps = {
     context: defaultAppContext(props?.appContext),
     accountRecoveryContext: {
-      reloadAccountRecoveryPolicy: jest.fn()
-    }
+      reloadAccountRecoveryPolicy: jest.fn(),
+    },
   };
   return Object.assign(defaultProps, props);
 }

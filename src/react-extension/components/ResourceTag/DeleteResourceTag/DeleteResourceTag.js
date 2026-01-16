@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withLoading} from "../../../contexts/LoadingContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withLoading } from "../../../contexts/LoadingContext";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -62,14 +62,14 @@ class DeleteResourceTag extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
-    this.props.context.setContext({tagToDelete: null});
+    this.props.context.setContext({ tagToDelete: null });
   }
 
   /**
    * Save the changes.
    */
   async delete() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
 
     try {
       this.props.loadingContext.add();
@@ -77,24 +77,24 @@ class DeleteResourceTag extends Component {
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The tag has been deleted successfully"));
       this.props.onClose();
-      this.props.context.setContext({tagToDelete: null});
+      this.props.context.setContext({ tagToDelete: null });
     } catch (error) {
       this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error.name === "UserAbortsOperationError") {
-        this.setState({processing: false});
+        this.setState({ processing: false });
       } else {
         // Unexpected error occurred.
         console.error(error);
         this.handleError(error);
-        this.setState({processing: false});
+        this.setState({ processing: false });
       }
     }
   }
 
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -121,19 +121,28 @@ class DeleteResourceTag extends Component {
         title={this.translate("Delete tag?")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="delete-tag-dialog">
+        className="delete-tag-dialog"
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <p>
               <Trans>
-                Are you sure you want to delete the tag <strong className="dialog-variable">{{tagName: this.props.context.tagToDelete.slug}}</strong>?
+                Are you sure you want to delete the tag{" "}
+                <strong className="dialog-variable">{{ tagName: this.props.context.tagToDelete.slug }}</strong>?
               </Trans>
             </p>
-            <p><Trans>Once the tag is deleted, it will be removed permanently and will not be recoverable.</Trans></p>
+            <p>
+              <Trans>Once the tag is deleted, it will be removed permanently and will not be recoverable.</Trans>
+            </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Delete")}
+              warning={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -150,4 +159,6 @@ DeleteResourceTag.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteResourceTag)))));
+export default withAppContext(
+  withLoading(withActionFeedback(withDialog(withTranslation("common")(DeleteResourceTag)))),
+);

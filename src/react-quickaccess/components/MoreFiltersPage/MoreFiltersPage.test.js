@@ -11,28 +11,26 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
-import {defaultProps} from "./MoreFiltersPage.test.data";
+import { defaultProps } from "./MoreFiltersPage.test.data";
 import MoreFiltersPage from "./MoreFiltersPage.test.page";
-import {createMemoryHistory} from "history";
-import {waitForTrue} from "../../../../test/utils/waitFor";
+import { createMemoryHistory } from "history";
+import { waitForTrue } from "../../../../test/utils/waitFor";
 import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV50FreshDto,
-  defaultMetadataTypesSettingsV6Dto
+  defaultMetadataTypesSettingsV6Dto,
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
   resourceTypesV4CollectionDto,
-  resourceTypesV5CollectionDto
+  resourceTypesV5CollectionDto,
 } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import {defaultUserDto} from "../../../shared/models/entity/user/userEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
+import { defaultUserDto } from "../../../shared/models/entity/user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -40,16 +38,13 @@ beforeEach(() => {
 
 describe("MoreFiltersPage", () => {
   describe("As LU I can navigate from the 'Filter by tag' page", () => {
-    it("should allow to go back on the previous page", async() => {
+    it("should allow to go back on the previous page", async () => {
       expect.assertions(1);
 
       const props = defaultProps();
 
       props.history = createMemoryHistory({
-        initialEntries: [
-          "/home",
-          "/test"
-        ],
+        initialEntries: ["/home", "/test"],
         initialIndex: 1,
       });
 
@@ -74,18 +69,22 @@ describe("MoreFiltersPage", () => {
 
     it("should display the button if metadata type settings and resource types are loaded for v5", () => {
       const metadataTypeSettingEntity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
-      const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity});
+      const props = defaultProps({ metadataTypeSettings: metadataTypeSettingEntity });
       const page = new MoreFiltersPage(props);
       expect(page.createButton).toBeDefined();
     });
 
-    it("should display action aborted missing metadata keys if share metadata key is enforced and user has missing keys", async() => {
+    it("should display action aborted missing metadata keys if share metadata key is enforced and user has missing keys", async () => {
       expect.assertions(2);
 
       const props = defaultProps({
-        context: defaultAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        context: defaultAppContext({
+          loggedInUser: defaultUserDto({ missing_metadata_key_ids: [uuidv4()] }, { withRole: true }),
+        }),
         metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
-        metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
+        metadataKeysSettings: new MetadataKeysSettingsEntity(
+          defaultMetadataKeysSettingsDto({ allow_usage_of_personal_keys: false }),
+        ),
       });
       props.history = createMemoryHistory();
 
@@ -97,17 +96,19 @@ describe("MoreFiltersPage", () => {
       await page.clickOnCreateButton();
       await waitForTrue(() => props.history.location.pathname !== initialPath);
 
-      expect(props.history.location.pathname).toStrictEqual(`/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys`);
+      expect(props.history.location.pathname).toStrictEqual(
+        `/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys`,
+      );
     });
 
     it("should not display the button if metadata type settings are not loaded", () => {
-      const props = defaultProps({metadataTypeSettings: null});
+      const props = defaultProps({ metadataTypeSettings: null });
       const page = new MoreFiltersPage(props);
       expect(page.createButton).toBeNull();
     });
 
     it("should not display the button if resource types are not loaded", () => {
-      const props = defaultProps({resourceTypes: null});
+      const props = defaultProps({ resourceTypes: null });
       const page = new MoreFiltersPage(props);
       expect(page.createButton).toBeNull();
     });
@@ -115,14 +116,17 @@ describe("MoreFiltersPage", () => {
     it("should not display the button if metadata type settings default is v5 and only v4 resource types is available", () => {
       const metadataTypeSettingEntity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto());
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypesV4CollectionDto());
-      const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity, resourceTypes: resourceTypesCollection});
+      const props = defaultProps({
+        metadataTypeSettings: metadataTypeSettingEntity,
+        resourceTypes: resourceTypesCollection,
+      });
       const page = new MoreFiltersPage(props);
       expect(page.createButton).toBeNull();
     });
 
     it("should not display the button if metadata type settings default is v4 and only v5 resource types is available", () => {
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypesV5CollectionDto());
-      const props = defaultProps({resourceTypes: resourceTypesCollection});
+      const props = defaultProps({ resourceTypes: resourceTypesCollection });
       const page = new MoreFiltersPage(props);
       expect(page.createButton).toBeNull();
     });

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import AutocompleteItem from "./AutocompleteItem";
@@ -46,11 +46,11 @@ class Autocomplete extends Component {
    * @return {void}
    */
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyDown, {capture: true});
+    document.addEventListener("keydown", this.handleKeyDown, { capture: true });
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown, {capture: true});
+    document.removeEventListener("keydown", this.handleKeyDown, { capture: true });
   }
 
   createInputRefs() {
@@ -72,21 +72,25 @@ class Autocomplete extends Component {
     if (!this.props.autocompleteItems) {
       return;
     }
-    if (event.keyCode === 40) { // key down
+    if (event.keyCode === 40) {
+      // key down
       event.preventDefault();
       this.selectNext();
       return;
     }
-    if (event.keyCode === 38) { // key up
+    if (event.keyCode === 38) {
+      // key up
       event.preventDefault();
       this.selectPrevious();
       return;
     }
-    if (event.keyCode === 8) { // backspace key
-      this.setState({selected: -1});
+    if (event.keyCode === 8) {
+      // backspace key
+      this.setState({ selected: -1 });
       return;
     }
-    if (event.keyCode === 13 || event.keyCode === 9) { // enter key or tab
+    if (event.keyCode === 13 || event.keyCode === 9) {
+      // enter key or tab
       if (this.state.selected === null || this.state.selected === -1) {
         return;
       }
@@ -130,9 +134,9 @@ class Autocomplete extends Component {
    */
   selectPrevious() {
     if (this.state.selected === -1) {
-      this.setState({selected: this.props.autocompleteItems.length - 1});
+      this.setState({ selected: this.props.autocompleteItems.length - 1 });
     } else {
-      this.setState({selected: (this.state.selected - 1)});
+      this.setState({ selected: this.state.selected - 1 });
     }
     this.scrollToSelectedItem();
     this.handleArrowFocus();
@@ -143,9 +147,9 @@ class Autocomplete extends Component {
    */
   selectNext() {
     if (this.state.selected === this.props.autocompleteItems.length - 1) {
-      this.setState({selected: -1});
+      this.setState({ selected: -1 });
     } else {
-      this.setState({selected: (this.state.selected + 1)});
+      this.setState({ selected: this.state.selected + 1 });
     }
     this.scrollToSelectedItem();
     this.handleArrowFocus();
@@ -173,7 +177,7 @@ class Autocomplete extends Component {
     return {
       left: this.props.left,
       top: this.props.top,
-      maxWidth
+      maxWidth,
     };
   }
 
@@ -185,14 +189,14 @@ class Autocomplete extends Component {
       const itemHeight = totalHeight / this.props.autocompleteItems.length;
       const visibleHeight = this.listRef.current.clientHeight;
       const howManyFits = Math.round(visibleHeight / itemHeight);
-      const fitOffset = visibleHeight - (itemHeight * howManyFits);
+      const fitOffset = visibleHeight - itemHeight * howManyFits;
       const currentItemPosition = itemHeight * this.state.selected;
       const currentScroll = this.listRef.current.scrollTop;
-      if ((currentItemPosition - fitOffset) < currentScroll) {
+      if (currentItemPosition - fitOffset < currentScroll) {
         this.listRef.current.scrollTop = this.listRef.current.scrollTop - visibleHeight;
         return;
       }
-      if (currentItemPosition > (currentScroll + visibleHeight)) {
+      if (currentItemPosition > currentScroll + visibleHeight) {
         this.listRef.current.scrollTop = currentItemPosition;
         return;
       }
@@ -204,15 +208,22 @@ class Autocomplete extends Component {
       <div className="autocomplete-suggestions" style={this.getStyle()}>
         <div className="autocomplete-content scroll" ref={this.listRef}>
           <ul>
-            {!this.state.processing && this.props.autocompleteItems && (this.props.autocompleteItems).map((tag, key) =>
-              <AutocompleteItem key={key} id={key} slug={tag.slug} selected={this.isItemSelected(key)}
-                onClick={this.handleSelect}/>
-            )}
-            {this.state.processing &&
+            {!this.state.processing &&
+              this.props.autocompleteItems &&
+              this.props.autocompleteItems.map((tag, key) => (
+                <AutocompleteItem
+                  key={key}
+                  id={key}
+                  slug={tag.slug}
+                  selected={this.isItemSelected(key)}
+                  onClick={this.handleSelect}
+                />
+              ))}
+            {this.state.processing && (
               <li className="autocomplete-suggestion row">
-                <SpinnerSVG/>
+                <SpinnerSVG />
               </li>
-            }
+            )}
           </ul>
         </div>
       </div>
@@ -228,7 +239,7 @@ Autocomplete.propTypes = {
   width: PropTypes.number, // width in px of the parent element
   onSelect: PropTypes.func,
   onArrowFocus: PropTypes.func,
-  value: PropTypes.string
+  value: PropTypes.string,
 };
 
 export default Autocomplete;

@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
+import { defaultProps } from "./DisplayHealthcheckAdministration.test.data";
+import DisplayHealthcheckAdministrationPage from "./DisplayHealthcheckAdministration.test.page";
 import {
-  defaultProps,
-} from './DisplayHealthcheckAdministration.test.data';
-import DisplayHealthcheckAdministrationPage from './DisplayHealthcheckAdministration.test.page';
-import {
-  defaultAdministrationHealthcheckContext, mockHealthcheckAirGappedEnvironment, mockHealthcheckDataAllChecksFail
+  defaultAdministrationHealthcheckContext,
+  mockHealthcheckAirGappedEnvironment,
+  mockHealthcheckDataAllChecksFail,
 } from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
 
 describe("See the healthCheck settings", () => {
@@ -25,7 +25,7 @@ describe("See the healthCheck settings", () => {
     jest.resetAllMocks();
   });
 
-  describe('As AD, I should see the healthcheck status on the administration page', () => {
+  describe("As AD, I should see the healthcheck status on the administration page", () => {
     let page, props;
 
     beforeEach(() => {
@@ -33,7 +33,7 @@ describe("See the healthCheck settings", () => {
       page = new DisplayHealthcheckAdministrationPage(props);
     });
 
-    it('should be able to refresh', async() => {
+    it("should be able to refresh", async () => {
       expect.assertions(2);
       expect(props.adminHealthcheckContext.loadHealthcheckData).toHaveBeenCalledTimes(1);
       await page.click(page.toolbarActionsRefreshButton);
@@ -41,13 +41,13 @@ describe("See the healthCheck settings", () => {
       expect(props.adminHealthcheckContext.loadHealthcheckData).toHaveBeenCalledTimes(2);
     });
 
-    it('should render and enable the refresh button', () => {
+    it("should render and enable the refresh button", () => {
       expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       expect(page.isRefreshButtonEnabled()).toBeTruthy();
     });
 
-    it('should display all the healthcheck sections', () => {
+    it("should display all the healthcheck sections", () => {
       expect.assertions(11);
       expect(page.healthCheckEnvironment).not.toBeNull();
       expect(page.healthCheckApp).not.toBeNull();
@@ -62,7 +62,7 @@ describe("See the healthCheck settings", () => {
       expect(page.healthcheckMetadata).not.toBeNull();
     });
 
-    it('should display all subssections success status', () => {
+    it("should display all subssections success status", () => {
       expect.assertions(22);
       expect(page.isAllHealthcheckSubSectionEnvironmentSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionConfigFilesSuccess).toBeTruthy();
@@ -89,14 +89,18 @@ describe("See the healthCheck settings", () => {
     });
   });
 
-  describe('As AD, I should see the healthcheck status failed on the administration page', () => {
+  describe("As AD, I should see the healthcheck status failed on the administration page", () => {
     let page, props;
 
     beforeEach(() => {
-      props = defaultProps({adminHealthcheckContext: defaultAdministrationHealthcheckContext({healthcheckData: mockHealthcheckDataAllChecksFail})});
+      props = defaultProps({
+        adminHealthcheckContext: defaultAdministrationHealthcheckContext({
+          healthcheckData: mockHealthcheckDataAllChecksFail,
+        }),
+      });
       page = new DisplayHealthcheckAdministrationPage(props);
     });
-    it('should display all subssections fail status', async() => {
+    it("should display all subssections fail status", async () => {
       expect.assertions(22);
       expect(page.isAllHealthcheckSubSectionEnvironmentFailed).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionConfigFilesWarned).toBeTruthy();
@@ -123,56 +127,62 @@ describe("See the healthCheck settings", () => {
     });
   });
 
-  describe('As AD running an air gaped environment, I should see the application sub section healthcheck status failing on the administration page', () => {
+  describe("As AD running an air gaped environment, I should see the application sub section healthcheck status failing on the administration page", () => {
     let page, props;
 
     beforeEach(() => {
-      props = defaultProps({adminHealthcheckContext: defaultAdministrationHealthcheckContext({healthcheckData: mockHealthcheckAirGappedEnvironment})});
+      props = defaultProps({
+        adminHealthcheckContext: defaultAdministrationHealthcheckContext({
+          healthcheckData: mockHealthcheckAirGappedEnvironment,
+        }),
+      });
       page = new DisplayHealthcheckAdministrationPage(props);
     });
-    it('should display a fail for the app sub section on a air gaped environment', async() => {
+    it("should display a fail for the app sub section on a air gaped environment", async () => {
       expect.assertions(1);
       expect(page.isAllHealthcheckSubSectionAppSuccessAirGapped).toBeTruthy();
     });
   });
 
-  describe('As AD, I should see the button disabled during loading', () => {
+  describe("As AD, I should see the button disabled during loading", () => {
     let page;
-    const props = defaultProps({adminHealthcheckContext: defaultAdministrationHealthcheckContext({isProcessing: () => true})});
+    const props = defaultProps({
+      adminHealthcheckContext: defaultAdministrationHealthcheckContext({ isProcessing: () => true }),
+    });
 
     beforeEach(() => {
       page = new DisplayHealthcheckAdministrationPage(props);
     });
-    it('should display refresh button disabled', async() => {
+    it("should display refresh button disabled", async () => {
       expect.assertions(1);
       expect(page.isRefreshButtonEnabled()).toBeFalsy();
     });
   });
 
-  describe('As AD, I should not be able to refresh the data if the endpoint is disabled', () => {
-    it('should display refresh button disabled', async() => {
+  describe("As AD, I should not be able to refresh the data if the endpoint is disabled", () => {
+    it("should display refresh button disabled", async () => {
       expect.assertions(1);
       const adminHealthcheckContext = defaultAdministrationHealthcheckContext({
         isHealthcheckEndpointEnabled: () => false,
-        isProcessing: () => false
+        isProcessing: () => false,
       });
 
-      const props = defaultProps({adminHealthcheckContext});
+      const props = defaultProps({ adminHealthcheckContext });
       const page = new DisplayHealthcheckAdministrationPage(props);
 
       expect(page.isRefreshButtonEnabled()).toBeFalsy();
     });
   });
 
-  describe('As AD, I am not able to see the SSO section if it is disabled', () => {
+  describe("As AD, I am not able to see the SSO section if it is disabled", () => {
     let page, props;
 
     beforeEach(() => {
-      props = defaultProps({context: {siteSettings: {canIUse: plugins => plugins !== "sso"}}});
+      props = defaultProps({ context: { siteSettings: { canIUse: (plugins) => plugins !== "sso" } } });
       page = new DisplayHealthcheckAdministrationPage(props);
     });
 
-    it('should display all the healthcheck sections except the sso', () => {
+    it("should display all the healthcheck sections except the sso", () => {
       expect.assertions(10);
       expect(page.healthCheckEnvironment).not.toBeNull();
       expect(page.healthCheckApp).not.toBeNull();
@@ -187,15 +197,15 @@ describe("See the healthCheck settings", () => {
     });
   });
 
-  describe('As AD, I am not able to see the directorySync section if it is disabled', () => {
+  describe("As AD, I am not able to see the directorySync section if it is disabled", () => {
     let page, props;
 
     beforeEach(() => {
-      props = defaultProps({context: {siteSettings: {canIUse: plugins => plugins !== "directorySync"}}});
+      props = defaultProps({ context: { siteSettings: { canIUse: (plugins) => plugins !== "directorySync" } } });
       page = new DisplayHealthcheckAdministrationPage(props);
     });
 
-    it('should display all the healthcheck sections except the directorySync', () => {
+    it("should display all the healthcheck sections except the directorySync", () => {
       expect.assertions(10);
       expect(page.healthCheckEnvironment).not.toBeNull();
       expect(page.healthCheckApp).not.toBeNull();
@@ -210,15 +220,17 @@ describe("See the healthCheck settings", () => {
     });
   });
 
-  describe('As AD, I am not able to see the SSO and directorySync section if it is disabled', () => {
+  describe("As AD, I am not able to see the SSO and directorySync section if it is disabled", () => {
     let page, props;
 
     beforeEach(() => {
-      props = defaultProps({context: {siteSettings: {canIUse: plugins => plugins !== "sso" && plugins !== "directorySync"}}});
+      props = defaultProps({
+        context: { siteSettings: { canIUse: (plugins) => plugins !== "sso" && plugins !== "directorySync" } },
+      });
       page = new DisplayHealthcheckAdministrationPage(props);
     });
 
-    it('should display all the healthcheck sections except directorySync and SSO', () => {
+    it("should display all the healthcheck sections except directorySync and SSO", () => {
       expect.assertions(10);
       expect(page.healthCheckEnvironment).not.toBeNull();
       expect(page.healthCheckApp).not.toBeNull();
@@ -233,15 +245,15 @@ describe("See the healthCheck settings", () => {
     });
   });
 
-  describe('As AD, I am not able to see the metadata section if it is disabled', () => {
+  describe("As AD, I am not able to see the metadata section if it is disabled", () => {
     let page, props;
 
     beforeEach(() => {
-      props = defaultProps({context: {siteSettings: {canIUse: plugins => plugins !== "metadata"}}});
+      props = defaultProps({ context: { siteSettings: { canIUse: (plugins) => plugins !== "metadata" } } });
       page = new DisplayHealthcheckAdministrationPage(props);
     });
 
-    it('should display all the healthcheck sections except the metadata', () => {
+    it("should display all the healthcheck sections except the metadata", () => {
       expect.assertions(11);
       expect(page.healthCheckEnvironment).not.toBeNull();
       expect(page.healthCheckApp).not.toBeNull();

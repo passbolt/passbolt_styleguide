@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import SelectUserSVG from "../../../../img/svg/select_user.svg";
 
 class DisplayUserWorkspaceEmptyDetails extends React.Component {
@@ -24,10 +24,12 @@ class DisplayUserWorkspaceEmptyDetails extends React.Component {
     return (
       <div className="sidebar empty">
         <SelectUserSVG />
-        <p><Trans>Select a user or a group to see the details.</Trans></p>
+        <p>
+          <Trans>Select a user or a group to see the details.</Trans>
+        </p>
       </div>
     );
   }
 }
 
-export default withTranslation('common')(DisplayUserWorkspaceEmptyDetails);
+export default withTranslation("common")(DisplayUserWorkspaceEmptyDetails);

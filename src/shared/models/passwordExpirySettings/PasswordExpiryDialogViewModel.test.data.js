@@ -12,7 +12,7 @@
  * @since         4.5.0
  */
 
-import {PasswordExpiryOptionEnum} from './PasswordExpiryDialogViewModel';
+import { PasswordExpiryOptionEnum } from "./PasswordExpiryDialogViewModel";
 
 /**
  * A default password expiry dialog ViewModel DTO

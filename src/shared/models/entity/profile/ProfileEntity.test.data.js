@@ -12,8 +12,8 @@
  * @since         4.1.0
  */
 
-import {v4 as uuidv4} from 'uuid';
-import {defaultAvatarDto} from "../avatar/avatarEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultAvatarDto } from "../avatar/avatarEntity.test.data";
 
 /**
  * Minimal profile dto.
@@ -21,9 +21,9 @@ import {defaultAvatarDto} from "../avatar/avatarEntity.test.data";
  * @returns {object}
  */
 export const minimalProfileDto = (data = {}) => ({
-  "first_name": "Ada",
-  "last_name": "Lovelace",
-  ...data
+  first_name: "Ada",
+  last_name: "Lovelace",
+  ...data,
 });
 
 /**
@@ -32,12 +32,12 @@ export const minimalProfileDto = (data = {}) => ({
  * @returns {object}
  */
 export const defaultProfileDto = (data = {}) => ({
-  "id": uuidv4(),
-  "user_id": uuidv4(),
-  "first_name": "Ada",
-  "last_name": "Lovelace",
-  "created": "2020-04-20T11:32:17+00:00",
-  "modified": "2020-04-20T11:32:17+00:00",
-  "avatar": defaultAvatarDto(),
-  ...data
+  id: uuidv4(),
+  user_id: uuidv4(),
+  first_name: "Ada",
+  last_name: "Lovelace",
+  created: "2020-04-20T11:32:17+00:00",
+  modified: "2020-04-20T11:32:17+00:00",
+  avatar: defaultAvatarDto(),
+  ...data,
 });

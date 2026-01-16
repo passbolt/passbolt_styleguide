@@ -12,18 +12,16 @@
  * @since         5.0.0
  */
 import ConfirmResourceCommentDeletion from "./ConfirmResourceCommentDeletion";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 export default {
-  title: 'Components/ResourceComment/ConfirmResourceCommentDeletion',
-  component: ConfirmResourceCommentDeletion
+  title: "Components/ResourceComment/ConfirmResourceCommentDeletion",
+  component: ConfirmResourceCommentDeletion,
 };
-
 
 export const Initial = {
   args: {
     context: defaultUserAppContext(),
     onClose: () => {},
-  }
+  },
 };

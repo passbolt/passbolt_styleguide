@@ -14,11 +14,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withResizableSidebar} from "../../contexts/ResizeSidebar/ResizeSidebarContext";
+import { withResizableSidebar } from "../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 const SIDEBARS = {
-  LEFT: 'left',
-  RIGHT: 'right'
+  LEFT: "left",
+  RIGHT: "right",
 };
 class ResizableSidebar extends React.Component {
   constructor(props) {
@@ -55,7 +55,7 @@ class ResizableSidebar extends React.Component {
    * Set the width of the sidebars on load
    */
   componentDidMount() {
-    const {minWidth, gutterLeft, sidebarContext} = this.props;
+    const { minWidth, gutterLeft, sidebarContext } = this.props;
     const side = gutterLeft ? SIDEBARS.RIGHT : SIDEBARS.LEFT;
     setTimeout(() => {
       // Run this right after DOM is painted to access the correct offsetWidth of container and set initial width properly
@@ -90,7 +90,9 @@ class ResizableSidebar extends React.Component {
    */
   percentToPx(percentStr, containerWidth) {
     const percent = parseFloat(percentStr);
-    if (isNaN(percent)) { return 0; }
+    if (isNaN(percent)) {
+      return 0;
+    }
     return (percent / 100) * containerWidth;
   }
 
@@ -101,10 +103,8 @@ class ResizableSidebar extends React.Component {
   handleMouseDown(e) {
     e.preventDefault();
 
-    const {gutterLeft, sidebarContext} = this.props;
-    const startWidth = gutterLeft
-      ? sidebarContext.right.width || 0
-      : sidebarContext.left.width || 0;
+    const { gutterLeft, sidebarContext } = this.props;
+    const startWidth = gutterLeft ? sidebarContext.right.width || 0 : sidebarContext.left.width || 0;
 
     this.setState({
       resizing: true,
@@ -125,10 +125,12 @@ class ResizableSidebar extends React.Component {
    * @param {Event} e
    */
   handleMouseMove(e) {
-    if (!this.state.resizing) { return; }
+    if (!this.state.resizing) {
+      return;
+    }
 
-    const {startX, startWidth} = this.state;
-    const {gutterLeft, minWidth, maxWidth, sidebarContext} = this.props;
+    const { startX, startWidth } = this.state;
+    const { gutterLeft, minWidth, maxWidth, sidebarContext } = this.props;
 
     const containerWidth = sidebarContext?.containerRef?.current?.offsetWidth || 1;
     const dx = e.clientX - startX;
@@ -146,7 +148,7 @@ class ResizableSidebar extends React.Component {
    * Handle mouse up event - remove event listeners
    */
   handleMouseUp() {
-    this.setState({resizing: false});
+    this.setState({ resizing: false });
     this.removeEventListeners();
   }
 
@@ -154,7 +156,7 @@ class ResizableSidebar extends React.Component {
    * Handle double click event - default the sidebars to original widths
    */
   handleDoubleClick() {
-    const {gutterLeft, minWidth, sidebarContext} = this.props;
+    const { gutterLeft, minWidth, sidebarContext } = this.props;
     const containerWidth = sidebarContext?.containerRef?.current?.offsetWidth || 1;
     const minPx = this.percentToPx(minWidth, containerWidth);
     const side = gutterLeft ? SIDEBARS.RIGHT : SIDEBARS.LEFT;
@@ -172,15 +174,9 @@ class ResizableSidebar extends React.Component {
   }
 
   render() {
-    const {
-      gutterLeft,
-      resizable,
-      classNames,
-      children,
-      sidebarContext,
-    } = this.props;
+    const { gutterLeft, resizable, classNames, children, sidebarContext } = this.props;
 
-    const {containerRef, left, right} = sidebarContext;
+    const { containerRef, left, right } = sidebarContext;
 
     const widthPx = gutterLeft ? right.width : left.width;
     const containerWidth = containerRef?.current?.offsetWidth || 1;
@@ -191,23 +187,15 @@ class ResizableSidebar extends React.Component {
     const classes = `resizable-sidebar${classNames ? ` ${classNames}` : ""}`;
 
     return (
-      <div className={classes} ref={this.sidebarRef} style={{width: widthPercent}}>
+      <div className={classes} ref={this.sidebarRef} style={{ width: widthPercent }}>
         {gutterLeft && resizable && (
-          <div
-            className="gutter"
-            onMouseDown={this.handleMouseDown}
-            onDoubleClick={this.handleDoubleClick}
-          />
+          <div className="gutter" onMouseDown={this.handleMouseDown} onDoubleClick={this.handleDoubleClick} />
         )}
 
         {children}
 
         {!gutterLeft && resizable && (
-          <div
-            className="gutter"
-            onMouseDown={this.handleMouseDown}
-            onDoubleClick={this.handleDoubleClick}
-          />
+          <div className="gutter" onMouseDown={this.handleMouseDown} onDoubleClick={this.handleDoubleClick} />
         )}
       </div>
     );
@@ -229,7 +217,7 @@ ResizableSidebar.defaultProps = {
   gutterLeft: false,
   classNames: "",
   minWidth: "20%",
-  maxWidth: "35%"
+  maxWidth: "35%",
 };
 
 export default withResizableSidebar(ResizableSidebar);
