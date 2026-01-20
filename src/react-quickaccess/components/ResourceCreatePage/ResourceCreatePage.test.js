@@ -122,7 +122,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 300 }).toJSDate().toISOString(),
+        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 350 }).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -180,7 +180,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 300 }).toJSDate().toISOString(),
+        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 350 }).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -323,7 +323,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 300 }).toJSDate().toISOString(),
+        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 350 }).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {

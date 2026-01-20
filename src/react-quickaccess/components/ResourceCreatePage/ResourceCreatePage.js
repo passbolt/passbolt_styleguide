@@ -98,7 +98,7 @@ class ResourceCreatePage extends React.Component {
    * @returns {Promise<void>}
    */
   async componentDidMount() {
-    this.props.passwordExpiryContext.findSettings();
+    await this.props.passwordExpiryContext.findSettings();
     this.initPwnedPasswordService();
     this.initResourceViewModel();
   }
