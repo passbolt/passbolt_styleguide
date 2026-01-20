@@ -62,8 +62,8 @@ class ApiAccountRecovery extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    await this.getSiteSettings();
-    this.initLocale();
+    const siteSettings = await this.getSiteSettings();
+    this.initLocale(siteSettings);
   }
 
   /**
@@ -112,7 +112,8 @@ class ApiAccountRecovery extends Component {
     const apiClient = new ApiClient(apiClientOptions);
     const { body } = await apiClient.findAll();
     const siteSettings = new SiteSettings(body);
-    await this.setState({ siteSettings });
+    this.setState({ siteSettings });
+    return siteSettings;
   }
 
   /**
@@ -123,28 +124,28 @@ class ApiAccountRecovery extends Component {
    * 2. The browser locale if supported;
    * 3. The browser similar locale;
    * 4. The organization locale;
+   * @param {SiteSettings} siteSettings The site settings
    * @warning Require the site settings to be fetch to work.
    */
-  initLocale() {
+  initLocale(siteSettings) {
     const locale =
-      this.getUrlLocale() ||
-      this.getBrowserLocale() ||
-      this.getBrowserSimilarLocale() ||
-      this.state.siteSettings.locale;
+      this.getUrlLocale(siteSettings) ||
+      this.getBrowserLocale(siteSettings) ||
+      this.getBrowserSimilarLocale(siteSettings) ||
+      siteSettings.locale;
     this.setState({ locale });
   }
 
   /**
    * Get the locale from the url i.e. ?locale=en-UK
+   * @param {SiteSettings} siteSettings The site settings
    * @returns {string}
    */
-  getUrlLocale() {
+  getUrlLocale(siteSettings) {
     const url = new URL(window.location.href);
     const locale = url.searchParams.get("locale");
     if (locale) {
-      const urlLocale = this.state.siteSettings.supportedLocales.find(
-        (supportedLocale) => locale === supportedLocale.locale,
-      );
+      const urlLocale = siteSettings.supportedLocales.find((supportedLocale) => locale === supportedLocale.locale);
       if (urlLocale) {
         return urlLocale.locale;
       }
@@ -153,10 +154,11 @@ class ApiAccountRecovery extends Component {
 
   /**
    * Get the browser locale if supported.
+   * @param {SiteSettings} siteSettings The site settings
    * @returns {string}
    */
-  getBrowserLocale() {
-    const browserSupportedLocale = this.state.siteSettings.supportedLocales.find(
+  getBrowserLocale(siteSettings) {
+    const browserSupportedLocale = siteSettings.supportedLocales.find(
       (supportedLocale) => navigator.language === supportedLocale.locale,
     );
     if (browserSupportedLocale) {
@@ -166,11 +168,12 @@ class ApiAccountRecovery extends Component {
 
   /**
    * Get the browser similar locale if supported.
+   * @param {SiteSettings} siteSettings The site settings
    * @returns {string}
    */
-  getBrowserSimilarLocale() {
+  getBrowserSimilarLocale(siteSettings) {
     const nonExplicitLanguage = navigator.language.split("-")[0];
-    const similarSupportedLocale = this.state.siteSettings.supportedLocales.find(
+    const similarSupportedLocale = siteSettings.supportedLocales.find(
       (supportedLocale) => nonExplicitLanguage === supportedLocale.locale.split("-")[0],
     );
     if (similarSupportedLocale) {
