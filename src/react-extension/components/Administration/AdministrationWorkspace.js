@@ -351,7 +351,7 @@ class AdministrationWorkspace extends Component {
   render() {
     return (
       <div id="container" className="page administration">
-        <div id="app" className="app" tabIndex="1000">
+        <div id="app" className="app">
           <div className="panel main">
             <div className="panel left">
               {!this.isHttpError403 && (
