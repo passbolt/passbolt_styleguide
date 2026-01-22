@@ -31,7 +31,6 @@ export const defaultPrepareResourceContext = (data = {}) => {
       }),
     onPrepareResource: jest.fn(),
     onPasswordGenerated: jest.fn(),
-    consumeLastGeneratedPassword: jest.fn(() => "aBcD10-é??????????"),
     consumePreparedResource: jest.fn(),
     resetSecretGeneratorSettings: jest.fn(),
   };

@@ -41,12 +41,11 @@ class LoginPage extends React.Component {
    */
   async componentDidMount() {
     this.initDefaultRememberMeChoice();
-    await this.props.ssoContext.loadSsoConfiguration();
-    if (this.props.ssoContext.hasUserAnSsoKit()) {
+    const ssoLocalConfiguredProvider = await this.props.ssoContext.loadSsoConfiguration();
+    if (ssoLocalConfiguredProvider) {
       this.setState({ isSsoAvailable: true, displaySso: true, isReady: true });
     } else {
-      this.setState({ isReady: true });
-      this.focusOnPassphrase();
+      this.setState({ isReady: true }, () => this.focusOnPassphrase());
     }
   }
 

@@ -19,7 +19,6 @@ import { withAppContext } from "../../shared/context/AppContext/AppContext";
 export const SsoContext = React.createContext({
   loadSsoConfiguration: () => {}, // Load the current sso configuration and store it in the state
   getProvider: () => {}, // Return the current sso configuration from the context state
-  hasUserAnSsoKit: () => {}, // Returns true if the current user has an SSO kit built locally
   runSignInProcess: () => {}, // Launches the SSO process with the configured provider
 });
 
@@ -45,20 +44,20 @@ export class SsoContextProvider extends React.Component {
       ssoLocalConfiguredProvider: null, // the provider configured for the local SSO kit if any, null otherwise
       loadSsoConfiguration: this.loadSsoConfiguration.bind(this), // Load the current sso configuration and store it in the state
       getProvider: this.getProvider.bind(this), // Return the current sso provider configured
-      hasUserAnSsoKit: this.hasUserAnSsoKit.bind(this), // Returns true if the current user has an SSO kit built locally
       runSignInProcess: this.runSignInProcess.bind(this), // Launches the SSO process with the configured provider
     };
   }
 
   /**
    * Find the sso configuration
-   * @return {Promise<void>}
+   * @return {string}
    */
   async loadSsoConfiguration() {
     const ssoLocalConfiguredProvider = await this.props.context.port.request(
       "passbolt.sso.get-local-configured-provider",
     );
     this.setState({ ssoLocalConfiguredProvider });
+    return ssoLocalConfiguredProvider;
   }
 
   /**
@@ -67,14 +66,6 @@ export class SsoContextProvider extends React.Component {
    */
   getProvider() {
     return this.state.ssoLocalConfiguredProvider;
-  }
-
-  /**
-   * Returns true if the current user has an SSO kit built locally
-   * @returns {boolean}
-   */
-  hasUserAnSsoKit() {
-    return Boolean(this.state.ssoLocalConfiguredProvider);
   }
 
   /**

@@ -23,8 +23,7 @@ export function defaultAppContext(appContext) {
 
 export function defaultSsoContext(ssoContext) {
   const defaultSsoContext = {
-    loadSsoConfiguration: jest.fn(() => Promise.resolve()),
-    hasUserAnSsoKit: jest.fn(() => true),
+    loadSsoConfiguration: jest.fn(() => "azure"),
     getProvider: jest.fn(() => "azure"),
     runSignInProcess: jest.fn(() => Promise.resolve()),
   };
@@ -47,8 +46,8 @@ export function defaultPropsWithSsoDisabled(data = {}) {
   const ssoContext = Object.assign(
     defaultSsoContext(),
     {
+      loadSsoConfiguration: jest.fn(() => null),
       getProvider: jest.fn(() => null),
-      hasUserAnSsoKit: jest.fn(() => false),
     },
     data.ssoContext,
   );

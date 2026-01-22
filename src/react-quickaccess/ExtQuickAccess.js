@@ -124,12 +124,12 @@ class ExtQuickAccess extends React.Component {
       this.handlePassphraseRequest();
       await this.checkPluginIsConfigured();
       await this.getUser();
-      await this.checkAuthStatus();
-      await this.getSiteSettings();
-      if (this.state.isAuthenticated) {
-        await this.getLoggedInUser();
+      const isAuthenticated = await this.checkAuthStatus();
+      const siteSettings = await this.getSiteSettings();
+      if (isAuthenticated) {
+        this.getLoggedInUser(siteSettings);
       }
-      this.getLocale();
+      await this.getLocale();
     } catch (e) {
       this.setState({
         hasError: true,
@@ -239,13 +239,14 @@ class ExtQuickAccess extends React.Component {
     const siteSettingsDto = await this.state.port.request("passbolt.organization-settings.get");
     const siteSettings = new SiteSettings(siteSettingsDto);
     this.setState({ siteSettings });
+    return siteSettings;
   }
 
   /**
    * Get the current user info from background page and set it in the state
    */
-  async getLoggedInUser() {
-    const canIUseRbac = this.state.siteSettings.canIUse("rbacs");
+  async getLoggedInUser(siteSettings) {
+    const canIUseRbac = siteSettings.canIUse("rbacs");
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
     const rbacsDto = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : [];
     const rbacs = new RbacsCollection(rbacsDto);
@@ -283,6 +284,7 @@ class ExtQuickAccess extends React.Component {
       return;
     }
     this.setState({ isAuthenticated });
+    return isAuthenticated;
   }
 
   /**
@@ -299,9 +301,9 @@ class ExtQuickAccess extends React.Component {
       return;
     }
 
-    await this.getSiteSettings();
+    const siteSettings = await this.getSiteSettings();
     this.setState({ isAuthenticated: true });
-    await this.getLoggedInUser();
+    this.getLoggedInUser(siteSettings);
   }
 
   logoutSuccessCallback() {
