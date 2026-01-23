@@ -228,7 +228,7 @@ class ExtQuickAccess extends React.Component {
    */
   async closeWindow() {
     if (this.getDetached()) {
-      await this.props.port.request('passbolt.active-tab.close');
+      await this.props.port.request("passbolt.active-tab.close");
     } else {
       window.close();
     }
@@ -237,7 +237,7 @@ class ExtQuickAccess extends React.Component {
   async checkPluginIsConfigured() {
     const isConfigured = await this.state.port.request("passbolt.addon.is-configured");
     if (!isConfigured) {
-      await this.props.port.request('passbolt.tabs.open', PASSBOLT_GETTING_STARTED_URL);
+      await this.props.port.request("passbolt.tabs.open", PASSBOLT_GETTING_STARTED_URL);
       await this.closeWindow();
     }
   }
@@ -304,7 +304,7 @@ class ExtQuickAccess extends React.Component {
    * Redirect to MFA authentication.
    */
   async redirectToMfaAuthentication() {
-    await this.props.port.request('passbolt.tabs.open', this.state.userSettings.getTrustedDomain());
+    await this.props.port.request("passbolt.tabs.open", this.state.userSettings.getTrustedDomain());
     await this.closeWindow();
   }
 
@@ -324,7 +324,7 @@ class ExtQuickAccess extends React.Component {
   }
 
   async mfaRequiredCallback(url) {
-    await this.props.port.request('passbolt.tabs.open', url);
+    await this.props.port.request("passbolt.tabs.open", url);
     await this.closeWindow();
   }
 

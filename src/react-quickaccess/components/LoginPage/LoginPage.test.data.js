@@ -3,24 +3,7 @@
  * @param appContext An existing app context
  * @returns {any}
  */
-import MockPort from "../../../react-extension/test/mock/MockPort";
-import UserSettings from "../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
-
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    focusSearch: () => {},
-    updateSearch: () => {},
-    searchHistory: {},
-    search: "",
-    userSettings: new UserSettings(userSettingsFixture),
-    setWindowBlurBehaviour: () => {},
-    shouldCloseAtWindowBlur: true,
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
 
 export function defaultSsoContext(ssoContext) {
   const defaultSsoContext = {

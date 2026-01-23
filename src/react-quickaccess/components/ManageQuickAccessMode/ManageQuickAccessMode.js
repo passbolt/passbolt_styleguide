@@ -39,7 +39,7 @@ class ManageQuickAccessMode extends Component {
   handleCloseOutsideWindowEvent() {
     const mustCloseWindow = this.props.context.getDetached() && this.props.context.getBootstrapFeature() !== null;
     if (mustCloseWindow) {
-      const closeWindow = async() => {
+      const closeWindow = async () => {
         if (this.props.context.shouldCloseAtWindowBlur) {
           await this.props.context.closeWindow();
         }
