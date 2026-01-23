@@ -22,6 +22,7 @@ import { Trans, withTranslation } from "react-i18next";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import UploadFileSVG from "../../../../img/svg/upload_file.svg";
+import { BROWSER_NAMES, detectBrowserName } from "../../../../shared/lib/Browser/detectBrowserName";
 /**
  * This component displays the user profile help
  */
@@ -69,6 +70,12 @@ class DisplayUserProfileHelp extends React.Component {
    * @returns {bool}
    */
   get canIUseUploadAvatarCapability() {
+    //@todo: temporary workaround as the current Swift implementation does not support file upload
+    const isSafari = detectBrowserName() === BROWSER_NAMES.SAFARI;
+    if (isSafari) {
+      return false;
+    }
+
     return this.props.rbacContext.canIUseAction(uiActions.AVATAR_UPLOAD);
   }
 
