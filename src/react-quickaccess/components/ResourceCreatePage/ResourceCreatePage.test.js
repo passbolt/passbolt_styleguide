@@ -455,7 +455,7 @@ describe("ResourceCreatePage", () => {
 
       let promiseRejecter;
       props.context.port.addRequestListener("passbolt.resources.create", () => {
-        const promise = new Promise((_, reject) => {
+        const promise = new Promise((_resolve, reject) => {
           promiseRejecter = reject;
         });
         return promise;
@@ -504,7 +504,7 @@ describe("ResourceCreatePage", () => {
 
       let promiseRejecter;
       props.context.port.addRequestListener("passbolt.resources.create", () => {
-        const promise = new Promise((_, reject) => {
+        const promise = new Promise((_resolve, reject) => {
           promiseRejecter = reject;
         });
         return promise;

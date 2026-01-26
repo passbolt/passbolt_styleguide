@@ -63,7 +63,7 @@ class DisplayRbacItem extends React.Component {
    * @returns {string}
    */
   get rowClassName() {
-    return this.props.actionName.toLowerCase().replaceAll(/[^\w]/gi, "-");
+    return this.props.actionName.toLowerCase().replaceAll(/\W/g, "-");
   }
 
   /**

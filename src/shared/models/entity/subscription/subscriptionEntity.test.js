@@ -20,7 +20,7 @@ import { defaultSubscriptionDto, minimalSubscriptionDto } from "./subscriptionEn
 describe("Subscription entity", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(SubscriptionEntity.ENTITY_NAME, SubscriptionEntity.getSchema());
+      EntitySchema.validateSchema(ENTITY_NAME, SubscriptionEntity.getSchema());
     });
 
     it("validates customer_id property", () => {
@@ -86,7 +86,8 @@ describe("Subscription entity", () => {
 
     it("should return its entity name", () => {
       expect.assertions(1);
-      expect(SubscriptionEntity.ENTITY_NAME).toStrictEqual(ENTITY_NAME);
+      const entity = new SubscriptionEntity(defaultSubscriptionDto());
+      expect(entity.constructor.ENTITY_NAME).toStrictEqual(ENTITY_NAME);
     });
   });
 

@@ -21,9 +21,9 @@ import {
   noMfaUserDefinedWithoutTotp,
   noMfaUserDefinedWithTotp,
   setupTotpData,
+  MfaOptInPolicy,
 } from "./MFAContext.test.data";
 import { enableFetchMocks } from "jest-fetch-mock";
-import { MfaOptInPolicy } from "./MFAContext.test.data";
 
 describe("MFAContext", () => {
   let mfaContextProvider; // The MFAContextProvider to test

@@ -31,7 +31,7 @@ class HandleExtAppBootstrapRouteChangeRequested extends Component {
    */
   handleRouteChangeRequested() {
     this.props.port.on("passbolt.app-bootstrap.change-route", (pathname) => {
-      if (/^\/[A-Za-z0-9\-\/]*$/.test(pathname)) {
+      if (/^\/[A-Z/-9\-]*$/i.test(pathname)) {
         this.props.history.replace(pathname);
       }
     });
