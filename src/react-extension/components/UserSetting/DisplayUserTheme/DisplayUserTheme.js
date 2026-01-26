@@ -96,7 +96,7 @@ class DisplayUserTheme extends React.Component {
     }
     this.props.loadingContext.add();
     this.setState({ selectedTheme: theme.name });
-    this.props.context.port
+    return this.props.context.port
       .request("passbolt.themes.change", theme.name)
       .then(this.onSelectSuccess)
       .catch(this.onSelectFailure)

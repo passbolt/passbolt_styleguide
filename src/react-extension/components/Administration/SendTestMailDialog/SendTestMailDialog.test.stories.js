@@ -16,9 +16,8 @@ import React from "react";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 import MockFetch from "../../../test/mock/MockFetch";
 import SendTestMailDialog from "./SendTestMailDialog";
-import { defaultProps } from "./SendTestMailDialog.test.data";
+import { defaultProps, defaultDebugResponse } from "./SendTestMailDialog.test.data";
 import AdminSmtpSettingsContextProvider from "../../../contexts/AdminSmtpSettingsContext";
-import { defaultDebugResponse } from "./SendTestMailDialog.test.data";
 
 let currentStory = null;
 const mockFetch = new MockFetch();
