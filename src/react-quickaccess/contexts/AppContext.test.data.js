@@ -45,6 +45,6 @@ export function defaultAppContext(data = {}) {
     closeWindow: jest.fn(),
     setWindowBlurBehaviour: () => {},
     shouldCloseAtWindowBlur: true,
-    ...data
+    ...data,
   };
 }

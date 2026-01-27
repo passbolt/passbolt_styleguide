@@ -469,7 +469,7 @@ class ResourceViewPage extends React.Component {
       );
 
       if (this.props.context.getDetached()) {
-        await this.props.context.port.request('passbolt.active-tab.close');
+        await this.props.context.port.request("passbolt.active-tab.close");
       } else {
         await this.props.context.closeWindow();
       }
