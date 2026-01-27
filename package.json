@@ -97,7 +97,8 @@
     "copy-anything": "4.0.4",
     "browserslist": "4.26.2",
     "qs": "6.14.1",
-    "undici": "7.18.2"
+    "undici": "7.18.2",
+    "lodash": ">=4.17.23"
   },
   "scripts": {
     "build": "npm run build-api-app",
