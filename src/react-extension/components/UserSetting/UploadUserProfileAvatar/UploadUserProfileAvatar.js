@@ -276,8 +276,9 @@ class UploadUserProfileAvatar extends React.Component {
    * @returns {Promise<void>}
    */
   async toggleProcessing() {
-    const previousValue = this.state.actions.processing;
-    await this.setState({ actions: Object.assign(this.state.actions, { processing: !previousValue }) });
+    this.setState((prevState) => ({
+      actions: Object.assign(this.state.actions, { processing: !prevState.actions.processing }),
+    }));
   }
 
   /**

@@ -54,7 +54,7 @@ class DisplayChangePassphraseIntroduction extends React.Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({ processing: !this.state.processing });
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

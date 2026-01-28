@@ -113,7 +113,7 @@ class EditUserProfile extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState({ profile: Object.assign(this.state.profile, { [name]: value }) });
+    this.setState((prevState) => ({ profile: Object.assign(prevState.profile, { [name]: value }) }));
     if (this.state.hasAlreadyBeenValidated) {
       await this.validate();
     }
@@ -252,8 +252,9 @@ class EditUserProfile extends Component {
    * @returns {Promise<void>}
    */
   async toggleProcessing() {
-    const prev = this.state.actions.processing;
-    return this.setState({ actions: Object.assign(this.state.actions, { processing: !prev }) });
+    return this.setState((prevState) => ({
+      actions: Object.assign(prevState.actions, { processing: !prevState.actions.processing }),
+    }));
   }
 
   /**

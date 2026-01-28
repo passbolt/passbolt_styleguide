@@ -233,7 +233,7 @@ class EnterNewPassphrase extends React.Component {
    * Toggle the obfuscate mode of the passphrase view
    */
   toggleObfuscate() {
-    this.setState({ isObfuscated: !this.state.isObfuscated });
+    this.setState((prevState) => ({ isObfuscated: !prevState.isObfuscated }));
   }
 
   /**
