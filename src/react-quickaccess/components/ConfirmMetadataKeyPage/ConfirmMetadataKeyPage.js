@@ -67,7 +67,7 @@ class ConfirmMetadataKeyPage extends React.Component {
    * Handle more information button click.
    */
   handleMoreInformationClicked() {
-    this.setState({ openMoreInformation: !this.state.openMoreInformation });
+    this.setState((prevState) => ({ openMoreInformation: !prevState.openMoreInformation }));
   }
 
   /**

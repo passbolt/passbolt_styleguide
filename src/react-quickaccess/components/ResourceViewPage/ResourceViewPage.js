@@ -490,7 +490,7 @@ class ResourceViewPage extends React.Component {
    * Handle click on additional uris
    */
   handleClickAdditionalUrisSection() {
-    this.setState({ isOpenAdditionalUris: !this.state.isOpenAdditionalUris });
+    this.setState((prevState) => ({ isOpenAdditionalUris: !prevState.isOpenAdditionalUris }));
   }
 
   /**
