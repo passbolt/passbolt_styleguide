@@ -62,7 +62,7 @@ class SecureTextarea extends Component {
     if (this.props.disabled) {
       return;
     }
-    this.setState({ viewTextarea: !this.state.viewTextarea });
+    this.setState((prevState) => ({ viewTextarea: !prevState.viewTextarea }));
   }
 
   /**
