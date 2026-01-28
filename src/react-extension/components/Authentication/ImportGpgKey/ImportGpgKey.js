@@ -245,7 +245,7 @@ class ImportGpgKey extends Component {
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({ actions: { processing: !this.state.actions.processing } });
+    this.setState((prevState) => ({ actions: { processing: !prevState.actions.processing } }));
   }
 
   /**

@@ -122,7 +122,7 @@ class AcceptLoginServerKeyChange extends Component {
    * Toggle the accept checkbox
    */
   async toggleAccept() {
-    await this.setState({ hasAccepted: !this.state.hasAccepted });
+    this.setState((prevState) => ({ hasAccepted: !prevState.hasAccepted }));
     if (this.state.hasBeenValidated) {
       await this.validate();
     }

@@ -277,7 +277,7 @@ class ChooseSecurityToken extends Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({ actions: { processing: !this.state.actions.processing } });
+    this.setState((prevState) => ({ actions: { processing: !prevState.actions.processing } }));
   }
 
   /**

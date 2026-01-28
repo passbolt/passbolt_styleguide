@@ -159,7 +159,7 @@ class CheckPassphrase extends Component {
     // Whenever the passphrase is invalid.
     this.toggleProcessing();
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({ errors: { ...this.state.errors, invalidPassphrase: true } });
+      this.setState((prevState) => ({ errors: { ...prevState.errors, invalidPassphrase: true } }));
       this.focusOnPassphrase();
     } else {
       throw error;
@@ -170,7 +170,7 @@ class CheckPassphrase extends Component {
    * Toggle the remember me flag value
    */
   toggleRemmemberMe() {
-    this.setState({ rememberMe: !this.state.rememberMe });
+    this.setState((prevState) => ({ rememberMe: !prevState.rememberMe }));
   }
 
   /**
@@ -188,7 +188,7 @@ class CheckPassphrase extends Component {
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({ actions: { processing: !this.state.actions.processing } });
+    this.setState((prevState) => ({ actions: { processing: !prevState.actions.processing } }));
   }
 
   /**
