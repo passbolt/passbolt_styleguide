@@ -109,8 +109,9 @@ export default class ActionFeedbackContextProvider extends React.Component {
    * @param feedbackToRemove A feedback
    */
   remove(feedbackToRemove) {
-    const hasSameId = (feedback) => feedbackToRemove.id !== feedback.id;
-    this.setState({ feedbacks: this.state.feedbacks.filter(hasSameId) });
+    this.setState((prevState) => ({
+      feedbacks: prevState.feedbacks.filter((feedback) => feedbackToRemove.id !== feedback.id),
+    }));
   }
 
   /**

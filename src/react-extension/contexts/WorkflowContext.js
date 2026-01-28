@@ -46,12 +46,16 @@ export default class WorkflowContextProvider extends React.Component {
       workflows: [],
       start: (Workflow, workflowProps) => {
         const workflowKey = uuidv4();
-        this.setState({ workflows: [...this.state.workflows, { key: workflowKey, Workflow, workflowProps }] });
+        this.setState((prevState) => ({
+          workflows: [...prevState.workflows, { key: workflowKey, Workflow, workflowProps }],
+        }));
 
         return workflowKey;
       },
       stop: async (workflowKey) =>
-        await this.setState({ workflows: this.state.workflows.filter((workflow) => workflowKey !== workflow.key) }),
+        this.setState((prevState) => ({
+          workflows: prevState.workflows.filter((workflow) => workflowKey !== workflow.key),
+        })),
     };
   }
 

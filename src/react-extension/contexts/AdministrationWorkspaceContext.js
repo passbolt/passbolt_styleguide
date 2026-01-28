@@ -99,28 +99,28 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    * Handle save enabled
    */
   handleSaveEnabled() {
-    this.setState({ can: { ...this.state.can, save: true } });
+    this.setState((prevState) => ({ can: { ...prevState.can, save: true } }));
   }
 
   /**
    * Handle must save settings
    */
   handleMustSaveSettings() {
-    this.setState({ must: { ...this.state.must, save: true } });
+    this.setState((prevState) => ({ must: { ...prevState.must, save: true } }));
   }
 
   /**
    * Handle must edit subscription key
    */
   handleMustEditSubscriptionKey() {
-    this.setState({ must: { ...this.state.must, editSubscriptionKey: true } });
+    this.setState((prevState) => ({ must: { ...prevState.must, editSubscriptionKey: true } }));
   }
 
   /**
    * Handle must refresh subscription key
    */
   handleMustRefreshSubscriptionKey() {
-    this.setState({ must: { ...this.state.must, refreshSubscriptionKey: true } });
+    this.setState((prevState) => ({ must: { ...prevState.must, refreshSubscriptionKey: true } }));
   }
 
   /**
