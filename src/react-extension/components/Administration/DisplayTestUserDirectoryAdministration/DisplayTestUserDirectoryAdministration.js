@@ -70,21 +70,21 @@ class DisplayTestUserDirectoryAdministration extends Component {
    * Handle the click on the list groups users
    */
   handleListGroupsUsersClicked() {
-    this.setState({ openListGroupsUsers: !this.state.openListGroupsUsers });
+    this.setState((prevState) => ({ openListGroupsUsers: !prevState.openListGroupsUsers }));
   }
 
   /**
    * Handle the click on the structure groups users
    */
   handleStructureGroupsUsersClicked() {
-    this.setState({ openStructureGroupsUsers: !this.state.openStructureGroupsUsers });
+    this.setState((prevState) => ({ openStructureGroupsUsers: !prevState.openStructureGroupsUsers }));
   }
 
   /**
    * Handle the click on the errors
    */
   handleErrorsClicked() {
-    this.setState({ openErrors: !this.state.openErrors });
+    this.setState((prevState) => ({ openErrors: !prevState.openErrors }));
   }
 
   /**

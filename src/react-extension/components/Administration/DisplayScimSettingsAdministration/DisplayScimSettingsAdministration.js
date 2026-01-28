@@ -185,7 +185,7 @@ class DisplayScimSettingsAdministration extends Component {
         settings: this.formSettings.toDto(),
       });
     }
-    this.setState({ enabled: !this.state.enabled });
+    this.setState((prevState) => ({ enabled: !prevState.enabled }));
   }
 
   /**

@@ -88,7 +88,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * Handle the click on the errors
    */
   handleFullReportClicked() {
-    this.setState({ openFullReport: !this.state.openFullReport });
+    this.setState((prevState) => ({ openFullReport: !prevState.openFullReport }));
   }
 
   /**

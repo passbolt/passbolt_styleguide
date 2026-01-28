@@ -416,7 +416,7 @@ class GenerateOrganizationKey extends React.Component {
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({ processing: !this.state.processing });
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**
