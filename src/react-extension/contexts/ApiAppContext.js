@@ -169,7 +169,7 @@ class ApiAppContextProvider extends React.Component {
     const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
     const siteSettings = await apiClient.findAll();
-    await this.setState({ siteSettings: new SiteSettings(siteSettings.body) });
+    this.setState({ siteSettings: new SiteSettings(siteSettings.body) });
   }
 
   /**

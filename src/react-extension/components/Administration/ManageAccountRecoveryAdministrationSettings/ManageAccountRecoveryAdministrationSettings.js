@@ -146,7 +146,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
       // the keyinfo will be updated in componentDidUpdate.
       this.resetKeyInfo();
     }
-    await this.props.adminAccountRecoveryContext.changePolicy(policy);
+    this.props.adminAccountRecoveryContext.changePolicy(policy);
   }
 
   /**
@@ -165,7 +165,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    */
   async handleUpdateOrganizationKey(publicKey, privateKey) {
     this.resetKeyInfo();
-    await this.props.adminAccountRecoveryContext.changePublicKey(publicKey);
+    this.props.adminAccountRecoveryContext.changePublicKey(publicKey);
     if (privateKey) {
       await this.downloadPrivateKey(privateKey);
     }

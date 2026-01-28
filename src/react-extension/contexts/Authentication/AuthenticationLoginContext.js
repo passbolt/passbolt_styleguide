@@ -173,11 +173,11 @@ export class AuthenticationLoginContextProvider extends React.Component {
       // Nothing to do. @todo document why?
     } else if (error.name === "ServerKeyChangedError") {
       const serverKey = await this.props.context.port.request("passbolt.auth.get-server-key");
-      await this.setState({ state: AuthenticationLoginWorkflowStates.ACCEPT_NEW_SERVER_KEY, serverKey });
+      this.setState({ state: AuthenticationLoginWorkflowStates.ACCEPT_NEW_SERVER_KEY, serverKey });
     } else if (error.name === "UserNotFoundError") {
       // This case should be treated by the background page itself, and the login form should not be displayed.
     } else {
-      await this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -194,7 +194,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
         // Expected errors controlled by the component CheckPassphrase, throw it.
         throw error;
       } else {
-        await this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
+        this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
       }
     }
   }
@@ -206,12 +206,12 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async signIn(passphrase, rememberMe = false) {
-    await this.setState({ state: AuthenticationLoginWorkflowStates.SIGNING_IN });
+    this.setState({ state: AuthenticationLoginWorkflowStates.SIGNING_IN });
     try {
       await this.props.context.port.request("passbolt.auth.login", passphrase, rememberMe);
       this.props.context.port.request("passbolt.auth.post-login-redirect");
     } catch (error) {
-      await this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN_ERROR, error });
+      this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN_ERROR, error });
     }
   }
 
@@ -310,20 +310,20 @@ export class AuthenticationLoginContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.auth.replace-server-key");
       this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
     } catch (error) {
-      await this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
   /**
    * Whenever the user lost its passphrase.
-   * @returns {Promise<void>}
+   * @returns {void}
    */
-  async needHelpCredentialsLost() {
+  needHelpCredentialsLost() {
     const canIUserAccountRecovery = this.props.context.siteSettings.canIUse("accountRecovery");
     if (canIUserAccountRecovery) {
-      await this.setState({ state: AuthenticationLoginWorkflowStates.INITIATE_ACCOUNT_RECOVERY });
+      this.setState({ state: AuthenticationLoginWorkflowStates.INITIATE_ACCOUNT_RECOVERY });
     } else {
-      await this.setState({ state: AuthenticationLoginWorkflowStates.HELP_CREDENTIALS_LOST });
+      this.setState({ state: AuthenticationLoginWorkflowStates.HELP_CREDENTIALS_LOST });
     }
   }
 
@@ -334,9 +334,9 @@ export class AuthenticationLoginContextProvider extends React.Component {
   async requestHelpCredentialsLost() {
     try {
       await this.props.context.port.request("passbolt.auth.request-help-credentials-lost");
-      await this.setState({ state: AuthenticationLoginWorkflowStates.CHECK_MAILBOX });
+      this.setState({ state: AuthenticationLoginWorkflowStates.CHECK_MAILBOX });
     } catch (error) {
-      await this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -345,7 +345,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async goToValidatePassphrase() {
-    await this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
+    this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
   }
 
   /**

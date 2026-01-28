@@ -76,9 +76,9 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
   /**
    * Change the policy
    * @param {string} policy The new policy. Any of: mandatory, opt-out, opt-in, disable.
-   * @return {Promise<void>}
+   * @return {void}
    */
-  async changePolicy(policy) {
+  changePolicy(policy) {
     const policyChanges = this.state.policyChanges;
 
     // If same policy than the current one, remove it from the changes if any.
@@ -93,17 +93,17 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
       delete policyChanges.publicKey;
     }
 
-    await this.setState({ policyChanges });
+    this.setState({ policyChanges });
   }
 
   /**
    * Change the public key
    * @param {string} publicKey The new public key in armored format.
-   * @returns {Promise<void>}
+   * @returns {void}
    */
-  async changePublicKey(publicKey) {
+  changePublicKey(publicKey) {
     const policyChanges = { ...this.state.policyChanges, publicKey };
-    await this.setState({ policyChanges });
+    this.setState({ policyChanges });
   }
 
   /**
@@ -130,9 +130,9 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
   /**
    * Reset the policy changes
    */
-  async resetChanges() {
+  resetChanges() {
     const policyChanges = {};
-    await this.setState({ policyChanges });
+    this.setState({ policyChanges });
   }
 
   /**

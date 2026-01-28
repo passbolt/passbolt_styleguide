@@ -17,7 +17,7 @@ import {
   mockMfaSettings,
   mockDuoError,
   mockDefaultMfaModel,
-} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+} from "../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import { AdminMfaContextProvider } from "./AdministrationMfaContext";
 import { enableFetchMocks } from "jest-fetch-mock";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";

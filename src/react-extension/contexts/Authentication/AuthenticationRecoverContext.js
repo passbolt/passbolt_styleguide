@@ -150,10 +150,10 @@ export class AuthenticationRecoverContextProvider extends React.Component {
 
   /**
    * Whenever the user wants to go to the import gpg key step.
-   * @returns {Promise<void>}
+   * @returns {void}
    */
-  async goToImportGpgKey() {
-    await this.setState({
+  goToImportGpgKey() {
+    this.setState({
       state: AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY,
     });
   }
@@ -176,12 +176,12 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async importGpgKey(armoredKey) {
     try {
       await this.props.context.port.request("passbolt.recover.import-key", armoredKey);
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE });
     } catch (error) {
       if (error.name === "GpgKeyError") {
         throw error;
       } else {
-        await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+        this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
       }
     }
   }
@@ -224,7 +224,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.recover.sign-in", this.state.rememberMe);
       await this.props.context.port.request("passbolt.auth.post-login-redirect");
     } catch (error) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -237,18 +237,18 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       "passbolt.recover.has-user-enabled-account-recovery",
     );
     if (hasUserAccountRecoveryEnabled) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY });
     } else {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST });
     }
   }
 
   /**
    * Whenever the user wants to initiate the account recovery process.
-   * @returns {Promise<void>}
+   * @returns {void}
    */
-  async initiateAccountRecovery() {
-    await this.setState({ state: AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY });
+  initiateAccountRecovery() {
+    this.setState({ state: AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY });
   }
 
   /**
@@ -258,9 +258,9 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async requestHelpCredentialsLost() {
     try {
       await this.props.context.port.request("passbolt.recover.request-help-credentials-lost");
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.CHECK_MAILBOX });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.CHECK_MAILBOX });
     } catch (error) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -273,9 +273,9 @@ export class AuthenticationRecoverContextProvider extends React.Component {
     const generateKeyDto = { passphrase };
     try {
       await this.props.context.port.request("passbolt.recover.generate-account-recovery-request-key", generateKeyDto);
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN });
     } catch (error) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -291,7 +291,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.recover.initiate-account-recovery-request");
       this.setState({ state: AuthenticationRecoverWorkflowStates.CHECK_ACCOUNT_RECOVERY_EMAIL });
     } catch (error) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 

@@ -52,7 +52,7 @@ export default class WorkflowContextProvider extends React.Component {
 
         return workflowKey;
       },
-      stop: async (workflowKey) =>
+      stop: (workflowKey) =>
         this.setState((prevState) => ({
           workflows: prevState.workflows.filter((workflow) => workflowKey !== workflow.key),
         })),
