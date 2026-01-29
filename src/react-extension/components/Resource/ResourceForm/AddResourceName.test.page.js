@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,15 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
-import {
-  ResourceTypesLocalStorageContext
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceTypesLocalStorageContext } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { ResourcePasswordGeneratorContext } from "../../../contexts/ResourcePasswordGeneratorContext";
 import AddResourceName from "./AddResourceName";
 /**
  * The Add resource name component represented as a page
@@ -34,7 +31,9 @@ export default class AddResourceNamePage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-          <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+          <ResourceTypesLocalStorageContext.Provider
+            value={{ get: () => props.resourceTypes, resourceTypes: props.resourceTypes }}
+          >
             <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
               <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
                 <AddResourceName {...props} />
@@ -43,7 +42,7 @@ export default class AddResourceNamePage {
           </ResourceTypesLocalStorageContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -58,7 +57,7 @@ export default class AddResourceNamePage {
    * Returns the name input element
    */
   get name() {
-    return this._page.container.querySelector('#resource-name');
+    return this._page.container.querySelector("#resource-name");
   }
   /**
    * Returns true if the page object exists in the container
@@ -73,8 +72,10 @@ export default class AddResourceNamePage {
    * @param {string} data - The data to fill the input element with.
    */
   async fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
-    await waitFor(() => { element.value === data; });
+    await waitFor(() => {
+      element.value === data;
+    });
   }
 }

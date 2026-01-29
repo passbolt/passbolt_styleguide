@@ -15,8 +15,8 @@
 /**
  * Unit tests on ActionAbortedMissingMetadataKeysPage in regard of specifications
  */
-import {waitFor} from "@testing-library/react";
-import {defaultProps} from "./ActionAbortedMissingMetadataKeysPage.test.data";
+import { waitFor } from "@testing-library/react";
+import { defaultProps } from "./ActionAbortedMissingMetadataKeysPage.test.data";
 import ActionAbortedMissingMetadataKeysPagePage from "./ActionAbortedMissingMetadataKeysPage.test.page";
 import expect from "expect";
 
@@ -25,7 +25,7 @@ beforeEach(() => {
 });
 
 describe("ActionAbortedMissingMetadataKeysPage", () => {
-  it("As a signed in user I can close the page with the submit button", async() => {
+  it("As a signed in user I can close the page with the submit button", async () => {
     expect.assertions(5);
     const props = defaultProps();
     jest.spyOn(props.history, "goBack");
@@ -42,7 +42,7 @@ describe("ActionAbortedMissingMetadataKeysPage", () => {
     expect(props.history.location.pathname).toStrictEqual("/home");
   });
 
-  it('As a signed in user I can close an action aborted missing metadata keys page', async() => {
+  it("As a signed in user I can close an action aborted missing metadata keys page", async () => {
     expect.assertions(3);
     const props = defaultProps();
     jest.spyOn(props.history, "goBack");
@@ -57,7 +57,7 @@ describe("ActionAbortedMissingMetadataKeysPage", () => {
     expect(props.history.location.pathname).toStrictEqual("/home");
   });
 
-  it('As a signed in user I can cancel with the keyboard (escape)', async() => {
+  it("As a signed in user I can cancel with the keyboard (escape)", async () => {
     expect.assertions(3);
     const props = defaultProps();
     jest.spyOn(props.history, "goBack");

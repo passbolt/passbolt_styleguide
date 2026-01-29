@@ -12,17 +12,16 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import AppContext from "../shared/context/AppContext/AppContext";
 import ApiAccountRecoveryContextProvider from "./contexts/ApiAccountRecoveryContext";
-import {ApiClientOptions} from "../shared/lib/apiClient/apiClientOptions";
+import { ApiClientOptions } from "../shared/lib/apiClient/apiClientOptions";
 import Footer from "./components/Common/Footer/Footer";
-import {ApiClient} from "../shared/lib/apiClient/apiClient";
+import { ApiClient } from "../shared/lib/apiClient/apiClient";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import ChangeApiRecoverLocale from "./components/Internationalisation/ChangeLocale/ChangeApiRecoverLocale";
-import OrchestrateApiAccountRecovery
-  from "./components/AuthenticationAccountRecovery/OrchestrateApiAccountRecovery/OrchestrateApiAccountRecovery";
+import OrchestrateApiAccountRecovery from "./components/AuthenticationAccountRecovery/OrchestrateApiAccountRecovery/OrchestrateApiAccountRecovery";
 import LogoSVG from "../img/svg/logo.svg";
 
 /**
@@ -63,8 +62,8 @@ class ApiAccountRecovery extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    await this.getSiteSettings();
-    this.initLocale();
+    const siteSettings = await this.getSiteSettings();
+    this.initLocale(siteSettings);
   }
 
   /**
@@ -88,9 +87,9 @@ class ApiAccountRecovery extends Component {
    * @return {string}
    */
   get baseUrl() {
-    const baseElement = document.getElementsByTagName('base') && document.getElementsByTagName('base')[0];
+    const baseElement = document.getElementsByTagName("base") && document.getElementsByTagName("base")[0];
     if (baseElement) {
-      return baseElement.attributes.href.value.replace(/\/*$/g, '');
+      return baseElement.attributes.href.value.replace(/\/*$/g, "");
     }
     console.error("Unable to retrieve the page base tag");
     return "";
@@ -101,8 +100,7 @@ class ApiAccountRecovery extends Component {
    * @returns {ApiClientOptions}
    */
   getApiClientOptions() {
-    return new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain);
+    return new ApiClientOptions().setBaseUrl(this.state.trustedDomain);
   }
 
   /**
@@ -110,12 +108,12 @@ class ApiAccountRecovery extends Component {
    * @returns {Promise<SiteSettings>}
    */
   async getSiteSettings() {
-    const apiClientOptions = this.getApiClientOptions()
-      .setResourceName("settings");
+    const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
-    const {body} = await apiClient.findAll();
+    const { body } = await apiClient.findAll();
     const siteSettings = new SiteSettings(body);
-    await this.setState({siteSettings});
+    this.setState({ siteSettings });
+    return siteSettings;
   }
 
   /**
@@ -126,25 +124,28 @@ class ApiAccountRecovery extends Component {
    * 2. The browser locale if supported;
    * 3. The browser similar locale;
    * 4. The organization locale;
+   * @param {SiteSettings} siteSettings The site settings
    * @warning Require the site settings to be fetch to work.
    */
-  initLocale() {
-    const locale = this.getUrlLocale()
-      || this.getBrowserLocale()
-      || this.getBrowserSimilarLocale()
-      || this.state.siteSettings.locale;
-    this.setState({locale});
+  initLocale(siteSettings) {
+    const locale =
+      this.getUrlLocale(siteSettings) ||
+      this.getBrowserLocale(siteSettings) ||
+      this.getBrowserSimilarLocale(siteSettings) ||
+      siteSettings.locale;
+    this.setState({ locale });
   }
 
   /**
    * Get the locale from the url i.e. ?locale=en-UK
+   * @param {SiteSettings} siteSettings The site settings
    * @returns {string}
    */
-  getUrlLocale() {
+  getUrlLocale(siteSettings) {
     const url = new URL(window.location.href);
-    const locale = url.searchParams.get('locale');
+    const locale = url.searchParams.get("locale");
     if (locale) {
-      const urlLocale = this.state.siteSettings.supportedLocales.find(supportedLocale => locale === supportedLocale.locale);
+      const urlLocale = siteSettings.supportedLocales.find((supportedLocale) => locale === supportedLocale.locale);
       if (urlLocale) {
         return urlLocale.locale;
       }
@@ -153,10 +154,13 @@ class ApiAccountRecovery extends Component {
 
   /**
    * Get the browser locale if supported.
+   * @param {SiteSettings} siteSettings The site settings
    * @returns {string}
    */
-  getBrowserLocale() {
-    const browserSupportedLocale = this.state.siteSettings.supportedLocales.find(supportedLocale => navigator.language === supportedLocale.locale);
+  getBrowserLocale(siteSettings) {
+    const browserSupportedLocale = siteSettings.supportedLocales.find(
+      (supportedLocale) => navigator.language === supportedLocale.locale,
+    );
     if (browserSupportedLocale) {
       return browserSupportedLocale.locale;
     }
@@ -164,11 +168,14 @@ class ApiAccountRecovery extends Component {
 
   /**
    * Get the browser similar locale if supported.
+   * @param {SiteSettings} siteSettings The site settings
    * @returns {string}
    */
-  getBrowserSimilarLocale() {
-    const nonExplicitLanguage = navigator.language.split('-')[0];
-    const similarSupportedLocale = this.state.siteSettings.supportedLocales.find(supportedLocale => nonExplicitLanguage === supportedLocale.locale.split('-')[0]);
+  getBrowserSimilarLocale(siteSettings) {
+    const nonExplicitLanguage = navigator.language.split("-")[0];
+    const similarSupportedLocale = siteSettings.supportedLocales.find(
+      (supportedLocale) => nonExplicitLanguage === supportedLocale.locale.split("-")[0],
+    );
     if (similarSupportedLocale) {
       return similarSupportedLocale.locale;
     }
@@ -179,7 +186,7 @@ class ApiAccountRecovery extends Component {
    * @param {string} locale The locale identifier
    */
   async onUpdateLocaleRequested(locale) {
-    await this.setState({locale});
+    await this.setState({ locale });
     this.setUrlLocale(locale);
   }
 
@@ -189,7 +196,7 @@ class ApiAccountRecovery extends Component {
    */
   setUrlLocale(locale) {
     const url = new URL(window.location.href);
-    url.searchParams.set('locale', locale);
+    url.searchParams.set("locale", locale);
     window.history.replaceState(null, null, url);
   }
 
@@ -208,26 +215,28 @@ class ApiAccountRecovery extends Component {
   render() {
     return (
       <AppContext.Provider value={this.state}>
-        {this.isReady() &&
-        <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
-          <ApiAccountRecoveryContextProvider value={{userId: this.userId, authenticationToken: this.authenticationToken}}>
-            <div id="container" className="container page login">
-              <div className="content">
-                <div className="header">
-                  <div className="logo-svg">
-                    <LogoSVG role="img" width="20rem" height="3.5rem"/>
+        {this.isReady() && (
+          <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
+            <ApiAccountRecoveryContextProvider
+              value={{ userId: this.userId, authenticationToken: this.authenticationToken }}
+            >
+              <div id="container" className="container page login">
+                <div className="content">
+                  <div className="header">
+                    <div className="logo-svg">
+                      <LogoSVG role="img" width="20rem" height="3.5rem" />
+                    </div>
                   </div>
+                  <div className="login-form">
+                    <OrchestrateApiAccountRecovery />
+                  </div>
+                  <ChangeApiRecoverLocale />
                 </div>
-                <div className="login-form">
-                  <OrchestrateApiAccountRecovery/>
-                </div>
-                <ChangeApiRecoverLocale/>
+                <Footer />
               </div>
-              <Footer/>
-            </div>
-          </ApiAccountRecoveryContextProvider>
-        </TranslationProvider>
-        }
+            </ApiAccountRecoveryContextProvider>
+          </TranslationProvider>
+        )}
       </AppContext.Provider>
     );
   }

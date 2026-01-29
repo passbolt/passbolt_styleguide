@@ -12,11 +12,14 @@
  * @since         4.4.0
  */
 
-import {PasswordExpirySettingsContextProvider} from "./PasswordExpirySettingsContext";
-import {defaultPasswordExpirySettingsEntityDto, passwordExpirySettingsEntityDtoFromApi} from "../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
-import {defaultProps} from "./PasswordExpirySettingsContext.test.data";
-import {v4 as uuid} from 'uuid';
-import {waitFor} from "@testing-library/dom";
+import { PasswordExpirySettingsContextProvider } from "./PasswordExpirySettingsContext";
+import {
+  defaultPasswordExpirySettingsEntityDto,
+  passwordExpirySettingsEntityDtoFromApi,
+} from "../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
+import { defaultProps } from "./PasswordExpirySettingsContext.test.data";
+import { v4 as uuid } from "uuid";
+import { waitFor } from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -24,14 +27,14 @@ beforeEach(() => {
 });
 
 describe("PasswordExpirySettingsContext", () => {
-  describe('::findSettings', () => {
-    it('should not call for passbolt.password-expiry.get-or-find if the feature flag is disabled', async() => {
+  describe("::findSettings", () => {
+    it("should not call for passbolt.password-expiry.get-or-find if the feature flag is disabled", async () => {
       expect.assertions(1);
 
       const props = defaultProps();
       props.context.siteSettings.canIUse = () => false;
 
-      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => {
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => {
         throw new Error("Shouldn't not be called");
       });
 
@@ -42,13 +45,13 @@ describe("PasswordExpirySettingsContext", () => {
       expect(context.getSettings()).toStrictEqual(null);
     });
 
-    it('should call for passbolt.password-expiry.get-or-find to retrieve the settings', async() => {
+    it("should call for passbolt.password-expiry.get-or-find to retrieve the settings", async () => {
       expect.assertions(1);
 
       const expectedSettings = defaultPasswordExpirySettingsEntityDto();
 
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => expectedSettings);
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => expectedSettings);
 
       const context = new PasswordExpirySettingsContextProvider(props);
       mockState(context);
@@ -57,14 +60,14 @@ describe("PasswordExpirySettingsContext", () => {
       expect(context.getSettings()).toStrictEqual(expectedSettings);
     });
 
-    it('should not called twice passbolt.password-expiry.get-or-find', async() => {
+    it("should not called twice passbolt.password-expiry.get-or-find", async () => {
       expect.assertions(2);
 
       const expectedSettings = defaultPasswordExpirySettingsEntityDto();
 
       let callCount = 0;
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => {
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => {
         callCount++;
         return expectedSettings;
       });
@@ -79,26 +82,26 @@ describe("PasswordExpirySettingsContext", () => {
     });
   });
 
-  describe('::getSettings', () => {
-    it('should return the `settings` value', async() => {
+  describe("::getSettings", () => {
+    it("should return the `settings` value", async () => {
       expect.assertions(1);
 
       const props = defaultProps();
       const context = new PasswordExpirySettingsContextProvider(props);
       mockState(context);
 
-      const expectedSettings = {id: uuid()};
+      const expectedSettings = { id: uuid() };
 
       context.setState({
-        settings: expectedSettings
+        settings: expectedSettings,
       });
 
       expect(context.getSettings()).toStrictEqual(expectedSettings);
     });
   });
 
-  describe('::isFeatureEnabled', () => {
-    it('should return false if the feature flag is disabled', async() => {
+  describe("::isFeatureEnabled", () => {
+    it("should return false if the feature flag is disabled", async () => {
       expect.assertions(1);
 
       const props = defaultProps();
@@ -108,13 +111,13 @@ describe("PasswordExpirySettingsContext", () => {
       expect(context.isFeatureEnabled()).toStrictEqual(false);
     });
 
-    it('should return false if the feature flag is enabled but settings is disabled', async() => {
+    it("should return false if the feature flag is enabled but settings is disabled", async () => {
       expect.assertions(1);
 
       const expectedSettings = defaultPasswordExpirySettingsEntityDto();
 
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => expectedSettings);
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => expectedSettings);
 
       const context = new PasswordExpirySettingsContextProvider(props);
       mockState(context);
@@ -123,13 +126,13 @@ describe("PasswordExpirySettingsContext", () => {
       expect(context.isFeatureEnabled()).toStrictEqual(false);
     });
 
-    it('should return true if the feature flag is enabled and settings is enabled', async() => {
+    it("should return true if the feature flag is enabled and settings is enabled", async () => {
       expect.assertions(1);
 
       const expectedSettings = passwordExpirySettingsEntityDtoFromApi();
 
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => expectedSettings);
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => expectedSettings);
 
       const context = new PasswordExpirySettingsContextProvider(props);
       mockState(context);
@@ -140,7 +143,7 @@ describe("PasswordExpirySettingsContext", () => {
   });
 
   describe("::getDefaultExpirationDate", () => {
-    it('should return null if the feature flag is disabled', async() => {
+    it("should return null if the feature flag is disabled", async () => {
       expect.assertions(1);
 
       const props = defaultProps();
@@ -150,7 +153,7 @@ describe("PasswordExpirySettingsContext", () => {
       expect(context.getDefaultExpirationDate()).toStrictEqual(null);
     });
 
-    it('should return 0 if there is no settings set', async() => {
+    it("should return 0 if there is no settings set", async () => {
       expect.assertions(1);
 
       const props = defaultProps();
@@ -161,12 +164,10 @@ describe("PasswordExpirySettingsContext", () => {
     });
 
     // @todo move this to a service
-    it('should return the date from the settings', async() => {
+    it("should return the date from the settings", async () => {
       expect.assertions(1);
 
-      jest
-        .useFakeTimers()
-        .setSystemTime(new Date("2024-01-01T00:00:00.000Z"));
+      jest.useFakeTimers().setSystemTime(new Date("2024-01-01T00:00:00.000Z"));
 
       const expectedPeriod = 5;
       const expectedSettings = defaultPasswordExpirySettingsEntityDto({
@@ -174,7 +175,7 @@ describe("PasswordExpirySettingsContext", () => {
       });
 
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', async() => expectedSettings);
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", async () => expectedSettings);
 
       const context = new PasswordExpirySettingsContextProvider(props);
       mockState(context);
@@ -190,9 +191,9 @@ describe("PasswordExpirySettingsContext", () => {
 });
 
 function mockState(contextProvider) {
-  const setStateMock = state => {
+  const setStateMock = (state) => {
     let newState;
-    if (typeof state  === 'function') {
+    if (typeof state === "function") {
       newState = state(contextProvider.state);
     } else {
       newState = state;
@@ -201,4 +202,3 @@ function mockState(contextProvider) {
   };
   jest.spyOn(contextProvider, "setState").mockImplementation(setStateMock);
 }
-

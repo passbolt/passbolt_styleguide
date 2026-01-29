@@ -23,26 +23,22 @@ class ExternalGpgSignatureEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "issuer_fingerprint",
-        "is_verified",
-        "created"
-      ],
-      "properties": {
-        "issuer_fingerprint": {
-          "type": "string",
-          "minLength": FINGERPRINT_MIN_LENGTH,
-          "maxLength": FINGERPRINT_MAX_LENGTH
+      type: "object",
+      required: ["issuer_fingerprint", "is_verified", "created"],
+      properties: {
+        issuer_fingerprint: {
+          type: "string",
+          minLength: FINGERPRINT_MIN_LENGTH,
+          maxLength: FINGERPRINT_MAX_LENGTH,
         },
-        "is_verified": {
-          "type": "boolean"
+        is_verified: {
+          type: "boolean",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
+        created: {
+          type: "string",
+          format: "date-time",
+        },
+      },
     };
   }
 

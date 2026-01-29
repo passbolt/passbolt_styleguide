@@ -11,9 +11,9 @@
  * @link          https=//www.passbolt.com Passbolt(tm)
  * @since         3.8.0
  */
-import UserDirectoryDTO from './UserDirectoryDTO';
-import {mockedData} from './UserDirectoryDTO.test.data';
-import {mockModel} from '../../../react-extension/components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data';
+import UserDirectoryDTO from "./UserDirectoryDTO";
+import { mockedData } from "./UserDirectoryDTO.test.data";
+import { mockModel } from "../../../react-extension/components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
 
 /**
  * Test model related to the user dto
@@ -27,7 +27,7 @@ describe("UserDirectoryDTO model", () => {
     });
     it("should init with default value if directory type is openldap", () => {
       expect.assertions(5);
-      const model = Object.assign({}, mockModel, {userDirectoryModel: "openldap"});
+      const model = Object.assign({}, mockModel, { userDirectoryModel: "openldap" });
       const dto = new UserDirectoryDTO(model);
       expect(dto.group_object_class).toEqual("");
       expect(dto.user_object_class).toEqual("");
@@ -51,5 +51,3 @@ describe("UserDirectoryDTO model", () => {
     });
   });
 });
-
-

@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.2.0
  */
-import i18n from 'i18next';
-import {I18nextProvider} from 'react-i18next';
-import HttpApi from 'i18next-http-backend';
-import React, {Component} from "react";
+import i18n from "i18next";
+import { I18nextProvider } from "react-i18next";
+import HttpApi from "i18next-http-backend";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 /**
  * The locales default url.
  * @type {string}
  */
-const DEFAULT_LOCALE_URL = '/locales/{{lng}}/{{ns}}.json';
+const DEFAULT_LOCALE_URL = "/locales/{{lng}}/{{ns}}.json";
 
 /**
  * This component set up the translation process
@@ -37,7 +37,7 @@ class TranslationProvider extends Component {
    */
   get defaultState() {
     return {
-      i18next: null // The i18next instance
+      i18next: null, // The i18next instance
     };
   }
 
@@ -78,7 +78,7 @@ class TranslationProvider extends Component {
       // I18next plugin used to load the translations json over http.
       .use(HttpApi)
       // init i18next, once done store the i18next instance in the state.
-      .init(this.i18nextOptions, () => this.setState({i18next, locale: this.props.locale}));
+      .init(this.i18nextOptions, () => this.setState({ i18next, locale: this.props.locale }));
   }
 
   /**
@@ -94,7 +94,7 @@ class TranslationProvider extends Component {
         useSuspense: false,
       },
       backend: {
-        loadPath: (lngs, namespaces) => this.getTranslationPath(lngs, namespaces)
+        loadPath: (lngs, namespaces) => this.getTranslationPath(lngs, namespaces),
       },
       supportedLngs: this.supportedLocales,
       fallbackLng: false,
@@ -130,11 +130,9 @@ class TranslationProvider extends Component {
     const lng = lngs[0];
     const ns = namespaces[0];
     // i18next is doing a fallback on en-GB we are redirecting to our en-UK folder
-    const actualLng = lng === 'en-GB' ? 'en-UK' : lng;
+    const actualLng = lng === "en-GB" ? "en-UK" : lng;
     const basePath = this.props.loadingPath;
-    return basePath
-      .replace('{{lng}}', actualLng)
-      .replace('{{ns}}', ns);
+    return basePath.replace("{{lng}}", actualLng).replace("{{ns}}", ns);
   }
 
   /**
@@ -144,12 +142,11 @@ class TranslationProvider extends Component {
   get supportedLocales() {
     const locales = [this.props.locale];
 
-    if (locales.includes('en-UK')) {
-      locales.push('en-GB'); //Need to add the locale to support i18next fallback as en-UK is not supported
+    if (locales.includes("en-UK")) {
+      locales.push("en-GB"); //Need to add the locale to support i18next fallback as en-UK is not supported
     }
     return locales;
   }
-
 
   /**
    * Render the component.
@@ -158,11 +155,9 @@ class TranslationProvider extends Component {
   render() {
     return (
       <>
-        {// Waiting for the i18n initialization to be completed
-          this.isReady &&
-          <I18nextProvider i18n={this.state.i18next}>
-            {this.props.children}
-          </I18nextProvider>
+        {
+          // Waiting for the i18n initialization to be completed
+          this.isReady && <I18nextProvider i18n={this.state.i18next}>{this.props.children}</I18nextProvider>
         }
       </>
     );
@@ -172,11 +167,11 @@ class TranslationProvider extends Component {
 TranslationProvider.propTypes = {
   loadingPath: PropTypes.any, // The way to load translations files
   children: PropTypes.any, // The children components
-  locale: PropTypes.string // The locale to use. i.e. en-UK
+  locale: PropTypes.string, // The locale to use. i.e. en-UK
 };
 
 TranslationProvider.defaultProps = {
-  loadingPath: DEFAULT_LOCALE_URL
+  loadingPath: DEFAULT_LOCALE_URL,
 };
 
 export default TranslationProvider;

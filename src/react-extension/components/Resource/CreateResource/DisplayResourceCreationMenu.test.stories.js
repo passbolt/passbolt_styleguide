@@ -19,16 +19,18 @@ import {
   fullV4AndPartialV5ContentTypes,
   fullV5AndPartialV4ContentTypes,
   onlyV4ContentTypesProps,
-  onlyV5ContentTypesProps
+  onlyV5ContentTypesProps,
 } from "./DisplayResourceCreationMenu.test.data";
 
 export default {
-  title: 'Components/Resource/DisplayCreateResourceMenu',
+  title: "Components/Resource/DisplayCreateResourceMenu",
   component: DisplayResourceCreationMenu,
-  decorators: [(Story, {args}) =>
-    <div style={{margin: "-1rem"}}>
-      <Story {...args}/>
-    </div>
+  decorators: [
+    (Story, { args }) => (
+      <div style={{ margin: "-1rem" }}>
+        <Story {...args} />
+      </div>
+    ),
   ],
 };
 

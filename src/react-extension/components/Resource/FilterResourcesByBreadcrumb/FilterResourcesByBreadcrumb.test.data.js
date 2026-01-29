@@ -1,12 +1,10 @@
-
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-  };
+  const defaultAppContext = {};
   return Object.assign(defaultAppContext, appContext || {});
 }
 
@@ -23,8 +21,8 @@ export function defaultResourceWorkspaceContext(type, payload, numberOfResources
   return {
     filter: {
       type,
-      payload
+      payload,
     },
-    filteredResources: resources
+    filteredResources: resources,
   };
 }

@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import DisplayRestartFromScratchError from "./DisplayRestartFromScratchError";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -27,9 +27,9 @@ export default class DisplayRestartFromScratchErrorPage {
   constructor() {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayRestartFromScratchError/>
+        <DisplayRestartFromScratchError />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -37,21 +37,21 @@ export default class DisplayRestartFromScratchErrorPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.setup-error h1').textContent;
+    return this._page.container.querySelector(".setup-error h1").textContent;
   }
 
   /**
    * Returns the message
    */
   get message() {
-    return this._page.container.querySelector('.setup-error p').textContent;
+    return this._page.container.querySelector(".setup-error p").textContent;
   }
 
   /**
    * Restart from scratch link
    */
   get linkToRestartFromScratch() {
-    return this._page.container.querySelector('.setup-error .form-actions .button.primary.big').textContent;
+    return this._page.container.querySelector(".setup-error .form-actions .button.primary.big").textContent;
   }
 
   /**

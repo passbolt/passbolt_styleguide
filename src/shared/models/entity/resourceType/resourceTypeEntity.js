@@ -13,16 +13,19 @@
  */
 import EntityV2 from "../../entity/abstract/entityV2";
 import EntitySchema from "../abstract/entitySchema";
-import {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "../metadata/metadataTypesSettingsEntity";
-import {ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET} from "../resource/metadata/IconEntity";
+import { RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5 } from "../metadata/metadataTypesSettingsEntity";
+import { ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET } from "../resource/metadata/IconEntity";
 import ResourceTypeSchemasDefinition, {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   RESOURCE_TYPE_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_TOTP_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG, RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG, RESOURCE_TYPE_V5_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG
+  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
+  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
 } from "./resourceTypeSchemasDefinition";
 
 const RESOURCE_TYPE_NAME_MAX_LENGTH = 255;
@@ -35,24 +38,21 @@ export const PASSWORD_RESOURCE_TYPES = [
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
-  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG
+  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
 ];
 
 export const TOTP_RESOURCE_TYPES = [
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   RESOURCE_TYPE_TOTP_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG,
 ];
 
-export const STANDALONE_TOTP_RESOURCE_TYPES = [
-  RESOURCE_TYPE_TOTP_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
-];
+export const STANDALONE_TOTP_RESOURCE_TYPES = [RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_TOTP_SLUG];
 
 export const PASSWORD_STRING_RESOURCE_TYPES = [
   RESOURCE_TYPE_PASSWORD_STRING_SLUG,
-  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG
+  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
 ];
 
 export const SECRET_DESCRIPTION_RESOURCE_TYPES = [
@@ -60,7 +60,7 @@ export const SECRET_DESCRIPTION_RESOURCE_TYPES = [
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
 ];
 
 export const METADATA_DESCRIPTION_RESOURCE_TYPES = [
@@ -70,13 +70,13 @@ export const METADATA_DESCRIPTION_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
 ];
 
 export const CUSTOM_FIELDS_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
-  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
 ];
 
 class ResourceTypeEntity extends EntityV2 {
@@ -101,73 +101,68 @@ class ResourceTypeEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "id",
-        "name",
-        "slug",
-        "definition",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["id", "name", "slug", "definition"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": RESOURCE_TYPE_NAME_MAX_LENGTH
+        name: {
+          type: "string",
+          minLength: 1,
+          maxLength: RESOURCE_TYPE_NAME_MAX_LENGTH,
         },
-        "slug": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": RESOURCE_TYPE_SLUG_MAX_LENGTH
+        slug: {
+          type: "string",
+          minLength: 1,
+          maxLength: RESOURCE_TYPE_SLUG_MAX_LENGTH,
         },
-        "definition": {
-          "type": "object"
+        definition: {
+          type: "object",
         },
-        "description": {
-          "type": "string",
-          "maxLength": RESOURCE_TYPE_DESCRIPTION_MAX_LENGTH,
-          "nullable": true,
+        description: {
+          type: "string",
+          maxLength: RESOURCE_TYPE_DESCRIPTION_MAX_LENGTH,
+          nullable: true,
         },
-        "icon": {
-          "type": "object",
-          "required": [],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
             },
-            "value": {
-              "type": "number",
-              "minimum": 0,
-              "nullable": true
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true,
             },
-            "background_color": {
-              "type": "string",
-              "pattern": /^#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/,
-              "nullable": true,
+            background_color: {
+              type: "string",
+              pattern: /^#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/,
+              nullable: true,
             },
-          }
+          },
         },
-        "resources_count": {
-          "type": "integer",
+        resources_count: {
+          type: "integer",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "deleted": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true,
-        }
-      }
+        deleted: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
+        },
+      },
     };
   }
 
@@ -308,8 +303,7 @@ class ResourceTypeEntity extends EntityV2 {
    * @returns {boolean}
    */
   isDeleted() {
-    return typeof(this._props.deleted) !== "undefined"
-      && this._props.deleted !== null;
+    return typeof this._props.deleted !== "undefined" && this._props.deleted !== null;
   }
 }
 

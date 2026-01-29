@@ -13,11 +13,11 @@
  */
 
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
-import {defaultAppContext} from "./ExportResources.test.data";
+import { defaultAppContext } from "./ExportResources.test.data";
 
 export default {
-  title: 'Components/Resource/ExportResources/ExportResourcesCredentials',
-  component: ExportResourcesCredentials
+  title: "Components/Resource/ExportResources/ExportResourcesCredentials",
+  component: ExportResourcesCredentials,
 };
 
 export const Initial = {
@@ -26,11 +26,11 @@ export const Initial = {
       resourceFileImportResult: {
         created: {
           foldersCount: 10,
-          resourcesCount: 15
-        }
-      }
+          resourcesCount: 15,
+        },
+      },
     },
     onClose: () => {},
     context: defaultAppContext(),
-  }
+  },
 };

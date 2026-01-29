@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.12.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import AppContext from "../shared/context/AppContext/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
@@ -82,23 +82,23 @@ class ExtAuthenticationSetup extends Component {
   async getSiteSettings() {
     const settings = await this.props.port.request("passbolt.organization-settings.get");
     const siteSettings = new SiteSettings(settings);
-    this.setState({siteSettings});
+    this.setState({ siteSettings });
   }
 
   /**
    * Get extension version
    */
   async getExtensionVersion() {
-    const extensionVersion = await this.props.port.request('passbolt.addon.get-version');
-    this.setState({extensionVersion});
+    const extensionVersion = await this.props.port.request("passbolt.addon.get-version");
+    this.setState({ extensionVersion });
   }
 
   /**
    * Init the locale
    */
   async initLocale() {
-    const {locale} = await this.props.port.request("passbolt.setup.get-and-init-locale");
-    this.setState({locale});
+    const { locale } = await this.props.port.request("passbolt.setup.get-and-init-locale");
+    this.setState({ locale });
   }
 
   /**
@@ -106,9 +106,9 @@ class ExtAuthenticationSetup extends Component {
    * @param {string} locale The locale identifier
    */
   async onUpdateLocaleRequested(locale) {
-    const localeDto = {locale};
+    const localeDto = { locale };
     await this.props.port.request("passbolt.setup.update-locale", localeDto);
-    this.setState({locale});
+    this.setState({ locale });
   }
 
   /**
@@ -117,26 +117,26 @@ class ExtAuthenticationSetup extends Component {
   render() {
     return (
       <AppContext.Provider value={this.state}>
-        {this.isReady() &&
-        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-          <AuthenticationSetupContextProvider>
-            <div id="container" className="container page login">
-              <div className="content">
-                <div className="header">
-                  <div className="logo-svg">
-                    <LogoSVG role="img" width="20rem" height="3.5rem"/>
+        {this.isReady() && (
+          <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+            <AuthenticationSetupContextProvider>
+              <div id="container" className="container page login">
+                <div className="content">
+                  <div className="header">
+                    <div className="logo-svg">
+                      <LogoSVG role="img" width="20rem" height="3.5rem" />
+                    </div>
                   </div>
+                  <div className="login-form">
+                    <SetupAuthentication />
+                  </div>
+                  <ChangeLocale />
                 </div>
-                <div className="login-form">
-                  <SetupAuthentication/>
-                </div>
-                <ChangeLocale/>
+                <Footer />
               </div>
-              <Footer/>
-            </div>
-          </AuthenticationSetupContextProvider>
-        </TranslationProvider>
-        }
+            </AuthenticationSetupContextProvider>
+          </TranslationProvider>
+        )}
       </AppContext.Provider>
     );
   }

@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 
 class ConfirmMigrateMetadataDialog extends React.Component {
@@ -33,7 +33,7 @@ class ConfirmMigrateMetadataDialog extends React.Component {
    */
   get defaultState() {
     return {
-      processing: false
+      processing: false,
     };
   }
 
@@ -78,15 +78,34 @@ class ConfirmMigrateMetadataDialog extends React.Component {
   render() {
     const isDisabled = this.hasAllInputDisabled();
     return (
-      <DialogWrapper className='confirm-migrate-metadata-dialog' title={this.props.t("Please confirm")} onClose={this.handleCancel} disabled={isDisabled}>
+      <DialogWrapper
+        className="confirm-migrate-metadata-dialog"
+        title={this.props.t("Please confirm")}
+        onClose={this.handleCancel}
+        disabled={isDisabled}
+      >
         <div className="form-content">
-          <p><strong><Trans>Are you sure you want to migrate the selected items to use encrypted metadata?</Trans></strong></p>
-          <p><Trans>If you have integrations, you will have to make sure they are updated before triggering the migration.</Trans></p>
-          <p><Trans>The operation may take a few minutes.</Trans></p>
+          <p>
+            <strong>
+              <Trans>Are you sure you want to migrate the selected items to use encrypted metadata?</Trans>
+            </strong>
+          </p>
+          <p>
+            <Trans>
+              If you have integrations, you will have to make sure they are updated before triggering the migration.
+            </Trans>
+          </p>
+          <p>
+            <Trans>The operation may take a few minutes.</Trans>
+          </p>
         </div>
         <div className="submit-wrapper clearfix">
-          <button type="button" className="link cancel" onClick={this.handleCancel} disabled={isDisabled}><Trans>Cancel</Trans></button>
-          <button type="button" className="button primary form" onClick={this.handleConfirm} disabled={isDisabled}><Trans>Migrate</Trans></button>
+          <button type="button" className="link cancel" onClick={this.handleCancel} disabled={isDisabled}>
+            <Trans>Cancel</Trans>
+          </button>
+          <button type="button" className="button primary form" onClick={this.handleConfirm} disabled={isDisabled}>
+            <Trans>Migrate</Trans>
+          </button>
         </div>
       </DialogWrapper>
     );
@@ -100,4 +119,4 @@ ConfirmMigrateMetadataDialog.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(ConfirmMigrateMetadataDialog);
+export default withTranslation("common")(ConfirmMigrateMetadataDialog);

@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 
 class CheckAccountRecoveryEmail extends Component {
   /**
@@ -23,11 +23,20 @@ class CheckAccountRecoveryEmail extends Component {
     // @todo review style as per figma
     return (
       <div className="email-sent-instructions">
-        <div className="email-sent-bg">
-        </div>
-        <h1><Trans>Please wait, while your request is processed.</Trans></h1>
-        <p><Trans>As soon as an administrator validates your request you will receive an email link to complete the process.</Trans></p>
-        <p><b><Trans>You need use the same computer and browser to finalize the process.</Trans></b></p>
+        <div className="email-sent-bg"></div>
+        <h1>
+          <Trans>Please wait, while your request is processed.</Trans>
+        </h1>
+        <p>
+          <Trans>
+            As soon as an administrator validates your request you will receive an email link to complete the process.
+          </Trans>
+        </p>
+        <p>
+          <b>
+            <Trans>You need use the same computer and browser to finalize the process.</Trans>
+          </b>
+        </p>
       </div>
     );
   }

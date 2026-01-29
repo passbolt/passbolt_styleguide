@@ -11,8 +11,11 @@
  * @link          https=//www.passbolt.com Passbolt(tm)
  * @since         3.8.0
  */
-import SubscriptionDto from './SubscriptionDto';
-import {mockSubscription, mockSubscriptionModel} from '../../../react-extension/components/Administration/DisplaySubscriptionKey/DisplaySubscriptionKey.test.data';
+import SubscriptionDto from "./SubscriptionDto";
+import {
+  mockSubscription,
+  mockSubscriptionModel,
+} from "../../../react-extension/components/Administration/DisplaySubscriptionKey/DisplaySubscriptionKey.test.data";
 
 /**
  * Test model related to the subscription dto
@@ -26,6 +29,3 @@ describe("SubscriptionDto model", () => {
     });
   });
 });
-
-
-

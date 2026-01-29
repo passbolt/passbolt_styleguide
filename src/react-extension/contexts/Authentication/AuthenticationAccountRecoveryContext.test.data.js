@@ -13,7 +13,7 @@
  */
 
 import MockPort from "../../test/mock/MockPort";
-import {defaultAppContext} from "../ExtAppContext.test.data";
+import { defaultAppContext } from "../ExtAppContext.test.data";
 
 /**
  * Default app context for authentication account recovery context.

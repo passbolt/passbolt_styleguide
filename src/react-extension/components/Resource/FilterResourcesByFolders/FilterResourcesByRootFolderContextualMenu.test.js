@@ -12,11 +12,11 @@
  * @since         2.11.0
  */
 
-import {defaultProps, propsWithDenyUiAction} from "./FilterResourcesByRootFolderContextualMenu.test.data";
+import { defaultProps, propsWithDenyUiAction } from "./FilterResourcesByRootFolderContextualMenu.test.data";
 import FilterResourcesByRootFolderContextualMenuPage from "./FilterResourcesByRootFolderContextualMenu.test.page";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import ExportResources from "../ExportResources/ExportResources";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -31,34 +31,34 @@ describe("FilterResourcesByRootFolderContextualMenu", () => {
     page = new FilterResourcesByRootFolderContextualMenuPage(props);
   });
 
-  describe('As LU I can create folder at the root', () => {
-    it('As LU I can create folder at the root', async() => {
+  describe("As LU I can create folder at the root", () => {
+    it("As LU I can create folder at the root", async () => {
       await page.foldersTreeRootFolderContextualMenu.createFolder();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder, {folderParentId: null});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder, { folderParentId: null });
       expect(props.hide).toHaveBeenCalled();
     });
   });
 
-  describe('As LU I can export folder at the root', () => {
-    it('As LU I can start to export a folder', async() => {
+  describe("As LU I can export folder at the root", () => {
+    it("As LU I can start to export a folder", async () => {
       await page.foldersTreeRootFolderContextualMenu.exportFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(ExportResources);
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it('As LU I cannot export folder if disabled by API flag', async() => {
+    it("As LU I cannot export folder if disabled by API flag", async () => {
       const appContext = {
         siteSettings: {
-          canIUse: () => false
-        }
+          canIUse: () => false,
+        },
       };
       const context = defaultUserAppContext(appContext); // The applicative context
-      props = defaultProps({context});
+      props = defaultProps({ context });
       page = new FilterResourcesByRootFolderContextualMenuPage(props);
       expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(2)).toBeUndefined();
     });
 
-    it('As LU I cannot export folder if denied by RBAC', async() => {
+    it("As LU I cannot export folder if denied by RBAC", async () => {
       const props = propsWithDenyUiAction(); // The props to pass
       page = new FilterResourcesByRootFolderContextualMenuPage(props);
       expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(2)).toBeUndefined();

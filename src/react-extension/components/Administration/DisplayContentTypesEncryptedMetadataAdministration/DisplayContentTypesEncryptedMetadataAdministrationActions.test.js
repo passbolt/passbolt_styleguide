@@ -12,9 +12,8 @@
  * @since         4.11.0
  */
 
-import DisplayContentTypesEncryptedMetadataAdministrationActionsPage
-  from "./DisplayContentTypesEncryptedMetadataAdministrationActions.test.page";
-import {defaultProps} from "./DisplayContentTypesEncryptedMetadataAdministrationActions.test.data";
+import DisplayContentTypesEncryptedMetadataAdministrationActionsPage from "./DisplayContentTypesEncryptedMetadataAdministrationActions.test.page";
+import { defaultProps } from "./DisplayContentTypesEncryptedMetadataAdministrationActions.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -23,7 +22,7 @@ beforeEach(() => {
 describe("DisplayContentTypesEncryptedMetadataAdministrationActions", () => {
   let page; // The page to test against
 
-  it('displays the save button as enabled if the component is not processing', async() => {
+  it("displays the save button as enabled if the component is not processing", async () => {
     expect.assertions(2);
     const props = defaultProps();
     page = new DisplayContentTypesEncryptedMetadataAdministrationActionsPage(props);
@@ -31,15 +30,15 @@ describe("DisplayContentTypesEncryptedMetadataAdministrationActions", () => {
     expect(page.saveButton.hasAttribute("disabled")).toBeFalsy();
   });
 
-  it('displays the save button as disabled if the component is processing', async() => {
+  it("displays the save button as disabled if the component is processing", async () => {
     expect.assertions(2);
-    const props = defaultProps({isProcessing: true});
+    const props = defaultProps({ isProcessing: true });
     page = new DisplayContentTypesEncryptedMetadataAdministrationActionsPage(props);
     expect(page.exists()).toBeTruthy();
     expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
   });
 
-  it('call the onSaveRequested callback when clicking on the save button', async() => {
+  it("call the onSaveRequested callback when clicking on the save button", async () => {
     expect.assertions(1);
     const props = defaultProps();
     jest.spyOn(props, "onSaveRequested");

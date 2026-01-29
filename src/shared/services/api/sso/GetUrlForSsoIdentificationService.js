@@ -12,7 +12,7 @@
  * @since         3.11.0
  */
 
-import {ApiClient} from "../../../lib/apiClient/apiClient";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
 import AzureSsoSettingsEntity from "../../../models/entity/ssoSettings/AzureSsoSettingsEntity";
 import GoogleSsoSettingsEntity from "../../../models/entity/ssoSettings/GoogleSsoSettingsEntity";
 
@@ -48,12 +48,12 @@ class GetUrlForSsoIdentificationService {
     const supportedUrl = SSO_LOGIN_SUPPORTED_URLS[providerId];
 
     if (!supportedUrl) {
-      throw new Error('The url should be part of the list of supported single sign-on urls.');
+      throw new Error("The url should be part of the list of supported single sign-on urls.");
     }
 
-    const isValidUrl = supportedUrl.some(supportedUrl => supportedUrl === url.origin);
+    const isValidUrl = supportedUrl.some((supportedUrl) => supportedUrl === url.origin);
     if (!isValidUrl) {
-      throw new Error('The url should be part of the list of supported single sign-on urls.');
+      throw new Error("The url should be part of the list of supported single sign-on urls.");
     }
 
     return url;
@@ -61,4 +61,3 @@ class GetUrlForSsoIdentificationService {
 }
 
 export default GetUrlForSsoIdentificationService;
-

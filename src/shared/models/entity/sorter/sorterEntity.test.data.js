@@ -14,8 +14,8 @@
 
 export const defaultSorterData = (data = {}) => {
   const defaultData = {
-    "propertyName": "name",
-    "asc": true
+    propertyName: "name",
+    asc: true,
   };
 
   return Object.assign(defaultData, data);

@@ -14,11 +14,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withActionFeedback} from '../../../../contexts/ActionFeedbackContext';
-import {
-  withAdministrationHealthcheck
-} from "../../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
+import { withAdministrationHealthcheck } from "../../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext";
 import RefreshSVG from "../../../../../img/svg/refresh.svg";
 
 /**
@@ -47,7 +45,10 @@ class DisplayAdministrationHealthcheckActions extends React.Component {
    * @returns {boolean}
    */
   isRefreshEnabled() {
-    return this.props.adminHealthcheckContext.isHealthcheckEndpointEnabled() && !this.props.adminHealthcheckContext.isProcessing();
+    return (
+      this.props.adminHealthcheckContext.isHealthcheckEndpointEnabled() &&
+      !this.props.adminHealthcheckContext.isProcessing()
+    );
   }
 
   /**
@@ -64,7 +65,9 @@ class DisplayAdministrationHealthcheckActions extends React.Component {
    * Handle save operation success.
    */
   async handleRefreshSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The healthcheck has been successfully refreshed"));
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.props.t("The healthcheck has been successfully refreshed"),
+    );
   }
 
   /**
@@ -78,9 +81,16 @@ class DisplayAdministrationHealthcheckActions extends React.Component {
           <div>
             <ul>
               <li>
-                <button type="button" disabled={!this.isRefreshEnabled()} id="save-settings" onClick={this.handleRefresh}>
-                  <RefreshSVG/>
-                  <span><Trans>Refresh</Trans></span>
+                <button
+                  type="button"
+                  disabled={!this.isRefreshEnabled()}
+                  id="save-settings"
+                  onClick={this.handleRefresh}
+                >
+                  <RefreshSVG />
+                  <span>
+                    <Trans>Refresh</Trans>
+                  </span>
                 </button>
               </li>
             </ul>
@@ -97,6 +107,6 @@ DisplayAdministrationHealthcheckActions.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAdministrationHealthcheck(withActionFeedback(withTranslation("common")(DisplayAdministrationHealthcheckActions)));
-
-
+export default withAdministrationHealthcheck(
+  withActionFeedback(withTranslation("common")(DisplayAdministrationHealthcheckActions)),
+);

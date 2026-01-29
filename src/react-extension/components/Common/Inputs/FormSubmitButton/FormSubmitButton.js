@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import SpinnerSVG from "../../../../../img/svg/spinner.svg";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class FormSubmitButton extends Component {
   /**
@@ -39,26 +39,26 @@ class FormSubmitButton extends Component {
    * @returns {string}
    */
   getClassName() {
-    let name = 'button primary form';
+    let name = "button primary form";
     if (this.props.warning) {
-      name += ' warning';
+      name += " warning";
     } else if (this.props.attention) {
-      name += ' attention';
+      name += " attention";
     }
     if (this.props.disabled) {
-      name += ' disabled';
+      name += " disabled";
     }
     if (this.props.processing) {
-      name += ' processing';
+      name += " processing";
     }
     if (this.props.big) {
-      name += ' big';
+      name += " big";
     }
     if (this.props.medium) {
-      name += ' medium';
+      name += " medium";
     }
     if (this.props.fullWidth) {
-      name += ' full-width';
+      name += " full-width";
     }
     return name;
   }
@@ -69,13 +69,9 @@ class FormSubmitButton extends Component {
    */
   render() {
     return (
-      <button type="submit"
-        className={this.getClassName()}
-        disabled={this.props.disabled}>
+      <button type="submit" className={this.getClassName()} disabled={this.props.disabled}>
         {this.props.value || <Trans>Save</Trans>}
-        {this.props.processing &&
-          <SpinnerSVG/>
-        }
+        {this.props.processing && <SpinnerSVG />}
       </button>
     );
   }
@@ -89,16 +85,12 @@ FormSubmitButton.defaultProps = {
 FormSubmitButton.propTypes = {
   processing: PropTypes.bool,
   disabled: PropTypes.bool,
-  value: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-    PropTypes.string,
-  ]),
+  value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node, PropTypes.string]),
   warning: PropTypes.bool,
   attention: PropTypes.bool,
   big: PropTypes.bool,
   medium: PropTypes.bool,
-  fullWidth: PropTypes.bool
+  fullWidth: PropTypes.bool,
 };
 
 export default withTranslation("common")(FormSubmitButton);

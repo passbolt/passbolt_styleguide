@@ -12,17 +12,16 @@
  * @since         2.11.0
  */
 
-import {ApiClientOptions} from "../../../../shared/lib/apiClient/apiClientOptions";
+import { ApiClientOptions } from "../../../../shared/lib/apiClient/apiClientOptions";
 import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
 
 export function defaultAppContext(context) {
   const baseUrl = "http://localhost:6006";
-  const apiClientOptions = new ApiClientOptions()
-    .setBaseUrl(baseUrl);
+  const apiClientOptions = new ApiClientOptions().setBaseUrl(baseUrl);
 
   const defaultAppContext = {
     getApiClientOptions: () => apiClientOptions,
-    trustedDomain: `${baseUrl}/subfolder`
+    trustedDomain: `${baseUrl}/subfolder`,
   };
   return Object.assign(defaultAppContext, context || {});
 }
@@ -34,8 +33,8 @@ export function defaultAppContext(context) {
 export function defaultProps(props) {
   const defaultProps = {
     context: defaultAppContext(),
-    ssoProvider: SsoProviders.find(provider => provider.id === "azure"),
-    history: {push: jest.fn()}
+    ssoProvider: SsoProviders.find((provider) => provider.id === "azure"),
+    history: { push: jest.fn() },
   };
   return Object.assign(defaultProps, props || {});
 }

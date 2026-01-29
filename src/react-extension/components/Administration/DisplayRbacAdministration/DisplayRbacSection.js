@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 
 class DisplayRbacSection extends React.Component {
@@ -28,7 +28,7 @@ class DisplayRbacSection extends React.Component {
       rows.push(
         <div className="flex-item" key={i}>
           &nbsp;
-        </div>
+        </div>,
       );
     }
     return <>{rows}</>;
@@ -41,7 +41,10 @@ class DisplayRbacSection extends React.Component {
       <>
         <div className={`flex-container inner level-${this.props.level}`}>
           <div className="flex-item first">
-            <span><CaretDownSVG className="caret-down"/>&nbsp;&nbsp;{this.props.label}</span>
+            <span>
+              <CaretDownSVG className="caret-down" />
+              &nbsp;&nbsp;{this.props.label}
+            </span>
           </div>
           {this.blankColumnSectionForRoles()}
         </div>
@@ -63,4 +66,4 @@ DisplayRbacSection.propTypes = {
   children: PropTypes.any, // The component children
 };
 
-export default withTranslation('common')(DisplayRbacSection);
+export default withTranslation("common")(DisplayRbacSection);

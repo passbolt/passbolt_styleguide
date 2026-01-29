@@ -12,8 +12,8 @@
  * @since         4.3.0
  */
 
-import {ImportAccountKitContextProvider, ImportAccountKitWorkflowStates} from "./ImportAccountKitContext";
-import {defaultAccountKit, defaultProps} from "./ImportAccountKitContext.test.data";
+import { ImportAccountKitContextProvider, ImportAccountKitWorkflowStates } from "./ImportAccountKitContext";
+import { defaultAccountKit, defaultProps } from "./ImportAccountKitContext.test.data";
 
 describe("ImportAccountKitContext", () => {
   let importAccountKitContext; // The ImportAccountKitContextProvider to test
@@ -46,7 +46,7 @@ describe("ImportAccountKitContext", () => {
   });
 
   describe("ImportAccountKitContext::verifyAccountKit", () => {
-    it("should navigate to VERIFY_PASSPHRASE", async() => {
+    it("should navigate to VERIFY_PASSPHRASE", async () => {
       expect.assertions(2);
 
       jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
@@ -58,10 +58,12 @@ describe("ImportAccountKitContext", () => {
       expect(importAccountKitContext.state.state).toEqual(ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE);
     });
 
-    it("should navigate to UNEXPECTED_ERROR_STATE in case of error", async() => {
+    it("should navigate to UNEXPECTED_ERROR_STATE in case of error", async () => {
       expect.assertions(1);
 
-      jest.spyOn(props.context.port, "request").mockImplementation(() => { throw new Error(); });
+      jest.spyOn(props.context.port, "request").mockImplementation(() => {
+        throw new Error();
+      });
 
       const accountKit = defaultAccountKit();
       await importAccountKitContext.verifyAccountKit(accountKit);
@@ -71,7 +73,7 @@ describe("ImportAccountKitContext", () => {
   });
 
   describe("ImportAccountKitContext::verifyPassphrase", () => {
-    it("should navigate to IMPORTING_ACCOUNT", async() => {
+    it("should navigate to IMPORTING_ACCOUNT", async () => {
       expect.assertions(3);
 
       jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
@@ -87,7 +89,7 @@ describe("ImportAccountKitContext", () => {
   });
 
   describe("ImportAccountKitContext::importAccountAndConnect", () => {
-    it("should flush the account kit", async() => {
+    it("should flush the account kit", async () => {
       expect.assertions(1);
 
       jest.spyOn(importAccountKitContext, "flushAccountKit");
@@ -98,7 +100,7 @@ describe("ImportAccountKitContext", () => {
       expect(importAccountKitContext.flushAccountKit).toHaveBeenCalled();
     });
 
-    it("should navigate to SIGNING_IN", async() => {
+    it("should navigate to SIGNING_IN", async () => {
       expect.assertions(2);
 
       jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
@@ -109,7 +111,7 @@ describe("ImportAccountKitContext", () => {
       expect(importAccountKitContext.state.state).toEqual(ImportAccountKitWorkflowStates.SIGNING_IN);
     });
 
-    it("should request background to sign in", async() => {
+    it("should request background to sign in", async () => {
       expect.assertions(1);
 
       jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
@@ -119,10 +121,12 @@ describe("ImportAccountKitContext", () => {
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth.login", passphrase);
     });
 
-    it("should navigate to UNEXPECTED_ERROR_STATE in case of error", async() => {
+    it("should navigate to UNEXPECTED_ERROR_STATE in case of error", async () => {
       expect.assertions(1);
 
-      jest.spyOn(props.context.port, "request").mockImplementation(() => { throw new Error(); });
+      jest.spyOn(props.context.port, "request").mockImplementation(() => {
+        throw new Error();
+      });
 
       await importAccountKitContext.importAccountAndConnect();
 
@@ -132,9 +136,9 @@ describe("ImportAccountKitContext", () => {
 });
 
 function mockState(importAccountKitContextProvider) {
-  const setStateMock = state => {
+  const setStateMock = (state) => {
     let newState;
-    if (typeof state === 'function') {
+    if (typeof state === "function") {
       newState = state(importAccountKitContextProvider.state);
     } else {
       newState = state;

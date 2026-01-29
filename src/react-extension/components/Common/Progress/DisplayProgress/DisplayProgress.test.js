@@ -13,7 +13,7 @@
  */
 
 import DisplayProgressTestPage from "./DisplayProgress.test.page";
-import {defaultProps, propsWithProgressiveProgressBar} from "./DisplayProgress.test.data";
+import { defaultProps, propsWithProgressiveProgressBar } from "./DisplayProgress.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -33,7 +33,7 @@ describe("DisplayProgress", () => {
     expect(page.primaryButton).not.toBeNull();
   });
 
-  it("displays a progressive progress bar.", async() => {
+  it("displays a progressive progress bar.", async () => {
     const props = propsWithProgressiveProgressBar();
     const page = new DisplayProgressTestPage(props);
 

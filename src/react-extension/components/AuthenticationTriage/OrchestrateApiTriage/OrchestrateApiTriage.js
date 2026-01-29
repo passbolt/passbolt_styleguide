@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
-import {ApiTriageContextState, withApiTriageContext} from "../../../contexts/ApiTriageContext";
+import { ApiTriageContextState, withApiTriageContext } from "../../../contexts/ApiTriageContext";
 import EnterUsernameForm from "../../Authentication/EnterUsernameForm/EnterUsernameForm";
 import EnterNameForm from "../../Authentication/EnterNameForm/EnterNameForm";
 import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
@@ -48,7 +48,7 @@ class OrchestrateApiTriage extends Component {
    */
   getSsoProviderData() {
     const providerId = this.props.apiTriageContext.getSsoProviderId();
-    return SsoProviders.find(provider => provider.id === providerId);
+    return SsoProviders.find((provider) => provider.id === providerId);
   }
 
   /**
@@ -58,28 +58,30 @@ class OrchestrateApiTriage extends Component {
   render() {
     switch (this.props.apiTriageContext.state) {
       case ApiTriageContextState.USERNAME_STATE:
-        return <EnterUsernameForm
-          isSsoRecoverEnabled={this.props.apiTriageContext.isSsoRecoverEnabled}
-          onSecondaryActionClick={this.props.apiTriageContext.handleSwitchToSsoSignInState}
-        />;
+        return (
+          <EnterUsernameForm
+            isSsoRecoverEnabled={this.props.apiTriageContext.isSsoRecoverEnabled}
+            onSecondaryActionClick={this.props.apiTriageContext.handleSwitchToSsoSignInState}
+          />
+        );
       case ApiTriageContextState.SSO_SIGN_IN_STATE:
-        return <IdentifyWithSso
-          ssoProvider={this.getSsoProviderData()}
-          onSecondaryActionClick={this.props.apiTriageContext.handleSwitchToUsernameState}
-          onUserRegistrationRequired={this.props.apiTriageContext.handleSwitchToEnterNameState}
-        />;
+        return (
+          <IdentifyWithSso
+            ssoProvider={this.getSsoProviderData()}
+            onSecondaryActionClick={this.props.apiTriageContext.handleSwitchToUsernameState}
+            onUserRegistrationRequired={this.props.apiTriageContext.handleSwitchToEnterNameState}
+          />
+        );
       case ApiTriageContextState.CHECK_MAILBOX_STATE:
-        return <CheckMailBox/>;
+        return <CheckMailBox />;
       case ApiTriageContextState.NAME_STATE:
-        return <EnterNameForm/>;
+        return <EnterNameForm />;
       case ApiTriageContextState.USERNAME_NOT_FOUND_ERROR:
-        return <DisplayRequireInvitationError/>;
+        return <DisplayRequireInvitationError />;
       case ApiTriageContextState.UNEXPECTED_ERROR_STATE:
-        return <DisplayUnexpectedError
-          error={this.props.apiTriageContext.unexpectedError}
-        />;
+        return <DisplayUnexpectedError error={this.props.apiTriageContext.unexpectedError} />;
       default:
-        return <LoadingSpinner/>;
+        return <LoadingSpinner />;
     }
   }
 }

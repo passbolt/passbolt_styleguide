@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,10 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import IdentifyWithSso from "./IdentifyWithSso";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The EnterUsernameForm component represented as a page
@@ -29,10 +29,10 @@ export default class IdentifyWithSsoPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <IdentifyWithSso {...props}/>
+        <IdentifyWithSso {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
+    this.user = userEvent.setup();
   }
 
   select(selector) {
@@ -43,21 +43,21 @@ export default class IdentifyWithSsoPage {
    * Returns the title element
    */
   get title() {
-    return this.select('div h1');
+    return this.select("div h1");
   }
 
   /**
    * Returns the SSO sign in Button
    */
   get ssoButton() {
-    return this.select('.sso-login-form .sso-login-button');
+    return this.select(".sso-login-form .sso-login-button");
   }
 
   /**
    * Returns the go to email Button
    */
   get secondaryActionButton() {
-    return this.select('.sso-login-form button.link');
+    return this.select(".sso-login-form button.link");
   }
 
   /**
@@ -71,7 +71,7 @@ export default class IdentifyWithSsoPage {
    * Returns true if the page is being processed
    */
   isProcessing() {
-    return this.ssoButton.classList.contains('disabled');
+    return this.ssoButton.classList.contains("disabled");
   }
 
   /**
@@ -91,12 +91,7 @@ export default class IdentifyWithSsoPage {
   }
 
   /** Click on the element */
-  async clickOn(element, callback = () => true)  {
-    fireEvent.click(element, {button: 0});
-    await waitFor(() => {
-      if (!callback()) {
-        throw new Error("The click has not been processed yet");
-      }
-    });
+  async clickOn(element) {
+    await this.user.click(element);
   }
 }

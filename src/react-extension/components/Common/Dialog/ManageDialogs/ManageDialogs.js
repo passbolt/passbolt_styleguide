@@ -13,9 +13,8 @@
  */
 
 import React from "react";
-import {withDialog} from "../../../../contexts/DialogContext";
+import { withDialog } from "../../../../contexts/DialogContext";
 import PropTypes from "prop-types";
-
 
 /**
  * This component acts as an anchor for the different project dialogs.
@@ -41,7 +40,7 @@ class ManageDialogs extends React.Component {
    * Removes the index-th dialog
    */
   async close(index) {
-    const dialog = this.props.dialogContext.dialogs.find(({key}) => key === index);
+    const dialog = this.props.dialogContext.dialogs.find(({ key }) => key === index);
     // If a dialog callback was given as dialog props, execute it.
     if (dialog?.DialogProps?.onClose) {
       dialog.DialogProps.onClose();
@@ -56,13 +55,9 @@ class ManageDialogs extends React.Component {
   render() {
     return (
       <>
-        {
-          this.props.dialogContext.dialogs.map(({key, Dialog, DialogProps}) =>
-            <Dialog
-              key={key}
-              {...DialogProps}
-              onClose={ () => this.close(key)} />)
-        }
+        {this.props.dialogContext.dialogs.map(({ key, Dialog, DialogProps }) => (
+          <Dialog key={key} {...DialogProps} onClose={() => this.close(key)} />
+        ))}
         {this.props.children}
       </>
     );
@@ -71,7 +66,7 @@ class ManageDialogs extends React.Component {
 
 ManageDialogs.propTypes = {
   dialogContext: PropTypes.any,
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 export default withDialog(ManageDialogs);

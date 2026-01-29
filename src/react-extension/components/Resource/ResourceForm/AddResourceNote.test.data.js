@@ -12,13 +12,12 @@
  * @since         5.0.0
  */
 
-
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceFormDto } from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
-import {resourceTypeV5DefaultDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { resourceTypeV5DefaultDto } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 /**
  * Default props
@@ -32,7 +31,7 @@ export function defaultProps(data = {}) {
     isAllowedToConvertNote: true,
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),
-    resource: defaultResourceFormDto()
+    resource: defaultResourceFormDto(),
   };
   return Object.assign(defaultData, data);
 }

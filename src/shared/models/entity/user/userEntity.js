@@ -16,7 +16,7 @@ import RoleEntity from "../role/roleEntity";
 import GpgkeyEntity from "../gpgkey/gpgkeyEntity";
 import ProfileEntity from "../profile/profileEntity";
 
-const ENTITY_NAME = 'User';
+const ENTITY_NAME = "User";
 
 /**
  * An enum to gather the different possible user statuses.
@@ -48,15 +48,15 @@ class UserEntity extends EntityV2 {
 
     // Associations
     if (this._props.profile) {
-      this._profile = new ProfileEntity(this._props.profile, {...options, clone: false});
+      this._profile = new ProfileEntity(this._props.profile, { ...options, clone: false });
       delete this._props.profile;
     }
     if (this._props.role) {
-      this._role = new RoleEntity(this._props.role, {...options, clone: false});
+      this._role = new RoleEntity(this._props.role, { ...options, clone: false });
       delete this._props.role;
     }
     if (this._props.gpgkey) {
-      this._gpgkey = new GpgkeyEntity(this._props.gpgkey, {...options, clone: false});
+      this._gpgkey = new GpgkeyEntity(this._props.gpgkey, { ...options, clone: false });
       delete this._props.gpgkey;
     }
   }
@@ -78,54 +78,54 @@ class UserEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
+      type: "object",
+      required: [
         "username",
         // "role_id",
       ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "role_id": {
-          "type": "string",
-          "format": "uuid"
+        role_id: {
+          type: "string",
+          format: "uuid",
         },
-        "username": {
-          "type": "string",
+        username: {
+          type: "string",
         },
-        "active": {
-          "type": "boolean"
+        active: {
+          type: "boolean",
         },
-        "deleted": {
-          "type": "boolean"
+        deleted: {
+          type: "boolean",
         },
-        "disabled": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true,
+        disabled: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "missing_metadata_key_ids": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "uuid"
+        missing_metadata_key_ids: {
+          type: "array",
+          items: {
+            type: "string",
+            format: "uuid",
           },
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
         // Associated models
-        "role": RoleEntity.getSchema(),
-        "profile": ProfileEntity.getSchema(),
-        "gpgkey": GpgkeyEntity.getSchema(),
-      }
+        role: RoleEntity.getSchema(),
+        profile: ProfileEntity.getSchema(),
+        gpgkey: GpgkeyEntity.getSchema(),
+      },
     };
   }
 
@@ -202,7 +202,7 @@ class UserEntity extends EntityV2 {
    * @returns {(boolean|null)} true if user completed the setup
    */
   get isActive() {
-    if (typeof this._props.active === 'undefined') {
+    if (typeof this._props.active === "undefined") {
       return null;
     }
     return this._props.active;
@@ -213,7 +213,7 @@ class UserEntity extends EntityV2 {
    * @returns {(boolean|null)} true if user is deleted
    */
   get isDeleted() {
-    if (typeof this._props.deleted === 'undefined') {
+    if (typeof this._props.deleted === "undefined") {
       return null;
     }
     return this._props.deleted;
@@ -250,7 +250,7 @@ class UserEntity extends EntityV2 {
    * @param {boolean} [options.withUsername = false] The with username option to display the username with the first name and last name
    * @return {string}
    */
-  getUserFormattedName(translate = text => text, options = {withUsername: false}) {
+  getUserFormattedName(translate = (text) => text, options = { withUsername: false }) {
     const profile = this.profile;
     if (!profile) {
       return translate("Unknown user");
@@ -281,7 +281,7 @@ class UserEntity extends EntityV2 {
     }
 
     return USER_STATUS.ACTIVE;
-  };
+  }
 
   /**
    * Set the user missing metadata keys ids
@@ -291,7 +291,6 @@ class UserEntity extends EntityV2 {
     this._props.missing_metadata_key_ids = missingMetadataKeysIds;
   }
 
-
   /**
    * UserEntity.ALL_CONTAIN_OPTIONS
    * @returns {object} all contain options that can be used in toDto()
@@ -299,7 +298,8 @@ class UserEntity extends EntityV2 {
   static get ALL_CONTAIN_OPTIONS() {
     return {
       profile: ProfileEntity.ALL_CONTAIN_OPTIONS,
-      role: true, gpgkey: true,
+      role: true,
+      gpgkey: true,
     };
   }
 

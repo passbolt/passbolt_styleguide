@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
@@ -17,19 +16,18 @@ import React from "react";
 import ApiSuccess from "./ApiSuccess";
 
 export default {
-  title: 'Components/Common/ApiFeedback',
-  component: ApiSuccess
+  title: "Components/Common/ApiFeedback",
+  component: ApiSuccess,
 };
 
-const Template = args =>
-  <ApiSuccess {...args}/>;
+const Template = (args) => <ApiSuccess {...args} />;
 
 const parameters = {
-  css: "api_main"
+  css: "api_main",
 };
 
 export const SuccessFeedback = Template.bind({});
 SuccessFeedback.args = {
-  message: "You successfully authenticated."
+  message: "You successfully authenticated.",
 };
 SuccessFeedback.parameters = parameters;

@@ -12,19 +12,19 @@
  * @since         3.1.0
  */
 
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import {withUserSettings} from "../../../contexts/UserSettingsContext";
+import { withUserSettings } from "../../../contexts/UserSettingsContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
-import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import PownedService from '../../../../shared/services/api/secrets/pownedService';
-import PasswordComplexityWithGoal from '../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal';
-import {withUserPassphrasePolicies} from '../../../contexts/UserPassphrasePoliciesContext';
+import { SecretGenerator } from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import PasswordComplexityWithGoal from "../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal";
+import { withUserPassphrasePolicies } from "../../../contexts/UserPassphrasePoliciesContext";
 
 /**
  * This component displays the user choose passphrase information
@@ -46,8 +46,8 @@ class EnterNewPassphrase extends React.Component {
    */
   get defaultState() {
     return {
-      passphrase: '', // The current passphrase
-      passphraseEntropy: null,  // The current passphrase entropy
+      passphrase: "", // The current passphrase
+      passphraseEntropy: null, // The current passphrase entropy
       actions: {
         processing: false, // True if one's processing passphrase
       },
@@ -66,10 +66,10 @@ class EnterNewPassphrase extends React.Component {
   get isValid() {
     const validation = {
       notInDictionary: !this.state.passphraseInDictionnary,
-      enoughEntropy: this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy)
+      enoughEntropy: this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy),
     };
 
-    return Object.values(validation).every(value => value);
+    return Object.values(validation).every((value) => value);
   }
 
   /**
@@ -186,7 +186,7 @@ class EnterNewPassphrase extends React.Component {
     const result = await this.pownedService.evaluateSecret(passphrase);
     const passphraseInDictionnary = result.inDictionary;
 
-    this.setState({passphraseInDictionnary});
+    this.setState({ passphraseInDictionnary });
     return passphraseInDictionnary;
   }
 
@@ -208,7 +208,7 @@ class EnterNewPassphrase extends React.Component {
    */
   onGpgKeyGeneratedFailure(error) {
     this.toggleProcessing();
-    this.props.dialogContext.open(NotifyError, {error});
+    this.props.dialogContext.open(NotifyError, { error });
   }
 
   /**
@@ -224,16 +224,16 @@ class EnterNewPassphrase extends React.Component {
   toggleProcessing() {
     const actions = {
       ...this.state.actions,
-      processing: !this.state.actions.processing
+      processing: !this.state.actions.processing,
     };
-    this.setState({actions});
+    this.setState({ actions });
   }
 
   /**
    * Toggle the obfuscate mode of the passphrase view
    */
   toggleObfuscate() {
-    this.setState({isObfuscated: !this.state.isObfuscated});
+    this.setState({ isObfuscated: !this.state.isObfuscated });
   }
 
   /**
@@ -242,7 +242,9 @@ class EnterNewPassphrase extends React.Component {
    * @returns {boolean}
    */
   isMinimumRequiredEntropyReached(passphraseEntropy) {
-    return passphraseEntropy && passphraseEntropy >= this.props.userPassphrasePoliciesContext.getSettings().entropy_minimum;
+    return (
+      passphraseEntropy && passphraseEntropy >= this.props.userPassphrasePoliciesContext.getSettings().entropy_minimum
+    );
   }
 
   render() {
@@ -256,7 +258,9 @@ class EnterNewPassphrase extends React.Component {
       <form className="profile-passphrase" onSubmit={this.handleSubmit}>
         <div className="main-column">
           <div className="main-content">
-            <h3><Trans>Please enter a new passphrase</Trans></h3>
+            <h3>
+              <Trans>Please enter a new passphrase</Trans>
+            </h3>
             <div className="enter-passphrase">
               <div className="input-password-wrapper input required">
                 <Password
@@ -267,20 +271,35 @@ class EnterNewPassphrase extends React.Component {
                   preview={true}
                   securityToken={this.props.context.userSettings.getSecurityToken()}
                   onChange={this.handlePassphraseChange}
-                  disabled={!this.areActionsAllowed}/>
-                <PasswordComplexityWithGoal entropy={passphraseEntropy} targetEntropy={userPassphrasePolicies.entropy_minimum}/>
-                {this.state.passphraseInDictionnary &&
-                  <div className="invalid-passphrase error-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
-                }
+                  disabled={!this.areActionsAllowed}
+                />
+                <PasswordComplexityWithGoal
+                  entropy={passphraseEntropy}
+                  targetEntropy={userPassphrasePolicies.entropy_minimum}
+                />
+                {this.state.passphraseInDictionnary && (
+                  <div className="invalid-passphrase error-message">
+                    <Trans>The passphrase is part of an exposed data breach.</Trans>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
         <div className="actions-wrapper">
-          <button className="button cancel secondary" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
+          <button
+            className="button cancel secondary"
+            type="button"
+            disabled={!this.areActionsAllowed}
+            onClick={this.handleCancel}
+          >
             <Trans>Cancel</Trans>
           </button>
-          <FormSubmitButton disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.props.t('Update')}/>
+          <FormSubmitButton
+            disabled={this.mustBeDisabled}
+            processing={this.isProcessing}
+            value={this.props.t("Update")}
+          />
         </div>
       </form>
     );
@@ -295,4 +314,6 @@ EnterNewPassphrase.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withUserSettings(withUserPassphrasePolicies(withTranslation('common')(EnterNewPassphrase)))));
+export default withAppContext(
+  withDialog(withUserSettings(withUserPassphrasePolicies(withTranslation("common")(EnterNewPassphrase)))),
+);

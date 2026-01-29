@@ -14,10 +14,7 @@
 
 import AvatarEntity from "./avatarEntity";
 import EntitySchema from "../abstract/entitySchema";
-import {
-  defaultAvatarDto,
-  minimalAvatarDto
-} from "../avatar/avatarEntity.test.data";
+import { defaultAvatarDto, minimalAvatarDto } from "../avatar/avatarEntity.test.data";
 import Validator from "validator";
 import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
 
@@ -52,8 +49,8 @@ describe("AvatarEntity", () => {
       const dto = minimalAvatarDto();
       const entity = new AvatarEntity(dto);
       expect(entity.id).toBeNull();
-      expect(entity.urlMedium).toEqual('img/avatar/user_medium.png');
-      expect(entity.urlSmall).toEqual('img/avatar/user.png');
+      expect(entity.urlMedium).toEqual("img/avatar/user_medium.png");
+      expect(entity.urlSmall).toEqual("img/avatar/user.png");
       expect(entity.created).toBeNull();
       expect(entity.modified).toBeNull();
     });
@@ -63,16 +60,16 @@ describe("AvatarEntity", () => {
       const dto = defaultAvatarDto();
       const entity = new AvatarEntity(dto);
       expect(Validator.isUUID(entity.id)).toBe(true);
-      expect(entity.urlMedium).toEqual('/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/medium.jpg');
-      expect(entity.urlSmall).toEqual('/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/small.jpg');
-      expect(entity.created).toEqual('2023-06-03T12:03:46+00:00');
-      expect(entity.modified).toEqual('2023-06-03T12:03:46+00:00');
+      expect(entity.urlMedium).toEqual("/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/medium.jpg");
+      expect(entity.urlSmall).toEqual("/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/small.jpg");
+      expect(entity.created).toEqual("2023-06-03T12:03:46+00:00");
+      expect(entity.modified).toEqual("2023-06-03T12:03:46+00:00");
     });
 
-    it("Should throw if invalid avatar url provided", async() => {
+    it("Should throw if invalid avatar url provided", async () => {
       expect.assertions(1);
       const dto = defaultAvatarDto({
-        url: {}
+        url: {},
       });
       expect(() => new AvatarEntity(dto)).toThrowEntityValidationError("small", "required");
     });

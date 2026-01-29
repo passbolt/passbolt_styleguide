@@ -11,13 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.7.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Select from "../../Common/Select/Select";
-import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import { isUserSuspended } from "../../../../shared/utils/userUtils";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 import TooltipMessageGroupUserDetailsLoading from "../../Common/Tooltip/TooltipMessageGroupUserDetailsLoading";
@@ -69,7 +69,7 @@ class EditUserGroupItem extends Component {
    * @returns {boolean}
    */
   isUserSuspended(user) {
-    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
+    return this.props.context.siteSettings.canIUse("disableUser") && isUserSuspended(user);
   }
 
   /**
@@ -78,8 +78,8 @@ class EditUserGroupItem extends Component {
    */
   get isManagerSelectOptions() {
     return [
-      {value: false, label: (<Trans>Member</Trans>)},
-      {value: true, label: (<Trans>Group manager</Trans>)}
+      { value: false, label: <Trans>Member</Trans> },
+      { value: true, label: <Trans>Group manager</Trans> },
     ];
   }
 
@@ -92,12 +92,19 @@ class EditUserGroupItem extends Component {
       return;
     }
 
-    const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.props.groupUser.user.id);
-    const tooltipFingerprintMessage = <div className="group-user-details-tooltip">
-      <div className="email ellipsis"><strong>{this.props.groupUser.user.username}</strong></div>
-      <Fingerprint fingerprint={gpgkey.fingerprint}/>
-    </div>;
-    this.setState({tooltipFingerprintMessage});
+    const gpgkey = await this.props.context.port.request(
+      "passbolt.keyring.get-public-key-info-by-user",
+      this.props.groupUser.user.id,
+    );
+    const tooltipFingerprintMessage = (
+      <div className="group-user-details-tooltip">
+        <div className="email ellipsis">
+          <strong>{this.props.groupUser.user.username}</strong>
+        </div>
+        <Fingerprint fingerprint={gpgkey.fingerprint} />
+      </div>
+    );
+    this.setState({ tooltipFingerprintMessage });
   }
 
   /**
@@ -106,28 +113,43 @@ class EditUserGroupItem extends Component {
   render() {
     const isSuspended = this.isUserSuspended(this.props.groupUser.user);
     return (
-      <li
-        className={`row ${this.props.isMemberChanged ? 'permission-updated' : ''} ${isSuspended ? "suspended" : ""}`}
-      >
-        <UserAvatar
-          baseUrl={this.props.context.userSettings.getTrustedDomain()}
-          user={this.props.groupUser.user}/>
+      <li className={`row ${this.props.isMemberChanged ? "permission-updated" : ""} ${isSuspended ? "suspended" : ""}`}>
+        <UserAvatar baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.groupUser.user} />
         <div className="aro">
           <div className="aro-name">
-            <span className="ellipsis">{this.getUserFullname()}{isSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
+            <span className="ellipsis">
+              {this.getUserFullname()}
+              {isSuspended && (
+                <span className="suspended">
+                  {" "}
+                  <Trans>(suspended)</Trans>
+                </span>
+              )}
+            </span>
             <TooltipPortal
               message={this.state.tooltipFingerprintMessage || <TooltipMessageGroupUserDetailsLoading />}
               direction="auto"
-              onMouseHover={this.onTooltipFingerprintMouseHover}>
-              <FingerprintSVG/>
+              onMouseHover={this.onTooltipFingerprintMouseHover}
+            >
+              <FingerprintSVG />
             </TooltipPortal>
           </div>
           <div className="permission_changes">
-            {this.props.isMemberAdded && <span><Trans>Will be added</Trans></span>}
-            {this.props.isMemberChanged && !this.props.isMemberAdded &&
-              <span><Trans>Will be updated</Trans></span>}
-            {!this.props.isMemberChanged && !this.props.isMemberAdded && <span><Trans>Unchanged</Trans></span>}
-
+            {this.props.isMemberAdded && (
+              <span>
+                <Trans>Will be added</Trans>
+              </span>
+            )}
+            {this.props.isMemberChanged && !this.props.isMemberAdded && (
+              <span>
+                <Trans>Will be updated</Trans>
+              </span>
+            )}
+            {!this.props.isMemberChanged && !this.props.isMemberAdded && (
+              <span>
+                <Trans>Unchanged</Trans>
+              </span>
+            )}
           </div>
         </div>
 
@@ -136,9 +158,10 @@ class EditUserGroupItem extends Component {
             className="permission inline"
             value={this.props.groupUser.is_admin}
             items={this.isManagerSelectOptions}
-            onChange={event => this.props.onMemberRoleChange(event, this.props.groupUser)}
+            onChange={(event) => this.props.onMemberRoleChange(event, this.props.groupUser)}
             disabled={!this.props.areActionsAllowed}
-            direction="bottom"/>
+            direction="bottom"
+          />
         </div>
 
         <div className="actions">
@@ -147,9 +170,12 @@ class EditUserGroupItem extends Component {
             title={this.props.t("Remove")}
             className="remove-item button inline button-transparent"
             disabled={!this.props.areActionsAllowed}
-            onClick={event => this.props.onMemberRemoved(event, this.props.groupUser)}>
-            <CloseSVG/>
-            <span className="visually-hidden"><Trans>Remove</Trans></span>
+            onClick={(event) => this.props.onMemberRemoved(event, this.props.groupUser)}
+          >
+            <CloseSVG />
+            <span className="visually-hidden">
+              <Trans>Remove</Trans>
+            </span>
           </button>
         </div>
       </li>
@@ -175,4 +201,4 @@ EditUserGroupItem.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(EditUserGroupItem));
+export default withAppContext(withTranslation("common")(EditUserGroupItem));

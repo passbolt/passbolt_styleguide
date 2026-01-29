@@ -13,8 +13,8 @@
  */
 
 import React from "react";
-import {createSafePortal} from "./portals";
-import {createPortal} from "react-dom";
+import { createSafePortal } from "./portals";
+import { createPortal } from "react-dom";
 
 jest.mock("react-dom");
 
@@ -23,14 +23,14 @@ beforeEach(() => {
 });
 
 describe("portals", () => {
-  describe('::createSafePortal', () => {
+  describe("::createSafePortal", () => {
     it("should display the HTMLElement at the target element", () => {
       expect.assertions(2);
 
       const container = document.createElement("div");
       document.body.appendChild(container);
 
-      const elementToPortal = (<div id="target"></div>);
+      const elementToPortal = <div id="target"></div>;
 
       createSafePortal(elementToPortal, container, "key");
 
@@ -44,7 +44,7 @@ describe("portals", () => {
       const container = document.createElement("div");
       document.body.appendChild(container);
 
-      const elementToPortal = (<div id="target"></div>);
+      const elementToPortal = <div id="target"></div>;
 
       createSafePortal(elementToPortal, document.getElementById("wrong-id"));
 

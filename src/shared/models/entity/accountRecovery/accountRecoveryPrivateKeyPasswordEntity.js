@@ -25,11 +25,14 @@ class AccountRecoveryPrivateKeyPasswordEntity extends Entity {
    * @inheritDoc
    */
   constructor(accountRecoveryPrivateKeyPasswordDto, options = {}) {
-    super(EntitySchema.validate(
-      AccountRecoveryPrivateKeyPasswordEntity.ENTITY_NAME,
-      accountRecoveryPrivateKeyPasswordDto,
-      AccountRecoveryPrivateKeyPasswordEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        AccountRecoveryPrivateKeyPasswordEntity.ENTITY_NAME,
+        accountRecoveryPrivateKeyPasswordDto,
+        AccountRecoveryPrivateKeyPasswordEntity.getSchema(),
+      ),
+      options,
+    );
   }
 
   /**
@@ -38,37 +41,33 @@ class AccountRecoveryPrivateKeyPasswordEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "recipient_foreign_model",
-        "recipient_fingerprint",
-        "data"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["recipient_foreign_model", "recipient_fingerprint", "data"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "private_key_id": {
-          "type": "string",
-          "format": "uuid"
+        private_key_id: {
+          type: "string",
+          format: "uuid",
         },
-        "recipient_foreign_model": {
-          "type": "string",
-          "enum": [AccountRecoveryPrivateKeyPasswordEntity.FOREIGN_MODEL_ORGANIZATION_KEY]
+        recipient_foreign_model: {
+          type: "string",
+          enum: [AccountRecoveryPrivateKeyPasswordEntity.FOREIGN_MODEL_ORGANIZATION_KEY],
         },
-        "recipient_foreign_key": {
-          "type": "string",
-          "format": "uuid"
+        recipient_foreign_key: {
+          type: "string",
+          format: "uuid",
         },
-        "recipient_fingerprint": {
-          "type": "string",
-          "length": FINGERPRINT_LENGTH
+        recipient_fingerprint: {
+          type: "string",
+          length: FINGERPRINT_LENGTH,
         },
-        "data": {
-          "type": "string"
+        data: {
+          type: "string",
         },
-      }
+      },
     };
   }
 

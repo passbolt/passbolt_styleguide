@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.5.0
  */
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Returns a minimum DTO object suitable for the ScimSettingsEntity
@@ -56,7 +56,6 @@ export const scimSettingsDtoForUpdating = (data = {}) => ({
   ...scimSettingsDtoWithNullSecretToken(data),
   setting_id: null,
 });
-
 
 /**
  * Returns a DTO object with invalid secret_token pattern

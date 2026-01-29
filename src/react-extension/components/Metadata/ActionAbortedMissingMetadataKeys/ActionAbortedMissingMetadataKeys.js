@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.4.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 
@@ -69,19 +69,22 @@ class ActionAbortedMissingMetadataKeys extends Component {
    */
   render() {
     return (
-      <DialogWrapper className="action-aborted-missing-metadata-keys-dialog"  title={this.translate("Action aborted")} onClose={this.handleCloseClick}>
+      <DialogWrapper
+        className="action-aborted-missing-metadata-keys-dialog"
+        title={this.translate("Action aborted")}
+        onClose={this.handleCloseClick}
+      >
         <form onSubmit={this.handleFormSubmit}>
           <div className="form-content">
             <p>
               <Trans>You cannot perform this action because you lack access to the shared metadata key.</Trans>
-              <br/>
-              <br/>
+              <br />
+              <br />
               <Trans>Please ask your administrator to share it with you.</Trans>
             </p>
           </div>
           <div className="submit-wrapper">
-            <FormSubmitButton
-              value={this.translate("Ok")}/>
+            <FormSubmitButton value={this.translate("Ok")} />
           </div>
         </form>
       </DialogWrapper>
@@ -94,4 +97,4 @@ ActionAbortedMissingMetadataKeys.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(ActionAbortedMissingMetadataKeys);
+export default withTranslation("common")(ActionAbortedMissingMetadataKeys);

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import PasswordExpiryDialog from "./PasswordExpiryDialog";
@@ -35,10 +35,12 @@ export default class PasswordExpiryDialogPage {
    * @param {object} props the props of the components
    */
   render(props) {
-    this._page = render(<MockTranslationProvider>
-      <PasswordExpiryDialog {...props}/>
-    </MockTranslationProvider>,
-    {legacyRoot: true});
+    this._page = render(
+      <MockTranslationProvider>
+        <PasswordExpiryDialog {...props} />
+      </MockTranslationProvider>,
+      { legacyRoot: true },
+    );
   }
 
   /**
@@ -67,7 +69,7 @@ export default class PasswordExpiryDialogPage {
    * @returns {Promise<void>}
    */
   async clickOn(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 
@@ -93,7 +95,7 @@ export default class PasswordExpiryDialogPage {
    * @returns {Promise<void>}
    */
   async setInputField(element, value) {
-    fireEvent.input(element, {target: {value: value}});
+    fireEvent.input(element, { target: { value: value } });
     await waitFor(() => {
       if (element.value !== value) {
         throw new Error("The value is not set yet");

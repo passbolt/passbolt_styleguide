@@ -43,18 +43,14 @@ export default class SiteSettings {
   sanitizeEmailValidateRegex(dto) {
     const emailValidateRegex = dto?.passbolt?.email?.validate?.regex;
 
-    if (
-      !emailValidateRegex
-      || typeof emailValidateRegex !== 'string'
-      || !emailValidateRegex.trim().length
-    ) {
+    if (!emailValidateRegex || typeof emailValidateRegex !== "string" || !emailValidateRegex.trim().length) {
       return;
     }
 
     dto.passbolt.email.validate.regex = emailValidateRegex
       .trim()
-      .replace(/^\/+/, '') // Trim starting slash
-      .replace(/\/+$/, '');   // Trim trailing slash
+      .replace(/^\/+/, "") // Trim starting slash
+      .replace(/\/+$/, ""); // Trim trailing slash
   }
 
   /**
@@ -111,10 +107,9 @@ export default class SiteSettings {
    * @returns {object}
    */
   getRememberMeOptions() {
-    const pluginSettings = this.getPluginSettings('rememberMe') || {};
+    const pluginSettings = this.getPluginSettings("rememberMe") || {};
     return pluginSettings.options || {};
   }
-
 
   /**
    * Check if the remember options include the "until I logout" options
@@ -255,8 +250,8 @@ export default class SiteSettings {
    */
   static get DEFAULT_LOCALE() {
     return {
-      "locale": "en-UK",
-      "label": "English"
+      locale: "en-UK",
+      label: "English",
     };
   }
 }

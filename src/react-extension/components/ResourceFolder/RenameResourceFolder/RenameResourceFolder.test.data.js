@@ -10,15 +10,15 @@ export function defaultAppContext(appContext) {
     port: new MockPort(),
     folder: {
       id: "some folder id",
-      name: "some name folder"
+      name: "some name folder",
     },
     folders: [
       {
         id: "some folder id",
-        name: "some name folder"
-      }
+        name: "some name folder",
+      },
     ],
-    setContext: jest.fn()
+    setContext: jest.fn(),
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -30,11 +30,11 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {
     actionFeedbackContext: {
-      displaySuccess: jest.fn()
+      displaySuccess: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
 }

@@ -11,46 +11,38 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withTranslation} from "react-i18next";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withTranslation } from "react-i18next";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import SelectResourceForm from "../ResourceForm/SelectResourceForm";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  ResourceEditCreateFormEnumerationTypes
-} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import { ResourceEditCreateFormEnumerationTypes } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import AddResourceName from "../ResourceForm/AddResourceName";
 import OrchestrateResourceForm from "../ResourceForm/OrchestrateResourceForm";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { SecretGenerator } from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import ConfirmCreateEdit, {
   ConfirmEditCreateOperationVariations,
-  ConfirmEditCreateRuleVariations
+  ConfirmEditCreateRuleVariations,
 } from "../ConfirmCreateEdit/ConfirmCreateEdit";
-import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import { ENTROPY_THRESHOLDS } from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 import memoize from "memoize-one";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
-import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withPasswordPolicies } from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {DateTime} from "luxon";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { DateTime } from "luxon";
 import EditResourceSkeleton from "./EditResourceSkeleton";
-import {
-  RESOURCE_TYPE_PASSWORD_STRING_SLUG
-} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import {
-  withMetadataTypesSettingsLocalStorage
-} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { RESOURCE_TYPE_PASSWORD_STRING_SLUG } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import { withMetadataTypesSettingsLocalStorage } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import CustomFieldsCollection from "../../../../shared/models/entity/customField/customFieldsCollection";
 
@@ -115,10 +107,11 @@ class EditResource extends Component {
       const secret = await this.getDecryptedSecret();
       this.mergeCustomFieldsMetadataAndSecret(resourceDto, secret);
       resourceDto.secret = secret;
-      this.resourceFormEntity = new ResourceFormEntity(resourceDto, {validate: false, resourceTypes: this.props.resourceTypes});
-      const passwordEntropy = secret?.password?.length
-        ? SecretGenerator.entropy(secret.password)
-        : null;
+      this.resourceFormEntity = new ResourceFormEntity(resourceDto, {
+        validate: false,
+        resourceTypes: this.props.resourceTypes,
+      });
+      const passwordEntropy = secret?.password?.length ? SecretGenerator.entropy(secret.password) : null;
 
       this.setState({
         isSecretDecrypting: false,
@@ -126,7 +119,7 @@ class EditResource extends Component {
         resource: this.resourceFormEntity.toDto(),
         resourceType: this.props.resourceTypes.getFirstById(this.props.resource.resource_type_id),
         resourceFormSelected: this.selectResourceFormByResourceSecretData(),
-        passwordEntropy
+        passwordEntropy,
       });
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
@@ -135,7 +128,7 @@ class EditResource extends Component {
         this.handleClose();
         return;
       }
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
       this.handleClose();
     }
   }
@@ -150,7 +143,10 @@ class EditResource extends Component {
     if (secret?.custom_fields?.length > 0) {
       const customFieldsMetadataCollection = new CustomFieldsCollection(resourceDto.metadata.custom_fields);
       const customFieldsSecretCollection = new CustomFieldsCollection(secret.custom_fields);
-      secret.custom_fields = CustomFieldsCollection.mergeCollectionsMetadataAndSecret(customFieldsMetadataCollection, customFieldsSecretCollection).toDto();
+      secret.custom_fields = CustomFieldsCollection.mergeCollectionsMetadataAndSecret(
+        customFieldsMetadataCollection,
+        customFieldsSecretCollection,
+      ).toDto();
       // Set the custom fields to null to remove the reference in the metadata to not have inconsistency if the user remove the custom fields secret
       resourceDto.metadata.custom_fields = null;
       // Remove the property
@@ -180,7 +176,7 @@ class EditResource extends Component {
       this.pownedService = new PownedService(this.props.context.port);
     }
 
-    this.setState({isPasswordDictionaryCheckRequested});
+    this.setState({ isPasswordDictionaryCheckRequested });
   }
 
   /**
@@ -190,10 +186,13 @@ class EditResource extends Component {
    *   A clone need to be created before validation to use marshall function from TotpEntity that modify the content but the form should not be modified for the user
    * @return {EntityValidationError}
    */
-  validateForm = memoize(resourceFormDto => {
-    const resourceFormEntity = new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes});
-    resourceFormEntity.removeEmptySecret({validate: false});
-    resourceFormEntity.addRequiredSecret({validate: false});
+  validateForm = memoize((resourceFormDto) => {
+    const resourceFormEntity = new ResourceFormEntity(resourceFormDto, {
+      validate: false,
+      resourceTypes: this.props.resourceTypes,
+    });
+    resourceFormEntity.removeEmptySecret({ validate: false });
+    resourceFormEntity.addRequiredSecret({ validate: false });
     return resourceFormEntity.validate();
   });
 
@@ -204,7 +203,7 @@ class EditResource extends Component {
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  verifyDataHealth = memoize(resourceFormDto => this.resourceFormEntity?.verifyHealth());
+  verifyDataHealth = memoize((resourceFormDto) => this.resourceFormEntity?.verifyHealth());
 
   /**
    * Get the decrypted secret associated to the resource
@@ -238,7 +237,7 @@ class EditResource extends Component {
   selectResourceFormByFirstError(errors) {
     if (errors.hasError("secret")) {
       if (errors.details.secret.hasError("totp")) {
-        this.setState({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP});
+        this.setState({ resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP });
       }
     }
   }
@@ -262,14 +261,12 @@ class EditResource extends Component {
       value = target.value;
     }
 
-    this.resourceFormEntity.set(name, value, {validate: false});
-    const newState = {resource: this.resourceFormEntity.toDto()};
+    this.resourceFormEntity.set(name, value, { validate: false });
+    const newState = { resource: this.resourceFormEntity.toDto() };
 
     if (name === "secret.password") {
       newState.passwordInDictionary = false;
-      newState.passwordEntropy = value?.length
-        ? SecretGenerator.entropy(value)
-        : null;
+      newState.passwordEntropy = value?.length ? SecretGenerator.entropy(value) : null;
     }
 
     this.setState(newState);
@@ -285,7 +282,7 @@ class EditResource extends Component {
       return;
     }
 
-    this.setState({hasAlreadyBeenValidated: true});
+    this.setState({ hasAlreadyBeenValidated: true });
     await this.toggleProcessing();
 
     try {
@@ -332,8 +329,7 @@ class EditResource extends Component {
       return true;
     }
 
-    return this.state.passwordEntropy
-      && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
+    return this.state.passwordEntropy && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
   }
 
   /**
@@ -358,10 +354,10 @@ class EditResource extends Component {
       return false;
     }
 
-    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(password);
+    const { isPwnedServiceAvailable, inDictionary } = await this.pownedService.evaluateSecret(password);
 
     if (!isPwnedServiceAvailable) {
-      this.setState({isPasswordDictionaryCheckServiceAvailable: false});
+      this.setState({ isPasswordDictionaryCheckServiceAvailable: false });
       return false;
     }
 
@@ -378,7 +374,7 @@ class EditResource extends Component {
       rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
       resourceName: this.state.resource?.metadata?.name,
       onConfirm: () => this.acceptCreationConfirmation(resourceFormEntity),
-      onReject: this.rejectEditionConfirmation
+      onReject: this.rejectEditionConfirmation,
     };
     this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
   }
@@ -397,7 +393,7 @@ class EditResource extends Component {
       rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
       resourceName: this.state.resource?.metadata?.name,
       onConfirm: () => this.acceptCreationConfirmation(resourceFormEntity),
-      onReject: this.rejectEditionConfirmation
+      onReject: this.rejectEditionConfirmation,
     };
     this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
   }
@@ -451,21 +447,24 @@ class EditResource extends Component {
    * @returns {ResourceFormEntity}
    */
   createAndSanitizeResourceFormEntity() {
-    const resourceFormEntity = new ResourceFormEntity(this.state.resource, {validate: false, resourceTypes: this.props.resourceTypes});
+    const resourceFormEntity = new ResourceFormEntity(this.state.resource, {
+      validate: false,
+      resourceTypes: this.props.resourceTypes,
+    });
     if (resourceFormEntity.metadata.name.length === 0) {
-      resourceFormEntity.set("metadata.name", "no name", {validate: false});
+      resourceFormEntity.set("metadata.name", "no name", { validate: false });
     }
-    resourceFormEntity.removeEmptySecret({validate: false});
-    resourceFormEntity.addRequiredSecret({validate: false});
+    resourceFormEntity.removeEmptySecret({ validate: false });
+    resourceFormEntity.addRequiredSecret({ validate: false });
     resourceFormEntity.removeUnusedNonEmptyMetadata();
 
     const resourceType = this.props.resourceTypes.getFirstById(resourceFormEntity.resourceTypeId);
-    const shouldResetUsername = !resourceFormEntity.metadata.username
-      || resourceFormEntity.metadata.username.length === 0;
+    const shouldResetUsername =
+      !resourceFormEntity.metadata.username || resourceFormEntity.metadata.username.length === 0;
 
     if (shouldResetUsername) {
       const usernameResetValue = resourceType.isStandaloneTotp() ? null : "";
-      resourceFormEntity.set("metadata.username", usernameResetValue, {validate: false});
+      resourceFormEntity.set("metadata.username", usernameResetValue, { validate: false });
     }
 
     return resourceFormEntity;
@@ -537,7 +536,7 @@ class EditResource extends Component {
       return;
     }
     console.error(error);
-    this.props.dialogContext.open(NotifyError, {error});
+    this.props.dialogContext.open(NotifyError, { error });
   }
 
   /**
@@ -546,8 +545,8 @@ class EditResource extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.isProcessing;
-    return new Promise(resolve => {
-      this.setState({isProcessing: !prev}, () => resolve());
+    return new Promise((resolve) => {
+      this.setState({ isProcessing: !prev }, () => resolve());
     });
   }
 
@@ -564,7 +563,7 @@ class EditResource extends Component {
    * @param resourceFormSelected
    */
   onSelectForm(event, resourceFormSelected) {
-    this.setState({resourceFormSelected});
+    this.setState({ resourceFormSelected });
   }
 
   /**
@@ -572,9 +571,9 @@ class EditResource extends Component {
    * @param {string} secret The secret to add
    */
   onAddSecret(secret) {
-    this.resourceFormEntity.addSecret(secret, {validate: false});
+    this.resourceFormEntity.addSecret(secret, { validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
-    this.setState({resource: this.resourceFormEntity.toDto(), resourceFormSelected: secret, resourceType});
+    this.setState({ resource: this.resourceFormEntity.toDto(), resourceFormSelected: secret, resourceType });
   }
 
   /**
@@ -582,12 +581,16 @@ class EditResource extends Component {
    * @param {string} secret The secret to delete
    */
   onDeleteSecret(secret) {
-    this.resourceFormEntity.deleteSecret(secret, {validate: false});
+    this.resourceFormEntity.deleteSecret(secret, { validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
     if (this.state.resourceFormSelected === secret) {
-      this.setState({resource: this.resourceFormEntity.toDto(), resourceFormSelected: this.selectResourceFormByResourceSecretData(), resourceType});
+      this.setState({
+        resource: this.resourceFormEntity.toDto(),
+        resourceFormSelected: this.selectResourceFormByResourceSecretData(),
+        resourceType,
+      });
     } else {
-      this.setState({resource: this.resourceFormEntity.toDto(), resourceType});
+      this.setState({ resource: this.resourceFormEntity.toDto(), resourceType });
     }
   }
 
@@ -595,12 +598,12 @@ class EditResource extends Component {
    * Handle convert note to metadata description
    */
   handleConvertToDescription() {
-    this.resourceFormEntity.convertToMetadataDescription({validate: false});
+    this.resourceFormEntity.convertToMetadataDescription({ validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
     this.setState({
       resource: this.resourceFormEntity.toDto(),
       resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION,
-      resourceType
+      resourceType,
     });
   }
 
@@ -608,12 +611,12 @@ class EditResource extends Component {
    * Handle convert description to secret note
    */
   handleConvertToNote() {
-    this.resourceFormEntity.convertToNote({validate: false});
+    this.resourceFormEntity.convertToNote({ validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
     this.setState({
       resource: this.resourceFormEntity.toDto(),
       resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE,
-      resourceType
+      resourceType,
     });
   }
 
@@ -652,7 +655,7 @@ class EditResource extends Component {
       return false;
     }
 
-    return this.state.resource.secret.password !==  this.state.originalSecret.password;
+    return this.state.resource.secret.password !== this.state.originalSecret.password;
   }
 
   /**
@@ -667,7 +670,7 @@ class EditResource extends Component {
     }
 
     // we have to update the expiration date in future based on the configuration.
-    return DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period}).toISO();
+    return DateTime.utc().plus({ days: passwordExpirySettings.default_expiry_period }).toISO();
   }
 
   /**
@@ -685,7 +688,7 @@ class EditResource extends Component {
   onUpgradeToV5() {
     this.resourceFormEntity.upgradeToV5();
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
-    this.setState({resource: this.resourceFormEntity.toDto(), resourceType});
+    this.setState({ resource: this.resourceFormEntity.toDto(), resourceType });
   }
 
   /*
@@ -698,12 +701,14 @@ class EditResource extends Component {
     const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.resource) : null;
 
     return (
-      <DialogWrapper title={this.translate("Edit a resource")} className="edit-resource"
-        disabled={this.hasAllInputDisabled} onClose={this.handleClose}>
-        {this.hasSecretDecrypting &&
-          <EditResourceSkeleton/>
-        }
-        {!this.hasSecretDecrypting &&
+      <DialogWrapper
+        title={this.translate("Edit a resource")}
+        className="edit-resource"
+        disabled={this.hasAllInputDisabled}
+        onClose={this.handleClose}
+      >
+        {this.hasSecretDecrypting && <EditResourceSkeleton />}
+        {!this.hasSecretDecrypting && (
           <>
             <SelectResourceForm
               resourceType={this.state.resourceType}
@@ -745,12 +750,16 @@ class EditResource extends Component {
                 </div>
               </div>
               <div className="submit-wrapper">
-                <FormCancelButton disabled={this.hasAllInputDisabled} onClick={this.handleClose}/>
-                <FormSubmitButton value={this.translate("Save")} disabled={this.hasAllInputDisabled} processing={this.state.isProcessing}/>
+                <FormCancelButton disabled={this.hasAllInputDisabled} onClick={this.handleClose} />
+                <FormSubmitButton
+                  value={this.translate("Save")}
+                  disabled={this.hasAllInputDisabled}
+                  processing={this.state.isProcessing}
+                />
               </div>
             </form>
           </>
-        }
+        )}
       </DialogWrapper>
     );
   }
@@ -770,4 +779,14 @@ EditResource.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withPasswordPolicies(withPasswordExpiry(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(EditResource)))))))));
+export default withAppContext(
+  withPasswordPolicies(
+    withPasswordExpiry(
+      withMetadataTypesSettingsLocalStorage(
+        withResourceTypesLocalStorage(
+          withActionFeedback(withDialog(withResourceWorkspace(withTranslation("common")(EditResource)))),
+        ),
+      ),
+    ),
+  ),
+);

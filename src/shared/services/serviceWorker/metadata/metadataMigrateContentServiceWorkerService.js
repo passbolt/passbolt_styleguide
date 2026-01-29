@@ -31,7 +31,10 @@ class MetadataMigrateContentServiceWorkerService {
    * @returns {Promise<PassboltResponsePaginationHeaderEntity>}
    */
   async findCountMetadataMigrateResources(sharedContentOnly = false) {
-    const metadataCountDetails = await this.port.request(METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT, sharedContentOnly);
+    const metadataCountDetails = await this.port.request(
+      METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT,
+      sharedContentOnly,
+    );
     return new PassboltResponsePaginationHeaderEntity(metadataCountDetails);
   }
 

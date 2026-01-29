@@ -16,7 +16,7 @@ export function defaultAppContext(appContext) {
     search: "",
     userSettings: new UserSettings(userSettingsFixture),
     setWindowBlurBehaviour: () => {},
-    shouldCloseAtWindowBlur: true
+    shouldCloseAtWindowBlur: true,
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -26,7 +26,7 @@ export function defaultSsoContext(ssoContext) {
     loadSsoConfiguration: jest.fn(() => Promise.resolve()),
     hasUserAnSsoKit: jest.fn(() => true),
     getProvider: jest.fn(() => "azure"),
-    runSignInProcess: jest.fn(() => Promise.resolve())
+    runSignInProcess: jest.fn(() => Promise.resolve()),
   };
   return Object.assign(defaultSsoContext, ssoContext || {});
 }
@@ -38,19 +38,23 @@ export function defaultPropsWithSsoEnabled(data = {}) {
   delete data.context;
   delete data.ssoContext;
 
-  return Object.assign({}, {context, ssoContext}, data);
+  return Object.assign({}, { context, ssoContext }, data);
 }
 
 export function defaultPropsWithSsoDisabled(data = {}) {
   const context = defaultAppContext(data.context);
 
-  const ssoContext = Object.assign(defaultSsoContext(), {
-    getProvider: jest.fn(() => null),
-    hasUserAnSsoKit: jest.fn(() => false),
-  }, data.ssoContext);
+  const ssoContext = Object.assign(
+    defaultSsoContext(),
+    {
+      getProvider: jest.fn(() => null),
+      hasUserAnSsoKit: jest.fn(() => false),
+    },
+    data.ssoContext,
+  );
 
   delete data.context;
   delete data.ssoContext;
 
-  return Object.assign({}, {context, ssoContext}, data);
+  return Object.assign({}, { context, ssoContext }, data);
 }

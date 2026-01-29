@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.3.0
  */
-import {SecretGeneratorComplexity} from "./SecretGeneratorComplexity";
+import { SecretGeneratorComplexity } from "./SecretGeneratorComplexity";
 
 describe("SecretGeneratorComplexity", () => {
   /**
@@ -36,7 +36,7 @@ describe("SecretGeneratorComplexity", () => {
   });
 
   it("evaluates the right strength based on the given entropy", () => {
-    const strengthOf = entropy => SecretGeneratorComplexity.strength(entropy).id;
+    const strengthOf = (entropy) => SecretGeneratorComplexity.strength(entropy).id;
 
     expect(strengthOf(0)).toBe("not_available");
 
@@ -58,14 +58,14 @@ describe("SecretGeneratorComplexity", () => {
 
   it("should compute the right entropy given a password", () => {
     const passwordsAndEntropy = {
-      "aaaaaa": 28.2,
-      "AAAAAA": 28.2,
-      "111111": 19.93,
+      aaaaaa: 28.2,
+      AAAAAA: 28.2,
+      111111: 19.93,
       "((((((": 16.84,
       "#$%&@^~": 19.65,
       ".,:;": 8,
       "<*+!?=": 15.51,
-      "aaaAAA1111": 59.54,
+      aaaAAA1111: 59.54,
       "🇫🇷": 0, // A char which doesn't match the known masks.
       "😸😸😸😸😸😸😸😸": 50.58,
       "😸😸😸😸😸😸😸🇫🇷": 50.72,
@@ -79,7 +79,8 @@ describe("SecretGeneratorComplexity", () => {
   });
 
   it("should compute the right entropy given a passphrase", () => {
-    const entropyOf = (wordCount, spacing) => roundEntropy(SecretGeneratorComplexity.entropyPassphrase(wordCount, spacing));
+    const entropyOf = (wordCount, spacing) =>
+      roundEntropy(SecretGeneratorComplexity.entropyPassphrase(wordCount, spacing));
     //Currently, the tests are written considering that there are 7776 words in the dictionnary and 3 word cases
 
     expect(entropyOf(5, "")).toBe(72.55);

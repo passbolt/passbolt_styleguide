@@ -13,7 +13,7 @@
  */
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
-import GroupServiceWorkerService, {GROUPS_FIND_MY_GROUPS} from "./groupServiceWorkerService";
+import GroupServiceWorkerService, { GROUPS_FIND_MY_GROUPS } from "./groupServiceWorkerService";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -28,7 +28,7 @@ describe("GroupServiceWorkerService", () => {
   });
 
   describe("::findMyGroups", () => {
-    it("requests the service worker with the expected event and return a group collection.", async() => {
+    it("requests the service worker with the expected event and return a group collection.", async () => {
       expect.assertions(2);
 
       jest.spyOn(port, "request").mockImplementation(() => {});

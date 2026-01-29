@@ -16,7 +16,7 @@ import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import GoogleSsoSettingsEntity from "./GoogleSsoSettingsEntity";
-import {defaultGoogleSsoSettingsDto} from "./SsoSettingsEntity.test.data";
+import { defaultGoogleSsoSettingsDto } from "./SsoSettingsEntity.test.data";
 
 describe("GoogleSsoSettingsEntity", () => {
   describe("schema must validate", () => {
@@ -60,11 +60,11 @@ describe("GoogleSsoSettingsEntity", () => {
   });
 
   each([
-    {dto: {client_id: ""}, errorType: "minLength"},
-    {dto: {client_secret: ""}, errorType: "minLength"},
-    {dto: {client_id: -1}, errorType: "type"},
-    {dto: {client_secret: -1}, errorType: "type"},
-  ]).describe("should throw an exception if DTO contains invalid values", scenario => {
+    { dto: { client_id: "" }, errorType: "minLength" },
+    { dto: { client_secret: "" }, errorType: "minLength" },
+    { dto: { client_id: -1 }, errorType: "type" },
+    { dto: { client_secret: -1 }, errorType: "type" },
+  ]).describe("should throw an exception if DTO contains invalid values", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(2);
       const fieldName = Object.keys(scenario.dto)[0];

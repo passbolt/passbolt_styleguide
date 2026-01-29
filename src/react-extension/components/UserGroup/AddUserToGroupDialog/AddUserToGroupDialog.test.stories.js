@@ -13,33 +13,36 @@
  */
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {defaultAppContext, mockGroup, mockUser} from "./AddUserToGroupDialog.test.data";
+import { defaultAppContext, mockGroup, mockUser } from "./AddUserToGroupDialog.test.data";
 import AddUserToGroupDialog from "./AddUserToGroupDialog";
 
 export default {
-  title: 'Components/User/AddUserToGroupDialog',
+  title: "Components/User/AddUserToGroupDialog",
   component: AddUserToGroupDialog,
   decorators: [
-    (Story, {args}) =>
+    (Story, { args }) => (
       <AppContext.Provider value={args.context}>
         <Story {...args} />
       </AppContext.Provider>
+    ),
   ],
 };
 
 export const Initial = {
   args: {
     context: defaultAppContext(),
-    onClose: () => {}
-  }
+    onClose: () => {},
+  },
 };
 
 export const LongUserAndGroupNames = {
   args: {
-    context: defaultAppContext({addUserToGroupDialogProps: {
-      user: mockUser({username: "repeat".repeat(10)}),
-      group: mockGroup({name: "repeat".repeat(10)})
-    }}),
-    onClose: () => {}
-  }
+    context: defaultAppContext({
+      addUserToGroupDialogProps: {
+        user: mockUser({ username: "repeat".repeat(10) }),
+        group: mockGroup({ name: "repeat".repeat(10) }),
+      },
+    }),
+    onClose: () => {},
+  },
 };

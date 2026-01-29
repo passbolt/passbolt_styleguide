@@ -11,22 +11,22 @@ export function defaultAppContext(appContext) {
     setContext: jest.fn(),
     folder: {
       id: "some folder id",
-      name: "some name folder"
+      name: "some name folder",
     },
     folders: [
       {
         id: "some folder id",
-        name: "some name folder"
-      }
+        name: "some name folder",
+      },
     ],
     folderMoveStrategyProps: {
       requestId: "some request id",
       folders: [
         {
           id: "Another folder id",
-        }
-      ]
-    }
+        },
+      ],
+    },
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -38,14 +38,14 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {
     actionFeedbackContext: {
-      displaySuccess: jest.fn()
+      displaySuccess: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
     loadingContext: {
-      remove: () => {}
+      remove: () => {},
     },
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
 }

@@ -16,7 +16,7 @@
  * Unit tests on DisplayUserGroupDetailsInformation in regard of specifications
  */
 
-import {defaultAppContext, defaultProps} from "./DisplayUserGroupDetailsInformation.test.data";
+import { defaultAppContext, defaultProps } from "./DisplayUserGroupDetailsInformation.test.data";
 import DisplayUserGroupDetailsInformationPage from "./DisplayUserGroupDetailsInformation.test.page";
 
 beforeEach(() => {
@@ -32,11 +32,11 @@ describe("Display User Group Details Information", () => {
     page = new DisplayUserGroupDetailsInformationPage(context, props);
   });
 
-  it('As LU I should initially see the information area as expanded', () => {
+  it("As LU I should initially see the information area as expanded", () => {
     expect(page.isCollapsed).toBeFalsy();
   });
 
-  it('As LU I should not see the information area when I collapse the area', async() => {
+  it("As LU I should not see the information area when I collapse the area", async () => {
     await page.toggleCollapse();
     expect(page.isCollapsed).toBeTruthy();
 
@@ -44,11 +44,11 @@ describe("Display User Group Details Information", () => {
     expect(page.isCollapsed).toBeFalsy();
   });
 
-  it('As LU I should see the last modificator of the group', () => {
-    expect(page.modifiedBy).toBe('Admin User');
+  it("As LU I should see the last modificator of the group", () => {
+    expect(page.modifiedBy).toBe("Admin User");
   });
 
-  it('As LU I should see the members count of the group', () => {
+  it("As LU I should see the members count of the group", () => {
     expect(page.membersCount).toBe("2");
   });
 });

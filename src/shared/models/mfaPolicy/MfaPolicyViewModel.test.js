@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.10.0
  */
-import {MfaPolicyEnumerationTypes} from "./MfaPolicyEnumeration";
+import { MfaPolicyEnumerationTypes } from "./MfaPolicyEnumeration";
 import MfaPolicyViewModel from "./MfaPolicyViewModel";
 
 describe("MfaPolicyViewModel", () => {

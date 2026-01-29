@@ -12,15 +12,13 @@
  * @since         5.0.0
  */
 
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {updatePermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
-import {TEST_RESOURCE_TYPE_PASSWORD_STRING} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { updatePermissionDto } from "../../../../shared/models/entity/permission/permissionEntity.test.data";
+import { TEST_RESOURCE_TYPE_PASSWORD_STRING } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 export function defaultProps(props) {
   return {
@@ -41,5 +39,5 @@ export const resourceWithDescriptionMock = defaultResourceDto({
     description: "Apache is the world's most used web server software.",
     uris: ["http://www.apache.org/"],
   },
-  permission: updatePermissionDto()
+  permission: updatePermissionDto(),
 });

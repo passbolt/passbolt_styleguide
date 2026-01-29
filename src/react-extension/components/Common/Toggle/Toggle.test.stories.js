@@ -14,61 +14,144 @@
 import React from "react";
 
 export default {
-  title: 'Foundations/Toggle',
-  component: "Toggle"
+  title: "Foundations/Toggle",
+  component: "Toggle",
 };
 
-
 export const Default = {
-  render: () => <div style={{display: "flex", flexWrap: "wrap"}}>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={false} checked={true} readOnly={true}/>
+  render: () => (
+    <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={false}
+          checked={true}
+          readOnly={true}
+        />
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={false}
+          checked={false}
+          readOnly={true}
+        />
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={true}
+          checked={true}
+          readOnly={true}
+        />
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={true}
+          checked={false}
+          readOnly={true}
+        />
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={false}
+          checked={true}
+          readOnly={true}
+          id="toggle1"
+        />
+        <label htmlFor="toggle1">Label</label>
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={false}
+          checked={false}
+          readOnly={true}
+          id="toggle2"
+        />
+        <label htmlFor="toggle2">Label</label>
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={true}
+          checked={true}
+          readOnly={true}
+          id="toggle3"
+        />
+        <label htmlFor="toggle3">Label</label>
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={true}
+          checked={false}
+          readOnly={true}
+          id="toggle4"
+        />
+        <label htmlFor="toggle4">Label</label>
+      </div>
     </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={false} checked={false} readOnly={true}/>
-    </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={true} checked={true} readOnly={true}/>
-    </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={true} checked={false} readOnly={true}/>
-    </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={false} checked={true} readOnly={true} id="toggle1"/>
-      <label htmlFor="toggle1">Label</label>
-    </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={false} checked={false} readOnly={true} id="toggle2"/>
-      <label htmlFor="toggle2">Label</label>
-    </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={true} checked={true} readOnly={true} id="toggle3"/>
-      <label htmlFor="toggle3">Label</label>
-    </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={true} checked={false} readOnly={true} id="toggle4"/>
-      <label htmlFor="toggle4">Label</label>
-    </div>
-  </div>
+  ),
 };
 
 export const ToggleList = {
-  render: () => <div className="togglelist-alt">
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={false} checked={true} readOnly={true} id="toggle1"/>
-      <label htmlFor="toggle1">Label</label>
+  render: () => (
+    <div className="togglelist-alt">
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={false}
+          checked={true}
+          readOnly={true}
+          id="toggle1"
+        />
+        <label htmlFor="toggle1">Label</label>
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={false}
+          checked={false}
+          readOnly={true}
+          id="toggle2"
+        />
+        <label htmlFor="toggle2">Label</label>
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={true}
+          checked={true}
+          readOnly={true}
+          id="toggle3"
+        />
+        <label htmlFor="toggle3">Label</label>
+      </div>
+      <div className="input toggle-switch" style={{ width: "25%" }}>
+        <input
+          type="checkbox"
+          className="toggle-switch-checkbox checkbox"
+          disabled={true}
+          checked={false}
+          readOnly={true}
+          id="toggle4"
+        />
+        <label htmlFor="toggle4">Label</label>
+      </div>
     </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={false} checked={false} readOnly={true} id="toggle2"/>
-      <label htmlFor="toggle2">Label</label>
-    </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={true} checked={true} readOnly={true} id="toggle3"/>
-      <label htmlFor="toggle3">Label</label>
-    </div>
-    <div className="input toggle-switch" style={{width: "25%"}}>
-      <input type="checkbox" className="toggle-switch-checkbox checkbox" disabled={true} checked={false} readOnly={true} id="toggle4"/>
-      <label htmlFor="toggle4">Label</label>
-    </div>
-  </div>
+  ),
 };

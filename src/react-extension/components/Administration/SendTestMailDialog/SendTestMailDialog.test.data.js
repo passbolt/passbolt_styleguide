@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 
 /**
  * Default props.
@@ -24,11 +24,11 @@ export function defaultProps(props = {}) {
     context: defaultAppContext(props?.context),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
-      resetDisplayAdministrationWorkspaceAction: jest.fn()
+      resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
-    }
+      open: jest.fn(),
+    },
   };
   delete props.context; // Treated in the default
   return Object.assign(defaultProps, props);
@@ -43,7 +43,7 @@ export function propsWithMockSendTestEmail(data = {}) {
 
   return defaultProps({
     ...defaultData,
-    ...data
+    ...data,
   });
 }
 
@@ -114,10 +114,10 @@ export function defaultDebugResponse(data = {}) {
   const defaultData = {
     debug: [
       {
-        message: debugMessage
-      }
-    ]
+        message: debugMessage,
+      },
+    ],
   };
 
-  return {...defaultData, ...data};
+  return { ...defaultData, ...data };
 }

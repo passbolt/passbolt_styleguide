@@ -11,7 +11,7 @@ export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
     siteSettings: new SiteSettings(siteSettingsFixture),
-    setContext: function(newContext) {
+    setContext: function (newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
@@ -27,15 +27,15 @@ export function defaultProps() {
   return {
     onClose: jest.fn(),
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
     resourceWorkspaceContext: {
       onResourceFileToImport: jest.fn(),
       onResourceFileImportResult: jest.fn(),
       resourceFileToImport: {
         b64FileContent: "dGVzdA==",
-        fileType: "kdbx"
-      }
-    }
+        fileType: "kdbx",
+      },
+    },
   };
 }

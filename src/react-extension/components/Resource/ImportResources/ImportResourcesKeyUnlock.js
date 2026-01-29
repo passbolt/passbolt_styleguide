@@ -12,18 +12,18 @@
  * @since         2.14.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import ImportResourcesResult from "./ImportResourcesResult";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
 
 /**
@@ -49,9 +49,9 @@ class ImportResourcesKeyUnlock extends Component {
       // Dialog states
       processing: false,
 
-      password: '', // The current password
+      password: "", // The current password
       keyFile: null, // The optional key file
-      errors: {} // The import errors
+      errors: {}, // The import errors
     };
   }
 
@@ -92,7 +92,7 @@ class ImportResourcesKeyUnlock extends Component {
    * Returns the selected file's name
    */
   get selectedFilename() {
-    return this.state.keyFile ? this.state.keyFile.name : '';
+    return this.state.keyFile ? this.state.keyFile.name : "";
   }
 
   /**
@@ -115,7 +115,7 @@ class ImportResourcesKeyUnlock extends Component {
    */
   async handleFileSelected(event) {
     const [keyFile] = event.target.files;
-    await this.setState({keyFile});
+    await this.setState({ keyFile });
   }
 
   /**
@@ -128,7 +128,7 @@ class ImportResourcesKeyUnlock extends Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -163,7 +163,7 @@ class ImportResourcesKeyUnlock extends Component {
 
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
-      reader.onloadend = event => {
+      reader.onloadend = (event) => {
         try {
           const base64Url = event.target.result;
           const fileBase64 = base64Url.split(",")[1];
@@ -185,12 +185,17 @@ class ImportResourcesKeyUnlock extends Component {
     const fileType = resourceFileToImport.fileType;
     const password = this.state.password;
     const keyfile = await this.readFile();
-    const options = Object.assign({}, resourceFileToImport.options, {credentials: {password, keyfile}});
+    const options = Object.assign({}, resourceFileToImport.options, { credentials: { password, keyfile } });
 
     this.toggleProcessing();
     await this.resetValidation();
     try {
-      const result = await this.props.context.port.request("passbolt.import-resources.import-file", fileType, b64FileContent, options);
+      const result = await this.props.context.port.request(
+        "passbolt.import-resources.import-file",
+        fileType,
+        b64FileContent,
+        options,
+      );
       this.handleImportSuccess(result);
     } catch (error) {
       this.handleImportError(error);
@@ -201,7 +206,7 @@ class ImportResourcesKeyUnlock extends Component {
    * Reset the validation process
    */
   async resetValidation() {
-    await this.setState({errors: {}});
+    await this.setState({ errors: {} });
   }
 
   /**
@@ -230,11 +235,11 @@ class ImportResourcesKeyUnlock extends Component {
       // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
     } else if (isInvalidPasswordOrKeyFile) {
       // If the credentials are invalid.
-      this.setState({errors: {invalidPasswordOrKeyfile: true}});
+      this.setState({ errors: { invalidPasswordOrKeyfile: true } });
     } else {
       // If an unexpected error occurred.
       const errorDialogProps = {
-        error: error
+        error: error,
       };
       this.props.dialogContext.open(NotifyError, errorDialogProps);
     }
@@ -253,7 +258,7 @@ class ImportResourcesKeyUnlock extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return this.setState({processing: !prev});
+    return this.setState({ processing: !prev });
   }
 
   /**
@@ -283,13 +288,14 @@ class ImportResourcesKeyUnlock extends Component {
         title={this.translate("Enter the password and/or key file")}
         className="import-password-dialog"
         disabled={this.hasAllInputDisabled()}
-        onClose={this.handleCancel}>
+        onClose={this.handleCancel}
+      >
         <form onSubmit={this.handleSubmit}>
-
           <div className="form-content">
-
-            <div className={`input-password-wrapper input ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="import-password-dialog-password"><Trans>Keepass password</Trans></label>
+            <div className={`input-password-wrapper input ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+              <label htmlFor="import-password-dialog-password">
+                <Trans>Keepass password</Trans>
+              </label>
               <Password
                 id="import-password-dialog-password"
                 name="password"
@@ -297,9 +303,10 @@ class ImportResourcesKeyUnlock extends Component {
                 value={this.state.password}
                 onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()}
-                placeholder={this.translate('Passphrase')}
+                placeholder={this.translate("Passphrase")}
                 preview={true}
-                inputRef={this.passwordInputRef}/>
+                inputRef={this.passwordInputRef}
+              />
             </div>
 
             <div className={`input file ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
@@ -307,38 +314,44 @@ class ImportResourcesKeyUnlock extends Component {
                 type="file"
                 id="dialog-import-passwords"
                 ref={this.fileUploaderRef}
-                onChange={this.handleFileSelected}/>
-              <label htmlFor="dialog-import-passwords"><Trans>Keepass key file (optional)</Trans></label>
+                onChange={this.handleFileSelected}
+              />
+              <label htmlFor="dialog-import-passwords">
+                <Trans>Keepass key file (optional)</Trans>
+              </label>
               <div className="input-file-inline">
                 <input
                   type="text"
-                  placeholder={this.translate('No key file selected')}
+                  placeholder={this.translate("No key file selected")}
                   disabled
-                  value={this.selectedFilename}/>
+                  value={this.selectedFilename}
+                />
                 <button
                   className="button primary"
                   type="button"
                   disabled={this.hasAllInputDisabled()}
-                  onClick={this.handleSelectFile}>
-                  <span><Trans>Choose a file</Trans></span>
+                  onClick={this.handleSelectFile}
+                >
+                  <span>
+                    <Trans>Choose a file</Trans>
+                  </span>
                 </button>
               </div>
-              {isInvalidPasswordOrKeyFile &&
+              {isInvalidPasswordOrKeyFile && (
                 <div className="error-message">
                   <Trans>Cannot decrypt the file, invalid credentials.</Trans>
                 </div>
-              }
+              )}
             </div>
           </div>
 
           <div className="submit-wrapper clearfix">
-            <FormCancelButton
-              disabled={this.hasAllInputDisabled()}
-              onClick={this.handleCancel}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCancel} />
             <FormSubmitButton
               value={this.translate("Continue import")}
               disabled={this.hasAllInputDisabled()}
-              processing={this.state.processing}/>
+              processing={this.state.processing}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -355,4 +368,6 @@ ImportResourcesKeyUnlock.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ImportResourcesKeyUnlock)))));
+export default withAppContext(
+  withResourceWorkspace(withActionFeedback(withDialog(withTranslation("common")(ImportResourcesKeyUnlock)))),
+);

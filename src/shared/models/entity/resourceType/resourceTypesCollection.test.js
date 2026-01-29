@@ -15,7 +15,9 @@ import EntitySchema from "../../entity/abstract/entitySchema";
 import ResourceTypesCollection from "./resourceTypesCollection";
 import {
   resourceTypesCollectionDto,
-  buildDefineNumberOfResourceTypesDtos, resourceTypesV4CollectionDto, resourceTypesV5CollectionDto
+  buildDefineNumberOfResourceTypesDtos,
+  resourceTypesV4CollectionDto,
+  resourceTypesV5CollectionDto,
 } from "./resourceTypesCollection.test.data";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
@@ -31,23 +33,24 @@ import {
   resourceTypeTotpDto,
   resourceTypeV5TotpDto,
   resourceTypeV5DefaultDto,
-  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE
+  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
 } from "./resourceTypeEntity.test.data";
 import CollectionValidationError from "../../entity/abstract/collectionValidationError";
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 import expect from "expect";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   RESOURCE_TYPE_PASSWORD_STRING_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG,
 } from "./resourceTypeSchemasDefinition";
-import {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "../metadata/metadataTypesSettingsEntity";
+import { RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5 } from "../metadata/metadataTypesSettingsEntity";
 
 describe("ResourceTypesCollection", () => {
   describe("::getSchema", () => {
@@ -88,8 +91,8 @@ describe("ResourceTypesCollection", () => {
 
     it("constructor should be empty if no resource types are supported", () => {
       expect.assertions(1);
-      const dto1 = resourceTypePasswordStringDto({slug: 'unsupported-slug'});
-      const dto2 = resourceTypePasswordStringDto({slug: 'unsupported-slug-2'});
+      const dto1 = resourceTypePasswordStringDto({ slug: "unsupported-slug" });
+      const dto2 = resourceTypePasswordStringDto({ slug: "unsupported-slug-2" });
       const resourceTypesCollection = new ResourceTypesCollection([dto1, dto2]);
       expect(resourceTypesCollection.length).toStrictEqual(0);
     });
@@ -99,7 +102,7 @@ describe("ResourceTypesCollection", () => {
       const resourceTypeDto1 = resourceTypePasswordStringDto();
       const resourceTypeDto2 = resourceTypePasswordStringDto();
       const resourceTypesDto = [resourceTypeDto1, resourceTypeDto2];
-      const options = {ignoreInvalidEntity: true};
+      const options = { ignoreInvalidEntity: true };
       const collection = new ResourceTypesCollection(resourceTypesDto, options);
       expect(collection).toHaveLength(1);
       expect(collection._items[0].toDto()).toStrictEqual(resourceTypeDto1);
@@ -109,10 +112,10 @@ describe("ResourceTypesCollection", () => {
       expect.assertions(2);
       const resourceTypeDto1 = resourceTypePasswordStringDto();
       const resourceTypeDto2 = resourceTypePasswordStringDto({
-        id: "wrong-id"
+        id: "wrong-id",
       });
       const resourceTypesDto = [resourceTypeDto1, resourceTypeDto2];
-      const options = {ignoreInvalidEntity: true};
+      const options = { ignoreInvalidEntity: true };
       const collection = new ResourceTypesCollection(resourceTypesDto, options);
       expect(collection).toHaveLength(1);
       expect(collection._items[0].toDto()).toStrictEqual(resourceTypeDto1);
@@ -145,7 +148,6 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeFalsy();
     });
   });
-
 
   describe("::filterByResourceTypeVersion", () => {
     it("should filter the collection by resources types by the version 4.", () => {
@@ -394,11 +396,13 @@ describe("ResourceTypesCollection", () => {
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       const resourceDto = {
         secret: {
-          password: ""
-        }
+          password: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v4 resource password with encrypted description for a resource with encrypted description.", () => {
@@ -406,11 +410,13 @@ describe("ResourceTypesCollection", () => {
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       const resourceDto = {
         secret: {
-          description: ""
-        }
+          description: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v4 resource password with encrypted description for a resource with password and encrypted description.", () => {
@@ -419,11 +425,13 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           password: "",
-          description: ""
-        }
+          description: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v4 resource password with encrypted description and totp for a resource with totp and encrypted description.", () => {
@@ -432,11 +440,13 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           totp: {},
-          description: ""
-        }
+          description: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v4 resource password with encrypted description and totp for a resource with totp and password.", () => {
@@ -445,11 +455,13 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           totp: {},
-          password: ""
-        }
+          password: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v4 resource password with encrypted description and totp for a resource with password with description encrypted and totp.", () => {
@@ -459,11 +471,13 @@ describe("ResourceTypesCollection", () => {
         secret: {
           totp: {},
           password: "",
-          description: ""
-        }
+          description: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v4 resource totp for a resource with totp.", () => {
@@ -472,45 +486,56 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           totp: {},
-        }
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match nothing for a resource with totp and no resource type v4 totp.", () => {
       expect.assertions(1);
-      const resourceTypes = new ResourceTypesCollection([resourceTypePasswordStringDto(), resourceTypePasswordAndDescriptionDto(), resourceTypeV5TotpDto()]);
+      const resourceTypes = new ResourceTypesCollection([
+        resourceTypePasswordStringDto(),
+        resourceTypePasswordAndDescriptionDto(),
+        resourceTypeV5TotpDto(),
+      ]);
       const resourceDto = {
         secret: {
           totp: {},
-        }
+        },
       };
       expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toBeNull();
     });
 
     it("should match nothing for a resource with password and no resource type v4 password.", () => {
       expect.assertions(1);
-      const resourceTypes = new ResourceTypesCollection([resourceTypeTotpDto(), resourceTypeV5TotpDto(), resourceTypeV5DefaultDto()]);
+      const resourceTypes = new ResourceTypesCollection([
+        resourceTypeTotpDto(),
+        resourceTypeV5TotpDto(),
+        resourceTypeV5DefaultDto(),
+      ]);
       const resourceDto = {
         secret: {
           password: "",
-        }
+        },
       };
       expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_4)).toBeNull();
     });
-
 
     it("should match v5 resource default for a resource with password.", () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       const resourceDto = {
         secret: {
-          password: ""
-        }
+          password: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v5 standalone for a resource with note.", () => {
@@ -518,11 +543,13 @@ describe("ResourceTypesCollection", () => {
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       const resourceDto = {
         secret: {
-          description: ""
-        }
+          description: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v5 default for a resource with password and note.", () => {
@@ -531,11 +558,13 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           password: "",
-          description: ""
-        }
+          description: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v5 default for a resource with custom_fields and note.", () => {
@@ -544,11 +573,13 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           custom_fields: [{}],
-          description: ""
-        }
+          description: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v5 resource default totp for a resource with totp and note.", () => {
@@ -557,11 +588,13 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           totp: {},
-          description: ""
-        }
+          description: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v5 resource default totp for a resource with totp and password.", () => {
@@ -570,11 +603,13 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           totp: {},
-          password: ""
-        }
+          password: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v5 resource default totp for a resource with totp and custom_fields.", () => {
@@ -583,11 +618,13 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           totp: {},
-          custom_fields: [{}]
-        }
+          custom_fields: [{}],
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v5 resource default totp for a resource with password with note and totp.", () => {
@@ -597,11 +634,13 @@ describe("ResourceTypesCollection", () => {
         secret: {
           totp: {},
           password: "",
-          description: ""
-        }
+          description: "",
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v5 resource totp for a resource with totp.", () => {
@@ -610,10 +649,12 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           totp: {},
-        }
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match v5 resource totp for a resource with totp.", () => {
@@ -622,10 +663,12 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           custom_fields: [{}],
-        }
+        },
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(
+        resourceTypeExpected,
+      );
     });
 
     it("should match nothing for a resource with totp and no resource type v5 totp.", () => {
@@ -634,7 +677,7 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           totp: {},
-        }
+        },
       };
       expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toBeNull();
     });
@@ -645,14 +688,14 @@ describe("ResourceTypesCollection", () => {
       const resourceDto = {
         secret: {
           password: "",
-        }
+        },
       };
       expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toBeNull();
     });
   });
 
   describe(":pushMany", () => {
-    it("[performance] should ensure performance adding large dataset remains effective.", async() => {
+    it("[performance] should ensure performance adding large dataset remains effective.", async () => {
       const count = 10_000;
       const dtos = buildDefineNumberOfResourceTypesDtos(count);
 

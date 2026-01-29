@@ -13,15 +13,15 @@
  */
 import PropTypes from "prop-types";
 import React from "react";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withRouter} from "react-router-dom";
-import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
-import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withRouter } from "react-router-dom";
+import { withContextualMenu } from "../../../contexts/ContextualMenuContext";
+import { UserWorkspaceFilterTypes, withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
-import {Trans, withTranslation} from "react-i18next";
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import { Trans, withTranslation } from "react-i18next";
+import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
+import { isUserSuspended } from "../../../../shared/utils/userUtils";
 import ColumnCheckboxModel from "../../../../shared/models/column/ColumnCheckboxModel";
 import CellCheckbox from "../../../../shared/components/Table/CellChecbox";
 import CellHeaderCheckbox from "../../../../shared/components/Table/CellHeaderCheckbox";
@@ -44,11 +44,11 @@ import CellUserAccountRecovery from "../../../../shared/components/Table/CellUse
 import ColumnsUserSettingCollection from "../../../../shared/models/entity/user/columnsUserSettingCollection";
 import ColumnModel from "../../../../shared/models/column/ColumnModel";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
-import {withRoles} from "../../../contexts/RoleContext";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
+import { withRoles } from "../../../contexts/RoleContext";
 import DisplayDragUser from "./DisplayDragUser";
-import {withDrag} from "../../../contexts/DragContext";
+import { withDrag } from "../../../contexts/DragContext";
 
 /**
  * This component allows to display the filtered users into a grid
@@ -119,20 +119,68 @@ class DisplayUsers extends React.Component {
    * Init the grid columns.
    */
   initColumns() {
-    this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {disabled: true}}}));
-    this.defaultColumns.push(new ColumnUserProfileModel({cellRenderer: {component: CellUserProfile, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredColumn}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
-    this.defaultColumns.push(new ColumnUserUsernameModel({headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Username")}}}));
-    this.defaultColumns.push(new ColumnUserRoleModel({getValue: user => this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id), cellRenderer: {component: CellUserRole}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Role")}}}));
+    this.defaultColumns.push(
+      new ColumnCheckboxModel({
+        cellRenderer: { component: CellCheckbox, props: { onClick: this.handleCheckboxWrapperClick } },
+        headerCellRenderer: { component: CellHeaderCheckbox, props: { disabled: true } },
+      }),
+    );
+    this.defaultColumns.push(
+      new ColumnUserProfileModel({
+        cellRenderer: {
+          component: CellUserProfile,
+          props: { hasAttentionRequiredFeature: this.hasAttentionRequiredColumn },
+        },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Name") } },
+      }),
+    );
+    this.defaultColumns.push(
+      new ColumnUserUsernameModel({
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Username") } },
+      }),
+    );
+    this.defaultColumns.push(
+      new ColumnUserRoleModel({
+        getValue: (user) => this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id),
+        cellRenderer: { component: CellUserRole },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Role") } },
+      }),
+    );
     if (this.hasSuspendedColumn) {
-      this.defaultColumns.push(new ColumnUserSuspendedModel({cellRenderer: {component: CellUserSuspended}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Suspended")}}}));
+      this.defaultColumns.push(
+        new ColumnUserSuspendedModel({
+          cellRenderer: { component: CellUserSuspended },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Suspended") } },
+        }),
+      );
     }
-    this.defaultColumns.push(new ColumnModifiedModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Modified")}}}));
-    this.defaultColumns.push(new ColumnUserLastLoggedInModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Last logged in")}}}));
+    this.defaultColumns.push(
+      new ColumnModifiedModel({
+        cellRenderer: { component: CellDate, props: { locale: this.props.context.locale, t: this.props.t } },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Modified") } },
+      }),
+    );
+    this.defaultColumns.push(
+      new ColumnUserLastLoggedInModel({
+        cellRenderer: { component: CellDate, props: { locale: this.props.context.locale, t: this.props.t } },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Last logged in") } },
+      }),
+    );
     if (this.hasMfaColumn) {
-      this.defaultColumns.push(new ColumnUserMfaModel({cellRenderer: {component: CellUserMfa}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("MFA")}}}));
+      this.defaultColumns.push(
+        new ColumnUserMfaModel({
+          cellRenderer: { component: CellUserMfa },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("MFA") } },
+        }),
+      );
     }
     if (this.hasAccountRecoveryColumn) {
-      this.defaultColumns.push(new ColumnUserAccountRecoveryModel({cellRenderer: {component: CellUserAccountRecovery}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Account recovery")}}}));
+      this.defaultColumns.push(
+        new ColumnUserAccountRecoveryModel({
+          cellRenderer: { component: CellUserAccountRecovery },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Account recovery") } },
+        }),
+      );
     }
   }
 
@@ -143,10 +191,12 @@ class DisplayUsers extends React.Component {
     // Get the column with id as a key from the column to merge
     const columnsUserSetting = this.columnsUserSetting.toHashTable();
     // Merge the column values
-    const columns = this.defaultColumns.map(column => Object.assign(new ColumnModel(column), columnsUserSetting[column.id]));
+    const columns = this.defaultColumns.map((column) =>
+      Object.assign(new ColumnModel(column), columnsUserSetting[column.id]),
+    );
     // Sort the position of the column, the column with no position will be at the beginning
-    columns.sort((columnA, columnB) => (columnA.position || 0) < (columnB.position || 0) ? -1 : 1);
-    this.setState({columns});
+    columns.sort((columnA, columnB) => ((columnA.position || 0) < (columnB.position || 0) ? -1 : 1));
+    this.setState({ columns });
   }
 
   /**
@@ -154,13 +204,12 @@ class DisplayUsers extends React.Component {
    */
   handleUserScroll() {
     const userToScroll = this.props.userWorkspaceContext.scrollTo.user;
-    const hasNotEmptyRange = this.listRef.current?.getVisibleRange().some(value => value);
+    const hasNotEmptyRange = this.listRef.current?.getVisibleRange().some((value) => value);
     if (userToScroll && hasNotEmptyRange) {
       this.scrollTo(userToScroll.id);
       this.props.userWorkspaceContext.onUserScrolled();
     }
   }
-
 
   /**
    * Handle the user selection
@@ -222,7 +271,7 @@ class DisplayUsers extends React.Component {
     const draggedItems = {
       users: this.props.userWorkspaceContext.selectedUsers,
       groups: [],
-      disabledGroupIds: this.getDisabledGroupIds(this.props.userWorkspaceContext.selectedUsers)
+      disabledGroupIds: this.getDisabledGroupIds(this.props.userWorkspaceContext.selectedUsers),
     };
 
     this.props.dragContext.onDragStart(event, DisplayDragUser, draggedItems);
@@ -271,18 +320,14 @@ class DisplayUsers extends React.Component {
     }
 
     return groups
-      .filter(group => {
-        const isAdmin = group.groups_users.some(
-          gu => gu.user_id === currentUserId && gu.is_admin
-        );
+      .filter((group) => {
+        const isAdmin = group.groups_users.some((gu) => gu.user_id === currentUserId && gu.is_admin);
         if (!isAdmin) {
           return true;
         }
-        return selectedUsers.some(selectedUser =>
-          group.groups_users.some(gu => gu.user_id === selectedUser.id)
-        );
+        return selectedUsers.some((selectedUser) => group.groups_users.some((gu) => gu.user_id === selectedUser.id));
       })
-      .map(group => group.id);
+      .map((group) => group.id);
   }
 
   /**
@@ -293,7 +338,7 @@ class DisplayUsers extends React.Component {
   displayContextualMenu(event, user) {
     const left = event.pageX;
     const top = event.pageY;
-    const contextualMenuProps = {left, top, user};
+    const contextualMenuProps = { left, top, user };
     this.props.contextualMenuContext.show(DisplayUsersContextualMenu, contextualMenuProps);
   }
 
@@ -305,13 +350,12 @@ class DisplayUsers extends React.Component {
     await this.props.userWorkspaceContext.onUserSelected.single(user);
   }
 
-
   /**
    * Scroll to the given user
    * @param userId An user identifier
    */
   scrollTo(userId) {
-    const userIndex = this.users.findIndex(user => user.id === userId);
+    const userIndex = this.users.findIndex((user) => user.id === userId);
     const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
     const isInvisible = userIndex < visibleStartIndex || userIndex > visibleEndIndex;
 
@@ -353,7 +397,7 @@ class DisplayUsers extends React.Component {
    * @return {boolean}
    */
   get isLoggedInUserAdmin() {
-    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -364,7 +408,11 @@ class DisplayUsers extends React.Component {
    * @returns {boolean}
    */
   get hasAttentionRequiredColumn() {
-    return (this.props.context.siteSettings.canIUse("accountRecovery") && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW)) || (this.props.context.siteSettings.canIUse("metadata") && this.isLoggedInUserAdmin);
+    return (
+      (this.props.context.siteSettings.canIUse("accountRecovery") &&
+        this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW)) ||
+      (this.props.context.siteSettings.canIUse("metadata") && this.isLoggedInUserAdmin)
+    );
   }
 
   /**
@@ -380,7 +428,7 @@ class DisplayUsers extends React.Component {
    * @returns {boolean}
    */
   get hasSuspendedColumn() {
-    return this.props.context.siteSettings.canIUse('disableUser') && this.isLoggedInUserAdmin;
+    return this.props.context.siteSettings.canIUse("disableUser") && this.isLoggedInUserAdmin;
   }
 
   /**
@@ -388,9 +436,11 @@ class DisplayUsers extends React.Component {
    * @returns {boolean}
    */
   get hasAccountRecoveryColumn() {
-    return this.props.context.siteSettings.canIUse("accountRecovery")
-      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW)
-      && this.props.accountRecoveryContext.isPolicyEnabled();
+    return (
+      this.props.context.siteSettings.canIUse("accountRecovery") &&
+      this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW) &&
+      this.props.accountRecoveryContext.isPolicyEnabled()
+    );
   }
 
   /**
@@ -398,7 +448,7 @@ class DisplayUsers extends React.Component {
    * @return {*}
    */
   get selectedUsersIds() {
-    const getIds = user => user.id;
+    const getIds = (user) => user.id;
     return this.selectedUsers.map(getIds);
   }
 
@@ -416,7 +466,7 @@ class DisplayUsers extends React.Component {
    * @return {[]}
    */
   get columnsFiltered() {
-    const filteredByColumnToDisplay = column => column.id === 'checkbox' || column.show;
+    const filteredByColumnToDisplay = (column) => column.id === "checkbox" || column.show;
     return this.state.columns.filter(filteredByColumnToDisplay);
   }
 
@@ -440,36 +490,42 @@ class DisplayUsers extends React.Component {
 
     return (
       <>
-        {!isReady &&
+        {!isReady && (
           <div className="tableview empty">
-            <div className="empty-content">
-            </div>
+            <div className="empty-content"></div>
           </div>
-        }
-        {isEmpty &&
+        )}
+        {isEmpty && (
           <div className="tableview empty">
-            {isSearchFilterApplied &&
+            {isSearchFilterApplied && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>None of the users matched this search.</Trans></h1>
-                  <p className="try-another-search"><Trans>Try another search or use the left panel to navigate into
-                    your organization.</Trans></p>
+                  <h1>
+                    <Trans>None of the users matched this search.</Trans>
+                  </h1>
+                  <p className="try-another-search">
+                    <Trans>Try another search or use the left panel to navigate into your organization.</Trans>
+                  </p>
                 </div>
               </div>
-            }
-            { !isSearchFilterApplied &&
+            )}
+            {!isSearchFilterApplied && (
               <div className="empty-content">
-                <CircleOffSVG/>
+                <CircleOffSVG />
                 <div className="message">
-                  <h1><Trans>There are no users.</Trans></h1>
-                  <p className="try-another-filter"><Trans>You could remove some filters.</Trans></p>
+                  <h1>
+                    <Trans>There are no users.</Trans>
+                  </h1>
+                  <p className="try-another-filter">
+                    <Trans>You could remove some filters.</Trans>
+                  </p>
                 </div>
               </div>
-            }
+            )}
           </div>
-        }
-        {isGridReady &&
+        )}
+        {isGridReady && (
           <GridTable
             columns={this.columnsFiltered}
             rows={this.users}
@@ -481,9 +537,9 @@ class DisplayUsers extends React.Component {
             onRowDragEnd={this.handleDragEndEvent}
             selectedRowsIds={this.selectedUsersIds}
             isRowInactive={this.isRowInactive}
-            rowsRef={this.listRef}>
-          </GridTable>
-        }
+            rowsRef={this.listRef}
+          ></GridTable>
+        )}
       </>
     );
   }
@@ -501,4 +557,14 @@ DisplayUsers.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withRoles(withAccountRecovery(withDrag(withTranslation('common')(DisplayUsers))))))))));
+export default withAppContext(
+  withRbac(
+    withRouter(
+      withActionFeedback(
+        withContextualMenu(
+          withUserWorkspace(withRoles(withAccountRecovery(withDrag(withTranslation("common")(DisplayUsers))))),
+        ),
+      ),
+    ),
+  ),
+);

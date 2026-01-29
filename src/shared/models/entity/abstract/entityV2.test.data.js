@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.0
  */
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 import EntityV2 from "./entityV2";
 import EntityValidationError from "./entityValidationError";
 import EntityV2Collection from "./entityV2Collection";
@@ -19,49 +19,49 @@ import EntityV2Collection from "./entityV2Collection";
 export class TestEntityV2 extends EntityV2 {
   static getSchema() {
     return {
-      "type": "object",
-      "required": ['name'],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+      type: "object",
+      required: ["name"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "name": {
-          "type": "string",
-          "nullable": true,
+        name: {
+          type: "string",
+          nullable: true,
         },
-        "number": {
-          "type": "number",
-          "nullable": true,
+        number: {
+          type: "number",
+          nullable: true,
         },
-        "integer": {
-          "type": "integer",
-          "nullable": true,
+        integer: {
+          type: "integer",
+          nullable: true,
         },
-        "boolean": {
-          "type": "boolean",
-          "nullable": true,
+        boolean: {
+          type: "boolean",
+          nullable: true,
         },
-        "object": {
-          "type": "object"
+        object: {
+          type: "object",
         },
-        "array": {
-          "type": "array",
-          "items": {
-            "type": "string",
-          }
+        array: {
+          type: "array",
+          items: {
+            type: "string",
+          },
         },
-        "associated_entity": TestAssociatedEntityV2.getSchema(),
-        "associated_collection": TestAssociatedCollection.getSchema()
-      }
+        associated_entity: TestAssociatedEntityV2.getSchema(),
+        associated_collection: TestAssociatedCollection.getSchema(),
+      },
     };
   }
 
   static get associations() {
     return {
-      "associated_entity": TestAssociatedEntityV2,
-      "associated_collection": TestAssociatedCollection
+      associated_entity: TestAssociatedEntityV2,
+      associated_collection: TestAssociatedCollection,
     };
   }
 
@@ -130,21 +130,21 @@ export class TestEntityV2 extends EntityV2 {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {associated_entity: true, associated_collection: true};
+    return { associated_entity: true, associated_collection: true };
   }
 }
 
 export class TestAssociatedEntityV2 extends EntityV2 {
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["id"],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["id"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-      }
+      },
     };
   }
 
@@ -156,20 +156,20 @@ export class TestAssociatedEntityV2 extends EntityV2 {
 export class TestWithAssociationEntityV2 extends EntityV2 {
   static getSchema() {
     return {
-      "type": "object",
-      "required": ['name', 'associated_entity'],
-      "properties": {
-        "name": {
-          "type": "string",
+      type: "object",
+      required: ["name", "associated_entity"],
+      properties: {
+        name: {
+          type: "string",
         },
-        "associated_entity": TestAssociatedEntityV2.getSchema()
-      }
+        associated_entity: TestAssociatedEntityV2.getSchema(),
+      },
     };
   }
 
   static get associations() {
     return {
-      "associated_entity": TestAssociatedEntityV2
+      associated_entity: TestAssociatedEntityV2,
     };
   }
 
@@ -201,25 +201,25 @@ export class TestAssociatedCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": TestAssociatedEntityV2.getSchema()
+      type: "array",
+      items: TestAssociatedEntityV2.getSchema(),
     };
   }
 }
 
-export const minimalTestEntityV2Dto = data => ({
+export const minimalTestEntityV2Dto = (data) => ({
   name: "test name",
-  ...data
+  ...data,
 });
 
-export const defaultTestEntityV2Dto = data => ({
+export const defaultTestEntityV2Dto = (data) => ({
   id: uuid(),
   name: "test name",
   number: Math.random(),
   integer: Math.floor(Math.random() * 100),
   boolean: Math.random() < 0.5,
   object: {
-    foo: uuid()
+    foo: uuid(),
   },
   array: [uuid(), uuid()],
   associated_entity: defaultAssociatedTestEntityV2Dto(),
@@ -227,7 +227,7 @@ export const defaultTestEntityV2Dto = data => ({
   ...data,
 });
 
-export const defaultAssociatedTestEntityV2Dto = data => ({
+export const defaultAssociatedTestEntityV2Dto = (data) => ({
   id: uuid(),
-  ...data
+  ...data,
 });

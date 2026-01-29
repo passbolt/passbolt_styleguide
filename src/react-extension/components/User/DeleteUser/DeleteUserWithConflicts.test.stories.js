@@ -13,17 +13,16 @@
  */
 
 import DeleteUserWithConflicts from "./DeleteUserWithConflicts";
-import {defaultContext} from "./DeleteUserWithConflicts.test.data";
-
+import { defaultContext } from "./DeleteUserWithConflicts.test.data";
 
 export default {
-  title: 'Components/User/DeleteUserWithConflicts',
-  component: DeleteUserWithConflicts
+  title: "Components/User/DeleteUserWithConflicts",
+  component: DeleteUserWithConflicts,
 };
 
 export const Initial = {
   args: {
     onClose: () => {},
-    context: defaultContext()
-  }
+    context: defaultContext(),
+  },
 };

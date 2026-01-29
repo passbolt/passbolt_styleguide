@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import AnimatedFeedback from "../../../../../shared/components/Icons/AnimatedFeedback";
 import CarretDownSVG from "../../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../../img/svg/caret_right.svg";
@@ -48,7 +48,7 @@ class ApiError extends Component {
    * Handles the click on the display logs button.
    */
   handleDisplayLogsClick() {
-    this.setState({displayLogs: !this.state.displayLogs});
+    this.setState({ displayLogs: !this.state.displayLogs });
   }
 
   /**
@@ -61,26 +61,27 @@ class ApiError extends Component {
         <div className="content">
           <div className="header">
             <div className="logo-svg">
-              <LogoSVG role="img" width="20rem" height="3.5rem"/>
+              <LogoSVG role="img" width="20rem" height="3.5rem" />
             </div>
           </div>
           <div className="api-feedback-card">
-            <AnimatedFeedback name="attention"/>
-            <h1><Trans>Something went wrong!</Trans></h1>
-            <p><Trans>Please try again later or contact your administrator.</Trans></p>
+            <AnimatedFeedback name="attention" />
+            <h1>
+              <Trans>Something went wrong!</Trans>
+            </h1>
+            <p>
+              <Trans>Please try again later or contact your administrator.</Trans>
+            </p>
             <div className="accordion-header">
               <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
-                <Trans>Logs</Trans> {this.state.displayLogs
-                  ? <CarretDownSVG />
-                  : <CarretRightSVG />
-                }
+                <Trans>Logs</Trans> {this.state.displayLogs ? <CarretDownSVG /> : <CarretRightSVG />}
               </button>
             </div>
-            {this.state.displayLogs &&
+            {this.state.displayLogs && (
               <div className="accordion-content">
-                <textarea readOnly={true} value={this.props.message}/>
+                <textarea readOnly={true} value={this.props.message} />
               </div>
-            }
+            )}
           </div>
         </div>
       </div>
@@ -90,7 +91,7 @@ class ApiError extends Component {
 
 ApiError.propTypes = {
   message: PropTypes.string.isRequired, // The message to display on the UI
-  t: PropTypes.func // the translation function
+  t: PropTypes.func, // the translation function
 };
 
 export default withTranslation("common")(ApiError);

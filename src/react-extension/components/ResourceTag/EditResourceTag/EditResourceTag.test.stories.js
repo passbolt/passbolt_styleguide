@@ -12,32 +12,30 @@
  * @since         5.0.0
  */
 import EditResourceTag from "./EditResourceTag";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import React from "react";
-import {MemoryRouter} from "react-router-dom";
-
+import { MemoryRouter } from "react-router-dom";
 
 export default {
-  title: 'Components/ResourceTag/EditResourceTag',
+  title: "Components/ResourceTag/EditResourceTag",
   component: EditResourceTag,
-  decorators: [Story => (
-    <MemoryRouter initialEntries={['/']}>
-      <Story/>
-    </MemoryRouter>
-  )],
+  decorators: [
+    (Story) => (
+      <MemoryRouter initialEntries={["/"]}>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
 };
 
 const tagToEdit = {
   id: 1,
-  slug: "apache"
+  slug: "apache",
 };
-
-
-
 
 export const Initial = {
   args: {
-    context: defaultUserAppContext({tagToEdit}),
-    onClose: () => {}
-  }
+    context: defaultUserAppContext({ tagToEdit }),
+    onClose: () => {},
+  },
 };

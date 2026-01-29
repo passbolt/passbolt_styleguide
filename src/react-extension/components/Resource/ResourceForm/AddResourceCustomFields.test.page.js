@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.3.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AddResourceCustomFields from "./AddResourceCustomFields";
@@ -27,7 +26,7 @@ export default class AddResourceCustomFieldsPage {
       <MockTranslationProvider>
         <AddResourceCustomFields {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -42,7 +41,7 @@ export default class AddResourceCustomFieldsPage {
    * Returns the add custom field button element
    */
   get addCustomField() {
-    return this._page.container.querySelector('.custom-field-add button');
+    return this._page.container.querySelector(".custom-field-add button");
   }
 
   /**
@@ -79,7 +78,7 @@ export default class AddResourceCustomFieldsPage {
    * @param {string} data - The data to fill the input element with.
    */
   async fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
     await waitFor(() => {
       element.value === data;
@@ -91,9 +90,8 @@ export default class AddResourceCustomFieldsPage {
    * @param {Element} element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 }

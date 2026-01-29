@@ -12,15 +12,14 @@
  * @since         4.6.0
  */
 
-import {defaultRbacData, defaultUnknownRbac} from "../../models/entity/rbac/rbacEntity.test.data";
+import { defaultRbacData, defaultUnknownRbac } from "../../models/entity/rbac/rbacEntity.test.data";
 import AllowControlFunction from "./controlFunctions/allowControlFunction";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import GetControlFunctionService from "./getControlFunctionService";
 
-
-describe('GetControlFunctionService', () => {
-  describe('::getByRbac', () => {
-    it('should return DenyControlFunction for unknown rbac', () => {
+describe("GetControlFunctionService", () => {
+  describe("::getByRbac", () => {
+    it("should return DenyControlFunction for unknown rbac", () => {
       expect.assertions(1);
 
       const result = GetControlFunctionService.getByRbac(defaultUnknownRbac());
@@ -28,7 +27,7 @@ describe('GetControlFunctionService', () => {
       expect(result).toEqual(DenyControlFunction);
     });
 
-    it('should return the control function for a known rbac', () => {
+    it("should return the control function for a known rbac", () => {
       expect.assertions(1);
 
       const result = GetControlFunctionService.getByRbac(defaultRbacData());
@@ -37,8 +36,8 @@ describe('GetControlFunctionService', () => {
     });
   });
 
-  describe('::getDefaultForAdminAndAction', () => {
-    it('should return AllowControlFunction for an unknown ui action', () => {
+  describe("::getDefaultForAdminAndAction", () => {
+    it("should return AllowControlFunction for an unknown ui action", () => {
       expect.assertions(1);
 
       const result = GetControlFunctionService.getDefaultForAdminAndAction(defaultUnknownRbac());
@@ -46,7 +45,7 @@ describe('GetControlFunctionService', () => {
       expect(result).toEqual(AllowControlFunction);
     });
 
-    it('should return the correct control function for a known ui action', () => {
+    it("should return the correct control function for a known ui action", () => {
       expect.assertions(1);
 
       const result = GetControlFunctionService.getDefaultForAdminAndAction(defaultRbacData());
@@ -55,8 +54,8 @@ describe('GetControlFunctionService', () => {
     });
   });
 
-  describe('::getDefaultForUserAndAction', () => {
-    it('should return AllowControlFunction for an unknown ui action', () => {
+  describe("::getDefaultForUserAndAction", () => {
+    it("should return AllowControlFunction for an unknown ui action", () => {
       expect.assertions(1);
 
       const result = GetControlFunctionService.getDefaultForUserAndAction(defaultUnknownRbac());
@@ -64,7 +63,7 @@ describe('GetControlFunctionService', () => {
       expect(result).toEqual(AllowControlFunction);
     });
 
-    it('should return the correct control function for a known ui action', () => {
+    it("should return the correct control function for a known ui action", () => {
       expect.assertions(1);
 
       const result = GetControlFunctionService.getDefaultForUserAndAction(defaultRbacData());

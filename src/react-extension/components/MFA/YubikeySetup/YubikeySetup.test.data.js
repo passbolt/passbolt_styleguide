@@ -12,8 +12,8 @@
  * @since         4.4.0
  */
 
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {mockMfaContext} from "../DisplayProviderList/DisplayProviderList.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { mockMfaContext } from "../DisplayProviderList/DisplayProviderList.test.data";
 
 export function defaultProps(props = {}) {
   return {

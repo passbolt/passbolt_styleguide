@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import NotifyExpiredSession from "./NotifyExpiredSession";
 
@@ -29,10 +29,10 @@ export default class NotifyExpiredSessionPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <NotifyExpiredSession {...props}/>
+          <NotifyExpiredSession {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -47,24 +47,22 @@ export default class NotifyExpiredSessionPage {
    * Returns the dialog element
    */
   get dialog() {
-    return this._page.container.querySelector('.session-expired-dialog');
+    return this._page.container.querySelector(".session-expired-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
-
 
   /**
    * Returns the save button element
    */
   get loginButton() {
-    return this._page.container.querySelector('.submit-wrapper a');
+    return this._page.container.querySelector(".submit-wrapper a");
   }
-
 
   /**
    * Returns true if the page object exists in the container
@@ -75,25 +73,25 @@ export default class NotifyExpiredSessionPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
   /** Click on the login button */
-  async goToLogin()  {
+  async goToLogin() {
     await this.click(this.loginButton);
   }
 
   /** Click on the close dialog */
-  async closeDialog()  {
+  async closeDialog() {
     await this.click(this.dialogClose);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.dialog, escapeKeyDown);
   }
 }

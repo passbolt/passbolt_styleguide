@@ -24,7 +24,7 @@ import {
   optOutPolicyPropsWithOrganisationKey,
 } from "./ManageAccountRecoveryAdministrationSettings.test.data";
 import ManageAccountRecoveryAdministrationSettingsPage from "./ManageAccountRecoveryAdministrationSettings.test.page";
-import {waitFor} from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -33,7 +33,7 @@ beforeEach(() => {
 describe("As AD I should see the account recovery settings", () => {
   let page; // The page to test against
 
-  it('As AD in the administration workspace, I can see the account recovery section populated with the default value', async() => {
+  it("As AD in the administration workspace, I can see the account recovery section populated with the default value", async () => {
     expect.assertions(10);
     const props = defaultProps(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
@@ -51,7 +51,7 @@ describe("As AD I should see the account recovery settings", () => {
     await page.unmount();
   });
 
-  it('As AD in the administration workspace, I can see the account recovery section populated with the mandatory value', async() => {
+  it("As AD in the administration workspace, I can see the account recovery section populated with the mandatory value", async () => {
     expect.assertions(4);
     const props = mandatoryPolicyPropsWithOrganisationKey(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
@@ -61,7 +61,7 @@ describe("As AD I should see the account recovery settings", () => {
     expect(page.optOutRadioButton.isChecked).toBeFalsy();
   });
 
-  it('As AD in the administration workspace, I can see the account recovery section populated with the opt-in value', async() => {
+  it("As AD in the administration workspace, I can see the account recovery section populated with the opt-in value", async () => {
     expect.assertions(4);
     const props = optInPolicyPropsWithOrganisationKey(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
@@ -71,7 +71,7 @@ describe("As AD I should see the account recovery settings", () => {
     expect(page.optOutRadioButton.isChecked).toBeFalsy();
   });
 
-  it('As AD in the administration workspace, I can see the account recovery section populated with the opt-out value', async() => {
+  it("As AD in the administration workspace, I can see the account recovery section populated with the opt-out value", async () => {
     expect.assertions(4);
     const props = optOutPolicyPropsWithOrganisationKey(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
@@ -81,7 +81,7 @@ describe("As AD I should see the account recovery settings", () => {
     expect(page.optOutRadioButton.isChecked).toBeTruthy();
   });
 
-  it('As a logged in administrator in the administration workspace, I can select an account recovery policy', async() => {
+  it("As a logged in administrator in the administration workspace, I can select an account recovery policy", async () => {
     expect.assertions(6);
     const props = hasChangedPolicyProps(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
@@ -92,6 +92,8 @@ describe("As AD I should see the account recovery settings", () => {
     await page.clickOnOptInPolicyButton();
     const newPolicy = "opt-in";
     expect(props.adminAccountRecoveryContext.changePolicy).toHaveBeenCalledWith(newPolicy);
-    expect(page.warningMessage).toBe("Don't forget to save your settings to apply your modification.Warning, Don't forget to add an organization recovery key.");
+    expect(page.warningMessage).toBe(
+      "Don't forget to save your settings to apply your modification.Warning, Don't forget to add an organization recovery key.",
+    );
   });
 });

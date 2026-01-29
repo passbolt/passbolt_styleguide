@@ -14,25 +14,26 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import FilterUsersByShortcut from "./FilterUsersByShortcut";
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultProps} from "./FilterUsersByShortcut.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultProps } from "./FilterUsersByShortcut.test.data";
 
 export default {
-  title: 'Components/User/FilterUsersByShortcut',
-  component: FilterUsersByShortcut
+  title: "Components/User/FilterUsersByShortcut",
+  component: FilterUsersByShortcut,
 };
 
-const Template = ({context, ...args}) =>
+const Template = ({ context, ...args }) => (
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={["/"]}>
       <div className="panel">
-        <Route component={routerProps => <FilterUsersByShortcut {...args} {...routerProps}/>}></Route>
+        <Route component={(routerProps) => <FilterUsersByShortcut {...args} {...routerProps} />}></Route>
       </div>
     </MemoryRouter>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 Template.propTypes = {
   context: PropTypes.object,

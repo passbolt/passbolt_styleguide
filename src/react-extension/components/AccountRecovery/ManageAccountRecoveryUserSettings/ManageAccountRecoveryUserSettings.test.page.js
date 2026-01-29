@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {BrowserRouter as Router} from "react-router-dom";
-import {render, fireEvent, waitFor} from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ManageAccountRecoveryUserSettings from "./ManageAccountRecoveryUserSettings";
@@ -29,10 +29,10 @@ export default class ManageAccountRecoveryUserSettingsPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <ManageAccountRecoveryUserSettings {...props}/>
+          <ManageAccountRecoveryUserSettings {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -58,7 +58,7 @@ export default class ManageAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this.selector('.recovery-account-policy-dialog h2');
+    return this.selector(".recovery-account-policy-dialog h2");
   }
 
   /**
@@ -66,7 +66,7 @@ export default class ManageAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get acceptCheckbox() {
-    return this.selector('#statusRecoverAccountAccept');
+    return this.selector("#statusRecoverAccountAccept");
   }
 
   /**
@@ -74,7 +74,7 @@ export default class ManageAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get rejectCheckbox() {
-    return this.selector('#statusRecoverAccountReject');
+    return this.selector("#statusRecoverAccountReject");
   }
 
   /**
@@ -90,7 +90,7 @@ export default class ManageAccountRecoveryUserSettingsPage {
    * @returns {Promise<void>}
    */
   async clickOnSave() {
-    fireEvent.click(this.saveButton, {button: 0});
+    fireEvent.click(this.saveButton, { button: 0 });
     await waitFor(() => {});
   }
 }

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.1.0
  */
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import ChangeUserPassphrase from "./ChangeUserPassphrase";
 
@@ -25,21 +24,18 @@ export default class ChangeUserPassphrasePage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(
-      <ChangeUserPassphrase {...props}/>,
-      {legacyRoot: true}
-    );
+    this._page = render(<ChangeUserPassphrase {...props} />, { legacyRoot: true });
   }
 
   /**
    * Returns the loading element
    */
   get loading() {
-    const element = this._page.container.querySelector('.loading');
+    const element = this._page.container.querySelector(".loading");
     return {
       exists() {
         return element !== null;
-      }
+      },
     };
   }
 
@@ -47,11 +43,11 @@ export default class ChangeUserPassphrasePage {
    * Returns the introduction element
    */
   get introduction() {
-    const element = this._page.container.querySelector('.introduction');
+    const element = this._page.container.querySelector(".introduction");
     return {
       exists() {
         return element !== null;
-      }
+      },
     };
   }
 
@@ -59,11 +55,11 @@ export default class ChangeUserPassphrasePage {
    * Returns the confirm passphrase element
    */
   get confirmPassphrase() {
-    const element = this._page.container.querySelector('.confirm');
+    const element = this._page.container.querySelector(".confirm");
     return {
       exists() {
         return element !== null;
-      }
+      },
     };
   }
 
@@ -71,11 +67,11 @@ export default class ChangeUserPassphrasePage {
    * Returns the update passphrase element
    */
   get updatePassphrase() {
-    const element = this._page.container.querySelector('.update');
+    const element = this._page.container.querySelector(".update");
     return {
       exists() {
         return element !== null;
-      }
+      },
     };
   }
 
@@ -83,16 +79,11 @@ export default class ChangeUserPassphrasePage {
    * Returns the download backup element
    */
   get downloadBackup() {
-    const element = this._page.container.querySelector('.download');
+    const element = this._page.container.querySelector(".download");
     return {
       exists() {
         return element !== null;
-      }
+      },
     };
   }
 }
-
-
-
-
-

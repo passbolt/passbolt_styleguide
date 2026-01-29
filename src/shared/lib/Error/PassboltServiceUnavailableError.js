@@ -9,7 +9,7 @@ class PassboltServiceUnavailableError extends Error {
   constructor(message) {
     message = message || "The service is unavailable";
     super(message);
-    this.name = 'PassboltServiceUnavailableError';
+    this.name = "PassboltServiceUnavailableError";
   }
 }
 

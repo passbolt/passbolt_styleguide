@@ -11,18 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.8.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withLoading} from "../../../contexts/LoadingContext";
-import {Trans, withTranslation} from "react-i18next";
-import {getUserFormattedName} from "../../../../shared/utils/userUtils";
+import { withLoading } from "../../../contexts/LoadingContext";
+import { Trans, withTranslation } from "react-i18next";
+import { getUserFormattedName } from "../../../../shared/utils/userUtils";
 
 /**
  * This component allows the removal of a user from a group
@@ -63,61 +63,60 @@ class AddUserToGroupDialog extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
-    this.props.context.setContext({addUserToGroupDialogProps: null});
+    this.props.context.setContext({ addUserToGroupDialogProps: null });
   }
 
   /**
    * Save the changes.
    */
   async add() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
     const userToAdd = this.props.context.addUserToGroupDialogProps.user;
     const group = this.props.context.addUserToGroupDialogProps.group;
     const groupUsers = group.groups_users;
-    const groupUsersDto = groupUsers
-      .map(groupUser => ({
-        id: groupUser.id || undefined,
-        user_id: groupUser.user_id,
-        is_admin: groupUser.is_admin,
-        delete: false
-      }));
+    const groupUsersDto = groupUsers.map((groupUser) => ({
+      id: groupUser.id || undefined,
+      user_id: groupUser.user_id,
+      is_admin: groupUser.is_admin,
+      delete: false,
+    }));
     groupUsersDto.push({
       id: undefined,
       user_id: userToAdd.id,
       is_admin: false,
-      delete: undefined
+      delete: undefined,
     });
 
     const groupDto = {
       id: group.id,
       name: group.name,
-      groups_users: groupUsersDto
+      groups_users: groupUsersDto,
     };
 
     try {
       this.props.loadingContext.add();
-      await this.props.context.port.request('passbolt.groups.update', groupDto);
+      await this.props.context.port.request("passbolt.groups.update", groupDto);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been added successfully"));
       this.props.onClose();
-      this.props.context.setContext({addUserToGroupDialogProps: null});
+      this.props.context.setContext({ addUserToGroupDialogProps: null });
     } catch (error) {
       this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error.name === "UserAbortsOperationError") {
-        this.setState({processing: false});
+        this.setState({ processing: false });
       } else {
         // Unexpected error occurred.
         console.error(error);
         this.handleError(error);
-        this.setState({processing: false});
+        this.setState({ processing: false });
       }
     }
   }
 
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -135,7 +134,9 @@ class AddUserToGroupDialog extends Component {
    * @returns {string}
    */
   getUser() {
-    return getUserFormattedName(this.props.context.addUserToGroupDialogProps.user, this.props.t, {withUsername: true});
+    return getUserFormattedName(this.props.context.addUserToGroupDialogProps.user, this.props.t, {
+      withUsername: true,
+    });
   }
 
   /**
@@ -160,19 +161,28 @@ class AddUserToGroupDialog extends Component {
         title={this.translate("Add user?")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="add-user-dialog">
+        className="add-user-dialog"
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <p>
               <Trans>
-                Are you sure you want to add <strong className="dialog-variable">{{user: this.getUser()}}</strong> to <strong className="dialog-variable">{{group: this.getGroup()}}</strong>?
+                Are you sure you want to add <strong className="dialog-variable">{{ user: this.getUser() }}</strong> to{" "}
+                <strong className="dialog-variable">{{ group: this.getGroup() }}</strong>?
               </Trans>
             </p>
-            <p><Trans>The user will gain access to the resources shared with the group.</Trans></p>
+            <p>
+              <Trans>The user will gain access to the resources shared with the group.</Trans>
+            </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Add")} warning={true}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Add")}
+              warning={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -189,4 +199,6 @@ AddUserToGroupDialog.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withLoading(withActionFeedback(withDialog(withTranslation('common')(AddUserToGroupDialog)))));
+export default withAppContext(
+  withLoading(withActionFeedback(withDialog(withTranslation("common")(AddUserToGroupDialog)))),
+);

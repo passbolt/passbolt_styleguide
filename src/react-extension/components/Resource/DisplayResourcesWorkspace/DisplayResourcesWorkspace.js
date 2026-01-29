@@ -11,13 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import FilterResourcesByFolders from "../FilterResourcesByFolders/FilterResourcesByFolders";
 import DisplayResourceFolderDetails from "../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayResourceFolderDetails";
 import DisplayResourceDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetails";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByTags from "../FilterResourcesByTags/FilterResourcesByTags";
 import PropTypes from "prop-types";
 import FilterResourcesByText from "../FilterResourcesByText/FilterResourcesByText";
@@ -26,11 +26,11 @@ import FilterResourcesByBreadcrumb from "../FilterResourcesByBreadcrumb/FilterRe
 import DisplayResourcesWorkspaceMenu from "./DisplayResourcesWorkspaceMenu";
 import Logo from "../../Common/Navigation/Header/Logo";
 import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMenu";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import FilterResourcesByGroups from "../FilterResourcesByGroups/FilterResourcesByGroups";
 import DisplayResourcesList from "../DisplayResourcesList/DisplayResourcesList";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
@@ -38,7 +38,7 @@ import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import ColumnsSVG from "../../../../img/svg/columns.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
-import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
+import WorkspaceSwitcher, { WORKSPACE_ENUM } from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters";
 import Footer from "../../Common/Footer/Footer";
@@ -46,10 +46,13 @@ import DisplayEmptyDetails from "../../ResourceFolderDetails/DisplayResourceFold
 import DisplayResourcesListDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourcesListDetails";
 import debounce from "debounce-promise";
 import RevertSVG from "../../../../img/svg/revert.svg";
-import {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
-import {ROW_SETTING_HEIGHT_COMFORTABLE, ROW_SETTING_HEIGHT_COMPACT} from "../../../../shared/models/entity/rowsSetting/rowsSettingEntity";
+import { ColumnModelTypes } from "../../../../shared/models/column/ColumnModel";
+import {
+  ROW_SETTING_HEIGHT_COMFORTABLE,
+  ROW_SETTING_HEIGHT_COMPACT,
+} from "../../../../shared/models/entity/rowsSetting/rowsSettingEntity";
 import ResizableSidebar from "../../ResizableSidebar/ResizableSidebar";
-import {withResizableSidebar} from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
+import { withResizableSidebar } from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -62,7 +65,7 @@ class Workspace extends Component {
     super(props);
     this.bindCallbacks();
     this.createRefs();
-    window.addEventListener('resize', this.handleWindowResizeEventDebounced);
+    window.addEventListener("resize", this.handleWindowResizeEventDebounced);
   }
 
   /**
@@ -116,7 +119,9 @@ class Workspace extends Component {
     this.actionsBar.current?.classList.remove("icon-only");
     // Get elements width
     const offsetWidthActionBar = this.actionsBar.current?.offsetWidth;
-    const offsetActionsButton = this.actionsFilter.current ? this.actionsFilter.current.offsetWidth : this.actionsButton.current?.offsetWidth;
+    const offsetActionsButton = this.actionsFilter.current
+      ? this.actionsFilter.current.offsetWidth
+      : this.actionsButton.current?.offsetWidth;
     const offsetActionsSecondary = this.actionsSecondary.current?.offsetWidth;
 
     // Check if the default width overlay the container to show only icons
@@ -181,7 +186,10 @@ class Workspace extends Component {
    */
   get isUserAdmin() {
     const loggedInUser = this.props.context.loggedInUser;
-    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
+    return (
+      loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN &&
+      this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE)
+    );
   }
 
   /**
@@ -197,9 +205,11 @@ class Workspace extends Component {
    * @returns {boolean}
    */
   get shouldDisplayEmptyDetails() {
-    return !this.props.resourceWorkspaceContext.details.folder
-      && !this.props.resourceWorkspaceContext.details.resource
-      && this.props.resourceWorkspaceContext.selectedResources.length === 0;
+    return (
+      !this.props.resourceWorkspaceContext.details.folder &&
+      !this.props.resourceWorkspaceContext.details.resource &&
+      this.props.resourceWorkspaceContext.selectedResources.length === 0
+    );
   }
 
   /**
@@ -221,9 +231,11 @@ class Workspace extends Component {
    */
   hasSeparator(column, index) {
     const nextColumn = this.props.resourceWorkspaceContext.columnsResourceSetting.items[index + 1];
-    return index === this.columnsResourceSetting.length - 1
-      || (column.id === ColumnModelTypes.URI && nextColumn?.id !== ColumnModelTypes.EXPIRED)
-      || column.id === ColumnModelTypes.EXPIRED;
+    return (
+      index === this.columnsResourceSetting.length - 1 ||
+      (column.id === ColumnModelTypes.URI && nextColumn?.id !== ColumnModelTypes.EXPIRED) ||
+      column.id === ColumnModelTypes.EXPIRED
+    );
   }
 
   /**
@@ -231,17 +243,18 @@ class Workspace extends Component {
    * @return {JSX}
    */
   render() {
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
-    const canUseTags = this.props.context.siteSettings.canIUse("tags")
-      && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
+    const canUseFolders =
+      this.props.context.siteSettings.canIUse("folders") && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
+    const canUseTags =
+      this.props.context.siteSettings.canIUse("tags") && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
 
     const rowsSetting = this.props.resourceWorkspaceContext.rowsSetting;
 
     /** Calculate the width of the header-right to align with the right sidebar resizing */
-    const {right, containerRef} = this.props.sidebarContext || {};
+    const { right, containerRef } = this.props.sidebarContext || {};
     const containerWidth = containerRef?.current?.offsetWidth || 1;
-    const rightHeaderWidth = ((right?.width / containerWidth) * 100) < 25 ? `25%` : `${(right?.width / containerWidth) * 100}%`; // set width of right header
+    const rightHeaderWidth =
+      (right?.width / containerWidth) * 100 < 25 ? `25%` : `${(right?.width / containerWidth) * 100}%`; // set width of right header
 
     return (
       <div className="panel main">
@@ -254,19 +267,15 @@ class Workspace extends Component {
         >
           <div className="panel left resource-filter">
             <div className="sidebar-content">
-              <Logo/>
+              <Logo />
               <div className="main-action-wrapper">
-                <DisplayResourcesWorkspaceMainMenu/>
+                <DisplayResourcesWorkspaceMainMenu />
               </div>
               <div className="sidebar-content-left">
-                <FilterResourcesByShortcuts/>
-                {canUseFolders &&
-                  <FilterResourcesByFolders/>
-                }
-                <FilterResourcesByGroups/>
-                {canUseTags &&
-                  <FilterResourcesByTags/>
-                }
+                <FilterResourcesByShortcuts />
+                {canUseFolders && <FilterResourcesByFolders />}
+                <FilterResourcesByGroups />
+                {canUseTags && <FilterResourcesByTags />}
               </div>
             </div>
           </div>
@@ -274,100 +283,142 @@ class Workspace extends Component {
         <div className="panel middle">
           <div className="header">
             <div className="header-left">
-              <FilterResourcesByText
-                placeholder={this.props.t("Search resource")}/>
+              <FilterResourcesByText placeholder={this.props.t("Search resource")} />
             </div>
-            <div className="header-right" style={{width: rightHeaderWidth}}>
-              <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={this.isUserWorkspaceVisible} currentWorkspace={WORKSPACE_ENUM.RESOURCE}/>
-              <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+            <div className="header-right" style={{ width: rightHeaderWidth }}>
+              <WorkspaceSwitcher
+                isUserAdmin={this.isUserAdmin}
+                isUserWorkspaceVisible={this.isUserWorkspaceVisible}
+                currentWorkspace={WORKSPACE_ENUM.RESOURCE}
+              />
+              <DisplayUserBadgeMenu
+                baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                user={this.props.context.loggedInUser}
+              />
             </div>
           </div>
           <div className="middle-right">
             <div className="breadcrumbs-and-grid">
               <div className="top-bar">
-                <FilterResourcesByBreadcrumb/>
+                <FilterResourcesByBreadcrumb />
                 <div className="action-bar" ref={this.actionsBar}>
-                  {this.props.resourceWorkspaceContext.selectedResources?.length > 0
-                    ? <DisplayResourcesWorkspaceMenu actionsButtonRef={this.actionsButton}/>
-                    : <DisplayResourcesWorkspaceFilters actionsFilterRef={this.actionsFilter}/>
-                  }
+                  {this.props.resourceWorkspaceContext.selectedResources?.length > 0 ? (
+                    <DisplayResourcesWorkspaceMenu actionsButtonRef={this.actionsButton} />
+                  ) : (
+                    <DisplayResourcesWorkspaceFilters actionsFilterRef={this.actionsFilter} />
+                  )}
                   <div className="actions-secondary" ref={this.actionsSecondary}>
                     <Dropdown>
                       <DropdownButton>
-                        <ColumnsSVG/>
-                        <span><Trans>Columns</Trans></span>
-                        <CaretDownSVG/>
+                        <ColumnsSVG />
+                        <span>
+                          <Trans>Columns</Trans>
+                        </span>
+                        <CaretDownSVG />
                       </DropdownButton>
                       <DropdownMenu direction="left">
                         <DropdownMenuItem keepOpenOnClick={true}>
                           <div className="radiolist">
                             <div className="input radio">
-                              <input type="radio" checked={!rowsSetting?.height || rowsSetting?.height === ROW_SETTING_HEIGHT_COMPACT} value={ROW_SETTING_HEIGHT_COMPACT} id="rows_setting.height.compact" name="rows_setting.height" onChange={this.handleOnChangeRowsSetting}/>
-                              <label htmlFor="rows_setting.height.compact"><Trans>Compact</Trans></label>
+                              <input
+                                type="radio"
+                                checked={!rowsSetting?.height || rowsSetting?.height === ROW_SETTING_HEIGHT_COMPACT}
+                                value={ROW_SETTING_HEIGHT_COMPACT}
+                                id="rows_setting.height.compact"
+                                name="rows_setting.height"
+                                onChange={this.handleOnChangeRowsSetting}
+                              />
+                              <label htmlFor="rows_setting.height.compact">
+                                <Trans>Compact</Trans>
+                              </label>
                             </div>
                           </div>
                         </DropdownMenuItem>
                         <DropdownMenuItem keepOpenOnClick={true} separator={true}>
                           <div className="radiolist">
                             <div className="input radio">
-                              <input type="radio" checked={rowsSetting?.height === ROW_SETTING_HEIGHT_COMFORTABLE} value={ROW_SETTING_HEIGHT_COMFORTABLE} id="rows_setting.height.comfortable" name="rows_setting.height" onChange={this.handleOnChangeRowsSetting}/>
-                              <label htmlFor="rows_setting.height.comfortable"><Trans>Comfortable</Trans></label>
+                              <input
+                                type="radio"
+                                checked={rowsSetting?.height === ROW_SETTING_HEIGHT_COMFORTABLE}
+                                value={ROW_SETTING_HEIGHT_COMFORTABLE}
+                                id="rows_setting.height.comfortable"
+                                name="rows_setting.height"
+                                onChange={this.handleOnChangeRowsSetting}
+                              />
+                              <label htmlFor="rows_setting.height.comfortable">
+                                <Trans>Comfortable</Trans>
+                              </label>
                             </div>
                           </div>
                         </DropdownMenuItem>
-                        {this.columnsResourceSetting?.map((column, index) =>
-                          <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={this.hasSeparator(column, index)}>
+                        {this.columnsResourceSetting?.map((column, index) => (
+                          <DropdownMenuItem
+                            keepOpenOnClick={true}
+                            key={column.id}
+                            separator={this.hasSeparator(column, index)}
+                          >
                             <div className="input checkbox">
-                              <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
-                              <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
+                              <input
+                                type="checkbox"
+                                checked={column.show}
+                                id={column.id}
+                                name={column.id}
+                                onChange={this.handleOnChangeColumnView}
+                              />
+                              <label htmlFor={column.id}>
+                                <Trans>{column.label}</Trans>
+                              </label>
                             </div>
                           </DropdownMenuItem>
-                        )}
+                        ))}
                         <DropdownMenuItem>
                           <div className="action-button">
-                            <button id="reset-columns-settings" type="button" onClick={this.handleOnResetColumnsSettings}>
-                              <RevertSVG/>
-                              <span><Trans>Reset columns</Trans></span>
+                            <button
+                              id="reset-columns-settings"
+                              type="button"
+                              onClick={this.handleOnResetColumnsSettings}
+                            >
+                              <RevertSVG />
+                              <span>
+                                <Trans>Reset columns</Trans>
+                              </span>
                             </button>
                           </div>
                         </DropdownMenuItem>
                       </DropdownMenu>
                     </Dropdown>
-                    <button type="button" className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}
-                      onClick={this.handleViewDetailClickEvent}>
+                    <button
+                      type="button"
+                      className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}
+                      onClick={this.handleViewDetailClickEvent}
+                    >
                       <InfoSVG />
-                      <span className="visuallyhidden"><Trans>View detail</Trans></span>
+                      <span className="visuallyhidden">
+                        <Trans>View detail</Trans>
+                      </span>
                     </button>
                   </div>
                 </div>
               </div>
-              <DisplayResourcesList/>
+              <DisplayResourcesList />
             </div>
-            {this.hasLockDetail() &&
-            <ResizableSidebar
-              resizable
-              gutterLeft={true}
-              minWidth={"25%"}
-              maxWidth={"35%"}
-              classNames={"resource-workspace right-side-bar"}
-            >
-              <div className="panel aside">
-                {this.shouldDisplayListDetails &&
-                    <DisplayResourcesListDetails />
-                }
-                {this.shouldDisplayEmptyDetails &&
-                    <DisplayEmptyDetails />
-                }
-                {this.props.resourceWorkspaceContext.details.folder &&
-                    <DisplayResourceFolderDetails/>
-                }
-                {this.props.resourceWorkspaceContext.details.resource &&
-                    <DisplayResourceDetails/>
-                }
-                <Footer/>
-              </div>
-            </ResizableSidebar>
-            }
+            {this.hasLockDetail() && (
+              <ResizableSidebar
+                resizable
+                gutterLeft={true}
+                minWidth={"25%"}
+                maxWidth={"35%"}
+                classNames={"resource-workspace right-side-bar"}
+              >
+                <div className="panel aside">
+                  {this.shouldDisplayListDetails && <DisplayResourcesListDetails />}
+                  {this.shouldDisplayEmptyDetails && <DisplayEmptyDetails />}
+                  {this.props.resourceWorkspaceContext.details.folder && <DisplayResourceFolderDetails />}
+                  {this.props.resourceWorkspaceContext.details.resource && <DisplayResourceDetails />}
+                  <Footer />
+                </div>
+              </ResizableSidebar>
+            )}
           </div>
         </div>
       </div>
@@ -383,4 +434,6 @@ Workspace.propTypes = {
   sidebarContext: PropTypes.any,
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withResizableSidebar(withTranslation('common')(Workspace)))));
+export default withAppContext(
+  withRbac(withResourceWorkspace(withResizableSidebar(withTranslation("common")(Workspace)))),
+);

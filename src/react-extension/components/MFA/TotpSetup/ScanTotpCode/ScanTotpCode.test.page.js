@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import ScanTotpCode from "./ScanTotpCode";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -28,9 +28,9 @@ export default class ScanTotpCodePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ScanTotpCode {...props}/>
+        <ScanTotpCode {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,91 +38,91 @@ export default class ScanTotpCodePage {
    * Returns the totp scan code parent element
    */
   get totpScanCodeList() {
-    return this._page.container.querySelector('.totp-scan-code');
+    return this._page.container.querySelector(".totp-scan-code");
   }
 
   /**
    * Returns page title
    */
   get title() {
-    return this._page.container.querySelector('h3');
+    return this._page.container.querySelector("h3");
   }
 
   /**
    * Returns the subtitle page
    */
   get subtitle() {
-    return this._page.container.querySelector('h4.no-border');
+    return this._page.container.querySelector("h4.no-border");
   }
 
   /**
    * Returns the page qr code
    */
   get qrcode() {
-    return this._page.container.querySelector('.qrcode');
+    return this._page.container.querySelector(".qrcode");
   }
 
   /**
    * Returns the input label otp label
    */
   get inputLabelOtp() {
-    return this._page.container.querySelector('.input label');
+    return this._page.container.querySelector(".input label");
   }
 
   /**
    * Returns the input otp card
    */
   get inputOtp() {
-    return this._page.container.querySelector('.input input');
+    return this._page.container.querySelector(".input input");
   }
 
   /**
    * Returns the error message
    */
   get errorMessage() {
-    return this._page.container.querySelector('.error-message');
+    return this._page.container.querySelector(".error-message");
   }
 
   /**
    * Returns the cancel button
    */
   get cancelButton() {
-    return this._page.container.querySelector('.button.cancel');
+    return this._page.container.querySelector(".button.cancel");
   }
 
   /**
    * Returns the validate button
    */
   get validateButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help');
+    return this._page.container.querySelector(".sidebar-help");
   }
 
   /**
    * Returns the help box title
    */
   get helpBoxTitle() {
-    return this._page.container.querySelector('.sidebar-help h3');
+    return this._page.container.querySelector(".sidebar-help h3");
   }
 
   /**
    * Returns the help box description
    */
   get helpBoxDescription() {
-    return this._page.container.querySelector('.sidebar-help p');
+    return this._page.container.querySelector(".sidebar-help p");
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help .button');
+    return this._page.container.querySelector(".sidebar-help .button");
   }
 
   /**
@@ -151,7 +151,7 @@ export default class ScanTotpCodePage {
    * @param code A otp code
    */
   async fillOtpInput(code) {
-    fireEvent.change(this.inputOtp, {target: {value: code}});
+    fireEvent.change(this.inputOtp, { target: { value: code } });
     await waitFor(() => {});
   }
 
@@ -160,7 +160,7 @@ export default class ScanTotpCodePage {
    * @param {Element} element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

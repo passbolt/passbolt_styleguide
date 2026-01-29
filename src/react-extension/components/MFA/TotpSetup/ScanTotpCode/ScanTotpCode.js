@@ -12,13 +12,13 @@
  * @since         4.4.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
-import {Trans} from 'react-i18next';
-import QRCode from 'qrcode';
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
-import {MfaSettingsWorkflowStates, withMfa} from "../../../../contexts/MFAContext";
+import { withTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
+import QRCode from "qrcode";
+import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
+import { MfaSettingsWorkflowStates, withMfa } from "../../../../contexts/MFAContext";
 
 /**
  * This component will display scan for the totp setup
@@ -55,8 +55,8 @@ class ScanTotpCode extends Component {
       isSubmitted: false,
       error: {
         isRequired: false,
-        invalidCode: false
-      }
+        invalidCode: false,
+      },
     };
   }
 
@@ -89,8 +89,8 @@ class ScanTotpCode extends Component {
     const parsedUrl = new URL(domain);
     let issuer = parsedUrl.hostname + parsedUrl.pathname;
 
-    issuer = issuer.replace(':', '');
-    issuer = issuer.replace(/\/$/, '');
+    issuer = issuer.replace(":", "");
+    issuer = issuer.replace(/\/$/, "");
 
     return issuer;
   }
@@ -101,7 +101,7 @@ class ScanTotpCode extends Component {
    */
   async getQrCodeUri() {
     const uri = await this.props.context.port.request("passbolt.mfa-setup.get-totp-code");
-    this.setState({uri});
+    this.setState({ uri });
     return uri;
   }
 
@@ -115,7 +115,7 @@ class ScanTotpCode extends Component {
     if (this.state.toptCode !== "") {
       this.setError("isRequired", false);
     }
-    this.setState({toptCode});
+    this.setState({ toptCode });
   }
 
   /**
@@ -125,7 +125,7 @@ class ScanTotpCode extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     try {
-      this.setState({isSubmitted: true});
+      this.setState({ isSubmitted: true });
       if (this.state.toptCode === "") {
         this.setError("isRequired", true);
       } else {
@@ -143,8 +143,8 @@ class ScanTotpCode extends Component {
    * set an error to object
    */
   setError(key, value) {
-    const error = Object.assign({}, this.state.error, {[key]: value});
-    this.setState({error});
+    const error = Object.assign({}, this.state.error, { [key]: value });
+    this.setState({ error });
   }
 
   /**
@@ -161,14 +161,19 @@ class ScanTotpCode extends Component {
    */
   async getQrCode() {
     const totpUri = await this.getQrCodeUri();
-    const qrCode = await QRCode.toDataURL([{
-      data: totpUri,
-      mode: 'byte'
-    }], {
-      type: 'image/jpeg',
-      quality: 1,
-    });
-    this.setState({qrCode});
+    const qrCode = await QRCode.toDataURL(
+      [
+        {
+          data: totpUri,
+          mode: "byte",
+        },
+      ],
+      {
+        type: "image/jpeg",
+        quality: 1,
+      },
+    );
+    this.setState({ qrCode });
   }
 
   /**
@@ -188,8 +193,12 @@ class ScanTotpCode extends Component {
       <>
         <div className="main-column mfa-setup totp-scan-code">
           <div className="main-content totp-setup">
-            <h3><Trans>Time based One Time Password (TOTP)</Trans></h3>
-            <h4 className="no-border"><Trans>Scan this bar code</Trans></h4>
+            <h3>
+              <Trans>Time based One Time Password (TOTP)</Trans>
+            </h3>
+            <h4 className="no-border">
+              <Trans>Scan this bar code</Trans>
+            </h4>
             <div className="totp-setup-form">
               <div className="qrcode">
                 <img id="qr-canvas" src={this.state.qrCode} />
@@ -197,7 +206,9 @@ class ScanTotpCode extends Component {
               <div className="input-verify">
                 <form onSubmit={this.handleSubmit}>
                   <div className="input text required">
-                    <label htmlFor="totp"><Trans>One Time Password (OTP)</Trans></label>
+                    <label htmlFor="totp">
+                      <Trans>One Time Password (OTP)</Trans>
+                    </label>
                     <input
                       type="text"
                       name="totp"
@@ -205,13 +216,18 @@ class ScanTotpCode extends Component {
                       autoComplete="off"
                       onChange={this.handleInputChange}
                       disabled={this.hasAllInputDisabled()}
-                      ref={this.otpInputRef}/>
-                    {(this.state.error.isRequired && this.state.isSubmitted) &&
-                <div className="code-required error-message"><Trans>A OTP code is required.</Trans></div>
-                    }
-                    {(this.state.error.invalidCode && this.state.isSubmitted) &&
-                <div className="invalid-code error-message"><Trans>This OTP is not valid.</Trans></div>
-                    }
+                      ref={this.otpInputRef}
+                    />
+                    {this.state.error.isRequired && this.state.isSubmitted && (
+                      <div className="code-required error-message">
+                        <Trans>A OTP code is required.</Trans>
+                      </div>
+                    )}
+                    {this.state.error.invalidCode && this.state.isSubmitted && (
+                      <div className="invalid-code error-message">
+                        <Trans>This OTP is not valid.</Trans>
+                      </div>
+                    )}
                   </div>
                   <div className="helptext">
                     <Trans>Enter the six digit number as presented on your phone or tablet.</Trans>
@@ -224,17 +240,23 @@ class ScanTotpCode extends Component {
         <div className="actions-wrapper">
           <button
             className="button cancel secondary"
-            type='button'
+            type="button"
             disabled={this.hasAllInputDisabled()}
-            onClick={this.handleCancelClick}>
-            <span><Trans>Cancel</Trans></span>
+            onClick={this.handleCancelClick}
+          >
+            <span>
+              <Trans>Cancel</Trans>
+            </span>
           </button>
           <button
             className="button primary form"
-            type='button'
+            type="button"
             disabled={this.hasAllInputDisabled()}
-            onClick={this.handleSubmit}>
-            <span><Trans>Validate</Trans></span>
+            onClick={this.handleSubmit}
+          >
+            <span>
+              <Trans>Validate</Trans>
+            </span>
           </button>
         </div>
       </>

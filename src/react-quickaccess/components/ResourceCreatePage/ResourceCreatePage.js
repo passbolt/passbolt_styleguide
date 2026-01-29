@@ -13,36 +13,32 @@
  */
 
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
-import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
-import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
+import { SecretGenerator } from "../../../shared/lib/SecretGenerator/SecretGenerator";
+import { withPrepareResourceContext } from "../../contexts/PrepareResourceContext";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 import PownedService from "../../../shared/services/api/secrets/pownedService";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
-import {ConfirmCreatePageRuleVariations} from "../ConfirmCreatePage/ConfirmCreatePage";
-import {ENTROPY_THRESHOLDS} from "../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { withPasswordPolicies } from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import { withPasswordExpiry } from "../../../react-extension/contexts/PasswordExpirySettingsContext";
+import { ConfirmCreatePageRuleVariations } from "../ConfirmCreatePage/ConfirmCreatePage";
+import { ENTROPY_THRESHOLDS } from "../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 import EntityValidationError from "../../../shared/models/entity/abstract/entityValidationError";
 import ResourcePasswordDescriptionViewModel from "../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
 import ResourceViewModel from "../../../shared/models/resource/ResourceViewModel";
-import {DateTime} from "luxon";
-import {
-  withResourceTypesLocalStorage
-} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { DateTime } from "luxon";
+import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  withMetadataTypesSettingsLocalStorage
-} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { withMetadataTypesSettingsLocalStorage } from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_SLUG
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import ResourceViewModelFactory from "../../../shared/models/resource/ResourceViewModelFactory";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
@@ -121,12 +117,15 @@ class ResourceCreatePage extends React.Component {
     const expired = this.getResourceExpirationDate();
     resourceViewModelDto.expired = expired;
 
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, resourceViewModelDto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(
+      resourceType,
+      resourceViewModelDto,
+    );
     const passwordEntropy = resourceViewModel.password ? SecretGenerator.entropy(resourceViewModel.password) : null;
 
     await this.focusFirstEmptyField(resourceViewModel);
 
-    this.setState({resourceViewModel, passwordEntropy});
+    this.setState({ resourceViewModel, passwordEntropy });
   }
 
   /**
@@ -142,7 +141,7 @@ class ResourceCreatePage extends React.Component {
     }
 
     const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
-    if (!(passwordExpirySettings?.automatic_update)) {
+    if (!passwordExpirySettings?.automatic_update) {
       return undefined;
     }
 
@@ -150,7 +149,7 @@ class ResourceCreatePage extends React.Component {
       return null;
     }
 
-    return DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period}).toISO();
+    return DateTime.utc().plus({ days: passwordExpirySettings.default_expiry_period }).toISO();
   }
 
   /**
@@ -163,7 +162,7 @@ class ResourceCreatePage extends React.Component {
       this.pownedService = new PownedService(this.props.context.port);
     }
 
-    this.setState({isPasswordDictionaryCheckRequested});
+    this.setState({ isPasswordDictionaryCheckRequested });
   }
 
   /**
@@ -211,7 +210,10 @@ class ResourceCreatePage extends React.Component {
     const ignoreUris = ["chrome://newtab/", "about:newtab"];
 
     try {
-      const tabInfo = await this.props.context.port.request("passbolt.quickaccess.prepare-resource", this.props.context.getOpenerTabId());
+      const tabInfo = await this.props.context.port.request(
+        "passbolt.quickaccess.prepare-resource",
+        this.props.context.getOpenerTabId(),
+      );
 
       if (!ignoreNames.includes(tabInfo["name"])) {
         name = tabInfo["name"].substring(0, 255);
@@ -221,17 +223,13 @@ class ResourceCreatePage extends React.Component {
         uri = tabInfo["uris"][0];
       }
 
-      username = tabInfo.username?.length > 0
-        ? tabInfo.username
-        : this.props.context.userSettings.username;
+      username = tabInfo.username?.length > 0 ? tabInfo.username : this.props.context.userSettings.username;
 
-      password = tabInfo.secret_clear?.length > 0
-        ? tabInfo.secret_clear
-        : this.generateSecret();
+      password = tabInfo.secret_clear?.length > 0 ? tabInfo.secret_clear : this.generateSecret();
     } catch (error) {
       console.error(error);
     }
-    return {name, uri, username, password};
+    return { name, uri, username, password };
   }
 
   /**
@@ -240,7 +238,7 @@ class ResourceCreatePage extends React.Component {
    * @returns {Promise<void>}
    */
   focusFirstEmptyField(resourceViewModel) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       /*
        * Wait 210ms, the time for the animation to be completed.
        * If we don't wait the animation to be completed, then the focus will screw the animation. Some browsers need
@@ -285,7 +283,7 @@ class ResourceCreatePage extends React.Component {
    */
   validate() {
     const errors = this.state.resourceViewModel.validate(ResourceViewModel.CREATE_MODE);
-    this.setState({errors});
+    this.setState({ errors });
     return errors;
   }
 
@@ -307,12 +305,12 @@ class ResourceCreatePage extends React.Component {
 
     this.setState({
       processing: true,
-      hasAlreadyBeenValidated: true
+      hasAlreadyBeenValidated: true,
     });
 
     const validationErrors = this.validate();
     if (validationErrors.hasErrors()) {
-      this.setState({processing: false});
+      this.setState({ processing: false });
       this.focusFirstFieldError(validationErrors);
       return;
     }
@@ -352,9 +350,9 @@ class ResourceCreatePage extends React.Component {
     this.persistResourceInPreparedStorage();
     const pageProps = {
       resourceName: this.state.resourceViewModel.name,
-      rule: createPageRuleVariation
+      rule: createPageRuleVariation,
     };
-    this.props.history.push('/webAccessibleResources/quickaccess/resources/confirm-create', pageProps);
+    this.props.history.push("/webAccessibleResources/quickaccess/resources/confirm-create", pageProps);
   }
 
   /**
@@ -388,7 +386,7 @@ class ResourceCreatePage extends React.Component {
      * password details page.
      */
     const goToComponentState = {
-      goBackEntriesCount: -2
+      goBackEntriesCount: -2,
     };
     this.props.prepareResourceContext.resetSecretGeneratorSettings();
     this.props.history.push(`/webAccessibleResources/quickaccess/resources/view/${resource.id}`, goToComponentState);
@@ -400,24 +398,25 @@ class ResourceCreatePage extends React.Component {
    */
   handleSubmitError(error) {
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
       return;
     }
 
-    const isBadRequestError = error.name === "PassboltApiFetchError"
-      && error.data.code === 400
-      && (error.data.body?.name || error.data.body?.username || error.data.body?.uri);
+    const isBadRequestError =
+      error.name === "PassboltApiFetchError" &&
+      error.data.code === 400 &&
+      (error.data.body?.name || error.data.body?.username || error.data.body?.uri);
 
     if (!isBadRequestError) {
       this.setState({
         unexpectedErrorMessage: error.message,
-        processing: false
+        processing: false,
       });
       return;
     }
 
     const apiErrors = this.formatApiErrors(error.data.body);
-    this.setState({errors: apiErrors});
+    this.setState({ errors: apiErrors });
   }
 
   /**
@@ -429,10 +428,12 @@ class ResourceCreatePage extends React.Component {
       return false;
     }
 
-    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(this.state.resourceViewModel.password);
+    const { isPwnedServiceAvailable, inDictionary } = await this.pownedService.evaluateSecret(
+      this.state.resourceViewModel.password,
+    );
 
     if (!isPwnedServiceAvailable) {
-      this.setState({isPasswordDictionaryCheckServiceAvailable: false});
+      this.setState({ isPasswordDictionaryCheckServiceAvailable: false });
       return false;
     }
 
@@ -459,7 +460,7 @@ class ResourceCreatePage extends React.Component {
 
     for (let i = 0; i < fieldsInError.length; i++) {
       const prop = fieldsInError[i];
-      const errorMessages = errorBody[prop].join(', ');
+      const errorMessages = errorBody[prop].join(", ");
       errors.addError(prop, "api-validation", errorMessages);
     }
 
@@ -471,16 +472,14 @@ class ResourceCreatePage extends React.Component {
    * @param {React.Event} event
    */
   handleInputChange(event) {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     const newState = {
       resourceViewModel: this.state.resourceViewModel.cloneWithMutation(name, value),
     };
 
     if (name === "password") {
       newState.passwordInDictionary = false;
-      newState.passwordEntropy = value?.length
-        ? SecretGenerator.entropy(value)
-        : null;
+      newState.passwordEntropy = value?.length ? SecretGenerator.entropy(value) : null;
     }
 
     if (this.state.hasAlreadyBeenValidated) {
@@ -500,7 +499,7 @@ class ResourceCreatePage extends React.Component {
     const password = this.generateSecret();
     const resourceViewModel = this.state.resourceViewModel.cloneWithMutation("password", password);
     const passwordEntropy = SecretGenerator.entropy(password);
-    this.setState({resourceViewModel, passwordEntropy, passwordInDictionary: false});
+    this.setState({ resourceViewModel, passwordEntropy, passwordInDictionary: false });
   }
 
   /**
@@ -521,7 +520,7 @@ class ResourceCreatePage extends React.Component {
     }
 
     this.persistResourceInPreparedStorage();
-    this.props.history.push('/webAccessibleResources/quickaccess/resources/generate-password');
+    this.props.history.push("/webAccessibleResources/quickaccess/resources/generate-password");
   }
 
   /**
@@ -533,7 +532,7 @@ class ResourceCreatePage extends React.Component {
       name: this.state.resourceViewModel.name,
       username: this.state.resourceViewModel.username,
       uri: this.state.resourceViewModel.uri,
-      password: this.state.resourceViewModel.password
+      password: this.state.resourceViewModel.password,
     };
     this.props.prepareResourceContext.onPrepareResource(resource);
   }
@@ -543,7 +542,7 @@ class ResourceCreatePage extends React.Component {
    * @returns {boolean}
    */
   get canUsePasswordGenerator() {
-    return this.props.context.siteSettings.canIUse('passwordGenerator');
+    return this.props.context.siteSettings.canIUse("passwordGenerator");
   }
 
   /**
@@ -564,87 +563,168 @@ class ResourceCreatePage extends React.Component {
     return (
       <div className="resource-create">
         <div className="back-link">
-          <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Cancel the operation")}>
-            <CaretLeftSVG/>
-            <span className="primary-action-title"><Trans>Create password</Trans></span>
+          <a
+            href="#"
+            className="primary-action"
+            onClick={this.handleGoBackClick}
+            title={this.translate("Cancel the operation")}
+          >
+            <CaretLeftSVG />
+            <span className="primary-action-title">
+              <Trans>Create password</Trans>
+            </span>
           </a>
-          <Link to="/webAccessibleResources/quickaccess/home" onClick={this.handleCancelButtonClick} className="secondary-action button-transparent button" title={this.translate("Cancel")}>
-            <CloseSVG/>
-            <span className="visually-hidden"><Trans>Cancel</Trans></span>
+          <Link
+            to="/webAccessibleResources/quickaccess/home"
+            onClick={this.handleCancelButtonClick}
+            className="secondary-action button-transparent button"
+            title={this.translate("Cancel")}
+          >
+            <CloseSVG />
+            <span className="visually-hidden">
+              <Trans>Cancel</Trans>
+            </span>
           </Link>
         </div>
         <form onSubmit={this.handleFormSubmit}>
           <div className="resource-create-form">
             <div className="form-container">
               <div className={`input text required ${this.state.errors.hasError("name") ? "error" : ""}`}>
-                <label htmlFor="name"><Trans>Name</Trans></label>
-                <input name="name" value={this.state.resourceViewModel.name || ""} onChange={this.handleInputChange} disabled={this.state.processing}
-                  ref={this.nameInputRef} className="required fluid" maxLength="255" type="text" id="name" autoComplete="off" />
-                {this.state.errors.hasError("name", "required") &&
-                  <div className="error-message"><Trans>A name is required.</Trans></div>
-                }
-                {this.state.errors.hasError("name", "api-validation") &&
+                <label htmlFor="name">
+                  <Trans>Name</Trans>
+                </label>
+                <input
+                  name="name"
+                  value={this.state.resourceViewModel.name || ""}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}
+                  ref={this.nameInputRef}
+                  className="required fluid"
+                  maxLength="255"
+                  type="text"
+                  id="name"
+                  autoComplete="off"
+                />
+                {this.state.errors.hasError("name", "required") && (
+                  <div className="error-message">
+                    <Trans>A name is required.</Trans>
+                  </div>
+                )}
+                {this.state.errors.hasError("name", "api-validation") && (
                   <div className="error-message">{this.state.errors.getError("name", "api-validation")}</div>
-                }
+                )}
               </div>
               <div className={`input text ${this.state.errors.hasError("uri") ? "error" : ""}`}>
-                <label htmlFor="uri"><Trans>URL</Trans></label>
-                <input name="uri" value={this.state.resourceViewModel.uri || ""} onChange={this.handleInputChange} disabled={this.state.processing}
-                  ref={this.uriInputRef} className="fluid" maxLength="1024" type="text" id="uri" autoComplete="off" />
-                {this.state.errors.hasError("uri", "maxLength") &&
-                  <div className="error-message"><Trans>The URI cannot exceed 1024 characters.</Trans></div>
-                }
-                {this.state.errors.hasError("uri", "api-validation") &&
+                <label htmlFor="uri">
+                  <Trans>URL</Trans>
+                </label>
+                <input
+                  name="uri"
+                  value={this.state.resourceViewModel.uri || ""}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}
+                  ref={this.uriInputRef}
+                  className="fluid"
+                  maxLength="1024"
+                  type="text"
+                  id="uri"
+                  autoComplete="off"
+                />
+                {this.state.errors.hasError("uri", "maxLength") && (
+                  <div className="error-message">
+                    <Trans>The URI cannot exceed 1024 characters.</Trans>
+                  </div>
+                )}
+                {this.state.errors.hasError("uri", "api-validation") && (
                   <div className="error-message">{this.state.errors.getError("uri", "api-validation")}</div>
-                }
+                )}
               </div>
               <div className={`input text ${this.state.errors.hasError("username") ? "error" : ""}`}>
-                <label htmlFor="username"><Trans>Username</Trans></label>
-                <input name="username" value={this.state.resourceViewModel.username || ""} onChange={this.handleInputChange} disabled={this.state.processing}
-                  ref={this.usernameInputRef} className="fluid" maxLength="255" type="text" id="username" autoComplete="off" />
-                {this.state.errors.hasError("username", "api-validation") &&
+                <label htmlFor="username">
+                  <Trans>Username</Trans>
+                </label>
+                <input
+                  name="username"
+                  value={this.state.resourceViewModel.username || ""}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}
+                  ref={this.usernameInputRef}
+                  className="fluid"
+                  maxLength="255"
+                  type="text"
+                  id="username"
+                  autoComplete="off"
+                />
+                {this.state.errors.hasError("username", "api-validation") && (
                   <div className="error-message">{this.state.errors.getError("username", "api-validation")}</div>
-                }
+                )}
               </div>
-              <div className={`input-password-wrapper input required ${this.state.errors.hasError("password") ? "error" : ""}`}>
-                <label htmlFor="password"><Trans>Password</Trans></label>
+              <div
+                className={`input-password-wrapper input required ${this.state.errors.hasError("password") ? "error" : ""}`}
+              >
+                <label htmlFor="password">
+                  <Trans>Password</Trans>
+                </label>
                 <div className="password-button-inline">
-                  <Password name="password" value={this.state.resourceViewModel.password || ""} preview={true} onChange={this.handleInputChange} disabled={this.state.processing}
-                    autoComplete="new-password" placeholder={this.translate('Password')} id="password" inputRef={this.passwordInputRef}/>
-                  <button type="button" onClick={this.handleGeneratePasswordButtonClick}
-                    className={`password-generate button-icon button ${this.state.processing ? "disabled" : ""}`}>
-                    <DiceSVG/>
-                    <span className="visually-hidden"><Trans>Generate</Trans></span>
+                  <Password
+                    name="password"
+                    value={this.state.resourceViewModel.password || ""}
+                    preview={true}
+                    onChange={this.handleInputChange}
+                    disabled={this.state.processing}
+                    autoComplete="new-password"
+                    placeholder={this.translate("Password")}
+                    id="password"
+                    inputRef={this.passwordInputRef}
+                  />
+                  <button
+                    type="button"
+                    onClick={this.handleGeneratePasswordButtonClick}
+                    className={`password-generate button-icon button ${this.state.processing ? "disabled" : ""}`}
+                  >
+                    <DiceSVG />
+                    <span className="visually-hidden">
+                      <Trans>Generate</Trans>
+                    </span>
                   </button>
-                  {this.canUsePasswordGenerator &&
-                    <button type="button" onClick={this.handleOpenGenerator}
-                      className="password-generator button-icon button">
-                      <SettingsSVG/>
-                      <span className="visually-hidden"><Trans>Open generator</Trans></span>
+                  {this.canUsePasswordGenerator && (
+                    <button
+                      type="button"
+                      onClick={this.handleOpenGenerator}
+                      className="password-generator button-icon button"
+                    >
+                      <SettingsSVG />
+                      <span className="visually-hidden">
+                        <Trans>Open generator</Trans>
+                      </span>
                     </button>
-                  }
+                  )}
                 </div>
-                <PasswordComplexity entropy={passwordEntropy} error={this.state.errors.hasError("password")}/>
-                {this.state.errors.hasError("password", "required") &&
-                  <div className="error-message"><Trans>A password is required.</Trans></div>
-                }
-                {this.state.errors.hasError("password", "api-validation") &&
+                <PasswordComplexity entropy={passwordEntropy} error={this.state.errors.hasError("password")} />
+                {this.state.errors.hasError("password", "required") && (
+                  <div className="error-message">
+                    <Trans>A password is required.</Trans>
+                  </div>
+                )}
+                {this.state.errors.hasError("password", "api-validation") && (
                   <div className="error-message">{this.state.errors.getError("password", "api-validation")}</div>
-                }
+                )}
               </div>
             </div>
           </div>
           <div className="submit-wrapper input">
-            <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
-              disabled={this.state.processing}>
+            <button
+              type="submit"
+              className={`button primary big full-width ${this.state.processing ? "processing" : ""}`}
+              role="button"
+              disabled={this.state.processing}
+            >
               <Trans>Save</Trans>
-              {this.state.processing &&
-                <SpinnerSVG/>
-              }
+              {this.state.processing && <SpinnerSVG />}
             </button>
-            {this.state.unexpectedErrorMessage &&
+            {this.state.unexpectedErrorMessage && (
               <div className="error-message">{this.state.unexpectedErrorMessage}</div>
-            }
+            )}
           </div>
         </form>
       </div>
@@ -664,4 +744,14 @@ ResourceCreatePage.propTypes = {
   passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
-export default withAppContext(withRouter(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ResourceCreatePage))))))));
+export default withAppContext(
+  withRouter(
+    withResourceTypesLocalStorage(
+      withMetadataTypesSettingsLocalStorage(
+        withPrepareResourceContext(
+          withPasswordExpiry(withPasswordPolicies(withTranslation("common")(ResourceCreatePage))),
+        ),
+      ),
+    ),
+  ),
+);

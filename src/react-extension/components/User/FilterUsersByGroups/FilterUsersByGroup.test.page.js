@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,10 +12,9 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayGroups from "./FilterUsersByGroup";
 import DisplayGroupsFilterContextualMenuPageObject from "./FilterUsersByGroupContextualMenu.test.page";
@@ -40,13 +38,13 @@ export default class FilterUsersByGroupPage {
         <AppContext.Provider value={appContext}>
           <Router>
             <ContextualMenuContextProvider>
-              <ManageContextualMenu/>
-              <DisplayGroups {...props}/>
+              <ManageContextualMenu />
+              <DisplayGroups {...props} />
             </ContextualMenuContextProvider>
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -113,12 +111,12 @@ class TitleHeaderPageObject {
    * Returns the clickable area of the filter
    */
   get filterButton() {
-    return this._container.querySelector('.row.title .dropdown.right-cell.more-ctrl button');
+    return this._container.querySelector(".row.title .dropdown.right-cell.more-ctrl button");
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
@@ -137,28 +135,28 @@ class DisplayGroupPageObject {
    * Returns the list elements of activities
    */
   get list() {
-    return this._container.querySelector('.accordion-content');
+    return this._container.querySelector(".accordion-content");
   }
 
   /**
    * Returns the loading element
    */
   get loadingMessage() {
-    return this._container.querySelector('.processing-text');
+    return this._container.querySelector(".processing-text");
   }
 
   /**
    * Returns the empty content element
    */
   get emptyContent() {
-    return this._container.querySelector('.empty-content');
+    return this._container.querySelector(".empty-content");
   }
 
   /**
    * Returns the clickable area of the more group
    */
   get moreButton() {
-    return this._container.querySelector('.group-item .dropdown.right-cell.more-ctrl button');
+    return this._container.querySelector(".group-item .dropdown.right-cell.more-ctrl button");
   }
 
   /**
@@ -172,21 +170,21 @@ class DisplayGroupPageObject {
    * Returns true
    */
   isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving groups';
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === "Retrieving groups";
   }
 
   /**
    * Returns true
    */
   isEmpty() {
-    return this.emptyContent !== null && this.emptyContent.innerHTML === 'empty';
+    return this.emptyContent !== null && this.emptyContent.innerHTML === "empty";
   }
 
   /**
    * Returns the number of displayed groups
    */
   count() {
-    return this.list.querySelectorAll('.group-item').length;
+    return this.list.querySelectorAll(".group-item").length;
   }
 
   /**
@@ -194,7 +192,9 @@ class DisplayGroupPageObject {
    * @param index
    */
   group(index) {
-    return this.list.querySelectorAll('.group-item')[index - 1].querySelector('.row .main-cell-wrapper .main-cell button');
+    return this.list
+      .querySelectorAll(".group-item")
+      [index - 1].querySelector(".row .main-cell-wrapper .main-cell button");
   }
 
   /**
@@ -202,7 +202,7 @@ class DisplayGroupPageObject {
    * @param index The display rank of name's group
    */
   name(index) {
-    return this.list.querySelectorAll('.group-item')[index - 1].querySelector('.ellipsis').textContent;
+    return this.list.querySelectorAll(".group-item")[index - 1].querySelector(".ellipsis").textContent;
   }
 
   /**
@@ -215,15 +215,15 @@ class DisplayGroupPageObject {
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
 
   /** Right-click on the component */
-  async rightClick(component)  {
-    const rightClick = {button: 0};
+  async rightClick(component) {
+    const rightClick = { button: 0 };
     fireEvent.contextMenu(component, rightClick);
     await waitFor(() => {});
   }

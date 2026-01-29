@@ -12,13 +12,10 @@
  * @since         2.13.0
  */
 import EntitySchema from "../abstract/entitySchema";
-import {
-  defaultProfileDto,
-  minimalProfileDto
-} from "../profile/ProfileEntity.test.data";
+import { defaultProfileDto, minimalProfileDto } from "../profile/ProfileEntity.test.data";
 import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
 import ProfileEntity from "./profileEntity";
-import {defaultAvatarDto} from "../avatar/avatarEntity.test.data";
+import { defaultAvatarDto } from "../avatar/avatarEntity.test.data";
 
 describe("ProfileEntity", () => {
   describe("::getSchema", () => {
@@ -71,8 +68,8 @@ describe("ProfileEntity", () => {
       const entity = new ProfileEntity(dto);
       expect(entity.id).toBeNull();
       expect(entity.userId).toBeNull();
-      expect(entity.firstName).toEqual('Ada');
-      expect(entity.lastName).toEqual('Lovelace');
+      expect(entity.firstName).toEqual("Ada");
+      expect(entity.lastName).toEqual("Lovelace");
       expect(entity.created).toBeNull();
       expect(entity.modified).toBeNull();
       expect(entity.avatar).toBeNull();
@@ -82,8 +79,8 @@ describe("ProfileEntity", () => {
       const dto = defaultProfileDto();
       const entity = new ProfileEntity(dto);
       expect(entity.id).toEqual(dto.id);
-      expect(entity.firstName).toEqual('Ada');
-      expect(entity.lastName).toEqual('Lovelace');
+      expect(entity.firstName).toEqual("Ada");
+      expect(entity.lastName).toEqual("Lovelace");
       expect(entity.created).toEqual("2020-04-20T11:32:17+00:00");
       expect(entity.modified).toEqual("2020-04-20T11:32:17+00:00");
       expect(entity.avatar).not.toBeNull();
@@ -91,10 +88,10 @@ describe("ProfileEntity", () => {
       expect(entity.avatar.urlSmall).toEqual("/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/small.jpg");
     });
 
-    it("Should throw if invalid avatar provided", async() => {
+    it("Should throw if invalid avatar provided", async () => {
       expect.assertions(1);
       const dto = defaultProfileDto({
-        avatar: defaultAvatarDto({id: "invalid-id"})
+        avatar: defaultAvatarDto({ id: "invalid-id" }),
       });
       expect(() => new ProfileEntity(dto)).toThrowEntityValidationError("id", "format");
     });
@@ -103,14 +100,7 @@ describe("ProfileEntity", () => {
   describe("ProfileEntity:toDto", () => {
     it("should return the expected properties.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        "id",
-        "user_id",
-        "first_name",
-        "last_name",
-        "created",
-        "modified"
-      ];
+      const expectedKeys = ["id", "user_id", "first_name", "last_name", "created", "modified"];
 
       const dto = defaultProfileDto();
       const entity = new ProfileEntity(dto);
@@ -122,19 +112,11 @@ describe("ProfileEntity", () => {
 
     it("should return the expected properties containing the associated avatar.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        "id",
-        "user_id",
-        "first_name",
-        "last_name",
-        "created",
-        "modified",
-        "avatar"
-      ];
+      const expectedKeys = ["id", "user_id", "first_name", "last_name", "created", "modified", "avatar"];
 
       const dto = defaultProfileDto();
       const entity = new ProfileEntity(dto);
-      const resultDto = entity.toDto({avatar: true});
+      const resultDto = entity.toDto({ avatar: true });
       const keys = Object.keys(resultDto);
       expect(keys).toEqual(expectedKeys);
       expect(Object.keys(resultDto).length).toBe(expectedKeys.length);

@@ -3,28 +3,35 @@
  * @param appContext An existing app context
  * @returns {any}
  */
-import {v4 as uuidv4} from "uuid";
-import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
-import {defaultFolderDto, folderWithReadPermissionDto} from "../../shared/models/entity/folder/folderEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { ResourceWorkspaceFilterTypes } from "./ResourceWorkspaceContext";
+import {
+  defaultFolderDto,
+  folderWithReadPermissionDto,
+} from "../../shared/models/entity/folder/folderEntity.test.data";
 import {
   defaultResourceDto,
   resourceStandaloneTotpDto,
-  resourceWithTotpDto
+  resourceWithTotpDto,
 } from "../../shared/models/entity/resource/resourceEntity.test.data";
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
-import {defaultUserAppContext} from "./ExtAppContext.test.data";
-import {defaultPasswordExpirySettingsContext} from "./PasswordExpirySettingsContext.test.data";
-import {defaultUserRbacContext} from "../../shared/context/Rbac/RbacContext.test.data";
-import {readPermissionDto, updatePermissionDto} from "../../shared/models/entity/permission/permissionEntity.test.data";
-import {defaultResourceMetadataDto} from "../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
-import {defaultTagDto} from "../../shared/models/entity/tag/tagEntity.test.data";
-import {resourceAllTypesDtosCollection, resourceAllTypesDtosCollectionAndVariousPermission} from "../../shared/models/entity/resource/resourcesCollection.test.data";
-import {defaultClipboardContext} from "./Clipboard/ManagedClipboardServiceProvider.test.data";
+import { defaultUserAppContext } from "./ExtAppContext.test.data";
+import { defaultPasswordExpirySettingsContext } from "./PasswordExpirySettingsContext.test.data";
+import { defaultUserRbacContext } from "../../shared/context/Rbac/RbacContext.test.data";
+import {
+  readPermissionDto,
+  updatePermissionDto,
+} from "../../shared/models/entity/permission/permissionEntity.test.data";
+import { defaultResourceMetadataDto } from "../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultTagDto } from "../../shared/models/entity/tag/tagEntity.test.data";
+import {
+  resourceAllTypesDtosCollection,
+  resourceAllTypesDtosCollectionAndVariousPermission,
+} from "../../shared/models/entity/resource/resourcesCollection.test.data";
+import { defaultClipboardContext } from "./Clipboard/ManagedClipboardServiceProvider.test.data";
 
 export function defaultAppContext(appContext) {
-  const folders = [
-    defaultFolderDto({name: "Folder searchable"})
-  ];
+  const folders = [defaultFolderDto({ name: "Folder searchable" })];
   const resourceWithEncryptedDescriptionToUpdateId = uuidv4();
   const resourceWithTotpToUpdateId = uuidv4();
   const resourceTotpToUpdateId = uuidv4();
@@ -32,17 +39,24 @@ export function defaultAppContext(appContext) {
   const resourceWithTotpToReadId = uuidv4();
   const resourceTotpToReadId = uuidv4();
   const resources = [
-    defaultResourceDto({metadata: defaultResourceMetadataDto({name: "Resource owned"})}, {withFavorite: true}),
-    resourceWithTotpDto({metadata: defaultResourceMetadataDto({name: "Resource in folder"}), folder_parent_id: folders[0].id}),
-    resourceStandaloneTotpDto({tags: [defaultTagDto()]}),
-    defaultResourceDto({permission: updatePermissionDto({aco_foreign_key: resourceWithEncryptedDescriptionToUpdateId})}),
-    resourceWithTotpDto({permission: updatePermissionDto({aco_foreign_key: resourceWithTotpToUpdateId})}),
-    resourceStandaloneTotpDto({permission: updatePermissionDto({aco_foreign_key: resourceTotpToUpdateId})}),
-    defaultResourceDto({permission: readPermissionDto({aco_foreign_key: resourceWithEncryptedDescriptionToReadId})}),
-    resourceWithTotpDto({permission: readPermissionDto({aco_foreign_key: resourceWithTotpToReadId})}),
-    resourceStandaloneTotpDto({permission: readPermissionDto({aco_foreign_key: resourceTotpToReadId})}),
-    defaultResourceDto({personal: true}),
-    defaultResourceDto({personal: true}),
+    defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "Resource owned" }) }, { withFavorite: true }),
+    resourceWithTotpDto({
+      metadata: defaultResourceMetadataDto({ name: "Resource in folder" }),
+      folder_parent_id: folders[0].id,
+    }),
+    resourceStandaloneTotpDto({ tags: [defaultTagDto()] }),
+    defaultResourceDto({
+      permission: updatePermissionDto({ aco_foreign_key: resourceWithEncryptedDescriptionToUpdateId }),
+    }),
+    resourceWithTotpDto({ permission: updatePermissionDto({ aco_foreign_key: resourceWithTotpToUpdateId }) }),
+    resourceStandaloneTotpDto({ permission: updatePermissionDto({ aco_foreign_key: resourceTotpToUpdateId }) }),
+    defaultResourceDto({
+      permission: readPermissionDto({ aco_foreign_key: resourceWithEncryptedDescriptionToReadId }),
+    }),
+    resourceWithTotpDto({ permission: readPermissionDto({ aco_foreign_key: resourceWithTotpToReadId }) }),
+    resourceStandaloneTotpDto({ permission: readPermissionDto({ aco_foreign_key: resourceTotpToReadId }) }),
+    defaultResourceDto({ personal: true }),
+    defaultResourceDto({ personal: true }),
   ];
   const foldersMapById = folders.reduce((result, folder) => {
     result[folder.id] = folder;
@@ -63,7 +77,7 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
-    rbacContext: defaultUserRbacContext()
+    rbacContext: defaultUserRbacContext(),
   };
 }
 
@@ -81,24 +95,24 @@ export function defaultResourceWorkspaceContext(data = {}) {
     filteredResources: [],
     selectedResources: [],
     columnsResourceSetting: new ColumnsResourceSettingCollection([
-      {id: "favorite", label: "Favorite", position: 1, show: true},
-      {id: "attentionRequired", label: "Attention", position: 2, show: true},
-      {id: "icon", label: "Icon", position: 3, show: true},
-      {id: "name", label: "Name", position: 4, show: true},
-      {id: "expired", label: "Expiry", position: 5, show: true},
-      {id: "username", label: "Username", position: 6, show: true},
-      {id: "password", label: "Password", position: 7, show: true},
-      {id: "totp", label: "TOTP", position: 8, show: true},
-      {id: "uri", label: "URI", position: 9, show: true},
-      {id: "modified", label: "Modified", position: 10, show: true},
-      {id: "location", label: "Location", position: 11, show: true}]),
+      { id: "favorite", label: "Favorite", position: 1, show: true },
+      { id: "attentionRequired", label: "Attention", position: 2, show: true },
+      { id: "icon", label: "Icon", position: 3, show: true },
+      { id: "name", label: "Name", position: 4, show: true },
+      { id: "expired", label: "Expiry", position: 5, show: true },
+      { id: "username", label: "Username", position: 6, show: true },
+      { id: "password", label: "Password", position: 7, show: true },
+      { id: "totp", label: "TOTP", position: 8, show: true },
+      { id: "uri", label: "URI", position: 9, show: true },
+      { id: "modified", label: "Modified", position: 10, show: true },
+      { id: "location", label: "Location", position: 11, show: true },
+    ]),
     filter: {
-      type: ResourceWorkspaceFilterTypes.ALL
+      type: ResourceWorkspaceFilterTypes.ALL,
     },
-    scrollTo: {
-    },
+    scrollTo: {},
     sorter: {
-      propertyName: 'modified'
+      propertyName: "modified",
     },
     onGoToResourceUriRequested: jest.fn(),
     onResourceCopied: jest.fn(),
@@ -108,7 +122,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
       none: jest.fn(),
       multiple: jest.fn(),
       range: jest.fn(),
-      single: jest.fn()
+      single: jest.fn(),
     },
     onResourceScrolled: jest.fn(),
     onFolderScrolled: jest.fn(),
@@ -118,13 +132,13 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onResourceFileImportResult: jest.fn(),
     onResourceFileToImport: jest.fn(),
     onLockDetail: jest.fn(),
-    onChangeColumnView:  jest.fn(),
+    onChangeColumnView: jest.fn(),
     onChangeColumnsSettings: jest.fn(),
     resetGridColumnsSettings: jest.fn(),
     onResourceDescriptionDecrypted: jest.fn(),
     onChangeRowSettingsHeight: jest.fn(),
     clipboardContext: defaultClipboardContext(),
-    ...data
+    ...data,
   };
 }
 
@@ -138,10 +152,10 @@ export function resourceWorkspaceContextWithSelectedFolderIOwn(data = {}) {
     filter: {
       type: ResourceWorkspaceFilterTypes.FOLDER,
       payload: {
-        folder: defaultFolderDto()
-      }
+        folder: defaultFolderDto(),
+      },
     },
-    ...data
+    ...data,
   });
 }
 
@@ -155,10 +169,10 @@ export function resourceWorkspaceContextWithSelectedFolderICanRead(data = {}) {
     filter: {
       type: ResourceWorkspaceFilterTypes.FOLDER,
       payload: {
-        folder: folderWithReadPermissionDto()
-      }
+        folder: folderWithReadPermissionDto(),
+      },
     },
-    ...data
+    ...data,
   });
 }
 
@@ -172,7 +186,7 @@ export function resourceWorkspaceContextWithSelectedResourceIOwn(data = {}) {
     details: {
       resource: defaultResourceDto(),
     },
-    ...data
+    ...data,
   });
 }
 
@@ -184,7 +198,7 @@ export function resourceWorkspaceContextWithSelectedResourceIOwn(data = {}) {
 export function resourceWorkspaceContextWithSelectedResourcesIOwn(data = {}) {
   return defaultResourceWorkspaceContext({
     selectedResources: resourceAllTypesDtosCollection(),
-    ...data
+    ...data,
   });
 }
 
@@ -196,6 +210,6 @@ export function resourceWorkspaceContextWithSelectedResourcesIOwn(data = {}) {
 export function resourceWorkspaceContextWithSelectedResourcesAndVariousPermission(data = {}) {
   return defaultResourceWorkspaceContext({
     selectedResources: resourceAllTypesDtosCollectionAndVariousPermission(),
-    ...data
+    ...data,
   });
 }

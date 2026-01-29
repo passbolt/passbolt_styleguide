@@ -12,7 +12,7 @@
  * @since         3.3.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import DomUtils from "../Dom/DomUtils";
 import browser from "webextension-polyfill";
 
@@ -25,7 +25,7 @@ class InFormCallToActionField {
    * Retrieve all the DOM elements which can be an in-form username fields
    */
   static findAll(selector) {
-    const domFields =  Array.from(document.querySelectorAll(selector));
+    const domFields = Array.from(document.querySelectorAll(selector));
     const iframesFields = InFormCallToActionField.findAllInIframes(selector);
     const shadowDomFields = InFormCallToActionField.findAllInShadowDom(selector);
     return domFields.concat(iframesFields).concat(shadowDomFields);
@@ -37,10 +37,8 @@ class InFormCallToActionField {
    */
   static findAllInIframes(selector) {
     const iframes = DomUtils.getAccessibleAndSameDomainIframes();
-    const queryMapper = iframe => Array.from(iframe.contentDocument.querySelectorAll(selector));
-    return iframes
-      .map(queryMapper)
-      .flat();
+    const queryMapper = (iframe) => Array.from(iframe.contentDocument.querySelectorAll(selector));
+    return iframes.map(queryMapper).flat();
   }
 
   /**
@@ -49,10 +47,8 @@ class InFormCallToActionField {
    */
   static findAllInShadowDom(selector) {
     const shadowDomDocuments = DomUtils.getShadowDomDocuments();
-    const queryMapper = shadowDom => Array.from(shadowDom.querySelectorAll(selector));
-    return shadowDomDocuments
-      .map(queryMapper)
-      .flat();
+    const queryMapper = (shadowDom) => Array.from(shadowDom.querySelectorAll(selector));
+    return shadowDomDocuments.map(queryMapper).flat();
   }
 
   /**
@@ -66,7 +62,9 @@ class InFormCallToActionField {
     this.field = field;
     /** Type of the field ("username" or "password") */
     this.fieldType = fieldType;
-    /** An unique identifier for the iframe */
+    /** A unique identifier for the InFormCallToActionField */
+    this.id = uuidv4();
+    /** A unique identifier for the iframe */
     this.iframeId = uuidv4();
     /** The scrollable field parent */
     this.scrollableFieldParent = null;
@@ -76,7 +74,7 @@ class InFormCallToActionField {
     this.callToActionClickWatcher = null;
     /** In-form call-to-action click listener callback */
     this.callToActionClickCallback = null;
-
+    /** The shadow root **/
     this.shadowRoot = shadowRoot;
 
     this.bindCallbacks();
@@ -92,7 +90,7 @@ class InFormCallToActionField {
     this.insertInformCallToActionIframe = this.insertInformCallToActionIframe.bind(this);
     this.removeInFormCallToActionWhenMouseOut = this.removeInFormCallToActionWhenMouseOut.bind(this);
     this.removeInFormCallToAction = this.removeInFormCallToAction.bind(this);
-    this.removeCallToActionIframe = this.removeCallToActionIframe.bind(this);
+    this.removeIframe = this.removeIframe.bind(this);
     this.destroy = this.destroy.bind(this);
   }
 
@@ -114,17 +112,17 @@ class InFormCallToActionField {
       this.insertInformCallToActionIframe();
     }
     this.field.addEventListener("mouseover", this.insertInformCallToActionIframe);
-    this.field.addEventListener("focus",  this.insertInformCallToActionIframe);
+    this.field.addEventListener("focus", this.insertInformCallToActionIframe);
   }
 
   /**
    * Insert an in-form call-to-action iframe
    */
   async insertInformCallToActionIframe() {
-    const iframes = this.shadowRoot.querySelectorAll('iframe');
+    const iframes = this.shadowRoot.querySelectorAll("iframe");
     // Use of Array prototype some method cause NodeList is not an array !
     const iframeId = this.iframeId;
-    const isIframeAlreadyInserted = Array.prototype.some.call(iframes, iframe => iframe.id === iframeId);
+    const isIframeAlreadyInserted = Array.prototype.some.call(iframes, (iframe) => iframe.id === iframeId);
     if (!isIframeAlreadyInserted) {
       const iframe = await this.createCallToActionIframe();
       this.handleCallToActionClicked(iframe);
@@ -137,9 +135,9 @@ class InFormCallToActionField {
    */
   async createCallToActionIframe() {
     // IMPORTANT: Calculate position before inserting iframe in document to avoid issue
-    const {top, left} = this.calculateFieldPosition();
+    const { top, left } = this.calculateFieldPosition();
     const portId = await port.request("passbolt.port.generate-id", "InFormCallToAction");
-    const iframe = document.createElement('iframe');
+    const iframe = document.createElement("iframe");
     this.shadowRoot.appendChild(iframe);
     const browserExtensionUrl = browser.runtime.getURL("/");
     iframe.id = this.iframeId;
@@ -148,10 +146,10 @@ class InFormCallToActionField {
     iframe.style.top = `${top}px`;
     iframe.style.left = `${left}px`;
     iframe.style.border = "none";
-    iframe.style.width = '18px';
-    iframe.style.height = '18px';
+    iframe.style.width = "18px";
+    iframe.style.height = "18px";
     iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
-    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}`;
+    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}&applicationId=${this.id}`;
     return iframe;
   }
 
@@ -165,9 +163,11 @@ class InFormCallToActionField {
     let currentElement = this.field;
     let hasScroll = false;
     const isInIframe = this.field.ownerDocument !== document;
-    const {top, left, height, width} = this.field.getBoundingClientRect();
+    const { top, left, height, width } = this.field.getBoundingClientRect();
     // If the field is in iframe get the top and left of the iframe else get the top and the left of the body
-    const {top: topBody, left: leftBody} = isInIframe ? this.field.ownerDocument.defaultView.frameElement.getBoundingClientRect() : document.documentElement.getBoundingClientRect();
+    const { top: topBody, left: leftBody } = isInIframe
+      ? this.field.ownerDocument.defaultView.frameElement.getBoundingClientRect()
+      : document.documentElement.getBoundingClientRect();
 
     /*
      * We loop to calculate the cumulated position of the field
@@ -187,13 +187,12 @@ class InFormCallToActionField {
       x = left + width - 25;
       y = top + Math.floor(height / 2) - 9;
     } else {
-      // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment )
+      // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical alignment )
       x = x + leftBody + width - 25;
       y = y + topBody + Math.floor(height / 2) - 9; // Calculate the middle position of the input, 9 is the half of the iframe height
     }
-    return {top: y, left: x};
+    return { top: y, left: x };
   }
-
 
   /**
    * Whenever the user clicked on the call-to-action iframe
@@ -208,7 +207,7 @@ class InFormCallToActionField {
     this.callToActionClickWatcher = setInterval(() => {
       // Check if a click has been applied on some iframe
       const elem = this.shadowRoot.activeElement;
-      if (elem && elem.tagName === 'IFRAME' && elem.id === this.iframeId) {
+      if (elem && elem.tagName === "IFRAME" && elem.id === this.iframeId) {
         this.field.focus();
         this.callToActionClickCallback();
         clearInterval(this.callToActionClickWatcher);
@@ -218,8 +217,8 @@ class InFormCallToActionField {
      * We need to know which iframe the user click on. We cannot add a listener on iframe
      * since there are from different domains (target page vs extension pagemods)
      */
-    iframe.addEventListener('mouseover', () => this.isCallToActionMousingOver = true);
-    iframe.addEventListener('mouseout', () => this.isCallToActionMousingOver = false);
+    iframe.addEventListener("mouseover", () => (this.isCallToActionMousingOver = true));
+    iframe.addEventListener("mouseout", () => (this.isCallToActionMousingOver = false));
   }
 
   /** CALL-TO-ACTION REMOVE */
@@ -229,7 +228,7 @@ class InFormCallToActionField {
    */
   handleRemoveEvent() {
     this.field.addEventListener("mouseout", this.removeInFormCallToActionWhenMouseOut);
-    this.field.addEventListener("blur",  this.removeInFormCallToAction);
+    this.field.addEventListener("blur", this.removeInFormCallToAction);
   }
 
   /**
@@ -239,7 +238,7 @@ class InFormCallToActionField {
     const isIframeMouseOver = this.isCallToActionMousingOver;
     const isActiveElementAnAuthenticationField = document.activeElement === this.field;
     if (!isIframeMouseOver && !isActiveElementAnAuthenticationField) {
-      this.removeCallToActionIframe();
+      this.removeIframe();
     }
   }
 
@@ -251,16 +250,16 @@ class InFormCallToActionField {
     const isNotCallToActionIframe = event.relatedTarget !== this.shadowRoot.host;
     const isActiveElementAnAuthenticationField = document.activeElement === this.field;
     if (isNotCallToActionIframe && !isActiveElementAnAuthenticationField) {
-      this.removeCallToActionIframe();
+      this.removeIframe();
     }
   }
 
   /**
    * Remove the call-to-action (iframe)
    */
-  removeCallToActionIframe() {
-    const iframes = this.shadowRoot.querySelectorAll('iframe');
-    iframes.forEach(iframe => {
+  removeIframe() {
+    const iframes = this.shadowRoot.querySelectorAll("iframe");
+    iframes.forEach((iframe) => {
       const identifierToMatch = this.iframeId;
       if (iframe.id === identifierToMatch) {
         iframe.parentNode.removeChild(iframe);
@@ -277,7 +276,7 @@ class InFormCallToActionField {
   handleScrollEvent() {
     // Remove the call-to-action
     this.scrollableFieldParent = DomUtils.getScrollParent(this.field);
-    this.scrollableFieldParent.addEventListener('scroll', this.removeCallToActionIframe);
+    this.scrollableFieldParent.addEventListener("scroll", this.removeIframe);
   }
 
   /** DESTROY */
@@ -287,11 +286,11 @@ class InFormCallToActionField {
    */
   destroy() {
     this.field.removeEventListener("mouseover", this.insertInformCallToActionIframe);
-    this.field.removeEventListener("focus",  this.insertInformCallToActionIframe);
+    this.field.removeEventListener("focus", this.insertInformCallToActionIframe);
     this.field.removeEventListener("mouseout", this.removeInFormCallToActionWhenMouseOut);
-    this.field.removeEventListener("blur",  this.removeInFormCallToAction);
-    this.scrollableFieldParent.removeEventListener('scroll', this.removeCallToActionIframe);
-    this.removeCallToActionIframe();
+    this.field.removeEventListener("blur", this.removeInFormCallToAction);
+    this.scrollableFieldParent.removeEventListener("scroll", this.removeIframe);
+    this.removeIframe();
   }
 }
 

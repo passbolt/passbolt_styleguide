@@ -12,7 +12,7 @@
  * @since         5.1.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ConfirmMetadataKey from "./ConfirmMetadataKey";
@@ -27,9 +27,9 @@ export default class ConfirmMetadataKeyPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ConfirmMetadataKey {...props}/>
+        <ConfirmMetadataKey {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -37,28 +37,28 @@ export default class ConfirmMetadataKeyPage {
    * Returns the confirm metadata key element
    */
   get confirmMetadataKey() {
-    return this._page.container.querySelector('.confirm-metadata-key-dialog');
+    return this._page.container.querySelector(".confirm-metadata-key-dialog");
   }
 
   /**
    * Returns the more information button element
    */
   get moreInformationButton() {
-    return this._page.container.querySelector('.accordion-header button');
+    return this._page.container.querySelector(".accordion-header button");
   }
 
   /**
    * Returns the more information button element
    */
   get fingerprint() {
-    return this._page.container.querySelector('.fingerprint');
+    return this._page.container.querySelector(".fingerprint");
   }
 
   /**
    * Returns the dialog close element
    */
   get closeButton() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
@@ -72,7 +72,7 @@ export default class ConfirmMetadataKeyPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -86,7 +86,7 @@ export default class ConfirmMetadataKeyPage {
    * Saves the change on the group
    */
   async submit() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.submitButton, leftClick);
     await waitFor(() => {});
   }
@@ -95,7 +95,7 @@ export default class ConfirmMetadataKeyPage {
    * Cancels the user's MFA disable
    */
   async cancel() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.cancelButton, leftClick);
     await waitFor(() => {});
   }
@@ -104,7 +104,7 @@ export default class ConfirmMetadataKeyPage {
    * Close the dialog
    */
   async close() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.closeButton, leftClick);
     await waitFor(() => {});
   }
@@ -113,7 +113,7 @@ export default class ConfirmMetadataKeyPage {
    * Go to renew key
    */
   async openMoreInformation() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.moreInformationButton, leftClick);
     await waitFor(() => {});
   }

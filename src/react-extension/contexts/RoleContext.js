@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import RolesCollection from "../../shared/models/entity/role/rolesCollection";
 import RoleServiceWorkerService from "../../shared/services/serviceWorker/role/roleServiceWorkerService";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
 
 export const RoleContext = React.createContext({
   getRole: () => {},
@@ -84,7 +84,7 @@ export class RoleContextProvider extends React.Component {
    */
   set(rolesCollectionDto) {
     const rolesCollection = new RolesCollection(rolesCollectionDto);
-    this.setState({rolesCollection});
+    this.setState({ rolesCollection });
   }
 
   /**
@@ -92,7 +92,7 @@ export class RoleContextProvider extends React.Component {
    * @returns {string}
    */
   get storageKey() {
-    return 'roles';
+    return "roles";
   }
 
   /**
@@ -127,7 +127,6 @@ export class RoleContextProvider extends React.Component {
     this.set(storageData[this.storageKey]);
   }
 
-
   /**
    * Returns all known roles.
    * @returns {RolesCollection|null}
@@ -161,11 +160,7 @@ export class RoleContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <RoleContext.Provider value={this.state}>
-        {this.props.children}
-      </RoleContext.Provider>
-    );
+    return <RoleContext.Provider value={this.state}>{this.props.children}</RoleContext.Provider>;
   }
 }
 
@@ -174,7 +169,7 @@ RoleContextProvider.propTypes = {
   children: PropTypes.any, // The children component
 };
 
-RoleContextProvider.displayName = 'RoleContextProvider';
+RoleContextProvider.displayName = "RoleContextProvider";
 
 export default withAppContext(RoleContextProvider);
 
@@ -187,11 +182,7 @@ export function withRoles(WrappedComponent) {
     render() {
       return (
         <RoleContext.Consumer>
-          {context => <WrappedComponent
-            roleContext={context}
-            roles={context.getAllRoles()}
-            {...this.props}
-          />}
+          {(context) => <WrappedComponent roleContext={context} roles={context.getAllRoles()} {...this.props} />}
         </RoleContext.Consumer>
       );
     }

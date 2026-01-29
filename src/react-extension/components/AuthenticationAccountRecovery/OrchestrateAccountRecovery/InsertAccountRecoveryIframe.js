@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class InsertAccountRecoveryIframe extends Component {
@@ -51,9 +51,7 @@ class InsertAccountRecoveryIframe extends Component {
    * @return {JSX}
    */
   render() {
-    return (
-      <iframe id="passbolt-iframe-account-recovery" ref={this.iframeRef} className="full-screen"/>
-    );
+    return <iframe id="passbolt-iframe-account-recovery" ref={this.iframeRef} className="full-screen" />;
   }
 }
 

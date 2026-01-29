@@ -12,12 +12,12 @@
  * @since         3.6.0
  */
 
-import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
-import {optOutOrganizationPolicy} from "../HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute.test.data";
+import { defaultAccountRecoveryUserContext } from "../../../contexts/AccountRecoveryUserContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultRoleContext } from "../../../contexts/RoleContext.test.data";
+import { optOutOrganizationPolicy } from "../HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute.test.data";
 
 /**
  * Default props

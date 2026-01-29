@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RbacApiService from "../../../../shared/services/api/rbac/rbacApiService";
 import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
@@ -59,7 +59,7 @@ export class AdminRbacContextProvider extends React.Component {
       isProcessing: this.isProcessing.bind(this),
       hasSettingsChanges: this.hasSettingsChanges.bind(this),
       save: this.save.bind(this),
-      clearContext: this.clearContext.bind(this)
+      clearContext: this.clearContext.bind(this),
     };
   }
 
@@ -69,7 +69,7 @@ export class AdminRbacContextProvider extends React.Component {
    * @return {void}
    */
   async setRbacs(rbacs) {
-    this.setState({rbacs});
+    this.setState({ rbacs });
   }
 
   /**
@@ -78,7 +78,7 @@ export class AdminRbacContextProvider extends React.Component {
    * @return {void}
    */
   async setRbacsUpdated(rbacsUpdated) {
-    this.setState({rbacsUpdated});
+    this.setState({ rbacsUpdated });
   }
 
   /**
@@ -96,7 +96,7 @@ export class AdminRbacContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -111,8 +111,8 @@ export class AdminRbacContextProvider extends React.Component {
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {rbacs, rbacsUpdated, processing} = this.defaultState;
-    this.setState({rbacs, rbacsUpdated, processing});
+    const { rbacs, rbacsUpdated, processing } = this.defaultState;
+    this.setState({ rbacs, rbacsUpdated, processing });
   }
 
   /**
@@ -126,12 +126,14 @@ export class AdminRbacContextProvider extends React.Component {
         return;
       }
 
-      const response = await this.rbacApiService.updateAll(rbacsUpdatedDto, {ui_action: true, action: true});
+      const response = await this.rbacApiService.updateAll(rbacsUpdatedDto, { ui_action: true, action: true });
       const rbacsUpdatedResultDto = response.body;
       const rbacs = this.state.rbacs;
-      rbacsUpdatedResultDto.forEach(rbacUpdatedResultDto => rbacs.pushOrReplace(new RbacEntity(rbacUpdatedResultDto)));
+      rbacsUpdatedResultDto.forEach((rbacUpdatedResultDto) =>
+        rbacs.pushOrReplace(new RbacEntity(rbacUpdatedResultDto)),
+      );
       const rbacsUpdated = new RbacsCollection([]);
-      this.setState({rbacs, rbacsUpdated});
+      this.setState({ rbacs, rbacsUpdated });
     } finally {
       this.setProcessing(false);
     }
@@ -142,11 +144,7 @@ export class AdminRbacContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <AdminRbacContext.Provider value={this.state}>
-        {this.props.children}
-      </AdminRbacContext.Provider>
-    );
+    return <AdminRbacContext.Provider value={this.state}>{this.props.children}</AdminRbacContext.Provider>;
   }
 }
 
@@ -166,9 +164,7 @@ export function withAdminRbac(WrappedComponent) {
     render() {
       return (
         <AdminRbacContext.Consumer>
-          {
-            adminRbacContext => <WrappedComponent adminRbacContext={adminRbacContext} {...this.props} />
-          }
+          {(adminRbacContext) => <WrappedComponent adminRbacContext={adminRbacContext} {...this.props} />}
         </AdminRbacContext.Consumer>
       );
     }

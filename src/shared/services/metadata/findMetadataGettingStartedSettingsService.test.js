@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.4.0
  */
-import {enableFetchMocks} from "jest-fetch-mock";
-import {defaultApiClientOptions} from "../../lib/apiClient/apiClientOptions.test.data";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { defaultApiClientOptions } from "../../lib/apiClient/apiClientOptions.test.data";
 import MetadataGettingStartedSettingsEntity from "../../models/entity/metadata/metadataGettingStartedSettingsEntity";
-import {enableMetadataGettingStartedSettingsDto} from "../../models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
-import {mockApiResponse, mockApiResponseError} from "../../../../test/mocks/mockApiResponse";
+import { enableMetadataGettingStartedSettingsDto } from "../../models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
+import { mockApiResponse, mockApiResponseError } from "../../../../test/mocks/mockApiResponse";
 import FindMetadataGettingStartedSettingsService from "./findMetadataGettingStartedSettingsService";
 
 beforeEach(() => {
@@ -25,7 +25,7 @@ beforeEach(() => {
 
 describe("FindMetadataGettingStartedSettingsService", () => {
   describe("::findGettingStartedSettings", () => {
-    it("should return an entity made from the api response", async() => {
+    it("should return an entity made from the api response", async () => {
       expect.assertions(2);
 
       const expectedDto = enableMetadataGettingStartedSettingsDto();
@@ -40,13 +40,15 @@ describe("FindMetadataGettingStartedSettingsService", () => {
       expect(result.enabled).toStrictEqual(expectedDto.enabled);
     });
 
-    it("should return an entity with disabled settings if an error occurs", async() => {
+    it("should return an entity with disabled settings if an error occurs", async () => {
       expect.assertions(2);
 
       const apiClienOptions = defaultApiClientOptions();
       const service = new FindMetadataGettingStartedSettingsService(apiClienOptions);
 
-      fetch.doMockIf(/\/metadata\/settings\/getting-started\.json/, () => mockApiResponseError(500, "Something went wrong!"));
+      fetch.doMockIf(/\/metadata\/settings\/getting-started\.json/, () =>
+        mockApiResponseError(500, "Something went wrong!"),
+      );
 
       const result = await service.findGettingStartedSettings();
 

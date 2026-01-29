@@ -14,7 +14,6 @@
 
 import EditSubscriptionKey from "../../../../react-extension/components/Administration/EditSubscriptionKey/EditSubscriptionKey";
 
-
 /**
  * the subscription action service
  */
@@ -58,12 +57,11 @@ class SubscriptionActionService {
    */
   editSubscription() {
     const editSubscriptionKey = {
-      key: this.subscriptionContext.getSubscription().data
+      key: this.subscriptionContext.getSubscription().data,
     };
-    this.context.setContext({editSubscriptionKey});
+    this.context.setContext({ editSubscriptionKey });
     this.dialogContext.open(EditSubscriptionKey);
   }
 }
 
 export default SubscriptionActionService;
-

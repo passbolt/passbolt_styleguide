@@ -12,7 +12,7 @@
  * @since         5.4.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ActionAbortedMissingMetadataKeys from "./ActionAbortedMissingMetadataKeys";
@@ -27,9 +27,9 @@ export default class ActionAbortedMissingMetadataKeysPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ActionAbortedMissingMetadataKeys {...props}/>
+        <ActionAbortedMissingMetadataKeys {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -37,14 +37,14 @@ export default class ActionAbortedMissingMetadataKeysPage {
    * Returns the confirm metadata key element
    */
   get confirmMetadataKey() {
-    return this._page.container.querySelector('.action-aborted-missing-metadata-keys-dialog');
+    return this._page.container.querySelector(".action-aborted-missing-metadata-keys-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get closeButton() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
@@ -65,7 +65,7 @@ export default class ActionAbortedMissingMetadataKeysPage {
    * Saves the change on the group
    */
   async submit() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.submitButton, leftClick);
     await waitFor(() => {});
   }
@@ -74,7 +74,7 @@ export default class ActionAbortedMissingMetadataKeysPage {
    * Close the dialog
    */
   async close() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.closeButton, leftClick);
     await waitFor(() => {});
   }

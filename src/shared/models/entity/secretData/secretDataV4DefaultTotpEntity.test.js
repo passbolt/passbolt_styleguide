@@ -15,9 +15,12 @@
 import EntitySchema from "../abstract/entitySchema";
 import SecretDataV4DefaultTotpEntity from "./secretDataV4DefaultTotpEntity";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultSecretDataV4DefaultTotpEntityDto, minimalSecretDataV4DefaultTotpEntityDto} from "./secretDataV4DefaultTotpEntity.test.data";
+import {
+  defaultSecretDataV4DefaultTotpEntityDto,
+  minimalSecretDataV4DefaultTotpEntityDto,
+} from "./secretDataV4DefaultTotpEntity.test.data";
 import TotpEntity from "../totp/totpEntity";
-import {defaultTotpDto} from "../totp/totpDto.test.data";
+import { defaultTotpDto } from "../totp/totpDto.test.data";
 
 describe("SecretDataV4DefaultTotpEntity", () => {
   describe("::getSchema", () => {
@@ -36,13 +39,14 @@ describe("SecretDataV4DefaultTotpEntity", () => {
 
       const dto = minimalSecretDataV4DefaultTotpEntityDto();
 
-      const successScenario = [
-        {scenario: "a valid totp", value: defaultTotpDto()},
-      ];
+      const successScenario = [{ scenario: "a valid totp", value: defaultTotpDto() }];
       const failScenario = [
-        {scenario: "The totp validation should failed.", value: defaultTotpDto({
-          algorithm: "not an algorithm"
-        })},
+        {
+          scenario: "The totp validation should failed.",
+          value: defaultTotpDto({
+            algorithm: "not an algorithm",
+          }),
+        },
       ];
       assertEntityProperty.assertAssociation(SecretDataV4DefaultTotpEntity, "totp", dto, successScenario, failScenario);
       assertEntityProperty.required(SecretDataV4DefaultTotpEntity, "totp");
@@ -58,7 +62,7 @@ describe("SecretDataV4DefaultTotpEntity", () => {
   describe("::associations", () => {
     it("associations should have totp in associations", () => {
       expect.assertions(1);
-      expect(SecretDataV4DefaultTotpEntity.associations).toStrictEqual({totp: TotpEntity});
+      expect(SecretDataV4DefaultTotpEntity.associations).toStrictEqual({ totp: TotpEntity });
     });
   });
 
@@ -88,7 +92,7 @@ describe("SecretDataV4DefaultTotpEntity", () => {
       expect.assertions(3);
       const dto = minimalSecretDataV4DefaultTotpEntityDto();
       dto.totp.secret_key = "";
-      const entity = SecretDataV4DefaultTotpEntity.createFromDefault({}, {validate: false});
+      const entity = SecretDataV4DefaultTotpEntity.createFromDefault({}, { validate: false });
 
       expect(entity.password).toStrictEqual("");
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
@@ -119,7 +123,9 @@ describe("SecretDataV4DefaultTotpEntity", () => {
 
     it("get default totp", () => {
       expect.assertions(1);
-      expect(SecretDataV4DefaultTotpEntity.getDefaultProp("totp")).toStrictEqual(TotpEntity.createFromDefault({}, {validate: false}).toDto());
+      expect(SecretDataV4DefaultTotpEntity.getDefaultProp("totp")).toStrictEqual(
+        TotpEntity.createFromDefault({}, { validate: false }).toDto(),
+      );
     });
 
     it("get default unknown", () => {
@@ -137,7 +143,7 @@ describe("SecretDataV4DefaultTotpEntity", () => {
     it("should return true", () => {
       const dto = defaultSecretDataV4DefaultTotpEntityDto();
       const entity = new SecretDataV4DefaultTotpEntity(dto);
-      expect(entity.areSecretsDifferent({password: dto.password, totp: dto.totp})).toBeTruthy();
+      expect(entity.areSecretsDifferent({ password: dto.password, totp: dto.totp })).toBeTruthy();
     });
 
     it("should return false", () => {

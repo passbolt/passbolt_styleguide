@@ -115,7 +115,6 @@ export const defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto = (data = 
   return Object.assign(defaultData, data);
 };
 
-
 /**
  * Build default metadata types settings for v5.0 migrated from v4 with support of v4.
  * Resources should be created by default in v5, and v4 resources are accepted.

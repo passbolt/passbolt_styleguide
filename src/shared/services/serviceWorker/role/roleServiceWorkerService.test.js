@@ -14,12 +14,12 @@
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import RolesCollection from "../../../models/entity/role/rolesCollection";
-import {rolesCollectionDto} from "../../../models/entity/role/rolesCollection.test.data";
+import { rolesCollectionDto } from "../../../models/entity/role/rolesCollection.test.data";
 import RoleServiceWorkerService from "./roleServiceWorkerService";
 
 describe("RoleServiceWorkerService", () => {
   describe("::findAll", () => {
-    it("should call for the right service worker event and return the right collection", async() => {
+    it("should call for the right service worker event and return the right collection", async () => {
       expect.assertions(4);
 
       const event = "passbolt.role.get-all";
@@ -40,7 +40,7 @@ describe("RoleServiceWorkerService", () => {
   });
 
   describe("::updateResourceLocalStorage", () => {
-    it("should call for the right service worker event", async() => {
+    it("should call for the right service worker event", async () => {
       expect.assertions(2);
 
       const event = "passbolt.role.update-local-storage";

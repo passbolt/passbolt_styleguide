@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 
-import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, { ColumnFields, ColumnModelTypes } from "./ColumnModel";
 
 /**
  * Model related to the column user profile name use only with the UI
@@ -30,10 +30,9 @@ class ColumnUserProfileModel extends ColumnModel {
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = true;
-    columnDto.getValue = value => value;
+    columnDto.getValue = (value) => value;
     super(columnDto);
   }
 }
 
 export default ColumnUserProfileModel;
-

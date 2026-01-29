@@ -13,23 +13,23 @@
  */
 
 import AccountEntity from "./accountEntity";
-import {pgpKeys} from '../../../../../test/fixture/pgpKeys/keys';
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 export const defaultAccountDto = (data = {}) => {
   data = JSON.parse(JSON.stringify(data));
 
   const defaultData = {
-    "type": AccountEntity.TYPE_ACCOUNT,
-    "domain": "https://passbolt.local",
-    "user_id": pgpKeys.ada.userId,
-    "username": "ada@passbolt.com",
-    "first_name": "Ada",
-    "last_name": "Lovelace",
-    "user_key_fingerprint": pgpKeys.ada.fingerprint,
-    "user_public_armored_key": pgpKeys.ada.public,
-    "user_private_armored_key": pgpKeys.ada.private,
-    "server_public_armored_key": pgpKeys.server.public,
-    "locale": "de-DE",
+    type: AccountEntity.TYPE_ACCOUNT,
+    domain: "https://passbolt.local",
+    user_id: pgpKeys.ada.userId,
+    username: "ada@passbolt.com",
+    first_name: "Ada",
+    last_name: "Lovelace",
+    user_key_fingerprint: pgpKeys.ada.fingerprint,
+    user_public_armored_key: pgpKeys.ada.public,
+    user_private_armored_key: pgpKeys.ada.private,
+    server_public_armored_key: pgpKeys.server.public,
+    locale: "de-DE",
   };
 
   return Object.assign(defaultData, data);

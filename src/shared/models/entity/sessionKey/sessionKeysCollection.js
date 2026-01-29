@@ -35,8 +35,8 @@ class SessionKeysCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": SessionKeyEntity.getSchema(),
+      type: "array",
+      items: SessionKeyEntity.getSchema(),
     };
   }
 
@@ -47,7 +47,7 @@ class SessionKeysCollection extends EntityV2Collection {
    * @throws {EntityValidationError} If a session key already exists with the same foreign_id.
    */
   validateBuildRules(item, options = {}) {
-    this.assertNotExist("foreign_id", item._props.foreign_id, {haystackSet: options?.uniqueForeignIdsSetCache});
+    this.assertNotExist("foreign_id", item._props.foreign_id, { haystackSet: options?.uniqueForeignIdsSetCache });
     /*
      * Do not validate session keys yet to not impact performance
      * TODO enable it when performance is under control
@@ -60,7 +60,7 @@ class SessionKeysCollection extends EntityV2Collection {
    * @returns {array}
    */
   toDto(contains = {}) {
-    return this._items.map(entity => entity.toDto(contains));
+    return this._items.map((entity) => entity.toDto(contains));
   }
 
   /*
@@ -78,7 +78,7 @@ class SessionKeysCollection extends EntityV2Collection {
      * TODO enable it when performance is under control
      * const uniqueSessionKeysSetCache = new Set(this.extract("session_key"));
      */
-    const onItemPushed = item => {
+    const onItemPushed = (item) => {
       uniqueForeignIdsSetCache.add(item._props.foreign_id);
       /*
        * TODO enable it when performance is under control
@@ -88,8 +88,8 @@ class SessionKeysCollection extends EntityV2Collection {
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueForeignIdsSetCache},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueForeignIdsSetCache },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);
@@ -105,7 +105,9 @@ class SessionKeysCollection extends EntityV2Collection {
    * Filter out the session keys not matching the given foreign model and foreignIds.
    */
   filterOutSessionKeysNotMatchingForeignModelAndForeignIds(foreignModel, foreignIds) {
-    this.filterByCallback(sessionKey => sessionKey.foreignModel === foreignModel && foreignIds.includes(sessionKey.foreignId));
+    this.filterByCallback(
+      (sessionKey) => sessionKey.foreignModel === foreignModel && foreignIds.includes(sessionKey.foreignId),
+    );
   }
 
   /**
@@ -113,7 +115,7 @@ class SessionKeysCollection extends EntityV2Collection {
    * @param {SessionKeyEntity} sessionKeyToRemove
    */
   remove(sessionKeyToRemove) {
-    this.filterByCallback(sessionKey => sessionKey !== sessionKeyToRemove);
+    this.filterByCallback((sessionKey) => sessionKey !== sessionKeyToRemove);
   }
 }
 

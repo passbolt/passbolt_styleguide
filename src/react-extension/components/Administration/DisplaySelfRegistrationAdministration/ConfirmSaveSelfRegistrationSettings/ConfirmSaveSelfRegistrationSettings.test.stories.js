@@ -14,17 +14,16 @@
  * @since         3.8.3
  */
 import ConfirmSaveSelfRegistrationSettings from "./ConfirmSaveSelfRegistrationSettings";
-import {propsWithMockDomains} from "./ConfirmSaveSelfRegistrationSettings.test.data";
-
+import { propsWithMockDomains } from "./ConfirmSaveSelfRegistrationSettings.test.data";
 
 export default {
-  title: 'Components/Administration/ConfirmSaveSelfRegistrationSettings',
+  title: "Components/Administration/ConfirmSaveSelfRegistrationSettings",
   component: ConfirmSaveSelfRegistrationSettings,
 };
 
 export const Default = {
   args: propsWithMockDomains(),
   parameters: {
-    css: "api_main"
-  }
+    css: "api_main",
+  },
 };

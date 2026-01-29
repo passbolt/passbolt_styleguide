@@ -11,32 +11,36 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.6.0
  */
-import {createMemoryHistory} from "history";
-import {waitFor} from "@testing-library/dom";
+import { createMemoryHistory } from "history";
+import { waitFor } from "@testing-library/dom";
 import ManageAccountRecoveryUserSettings from "../ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
 import HandleAccountRecoveryUserSettingsRoutePage from "./HandleAccountRecoveryUserSettingsRoute.test.page";
-import {defaultProps, disabledOrganizationPolicy, optOutOrganizationPolicy} from "./HandleAccountRecoveryUserSettingsRoute.test.data";
+import {
+  defaultProps,
+  disabledOrganizationPolicy,
+  optOutOrganizationPolicy,
+} from "./HandleAccountRecoveryUserSettingsRoute.test.data";
 
 describe("HandleAccountRecoveryUserSettingsRoute", () => {
-  it("Should redirect to the user's account recovery setting if the organization policy is disabled", async() => {
+  it("Should redirect to the user's account recovery setting if the organization policy is disabled", async () => {
     const history = createMemoryHistory();
     const organizationPolicy = disabledOrganizationPolicy();
     const props = defaultProps({
       accountRecoveryContext: {
         findAccountRecoveryPolicy: jest.fn(() => organizationPolicy),
         getPolicy: jest.fn(() => organizationPolicy.policy),
-        getUserAccountRecoverySubscriptionStatus: jest.fn(() => "pending")
+        getUserAccountRecoverySubscriptionStatus: jest.fn(() => "pending"),
       },
       dialogContext: {
-        open: jest.fn()
-      }
+        open: jest.fn(),
+      },
     });
     new HandleAccountRecoveryUserSettingsRoutePage(props, history);
     await waitFor(() => {});
     expect(history.location.pathname).toBe("/app/settings/account-recovery");
   });
 
-  it("Should redirect to the user's account recovery setting and show a notification if the user has already approved the enrollment", async() => {
+  it("Should redirect to the user's account recovery setting and show a notification if the user has already approved the enrollment", async () => {
     const history = createMemoryHistory();
     const organizationPolicy = optOutOrganizationPolicy();
     const props = defaultProps({
@@ -57,10 +61,12 @@ describe("HandleAccountRecoveryUserSettingsRoute", () => {
     new HandleAccountRecoveryUserSettingsRoutePage(props, history);
     await waitFor(() => {});
     expect(history.location.pathname).toBe("/app/settings/account-recovery");
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("You already enrolled to the account recovery program");
+    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
+      "You already enrolled to the account recovery program",
+    );
   });
 
-  it("Should display the ManageAccountRecoveryUserSettings dialog if the organization policy is enabled and the user didn't enrolled yet.", async() => {
+  it("Should display the ManageAccountRecoveryUserSettings dialog if the organization policy is enabled and the user didn't enrolled yet.", async () => {
     const history = createMemoryHistory();
     const organizationPolicy = optOutOrganizationPolicy();
     const props = defaultProps({
@@ -82,7 +88,7 @@ describe("HandleAccountRecoveryUserSettingsRoute", () => {
     await waitFor(() => {});
     expect(history.location.pathname).not.toBe("/app/settings/account-recovery/edit");
     expect(props.dialogContext.open).toHaveBeenCalledWith(ManageAccountRecoveryUserSettings, {
-      organizationPolicy: organizationPolicy
+      organizationPolicy: organizationPolicy,
     });
   });
 });

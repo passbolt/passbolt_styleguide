@@ -14,27 +14,23 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { withPasswordPolicies } from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import { withPasswordExpiry } from "../../../react-extension/contexts/PasswordExpirySettingsContext";
 import EntityValidationError from "../../../shared/models/entity/abstract/entityValidationError";
 import ResourceViewModel from "../../../shared/models/resource/ResourceViewModel";
-import {
-  withResourceTypesLocalStorage
-} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  withMetadataTypesSettingsLocalStorage
-} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { withMetadataTypesSettingsLocalStorage } from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceViewModelFactory from "../../../shared/models/resource/ResourceViewModelFactory";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_SLUG
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class SaveResource extends React.Component {
@@ -97,9 +93,12 @@ class SaveResource extends React.Component {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     }
     resourceDto.resource_type_id = resourceType.id;
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, resourceDto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(
+      resourceType,
+      resourceDto,
+    );
 
-    this.setState({loaded: true, resourceViewModel: resourceViewModel});
+    this.setState({ loaded: true, resourceViewModel: resourceViewModel });
   }
 
   /**
@@ -116,7 +115,7 @@ class SaveResource extends React.Component {
    */
   validate(resourceViewModel) {
     const errors = resourceViewModel.validate(ResourceViewModel.CREATE_MODE);
-    this.setState({errors});
+    this.setState({ errors });
     return errors;
   }
 
@@ -127,17 +126,16 @@ class SaveResource extends React.Component {
    */
   async handleFormSubmit(event) {
     event.preventDefault();
-    this.setState({processing: true, hasAlreadyBeenValidated: true});
+    this.setState({ processing: true, hasAlreadyBeenValidated: true });
 
     const expired = this.props.passwordExpiryContext.getDefaultExpirationDate();
 
-    const resourceViewModel = this.state.resourceViewModel
-      .cloneWithMutation("expired", expired);
+    const resourceViewModel = this.state.resourceViewModel.cloneWithMutation("expired", expired);
 
     const validationErrors = this.validate(resourceViewModel);
 
     if (validationErrors.hasErrors()) {
-      this.setState({processing: false});
+      this.setState({ processing: false });
       return;
     }
 
@@ -161,9 +159,10 @@ class SaveResource extends React.Component {
       processing: false,
     };
 
-    const isBadRequestError = error.name === "PassboltApiFetchError"
-      && error.data.code === 400
-      && (error.data.body?.name || error.data.body?.username || error.data.body?.uri);
+    const isBadRequestError =
+      error.name === "PassboltApiFetchError" &&
+      error.data.code === 400 &&
+      (error.data.body?.name || error.data.body?.username || error.data.body?.uri);
 
     if (isBadRequestError) {
       newState.errors = this.formatApiErrors(error.data.body);
@@ -185,7 +184,7 @@ class SaveResource extends React.Component {
 
     for (let i = 0; i < fieldsInError.length; i++) {
       const prop = fieldsInError[i];
-      const errorMessages = errorBody[prop].join(', ');
+      const errorMessages = errorBody[prop].join(", ");
       errors.addError(prop, "api-validation", errorMessages);
     }
 
@@ -197,7 +196,7 @@ class SaveResource extends React.Component {
    * @param {React.Event} event
    */
   handleInputChange(event) {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     const newState = {
       resourceViewModel: this.state.resourceViewModel.cloneWithMutation(name, value),
     };
@@ -224,66 +223,123 @@ class SaveResource extends React.Component {
   render() {
     return (
       <div className="resource-auto-save">
-        <h1 className="title"><Trans>Would you like to save this credential ?</Trans></h1>
+        <h1 className="title">
+          <Trans>Would you like to save this credential ?</Trans>
+        </h1>
         <form onSubmit={this.handleFormSubmit}>
           <div className="resource-auto-save-form">
             <div className="form-container">
               <div className={`input text required ${this.state.errors?.hasError("name") ? "error" : ""}`}>
-                <label htmlFor="name"><Trans>Name</Trans></label>
-                <input name="name" value={this.state.resourceViewModel?.name || ""} onChange={this.handleInputChange} disabled={this.state.processing}
-                  className="required fluid" maxLength="255" type="text" id="name" autoComplete="off" />
-                {this.state.errors?.hasError("name", "required") &&
-                  <div className="error-message"><Trans>A name is required.</Trans></div>
-                }
-                {this.state.errors?.hasError("name", "api-validation") &&
+                <label htmlFor="name">
+                  <Trans>Name</Trans>
+                </label>
+                <input
+                  name="name"
+                  value={this.state.resourceViewModel?.name || ""}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}
+                  className="required fluid"
+                  maxLength="255"
+                  type="text"
+                  id="name"
+                  autoComplete="off"
+                />
+                {this.state.errors?.hasError("name", "required") && (
+                  <div className="error-message">
+                    <Trans>A name is required.</Trans>
+                  </div>
+                )}
+                {this.state.errors?.hasError("name", "api-validation") && (
                   <div className="error-message">{this.state.errors.getError("name", "api-validation")}</div>
-                }
+                )}
               </div>
               <div className={`input text ${this.state.errors?.hasError("uri") ? "error" : ""}`}>
-                <label htmlFor="uri"><Trans>URL</Trans></label>
-                <input name="uri" value={this.state.resourceViewModel?.uri || ""} onChange={this.handleInputChange} disabled={this.state.processing}
-                  className="fluid" maxLength="1024" type="text" id="uri" autoComplete="off" />
-                {this.state.errors?.hasError("uri", "maxLength") &&
-                  <div className="error-message"><Trans>The URI cannot exceed 1024 characters.</Trans></div>
-                }
-                {this.state.errors?.hasError("uri", "api-validation") &&
+                <label htmlFor="uri">
+                  <Trans>URL</Trans>
+                </label>
+                <input
+                  name="uri"
+                  value={this.state.resourceViewModel?.uri || ""}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}
+                  className="fluid"
+                  maxLength="1024"
+                  type="text"
+                  id="uri"
+                  autoComplete="off"
+                />
+                {this.state.errors?.hasError("uri", "maxLength") && (
+                  <div className="error-message">
+                    <Trans>The URI cannot exceed 1024 characters.</Trans>
+                  </div>
+                )}
+                {this.state.errors?.hasError("uri", "api-validation") && (
                   <div className="error-message">{this.state.errors.getError("uri", "api-validation")}</div>
-                }
+                )}
               </div>
               <div className={`input text ${this.state.errors?.hasError("username") ? "error" : ""}`}>
-                <label htmlFor="username"><Trans>Username</Trans></label>
-                <input name="username" value={this.state.resourceViewModel?.username || ""} onChange={this.handleInputChange} disabled={this.state.processing}
-                  className="fluid" maxLength="255" type="text" id="username" autoComplete="off" />
-                {this.state.errors?.hasError("username", "api-validation") &&
+                <label htmlFor="username">
+                  <Trans>Username</Trans>
+                </label>
+                <input
+                  name="username"
+                  value={this.state.resourceViewModel?.username || ""}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}
+                  className="fluid"
+                  maxLength="255"
+                  type="text"
+                  id="username"
+                  autoComplete="off"
+                />
+                {this.state.errors?.hasError("username", "api-validation") && (
                   <div className="error-message">{this.state.errors.getError("username", "api-validation")}</div>
-                }
+                )}
               </div>
-              <div className={`input-password-wrapper input required ${this.state.errors?.hasError("password") ? "error" : ""}`}>
-                <label htmlFor="password"><Trans>Password</Trans></label>
+              <div
+                className={`input-password-wrapper input required ${this.state.errors?.hasError("password") ? "error" : ""}`}
+              >
+                <label htmlFor="password">
+                  <Trans>Password</Trans>
+                </label>
                 <div className="password-button-inline">
-                  <Password name="password" value={this.state.resourceViewModel?.password || ""} preview={true} onChange={this.handleInputChange} disabled={this.state.processing}
-                    placeholder={this.translate('Password')} id="password" autoComplete="new-password"/>
+                  <Password
+                    name="password"
+                    value={this.state.resourceViewModel?.password || ""}
+                    preview={true}
+                    onChange={this.handleInputChange}
+                    disabled={this.state.processing}
+                    placeholder={this.translate("Password")}
+                    id="password"
+                    autoComplete="new-password"
+                  />
                 </div>
-                {this.state.errors?.hasError("password", "required") &&
-                  <div className="error-message"><Trans>A password is required.</Trans></div>
-                }
-                {this.state.errors?.hasError("password", "api-validation") &&
+                {this.state.errors?.hasError("password", "required") && (
+                  <div className="error-message">
+                    <Trans>A password is required.</Trans>
+                  </div>
+                )}
+                {this.state.errors?.hasError("password", "api-validation") && (
                   <div className="error-message">{this.state.errors.getError("password", "api-validation")}</div>
-                }
+                )}
               </div>
-              {this.state.unexpectedErrorMessage &&
+              {this.state.unexpectedErrorMessage && (
                 <div className="error-message">{this.state.unexpectedErrorMessage}</div>
-              }
+              )}
             </div>
           </div>
           <div className="submit-wrapper input flex-row-end">
-            <a className="cancel" role="button" onClick={this.handleClose}>{this.translate("no, thanks")}</a>
-            <button type="submit" className={`button primary big ${this.state.processing ? "processing" : ""}`} role="button"
-              disabled={this.state.processing}>
+            <a className="cancel" role="button" onClick={this.handleClose}>
+              {this.translate("no, thanks")}
+            </a>
+            <button
+              type="submit"
+              className={`button primary big ${this.state.processing ? "processing" : ""}`}
+              role="button"
+              disabled={this.state.processing}
+            >
               <Trans>Save</Trans>
-              {this.state.processing &&
-                <SpinnerSVG/>
-              }
+              {this.state.processing && <SpinnerSVG />}
             </button>
           </div>
         </form>
@@ -302,4 +358,12 @@ SaveResource.propTypes = {
   passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
-export default withAppContext(withRouter(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withPasswordPolicies(withPasswordExpiry(withTranslation('common')(SaveResource)))))));
+export default withAppContext(
+  withRouter(
+    withResourceTypesLocalStorage(
+      withMetadataTypesSettingsLocalStorage(
+        withPasswordPolicies(withPasswordExpiry(withTranslation("common")(SaveResource))),
+      ),
+    ),
+  ),
+);

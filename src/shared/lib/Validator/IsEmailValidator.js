@@ -14,7 +14,8 @@
 
 import XRegExp from "xregexp";
 
-const REGEX_HOSTNAME = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
+const REGEX_HOSTNAME =
+  "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
 const REGEX_EMAIL = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${REGEX_HOSTNAME}$`;
 
 export default class IsEmailValidator {
@@ -26,10 +27,10 @@ export default class IsEmailValidator {
    * @returns {boolean}
    */
   static validate(value) {
-    if (typeof value !== 'string') {
+    if (typeof value !== "string") {
       return false;
     }
 
-    return XRegExp(REGEX_EMAIL, 'i').test(value);
+    return XRegExp(REGEX_EMAIL, "i").test(value);
   }
 }

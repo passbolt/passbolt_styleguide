@@ -13,7 +13,7 @@
  */
 import GroupsUsersCollection from "./groupsUsersCollection";
 import EntitySchema from "../abstract/entitySchema";
-import {defaultGroupUser} from "../groupUser/groupUserEntity.test.data.js";
+import { defaultGroupUser } from "../groupUser/groupUserEntity.test.data.js";
 import GroupUserEntity from "../groupUser/groupUserEntity";
 
 describe("Groups users collection", () => {
@@ -28,7 +28,7 @@ describe("Groups users collection", () => {
 
     it("works if valid minimal DTO is provided", () => {
       const dto1 = defaultGroupUser({});
-      const dto2 = defaultGroupUser({is_admin: true});
+      const dto2 = defaultGroupUser({ is_admin: true });
       const dto3 = defaultGroupUser({});
       const dtos = [dto1, dto2, dto3];
       const collection = new GroupsUsersCollection(dtos);
@@ -68,26 +68,24 @@ describe("Groups users collection", () => {
 
     it("should throw if the collection schema does not validate", () => {
       expect.assertions(1);
-      expect(() => new GroupsUsersCollection({}))
-        .toThrowEntityValidationError("items");
+      expect(() => new GroupsUsersCollection({})).toThrowEntityValidationError("items");
     });
 
     it("should throw if one of data item does not validate the collection entity schema", () => {
       const dto1 = defaultGroupUser();
-      const dto2 = defaultGroupUser({id: 42});
+      const dto2 = defaultGroupUser({ id: 42 });
 
       expect.assertions(1);
-      expect(() => new GroupsUsersCollection([dto1, dto2]))
-        .toThrowCollectionValidationError("1.id.type");
+      expect(() => new GroupsUsersCollection([dto1, dto2])).toThrowCollectionValidationError("1.id.type");
     });
 
     it("should, with enabling the ignore invalid option, ignore group user which do not validate their schema", () => {
       const dto1 = defaultGroupUser();
-      const dto2 = defaultGroupUser({group_id: 42});
+      const dto2 = defaultGroupUser({ group_id: 42 });
       const dto3 = defaultGroupUser();
 
       expect.assertions(3);
-      const collection = new GroupsUsersCollection([dto1, dto2, dto3], {ignoreInvalidEntity: true});
+      const collection = new GroupsUsersCollection([dto1, dto2, dto3], { ignoreInvalidEntity: true });
       expect(collection.items).toHaveLength(2);
       expect(collection.items[0].id).toEqual(dto1.id);
       expect(collection.items[1].id).toEqual(dto3.id);

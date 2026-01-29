@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ReviewAccountRecoveryRequest from "./ReviewAccountRecoveryRequest";
@@ -27,9 +27,9 @@ export default class ReviewAccountRecoveryRequestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ReviewAccountRecoveryRequest {...props}/>
+        <ReviewAccountRecoveryRequest {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -37,42 +37,42 @@ export default class ReviewAccountRecoveryRequestPage {
    * Returns the review account recovery element
    */
   get reviewAccountRecovery() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog');
+    return this._page.container.querySelector(".save-recovery-account-settings-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get closeButton() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
    * Get the accepted checkbox element
    */
   get acceptCheckbox() {
-    return this._page.container.querySelector('#statusRecoverAccountAccept');
+    return this._page.container.querySelector("#statusRecoverAccountAccept");
   }
 
   /**
    * Get the accepted checkbox creator element
    */
   get acceptCheckboxCreatorName() {
-    return this._page.container.querySelectorAll('.input.radio .info')[1];
+    return this._page.container.querySelectorAll(".input.radio .info")[1];
   }
 
   /**
    * Get the rejected checkbox element
    */
   get rejectCheckbox() {
-    return this._page.container.querySelector('#statusRecoverAccountReject');
+    return this._page.container.querySelector("#statusRecoverAccountReject");
   }
 
   /**
    * Get the rejected checkbox creator element
    */
   get rejectCheckboxCreatorName() {
-    return this._page.container.querySelectorAll('.input.radio .info')[0];
+    return this._page.container.querySelectorAll(".input.radio .info")[0];
   }
 
   /**
@@ -86,7 +86,7 @@ export default class ReviewAccountRecoveryRequestPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -100,7 +100,7 @@ export default class ReviewAccountRecoveryRequestPage {
    * Saves the change on the group
    */
   async submit() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.submitButton, leftClick);
     await waitFor(() => {});
   }
@@ -109,7 +109,7 @@ export default class ReviewAccountRecoveryRequestPage {
    * Cancels the user's MFA disable
    */
   async cancel() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.cancelButton, leftClick);
     await waitFor(() => {});
   }
@@ -118,7 +118,7 @@ export default class ReviewAccountRecoveryRequestPage {
    * Close the dialog
    */
   async close() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.closeButton, leftClick);
     await waitFor(() => {});
   }
@@ -127,7 +127,7 @@ export default class ReviewAccountRecoveryRequestPage {
    * Go to renew key
    */
   async selectReview(review) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(review, leftClick);
     await waitFor(() => {});
   }

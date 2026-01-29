@@ -12,13 +12,12 @@
  * @since         5.1.0
  */
 
-import {v4 as uuidv4} from "uuid";
-import {defaultMetadataKeyDto} from "../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
-import {defaultMetadataTrustedKeyDto} from "../../../shared/models/entity/metadata/metadataTrustedKeyEntity.test.data";
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultMetadataKeyDto } from "../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
+import { defaultMetadataTrustedKeyDto } from "../../../shared/models/entity/metadata/metadataTrustedKeyEntity.test.data";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import MetadataTrustedKeyEntity from "../../../shared/models/entity/metadata/metadataTrustedKeyEntity";
 import MetadataKeyEntity from "../../../shared/models/entity/metadata/metadataKeyEntity";
-
 
 /**
  * Default props.
@@ -26,16 +25,16 @@ import MetadataKeyEntity from "../../../shared/models/entity/metadata/metadataKe
  * @returns {object}
  */
 export function defaultProps(data = {}) {
-  const metadataKeyDto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
+  const metadataKeyDto = defaultMetadataKeyDto({}, { withMetadataPrivateKeys: true });
   delete metadataKeyDto.metadata_private_keys[0].data;
   metadataKeyDto.metadata_private_keys[0].data_signed_by_current_user = "2025-04-24T10:39.000Z";
   return {
     context: defaultAppContext(),
     requestId: uuidv4(),
     metadataTrustedKey: new MetadataTrustedKeyEntity(defaultMetadataTrustedKeyDto()),
-    metadataKey: new MetadataKeyEntity(metadataKeyDto, {validate: false}),
+    metadataKey: new MetadataKeyEntity(metadataKeyDto, { validate: false }),
     onComplete: jest.fn(),
-    ...data
+    ...data,
   };
 }
 
@@ -49,8 +48,8 @@ export function defaultPropsWithRollback(data = {}) {
     context: defaultAppContext(),
     requestId: uuidv4(),
     metadataTrustedKey: new MetadataTrustedKeyEntity(defaultMetadataTrustedKeyDto()),
-    metadataKey: new MetadataKeyEntity(defaultMetadataKeyDto(), {validate: false}),
+    metadataKey: new MetadataKeyEntity(defaultMetadataKeyDto(), { validate: false }),
     onComplete: jest.fn(),
-    ...data
+    ...data,
   };
 }

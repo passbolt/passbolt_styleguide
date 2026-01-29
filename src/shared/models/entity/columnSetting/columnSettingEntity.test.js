@@ -14,7 +14,7 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import ColumnSettingEntity from "./columnSettingEntity";
-import {defaultColumnSettingData} from "./columnSettingEntity.test.data";
+import { defaultColumnSettingData } from "./columnSettingEntity.test.data";
 import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
 
@@ -35,38 +35,38 @@ describe("ColumnSettingEntity", () => {
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-    ]).describe("Should validate the id", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+    ]).describe("Should validate the id", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultColumnSettingData({
-          id: test.value
+          id: test.value,
         });
         try {
           new ColumnSettingEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('id', test.rule)).toBeTruthy();
+          expect(error.hasError("id", test.rule)).toBeTruthy();
         }
       });
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-    ]).describe("Should validate the label", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+    ]).describe("Should validate the label", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultColumnSettingData({
           id: "id",
-          label: test.value
+          label: test.value,
         });
         try {
           new ColumnSettingEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('label', test.rule)).toBeTruthy();
+          expect(error.hasError("label", test.rule)).toBeTruthy();
         }
       });
     });
@@ -75,10 +75,7 @@ describe("ColumnSettingEntity", () => {
   describe("ColumnSettingEntity:toDto", () => {
     it("should return the expected properties.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        'id',
-        'label'
-      ];
+      const expectedKeys = ["id", "label"];
 
       const dto = defaultColumnSettingData();
       const entity = new ColumnSettingEntity(dto);

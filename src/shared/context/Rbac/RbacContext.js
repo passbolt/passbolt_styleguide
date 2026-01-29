@@ -14,11 +14,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../AppContext/AppContext";
+import { withAppContext } from "../AppContext/AppContext";
 import CanUse from "../../services/rbacs/canUseService";
 
 export const RbacContext = React.createContext({
-  canIUseAction: () => {}
+  canIUseAction: () => {},
 });
 
 /**
@@ -38,7 +38,7 @@ export class RbacContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      canIUseAction: this.canIUseAction.bind(this)
+      canIUseAction: this.canIUseAction.bind(this),
     };
   }
 
@@ -56,11 +56,7 @@ export class RbacContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <RbacContext.Provider value={this.state}>
-        {this.props.children}
-      </RbacContext.Provider>
-    );
+    return <RbacContext.Provider value={this.state}>{this.props.children}</RbacContext.Provider>;
   }
 }
 
@@ -79,9 +75,7 @@ export function withRbac(WrappedComponent) {
     render() {
       return (
         <RbacContext.Consumer>
-          {
-            rbacContext => <WrappedComponent rbacContext={rbacContext} {...this.props} />
-          }
+          {(rbacContext) => <WrappedComponent rbacContext={rbacContext} {...this.props} />}
         </RbacContext.Consumer>
       );
     }

@@ -12,11 +12,11 @@
  */
 import * as React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {withRouter} from "react-router-dom";
-import {withLoading} from "./LoadingContext";
-import {withRbac} from "../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { withRouter } from "react-router-dom";
+import { withLoading } from "./LoadingContext";
+import { withRbac } from "../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -29,7 +29,7 @@ export const AdministrationWorkspaceContext = React.createContext({
   must: {
     save: false, // Must save settings
     editSubscriptionKey: false, // Must edit subscription key
-    refreshSubscriptionKey: false // Must refresh the subscription key
+    refreshSubscriptionKey: false, // Must refresh the subscription key
   },
   administrationWorkspaceAction: null, // Class of the component to display the actions of the users
   setDisplayAdministrationWorkspaceAction: () => {}, // Whenever the component to display workspace action is requested
@@ -67,12 +67,11 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       must: {
         save: false, // Must save settings
         editSubscriptionKey: false, // Must edit subscription key
-        refreshSubscriptionKey: false // Must refresh the susbcription key
+        refreshSubscriptionKey: false, // Must refresh the susbcription key
       },
       administrationWorkspaceAction: () => <></>, // Class of the component to display the actions of the users
       setDisplayAdministrationWorkspaceAction: this.setDisplayAdministrationWorkspaceAction.bind(this), // Whenever the component to display workspace action is requested
       resetDisplayAdministrationWorkspaceAction: this.resetDisplayAdministrationWorkspaceAction.bind(this), // Whenever the reset of the display workspace action is requested
-      onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
       onMustEditSubscriptionKey: this.handleMustEditSubscriptionKey.bind(this), // Whenever a user wants edit the susbcription key
@@ -100,28 +99,28 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    * Handle save enabled
    */
   handleSaveEnabled() {
-    this.setState({can: {...this.state.can, save: true}});
+    this.setState({ can: { ...this.state.can, save: true } });
   }
 
   /**
    * Handle must save settings
    */
   handleMustSaveSettings() {
-    this.setState({must: {...this.state.must, save: true}});
+    this.setState({ must: { ...this.state.must, save: true } });
   }
 
   /**
    * Handle must edit subscription key
    */
   handleMustEditSubscriptionKey() {
-    this.setState({must: {...this.state.must, editSubscriptionKey: true}});
+    this.setState({ must: { ...this.state.must, editSubscriptionKey: true } });
   }
 
   /**
    * Handle must refresh subscription key
    */
   handleMustRefreshSubscriptionKey() {
-    this.setState({must: {...this.state.must, refreshSubscriptionKey: true}});
+    this.setState({ must: { ...this.state.must, refreshSubscriptionKey: true } });
   }
 
   /**
@@ -133,9 +132,9 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       test: false,
       synchronize: false,
       editSubscriptionKey: false,
-      refreshSubscriptionKey: false
+      refreshSubscriptionKey: false,
     };
-    this.setState({must});
+    this.setState({ must });
   }
 
   /**
@@ -157,14 +156,14 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       can: {
         save: false,
         test: false,
-        synchronize: false
+        synchronize: false,
       },
       must: {
         save: false,
         test: false,
         synchronize: false,
         editSubscriptionKey: false,
-        refreshSubscriptionKey: false
+        refreshSubscriptionKey: false,
       },
     };
 
@@ -207,7 +206,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isUserPassphrasePoliciesTeasing = ADMIN_URL_REGEXP.userPassphrasePoliciesTeasing.test(location);
     const isSsoTeasing = ADMIN_URL_REGEXP.ssoTeasing.test(location);
     const scimTeasing = ADMIN_URL_REGEXP.scimTeasing.test(location);
-
 
     let selectedAdministration;
     if (isAdminHomePageLocation) {
@@ -268,9 +266,14 @@ class AdministrationWorkspaceContextProvider extends React.Component {
 
     // the URL is supported, now check if the feature flag is enabled or not (except for email notification which doesn't have flag).
     const currentFeatureFlag = AdministrationWorkspaceFeatureFlag?.[selectedAdministration];
-    newState.selectedAdministration = currentFeatureFlag && !(this.props.context.siteSettings.canIUse(currentFeatureFlag) || (PRO_TEASING_MENUITEMS.includes(selectedAdministration) && this.props.context.siteSettings.isCommunityEdition))
-      ? AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND
-      : selectedAdministration;
+    newState.selectedAdministration =
+      currentFeatureFlag &&
+      !(
+        this.props.context.siteSettings.canIUse(currentFeatureFlag) ||
+        (PRO_TEASING_MENUITEMS.includes(selectedAdministration) && this.props.context.siteSettings.isCommunityEdition)
+      )
+        ? AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND
+        : selectedAdministration;
 
     this.setState(newState);
   }
@@ -279,23 +282,14 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    * @param administrationWorkspaceAction
    */
   setDisplayAdministrationWorkspaceAction(administrationWorkspaceAction) {
-    this.setState({administrationWorkspaceAction});
+    this.setState({ administrationWorkspaceAction });
   }
 
   /**
    * Reset the display of the administration workspace action
    */
   resetDisplayAdministrationWorkspaceAction() {
-    this.setState({administrationWorkspaceAction: () => <></>});
-  }
-
-  /**
-   * Whenever the update of the subscription is requested.
-   * @param keyDto The new subscription key
-   * @return {Promise<object>}
-   */
-  onUpdateSubscriptionKeyRequested(keyDto) {
-    return this.props.context.port.request("passbolt.subscription.update", keyDto);
+    this.setState({ administrationWorkspaceAction: () => <></> });
   }
 
   /**
@@ -311,7 +305,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
   }
 }
 
-AdministrationWorkspaceContextProvider.displayName = 'AdministrationWorkspaceContextProvider';
+AdministrationWorkspaceContextProvider.displayName = "AdministrationWorkspaceContextProvider";
 
 AdministrationWorkspaceContextProvider.propTypes = {
   context: PropTypes.object, // The application context
@@ -334,9 +328,9 @@ export function withAdministrationWorkspace(WrappedComponent) {
     render() {
       return (
         <AdministrationWorkspaceContext.Consumer>
-          {
-            administrationWorkspaceContext => <WrappedComponent administrationWorkspaceContext={administrationWorkspaceContext} {...this.props} />
-          }
+          {(administrationWorkspaceContext) => (
+            <WrappedComponent administrationWorkspaceContext={administrationWorkspaceContext} {...this.props} />
+          )}
         </AdministrationWorkspaceContext.Consumer>
       );
     }
@@ -347,18 +341,18 @@ export function withAdministrationWorkspace(WrappedComponent) {
  * The list of user workspace search filter types
  */
 export const AdministrationWorkspaceMenuTypes = {
-  NONE: 'NONE', // Initial administration menu selected
-  HOME: 'HOME', // The administration homepage
-  MFA: 'MFA', // MFA administration menu selected
-  MFA_POLICY: 'MFA-POLICY', //MFA Policy menu seleted
-  PASSWORD_POLICIES: 'PASSWORD-POLICIES', //Password Policies menu selected
-  USER_DIRECTORY: 'USER-DIRECTORY', // User directory administration menu selected
-  EMAIL_NOTIFICATION: 'EMAIL-NOTIFICATION', // Email notification administration menu selected
-  SUBSCRIPTION: 'SUBSCRIPTION', // Subscription administration menu selected
-  INTERNATIONALIZATION: 'INTERNATIONALIZATION', // Internationalization administration menu selected
-  ACCOUNT_RECOVERY: 'ACCOUNT-RECOVERY', // Account Recovery administration menu selected
-  SMTP_SETTINGS: 'SMTP-SETTINGS', // Smtp settings administration menu selected
-  SELF_REGISTRATION: 'SELF-REGISTRATION', // Self registration settings administration menu selected
+  NONE: "NONE", // Initial administration menu selected
+  HOME: "HOME", // The administration homepage
+  MFA: "MFA", // MFA administration menu selected
+  MFA_POLICY: "MFA-POLICY", //MFA Policy menu seleted
+  PASSWORD_POLICIES: "PASSWORD-POLICIES", //Password Policies menu selected
+  USER_DIRECTORY: "USER-DIRECTORY", // User directory administration menu selected
+  EMAIL_NOTIFICATION: "EMAIL-NOTIFICATION", // Email notification administration menu selected
+  SUBSCRIPTION: "SUBSCRIPTION", // Subscription administration menu selected
+  INTERNATIONALIZATION: "INTERNATIONALIZATION", // Internationalization administration menu selected
+  ACCOUNT_RECOVERY: "ACCOUNT-RECOVERY", // Account Recovery administration menu selected
+  SMTP_SETTINGS: "SMTP-SETTINGS", // Smtp settings administration menu selected
+  SELF_REGISTRATION: "SELF-REGISTRATION", // Self registration settings administration menu selected
   SSO: "SSO", // SSO administration menu selected
   RBAC: "RBAC", // RBAC administration menu selected
   USER_PASSPHRASE_POLICIES: "USER-PASSPHRASE-POLICIES", // User Passphrase Policies administration menu selected
@@ -379,15 +373,15 @@ export const AdministrationWorkspaceMenuTypes = {
  * A map of administration workspace menu keys with the corresponding feature flag values
  */
 export const AdministrationWorkspaceFeatureFlag = {
-  [AdministrationWorkspaceMenuTypes.MFA]: 'multiFactorAuthentication', // MFA administration feature flag
-  [AdministrationWorkspaceMenuTypes.MFA_POLICY]: 'mfaPolicies', //MFA Policy menu seleted
-  [AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES]: 'passwordPoliciesUpdate', //Password Policies feature flag
-  [AdministrationWorkspaceMenuTypes.USER_DIRECTORY]: 'directorySync', // User directory administration feature flag
-  [AdministrationWorkspaceMenuTypes.SUBSCRIPTION]: 'ee', // Subscription administration feature flag
-  [AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION]: 'locale', // Internationalization administration feature flag
-  [AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY]: 'accountRecovery', // Account Recovery administration feature flag
-  [AdministrationWorkspaceMenuTypes.SMTP_SETTINGS]: 'smtpSettings', // Smtp settings administration feature flag
-  [AdministrationWorkspaceMenuTypes.SELF_REGISTRATION]: 'selfRegistration', // Self registration settings administration feature flag
+  [AdministrationWorkspaceMenuTypes.MFA]: "multiFactorAuthentication", // MFA administration feature flag
+  [AdministrationWorkspaceMenuTypes.MFA_POLICY]: "mfaPolicies", //MFA Policy menu seleted
+  [AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES]: "passwordPoliciesUpdate", //Password Policies feature flag
+  [AdministrationWorkspaceMenuTypes.USER_DIRECTORY]: "directorySync", // User directory administration feature flag
+  [AdministrationWorkspaceMenuTypes.SUBSCRIPTION]: "ee", // Subscription administration feature flag
+  [AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION]: "locale", // Internationalization administration feature flag
+  [AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY]: "accountRecovery", // Account Recovery administration feature flag
+  [AdministrationWorkspaceMenuTypes.SMTP_SETTINGS]: "smtpSettings", // Smtp settings administration feature flag
+  [AdministrationWorkspaceMenuTypes.SELF_REGISTRATION]: "selfRegistration", // Self registration settings administration feature flag
   [AdministrationWorkspaceMenuTypes.SSO]: "sso", // SSO administration feature flag
   [AdministrationWorkspaceMenuTypes.RBAC]: "rbacs", // RBAC administration feature flag
   [AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES]: "userPassphrasePolicies", // User Passphrase Policies administration feature flag
@@ -450,5 +444,5 @@ export const PRO_TEASING_MENUITEMS = [
   AdministrationWorkspaceMenuTypes.SSO,
   AdministrationWorkspaceMenuTypes.MFA_POLICY,
   AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
-  AdministrationWorkspaceMenuTypes.SCIM
+  AdministrationWorkspaceMenuTypes.SCIM,
 ];

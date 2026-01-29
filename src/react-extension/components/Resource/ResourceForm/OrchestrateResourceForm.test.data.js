@@ -12,9 +12,7 @@
  * @since         5.0.0
  */
 
-import {
-  ResourceEditCreateFormEnumerationTypes
-} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import { ResourceEditCreateFormEnumerationTypes } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
 /**
  * Default props
@@ -22,7 +20,7 @@ import {
  */
 export function defaultProps(data = {}) {
   const defaultData = {
-    resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD
+    resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD,
   };
   return Object.assign(defaultData, data);
 }

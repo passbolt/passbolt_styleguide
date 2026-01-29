@@ -15,38 +15,38 @@ import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import mockPort from "../../../../../test/mocks/mockPort";
 import mockStorage from "../../../../../test/mocks/mockStorage";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
 import DisplayResourceDetails from "./DisplayResourceDetails";
-import {defaultProps, propsWithUnencryptedDescriptionResource} from "./DisplayResourceDetails.test.data";
+import { defaultProps, propsWithUnencryptedDescriptionResource } from "./DisplayResourceDetails.test.data";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import {
   resourceStandaloneTotpDto,
-  resourceWithTotpDto
+  resourceWithTotpDto,
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {RbacContext} from "../../../../shared/context/Rbac/RbacContext";
-import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
-import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
-import {resourceWithMultipleUris} from "./DisplayResourceDetailsURIs.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { RbacContext } from "../../../../shared/context/Rbac/RbacContext";
+import { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
+import { resourceWithCustomFields } from "./DisplayResourceDetailsCustomFields.test.data";
+import { resourceWithMultipleUris } from "./DisplayResourceDetailsURIs.test.data";
 
 /**
  * DisplayResourceDetails stories
  */
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetails',
+  title: "Components/ResourceDetails/DisplayResourceDetails",
   component: DisplayResourceDetails,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <Router>
         <AppContext.Provider value={args.context}>
           <RbacContext.Provider value={args.rbacContext}>
             <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
               <div className="page">
-                <div className="app" style={{margin: "-1rem"}}>
+                <div className="app" style={{ margin: "-1rem" }}>
                   <div className="panel main">
                     <div className="panel middle">
-                      <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+                      <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                         <div className="panel aside">
                           <Story {...args} />
                         </div>
@@ -59,20 +59,20 @@ export default {
           </RbacContext.Provider>
         </AppContext.Provider>
       </Router>
-    )
-  ]
+    ),
+  ],
 };
 
 const storage = mockStorage();
 const port = mockPort(storage);
 
 port.addRequestListener("passbolt.organization-settings.get", () => siteSettingsCe);
-port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({description: "This is a secure note."}));
+port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({ description: "This is a secure note." }));
 
 export const Default = {
   args: {
     ...defaultProps(),
-  }
+  },
 };
 
 export const PasswordWithTotp = {
@@ -81,10 +81,10 @@ export const PasswordWithTotp = {
       resourceWorkspaceContext: defaultResourceWorkspaceContext({
         details: {
           resource: resourceWithTotpDto(),
-        }
-      })
+        },
+      }),
     }),
-  }
+  },
 };
 
 export const StandaloneTotp = {
@@ -93,10 +93,10 @@ export const StandaloneTotp = {
       resourceWorkspaceContext: defaultResourceWorkspaceContext({
         details: {
           resource: resourceStandaloneTotpDto(),
-        }
-      })
+        },
+      }),
     }),
-  }
+  },
 };
 
 export const WithUnencryptedDescription = {
@@ -104,9 +104,8 @@ export const WithUnencryptedDescription = {
     storage: storage,
     port: port,
     ...propsWithUnencryptedDescriptionResource(),
-  }
+  },
 };
-
 
 export const WithCustomFields = {
   args: {
@@ -114,10 +113,10 @@ export const WithCustomFields = {
       resourceWorkspaceContext: defaultResourceWorkspaceContext({
         details: {
           resource: resourceWithCustomFields,
-        }
-      })
+        },
+      }),
     }),
-  }
+  },
 };
 
 export const WithMultipleUris = {
@@ -126,8 +125,8 @@ export const WithMultipleUris = {
       resourceWorkspaceContext: defaultResourceWorkspaceContext({
         details: {
           resource: resourceWithMultipleUris,
-        }
-      })
+        },
+      }),
     }),
-  }
+  },
 };

@@ -13,8 +13,8 @@
  */
 import EntitySchema from "../../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../../test/assert/assertEntityProperty";
-import IconEntity, {ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET} from "./IconEntity";
-import {defaultIconDto, minimalIconDto} from "./iconEntity.test.data";
+import IconEntity, { ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET } from "./IconEntity";
+import { defaultIconDto, minimalIconDto } from "./iconEntity.test.data";
 
 describe("Icon entity", () => {
   describe("::getSchema", () => {
@@ -37,15 +37,15 @@ describe("Icon entity", () => {
 
     it("validates background_color property", () => {
       const successScenario = [
-        {scenario: "a valid hex color without transparency", value: "#FF00FF"},
-        {scenario: "a valid hex color with transparency", value: "#FF00FF00"},
+        { scenario: "a valid hex color without transparency", value: "#FF00FF" },
+        { scenario: "a valid hex color with transparency", value: "#FF00FF00" },
       ];
 
       const failingScenario = [
-        {scenario: "a hex color without #", value: "ABCDEF"},
-        {scenario: "too long string", value: "#FF00FF00F"},
-        {scenario: "too short string", value: "#FF00F"},
-        {scenario: "8 characters long string", value: "#FF00FF0"}
+        { scenario: "a hex color without #", value: "ABCDEF" },
+        { scenario: "too long string", value: "#FF00FF00F" },
+        { scenario: "too short string", value: "#FF00F" },
+        { scenario: "8 characters long string", value: "#FF00FF0" },
       ];
 
       assertEntityProperty.string(IconEntity, "background_color");

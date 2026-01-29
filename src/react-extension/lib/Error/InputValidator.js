@@ -19,6 +19,6 @@ export function maxSizeValidation(value, maxLength, translate) {
    * this.translate("this is the maximum size for this field, make sure your data was not truncated")
    */
   const sizeExceeded = value.length >= maxLength;
-  const warningMessage =  translate("this is the maximum size for this field, make sure your data was not truncated");
+  const warningMessage = translate("this is the maximum size for this field, make sure your data was not truncated");
   return sizeExceeded ? warningMessage : "";
 }

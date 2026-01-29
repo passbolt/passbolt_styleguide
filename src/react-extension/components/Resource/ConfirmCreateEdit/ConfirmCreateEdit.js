@@ -11,20 +11,20 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.6.1
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * The component display operation variations.
  * @type {Object}
  */
 export const ConfirmEditCreateOperationVariations = {
-  CREATE: 'Create',
-  EDIT: 'Edit',
+  CREATE: "Create",
+  EDIT: "Edit",
 };
 
 /**
@@ -32,8 +32,8 @@ export const ConfirmEditCreateOperationVariations = {
  * @type {Object}
  */
 export const ConfirmEditCreateRuleVariations = {
-  IN_DICTIONARY: 'In dictionary',
-  MINIMUM_ENTROPY: 'Minimum entropy'
+  IN_DICTIONARY: "In dictionary",
+  MINIMUM_ENTROPY: "Minimum entropy",
 };
 
 /**
@@ -68,7 +68,7 @@ class ConfirmCreateEdit extends Component {
     event.preventDefault();
 
     if (!this.state.processing) {
-      this.setState({processing: true});
+      this.setState({ processing: true });
       this.props.onConfirm();
       this.props.onClose();
     }
@@ -96,7 +96,6 @@ class ConfirmCreateEdit extends Component {
     this.props.onReject();
   }
 
-
   /**
    * Should input be disabled? True if state is processing
    * @returns {boolean}
@@ -116,42 +115,61 @@ class ConfirmCreateEdit extends Component {
   render() {
     return (
       <DialogWrapper
-        title={{
-          [ConfirmEditCreateOperationVariations.CREATE]: <Trans>Confirm resource creation</Trans>,
-          [ConfirmEditCreateOperationVariations.EDIT]: <Trans>Confirm resource edition</Trans>,
-        }[this.props.operation]}
+        title={
+          {
+            [ConfirmEditCreateOperationVariations.CREATE]: <Trans>Confirm resource creation</Trans>,
+            [ConfirmEditCreateOperationVariations.EDIT]: <Trans>Confirm resource edition</Trans>,
+          }[this.props.operation]
+        }
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="confirm-create-edit-password-dialog">
+        className="confirm-create-edit-password-dialog"
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <p>
-              {{
-                [ConfirmEditCreateRuleVariations.IN_DICTIONARY]: <Trans>The password is part of an exposed data breach.</Trans>,
-                [ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY]: <Trans>The password is very weak and might be part of an exposed data breach.</Trans>,
-              }[this.props.rule]}
+              {
+                {
+                  [ConfirmEditCreateRuleVariations.IN_DICTIONARY]: (
+                    <Trans>The password is part of an exposed data breach.</Trans>
+                  ),
+                  [ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY]: (
+                    <Trans>The password is very weak and might be part of an exposed data breach.</Trans>
+                  ),
+                }[this.props.rule]
+              }
             </p>
             <p>
-              {{
-                [ConfirmEditCreateOperationVariations.CREATE]: <Trans>
-                  Are you sure you want to create the resource <strong
-                    className="dialog-variable">{{resourceName: this.props.resourceName}}</strong>?
-                </Trans>,
-                [ConfirmEditCreateOperationVariations.EDIT]: <Trans>
-                  Are you sure you want to edit the resource <strong
-                    className="dialog-variable">{{resourceName: this.props.resourceName}}</strong>?
-                </Trans>,
-              }[this.props.operation]}
+              {
+                {
+                  [ConfirmEditCreateOperationVariations.CREATE]: (
+                    <Trans>
+                      Are you sure you want to create the resource{" "}
+                      <strong className="dialog-variable">{{ resourceName: this.props.resourceName }}</strong>?
+                    </Trans>
+                  ),
+                  [ConfirmEditCreateOperationVariations.EDIT]: (
+                    <Trans>
+                      Are you sure you want to edit the resource{" "}
+                      <strong className="dialog-variable">{{ resourceName: this.props.resourceName }}</strong>?
+                    </Trans>
+                  ),
+                }[this.props.operation]
+              }
             </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton value={this.translate("Edit password")}
+            <FormCancelButton
+              value={this.translate("Edit password")}
               disabled={this.hasAllInputDisabled()}
-              onClick={this.handleRejectClicked}/>
-            <FormSubmitButton value={this.translate("Proceed anyway")}
+              onClick={this.handleRejectClicked}
+            />
+            <FormSubmitButton
+              value={this.translate("Proceed anyway")}
               disabled={this.hasAllInputDisabled()}
               processing={this.state.processing}
-              attention={true}/>
+              attention={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -160,10 +178,7 @@ class ConfirmCreateEdit extends Component {
 }
 
 ConfirmCreateEdit.propTypes = {
-  operation: PropTypes.oneOf([
-    ConfirmEditCreateOperationVariations.CREATE,
-    ConfirmEditCreateOperationVariations.EDIT,
-  ]), // Defines which resource operation the dialog has to be displayed for.
+  operation: PropTypes.oneOf([ConfirmEditCreateOperationVariations.CREATE, ConfirmEditCreateOperationVariations.EDIT]), // Defines which resource operation the dialog has to be displayed for.
   rule: PropTypes.oneOf([
     ConfirmEditCreateRuleVariations.IN_DICTIONARY,
     ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
@@ -175,4 +190,4 @@ ConfirmCreateEdit.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(ConfirmCreateEdit);
+export default withTranslation("common")(ConfirmCreateEdit);

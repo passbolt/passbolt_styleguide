@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Select from "../../Common/Select/Select";
 
 /**
@@ -52,7 +52,7 @@ class ChangeLocale extends Component {
   async handleLocaleChange(previousLocale) {
     const hasLocaleChanged = this.props.context.locale !== previousLocale;
     if (hasLocaleChanged) {
-      await this.setState({locale: this.props.context.locale});
+      await this.setState({ locale: this.props.context.locale });
     }
   }
 
@@ -106,7 +106,7 @@ class ChangeLocale extends Component {
    * Get th locale
    */
   async initLocale() {
-    await this.setState({locale: this.props.context.locale, loading: false});
+    await this.setState({ locale: this.props.context.locale, loading: false });
   }
 
   /**
@@ -115,7 +115,7 @@ class ChangeLocale extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return this.setState({processing: !prev});
+    return this.setState({ processing: !prev });
   }
 
   /**
@@ -132,7 +132,10 @@ class ChangeLocale extends Component {
    */
   get supportedLocales() {
     if (this.props.context.siteSettings.supportedLocales) {
-      return this.props.context.siteSettings.supportedLocales.map(supportedLocale => ({value: supportedLocale.locale, label: supportedLocale.label}));
+      return this.props.context.siteSettings.supportedLocales.map((supportedLocale) => ({
+        value: supportedLocale.locale,
+        label: supportedLocale.label,
+      }));
     }
     return [];
   }
@@ -143,12 +146,19 @@ class ChangeLocale extends Component {
   render() {
     return (
       <>
-        {!this.isLoading() &&
-        <div className="select-wrapper input">
-          <Select id="user-locale-input" className="setup-extension" name="locale" value={this.state.locale}
-            disabled={!this.areActionsAllowed} items={this.supportedLocales} onChange={this.handleLocaleInputChange}/>
-        </div>
-        }
+        {!this.isLoading() && (
+          <div className="select-wrapper input">
+            <Select
+              id="user-locale-input"
+              className="setup-extension"
+              name="locale"
+              value={this.state.locale}
+              disabled={!this.areActionsAllowed}
+              items={this.supportedLocales}
+              onChange={this.handleLocaleInputChange}
+            />
+          </div>
+        )}
       </>
     );
   }

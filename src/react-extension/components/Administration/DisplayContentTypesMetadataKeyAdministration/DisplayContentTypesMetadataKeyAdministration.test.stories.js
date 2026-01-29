@@ -16,50 +16,50 @@ import React from "react";
 import DisplayContentTypesMetadataKeyAdministration from "./DisplayContentTypesMetadataKeyAdministration";
 import {
   defaultProps,
-  defaultSettingsAndMultipleActiveKeysProps, defaultSettingsAndMultipleKeysProps,
-  defaultSettingsAndSingleActiveKeyProps
+  defaultSettingsAndMultipleActiveKeysProps,
+  defaultSettingsAndMultipleKeysProps,
+  defaultSettingsAndSingleActiveKeyProps,
 } from "./DisplayContentTypesMetadataKeyAdministration.test.data";
-import {within} from "@testing-library/dom";
-import {MemoryRouter} from "react-router-dom";
+import { within } from "@testing-library/dom";
+import { MemoryRouter } from "react-router-dom";
 import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
-import DisplayAdministrationWorkspaceBreadcrumb
-  from "../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
-import {waitFor} from "@testing-library/react";
+import DisplayAdministrationWorkspaceBreadcrumb from "../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
+import { waitFor } from "@testing-library/react";
 
 export default {
-  title: 'Components/Administration/DisplayContentTypesMetadataKeyAdministration',
+  title: "Components/Administration/DisplayContentTypesMetadataKeyAdministration",
   component: DisplayContentTypesMetadataKeyAdministration,
-  decorators: [(Story, {args}) =>
-    <MemoryRouter initialEntries={['/app/administration/content-types/metadata']}>
-      <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-        <div id="container" className="page administration">
-          <div id="app" className="app" style={{margin: "-1rem"}}>
-            <div className="panel main">
-              <div className="panel left">
-                <div className="sidebar-content">
-                  <div className="top-bar-left-navigation">
-                    <div className="navigation">
+  decorators: [
+    (Story, { args }) => (
+      <MemoryRouter initialEntries={["/app/administration/content-types/metadata"]}>
+        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+          <div id="container" className="page administration">
+            <div id="app" className="app" style={{ margin: "-1rem" }}>
+              <div className="panel main">
+                <div className="panel left">
+                  <div className="sidebar-content">
+                    <div className="top-bar-left-navigation">
+                      <div className="navigation"></div>
                     </div>
-                  </div>
-                  <div className="sidebar-content-left">
+                    <div className="sidebar-content-left"></div>
                   </div>
                 </div>
-              </div>
-              <div className="panel middle">
-                <div className="header">
-                </div>
-                <div className="middle-right">
-                  <div className="breadcrumbs-and-grid">
-                    <div className="top-bar">
-                      <DisplayAdministrationWorkspaceBreadcrumb administrationWorkspaceContext={args.administrationWorkspaceContext}/>
+                <div className="panel middle">
+                  <div className="header"></div>
+                  <div className="middle-right">
+                    <div className="breadcrumbs-and-grid">
+                      <div className="top-bar">
+                        <DisplayAdministrationWorkspaceBreadcrumb
+                          administrationWorkspaceContext={args.administrationWorkspaceContext}
+                        />
+                      </div>
+                      <div className="main-page">
+                        <Story {...args} />
+                      </div>
                     </div>
-                    <div className="main-page">
-                      <Story {...args}/>
-                    </div>
-                  </div>
-                  <div className="help-panel">
-                    <div className="sidebar-help">
-                      <div id="administration-help-panel">
+                    <div className="help-panel">
+                      <div className="sidebar-help">
+                        <div id="administration-help-panel"></div>
                       </div>
                     </div>
                   </div>
@@ -67,44 +67,44 @@ export default {
               </div>
             </div>
           </div>
-        </div>
-      </TranslationProvider>
-    </MemoryRouter>
+        </TranslationProvider>
+      </MemoryRouter>
+    ),
   ],
 };
 
 export const Initial = {
-  args: defaultProps()
+  args: defaultProps(),
 };
 
 export const WithValidationError = {
   args: defaultProps(),
   // Trigger the form validation.
-  play: async({canvasElement}) => {
+  play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const form = await waitFor(() => canvas.getByTestId("submit-form"));
     form.requestSubmit();
-  }
+  },
 };
 
 export const GeneratedMetadataKey = {
   args: defaultProps(),
   // Trigger a key generation.
-  play: async({canvasElement}) => {
+  play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const form = await waitFor(() => canvas.getByTestId("generate-key-buton"));
     form.click();
-  }
+  },
 };
 
 export const SingleActiveMetadataKey = {
-  args: defaultSettingsAndSingleActiveKeyProps()
+  args: defaultSettingsAndSingleActiveKeyProps(),
 };
 
 export const MultipleActiveKeys = {
-  args: defaultSettingsAndMultipleActiveKeysProps()
+  args: defaultSettingsAndMultipleActiveKeysProps(),
 };
 
 export const MultipleKeys = {
-  args: defaultSettingsAndMultipleKeysProps()
+  args: defaultSettingsAndMultipleKeysProps(),
 };

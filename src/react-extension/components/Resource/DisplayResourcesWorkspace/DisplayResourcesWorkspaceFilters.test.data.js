@@ -11,11 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {
-  defaultResourceWorkspaceContext
-} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
+import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 /**
  * Default component props.
@@ -29,7 +27,7 @@ export function defaultProps(data = {}) {
     history: {
       push: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }
 
@@ -40,8 +38,10 @@ export function defaultProps(data = {}) {
  */
 export function propsFilterByFavorite(data = {}) {
   return defaultProps({
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({filter: {type: ResourceWorkspaceFilterTypes.FAVORITE}}),
-    ...data
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filter: { type: ResourceWorkspaceFilterTypes.FAVORITE },
+    }),
+    ...data,
   });
 }
 
@@ -52,8 +52,10 @@ export function propsFilterByFavorite(data = {}) {
  */
 export function propsFilterByShared(data = {}) {
   return defaultProps({
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({filter: {type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME}}),
-    ...data
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filter: { type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME },
+    }),
+    ...data,
   });
 }
 
@@ -64,8 +66,10 @@ export function propsFilterByShared(data = {}) {
  */
 export function propsFilterByPrivate(data = {}) {
   return defaultProps({
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({filter: {type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN}}),
-    ...data
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filter: { type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN },
+    }),
+    ...data,
   });
 }
 
@@ -76,7 +80,9 @@ export function propsFilterByPrivate(data = {}) {
  */
 export function propsFilterByExpired(data = {}) {
   return defaultProps({
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({filter: {type: ResourceWorkspaceFilterTypes.EXPIRED}}),
-    ...data
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filter: { type: ResourceWorkspaceFilterTypes.EXPIRED },
+    }),
+    ...data,
   });
 }

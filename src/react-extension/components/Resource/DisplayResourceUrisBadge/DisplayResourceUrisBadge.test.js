@@ -16,8 +16,8 @@
  * Unit tests on DisplayResourceUrisBadge in regard of specifications
  */
 
-import {defaultProps, propsWithLargeAmountOfUris} from './DisplayResourceUrisBadge.test.data';
-import DisplayResourceUrisBadgePage from './DisplayResourceUrisBadge.test.page';
+import { defaultProps, propsWithLargeAmountOfUris } from "./DisplayResourceUrisBadge.test.data";
+import DisplayResourceUrisBadgePage from "./DisplayResourceUrisBadge.test.page";
 import "../../../../../test/mocks/mockPortal";
 
 beforeEach(() => {
@@ -27,8 +27,8 @@ beforeEach(() => {
 describe("DisplayResourceUrisBadge", () => {
   let page; // The page to test against
 
-  describe('As LU I can see the resource uris badge.', () => {
-    it('As LU I can see the resource uris badge counter.', () => {
+  describe("As LU I can see the resource uris badge.", () => {
+    it("As LU I can see the resource uris badge counter.", () => {
       expect.assertions(2);
 
       const props = defaultProps();
@@ -38,7 +38,7 @@ describe("DisplayResourceUrisBadge", () => {
       expect(page.count.textContent).toEqual("+3");
     });
 
-    it('As LU I can see the resource uris badge counter 99+.', () => {
+    it("As LU I can see the resource uris badge counter 99+.", () => {
       expect.assertions(2);
 
       const props = propsWithLargeAmountOfUris();
@@ -49,15 +49,15 @@ describe("DisplayResourceUrisBadge", () => {
     });
   });
 
-  describe('As LU I can see the additional resource uris', () => {
-    it('As LU I can see the additional resource uris on the tooltip.', async() => {
+  describe("As LU I can see the additional resource uris", () => {
+    it("As LU I can see the additional resource uris on the tooltip.", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
       page = new DisplayResourceUrisBadgePage(props);
-      jest.spyOn(window.HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
-        () => ({x: 0, y: 0, widths: 100, height: 500, top: 0, right: 400, bottom: 500, left: 0})
-      );
+      jest
+        .spyOn(window.HTMLElement.prototype, "getBoundingClientRect")
+        .mockImplementation(() => ({ x: 0, y: 0, widths: 100, height: 500, top: 0, right: 400, bottom: 500, left: 0 }));
 
       await page.hover(page.tooltip);
 

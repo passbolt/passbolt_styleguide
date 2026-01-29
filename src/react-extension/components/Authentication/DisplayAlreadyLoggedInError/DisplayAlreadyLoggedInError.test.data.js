@@ -19,7 +19,7 @@
  */
 export function defaultProps(props = {}) {
   const defaultProps = {
-    onLogoutButtonClick: jest.fn()
+    onLogoutButtonClick: jest.fn(),
   };
   return Object.assign(defaultProps, props);
 }

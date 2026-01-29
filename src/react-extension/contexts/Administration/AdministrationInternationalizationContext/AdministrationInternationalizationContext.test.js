@@ -12,10 +12,13 @@
  * @since         3.8.0
  */
 
-import {defaultLocale, defaultProps} from "../../../../react-extension/components/Administration/DisplayInternationalizationAdministration/DisplayInternationalizationAdministration.test.data";
-import {AdminInternationalizationContextProvider} from './AdministrationInternationalizationContext';
-import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import {enableFetchMocks} from 'jest-fetch-mock';
+import {
+  defaultLocale,
+  defaultProps,
+} from "../../../../react-extension/components/Administration/DisplayInternationalizationAdministration/DisplayInternationalizationAdministration.test.data";
+import { AdminInternationalizationContextProvider } from "./AdministrationInternationalizationContext";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import { enableFetchMocks } from "jest-fetch-mock";
 
 const frLocale = "fr-Fr";
 
@@ -26,14 +29,14 @@ describe("AdministrationInternationalizationContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminInternationalizationContext = new AdminInternationalizationContextProvider(props);
-    const setStateMock = state => adminInternationalizationContext.state = Object.assign(adminInternationalizationContext.state, state);
+    const setStateMock = (state) =>
+      (adminInternationalizationContext.state = Object.assign(adminInternationalizationContext.state, state));
     jest.spyOn(adminInternationalizationContext, "setState").mockImplementation(setStateMock);
     enableFetchMocks();
   });
 
-
   describe("AdministrationInternationalizationContext::findLocale", () => {
-    it("should get the current locale and store it in its state", async() => {
+    it("should get the current locale and store it in its state", async () => {
       await adminInternationalizationContext.findLocale();
 
       expect.assertions(3);
@@ -44,7 +47,6 @@ describe("AdministrationInternationalizationContext", () => {
     });
   });
 
-
   describe("AdministrationInternationalizationContext::hasLocaleChanges", () => {
     it("should return true if settings is different then current setting", () => {
       adminInternationalizationContext.setLocale(frLocale);
@@ -54,7 +56,7 @@ describe("AdministrationInternationalizationContext", () => {
       expect(adminInternationalizationContext.hasLocaleChanges()).toBeTruthy();
     });
 
-    it("should return false if settings is different then current setting", async() => {
+    it("should return false if settings is different then current setting", async () => {
       await adminInternationalizationContext.findLocale();
 
       adminInternationalizationContext.setLocale(frLocale);
@@ -65,7 +67,6 @@ describe("AdministrationInternationalizationContext", () => {
       expect(adminInternationalizationContext.hasLocaleChanges()).toBeFalsy();
     });
   });
-
 
   describe("AdministrationInternationalizationContext::clearContext", () => {
     it("should clear the context and set it by default", () => {
@@ -82,7 +83,7 @@ describe("AdministrationInternationalizationContext", () => {
   });
 
   describe("AdministrationInternationalizationContext::setLocale", () => {
-    it("should update locale object and not the current object", async() => {
+    it("should update locale object and not the current object", async () => {
       await adminInternationalizationContext.findLocale();
       adminInternationalizationContext.setLocale(frLocale);
 
@@ -94,7 +95,7 @@ describe("AdministrationInternationalizationContext", () => {
   });
 
   describe("AdministrationInternationalizationContext::save", () => {
-    it("should save locale and refresh texts", async() => {
+    it("should save locale and refresh texts", async () => {
       fetch.doMockOnceIf(/locale\/settings/, () => mockApiResponse({}));
       const findLocale = jest.spyOn(adminInternationalizationContext, "findLocale").mockImplementation();
 
@@ -104,8 +105,7 @@ describe("AdministrationInternationalizationContext", () => {
 
       expect(adminInternationalizationContext.isProcessing()).toBeTruthy();
       expect(findLocale).toHaveBeenCalled();
-      expect(JSON.parse(fetch.mock.calls[0][1].body)).toEqual({value: defaultLocale});
+      expect(JSON.parse(fetch.mock.calls[0][1].body)).toEqual({ value: defaultLocale });
     });
   });
 });
-

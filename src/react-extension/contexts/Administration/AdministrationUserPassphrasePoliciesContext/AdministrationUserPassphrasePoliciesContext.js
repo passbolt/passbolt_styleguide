@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withTranslation} from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withTranslation } from "react-i18next";
 import UserPassphrasePoliciesViewModel from "../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesViewModel";
 
 /**
@@ -72,7 +72,7 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    * @return {Promise<void>}
    */
   async findSettings() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
 
     const result = await this.props.context.port.request("passbolt.user-passphrase-policies.find");
     const settings = UserPassphrasePoliciesViewModel.fromEntityDto(result);
@@ -100,12 +100,12 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
     const settings = this.state.settings.cloneWithMutation(key, value);
     const isDataModified = UserPassphrasePoliciesViewModel.isDataDifferent(settings, this.state.currentSettings);
     if (!this.state.hasBeenValidated) {
-      this.setState({settings, isDataModified});
+      this.setState({ settings, isDataModified });
       return;
     }
 
     const errors = settings.validate();
-    this.setState({errors, settings, isDataModified});
+    this.setState({ errors, settings, isDataModified });
   }
 
   /**
@@ -124,7 +124,7 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
     const validattionError = this.state.settings.validate();
     const hasErrors = validattionError.hasErrors();
     const errors = hasErrors ? validattionError : null;
-    this.setState({errors, hasBeenValidated: true});
+    this.setState({ errors, hasBeenValidated: true });
     return !hasErrors;
   }
 
@@ -132,7 +132,7 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    * Saves the data on the API
    */
   async save() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
 
     try {
       const settingsDto = this.state.settings.toEntityDto();
@@ -142,10 +142,10 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
         settings,
         currentSettings: settings,
         processing: false,
-        isDataModified: false
+        isDataModified: false,
       });
     } finally {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -184,7 +184,7 @@ AdministrationUserPassphrasePoliciesContextProvider.propTypes = {
   t: PropTypes.any, // The translate context
 };
 
-export default withAppContext(withTranslation('common')(AdministrationUserPassphrasePoliciesContextProvider));
+export default withAppContext(withTranslation("common")(AdministrationUserPassphrasePoliciesContextProvider));
 
 /**
  * Administration User Passphrase Policies Context Consumer HOC
@@ -195,11 +195,8 @@ export function withAdminUserPassphrasePolicies(WrappedComponent) {
     render() {
       return (
         <AdministrationUserPassphrasePoliciesContext.Consumer>
-          {adminUserPassphrasePoliciesContext => (
-            <WrappedComponent
-              adminUserPassphrasePoliciesContext={adminUserPassphrasePoliciesContext}
-              {...this.props}
-            />
+          {(adminUserPassphrasePoliciesContext) => (
+            <WrappedComponent adminUserPassphrasePoliciesContext={adminUserPassphrasePoliciesContext} {...this.props} />
           )}
         </AdministrationUserPassphrasePoliciesContext.Consumer>
       );

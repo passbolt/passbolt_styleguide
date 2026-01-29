@@ -12,8 +12,7 @@
  * @since         4.4.0
  */
 
-import {defaultAppContext} from "../../../../contexts/ExtAppContext.test.data";
-
+import { defaultAppContext } from "../../../../contexts/ExtAppContext.test.data";
 
 export function defaultProps(props = {}) {
   return {
@@ -29,6 +28,6 @@ export function mockMfaContext(props = {}) {
     findMfaSettings: jest.fn(),
     goToProviderList: jest.fn(),
     isProcessing: jest.fn(),
-    ...props
+    ...props,
   };
 }

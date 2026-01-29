@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.12.0
  */
-import ConfirmMigrateMetadataDialog from './ConfirmMigrateMetadataDialog';
+import ConfirmMigrateMetadataDialog from "./ConfirmMigrateMetadataDialog";
 
 export default {
-  title: 'Components/Administration/ConfirmMigrateMetadataDialog',
+  title: "Components/Administration/ConfirmMigrateMetadataDialog",
   component: ConfirmMigrateMetadataDialog,
 };
 
@@ -23,5 +23,5 @@ export const Initial = {
     cancel: jest.fn(),
     confirm: jest.fn(),
     close: jest.fn(),
-  }
+  },
 };

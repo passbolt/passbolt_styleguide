@@ -12,8 +12,8 @@
  * @since         3.6.0
  */
 
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultAdminAccountRecoveryContext} from "../../../contexts/AdminAccountRecoveryContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultAdminAccountRecoveryContext } from "../../../contexts/AdminAccountRecoveryContext.test.data";
 
 /**
  * Default props.
@@ -25,9 +25,9 @@ export function defaultProps(props = {}) {
     context: defaultAppContext(props?.context),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
-      resetDisplayAdministrationWorkspaceAction: jest.fn()
+      resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
-    adminAccountRecoveryContext: defaultAdminAccountRecoveryContext(props?.adminAccountRecoveryContext)
+    adminAccountRecoveryContext: defaultAdminAccountRecoveryContext(props?.adminAccountRecoveryContext),
   };
   delete props.context; // Treated in the default
   delete props.adminAccountRecoveryContext; // Treated in the default
@@ -45,16 +45,16 @@ export function hasChangedPolicyProps(props = {}) {
       hasPolicyChanges: jest.fn(() => true),
       policyChanges: {
         policy: "mandatory",
-        publicKey: "new-public-key"
+        publicKey: "new-public-key",
       },
-      getKeyInfo: () => defaultKeyInfo
-    }
+      getKeyInfo: () => defaultKeyInfo,
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
 
 const defaultKeyInfo = {
-  user_ids: [{name: "Test Test", email: "test@passbolt.com"}],
+  user_ids: [{ name: "Test Test", email: "test@passbolt.com" }],
   armored_key: "new-public-key",
   fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
   algorithm: "RSA",
@@ -73,10 +73,10 @@ export function disabledPolicyPropsWithOrganisationKey(props = {}) {
     adminAccountRecoveryContext: {
       policyChanges: {
         policy: "disabled",
-        publicKey: "new-public-key"
+        publicKey: "new-public-key",
       },
-      getKeyInfo: () => defaultKeyInfo
-    }
+      getKeyInfo: () => defaultKeyInfo,
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -91,10 +91,10 @@ export function mandatoryPolicyPropsWithOrganisationKey(props = {}) {
     adminAccountRecoveryContext: {
       policyChanges: {
         policy: "mandatory",
-        publicKey: "new-public-key"
+        publicKey: "new-public-key",
       },
-      getKeyInfo: () => defaultKeyInfo
-    }
+      getKeyInfo: () => defaultKeyInfo,
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -109,10 +109,10 @@ export function optInPolicyPropsWithOrganisationKey(props = {}) {
     adminAccountRecoveryContext: {
       policyChanges: {
         policy: "opt-in",
-        publicKey: "new-public-key"
+        publicKey: "new-public-key",
       },
-      getKeyInfo: () => defaultKeyInfo
-    }
+      getKeyInfo: () => defaultKeyInfo,
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -127,10 +127,10 @@ export function optOutPolicyPropsWithOrganisationKey(props = {}) {
     adminAccountRecoveryContext: {
       policyChanges: {
         policy: "opt-out",
-        publicKey: "new-public-key"
+        publicKey: "new-public-key",
       },
-      getKeyInfo: () => defaultKeyInfo
-    }
+      getKeyInfo: () => defaultKeyInfo,
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -145,8 +145,8 @@ export function disabledPolicyProps(props = {}) {
     adminAccountRecoveryContext: {
       policyChanges: {
         policy: "disabled",
-      }
-    }
+      },
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -161,8 +161,8 @@ export function mandatoryPolicyProps(props = {}) {
     adminAccountRecoveryContext: {
       policyChanges: {
         policy: "mandatory",
-      }
-    }
+      },
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -177,8 +177,8 @@ export function optInPolicyProps(props = {}) {
     adminAccountRecoveryContext: {
       policyChanges: {
         policy: "opt-in",
-      }
-    }
+      },
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -193,9 +193,8 @@ export function optOutPolicyProps(props = {}) {
     adminAccountRecoveryContext: {
       policyChanges: {
         policy: "opt-out",
-      }
-    }
+      },
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
-

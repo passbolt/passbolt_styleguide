@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,9 +12,9 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import CreateResourceFolder from "./CreateResourceFolder";
 import userEvent from "@testing-library/user-event";
@@ -35,7 +34,7 @@ export default class CreateResourceFolderPage {
           <CreateResourceFolder.WrappedComponent {...props}></CreateResourceFolder.WrappedComponent>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -45,49 +44,49 @@ export default class CreateResourceFolderPage {
    * Set a name to the folder name input
    */
   get inputName() {
-    return this._page.container.querySelector('#folder-name-input');
+    return this._page.container.querySelector("#folder-name-input");
   }
 
   /**
    * Set a name to the folder name input
    */
   set name(value) {
-    fireEvent.change(this.inputName, {target: {value}});
+    fireEvent.change(this.inputName, { target: { value } });
   }
 
   /**
    * Returns true it the folder name is invalid
    */
   get hasInvalidName() {
-    return Boolean(this._page.container.querySelector('.error-message'));
+    return Boolean(this._page.container.querySelector(".error-message"));
   }
 
   /**
    * Returns true it one can cancel the operation
    */
   get canCancel() {
-    return !this._page.container.querySelector('.cancel').hasAttribute('disabled');
+    return !this._page.container.querySelector(".cancel").hasAttribute("disabled");
   }
 
   /**
    * Returns true it one can close the dialog
    */
   get canClose() {
-    return !this._page.container.querySelector('.dialog-close').hasAttribute('disabled');
+    return !this._page.container.querySelector(".dialog-close").hasAttribute("disabled");
   }
 
   /**
    * Returns true it one can submit the create operation
    */
   get canSubmit() {
-    return !this._page.container.querySelector('button[type="submit"]').hasAttribute('disabled');
+    return !this._page.container.querySelector('button[type="submit"]').hasAttribute("disabled");
   }
 
   /**
    * Returns true it one can change the data
    */
   get canChangeData() {
-    return !this._page.container.querySelector('#folder-name-input').hasAttribute('disabled');
+    return !this._page.container.querySelector("#folder-name-input").hasAttribute("disabled");
   }
 
   /**
@@ -115,7 +114,7 @@ export default class CreateResourceFolderPage {
    * Returns the name warning mesage input element
    */
   get nameWarningMessage() {
-    return this._page.container.querySelector('.name.warning-message');
+    return this._page.container.querySelector(".name.warning-message");
   }
 
   /**
@@ -130,14 +129,14 @@ export default class CreateResourceFolderPage {
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
-    const dataInputEvent = {target: {value: data}};
+  fillInput(element, data) {
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 
   /** on keypup element */
-  keyUpInput(component)  {
-    fireEvent.keyUp(component, {keyCode: 38});
+  keyUpInput(component) {
+    fireEvent.keyUp(component, { keyCode: 38 });
   }
 
   /**
@@ -146,7 +145,6 @@ export default class CreateResourceFolderPage {
   async cancel() {
     await this.user.click(this.cancelButton);
   }
-
 
   /**
    * Close the create operation

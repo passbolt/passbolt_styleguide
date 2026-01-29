@@ -14,7 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 
 class DisplayDragResource extends React.Component {
   /**
@@ -46,7 +46,7 @@ class DisplayDragResource extends React.Component {
    * @returns {string|*}
    */
   get numberOfResources() {
-    return this.selectedResources.length > 99 ? '99+' : this.props.resourceWorkspaceContext.selectedResources.length;
+    return this.selectedResources.length > 99 ? "99+" : this.props.resourceWorkspaceContext.selectedResources.length;
   }
 
   /**
@@ -55,13 +55,11 @@ class DisplayDragResource extends React.Component {
    */
   render() {
     return (
-      <div className={`drag-and-drop ${this.hasMoreThanThreeResourcesSelected() ? "item-n" : `item-${this.numberOfResources}`}`}>
+      <div
+        className={`drag-and-drop ${this.hasMoreThanThreeResourcesSelected() ? "item-n" : `item-${this.numberOfResources}`}`}
+      >
         <span className="message">{this.selectedResources[0]?.metadata.name}</span>
-        {this.isMultipleSelected() &&
-          <span className="count">
-            {this.numberOfResources}
-          </span>
-        }
+        {this.isMultipleSelected() && <span className="count">{this.numberOfResources}</span>}
       </div>
     );
   }
@@ -70,7 +68,7 @@ class DisplayDragResource extends React.Component {
 DisplayDragResource.contextType = AppContext;
 
 DisplayDragResource.propTypes = {
-  resourceWorkspaceContext: PropTypes.any
+  resourceWorkspaceContext: PropTypes.any,
 };
 
 export default withResourceWorkspace(DisplayDragResource);

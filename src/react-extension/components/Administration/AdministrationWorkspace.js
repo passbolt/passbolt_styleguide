@@ -10,34 +10,27 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import React, {Component} from "react";
-import {Route, Switch} from "react-router-dom";
+import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import {
   AdministrationWorkspaceMenuTypes,
-  withAdministrationWorkspace
+  withAdministrationWorkspace,
 } from "../../contexts/AdministrationWorkspaceContext";
 import DisplayUserBadgeMenu from "../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
-import DisplayAdministrationWorkspaceBreadcrumb
-  from "./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
-import DisplayUserDirectoryAdministration
-  from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
+import DisplayAdministrationWorkspaceBreadcrumb from "./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
+import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
 import DisplayUserDirectoryAdministrationTeasing from "./DisplayUserDirectoryAdministrationTeasing/DisplayUserDirectoryAdministrationTeasing";
-import DisplayEmailNotificationsAdministration
-  from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
+import DisplayEmailNotificationsAdministration from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
 import DisplaySubscriptionKeyTeasing from "./DisplaySubscriptionKeyTeasing/DisplaySubscriptionKeyTeasing";
-import DisplayInternationalizationAdministration
-  from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
-import ManageAccountRecoveryAdministrationSettings
-  from "./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings";
-import ManageAccountRecoveryAdministrationSettingsTeasing
-  from "./ManageAccountRecoveryAdministrationSettingsTeasing/ManageAccountRecoveryAdministrationSettingsTeasing";
-import ManageSmtpAdministrationSettings
-  from "./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings.js";
+import DisplayInternationalizationAdministration from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
+import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings";
+import ManageAccountRecoveryAdministrationSettingsTeasing from "./ManageAccountRecoveryAdministrationSettingsTeasing/ManageAccountRecoveryAdministrationSettingsTeasing";
+import ManageSmtpAdministrationSettings from "./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings.js";
 import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration";
 import ManageSsoSettings from "./ManageSsoSettings/ManageSsoSettings";
 import ManageSsoSettingsTeasing from "./ManageSsoSettingsTeasing/ManageSsoSettingsTeasing";
@@ -51,23 +44,20 @@ import DisplayAdministrationUserPassphrasePoliciesTeasing from "./DisplayAdminis
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry";
 import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError";
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration/DisplayHealthcheckAdministration";
-import DisplayContentTypesEncryptedMetadataAdministration
-  from "./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration";
-import {Trans} from "react-i18next";
+import DisplayContentTypesEncryptedMetadataAdministration from "./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration";
+import { Trans } from "react-i18next";
 import ArrowLeftSVG from "../../../img/svg/arrow_left.svg";
-import {withNavigationContext} from "../../contexts/NavigationContext";
+import { withNavigationContext } from "../../contexts/NavigationContext";
 import Footer from "../Common/Footer/Footer.js";
-import DisplayContentTypesMetadataKeyAdministration
-  from "./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMetadataKeyAdministration";
+import DisplayContentTypesMetadataKeyAdministration from "./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMetadataKeyAdministration";
 import DisplayMigrateMetadataAdministration from "./DisplayMigrateMetadataAdministration/DisplayMigrateMetadataAdministration";
 import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration/DisplayContentTypesAllowedContentTypesAdministration";
 import AdministrationHomePage from "./HomePage/AdministrationHomePage.js";
-import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher.js";
+import WorkspaceSwitcher, { WORKSPACE_ENUM } from "../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher.js";
 import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministrationMetadataGettingStarted/DisplayAdministrationMetadataGettingStarted.js";
 import DisplayScimSettingsAdministration from "./DisplayScimSettingsAdministration/DisplayScimSettingsAdministration.js";
 import DisplayScimAdministrationTeasing from "./DisplayScimAdministrationTeasing/DisplayScimAdministrationTeasing.js";
-import DisplaySecretHistoryAdministration
-  from "./DisplaySecretHistoryAdministration/DisplaySecretHistoryAdministration";
+import DisplaySecretHistoryAdministration from "./DisplaySecretHistoryAdministration/DisplaySecretHistoryAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -100,8 +90,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isHomePageSelected() {
-    return AdministrationWorkspaceMenuTypes.HOME === this.props.administrationWorkspaceContext.selectedAdministration
-      || AdministrationWorkspaceMenuTypes.NONE === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.HOME === this.props.administrationWorkspaceContext.selectedAdministration ||
+      AdministrationWorkspaceMenuTypes.NONE === this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -117,7 +109,9 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isMfaPolicySelected() {
-    return AdministrationWorkspaceMenuTypes.MFA_POLICY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.MFA_POLICY === this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -125,7 +119,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isPasswordPoliciesSelected() {
-    return AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -133,7 +130,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isUserDirectorySelected() {
-    return AdministrationWorkspaceMenuTypes.USER_DIRECTORY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.USER_DIRECTORY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -141,7 +141,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isEmailNotificationsSelected() {
-    return AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -149,7 +152,9 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isSubscriptionSelected() {
-    return AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -157,7 +162,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isInternationalizationSelected() {
-    return AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -165,7 +173,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isAccountRecoverySelected() {
-    return AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -173,7 +184,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isSmtpSettingsSelected() {
-    return AdministrationWorkspaceMenuTypes.SMTP_SETTINGS === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.SMTP_SETTINGS ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -181,7 +195,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isSelfRegistrationSelected() {
-    return AdministrationWorkspaceMenuTypes.SELF_REGISTRATION === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.SELF_REGISTRATION ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -205,7 +222,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isUserPassphrasePoliciesSelected() {
-    return AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -213,7 +233,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isPasswordExpirySelected() {
-    return AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -221,7 +244,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isContentTypesEncryptedMetadataSelected() {
-    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -229,7 +255,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isContentTypesMetadataKeySelected() {
-    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -237,7 +266,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isMigrateMetadataSelected() {
-    return AdministrationWorkspaceMenuTypes.MIGRATE_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.MIGRATE_METADATA ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -245,7 +277,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isAllowContentTypesSelected() {
-    return AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -253,7 +288,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isGetStartedMetadataSelected() {
-    return AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -269,7 +307,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   isSecretHistorySelected() {
-    return AdministrationWorkspaceMenuTypes.SECRET_HISTORY === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.SECRET_HISTORY ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -284,7 +325,10 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   get isHttpError403() {
-    return AdministrationWorkspaceMenuTypes.HTTP_403_ACCESS_DENIED === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.HTTP_403_ACCESS_DENIED ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -292,11 +336,16 @@ class AdministrationWorkspace extends Component {
    * @returns {boolean}
    */
   get isHttpError404() {
-    return AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND ===
+      this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   isHealthcheckSelected() {
-    return AdministrationWorkspaceMenuTypes.HEALTHCHECK === this.props.administrationWorkspaceContext.selectedAdministration;
+    return (
+      AdministrationWorkspaceMenuTypes.HEALTHCHECK === this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   render() {
@@ -305,132 +354,123 @@ class AdministrationWorkspace extends Component {
         <div id="app" className="app" tabIndex="1000">
           <div className="panel main">
             <div className="panel left">
-              {!this.isHttpError403 &&
+              {!this.isHttpError403 && (
                 <div className="sidebar-content">
                   <div className="top-bar-left-navigation">
                     <div className="navigation">
                       <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
-                        <ArrowLeftSVG/>
+                        <ArrowLeftSVG />
                       </button>
-                      <span className="title administration"><Trans>Organisation settings</Trans></span>
+                      <span className="title administration">
+                        <Trans>Organisation settings</Trans>
+                      </span>
                     </div>
                   </div>
                   <div className="sidebar-content-left">
-                    <DisplayAdministrationMenu/>
+                    <DisplayAdministrationMenu />
                   </div>
                 </div>
-              }
+              )}
             </div>
             <div className="panel middle">
               <div className="header">
-                {!this.isHttpError403 &&
+                {!this.isHttpError403 && (
                   <>
                     <div className="header-left"></div>
                     <div className="header-right">
-                      <WorkspaceSwitcher isUserAdmin={true} isUserWorkspaceVisible={true} currentWorkspace={WORKSPACE_ENUM.ORGANISATION_SETTINGS}/>
-                      <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+                      <WorkspaceSwitcher
+                        isUserAdmin={true}
+                        isUserWorkspaceVisible={true}
+                        currentWorkspace={WORKSPACE_ENUM.ORGANISATION_SETTINGS}
+                      />
+                      <DisplayUserBadgeMenu
+                        baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()}
+                        user={this.props.context.loggedInUser}
+                      />
                     </div>
                   </>
-                }
+                )}
               </div>
               <div className="middle-right">
                 <div className="breadcrumbs-and-grid">
                   <div className="top-bar">
-                    <DisplayAdministrationWorkspaceBreadcrumb/>
+                    <DisplayAdministrationWorkspaceBreadcrumb />
                   </div>
                   <div className="main-page">
-                    {this.isHttpError403 &&
-                      <DisplayHttpError errorCode={403}/>
-                    }
-                    {this.isHttpError404 &&
-                      <DisplayHttpError errorCode={404}/>
-                    }
-                    {this.isHomePageSelected() &&
-                      <AdministrationHomePage/>
-                    }
-                    {this.isMfaSelected() &&
-                      <DisplayMfaAdministration/>
-                    }
+                    {this.isHttpError403 && <DisplayHttpError errorCode={403} />}
+                    {this.isHttpError404 && <DisplayHttpError errorCode={404} />}
+                    {this.isHomePageSelected() && <AdministrationHomePage />}
+                    {this.isMfaSelected() && <DisplayMfaAdministration />}
                     {this.isMfaPolicySelected() &&
-                      (this.isCommunityEdition() ? <DisplayMfaPolicyAdministrationTeasing/> : <DisplayMfaPolicyAdministration/>)
-                    }
+                      (this.isCommunityEdition() ? (
+                        <DisplayMfaPolicyAdministrationTeasing />
+                      ) : (
+                        <DisplayMfaPolicyAdministration />
+                      ))}
                     {this.isPasswordPoliciesSelected() &&
-                      (this.isCommunityEdition() ? <DisplayPasswordPoliciesAdministrationTeasing/> : <DisplayPasswordPoliciesAdministration/>)
-                    }
+                      (this.isCommunityEdition() ? (
+                        <DisplayPasswordPoliciesAdministrationTeasing />
+                      ) : (
+                        <DisplayPasswordPoliciesAdministration />
+                      ))}
                     {this.isUserDirectorySelected() &&
-                      (this.isCommunityEdition() ? <DisplayUserDirectoryAdministrationTeasing/> : <DisplayUserDirectoryAdministration/>)
-                    }
-                    {this.isEmailNotificationsSelected() &&
-                      <DisplayEmailNotificationsAdministration/>
-                    }
+                      (this.isCommunityEdition() ? (
+                        <DisplayUserDirectoryAdministrationTeasing />
+                      ) : (
+                        <DisplayUserDirectoryAdministration />
+                      ))}
+                    {this.isEmailNotificationsSelected() && <DisplayEmailNotificationsAdministration />}
                     {this.isSubscriptionSelected() &&
-                      (this.isCommunityEdition() ? <DisplaySubscriptionKeyTeasing/> : <DisplaySubscriptionKey/>)
-                    }
-                    {this.isInternationalizationSelected() &&
-                      <DisplayInternationalizationAdministration/>
-                    }
+                      (this.isCommunityEdition() ? <DisplaySubscriptionKeyTeasing /> : <DisplaySubscriptionKey />)}
+                    {this.isInternationalizationSelected() && <DisplayInternationalizationAdministration />}
                     {this.isAccountRecoverySelected() &&
-                      (this.isCommunityEdition() ? <ManageAccountRecoveryAdministrationSettingsTeasing/> : <ManageAccountRecoveryAdministrationSettings/>)
-                    }
-                    {this.isSmtpSettingsSelected() &&
-                      <ManageSmtpAdministrationSettings/>
-                    }
-                    {this.isSelfRegistrationSelected() &&
-                      <DisplaySelfRegistrationAdministration/>
-                    }
+                      (this.isCommunityEdition() ? (
+                        <ManageAccountRecoveryAdministrationSettingsTeasing />
+                      ) : (
+                        <ManageAccountRecoveryAdministrationSettings />
+                      ))}
+                    {this.isSmtpSettingsSelected() && <ManageSmtpAdministrationSettings />}
+                    {this.isSelfRegistrationSelected() && <DisplaySelfRegistrationAdministration />}
                     {this.isSsoSelected() &&
-                      (this.isCommunityEdition() ? <ManageSsoSettingsTeasing/> : <ManageSsoSettings/>)
-                    }
-                    {this.isRbacSelected() &&
-                      <DisplayRbacAdministration/>
-                    }
+                      (this.isCommunityEdition() ? <ManageSsoSettingsTeasing /> : <ManageSsoSettings />)}
+                    {this.isRbacSelected() && <DisplayRbacAdministration />}
                     {this.isUserPassphrasePoliciesSelected() &&
-                      (this.isCommunityEdition() ? <DisplayAdministrationUserPassphrasePoliciesTeasing/> : <DisplayAdministrationUserPassphrasePolicies/>)
-                    }
-                    {this.isPasswordExpirySelected() &&
-                      <DisplayAdministrationPasswordExpiry/>
-                    }
-                    {this.isHealthcheckSelected() &&
-                      <DisplayHealthcheckAdministration/>
-                    }
-                    {this.isContentTypesEncryptedMetadataSelected() &&
-                      <DisplayContentTypesEncryptedMetadataAdministration/>
-                    }
-                    {this.isContentTypesMetadataKeySelected() &&
-                      <DisplayContentTypesMetadataKeyAdministration/>
-                    }
-                    {this.isMigrateMetadataSelected() &&
-                      <DisplayMigrateMetadataAdministration/>
-                    }
-                    {this.isAllowContentTypesSelected() &&
-                      <DisplayContentTypesAllowedContentTypesAdministration/>
-                    }
-                    {
-                      this.isGetStartedMetadataSelected() &&
-                      <DisplayAdministrationMetadataGettingStarted/>
-                    }
-                    {
-                      this.isScimSelected() &&
-                      (this.isCommunityEdition() ? <DisplayScimAdministrationTeasing/> : <DisplayScimSettingsAdministration/>)
-
-                    }
-                    {
-                      this.isSecretHistorySelected() &&
-                      <DisplaySecretHistoryAdministration/>
-                    }
+                      (this.isCommunityEdition() ? (
+                        <DisplayAdministrationUserPassphrasePoliciesTeasing />
+                      ) : (
+                        <DisplayAdministrationUserPassphrasePolicies />
+                      ))}
+                    {this.isPasswordExpirySelected() && <DisplayAdministrationPasswordExpiry />}
+                    {this.isHealthcheckSelected() && <DisplayHealthcheckAdministration />}
+                    {this.isContentTypesEncryptedMetadataSelected() && (
+                      <DisplayContentTypesEncryptedMetadataAdministration />
+                    )}
+                    {this.isContentTypesMetadataKeySelected() && <DisplayContentTypesMetadataKeyAdministration />}
+                    {this.isMigrateMetadataSelected() && <DisplayMigrateMetadataAdministration />}
+                    {this.isAllowContentTypesSelected() && <DisplayContentTypesAllowedContentTypesAdministration />}
+                    {this.isGetStartedMetadataSelected() && <DisplayAdministrationMetadataGettingStarted />}
+                    {this.isScimSelected() &&
+                      (this.isCommunityEdition() ? (
+                        <DisplayScimAdministrationTeasing />
+                      ) : (
+                        <DisplayScimSettingsAdministration />
+                      ))}
+                    {this.isSecretHistorySelected() && <DisplaySecretHistoryAdministration />}
                   </div>
                 </div>
                 <Switch>
-                  <Route exact path={[
-                    "/app/administration",
-                    "/app/administration/scim-teasing",
-                    "/app/administration/secret-history"
-                  ]}/>
+                  <Route
+                    exact
+                    path={[
+                      "/app/administration",
+                      "/app/administration/scim-teasing",
+                      "/app/administration/secret-history",
+                    ]}
+                  />
                   <Route>
                     <div className="help-panel">
-                      <div className="sidebar-help" id="administration-help-panel">
-                      </div>
-                      <Footer/>
+                      <div className="sidebar-help" id="administration-help-panel"></div>
+                      <Footer />
                     </div>
                   </Route>
                 </Switch>

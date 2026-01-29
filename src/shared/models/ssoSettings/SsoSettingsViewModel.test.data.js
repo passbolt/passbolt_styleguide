@@ -12,11 +12,11 @@
  * @since         4.5.0
  */
 
-import {v4 as uuid} from 'uuid';
-import AzureSsoSettingsEntity from '../entity/ssoSettings/AzureSsoSettingsEntity';
-import GoogleSsoSettingsEntity from '../entity/ssoSettings/GoogleSsoSettingsEntity';
-import OAuth2SsoSettingsEntity from '../entity/ssoSettings/OAuth2SsoSettingsEntity';
-import ADFSSsoSettingsEntity from '../entity/ssoSettings/AdfsSsoSettingsEntity';
+import { v4 as uuid } from "uuid";
+import AzureSsoSettingsEntity from "../entity/ssoSettings/AzureSsoSettingsEntity";
+import GoogleSsoSettingsEntity from "../entity/ssoSettings/GoogleSsoSettingsEntity";
+import OAuth2SsoSettingsEntity from "../entity/ssoSettings/OAuth2SsoSettingsEntity";
+import ADFSSsoSettingsEntity from "../entity/ssoSettings/AdfsSsoSettingsEntity";
 
 /**
  * The default azure SSO settings ViewModel DTO
@@ -25,7 +25,7 @@ import ADFSSsoSettingsEntity from '../entity/ssoSettings/AdfsSsoSettingsEntity';
  */
 export const defaultSsoSettingsViewModelDto = (data = {}) => {
   const defaultData = {
-    provider: 'azure',
+    provider: "azure",
     providers: [
       AzureSsoSettingsEntity.PROVIDER_ID,
       GoogleSsoSettingsEntity.PROVIDER_ID,
@@ -119,7 +119,7 @@ export const azureSsoSettingsEntityDtoFromApi = (data = {}) => {
     created: "2023-08-06T10:05:46+00:00",
     created_by: uuid(),
     modified: "2023-08-06T10:05:46+00:00",
-    modified_by: uuid()
+    modified_by: uuid(),
   });
 
   delete data?.data;
@@ -140,7 +140,7 @@ export const googleSsoSettingsEntityDtoFromApi = (data = {}) => {
     created: "2023-08-06T10:05:46+00:00",
     created_by: uuid(),
     modified: "2023-08-06T10:05:46+00:00",
-    modified_by: uuid()
+    modified_by: uuid(),
   });
 
   delete data?.data;
@@ -161,7 +161,7 @@ export const oAuth2SsoSettingsEntityDtoFromApi = (data = {}) => {
     created: "2023-08-06T10:05:46+00:00",
     created_by: uuid(),
     modified: "2023-08-06T10:05:46+00:00",
-    modified_by: uuid()
+    modified_by: uuid(),
   });
 
   delete data?.data;
@@ -182,7 +182,7 @@ export const adfsSsoSettingsEntityDtoFromApi = (data = {}) => {
     created: "2023-08-06T10:05:46+00:00",
     created_by: uuid(),
     modified: "2023-08-06T10:05:46+00:00",
-    modified_by: uuid()
+    modified_by: uuid(),
   });
 
   delete data?.data;

@@ -12,24 +12,23 @@
  * @since         3.9.0
  */
 import SaveResourcePage from "./SaveResource.test.page";
-import {defaultProps} from "./SaveResource.test.data";
-import {waitFor} from "@testing-library/react";
-import {waitForTrue} from "../../../../test/utils/waitFor";
+import { defaultProps } from "./SaveResource.test.data";
+import { waitFor } from "@testing-library/react";
+import { waitForTrue } from "../../../../test/utils/waitFor";
 import {
-  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG, RESOURCE_TYPE_V5_DEFAULT_SLUG
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {
-  defaultMetadataTypesSettingsV6Dto
-} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
-import {SECRET_DATA_OBJECT_TYPE} from "../../../shared/models/entity/secretData/secretDataEntity";
+import { defaultMetadataTypesSettingsV6Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { SECRET_DATA_OBJECT_TYPE } from "../../../shared/models/entity/secretData/secretDataEntity";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("See the Create Resource - save resource", () => {
-  it("As a signed-in user creating a password on the quickaccess, I should fill the form with meta received", async() => {
+  it("As a signed-in user creating a password on the quickaccess, I should fill the form with meta received", async () => {
     expect.assertions(4);
     // data mocked
     const props = defaultProps(); // The props to pass
@@ -37,10 +36,10 @@ describe("See the Create Resource - save resource", () => {
       name: "Passbolt",
       uri: "https://passbolt.com",
       username: "username",
-      secret_clear: "secret"
+      secret_clear: "secret",
     };
     // functions mocked
-    jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => resourceMetaFromTab);
+    jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
     // process
     const page = new SaveResourcePage(props);
     await waitFor(() => {});
@@ -51,7 +50,7 @@ describe("See the Create Resource - save resource", () => {
     expect(page.password.value).toBe(resourceMetaFromTab.secret_clear);
   });
 
-  it("As a signed-in user creating a password on the quickaccess, I should be able to save resource v4", async() => {
+  it("As a signed-in user creating a password on the quickaccess, I should be able to save resource v4", async () => {
     expect.assertions(2);
     // data mocked
     const props = defaultProps(); // The props to pass
@@ -59,11 +58,11 @@ describe("See the Create Resource - save resource", () => {
       name: "Passbolt",
       uris: ["https://passbolt.com"],
       username: "username",
-      secret_clear: "secret"
+      secret_clear: "secret",
     };
     // functions mocked
-    jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => resourceMetaFromTab);
-    jest.spyOn(window, 'close').mockImplementation(jest.fn());
+    jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
+    jest.spyOn(window, "close").mockImplementation(jest.fn());
     // process
     const page = new SaveResourcePage(props);
 
@@ -92,20 +91,20 @@ describe("See the Create Resource - save resource", () => {
     expect(window.close).toHaveBeenCalled();
   });
 
-  it("As a signed-in user creating a password on the quickaccess, I should be able to save resource v5", async() => {
+  it("As a signed-in user creating a password on the quickaccess, I should be able to save resource v5", async () => {
     expect.assertions(2);
     // data mocked
     const metadataTypeSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
-    const props = defaultProps({metadataTypeSettings}); // The props to pass
+    const props = defaultProps({ metadataTypeSettings }); // The props to pass
     const resourceMetaFromTab = {
       name: "Passbolt",
       uris: ["https://passbolt.com"],
       username: "username",
-      secret_clear: "secret"
+      secret_clear: "secret",
     };
     // functions mocked
-    jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => resourceMetaFromTab);
-    jest.spyOn(window, 'close').mockImplementation(jest.fn());
+    jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
+    jest.spyOn(window, "close").mockImplementation(jest.fn());
     // process
     const page = new SaveResourcePage(props);
     await waitFor(() => {});
@@ -135,7 +134,7 @@ describe("See the Create Resource - save resource", () => {
     expect(window.close).toHaveBeenCalled();
   });
 
-  it("As a signed-in user, I can change the content of the form", async() => {
+  it("As a signed-in user, I can change the content of the form", async () => {
     expect.assertions(4);
     // data mocked
     const props = defaultProps(); // The props to pass
@@ -143,10 +142,10 @@ describe("See the Create Resource - save resource", () => {
       name: "",
       uri: "",
       username: "",
-      secret_clear: ""
+      secret_clear: "",
     };
     // functions mocked
-    jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => resourceMetaFromTab);
+    jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
     // process
     const page = new SaveResourcePage(props);
     await waitFor(() => {});
@@ -166,7 +165,7 @@ describe("See the Create Resource - save resource", () => {
     expect(page.password.value).toStrictEqual(expectedData.password);
   });
 
-  it("As a signed-in user, I can see error messages if the data is invalid", async() => {
+  it("As a signed-in user, I can see error messages if the data is invalid", async () => {
     expect.assertions(2);
     // data mocked
     const props = defaultProps(); // The props to pass
@@ -175,7 +174,7 @@ describe("See the Create Resource - save resource", () => {
       name: "",
       uris: ["test"],
       username: "",
-      secret_clear: ""
+      secret_clear: "",
     };
     // functions mocked
     props.context.port.addRequestListener("passbolt.quickaccess.prepare-autosave", () => resourceMetaFromTab);
@@ -189,13 +188,13 @@ describe("See the Create Resource - save resource", () => {
     expect(page.passwordError.textContent).toStrictEqual("A password is required.");
   });
 
-  it("As a signed-in user, I can see error messages from the API", async() => {
+  it("As a signed-in user, I can see error messages from the API", async () => {
     expect.assertions(4);
     // data mocked
     const props = defaultProps(); // The props to pass
     const resourceMetaFromTab = {
       name: "Test",
-      secret_clear: "password"
+      secret_clear: "password",
     };
 
     const apiError = new Error();
@@ -207,12 +206,14 @@ describe("See the Create Resource - save resource", () => {
         uri: ["The uri is invalid", "The uri contains a forbidden scheme"],
         username: ["The username is invalid"],
         password: ["The password is too weak"],
-      }
+      },
     };
 
     // functions mocked
     props.context.port.addRequestListener("passbolt.quickaccess.prepare-autosave", () => resourceMetaFromTab);
-    props.context.port.addRequestListener("passbolt.resources.create", () => { throw apiError; });
+    props.context.port.addRequestListener("passbolt.resources.create", () => {
+      throw apiError;
+    });
 
     // process
     const page = new SaveResourcePage(props);

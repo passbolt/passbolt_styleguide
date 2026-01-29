@@ -16,7 +16,7 @@
  * Unit tests on Password in regard of specifications
  */
 import PasswordPage from "./Password.test.page";
-import {defaultProps} from "./Password.test.data";
+import { defaultProps } from "./Password.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,7 +26,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
   let page; // The page to test against
   const props = defaultProps();
 
-  describe('As LU I can start enter a password', () => {
+  describe("As LU I can start enter a password", () => {
     /**
      * Given the user settings passphrase
      * Matches the styleguide
@@ -38,7 +38,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
       page = new PasswordPage(props);
     });
 
-    it('Matches the styleguide', () => {
+    it("Matches the styleguide", () => {
       expect.assertions(12);
       // Dialog title exists and correct
       expect(page.exists()).toBeTruthy();
@@ -63,33 +63,33 @@ describe("As LU I should see the user confirm passphrase page", () => {
       expect(securityTokenInputStyle.color).toBe("rgb(0, 0, 0)");
     });
 
-    it('As LU I should be able to enter my new password', async() => {
+    it("As LU I should be able to enter my new password", async () => {
       expect.assertions(3);
-      const expectedPassphrase = 'La belle vie';
+      const expectedPassphrase = "La belle vie";
       await page.insertPassword(expectedPassphrase);
       expect(page.password).toBe(expectedPassphrase);
-      expect(page.securityToken.textContent).toBe('PAS');
+      expect(page.securityToken.textContent).toBe("PAS");
       expect(props.onChange).toHaveBeenCalled();
     });
 
-    it('As LU I should initially see the passphrase I typed as obfuscated', async() => {
+    it("As LU I should initially see the passphrase I typed as obfuscated", async () => {
       expect.assertions(1);
-      const passphrase = 'La belle vie';
+      const passphrase = "La belle vie";
       await page.insertPassword(passphrase);
       expect(page.isObfuscated).toBeTruthy();
     });
 
-    it('As LU I should be able to see the non-obfuscate passphrase I typed', async() => {
+    it("As LU I should be able to see the non-obfuscate passphrase I typed", async () => {
       expect.assertions(1);
-      const passphrase = 'La belle vie';
+      const passphrase = "La belle vie";
       await page.insertPassword(passphrase);
       await page.toggleObfuscate();
       expect(page.isObfuscated).toBeFalsy();
     });
 
-    it('As LU I should see the password obfuscated if the field is disabled', async() => {
+    it("As LU I should see the password obfuscated if the field is disabled", async () => {
       expect.assertions(2);
-      const passphrase = 'La belle vie';
+      const passphrase = "La belle vie";
       const props = defaultProps();
       const page = new PasswordPage(props);
       await page.insertPassword(passphrase);

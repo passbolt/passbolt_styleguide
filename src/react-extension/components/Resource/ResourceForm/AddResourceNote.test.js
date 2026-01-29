@@ -16,11 +16,12 @@
  * Unit tests on AddResourceNote in regard of specifications
  */
 
-import AddResourceNotePage from './AddResourceNote.test.page';
-import {defaultProps} from './AddResourceNote.test.data';
+import AddResourceNotePage from "./AddResourceNote.test.page";
+import { defaultProps } from "./AddResourceNote.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import {
-  resourceTypePasswordAndDescriptionDto, resourceTypePasswordDescriptionTotpDto,
+  resourceTypePasswordAndDescriptionDto,
+  resourceTypePasswordDescriptionTotpDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
@@ -31,8 +32,8 @@ beforeEach(() => {
 describe("AddResourceNote", () => {
   let page; // The page to test against
 
-  describe('As LU I can see the resource form.', () => {
-    it('As LU I can see the resource note form.', () => {
+  describe("As LU I can see the resource form.", () => {
+    it("As LU I can see the resource note form.", () => {
       expect.assertions(3);
 
       const props = defaultProps();
@@ -44,14 +45,13 @@ describe("AddResourceNote", () => {
     });
   });
 
-  describe('Fill form note', () => {
-    it('Enter note should call callback function.', async() => {
+  describe("Fill form note", () => {
+    it("Enter note should call callback function.", async () => {
       expect.assertions(3);
 
-      let name,
-        value;
+      let name, value;
       const props = defaultProps();
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });
@@ -64,40 +64,43 @@ describe("AddResourceNote", () => {
     });
   });
 
-  describe('As LU I can convert the note to description.', () => {
-    it('As LU I can convert the note form.', async() => {
+  describe("As LU I can convert the note to description.", () => {
+    it("As LU I can convert the note form.", async () => {
       expect.assertions(1);
 
-      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+      const props = defaultProps({ resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()) });
       page = new AddResourceNotePage(props);
 
       await page.click(page.convertToDescription);
       expect(props.onConvertToDescription).toHaveBeenCalled();
     });
 
-    it('As LU I cannot convert the description form if there is no resource type v4 default.', async() => {
+    it("As LU I cannot convert the description form if there is no resource type v4 default.", async () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection([resourceTypePasswordAndDescriptionDto()]);
-      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resourceTypes});
+      const props = defaultProps({
+        resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()),
+        resourceTypes,
+      });
       page = new AddResourceNotePage(props);
 
       expect(page.convertToDescription).toBeNull();
     });
 
-    it('As LU I should not see convert the description form if the resource type is not v4 default.', async() => {
+    it("As LU I should not see convert the description form if the resource type is not v4 default.", async () => {
       expect.assertions(1);
-      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordDescriptionTotpDto())});
+      const props = defaultProps({ resourceType: new ResourceTypeEntity(resourceTypePasswordDescriptionTotpDto()) });
       page = new AddResourceNotePage(props);
 
       expect(page.convertToDescription).toBeNull();
     });
   });
 
-  describe('As LU I should see the note disabled.', () => {
-    it('As LU I can see the note form disabled.', async() => {
+  describe("As LU I should see the note disabled.", () => {
+    it("As LU I can see the note form disabled.", async () => {
       expect.assertions(1);
 
-      const props = defaultProps({disabled: true});
+      const props = defaultProps({ disabled: true });
       page = new AddResourceNotePage(props);
 
       expect(page.note.hasAttribute("disabled")).toBeTruthy();

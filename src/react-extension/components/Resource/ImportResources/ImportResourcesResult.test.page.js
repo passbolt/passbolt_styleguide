@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ImportResourcesResult from "./ImportResourcesResult";
 
@@ -32,11 +32,11 @@ export default class ImportResourcesResultPage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
-            <ImportResourcesResult.WrappedComponent {...props}/>
+            <ImportResourcesResult.WrappedComponent {...props} />
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -64,7 +64,7 @@ export default class ImportResourcesResultPage {
    * Returns the dialog close button element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
@@ -84,14 +84,14 @@ export default class ImportResourcesResultPage {
    * Returns true if the resources section exists
    */
   get hasResourcesSection() {
-    return this._page.container.querySelector('.resources-section') !== null;
+    return this._page.container.querySelector(".resources-section") !== null;
   }
 
   /**
    * Returns true if the folders section exists
    */
   get hasFoldersSection() {
-    return this._page.container.querySelector('.folder-section') !== null;
+    return this._page.container.querySelector(".folder-section") !== null;
   }
 
   /*
@@ -104,21 +104,21 @@ export default class ImportResourcesResultPage {
    * Returns the warning resources section element
    */
   get warningResourcesSection() {
-    return this._page.container.querySelector('.resources-section .warning-state')?.closest('.accordion-section');
+    return this._page.container.querySelector(".resources-section .warning-state")?.closest(".accordion-section");
   }
 
   /**
    * Returns the error resources section element
    */
   get errorResourcesSection() {
-    return this._page.container.querySelector('.resources-section .fail-state')?.closest('.accordion-section');
+    return this._page.container.querySelector(".resources-section .fail-state")?.closest(".accordion-section");
   }
 
   /**
    * Returns the error folders section element
    */
   get errorFoldersSection() {
-    return this._page.container.querySelector('.folder-section .fail-state')?.closest('.accordion-section');
+    return this._page.container.querySelector(".folder-section .fail-state")?.closest(".accordion-section");
   }
 
   /*
@@ -138,14 +138,14 @@ export default class ImportResourcesResultPage {
    * Returns the warning resources details accordion button
    */
   get warningResourcesDetailsButton() {
-    return this.warningResourcesSection?.querySelector('.accordion-header button');
+    return this.warningResourcesSection?.querySelector(".accordion-header button");
   }
 
   /**
    * Returns the warning resources debug textarea value
    */
   get warningResourcesDebug() {
-    return this.warningResourcesSection?.querySelector('#js_field_debug')?.value;
+    return this.warningResourcesSection?.querySelector("#js_field_debug")?.value;
   }
 
   /*
@@ -165,14 +165,14 @@ export default class ImportResourcesResultPage {
    * Returns the error resources details accordion button
    */
   get errorResourcesDetailsButton() {
-    return this.errorResourcesSection?.querySelector('.accordion-header button');
+    return this.errorResourcesSection?.querySelector(".accordion-header button");
   }
 
   /**
    * Returns the error resources debug textarea value
    */
   get errorResourcesDebug() {
-    return this.errorResourcesSection?.querySelector('#js_field_debug')?.value;
+    return this.errorResourcesSection?.querySelector("#js_field_debug")?.value;
   }
 
   /*
@@ -192,14 +192,14 @@ export default class ImportResourcesResultPage {
    * Returns the error folders details accordion button
    */
   get errorFoldersDetailsButton() {
-    return this.errorFoldersSection?.querySelector('.accordion-header button');
+    return this.errorFoldersSection?.querySelector(".accordion-header button");
   }
 
   /**
    * Returns the error folders debug textarea value
    */
   get errorFoldersDebug() {
-    return this.errorFoldersSection?.querySelector('#js_field_folders_debug')?.value;
+    return this.errorFoldersSection?.querySelector("#js_field_folders_debug")?.value;
   }
 
   /*
@@ -212,14 +212,14 @@ export default class ImportResourcesResultPage {
    * Returns the result for the index one
    */
   result(index) {
-    return this._page.container.querySelectorAll('p strong')[index - 1].textContent;
+    return this._page.container.querySelectorAll("p strong")[index - 1].textContent;
   }
 
   /**
    * Returns the reference for the index one
    */
   reference(index) {
-    return this._page.container.querySelectorAll('p button')[index - 1];
+    return this._page.container.querySelectorAll("p button")[index - 1];
   }
 
   /*
@@ -245,8 +245,8 @@ export default class ImportResourcesResultPage {
    * Click on the element
    * @param {HTMLElement} element The element to click
    */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -254,8 +254,8 @@ export default class ImportResourcesResultPage {
   /**
    * Trigger escape key on the form
    */
-  escapeKey()  {
-    const escapeKeyDown = {keyCode: 27};
+  escapeKey() {
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.form, escapeKeyDown);
   }
 

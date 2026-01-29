@@ -14,11 +14,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import CreateUser from "../CreateUser/CreateUser";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import CreateUserGroup from "../../UserGroup/CreateUserGroup/CreateUserGroup";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import AddSVG from "../../../../img/svg/add.svg";
@@ -27,8 +27,8 @@ import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import UserAddSVG from "../../../../img/svg/user_add.svg";
 import GroupAddSVG from "../../../../img/svg/users.svg";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -92,7 +92,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -110,33 +110,47 @@ class DisplayUserWorkspaceMainActions extends React.Component {
   render() {
     return (
       <div className="main-action-wrapper">
-        {this.canIUseCreate() &&
-        <Dropdown>
-          <DropdownButton className="create primary">
-            <AddSVG/>
-            <Trans>Create</Trans>
-            <CaretDownSVG/>
-          </DropdownButton>
-          <DropdownMenu className="menu-create-primary">
-            {this.isLoggedInUserAdmin() &&
-              <DropdownMenuItem>
-                <button id="user_action" type="button" className="no-border" onClick={this.handleCreateMenuUserClickEvent}>
-                  <UserAddSVG/>
-                  <span><Trans>User</Trans></span>
-                </button>
-              </DropdownMenuItem>
-            }
-            {this.canIUseCreateGroup() &&
-              <DropdownMenuItem>
-                <button id="group_action" type="button" className="no-border" onClick={this.handleCreateMenuGroupClickEvent}>
-                  <GroupAddSVG/>
-                  <span><Trans>Group</Trans></span>
-                </button>
-              </DropdownMenuItem>
-            }
-          </DropdownMenu>
-        </Dropdown>
-        }
+        {this.canIUseCreate() && (
+          <Dropdown>
+            <DropdownButton className="create primary">
+              <AddSVG />
+              <Trans>Create</Trans>
+              <CaretDownSVG />
+            </DropdownButton>
+            <DropdownMenu className="menu-create-primary">
+              {this.isLoggedInUserAdmin() && (
+                <DropdownMenuItem>
+                  <button
+                    id="user_action"
+                    type="button"
+                    className="no-border"
+                    onClick={this.handleCreateMenuUserClickEvent}
+                  >
+                    <UserAddSVG />
+                    <span>
+                      <Trans>User</Trans>
+                    </span>
+                  </button>
+                </DropdownMenuItem>
+              )}
+              {this.canIUseCreateGroup() && (
+                <DropdownMenuItem>
+                  <button
+                    id="group_action"
+                    type="button"
+                    className="no-border"
+                    onClick={this.handleCreateMenuGroupClickEvent}
+                  >
+                    <GroupAddSVG />
+                    <span>
+                      <Trans>Group</Trans>
+                    </span>
+                  </button>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenu>
+          </Dropdown>
+        )}
       </div>
     );
   }

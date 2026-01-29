@@ -14,19 +14,19 @@
 import PasswordComplexity from "./PasswordComplexity";
 
 export default {
-  title: 'Foundations/PasswordComplexity',
+  title: "Foundations/PasswordComplexity",
   component: PasswordComplexity,
 };
 
 export const DefaultPasswordComplexity = {
   args: {
     entropy: 87.9,
-    error: false
-  }
+    error: false,
+  },
 };
 
 export const ErrorPasswordComplexity = {
   args: {
-    error: true
-  }
+    error: true,
+  },
 };

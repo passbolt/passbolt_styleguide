@@ -15,7 +15,7 @@
 import EntityV2 from "../abstract/entityV2";
 import AvatarEntity from "../avatar/avatarEntity";
 
-const ENTITY_NAME = 'Profile';
+const ENTITY_NAME = "Profile";
 
 class ProfileEntity extends EntityV2 {
   /**
@@ -26,7 +26,7 @@ class ProfileEntity extends EntityV2 {
 
     // Association
     if (this._props.avatar) {
-      this._avatar = new AvatarEntity(this._props.avatar, {...options, clone: false});
+      this._avatar = new AvatarEntity(this._props.avatar, { ...options, clone: false });
       delete this._props.avatar;
     }
   }
@@ -37,40 +37,37 @@ class ProfileEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "first_name",
-        "last_name"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["first_name", "last_name"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "user_id": {
-          "type": "string",
-          "format": "uuid"
+        user_id: {
+          type: "string",
+          format: "uuid",
         },
-        "first_name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 255
+        first_name: {
+          type: "string",
+          minLength: 1,
+          maxLength: 255,
         },
-        "last_name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 255
+        last_name: {
+          type: "string",
+          minLength: 1,
+          maxLength: 255,
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "avatar": AvatarEntity.getSchema()
-      }
+        avatar: AvatarEntity.getSchema(),
+      },
     };
   }
 
@@ -118,7 +115,7 @@ class ProfileEntity extends EntityV2 {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {avatar: true};
+    return { avatar: true };
   }
 
   /*

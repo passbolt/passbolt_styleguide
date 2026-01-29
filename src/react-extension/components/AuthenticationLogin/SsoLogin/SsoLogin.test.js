@@ -16,8 +16,8 @@
  * Unit tests on Login in regard of specifications
  */
 import SsoLoginPage from "./SsoLogin.test.page";
-import {defaultProps} from "./SsoLogin.test.data";
-import {waitFor} from "@testing-library/dom";
+import { defaultProps } from "./SsoLogin.test.data";
+import { waitFor } from "@testing-library/dom";
 import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
 
 beforeEach(() => {
@@ -26,7 +26,7 @@ beforeEach(() => {
 
 describe("SsoLogin", () => {
   describe("As a registered user I can use the SSO feature to sign in to passbolt", () => {
-    it('As AN I can see the SSO login button if I have an SSO kit set on my browser profile', async() => {
+    it("As AN I can see the SSO login button if I have an SSO kit set on my browser profile", async () => {
       expect.assertions(2);
       const props = defaultProps();
 
@@ -37,7 +37,7 @@ describe("SsoLogin", () => {
       expect(page.secondaryActionLink.textContent).toStrictEqual("Sign in with my passphrase.");
     });
 
-    it('As AN with and SSO kit, I can switch to Sign-in with passphrase', async() => {
+    it("As AN with and SSO kit, I can switch to Sign-in with passphrase", async () => {
       expect.assertions(2);
       const props = defaultProps({
         switchToPassphraseLogin: jest.fn(),
@@ -53,15 +53,18 @@ describe("SsoLogin", () => {
       expect(props.switchToPassphraseLogin).toHaveBeenCalledTimes(1);
     });
 
-    it('As AN I can use the SSO login feature to sign in to Passbolt', async() => {
+    it("As AN I can use the SSO login feature to sign in to Passbolt", async () => {
       expect.assertions(3);
 
-      const ssoProvider = SsoProviders.find(provider => provider.id === "azure");
+      const ssoProvider = SsoProviders.find((provider) => provider.id === "azure");
       let signInPromiseResolver = null;
       const props = defaultProps({
-        onSsoSignIn: jest.fn().mockImplementation(() => new Promise(resolve => {
-          signInPromiseResolver = resolve;
-        })),
+        onSsoSignIn: jest.fn().mockImplementation(
+          () =>
+            new Promise((resolve) => {
+              signInPromiseResolver = resolve;
+            }),
+        ),
         switchToPassphraseLogin: jest.fn(),
         ssoProvider,
       });

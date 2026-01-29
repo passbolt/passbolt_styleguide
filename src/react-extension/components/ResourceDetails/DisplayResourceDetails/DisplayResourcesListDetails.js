@@ -13,13 +13,11 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
 import CloseSVG from "../../../../img/svg/close.svg";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
 import ReactList from "react-list";
@@ -136,9 +134,16 @@ class DisplayResourcesListDetails extends React.Component {
             <span className="subtitle">{this.getResourceTypeSubtitle(resource)}</span>
             <span className="subtitle">{this.getPermissionSubtitle(resource)}</span>
           </h3>
-          <button type="button" className="title-link button-transparent inline" title={this.props.t("Remove this resource from the selection")} onClick={() => this.handleUnselectClickEvent(resource)}>
+          <button
+            type="button"
+            className="title-link button-transparent inline"
+            title={this.props.t("Remove this resource from the selection")}
+            onClick={() => this.handleUnselectClickEvent(resource)}
+          >
             <CloseSVG />
-            <span className="visuallyhidden"><Trans>Remove this resource from the selection</Trans></span>
+            <span className="visuallyhidden">
+              <Trans>Remove this resource from the selection</Trans>
+            </span>
           </button>
         </div>
       </div>
@@ -153,17 +158,9 @@ class DisplayResourcesListDetails extends React.Component {
     const count = this.props.resourceWorkspaceContext.selectedResources.length;
     return (
       <div className="sidebar resource multiple-resources-selected">
-        <div className="sidebar-title">
-          {this.props.t("{{count}} resource selected", {count})}
-        </div>
+        <div className="sidebar-title">{this.props.t("{{count}} resource selected", { count })}</div>
         <div className="sidebar-content">
-          <ReactList
-            itemRenderer={this.renderItem}
-            length={count}
-            pageSize={15}
-            minSize={15}
-            type="uniform"
-          />
+          <ReactList itemRenderer={this.renderItem} length={count} pageSize={15} minSize={15} type="uniform" />
         </div>
       </div>
     );
@@ -177,4 +174,6 @@ DisplayResourcesListDetails.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withResourceTypesLocalStorage(withTranslation('common')(DisplayResourcesListDetails))));
+export default withAppContext(
+  withResourceWorkspace(withResourceTypesLocalStorage(withTranslation("common")(DisplayResourcesListDetails))),
+);

@@ -17,17 +17,18 @@ import MetadataKeysServiceWorkerService, {
   METADATA_KEYS_CREATE_EVENT,
   METADATA_KEYS_FIND_ALL_EVENT,
   METADATA_KEYS_GENERATE_EVENT,
-  METADATA_KEYS_RESUME_ROTATE_EVENT, METADATA_KEYS_ROTATE_EVENT,
-  METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT
+  METADATA_KEYS_RESUME_ROTATE_EVENT,
+  METADATA_KEYS_ROTATE_EVENT,
+  METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT,
 } from "./metadataKeysServiceWorkerService";
-import {defaultMetadataKeysDtos} from "../../../models/entity/metadata/metadataKeysCollection.test.data";
+import { defaultMetadataKeysDtos } from "../../../models/entity/metadata/metadataKeysCollection.test.data";
 import MetadataKeysCollection from "../../../models/entity/metadata/metadataKeysCollection";
-import {ExternalGpgKeyEntityFixtures} from "../../../models/entity/gpgkey/externalGpgKeyEntity.test.fixtures";
+import { ExternalGpgKeyEntityFixtures } from "../../../models/entity/gpgkey/externalGpgKeyEntity.test.fixtures";
 import ExternalGpgKeyPairEntity from "../../../models/entity/gpgkey/external/externalGpgKeyPairEntity";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
-import {defaultMetadataKeyDto} from "../../../models/entity/metadata/metadataKeyEntity.test.data";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
+import { defaultMetadataKeyDto } from "../../../models/entity/metadata/metadataKeyEntity.test.data";
 import MetadataKeyEntity from "../../../models/entity/metadata/metadataKeyEntity";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -42,7 +43,7 @@ describe("MetadataKeysServiceWorkerService", () => {
   });
 
   describe("::findAll", () => {
-    it("requests the service worker with the expected event and return metadata keys collection.", async() => {
+    it("requests the service worker with the expected event and return metadata keys collection.", async () => {
       expect.assertions(3);
       const dto = defaultMetadataKeysDtos();
       jest.spyOn(port, "request").mockReturnValue(dto);
@@ -54,12 +55,12 @@ describe("MetadataKeysServiceWorkerService", () => {
   });
 
   describe("::generateKeyPair", () => {
-    it("requests the service worker with the expected event and return the request output.", async() => {
+    it("requests the service worker with the expected event and return the request output.", async () => {
       expect.assertions(4);
       const externalGpgKeyDto = ExternalGpgKeyEntityFixtures.minimal_dto;
       const dto = {
         public_key: externalGpgKeyDto,
-        private_key: externalGpgKeyDto
+        private_key: externalGpgKeyDto,
       };
       jest.spyOn(port, "request").mockReturnValue(dto);
       const externalGpgKeyPair = await service.generateKeyPair();
@@ -71,7 +72,7 @@ describe("MetadataKeysServiceWorkerService", () => {
   });
 
   describe("::createKey", () => {
-    it("requests the service worker with the expected event and return the request output.", async() => {
+    it("requests the service worker with the expected event and return the request output.", async () => {
       expect.assertions(3);
       const dto = {
         public_key: {
@@ -83,7 +84,7 @@ describe("MetadataKeysServiceWorkerService", () => {
       };
       const generatedKeyPair = new ExternalGpgKeyPairEntity(dto);
 
-      const metadataKeyDto = defaultMetadataKeyDto({armored_key: dto.public_key.armored_key});
+      const metadataKeyDto = defaultMetadataKeyDto({ armored_key: dto.public_key.armored_key });
       jest.spyOn(port, "request").mockReturnValue(metadataKeyDto);
       const metadataKey = await service.createKey(generatedKeyPair);
       expect(port.request).toHaveBeenCalledWith(METADATA_KEYS_CREATE_EVENT, dto);
@@ -91,14 +92,14 @@ describe("MetadataKeysServiceWorkerService", () => {
       expect(metadataKey.armoredKey).toEqual(dto.public_key.armored_key);
     });
 
-    it("throws if the given generated metadata key pair is not of type ExternalGpgKeyPairEntity.", async() => {
+    it("throws if the given generated metadata key pair is not of type ExternalGpgKeyPairEntity.", async () => {
       expect.assertions(1);
       await expect(() => service.createKey(42)).rejects.toThrow(TypeError);
     });
   });
 
   describe("::share", () => {
-    it("requests the service worker with the expected event.", async() => {
+    it("requests the service worker with the expected event.", async () => {
       expect.assertions(1);
 
       jest.spyOn(port, "request").mockReturnValue(() => {});
@@ -111,7 +112,7 @@ describe("MetadataKeysServiceWorkerService", () => {
   });
 
   describe("::rotate", () => {
-    it("requests the service worker with the expected event.", async() => {
+    it("requests the service worker with the expected event.", async () => {
       expect.assertions(1);
 
       const dto = {
@@ -134,7 +135,7 @@ describe("MetadataKeysServiceWorkerService", () => {
   });
 
   describe("::resumeRotation", () => {
-    it("requests the service worker with the expected event.", async() => {
+    it("requests the service worker with the expected event.", async () => {
       expect.assertions(1);
 
       jest.spyOn(port, "request").mockReturnValue(() => {});

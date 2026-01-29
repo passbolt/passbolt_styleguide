@@ -15,28 +15,28 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ImportAccoutKitDetails from "./ImportAccoutKitDetails";
-import {ImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
-import {defaultContextProps} from "./ImportAccoutKitDetails.test.data";
-
+import { ImportAccountKitContext } from "../../../contexts/Desktop/ImportAccountKitContext";
+import { defaultContextProps } from "./ImportAccoutKitDetails.test.data";
 
 export default {
-  title: 'Components/Desktop/ImportAccoutKitDetails',
-  component: ImportAccoutKitDetails
+  title: "Components/Desktop/ImportAccoutKitDetails",
+  component: ImportAccoutKitDetails,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
         <ImportAccountKitContext.Provider value={args.importAccountKitContext}>
-          <ImportAccoutKitDetails {...args}/>
+          <ImportAccoutKitDetails {...args} />
         </ImportAccountKitContext.Provider>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 Template.propTypes = {
@@ -46,4 +46,3 @@ Template.propTypes = {
 export const Default = Template.bind({});
 Default.parameters = defaultParameters;
 Default.args = defaultContextProps();
-

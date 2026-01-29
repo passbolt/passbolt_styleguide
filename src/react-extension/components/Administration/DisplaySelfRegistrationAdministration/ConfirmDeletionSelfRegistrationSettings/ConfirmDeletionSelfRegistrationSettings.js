@@ -11,13 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withAdminSelfRegistration} from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import { withAdminSelfRegistration } from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
 
 class ConfirmDeletionSelfRegistrationSettings extends Component {
   /**
@@ -66,7 +66,8 @@ class ConfirmDeletionSelfRegistrationSettings extends Component {
         title={this.props.t("Disable self registration")}
         onClose={this.handleClose}
         disabled={isProcessing}
-        className="delete-self-registration-settings-dialog">
+        className="delete-self-registration-settings-dialog"
+      >
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
             <div>
@@ -74,19 +75,19 @@ class ConfirmDeletionSelfRegistrationSettings extends Component {
                 <Trans>Are you sure to disable the self registration for the organization ?</Trans>
               </p>
               <p>
-                <Trans>Users will not be able to self register anymore.</Trans> <Trans>Only administrators would be able to invite users to register. </Trans>
+                <Trans>Users will not be able to self register anymore.</Trans>{" "}
+                <Trans>Only administrators would be able to invite users to register. </Trans>
               </p>
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton
-              onClick={this.handleClose}
-              disabled={isProcessing}/>
+            <FormCancelButton onClick={this.handleClose} disabled={isProcessing} />
             <FormSubmitButton
               value={this.props.t("Save")}
               disabled={isProcessing}
               processing={isProcessing}
-              warning={true}/>
+              warning={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -100,6 +101,4 @@ ConfirmDeletionSelfRegistrationSettings.propTypes = {
   onSubmit: PropTypes.func, // The submit callback
   t: PropTypes.func, // The translation function
 };
-export default withAdminSelfRegistration(withTranslation('common')(ConfirmDeletionSelfRegistrationSettings));
-
-
+export default withAdminSelfRegistration(withTranslation("common")(ConfirmDeletionSelfRegistrationSettings));

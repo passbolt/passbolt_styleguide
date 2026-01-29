@@ -20,24 +20,21 @@ class SecretRevisionsSettingsEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "max_revisions",
-        "allow_sharing_revisions",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["max_revisions", "allow_sharing_revisions"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "max_revisions": {
-          "type": "integer",
-          "minimum": 1,
+        max_revisions: {
+          type: "integer",
+          minimum: 1,
         },
-        "allow_sharing_revisions": {
-          "type": "boolean",
+        allow_sharing_revisions: {
+          type: "boolean",
         },
-      }
+      },
     };
   }
 
@@ -49,10 +46,10 @@ class SecretRevisionsSettingsEntity extends EntityV2 {
   static createFromDefault(data = {}) {
     const defaultData = {
       max_revisions: 1,
-      allow_sharing_revisions: false
+      allow_sharing_revisions: false,
     };
 
-    return new SecretRevisionsSettingsEntity({...defaultData, ...data});
+    return new SecretRevisionsSettingsEntity({ ...defaultData, ...data });
   }
   /*
    * ==================================================

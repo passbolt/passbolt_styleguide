@@ -13,17 +13,17 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
-import {getUserFormattedName} from "../../utils/userUtils";
-import {getGroupFormattedName} from "../../utils/groupUtils";
+import { withTranslation } from "react-i18next";
+import { getUserFormattedName } from "../../utils/userUtils";
+import { getGroupFormattedName } from "../../utils/groupUtils";
 
 /**
  * The component display variations.
  * @type {Object}
  */
 export const DisplayAroNameVariations = {
-  USER: 'User',
-  GROUP: 'Group',
+  USER: "User",
+  GROUP: "Group",
 };
 
 class DisplayAroName extends React.PureComponent {
@@ -38,10 +38,13 @@ class DisplayAroName extends React.PureComponent {
 
     const shouldDisplayAsUser = this.props.displayAs === DisplayAroNameVariations.USER || this.props.user;
 
-    return (<>{shouldDisplayAsUser
-      ? getUserFormattedName(this.props.user, this.props.t, {withUsername: this.props.withUsername})
-      : getGroupFormattedName(this.props.group, this.props.t)
-    }</>);
+    return (
+      <>
+        {shouldDisplayAsUser
+          ? getUserFormattedName(this.props.user, this.props.t, { withUsername: this.props.withUsername })
+          : getGroupFormattedName(this.props.group, this.props.t)}
+      </>
+    );
   }
 }
 
@@ -53,12 +56,9 @@ DisplayAroName.defaultProps = {
 DisplayAroName.propTypes = {
   user: PropTypes.object, // the user whose name has to be displayed
   group: PropTypes.object, // the group whose name has to be displayed
-  displayAs: PropTypes.oneOf([
-    DisplayAroNameVariations.USER,
-    DisplayAroNameVariations.GROUP,
-  ]), // Defines how the form should be displayed and behaves
+  displayAs: PropTypes.oneOf([DisplayAroNameVariations.USER, DisplayAroNameVariations.GROUP]), // Defines how the form should be displayed and behaves
   withUsername: PropTypes.bool, // should the user name be displayed with its username
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(DisplayAroName);
+export default withTranslation("common")(DisplayAroName);

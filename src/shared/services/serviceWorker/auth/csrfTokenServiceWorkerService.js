@@ -12,7 +12,6 @@
  * @since         5.0.0
  */
 
-
 export const GET_CSRF_TOKEN_EVENT = "passbolt.auth.get-csrf-token";
 
 class CsrfTokenServiceWorkerService {

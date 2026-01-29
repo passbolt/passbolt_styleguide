@@ -13,7 +13,7 @@
 
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import EntityV2 from "../abstract/entityV2";
-import {v5 as uuidv5} from "uuid";
+import { v5 as uuidv5 } from "uuid";
 
 const ENTITY_NAME = "Account";
 
@@ -23,7 +23,7 @@ const TYPE_ACCOUNT = "Account";
 const FINGERPRINT_MIN_LENGTH = 40;
 const FINGERPRINT_MAX_LENGTH = 40;
 
-const UUID_PASSBOLT_NAMESPACE = 'd5447ca1-950f-459d-8b20-86ddfdd0f922';
+const UUID_PASSBOLT_NAMESPACE = "d5447ca1-950f-459d-8b20-86ddfdd0f922";
 
 /**
  * Warning this entity is not complete due to a lot of dependencies on the Bext.
@@ -34,12 +34,9 @@ class AccountEntity extends EntityV2 {
    * @inheritdoc
    */
   marshall() {
-    Object.assign(
-      this._props,
-      {
-        type: AccountEntity.TYPE_ACCOUNT
-      }
-    );
+    Object.assign(this._props, {
+      type: AccountEntity.TYPE_ACCOUNT,
+    });
   }
 
   /**
@@ -48,8 +45,8 @@ class AccountEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
+      type: "object",
+      required: [
         "type",
         "domain",
         "user_id",
@@ -59,49 +56,49 @@ class AccountEntity extends EntityV2 {
         "user_public_armored_key",
         "server_public_armored_key",
       ],
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [AccountEntity.TYPE_ACCOUNT],
+      properties: {
+        type: {
+          type: "string",
+          enum: [AccountEntity.TYPE_ACCOUNT],
         },
-        "domain": {
-          "type": "string"
+        domain: {
+          type: "string",
         },
-        "user_id": {
-          "type": "string",
-          "format": "uuid"
+        user_id: {
+          type: "string",
+          format: "uuid",
         },
-        "user_key_fingerprint": {
-          "type": "string",
-          "minLength": FINGERPRINT_MIN_LENGTH,
-          "maxLength": FINGERPRINT_MAX_LENGTH,
-          "pattern": /^[A-F0-9]{40}$/,
+        user_key_fingerprint: {
+          type: "string",
+          minLength: FINGERPRINT_MIN_LENGTH,
+          maxLength: FINGERPRINT_MAX_LENGTH,
+          pattern: /^[A-F0-9]{40}$/,
         },
-        "user_public_armored_key": {
-          "type": "string"
+        user_public_armored_key: {
+          type: "string",
         },
-        "server_public_armored_key": {
-          "type": "string"
+        server_public_armored_key: {
+          type: "string",
         },
-        "username": {
-          "type": "string"
+        username: {
+          type: "string",
         },
-        "first_name": {
-          "type": "string"
+        first_name: {
+          type: "string",
         },
-        "last_name": {
-          "type": "string"
+        last_name: {
+          type: "string",
         },
-        "locale": {
-          "type": "string",
-          "pattern": /^[a-z]{2}-[A-Z]{2}$/,
-          "nullable": true,
+        locale: {
+          type: "string",
+          pattern: /^[a-z]{2}-[A-Z]{2}$/,
+          nullable: true,
         },
-        "role_name": {
+        role_name: {
           ...RoleEntity.getSchema().properties.name,
-          "nullable": true,
+          nullable: true,
         },
-      }
+      },
     };
   }
 

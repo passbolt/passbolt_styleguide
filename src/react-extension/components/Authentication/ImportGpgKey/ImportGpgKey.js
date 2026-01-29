@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
 /**
@@ -22,8 +22,8 @@ import SpinnerSVG from "../../../../img/svg/spinner.svg";
  * @type {Object}
  */
 export const ImportGpgKeyVariations = {
-  SETUP: 'Setup',
-  RECOVER: 'Recover'
+  SETUP: "Setup",
+  RECOVER: "Recover",
 };
 
 /**
@@ -47,16 +47,16 @@ class ImportGpgKey extends Component {
   get defaultState() {
     return {
       selectedFile: null, // the file to import
-      privateKey: '', // The gpg private key
+      privateKey: "", // The gpg private key
       actions: {
-        processing: false // True if one's processing passphrase
+        processing: false, // True if one's processing passphrase
       },
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPrivateKey: false, // True if the private key is empty
         invalidPrivateKey: false, // True if the private key is invalid
       },
-      errorMessage: '', // The error message if isRequired
+      errorMessage: "", // The error message if isRequired
       keyHasAnExpirationDate: false, // True if the key being imported has an expiration date
     };
   }
@@ -72,7 +72,7 @@ class ImportGpgKey extends Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    return Object.values(this.state.errors).every(value => !value);
+    return Object.values(this.state.errors).every((value) => !value);
   }
 
   /**
@@ -134,7 +134,7 @@ class ImportGpgKey extends Component {
 
     // we do not display the warning message if the key can't be read.
     const keyHasAnExpirationDate = await this.props.hasKeyExpirationDate(privateKey).catch(() => false);
-    this.setState({keyHasAnExpirationDate});
+    this.setState({ keyHasAnExpirationDate });
   }
 
   /**
@@ -143,7 +143,7 @@ class ImportGpgKey extends Component {
    */
   async handleChangePrivateKey(event) {
     const privateKey = event.target.value;
-    this.setState({privateKey});
+    this.setState({ privateKey });
     await this.checkExpiryDate(privateKey);
 
     if (this.state.hasBeenValidated) {
@@ -173,7 +173,7 @@ class ImportGpgKey extends Component {
     const [privateKeyFile] = event.target.files;
     const privateKey = await this.readPrivateKeyFile(privateKeyFile);
     await this.checkExpiryDate(privateKey);
-    this.setState({privateKey, selectedFile: privateKeyFile});
+    this.setState({ privateKey, selectedFile: privateKeyFile });
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
@@ -183,8 +183,7 @@ class ImportGpgKey extends Component {
    * Verify and save the private gpg key
    */
   async save() {
-    await this.props.onComplete(this.state.privateKey)
-      .catch(this.onSaveFailure.bind(this));
+    await this.props.onComplete(this.state.privateKey).catch(this.onSaveFailure.bind(this));
   }
 
   /**
@@ -196,7 +195,7 @@ class ImportGpgKey extends Component {
     // It can happen when some key validation went wrong.
     this.toggleProcessing();
     if (error.name === "GpgKeyError") {
-      this.setState({errors: {invalidPrivateKey: true}, errorMessage: error.message});
+      this.setState({ errors: { invalidPrivateKey: true }, errorMessage: error.message });
     } else {
       throw error;
     }
@@ -224,10 +223,10 @@ class ImportGpgKey extends Component {
    * Validate the imported private key
    */
   async validate() {
-    const {privateKey} = this.state;
-    const emptyPrivateKey = privateKey.trim() === '';
+    const { privateKey } = this.state;
+    const emptyPrivateKey = privateKey.trim() === "";
     if (emptyPrivateKey) {
-      this.setState({hasBeenValidated: true, errors: {emptyPrivateKey}});
+      this.setState({ hasBeenValidated: true, errors: { emptyPrivateKey } });
       return;
     }
 
@@ -239,14 +238,14 @@ class ImportGpgKey extends Component {
       invalidPrivateKey = true;
       errorMessage = e.message;
     }
-    this.setState({hasBeenValidated: true, errors: {invalidPrivateKey}, errorMessage});
+    this.setState({ hasBeenValidated: true, errors: { invalidPrivateKey }, errorMessage });
   }
 
   /**
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({actions: {processing: !this.state.actions.processing}});
+    this.setState({ actions: { processing: !this.state.actions.processing } });
   }
 
   /**
@@ -261,20 +260,26 @@ class ImportGpgKey extends Component {
    * Render the component
    */
   render() {
-    const processingClassName = this.isProcessing ? 'processing' : '';
+    const processingClassName = this.isProcessing ? "processing" : "";
     return (
       <div className="import-private-key">
         <h1>
-          {{
-            [ImportGpgKeyVariations.SETUP]: <Trans>Please enter your private key to continue.</Trans>,
-            [ImportGpgKeyVariations.RECOVER]: <Trans>Welcome back, please enter your private key to begin the recovery process.</Trans>
-          }[this.props.displayAs]}
+          {
+            {
+              [ImportGpgKeyVariations.SETUP]: <Trans>Please enter your private key to continue.</Trans>,
+              [ImportGpgKeyVariations.RECOVER]: (
+                <Trans>Welcome back, please enter your private key to begin the recovery process.</Trans>
+              ),
+            }[this.props.displayAs]
+          }
         </h1>
-        <form
-          acceptCharset="utf-8"
-          onSubmit={this.handleSubmit}>
-          <div className={`input textarea required openpgp-key ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
-            <label htmlFor="private-key"><Trans>Private key</Trans></label>
+        <form acceptCharset="utf-8" onSubmit={this.handleSubmit}>
+          <div
+            className={`input textarea required openpgp-key ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}
+          >
+            <label htmlFor="private-key">
+              <Trans>Private key</Trans>
+            </label>
             <textarea
               name="private-key"
               aria-required={true}
@@ -282,7 +287,8 @@ class ImportGpgKey extends Component {
               placeholder={this.translate("Your OpenPGP private key block")}
               value={this.state.privateKey}
               onChange={this.handleChangePrivateKey}
-              disabled={!this.areActionsAllowed}/>
+              disabled={!this.areActionsAllowed}
+            />
           </div>
           <div className={`input file ${!this.areActionsAllowed ? "disabled" : ""}`}>
             <input
@@ -290,48 +296,64 @@ class ImportGpgKey extends Component {
               ref={this.fileUploaderRef}
               disabled={!this.areActionsAllowed}
               onChange={this.handleSelectPrivateKeyFile}
-              accept="text/plain,.key,.asc"/>
+              accept="text/plain,.key,.asc"
+            />
             <div className="input-file-inline">
-              <input type="text" disabled={true} placeholder={this.translate("No key file selected")} value={this.selectedFilename}/>
-              <button className="button primary" type="button" onClick={this.handleSelectFile} disabled={!this.areActionsAllowed}>
-                <span><Trans>Choose a file</Trans></span>
+              <input
+                type="text"
+                disabled={true}
+                placeholder={this.translate("No key file selected")}
+                value={this.selectedFilename}
+              />
+              <button
+                className="button primary"
+                type="button"
+                onClick={this.handleSelectFile}
+                disabled={!this.areActionsAllowed}
+              >
+                <span>
+                  <Trans>Choose a file</Trans>
+                </span>
               </button>
             </div>
-            {this.state.keyHasAnExpirationDate &&
+            {this.state.keyHasAnExpirationDate && (
               <div className="warning-message">
                 <Trans>The private key should not have an expiry date.</Trans>&nbsp;
                 <Trans>Once expired you will not be able to connect to your account.</Trans>
               </div>
-            }
-            {this.state.hasBeenValidated &&
+            )}
+            {this.state.hasBeenValidated && (
               <>
-                {this.state.errors.emptyPrivateKey &&
-                  <div className="empty-private-key error-message"><Trans>The private key should not be empty.</Trans></div>
-                }
-                {this.state.errors.invalidPrivateKey &&
+                {this.state.errors.emptyPrivateKey && (
+                  <div className="empty-private-key error-message">
+                    <Trans>The private key should not be empty.</Trans>
+                  </div>
+                )}
+                {this.state.errors.invalidPrivateKey && (
                   <div className="invalid-private-key error-message">{this.state.errorMessage}</div>
-                }
+                )}
               </>
-            }
+            )}
           </div>
           <div className="form-actions">
             <button
               type="submit"
               className={`button primary big full-width ${processingClassName}`}
-              disabled={this.isProcessing}>
+              disabled={this.isProcessing}
+            >
               <Trans>Next</Trans>
-              {this.isProcessing &&
-                <SpinnerSVG/>
-              }
+              {this.isProcessing && <SpinnerSVG />}
             </button>
-            {this.props.onSecondaryActionClick &&
-            <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
-              {{
-                [ImportGpgKeyVariations.SETUP]: <Trans>Or generate a new private key.</Trans>,
-                [ImportGpgKeyVariations.RECOVER]: <Trans>Help, I lost my private key.</Trans>,
-              }[this.props.displayAs]}
-            </button>
-            }
+            {this.props.onSecondaryActionClick && (
+              <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
+                {
+                  {
+                    [ImportGpgKeyVariations.SETUP]: <Trans>Or generate a new private key.</Trans>,
+                    [ImportGpgKeyVariations.RECOVER]: <Trans>Help, I lost my private key.</Trans>,
+                  }[this.props.displayAs]
+                }
+              </button>
+            )}
           </div>
         </form>
       </div>
@@ -346,13 +368,10 @@ ImportGpgKey.defaultProps = {
 ImportGpgKey.propTypes = {
   context: PropTypes.object, // The application context
   onComplete: PropTypes.func.isRequired, // The callback to trigger when the user wants to import its gpg key
-  displayAs: PropTypes.oneOf([
-    ImportGpgKeyVariations.SETUP,
-    ImportGpgKeyVariations.RECOVER
-  ]), // Defines how the form should be displayed and behaves
+  displayAs: PropTypes.oneOf([ImportGpgKeyVariations.SETUP, ImportGpgKeyVariations.RECOVER]), // Defines how the form should be displayed and behaves
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
   t: PropTypes.func, // The translation function
   validatePrivateGpgKey: PropTypes.func, // The callback to check the validity of the gpg key
   hasKeyExpirationDate: PropTypes.func, // The callback to check if the key has an expiration date
 };
-export default withAppContext(withTranslation('common')(ImportGpgKey));
+export default withAppContext(withTranslation("common")(ImportGpgKey));

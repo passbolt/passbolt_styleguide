@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
@@ -24,16 +24,15 @@ import UserCogSVG from "../../../../img/svg/user_cog.svg";
 import UserXSVG from "../../../../img/svg/user_x.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
-import {withRouter} from "react-router-dom";
-import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import { withRouter } from "react-router-dom";
+import { UserWorkspaceFilterTypes, withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 import BuoySVG from "../../../../img/svg/buoy.svg";
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {isAccountRecoveryRequested, isMissingMetadataKey} from "../../../../shared/utils/userUtils";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
-
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { isAccountRecoveryRequested, isMissingMetadataKey } from "../../../../shared/utils/userUtils";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
 
 /**
  * This component allows to filter resources
@@ -65,23 +64,34 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
   get displaySelectedFilter() {
     switch (this.props.userWorkspaceContext.filter.type) {
       case UserWorkspaceFilterTypes.SUSPENDED_USER:
-        return <>
-          <UserXSVG/>
-          <span><Trans>Suspended</Trans></span>
-        </>;
+        return (
+          <>
+            <UserXSVG />
+            <span>
+              <Trans>Suspended</Trans>
+            </span>
+          </>
+        );
       case UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST:
-        return <>
-          <BuoySVG/>
-          <span><Trans>Account Recovery Requests</Trans></span>
-        </>;
+        return (
+          <>
+            <BuoySVG />
+            <span>
+              <Trans>Account Recovery Requests</Trans>
+            </span>
+          </>
+        );
       case UserWorkspaceFilterTypes.MISSING_METADATA_KEY:
-        return <>
-          <MetadataKeySVG/>
-          <span><Trans>Missing Metadata Key</Trans></span>
-        </>;
+        return (
+          <>
+            <MetadataKeySVG />
+            <span>
+              <Trans>Missing Metadata Key</Trans>
+            </span>
+          </>
+        );
       default:
-        return <>
-        </>;
+        return <></>;
     }
   }
 
@@ -89,16 +99,16 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
    * Whenever the filter "Items I own" has been selected
    */
   handleSuspendedStatusClick() {
-    const filter = {type: UserWorkspaceFilterTypes.SUSPENDED_USER};
-    this.props.history.push({pathname: '/app/users', state: {filter}});
+    const filter = { type: UserWorkspaceFilterTypes.SUSPENDED_USER };
+    this.props.history.push({ pathname: "/app/users", state: { filter } });
   }
 
   /**
    * Whenever a filter has been removed go back to all items filter
    */
   handleRemoveFilterClick() {
-    const filter = {type: ResourceWorkspaceFilterTypes.ALL};
-    this.props.history.push({pathname: '/app/users', state: {filter}});
+    const filter = { type: ResourceWorkspaceFilterTypes.ALL };
+    this.props.history.push({ pathname: "/app/users", state: { filter } });
   }
 
   /**
@@ -106,8 +116,8 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
    * @returns {void}
    */
   handleAccountRecoveryRequestClick() {
-    const filter = {type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST};
-    this.props.history.push({pathname: '/app/users', state: {filter}});
+    const filter = { type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST };
+    this.props.history.push({ pathname: "/app/users", state: { filter } });
   }
 
   /**
@@ -115,8 +125,8 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
    * @returns {void}
    */
   handleMissingMetadataKeyClick() {
-    const filter = {type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY};
-    this.props.history.push({pathname: '/app/users', state: {filter}});
+    const filter = { type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY };
+    this.props.history.push({ pathname: "/app/users", state: { filter } });
   }
 
   /**
@@ -138,7 +148,7 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
    */
   get hasUserMissingMetadataKeys() {
     const users = this.props.context.users;
-    return users?.some(user => isMissingMetadataKey(user));
+    return users?.some((user) => isMissingMetadataKey(user));
   }
 
   /**
@@ -147,7 +157,7 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
    */
   get hasUserAccountRecoveryRequested() {
     const users = this.props.context.users;
-    return users?.some(user => isAccountRecoveryRequested(user));
+    return users?.some((user) => isAccountRecoveryRequested(user));
   }
 
   /**
@@ -199,70 +209,75 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
     const shouldDisplayAllStatusDropdown = !isFilterApplied;
 
     /** Display the Attention Required dropdown if - atleast one user in list has atleast one attention state && if none of the filters are applied && logged in user is an admin */
-    const shouldDisplayAttentionRequiredDropDown =  hasAttentionRequiredState && !isFilterApplied && (this.isAdmin || this.canUseAccountRecovery);
+    const shouldDisplayAttentionRequiredDropDown =
+      hasAttentionRequiredState && !isFilterApplied && (this.isAdmin || this.canUseAccountRecovery);
 
     return (
       <div className="actions-filter" ref={this.props.actionsFilterRef}>
-        {shouldDisplayAllStatusDropdown &&
+        {shouldDisplayAllStatusDropdown && (
           <Dropdown>
             <DropdownButton>
-              <UserCogSVG/>
-              <span><Trans>All statuses</Trans></span>
-              <CaretDownSVG/>
+              <UserCogSVG />
+              <span>
+                <Trans>All statuses</Trans>
+              </span>
+              <CaretDownSVG />
             </DropdownButton>
             <DropdownMenu>
               <DropdownMenuItem>
                 <button type="button" className="no-border" onClick={this.handleSuspendedStatusClick}>
-                  <UserXSVG/>
-                  <span><Trans>Suspended</Trans></span>
+                  <UserXSVG />
+                  <span>
+                    <Trans>Suspended</Trans>
+                  </span>
                 </button>
               </DropdownMenuItem>
             </DropdownMenu>
           </Dropdown>
-        }
-        {shouldDisplayAttentionRequiredDropDown &&
+        )}
+        {shouldDisplayAttentionRequiredDropDown && (
           <Dropdown>
             <DropdownButton>
-              <AttentionSVG className="attention-required"/>
-              <span><Trans>Attention Required</Trans></span>
-              <CaretDownSVG/>
+              <AttentionSVG className="attention-required" />
+              <span>
+                <Trans>Attention Required</Trans>
+              </span>
+              <CaretDownSVG />
             </DropdownButton>
             <DropdownMenu>
               {this.shouldDisplayAccountRecoveryDropDown && (
                 <DropdownMenuItem>
-                  <button
-                    type="button"
-                    className="no-border"
-                    onClick={this.handleAccountRecoveryRequestClick}>
+                  <button type="button" className="no-border" onClick={this.handleAccountRecoveryRequestClick}>
                     <BuoySVG />
-                    <span><Trans>Account Recovery Requests</Trans></span>
+                    <span>
+                      <Trans>Account Recovery Requests</Trans>
+                    </span>
                   </button>
                 </DropdownMenuItem>
               )}
               {this.shouldDisplayMissingMetadataKeyDropDown && (
                 <DropdownMenuItem>
-                  <button
-                    type="button"
-                    className="no-border"
-                    onClick={this.handleMissingMetadataKeyClick}>
+                  <button type="button" className="no-border" onClick={this.handleMissingMetadataKeyClick}>
                     <MetadataKeySVG />
-                    <span><Trans>Missing Metadata Key</Trans></span>
+                    <span>
+                      <Trans>Missing Metadata Key</Trans>
+                    </span>
                   </button>
                 </DropdownMenuItem>
               )}
             </DropdownMenu>
           </Dropdown>
-        }
-        {isFilterApplied &&
+        )}
+        {isFilterApplied && (
           <div className="button button-action-filtered">
             {this.displaySelectedFilter}
             <span className="divider">
               <button type="button" className="button-transparent" onClick={this.handleRemoveFilterClick}>
-                <CloseSVG className="close"/>
+                <CloseSVG className="close" />
               </button>
             </span>
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -278,4 +293,6 @@ DisplayUsersWorkspaceFilterBar.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withRbac(withUserWorkspace(withTranslation('common')(DisplayUsersWorkspaceFilterBar)))));
+export default withRouter(
+  withAppContext(withRbac(withUserWorkspace(withTranslation("common")(DisplayUsersWorkspaceFilterBar)))),
+);

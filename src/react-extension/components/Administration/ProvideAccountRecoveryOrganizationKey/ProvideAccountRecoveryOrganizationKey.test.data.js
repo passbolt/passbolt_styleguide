@@ -16,7 +16,7 @@
  * Returns the default app context for the unit test
  */
 
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Props with user group details
@@ -28,4 +28,3 @@ export function defaultProps() {
     onClose: jest.fn(),
   };
 }
-

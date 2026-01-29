@@ -12,22 +12,22 @@
  * @since         2.13.0
  */
 import DisplayTestUserDirectoryAdministration from "./DisplayTestUserDirectoryAdministration";
-import {mockTestSettingsReportBody} from "./DisplayTestUserDirectoryAdministration.test.data";
+import { mockTestSettingsReportBody } from "./DisplayTestUserDirectoryAdministration.test.data";
 
 export default {
-  title: 'Components/Administration/DisplayTestUserDirectoryAdministration',
+  title: "Components/Administration/DisplayTestUserDirectoryAdministration",
   component: DisplayTestUserDirectoryAdministration,
   parameters: {
     css: "api_main",
-  }
+  },
 };
 
 const context = {
   displayTestUserDirectoryDialogProps: {
     userDirectoryTestResult: mockTestSettingsReportBody,
-  }
+  },
 };
 
 export const Initial = {
-  args: {context},
+  args: { context },
 };

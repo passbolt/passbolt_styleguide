@@ -14,25 +14,24 @@
 
 import React from "react";
 import DisplaySsoProviderMismatchError from "./DisplaySsoProviderMismatchError";
-import {defaultProps} from "./DisplaySsoProviderMismatchError.test.data";
+import { defaultProps } from "./DisplaySsoProviderMismatchError.test.data";
 
 export default {
-  title: 'Components/Authentication/DisplaySsoProviderMismatchError',
-  component: DisplaySsoProviderMismatchError
+  title: "Components/Authentication/DisplaySsoProviderMismatchError",
+  component: DisplaySsoProviderMismatchError,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <DisplaySsoProviderMismatchError {...args}/>
+        <DisplaySsoProviderMismatchError {...args} />
       </div>
     </div>
   </div>
-;
-
+);
 export const Initial = Template.bind({});
 Initial.args = defaultProps();
 Initial.parameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };

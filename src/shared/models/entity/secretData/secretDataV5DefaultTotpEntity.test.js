@@ -15,14 +15,17 @@
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SecretDataV5DefaultTotpEntity from "./secretDataV5DefaultTotpEntity";
-import {defaultSecretDataV5DefaultTotpEntityDto, minimalSecretDataV5DefaultTotpEntityDto} from "./secretDataV5DefaultTotpEntity.test.data";
+import {
+  defaultSecretDataV5DefaultTotpEntityDto,
+  minimalSecretDataV5DefaultTotpEntityDto,
+} from "./secretDataV5DefaultTotpEntity.test.data";
 import TotpEntity from "../totp/totpEntity";
-import {defaultTotpDto} from "../totp/totpDto.test.data";
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { defaultTotpDto } from "../totp/totpDto.test.data";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import CustomFieldsCollection from "../customField/customFieldsCollection";
-import {defaultCustomField} from "../customField/customFieldEntity.test.data";
+import { defaultCustomField } from "../customField/customFieldEntity.test.data";
 import CustomFieldEntity from "../customField/customFieldEntity";
-import {defaultCustomFieldsCollection} from "../customField/customFieldsCollection.test.data";
+import { defaultCustomFieldsCollection } from "../customField/customFieldsCollection.test.data";
 
 describe("SecretDataV5DefaultTotpEntity", () => {
   describe("::getSchema", () => {
@@ -31,7 +34,12 @@ describe("SecretDataV5DefaultTotpEntity", () => {
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.enumeration(SecretDataV5DefaultTotpEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
+      assertEntityProperty.enumeration(
+        SecretDataV5DefaultTotpEntity,
+        "object_type",
+        [SECRET_DATA_OBJECT_TYPE],
+        ["any other values"],
+      );
     });
 
     it("validates password property", () => {
@@ -46,13 +54,14 @@ describe("SecretDataV5DefaultTotpEntity", () => {
 
       const dto = minimalSecretDataV5DefaultTotpEntityDto();
 
-      const successScenario = [
-        {scenario: "a valid totp", value: defaultTotpDto()},
-      ];
+      const successScenario = [{ scenario: "a valid totp", value: defaultTotpDto() }];
       const failScenario = [
-        {scenario: "The totp validation should failed.", value: defaultTotpDto({
-          algorithm: "not an algorithm"
-        })},
+        {
+          scenario: "The totp validation should failed.",
+          value: defaultTotpDto({
+            algorithm: "not an algorithm",
+          }),
+        },
       ];
       assertEntityProperty.assertAssociation(SecretDataV5DefaultTotpEntity, "totp", dto, successScenario, failScenario);
       assertEntityProperty.required(SecretDataV5DefaultTotpEntity, "totp");
@@ -68,7 +77,10 @@ describe("SecretDataV5DefaultTotpEntity", () => {
   describe("::associations", () => {
     it("associations should have totp and custom_fields", () => {
       expect.assertions(1);
-      expect(SecretDataV5DefaultTotpEntity.associations).toStrictEqual({totp: TotpEntity, custom_fields: CustomFieldsCollection});
+      expect(SecretDataV5DefaultTotpEntity.associations).toStrictEqual({
+        totp: TotpEntity,
+        custom_fields: CustomFieldsCollection,
+      });
     });
   });
 
@@ -98,7 +110,7 @@ describe("SecretDataV5DefaultTotpEntity", () => {
       expect.assertions(5);
       const dto = minimalSecretDataV5DefaultTotpEntityDto();
       dto.totp.secret_key = "";
-      const entity = SecretDataV5DefaultTotpEntity.createFromDefault({}, {validate: false});
+      const entity = SecretDataV5DefaultTotpEntity.createFromDefault({}, { validate: false });
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual("");
@@ -140,7 +152,9 @@ describe("SecretDataV5DefaultTotpEntity", () => {
 
     it("get default totp", () => {
       expect.assertions(1);
-      expect(SecretDataV5DefaultTotpEntity.getDefaultProp("totp")).toStrictEqual(TotpEntity.createFromDefault({}, {validate: false}).toDto());
+      expect(SecretDataV5DefaultTotpEntity.getDefaultProp("totp")).toStrictEqual(
+        TotpEntity.createFromDefault({}, { validate: false }).toDto(),
+      );
     });
 
     it("get default unknown", () => {
@@ -158,7 +172,7 @@ describe("SecretDataV5DefaultTotpEntity", () => {
     it("should return true", () => {
       const dto = defaultSecretDataV5DefaultTotpEntityDto();
       const entity = SecretDataV5DefaultTotpEntity.createFromDefault(dto);
-      expect(entity.areSecretsDifferent({password: dto.password, totp: dto.totp})).toBeTruthy();
+      expect(entity.areSecretsDifferent({ password: dto.password, totp: dto.totp })).toBeTruthy();
     });
 
     it("should return false", () => {

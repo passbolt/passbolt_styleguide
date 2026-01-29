@@ -12,7 +12,7 @@
  * @since         5.8.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import userEvent from "@testing-library/user-event";
@@ -31,7 +31,7 @@ export default class EditRolePage {
       <MockTranslationProvider>
         <EditRole {...props}></EditRole>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -41,21 +41,21 @@ export default class EditRolePage {
    * Get the role name input
    */
   get inputName() {
-    return this._page.container.querySelector('#role-name-input');
+    return this._page.container.querySelector("#role-name-input");
   }
 
   /**
    * Set a name to the role name input
    */
   set name(value) {
-    fireEvent.change(this.inputName, {target: {value}});
+    fireEvent.change(this.inputName, { target: { value } });
   }
 
   /**
    * Returns true if the role name is invalid
    */
   get hasInvalidName() {
-    return Boolean(this._page.container.querySelector('.error-message'));
+    return Boolean(this._page.container.querySelector(".error-message"));
   }
 
   /**
@@ -63,35 +63,35 @@ export default class EditRolePage {
    * @return {string}
    */
   get errorMessage() {
-    return this._page.container.querySelector('.error-message').textContent;
+    return this._page.container.querySelector(".error-message").textContent;
   }
 
   /**
    * Returns true if one can cancel the operation
    */
   get canCancel() {
-    return !this._page.container.querySelector('.cancel').hasAttribute('disabled');
+    return !this._page.container.querySelector(".cancel").hasAttribute("disabled");
   }
 
   /**
    * Returns true if one can close the dialog
    */
   get canClose() {
-    return !this._page.container.querySelector('.dialog-close').hasAttribute('disabled');
+    return !this._page.container.querySelector(".dialog-close").hasAttribute("disabled");
   }
 
   /**
    * Returns true if one can submit the edit operation
    */
   get canSubmit() {
-    return !this._page.container.querySelector('button[type="submit"]').hasAttribute('disabled');
+    return !this._page.container.querySelector('button[type="submit"]').hasAttribute("disabled");
   }
 
   /**
    * Returns true if one can change the data
    */
   get canChangeData() {
-    return !this._page.container.querySelector('#role-name-input').hasAttribute('disabled');
+    return !this._page.container.querySelector("#role-name-input").hasAttribute("disabled");
   }
 
   /**
@@ -119,7 +119,7 @@ export default class EditRolePage {
    * Returns the name warning message input element
    */
   get nameWarningMessage() {
-    return this._page.container.querySelector('.name.warning-message');
+    return this._page.container.querySelector(".name.warning-message");
   }
 
   /**
@@ -133,7 +133,7 @@ export default class EditRolePage {
 
   /** fill the input element with data */
   fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 

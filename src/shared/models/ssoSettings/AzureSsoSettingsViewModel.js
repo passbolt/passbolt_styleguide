@@ -70,12 +70,12 @@ class AzureSsoSettingsViewModel {
         "client_secret_expiry",
         "email_claim",
         "prompt",
-        "login_hint"
+        "login_hint",
       ],
       properties: {
         id: {
-          "type": "string",
-          "format": "uuid",
+          type: "string",
+          format: "uuid",
         },
         url: baseEntitySchema.properties.url,
         client_id: baseEntitySchema.properties.client_id,
@@ -85,7 +85,7 @@ class AzureSsoSettingsViewModel {
         email_claim: baseEntitySchema.properties.email_claim,
         prompt: baseEntitySchema.properties.prompt,
         login_hint: baseEntitySchema.properties.login_hint,
-      }
+      },
     };
   }
 
@@ -106,7 +106,7 @@ class AzureSsoSettingsViewModel {
       "prompt",
       "login_hint",
     ];
-    return keys.some(key => a[key] !== b[key]);
+    return keys.some((key) => a[key] !== b[key]);
   }
 
   /**
@@ -213,7 +213,7 @@ class AzureSsoSettingsViewModel {
         email_claim: this.email_claim,
         prompt: this.prompt,
         login_hint: this.login_hint,
-      }
+      },
     };
 
     return entityDto;

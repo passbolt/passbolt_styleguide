@@ -12,8 +12,8 @@
  * @since         4.5.0
  */
 
-import {defaultLoggedInUser} from "../../../context/Rbac/RbacContext.test.data";
-import {groupsWithoutOwnership} from "../../../models/entity/groupUser/groupUserEntity.test.data";
+import { defaultLoggedInUser } from "../../../context/Rbac/RbacContext.test.data";
+import { groupsWithoutOwnership } from "../../../models/entity/groupUser/groupUserEntity.test.data";
 import AllowIfGroupManagerInOneGroupFunction from "./allowIfGroupManagerInOneGroupFunction";
 
 describe("AllowIfGroupManagerInOneGroupFunction", () => {
@@ -27,7 +27,7 @@ describe("AllowIfGroupManagerInOneGroupFunction", () => {
     expect.assertions(1);
 
     const userWithOwnership = defaultLoggedInUser({
-      groups_users: groupsWithoutOwnership()
+      groups_users: groupsWithoutOwnership(),
     });
     expect(AllowIfGroupManagerInOneGroupFunction.execute(userWithOwnership)).toBeFalsy();
   });

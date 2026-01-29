@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import SpinnerSVG from "../../../../../img/svg/spinner.svg";
 
 class AutocompleteItemLoading extends Component {
@@ -26,7 +26,7 @@ class AutocompleteItemLoading extends Component {
           <div className="main-cell-wrapper">
             <div className="main-cell">
               <div className="loading">
-                <SpinnerSVG/>
+                <SpinnerSVG />
               </div>
               <div className="info">
                 <span className="name">Loading...</span>

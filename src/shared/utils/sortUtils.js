@@ -16,7 +16,7 @@
  * Sort an array of resources alphabetically
  * @param {Array<ResourceEntityDto>} resources
  */
-export const sortResourcesAlphabetically = resources => {
+export const sortResourcesAlphabetically = (resources) => {
   resources?.sort((resource1, resource2) => {
     const resource1Name = resource1.metadata.name.toUpperCase();
     const resource2Name = resource2.metadata.name.toUpperCase();

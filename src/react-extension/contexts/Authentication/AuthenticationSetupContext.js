@@ -13,24 +13,24 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {BROWSER_NAMES, detectBrowserName} from "../../../shared/lib/Browser/detectBrowserName";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { BROWSER_NAMES, detectBrowserName } from "../../../shared/lib/Browser/detectBrowserName";
 import SetupServiceWorkerService from "../../../shared/services/serviceWorker/setup/setupServiceWorkerService";
 
 // The authentication setup workflow states.
 export const AuthenticationSetupWorkflowStates = {
-  CHOOSE_ACCOUNT_RECOVERY_PREFERENCE: 'Join account recovery program',
-  CHOOSE_SECURITY_TOKEN: 'Choose security token',
-  DOWNLOAD_RECOVERY_KIT: 'Download recovery kit',
-  GENERATE_GPG_KEY: 'Generate gpg key',
-  IMPORT_GPG_KEY: 'Import gpg key',
-  INTRODUCE_EXTENSION: 'Introduce extension',
-  LOADING: 'Loading',
-  SIGNING_IN: 'Signing in',
-  COMPLETING_SETUP: 'Completing setup',
-  UNEXPECTED_ERROR: 'Unexpected Error',
+  CHOOSE_ACCOUNT_RECOVERY_PREFERENCE: "Join account recovery program",
+  CHOOSE_SECURITY_TOKEN: "Choose security token",
+  DOWNLOAD_RECOVERY_KIT: "Download recovery kit",
+  GENERATE_GPG_KEY: "Generate gpg key",
+  IMPORT_GPG_KEY: "Import gpg key",
+  INTRODUCE_EXTENSION: "Introduce extension",
+  LOADING: "Loading",
+  SIGNING_IN: "Signing in",
+  COMPLETING_SETUP: "Completing setup",
+  UNEXPECTED_ERROR: "Unexpected Error",
   UNEXPECTED_METADATA_ENCRYPTION_ENABLEMENT_ERROR: "Unexpected metadata encryption enablement error",
-  VALIDATE_PASSPHRASE: 'Validate passphrase',
+  VALIDATE_PASSPHRASE: "Validate passphrase",
   CONFIGURING_SSO: "Configuring SSO",
   CHECKING_POST_SETUP_METADATA_TASKS: "Checking post setup metadata tasks",
   ENABLING_METADATA_ENCRYPTION: "Enabling metadata encryption",
@@ -48,28 +48,17 @@ export const AuthenticationSetupContext = React.createContext({
   error: null, // The current error
 
   // Workflow mutators.
-  goToGenerateGpgKey: () => {
-  }, // Whenever the user wants to go to the generate key step.
-  generateGpgKey: () => {
-  }, // Whenever the user wants to generate a new key.
-  downloadRecoveryKit: () => {
-  }, // Whenever the user want to download the generated key.
-  handleRecoveryKitDownloaded: () => {
-  }, // Whenever the user has completed the download of its generated gpg key
-  goToImportGpgKey: () => {
-  }, // Whenever the user wants to go the import gpg key step.
-  importGpgKey: () => {
-  }, // Whenever the user wants to import a gpg key.
-  checkPassphrase: () => {
-  }, // Whenever the user want to check the passphrase of its imported gpg key.
-  chooseAccountRecoveryPreference: () => {
-  }, // Whenever the user wants to set its account recovery preferences.
-  chooseSecurityToken: () => {
-  }, // Whenever the user wants to choose its security token preference.
-  validatePrivateKey: () => {
-  }, // Whenever we need to verify the imported private key
-  goToAdministrationWorkspace: () => {
-  }, // Whenever an error occured on the metadata encryption enablement and the user clicked on continue
+  goToGenerateGpgKey: () => {}, // Whenever the user wants to go to the generate key step.
+  generateGpgKey: () => {}, // Whenever the user wants to generate a new key.
+  downloadRecoveryKit: () => {}, // Whenever the user want to download the generated key.
+  handleRecoveryKitDownloaded: () => {}, // Whenever the user has completed the download of its generated gpg key
+  goToImportGpgKey: () => {}, // Whenever the user wants to go the import gpg key step.
+  importGpgKey: () => {}, // Whenever the user wants to import a gpg key.
+  checkPassphrase: () => {}, // Whenever the user want to check the passphrase of its imported gpg key.
+  chooseAccountRecoveryPreference: () => {}, // Whenever the user wants to set its account recovery preferences.
+  chooseSecurityToken: () => {}, // Whenever the user wants to choose its security token preference.
+  validatePrivateKey: () => {}, // Whenever we need to verify the imported private key
+  goToAdministrationWorkspace: () => {}, // Whenever an error occured on the metadata encryption enablement and the user clicked on continue
 });
 
 /**
@@ -135,7 +124,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
     if (isFirstInstall && isChromeBrowser) {
       state = AuthenticationSetupWorkflowStates.INTRODUCE_EXTENSION;
     }
-    this.setState({state, userPassphrasePolicies});
+    this.setState({ state, userPassphrasePolicies });
   }
 
   /**
@@ -143,7 +132,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   goToGenerateGpgKey() {
     this.setState({
-      state: AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY
+      state: AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY,
     });
   }
 
@@ -153,7 +142,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async generateGpgKey(passphrase) {
-    const generateKeyDto = {passphrase};
+    const generateKeyDto = { passphrase };
     try {
       const armoredKey = await this.setupServiceWorkerService.generateKey(generateKeyDto);
       this.setState({
@@ -162,7 +151,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
         gpgKeyGenerated: true,
       });
     } catch (error) {
-      this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+      this.setState({ state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -174,7 +163,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
     try {
       await this.setupServiceWorkerService.downloadRecoveryKit();
     } catch (error) {
-      this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+      this.setState({ state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -184,13 +173,14 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async handleRecoveryKitDownloaded() {
     if (await this.isAccountRecoveryOrganizationPolicyEnabled()) {
-      const accountRecoveryOrganizationPolicy = await this.setupServiceWorkerService.getAccountRecoveryOrganisationPolicy();
+      const accountRecoveryOrganizationPolicy =
+        await this.setupServiceWorkerService.getAccountRecoveryOrganisationPolicy();
       this.setState({
         state: AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE,
-        accountRecoveryOrganizationPolicy: accountRecoveryOrganizationPolicy
+        accountRecoveryOrganizationPolicy: accountRecoveryOrganizationPolicy,
       });
     } else {
-      this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
+      this.setState({ state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN });
     }
   }
 
@@ -199,13 +189,13 @@ export class AuthenticationSetupContextProvider extends React.Component {
    * @returns {Promise<boolean>}
    */
   async isAccountRecoveryOrganizationPolicyEnabled() {
-    if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
+    if (!this.props.context.siteSettings.canIUse("accountRecovery")) {
       return false;
     }
-    const accountRecoveryOrganizationPolicy = await this.setupServiceWorkerService.getAccountRecoveryOrganisationPolicy();
+    const accountRecoveryOrganizationPolicy =
+      await this.setupServiceWorkerService.getAccountRecoveryOrganisationPolicy();
 
-    return accountRecoveryOrganizationPolicy
-      && accountRecoveryOrganizationPolicy?.policy !== 'disabled';
+    return accountRecoveryOrganizationPolicy && accountRecoveryOrganizationPolicy?.policy !== "disabled";
   }
 
   /**
@@ -214,7 +204,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async goToImportGpgKey() {
     this.setState({
-      state: AuthenticationSetupWorkflowStates.IMPORT_GPG_KEY
+      state: AuthenticationSetupWorkflowStates.IMPORT_GPG_KEY,
     });
   }
 
@@ -236,7 +226,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
       if (error.name === "GpgKeyError") {
         throw error;
       } else {
-        this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+        this.setState({ state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error });
       }
     }
   }
@@ -252,21 +242,22 @@ export class AuthenticationSetupContextProvider extends React.Component {
   async checkPassphrase(passphrase, rememberMe = false) {
     try {
       await this.setupServiceWorkerService.verifyPassphrase(passphrase);
-      this.setState({rememberMe});
+      this.setState({ rememberMe });
 
       if (await this.isAccountRecoveryOrganizationPolicyEnabled()) {
         this.setState({
-          accountRecoveryOrganizationPolicy: await this.setupServiceWorkerService.getAccountRecoveryOrganisationPolicy(),
-          state: AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE
+          accountRecoveryOrganizationPolicy:
+            await this.setupServiceWorkerService.getAccountRecoveryOrganisationPolicy(),
+          state: AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE,
         });
       } else {
-        this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
+        this.setState({ state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN });
       }
     } catch (error) {
       if (error.name === "InvalidMasterPasswordError") {
         throw error;
       } else {
-        this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+        this.setState({ state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error });
       }
     }
   }
@@ -279,9 +270,9 @@ export class AuthenticationSetupContextProvider extends React.Component {
   async chooseAccountRecoveryPreference(status) {
     try {
       await this.setupServiceWorkerService.setAccountRecoveryUserSettings(status);
-      this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
+      this.setState({ state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN });
     } catch (error) {
-      this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+      this.setState({ state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -293,10 +284,10 @@ export class AuthenticationSetupContextProvider extends React.Component {
   async chooseSecurityToken(securityTokenDto) {
     try {
       await this.setupServiceWorkerService.setSecurityToken(securityTokenDto);
-      this.setState({state: AuthenticationSetupWorkflowStates.COMPLETING_SETUP});
+      this.setState({ state: AuthenticationSetupWorkflowStates.COMPLETING_SETUP });
 
       await this.setupServiceWorkerService.completeSetup();
-      this.setState({state: AuthenticationSetupWorkflowStates.SIGNING_IN});
+      this.setState({ state: AuthenticationSetupWorkflowStates.SIGNING_IN });
 
       await this.setupServiceWorkerService.signIn(this.state.rememberMe);
 
@@ -307,7 +298,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
         await this.setupServiceWorkerService.redirectUserToPostLoginUrl();
       }
     } catch (error) {
-      this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+      this.setState({ state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -326,17 +317,20 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async runPostSetupProcess() {
     try {
-      this.setState({state: AuthenticationSetupWorkflowStates.CHECKING_POST_SETUP_METADATA_TASKS});
+      this.setState({ state: AuthenticationSetupWorkflowStates.CHECKING_POST_SETUP_METADATA_TASKS });
       const metadataSetupSettings = await this.setupServiceWorkerService.findMetadataSetupSettings();
       if (metadataSetupSettings.enableEncryptedMetadataOnInstall) {
-        this.setState({state: AuthenticationSetupWorkflowStates.ENABLING_METADATA_ENCRYPTION});
+        this.setState({ state: AuthenticationSetupWorkflowStates.ENABLING_METADATA_ENCRYPTION });
         await this.setupServiceWorkerService.enableMetadataEncryption();
       }
       await this.setupServiceWorkerService.redirectUserToPostLoginUrl();
     } catch (e) {
       const error = new Error(e.message);
       error.details = JSON.parse(JSON.stringify(e));
-      this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_METADATA_ENCRYPTION_ENABLEMENT_ERROR, error: error});
+      this.setState({
+        state: AuthenticationSetupWorkflowStates.UNEXPECTED_METADATA_ENCRYPTION_ENABLEMENT_ERROR,
+        error: error,
+      });
     }
   }
 
@@ -372,7 +366,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
 
 AuthenticationSetupContextProvider.propTypes = {
   context: PropTypes.any, // The application context
-  children: PropTypes.any // The children components
+  children: PropTypes.any, // The children components
 };
 export default withAppContext(AuthenticationSetupContextProvider);
 
@@ -385,10 +379,9 @@ export function withAuthenticationSetupContext(WrappedComponent) {
     render() {
       return (
         <AuthenticationSetupContext.Consumer>
-          {
-            AuthenticationSetupContext => <WrappedComponent
-              authenticationSetupContext={AuthenticationSetupContext} {...this.props} />
-          }
+          {(AuthenticationSetupContext) => (
+            <WrappedComponent authenticationSetupContext={AuthenticationSetupContext} {...this.props} />
+          )}
         </AuthenticationSetupContext.Consumer>
       );
     }

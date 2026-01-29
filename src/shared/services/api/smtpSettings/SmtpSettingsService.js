@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {ApiClient} from "../../../lib/apiClient/apiClient";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
 
 const SMTP_SETTINGS_RESOURCE_NAME = "smtp/settings";
 

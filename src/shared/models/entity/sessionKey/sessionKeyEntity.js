@@ -20,7 +20,7 @@ const ALLOWED_FOREIGN_MODELS = [
   // TODO: use the entity name later when entities will be moved
   "Resource",
   "Folder",
-  "Tag"
+  "Tag",
 ];
 
 class SessionKeyEntity extends EntityV2 {
@@ -36,7 +36,7 @@ class SessionKeyEntity extends EntityV2 {
      * Example in:  "536B8D0B..."
      * Example out: "9:536B8D0B..."
      */
-    if (typeof(this._props.session_key) === "string" && /^[0-9A-F]{64}$/.test(this._props.session_key)) {
+    if (typeof this._props.session_key === "string" && /^[0-9A-F]{64}$/.test(this._props.session_key)) {
       this._props.session_key = `9:${this._props.session_key}`;
     }
     /*
@@ -45,7 +45,7 @@ class SessionKeyEntity extends EntityV2 {
      * Example in:  "2025-09-17T12:15:33.618450+02:00[Europe/Paris]"
      * Example out: "2025-09-17T12:15:33.618450+02:00"
      */
-    if (typeof(this._props.modified) === "string") {
+    if (typeof this._props.modified === "string") {
       this._props.modified = this._props.modified.replace(/\[.*\]$/, "");
     }
 
@@ -58,30 +58,26 @@ class SessionKeyEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "foreign_model",
-        "foreign_id",
-        "session_key",
-      ],
-      "properties": {
-        "foreign_model": {
-          "type": "string",
-          "enum": ALLOWED_FOREIGN_MODELS
+      type: "object",
+      required: ["foreign_model", "foreign_id", "session_key"],
+      properties: {
+        foreign_model: {
+          type: "string",
+          enum: ALLOWED_FOREIGN_MODELS,
         },
-        "foreign_id": {
-          "type": "string",
-          "format": "uuid",
+        foreign_id: {
+          type: "string",
+          format: "uuid",
         },
-        "session_key": {
-          "type": "string",
-          "pattern": /^9:[0-9A-F]{64}$/i,
+        session_key: {
+          type: "string",
+          pattern: /^9:[0-9A-F]{64}$/i,
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-      }
+      },
     };
   }
 

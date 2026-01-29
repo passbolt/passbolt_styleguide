@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import CreateGpgKey from "./CreateGpgKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -26,8 +26,7 @@ export default class CreateGpgKeyPage {
    * @param {object} props Props to attach
    */
   constructor(props) {
-    this._page = render(this.jsx(props),
-      {legacyRoot: true});
+    this._page = render(this.jsx(props), { legacyRoot: true });
   }
 
   /**
@@ -35,30 +34,32 @@ export default class CreateGpgKeyPage {
    * @param {object} props Props to attach
    */
   jsx(props) {
-    return <MockTranslationProvider>
-      <CreateGpgKey {...props}/>
-    </MockTranslationProvider>;
+    return (
+      <MockTranslationProvider>
+        <CreateGpgKey {...props} />
+      </MockTranslationProvider>
+    );
   }
 
   /**
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('h1').textContent;
+    return this._page.container.querySelector("h1").textContent;
   }
 
   /**
    * Returns the passphrase input
    */
   get passphraseInput() {
-    return this._page.container.querySelector('#passphrase-input');
+    return this._page.container.querySelector("#passphrase-input");
   }
 
   /**
    * Returns the obfuscate button
    */
   get obfuscateButton() {
-    return this._page.container.querySelector('.password-view');
+    return this._page.container.querySelector(".password-view");
   }
 
   /**
@@ -72,98 +73,98 @@ export default class CreateGpgKeyPage {
    * Returns true if the component is in an obfuscated mode
    */
   get isObfuscated() {
-    return this.passphraseInput.getAttribute('type') === "password";
+    return this.passphraseInput.getAttribute("type") === "password";
   }
 
   /**
    * Returns the next button element
    */
   get nextButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns the secondary action link element
    */
   get secondaryActionLink() {
-    return this._page.container.querySelector('.form-actions button.link');
+    return this._page.container.querySelector(".form-actions button.link");
   }
 
   /**
    * Returns the element where is displayed the passphrase complexity text
    */
   get passphraseComplexity() {
-    return this._page.container.querySelector('.complexity-text');
+    return this._page.container.querySelector(".complexity-text");
   }
 
   /**
    * Returns true if the current passphrase is very weak
    */
   get isVeryWeakPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Very weak'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Very weak"));
   }
 
   /**
    * Returns true if the current passphrase is weak
    */
   get isWeakPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Weak'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Weak"));
   }
 
   /**
    * Returns true if the current passphrase is fair
    */
   get isFairPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Fair'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Fair"));
   }
 
   /**
    * Returns true if the current passphrase is strong
    */
   get isStrongPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Strong'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Strong"));
   }
 
   /**
    * Returns true if the current passphrase is very strong
    */
   get isVeryStrongPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Very strong'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Very strong"));
   }
 
   /**
    * Returns true if the current passphrase is empty
    */
   get isEmptyPassphrase() {
-    return Boolean(this.passphraseComplexity.textContent.startsWith('Quality'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith("Quality"));
   }
 
   /**
    * Returns true if one is processing
    */
   get isProcessing() {
-    return this.nextButton.classList.contains('processing');
+    return this.nextButton.classList.contains("processing");
   }
 
   /**
    * Returns true if one can go to the next step
    */
   get canGoToNextStep() {
-    return !this.nextButton.classList.contains('disabled');
+    return !this.nextButton.classList.contains("disabled");
   }
 
   /**
    * Returns true if the user can change something like the passphrase
    */
   get canChange() {
-    return !this.passphraseInput.hasAttribute('disabled');
+    return !this.passphraseInput.hasAttribute("disabled");
   }
 
   /**
    * Returns true if one can access to import
    */
   get canAccesToImport() {
-    return Boolean(this._page.container.querySelector('#import-key-link'));
+    return Boolean(this._page.container.querySelector("#import-key-link"));
   }
 
   /**
@@ -173,13 +174,12 @@ export default class CreateGpgKeyPage {
     return this._page.container.querySelector(".invalid-passphrase.error-message");
   }
 
-
   /**
    * Change the passphrase input value
    * @param passphrase The new passphrase
    */
   async fill(passphrase) {
-    fireEvent.change(this.passphraseInput, {target: {value: passphrase}});
+    fireEvent.change(this.passphraseInput, { target: { value: passphrase } });
     await waitFor(() => {
       if (this.passphraseInput.value !== passphrase) {
         throw new Error("Event is not processed yet");
@@ -192,7 +192,7 @@ export default class CreateGpgKeyPage {
    * @param inProgressFn Function called while the generation
    */
   async generateKey(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.nextButton, leftClick);
     await waitFor(inProgressFn);
   }
@@ -201,7 +201,7 @@ export default class CreateGpgKeyPage {
    * Toggle the obfuscate mode
    */
   async toggleObfuscate() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.obfuscateButton, leftClick);
     await waitFor(() => {});
   }
@@ -210,7 +210,7 @@ export default class CreateGpgKeyPage {
    * Click on the secondary action link.
    */
   async clickSecondaryActionLink(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.secondaryActionLink, leftClick);
     await waitFor(inProgressFn);
   }

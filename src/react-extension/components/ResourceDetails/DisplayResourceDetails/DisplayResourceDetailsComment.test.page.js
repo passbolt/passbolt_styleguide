@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayResourceDetailsComment from "./DisplayResourceDetailsComment";
@@ -40,12 +39,12 @@ export default class PasswordSidebarCommentSectionPage {
       <MockTranslationProvider>
         <AppContextProvider context={appContext}>
           <DialogContextProvider>
-            <ManageDialogs/>
-            <DisplayResourceDetailsComment {...props}/>
+            <ManageDialogs />
+            <DisplayResourceDetailsComment {...props} />
           </DialogContextProvider>
         </AppContextProvider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -118,8 +117,8 @@ class TitleHeaderPageObject {
   }
 
   /** Click on the title */
-  async click()  {
-    const leftClick = {button: 0};
+  async click() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.hyperlink, leftClick);
     await waitFor(() => {});
   }
@@ -142,7 +141,7 @@ class AddIconPageObject {
    * Returns the icon element
    */
   get icon() {
-    return  this._container.querySelector('.section-action');
+    return this._container.querySelector(".section-action");
   }
 
   /**
@@ -176,22 +175,18 @@ class AppContextProvider extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({setContext: this.setState.bind(this)});
+    this.setState({ setContext: this.setState.bind(this) });
   }
 
   /**
    * Render the component
    */
   render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        {this.props.children}
-      </AppContext.Provider>
-    );
+    return <AppContext.Provider value={this.state}>{this.props.children}</AppContext.Provider>;
   }
 }
 
 AppContextProvider.propTypes = {
   context: PropTypes.object,
-  children: PropTypes.any
+  children: PropTypes.any,
 };

@@ -16,13 +16,14 @@ import EntityV2 from "./entityV2";
 import {
   defaultAssociatedTestEntityV2Dto,
   defaultTestEntityV2Dto,
-  minimalTestEntityV2Dto, TestAssociatedCollection,
+  minimalTestEntityV2Dto,
+  TestAssociatedCollection,
   TestAssociatedEntityV2,
   TestEntityV2,
-  TestWithAssociationEntityV2
+  TestWithAssociationEntityV2,
 } from "./entityV2.test.data";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 import EntitySchema from "./entitySchema";
 import EntityValidationError from "./entityValidationError";
 
@@ -54,30 +55,28 @@ describe("EntityV2", () => {
 
     it("should throw if the dto does not validate against the entity schema.", () => {
       expect.assertions(1);
-      const dto = minimalTestEntityV2Dto({name: 42});
+      const dto = minimalTestEntityV2Dto({ name: 42 });
       expect(() => new TestEntityV2(dto)).toThrowEntityValidationError("name", "type");
     });
 
     it("should throw if a dto associated entity dto does not validate against the associated entity schema.", () => {
       expect.assertions(2);
-      const associatedEntityDto = {id: 42};
-      const dto = minimalTestEntityV2Dto({associated_entity: associatedEntityDto});
+      const associatedEntityDto = { id: 42 };
+      const dto = minimalTestEntityV2Dto({ associated_entity: associatedEntityDto });
       // Ideally the thrown error should indicate the path of the error.
-      expect(() => new TestEntityV2(dto))
-        .toThrowEntityValidationError("associated_entity.details.id", "type");
-      expect(() => new TestEntityV2(dto))
-        .not.toThrowEntityValidationError("id", "type");
+      expect(() => new TestEntityV2(dto)).toThrowEntityValidationError("associated_entity.details.id", "type");
+      expect(() => new TestEntityV2(dto)).not.toThrowEntityValidationError("id", "type");
     });
 
     it("should throw if the dto does not validate against the entity build rules.", () => {
       expect.assertions(1);
-      const dto = minimalTestEntityV2Dto({name: "Karen"});
+      const dto = minimalTestEntityV2Dto({ name: "Karen" });
       expect(() => new TestEntityV2(dto)).toThrowEntityValidationError("name", "karen");
     });
 
     it("call the marshall function prior to validate.", () => {
       expect.assertions(1);
-      const dto = minimalTestEntityV2Dto({name: "K4r3n"});
+      const dto = minimalTestEntityV2Dto({ name: "K4r3n" });
       expect(() => new TestEntityV2(dto)).toThrowEntityValidationError("name", "karen");
     });
 
@@ -97,7 +96,7 @@ describe("EntityV2", () => {
       jest.spyOn(TestEntityV2.prototype, "validateSchema");
       jest.spyOn(TestAssociatedEntityV2.prototype, "validateSchema");
 
-      new TestEntityV2(defaultTestEntityV2Dto(), {validate: false});
+      new TestEntityV2(defaultTestEntityV2Dto(), { validate: false });
 
       expect(TestEntityV2.prototype.validateSchema).not.toHaveBeenCalled();
 
@@ -108,7 +107,7 @@ describe("EntityV2", () => {
     it("validates the entity build rules.", () => {
       expect.assertions(2);
       jest.spyOn(TestEntityV2.prototype, "validateBuildRules");
-      const dto = defaultTestEntityV2Dto({name: "Karen"});
+      const dto = defaultTestEntityV2Dto({ name: "Karen" });
       expect(() => new TestEntityV2(dto)).toThrowEntityValidationError("name", "karen");
       expect(TestEntityV2.prototype.validateBuildRules).toHaveBeenCalled();
     });
@@ -119,7 +118,7 @@ describe("EntityV2", () => {
       jest.spyOn(TestEntityV2.prototype, "validateBuildRules");
       jest.spyOn(TestAssociatedEntityV2.prototype, "validateBuildRules");
 
-      new TestEntityV2(defaultTestEntityV2Dto(), {validate: false});
+      new TestEntityV2(defaultTestEntityV2Dto(), { validate: false });
 
       expect(TestEntityV2.prototype.validateBuildRules).not.toHaveBeenCalled();
 
@@ -132,15 +131,15 @@ describe("EntityV2", () => {
     it("throws an error if the getSchema function is not overridden.", () => {
       expect.assertions(1);
       const expectedError = new Error("The entity class should declare its schema.");
-      const dto = minimalTestEntityV2Dto({name: "K4r3n"});
-      const entity = new EntityV2(dto, {validate: false});
+      const dto = minimalTestEntityV2Dto({ name: "K4r3n" });
+      const entity = new EntityV2(dto, { validate: false });
       expect(() => entity.validateSchema()).toThrow(expectedError);
     });
 
     it("validates the entity schema.", () => {
       expect.assertions(1);
       // Schema is better covered on the constructor as unit tests tools were implemented originally for it.
-      const entity = new TestEntityV2({id: 42}, {validate: false});
+      const entity = new TestEntityV2({ id: 42 }, { validate: false });
       expect(() => entity.validateSchema()).toThrowEntityValidationError("id", "type");
     });
 
@@ -150,7 +149,7 @@ describe("EntityV2", () => {
       jest.spyOn(TestAssociatedEntityV2, "getSchema");
       expect(TestEntityV2._cachedSchema.TestEntityV2).toBeUndefined();
       expect(TestAssociatedEntityV2._cachedSchema.TestAssociatedEntityV2).toBeUndefined();
-      const entity = new TestEntityV2(defaultTestEntityV2Dto(), {validate: false});
+      const entity = new TestEntityV2(defaultTestEntityV2Dto(), { validate: false });
       entity.validateSchema();
       expect(TestEntityV2._cachedSchema.TestEntityV2).toEqual(TestEntityV2.getSchema());
       entity.validateSchema();
@@ -164,49 +163,49 @@ describe("EntityV2", () => {
 
       jest.spyOn(EntitySchema, "validate");
 
-      const entity = new TestWithAssociationEntityV2({
-        "name": "test name",
-        associated_entity: defaultAssociatedTestEntityV2Dto(),
-      }, {
-        validate: false
-      }); // ensure the cache is used even when validating entity from constructor.
+      const entity = new TestWithAssociationEntityV2(
+        {
+          name: "test name",
+          associated_entity: defaultAssociatedTestEntityV2Dto(),
+        },
+        {
+          validate: false,
+        },
+      ); // ensure the cache is used even when validating entity from constructor.
 
       entity.validate({
-        skipSchemaAssociationValidation: true
+        skipSchemaAssociationValidation: true,
       });
 
       const expectedSchema = TestWithAssociationEntityV2.getSchema();
       expectedSchema.required = ["name"];
 
-      expect(EntitySchema.validate).toHaveBeenCalledWith(
-        entity.constructor.name,
-        entity._props,
-        expectedSchema
-      );
+      expect(EntitySchema.validate).toHaveBeenCalledWith(entity.constructor.name, entity._props, expectedSchema);
     });
-
 
     it("validates should not association required if skipSchemaAssociationValidation option not exist.", () => {
       expect.assertions(1);
 
       jest.spyOn(EntitySchema, "validate");
 
-      const entity = new TestWithAssociationEntityV2({
-        "name": "test name",
-        associated_entity: defaultAssociatedTestEntityV2Dto(),
-      }, {
-        validate: false
-      }); // ensure the cache is used even when validating entity from constructor.
+      const entity = new TestWithAssociationEntityV2(
+        {
+          name: "test name",
+          associated_entity: defaultAssociatedTestEntityV2Dto(),
+        },
+        {
+          validate: false,
+        },
+      ); // ensure the cache is used even when validating entity from constructor.
 
       entity.validate({
-        skipSchemaAssociationValidation: false
+        skipSchemaAssociationValidation: false,
       });
-
 
       expect(EntitySchema.validate).toHaveBeenCalledWith(
         entity.constructor.name,
         entity._props,
-        TestWithAssociationEntityV2.getSchema()
+        TestWithAssociationEntityV2.getSchema(),
       );
     });
   });
@@ -223,7 +222,7 @@ describe("EntityV2", () => {
     it("validates the entity schema.", () => {
       expect.assertions(3);
       jest.spyOn(TestEntityV2.prototype, "validateSchema");
-      const entity = new TestEntityV2({id: 42}, {validate: false});
+      const entity = new TestEntityV2({ id: 42 }, { validate: false });
       const result = entity.validate();
       expect(result.hasErrors()).toBeTruthy();
       expect(result.hasError("id", "type")).toBeTruthy();
@@ -233,7 +232,7 @@ describe("EntityV2", () => {
     it("validates the build rules.", () => {
       expect.assertions(3);
       jest.spyOn(TestEntityV2.prototype, "validateBuildRules");
-      const entity = new TestEntityV2({name: "Karen"}, {validate: false});
+      const entity = new TestEntityV2({ name: "Karen" }, { validate: false });
       const result = entity.validate();
       expect(result.hasErrors()).toBeTruthy();
       expect(result.hasError("name", "karen")).toBeTruthy();
@@ -243,7 +242,7 @@ describe("EntityV2", () => {
     it("should skip required association from schema when option skipSchemaAssociationValidation exist.", () => {
       expect.assertions(1);
       const entity = new TestWithAssociationEntityV2(defaultTestEntityV2Dto(), {
-        validate: false
+        validate: false,
       });
       const result = entity.validate({
         skipSchemaAssociationValidation: true,
@@ -256,7 +255,7 @@ describe("EntityV2", () => {
       expect.assertions(2);
       const entity = new TestWithAssociationEntityV2(defaultTestEntityV2Dto(), {
         skipSchemaAssociationValidation: true,
-        validate: false
+        validate: false,
       });
       const result = entity.validate();
 
@@ -267,8 +266,8 @@ describe("EntityV2", () => {
     it("throws an error if the getSchema function is not overridden.", () => {
       expect.assertions(1);
       const expectedError = new Error("The entity class should declare its schema.");
-      const dto = minimalTestEntityV2Dto({name: "K4r3n"});
-      const entity = new EntityV2(dto, {validate: false});
+      const dto = minimalTestEntityV2Dto({ name: "K4r3n" });
+      const entity = new EntityV2(dto, { validate: false });
       expect(() => entity.validate()).toThrow(expectedError);
     });
   });
@@ -285,14 +284,20 @@ describe("EntityV2", () => {
     it("throws a validation error if the association validation failed.", () => {
       expect.assertions(1);
 
-      const entity = new TestWithAssociationEntityV2(defaultTestEntityV2Dto({
-        associated_entity: {},
-      }), {
-        validate: false
-      });
+      const entity = new TestWithAssociationEntityV2(
+        defaultTestEntityV2Dto({
+          associated_entity: {},
+        }),
+        {
+          validate: false,
+        },
+      );
 
       const validationErrors = new EntityValidationError();
-      validationErrors.addAssociationError("associated_entity", new EntityValidationError("id", "required", "Could not validate entity TestAssociatedEntityV2."));
+      validationErrors.addAssociationError(
+        "associated_entity",
+        new EntityValidationError("id", "required", "Could not validate entity TestAssociatedEntityV2."),
+      );
       expect(() => entity.validateAssociations()).toThrow(validationErrors);
     });
   });
@@ -304,7 +309,10 @@ describe("EntityV2", () => {
 
     it("retrieves associations of an entity.", () => {
       expect.assertions(1);
-      expect(TestEntityV2.associations).toStrictEqual({"associated_entity": TestAssociatedEntityV2, "associated_collection": TestAssociatedCollection});
+      expect(TestEntityV2.associations).toStrictEqual({
+        associated_entity: TestAssociatedEntityV2,
+        associated_collection: TestAssociatedCollection,
+      });
     });
   });
 
@@ -330,25 +338,33 @@ describe("EntityV2", () => {
     it("throws if property not defined in entity schema.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.get("undefined_prop")).toThrow(new Error("The property \"undefined_prop\" has no schema definition."));
+      expect(() => entity.get("undefined_prop")).toThrow(
+        new Error('The property "undefined_prop" has no schema definition.'),
+      );
     });
 
     it("throws if property is relative to an object.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.get("object")).toThrow(new Error("The property \"associated_entity\" should reference scalar properties only."));
+      expect(() => entity.get("object")).toThrow(
+        new Error('The property "associated_entity" should reference scalar properties only.'),
+      );
     });
 
     it("throws if property is relative to an array.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.get("array")).toThrow(new Error("The property \"associated_entity\" should reference scalar properties only."));
+      expect(() => entity.get("array")).toThrow(
+        new Error('The property "associated_entity" should reference scalar properties only.'),
+      );
     });
 
     it("throws if property is relative to an association.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.get("associated_entity")).toThrow(new Error("The property \"associated_entity\" should reference scalar properties only."));
+      expect(() => entity.get("associated_entity")).toThrow(
+        new Error('The property "associated_entity" should reference scalar properties only.'),
+      );
     });
   });
 
@@ -369,7 +385,7 @@ describe("EntityV2", () => {
     it("does not validate and set the property with a wrong value if the validation is disabled by option.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      entity.set("name", 42, {validate: false});
+      entity.set("name", 42, { validate: false });
       expect(entity.name).toBe(42);
     });
 
@@ -382,13 +398,17 @@ describe("EntityV2", () => {
     it("throws if property not defined in entity schema.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("undefined_prop")).toThrow(new Error("The property \"undefined_prop\" has no schema definition."));
+      expect(() => entity.set("undefined_prop")).toThrow(
+        new Error('The property "undefined_prop" has no schema definition.'),
+      );
     });
 
     it("throws if property is relative to an object.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("object")).toThrow(new Error("The property \"associated_entity\" should reference scalar properties only."));
+      expect(() => entity.set("object")).toThrow(
+        new Error('The property "associated_entity" should reference scalar properties only.'),
+      );
     });
 
     it("set an association property value with dto.", () => {
@@ -427,13 +447,17 @@ describe("EntityV2", () => {
     it("throws if association property value is not valid object.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("associated_entity", {id: "no uuid"})).toThrow(new Error("Could not validate entity TestAssociatedEntityV2."));
+      expect(() => entity.set("associated_entity", { id: "no uuid" })).toThrow(
+        new Error("Could not validate entity TestAssociatedEntityV2."),
+      );
     });
 
     it("throws if association property value is not valid entity.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("associated_entity", new EntityV2({id: "no uuid"}, {validate: false}))).toThrow(new Error("Could not validate entity TestAssociatedEntityV2."));
+      expect(() => entity.set("associated_entity", new EntityV2({ id: "no uuid" }, { validate: false }))).toThrow(
+        new Error("Could not validate entity TestAssociatedEntityV2."),
+      );
     });
 
     it("throws if association property value with property in the association is not valid.", () => {
@@ -451,13 +475,15 @@ describe("EntityV2", () => {
     it("throws if array prop index is not defined.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("array")).toThrow(new Error("The property \"array\" has no index passed."));
+      expect(() => entity.set("array")).toThrow(new Error('The property "array" has no index passed.'));
     });
 
     it("throws if array prop index has an incorrect format.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("array.[0]")).toThrow(new Error("The property \"array\" has an invalid index format. Expected format: digits."));
+      expect(() => entity.set("array.[0]")).toThrow(
+        new Error('The property "array" has an invalid index format. Expected format: digits.'),
+      );
     });
     it("throws if array prop items does not respect items type.", () => {
       expect.assertions(1);
@@ -476,7 +502,7 @@ describe("EntityV2", () => {
       expect.assertions(2);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       expect(entity.toDto().array.length).toEqual(2);
-      entity.set("array.1", null, {validate: false});
+      entity.set("array.1", null, { validate: false });
       expect(entity.toDto().array.length).toEqual(1);
     });
 
@@ -510,13 +536,17 @@ describe("EntityV2", () => {
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       const id = uuid();
       expect(entity.associatedCollection).toBeDefined();
-      expect(() => entity.set("associated_collection.1.id", id)).toThrow(new Error("The collection \"associatedCollection\" has no item at the index \"1\"."));
+      expect(() => entity.set("associated_collection.1.id", id)).toThrow(
+        new Error('The collection "associatedCollection" has no item at the index "1".'),
+      );
     });
 
     it("throws if association property value is not valid object.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("associated_collection.0.id", {id: "no uuid"})).toThrow(new Error("Could not validate property id."));
+      expect(() => entity.set("associated_collection.0.id", { id: "no uuid" })).toThrow(
+        new Error("Could not validate property id."),
+      );
     });
   });
 
@@ -547,13 +577,13 @@ describe("EntityV2", () => {
       const entity2 = new TestEntityV2(minimalTestEntityV2Dto());
       const diff = entity1.diffProps(entity2);
       expect(Object.keys(diff).length).toEqual(4);
-      expect(diff).toEqual({id: undefined, number: undefined, integer: undefined, boolean: undefined});
+      expect(diff).toEqual({ id: undefined, number: undefined, integer: undefined, boolean: undefined });
     });
 
     it("does not return difference on non scalar properties.", () => {
       expect.assertions(5);
       const entity1 = new TestEntityV2(defaultTestEntityV2Dto());
-      const entity2 = new TestEntityV2(defaultTestEntityV2Dto({boolean: !entity1.get("boolean")}));
+      const entity2 = new TestEntityV2(defaultTestEntityV2Dto({ boolean: !entity1.get("boolean") }));
       const diff = entity1.diffProps(entity2);
       expect(Object.keys(diff).length).toEqual(4);
       expect(diff.id).toEqual(entity2.id);
@@ -578,7 +608,8 @@ describe("EntityV2", () => {
     });
 
     it("returns true when the two entities have no differences.", () => {
-      expect.assertions(1); const entity1 = new TestEntityV2(defaultTestEntityV2Dto());
+      expect.assertions(1);
+      const entity1 = new TestEntityV2(defaultTestEntityV2Dto());
       const entity2 = new TestEntityV2(minimalTestEntityV2Dto());
       expect(entity1.hasDiffProps(entity2)).toBeTruthy();
     });

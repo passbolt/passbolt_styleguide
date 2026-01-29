@@ -12,7 +12,7 @@
  * @since         3.3.0
  */
 
-import {UsernameFieldSelectorException} from "./InFormFieldSelectorException";
+import { UsernameFieldSelectorException } from "./InFormFieldSelectorException";
 
 /**
  * All the possible in-form fields DOM selectors
@@ -78,5 +78,5 @@ export default {
   input[type='text' i][class*='password' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='passwort' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='passwort' i]:not([hidden]):not([disabled]),
-  input[type='text' i][class*='passwort' i]:not([hidden]):not([disabled])`
+  input[type='text' i][class*='passwort' i]:not([hidden]):not([disabled])`,
 };

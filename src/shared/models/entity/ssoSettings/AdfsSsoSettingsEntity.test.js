@@ -15,9 +15,9 @@
 import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
-import {defaultAdfsSsoSettingsDto} from "./SsoSettingsEntity.test.data";
+import { defaultAdfsSsoSettingsDto } from "./SsoSettingsEntity.test.data";
 import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
-import {defaultAdfsSsoSettingsViewModelDto} from "../../ssoSettings/SsoSettingsViewModel.test.data";
+import { defaultAdfsSsoSettingsViewModelDto } from "../../ssoSettings/SsoSettingsViewModel.test.data";
 
 describe("AdfsSsoSettingsEntity", () => {
   it("schema must validate", () => {
@@ -59,18 +59,18 @@ describe("AdfsSsoSettingsEntity", () => {
   });
 
   each([
-    {dto: {url: -1}, errorType: "type"},
-    {dto: {url: "test"}, errorType: "pattern"},
+    { dto: { url: -1 }, errorType: "type" },
+    { dto: { url: "test" }, errorType: "pattern" },
 
-    {dto: {openid_configuration_path: -1}, errorType: "type"},
-    {dto: {openid_configuration_path: ""}, errorType: "minLength"},
+    { dto: { openid_configuration_path: -1 }, errorType: "type" },
+    { dto: { openid_configuration_path: "" }, errorType: "minLength" },
 
-    {dto: {client_id: -1}, errorType: "type"},
-    {dto: {client_id: ""}, errorType: "minLength"},
+    { dto: { client_id: -1 }, errorType: "type" },
+    { dto: { client_id: "" }, errorType: "minLength" },
 
-    {dto: {client_secret: -1}, errorType: "type"},
-    {dto: {client_secret: ""}, errorType: "minLength"},
-  ]).describe("should throw an exception if DTO contains invalid values", scenario => {
+    { dto: { client_secret: -1 }, errorType: "type" },
+    { dto: { client_secret: "" }, errorType: "minLength" },
+  ]).describe("should throw an exception if DTO contains invalid values", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(2);
       const fieldName = Object.keys(scenario.dto)[0];
@@ -91,9 +91,9 @@ describe("AdfsSsoSettingsEntity", () => {
       "https://login.partner.adfs.lu",
       "https://localhost",
       "https://192.168.1.1",
-    ]).describe("Should validate the supported URL", url => {
+    ]).describe("Should validate the supported URL", (url) => {
       it(`${url}`, () => {
-        const dto = defaultAdfsSsoSettingsViewModelDto({url});
+        const dto = defaultAdfsSsoSettingsViewModelDto({ url });
         expect(() => new AdfsSsoSettingsEntity(dto)).not.toThrow();
       });
     });
@@ -126,9 +126,9 @@ describe("AdfsSsoSettingsEntity", () => {
       "ftp://login.partner.adfs.lu/",
       "ftp://localhost/",
       "ftp://192.168.1.1/",
-    ]).describe("Should not validate an unsupported URL", url => {
+    ]).describe("Should not validate an unsupported URL", (url) => {
       it(`${url}`, () => {
-        const dto = defaultAdfsSsoSettingsViewModelDto({url});
+        const dto = defaultAdfsSsoSettingsViewModelDto({ url });
         expect(() => new AdfsSsoSettingsEntity(dto)).toThrow(EntityValidationError);
       });
     });

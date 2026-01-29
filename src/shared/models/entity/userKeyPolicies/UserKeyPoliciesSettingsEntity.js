@@ -31,30 +31,28 @@ class UserKeyPoliciesSettingsEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "preferred_key_type",
-      ],
-      "properties": {
-        "preferred_key_type": {
-          "type": "string",
-          "enum": [GPG_KEY_TYPE_RSA, GPG_KEY_TYPE_CURVE]
+      type: "object",
+      required: ["preferred_key_type"],
+      properties: {
+        preferred_key_type: {
+          type: "string",
+          enum: [GPG_KEY_TYPE_RSA, GPG_KEY_TYPE_CURVE],
         },
-        "preferred_key_size": {
-          "type": "integer",
-          "enum": [GPG_KEY_SIZE_RSA_3072, GPG_KEY_SIZE_RSA_4096],
-          "nullable": true,
+        preferred_key_size: {
+          type: "integer",
+          enum: [GPG_KEY_SIZE_RSA_3072, GPG_KEY_SIZE_RSA_4096],
+          nullable: true,
         },
-        "preferred_key_curve": {
-          "type": "string",
-          "enum": [GPG_KEY_CURVE_25519],
-          "nullable": true,
+        preferred_key_curve: {
+          type: "string",
+          enum: [GPG_KEY_CURVE_25519],
+          nullable: true,
         },
-        "source": {
-          "type": "string",
-          "enum": [SETTINGS_SOURCE_FILE, SETTINGS_SOURCE_ENV, SETTINGS_SOURCE_DEFAULT]
-        }
-      }
+        source: {
+          type: "string",
+          enum: [SETTINGS_SOURCE_FILE, SETTINGS_SOURCE_ENV, SETTINGS_SOURCE_DEFAULT],
+        },
+      },
     };
   }
 
@@ -83,13 +81,21 @@ class UserKeyPoliciesSettingsEntity extends EntityV2 {
   validateBuildRules() {
     if (this._props.preferred_key_type === GPG_KEY_TYPE_RSA && Boolean(this._props.preferred_key_curve)) {
       const error = new EntityValidationError();
-      error.addError("preferred_key_curve", "unwanted_preferred_key_curve", `The 'preferred_key_curve' should be null if preferred_key_type is set to '${GPG_KEY_TYPE_RSA}'`);
+      error.addError(
+        "preferred_key_curve",
+        "unwanted_preferred_key_curve",
+        `The 'preferred_key_curve' should be null if preferred_key_type is set to '${GPG_KEY_TYPE_RSA}'`,
+      );
       throw error;
     }
 
     if (this._props.preferred_key_type === GPG_KEY_TYPE_CURVE && Boolean(this._props.preferred_key_size)) {
       const error = new EntityValidationError();
-      error.addError("preferred_key_size", "unwanted_preferred_key_size", `The 'preferred_key_size' should be null if preferred_key_type is set to '${GPG_KEY_TYPE_CURVE}'`);
+      error.addError(
+        "preferred_key_size",
+        "unwanted_preferred_key_size",
+        `The 'preferred_key_size' should be null if preferred_key_type is set to '${GPG_KEY_TYPE_CURVE}'`,
+      );
       throw error;
     }
 
@@ -104,10 +110,10 @@ class UserKeyPoliciesSettingsEntity extends EntityV2 {
   static createFromDefault(data = {}) {
     const defaultData = {
       preferred_key_type: GPG_KEY_TYPE_RSA,
-      source: SETTINGS_SOURCE_DEFAULT
+      source: SETTINGS_SOURCE_DEFAULT,
     };
 
-    return new UserKeyPoliciesSettingsEntity({...defaultData, ...data});
+    return new UserKeyPoliciesSettingsEntity({ ...defaultData, ...data });
   }
 
   /*

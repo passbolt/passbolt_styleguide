@@ -12,16 +12,15 @@
  * @since         4.3.0
  */
 import React from "react";
-import {defaultProps} from "./Totp.test.data";
+import { defaultProps } from "./Totp.test.data";
 import Totp from "./Totp";
 
 export default {
-  title: 'Foundations/Password',
-  component: "Totp"
+  title: "Foundations/Password",
+  component: "Totp",
 };
 
-const Template = args =>
-  <Totp {...args}/>;
+const Template = (args) => <Totp {...args} />;
 
 export const DefaultTotp = Template.bind({});
 DefaultTotp.args = defaultProps();

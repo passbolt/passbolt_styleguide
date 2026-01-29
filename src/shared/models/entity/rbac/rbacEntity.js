@@ -16,7 +16,7 @@ import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 import ActionEntity from "./actionEntity";
 import UiActionEntity from "./uiActionEntity";
-import {controlFunctions} from "../../../services/rbacs/controlFunctionEnumeration";
+import { controlFunctions } from "../../../services/rbacs/controlFunctionEnumeration";
 
 const ENTITY_NAME = "Rbac";
 const FOREIGN_MODEL_UI_ACTION = "UiAction";
@@ -27,19 +27,15 @@ class RbacEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      RbacEntity.ENTITY_NAME,
-      dto,
-      RbacEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(RbacEntity.ENTITY_NAME, dto, RbacEntity.getSchema()), options);
 
     // Associations
     if (this._props.action) {
-      this._action = new ActionEntity(this._props.action, {clone: false});
+      this._action = new ActionEntity(this._props.action, { clone: false });
     }
     delete this._props.action;
     if (this._props.ui_action) {
-      this._ui_action = new UiActionEntity(this._props.ui_action, {clone: false});
+      this._ui_action = new UiActionEntity(this._props.ui_action, { clone: false });
     }
     delete this._props.ui_action;
   }
@@ -50,46 +46,33 @@ class RbacEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "id",
-        "role_id",
-        "foreign_model",
-        "foreign_id",
-        "control_function"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["id", "role_id", "foreign_model", "foreign_id", "control_function"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "role_id": {
-          "type": "string",
-          "format": "uuid"
+        role_id: {
+          type: "string",
+          format: "uuid",
         },
-        "foreign_model": {
-          "type": "string",
-          "enum": [
-            RbacEntity.FOREIGN_MODEL_ACTION,
-            RbacEntity.FOREIGN_MODEL_UI_ACTION,
-          ]
+        foreign_model: {
+          type: "string",
+          enum: [RbacEntity.FOREIGN_MODEL_ACTION, RbacEntity.FOREIGN_MODEL_UI_ACTION],
         },
-        "foreign_id": {
-          "type": "string",
-          "format": "uuid"
+        foreign_id: {
+          type: "string",
+          format: "uuid",
         },
-        "control_function": {
-          "type": "string",
-          "enum": [
-            controlFunctions.ALLOW,
-            controlFunctions.DENY,
-            controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP
-          ]
+        control_function: {
+          type: "string",
+          enum: [controlFunctions.ALLOW, controlFunctions.DENY, controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP],
         },
         // Association
-        "action": ActionEntity.getSchema(), // relative action entity
-        "ui_action": UiActionEntity.getSchema(), // relative ui action entity
-      }
+        action: ActionEntity.getSchema(), // relative action entity
+        ui_action: UiActionEntity.getSchema(), // relative ui action entity
+      },
     };
   }
 
@@ -128,7 +111,7 @@ class RbacEntity extends Entity {
   toUpdateDto() {
     return {
       id: this.id,
-      control_function: this.controlFunction
+      control_function: this.controlFunction,
     };
   }
 
@@ -236,7 +219,7 @@ class RbacEntity extends Entity {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {action: true, ui_action: true};
+    return { action: true, ui_action: true };
   }
 
   /**

@@ -11,15 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import i18n from 'i18next';
-import {initReactI18next} from 'react-i18next';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 import enTranslations from "../../locales/en-UK/common.json";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../shared/context/AppContext/AppContext";
-import {Router, NavLink, Route, Switch} from "react-router-dom";
-import {createMemoryHistory} from "history";
-import UserWorkspaceContextProvider, {UserWorkspaceFilterTypes, UserWorkspaceContext} from "./UserWorkspaceContext";
+import { Router, NavLink, Route, Switch } from "react-router-dom";
+import { createMemoryHistory } from "history";
+import UserWorkspaceContextProvider, { UserWorkspaceFilterTypes, UserWorkspaceContext } from "./UserWorkspaceContext";
 
 /**
  * The UserWorkspaceContextPage component represented as a page
@@ -49,21 +49,21 @@ export default class UserWorkspaceContextPage {
       .use(initReactI18next)
       // init i18next, for all options read: https://www.i18next.com/overview/configuration-options
       .init({
-        lng: 'en-UK',
+        lng: "en-UK",
         resources: {
           "en-UK": {
-            common: enTranslations
-          }
+            common: enTranslations,
+          },
         },
         react: {
           useSuspense: false,
         },
         fallbackLng: false,
-        ns: ['common'],
-        defaultNS: 'common',
+        ns: ["common"],
+        defaultNS: "common",
         keySeparator: false, // don't use the dot for separator of nested json object
         nsSeparator: false, // allowed ':' in key to avoid namespace separator
-        debug: false
+        debug: false,
       });
   }
 
@@ -110,7 +110,7 @@ export default class UserWorkspaceContextPage {
   async goToLink(linkCssSelector) {
     const oldFilter = this.filter;
     const element = this._page.container.querySelector(linkCssSelector);
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {
       if (oldFilter == this.filter) {
@@ -124,35 +124,35 @@ export default class UserWorkspaceContextPage {
    */
   async goToAllUsers() {
     this.setup(this.context, this.props);
-    await this.goToLink('.all');
+    await this.goToLink(".all");
   }
 
   /**
    * Go to the Recently Modified search filter route
    */
   async goToRecentlyModified() {
-    await this.goToLink('.recently-modified');
+    await this.goToLink(".recently-modified");
   }
 
   /**
    * Go to the Recently Modified search filter route
    */
   async goToSuspendedUsers() {
-    await this.goToLink('.suspended-users');
+    await this.goToLink(".suspended-users");
   }
 
   /**
    * Go to the Attention Required Account Recovery search filter route
    */
   async goToAccountRecoveryRequestUsers() {
-    await this.goToLink('.account-recovery-request-users');
+    await this.goToLink(".account-recovery-request-users");
   }
 
   /**
    * Go to the Attention Required Missing metadata keys search filter route
    */
   async goToMissingMetadataKeysUsers() {
-    await this.goToLink('.missing-metadata-keys-users');
+    await this.goToLink(".missing-metadata-keys-users");
   }
 
   /**
@@ -160,8 +160,8 @@ export default class UserWorkspaceContextPage {
    * @param text A specific text search filter
    */
   async goToText(text) {
-    this.setup(this.context, this.props, {text});
-    await this.goToLink('.text');
+    this.setup(this.context, this.props, { text });
+    await this.goToLink(".text");
   }
 
   /**
@@ -169,8 +169,8 @@ export default class UserWorkspaceContextPage {
    * @param group A specific group search filter
    */
   async goToGroup(group) {
-    this.setup(this.context, this.props, {group});
-    await this.goToLink('.group');
+    this.setup(this.context, this.props, { group });
+    await this.goToLink(".group");
   }
 
   /**
@@ -181,7 +181,6 @@ export default class UserWorkspaceContextPage {
     await this.userWorkspaceContext.onUserSelected.single(user);
     await waitFor(() => {});
   }
-
 
   /**
    * Toggle the display lock on details
@@ -196,7 +195,7 @@ export default class UserWorkspaceContextPage {
    * @param user A specific user
    * @pram group A group
    */
-  updateDetails({user, group}) {
+  updateDetails({ user, group }) {
     this.userWorkspaceContext.details = {
       user,
       group,
@@ -208,11 +207,9 @@ export default class UserWorkspaceContextPage {
    * Remove from the selected users those which are not present in regard of the current displayed list
    */
   unselectUsersNotFiltered() {
-    const matchId = selectedUser => user => user.id === selectedUser.id;
+    const matchId = (selectedUser) => (user) => user.id === selectedUser.id;
 
-    const filtered = this.selectedUsers.filter(selectedUser =>
-      this.filteredUsers.some(matchId(selectedUser))
-    );
+    const filtered = this.selectedUsers.filter((selectedUser) => this.filteredUsers.some(matchId(selectedUser)));
 
     if (filtered.length === 1) {
       this.userWorkspaceContext.onUserSelected.single(filtered[0]);
@@ -220,8 +217,6 @@ export default class UserWorkspaceContextPage {
       this.userWorkspaceContext.onUserSelected.none();
     }
   }
-
-
 
   /**
    * Returns the rendering of  the page
@@ -232,60 +227,64 @@ export default class UserWorkspaceContextPage {
   setup(appContext, props, args = {}) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-        <Router history={createMemoryHistory({initialEntries: [
-          "/app/groups/view/:selectedGroupId",
-          "/app/users/view/:selectedResourceId",
-          "/app/users",
-        ]})}>
+        <Router
+          history={createMemoryHistory({
+            initialEntries: ["/app/groups/view/:selectedGroupId", "/app/users/view/:selectedResourceId", "/app/users"],
+          })}
+        >
           <Switch>
-            <Route path={[
-              "/app/groups/view/:selectedGroupId",
-              "/app/users/view/:selectedUserId",
-              "/app/users",
-            ]}>
+            <Route path={["/app/groups/view/:selectedGroupId", "/app/users/view/:selectedUserId", "/app/users"]}>
               <UserWorkspaceContextProvider {...props}>
                 <UserWorkspaceContext.Consumer>
-                  {
-                    UserWorkspaceContext => {
-                      this.userWorkspaceContext = UserWorkspaceContext;
-                      return (<></>);
-                    }
-                  }
+                  {(UserWorkspaceContext) => {
+                    this.userWorkspaceContext = UserWorkspaceContext;
+                    return <></>;
+                  }}
                 </UserWorkspaceContext.Consumer>
               </UserWorkspaceContextProvider>
             </Route>
           </Switch>
-          <NavLink
-            to="/app/users">
+          <NavLink to="/app/users">
             <a className="all"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED}}}}>
+            to={{ pathname: "/app/users", state: { filter: { type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED } } }}
+          >
             <a className="recently-modified"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST}}}}>
+            to={{
+              pathname: "/app/users",
+              state: { filter: { type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST } },
+            }}
+          >
             <a className="account-recovery-request-users"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY}}}}>
+            to={{ pathname: "/app/users", state: { filter: { type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY } } }}
+          >
             <a className="missing-metadata-keys-users"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.SUSPENDED_USER}}}}>
+            to={{ pathname: "/app/users", state: { filter: { type: UserWorkspaceFilterTypes.SUSPENDED_USER } } }}
+          >
             <a className="suspended-users"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.TEXT, payload: args.text}}}}>
+            to={{
+              pathname: "/app/users",
+              state: { filter: { type: UserWorkspaceFilterTypes.TEXT, payload: args.text } },
+            }}
+          >
             <a className="text"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: `/app/groups/view/${(args.group ? args.group.id : "")}`}}>
+          <NavLink to={{ pathname: `/app/groups/view/${args.group ? args.group.id : ""}` }}>
             <a className="group"></a>
-          </NavLink>x
+          </NavLink>
+          x
         </Router>
       </AppContext.Provider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 }

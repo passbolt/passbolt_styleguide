@@ -12,7 +12,11 @@
  * @since         3.8.0
  */
 
-import {defaultEmailNotificationSettings, defaultSettingsModel, withoutSourceNotificationSettings} from "../../../react-extension/components/Administration/DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration.test.data";
+import {
+  defaultEmailNotificationSettings,
+  defaultSettingsModel,
+  withoutSourceNotificationSettings,
+} from "../../../react-extension/components/Administration/DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration.test.data";
 import EmailNotificationDTO from "./EmailNotificationDTO";
 
 describe("EmailNotificationDTO", () => {

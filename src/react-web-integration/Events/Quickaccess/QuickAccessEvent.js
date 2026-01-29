@@ -12,13 +12,13 @@
  * @since         3.3.0
  */
 
-import {Autofill} from "../../Autofill/Autofill";
+import { Autofill } from "../../Autofill/Autofill";
 
 function fillForm() {
-  port.on('passbolt.quickaccess.fill-form', (requestId, username, secret, url) => {
-    const quickaccessFormData = {requestId, username, secret, url};
+  port.on("passbolt.quickaccess.fill-form", (requestId, username, secret, url) => {
+    const quickaccessFormData = { requestId, username, secret, url };
     Autofill.fillForm(quickaccessFormData);
   });
 }
 
-export const QuickAccessEvent = {fillForm};
+export const QuickAccessEvent = { fillForm };

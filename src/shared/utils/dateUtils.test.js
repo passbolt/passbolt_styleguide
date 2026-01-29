@@ -12,9 +12,9 @@
  * @since         4.4.0
  */
 
-import {DateTime} from "luxon";
-import {formatDateForApi, formatDateTimeAgo, formatExpirationDateTimeAgo} from "./dateUtils";
-import each from 'jest-each';
+import { DateTime } from "luxon";
+import { formatDateForApi, formatDateTimeAgo, formatExpirationDateTimeAgo } from "./dateUtils";
+import each from "jest-each";
 
 describe("dateUtils", () => {
   beforeEach(() => {
@@ -22,13 +22,12 @@ describe("dateUtils", () => {
   });
 
   describe("::formatDateTimeAgo", () => {
-    const translation = jest.fn(t => t);
+    const translation = jest.fn((t) => t);
     const language = "en-GB";
 
     const now = new Date();
 
-    jest.useFakeTimers()
-      .setSystemTime(now);
+    jest.useFakeTimers().setSystemTime(now);
 
     it("should return n/a if the given date is null", () => {
       expect.assertions(2);
@@ -39,7 +38,7 @@ describe("dateUtils", () => {
 
     it("should return 'Never' translated if the date is 'Infinity'", () => {
       expect.assertions(3);
-      const date = 'Infinity';
+      const date = "Infinity";
       expect(formatDateTimeAgo(date, translation, language)).toStrictEqual("Never");
       expect(translation).toHaveBeenCalledWith("Never");
       expect(translation).toHaveBeenCalledTimes(1);
@@ -58,12 +57,12 @@ describe("dateUtils", () => {
       //a day is not 25 hours but it stabilized this test
       const _2days = 1000 * 60 * 60 * 25 * 2;
       const date = new Date(now.getTime() - _2days);
-      const spyOnDateTimeToRelative = jest.spyOn(DateTime.prototype, 'toRelative');
+      const spyOnDateTimeToRelative = jest.spyOn(DateTime.prototype, "toRelative");
 
       expect(formatDateTimeAgo(date.toISOString(), translation, language)).toStrictEqual("2 days ago");
       expect(translation).not.toHaveBeenCalled();
 
-      expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({locale: language});
+      expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({ locale: language });
       expect(spyOnDateTimeToRelative).toHaveBeenCalledTimes(1);
     });
 
@@ -72,27 +71,24 @@ describe("dateUtils", () => {
       //a day is not 25 hours but it stabilized this test
       const _2days = 1000 * 60 * 60 * 25 * 2;
       const date = new Date(now.getTime() + _2days);
-      const spyOnDateTimeToRelative = jest.spyOn(DateTime.prototype, 'toRelative');
+      const spyOnDateTimeToRelative = jest.spyOn(DateTime.prototype, "toRelative");
       expect(formatDateTimeAgo(date.toISOString(), translation, language)).toStrictEqual("in 2 days");
       expect(translation).not.toHaveBeenCalled();
 
-      expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({locale: language});
+      expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({ locale: language });
       expect(spyOnDateTimeToRelative).toHaveBeenCalledTimes(1);
     });
   });
 
   describe("::formatExpirationDateTimeAgo", () => {
-    const translation = jest.fn(t => t);
+    const translation = jest.fn((t) => t);
     const language = "en-GB";
 
     const now = new Date();
 
-    jest.useFakeTimers()
-      .setSystemTime(now);
+    jest.useFakeTimers().setSystemTime(now);
 
-    each([
-      0, false, null, undefined, []
-    ]).describe("should return 'Never' if the given date is falsy", scenario => {
+    each([0, false, null, undefined, []]).describe("should return 'Never' if the given date is falsy", (scenario) => {
       it(`with: ${scenario}`, () => {
         expect.assertions(3);
         const date = null;
@@ -104,7 +100,7 @@ describe("dateUtils", () => {
 
     it("should return 'Never' translated if the date is 'Infinity'", () => {
       expect.assertions(3);
-      const date = 'Infinity';
+      const date = "Infinity";
       expect(formatExpirationDateTimeAgo(date, translation, language)).toStrictEqual("Never");
       expect(translation).toHaveBeenCalledWith("Never");
       expect(translation).toHaveBeenCalledTimes(1);
@@ -123,12 +119,12 @@ describe("dateUtils", () => {
       //a day is not 25 hours but it stabilized this test
       const _2days = 1000 * 60 * 60 * 25 * 2;
       const date = new Date(now.getTime() - _2days);
-      const spyOnDateTimeToRelative = jest.spyOn(DateTime.prototype, 'toRelative');
+      const spyOnDateTimeToRelative = jest.spyOn(DateTime.prototype, "toRelative");
 
       expect(formatExpirationDateTimeAgo(date.toISOString(), translation, language)).toStrictEqual("2 days ago");
       expect(translation).not.toHaveBeenCalled();
 
-      expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({locale: language});
+      expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({ locale: language });
       expect(spyOnDateTimeToRelative).toHaveBeenCalledTimes(1);
     });
 
@@ -137,11 +133,11 @@ describe("dateUtils", () => {
       //a day is not 25 hours but it stabilized this test
       const _2days = 1000 * 60 * 60 * 25 * 2;
       const date = new Date(now.getTime() + _2days);
-      const spyOnDateTimeToRelative = jest.spyOn(DateTime.prototype, 'toRelative');
+      const spyOnDateTimeToRelative = jest.spyOn(DateTime.prototype, "toRelative");
       expect(formatExpirationDateTimeAgo(date.toISOString(), translation, language)).toStrictEqual("in 2 days");
       expect(translation).not.toHaveBeenCalled();
 
-      expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({locale: language});
+      expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({ locale: language });
       expect(spyOnDateTimeToRelative).toHaveBeenCalledTimes(1);
     });
   });

@@ -11,11 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import EnterNameForm from "./EnterNameForm";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The EnterNameForm component represented as a page
@@ -29,53 +30,53 @@ export default class EnterNameFormPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <EnterNameForm {...props}/>
+          <EnterNameForm {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
     );
+    this.user = userEvent.setup();
   }
 
   /**
    * Returns the form element
    */
   get enterNameForm() {
-    return this._page.container.querySelector('.enter-name');
+    return this._page.container.querySelector(".enter-name");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.enter-name h1').textContent;
+    return this._page.container.querySelector(".enter-name h1").textContent;
   }
 
   /**
    * Returns the firstname input element
    */
   get firstname() {
-    return this._page.container.querySelector('#firstname-input');
+    return this._page.container.querySelector("#firstname-input");
   }
 
   /**
    * Returns the firstname error message input element
    */
   get firstnameErrorMessage() {
-    return this._page.container.querySelectorAll('.error-message')[0].textContent;
+    return this._page.container.querySelectorAll(".error-message")[0].textContent;
   }
 
   /**
    * Returns the lastname input element
    */
   get lastname() {
-    return this._page.container.querySelector('#lastname-input');
+    return this._page.container.querySelector("#lastname-input");
   }
 
   /**
    * Returns the lastname error message input element
    */
   get lastnameErrorMessage() {
-    return this._page.container.querySelectorAll('.error-message')[1].textContent;
+    return this._page.container.querySelectorAll(".error-message")[1].textContent;
   }
 
   /**
@@ -89,7 +90,7 @@ export default class EnterNameFormPage {
    * Returns the have an account button element
    */
   get haveAccount() {
-    return this._page.container.querySelector('.form-actions a');
+    return this._page.container.querySelector(".form-actions a");
   }
 
   /**
@@ -100,31 +101,23 @@ export default class EnterNameFormPage {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
-  }
-
-  /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
+  async click(element) {
+    await this.user.click(element);
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
-    const dataInputEvent = {target: {value: data}};
+  fillInput(element, data) {
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 
   /** fill the firstname input element with data */
-  insertFirstname(data)  {
+  insertFirstname(data) {
     this.fillInput(this.firstname, data);
   }
 
   /** fill the lastname input element with data */
-  insertLastname(data)  {
+  insertLastname(data) {
     this.fillInput(this.lastname, data);
   }
 
@@ -135,11 +128,6 @@ export default class EnterNameFormPage {
 
   /** click register without wait for */
   registerWithoutWaitFor() {
-    this.clickWithoutWaitFor(this.registerButton);
+    this.click(this.registerButton);
   }
 }
-
-
-
-
-

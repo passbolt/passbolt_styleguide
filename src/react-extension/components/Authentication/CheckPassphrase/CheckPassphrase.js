@@ -11,19 +11,19 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 
 /**
  * The component display variations.
  * @type {Object}
  */
 export const CheckPassphraseVariations = {
-  SETUP: 'Setup',
-  RECOVER: 'Recover'
+  SETUP: "Setup",
+  RECOVER: "Recover",
 };
 
 /**
@@ -47,17 +47,17 @@ class CheckPassphrase extends Component {
    */
   get defaultState() {
     return {
-      passphrase: '', // The passphrase
+      passphrase: "", // The passphrase
       rememberMe: false, // The remember passphrase flag
       isObfuscated: true, // True if the passphrase should not be visible
       actions: {
-        processing: false // True if one's processing passphrase
+        processing: false, // True if one's processing passphrase
       },
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
         invalidPassphrase: false, // True if the passphrase is invalid
-      }
+      },
     };
   }
 
@@ -129,10 +129,9 @@ class CheckPassphrase extends Component {
       passphrase: event.target.value,
       errors: {
         emptyPassphrase: false,
-        invalidPassphrase: false
-      }
+        invalidPassphrase: false,
+      },
     };
-
 
     this.setState(newState);
   }
@@ -148,8 +147,7 @@ class CheckPassphrase extends Component {
    * Check the private gpg key passphrase
    */
   async check() {
-    await this.props.onComplete(this.state.passphrase, this.state.rememberMe)
-      .catch(this.onCheckFailure.bind(this));
+    await this.props.onComplete(this.state.passphrase, this.state.rememberMe).catch(this.onCheckFailure.bind(this));
   }
 
   /**
@@ -161,7 +159,7 @@ class CheckPassphrase extends Component {
     // Whenever the passphrase is invalid.
     this.toggleProcessing();
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({errors: {...this.state.errors, invalidPassphrase: true}});
+      this.setState({ errors: { ...this.state.errors, invalidPassphrase: true } });
       this.focusOnPassphrase();
     } else {
       throw error;
@@ -172,16 +170,16 @@ class CheckPassphrase extends Component {
    * Toggle the remember me flag value
    */
   toggleRemmemberMe() {
-    this.setState({rememberMe: !this.state.rememberMe});
+    this.setState({ rememberMe: !this.state.rememberMe });
   }
 
   /**
    * Validate the security token data
    */
   validate() {
-    const {passphrase} = this.state;
-    const errors = {...this.state.errors, emptyPassphrase: passphrase.trim() === ''};
-    this.setState({hasBeenValidated: true, errors});
+    const { passphrase } = this.state;
+    const errors = { ...this.state.errors, emptyPassphrase: passphrase.trim() === "" };
+    this.setState({ hasBeenValidated: true, errors });
 
     return errors;
   }
@@ -190,7 +188,7 @@ class CheckPassphrase extends Component {
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({actions: {processing: !this.state.actions.processing}});
+    this.setState({ actions: { processing: !this.state.actions.processing } });
   }
 
   /**
@@ -204,14 +202,20 @@ class CheckPassphrase extends Component {
    * Render the component
    */
   render() {
-    const processingClassName = this.isProcessing ? 'processing' : '';
+    const processingClassName = this.isProcessing ? "processing" : "";
     return (
       <div className="check-passphrase">
-        <h1><Trans>Please enter your passphrase to continue.</Trans></h1>
+        <h1>
+          <Trans>Please enter your passphrase to continue.</Trans>
+        </h1>
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <div className="form-content">
-            <div className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
-              <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
+            <div
+              className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}
+            >
+              <label htmlFor="passphrase">
+                <Trans>Passphrase</Trans>
+              </label>
               <Password
                 id="passphrase"
                 autoComplete="off"
@@ -220,19 +224,24 @@ class CheckPassphrase extends Component {
                 value={this.state.passphrase}
                 preview={true}
                 onChange={this.handleChangePassphrase}
-                disabled={!this.areActionsAllowed}/>
-              {this.state.hasBeenValidated &&
-              <>
-                {this.state.errors.emptyPassphrase &&
-                  <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
-                }
-                {!this.state.errors.emptyPassphrase && this.state.errors.invalidPassphrase &&
-                  <div className="invalid-passphrase error-message"><Trans>The passphrase is invalid.</Trans></div>
-                }
-              </>
-              }
+                disabled={!this.areActionsAllowed}
+              />
+              {this.state.hasBeenValidated && (
+                <>
+                  {this.state.errors.emptyPassphrase && (
+                    <div className="empty-passphrase error-message">
+                      <Trans>The passphrase should not be empty.</Trans>
+                    </div>
+                  )}
+                  {!this.state.errors.emptyPassphrase && this.state.errors.invalidPassphrase && (
+                    <div className="invalid-passphrase error-message">
+                      <Trans>The passphrase is invalid.</Trans>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
-            {this.props.canRememberMe &&
+            {this.props.canRememberMe && (
               <div className="input checkbox">
                 <input
                   id="remember-me"
@@ -240,28 +249,32 @@ class CheckPassphrase extends Component {
                   name="remember-me"
                   value={this.state.rememberMe}
                   onChange={this.handleToggleRememberMe}
-                  disabled={!this.areActionsAllowed}/>
+                  disabled={!this.areActionsAllowed}
+                />
                 <label htmlFor="remember-me">
                   <Trans>Remember until signed out.</Trans>
                 </label>
               </div>
-            }
+            )}
           </div>
           <div className="form-actions">
             <button
               type="submit"
               className={`button primary big full-width ${processingClassName}`}
-              disabled={this.isProcessing}>
+              disabled={this.isProcessing}
+            >
               <Trans>Verify</Trans>
             </button>
-            {this.props.onSecondaryActionClick &&
-            <button type="button" className="link" onClick={this.props.onSecondaryActionClick}>
-              {{
-                [CheckPassphraseVariations.SETUP]: <Trans>I lost my passphrase, generate a new private key.</Trans>,
-                [CheckPassphraseVariations.RECOVER]: <Trans>Help, I lost my passphrase.</Trans>,
-              }[this.props.displayAs]}
-            </button>
-            }
+            {this.props.onSecondaryActionClick && (
+              <button type="button" className="link" onClick={this.props.onSecondaryActionClick}>
+                {
+                  {
+                    [CheckPassphraseVariations.SETUP]: <Trans>I lost my passphrase, generate a new private key.</Trans>,
+                    [CheckPassphraseVariations.RECOVER]: <Trans>Help, I lost my passphrase.</Trans>,
+                  }[this.props.displayAs]
+                }
+              </button>
+            )}
           </div>
         </form>
       </div>
@@ -277,10 +290,7 @@ CheckPassphrase.propTypes = {
   context: PropTypes.any, // The application context
   userPassphrasePolicies: PropTypes.object.isRequired, // the user passphrase policies
   onComplete: PropTypes.func.isRequired, // The callback to trigger when the user wants to verify its passphrase
-  displayAs: PropTypes.PropTypes.oneOf([
-    CheckPassphraseVariations.SETUP,
-    CheckPassphraseVariations.RECOVER
-  ]), // Defines how the form should be displayed and behaves
+  displayAs: PropTypes.PropTypes.oneOf([CheckPassphraseVariations.SETUP, CheckPassphraseVariations.RECOVER]), // Defines how the form should be displayed and behaves
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
 };

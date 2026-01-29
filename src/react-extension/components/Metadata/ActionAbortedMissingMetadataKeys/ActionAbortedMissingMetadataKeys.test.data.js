@@ -20,6 +20,6 @@
 export function defaultProps(data = {}) {
   return {
     onClose: jest.fn(),
-    ...data
+    ...data,
   };
 }

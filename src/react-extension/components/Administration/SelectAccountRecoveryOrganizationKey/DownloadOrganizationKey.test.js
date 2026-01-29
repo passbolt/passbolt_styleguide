@@ -15,7 +15,7 @@
 /**
  * Unit tests on ConfirmSaveAccountRecoverySettings in regard of specifications
  */
-import {waitFor} from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import DownloadOrganizationKeyPage from "./DownloadOrganizationKey.test.page";
 
 beforeEach(() => {
@@ -25,10 +25,10 @@ beforeEach(() => {
 describe("See the Confirm Organization Recovery Key download", () => {
   let page; // The page to test against
 
-  it('As AD I can see a dialog to ensure that the private key has been downloaded', async() => {
+  it("As AD I can see a dialog to ensure that the private key has been downloaded", async () => {
     expect.assertions(6);
     page = new DownloadOrganizationKeyPage();
-    await waitFor(() => { });
+    await waitFor(() => {});
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
     expect(page.title.textContent).toBe("Confirm Organization Recovery Key download");

@@ -14,7 +14,7 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import UiActionEntity from "./uiActionEntity";
-import {defaultUiActionData} from "./uiActionEntity.test.data";
+import { defaultUiActionData } from "./uiActionEntity.test.data";
 import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
 
@@ -35,39 +35,39 @@ describe("UiActionEntity", () => {
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'valid uuid', rule: 'format', value: 'invalid-id'},
-    ]).describe("Should validate the id", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+      { scenario: "valid uuid", rule: "format", value: "invalid-id" },
+    ]).describe("Should validate the id", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultUiActionData({
-          id: test.value
+          id: test.value,
         });
         try {
           new UiActionEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('id', test.rule)).toBeTruthy();
+          expect(error.hasError("id", test.rule)).toBeTruthy();
         }
       });
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'max length', rule: 'format', value: "a".repeat(256)},
-    ]).describe("Should validate the name", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+      { scenario: "max length", rule: "format", value: "a".repeat(256) },
+    ]).describe("Should validate the name", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultUiActionData({
-          id: test.value
+          id: test.value,
         });
         try {
           new UiActionEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('id', test.rule)).toBeTruthy();
+          expect(error.hasError("id", test.rule)).toBeTruthy();
         }
       });
     });
@@ -76,10 +76,7 @@ describe("UiActionEntity", () => {
   describe("UiActionEntity:toDto", () => {
     it("should return the expected properties.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        'id',
-        'name'
-      ];
+      const expectedKeys = ["id", "name"];
 
       const dto = defaultUiActionData();
       const entity = new UiActionEntity(dto);

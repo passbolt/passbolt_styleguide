@@ -13,13 +13,20 @@
  */
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import PasswordExpiryProSettingsEntity from "./passwordExpiryProSettingsEntity";
-import {defaultPasswordExpiryProSettingsDto, defaultPasswordExpirySettingsDto, defaultPasswordExpirySettingsDtoFromApi} from "../passwordExpiry/passwordExpirySettingsEntity.test.data";
+import {
+  defaultPasswordExpiryProSettingsDto,
+  defaultPasswordExpirySettingsDto,
+  defaultPasswordExpirySettingsDtoFromApi,
+} from "../passwordExpiry/passwordExpirySettingsEntity.test.data";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 
 describe("passwordExpiryProSettings entity", () => {
   describe("PasswordExpiryProSettingsEntity::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(PasswordExpiryProSettingsEntity.ENTITY_NAME, PasswordExpiryProSettingsEntity.getSchema());
+      EntitySchema.validateSchema(
+        PasswordExpiryProSettingsEntity.ENTITY_NAME,
+        PasswordExpiryProSettingsEntity.getSchema(),
+      );
     });
 
     it("validates id property", () => {
@@ -91,7 +98,7 @@ describe("passwordExpiryProSettings entity", () => {
       automatic_update: true,
       automatic_expiry: true,
       policy_override: false,
-      default_expiry_period: null
+      default_expiry_period: null,
     });
   });
 
@@ -101,7 +108,7 @@ describe("passwordExpiryProSettings entity", () => {
       automatic_update: true,
       automatic_expiry: false,
       policy_override: true,
-      default_expiry_period: 60
+      default_expiry_period: 60,
     };
 
     const entity = PasswordExpiryProSettingsEntity.createFromDefault(expectedDto);
@@ -136,7 +143,7 @@ describe("passwordExpiryProSettings entity", () => {
       const dto = defaultPasswordExpirySettingsDto({
         automatic_update: true,
         automatic_expiry: true,
-        default_expiry_period: 30
+        default_expiry_period: 30,
       });
       delete dto.id;
       const entity = new PasswordExpiryProSettingsEntity(dto);
@@ -151,7 +158,7 @@ describe("passwordExpiryProSettings entity", () => {
         id: "10801423-4151-42a4-99d1-86e66145a08c",
         automatic_update: true,
         automatic_expiry: true,
-        default_expiry_period: null
+        default_expiry_period: null,
       });
       const entity = new PasswordExpiryProSettingsEntity(dto);
 
@@ -165,7 +172,7 @@ describe("passwordExpiryProSettings entity", () => {
         id: "10801423-4151-42a4-99d1-86e66145a08c",
         automatic_update: true,
         automatic_expiry: true,
-        default_expiry_period: 30
+        default_expiry_period: 30,
       });
       const entity = new PasswordExpiryProSettingsEntity(dto);
 

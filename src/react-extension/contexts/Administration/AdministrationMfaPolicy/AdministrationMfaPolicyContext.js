@@ -14,10 +14,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import MfaPolicyViewModel from '../../../../shared/models/mfaPolicy/MfaPolicyViewModel';
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import MfaPolicyViewModel from "../../../../shared/models/mfaPolicy/MfaPolicyViewModel";
 import MfaPolicyService from "../../../../shared/services/api/mfaPolicy/MfaPolicyService";
-import MfaPolicyDto from '../../../../shared/models/mfaPolicy/MfaPolicyDto';
+import MfaPolicyDto from "../../../../shared/models/mfaPolicy/MfaPolicyDto";
 
 /**
  * The Administration Mfa policy Context
@@ -47,9 +47,7 @@ export class AdminMfaPolicyContextProvider extends React.Component {
     super(props);
     this.state = this.defaultState;
     const apiClientOptions = props.context.getApiClientOptions();
-    this.mfaPolicyService = new MfaPolicyService(
-      apiClientOptions
-    );
+    this.mfaPolicyService = new MfaPolicyService(apiClientOptions);
   }
 
   /**
@@ -81,8 +79,8 @@ export class AdminMfaPolicyContextProvider extends React.Component {
     const result = await this.mfaPolicyService.find();
     const currentSettings = new MfaPolicyViewModel(result);
     //Init saved setting
-    this.setState({currentSettings});
-    this.setState({settings: currentSettings}, callback);
+    this.setState({ currentSettings });
+    this.setState({ settings: currentSettings }, callback);
     this.setProcessing(false);
   }
 
@@ -118,8 +116,8 @@ export class AdminMfaPolicyContextProvider extends React.Component {
    * @returns {void}
    */
   setSettings(key, value, callback = () => {}) {
-    const newSettings = Object.assign({}, this.state.settings, {[key]: value});
-    this.setState({settings: newSettings}, callback);
+    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
+    this.setState({ settings: newSettings }, callback);
   }
 
   /**
@@ -137,7 +135,7 @@ export class AdminMfaPolicyContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -152,7 +150,7 @@ export class AdminMfaPolicyContextProvider extends React.Component {
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {currentSettings, settings, processing} = this.defaultState;
+    const { currentSettings, settings, processing } = this.defaultState;
     this.setState({
       currentSettings,
       settings,
@@ -165,11 +163,7 @@ export class AdminMfaPolicyContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <AdminMfaPolicyContext.Provider value={this.state}>
-        {this.props.children}
-      </AdminMfaPolicyContext.Provider>
-    );
+    return <AdminMfaPolicyContext.Provider value={this.state}>{this.props.children}</AdminMfaPolicyContext.Provider>;
   }
 }
 
@@ -191,11 +185,8 @@ export function withAdminMfaPolicy(WrappedComponent) {
     render() {
       return (
         <AdminMfaPolicyContext.Consumer>
-          {adminMfaPolicyContext => (
-            <WrappedComponent
-              adminMfaPolicyContext={adminMfaPolicyContext}
-              {...this.props}
-            />
+          {(adminMfaPolicyContext) => (
+            <WrappedComponent adminMfaPolicyContext={adminMfaPolicyContext} {...this.props} />
           )}
         </AdminMfaPolicyContext.Consumer>
       );

@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../AppContext/AppContext";
+import { withAppContext } from "../AppContext/AppContext";
 import MetadataTypesSettingsEntity from "../../models/entity/metadata/metadataTypesSettingsEntity";
 
 export const MetadataTypesSettingsLocalStorageContext = React.createContext({
@@ -21,7 +21,6 @@ export const MetadataTypesSettingsLocalStorageContext = React.createContext({
   metadataTypeSettings: null, // the current metadata type settings loaded from the local storage
   updateLocalStorage: () => {}, // triggers an update of the local storage
 });
-
 
 /**
  * The metadata type settings local storage context provider
@@ -88,7 +87,7 @@ export class MetadataTypesSettingsLocalStorageContextProvider extends React.Comp
    */
   set(metadataTypeSettings) {
     const metadataTypeSettingsCollection = new MetadataTypesSettingsEntity(metadataTypeSettings);
-    this.setState({metadataTypeSettings: metadataTypeSettingsCollection});
+    this.setState({ metadataTypeSettings: metadataTypeSettingsCollection });
   }
 
   /**
@@ -134,7 +133,9 @@ export class MetadataTypesSettingsLocalStorageContextProvider extends React.Comp
    */
   async updateLocalStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
-      this.runningLocalStorageUpdatePromise = this.props.context.port.request('passbolt.metadata.get-or-find-metadata-types-settings');
+      this.runningLocalStorageUpdatePromise = this.props.context.port.request(
+        "passbolt.metadata.get-or-find-metadata-types-settings",
+      );
       await this.runningLocalStorageUpdatePromise;
       this.runningLocalStorageUpdatePromise = null;
     } else {
@@ -170,16 +171,15 @@ export function withMetadataTypesSettingsLocalStorage(WrappedComponent) {
     render() {
       return (
         <MetadataTypesSettingsLocalStorageContext.Consumer>
-          {
-            metadataTypeSettingsLocalStorageContext => <WrappedComponent
+          {(metadataTypeSettingsLocalStorageContext) => (
+            <WrappedComponent
               metadataTypeSettingsLocalStorageContext={metadataTypeSettingsLocalStorageContext}
               metadataTypeSettings={metadataTypeSettingsLocalStorageContext.get()}
               {...this.props}
             />
-          }
+          )}
         </MetadataTypesSettingsLocalStorageContext.Consumer>
       );
     }
   };
 }
-

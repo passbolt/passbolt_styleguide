@@ -15,7 +15,7 @@
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import MigrateMetadataEntity from "./migrateMetadataEntity";
-import {defaultMigrateMetadataDto} from "./migrateMetadataEntity.test.data";
+import { defaultMigrateMetadataDto } from "./migrateMetadataEntity.test.data";
 
 describe("MigrateMetadataEntity", () => {
   describe("::getSchema", () => {
@@ -78,9 +78,11 @@ describe("MigrateMetadataEntity", () => {
     it("exports form data when no key were generated", () => {
       expect.assertions(1);
 
-      const settings = new MigrateMetadataEntity(defaultMigrateMetadataDto({
-        migrate_resources_to_v5: true,
-      }));
+      const settings = new MigrateMetadataEntity(
+        defaultMigrateMetadataDto({
+          migrate_resources_to_v5: true,
+        }),
+      );
 
       const expectedDto = {
         migrate_resources_to_v5: true,

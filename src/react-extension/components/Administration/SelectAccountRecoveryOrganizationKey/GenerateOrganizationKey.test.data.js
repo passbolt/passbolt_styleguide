@@ -12,11 +12,9 @@
  * @since         4.2.0
  */
 
-import {
-  defaultPasswordPoliciesContext
-} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import { defaultPasswordPoliciesContext } from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 
 /**
  * Default props
@@ -30,6 +28,6 @@ export function defaultProps(props = {}) {
     dialogContext: defaultDialogContext(),
     onClose: jest.fn(),
     handleUpdateOrganizationKey: jest.fn(),
-    ...props
+    ...props,
   };
 }

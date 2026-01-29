@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,12 +12,11 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
-import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
+import { BrowserRouter as Router } from "react-router-dom";
+import { UserWorkspaceContext } from "../../../contexts/UserWorkspaceContext";
 import DisplayUserGroupDetails from "./DisplayUserGroupDetails";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -37,12 +35,12 @@ export default class DisplayUserGroupDetailsPage {
         <AppContext.Provider value={appContext}>
           <Router>
             <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
-              <DisplayUserGroupDetails {...props}/>
+              <DisplayUserGroupDetails {...props} />
             </UserWorkspaceContext.Provider>
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -51,7 +49,7 @@ export default class DisplayUserGroupDetailsPage {
    * @returns {boolean}
    */
   get canSeeUserGroups() {
-    return Boolean(this._page.container.querySelector('.detailed-user-groups'));
+    return Boolean(this._page.container.querySelector(".detailed-user-groups"));
   }
 
   /**
@@ -59,15 +57,15 @@ export default class DisplayUserGroupDetailsPage {
    * @returns {boolean}
    */
   get canSeeGpgKey() {
-    return Boolean(this._page.container.querySelector('.key-information'));
+    return Boolean(this._page.container.querySelector(".key-information"));
   }
 
   /**
    * Copy the user permalink
    */
   async copyPermalink() {
-    const element = this._page.container.querySelector('.title-link');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector(".title-link");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -76,8 +74,8 @@ export default class DisplayUserGroupDetailsPage {
    * Close the dialog
    */
   async close() {
-    const element = this._page.container.querySelector('.dialog-close');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector(".dialog-close");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

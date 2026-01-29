@@ -13,13 +13,13 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
+import { withRouter } from "react-router-dom";
+import { withTranslation } from "react-i18next";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
 import ManageAccountRecoveryUserSettings from "../ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
-import {AccountRecoveryUserContextProvider} from "../../../contexts/AccountRecoveryUserContext";
+import { AccountRecoveryUserContextProvider } from "../../../contexts/AccountRecoveryUserContext";
 
 class HandleAccountRecoveryUserSettingsRoute extends React.Component {
   /**
@@ -36,13 +36,16 @@ class HandleAccountRecoveryUserSettingsRoute extends React.Component {
    * @returns {Promise<void>}
    */
   async handleRoute() {
-    const isPolicyDisabled = this.props.accountRecoveryContext.getPolicy() === AccountRecoveryUserContextProvider.POLICY_DISABLED;
+    const isPolicyDisabled =
+      this.props.accountRecoveryContext.getPolicy() === AccountRecoveryUserContextProvider.POLICY_DISABLED;
     if (isPolicyDisabled) {
       this.redirectToSettingsPage();
       return;
     }
 
-    const hasUserAlreadyEnrolledTheProgram = this.props.accountRecoveryContext.getUserAccountRecoverySubscriptionStatus() === AccountRecoveryUserContextProvider.STATUS_APPROVED;
+    const hasUserAlreadyEnrolledTheProgram =
+      this.props.accountRecoveryContext.getUserAccountRecoverySubscriptionStatus() ===
+      AccountRecoveryUserContextProvider.STATUS_APPROVED;
     if (hasUserAlreadyEnrolledTheProgram) {
       this.showAlreadyEnrolledFeedback();
       this.redirectToSettingsPage();
@@ -50,7 +53,7 @@ class HandleAccountRecoveryUserSettingsRoute extends React.Component {
     }
 
     this.props.dialogContext.open(ManageAccountRecoveryUserSettings, {
-      organizationPolicy: this.props.accountRecoveryContext.getOrganizationPolicy()
+      organizationPolicy: this.props.accountRecoveryContext.getOrganizationPolicy(),
     });
   }
 
@@ -58,7 +61,9 @@ class HandleAccountRecoveryUserSettingsRoute extends React.Component {
    * Notify the user that the enrollment has been done already.
    */
   async showAlreadyEnrolledFeedback() {
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("You already enrolled to the account recovery program"));
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.props.t("You already enrolled to the account recovery program"),
+    );
   }
 
   /**
@@ -85,4 +90,8 @@ HandleAccountRecoveryUserSettingsRoute.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withDialog(withAccountRecovery(withActionFeedback(withTranslation("common")(HandleAccountRecoveryUserSettingsRoute)))));
+export default withRouter(
+  withDialog(
+    withAccountRecovery(withActionFeedback(withTranslation("common")(HandleAccountRecoveryUserSettingsRoute))),
+  ),
+);

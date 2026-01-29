@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import YubikeySetup from "./YubikeySetup";
 
@@ -28,9 +28,9 @@ export default class YubikeySetupPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <YubikeySetup {...props}/>
+        <YubikeySetup {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,56 +38,56 @@ export default class YubikeySetupPage {
    * Returns the yubikey setup parent element
    */
   get yubikeySetup() {
-    return this._page.container.querySelector('.yubikey-setup');
+    return this._page.container.querySelector(".yubikey-setup");
   }
 
   /**
    * Returns page title
    */
   get title() {
-    return this._page.container.querySelector('h3');
+    return this._page.container.querySelector("h3");
   }
 
   /**
    * Returns the input label otp label
    */
   get inputLabelOtp() {
-    return this._page.container.querySelector('.input label');
+    return this._page.container.querySelector(".input label");
   }
 
   /**
    * Returns the input otp
    */
   get inputOtp() {
-    return this._page.container.querySelector('.input input');
+    return this._page.container.querySelector(".input input");
   }
 
   /**
    * Returns the error message
    */
   get errorMessage() {
-    return this._page.container.querySelector('.error-message');
+    return this._page.container.querySelector(".error-message");
   }
 
   /**
    * Returns the cancel button
    */
   get cancelButton() {
-    return this._page.container.querySelector('.button.cancel');
+    return this._page.container.querySelector(".button.cancel");
   }
 
   /**
    * Returns the validate button
    */
   get validateButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns the help text
    */
   get helpText() {
-    return this._page.container.querySelector('.helptext');
+    return this._page.container.querySelector(".helptext");
   }
 
   /**
@@ -116,7 +116,7 @@ export default class YubikeySetupPage {
    * @param code A otp code
    */
   async fillOtpInput(code) {
-    fireEvent.change(this.inputOtp, {target: {value: code}});
+    fireEvent.change(this.inputOtp, { target: { value: code } });
     await waitFor(() => {});
   }
 
@@ -125,7 +125,7 @@ export default class YubikeySetupPage {
    * @param {Element} element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

@@ -15,9 +15,8 @@ const AppContext = React.createContext({
   mustRefreshComments: false,
   siteSettings: null,
   userSettings: null,
-  onCheckIsAuthenticatedRequested: null
+  onCheckIsAuthenticatedRequested: null,
 });
-
 
 /**
  * App Context Consumer HOC
@@ -28,9 +27,7 @@ export function withAppContext(WrappedComponent) {
     render() {
       return (
         <AppContext.Consumer>
-          {
-            AppContext => <WrappedComponent context={AppContext} {...this.props} />
-          }
+          {(AppContext) => <WrappedComponent context={AppContext} {...this.props} />}
         </AppContext.Consumer>
       );
     }

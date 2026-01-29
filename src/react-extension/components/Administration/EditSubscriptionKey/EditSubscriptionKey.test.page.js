@@ -1,4 +1,4 @@
-import {render, waitFor} from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import React from "react";
 import EditSubscriptionKey from "./EditSubscriptionKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -15,9 +15,9 @@ export default class EditSubscriptionKeyPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <EditSubscriptionKey {...props}/>
+        <EditSubscriptionKey {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }
@@ -26,7 +26,7 @@ export default class EditSubscriptionKeyPage {
    * Returns the subscription key input
    */
   get subscriptionKeyInput() {
-    return this._page.container.querySelector('textarea');
+    return this._page.container.querySelector("textarea");
   }
 
   /**
@@ -40,16 +40,15 @@ export default class EditSubscriptionKeyPage {
    * Returns true if a subscription key error appears
    */
   get hasSubscriptionKeyError() {
-    return Boolean(this._page.container.querySelector('.key.error-message'));
+    return Boolean(this._page.container.querySelector(".key.error-message"));
   }
 
   /**
    * Returns true if a subscription key error message
    */
   get subscriptionKeyErrorMessage() {
-    return this._page.container.querySelector('.key.error-message').textContent;
+    return this._page.container.querySelector(".key.error-message").textContent;
   }
-
 
   /**
    * Returns the save button element
@@ -69,22 +68,22 @@ export default class EditSubscriptionKeyPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   get errorDialog() {
-    return this._page.container.querySelector('.error-dialog');
+    return this._page.container.querySelector(".error-dialog");
   }
 
   get errorDialogMessage() {
-    return this._page.container.querySelector('.error-dialog .dialog .dialog-content .form-content');
+    return this._page.container.querySelector(".error-dialog .dialog .dialog-content .form-content");
   }
 
   /**
    * Returns true if the user can change something like the passphrase
    */
   get canChange() {
-    return !this.subscriptionKeyInput.hasAttribute('disabled');
+    return !this.subscriptionKeyInput.hasAttribute("disabled");
   }
 
   /**

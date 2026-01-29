@@ -13,9 +13,8 @@
  */
 
 import React from "react";
-import {withWorkflow} from "../../../../contexts/WorkflowContext";
+import { withWorkflow } from "../../../../contexts/WorkflowContext";
 import PropTypes from "prop-types";
-
 
 /**
  * This component acts as an anchor for the different project workflows.
@@ -51,13 +50,9 @@ class ManageWorkflows extends React.Component {
   render() {
     return (
       <>
-        {
-          this.props.workflowContext.workflows.map(({key, Workflow, workflowProps}) =>
-            <Workflow
-              key={key}
-              onStop={ () => this.stop(key)}
-              {...workflowProps} />)
-        }
+        {this.props.workflowContext.workflows.map(({ key, Workflow, workflowProps }) => (
+          <Workflow key={key} onStop={() => this.stop(key)} {...workflowProps} />
+        ))}
         {this.props.children}
       </>
     );
@@ -66,7 +61,7 @@ class ManageWorkflows extends React.Component {
 
 ManageWorkflows.propTypes = {
   workflowContext: PropTypes.any,
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 export default withWorkflow(ManageWorkflows);

@@ -11,27 +11,27 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.5.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withAdministrationWorkspace } from "../../../contexts/AdministrationWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 import memoize from "memoize-one";
 import NotifyError from "../../../components/Common/Error/NotifyError/NotifyError";
 import ScimSettingsEntity from "../../../../shared/models/entity/scimSettings/scimSettingsEntity";
 import ScimSettingsFormEntity from "../../../../shared/models/entity/scimSettings/scimSettingsFormEntity";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import ScimSettingsServiceWorkerService from "../../../../shared/services/serviceWorker/scim/scimSettingsServiceWorkerService";
 import CopySVG from "../../../../img/svg/copy.svg";
 import RefreshSVG from "../../../../img/svg/refresh.svg";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import Password from "../../../../shared/components/Password/Password";
 import Select from "../../Common/Select/Select";
-import {getUserFormattedName} from "../../../../shared/utils/userUtils";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import { getUserFormattedName } from "../../../../shared/utils/userUtils";
+import { createSafePortal } from "../../../../shared/utils/portals";
 import DisplayScimSettingsAdministrationHelp from "./DisplayScimSettingsAdministrationHelp";
-import {withRoles} from "../../../contexts/RoleContext";
+import { withRoles } from "../../../contexts/RoleContext";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 
 /**
@@ -64,7 +64,8 @@ class DisplayScimSettingsAdministration extends Component {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
-    this.scimSettingsService = props.scimSettingsServiceWorkerService ?? new ScimSettingsServiceWorkerService(this.props.context.port);
+    this.scimSettingsService =
+      props.scimSettingsServiceWorkerService ?? new ScimSettingsServiceWorkerService(this.props.context.port);
   }
 
   /**
@@ -103,7 +104,7 @@ class DisplayScimSettingsAdministration extends Component {
       await this.props.context.port.request("passbolt.users.update-local-storage");
     }
     await this.findScimSettings();
-    this.setState({isProcessing: false});
+    this.setState({ isProcessing: false });
   }
 
   /**
@@ -119,23 +120,28 @@ class DisplayScimSettingsAdministration extends Component {
    * @returns {Array} Array of active admin users
    */
   get adminUsers() {
-    const adminRole = this.props.roles.items.filter(r => r.isAdmin())?.[0] || null;
+    const adminRole = this.props.roles.items.filter((r) => r.isAdmin())?.[0] || null;
 
     const users = this.props.context.users;
 
     if (users !== null && adminRole) {
-      return users.filter(user => user.active === true && user.role_id === adminRole.id);
+      return users.filter((user) => user.active === true && user.role_id === adminRole.id);
     }
     return [];
   }
-
 
   /**
    * Get admin users formatted for select input
    * @returns {Array<{value: string, label: string}>} Array of admin users formatted for select input
    */
   get adminUsersForSelect() {
-    return this.adminUsers && this.adminUsers.map(user => ({value: user.id, label: getUserFormattedName(user, this.props.t, {withUsername: true})}));
+    return (
+      this.adminUsers &&
+      this.adminUsers.map((user) => ({
+        value: user.id,
+        label: getUserFormattedName(user, this.props.t, { withUsername: true }),
+      }))
+    );
   }
 
   /**
@@ -143,22 +149,22 @@ class DisplayScimSettingsAdministration extends Component {
    * @return {Promise<void>}
    */
   async findScimSettings() {
-    this.setState({isProcessing: true});
+    this.setState({ isProcessing: true });
     try {
       const scimSettings = await this.scimSettingsService.findSettings();
       if (scimSettings) {
-        this.originalSettings = new ScimSettingsFormEntity(scimSettings, {validate: false});
-        this.formSettings = new ScimSettingsFormEntity(scimSettings, {validate: false});
+        this.originalSettings = new ScimSettingsFormEntity(scimSettings, { validate: false });
+        this.formSettings = new ScimSettingsFormEntity(scimSettings, { validate: false });
         this.setState({
           settings: this.formSettings.toDto(),
-          enabled: true
+          enabled: true,
         });
       }
     } catch (error) {
       await this.handleUnexpectedError(error);
       this.setDefaultSettings();
     }
-    this.setState({isProcessing: false});
+    this.setState({ isProcessing: false });
   }
 
   /**
@@ -166,7 +172,7 @@ class DisplayScimSettingsAdministration extends Component {
    */
   setDefaultSettings() {
     this.formSettings = ScimSettingsFormEntity.createFromDefault(this.adminUsers[0].id);
-    this.setState({settings: this.formSettings.toDto()});
+    this.setState({ settings: this.formSettings.toDto() });
   }
 
   /**
@@ -176,10 +182,10 @@ class DisplayScimSettingsAdministration extends Component {
     if (!this.state.enabled) {
       this.formSettings = ScimSettingsFormEntity.createFromDefault(this.adminUsers[0].id);
       this.setState({
-        settings: this.formSettings.toDto()
+        settings: this.formSettings.toDto(),
       });
     }
-    this.setState({enabled: !this.state.enabled});
+    this.setState({ enabled: !this.state.enabled });
   }
 
   /**
@@ -188,8 +194,11 @@ class DisplayScimSettingsAdministration extends Component {
    * @param {ScimSettingsFormEntity} formSettings The settings updated by the user.
    * @return {boolean}
    */
-  // eslint-disable-next-line no-unused-vars
-  hasSettingsChanges = memoize((originalSettings, formSettings, settings) => originalSettings?.hasDiffProps(formSettings) || false);
+
+  hasSettingsChanges = memoize(
+    // eslint-disable-next-line no-unused-vars
+    (originalSettings, formSettings, settings) => originalSettings?.hasDiffProps(formSettings) || false,
+  );
 
   /**
    * Handle form input changes.
@@ -200,7 +209,7 @@ class DisplayScimSettingsAdministration extends Component {
     if (this.hasAllInputDisabled()) {
       return;
     }
-    const {type, checked, name} = event.target;
+    const { type, checked, name } = event.target;
     const parsedValue = type === "checkbox" ? checked : event.target.value;
 
     this.setFormPropertyValue(name, parsedValue);
@@ -212,8 +221,8 @@ class DisplayScimSettingsAdministration extends Component {
    * @param {*} parsedValue The parsed value
    */
   setFormPropertyValue(name, parsedValue) {
-    this.formSettings.set(name, parsedValue, {validate: false});
-    this.setState({settings: this.formSettings.toDto()});
+    this.formSettings.set(name, parsedValue, { validate: false });
+    this.setState({ settings: this.formSettings.toDto() });
   }
 
   /**
@@ -228,14 +237,20 @@ class DisplayScimSettingsAdministration extends Component {
    * Handle the copy to clipboard button
    */
   async handleCopyScimUrl() {
-    await this.props.clipboardContext.copy(this.scimUrl, this.props.t("The SCIM URL has been copied to the clipboard."));
+    await this.props.clipboardContext.copy(
+      this.scimUrl,
+      this.props.t("The SCIM URL has been copied to the clipboard."),
+    );
   }
 
   /**
    * Handle the copy to clipboard button
    */
   async handleCopySecretToken() {
-    await this.props.clipboardContext.copy(this.state.settings.secret_token, this.props.t("The SCIM secret token has been copied to the clipboard."));
+    await this.props.clipboardContext.copy(
+      this.state.settings.secret_token,
+      this.props.t("The SCIM secret token has been copied to the clipboard."),
+    );
   }
 
   /**
@@ -265,21 +280,23 @@ class DisplayScimSettingsAdministration extends Component {
       return;
     }
 
-    this.setState({isProcessing: true});
+    this.setState({ isProcessing: true });
     const validationError = this.validateForm();
     if (validationError?.hasErrors()) {
-      this.setState({isProcessing: false, hasAlreadyBeenValidated: true});
+      this.setState({ isProcessing: false, hasAlreadyBeenValidated: true });
       return;
     }
 
     try {
       const result = await this.saveScimSettings();
       //Refresh data returned by server
-      this.formSettings = result ? new ScimSettingsFormEntity(result, {validate: false}) : null;
-      this.originalSettings = result ? new ScimSettingsFormEntity(this.formSettings.toDto(), {validate: false}) : null;
+      this.formSettings = result ? new ScimSettingsFormEntity(result, { validate: false }) : null;
+      this.originalSettings = result
+        ? new ScimSettingsFormEntity(this.formSettings.toDto(), { validate: false })
+        : null;
       this.setState({
         settings: result ? this.formSettings.toDto() : null,
-        enabled: result !== null
+        enabled: result !== null,
       });
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The SCIM settings were updated."));
     } catch (error) {
@@ -329,7 +346,7 @@ class DisplayScimSettingsAdministration extends Component {
   handleUnexpectedError(error) {
     console.error(error);
     if (error.name !== "UserAbortsOperationError") {
-      return this.props.dialogContext.open(NotifyError, {error});
+      return this.props.dialogContext.open(NotifyError, { error });
     }
   }
 
@@ -363,33 +380,59 @@ class DisplayScimSettingsAdministration extends Component {
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
               <h3 className="title">
                 <span className="input toggle-switch form-element">
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="enabled"
-                    onChange={this.handleToggleEnabled} checked={this.state.enabled} disabled={this.hasAllInputDisabled()}
-                    id="scimSettingsToggle"/>
-                  <label htmlFor="scimSettingsToggle"><Trans>SCIM</Trans></label>
+                  <input
+                    type="checkbox"
+                    className="toggle-switch-checkbox checkbox"
+                    name="enabled"
+                    onChange={this.handleToggleEnabled}
+                    checked={this.state.enabled}
+                    disabled={this.hasAllInputDisabled()}
+                    id="scimSettingsToggle"
+                  />
+                  <label htmlFor="scimSettingsToggle">
+                    <Trans>SCIM</Trans>
+                  </label>
                 </span>
               </h3>
               <p className="description">
-                <Trans>SCIM is a standard protocol that automates user provisioning and deprovisioning with identity providers.</Trans>
+                <Trans>
+                  SCIM is a standard protocol that automates user provisioning and deprovisioning with identity
+                  providers.
+                </Trans>
               </p>
 
-              {
-                this.state.enabled && this.state.settings && <>
-                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>SCIM URL</Trans></label>
+              {this.state.enabled && this.state.settings && (
+                <>
+                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                    <label>
+                      <Trans>SCIM URL</Trans>
+                    </label>
                     <div className="button-inline">
-                      <input id="scim-url-input" type="text" className="fluid form-element disabled" name="scim_url"
-                        value={this.scimUrl} readOnly disabled={true}/>
-                      <button type="button" onClick={this.handleCopyScimUrl} className="copy-to-clipboard button button-icon">
-                        <CopySVG/>
+                      <input
+                        id="scim-url-input"
+                        type="text"
+                        className="fluid form-element disabled"
+                        name="scim_url"
+                        value={this.scimUrl}
+                        readOnly
+                        disabled={true}
+                      />
+                      <button
+                        type="button"
+                        onClick={this.handleCopyScimUrl}
+                        className="copy-to-clipboard button button-icon"
+                      >
+                        <CopySVG />
                       </button>
                     </div>
                     <p>
                       <Trans>The URL to enter in your provider when configuring user provisioning.</Trans>
                     </p>
                   </div>
-                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Secret Token</Trans></label>
+                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                    <label>
+                      <Trans>Secret Token</Trans>
+                    </label>
                     <div className="button-inline">
                       <Password
                         id="scim-secret-token-input"
@@ -400,16 +443,27 @@ class DisplayScimSettingsAdministration extends Component {
                         preview={true}
                         disabled={this.state.settings.secret_token === ScimSettingsEntity.EMPTY_SECRET_VALUE}
                       />
-                      <button type="button" disabled={this.state.settings.secret_token === ScimSettingsEntity.EMPTY_SECRET_VALUE} onClick={this.handleCopySecretToken} className="copy-to-clipboard button button-icon">
-                        <CopySVG/>
+                      <button
+                        type="button"
+                        disabled={this.state.settings.secret_token === ScimSettingsEntity.EMPTY_SECRET_VALUE}
+                        onClick={this.handleCopySecretToken}
+                        className="copy-to-clipboard button button-icon"
+                      >
+                        <CopySVG />
                       </button>
-                      <button type="button" onClick={this.handleRegenerateSecretToken} className="copy-to-clipboard button button-icon">
-                        <RefreshSVG/>
+                      <button
+                        type="button"
+                        onClick={this.handleRegenerateSecretToken}
+                        className="copy-to-clipboard button button-icon"
+                      >
+                        <RefreshSVG />
                       </button>
                     </div>
                   </div>
-                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>SCIM User</Trans></label>
+                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                    <label>
+                      <Trans>SCIM User</Trans>
+                    </label>
                     <Select
                       items={this.adminUsersForSelect}
                       name="scim_user_id"
@@ -418,72 +472,101 @@ class DisplayScimSettingsAdministration extends Component {
                       onChange={this.handleInputChange}
                       disabled={this.state.isProcessing}
                       search={true}
-                      direction="bottom"/>
+                      direction="bottom"
+                    />
                     <p>
                       <Trans>The SCIM user is the user that will perform the operation in the logs.</Trans>
                     </p>
                   </div>
                   <div className="section">
-                    <label><Trans>Synchronisation</Trans></label>
+                    <label>
+                      <Trans>Synchronisation</Trans>
+                    </label>
                     <span className="input toggle-switch form-element">
-                      <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordUpdate"
-                        disabled={true} checked={true}
-                        id="send-password-update-toggle-button"/>
+                      <input
+                        type="checkbox"
+                        className="toggle-switch-checkbox checkbox"
+                        name="passwordUpdate"
+                        disabled={true}
+                        checked={true}
+                        id="send-password-update-toggle-button"
+                      />
                       <label className="text" htmlFor="send-password-update-toggle-button">
                         <Trans>Users.</Trans>
                       </label>
                     </span>
                     <span className="input toggle-switch form-element">
-                      <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordUpdate"
+                      <input
+                        type="checkbox"
+                        className="toggle-switch-checkbox checkbox"
+                        name="passwordUpdate"
                         disabled={true}
                         checked={false}
-                        id="send-password-update-toggle-button"/>
+                        id="send-password-update-toggle-button"
+                      />
                       <label className="text" htmlFor="send-password-update-toggle-button">
                         <Trans>Groups (Not supported).</Trans>
                       </label>
                     </span>
                   </div>
-
                 </>
-              }
+              )}
             </form>
           </div>
           {
             <div className="warning message">
-              {!this.formSettings?.id && this.state.enabled &&
-                    <div className="form-banner">
-                      <p><Trans>Please save the settings to enable the feature.</Trans></p>
-                    </div>
-              }
-              {this.formSettings?.id && !this.state.enabled &&
-                    <div className="form-banner">
-                      <p><Trans>Please save the settings to disable the feature.</Trans></p>
-                    </div>
-              }
-              {hasSettingsChanges && this.state.enabled && this.formSettings.id &&
-                    <div className="form-banner">
-                      <p><Trans>Don&apos;t forget to save your settings to apply your modification.</Trans></p>
-                    </div>
-              }
-              {errors?.hasErrors() &&
-                    <div className="form-banner">
-                      <p><b><Trans>Warning:</Trans></b> <Trans>Please fix the errors in the form before saving.</Trans></p>
-                    </div>
-              }
+              {!this.formSettings?.id && this.state.enabled && (
+                <div className="form-banner">
+                  <p>
+                    <Trans>Please save the settings to enable the feature.</Trans>
+                  </p>
+                </div>
+              )}
+              {this.formSettings?.id && !this.state.enabled && (
+                <div className="form-banner">
+                  <p>
+                    <Trans>Please save the settings to disable the feature.</Trans>
+                  </p>
+                </div>
+              )}
+              {hasSettingsChanges && this.state.enabled && this.formSettings.id && (
+                <div className="form-banner">
+                  <p>
+                    <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                  </p>
+                </div>
+              )}
+              {errors?.hasErrors() && (
+                <div className="form-banner">
+                  <p>
+                    <b>
+                      <Trans>Warning:</Trans>
+                    </b>{" "}
+                    <Trans>Please fix the errors in the form before saving.</Trans>
+                  </p>
+                </div>
+              )}
             </div>
           }
         </div>
         <div className="actions-wrapper">
-          <button type="button" className="button primary" disabled={this.state.isProcessing || errors?.hasErrors()} onClick={this.handleFormSubmit}>
-            <span><Trans>Save</Trans></span>
+          <button
+            type="button"
+            className="button primary"
+            disabled={this.state.isProcessing || errors?.hasErrors()}
+            onClick={this.handleFormSubmit}
+          >
+            <span>
+              <Trans>Save</Trans>
+            </span>
           </button>
         </div>
-        {
-          createSafePortal(
-            <DisplayScimSettingsAdministrationHelp shouldDisplayWarning={!hasSettingsChanges && this.state.enabled && this.formSettings?.id}/>,
-            document.getElementById("administration-help-panel")
-          )
-        }
+        {createSafePortal(
+          <DisplayScimSettingsAdministrationHelp
+            shouldDisplayWarning={!hasSettingsChanges && this.state.enabled && this.formSettings?.id}
+          />,
+          document.getElementById("administration-help-panel"),
+        )}
       </div>
     );
   }
@@ -504,13 +587,7 @@ DisplayScimSettingsAdministration.propTypes = {
 export default withAdministrationWorkspace(
   withDialog(
     withActionFeedback(
-      withClipboard(
-        withAppContext(
-          withRoles(
-            withTranslation('common')(DisplayScimSettingsAdministration)
-          )
-        )
-      )
-    )
-  )
+      withClipboard(withAppContext(withRoles(withTranslation("common")(DisplayScimSettingsAdministration)))),
+    ),
+  ),
 );

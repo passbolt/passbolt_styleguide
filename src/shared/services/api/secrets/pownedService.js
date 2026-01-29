@@ -45,7 +45,7 @@ class PownedService {
       isPwnedServiceAvailable = false;
     }
 
-    return {inDictionary, isPwnedServiceAvailable};
+    return { inDictionary, isPwnedServiceAvailable };
   }
 
   /**
@@ -54,10 +54,9 @@ class PownedService {
    * @return {Promise<boolean>}
    */
   async checkIfPasswordPowned(password) {
-    const response =  await this.port.request("passbolt.secrets.powned-password", password);
+    const response = await this.port.request("passbolt.secrets.powned-password", password);
     return response > 0;
   }
 }
 
 export default PownedService;
-

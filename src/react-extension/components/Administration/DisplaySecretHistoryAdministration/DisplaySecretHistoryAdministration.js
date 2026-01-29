@@ -13,17 +13,15 @@
  */
 
 import PropTypes from "prop-types";
-import React, {Component} from 'react';
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import memoize from "memoize-one";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import SecretRevisionsSettingsServiceWorkerService
-  from "../../../../shared/services/serviceWorker/secretRevision/secretRevisionsSettingsServiceWorkerService";
-import SecretRevisionsSettingsEntity
-  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import SecretRevisionsSettingsServiceWorkerService from "../../../../shared/services/serviceWorker/secretRevision/secretRevisionsSettingsServiceWorkerService";
+import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 
 class DisplaySecretHistoryAdministration extends Component {
   /** @type {SecretRevisionsSettingsEntity}*/
@@ -38,7 +36,9 @@ class DisplaySecretHistoryAdministration extends Component {
   constructor(props) {
     super(props);
 
-    this.secretRevisionsSettingsServiceWorkerService = new SecretRevisionsSettingsServiceWorkerService(props.context.port);
+    this.secretRevisionsSettingsServiceWorkerService = new SecretRevisionsSettingsServiceWorkerService(
+      props.context.port,
+    );
 
     this.state = this.defaultState;
     this.bindCallbacks();
@@ -53,7 +53,7 @@ class DisplaySecretHistoryAdministration extends Component {
       isProcessing: true, // Is the form processing (loading, submitting).
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once.
       isFeatureEnabled: false, // Is the feature enabled.
-      settings: {}
+      settings: {},
     };
   }
 
@@ -74,13 +74,13 @@ class DisplaySecretHistoryAdministration extends Component {
    */
   async componentDidMount() {
     this.originalSettings = await this.secretRevisionsSettingsServiceWorkerService.findSettings();
-    this.formSettings = new SecretRevisionsSettingsEntity(this.originalSettings.toDto(), {validate: false});
+    this.formSettings = new SecretRevisionsSettingsEntity(this.originalSettings.toDto(), { validate: false });
     const settings = this.formSettings.toDto();
 
     this.setState({
       settings: settings,
       isFeatureEnabled: this.originalSettings.isFeatureEnabled,
-      isProcessing: false
+      isProcessing: false,
     });
   }
 
@@ -92,8 +92,7 @@ class DisplaySecretHistoryAdministration extends Component {
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  validateForm = memoize(formSettingsDto => this.formSettings?.validate());
-
+  validateForm = memoize((formSettingsDto) => this.formSettings?.validate());
 
   /**
    * Check if the data have been changed.
@@ -103,7 +102,11 @@ class DisplaySecretHistoryAdministration extends Component {
    *   function is only triggered when the form is updated.
    * @return {EntityValidationError}
    */
-  hasSettingsChanges = memoize((formSettingsDto, isFeatureEnabled) => this.originalSettings?.hasDiffProps(this.formSettings) || this.originalSettings?.isFeatureEnabled !== isFeatureEnabled);
+  hasSettingsChanges = memoize(
+    (formSettingsDto, isFeatureEnabled) =>
+      this.originalSettings?.hasDiffProps(this.formSettings) ||
+      this.originalSettings?.isFeatureEnabled !== isFeatureEnabled,
+  );
 
   /**
    * Handle form input changes.
@@ -111,7 +114,7 @@ class DisplaySecretHistoryAdministration extends Component {
    * @returns {void}
    */
   handleInputChange(event) {
-    const {value, name} = event.target;
+    const { value, name } = event.target;
     // Add the revision for the current one to be part of the settings but not displayed. (It can be confusing for the administrator)
     const parsedValue = parseInt(value, 10) + 1;
     this.setFormPropertyValue(name, parsedValue);
@@ -123,8 +126,8 @@ class DisplaySecretHistoryAdministration extends Component {
    * @param parsedValue
    */
   setFormPropertyValue(name, parsedValue) {
-    this.formSettings.set(name, parsedValue, {validate: false});
-    this.setState({settings: this.formSettings.toDto()});
+    this.formSettings.set(name, parsedValue, { validate: false });
+    this.setState({ settings: this.formSettings.toDto() });
   }
 
   /**
@@ -150,12 +153,12 @@ class DisplaySecretHistoryAdministration extends Component {
    * @returns {void}
    */
   handleEnableFeature(event) {
-    const {checked} = event.target;
+    const { checked } = event.target;
     if (checked && this.state.settings.max_revisions === 1) {
       // In case the feature is disabled and be enabled set to a default value
       this.setFormPropertyValue("max_revisions", 2);
     }
-    this.setState({isFeatureEnabled: checked});
+    this.setState({ isFeatureEnabled: checked });
   }
 
   /**
@@ -195,11 +198,11 @@ class DisplaySecretHistoryAdministration extends Component {
 
     const validationError = this.validateForm(this.state.settings);
     if (validationError?.hasErrors() || this.hasMaxRevisionsError) {
-      this.setState({hasAlreadyBeenValidated: true});
+      this.setState({ hasAlreadyBeenValidated: true });
       return;
     }
 
-    this.setState({isProcessing: true});
+    this.setState({ isProcessing: true });
 
     try {
       const hasToDeleteSettings = !this.state.isFeatureEnabled;
@@ -211,13 +214,13 @@ class DisplaySecretHistoryAdministration extends Component {
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The secret history settings were updated."));
     } catch (error) {
       console.error(error);
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
     }
 
     this.setState({
       hasAlreadyBeenValidated: true,
       isProcessing: false,
-      settings: this.formSettings.toDto()
+      settings: this.formSettings.toDto(),
     });
   }
 
@@ -228,7 +231,7 @@ class DisplaySecretHistoryAdministration extends Component {
   async deleteSettings() {
     await this.secretRevisionsSettingsServiceWorkerService.deleteSettings();
     this.originalSettings = SecretRevisionsSettingsEntity.createFromDefault();
-    this.formSettings = new SecretRevisionsSettingsEntity(this.originalSettings.toDto(), {validate: false});
+    this.formSettings = new SecretRevisionsSettingsEntity(this.originalSettings.toDto(), { validate: false });
   }
 
   /**
@@ -237,9 +240,11 @@ class DisplaySecretHistoryAdministration extends Component {
    */
   async saveSettings() {
     const settings = this.formSettings.toDto();
-    this.originalSettings = new SecretRevisionsSettingsEntity(settings, {validate: false});
-    this.originalSettings = await this.secretRevisionsSettingsServiceWorkerService.saveSettings(new SecretRevisionsSettingsEntity(settings));
-    this.formSettings = new SecretRevisionsSettingsEntity(this.originalSettings.toDto(), {validate: false});
+    this.originalSettings = new SecretRevisionsSettingsEntity(settings, { validate: false });
+    this.originalSettings = await this.secretRevisionsSettingsServiceWorkerService.saveSettings(
+      new SecretRevisionsSettingsEntity(settings),
+    );
+    this.formSettings = new SecretRevisionsSettingsEntity(this.originalSettings.toDto(), { validate: false });
   }
 
   /**
@@ -249,7 +254,8 @@ class DisplaySecretHistoryAdministration extends Component {
   render() {
     const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.settings) : null;
     const hasSettingsChanges = this.hasSettingsChanges(this.state.settings, this.state.isFeatureEnabled);
-    const hasMaxRevisionsError = errors?.hasError("max_revisions") || (this.state.hasAlreadyBeenValidated && this.hasMaxRevisionsError);
+    const hasMaxRevisionsError =
+      errors?.hasError("max_revisions") || (this.state.hasAlreadyBeenValidated && this.hasMaxRevisionsError);
 
     return (
       <div className="row">
@@ -258,26 +264,39 @@ class DisplaySecretHistoryAdministration extends Component {
             <form onSubmit={this.handleFormSubmit}>
               <h3 id="secret-history-settings-title" className="title">
                 <span className="input toggle-switch form-element">
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="secretHistorySettingsToggle"
-                    onChange={this.handleEnableFeature} checked={this.state.isFeatureEnabled} disabled={this.hasAllInputDisabled()}
-                    id="passwordExpirySettingsToggle"/>
-                  <label htmlFor="passwordExpirySettingsToggle"><Trans>Secret history</Trans></label>
+                  <input
+                    type="checkbox"
+                    className="toggle-switch-checkbox checkbox"
+                    name="secretHistorySettingsToggle"
+                    onChange={this.handleEnableFeature}
+                    checked={this.state.isFeatureEnabled}
+                    disabled={this.hasAllInputDisabled()}
+                    id="passwordExpirySettingsToggle"
+                  />
+                  <label htmlFor="passwordExpirySettingsToggle">
+                    <Trans>Secret history</Trans>
+                  </label>
                 </span>
               </h3>
-              {!this.state.isFeatureEnabled &&
+              {!this.state.isFeatureEnabled && (
                 <p className="description">
-                  <Trans>No secret history is configured. Enable it to activate and set the number of passwords revisions.</Trans>
+                  <Trans>
+                    No secret history is configured. Enable it to activate and set the number of passwords revisions.
+                  </Trans>
                 </p>
-              }
+              )}
               {this.state.isFeatureEnabled && (
                 <>
                   <p className="description">
-                    <Trans>Control how many revisions are retained, enabling users to view and restore historical data.</Trans>
+                    <Trans>
+                      Control how many revisions are retained, enabling users to view and restore historical data.
+                    </Trans>
                   </p>
-                  <div className={`input text ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <h4><label htmlFor="configure-secret-history-form-length">
-                      <Trans>History length</Trans>
-                    </label>
+                  <div className={`input text ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                    <h4>
+                      <label htmlFor="configure-secret-history-form-length">
+                        <Trans>History length</Trans>
+                      </label>
                     </h4>
                     <div className="slider">
                       {/* Remove the current revision only for the display*/}
@@ -289,7 +308,8 @@ class DisplaySecretHistoryAdministration extends Component {
                         step="1"
                         type="range"
                         onChange={this.handleInputChange}
-                        disabled={this.hasAllInputDisabled()}/>
+                        disabled={this.hasAllInputDisabled()}
+                      />
                       <input
                         id="configure-secret-history-form-length"
                         type="number"
@@ -298,31 +318,45 @@ class DisplaySecretHistoryAdministration extends Component {
                         max={this.maxRevisionsLimit - 1}
                         value={this.state.settings.max_revisions - 1}
                         onChange={this.handleInputChange}
-                        disabled={this.hasAllInputDisabled()}/>
+                        disabled={this.hasAllInputDisabled()}
+                      />
                     </div>
                     <p className="description">
                       <Trans>This is the number of revisions kept once users have access.</Trans>
                     </p>
-                    {hasMaxRevisionsError &&
-                      <div id="maxRevisions-error" className="error-message"><Trans>The history length must be between 1 and {this.maxRevisionsLimitToDisplay}.</Trans></div>
-                    }
+                    {hasMaxRevisionsError && (
+                      <div id="maxRevisions-error" className="error-message">
+                        <Trans>The history length must be between 1 and {this.maxRevisionsLimitToDisplay}.</Trans>
+                      </div>
+                    )}
                   </div>
                 </>
-
               )}
             </form>
           </div>
-          {hasSettingsChanges &&
+          {hasSettingsChanges && (
             <div className="warning message">
               <div>
-                <p><b><Trans>Warning:</Trans></b> <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans></p>
+                <p>
+                  <b>
+                    <Trans>Warning:</Trans>
+                  </b>{" "}
+                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                </p>
               </div>
             </div>
-          }
+          )}
         </div>
         <div className="actions-wrapper">
-          <button type="button" className="button primary" disabled={this.state.isProcessing} onClick={this.handleFormSubmit}>
-            <span><Trans>Save</Trans></span>
+          <button
+            type="button"
+            className="button primary"
+            disabled={this.state.isProcessing}
+            onClick={this.handleFormSubmit}
+          >
+            <span>
+              <Trans>Save</Trans>
+            </span>
           </button>
         </div>
       </div>
@@ -337,4 +371,6 @@ DisplaySecretHistoryAdministration.propTypes = {
   t: PropTypes.func, // translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(DisplaySecretHistoryAdministration))));
+export default withAppContext(
+  withActionFeedback(withDialog(withTranslation("common")(DisplaySecretHistoryAdministration))),
+);

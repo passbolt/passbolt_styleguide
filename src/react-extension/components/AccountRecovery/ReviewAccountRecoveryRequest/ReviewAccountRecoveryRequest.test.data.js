@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
+import { users } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultRoleContext } from "../../../contexts/RoleContext.test.data";
 
 export function defaultProps(data = {}) {
   const roleContext = defaultRoleContext(data.roleContext);
@@ -33,6 +33,6 @@ export function defaultProps(data = {}) {
     onError: jest.fn(),
     ...data,
     roleContext: roleContext,
-    roles: roles
+    roles: roles,
   };
 }

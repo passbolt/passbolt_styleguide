@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 import ExternalGpgKeyCollection from "./externalGpgKeyCollection";
-import {ExternalGpgKeyEntityFixtures} from "./externalGpgKeyEntity.test.fixtures";
+import { ExternalGpgKeyEntityFixtures } from "./externalGpgKeyEntity.test.fixtures";
 import EntitySchema from "../abstract/entitySchema";
 
 describe("ExternalGpgKey Collection", () => {

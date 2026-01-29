@@ -12,7 +12,7 @@
  * @since         5.6.0
  */
 
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 
 /**
  * Returns a default DTO object suitable for the SecretDataV5StandaloneNoteEntity

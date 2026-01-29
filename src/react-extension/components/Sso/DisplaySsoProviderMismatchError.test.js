@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.0.0
  */
-import {defaultProps} from "./DisplaySsoProviderMismatchError.test.data";
+import { defaultProps } from "./DisplaySsoProviderMismatchError.test.data";
 import DisplaySsoProviderMismatchErrorPage from "./DisplaySsoProviderMismatchError.test.page";
 
 beforeEach(() => {
@@ -19,14 +19,16 @@ beforeEach(() => {
 });
 
 describe("DisplaySsoDisabledError", () => {
-  it('As a registered user I am informed that the SSO provider has changed', async() => {
+  it("As a registered user I am informed that the SSO provider has changed", async () => {
     expect.assertions(5);
     const props = defaultProps();
     const page = new DisplaySsoProviderMismatchErrorPage(props);
 
     expect(page.title).toBeTruthy();
     expect(page.title.textContent).toStrictEqual("Sorry, the SSO provider has changed.");
-    expect(page.message.textContent).toStrictEqual(`For security reasons please check with your administrator that this is a change that they initiated.The new SSO provider: ${props.newProvider.name}`);
+    expect(page.message.textContent).toStrictEqual(
+      `For security reasons please check with your administrator that this is a change that they initiated.The new SSO provider: ${props.newProvider.name}`,
+    );
     await page.clickOnAcceptNewProviderButton();
 
     expect(props.onAcceptNewProvider).not.toHaveBeenCalled();
@@ -37,4 +39,3 @@ describe("DisplaySsoDisabledError", () => {
     expect(props.onAcceptNewProvider).toHaveBeenCalledTimes(1);
   });
 });
-

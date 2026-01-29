@@ -11,15 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
-import {defaultMetadataKeyDto, minimalMetadataKeyDto} from "./metadataKeyEntity.test.data";
-import {v4 as uuidv4} from "uuid";
-import {decryptedMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import { defaultMetadataKeyDto, minimalMetadataKeyDto } from "./metadataKeyEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { decryptedMetadataPrivateKeyDto } from "./metadataPrivateKeyEntity.test.data";
 
 export const defaultMetadataKeysDtos = (count = 2, data = {}, options = {}) => {
   const dtos = [];
   for (let i = 0; i < count; i += 2) {
-    const dto1 = defaultMetadataKeyDto({fingerprint: generateFingerprint(i), ...data}, options);
-    const dto2 = defaultMetadataKeyDto({fingerprint: generateFingerprint(i + 1), ...data}, options);
+    const dto1 = defaultMetadataKeyDto({ fingerprint: generateFingerprint(i), ...data }, options);
+    const dto2 = defaultMetadataKeyDto({ fingerprint: generateFingerprint(i + 1), ...data }, options);
     dtos.push(dto1, dto2);
   }
 
@@ -33,19 +33,22 @@ export const defaultDecryptedSharedMetadataKeysDtos = (data = {}, options = {}) 
   });
 
   return [
-    defaultMetadataKeyDto({
-      id: id,
-      metadata_private_keys: [sharedMetadataPrivateKey],
-      ...data,
-    }, options),
+    defaultMetadataKeyDto(
+      {
+        id: id,
+        metadata_private_keys: [sharedMetadataPrivateKey],
+        ...data,
+      },
+      options,
+    ),
   ];
 };
 
 export const defaultMinimalMetadataKeysDtos = (count = 2, data = {}, options = {}) => {
   const dtos = [];
   for (let i = 0; i < count; i += 2) {
-    const dto1 = minimalMetadataKeyDto({fingerprint: generateFingerprint(i), ...data}, options);
-    const dto2 = minimalMetadataKeyDto({fingerprint: generateFingerprint(i + 1), ...data}, options);
+    const dto1 = minimalMetadataKeyDto({ fingerprint: generateFingerprint(i), ...data }, options);
+    const dto2 = minimalMetadataKeyDto({ fingerprint: generateFingerprint(i + 1), ...data }, options);
     dtos.push(dto1, dto2);
   }
 

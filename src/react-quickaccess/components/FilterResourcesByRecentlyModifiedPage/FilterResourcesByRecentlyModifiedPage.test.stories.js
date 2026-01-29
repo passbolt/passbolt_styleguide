@@ -13,34 +13,41 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import FilterResourcesByRecentlyModifiedPage from "./FilterResourcesByRecentlyModifiedPage";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import {
   defaultProps,
   noFilteredResourcesProps,
-  withFilteredResourcesProps
+  withFilteredResourcesProps,
 } from "./FilterResourcesByRecentlyModifiedPage.test.data";
 
 export default {
-  title: 'Components/QuickAccess/FilterResourcesByRecentlyModified',
-  component: FilterResourcesByRecentlyModifiedPage
+  title: "Components/QuickAccess/FilterResourcesByRecentlyModified",
+  component: FilterResourcesByRecentlyModifiedPage,
 };
 
-const Template = ({context, ...args}) =>
+const Template = ({ context, ...args }) => (
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <div className="container quickaccess"><FilterResourcesByRecentlyModifiedPage {...args} {...routerProps}/></div>}/>
+    <MemoryRouter initialEntries={["/"]}>
+      <Route
+        component={(routerProps) => (
+          <div className="container quickaccess">
+            <FilterResourcesByRecentlyModifiedPage {...args} {...routerProps} />
+          </div>
+        )}
+      />
     </MemoryRouter>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 Template.propTypes = {
   context: PropTypes.object,
 };
 
 const parameters = {
-  css: "ext_quickaccess"
+  css: "ext_quickaccess",
 };
 
 export const InitialLoad = Template.bind({});

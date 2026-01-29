@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class InsertRecoverAuthenticationIframe extends Component {
@@ -42,9 +42,7 @@ class InsertRecoverAuthenticationIframe extends Component {
    * @return {JSX}
    */
   render() {
-    return (
-      <iframe id="passbolt-iframe-recover" ref={this.iframeRef} className="full-screen"/>
-    );
+    return <iframe id="passbolt-iframe-recover" ref={this.iframeRef} className="full-screen" />;
   }
 }
 

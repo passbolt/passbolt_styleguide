@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.3.0
  */
-import {defaultUserPassphrasePoliciesEntityDto} from '../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data';
+import { defaultUserPassphrasePoliciesEntityDto } from "../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
 
 export const defaultUserPassphrasePoliciesContext = (data = {}) => {
   const defaultData = {

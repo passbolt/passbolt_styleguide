@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
@@ -14,7 +13,7 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import OrchestrateAccountKitImportation from "./OrchestrateAccountKitImportation";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -31,7 +30,7 @@ export default class OrchestrateAccountKitImportationPage {
       <MockTranslationProvider>
         <OrchestrateAccountKitImportation {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -39,34 +38,34 @@ export default class OrchestrateAccountKitImportationPage {
    * Returns the get started page
    */
   get getStartedPage() {
-    return this._page.container.querySelector('.get-started-desktop');
+    return this._page.container.querySelector(".get-started-desktop");
   }
 
   /**
    * Returns the import account kit page
    */
   get importAccountKitPage() {
-    return this._page.container.querySelector('.import-account-kit');
+    return this._page.container.querySelector(".import-account-kit");
   }
 
   /**
    * Returns the account kit details page
    */
   get importAccountKitDetailsPage() {
-    return this._page.container.querySelector('.import-account-kit-details');
+    return this._page.container.querySelector(".import-account-kit-details");
   }
 
   /**
    * Returns the display unexpected error page
    */
   get displayUnexpectedErrorPage() {
-    return this._page.container.querySelector('.setup-error');
+    return this._page.container.querySelector(".setup-error");
   }
 
   /**
    * Returns the loading processing title
    */
   get loadingTitle() {
-    return this._page.container.querySelector('.login-processing h1').textContent;
+    return this._page.container.querySelector(".login-processing h1").textContent;
   }
 }

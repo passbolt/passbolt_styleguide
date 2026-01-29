@@ -15,8 +15,10 @@
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SecretDataV4DefaultEntity from "./secretDataV4DefaultEntity";
-import {defaultSecretDataV4DefaultData, minimalDefaultSecretDataV4DefaultData} from "./secretDataV4DefaultEntity.test.data";
-
+import {
+  defaultSecretDataV4DefaultData,
+  minimalDefaultSecretDataV4DefaultData,
+} from "./secretDataV4DefaultEntity.test.data";
 
 describe("SecretDataV4DefaultEntity", () => {
   describe("::getSchema", () => {
@@ -100,7 +102,7 @@ describe("SecretDataV4DefaultEntity", () => {
     it("should return true", () => {
       const dto = defaultSecretDataV4DefaultData();
       const entity = new SecretDataV4DefaultEntity(dto);
-      expect(entity.areSecretsDifferent({password: "this-is-a-secret-password"})).toBeTruthy();
+      expect(entity.areSecretsDifferent({ password: "this-is-a-secret-password" })).toBeTruthy();
     });
 
     it("should return false", () => {

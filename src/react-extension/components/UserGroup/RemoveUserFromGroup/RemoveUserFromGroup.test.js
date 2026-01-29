@@ -15,11 +15,11 @@
 /**
  * Unit tests on RemoveUserFromGroupDialog in regard of specifications
  */
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {fireEvent, waitFor} from "@testing-library/react";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { fireEvent, waitFor } from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import RemoveUserFromGroupPage from "./RemoveUserFromGroup.test.page";
-import {defaultAppContext, defaultProps, mockGroup, mockGroupDto, mockUser} from "./RemoveUserFromGroup.test.data";
+import { defaultAppContext, defaultProps, mockGroup, mockGroupDto, mockUser } from "./RemoveUserFromGroup.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,9 +32,10 @@ describe("See Remove User From Group Dialog", () => {
   const user = mockUser();
   const group = mockGroup();
 
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(context.port, "request").mockImplementation(implementation);
 
-  describe('As AD I can remove a user from a group', () => {
+  describe("As AD I can remove a user from a group", () => {
     /**
      * Given a selected user
      * Then I should see the name of the user I can remove
@@ -44,14 +45,16 @@ describe("See Remove User From Group Dialog", () => {
      */
 
     beforeEach(() => {
-      context.setContext({removeUserFromGroupDialogProps: {
-        user: user,
-        group: group
-      }});
+      context.setContext({
+        removeUserFromGroupDialogProps: {
+          user: user,
+          group: group,
+        },
+      });
       page = new RemoveUserFromGroupPage(context, props);
     });
 
-    it('As AD I should know what user I am removing', () => {
+    it("As AD I should know what user I am removing", () => {
       expect.assertions(9);
       expect(page.displayRemoveUserFromGroupDialog.exists()).toBeTruthy();
       // title
@@ -61,35 +64,39 @@ describe("See Remove User From Group Dialog", () => {
       expect(page.displayRemoveUserFromGroupDialog.closeButton).not.toBeNull();
       // submit button
       expect(page.displayRemoveUserFromGroupDialog.saveButton).not.toBeNull();
-      expect(page.displayRemoveUserFromGroupDialog.saveButton.textContent).toBe('Remove');
+      expect(page.displayRemoveUserFromGroupDialog.saveButton.textContent).toBe("Remove");
       // cancel button
       expect(page.displayRemoveUserFromGroupDialog.cancelButton).not.toBeNull();
-      expect(page.displayRemoveUserFromGroupDialog.cancelButton.textContent).toBe('Cancel');
+      expect(page.displayRemoveUserFromGroupDialog.cancelButton.textContent).toBe("Cancel");
       // user name
-      expect(page.displayRemoveUserFromGroupDialog.getUser.textContent).toBe(`${user.profile.first_name} ${user.profile.last_name} (${user.username})`);
+      expect(page.displayRemoveUserFromGroupDialog.getUser.textContent).toBe(
+        `${user.profile.first_name} ${user.profile.last_name} (${user.username})`,
+      );
     });
 
-    it('As AD I should see a toaster message after removing a user from a group', async() => {
+    it("As AD I should see a toaster message after removing a user from a group", async () => {
       expect.assertions(2);
       const submitButton = page.displayRemoveUserFromGroupDialog.saveButton;
       // Mock the request function to make it the expected result
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.displayRemoveUserFromGroupDialog.click(submitButton);
       expect(context.port.request).toHaveBeenCalledWith("passbolt.groups.update", mockGroupDto());
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
-    it('As AD I should see a processing feedback while submitting the form', async() => {
+    it("As AD I should see a processing feedback while submitting the form", async () => {
       expect.assertions(3);
       // Mock the request function to make it the expected result
       let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
+      const requestMockImpl = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            updateResolve = resolve;
+          }),
+      );
 
       // Mock the request function to make it the expected result
       mockContextRequest(context, requestMockImpl);
@@ -103,7 +110,7 @@ describe("See Remove User From Group Dialog", () => {
       });
     });
 
-    it('As AD I should be able to cancel the operation by clicking on the close button', async() => {
+    it("As AD I should be able to cancel the operation by clicking on the close button", async () => {
       expect.assertions(1);
       const closeButton = page.displayRemoveUserFromGroupDialog.closeButton;
 
@@ -111,7 +118,7 @@ describe("See Remove User From Group Dialog", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I should be able to cancel the operation by clicking on the cancel button', async() => {
+    it("As AD I should be able to cancel the operation by clicking on the cancel button", async () => {
       expect.assertions(1);
       const cancelButton = page.displayRemoveUserFromGroupDialog.cancelButton;
 
@@ -119,20 +126,20 @@ describe("See Remove User From Group Dialog", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I should be able to cancel the edition with the keyboard (escape)', () => {
+    it("As AD I should be able to cancel the edition with the keyboard (escape)", () => {
       expect.assertions(1);
       // Escape key pressed event
-      const escapeKeyDown = {keyCode: 27};
+      const escapeKeyDown = { keyCode: 27 };
       fireEvent.keyDown(page.displayRemoveUserFromGroupDialog.dialogTitle, escapeKeyDown);
 
       expect(props.onClose).toBeCalled();
     });
 
-    it('Displays an error when the API call fail', async() => {
+    it("Displays an error when the API call fail", async () => {
       expect.assertions(2);
       const submitButton = page.displayRemoveUserFromGroupDialog.saveButton;
       // Mock the request function to make it return an error.
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
 
@@ -143,7 +150,7 @@ describe("See Remove User From Group Dialog", () => {
       expect(page.displayRemoveUserFromGroupDialog.errorDialogMessage).not.toBeNull();
     });
 
-    it('As AD I want to see a user and group names fitting its remove dialog', async() => {
+    it("As AD I want to see a user and group names fitting its remove dialog", async () => {
       expect.assertions(2);
       expect(page.displayRemoveUserFromGroupDialog.getUser.classList.contains("dialog-variable")).toBeTruthy();
       expect(page.displayRemoveUserFromGroupDialog.getGroup.classList.contains("dialog-variable")).toBeTruthy();

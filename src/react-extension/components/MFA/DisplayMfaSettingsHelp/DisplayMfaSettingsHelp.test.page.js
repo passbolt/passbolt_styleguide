@@ -14,7 +14,7 @@
 
 import React from "react";
 import DisplayMfaSettingsHelp from "./DisplayMfaSettingsHelp";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -28,9 +28,9 @@ export default class DisplayMfaSettingsHelpPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayMfaSettingsHelp {...props}/>
+        <DisplayMfaSettingsHelp {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,27 +38,27 @@ export default class DisplayMfaSettingsHelpPage {
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help-section');
+    return this._page.container.querySelector(".sidebar-help-section");
   }
 
   /**
    * Returns the help box title
    */
   get helpBoxTitle() {
-    return this._page.container.querySelector('.sidebar-help-section h3');
+    return this._page.container.querySelector(".sidebar-help-section h3");
   }
 
   /**
    * Returns the help box description
    */
   get helpBoxDescription() {
-    return this._page.container.querySelector('.sidebar-help-section p');
+    return this._page.container.querySelector(".sidebar-help-section p");
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help-section .button');
+    return this._page.container.querySelector(".sidebar-help-section .button");
   }
 }

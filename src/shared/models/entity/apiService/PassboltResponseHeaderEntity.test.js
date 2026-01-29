@@ -14,23 +14,29 @@
 
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import PassboltResponseHeaderEntity from "./PassboltResponseHeaderEntity";
-import {defaultPassboltResponseHeaderDto} from "./PassboltResponseHeaderEntity.test.data";
+import { defaultPassboltResponseHeaderDto } from "./PassboltResponseHeaderEntity.test.data";
 import PassboltResponsePaginationHeaderEntity from "./PassboltResponsePaginationHeaderEntity";
-import {defaultPassboltResponsePaginationHeaderDto} from "./PassboltResponsePaginationHeaderEntity.test.data";
+import { defaultPassboltResponsePaginationHeaderDto } from "./PassboltResponsePaginationHeaderEntity.test.data";
 
 describe("PassboltResponseHeaderEntity", () => {
   describe("PassboltResponseHeaderEntity::getSchema", () => {
     it("validates pagination property", () => {
       const dto = defaultPassboltResponseHeaderDto();
       const successScenarios = [
-        {scenario: "valid pagination object", value: defaultPassboltResponsePaginationHeaderDto()},
-        {scenario: "null pagination'", value: null},
+        { scenario: "valid pagination object", value: defaultPassboltResponsePaginationHeaderDto() },
+        { scenario: "null pagination'", value: null },
       ];
       const failScenarios = [
-        {scenario: "invalid pagination type: array", value: []},
-        {scenario: "invalid pagination type: integer", value: 42},
+        { scenario: "invalid pagination type: array", value: [] },
+        { scenario: "invalid pagination type: integer", value: 42 },
       ];
-      assertEntityProperty.assertAssociation(PassboltResponseHeaderEntity, "pagination", dto, successScenarios, failScenarios);
+      assertEntityProperty.assertAssociation(
+        PassboltResponseHeaderEntity,
+        "pagination",
+        dto,
+        successScenarios,
+        failScenarios,
+      );
       assertEntityProperty.notRequired(PassboltResponseHeaderEntity, "pagination");
     });
   });

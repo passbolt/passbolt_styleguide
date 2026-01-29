@@ -44,11 +44,12 @@ class LoadingBar extends React.Component {
   render() {
     return (
       <div className="update-loading-bar">
-        <div className="progress-bar"  >
-          <span className="progress"
+        <div className="progress-bar">
+          <span
+            className="progress"
             onTransitionEnd={this.handleProgressEnd}
-            style={{"width": `${this.props.progress || 0}%`}}>
-          </span>
+            style={{ width: `${this.props.progress || 0}%` }}
+          ></span>
         </div>
       </div>
     );
@@ -57,7 +58,7 @@ class LoadingBar extends React.Component {
 
 LoadingBar.propTypes = {
   progress: PropTypes.number, // The progress rate to reach
-  onProgressCompleted: PropTypes.func // Whenever the progress rate has been reached
+  onProgressCompleted: PropTypes.func, // Whenever the progress rate has been reached
 };
 
 export default LoadingBar;

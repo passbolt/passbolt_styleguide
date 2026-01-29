@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
@@ -27,9 +27,9 @@ export default class DisplayResourcesListContextualMenuPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourcesListContextualMenu {...props}/>
+        <DisplayResourcesListContextualMenu {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,7 +38,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get menu() {
-    return this._page.container.querySelector('.contextual-menu');
+    return this._page.container.querySelector(".contextual-menu");
   }
 
   /**
@@ -46,7 +46,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get copyUsernameItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#username');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#username");
   }
 
   /**
@@ -54,7 +54,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get copyPasswordItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#password');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#password");
   }
 
   /**
@@ -62,7 +62,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get copyUriItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#uri');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#uri");
   }
 
   /**
@@ -70,7 +70,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get copyPermalinkItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#permalink');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#permalink");
   }
 
   /**
@@ -78,7 +78,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get openUriItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#open-uri');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#open-uri");
   }
 
   /**
@@ -86,7 +86,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get copyTotpItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#totp');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#totp");
   }
 
   /**
@@ -94,7 +94,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get editItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#edit');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#edit");
   }
 
   /**
@@ -102,7 +102,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get shareItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#share');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#share");
   }
 
   /**
@@ -110,7 +110,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get deleteItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#delete');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#delete");
   }
 
   /**
@@ -118,7 +118,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get markAsExpiredItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#mark-as-expired');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#mark-as-expired");
   }
 
   /**
@@ -126,7 +126,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get setExpiryDateItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#set-expiry-date');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#set-expiry-date");
   }
 
   /**
@@ -134,12 +134,12 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get secretHistoryItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#secret-history');
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#secret-history");
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

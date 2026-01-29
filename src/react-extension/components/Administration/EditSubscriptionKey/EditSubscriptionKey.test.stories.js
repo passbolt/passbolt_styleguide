@@ -12,11 +12,11 @@
  * @since         3.6.0
  */
 import EditSubscriptionKey from "./EditSubscriptionKey";
-import {defaultProps} from "./EditSubscriptionKey.test.data";
+import { defaultProps } from "./EditSubscriptionKey.test.data";
 
 export default {
-  title: 'Components/Administration/EditSubscriptionKey',
-  component: EditSubscriptionKey
+  title: "Components/Administration/EditSubscriptionKey",
+  component: EditSubscriptionKey,
 };
 
 export const Default = {

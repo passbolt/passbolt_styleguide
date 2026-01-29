@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DialogCloseButton from "../DialogCloseButton/DialogCloseButton";
 import Tooltip from "../../Tooltip/Tooltip";
@@ -62,7 +62,7 @@ class DialogWrapper extends Component {
    * @return {void}
    */
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyDown, {capture: false});
+    document.addEventListener("keydown", this.handleKeyDown, { capture: false });
   }
 
   /**
@@ -71,7 +71,7 @@ class DialogWrapper extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown, {capture: false});
+    document.removeEventListener("keydown", this.handleKeyDown, { capture: false });
   }
 
   /**
@@ -86,21 +86,17 @@ class DialogWrapper extends Component {
             <div className="dialog-title-wrapper">
               <h2>
                 <span className="dialog-header-title">{this.props.title}</span>
-                {this.props.subtitle &&
-                  <span className="dialog-header-subtitle">{this.props.subtitle}</span>
-                }
+                {this.props.subtitle && <span className="dialog-header-subtitle">{this.props.subtitle}</span>}
               </h2>
-              {(this.props.tooltip && this.props.tooltip !== '') &&
+              {this.props.tooltip && this.props.tooltip !== "" && (
                 <Tooltip message={this.props.tooltip}>
-                  <InfoSVG/>
+                  <InfoSVG />
                 </Tooltip>
-              }
+              )}
             </div>
-            <DialogCloseButton onClose={this.handleClose} disabled={this.props.disabled}/>
+            <DialogCloseButton onClose={this.handleClose} disabled={this.props.disabled} />
           </div>
-          <div className="dialog-content">
-            {this.props.children}
-          </div>
+          <div className="dialog-content">{this.props.children}</div>
         </div>
       </div>
     );
@@ -110,15 +106,11 @@ class DialogWrapper extends Component {
 DialogWrapper.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  title: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-    PropTypes.string,
-  ]),
+  title: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node, PropTypes.string]),
   subtitle: PropTypes.string,
   tooltip: PropTypes.string,
   disabled: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
 export default DialogWrapper;

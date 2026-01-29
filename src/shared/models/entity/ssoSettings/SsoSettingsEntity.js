@@ -28,15 +28,13 @@ class SsoSettingsEntity extends Entity {
    * @inheritDoc
    */
   constructor(ssoSettingsDto, options = {}) {
-    super(EntitySchema.validate(
-      SsoSettingsEntity.ENTITY_NAME,
-      ssoSettingsDto,
-      SsoSettingsEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(SsoSettingsEntity.ENTITY_NAME, ssoSettingsDto, SsoSettingsEntity.getSchema()), options);
 
     // Sso settings associations.
     if (this._props.data) {
-      this._data = SsoSettingsEntity.buildSsoProviderSettingsFromData(this._props.provider, this._props.data, {clone: false});
+      this._data = SsoSettingsEntity.buildSsoProviderSettingsFromData(this._props.provider, this._props.data, {
+        clone: false,
+      });
       delete this._props.data;
     }
   }
@@ -47,44 +45,44 @@ class SsoSettingsEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: [],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "providers": {
-          "type": "array",
-          "items": {
-            "type": "string"
+        providers: {
+          type: "array",
+          items: {
+            type: "string",
           },
         },
-        "provider": {
-          "type": "string",
-          "enum": SsoSettingsEntity.AVAILABLE_PROVIDERS,
-          "nullable": true,
+        provider: {
+          type: "string",
+          enum: SsoSettingsEntity.AVAILABLE_PROVIDERS,
+          nullable: true,
         },
-        "data": {
-          "type": "object",
+        data: {
+          type: "object",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid"
+        created_by: {
+          type: "string",
+          format: "uuid",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid"
+        modified_by: {
+          type: "string",
+          format: "uuid",
         },
-      }
+      },
     };
   }
 
@@ -106,13 +104,13 @@ class SsoSettingsEntity extends Entity {
    */
   static buildSsoProviderSettingsFromData(providerId, data, options = {}) {
     switch (providerId) {
-      case (AzureSsoSettingsEntity.PROVIDER_ID):
+      case AzureSsoSettingsEntity.PROVIDER_ID:
         return new AzureSsoSettingsEntity(data, options);
-      case (GoogleSsoSettingsEntity.PROVIDER_ID):
+      case GoogleSsoSettingsEntity.PROVIDER_ID:
         return new GoogleSsoSettingsEntity(data, options);
-      case (OAuth2SsoSettingsEntity.PROVIDER_ID):
+      case OAuth2SsoSettingsEntity.PROVIDER_ID:
         return new OAuth2SsoSettingsEntity(data, options);
-      case (AdfsSsoSettingsEntity.PROVIDER_ID):
+      case AdfsSsoSettingsEntity.PROVIDER_ID:
         return new AdfsSsoSettingsEntity(data, options);
       default:
         /*

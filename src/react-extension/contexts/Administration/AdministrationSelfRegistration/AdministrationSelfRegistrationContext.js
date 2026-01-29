@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import SelfRegistrationService from "../../../../shared/services/api/selfRegistration/selfRegistrationService";
 import SelfRegistrationDomainsViewModel from "../../../../shared/models/selfRegistration/SelfRegistrationDomainsViewModel";
 import MapObject from "../../../lib/Map/MapObject";
@@ -22,9 +22,9 @@ import SelfRegistrationDto from "../../../../shared/models/selfRegistration/Self
 import SelfRegistrationFormService from "../../../../shared/services/forms/selfRegistration/SelfRegistrationFormService";
 import ConfirmSaveSelfRegistrationSettings from "../../../components/Administration/DisplaySelfRegistrationAdministration/ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings";
 import NotifyError from "../../../components/Common/Error/NotifyError/NotifyError";
-import {withActionFeedback} from "../../ActionFeedbackContext";
-import {withDialog} from "../../DialogContext";
-import {withTranslation} from "react-i18next";
+import { withActionFeedback } from "../../ActionFeedbackContext";
+import { withDialog } from "../../DialogContext";
+import { withTranslation } from "react-i18next";
 import ConfirmDeletionSelfRegistrationSettings from "../../../components/Administration/DisplaySelfRegistrationAdministration/ConfirmDeletionSelfRegistrationSettings/ConfirmDeletionSelfRegistrationSettings";
 
 /**
@@ -52,7 +52,7 @@ export const AdminSelfRegistrationContext = React.createContext({
   setFocus: () => {}, // Set the focus object,
   isSaved: () => {}, // return saved value
   setSaved: () => {}, // init saved value
-  validateForm: () => {} // Validate the form
+  validateForm: () => {}, // Validate the form
 });
 
 /**
@@ -67,12 +67,8 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
     super(props);
     this.state = this.defaultState;
     const apiClientOptions = props.context.getApiClientOptions();
-    this.selfRegistrationService = new SelfRegistrationService(
-      apiClientOptions
-    );
-    this.selfRegistrationFormService = new SelfRegistrationFormService(
-      this.props.t
-    );
+    this.selfRegistrationService = new SelfRegistrationService(apiClientOptions);
+    this.selfRegistrationFormService = new SelfRegistrationFormService(this.props.t);
   }
 
   /**
@@ -119,7 +115,7 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
     this.setProcessing(true);
     const result = await this.selfRegistrationService.find();
     //Init saved setting
-    this.setState({currentSettings: result});
+    this.setState({ currentSettings: result });
     const domains = new SelfRegistrationDomainsViewModel(result);
     //Init allowed domains which will interact with UI
     this.setDomains(domains, callback);
@@ -148,10 +144,10 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
    * @returns {void}
    */
   setAllowedDomains(key, value, callback = () => {}) {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       const allowedDomains = MapObject.clone(prevState.domains.allowedDomains);
       allowedDomains.set(key, value);
-      return {domains: {allowedDomains}};
+      return { domains: { allowedDomains } };
     }, callback);
   }
 
@@ -161,7 +157,7 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
    * @returns {void}
    */
   setDomains(domains, callback = () => {}) {
-    this.setState({domains}, callback);
+    this.setState({ domains }, callback);
   }
 
   /**
@@ -179,7 +175,7 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -196,7 +192,7 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
    * @returns {Boolean}
    */
   setSubmitted(submitted) {
-    this.setState({submitted});
+    this.setState({ submitted });
     this.setFocus(submitted);
   }
 
@@ -220,17 +216,17 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
    * @returns {Boolean}
    */
   setFocus(focus) {
-    this.setState({focus});
+    this.setState({ focus });
   }
 
   /**
    * set an error to object
    */
   setError(key, value) {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       const errors = MapObject.clone(prevState.errors);
       errors.set(key, value);
-      return {errors};
+      return { errors };
     });
   }
 
@@ -238,7 +234,7 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
    * set errors to object
    */
   setErrors(errors) {
-    this.setState({errors});
+    this.setState({ errors });
   }
 
   /**
@@ -250,16 +246,14 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
     const savedDomains = this.state.currentSettings?.data?.allowed_domains || [];
     const uiDomains = MapObject.listValues(this.state.domains.allowedDomains);
 
-    return (
-      (JSON.stringify(savedDomains) !== JSON.stringify(uiDomains))
-    );
+    return JSON.stringify(savedDomains) !== JSON.stringify(uiDomains);
   }
 
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {currentSettings, domains, processing} = this.defaultState;
+    const { currentSettings, domains, processing } = this.defaultState;
     this.setState({
       currentSettings,
       domains,
@@ -312,16 +306,11 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
   async saveSettings() {
     try {
       this.setProcessing(true);
-      const newSettings = new SelfRegistrationDto(
-        this.state.domains,
-        this.state.currentSettings
-      );
+      const newSettings = new SelfRegistrationDto(this.state.domains, this.state.currentSettings);
       await this.selfRegistrationService.save(newSettings);
       await this.findSettings(() => this.setSaved(true));
       await this.props.actionFeedbackContext.displaySuccess(
-        this.props.t(
-          "The self registration settings for the organization were updated."
-        )
+        this.props.t("The self registration settings for the organization were updated."),
       );
     } catch (error) {
       this.handleSubmitError(error);
@@ -382,9 +371,7 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
       await this.selfRegistrationService.delete(this.state.currentSettings.id);
       await this.findSettings();
       await this.props.actionFeedbackContext.displaySuccess(
-        this.props.t(
-          "The self registration settings for the organization were updated."
-        )
+        this.props.t("The self registration settings for the organization were updated."),
       );
     } catch (error) {
       this.handleSubmitError(error);
@@ -406,7 +393,7 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
    * @Param {Boolean}
    */
   setSaved(saved) {
-    return this.setState({saved});
+    return this.setState({ saved });
   }
 
   /**
@@ -430,7 +417,9 @@ AdminSelfRegistrationContextProvider.propTypes = {
   actionFeedbackContext: PropTypes.object, // The action feedback context
 };
 
-export default withAppContext(withDialog(withActionFeedback(withTranslation("common")(AdminSelfRegistrationContextProvider))));
+export default withAppContext(
+  withDialog(withActionFeedback(withTranslation("common")(AdminSelfRegistrationContextProvider))),
+);
 
 /**
  * Resource Workspace Context Consumer HOC
@@ -441,11 +430,8 @@ export function withAdminSelfRegistration(WrappedComponent) {
     render() {
       return (
         <AdminSelfRegistrationContext.Consumer>
-          {adminSelfRegistrationContext => (
-            <WrappedComponent
-              adminSelfRegistrationContext={adminSelfRegistrationContext}
-              {...this.props}
-            />
+          {(adminSelfRegistrationContext) => (
+            <WrappedComponent adminSelfRegistrationContext={adminSelfRegistrationContext} {...this.props} />
           )}
         </AdminSelfRegistrationContext.Consumer>
       );

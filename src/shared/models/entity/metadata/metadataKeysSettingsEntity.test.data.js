@@ -12,8 +12,8 @@
  * @since         4.10.0
  */
 
-import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { defaultMetadataPrivateKeyDto } from "./metadataPrivateKeyEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Build default metadata types settings.
@@ -29,7 +29,9 @@ export const defaultMetadataKeysSettingsDto = (data = {}, options = {}) => {
   };
 
   if (!defaultData.metadata_private_keys && options?.withMetadataPrivateKeys) {
-    defaultData.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: uuidv4()}, options?.withMetadataPrivateKeys)];
+    defaultData.metadata_private_keys = [
+      defaultMetadataPrivateKeyDto({ metadata_key_id: uuidv4() }, options?.withMetadataPrivateKeys),
+    ];
   }
 
   return Object.assign(defaultData, data);

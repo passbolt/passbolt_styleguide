@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,12 +12,11 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import FilterUsersByShortcut from "./FilterUsersByShortcut";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -35,11 +33,11 @@ export default class FilterUsersByShortcutPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
-            <FilterUsersByShortcut.WrappedComponent {...props}/>
+            <FilterUsersByShortcut.WrappedComponent {...props} />
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -47,8 +45,8 @@ export default class FilterUsersByShortcutPage {
    * Select the All users filter
    */
   async filterByAllUsers() {
-    const element = this._page.container.querySelector('#all-users');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector("#all-users");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -57,8 +55,8 @@ export default class FilterUsersByShortcutPage {
    * Select the Recently Modified filter
    */
   async filterByRecentlyModified() {
-    const element = this._page.container.querySelector('#recently-modified');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector("#recently-modified");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -67,8 +65,8 @@ export default class FilterUsersByShortcutPage {
    * Select the Recently Modified filter
    */
   async filterBySuspendedUsers() {
-    const element = this._page.container.querySelector('#suspended-users');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector("#suspended-users");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

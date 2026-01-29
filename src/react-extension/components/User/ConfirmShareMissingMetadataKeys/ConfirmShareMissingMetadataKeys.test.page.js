@@ -12,7 +12,7 @@
  * @since         5.2.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import React from "react";
@@ -32,15 +32,13 @@ export default class ConfirmShareMissingMetadataKeysPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-
           <DialogContextProvider>
-            <ManageDialogs/>
-            <ConfirmShareMissingMetadataKeys {...props}/>
+            <ManageDialogs />
+            <ConfirmShareMissingMetadataKeys {...props} />
           </DialogContextProvider>
         </AppContext.Provider>
-
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -55,21 +53,21 @@ export default class ConfirmShareMissingMetadataKeysPage {
    * Returns the confirm button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
    * Returns the dialog content
    */
   get dialogContent() {
-    return this._page.container.querySelector('.form-content p').textContent;
+    return this._page.container.querySelector(".form-content p").textContent;
   }
 
   /**
    * Confirms the share missing metadatz dialog disable
    */
   async confirm() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.confirmButton, leftClick);
     await waitFor(() => {});
   }
@@ -78,7 +76,7 @@ export default class ConfirmShareMissingMetadataKeysPage {
    * Cancels the user's MFA disable
    */
   async cancel() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.cancelButton, leftClick);
     await waitFor(() => {});
   }

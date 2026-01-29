@@ -12,7 +12,7 @@
  * @since         4.9.4
  */
 
-import {defaultNeededSecretDto} from "./neededSecretEntity.test.data";
+import { defaultNeededSecretDto } from "./neededSecretEntity.test.data";
 
 /**
  * Build dtos.
@@ -28,4 +28,3 @@ export const defaultNeededSecretsDtos = (count = 10, data = {}) => {
   }
   return dtos;
 };
-

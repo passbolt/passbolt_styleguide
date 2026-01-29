@@ -1,4 +1,4 @@
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
@@ -20,12 +20,12 @@ export default class ConfirmDisableUserMFATestPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
-            <ManageDialogs/>
-            <ConfirmDisableUserMFA {...props}/>
+            <ManageDialogs />
+            <ConfirmDisableUserMFA {...props} />
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -40,15 +40,14 @@ export default class ConfirmDisableUserMFATestPage {
    * Returns the confirm button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
-
 
   /**
    * Confirms the user's MFA disable
    */
   async confirm() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.confirmButton, leftClick);
     await waitFor(() => {});
   }
@@ -57,7 +56,7 @@ export default class ConfirmDisableUserMFATestPage {
    * Confirms the user's MFA disable without React wait for
    */
   confirmWithoutWaitFor() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.confirmButton, leftClick);
   }
 
@@ -65,7 +64,7 @@ export default class ConfirmDisableUserMFATestPage {
    * Cancels the user's MFA disable
    */
   async cancel() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.cancelButton, leftClick);
     await waitFor(() => {});
   }

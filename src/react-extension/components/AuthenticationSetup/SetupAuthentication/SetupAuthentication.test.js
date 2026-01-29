@@ -11,10 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.4.0
  */
-import {AuthenticationSetupWorkflowStates} from "../../../contexts/Authentication/AuthenticationSetupContext";
-import {defaultProps} from "./SetupAuthentication.test.data";
+import { AuthenticationSetupWorkflowStates } from "../../../contexts/Authentication/AuthenticationSetupContext";
+import { defaultProps } from "./SetupAuthentication.test.data";
 import SetupAuthenticationPage from "./SetupAuthentication.test.page";
-
 
 describe("SetupAuthentication", () => {
   describe("::render", () => {
@@ -23,7 +22,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.INTRODUCE_EXTENSION;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -38,7 +37,7 @@ describe("SetupAuthentication", () => {
       const props = defaultProps({
         authenticationSetupContext: {
           state: state,
-          userPassphrasePolicies: {entropy_minimum: 0},
+          userPassphrasePolicies: { entropy_minimum: 0 },
         },
       });
 
@@ -54,7 +53,7 @@ describe("SetupAuthentication", () => {
       const props = defaultProps({
         authenticationSetupContext: {
           state: state,
-          downloadRecoveryKit: jest.fn()
+          downloadRecoveryKit: jest.fn(),
         },
       });
 
@@ -68,7 +67,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.IMPORT_GPG_KEY;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -81,7 +80,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.VALIDATE_PASSPHRASE;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -94,7 +93,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -107,7 +106,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -120,7 +119,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.CONFIGURING_SSO;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -133,7 +132,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.COMPLETING_SETUP;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -146,7 +145,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.SIGNING_IN;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -159,7 +158,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -172,7 +171,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.CHECKING_POST_SETUP_METADATA_TASKS;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -185,7 +184,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.ENABLING_METADATA_ENCRYPTION;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);
@@ -198,7 +197,7 @@ describe("SetupAuthentication", () => {
 
       const state = AuthenticationSetupWorkflowStates.LOADING;
       const props = defaultProps({
-        authenticationSetupContext: {state},
+        authenticationSetupContext: { state },
       });
 
       const page = new SetupAuthenticationPage(props);

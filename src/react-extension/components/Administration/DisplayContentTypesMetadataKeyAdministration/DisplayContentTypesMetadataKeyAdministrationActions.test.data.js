@@ -22,6 +22,6 @@ export function defaultProps(props = {}) {
     isProcessing: false,
     isDisabled: false,
     onSaveRequested: jest.fn,
-    ... props
+    ...props,
   };
 }

@@ -12,10 +12,10 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import React, { Component } from "react";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class DisplayRestartFromScratchError extends Component {
   /**
@@ -25,14 +25,28 @@ class DisplayRestartFromScratchError extends Component {
   render() {
     return (
       <div className="setup-error">
-        <h1><Trans>Sorry, wrong computer or browser...</Trans></h1>
-        <p><Trans>You need to finalize the account recovery process with the same computer you used for the account recovery request.</Trans><br/><br/>
-          <Trans>If you changed systems, or reinstalled passbolt web extension in the meantime, you will need to start the account recovery process from scratch.</Trans></p>
+        <h1>
+          <Trans>Sorry, wrong computer or browser...</Trans>
+        </h1>
+        <p>
+          <Trans>
+            You need to finalize the account recovery process with the same computer you used for the account recovery
+            request.
+          </Trans>
+          <br />
+          <br />
+          <Trans>
+            If you changed systems, or reinstalled passbolt web extension in the meantime, you will need to start the
+            account recovery process from scratch.
+          </Trans>
+        </p>
         <div className="form-actions">
-          <a href={`${this.props.context.trustedDomain}/users/recover`}
+          <a
+            href={`${this.props.context.trustedDomain}/users/recover`}
             className="button primary big full-width"
             role="button"
-            rel="noopener noreferrer">
+            rel="noopener noreferrer"
+          >
             <Trans>Restart from scratch</Trans>
           </a>
         </div>

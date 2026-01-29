@@ -11,16 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withDialog } from "../../../contexts/DialogContext";
+import { Trans, withTranslation } from "react-i18next";
 
 class DefineResourceFolderMoveStrategy extends Component {
   /**
@@ -30,7 +30,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getStateBasedOnContext(props,  this.getDefaultState());
+    this.state = this.getStateBasedOnContext(props, this.getDefaultState());
     this.moveOptionChangeRef = React.createRef();
     this.moveOptionKeepRef = React.createRef();
     this.bindEventHandlers();
@@ -42,7 +42,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.setState({loading: false, moveOption: 'change'});
+    this.setState({ loading: false, moveOption: "change" });
     this.moveOptionChangeRef.current.focus();
   }
 
@@ -55,10 +55,10 @@ class DefineResourceFolderMoveStrategy extends Component {
       // Dialog states
       loading: true,
       processing: false,
-      moveOption: 'change',
+      moveOption: "change",
 
       // Cascade checkbox
-      cascade: false
+      cascade: false,
     };
   }
 
@@ -83,7 +83,7 @@ class DefineResourceFolderMoveStrategy extends Component {
   getStateBasedOnContext(props, defaultState) {
     const folders = props.context.folders;
     const error = {
-      message: this.translate("The folder could not be found. Maybe it was deleted or you lost access.")
+      message: this.translate("The folder could not be found. Maybe it was deleted or you lost access."),
     };
 
     if (!folders) {
@@ -91,7 +91,8 @@ class DefineResourceFolderMoveStrategy extends Component {
       this.handleError(error);
     }
 
-    const folder = props.context.folders.find(item => item.id === this.props.context.folderMoveStrategyProps.folders[0]) || false;
+    const folder =
+      props.context.folders.find((item) => item.id === this.props.context.folderMoveStrategyProps.folders[0]) || false;
     if (!folder) {
       console.error(`Folder ${this.props.context.folderMoveStrategyProps.folders[0]} not found in context.`);
       this.handleError(error);
@@ -116,7 +117,9 @@ class DefineResourceFolderMoveStrategy extends Component {
     await this.toggleProcessing();
 
     try {
-      await this.props.context.port.emit(this.props.context.folderMoveStrategyProps.requestId, "SUCCESS", {moveOption: this.state.moveOption});
+      await this.props.context.port.emit(this.props.context.folderMoveStrategyProps.requestId, "SUCCESS", {
+        moveOption: this.state.moveOption,
+      });
       this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
@@ -127,7 +130,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    * Handle save operation success.
    */
   handleSaveSuccess() {
-    this.props.context.setContext({folderMoveStrategyProps: {}});
+    this.props.context.setContext({ folderMoveStrategyProps: {} });
     this.props.onClose();
   }
 
@@ -138,12 +141,12 @@ class DefineResourceFolderMoveStrategy extends Component {
   handleSaveError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     } else {
       // Unexpected error occurred.
       console.error(error);
       this.handleError(error);
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -153,7 +156,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -164,8 +167,8 @@ class DefineResourceFolderMoveStrategy extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return new Promise(resolve => {
-      this.setState({processing: !prev}, resolve());
+    return new Promise((resolve) => {
+      this.setState({ processing: !prev }, resolve());
     });
   }
 
@@ -178,7 +181,7 @@ class DefineResourceFolderMoveStrategy extends Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -191,7 +194,7 @@ class DefineResourceFolderMoveStrategy extends Component {
     }
     const error = new UserAbortsOperationError(this.translate("The dialog has been closed."));
     this.props.context.port.emit(this.props.context.folderMoveStrategyProps.requestId, "ERROR", error);
-    this.props.context.setContext({folderMoveStrategyProps: {}});
+    this.props.context.setContext({ folderMoveStrategyProps: {} });
     this.props.onClose();
   }
 
@@ -208,7 +211,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {string}
    */
   getIntroMessage() {
-    let message = '';
+    let message = "";
     if (this.isAboutItems()) {
       message = <Trans>You are about to move several items.</Trans>;
     } else if (this.isAboutAFolder()) {
@@ -220,7 +223,11 @@ class DefineResourceFolderMoveStrategy extends Component {
     } else {
       message = <Trans>You are about to move several resources.</Trans>;
     }
-    message = <span>{message} <Trans>The permissions do not match the destination folder permissions.</Trans></span>;
+    message = (
+      <span>
+        {message} <Trans>The permissions do not match the destination folder permissions.</Trans>
+      </span>
+    );
     return message;
   }
 
@@ -229,10 +236,12 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutItems() {
-    return this.props.context.folderMoveStrategyProps.resources
-      && this.props.context.folderMoveStrategyProps.folders
-      && this.props.context.folderMoveStrategyProps.resources.length
-      && this.props.context.folderMoveStrategyProps.folders.length;
+    return (
+      this.props.context.folderMoveStrategyProps.resources &&
+      this.props.context.folderMoveStrategyProps.folders &&
+      this.props.context.folderMoveStrategyProps.resources.length &&
+      this.props.context.folderMoveStrategyProps.folders.length
+    );
   }
 
   /**
@@ -240,7 +249,10 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutResources() {
-    return this.props.context.folderMoveStrategyProps.resources && this.props.context.folderMoveStrategyProps.resources.length > 1;
+    return (
+      this.props.context.folderMoveStrategyProps.resources &&
+      this.props.context.folderMoveStrategyProps.resources.length > 1
+    );
   }
 
   /**
@@ -248,7 +260,10 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutFolders() {
-    return this.props.context.folderMoveStrategyProps.folders && this.props.context.folderMoveStrategyProps.folders.length > 1;
+    return (
+      this.props.context.folderMoveStrategyProps.folders &&
+      this.props.context.folderMoveStrategyProps.folders.length > 1
+    );
   }
 
   /**
@@ -256,7 +271,10 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutAFolder() {
-    return this.props.context.folderMoveStrategyProps.folders && this.props.context.folderMoveStrategyProps.folders.length === 1;
+    return (
+      this.props.context.folderMoveStrategyProps.folders &&
+      this.props.context.folderMoveStrategyProps.folders.length === 1
+    );
   }
 
   /**
@@ -264,7 +282,10 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutAResource() {
-    return this.props.context.folderMoveStrategyProps.resources && this.props.context.folderMoveStrategyProps.resources.length === 1;
+    return (
+      this.props.context.folderMoveStrategyProps.resources &&
+      this.props.context.folderMoveStrategyProps.resources.length === 1
+    );
   }
 
   /**
@@ -277,33 +298,65 @@ class DefineResourceFolderMoveStrategy extends Component {
 
   render() {
     return (
-      <DialogWrapper className='move-folder-strategy-dialog' title={this.translate("How do you want to proceed?")}
-        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+      <DialogWrapper
+        className="move-folder-strategy-dialog"
+        title={this.translate("How do you want to proceed?")}
+        onClose={this.handleClose}
+        disabled={this.hasAllInputDisabled()}
+      >
         <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <p>{this.getIntroMessage()}</p>
             <div className="radiolist-alt">
-              <div className={`input radio ${this.state.moveOption === "change" ? 'checked' : ''}`}>
-                <input name="moveOption" value="change" id="moveOptionChange" type="radio"
-                  onChange={this.handleInputChange} ref={this.moveOptionChangeRef} checked={this.state.moveOption === 'change'} />
+              <div className={`input radio ${this.state.moveOption === "change" ? "checked" : ""}`}>
+                <input
+                  name="moveOption"
+                  value="change"
+                  id="moveOptionChange"
+                  type="radio"
+                  onChange={this.handleInputChange}
+                  ref={this.moveOptionChangeRef}
+                  checked={this.state.moveOption === "change"}
+                />
                 <label htmlFor="moveOptionChange">
-                  <span className="name"><Trans>Change permissions</Trans></span>
-                  <span className="info"><Trans>Remove old inherited permissions and apply the new destination folder permissions recursively.</Trans></span>
+                  <span className="name">
+                    <Trans>Change permissions</Trans>
+                  </span>
+                  <span className="info">
+                    <Trans>
+                      Remove old inherited permissions and apply the new destination folder permissions recursively.
+                    </Trans>
+                  </span>
                 </label>
               </div>
-              <div className={`input radio last ${this.state.moveOption === "keep" ? 'checked' : ''}`}>
-                <input name="moveOption" value="keep" id="moveOptionKeep" type="radio"
-                  onChange={this.handleInputChange} ref={this.moveOptionKeepRef}  checked={this.state.moveOption === 'keep'}/>
+              <div className={`input radio last ${this.state.moveOption === "keep" ? "checked" : ""}`}>
+                <input
+                  name="moveOption"
+                  value="keep"
+                  id="moveOptionKeep"
+                  type="radio"
+                  onChange={this.handleInputChange}
+                  ref={this.moveOptionKeepRef}
+                  checked={this.state.moveOption === "keep"}
+                />
                 <label htmlFor="moveOptionKeep">
-                  <span className="name"><Trans>Keep existing permissions</Trans></span>
-                  <span className="info"><Trans>Keep the original permissions, do not apply the destination folder permissions.</Trans></span>
+                  <span className="name">
+                    <Trans>Keep existing permissions</Trans>
+                  </span>
+                  <span className="info">
+                    <Trans>Keep the original permissions, do not apply the destination folder permissions.</Trans>
+                  </span>
                 </label>
               </div>
             </div>
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Move")} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Move")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -318,4 +371,4 @@ DefineResourceFolderMoveStrategy.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withTranslation('common')(DefineResourceFolderMoveStrategy)));
+export default withAppContext(withDialog(withTranslation("common")(DefineResourceFolderMoveStrategy)));

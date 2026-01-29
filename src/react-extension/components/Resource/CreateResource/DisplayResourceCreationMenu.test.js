@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -15,15 +14,19 @@
 import DisplayResourceCreationMenuPage from "./DisplayResourceCreationMenu.test.page";
 import CreateResource from "./CreateResource";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import {waitFor} from "@testing-library/dom";
-import {resourceTypeTotpDto, resourceTypeV5PasswordStringDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
+import { waitFor } from "@testing-library/dom";
+import {
+  resourceTypeTotpDto,
+  resourceTypeV5PasswordStringDto,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {
   defaultProps,
@@ -31,25 +34,22 @@ import {
   onlyPasswordV5ContentTypes,
   onlyTotpV5ContentTypes,
   onlyV4ContentTypesProps,
-  onlyV5ContentTypesProps
+  onlyV5ContentTypesProps,
 } from "./DisplayResourceCreationMenu.test.data";
-import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {v4 as uuidv4} from "uuid";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
-import ActionAbortedMissingMetadataKeys
-  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
-import {resourceWorkspaceContextWithSelectedFolderIOwn} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultFolderDto } from "../../../../shared/models/entity/folder/folderEntity.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import { resourceWorkspaceContextWithSelectedFolderIOwn } from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 /**
  * Unit tests on Display Resource Creation Menu in regard of specifications
  */
 describe("See the Display Resource Creation Menu", () => {
-  describe('Styleguide specifications', () => {
-    it('should display the component matches the styleguide', async() => {
+  describe("Styleguide specifications", () => {
+    it("should display the component matches the styleguide", async () => {
       expect.assertions(12);
 
       const props = defaultProps(); // The props to pass
@@ -82,7 +82,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(page.getContentTypeName(4).textContent).toStrictEqual("Custom fields");
     });
 
-    it("should close the dialog when pressing escape", async() => {
+    it("should close the dialog when pressing escape", async () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
@@ -135,7 +135,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(page.getContentTypeDescription(2).textContent).toStrictEqual("with cleartext metadata");
     });
 
-    it("should switch tab when clicking on legacy cleartext metadata tab", async() => {
+    it("should switch tab when clicking on legacy cleartext metadata tab", async () => {
       expect.assertions(8);
 
       const props = defaultProps(); // The props to pass
@@ -214,10 +214,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect.assertions(4);
 
       const props = onlyPasswordV5ContentTypes({
-        resourceTypes: new ResourceTypesCollection([
-          resourceTypeV5PasswordStringDto(),
-          resourceTypeTotpDto(),
-        ]),
+        resourceTypes: new ResourceTypesCollection([resourceTypeV5PasswordStringDto(), resourceTypeTotpDto()]),
       });
       const page = new DisplayResourceCreationMenuPage(props);
 
@@ -235,7 +232,7 @@ describe("See the Display Resource Creation Menu", () => {
   });
 
   describe("should open the resource creation dialog with the right parameters", () => {
-    it("should open the dialog with the right resource type", async() => {
+    it("should open the dialog with the right resource type", async () => {
       expect.assertions(8);
 
       const props = defaultProps(); // The props to pass
@@ -247,25 +244,25 @@ describe("See the Display Resource Creation Menu", () => {
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
       let resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //click on totp v5
       page.clickOn(page.displayedContentTypes[1]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //click on note v5
       page.clickOn(page.displayedContentTypes[2]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //click on custom fields v5
       page.clickOn(page.displayedContentTypes[3]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //switch tab
       page.clickOn(page.legacyCleartextMetadataTab);
@@ -275,24 +272,26 @@ describe("See the Display Resource Creation Menu", () => {
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //click on totp v4
       page.clickOn(page.displayedContentTypes[1]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(6);
       expect(props.onClose).toHaveBeenCalledTimes(6);
     });
 
-    it("should open the action aborted dialog if shared metadata key is enforced and missing", async() => {
+    it("should open the action aborted dialog if shared metadata key is enforced and missing", async () => {
       expect.assertions(5);
 
       const props = defaultProps({
-        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
-        metadataKeysSettings: defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false}),
+        context: defaultUserAppContext({
+          loggedInUser: defaultUserDto({ missing_metadata_key_ids: [uuidv4()] }, { withRole: true }),
+        }),
+        metadataKeysSettings: defaultMetadataKeysSettingsDto({ allow_usage_of_personal_keys: false }),
       }); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
 
@@ -319,12 +318,14 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.dialogContext.open).toHaveBeenCalledTimes(4);
     });
 
-    it("should open the action aborted dialog if shared metadata key is missing to create a shared resource", async() => {
+    it("should open the action aborted dialog if shared metadata key is missing to create a shared resource", async () => {
       expect.assertions(5);
 
       const props = defaultProps({
-        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
-        resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderIOwn()
+        context: defaultUserAppContext({
+          loggedInUser: defaultUserDto({ missing_metadata_key_ids: [uuidv4()] }, { withRole: true }),
+        }),
+        resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderIOwn(),
       }); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
 
@@ -351,7 +352,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.dialogContext.open).toHaveBeenCalledTimes(4);
     });
 
-    it("should open the dialog with the right folder parent id set", async() => {
+    it("should open the dialog with the right folder parent id set", async () => {
       expect.assertions(3);
 
       const folder = defaultFolderDto();
@@ -361,7 +362,7 @@ describe("See the Display Resource Creation Menu", () => {
         type: ResourceWorkspaceFilterTypes.FOLDER,
         payload: {
           folder: folder,
-        }
+        },
       };
       const page = new DisplayResourceCreationMenuPage(props);
 
@@ -369,7 +370,10 @@ describe("See the Display Resource Creation Menu", () => {
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
       const resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType: resourceType, folderParentId: folder.id});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {
+        resourceType: resourceType,
+        folderParentId: folder.id,
+      });
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
       expect(props.onClose).toHaveBeenCalledTimes(1);

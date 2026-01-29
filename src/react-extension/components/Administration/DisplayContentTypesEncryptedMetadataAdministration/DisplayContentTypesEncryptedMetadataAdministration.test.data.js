@@ -12,20 +12,16 @@
  * @since         4.11.0
  */
 
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {
-  defaultMetadataTypesSettingsV4Dto
-} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultMetadataTypesSettingsV4Dto } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
-import {defaultMetadataKeysDtos} from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
+import { defaultMetadataKeysDtos } from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
 
 /**
  * Default props.
@@ -40,15 +36,15 @@ export function defaultProps(props = {}) {
     actionFeedbackContext: defaultActionFeedbackContext(),
     metadataSettingsServiceWorkerService: {
       findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
-      saveTypesSettings: jest.fn(settings => new MetadataTypesSettingsEntity(settings.toDto())),
+      saveTypesSettings: jest.fn((settings) => new MetadataTypesSettingsEntity(settings.toDto())),
     },
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection(defaultMetadataKeysDtos()),
     },
     createPortal: jest.fn,
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    t: text => text,
-    ...props
+    t: (text) => text,
+    ...props,
   };
 }
 
@@ -63,9 +59,9 @@ export function allowedVersionErrorProps(data = {}) {
 
   return defaultProps({
     metadataSettingsServiceWorkerService: {
-      findTypesSettings: () => new MetadataTypesSettingsEntity(settingsDto, {validate: false})
+      findTypesSettings: () => new MetadataTypesSettingsEntity(settingsDto, { validate: false }),
     },
-    ...data
+    ...data,
   });
 }
 
@@ -84,6 +80,6 @@ export function resourceTypesDeletedProps(data = {}) {
     metadataSettingsServiceWorkerService: {
       findTypesSettings: () => new MetadataTypesSettingsEntity(settingsDto),
     },
-    ...data
+    ...data,
   });
 }

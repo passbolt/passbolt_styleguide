@@ -14,30 +14,29 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import ImportResources from "../ImportResources/ImportResources";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  withMetadataTypesSettingsLocalStorage
-} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { withMetadataTypesSettingsLocalStorage } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_5} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import MetadataTypesSettingsEntity, {
+  RESOURCE_TYPE_VERSION_5,
+} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import AddSVG from "../../../../img/svg/add.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
@@ -53,12 +52,9 @@ import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreati
 import CreateResource from "../CreateResource/CreateResource";
 import NoteSVG from "../../../../img/svg/notes.svg";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
-import {
-  withMetadataKeysSettingsLocalStorage
-} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import ActionAbortedMissingMetadataKeys
-  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 /**
  * This component allows the current user to create a new resource
@@ -115,7 +111,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @param {ResourceTypeEntity} resourceType The resource type
    */
   openCreateDialog(resourceType) {
-    this.props.dialogContext.open(CreateResource, {folderParentId: this.folderIdSelected, resourceType});
+    this.props.dialogContext.open(CreateResource, { folderParentId: this.folderIdSelected, resourceType });
   }
 
   /**
@@ -145,7 +141,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       this.displayMissingKeysDialog();
       return;
     }
-    const resourceType  = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
     this.openCreateDialog(resourceType);
   }
 
@@ -159,7 +155,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       return;
     }
 
-    const resourceType  = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
     this.openCreateDialog(resourceType);
   }
 
@@ -167,7 +163,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Handle other click event
    */
   handleMenuCreateOtherClickEvent() {
-    this.props.dialogContext.open(DisplayResourceCreationMenu, {folderParentId: this.folderIdSelected});
+    this.props.dialogContext.open(DisplayResourceCreationMenu, { folderParentId: this.folderIdSelected });
   }
 
   /**
@@ -181,7 +177,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Open create password dialog
    */
   openFolderCreateDialog() {
-    this.props.dialogContext.open(CreateResourceFolder, {folderParentId: this.folderIdSelected});
+    this.props.dialogContext.open(CreateResourceFolder, { folderParentId: this.folderIdSelected });
   }
 
   /**
@@ -222,7 +218,10 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     const isPersonalFolder = this.folderSelected === null || this.folderSelected.personal;
     const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
 
-    return  (isPersonalFolder && isMetadataSharedKeyEnforced && userHasMissingKeys) || (!isPersonalFolder && userHasMissingKeys);
+    return (
+      (isPersonalFolder && isMetadataSharedKeyEnforced && userHasMissingKeys) ||
+      (!isPersonalFolder && userHasMissingKeys)
+    );
   }
 
   /**
@@ -248,8 +247,10 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @returns {boolean}
    */
   hasMetadataTypesV4AndV5() {
-    return this.props.metadataTypeSettings.allowCreationOfV5Resources
-      && this.props.metadataTypeSettings.allowCreationOfV4Resources;
+    return (
+      this.props.metadataTypeSettings.allowCreationOfV5Resources &&
+      this.props.metadataTypeSettings.allowCreationOfV4Resources
+    );
   }
 
   /**
@@ -321,11 +322,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       return true;
     }
 
-    const otherV5ContentTypes = this.props.resourceTypes?.items.filter(rt =>
-      rt.version === RESOURCE_TYPE_VERSION_5
-      && !rt.hasPassword()
-      && !rt.hasTotp()
-      && !rt.hasSecretDescription()
+    const otherV5ContentTypes = this.props.resourceTypes?.items.filter(
+      (rt) =>
+        rt.version === RESOURCE_TYPE_VERSION_5 && !rt.hasPassword() && !rt.hasTotp() && !rt.hasSecretDescription(),
     );
 
     return otherV5ContentTypes?.length > 0;
@@ -343,103 +342,152 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canImport = this.props.context.siteSettings.canIUse("import")
-      && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_IMPORT);
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
-    const canUseTotp = this.props.context.siteSettings.canIUse('totpResourceTypes');
+    const canImport =
+      this.props.context.siteSettings.canIUse("import") &&
+      this.props.rbacContext.canIUseAction(uiActions.RESOURCES_IMPORT);
+    const canUseFolders =
+      this.props.context.siteSettings.canIUse("folders") && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
+    const canUseTotp = this.props.context.siteSettings.canIUse("totpResourceTypes");
     const canSeeOther = this.canSeeOther();
 
     return (
       <Dropdown>
         <DropdownButton className="create primary" disabled={!this.canCreate()}>
-          <AddSVG/>
+          <AddSVG />
           <Trans>Create</Trans>
-          <CaretDownSVG/>
+          <CaretDownSVG />
         </DropdownButton>
         <DropdownMenu className="menu-create-primary">
-          {!this.hasMetadataTypesSettings() &&
+          {!this.hasMetadataTypesSettings() && (
             <>
               <DropdownItem separator={!canUseTotp}>
                 <Tooltip message={this.props.t("Loading metadata types settings")}>
                   <button id="password_action" type="button" className="no-border" disabled={true}>
-                    <KeySVG/>
-                    <span><Trans>Password</Trans></span>
+                    <KeySVG />
+                    <span>
+                      <Trans>Password</Trans>
+                    </span>
                   </button>
                 </Tooltip>
               </DropdownItem>
-              {canUseTotp &&
+              {canUseTotp && (
                 <DropdownItem separator={true}>
                   <Tooltip message={this.props.t("Loading metadata types settings")}>
                     <button id="totp_action" type="button" className="no-border" disabled={true}>
-                      <TotpSVG/>
-                      <span><Trans>TOTP</Trans></span>
+                      <TotpSVG />
+                      <span>
+                        <Trans>TOTP</Trans>
+                      </span>
                     </button>
                   </Tooltip>
                 </DropdownItem>
-              }
+              )}
             </>
-          }
-          {this.hasMetadataTypesSettings() &&
+          )}
+          {this.hasMetadataTypesSettings() && (
             <>
-              {this.canCreatePassword() &&
+              {this.canCreatePassword() && (
                 <DropdownItem separator={!canUseTotp}>
-                  <button id="password_action" type="button" className="no-border" onClick={this.handleCreateMenuPasswordClickEvent}>
-                    <KeySVG/>
-                    <span><Trans>Password</Trans></span>
+                  <button
+                    id="password_action"
+                    type="button"
+                    className="no-border"
+                    onClick={this.handleCreateMenuPasswordClickEvent}
+                  >
+                    <KeySVG />
+                    <span>
+                      <Trans>Password</Trans>
+                    </span>
                   </button>
                 </DropdownItem>
-              }
-              {canUseTotp && this.canCreateStandaloneTotp() &&
+              )}
+              {canUseTotp && this.canCreateStandaloneTotp() && (
                 <DropdownItem separator={!this.canCreateCustomFields}>
-                  <button id="totp_action" type="button" className="no-border" onClick={this.handleMenuCreateTotpClickEvent}>
-                    <TotpSVG/>
-                    <span><Trans>TOTP</Trans></span>
+                  <button
+                    id="totp_action"
+                    type="button"
+                    className="no-border"
+                    onClick={this.handleMenuCreateTotpClickEvent}
+                  >
+                    <TotpSVG />
+                    <span>
+                      <Trans>TOTP</Trans>
+                    </span>
                   </button>
                 </DropdownItem>
-              }
-              {this.canCreateCustomFields &&
+              )}
+              {this.canCreateCustomFields && (
                 <DropdownItem separator={!this.canCreateStandaloneNote}>
-                  <button id="custom_fields_action" type="button" className="no-border" onClick={this.handleMenuCreateCustomFieldsClickEvent}>
-                    <TablePropertiesSVG/>
-                    <span><Trans>Custom fields</Trans></span>
+                  <button
+                    id="custom_fields_action"
+                    type="button"
+                    className="no-border"
+                    onClick={this.handleMenuCreateCustomFieldsClickEvent}
+                  >
+                    <TablePropertiesSVG />
+                    <span>
+                      <Trans>Custom fields</Trans>
+                    </span>
                   </button>
                 </DropdownItem>
-              }
-              {this.canCreateStandaloneNote &&
+              )}
+              {this.canCreateStandaloneNote && (
                 <DropdownItem separator={!canSeeOther}>
-                  <button id="standalone_note_action" type="button" className="no-border" onClick={this.handleMenuCreateStandaloneNoteClickEvent}>
-                    <NoteSVG/>
-                    <span><Trans>Notes</Trans></span>
+                  <button
+                    id="standalone_note_action"
+                    type="button"
+                    className="no-border"
+                    onClick={this.handleMenuCreateStandaloneNoteClickEvent}
+                  >
+                    <NoteSVG />
+                    <span>
+                      <Trans>Notes</Trans>
+                    </span>
                   </button>
                 </DropdownItem>
-              }
-              {canSeeOther &&
+              )}
+              {canSeeOther && (
                 <DropdownItem separator={true}>
-                  <button id="other_action" type="button" className="no-border" onClick={this.handleMenuCreateOtherClickEvent}>
-                    <CircleEllipsisSVG/>
-                    <span><Trans>Other</Trans></span>
+                  <button
+                    id="other_action"
+                    type="button"
+                    className="no-border"
+                    onClick={this.handleMenuCreateOtherClickEvent}
+                  >
+                    <CircleEllipsisSVG />
+                    <span>
+                      <Trans>Other</Trans>
+                    </span>
                   </button>
                 </DropdownItem>
-              }
+              )}
             </>
-          }
-          {canUseFolders &&
+          )}
+          {canUseFolders && (
             <DropdownItem separator={canImport}>
-              <button id="folder_action" type="button" className="no-border" onClick={this.handleMenuCreateFolderClickEvent}>
-                <FolderPlusSVG/>
-                <span><Trans>Folder</Trans></span>
+              <button
+                id="folder_action"
+                type="button"
+                className="no-border"
+                onClick={this.handleMenuCreateFolderClickEvent}
+              >
+                <FolderPlusSVG />
+                <span>
+                  <Trans>Folder</Trans>
+                </span>
               </button>
             </DropdownItem>
-          }
-          {canImport &&
+          )}
+          {canImport && (
             <DropdownItem>
               <button id="import_action" type="button" className="no-border" onClick={this.handleImportClickEvent}>
-                <UploadFileSVG/>
-                <span><Trans>Import resources</Trans></span>
+                <UploadFileSVG />
+                <span>
+                  <Trans>Import resources</Trans>
+                </span>
               </button>
             </DropdownItem>
-          }
+          )}
         </DropdownMenu>
       </Dropdown>
     );
@@ -457,4 +505,16 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withResourceTypesLocalStorage(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))))))));
+export default withAppContext(
+  withRbac(
+    withDialog(
+      withMetadataTypesSettingsLocalStorage(
+        withMetadataKeysSettingsLocalStorage(
+          withResourceTypesLocalStorage(
+            withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu)),
+          ),
+        ),
+      ),
+    ),
+  ),
+);

@@ -14,11 +14,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {resourceLinkAuthorizedProtocols, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
+import { resourceLinkAuthorizedProtocols, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
+import sanitizeUrl, { urlProtocols } from "../../../lib/Sanitize/sanitizeUrl";
 
 /**
  * This component display the uris of a resource
@@ -82,7 +82,7 @@ class DisplayResourceDetailsURIs extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
   }
 
   /**
@@ -91,11 +91,10 @@ class DisplayResourceDetailsURIs extends React.Component {
    * @return {string}
    */
   safeUri(uri) {
-    return sanitizeUrl(
-      uri, {
-        whiteListedProtocols: resourceLinkAuthorizedProtocols,
-        defaultProtocol: urlProtocols.HTTPS
-      });
+    return sanitizeUrl(uri, {
+      whiteListedProtocols: resourceLinkAuthorizedProtocols,
+      defaultProtocol: urlProtocols.HTTPS,
+    });
   }
   /**
    * Handles the click event to navigate to the resource URI.
@@ -105,7 +104,6 @@ class DisplayResourceDetailsURIs extends React.Component {
   handleGoToResourceUriClick(uri) {
     this.props.resourceWorkspaceContext.onGoToResourceUriRequested(uri);
   }
-
 
   /**
    * Render the component
@@ -120,42 +118,54 @@ class DisplayResourceDetailsURIs extends React.Component {
               <span className="accordion-title">
                 <Trans>URIs</Trans>
               </span>
-              {this.state.open && <CaretDownSVG />
-              }
-              {!this.state.open && <CaretRightSVG />
-              }
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open && <div className="accordion-content">
-          <div className="information-label">
-            <span className="main-uri label"><Trans>Main Uri</Trans></span>
-            {this.additionalUris.length > 0 &&
-                <span className="addictional-uris label"><Trans>Additional URIs</Trans></span>
-            }
-          </div>
-          <div className="information-value">
-            <span className="main-uri value">
-              {this.safeUri(this.mainUri)
-                ? <button type="button" className="link" onClick={() => this.handleGoToResourceUriClick(this.mainUri)}>
-                  <span>{this.mainUri}</span>
-                </button>
-                : <span>{this.mainUri}</span>
-              }
-            </span>
-            {this.additionalUris.length > 0 && <span className="additional-uris value">
-              {this.additionalUris.map((uri, index) => (
-                this.safeUri(uri)
-                  ? <button key={index} type="button" className="link" onClick={() => this.handleGoToResourceUriClick(uri)}>
-                    <span>{uri}</span>
+        {this.state.open && (
+          <div className="accordion-content">
+            <div className="information-label">
+              <span className="main-uri label">
+                <Trans>Main Uri</Trans>
+              </span>
+              {this.additionalUris.length > 0 && (
+                <span className="addictional-uris label">
+                  <Trans>Additional URIs</Trans>
+                </span>
+              )}
+            </div>
+            <div className="information-value">
+              <span className="main-uri value">
+                {this.safeUri(this.mainUri) ? (
+                  <button type="button" className="link" onClick={() => this.handleGoToResourceUriClick(this.mainUri)}>
+                    <span>{this.mainUri}</span>
                   </button>
-                  : <span key={index}>{uri}</span>
-              ))}
-            </span>
-            }
+                ) : (
+                  <span>{this.mainUri}</span>
+                )}
+              </span>
+              {this.additionalUris.length > 0 && (
+                <span className="additional-uris value">
+                  {this.additionalUris.map((uri, index) =>
+                    this.safeUri(uri) ? (
+                      <button
+                        key={index}
+                        type="button"
+                        className="link"
+                        onClick={() => this.handleGoToResourceUriClick(uri)}
+                      >
+                        <span>{uri}</span>
+                      </button>
+                    ) : (
+                      <span key={index}>{uri}</span>
+                    ),
+                  )}
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-        }
+        )}
       </div>
     );
   }
@@ -166,4 +176,4 @@ DisplayResourceDetailsURIs.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsURIs));
+export default withResourceWorkspace(withTranslation("common")(DisplayResourceDetailsURIs));

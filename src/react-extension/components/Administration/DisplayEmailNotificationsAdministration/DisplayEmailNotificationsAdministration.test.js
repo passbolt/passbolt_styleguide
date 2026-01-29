@@ -16,17 +16,14 @@
  * Unit tests on DisplayEmailNotificationsAdministration in regard of specifications
  */
 import "../../../../../test/mocks/mockPortal.js";
-import {
-  defaultEmailNotificationSettings,
-  defaultProps,
-} from "./DisplayEmailNotificationsAdministration.test.data";
+import { defaultEmailNotificationSettings, defaultProps } from "./DisplayEmailNotificationsAdministration.test.data";
 import DisplayEmailNotificationsAdministrationPage from "./DisplayEmailNotificationsAdministration.test.page";
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
-import {enableFetchMocks} from "jest-fetch-mock";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
-import {act} from "react";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
+import { act } from "react";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -38,7 +35,7 @@ describe("See the Email Notifications Settings", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
   const settings = defaultEmailNotificationSettings();
-  describe('As AD I should see the Email Notifications on the administration settings page', () => {
+  describe("As AD I should see the Email Notifications on the administration settings page", () => {
     /**
      * I should see the Email Notifications provider activation state on the administration settings page
      */
@@ -47,7 +44,7 @@ describe("See the Email Notifications Settings", () => {
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
     });
 
-    it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
+    it("As AD I should see if all fields is available for my Passbolt instance on the administration settings page", async () => {
       expect.assertions(36);
 
       expect(page.exists()).toBeTruthy();
@@ -112,7 +109,7 @@ describe("See the Email Notifications Settings", () => {
       expect(page.saveWarningBanner).toBeNull();
     });
 
-    it('As AD I should save email notifications on the administration settings page and see a confirmation message', async() => {
+    it("As AD I should save email notifications on the administration settings page and see a confirmation message", async () => {
       //button should be disable by default
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       //Call to save the settings
@@ -120,36 +117,35 @@ describe("See the Email Notifications Settings", () => {
       //Call to API to retrieve the settings
       fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
 
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
       await page.checkCommentAdd();
       await page.saveSettings();
 
-
-
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The email notification settings were updated.");
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The email notification settings were updated.",
+      );
       // We expect the button to be disable
       expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
 
-    it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+    it("As AD I should see an error toaster if the submit operation fails for an unexpected reason", async () => {
       //button should be disable by default
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       await page.checkCommentAdd();
 
       // Mock the request function to make it return an error.
-      const error = {message: "Unable to reach the server, an unexpected error occurred"};
+      const error = { message: "Unable to reach the server, an unexpected error occurred" };
 
       fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => Promise.reject(error));
 
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displayError").mockImplementation(() => {});
       await page.saveSettings();
-
 
       // Throw general error message
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(error.message);
     });
 
-    it('As AD I should not be able to click on save if there is no change', async() => {
+    it("As AD I should not be able to click on save if there is no change", async () => {
       //button should be disable by default
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       await page.checkCommentAdd();
@@ -159,7 +155,7 @@ describe("See the Email Notifications Settings", () => {
       expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
 
-    it('I should see all fields disabled”', () => {
+    it("I should see all fields disabled”", () => {
       expect.assertions(34);
       fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
@@ -226,14 +222,14 @@ describe("See the Email Notifications Settings", () => {
       expectDisabled(page.showComment);
     });
 
-    it('As an administrator when I modify a field, I can see a changes warning message', async() => {
+    it("As an administrator when I modify a field, I can see a changes warning message", async () => {
       await page.checkCommentAdd();
       expect(page.saveWarningBanner).not.toBeNull();
     });
   });
 
   describe("As AD I should not be able to see the source of the configuration", () => {
-    it("when it's coming from the database", async() => {
+    it("when it's coming from the database", async () => {
       expect.assertions(1);
 
       const settings = defaultEmailNotificationSettings();
@@ -242,14 +238,12 @@ describe("See the Email Notifications Settings", () => {
       const context = defaultAppContext(); // The applicative context
       const props = defaultProps(); // The props to pass
       let page;
-      await act(
-        async() => page = new DisplayEmailNotificationsAdministrationPage(context, props)
-      );
+      await act(async () => (page = new DisplayEmailNotificationsAdministrationPage(context, props)));
 
-      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: database.');
+      expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: database.");
     });
 
-    it("when it's coming from a file", async() => {
+    it("when it's coming from a file", async () => {
       expect.assertions(1);
 
       const settings = defaultEmailNotificationSettings({
@@ -260,14 +254,12 @@ describe("See the Email Notifications Settings", () => {
 
       const context = defaultAppContext(); // The applicative context
       const props = defaultProps(); // The props to pass
-      await act(
-        async() => page = new DisplayEmailNotificationsAdministrationPage(context, props)
-      );
+      await act(async () => (page = new DisplayEmailNotificationsAdministrationPage(context, props)));
 
-      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: file.');
+      expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: file.");
     });
 
-    it("when it's coming from a environment variables", async() => {
+    it("when it's coming from a environment variables", async () => {
       expect.assertions(1);
 
       const settings = defaultEmailNotificationSettings({
@@ -282,7 +274,9 @@ describe("See the Email Notifications Settings", () => {
       const page = new DisplayEmailNotificationsAdministrationPage(context, props);
       await waitForTrue(() => Boolean(page.settingsSource));
 
-      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: environment variables.');
+      expect(page.settingsSource.textContent).toStrictEqual(
+        "This current configuration source is: environment variables.",
+      );
     });
   });
 });

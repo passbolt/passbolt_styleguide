@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourceDetails from "./DisplayResourceDetails";
 import userEvent from "@testing-library/user-event";
@@ -30,10 +30,10 @@ export default class DisplayResourceDetailsPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <DisplayResourceDetails {...props}/>
+          <DisplayResourceDetails {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -44,7 +44,7 @@ export default class DisplayResourceDetailsPage {
    * @returns {HTMLElement}
    */
   get resourceSidebar() {
-    return this._page.container.querySelector('.sidebar.resource');
+    return this._page.container.querySelector(".sidebar.resource");
   }
 
   /**
@@ -52,7 +52,7 @@ export default class DisplayResourceDetailsPage {
    * @returns {string}
    */
   get name() {
-    return this._page.container.querySelector('.name').textContent;
+    return this._page.container.querySelector(".name").textContent;
   }
 
   /**
@@ -60,7 +60,7 @@ export default class DisplayResourceDetailsPage {
    * @returns {string}
    */
   get subtitle() {
-    return this._page.container.querySelector('.subtitle').textContent;
+    return this._page.container.querySelector(".subtitle").textContent;
   }
 
   /**
@@ -68,7 +68,7 @@ export default class DisplayResourceDetailsPage {
    * @returns {HTMLElement}
    */
   get permalink() {
-    return this._page.container.querySelector('.title-link');
+    return this._page.container.querySelector(".title-link");
   }
 
   /**
@@ -76,7 +76,7 @@ export default class DisplayResourceDetailsPage {
    * @return {Element}
    */
   get password() {
-    return this._page.container.querySelector('.password');
+    return this._page.container.querySelector(".password");
   }
 
   /**
@@ -84,7 +84,7 @@ export default class DisplayResourceDetailsPage {
    * @return {Element}
    */
   get totp() {
-    return this._page.container.querySelector('.totp');
+    return this._page.container.querySelector(".totp");
   }
 
   /**
@@ -92,7 +92,7 @@ export default class DisplayResourceDetailsPage {
    * @return {Element}
    */
   get customField() {
-    return this._page.container.querySelector('.custom-fields');
+    return this._page.container.querySelector(".custom-fields");
   }
 
   /**
@@ -100,7 +100,7 @@ export default class DisplayResourceDetailsPage {
    * @return {Element}
    */
   get description() {
-    return this._page.container.querySelector('.description');
+    return this._page.container.querySelector(".description");
   }
 
   /**
@@ -108,7 +108,7 @@ export default class DisplayResourceDetailsPage {
    * @return {Element}
    */
   get upgradeCard() {
-    return this._page.container.querySelector('.section-card .card');
+    return this._page.container.querySelector(".section-card .card");
   }
 
   /**
@@ -116,7 +116,7 @@ export default class DisplayResourceDetailsPage {
    * @return {Element}
    */
   get upgradeButton() {
-    return this._page.container.querySelector('.section-card .card .content button');
+    return this._page.container.querySelector(".section-card .card .content button");
   }
 
   /**
@@ -124,7 +124,7 @@ export default class DisplayResourceDetailsPage {
    * @returns {HTMLElement}
    */
   get activitySection() {
-    return this._page.container.querySelector('.activity');
+    return this._page.container.querySelector(".activity");
   }
 
   /**
@@ -132,7 +132,7 @@ export default class DisplayResourceDetailsPage {
    * @returns {HTMLElement}
    */
   get activeTab() {
-    return this._page.container.querySelector('.sidebar-content .tabs .active');
+    return this._page.container.querySelector(".sidebar-content .tabs .active");
   }
 
   /**
@@ -140,7 +140,7 @@ export default class DisplayResourceDetailsPage {
    * @returns {HTMLElement}
    */
   tabs() {
-    return this._page.container.querySelector('.sidebar-content .tabs');
+    return this._page.container.querySelector(".sidebar-content .tabs");
   }
 
   /**
@@ -148,7 +148,7 @@ export default class DisplayResourceDetailsPage {
    * @returns {HTMLElement}
    */
   tab(index) {
-    return this._page.container.querySelectorAll('.sidebar-content .tabs li button')?.[index];
+    return this._page.container.querySelectorAll(".sidebar-content .tabs li button")?.[index];
   }
 
   /**
@@ -156,7 +156,7 @@ export default class DisplayResourceDetailsPage {
    * @returns {HTMLElement} The URIs tab element.
    */
   get urisTab() {
-    return this._page.container.querySelector('.sidebar-content .uris');
+    return this._page.container.querySelector(".sidebar-content .uris");
   }
 
   /**
@@ -167,17 +167,12 @@ export default class DisplayResourceDetailsPage {
   }
 
   /** Click on the component */
-  async click(component)  {
+  async click(component) {
     await this.user.click(component);
   }
 
   /** Click on the permalink */
-  async selectPermalink()  {
+  async selectPermalink() {
     await this.click(this.permalink);
   }
 }
-
-
-
-
-

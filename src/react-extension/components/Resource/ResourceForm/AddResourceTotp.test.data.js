@@ -11,14 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
-import {defaultTotpDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
-import {
-  minimalResourceMetadataDto
-} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceFormDto } from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import { defaultTotpDto } from "../../../../shared/models/entity/totp/totpDto.test.data";
+import { minimalResourceMetadataDto } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default props
@@ -29,12 +27,18 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     onChange: jest.fn(),
-    resource: defaultResourceFormDto({metadata: minimalResourceMetadataDto(), secret: {totp: defaultTotpDto({secret_key: ""})}}),
+    resource: defaultResourceFormDto({
+      metadata: minimalResourceMetadataDto(),
+      secret: { totp: defaultTotpDto({ secret_key: "" }) },
+    }),
     clipboardContext: defaultClipboardContext(),
   };
   return Object.assign(defaultData, data);
 }
 
 export function qrCode() {
-  return {decodedText: 'otpauth://totp/pro.passbolt.local%3Aadmin%40passbolt.com?issuer=pro.passbolt.local&secret=OFL3VF3OU4BZP45D4ZME6KTF654JRSSO4Q2EO6FJFGPKHRHYSVJA'};
+  return {
+    decodedText:
+      "otpauth://totp/pro.passbolt.local%3Aadmin%40passbolt.com?issuer=pro.passbolt.local&secret=OFL3VF3OU4BZP45D4ZME6KTF654JRSSO4Q2EO6FJFGPKHRHYSVJA",
+  };
 }

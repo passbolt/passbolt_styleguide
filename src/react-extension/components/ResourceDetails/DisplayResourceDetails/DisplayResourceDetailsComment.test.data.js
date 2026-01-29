@@ -12,8 +12,8 @@
  * @since         5.0.0
  */
 
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
 
 /**
  * Default props
@@ -21,19 +21,21 @@ import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.t
  */
 export function defaultProps() {
   return {
-    context: defaultUserAppContext({loggedInUser: defaultUserDto({id: "5247399c-6c8a-47f0-8880-aa854e01e554"}, {withRole: true}),}),
+    context: defaultUserAppContext({
+      loggedInUser: defaultUserDto({ id: "5247399c-6c8a-47f0-8880-aa854e01e554" }, { withRole: true }),
+    }),
     resourceWorkspaceContext: {
       details: {
         resource: {
           id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
           permission: {
-            type: 15
-          }
-        }
+            type: 15,
+          },
+        },
       },
       refresh: {
-        permissions: false
-      }
-    }
+        permissions: false,
+      },
+    },
   };
 }

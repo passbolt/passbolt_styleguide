@@ -13,17 +13,17 @@
  */
 import EntitySchema from "../abstract/entitySchema";
 import MetadataKeyEntity from "./metadataKeyEntity";
-import {defaultMetadataKeyDto} from "./metadataKeyEntity.test.data";
+import { defaultMetadataKeyDto } from "./metadataKeyEntity.test.data";
 import MetadataKeysCollection from "./metadataKeysCollection";
 import {
   defaultDecryptedSharedMetadataKeysDtos,
   defaultMetadataKeysDtos,
-  defaultMinimalMetadataKeysDtos
+  defaultMinimalMetadataKeysDtos,
 } from "./metadataKeysCollection.test.data";
-import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
-import {decryptedMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
-import {v4 as uuidv4} from "uuid";
+import { defaultMetadataPrivateKeyDataDto } from "./metadataPrivateKeyDataEntity.test.data";
+import { decryptedMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto } from "./metadataPrivateKeyEntity.test.data";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
+import { v4 as uuidv4 } from "uuid";
 import EntityValidationError from "../abstract/entityValidationError";
 import CollectionValidationError from "../abstract/collectionValidationError";
 
@@ -82,8 +82,7 @@ describe("MetadataKeysCollection", () => {
     it("should throw if the collection schema does not validate", () => {
       expect.assertions(1);
 
-      expect(() => new MetadataKeysCollection({}))
-        .toThrowEntityValidationError("items");
+      expect(() => new MetadataKeysCollection({})).toThrowEntityValidationError("items");
     });
 
     it("should throw if one of data item does not validate the unique id build rule", () => {
@@ -92,8 +91,7 @@ describe("MetadataKeysCollection", () => {
       const dtos = defaultMetadataKeysDtos();
       dtos[1].id = dtos[0].id;
 
-      expect(() => new MetadataKeysCollection(dtos))
-        .toThrowCollectionValidationError("1.id.unique");
+      expect(() => new MetadataKeysCollection(dtos)).toThrowCollectionValidationError("1.id.unique");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate the unique id build rule", () => {
@@ -102,7 +100,7 @@ describe("MetadataKeysCollection", () => {
       const dtos = defaultMetadataKeysDtos();
       dtos[1].id = dtos[0].id;
 
-      const collection = new MetadataKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new MetadataKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
@@ -111,18 +109,17 @@ describe("MetadataKeysCollection", () => {
     it("should throw if one of data item does not validate the collection entity schema", () => {
       expect.assertions(1);
 
-      const dtos = defaultMetadataKeysDtos(2, {fingerprint: "abcd".repeat(10)});
+      const dtos = defaultMetadataKeysDtos(2, { fingerprint: "abcd".repeat(10) });
 
-      expect(() => new MetadataKeysCollection(dtos))
-        .toThrowCollectionValidationError("1.fingerprint.unique");
+      expect(() => new MetadataKeysCollection(dtos)).toThrowCollectionValidationError("1.fingerprint.unique");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate their schema", () => {
       expect.assertions(2);
 
-      const dtos = defaultMetadataKeysDtos(2, {fingerprint: "abcd".repeat(10)});
+      const dtos = defaultMetadataKeysDtos(2, { fingerprint: "abcd".repeat(10) });
 
-      const collection = new MetadataKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new MetadataKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
@@ -207,9 +204,7 @@ describe("MetadataKeysCollection", () => {
     it("should return false if the collection has not metadata private keys", () => {
       expect.assertions(1);
 
-      const dtos = [
-        defaultMetadataKeyDto(),
-      ];
+      const dtos = [defaultMetadataKeyDto()];
       const collection = new MetadataKeysCollection(dtos);
 
       expect(collection.hasDecryptedKeys()).toStrictEqual(false);
@@ -220,7 +215,9 @@ describe("MetadataKeysCollection", () => {
 
       const metadataKeyDto = defaultMetadataKeyDto();
       const keyData = defaultMetadataPrivateKeyDataDto();
-      metadataKeyDto.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: metadataKeyDto.id, data: keyData})];
+      metadataKeyDto.metadata_private_keys = [
+        defaultMetadataPrivateKeyDto({ metadata_key_id: metadataKeyDto.id, data: keyData }),
+      ];
       const dtos = [metadataKeyDto];
       const collection = new MetadataKeysCollection(dtos);
 
@@ -230,7 +227,7 @@ describe("MetadataKeysCollection", () => {
     it("should return false if none of the items has an encrypted metadata private key", () => {
       expect.assertions(1);
 
-      const collection = new MetadataKeysCollection(defaultMetadataKeysDtos({}, {withMetadataPrivateKeys: true}));
+      const collection = new MetadataKeysCollection(defaultMetadataKeysDtos({}, { withMetadataPrivateKeys: true }));
 
       expect(collection.hasDecryptedKeys()).toStrictEqual(false);
     });
@@ -240,9 +237,7 @@ describe("MetadataKeysCollection", () => {
     it("should return false if the collection has not metadata private keys", () => {
       expect.assertions(1);
 
-      const dtos = [
-        defaultMetadataKeyDto(),
-      ];
+      const dtos = [defaultMetadataKeyDto()];
       const collection = new MetadataKeysCollection(dtos);
 
       expect(collection.hasEncryptedKeys()).toStrictEqual(false);
@@ -272,9 +267,7 @@ describe("MetadataKeysCollection", () => {
     it("should filter out metadata key having no metadata private keys", () => {
       expect.assertions(1);
 
-      const dtos = [
-        defaultMetadataKeyDto(),
-      ];
+      const dtos = [defaultMetadataKeyDto()];
       const collection = new MetadataKeysCollection(dtos);
       collection.filterOutMissingMetadataPrivateKeys();
 
@@ -284,9 +277,7 @@ describe("MetadataKeysCollection", () => {
     it("should not filter out metadata key having a metadata private keys", () => {
       expect.assertions(1);
 
-      const dtos = [
-        defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true}),
-      ];
+      const dtos = [defaultMetadataKeyDto({}, { withMetadataPrivateKeys: true })];
       const collection = new MetadataKeysCollection(dtos);
       collection.filterOutMissingMetadataPrivateKeys();
 
@@ -298,9 +289,9 @@ describe("MetadataKeysCollection", () => {
 
       const dtos = [
         defaultMetadataKeyDto(),
-        defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true}),
+        defaultMetadataKeyDto({}, { withMetadataPrivateKeys: true }),
         defaultMetadataKeyDto(),
-        defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true}),
+        defaultMetadataKeyDto({}, { withMetadataPrivateKeys: true }),
       ];
       const collection = new MetadataKeysCollection(dtos);
       collection.filterOutMissingMetadataPrivateKeys();
@@ -310,7 +301,7 @@ describe("MetadataKeysCollection", () => {
   });
 
   describe("::pushMany", () => {
-    it("[performance] should ensure performance adding large dataset remains effective.", async() => {
+    it("[performance] should ensure performance adding large dataset remains effective.", async () => {
       const count = 10_000;
       const dtos = defaultMetadataKeysDtos(count);
 
@@ -325,7 +316,7 @@ describe("MetadataKeysCollection", () => {
     it("should return if private key is not decrypted", () => {
       expect.assertions(1);
 
-      const metadataKeyDto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
+      const metadataKeyDto = defaultMetadataKeyDto({}, { withMetadataPrivateKeys: true });
       const collection = new MetadataKeysCollection([metadataKeyDto]);
 
       expect(() => collection.assertFingerprintsPublicAndPrivateKeysMatch()).not.toThrow();
@@ -342,12 +333,12 @@ describe("MetadataKeysCollection", () => {
 
     it("should throw an error if fingerprint does not match between public key and private keys", () => {
       expect.assertions(2);
-      const metadataKeyId =  uuidv4();
+      const metadataKeyId = uuidv4();
 
       const metadataKeyDto = defaultMetadataKeyDto({
         id: metadataKeyId,
         fingerprint: "1039097B2E1D31979FF662502714A820FAEF4FF3",
-        metadata_private_keys: [decryptedMetadataPrivateKeyDto({metadata_key_id: metadataKeyId})]
+        metadata_private_keys: [decryptedMetadataPrivateKeyDto({ metadata_key_id: metadataKeyId })],
       });
 
       const collection = new MetadataKeysCollection([metadataKeyDto]);
@@ -356,7 +347,11 @@ describe("MetadataKeysCollection", () => {
         collection.assertFingerprintsPublicAndPrivateKeysMatch();
       } catch (error) {
         const entityValidationError = new EntityValidationError();
-        entityValidationError.addError('metadata_private_keys.0.fingerprint', 'fingerprint_match', 'The fingerprint of the metadata private key does not match the fingerprint of the metadata public key');
+        entityValidationError.addError(
+          "metadata_private_keys.0.fingerprint",
+          "fingerprint_match",
+          "The fingerprint of the metadata private key does not match the fingerprint of the metadata public key",
+        );
         const collectionValidationError = new CollectionValidationError();
         collectionValidationError.addItemValidationError(0, entityValidationError);
 
@@ -367,11 +362,11 @@ describe("MetadataKeysCollection", () => {
 
     it("should succeed if fingerprint match between public key and private keys", () => {
       expect.assertions(1);
-      const metadataKeyId =  uuidv4();
+      const metadataKeyId = uuidv4();
       const metadataKeyDto = defaultMetadataKeyDto({
         id: metadataKeyId,
         fingerprint: pgpKeys.metadataKey.fingerprint,
-        metadata_private_keys: [decryptedMetadataPrivateKeyDto({metadata_key_id: metadataKeyId})]
+        metadata_private_keys: [decryptedMetadataPrivateKeyDto({ metadata_key_id: metadataKeyId })],
       });
 
       const collection = new MetadataKeysCollection([metadataKeyDto]);

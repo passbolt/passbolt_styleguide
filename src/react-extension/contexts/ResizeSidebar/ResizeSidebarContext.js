@@ -17,8 +17,8 @@ import PropTypes from "prop-types";
 
 export const ResizableSidebarContext = React.createContext({
   containerRef: null,
-  left: {width: 0},
-  right: {width: 0},
+  left: { width: 0 },
+  right: { width: 0 },
   setSidebarWidth: () => {},
 });
 
@@ -42,8 +42,8 @@ export class ResizableSidebarContextProvider extends React.Component {
    */
   defaultState() {
     return {
-      left: {width: 0},
-      right: {width: 0},
+      left: { width: 0 },
+      right: { width: 0 },
     };
   }
 
@@ -54,7 +54,7 @@ export class ResizableSidebarContextProvider extends React.Component {
    */
   setSidebarWidth(side, width) {
     this.setState(() => ({
-      [side]: {width},
+      [side]: { width },
     }));
   }
 
@@ -84,7 +84,7 @@ ResizableSidebarContextProvider.propTypes = {
   children: PropTypes.any, // The children component
 };
 
-ResizableSidebarContextProvider.displayName = 'ResizableSidebarContextProvider';
+ResizableSidebarContextProvider.displayName = "ResizableSidebarContextProvider";
 /**
  * Resizebar Context Consumer HOC
  * @param WrappedComponent
@@ -94,7 +94,7 @@ export function withResizableSidebar(WrappedComponent) {
     render() {
       return (
         <ResizableSidebarContext.Consumer>
-          {context => <WrappedComponent {...this.props} sidebarContext={context} />}
+          {(context) => <WrappedComponent {...this.props} sidebarContext={context} />}
         </ResizableSidebarContext.Consumer>
       );
     }

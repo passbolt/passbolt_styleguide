@@ -12,9 +12,9 @@
  * @since         4.1.0
  */
 
-import {defaultGroupUser} from "../../models/entity/groupUser/groupUserEntity.test.data";
-import {defaultUserDto} from "../../models/entity/user/userEntity.test.data";
-import {defaultUserAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
+import { defaultGroupUser } from "../../models/entity/groupUser/groupUserEntity.test.data";
+import { defaultUserDto } from "../../models/entity/user/userEntity.test.data";
+import { defaultUserAppContext } from "../../../react-extension/contexts/ExtAppContext.test.data";
 
 /**
  * Default props.
@@ -36,7 +36,7 @@ export function defaultProps(data = {}) {
 export function defaultAdministratorRbacContext(data = {}) {
   return {
     canIUseAction: () => true,
-    ...data
+    ...data,
   };
 }
 
@@ -48,7 +48,7 @@ export function defaultAdministratorRbacContext(data = {}) {
 export function defaultUserRbacContext(data = {}) {
   return {
     canIUseAction: () => true,
-    ...data
+    ...data,
   };
 }
 
@@ -60,17 +60,20 @@ export function defaultUserRbacContext(data = {}) {
 export function denyRbacContext(data = {}) {
   return {
     canIUseAction: () => false,
-    ...data
+    ...data,
   };
 }
 
 export function defaultLoggedInUser(data = {}) {
-  const user = defaultUserDto({
-    groups_users: [
-      defaultGroupUser({
-        is_admin: true
-      })
-    ]
-  }, {withRole: true});
+  const user = defaultUserDto(
+    {
+      groups_users: [
+        defaultGroupUser({
+          is_admin: true,
+        }),
+      ],
+    },
+    { withRole: true },
+  );
   return Object.assign(user, data);
 }

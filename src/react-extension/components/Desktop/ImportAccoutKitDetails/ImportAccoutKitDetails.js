@@ -13,11 +13,14 @@
  */
 
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {ImportAccountKitWorkflowStates, withImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
+import {
+  ImportAccountKitWorkflowStates,
+  withImportAccountKitContext,
+} from "../../../contexts/Desktop/ImportAccountKitContext";
 import Password from "../../../../shared/components/Password/Password";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 
 class ImportAccoutKitDetails extends React.Component {
@@ -37,12 +40,12 @@ class ImportAccoutKitDetails extends React.Component {
    */
   get defaultState() {
     return {
-      passphrase: '', // The passphrase
+      passphrase: "", // The passphrase
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
         invalidGpgKey: false, // True if the gpg key is invalid
-        invalidPassphrase: false // True if the passphrase is invalid
+        invalidPassphrase: false, // True if the passphrase is invalid
       },
     };
   }
@@ -94,7 +97,7 @@ class ImportAccoutKitDetails extends React.Component {
   handleChangePassphrase(event) {
     const passphrase = event.target.value;
 
-    this.setState({passphrase});
+    this.setState({ passphrase });
     if (this.state.hasBeenValidated) {
       this.validate();
     }
@@ -108,7 +111,7 @@ class ImportAccoutKitDetails extends React.Component {
     return {
       code: this.props.importAccountKitContext.accountKit?.security_token.code,
       backgroundColor: this.props.importAccountKitContext.accountKit?.security_token.color,
-      textColor: this.props.importAccountKitContext.accountKit?.security_token.textcolor
+      textColor: this.props.importAccountKitContext.accountKit?.security_token.textcolor,
     };
   }
 
@@ -122,13 +125,13 @@ class ImportAccoutKitDetails extends React.Component {
    * Validate the security token data
    */
   validate() {
-    const {passphrase} = this.state;
+    const { passphrase } = this.state;
     const errors = {
-      emptyPassphrase: passphrase.trim() === '',
+      emptyPassphrase: passphrase.trim() === "",
       invalidPassphrase: false,
       invalidGpgKey: false,
     };
-    this.setState({hasBeenValidated: true, errors});
+    this.setState({ hasBeenValidated: true, errors });
   }
 
   /**
@@ -139,9 +142,9 @@ class ImportAccoutKitDetails extends React.Component {
   onCheckPassphraseFailure(error) {
     // It can happen when the user has entered the wrong passphrase.
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({errors: {invalidPassphrase: true}});
-    } else if (error.name === 'GpgKeyError') {
-      this.setState({errors: {invalidGpgKey: true}});
+      this.setState({ errors: { invalidPassphrase: true } });
+    } else if (error.name === "GpgKeyError") {
+      this.setState({ errors: { invalidGpgKey: true } });
     } else {
       // Only controlled errors should hit the component.
       throw error;
@@ -165,13 +168,19 @@ class ImportAccoutKitDetails extends React.Component {
     return (
       <div className="import-account-kit-details">
         <div className="user">
-          <UserAvatar user={this.props.importAccountKitContext.accountKit} baseUrl={this.props.importAccountKitContext.accountKit?.domain} className="big avatar user-avatar" />
+          <UserAvatar
+            user={this.props.importAccountKitContext.accountKit}
+            baseUrl={this.props.importAccountKitContext.accountKit?.domain}
+            className="big avatar user-avatar"
+          />
           <p className="user-name">{this.fullname}</p>
           <p className="user-email">{this.props.importAccountKitContext.accountKit?.username}</p>
           <p className="user-domain">{this.props.importAccountKitContext.accountKit?.domain}</p>
         </div>
         <div className="input-password-wrapper input required">
-          <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
+          <label htmlFor="passphrase">
+            <Trans>Passphrase</Trans>
+          </label>
           <Password
             id="passphrase-input"
             autoComplete="off"
@@ -179,31 +188,33 @@ class ImportAccoutKitDetails extends React.Component {
             preview={true}
             securityToken={this.securityToken}
             onChange={this.handleChangePassphrase}
-            disabled={!this.areActionsAllowed} />
-          {this.state.hasBeenValidated &&
+            disabled={!this.areActionsAllowed}
+          />
+          {this.state.hasBeenValidated && (
             <>
-              {this.state.errors.emptyPassphrase &&
-                <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
-              }
-              {this.state.errors.invalidPassphrase &&
+              {this.state.errors.emptyPassphrase && (
+                <div className="empty-passphrase error-message">
+                  <Trans>The passphrase should not be empty.</Trans>
+                </div>
+              )}
+              {this.state.errors.invalidPassphrase && (
                 <div className="invalid-passphrase error-message">
                   <Trans>The passphrase is invalid.</Trans>
                 </div>
-              }
-              {this.state.errors.invalidGpgKey &&
-                <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
-              }
+              )}
+              {this.state.errors.invalidGpgKey && (
+                <div className="invalid-gpg-key error-message">
+                  <Trans>The private key is invalid.</Trans>
+                </div>
+              )}
             </>
-          }
+          )}
         </div>
         <div className="form-actions">
-          <button
-            type="button"
-            onClick={this.handleConfirmation}
-            className="button primary big full-width">
+          <button type="button" onClick={this.handleConfirmation} className="button primary big full-width">
             <Trans>Next</Trans>
           </button>
-          <button type="button" className="link"  onClick={this.importAnotherAccount}>
+          <button type="button" className="link" onClick={this.importAnotherAccount}>
             <Trans>Import another account</Trans>
           </button>
         </div>
@@ -218,4 +229,4 @@ ImportAccoutKitDetails.propTypes = {
   importAccountKitContext: PropTypes.any.isRequired, // The import account kit context
 };
 
-export default withAppContext(withImportAccountKitContext(withTranslation('common')(ImportAccoutKitDetails)));
+export default withAppContext(withImportAccountKitContext(withTranslation("common")(ImportAccoutKitDetails)));

@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 
 /**
  * Default props.
@@ -24,11 +24,11 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(data?.context),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
-      resetDisplayAdministrationWorkspaceAction: jest.fn()
+      resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
     actionFeedbackContext: {
       displaySuccess: () => jest.fn(),
-      displayError: jest.fn()
+      displayError: jest.fn(),
     },
   };
   return Object.assign(defaultProps, data);
@@ -157,7 +157,7 @@ export const mockModel = {
 export function defaultEmailNotificationSettings(data = {}) {
   return {
     ...mockResult,
-    ...data
+    ...data,
   };
 }
 
@@ -168,12 +168,12 @@ export function defaultEmailNotificationSettings(data = {}) {
  */
 export function withoutSourceNotificationSettings(data = {}) {
   const settings = defaultEmailNotificationSettings({
-    "sources_database": false,
-    "sources_file": false
+    sources_database: false,
+    sources_file: false,
   });
   return {
     ...settings,
-    ...data
+    ...data,
   };
 }
 
@@ -183,10 +183,10 @@ export function withoutSourceNotificationSettings(data = {}) {
  * @returns {object}
  */
 export function withFileSourceSettings(data = {}) {
-  const settings = Object.assign({}, mockResult,  {sources_file: true});
+  const settings = Object.assign({}, mockResult, { sources_file: true });
   return {
     ...settings,
-    ...data
+    ...data,
   };
 }
 
@@ -196,14 +196,12 @@ export function withFileSourceSettings(data = {}) {
  * @returns {object}
  */
 export function withoutDatabaseSourceSettings(data = {}) {
-  const settings = Object.assign({}, mockResult,  {sources_file: true, sources_database: false});
+  const settings = Object.assign({}, mockResult, { sources_file: true, sources_database: false });
   return {
     ...settings,
-    ...data
+    ...data,
   };
 }
-
-
 
 /**
  * Email notifications settings for UI.
@@ -213,10 +211,9 @@ export function withoutDatabaseSourceSettings(data = {}) {
 export function defaultSettingsModel(data = {}) {
   return {
     ...mockModel,
-    ...data
+    ...data,
   };
 }
-
 
 /**
  * Email notifications settings for UI without db and file source.
@@ -224,10 +221,9 @@ export function defaultSettingsModel(data = {}) {
  * @returns {object}
  */
 export function withoutSourceSettingsModel(data = {}) {
-  const settings = Object.assign({}, mockModel,  {hasDatabaseSetting: false});
+  const settings = Object.assign({}, mockModel, { hasDatabaseSetting: false });
   return {
     ...settings,
-    ...data
+    ...data,
   };
 }
-

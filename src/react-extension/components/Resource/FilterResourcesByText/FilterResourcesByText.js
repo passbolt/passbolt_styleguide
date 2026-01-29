@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import SearchBar from "../../Common/Navigation/Search/SearchBar";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 
 class FilterResourcesByText extends Component {
   /**
@@ -41,8 +41,8 @@ class FilterResourcesByText extends Component {
    */
   get defaultState() {
     return {
-      text: '', // Current search text
-      debounceTimeoutIt: null // Set the debounce timeout identifier
+      text: "", // Current search text
+      debounceTimeoutIt: null, // Set the debounce timeout identifier
     };
   }
 
@@ -68,7 +68,7 @@ class FilterResourcesByText extends Component {
     const isTextFilter = this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.TEXT;
     const isNotTextFilterAnymore = wasTextFilter && !isTextFilter;
     if (isNotTextFilterAnymore) {
-      this.setState({text: ''});
+      this.setState({ text: "" });
     }
   }
 
@@ -88,9 +88,9 @@ class FilterResourcesByText extends Component {
     clearTimeout(this.state.debounceTimeoutId);
     const debounceTimeoutId = setTimeout(() => {
       const filter = this.generateFilter(text);
-      this.props.history.push({pathname: '/app/passwords', state: {filter}});
+      this.props.history.push({ pathname: "/app/passwords", state: { filter } });
     }, 300);
-    this.setState({debounceTimeoutId, text});
+    this.setState({ debounceTimeoutId, text });
   }
 
   /**
@@ -100,9 +100,9 @@ class FilterResourcesByText extends Component {
    */
   generateFilter(text) {
     if (text.length > 0) {
-      return {type: ResourceWorkspaceFilterTypes.TEXT, payload: text};
+      return { type: ResourceWorkspaceFilterTypes.TEXT, payload: text };
     }
-    return {type: ResourceWorkspaceFilterTypes.ALL};
+    return { type: ResourceWorkspaceFilterTypes.ALL };
   }
 
   /**
@@ -115,7 +115,8 @@ class FilterResourcesByText extends Component {
         disabled={this.props.disabled}
         onSearch={this.handleSearchEvent}
         placeholder={this.props.placeholder}
-        value={this.state.text} />
+        value={this.state.text}
+      />
     );
   }
 }
@@ -124,13 +125,12 @@ FilterResourcesByText.propTypes = {
   disabled: PropTypes.bool,
   placeholder: PropTypes.string,
   resourceWorkspaceContext: PropTypes.object,
-  history: PropTypes.object
+  history: PropTypes.object,
 };
 
 FilterResourcesByText.defaultProps = {
   disabled: false,
-  placeholder: 'Search',
+  placeholder: "Search",
 };
 
 export default withRouter(withResourceWorkspace(FilterResourcesByText));
-

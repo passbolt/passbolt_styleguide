@@ -13,44 +13,46 @@
  */
 
 import React from "react";
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 import MockFetch from "../../../test/mock/MockFetch";
 import SendTestMailDialog from "./SendTestMailDialog";
-import {defaultProps} from "./SendTestMailDialog.test.data";
+import { defaultProps } from "./SendTestMailDialog.test.data";
 import AdminSmtpSettingsContextProvider from "../../../contexts/AdminSmtpSettingsContext";
-import {defaultDebugResponse} from "./SendTestMailDialog.test.data";
+import { defaultDebugResponse } from "./SendTestMailDialog.test.data";
 
 let currentStory = null;
 const mockFetch = new MockFetch();
-mockFetch.addPostFetchRequest(/smtp\/email\.json/, async() => {
+mockFetch.addPostFetchRequest(/smtp\/email\.json/, async () => {
   switch (currentStory) {
-    case 'components-administration-sendtestmaildialog--email-send-success': {
+    case "components-administration-sendtestmaildialog--email-send-success": {
       return mockApiResponse(defaultDebugResponse());
     }
-    case 'components-administration-sendtestmaildialog--email-send-error': {
+    case "components-administration-sendtestmaildialog--email-send-error": {
       const response = {
         header: {
-          message: "Something went wrong!"
+          message: "Something went wrong!",
         },
         body: defaultDebugResponse(),
       };
-      return new Response(JSON.stringify(response), {status: 400});
+      return new Response(JSON.stringify(response), { status: 400 });
     }
   }
   throw new Error("Unsupported story");
 });
 
 export default {
-  title: 'Components/Administration/SendTestMailDialog',
+  title: "Components/Administration/SendTestMailDialog",
   component: SendTestMailDialog,
   decorators: [
     (Story, storyArgs) => {
       currentStory = storyArgs.id;
-      return <AdminSmtpSettingsContextProvider {...storyArgs.args}>
-        <Story {...storyArgs.args}/>;
-      </AdminSmtpSettingsContextProvider>;
-    }
-  ]
+      return (
+        <AdminSmtpSettingsContextProvider {...storyArgs.args}>
+          <Story {...storyArgs.args} />;
+        </AdminSmtpSettingsContextProvider>
+      );
+    },
+  ],
 };
 
 export const EmailSendSuccess = {

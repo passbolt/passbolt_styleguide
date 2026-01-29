@@ -11,8 +11,11 @@
  * @link          https=//www.passbolt.com Passbolt(tm)
  * @since         3.8.0
  */
-import {mockSubscription, mockSubscriptionModel} from '../../../react-extension/components/Administration/DisplaySubscriptionKey/DisplaySubscriptionKey.test.data';
-import SubscriptionModel from './SubscriptionModel';
+import {
+  mockSubscription,
+  mockSubscriptionModel,
+} from "../../../react-extension/components/Administration/DisplaySubscriptionKey/DisplaySubscriptionKey.test.data";
+import SubscriptionModel from "./SubscriptionModel";
 
 /**
  * Test model related to the subscription model
@@ -34,7 +37,7 @@ describe("SubscriptionModel model", () => {
         email: "",
         expiry: null,
         created: null,
-        data: null
+        data: null,
       });
     });
     it("should init model with N/A value if email and subscriptionId not exist", () => {
@@ -45,4 +48,3 @@ describe("SubscriptionModel model", () => {
     });
   });
 });
-

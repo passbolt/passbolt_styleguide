@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 export const defaultFavoriteDto = (data = {}) => ({
   id: uuidv4(),
   user_id: uuidv4(),
   foreign_key: uuidv4(),
   created: "2020-08-27T08:35:21+00:00",
-  ...data
+  ...data,
 });

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import ApiTriage from "./ApiTriage";
 
 /**
@@ -21,12 +21,5 @@ import ApiTriage from "./ApiTriage";
 const appDomElement = document.createElement("div");
 document.body.appendChild(appDomElement);
 
-/*
- * TODO: React18 - enable when ready
- * const root = ReactDOM.createRoot(appDomElement);
- */
-/* eslint-disable react/no-deprecated */
-ReactDOM.render(
-  <ApiTriage/>,
-  appDomElement
-);
+const root = createRoot(appDomElement);
+root.render(<ApiTriage />);

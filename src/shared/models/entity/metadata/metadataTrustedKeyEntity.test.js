@@ -13,11 +13,11 @@
  */
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import EntitySchema from "../abstract/entitySchema";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 import MetadataTrustedKeyEntity from "./metadataTrustedKeyEntity";
-import {defaultMetadataTrustedKeyDto} from "./metadataTrustedKeyEntity.test.data";
+import { defaultMetadataTrustedKeyDto } from "./metadataTrustedKeyEntity.test.data";
 import MetadataKeyEntity from "./metadataKeyEntity";
-import {defaultMetadataKeyDto} from "./metadataKeyEntity.test.data";
+import { defaultMetadataKeyDto } from "./metadataKeyEntity.test.data";
 
 describe("MetadataTrustedKeyEntity", () => {
   describe("::getSchema", () => {
@@ -71,9 +71,8 @@ describe("MetadataTrustedKeyEntity", () => {
     it("returns true if metadata key is trusted", () => {
       expect.assertions(1);
       const metadataKey = new MetadataKeyEntity(defaultMetadataKeyDto());
-      const dto = defaultMetadataTrustedKeyDto({fingerprint: metadataKey.fingerprint});
+      const dto = defaultMetadataTrustedKeyDto({ fingerprint: metadataKey.fingerprint });
       const entity = new MetadataTrustedKeyEntity(dto);
-
 
       expect(entity.isMetadataKeyTrusted(metadataKey)).toBeTruthy();
     });

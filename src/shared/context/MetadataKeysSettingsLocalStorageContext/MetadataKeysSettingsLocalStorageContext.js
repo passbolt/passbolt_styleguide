@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropKeys from "prop-types";
-import {withAppContext} from "../AppContext/AppContext";
+import { withAppContext } from "../AppContext/AppContext";
 import MetadataKeysSettingsEntity from "../../models/entity/metadata/metadataKeysSettingsEntity";
 
 export const MetadataKeysSettingsLocalStorageContext = React.createContext({
@@ -21,7 +21,6 @@ export const MetadataKeysSettingsLocalStorageContext = React.createContext({
   metadataKeysSettings: null, // the current metadata key settings loaded from the local storage
   updateLocalStorage: () => {}, // triggers an update of the local storage
 });
-
 
 /**
  * The metadata key settings local storage context provider
@@ -88,7 +87,7 @@ export class MetadataKeysSettingsLocalStorageContextProvider extends React.Compo
    */
   set(metadataKeysSettings) {
     const metadataKeysSettingsEntity = new MetadataKeysSettingsEntity(metadataKeysSettings);
-    this.setState({metadataKeysSettings: metadataKeysSettingsEntity});
+    this.setState({ metadataKeysSettings: metadataKeysSettingsEntity });
   }
 
   /**
@@ -134,7 +133,9 @@ export class MetadataKeysSettingsLocalStorageContextProvider extends React.Compo
    */
   async updateLocalStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
-      this.runningLocalStorageUpdatePromise = this.props.context.port.request('passbolt.metadata.get-or-find-metadata-keys-settings');
+      this.runningLocalStorageUpdatePromise = this.props.context.port.request(
+        "passbolt.metadata.get-or-find-metadata-keys-settings",
+      );
       await this.runningLocalStorageUpdatePromise;
       this.runningLocalStorageUpdatePromise = null;
     } else {
@@ -170,16 +171,15 @@ export function withMetadataKeysSettingsLocalStorage(WrappedComponent) {
     render() {
       return (
         <MetadataKeysSettingsLocalStorageContext.Consumer>
-          {
-            metadataKeysSettingsLocalStorageContext => <WrappedComponent
+          {(metadataKeysSettingsLocalStorageContext) => (
+            <WrappedComponent
               metadataKeysSettingsLocalStorageContext={metadataKeysSettingsLocalStorageContext}
               metadataKeysSettings={metadataKeysSettingsLocalStorageContext.get()}
               {...this.props}
             />
-          }
+          )}
         </MetadataKeysSettingsLocalStorageContext.Consumer>
       );
     }
   };
 }
-

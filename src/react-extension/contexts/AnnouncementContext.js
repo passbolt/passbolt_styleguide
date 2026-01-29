@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -15,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * The announcement context
@@ -23,7 +22,7 @@ import {v4 as uuidv4} from "uuid";
 export const AnnouncementContext = React.createContext({
   announcements: [], // The current of displayed announcements
   show: () => {}, // Show an announcement
-  close: () => {} // Close an announcement
+  close: () => {}, // Close an announcement
 });
 
 /**
@@ -47,10 +46,15 @@ export default class AnnouncementContextProvider extends React.Component {
       announcements: [],
       show: (Announcement, AnnouncementProps) => {
         const announcementKey = uuidv4();
-        this.setState({announcements: [...this.state.announcements, {key: announcementKey, Announcement, AnnouncementProps}]});
+        this.setState({
+          announcements: [...this.state.announcements, { key: announcementKey, Announcement, AnnouncementProps }],
+        });
         return announcementKey;
       },
-      close: async announcementKey => await this.setState({announcements: this.state.announcements.filter(announcement => announcementKey !== announcement.key)})
+      close: async (announcementKey) =>
+        await this.setState({
+          announcements: this.state.announcements.filter((announcement) => announcementKey !== announcement.key),
+        }),
     };
   }
 
@@ -59,16 +63,12 @@ export default class AnnouncementContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <AnnouncementContext.Provider value={this.state}>
-        {this.props.children}
-      </AnnouncementContext.Provider>
-    );
+    return <AnnouncementContext.Provider value={this.state}>{this.props.children}</AnnouncementContext.Provider>;
   }
 }
-AnnouncementContextProvider.displayName = 'AnnouncementContextProvider';
+AnnouncementContextProvider.displayName = "AnnouncementContextProvider";
 AnnouncementContextProvider.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 /**
@@ -80,9 +80,7 @@ export function withAnnouncement(WrappedComponent) {
     render() {
       return (
         <AnnouncementContext.Consumer>
-          {
-            announcementContext => <WrappedComponent announcementContext={announcementContext} {...this.props} />
-          }
+          {(announcementContext) => <WrappedComponent announcementContext={announcementContext} {...this.props} />}
         </AnnouncementContext.Consumer>
       );
     }

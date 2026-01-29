@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -22,7 +21,7 @@ import PropTypes from "prop-types";
 export const LoadingContext = React.createContext({
   counter: [], // The number of loading processes
   add: () => {}, // Add a loading process
-  remove: () => {} // Remove a loading process
+  remove: () => {}, // Remove a loading process
 });
 
 /**
@@ -44,8 +43,12 @@ export default class LoadingContextProvider extends React.Component {
   get defaultState() {
     return {
       counter: 0, // The number of loading processes
-      add: () => { this.setState({counter: this.state.counter + 1}); }, // Add a loading process
-      remove: () => { this.setState({counter: Math.min(this.state.counter - 1, 0)}); } // Remove a loading process
+      add: () => {
+        this.setState({ counter: this.state.counter + 1 });
+      }, // Add a loading process
+      remove: () => {
+        this.setState({ counter: Math.min(this.state.counter - 1, 0) });
+      }, // Remove a loading process
     };
   }
 
@@ -54,18 +57,13 @@ export default class LoadingContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <LoadingContext.Provider value={this.state}>
-        {this.props.children}
-      </LoadingContext.Provider>
-    );
+    return <LoadingContext.Provider value={this.state}>{this.props.children}</LoadingContext.Provider>;
   }
 }
 
 LoadingContextProvider.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 };
-
 
 /**
  * Laoding Context Consumer HOC
@@ -76,9 +74,7 @@ export function withLoading(WrappedComponent) {
     render() {
       return (
         <LoadingContext.Consumer>
-          {
-            loadingContext => <WrappedComponent loadingContext={loadingContext} {...this.props} />
-          }
+          {(loadingContext) => <WrappedComponent loadingContext={loadingContext} {...this.props} />}
         </LoadingContext.Consumer>
       );
     }

@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {MfaPolicyEnumerationTypes} from "../../shared/models/mfaPolicy/MfaPolicyEnumeration";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { MfaPolicyEnumerationTypes } from "../../shared/models/mfaPolicy/MfaPolicyEnumeration";
 
 // The mfa settings workflow states.
 export const MfaSettingsWorkflowStates = {
@@ -24,7 +24,7 @@ export const MfaSettingsWorkflowStates = {
   SCANTOTPCODE: "Scan totp code",
   VIEWCONFIGURATION: "View a totp configuration",
   SETUPYUBIKEY: "Setup Yubikey",
-  SETUPDUO: "Setup Duo"
+  SETUPDUO: "Setup Duo",
 };
 
 export const Providers = {
@@ -51,8 +51,8 @@ export const MfaContext = React.createContext({
   isMfaChoiceRequired: () => {}, //return is an user has to perform a mfa or not
   checkMfaChoiceRequired: () => {}, //return is an user has to perform a mfa or not
   hasMfaUserSettings: () => {}, // returns if user has already defined its mfa settings
-  navigate: () => { }, // Change state for orchestration
-  setProvider: () => { }, //Init the provider and the state to follow
+  navigate: () => {}, // Change state for orchestration
+  setProvider: () => {}, //Init the provider and the state to follow
   goToProviderList: () => {}, //Cancel a setup process or/and go to mfa providers
   validateTotpCode: () => {}, //Validate the totp code
   removeProvider: () => {}, //Remove an existing provider
@@ -120,7 +120,7 @@ export class MfaContextProvider extends React.Component {
     let policy = null;
     const result = await this.props.context.port.request("passbolt.mfa-policy.get-policy");
     policy = result ? result.policy : null;
-    this.setState({policy});
+    this.setState({ policy });
     this.setProcessing(false);
   }
 
@@ -130,13 +130,13 @@ export class MfaContextProvider extends React.Component {
    */
   async findMfaSettings() {
     this.setProcessing(true);
-    let mfaUserSettings =  null;
+    let mfaUserSettings = null;
     let mfaOrganisationSettings = null;
     const settings = await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
     mfaUserSettings = settings.MfaAccountSettings;
     mfaOrganisationSettings = settings.MfaOrganizationSettings;
-    this.setState({mfaUserSettings});
-    this.setState({mfaOrganisationSettings});
+    this.setState({ mfaUserSettings });
+    this.setState({ mfaOrganisationSettings });
     this.setProcessing(false);
   }
 
@@ -177,8 +177,9 @@ export class MfaContextProvider extends React.Component {
    * @returns {boolean}
    */
   hasMfaOrganisationSettings() {
-    return this.state.mfaOrganisationSettings &&
-      Object.values(this.state.mfaOrganisationSettings).some(value => value);
+    return (
+      this.state.mfaOrganisationSettings && Object.values(this.state.mfaOrganisationSettings).some((value) => value)
+    );
   }
 
   /**
@@ -186,8 +187,7 @@ export class MfaContextProvider extends React.Component {
    * @returns {boolean}
    */
   hasMfaUserSettings() {
-    return this.state.mfaUserSettings &&
-      Object.values(this.state.mfaUserSettings).some(value => value);
+    return this.state.mfaUserSettings && Object.values(this.state.mfaUserSettings).some((value) => value);
   }
 
   /**
@@ -204,14 +204,14 @@ export class MfaContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {policy, processing} = this.defaultState;
+    const { policy, processing } = this.defaultState;
     this.setState({
       policy,
       processing,
@@ -228,7 +228,7 @@ export class MfaContextProvider extends React.Component {
       return false;
     }
     await this.findMfaSettings();
-    this.setState({mfaChoiceRequired: !this.hasMfaSettings()});
+    this.setState({ mfaChoiceRequired: !this.hasMfaSettings() });
   }
 
   /**
@@ -245,14 +245,14 @@ export class MfaContextProvider extends React.Component {
    * @returns {void}
    */
   navigate(state) {
-    this.setState({state});
+    this.setState({ state });
   }
 
   /**
    * Cancel a setup process or go back to mfa settings providers
    */
   goToProviderList() {
-    this.setState({state: MfaSettingsWorkflowStates.OVERVIEW, provider: null});
+    this.setState({ state: MfaSettingsWorkflowStates.OVERVIEW, provider: null });
   }
 
   /**
@@ -261,7 +261,7 @@ export class MfaContextProvider extends React.Component {
    * @returns {void}
    */
   setProvider(provider) {
-    this.setState({provider});
+    this.setState({ provider });
   }
 
   /**
@@ -275,7 +275,7 @@ export class MfaContextProvider extends React.Component {
       this.setProcessing(true);
       await this.props.context.port.request("passbolt.mfa-setup.verify-totp-code", {
         otpProvisioningUri,
-        totp
+        totp,
       });
     } catch (error) {
       console.error(error);
@@ -294,7 +294,7 @@ export class MfaContextProvider extends React.Component {
     try {
       this.setProcessing(true);
       await this.props.context.port.request("passbolt.mfa-setup.verify-yubikey-code", {
-        hotp
+        hotp,
       });
     } catch (error) {
       console.error(error);
@@ -311,7 +311,7 @@ export class MfaContextProvider extends React.Component {
   async removeProvider() {
     try {
       this.setProcessing(true);
-      await this.props.context.port.request("passbolt.mfa-setup.remove-provider", {provider: this.state.provider});
+      await this.props.context.port.request("passbolt.mfa-setup.remove-provider", { provider: this.state.provider });
     } catch (error) {
       console.error(error);
       throw error;
@@ -325,11 +325,7 @@ export class MfaContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <MfaContext.Provider value={this.state}>
-        {this.props.children}
-      </MfaContext.Provider>
-    );
+    return <MfaContext.Provider value={this.state}>{this.props.children}</MfaContext.Provider>;
   }
 }
 
@@ -349,12 +345,7 @@ export function withMfa(WrappedComponent) {
     render() {
       return (
         <MfaContext.Consumer>
-          {mfaContext => (
-            <WrappedComponent
-              mfaContext={mfaContext}
-              {...this.props}
-            />
-          )}
+          {(mfaContext) => <WrappedComponent mfaContext={mfaContext} {...this.props} />}
         </MfaContext.Consumer>
       );
     }

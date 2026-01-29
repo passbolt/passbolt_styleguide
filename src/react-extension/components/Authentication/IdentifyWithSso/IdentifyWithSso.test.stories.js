@@ -17,22 +17,23 @@ import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.da
 import IdentifyWithSso from "./IdentifyWithSso";
 
 export default {
-  title: 'Components/Authentication/IdentifyWithSso',
-  component: IdentifyWithSso
+  title: "Components/Authentication/IdentifyWithSso",
+  component: IdentifyWithSso,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <IdentifyWithSso {...args}/>
+        <IdentifyWithSso {...args} />
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 export const Initial = Template.bind({});
 Initial.parameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 Initial.args = {
@@ -40,9 +41,9 @@ Initial.args = {
     getApiClientOptions: () => ({
       getBaseUrl: () => self.location.origin,
       setResourceName: () => {},
-      getResourceName: () => "sso-recover"
+      getResourceName: () => "sso-recover",
     }),
-    trustedDomain: self.location.origin
+    trustedDomain: self.location.origin,
   },
-  ssoProvider: SsoProviders.find(provider => provider.id === "azure")
+  ssoProvider: SsoProviders.find((provider) => provider.id === "azure"),
 };

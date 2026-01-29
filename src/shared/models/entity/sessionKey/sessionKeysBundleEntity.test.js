@@ -14,10 +14,14 @@
 import SessionKeysBundleEntity from "./sessionKeysBundleEntity";
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {decryptedSessionKeysBundleDto, defaultSessionKeysBundleDto, minimalSessionKeysBundleDto} from "./sessionKeysBundleEntity.test.data";
+import {
+  decryptedSessionKeysBundleDto,
+  defaultSessionKeysBundleDto,
+  minimalSessionKeysBundleDto,
+} from "./sessionKeysBundleEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
-import {defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty.test.data";
-import {defaultSessionKeysBundleDataDto} from "./sessionKeysBundleDataEntity.test.data";
+import { defaultPgpMessage } from "../../../../../test/assert/assertEntityProperty.test.data";
+import { defaultSessionKeysBundleDataDto } from "./sessionKeysBundleDataEntity.test.data";
 import SessionKeysBundleDataEntity from "./sessionKeysBundleDataEntity";
 
 describe("SessionKeysBundleEntity", () => {
@@ -42,48 +46,67 @@ describe("SessionKeysBundleEntity", () => {
       assertEntityProperty.required(SessionKeysBundleEntity, "data");
 
       const dataStringSuccessScenarios = [
-        {scenario: "PGP Message with comments in the header", value: defaultPgpMessage({withCrc: true, withComments: true})},
-        {scenario: "PGP Message without comments in the header", value: defaultPgpMessage({withCrc: true, withComments: false})},
+        {
+          scenario: "PGP Message with comments in the header",
+          value: defaultPgpMessage({ withCrc: true, withComments: true }),
+        },
+        {
+          scenario: "PGP Message without comments in the header",
+          value: defaultPgpMessage({ withCrc: true, withComments: false }),
+        },
       ];
       for (let i = 0; i < dataStringSuccessScenarios.length; i++) {
         const scenario = dataStringSuccessScenarios[i];
-        const dto = defaultSessionKeysBundleDto({data: scenario.value});
+        const dto = defaultSessionKeysBundleDto({ data: scenario.value });
         expect(() => new SessionKeysBundleEntity(dto)).not.toThrow();
       }
 
       const dataStringFailScenarios = [
-        {scenario: "PGP Message without CRC", value: defaultPgpMessage({withCrc: false})},
-        {scenario: "PGP Message without CRC and multiple blocks", value: defaultPgpMessage({withCrc: false, withDuplicates: true})},
-        {scenario: "PGP Message with wrong extra characters", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true})},
-        {scenario: "PGP Message with wrong extra characters and multiple blocks", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
-        {scenario: "PGP Message with comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: true, withDuplicates: true})},
-        {scenario: "PGP Message without comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: false, withDuplicates: true})},
+        { scenario: "PGP Message without CRC", value: defaultPgpMessage({ withCrc: false }) },
+        {
+          scenario: "PGP Message without CRC and multiple blocks",
+          value: defaultPgpMessage({ withCrc: false, withDuplicates: true }),
+        },
+        {
+          scenario: "PGP Message with wrong extra characters",
+          value: defaultPgpMessage({ withCrc: true, withWrongExtraCharacters: true }),
+        },
+        {
+          scenario: "PGP Message with wrong extra characters and multiple blocks",
+          value: defaultPgpMessage({ withCrc: true, withWrongExtraCharacters: true, withDuplicates: true }),
+        },
+        {
+          scenario: "PGP Message with comments in the header and multiple blocks",
+          value: defaultPgpMessage({ withCrc: true, withComments: true, withDuplicates: true }),
+        },
+        {
+          scenario: "PGP Message without comments in the header and multiple blocks",
+          value: defaultPgpMessage({ withCrc: true, withComments: false, withDuplicates: true }),
+        },
       ];
       for (let i = 0; i < dataStringFailScenarios.length; i++) {
         const scenario = dataStringFailScenarios[i];
-        const dto = defaultSessionKeysBundleDto({data: scenario.value});
+        const dto = defaultSessionKeysBundleDto({ data: scenario.value });
 
         expect(() => new SessionKeysBundleEntity(dto)).toThrow(EntityValidationError);
       }
 
-      const dataObjectSuccessScenarios = [
-        {scenario: "valid entity dto", value: defaultSessionKeysBundleDataDto()},
-      ];
+      const dataObjectSuccessScenarios = [{ scenario: "valid entity dto", value: defaultSessionKeysBundleDataDto() }];
       for (let i = 0; i < dataObjectSuccessScenarios.length; i++) {
         const scenario = dataObjectSuccessScenarios[i];
-        const dto = defaultSessionKeysBundleDto({data: scenario.value});
+        const dto = defaultSessionKeysBundleDto({ data: scenario.value });
 
         expect(() => new SessionKeysBundleEntity(dto)).not.toThrow();
       }
 
       const dataObjectFailScenarios = [
-        {scenario: "invalid entity object", value: {}},
-        {scenario: "integer", value: 42},
-        {scenario: "boolean", value: false},
+        { scenario: "invalid entity object", value: {} },
+        { scenario: "integer", value: 42 },
+        { scenario: "boolean", value: false },
       ];
       for (let i = 0; i < dataObjectFailScenarios.length; i++) {
         const scenario = dataObjectFailScenarios[i];
-        const dto = defaultSessionKeysBundleDto({data: scenario.value});
+        const dto = defaultSessionKeysBundleDto({ data: scenario.value });
 
         expect(() => new SessionKeysBundleEntity(dto)).toThrow(EntityValidationError);
       }
@@ -169,7 +192,7 @@ describe("SessionKeysBundleEntity", () => {
     it("`data` should return the right value: with a SessionKeysBundleDataEntity", () => {
       expect.assertions(2);
       const dto = defaultSessionKeysBundleDto({
-        data: defaultSessionKeysBundleDataDto()
+        data: defaultSessionKeysBundleDataDto(),
       });
       const entity = new SessionKeysBundleEntity(dto);
 
@@ -218,7 +241,9 @@ describe("SessionKeysBundleEntity", () => {
         expect.assertions(1);
         const entity = new SessionKeysBundleEntity(defaultSessionKeysBundleDto());
 
-        expect(() => { entity.data = "test"; }).toThrow(EntityValidationError);
+        expect(() => {
+          entity.data = "test";
+        }).toThrow(EntityValidationError);
       });
     });
   });

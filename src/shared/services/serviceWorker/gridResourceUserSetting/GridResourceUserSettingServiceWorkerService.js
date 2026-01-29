@@ -18,7 +18,6 @@ export const RESOURCES_GRID_USER_SETTINGS_GET_EVENT = "passbolt.resources.get-gr
 export const RESOURCES_GRID_USER_SETTINGS_SET_EVENT = "passbolt.resources.set-grid-setting";
 export const RESOURCES_GRID_USER_SETTINGS_RESET_EVENT = "passbolt.resources.reset-grid-setting";
 
-
 /**
  * The grid resource service
  */
@@ -74,4 +73,3 @@ class GridResourceUserSettingServiceWorkerService {
 }
 
 export default GridResourceUserSettingServiceWorkerService;
-

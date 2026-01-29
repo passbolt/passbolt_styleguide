@@ -11,15 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
-import {BROWSER_NAMES, detectBrowserName} from "../../../../shared/lib/Browser/detectBrowserName";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import React, { Component } from "react";
+import { BROWSER_NAMES, detectBrowserName } from "../../../../shared/lib/Browser/detectBrowserName";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
-const CHROME_STORE_BROWSER_EXTENSION_URL = "https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf";
+export const CHROME_STORE_BROWSER_EXTENSION_URL = "https://download.passbolt.com/extension/chrome";
 const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/firefox/addon/passbolt";
-const EDGE_STORE_BROWSER_EXTENSION_URL = "https://microsoftedge.microsoft.com/addons/detail/passbolt-extension/ljeppgjhohmhpbdhjjjbiflabdgfkhpo";
+const EDGE_STORE_BROWSER_EXTENSION_URL =
+  "https://microsoftedge.microsoft.com/addons/detail/passbolt-extension/ljeppgjhohmhpbdhjjjbiflabdgfkhpo";
 
 class InstallExtension extends Component {
   constructor(props) {
@@ -32,11 +33,11 @@ class InstallExtension extends Component {
    * Returns the default component state
    */
   getDefaultState() {
-    const currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+    const currentTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 
     return {
       browserName: detectBrowserName(),
-      theme: currentTheme
+      theme: currentTheme,
     };
   }
 
@@ -108,16 +109,30 @@ class InstallExtension extends Component {
   render() {
     return (
       <div className="install-extension">
-        <h1><Trans>Please install the browser extension.</Trans></h1>
-        <p><Trans>Please download the browser extension and refresh this page to continue.</Trans></p>
-        {this.state.browserName &&
-        <a href={this.storeUrl} className={this.storeClassName} target="_blank" rel="noopener noreferrer">
-          <img src={this.browserStoreThumbnailUrl} alt="browser store thumbnail"/>
-        </a>
-        }
+        <h1>
+          <Trans>Please install the browser extension.</Trans>
+        </h1>
+        <p>
+          <Trans>Please download the browser extension and refresh this page to continue.</Trans>
+        </p>
+        {this.state.browserName && (
+          <a href={this.storeUrl} className={this.storeClassName} target="_blank" rel="noopener noreferrer">
+            <img src={this.browserStoreThumbnailUrl} alt="browser store thumbnail" />
+          </a>
+        )}
         <div className="form-actions">
-          <a href={this.storeUrl} className="button primary big full-width" role="button" target="_blank" rel="noopener noreferrer"><Trans>Download extension</Trans></a>
-          <button className="link" type="button" onClick={this.handleRefreshClick}><Trans>Refresh to detect extension</Trans></button>
+          <a
+            href={this.storeUrl}
+            className="button primary big full-width"
+            role="button"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Trans>Download extension</Trans>
+          </a>
+          <button className="link" type="button" onClick={this.handleRefreshClick}>
+            <Trans>Refresh to detect extension</Trans>
+          </button>
         </div>
       </div>
     );

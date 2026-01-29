@@ -14,12 +14,12 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../DialogContext";
-import UserDirectoryService from '../../../../shared/services/api/userDirectory/UserDirectoryService';
-import UserService from '../../../../shared/services/api/user/userService';
-import UserDirectoryModel from '../../../../shared/models/userDirectory/UserDirectoryModel';
-import UserDirectoryDTO from '../../../../shared/models/userDirectory/UserDirectoryDTO';
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../DialogContext";
+import UserDirectoryService from "../../../../shared/services/api/userDirectory/UserDirectoryService";
+import UserService from "../../../../shared/services/api/user/userService";
+import UserDirectoryModel from "../../../../shared/models/userDirectory/UserDirectoryModel";
+import UserDirectoryDTO from "../../../../shared/models/userDirectory/UserDirectoryDTO";
 import NotifyError from "../../../components/Common/Error/NotifyError/NotifyError";
 
 const DIRECTORY_TYPE_FIELD_NAME = "directoryType";
@@ -90,7 +90,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
       processing: true, // Context is processing data
       getCurrentSettings: this.getCurrentSettings.bind(this), // Returns settings saved
       getSettings: this.getSettings.bind(this), // Returns settings for UI changes
-      setSettings: this.setSettings.bind(this),  // Set the settings object with changes
+      setSettings: this.setSettings.bind(this), // Set the settings object with changes
       setAdUserFieldsMappingSettings: this.setAdUserFieldsMappingSettings.bind(this), // Set the field mapping settings object for the active directory part
       setOpenLdapGroupFieldsMappingSettings: this.setOpenLdapGroupFieldsMappingSettings.bind(this), // Handles open ldap's group field mapping settings changes.
       setAdFallbackFieldsSettings: this.setAdFallbackFieldsSettings.bind(this), //t
@@ -142,7 +142,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
     }
     const apiResponse = await this.userService.findAll();
     const users = apiResponse.body;
-    const userLogged = users.find(user => this.props.context.loggedInUser.id === user.id);
+    const userLogged = users.find((user) => this.props.context.loggedInUser.id === user.id);
     //@todo replace this approach with the ViewModel
     const currentSettings = new UserDirectoryModel(userDirectorySettings, userLogged.id);
 
@@ -160,7 +160,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   sortUsers(users) {
-    const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;
+    const getUserFullName = (user) => `${user.profile.first_name} ${user.profile.last_name}`;
     const nameSorter = (u1, u2) => getUserFullName(u1).localeCompare(getUserFullName(u2));
     return users.sort(nameSorter);
   }
@@ -186,7 +186,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {object}
    */
   requestSynchronization(result) {
-    this.setState({mustSynchronize: result});
+    this.setState({ mustSynchronize: result });
   }
 
   /**
@@ -204,7 +204,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {void}
    */
   setSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings, {[key]: value});
+    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
     /*
      * Applies default values on fields mapping if needed.
      * It is required when a value is invalid and an admin changes the directoryType.
@@ -218,11 +218,12 @@ export class AdminUserDirectoryContextProvider extends React.Component {
     }
 
     if (this.isOpenLdapFieldsMappingGroupUsersResetNeeded(key, value)) {
-      newSettings.fieldsMapping.openldap.group.users = UserDirectoryModel.DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE;
+      newSettings.fieldsMapping.openldap.group.users =
+        UserDirectoryModel.DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE;
       this.setError(OPENLDAP_FIELDS_MAPPING_GROUP_USERS_ERROR, null);
     }
 
-    this.setState({settings: newSettings});
+    this.setState({ settings: newSettings });
   }
 
   /**
@@ -232,8 +233,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {boolean}
    */
   isAdFieldsMappingUserUsernameResetNeeded(key, value) {
-    return key === DIRECTORY_TYPE_FIELD_NAME
-      && value === DIRECTORY_TYPE_OPENLDAP;
+    return key === DIRECTORY_TYPE_FIELD_NAME && value === DIRECTORY_TYPE_OPENLDAP;
   }
 
   /**
@@ -243,8 +243,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {boolean}
    */
   isOpenLdapFieldsMappingGroupUsersResetNeeded(key, value) {
-    return key === DIRECTORY_TYPE_FIELD_NAME
-      && value === DIRECTORY_TYPE_ACTIVE_DIRECTORY;
+    return key === DIRECTORY_TYPE_FIELD_NAME && value === DIRECTORY_TYPE_ACTIVE_DIRECTORY;
   }
 
   /**
@@ -256,7 +255,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
   setAdUserFieldsMappingSettings(key, value) {
     const newSettings = Object.assign({}, this.state.settings);
     newSettings.fieldsMapping.ad.user[key] = value;
-    this.setState({settings: newSettings});
+    this.setState({ settings: newSettings });
   }
 
   /**
@@ -268,9 +267,8 @@ export class AdminUserDirectoryContextProvider extends React.Component {
   setOpenLdapGroupFieldsMappingSettings(key, value) {
     const newSettings = Object.assign({}, this.state.settings);
     newSettings.fieldsMapping.openldap.group[key] = value;
-    this.setState({settings: newSettings});
+    this.setState({ settings: newSettings });
   }
-
 
   /**
    * Handles open ldap's group field mapping settings changes.
@@ -281,7 +279,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
   setAdFallbackFieldsSettings(key, value) {
     const newSettings = Object.assign({}, this.state.settings);
     newSettings.fallbackFields.ad[key] = value;
-    this.setState({settings: newSettings});
+    this.setState({ settings: newSettings });
   }
 
   /**
@@ -308,7 +306,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -332,16 +330,18 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {Boolean}
    */
   setSubmitted(submitted) {
-    this.setState({submitted});
+    this.setState({ submitted });
   }
 
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {currentSettings, settings, processing} = this.defaultState;
+    const { currentSettings, settings, processing } = this.defaultState;
     this.setState({
-      currentSettings, settings, processing
+      currentSettings,
+      settings,
+      processing,
     });
   }
 
@@ -370,7 +370,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
   async test() {
     this.setProcessing(true);
     const newSettings = new UserDirectoryDTO(this.state.settings);
-    const result  = await this.userDirectoryService.test(newSettings);
+    const result = await this.userDirectoryService.test(newSettings);
     this.setProcessing(false);
     return result;
   }
@@ -400,8 +400,8 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * set an error to object
    */
   setError(key, value) {
-    const errors = Object.assign({}, this.state.errors, {[key]: value});
-    this.setState({errors});
+    const errors = Object.assign({}, this.state.errors, { [key]: value });
+    this.setState({ errors });
   }
 
   /**
@@ -416,7 +416,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   setErrors(newErrors, callback = () => {}) {
     const errors = Object.assign({}, this.state.errors, newErrors);
-    return this.setState({errors}, callback);
+    return this.setState({ errors }, callback);
   }
 
   /**
@@ -425,7 +425,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -436,9 +436,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   render() {
     return (
-      <AdminUserDirectoryContext.Provider value={this.state}>
-        {this.props.children}
-      </AdminUserDirectoryContext.Provider>
+      <AdminUserDirectoryContext.Provider value={this.state}>{this.props.children}</AdminUserDirectoryContext.Provider>
     );
   }
 }
@@ -451,7 +449,6 @@ AdminUserDirectoryContextProvider.propTypes = {
 
 export default withAppContext(withDialog(AdminUserDirectoryContextProvider));
 
-
 /**
  * Resource Workspace Context Consumer HOC
  * @param WrappedComponent
@@ -461,12 +458,11 @@ export function withAdminUserDirectory(WrappedComponent) {
     render() {
       return (
         <AdminUserDirectoryContext.Consumer>
-          {
-            adminUserDirectoryContext => <WrappedComponent adminUserDirectoryContext={adminUserDirectoryContext} {...this.props} />
-          }
+          {(adminUserDirectoryContext) => (
+            <WrappedComponent adminUserDirectoryContext={adminUserDirectoryContext} {...this.props} />
+          )}
         </AdminUserDirectoryContext.Consumer>
       );
     }
   };
 }
-

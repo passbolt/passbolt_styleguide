@@ -15,12 +15,12 @@ class LocalStorage {
 
   set(data) {
     const storageChangeEventValue = {};
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       this.storage[key] = data[key];
       storageChangeEventValue[key] = {};
       storageChangeEventValue[key].newValue = data[key];
     });
-    this.changeCallbacks.forEach(callback => callback(storageChangeEventValue));
+    this.changeCallbacks.forEach((callback) => callback(storageChangeEventValue));
   }
 }
 
@@ -29,15 +29,15 @@ class MockStorage {
     this.changeCallbacks = [];
     this.local = new LocalStorage(this.changeCallbacks);
     this.onChanged = {
-      addListener: listener => {
+      addListener: (listener) => {
         this.changeCallbacks.push(listener);
       },
-      removeListener: listener => {
+      removeListener: (listener) => {
         const listenerIndex = this.changeCallbacks.indexOf(listener);
         if (listenerIndex > -1) {
           this.changeCallbacks.splice(listenerIndex, 1);
         }
-      }
+      },
     };
   }
 }

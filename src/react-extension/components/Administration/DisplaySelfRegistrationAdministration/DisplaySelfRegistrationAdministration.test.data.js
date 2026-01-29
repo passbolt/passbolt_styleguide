@@ -12,8 +12,8 @@
  * @since         3.8.3
  */
 
-import {SelfRegistrationProviderTypes} from "../../../../shared/models/selfRegistration/SelfRegistrationEnumeration";
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import { SelfRegistrationProviderTypes } from "../../../../shared/models/selfRegistration/SelfRegistrationEnumeration";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 
 /**
  * Default props.
@@ -25,17 +25,17 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(data?.context),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
-      resetDisplayAdministrationWorkspaceAction: jest.fn()
+      resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),
-      displayError: jest.fn()
+      displayError: jest.fn(),
     },
     dialogContext: {
       open: jest.fn(),
-      close: jest.fn()
+      close: jest.fn(),
     },
-    t: text => text
+    t: (text) => text,
   };
   return Object.assign(defaultProps, data);
 }
@@ -46,23 +46,19 @@ export function defaultProps(data = {}) {
  */
 export function mockResult(domains = allowedDomains, provider = SelfRegistrationProviderTypes.EMAILDOMAINS) {
   return {
-    "id": "287ddd52-8131-4ef0-bdb8-19cf8291bf11",
-    "provider": provider,
-    "data": {
-      "allowed_domains": domains
+    id: "287ddd52-8131-4ef0-bdb8-19cf8291bf11",
+    provider: provider,
+    data: {
+      allowed_domains: domains,
     },
   };
 }
 
-export const allowedDomains = [
-  "passbolt.com",
-  "passbolt.io",
-  "passbolt.lu",
-];
+export const allowedDomains = ["passbolt.com", "passbolt.io", "passbolt.lu"];
 
 export const domains = {
-  "0": allowedDomains[0],
-  "1": allowedDomains[1],
-  "2": allowedDomains[2],
-  "3": "gmail.com"
+  0: allowedDomains[0],
+  1: allowedDomains[1],
+  2: allowedDomains[2],
+  3: "gmail.com",
 };

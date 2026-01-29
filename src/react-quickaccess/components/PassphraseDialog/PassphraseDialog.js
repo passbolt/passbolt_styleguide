@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import CloseSVG from "../../../img/svg/close.svg";
 
 class PassphraseDialog extends React.Component {
@@ -25,9 +25,9 @@ class PassphraseDialog extends React.Component {
     return {
       attempt: 0,
       processing: false,
-      passphrase: '',
+      passphrase: "",
       rememberMe: false,
-      passphraseError: '',
+      passphraseError: "",
     };
   }
 
@@ -55,7 +55,7 @@ class PassphraseDialog extends React.Component {
 
   async handleFormSubmit(event) {
     event.preventDefault();
-    this.setState({processing: true});
+    this.setState({ processing: true });
 
     if (this.state.passphrase === "") {
       this.handlePassphraseError();
@@ -63,7 +63,7 @@ class PassphraseDialog extends React.Component {
     }
 
     try {
-      await this.props.context.port.request('passbolt.keyring.private.checkpassphrase', this.state.passphrase);
+      await this.props.context.port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
       this.handlePassphraseSuccess();
     } catch (error) {
       console.error(`Invalid passphrase":`, error);
@@ -75,7 +75,7 @@ class PassphraseDialog extends React.Component {
     const rememberMeDuration = this.state.rememberMe ? -1 : false;
     this.props.context.port.emit(this.props.requestId, "SUCCESS", {
       passphrase: this.state.passphrase,
-      rememberMe: rememberMeDuration
+      rememberMe: rememberMeDuration,
     });
     this.props.onComplete();
   }
@@ -94,7 +94,7 @@ class PassphraseDialog extends React.Component {
     this.setState({
       processing: false,
       attempt: attempt,
-      passphraseError: errorMessage
+      passphraseError: errorMessage,
     });
     if (attempt < 3) {
       // Force the passphrase input focus. The autoFocus attribute only works during the first rendering.
@@ -104,16 +104,19 @@ class PassphraseDialog extends React.Component {
 
   handleInputChange(event) {
     const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
   handleCloseButtonClick() {
-    this.props.context.port.emit(this.props.requestId, "ERROR", {name: "UserAbortsOperationError", message: "The dialog has been closed."});
+    this.props.context.port.emit(this.props.requestId, "ERROR", {
+      name: "UserAbortsOperationError",
+      message: "The dialog has been closed.",
+    });
     this.props.onComplete();
   }
 
@@ -122,7 +125,10 @@ class PassphraseDialog extends React.Component {
     if (event.keyCode === 27) {
       // If not stop it will bubble to the QuickAccess component and it will close the quickaccess dialog.
       event.stopPropagation();
-      this.props.context.port.emit(this.props.requestId, "ERROR", {name: "UserAbortsOperationError", message: "The dialog has been closed."});
+      this.props.context.port.emit(this.props.requestId, "ERROR", {
+        name: "UserAbortsOperationError",
+        message: "The dialog has been closed.",
+      });
       this.props.onComplete();
     }
   }
@@ -132,44 +138,71 @@ class PassphraseDialog extends React.Component {
       <div className="passphrase" onKeyDown={this.handleKeyDown}>
         <div className="back-link">
           <a className="primary-action">
-            <span className="primary-action-title"><Trans>Passphrase required</Trans></span>
+            <span className="primary-action-title">
+              <Trans>Passphrase required</Trans>
+            </span>
           </a>
-          <a onClick={this.handleCloseButtonClick} className="secondary-action button-transparent button" title={this.translate("Cancel the operation")}>
-            <CloseSVG/>
-            <span className="visually-hidden"><Trans>Cancel</Trans></span>
+          <a
+            onClick={this.handleCloseButtonClick}
+            className="secondary-action button-transparent button"
+            title={this.translate("Cancel the operation")}
+          >
+            <CloseSVG />
+            <span className="visually-hidden">
+              <Trans>Cancel</Trans>
+            </span>
           </a>
         </div>
-        {this.state.attempt < 3 &&
+        {this.state.attempt < 3 && (
           <form onSubmit={this.handleFormSubmit}>
             <div className="form-container">
-              <div className={`input-password-wrapper input required ${this.state.passphraseError ? 'error' : ''}`} >
-                <label htmlFor="passphrase"><Trans>Please enter your passphrase</Trans></label>
-                <Password name="passphrase" placeholder={this.translate('Passphrase')} id="passphrase" inputRef={this.passphraseInputRef}
-                  value={this.state.passphrase} onChange={this.handleInputChange} disabled={this.state.processing}
-                  securityToken={this.props.context.userSettings.getSecurityToken()} autoComplete="off"/>
-                {this.state.passphraseError &&
-                  <div className="error-message">{this.state.passphraseError}</div>
-                }
+              <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""}`}>
+                <label htmlFor="passphrase">
+                  <Trans>Please enter your passphrase</Trans>
+                </label>
+                <Password
+                  name="passphrase"
+                  placeholder={this.translate("Passphrase")}
+                  id="passphrase"
+                  inputRef={this.passphraseInputRef}
+                  value={this.state.passphrase}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}
+                  securityToken={this.props.context.userSettings.getSecurityToken()}
+                  autoComplete="off"
+                />
+                {this.state.passphraseError && <div className="error-message">{this.state.passphraseError}</div>}
               </div>
-              {this.props.canRememberMe &&
+              {this.props.canRememberMe && (
                 <div className="input checkbox">
-                  <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} disabled={this.state.processing}/>
-                  <label htmlFor="remember-me"><Trans>Remember until I log out.</Trans></label>
+                  <input
+                    type="checkbox"
+                    name="rememberMe"
+                    id="remember-me"
+                    checked={this.state.rememberMe}
+                    onChange={this.handleInputChange}
+                    disabled={this.state.processing}
+                  />
+                  <label htmlFor="remember-me">
+                    <Trans>Remember until I log out.</Trans>
+                  </label>
                 </div>
-              }
+              )}
             </div>
             <div className="submit-wrapper">
-              <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
-                disabled={this.state.processing}>
+              <button
+                type="submit"
+                className={`button primary big full-width ${this.state.processing ? "processing" : ""}`}
+                role="button"
+                disabled={this.state.processing}
+              >
                 <Trans>Submit</Trans>
-                {this.state.processing &&
-                  <SpinnerSVG/>
-                }
+                {this.state.processing && <SpinnerSVG />}
               </button>
             </div>
           </form>
-        }
-        {this.state.attempt === 3 &&
+        )}
+        {this.state.attempt === 3 && (
           <div className="passphrase-wrong">
             <div className="too-many-attempts-error">
               <Trans>Your passphrase is wrong!</Trans> <Trans>The operation has been aborted.</Trans>
@@ -180,7 +213,7 @@ class PassphraseDialog extends React.Component {
               </a>
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -195,4 +228,4 @@ PassphraseDialog.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(PassphraseDialog));
+export default withAppContext(withTranslation("common")(PassphraseDialog));

@@ -13,25 +13,27 @@
  */
 import React from "react";
 import DisplayMfaPolicyAdministrationTeasing from "./DisplayMfaPolicyAdministrationTeasing";
-import {defaultProps} from "./DisplayMfaPolicyAdministrationTeasing.test.data";
+import { defaultProps } from "./DisplayMfaPolicyAdministrationTeasing.test.data";
 
 export default {
-  title: 'Components/Administration/DisplayMfaPolicyAdministrationTeasing',
+  title: "Components/Administration/DisplayMfaPolicyAdministrationTeasing",
   component: DisplayMfaPolicyAdministrationTeasing,
-  decorators: [(Story, {args}) =>
-    <div className="page administration">
-      <div className="app" >
-        <div className="panel main">
-          <div className="panel middle">
-            <div className="middle-right">
-              <div className="main-page mfa-settings-teasing">
-                <Story {...args}/>
+  decorators: [
+    (Story, { args }) => (
+      <div className="page administration">
+        <div className="app">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="main-page mfa-settings-teasing">
+                  <Story {...args} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    ),
   ],
 };
 
