@@ -84,7 +84,7 @@ class DisplayUserDetailsGroups extends React.Component {
    * Handle the click on the title
    */
   handleTitleClicked() {
-    this.setState({ open: !this.state.open });
+    this.setState((prevState) => ({ open: !prevState.open }));
   }
 
   /**
