@@ -116,7 +116,7 @@ class UploadUserProfileAvatar extends React.Component {
    */
   async handleAvatarFileSelected(event) {
     const [avatarFile] = event.target.files;
-    await this.select(avatarFile);
+    this.select(avatarFile);
     if (this.state.validation.hasAlreadyBeenValidated) {
       const state = this.validateAvatarInput();
       this.setState(state);
@@ -150,8 +150,8 @@ class UploadUserProfileAvatar extends React.Component {
    * Select the next avatar profile
    * @param avatarFile
    */
-  async select(avatarFile) {
-    await this.setState({ avatarFile });
+  select(avatarFile) {
+    this.setState({ avatarFile });
   }
 
   /**

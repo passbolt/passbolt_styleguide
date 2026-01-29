@@ -113,9 +113,9 @@ class ImportResourcesKeyUnlock extends Component {
    * Handle the event that a file has been selected
    * @param event A dom event
    */
-  async handleFileSelected(event) {
+  handleFileSelected(event) {
     const [keyFile] = event.target.files;
-    await this.setState({ keyFile });
+    this.setState({ keyFile });
   }
 
   /**
@@ -206,7 +206,7 @@ class ImportResourcesKeyUnlock extends Component {
    * Reset the validation process
    */
   async resetValidation() {
-    await this.setState({ errors: {} });
+    this.setState({ errors: {} });
   }
 
   /**

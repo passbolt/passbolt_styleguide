@@ -175,7 +175,6 @@ class EditSubscriptionKey extends Component {
       this.toggleProcessing();
       return;
     }
-
     try {
       await this.subscriptionKeyService.updateOrganizationSubscriptionKey(this.state.key);
       await this.handleSaveSuccess();
@@ -210,7 +209,7 @@ class EditSubscriptionKey extends Component {
    * Handle save operation error.
    * @param {object} error The returned error
    */
-  async handleSaveError(error) {
+  handleSaveError(error) {
     if (error.name === "PassboltSubscriptionError") {
       this.setState({ keyError: error.message });
     } else if (error.name === "EntityValidationError") {

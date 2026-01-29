@@ -82,9 +82,11 @@ class EditUserProfile extends Component {
 
   /**
    * True if the edit has validation errors
+   * @param {object} errors
+   * @return boolean
    */
-  get hasErrors() {
-    return Object.values(this.state.errors).some((value) => value);
+  hasErrors(errors) {
+    return Object.values(errors).some((value) => value);
   }
 
   /**
@@ -142,7 +144,7 @@ class EditUserProfile extends Component {
   async populate() {
     const { first_name, last_name } = this.props.context.loggedInUser.profile;
     const locale = this.props.context.locale;
-    await this.setState({ profile: { first_name, last_name, locale } });
+    this.setState({ profile: { first_name, last_name, locale } });
   }
 
   /**
@@ -151,8 +153,8 @@ class EditUserProfile extends Component {
   async save() {
     this.setState({ hasAlreadyBeenValidated: true });
     this.toggleProcessing();
-    await this.validate();
-    if (this.hasErrors) {
+    const errors = this.validate();
+    if (this.hasErrors(errors)) {
       this.toggleProcessing();
       this.focusFirstFieldError();
       return;
@@ -226,14 +228,16 @@ class EditUserProfile extends Component {
 
   /**
    * Validates the edit data
+   * @return {object} errors
    */
-  async validate() {
+  validate() {
     const isEmpty = (s) => s.trim().length === 0;
     const errors = {
       isFirstnameEmpty: isEmpty(this.state.profile.first_name),
       isLastnameEmpty: isEmpty(this.state.profile.last_name),
     };
-    await this.setState({ errors });
+    this.setState({ errors });
+    return errors;
   }
 
   /**

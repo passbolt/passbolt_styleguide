@@ -98,7 +98,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
   async handleSelectOrganizationKeyFile(event) {
     const [organizationFile] = event.target.files;
     const organizationKey = await this.readOrganizationKeyFile(organizationFile);
-    await this.fillOrganizationKey(organizationKey);
+    this.fillOrganizationKey(organizationKey);
     this.setState({ selectedFile: organizationFile });
     if (this.state.hasAlreadyBeenValidated) {
       await this.validate();
@@ -127,8 +127,8 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    * Fill the organization key
    * @param organizationKey A subscription key
    */
-  async fillOrganizationKey(organizationKey) {
-    await this.setState({ key: organizationKey });
+  fillOrganizationKey(organizationKey) {
+    this.setState({ key: organizationKey });
   }
 
   /**

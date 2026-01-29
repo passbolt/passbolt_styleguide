@@ -196,7 +196,7 @@ class CreateUser extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
 
-    await this.setState({ hasAlreadyBeenValidated: true });
+    this.setState({ hasAlreadyBeenValidated: true });
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {

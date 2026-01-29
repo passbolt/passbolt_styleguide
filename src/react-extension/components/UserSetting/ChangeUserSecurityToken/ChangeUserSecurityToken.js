@@ -180,7 +180,7 @@ class ChangeUserSecurityToken extends Component {
    */
   async handleSelectColor(color) {
     if (this.areActionsAllowed) {
-      await this.selectColor(color);
+      this.selectColor(color);
       if (this.state.hasBeenValidated) {
         await this.validate();
       }
@@ -201,7 +201,7 @@ class ChangeUserSecurityToken extends Component {
    */
   async handleChangeCode(event) {
     const code = event.target.value;
-    await this.selectCode(code);
+    this.selectCode(code);
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
@@ -241,9 +241,9 @@ class ChangeUserSecurityToken extends Component {
    * Select a token color
    * @param color A color
    */
-  async selectColor(color) {
+  selectColor(color) {
     if (color.hex !== this.state.background) {
-      await this.setState({ background: color.hex });
+      this.setState({ background: color.hex });
     }
   }
 
@@ -251,8 +251,8 @@ class ChangeUserSecurityToken extends Component {
    * Select a token code
    * @param code A code
    */
-  async selectCode(code) {
-    await this.setState({ code });
+  selectCode(code) {
+    this.setState({ code });
   }
 
   /**
@@ -260,7 +260,7 @@ class ChangeUserSecurityToken extends Component {
    */
   async randomizeCode() {
     const code = SecretComplexity.generate(3, ["uppercase"]);
-    await this.selectCode(code);
+    this.selectCode(code);
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
@@ -277,7 +277,7 @@ class ChangeUserSecurityToken extends Component {
         hex: this.defaultColors[number],
       };
     } while (color.hex === this.state.background);
-    await this.selectColor(color);
+    this.selectColor(color);
   }
 
   /**
@@ -288,23 +288,23 @@ class ChangeUserSecurityToken extends Component {
 
     const emptyCode = code.trim() === "";
     if (emptyCode) {
-      await this.setState({ hasBeenValidated: true, errors: { emptyCode } });
+      this.setState({ hasBeenValidated: true, errors: { emptyCode } });
       return;
     }
 
     const lengthCode = code.trim().length !== 3;
     if (lengthCode) {
-      await this.setState({ hasBeenValidated: true, errors: { lengthCode } });
+      this.setState({ hasBeenValidated: true, errors: { lengthCode } });
       return;
     }
 
     const invalidRegex = !isValidSecurityToken(code.trim());
     if (invalidRegex) {
-      await this.setState({ hasBeenValidated: true, errors: { invalidRegex } });
+      this.setState({ hasBeenValidated: true, errors: { invalidRegex } });
       return;
     }
 
-    await this.setState({ hasBeenValidated: true, errors: {} });
+    this.setState({ hasBeenValidated: true, errors: {} });
   }
 
   /**

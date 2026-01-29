@@ -134,10 +134,10 @@ class AcceptLoginServerKeyChange extends Component {
   async validate() {
     const { hasAccepted } = this.state;
     if (!hasAccepted) {
-      await this.setState({ hasBeenValidated: true, errors: { hasNotAccepted: true } });
+      this.setState({ hasBeenValidated: true, errors: { hasNotAccepted: true } });
       return;
     }
-    await this.setState({ hasBeenValidated: true, errors: {} });
+    this.setState({ hasBeenValidated: true, errors: {} });
   }
 
   /**

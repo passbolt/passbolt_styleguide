@@ -123,11 +123,11 @@ class EnterUsernameForm extends Component {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    await this.setState({ [name]: value });
-
-    if (this.state.hasAlreadyBeenValidated) {
-      await this.validate();
-    }
+    this.setState({ [name]: value }, async () => {
+      if (this.state.hasAlreadyBeenValidated) {
+        await this.validate();
+      }
+    });
   }
 
   /**

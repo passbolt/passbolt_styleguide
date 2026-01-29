@@ -302,7 +302,7 @@ class ResourceViewPage extends React.Component {
   async previewPassword() {
     const previewedSecret = "password";
     let plaintextSecretDto;
-    await this.setState({ error: "", isPasswordDecrypting: true });
+    this.setState({ error: "", isPasswordDecrypting: true });
 
     try {
       plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
@@ -323,7 +323,7 @@ class ResourceViewPage extends React.Component {
       return;
     }
 
-    await this.setState({ plaintextSecretDto, previewedSecret });
+    this.setState({ plaintextSecretDto, previewedSecret });
   }
 
   /**
@@ -425,7 +425,7 @@ class ResourceViewPage extends React.Component {
     const previewedSecret = "totp";
     let plaintextSecretDto;
 
-    await this.setState({ error: "", isTotpDecrypting: true });
+    this.setState({ error: "", isTotpDecrypting: true });
 
     try {
       plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);

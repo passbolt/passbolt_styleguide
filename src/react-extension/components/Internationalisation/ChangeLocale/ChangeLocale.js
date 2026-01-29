@@ -33,26 +33,26 @@ class ChangeLocale extends Component {
   /**
    * Whenever the component is mounted
    */
-  async componentDidMount() {
-    await this.initLocale();
+  componentDidMount() {
+    this.initLocale();
   }
 
   /**
    * Whenever the component has updated in terms of props
    * @param prevProps
    */
-  async componentDidUpdate(prevProps) {
-    await this.handleLocaleChange(prevProps.context.locale);
+  componentDidUpdate(prevProps) {
+    this.handleLocaleChange(prevProps.context.locale);
   }
 
   /**
    * Check if the locale has changed and update
    * @param previousLocale
    */
-  async handleLocaleChange(previousLocale) {
+  handleLocaleChange(previousLocale) {
     const hasLocaleChanged = this.props.context.locale !== previousLocale;
     if (hasLocaleChanged) {
-      await this.setState({ locale: this.props.context.locale });
+      this.setState({ locale: this.props.context.locale });
     }
   }
 
@@ -89,7 +89,7 @@ class ChangeLocale extends Component {
   async handleLocaleInputChange(event) {
     const target = event.target;
     const locale = target.value;
-    await this.updateLocale(locale);
+    this.updateLocale(locale);
   }
 
   /**
@@ -105,8 +105,8 @@ class ChangeLocale extends Component {
   /**
    * Get th locale
    */
-  async initLocale() {
-    await this.setState({ locale: this.props.context.locale, loading: false });
+  initLocale() {
+    this.setState({ locale: this.props.context.locale, loading: false });
   }
 
   /**
