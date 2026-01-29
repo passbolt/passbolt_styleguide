@@ -112,7 +112,7 @@ class AddResourcePassword extends Component {
    * Handles the click on the display secrets button.
    */
   handleDisplayPasswordGeneratorClick() {
-    this.setState({ displayPasswordGenerator: !this.state.displayPasswordGenerator });
+    this.setState((prevState) => ({ displayPasswordGenerator: !prevState.displayPasswordGenerator }));
   }
 
   /**

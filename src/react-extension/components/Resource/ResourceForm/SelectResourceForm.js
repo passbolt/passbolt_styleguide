@@ -73,21 +73,21 @@ class SelectResourceForm extends Component {
    * Handles the click on the display secrets button.
    */
   handleDisplaySecretsClick() {
-    this.setState({ displaySecrets: !this.state.displaySecrets });
+    this.setState((prevState) => ({ displaySecrets: !prevState.displaySecrets }));
   }
 
   /**
    * Handles the click on the display metadata button.
    */
   handleDisplayMetadataClick() {
-    this.setState({ displayMetadata: !this.state.displayMetadata });
+    this.setState((prevState) => ({ displayMetadata: !prevState.displayMetadata }));
   }
 
   /**
    * Handles the click on the display upgrade button.
    */
   handleDisplayUpgradeClick() {
-    this.setState({ displayUpgrade: !this.state.displayUpgrade });
+    this.setState((prevState) => ({ displayUpgrade: !prevState.displayUpgrade }));
   }
 
   /**
