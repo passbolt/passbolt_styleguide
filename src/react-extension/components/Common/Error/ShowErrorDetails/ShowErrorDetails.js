@@ -81,7 +81,7 @@ class ShowErrorDetails extends Component {
    * Toggle the display of the error details
    */
   toggleErrorDetails() {
-    this.setState({ showErrorDetails: !this.state.showErrorDetails });
+    this.setState((prevState) => ({ showErrorDetails: !prevState.showErrorDetails }));
   }
 
   /**

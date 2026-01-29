@@ -136,7 +136,7 @@ class Autocomplete extends Component {
     if (this.state.selected === -1) {
       this.setState({ selected: this.props.autocompleteItems.length - 1 });
     } else {
-      this.setState({ selected: this.state.selected - 1 });
+      this.setState((prevState) => ({ selected: prevState.selected - 1 }));
     }
     this.scrollToSelectedItem();
     this.handleArrowFocus();
@@ -149,7 +149,7 @@ class Autocomplete extends Component {
     if (this.state.selected === this.props.autocompleteItems.length - 1) {
       this.setState({ selected: -1 });
     } else {
-      this.setState({ selected: this.state.selected + 1 });
+      this.setState((prevState) => ({ selected: prevState.selected + 1 }));
     }
     this.scrollToSelectedItem();
     this.handleArrowFocus();

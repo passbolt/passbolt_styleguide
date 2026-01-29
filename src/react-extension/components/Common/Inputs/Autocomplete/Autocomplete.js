@@ -256,9 +256,9 @@ class Autocomplete extends Component {
    */
   selectPrevious() {
     if (this.state.selected === 0 || this.state.selected === null) {
-      this.setState({ selected: this.state.autocompleteItems.length - 1 });
+      this.setState((prevState) => ({ selected: prevState.autocompleteItems.length - 1 }));
     } else {
-      this.setState({ selected: this.state.selected - 1 });
+      this.setState((prevState) => ({ selected: prevState.selected - 1 }));
     }
     this.scrollToSelectedItem();
   }
@@ -271,7 +271,7 @@ class Autocomplete extends Component {
     if (this.state.selected === null || this.state.selected === this.state.autocompleteItems.length - 1) {
       this.setState({ selected: 0 });
     } else {
-      this.setState({ selected: this.state.selected + 1 });
+      this.setState((prevState) => ({ selected: prevState.selected + 1 }));
     }
     this.scrollToSelectedItem();
   }
