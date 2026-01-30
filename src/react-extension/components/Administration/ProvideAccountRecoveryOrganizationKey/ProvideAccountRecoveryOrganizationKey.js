@@ -212,11 +212,11 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    */
   async save() {
     this.setState({ hasAlreadyBeenValidated: true });
-    await this.toggleProcessing();
+    this.toggleProcessing();
 
     if (!(await this.validate())) {
       this.handleValidateError();
-      await this.toggleProcessing();
+      this.toggleProcessing();
       return;
     }
 
@@ -230,11 +230,11 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
         privateGpgKeyDto,
       );
       await this.props.onSubmit(privateGpgKeyDto);
-      await this.toggleProcessing();
+      this.toggleProcessing();
       this.props.onClose();
     } catch (error) {
       await this.handleSubmitError(error);
-      await this.toggleProcessing();
+      this.toggleProcessing();
     }
   }
 
@@ -300,7 +300,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 

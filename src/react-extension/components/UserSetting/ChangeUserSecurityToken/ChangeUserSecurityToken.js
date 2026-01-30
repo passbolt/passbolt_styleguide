@@ -170,7 +170,7 @@ class ChangeUserSecurityToken extends Component {
     await this.validate();
 
     if (this.isValid) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       await this.save();
     }
   }
@@ -221,7 +221,7 @@ class ChangeUserSecurityToken extends Component {
       await this.props.actionFeedbackContext.displaySuccess(
         this.props.t("The security token has been updated successfully"),
       );
-      await this.toggleProcessing();
+      this.toggleProcessing();
     } catch (error) {
       await this.onSaveFailure(error);
     }
@@ -232,7 +232,7 @@ class ChangeUserSecurityToken extends Component {
    * @param error The error
    */
   async onSaveFailure(error) {
-    await this.toggleProcessing();
+    this.toggleProcessing();
     const ErrorDialogProps = { error: error };
     this.props.dialogContext.open(NotifyError, ErrorDialogProps);
   }
@@ -310,7 +310,7 @@ class ChangeUserSecurityToken extends Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     this.setState((prevState) => ({ actions: { processing: !prevState.actions.processing } }));
   }
 

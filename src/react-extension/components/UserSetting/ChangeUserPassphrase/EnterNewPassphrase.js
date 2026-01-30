@@ -222,11 +222,12 @@ class EnterNewPassphrase extends React.Component {
    * Toggle the processing mode
    */
   toggleProcessing() {
-    const actions = {
-      ...this.state.actions,
-      processing: !this.state.actions.processing,
-    };
-    this.setState({ actions });
+    this.setState((prevState) => ({
+      actions: {
+        ...prevState.actions,
+        processing: !prevState.actions.processing,
+      },
+    }));
   }
 
   /**

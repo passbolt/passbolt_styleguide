@@ -162,10 +162,10 @@ class RenameResourceFolder extends Component {
       inlineValidation: this.state.inlineValidation || true,
     });
 
-    await this.toggleProcessing();
+    this.toggleProcessing();
     await this.validate();
     if (this.hasValidationError()) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       this.focusFirstFieldError();
       return;
     }
@@ -216,13 +216,9 @@ class RenameResourceFolder extends Component {
 
   /**
    * Toggle processing state
-   * @returns {Promise<void>}
    */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return new Promise((resolve) => {
-      this.setState({ processing: !prev }, resolve());
-    });
+  toggleProcessing() {
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

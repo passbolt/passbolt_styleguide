@@ -153,7 +153,7 @@ class ChooseSecurityToken extends Component {
     await this.validate();
 
     if (this.isValid) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       await this.save();
     }
   }
@@ -276,7 +276,7 @@ class ChooseSecurityToken extends Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     this.setState((prevState) => ({ actions: { processing: !prevState.actions.processing } }));
   }
 

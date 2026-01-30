@@ -213,7 +213,7 @@ class CreateResource extends Component {
     }
 
     this.setState({ hasAlreadyBeenValidated: true });
-    await this.toggleProcessing();
+    this.toggleProcessing();
 
     try {
       // Create a clone entity from DTO and remove empty secret and add required secret
@@ -224,7 +224,7 @@ class CreateResource extends Component {
 
       if (validationError?.hasErrors()) {
         this.selectResourceFormByFirstError(validationError);
-        await this.toggleProcessing();
+        this.toggleProcessing();
         return;
       }
 
@@ -238,7 +238,7 @@ class CreateResource extends Component {
 
       await this.save(resourceFormEntity);
     } catch (error) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       this.handleSaveError(error);
     }
   }
@@ -336,7 +336,7 @@ class CreateResource extends Component {
     try {
       await this.save(resourceFormEntity);
     } catch (error) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       this.handleSaveError(error);
     }
   }
@@ -458,13 +458,9 @@ class CreateResource extends Component {
 
   /**
    * Toggle processing state when validating / saving
-   * @returns {Promise<void>}
    */
-  async toggleProcessing() {
-    const prev = this.state.isProcessing;
-    return new Promise((resolve) => {
-      this.setState({ isProcessing: !prev }, () => resolve());
-    });
+  toggleProcessing() {
+    this.setState((prevState) => ({ isProcessing: !prevState.isProcessing }));
   }
 
   /**

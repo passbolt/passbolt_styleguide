@@ -168,7 +168,7 @@ class ShareDialog extends Component {
       return;
     }
 
-    await this.toggleProcessing();
+    this.toggleProcessing();
     try {
       await this.shareSave();
       await this.handleSaveSuccess();
@@ -437,13 +437,9 @@ class ShareDialog extends Component {
 
   /**
    * Toggle processing state
-   * @returns {Promise<void>}
    */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return new Promise((resolve) => {
-      this.setState({ processing: !prev }, resolve());
-    });
+  toggleProcessing() {
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

@@ -149,11 +149,11 @@ class EditUserProfile extends Component {
    * Saves the change on the user profile
    */
   async save() {
-    await this.setState({ hasAlreadyBeenValidated: true });
-    await this.toggleProcessing();
+    this.setState({ hasAlreadyBeenValidated: true });
+    this.toggleProcessing();
     await this.validate();
     if (this.hasErrors) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       this.focusFirstFieldError();
       return;
     }
@@ -210,7 +210,7 @@ class EditUserProfile extends Component {
    * @param error The error
    */
   async onSaveError(error) {
-    await this.toggleProcessing();
+    this.toggleProcessing();
     const errorDialogProps = {
       error: error,
     };
@@ -249,11 +249,13 @@ class EditUserProfile extends Component {
 
   /**
    * Toggle processing state
-   * @returns {Promise<void>}
    */
-  async toggleProcessing() {
-    return this.setState((prevState) => ({
-      actions: Object.assign(prevState.actions, { processing: !prevState.actions.processing }),
+  toggleProcessing() {
+    this.setState((prevState) => ({
+      actions: {
+        ...prevState.actions,
+        processing: !prevState.actions.processing,
+      },
     }));
   }
 

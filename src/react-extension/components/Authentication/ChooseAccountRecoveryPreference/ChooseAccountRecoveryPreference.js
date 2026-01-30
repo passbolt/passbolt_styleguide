@@ -49,7 +49,7 @@ class ChooseAccountRecoveryPreference extends Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
@@ -67,7 +67,7 @@ class ChooseAccountRecoveryPreference extends Component {
   async handleSubmit(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
-    await this.toggleProcessing();
+    this.toggleProcessing();
     this.complete();
   }
 

@@ -257,8 +257,7 @@ class EditUser extends Component {
    * Toggle processing state
    */
   toggleProcessing() {
-    const prev = this.state.processing;
-    this.setState({ processing: !prev });
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

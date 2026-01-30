@@ -254,11 +254,9 @@ class ImportResourcesKeyUnlock extends Component {
 
   /**
    * Toggle processing state
-   * @returns {Promise<void>}
    */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
+  toggleProcessing() {
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

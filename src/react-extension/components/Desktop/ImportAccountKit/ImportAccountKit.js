@@ -112,13 +112,13 @@ class ImportAccountKit extends React.Component {
       return;
     }
 
-    await this.setState({ validation: { hasAlreadyBeenValidated: true } });
+    this.setState({ validation: { hasAlreadyBeenValidated: true } });
 
-    await this.toggleProcessing();
+    this.toggleProcessing();
     await this.validateAccountKitInput();
 
     if (this.hasValidationError) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       return;
     }
     await this.props.importAccountKitContext.verifyAccountKit(this.state.accountKit);

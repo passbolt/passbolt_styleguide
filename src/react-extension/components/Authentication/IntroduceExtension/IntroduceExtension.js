@@ -43,7 +43,7 @@ class IntroduceExtension extends Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
@@ -60,7 +60,7 @@ class IntroduceExtension extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.toggleProcessing();
+    this.toggleProcessing();
     this.props.onComplete();
   }
 

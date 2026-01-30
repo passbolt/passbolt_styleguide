@@ -117,14 +117,14 @@ class CreateRole extends Component {
     }
 
     this.setState({ hasAlreadyBeenValidated: true });
-    await this.toggleProcessing();
+    this.toggleProcessing();
 
     // Validate the entity
     const validationError = this.roleEntity.validate();
 
     if (validationError?.hasErrors() || this.roleEntity.isAReservedRole()) {
       this.focusFirstFieldError();
-      await this.toggleProcessing();
+      this.toggleProcessing();
       return;
     }
 
@@ -136,11 +136,8 @@ class CreateRole extends Component {
    * Toggle processing state
    * @returns {Promise<void>}
    */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return new Promise((resolve) => {
-      this.setState({ processing: !prev }, resolve());
-    });
+  toggleProcessing() {
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

@@ -117,9 +117,9 @@ class TransferToMobile extends React.Component {
    */
   async handleClickStart() {
     try {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       await this.createTransfer();
-      await this.toggleProcessing();
+      this.toggleProcessing();
     } catch (error) {
       // Could be that the user canceled or couldn't remember the passphrase
       if (error.name === "UserAbortsOperationError") {
@@ -446,7 +446,7 @@ class TransferToMobile extends React.Component {
    * @returns {Promise<void>}
    */
   async handleTransferCancel() {
-    await this.toggleProcessing();
+    this.toggleProcessing();
     this.clearInterval();
     try {
       // cancel server side if we had the time to create a transfer entity there
@@ -558,13 +558,9 @@ class TransferToMobile extends React.Component {
 
   /**
    * Toggle processing state
-   * @returns {Promise<void>}
    */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return new Promise((resolve) => {
-      this.setState({ processing: !prev }, resolve());
-    });
+  toggleProcessing() {
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /*

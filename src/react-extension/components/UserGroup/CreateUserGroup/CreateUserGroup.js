@@ -191,7 +191,7 @@ class CreateUserGroup extends Component {
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       try {
         await this.createGroup();
         await this.handleSaveSuccess();
@@ -265,11 +265,9 @@ class CreateUserGroup extends Component {
 
   /**
    * Toggle processing state
-   * @returns {Promise<void>}
    */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
+  toggleProcessing() {
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

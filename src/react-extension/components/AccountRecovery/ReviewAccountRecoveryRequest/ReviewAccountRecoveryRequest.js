@@ -56,7 +56,7 @@ class ReviewAccountRecoveryRequest extends Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
@@ -82,14 +82,14 @@ class ReviewAccountRecoveryRequest extends Component {
    * Submit the changes.
    */
   async submit() {
-    await this.toggleProcessing();
+    this.toggleProcessing();
 
     try {
       await this.props.onSubmit(this.state.status);
-      await this.toggleProcessing();
+      this.toggleProcessing();
       this.props.onClose();
     } catch (error) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       //@todo unify unexpected error management: the error should be handle by the workflow proposing the callback prop
       this.onUnexpectedError(error);
     }

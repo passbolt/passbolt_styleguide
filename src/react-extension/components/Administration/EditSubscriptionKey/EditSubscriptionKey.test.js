@@ -12,6 +12,7 @@
  * @since         3.2.0
  */
 
+import { screen } from "@testing-library/react";
 import { defaultProps } from "./EditSubscriptionKey.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import EditSubscriptionKeyPage from "./EditSubscriptionKey.test.page";
@@ -82,6 +83,7 @@ describe("As AD I should edit the subscription key", () => {
     await page.fill("Some subscription key");
     await page.updateKey();
 
+    await screen.findByText("The key is invalid.");
     expect(page.hasSubscriptionKeyError).toEqual(true);
     expect(page.subscriptionKeyErrorMessage).toBe("The key is invalid.");
   });
@@ -96,6 +98,7 @@ describe("As AD I should edit the subscription key", () => {
     await page.fill("Some subscription key");
     await page.updateKey();
 
+    await screen.findByText("The subscription key is invalid.");
     expect(page.hasSubscriptionKeyError).toEqual(true);
     expect(page.subscriptionKeyErrorMessage).toBe("The subscription key is invalid.");
   });

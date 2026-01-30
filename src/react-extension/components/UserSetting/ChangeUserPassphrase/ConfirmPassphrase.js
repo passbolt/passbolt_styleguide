@@ -81,7 +81,7 @@ class ConfirmPassphrase extends React.Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
@@ -105,7 +105,7 @@ class ConfirmPassphrase extends React.Component {
     event.preventDefault();
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       await this.checkPassphrase();
     }
   }

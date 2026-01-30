@@ -161,12 +161,12 @@ class ImportOrganizationKey extends React.Component {
    * Save the changes.
    */
   async save() {
-    await this.setState({ hasAlreadyBeenValidated: true });
-    await this.toggleProcessing();
+    this.setState({ hasAlreadyBeenValidated: true });
+    this.toggleProcessing();
 
     if (!(await this.validate())) {
       this.handleValidateError();
-      await this.toggleProcessing();
+      this.toggleProcessing();
       return;
     }
 
@@ -192,7 +192,7 @@ class ImportOrganizationKey extends React.Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 

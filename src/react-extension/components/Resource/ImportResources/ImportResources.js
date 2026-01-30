@@ -206,11 +206,9 @@ class ImportResources extends Component {
 
   /**
    * Toggle processing state
-   * @returns {Promise<void>}
    */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
+  toggleProcessing() {
+    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**
@@ -283,7 +281,7 @@ class ImportResources extends Component {
     const credentialsOptions = { credentials: { password: null, keyFile: null } };
     const options = Object.assign({}, this.state.options, credentialsOptions);
 
-    await this.toggleProcessing();
+    this.toggleProcessing();
     try {
       const importResult = await this.props.context.port.request(
         "passbolt.import-resources.import-file",
