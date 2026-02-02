@@ -134,42 +134,35 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError(
         "password_v4",
         "has_content",
-        "One (or more) resource type v4 having a password is deleted but its resources_count is not 0.",
-      );
-      expectedError.addError(
-        "password_v5",
-        "has_content",
-        "One (or more) resource type v4 having a totp is deleted but its resources_count is not 0.",
+        "Password content type is disabled but there are existing password resources.",
       );
       expectedError.addError(
         "totp_v4",
         "has_content",
-        "One (or more) resource type v5 having a password is deleted but its resources_count is not 0.",
+        "TOTP content type is disabled but there are existing TOTP resources.",
+      );
+      expectedError.addError(
+        "password_v5",
+        "has_content",
+        "Password content type is disabled but there are existing password resources.",
       );
       expectedError.addError(
         "totp_v5",
         "has_content",
-        "One (or more) resource type v5 having a totp is deleted but its resources_count is not 0.",
+        "TOTP content type is disabled but there are existing TOTP resources.",
       );
       expectedError.addError(
         "note_v5",
         "has_content",
-        "One (or more) resource type v5 having a note is deleted but its resources_count is not 0.",
+        "Note content type is disabled but there are existing note resources.",
       );
 
       expectedError.addError("password_v4", "minimum_requirement", "At least one content type should be allowed");
-      expectedError.addError("password_v5", "minimum_requirement", "At least one content type should be allowed");
       expectedError.addError("totp_v4", "minimum_requirement", "At least one content type should be allowed");
-      expectedError.addError(
-        "totp_v5",
-        "has_cominimum_requirementntent",
-        "At least one content type should be allowed",
-      );
-      expectedError.addError(
-        "note_v5",
-        "has_cominimum_requirementntent",
-        "At least one content type should be allowed",
-      );
+      expectedError.addError("password_v5", "minimum_requirement", "At least one content type should be allowed");
+      expectedError.addError("totp_v5", "minimum_requirement", "At least one content type should be allowed");
+      expectedError.addError("custom_fields_v5", "minimum_requirement", "At least one content type should be allowed");
+      expectedError.addError("note_v5", "minimum_requirement", "At least one content type should be allowed");
 
       const dto = withDeletedResourceTypesHavingResources();
       expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
@@ -224,26 +217,32 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError(
         "totp_v4",
         "is_creation_alowed",
-        "Creation of resource type v4 is allowed but all resource types having totp are deleted.",
+        "V4 resource creation is enabled but TOTP content type is disabled.",
       );
       expectedError.addError(
         "password_v5",
         "is_creation_alowed",
-        "Creation of resource type v5 is allowed but all resource types having passwords are deleted.",
+        "V5 resource creation is enabled but password content type is disabled.",
       );
       expectedError.addError(
         "totp_v5",
         "is_creation_alowed",
-        "Creation of resource type v5 is allowed but all resource types having totp are deleted.",
+        "V5 resource creation is enabled but TOTP content type is disabled.",
+      );
+      expectedError.addError(
+        "custom_fields_v5",
+        "is_creation_alowed",
+        "V5 resource creation is enabled but custom fields content type is disabled.",
       );
       expectedError.addError(
         "note_v5",
         "is_creation_alowed",
-        "Creation of resource type v5 is allowed but all resource types having note are deleted.",
+        "V5 resource creation is enabled but note content type is disabled.",
       );
 
       expectedError.addError("password_v5", "active_metadata_key", "No active metadata key defined.");
       expectedError.addError("totp_v5", "active_metadata_key", "No active metadata key defined.");
+      expectedError.addError("custom_fields_v5", "active_metadata_key", "No active metadata key defined.");
       expectedError.addError("note_v5", "active_metadata_key", "No active metadata key defined.");
 
       const metadataTypesSettings = new MetadataTypesSettingsEntity(
@@ -267,7 +266,12 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError(
         "password_v4",
         "is_creation_alowed",
-        "Creation of resource type v4 is allowed but all resource types having passwords are deleted.",
+        "V4 resource creation is enabled but password content type is disabled.",
+      );
+      expectedError.addError(
+        "totp_v4",
+        "is_creation_alowed",
+        "V4 resource creation is enabled but TOTP content type is disabled.",
       );
 
       const metadataTypesSettings = new MetadataTypesSettingsEntity(
@@ -277,7 +281,9 @@ describe("ResourceTypesFormEntity", () => {
       const settings = new ResourceTypesFormEntity(
         defaultResourceTypesFormDto({
           password_v4: false,
+          totp_v4: false,
           password_v4_count: 0,
+          totp_v4_count: 0,
         }),
       );
 
