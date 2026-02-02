@@ -175,6 +175,23 @@ describe("ResourceTypesFormEntity", () => {
       const dto = withDeletedResourceTypesHavingResources({ resource_types: [] });
       expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
     });
+
+    it("should throw an error if custom_fields_v5 is deleted but custom_fields_v5_count is greater than 0", () => {
+      expect.assertions(1);
+
+      const expectedError = new EntityValidationError();
+      expectedError.addError(
+        "custom_fields_v5",
+        "has_content",
+        "Custom fields resource type is deleted but there is existing custom fields resources.",
+      );
+
+      const dto = defaultResourceTypesFormDto({
+        custom_fields_v5: false,
+        custom_fields_v5_count: 5,
+      });
+      expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
+    });
   });
 
   describe("::verifyHealth", () => {
