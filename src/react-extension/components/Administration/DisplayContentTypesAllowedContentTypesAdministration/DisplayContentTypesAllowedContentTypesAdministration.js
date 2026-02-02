@@ -333,10 +333,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                         )}
                         {errors?.hasError("password_v5", "has_content") && (
                           <div className="error-message">
-                            <Trans>
-                              One (or more) content type v5 having a password is deleted but its resources count is not
-                              0.
-                            </Trans>
+                            <Trans>Password content type is disabled but there are existing password resources.</Trans>
                           </div>
                         )}
                         {errors?.hasError("password_v5", "minimum_requirement") && (
@@ -348,10 +345,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                           <>
                             {warnings?.hasError("password_v5", "is_creation_alowed") && (
                               <div className="warning-message">
-                                <Trans>
-                                  Creation of content type v5 is allowed but all content types having passwords are
-                                  deleted.
-                                </Trans>
+                                <Trans>V5 resource creation is enabled but password content type is disabled.</Trans>
                               </div>
                             )}
                             {warnings?.hasError("password_v5", "active_metadata_key") && (
@@ -396,9 +390,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                         )}
                         {errors?.hasError("totp_v5", "has_content") && (
                           <div className="error-message">
-                            <Trans>
-                              One (or more) content type v5 having a totp is deleted but its resources count is not 0.
-                            </Trans>
+                            <Trans>TOTP content type is disabled but there are existing TOTP resources.</Trans>
                           </div>
                         )}
                         {errors?.hasError("totp_v5", "minimum_requirement") && (
@@ -410,9 +402,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                           <>
                             {warnings?.hasError("totp_v5", "is_creation_alowed") && (
                               <div className="warning-message">
-                                <Trans>
-                                  Creation of content type v5 is allowed but all content types having totp are deleted.
-                                </Trans>
+                                <Trans>V5 resource creation is enabled but TOTP content type is disabled.</Trans>
                               </div>
                             )}
                             {warnings?.hasError("totp_v5", "active_metadata_key") && (
@@ -465,7 +455,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                         {errors?.hasError("custom_fields_v5", "has_content") && (
                           <div className="error-message">
                             <Trans>
-                              Custom fields resource type is deleted but there is existing custom fields resources.
+                              Custom fields content type is disabled but there are existing custom fields resources.
                             </Trans>
                           </div>
                         )}
@@ -479,7 +469,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                             {warnings?.hasError("custom_fields_v5", "is_creation_alowed") && (
                               <div className="warning-message">
                                 <Trans>
-                                  Creation of content type v5 is allowed but custom fields resource type is deleted.
+                                  V5 resource creation is enabled but custom fields content type is disabled.
                                 </Trans>
                               </div>
                             )}
@@ -524,7 +514,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                         )}
                         {errors?.hasError("note_v5", "has_content") && (
                           <div className="error-message">
-                            <Trans>Note resource type is deleted but there is existing note resources.</Trans>
+                            <Trans>Note content type is disabled but there are existing note resources.</Trans>
                           </div>
                         )}
                         {errors?.hasError("note_v5", "minimum_requirement") && (
@@ -536,7 +526,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                           <>
                             {warnings?.hasError("note_v5", "is_creation_alowed") && (
                               <div className="warning-message">
-                                <Trans>Creation of content type v5 is allowed but note resource type is deleted.</Trans>
+                                <Trans>V5 resource creation is enabled but note content type is disabled.</Trans>
                               </div>
                             )}
                             {warnings?.hasError("note_v5", "active_metadata_key") && (
@@ -598,10 +588,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                         )}
                         {errors?.hasError("password_v4", "has_content") && (
                           <div className="error-message">
-                            <Trans>
-                              One (or more) content type v4 having a password is deleted but its resources count is not
-                              0.
-                            </Trans>
+                            <Trans>Password content type is disabled but there are existing password resources.</Trans>
                           </div>
                         )}
                         {errors?.hasError("password_v4", "minimum_requirement") && (
@@ -613,10 +600,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                           <>
                             {warnings?.hasError("password_v4", "is_creation_alowed") && (
                               <div className="warning-message">
-                                <Trans>
-                                  Creation of content type v4 is allowed but all content types having passwords are
-                                  deleted.
-                                </Trans>
+                                <Trans>V4 resource creation is enabled but password content type is disabled.</Trans>
                               </div>
                             )}
                             {warnings?.hasError("password_v4", "is_creation_not_alowed") && (
@@ -656,9 +640,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                         )}
                         {errors?.hasError("totp_v4", "has_content") && (
                           <div className="error-message">
-                            <Trans>
-                              One (or more) content type v4 having a totp is deleted but its resources count is not 0.
-                            </Trans>
+                            <Trans>TOTP content type is disabled but there are existing TOTP resources.</Trans>
                           </div>
                         )}
                         {errors?.hasError("totp_v4", "minimum_requirement") && (
@@ -670,9 +652,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                           <>
                             {warnings?.hasError("totp_v4", "is_creation_alowed") && (
                               <div className="warning-message">
-                                <Trans>
-                                  Creation of content type v4 is allowed but all content types having totp are deleted.
-                                </Trans>
+                                <Trans>V4 resource creation is enabled but TOTP content type is disabled.</Trans>
                               </div>
                             )}
                             {warnings?.hasError("totp_v4", "is_creation_not_alowed") && (
