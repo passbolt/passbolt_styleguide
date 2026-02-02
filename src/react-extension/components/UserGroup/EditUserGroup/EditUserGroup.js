@@ -80,8 +80,12 @@ class EditUserGroup extends Component {
    */
   componentDidUpdate() {
     if (this.groupToEdit && this.isLoading) {
-      const actions = Object.assign(this.state.actions, { loading: false });
-      this.setState({ actions });
+      this.setState((prevState) => ({
+        actions: {
+          ...prevState.actions,
+          loading: false,
+        },
+      }));
     }
   }
 
@@ -281,8 +285,12 @@ class EditUserGroup extends Component {
     event.preventDefault();
 
     this.resetErrors();
-    const actions = Object.assign(this.state.actions, { processing: true });
-    this.setState({ actions });
+    this.setState((prevState) => ({
+      actions: {
+        ...prevState.actions,
+        processing: true,
+      },
+    }));
 
     this.validate();
     if (this.hasErrors()) {
@@ -293,8 +301,12 @@ class EditUserGroup extends Component {
       .then(this.onEditSuccess.bind(this))
       .catch(this.onEditFailure.bind(this))
       .finally(() => {
-        const actions = Object.assign(this.state.actions, { processing: false });
-        this.setState({ actions });
+        this.setState((prevState) => ({
+          actions: {
+            ...prevState.actions,
+            processing: false,
+          },
+        }));
       });
   }
 
@@ -302,8 +314,12 @@ class EditUserGroup extends Component {
    * Handle validation error.
    */
   handleValidateError() {
-    const actions = Object.assign(this.state.actions, { processing: false });
-    this.setState({ actions });
+    this.setState((prevState) => ({
+      actions: {
+        ...prevState.actions,
+        processing: false,
+      },
+    }));
     this.focusFieldError();
   }
 
@@ -388,7 +404,13 @@ class EditUserGroup extends Component {
    * @param name The new name
    */
   updateName(name) {
-    this.setState({ groupToEdit: Object.assign({}, this.state.groupToEdit, { name }) });
+    this.setState((prevState) => ({
+      groupToEdit: {
+        ...prevState.groupToEdit,
+        name,
+      },
+    }));
+
     if (this.state.validation.hasAlreadyBeenValidated) {
       this.validateName();
     } else {
@@ -403,13 +425,17 @@ class EditUserGroup extends Component {
    * @param {boolean} shouldScrollToEnd if true triggers a scroll to the end of the list
    */
   updateGroupsUsers(groupsUsers, shouldScrollToEnd) {
-    const groupToEdit = Object.assign({}, this.state.groupToEdit, { groups_users: groupsUsers });
-    this.setState({ groupToEdit }, () => {
-      if (shouldScrollToEnd) {
-        // scroll at the bottom of the group users list
-        this.listRef.current.scrollTo(this.groupsUsers.length - 1);
-      }
-    });
+    this.setState(
+      (prevState) => ({
+        groupToEdit: { ...prevState.groupToEdit, groups_users: groupsUsers },
+      }),
+      () => {
+        if (shouldScrollToEnd) {
+          // scroll at the bottom of the group users list
+          this.listRef.current.scrollTo(this.groupsUsers.length - 1);
+        }
+      },
+    );
   }
 
   /**
@@ -462,7 +488,9 @@ class EditUserGroup extends Component {
    */
   validate() {
     this.validateName();
-    this.setState({ validation: Object.assign({}, this.state.validation, { hasAlreadyBeenValidated: true }) });
+    this.setState((prevState) => ({
+      validation: { ...prevState.validation, hasAlreadyBeenValidated: true },
+    }));
   }
 
   /**

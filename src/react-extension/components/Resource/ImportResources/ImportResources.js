@@ -156,17 +156,19 @@ class ImportResources extends Component {
   /**
    * Handle the change of import folders option
    */
-  async handleImportOptionFoldersChanged() {
-    const options = Object.assign({}, this.state.options, { folders: !this.state.options.folders });
-    await this.setState({ options });
+  handleImportOptionFoldersChanged() {
+    this.setState((prevState) => ({
+      options: { ...prevState.options, folders: !prevState.options.folders },
+    }));
   }
 
   /**
    * Handle the change of unique tag options
    */
-  async handleImportOptionTagsChanged() {
-    const options = Object.assign({}, this.state.options, { tags: !this.state.options.tags });
-    await this.setState({ options });
+  handleImportOptionTagsChanged() {
+    this.setState((prevState) => ({
+      options: { ...prevState.options, tags: !prevState.options.tags },
+    }));
   }
 
   /**

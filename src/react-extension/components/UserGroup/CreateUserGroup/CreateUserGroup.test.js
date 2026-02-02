@@ -54,6 +54,8 @@ describe("See the Create Dialog Group", () => {
       const groupMeta = {
         name: "test",
       };
+
+      await screen.findByText("You need to click save for the changes to take place.");
       expect(page.createGroup.warningMessage).toBe("You need to click save for the changes to take place.");
       // Fill the form
       page.createGroup.fillInput(page.createGroup.name, groupMeta.name);
@@ -205,6 +207,7 @@ describe("See the Create Dialog Group", () => {
       });
 
       await page.createGroup.click(page.createGroup.saveButton);
+      await screen.findByText("Jest simulate API error.");
 
       // Throw general error message
       expect(page.createGroup.errorDialog).not.toBeNull();
@@ -241,6 +244,7 @@ describe("See the Create Dialog Group", () => {
       });
 
       await page.createGroup.click(page.createGroup.saveButton);
+      await screen.findByText("The group name test already exists.");
 
       // display groupname error message
       expect(page.createGroup.nameErrorMessage.textContent).toBe("The group name test already exists.");

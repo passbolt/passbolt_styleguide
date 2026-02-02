@@ -157,12 +157,12 @@ class CreateUserGroup extends Component {
    * @param userId
    */
   handleSelectUpdate(event, userId) {
-    const target = event.target;
-    const is_admin = target.value === true;
-    const groups_users = Object.assign(this.state.groups_users);
-    const index = groups_users.findIndex((groups_user) => groups_user.user.id === userId);
-    groups_users[index] = Object.assign(groups_users[index], { is_admin });
-    this.setState({ groups_users });
+    const is_admin = event.target.value === true;
+    this.setState((prevState) => ({
+      groups_users: prevState.groups_users.map((groups_user) =>
+        groups_user.user.id === userId ? { ...groups_user, is_admin } : groups_user,
+      ),
+    }));
   }
 
   /**
@@ -171,10 +171,9 @@ class CreateUserGroup extends Component {
    * @param userId
    */
   handleDeleteClickEvent(event, userId) {
-    const groups_users = Object.assign(this.state.groups_users);
-    const index = groups_users.findIndex((groups_user) => groups_user.user.id === userId);
-    groups_users.splice(index, 1);
-    this.setState({ groups_users });
+    this.setState((prevState) => ({
+      groups_users: prevState.groups_users.filter((groups_user) => groups_user.user.id !== userId),
+    }));
   }
 
   /**
