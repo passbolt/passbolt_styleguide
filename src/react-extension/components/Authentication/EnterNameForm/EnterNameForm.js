@@ -125,11 +125,11 @@ class EnterNameForm extends Component {
     // Do not re-submit an already processing form
     if (!this.state.processing) {
       this.toggleProcessing();
-      await this.validate();
+      const errors = this.validate();
 
-      if (this.hasValidationError()) {
+      if (this.hasValidationError(errors)) {
         this.toggleProcessing();
-        this.focusFirstFieldError();
+        this.focusFirstFieldError(errors);
         return;
       }
 
@@ -146,57 +146,61 @@ class EnterNameForm extends Component {
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {object}
    */
-  async validate() {
-    await Promise.all([this.validateFirstnameInput(), this.validateLastnameInput()]);
-    return this.hasValidationError();
+  validate() {
+    const firstnameError = this.validateFirstnameInput();
+    const lastnameError = this.validateLastnameInput();
+    this.setState({ firstnameError, lastnameError });
+    return { firstnameError, lastnameError };
   }
 
   /**
    * Validate the firstname input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateFirstnameInput() {
+  validateFirstnameInput() {
     let firstnameError = null;
     const firstname = this.state.firstname.trim();
     if (!firstname.length) {
       firstnameError = this.translate("A first name is required.");
     }
-    return this.setState({ firstnameError });
+    return firstnameError;
   }
 
   /**
    * Validate the firstname input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateLastnameInput() {
+  validateLastnameInput() {
     let lastnameError = null;
     const lastname = this.state.lastname.trim();
     if (!lastname.length) {
       lastnameError = this.translate("A last name is required.");
     }
-    return this.setState({ lastnameError });
+    return lastnameError;
   }
 
   /**
    * Focus the first field of the form which is in error state.
+   * @param {object} errors
    * @returns {void}
    */
-  focusFirstFieldError() {
-    if (this.state.firstnameError) {
+  focusFirstFieldError(errors) {
+    if (errors.firstnameError) {
       this.firstnameRef.current.focus();
-    } else if (this.state.lastnameError) {
+    } else if (errors.lastnameError) {
       this.lastnameRef.current.focus();
     }
   }
 
   /**
    * Return true if the form has some validation error
+   * @param {object} errors
    * @returns {boolean}
    */
-  hasValidationError() {
-    return this.state.firstnameError !== null || this.state.lastnameError !== null;
+  hasValidationError(errors) {
+    return errors.firstnameError !== null || errors.lastnameError !== null;
   }
 
   /**

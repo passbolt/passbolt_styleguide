@@ -134,8 +134,7 @@ class CreateResourceFolder extends Component {
     });
 
     this.toggleProcessing();
-    await this.validate();
-    if (this.hasValidationError()) {
+    if (this.validate()) {
       this.toggleProcessing();
       this.focusFirstFieldError();
       return;
@@ -214,29 +213,9 @@ class CreateResourceFolder extends Component {
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {boolean}
    */
-  async validate() {
-    await this.resetValidation();
-    await this.validateNameInput();
-    return this.hasValidationError();
-  }
-
-  /**
-   * Reset validation errors
-   * @returns {Promise<void>}
-   */
-  async resetValidation() {
-    return new Promise((resolve) => {
-      this.setState({ nameError: false }, resolve());
-    });
-  }
-
-  /**
-   * Validate the name input.
-   * @returns {Promise<void>}
-   */
-  validateNameInput() {
+  validate() {
     let nameError = false;
     const name = this.state.name.trim();
     if (!name.length) {
@@ -245,9 +224,9 @@ class CreateResourceFolder extends Component {
     if (name.length > 256) {
       nameError = this.translate("A name can not be more than 256 char in length.");
     }
-    return new Promise((resolve) => {
-      this.setState({ nameError: nameError }, resolve);
-    });
+
+    this.setState({ nameError: nameError });
+    return Boolean(nameError);
   }
 
   /**

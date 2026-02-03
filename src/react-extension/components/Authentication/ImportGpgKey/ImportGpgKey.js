@@ -69,10 +69,11 @@ class ImportGpgKey extends Component {
   }
 
   /**
-   * Returns true if the passphrase is valid
+   * Returns true if there is at least one error property is true
+   * @param {object} errors
    */
-  get isValid() {
-    return Object.values(this.state.errors).every((value) => !value);
+  isValid(errors) {
+    return Object.values(errors).every((value) => !value);
   }
 
   /**
@@ -114,9 +115,10 @@ class ImportGpgKey extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.validate();
+    this.setState({ hasBeenValidated: true });
+    const errors = await this.validate();
 
-    if (this.isValid) {
+    if (this.isValid(errors)) {
       this.toggleProcessing();
       await this.save();
     }
@@ -221,24 +223,25 @@ class ImportGpgKey extends Component {
 
   /**
    * Validate the imported private key
+   * @return {object} errors
    */
   async validate() {
     const { privateKey } = this.state;
+    const errors = {};
+    let errorMessage = "";
     const emptyPrivateKey = privateKey.trim() === "";
     if (emptyPrivateKey) {
-      this.setState({ hasBeenValidated: true, errors: { emptyPrivateKey } });
-      return;
+      errors.emptyPrivateKey = true;
+    } else {
+      try {
+        await this.props.validatePrivateGpgKey(privateKey);
+      } catch (e) {
+        errors.invalidPrivateKey = true;
+        errorMessage = e.message;
+      }
     }
-
-    let invalidPrivateKey = false;
-    let errorMessage = "";
-    try {
-      await this.props.validatePrivateGpgKey(privateKey);
-    } catch (e) {
-      invalidPrivateKey = true;
-      errorMessage = e.message;
-    }
-    this.setState({ hasBeenValidated: true, errors: { invalidPrivateKey }, errorMessage });
+    this.setState({ errors, errorMessage });
+    return errors;
   }
 
   /**

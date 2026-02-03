@@ -79,14 +79,6 @@ class Login extends Component {
   }
 
   /**
-   * Returns true if the passphrase is valid
-   * @returns {boolean}
-   */
-  get isValid() {
-    return Object.values(this.state.errors).every((value) => !value);
-  }
-
-  /**
    * Returns true if the component must be in a processing mode
    * @returns {boolean}
    */

@@ -125,7 +125,7 @@ class EnterUsernameForm extends Component {
     const name = target.name;
     this.setState({ [name]: value }, async () => {
       if (this.state.hasAlreadyBeenValidated) {
-        await this.validate();
+        this.validate();
       }
     });
   }
@@ -154,9 +154,9 @@ class EnterUsernameForm extends Component {
     // Do not re-submit an already processing form
     if (!this.state.processing) {
       this.toggleProcessing();
-      await this.validate();
+      const errors = this.validate();
 
-      if (this.hasValidationError()) {
+      if (this.hasValidationError(errors)) {
         this.toggleProcessing();
         return;
       }
@@ -173,18 +173,20 @@ class EnterUsernameForm extends Component {
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {object}
    */
-  async validate() {
-    await Promise.all([this.validateUsernameInput(), this.validateAgreedTerms()]);
-    return this.hasValidationError();
+  validate() {
+    const usernameError = this.validateUsernameInput();
+    const agreedTermsError = this.validateAgreedTerms();
+    this.setState({ usernameError, agreedTermsError });
+    return { usernameError, agreedTermsError };
   }
 
   /**
    * Validate the username input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateUsernameInput() {
+  validateUsernameInput() {
     let usernameError = null;
     const username = this.state.username.trim();
     if (!username.length) {
@@ -192,29 +194,31 @@ class EnterUsernameForm extends Component {
     } else if (!AppEmailValidatorService.validate(username, this.props.context.siteSettings)) {
       usernameError = this.translate("Please enter a valid email address.");
     }
-    return this.setState({ username, usernameError });
+    this.setState({ username });
+    return usernameError;
   }
 
   /**
    * Validate the agreed terms checkbox.
-   * @returns {Promise<void>}
+   * @returns {boolean}
    */
-  async validateAgreedTerms() {
+  validateAgreedTerms() {
     let agreedTermsError = false;
     const mustValidateTerms = this.privacyLink || this.termsLink;
     const agreedTerms = this.state.agreedTerms;
     if (mustValidateTerms && !agreedTerms) {
       agreedTermsError = true;
     }
-    return this.setState({ agreedTermsError });
+    return agreedTermsError;
   }
 
   /**
    * Return true if the form has some validation error
+   * @param {object} errors
    * @returns {boolean}
    */
-  hasValidationError() {
-    return this.state.usernameError !== null || this.state.agreedTermsError;
+  hasValidationError(errors) {
+    return errors.usernameError !== null || errors.agreedTermsError;
   }
 
   /**

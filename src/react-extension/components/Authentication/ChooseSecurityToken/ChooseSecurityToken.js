@@ -114,10 +114,12 @@ class ChooseSecurityToken extends Component {
   }
 
   /**
-   * Returns true if the passphrase is valid
+   * Returns true if there is at least one error property is true
+   * @param {object} errors The errors
+   * @return boolean
    */
-  get isValid() {
-    return Object.values(this.state.errors).every((value) => !value);
+  isValid(errors) {
+    return Object.values(errors).every((value) => !value);
   }
 
   /**
@@ -150,9 +152,10 @@ class ChooseSecurityToken extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.validate();
+    this.setState({ hasBeenValidated: true });
+    const errors = this.validate();
 
-    if (this.isValid) {
+    if (this.isValid(errors)) {
       this.toggleProcessing();
       await this.save();
     }
@@ -161,11 +164,11 @@ class ChooseSecurityToken extends Component {
   /**
    * Whenever a new color has been selected
    */
-  async handleSelectColor(color) {
+  handleSelectColor(color) {
     if (this.areActionsAllowed) {
       this.selectColor(color);
       if (this.state.hasBeenValidated) {
-        await this.validate();
+        this.validate();
       }
     }
   }
@@ -182,11 +185,11 @@ class ChooseSecurityToken extends Component {
    * Whenever the user changes the token code
    * @param event An input event
    */
-  async handleChangeCode(event) {
+  handleChangeCode(event) {
     const code = event.target.value;
     this.selectCode(code);
     if (this.state.hasBeenValidated) {
-      await this.validate();
+      this.validate();
     }
   }
 
@@ -224,18 +227,18 @@ class ChooseSecurityToken extends Component {
   /**
    * Randomize a token code
    */
-  async randomizeCode() {
+  randomizeCode() {
     const code = SecretComplexity.generate(3, ["uppercase"]);
     this.selectCode(code);
     if (this.state.hasBeenValidated) {
-      await this.validate();
+      this.validate();
     }
   }
 
   /**
    * Randomize a color
    */
-  async randomizeColor() {
+  randomizeColor() {
     let color;
     do {
       const number = parseInt(SecretComplexity.generate(3, ["digit"])) % this.defaultColors.length;
@@ -248,29 +251,28 @@ class ChooseSecurityToken extends Component {
 
   /**
    * Validate the security token data
+   * @return {object} errors
    */
-  async validate() {
+  validate() {
     const { code } = this.state;
+    const errors = {};
 
     const emptyCode = code.trim() === "";
     if (emptyCode) {
-      this.setState({ hasBeenValidated: true, errors: { emptyCode } });
-      return;
+      errors.emptyCode = true;
+    } else {
+      const lengthCode = code.trim().length !== 3;
+      if (lengthCode) {
+        errors.lengthCode = true;
+      } else {
+        const invalidRegex = !isValidSecurityToken(code.trim());
+        if (invalidRegex) {
+          errors.invalidRegex = true;
+        }
+      }
     }
-
-    const lengthCode = code.trim().length !== 3;
-    if (lengthCode) {
-      this.setState({ hasBeenValidated: true, errors: { lengthCode } });
-      return;
-    }
-
-    const invalidRegex = !isValidSecurityToken(code.trim());
-    if (invalidRegex) {
-      this.setState({ hasBeenValidated: true, errors: { invalidRegex } });
-      return;
-    }
-
-    this.setState({ hasBeenValidated: true, errors: {} });
+    this.setState({ errors });
+    return errors;
   }
 
   /**
