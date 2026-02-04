@@ -314,11 +314,12 @@ describe("Resource Workspace Context", () => {
         { id: "password", label: "Password", position: 5, show: true },
         { id: "totp", label: "TOTP", position: 6, show: true },
         { id: "uri", label: "URI", position: 7, show: true },
-        { id: "expired", label: "Expiry", position: 8, show: true },
-        { id: "modified", label: "Modified", position: 9, show: true },
-        { id: "location", label: "Location", position: 10, show: true },
+        { id: "tags", label: "Tags", position: 8, show: true },
+        { id: "expired", label: "Expiry", position: 9, show: true },
+        { id: "modified", label: "Modified", position: 10, show: true },
+        { id: "location", label: "Location", position: 11, show: true },
       ];
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(10);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(11);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(defaultColumnsSetting);
     });
 
@@ -332,9 +333,10 @@ describe("Resource Workspace Context", () => {
         { id: "password", label: "Password", position: 5, show: true },
         { id: "totp", label: "TOTP", position: 6, show: true },
         { id: "uri", label: "URI", position: 7, show: true },
-        { id: "expired", label: "Expiry", position: 8, show: true },
-        { id: "modified", label: "Modified", position: 9, show: true },
-        { id: "location", label: "Location", position: 10, show: true },
+        { id: "tags", label: "Tags", position: 8, show: true },
+        { id: "expired", label: "Expiry", position: 9, show: true },
+        { id: "modified", label: "Modified", position: 10, show: true },
+        { id: "location", label: "Location", position: 11, show: true },
       ];
       const sorter = {
         propertyName: "name",
@@ -350,7 +352,7 @@ describe("Resource Workspace Context", () => {
       });
       await page.goToAllItems();
       await page.goToRootFolder();
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(10);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(11);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(columnsSetting);
       expect(page.sorter.toDto()).toStrictEqual(sorter);
     });
@@ -391,21 +393,22 @@ describe("Resource Workspace Context", () => {
         { id: "password", label: "Password", position: 3, width: 100, show: true },
         { id: "totp", label: "TOTP", position: 5, width: 190, show: true },
         { id: "uri", label: "URI", position: 4, width: 300, show: true },
-        { id: "expired", label: "Expiry", position: 8, show: true },
+        { id: "tags", label: "Tags", position: 8, show: true },
+        { id: "expired", label: "Expiry", position: 9, show: true },
         { id: "modified", label: "Modified", position: 5, width: 250, show: true },
-        { id: "location", label: "Location", position: 10, show: true },
+        { id: "location", label: "Location", position: 11, show: true },
       ];
       await page.goToAllItems();
       await page.onChangeColumnView("name", false);
       await page.onChangeColumnsSettings(columnsSetting);
-      expect(page.columnsResourceSetting.length).toStrictEqual(10);
+      expect(page.columnsResourceSetting.length).toStrictEqual(11);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
     });
   });
 
   describe("As LU I should be able to reset the resource columns setting", () => {
     it("As LU I should be able to reset the resource column settings", async () => {
-      expect.assertions(20);
+      expect.assertions(22);
 
       await page.goToAllItems();
       await page.onChangeColumnView("favorite", false);
@@ -415,6 +418,7 @@ describe("Resource Workspace Context", () => {
       await page.onChangeColumnView("password", false);
       await page.onChangeColumnView("totp", false);
       await page.onChangeColumnView("uri", false);
+      await page.onChangeColumnView("tags", false);
       await page.onChangeColumnView("modified", false);
       await page.onChangeColumnView("expired", false);
       await page.onChangeColumnView("location", false);
@@ -428,6 +432,7 @@ describe("Resource Workspace Context", () => {
       expect(page.columnsResourceSetting.items[7].show).toBeFalsy();
       expect(page.columnsResourceSetting.items[8].show).toBeFalsy();
       expect(page.columnsResourceSetting.items[9].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[10].show).toBeFalsy();
       await page.resetColumnsSettings();
       expect(page.columnsResourceSetting.items[0].show).toBeTruthy();
       expect(page.columnsResourceSetting.items[1].show).toBeTruthy();
@@ -439,6 +444,7 @@ describe("Resource Workspace Context", () => {
       expect(page.columnsResourceSetting.items[7].show).toBeTruthy();
       expect(page.columnsResourceSetting.items[8].show).toBeTruthy();
       expect(page.columnsResourceSetting.items[9].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[10].show).toBeTruthy();
     });
   });
 });
