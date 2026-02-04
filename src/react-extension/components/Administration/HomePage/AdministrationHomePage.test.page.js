@@ -36,7 +36,6 @@ export default class AdministrationHomePagePage {
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
   /**

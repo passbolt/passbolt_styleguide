@@ -34,7 +34,6 @@ export default class FilterResourcesByRecentlyModifiedPagePage {
           <FilterResourcesByRecentlyModifiedPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

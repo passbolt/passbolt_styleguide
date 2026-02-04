@@ -30,7 +30,6 @@ export default class ConfirmSaveAccountRecoverySettingsPage {
       <MockTranslationProvider>
         <ConfirmSaveAccountRecoverySettings {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

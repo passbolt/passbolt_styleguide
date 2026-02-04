@@ -31,7 +31,6 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
       <MockTranslationProvider>
         <ManageAccountRecoveryAdministrationSettings {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

@@ -30,7 +30,6 @@ export default class DisplayAdministrationRbacActionsPage {
       <MockTranslationProvider>
         <DisplayAdministrationRbacActions {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

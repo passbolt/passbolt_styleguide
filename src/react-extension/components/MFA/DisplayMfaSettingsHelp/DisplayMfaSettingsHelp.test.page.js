@@ -30,7 +30,6 @@ export default class DisplayMfaSettingsHelpPage {
       <MockTranslationProvider>
         <DisplayMfaSettingsHelp {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

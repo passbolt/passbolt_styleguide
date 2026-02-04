@@ -33,7 +33,6 @@ export default class FilterResourcesByGroupsPage {
           <FilterResourcesByGroups.WrappedComponent {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

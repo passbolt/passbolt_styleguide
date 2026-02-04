@@ -30,7 +30,6 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationActionsPa
       <MockTranslationProvider>
         <DisplayContentTypesMetadataKeyAdministrationActions {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

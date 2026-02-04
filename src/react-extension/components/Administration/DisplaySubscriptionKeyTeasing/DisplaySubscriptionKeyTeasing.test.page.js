@@ -33,7 +33,6 @@ export default class DisplaySubscriptionKeyTeasingPage {
           <DisplaySubscriptionKeyTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

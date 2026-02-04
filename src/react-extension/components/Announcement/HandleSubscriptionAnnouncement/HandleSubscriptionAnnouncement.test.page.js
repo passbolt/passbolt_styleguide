@@ -24,6 +24,6 @@ export default class HandleSubscriptionAnnouncementPage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(<HandleSubscriptionAnnouncement {...props} />, { legacyRoot: true });
+    this._page = render(<HandleSubscriptionAnnouncement {...props} />);
   }
 }

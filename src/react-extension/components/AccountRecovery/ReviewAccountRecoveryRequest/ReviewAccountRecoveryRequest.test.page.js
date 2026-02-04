@@ -29,7 +29,6 @@ export default class ReviewAccountRecoveryRequestPage {
       <MockTranslationProvider>
         <ReviewAccountRecoveryRequest {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
