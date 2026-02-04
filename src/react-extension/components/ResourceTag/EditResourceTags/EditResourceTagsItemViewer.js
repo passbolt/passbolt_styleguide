@@ -83,7 +83,12 @@ class EditResourceTagsItemViewer extends React.Component {
           this.props.tags.length > 0 &&
           this.getTags().map((tag) => (
             <div key={tag.id} className="tag-list-item">
-              <button type="button" onClick={(event) => this.handleOnClickTag(event, tag)} className="tag">
+              <button
+                type="button"
+                title={tag.slug}
+                onClick={(event) => this.handleOnClickTag(event, tag)}
+                className="tag"
+              >
                 <span className="tag-content ellipsis">{tag.slug}</span>
               </button>
             </div>
