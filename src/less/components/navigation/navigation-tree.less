@@ -1,201 +1,214 @@
 .navigation-secondary-tree {
-    align-self: stretch;
+  align-self: stretch;
 
-    .row {
-        border-radius: var(--Button-border-radius);
+  .row {
+    border-radius: var(--Button-border-radius);
 
-        .main-cell-wrapper {
-            .main-cell {
-                span {
-                    .ellipsis();
-                }
-
-                .toggle-folder {
-                  display: flex;
-                  align-items: center;
-                  align-self: stretch;
-                  padding-left: .6rem; // add a bigger clickable area
-
-                    svg {
-                        min-width: .8rem;
-                        width: .8rem;
-                        height: .8rem;
-                    }
-                }
-
-                .svg-icon {
-                    display: flex;
-                    margin-right: .8rem;
-                    // inherit ellipsis
-                    white-space: inherit;
-                    overflow: inherit;
-                    text-overflow: inherit;
-                    -o-text-overflow: inherit;
-                    -ms-text-overflow: inherit;
-
-                    &.folder-shared, &.folder, &.folders, &.folder-root {
-                        svg {
-                            width: 1.8rem;
-                            height: 100%;
-                        }
-                    }
-                }
-
-                .svg-icon.hidden {
-                    display: none;
-                }
-
-                button {
-                    gap: .8rem;
-
-                    .toggle-folder {
-                      padding-left: .6rem; // add a bigger clickable area
-                      align-self: stretch;
-                      svg {
-                        width: .8rem;
-                        height: .8rem;
-                      }
-                    }
-
-                    svg {
-                        min-width: 1.8rem;
-                        width: 1.8rem;
-                        height: 1.8rem;
-                    }
-
-                    span {
-                        width: 100%;
-                    }
-                }
-            }
+    .main-cell-wrapper {
+      .main-cell {
+        span {
+          .ellipsis();
         }
 
-        /* title row */
-        &.title {
-            .main-cell {
-                h3 {
-                    padding: 0;
-                    border: 0;
-                    margin: 0;
+        .toggle-folder {
+          display: flex;
+          align-items: center;
+          align-self: stretch;
+          padding-left: .6rem; // add a bigger clickable area
 
-                    .folders-label {
-                        button {
-                            cursor: pointer;
-                            padding: 0;
-                        }
-                    }
-
-                    &.section-title button {
-                        font-weight: 700;
-                    }
-                }
-            }
-
-            /* selected */
-            &.selected {
-                .main-cell h3 .folders-label a {
-                    font-weight: 700;
-                }
-            }
-        }
-
-        /* disabled row */
-        &.disabled {
-            cursor: default;
-            pointer-events: none;
-            opacity: .5;
-
-            .main-cell {
-
-                span.tag-name,
-                span.group-name,
-                span.folder-name {
-                    color: var(--Text-and-icons-Main-text);
-                    text-shadow: none;
-                    font-weight: normal;
-                }
-
-                button:before {
-                    color: var(--Text-and-icons-Main-text);
-                }
-            }
-
-            &.is-dragged {
-                pointer-events: auto;
-            }
-        }
-    }
-    &.navigation-folders {
-        .row {
-            padding: .6rem 0 .6rem .4rem; // padding-left = 1rem -.6rem to have a bigger clickable area for the caret
-
-            .main-cell-wrapper .main-cell {
-                button {
-                    gap: .6rem;
-                    width: calc(100% - .5rem);
-
-                    & > svg {
-                        margin-right: .2rem;
-                    }
-                }
-            }
-        }
-
-        .folder-item .row {
-          /* Folder levels (should be override with JS) */
-          --folder-depth: 0;
-          padding-left: calc(1.9rem + var(--folder-depth) * 1.5rem); // padding-left = 2.5rem -.6rem to have a bigger clickable area for the caret
-
-          &.no-child {
-            padding-left: calc(3.9rem + var(--folder-depth) * 1.5rem);
+          svg {
+            min-width: .8rem;
+            width: .8rem;
+            height: .8rem;
           }
         }
-    }
 
-    &.navigation-groups {
-        .row {
-          padding: .6rem 0 .6rem .4rem; // padding-left = 1rem -.6rem to have a bigger clickable area for the caret
+        .svg-icon {
+          display: flex;
+          margin-right: .8rem;
+          // inherit ellipsis
+          white-space: inherit;
+          overflow: inherit;
+          text-overflow: inherit;
+          -o-text-overflow: inherit;
+          -ms-text-overflow: inherit;
 
-          .main-cell-wrapper .main-cell {
-            button {
-              gap: .6rem;
-              width: calc(100% - .5rem);
-
-              & > svg {
-                margin-right: .2rem;
-              }
+          &.folder-shared,
+          &.folder,
+          &.folders,
+          &.folder-root {
+            svg {
+              width: 1.8rem;
+              height: 100%;
             }
           }
         }
 
-        .group-item {
-            .row {
-                padding-left: 2.6rem;
-            }
+        .svg-icon.hidden {
+          display: none;
         }
-    }
 
-    &.navigation-tags {
-      padding-bottom: .8rem;
-        .row {
-          padding: .6rem 0 .6rem .4rem; // padding-left = 1rem -.6rem to have a bigger clickable area for the caret
+        button {
+          gap: .8rem;
 
-          .main-cell-wrapper .main-cell {
-            button {
-              gap: .6rem;
-              width: calc(100% - .5rem);
+          .toggle-folder {
+            padding-left: .6rem; // add a bigger clickable area
+            align-self: stretch;
 
-              & > svg {
-                margin-right: .2rem;
-              }
+            svg {
+              width: .8rem;
+              height: .8rem;
             }
           }
-        }
 
-      .tag-item {
-        .row {
-          padding-left: 2.6rem;
+          svg {
+            min-width: 1.8rem;
+            width: 1.8rem;
+            height: 1.8rem;
+          }
+
+          span {
+            width: 100%;
+          }
         }
       }
     }
+
+    /* title row */
+    &.title {
+      .main-cell {
+        h3 {
+          padding: 0;
+          border: 0;
+          margin: 0;
+
+          .folders-label {
+            button {
+              cursor: pointer;
+              padding: 0;
+            }
+          }
+
+          &.section-title button {
+            font-weight: 700;
+          }
+        }
+      }
+
+      /* selected */
+      &.selected {
+        .main-cell h3 .folders-label a {
+          font-weight: 700;
+        }
+      }
+    }
+
+    /* disabled row */
+    &.disabled {
+      cursor: default;
+      pointer-events: none;
+      opacity: .5;
+
+      .main-cell {
+
+        span.tag-name,
+        span.group-name,
+        span.folder-name {
+          color: var(--Text-and-icons-Main-text);
+          text-shadow: none;
+          font-weight: normal;
+        }
+
+        button:before {
+          color: var(--Text-and-icons-Main-text);
+        }
+      }
+
+      &.is-dragged {
+        pointer-events: auto;
+      }
+    }
+  }
+
+  &.navigation-folders {
+    .row {
+      padding: .6rem 0 .6rem .4rem; // padding-left = 1rem -.6rem to have a bigger clickable area for the caret
+
+      .main-cell-wrapper .main-cell {
+        button {
+          gap: .6rem;
+          width: calc(100% - .5rem);
+
+          & > svg {
+            margin-right: .2rem;
+          }
+        }
+      }
+    }
+
+    .folder-item .row {
+      /* Folder levels (should be override with JS) */
+      --folder-depth: 0;
+      padding-left: calc(1.9rem + var(--folder-depth) * 1.5rem); // padding-left = 2.5rem -.6rem to have a bigger clickable area for the caret
+
+      &.no-child {
+        padding-left: calc(3.9rem + var(--folder-depth) * 1.5rem);
+      }
+    }
+  }
+
+  &.navigation-groups {
+    .row {
+      padding: .6rem 0 .6rem .4rem; // padding-left = 1rem -.6rem to have a bigger clickable area for the caret
+
+      .main-cell-wrapper .main-cell {
+        button {
+          gap: .6rem;
+          width: calc(100% - .5rem);
+
+          & > svg {
+            margin-right: .2rem;
+          }
+        }
+      }
+    }
+
+    .group-item {
+      .row {
+        padding-left: 2.6rem;
+      }
+    }
+  }
+
+  &.navigation-tags {
+    padding-bottom: .8rem;
+
+    .row {
+      gap: .4rem;
+      justify-content: space-between;
+      width: 100%;
+
+      padding: .6rem 0 .6rem .4rem; // padding-left = 1rem -.6rem to have a bigger clickable area for the caret
+
+      .main-cell-wrapper {
+        flex: unset; // Forces tags to display with theit own size
+
+        .main-cell {
+          button {
+            gap: .6rem;
+
+            & > svg {
+              margin-right: .2rem;
+            }
+          }
+        }
+      }
+    }
+
+    .tag-item {
+      .row {
+        padding-left: 2.6rem;
+      }
+    }
+  }
 }
