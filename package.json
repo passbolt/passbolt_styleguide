@@ -89,18 +89,6 @@
     "webextension-polyfill": "^0.10.0",
     "xregexp": "^5.1.2"
   },
-  "overrides": {
-    "i18next-parser": {
-      "cheerio": "1.1.2"
-    },
-    "brace-expansion": "^1.1.12",
-    "copy-anything": "4.0.4",
-    "browserslist": "4.26.2",
-    "qs": "6.14.1",
-    "undici": "7.18.2",
-    "lodash": ">=4.17.23",
-    "lodash-es": ">=4.17.23"
-  },
   "scripts": {
     "build": "npm run build-api-app",
     "build-api-app": "webpack --config webpack-api.config.js",
