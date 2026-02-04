@@ -326,6 +326,66 @@
         flex-shrink: 0;
       }
     }
+
+    td.cell-tags {
+      min-width: 0;
+      overflow: hidden;
+
+      // Override tags-list styles for grid cell context
+      div.tags-list.cell-tag {
+        width: 100%;
+        padding: 0;
+        gap: .4rem;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: flex-start;
+
+        .tag-list-item {
+          flex-shrink: 0;
+
+          .tag {
+            cursor: pointer;
+
+            .tag-content {
+              display: block;
+              white-space: nowrap;
+            }
+          }
+
+          // Tag with ellipsis (last visible tag that doesn't fully fit)
+          &.ellipsis-tag {
+            flex-shrink: 1;
+            min-width: 0;
+            overflow: hidden;
+
+            // Only expand to fill space when no badge follows (single tag scenario)
+            &:last-child {
+              flex-grow: 1;
+            }
+
+            .tag {
+              max-width: 100%;
+              overflow: hidden;
+
+              .tag-content {
+                display: block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
+          }
+        }
+
+        .badge {
+          flex-shrink: 0;
+
+          .tooltip-portal {
+            display: flex;
+          }
+        }
+      }
+    }
   }
 
   &.comfortable {
