@@ -37,7 +37,10 @@ describe("AdminMfaContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminMfaContext = new AdminMfaContextProvider(props);
-    const setStateMock = (state) => (adminMfaContext.state = Object.assign(adminMfaContext.state, state));
+    const setStateMock = (state) => {
+      const newState = typeof state === "function" ? state(adminMfaContext.state) : state;
+      adminMfaContext.state = Object.assign(adminMfaContext.state, newState);
+    };
     jest.spyOn(adminMfaContext, "setState").mockImplementation(setStateMock);
     enableFetchMocks();
   });

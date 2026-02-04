@@ -116,8 +116,15 @@ export class AdminMfaPolicyContextProvider extends React.Component {
    * @returns {void}
    */
   setSettings(key, value, callback = () => {}) {
-    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
-    this.setState({ settings: newSettings }, callback);
+    this.setState(
+      (prevState) => ({
+        settings: {
+          ...prevState.settings,
+          [key]: value,
+        },
+      }),
+      callback,
+    );
   }
 
   /**

@@ -245,12 +245,19 @@ export class AdminPasswordPoliciesContextProvider extends React.Component {
    * @returns {void}
    */
   setSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
-    this.setState({ settings: newSettings }, () => {
-      if (this.hasDataBeenValidated) {
-        this.validateData();
-      }
-    });
+    this.setState(
+      (prevState) => ({
+        settings: {
+          ...prevState.settings,
+          [key]: value,
+        },
+      }),
+      () => {
+        if (this.hasDataBeenValidated) {
+          this.validateData();
+        }
+      },
+    );
   }
 
   /**

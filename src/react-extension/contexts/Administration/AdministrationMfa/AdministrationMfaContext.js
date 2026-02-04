@@ -131,11 +131,14 @@ export class AdminMfaContextProvider extends React.Component {
   /**
    * Handle settings changes.
    * @params {ReactEvent} The react event
-   * @returns {void}
    */
   setSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
-    this.setState({ settings: newSettings });
+    this.setState((prevState) => ({
+      settings: {
+        ...prevState.settings,
+        [key]: value,
+      },
+    }));
   }
 
   /**
@@ -213,16 +216,27 @@ export class AdminMfaContextProvider extends React.Component {
    * set an error to object
    */
   setError(key, value) {
-    const errors = Object.assign({}, this.state.errors, { [key]: value });
-    this.setState({ errors });
+    this.setState((prevState) => ({
+      errors: {
+        ...prevState.errors,
+        [key]: value,
+      },
+    }));
   }
 
   /**
    * set errors to object
    */
   setErrors(newErrors, callback = () => {}) {
-    const errors = Object.assign({}, this.state.errors, newErrors);
-    return this.setState({ errors }, callback);
+    this.setState(
+      (prevState) => ({
+        errors: {
+          ...prevState.errors,
+          ...newErrors,
+        },
+      }),
+      callback,
+    );
   }
 
   /**

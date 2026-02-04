@@ -204,26 +204,65 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {void}
    */
   setSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
     /*
      * Applies default values on fields mapping if needed.
      * It is required when a value is invalid and an admin changes the directoryType.
      * It avoids a situation where nothing seems to happen when saving
      * as the expected error message wouldn't be displayed.
      */
-    if (this.isAdFieldsMappingUserUsernameResetNeeded(key, value)) {
-      newSettings.fieldsMapping.ad.user.username = UserDirectoryModel.DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE;
+    const resetAdUsername = this.isAdFieldsMappingUserUsernameResetNeeded(key, value);
+
+    const resetOpenLdapUsers = this.isOpenLdapFieldsMappingGroupUsersResetNeeded(key, value);
+
+    if (resetAdUsername) {
       this.setError(AD_FIELDS_MAPPING_USER_USERNAME_ERROR, null);
       this.setError(AD_FIELDS_MAPPING_USER_USERNAME_FALLBACK_ERROR, null);
     }
 
-    if (this.isOpenLdapFieldsMappingGroupUsersResetNeeded(key, value)) {
-      newSettings.fieldsMapping.openldap.group.users =
-        UserDirectoryModel.DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE;
+    if (resetOpenLdapUsers) {
       this.setError(OPENLDAP_FIELDS_MAPPING_GROUP_USERS_ERROR, null);
     }
 
-    this.setState({ settings: newSettings });
+    this.setState((prevState) => {
+      let settings = {
+        ...prevState.settings,
+        [key]: value,
+      };
+
+      if (resetAdUsername) {
+        settings = {
+          ...settings,
+          fieldsMapping: {
+            ...prevState.settings.fieldsMapping,
+            ad: {
+              ...prevState.settings.fieldsMapping?.ad,
+              user: {
+                ...prevState.settings.fieldsMapping?.ad?.user,
+                username: UserDirectoryModel.DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE,
+              },
+            },
+          },
+        };
+      }
+
+      if (resetOpenLdapUsers) {
+        settings = {
+          ...settings,
+          fieldsMapping: {
+            ...settings.fieldsMapping,
+            openldap: {
+              ...prevState.settings.fieldsMapping?.openldap,
+              group: {
+                ...prevState.settings.fieldsMapping?.openldap?.group,
+                users: UserDirectoryModel.DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE,
+              },
+            },
+          },
+        };
+      }
+
+      return { settings };
+    });
   }
 
   /**
@@ -253,9 +292,12 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {void}
    */
   setAdUserFieldsMappingSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings);
-    newSettings.fieldsMapping.ad.user[key] = value;
-    this.setState({ settings: newSettings });
+    this.setState((prevState) => {
+      const newSettings = { ...prevState.settings };
+      newSettings.fieldsMapping.ad.user[key] = value;
+
+      return { settings: newSettings };
+    });
   }
 
   /**
@@ -265,9 +307,12 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {void}
    */
   setOpenLdapGroupFieldsMappingSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings);
-    newSettings.fieldsMapping.openldap.group[key] = value;
-    this.setState({ settings: newSettings });
+    this.setState((prevState) => {
+      const newSettings = { ...prevState.settings };
+      newSettings.fieldsMapping.openldap.group[key] = value;
+
+      return { settings: newSettings };
+    });
   }
 
   /**
@@ -277,9 +322,12 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @returns {void}
    */
   setAdFallbackFieldsSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings);
-    newSettings.fallbackFields.ad[key] = value;
-    this.setState({ settings: newSettings });
+    this.setState((prevState) => {
+      const newSettings = { ...prevState.settings };
+      newSettings.fieldsMapping.ad[key] = value;
+
+      return { settings: newSettings };
+    });
   }
 
   /**
@@ -400,8 +448,12 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * set an error to object
    */
   setError(key, value) {
-    const errors = Object.assign({}, this.state.errors, { [key]: value });
-    this.setState({ errors });
+    this.setState((prevState) => ({
+      errors: {
+        ...prevState.errors,
+        [key]: value,
+      },
+    }));
   }
 
   /**
@@ -415,8 +467,15 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * set errors to object
    */
   setErrors(newErrors, callback = () => {}) {
-    const errors = Object.assign({}, this.state.errors, newErrors);
-    return this.setState({ errors }, callback);
+    this.setState(
+      (prevState) => ({
+        errors: {
+          ...prevState.errors,
+          ...newErrors,
+        },
+      }),
+      callback,
+    );
   }
 
   /**

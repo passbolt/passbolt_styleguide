@@ -37,8 +37,10 @@ describe("AdminEmailNotificationContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminEmailNotificationContext = new AdminEmailNotificationContextProvider(props);
-    const setStateMock = (state) =>
-      (adminEmailNotificationContext.state = Object.assign(adminEmailNotificationContext.state, state));
+    const setStateMock = (state) => {
+      const newState = typeof state === "function" ? state(adminEmailNotificationContext.state) : state;
+      adminEmailNotificationContext.state = Object.assign(adminEmailNotificationContext.state, newState);
+    };
     jest.spyOn(adminEmailNotificationContext, "setState").mockImplementation(setStateMock);
     enableFetchMocks();
   });
