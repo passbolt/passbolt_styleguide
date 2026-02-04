@@ -337,7 +337,7 @@ class FilterResourcesByTagsList extends React.Component {
                     className="main-cell-wrapper"
                     onContextMenu={(event) => this.handleContextualMenuEvent(event, tag)}
                   >
-                    <div className="main-cell">
+                    <div className="main-cell tag">
                       <button className="link no-border" type="button" title={tag.slug}>
                         <span className="ellipsis tag-name" onClick={() => this.handleOnClickTag(tag)}>
                           {tag.slug}
