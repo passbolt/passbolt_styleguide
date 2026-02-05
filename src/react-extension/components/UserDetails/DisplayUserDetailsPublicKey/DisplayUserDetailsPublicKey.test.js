@@ -25,6 +25,7 @@ import {
 } from "./DisplayUserDetailsPublicKey.test.data";
 import DisplayUserDetailsPublicKeyPage from "./DisplayUserDetailsPublicKey.test.page";
 import { DateTime } from "luxon";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -70,6 +71,8 @@ describe("Display User Details Information", () => {
   it("As LU I should see the appropriate detailed user fingerprint", async () => {
     expect.assertions(2);
     await page.toggleCollapse();
+    // Wait until the text is found (This will ensure the state has been updated)
+    await screen.findByText("RSA");
     expect(page.fingerprint).toContain("03F6 0E95 8F4C B297 23AC<br>DF76 1353 B5B1 5D9B 054F");
     expect(page.type).toBe("RSA");
   });
@@ -79,6 +82,8 @@ describe("Display User Details Information", () => {
     jest.spyOn(context.port, "request").mockImplementation(jest.fn(() => mockInvalidGpgKey));
 
     await page.toggleCollapse();
+    // Wait until the text is found (This will ensure the state has been updated)
+    await screen.findByText("RSA");
     expect(page.fingerprint).toContain("C694 577F F69D E85C 0793<br>5DF3 10FC 3004 99AE 900B");
     expect(page.type).toBe("RSA");
     expect(page.created).toBe(formatDate("2020-08-19T14:56:54+00:00"));

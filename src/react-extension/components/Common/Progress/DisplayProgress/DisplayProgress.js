@@ -55,8 +55,7 @@ class DisplayProgress extends Component {
     }
 
     this.infiniteTimerUpdateIntervalId = setInterval(() => {
-      const infiniteTimer = this.state.infiniteTimer + 2;
-      this.setState({ infiniteTimer });
+      this.setState({ infiniteTimer: this.state.infiniteTimer + 2 });
     }, 500);
   }
 

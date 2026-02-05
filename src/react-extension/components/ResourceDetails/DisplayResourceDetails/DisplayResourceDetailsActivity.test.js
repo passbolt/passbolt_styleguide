@@ -122,13 +122,15 @@ describe("See activities", () => {
     });
 
     it("I should see the loading message “Retrieving activities”", async () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
       const inProgressFn = () => {
-        findResolve([]);
+        expect(page.displayActivityList.isLoading()).toBeTruthy();
+        findResolve(activitiesMock);
       };
       await page.displayActivityList.waitForLoading(inProgressFn);
-      expect(page.displayActivityList.isLoading()).toBeTruthy();
+      await screen.findAllByText("Admin User");
+      expect(page.displayActivityList.isLoading()).toBeFalsy();
     });
   });
 

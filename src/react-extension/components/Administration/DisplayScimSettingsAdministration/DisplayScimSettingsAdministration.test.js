@@ -19,13 +19,13 @@ import {
 } from "./DisplayScimSettingsAdministration.test.data";
 import DisplayScimSettingsAdministrationPage from "./DisplayScimSettingsAdministration.test.page";
 import { waitFor } from "@testing-library/dom";
+import { act } from "react";
 
 describe("DisplayScimSettingsAdministration", () => {
   let page, props;
-
-  beforeEach(() => {
+  beforeEach(async () => {
     props = defaultProps();
-    page = new DisplayScimSettingsAdministrationPage(props);
+    await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
   });
 
   it("should display the title and description", async () => {
@@ -55,8 +55,8 @@ describe("DisplayScimSettingsAdministration", () => {
   it("should allow enabling SCIM settings", async () => {
     expect.assertions(4);
 
-    props = new defaultScimSettingsDisabledProps();
-    page = new DisplayScimSettingsAdministrationPage(props);
+    props = defaultScimSettingsDisabledProps();
+    await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
     expect(page.exists()).toBeTruthy();
 
     await page.toggleScimSettings();
@@ -78,8 +78,8 @@ describe("DisplayScimSettingsAdministration", () => {
   it("should not be able to copy secret token if not exist", async () => {
     expect.assertions(3);
 
-    props = new defaultScimSettingsConfiguredProps();
-    page = new DisplayScimSettingsAdministrationPage(props);
+    props = defaultScimSettingsConfiguredProps();
+    await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
     await waitFor(() => page.copySecretTokenButton !== null);
     expect(page.exists()).toBeTruthy();
     expect(page.isScimSecretTokenInputDisabled).toBeTruthy();

@@ -29,7 +29,6 @@ export default class ConfirmPassphrasePage {
       <MockTranslationProvider>
         <ConfirmPassphrase {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

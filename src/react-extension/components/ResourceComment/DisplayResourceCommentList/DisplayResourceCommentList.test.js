@@ -111,14 +111,17 @@ describe("See comments", () => {
     });
 
     it("I should see the loading message “Retrieving comments”", async () => {
-      expect.assertions(1);
+      expect.assertions(2);
       await page.title.click();
 
       const inProgressFn = () => {
-        findResolve([]);
+        expect(page.displayCommentList.isLoading()).toBeTruthy();
+        findResolve(commentsMock);
       };
       await page.displayCommentList.waitForLoading(inProgressFn);
-      expect(page.displayCommentList.isLoading()).toBeTruthy();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Carol Shaw");
+      expect(page.displayCommentList.isLoading()).toBeFalsy();
     });
   });
 
