@@ -41,7 +41,6 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
           </AdministrationUserPassphrasePoliciesContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

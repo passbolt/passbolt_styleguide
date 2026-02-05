@@ -12,11 +12,12 @@
  * @since         4.1.0
  */
 
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import { MemoryRouter, Route } from "react-router-dom";
 import ResourceViewPage from "./ResourceViewPage";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayResourcesWorkspaceMainMenuPage component represented as a page
@@ -33,8 +34,8 @@ export default class ResourceViewPagePage {
           <Route path="/:id" component={(routerProps) => <ResourceViewPage {...props} {...routerProps} />} />
         </MemoryRouter>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -147,8 +148,6 @@ export default class ResourceViewPagePage {
    * @returns {Promise<void>}
    */
   async click(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 }

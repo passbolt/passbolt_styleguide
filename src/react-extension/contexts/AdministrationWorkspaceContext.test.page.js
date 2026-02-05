@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import AdministrationWorkspaceContextProvider, {
   AdministrationWorkspaceContext,
@@ -19,6 +19,7 @@ import AdministrationWorkspaceContextProvider, {
 import AppContext from "../../shared/context/AppContext/AppContext";
 import { Router, NavLink, Route, Switch } from "react-router-dom";
 import { createMemoryHistory } from "history";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The AdministrationWorkspaceContextPage component represented as a page
@@ -33,6 +34,7 @@ export default class AdministrationWorkspaceContextPage {
     this.context = appContext;
     this.props = props;
     this.setup(appContext, props);
+    this.user = userEvent.setup();
   }
 
   /**
@@ -105,9 +107,7 @@ export default class AdministrationWorkspaceContextPage {
    */
   async goToLink(linkCssSelector) {
     const element = this._page.container.querySelector(linkCssSelector);
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /**
@@ -191,7 +191,6 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onSaveEnabled() {
     await this.administrationWorkspaceContext.onSaveEnabled();
-    await waitFor(() => {});
   }
 
   /**
@@ -199,7 +198,6 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onMustSaveSettings() {
     await this.administrationWorkspaceContext.onMustSaveSettings();
-    await waitFor(() => {});
   }
 
   /**
@@ -207,7 +205,6 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onTestEnabled() {
     await this.administrationWorkspaceContext.onTestEnabled(true);
-    await waitFor(() => {});
   }
 
   /**
@@ -215,7 +212,6 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onMustTestSettings() {
     await this.administrationWorkspaceContext.onMustTestSettings();
-    await waitFor(() => {});
   }
 
   /**
@@ -223,7 +219,6 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onMustEditSubscriptionKey() {
     await this.administrationWorkspaceContext.onMustEditSubscriptionKey();
-    await waitFor(() => {});
   }
 
   /**
@@ -231,7 +226,6 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onMustRefreshSubscriptionKey() {
     await this.administrationWorkspaceContext.onMustRefreshSubscriptionKey();
-    await waitFor(() => {});
   }
 
   /**
@@ -239,7 +233,6 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onSynchronizeEnabled() {
     await this.administrationWorkspaceContext.onSynchronizeEnabled(true);
-    await waitFor(() => {});
   }
 
   /**
@@ -247,7 +240,6 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onMustSynchronizeSettings() {
     await this.administrationWorkspaceContext.onMustSynchronizeSettings();
-    await waitFor(() => {});
   }
 
   /**
@@ -255,7 +247,6 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onResetActionsSettings() {
     await this.administrationWorkspaceContext.onResetActionsSettings();
-    await waitFor(() => {});
   }
 
   /**
@@ -312,7 +303,6 @@ export default class AdministrationWorkspaceContextPage {
           </NavLink>
         </Router>
       </AppContext.Provider>,
-      { legacyRoot: true },
     );
   }
 }

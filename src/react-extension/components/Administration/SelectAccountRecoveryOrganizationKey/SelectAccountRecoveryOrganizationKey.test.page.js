@@ -35,7 +35,6 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
       <MockTranslationProvider>
         <SelectAccountRecoveryOrganizationKey {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
