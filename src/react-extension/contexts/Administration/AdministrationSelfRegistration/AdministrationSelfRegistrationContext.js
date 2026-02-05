@@ -109,7 +109,7 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
 
   /**
    * Find the self registration settings
-   * @return {Promise<void>}
+   * @return {Promise<SelfRegistrationDomainsViewModel>}
    */
   async findSettings(callback = () => {}) {
     this.setProcessing(true);
@@ -120,6 +120,7 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
     //Init allowed domains which will interact with UI
     this.setDomains(domains, callback);
     this.setProcessing(false);
+    return domains;
   }
 
   /**

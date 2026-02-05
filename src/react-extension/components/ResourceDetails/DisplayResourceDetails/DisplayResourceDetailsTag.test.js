@@ -25,6 +25,7 @@ import {
 import PasswordSidebarTagSectionPage from "./DisplayResourceDetailsTag.test.page";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import { waitForElementToBeRemoved } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -389,6 +390,7 @@ describe("See tags", () => {
       expect(page.tagEditor.component.textContent).toBe("");
       expect(page.tagEditor.count()).toBe(1);
       await page.passwordSidebarTagSection.enterKeyPressed(page.tagEditor.component);
+      await waitForElementToBeRemoved(() => page.tagEditor.component);
       expect(page.tagEditor.component).toBeNull();
       const tagsDto = [
         {

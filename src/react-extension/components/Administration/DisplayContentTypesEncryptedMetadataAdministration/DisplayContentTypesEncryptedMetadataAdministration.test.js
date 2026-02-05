@@ -16,7 +16,6 @@ import {
   defaultProps,
   resourceTypesDeletedProps,
 } from "./DisplayContentTypesEncryptedMetadataAdministration.test.data";
-import { waitForTrue } from "../../../../../test/utils/waitFor";
 import DisplayContentTypesEncryptedMetadataAdministrationPage from "./DisplayContentTypesEncryptedMetadataAdministration.test.page";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
@@ -27,6 +26,7 @@ import {
 import { waitFor } from "@testing-library/react";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
+import { act } from "react";
 
 describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
   beforeEach(() => {
@@ -38,9 +38,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
     it("As a signed-in administrator I can see the settings", async () => {
       expect.assertions(14);
       const props = defaultProps();
-
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
 
       expect(page.title.textContent).toBe("Encrypted metadata");
       expect(page.allowCreationOfV5ResourcesInput.checked).toBe(false);
@@ -68,8 +67,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
           findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
         },
       });
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       expect(page.warningMessagesCount).toBe(2);
       expect(page.errorMessagesCount).toBe(0);
       expect(page.allowCreationOfV4ResourcesWarning).not.toBeNull();
@@ -89,8 +88,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
           findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
         },
       });
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       expect(page.warningMessagesCount).toBe(2);
       expect(page.errorMessagesCount).toBe(0);
       expect(page.allowCreationOfV5ResourcesWarning).not.toBeNull();
@@ -111,8 +110,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
             new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto()),
         },
       });
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       expect(page.warningMessagesCount).toBe(4);
       expect(page.errorMessagesCount).toBe(0);
       expect(page.allowCreationOfV4ResourcesWarning).not.toBeNull();
@@ -145,8 +144,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
             new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto({ allow_v4_v5_upgrade: true })),
         },
       });
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       expect(page.warningMessagesCount).toBe(1);
       expect(page.errorMessagesCount).toBe(0);
       expect(page.allowV4V5UpgradeWarning).not.toBeNull();
@@ -164,8 +163,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
             new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({ allow_v5_v4_downgrade: true })),
         },
       });
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       expect(page.warningMessagesCount).toBe(1);
       expect(page.errorMessagesCount).toBe(0);
       expect(page.allowV5V4DowngradeWarning).not.toBeNull();
@@ -184,8 +183,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
           findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
         },
       });
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       expect(page.warningMessagesCount).toBe(1);
       expect(page.errorMessagesCount).toBe(0);
       expect(page.allowCreationOfV5ResourcesWarning).not.toBeNull();
@@ -207,8 +206,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
             ),
         },
       });
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.submitForm();
       expect(page.warningMessagesCount).toBe(0);
       expect(page.errorMessagesCount).toBe(2);
@@ -233,8 +232,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
             ),
         },
       });
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.submitForm();
       expect(page.warningMessagesCount).toBe(0);
       expect(page.errorMessagesCount).toBe(2);
@@ -254,8 +253,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(2);
       const props = defaultProps();
 
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.clickOnDefaultResourceTypesV5Input();
       expect(page.formBanner).not.toBeNull();
       expect(page.formBanner.textContent).toEqual(
@@ -270,8 +269,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
           findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
         },
       });
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.clickOnDefaultResourceTypesV5Input();
       expect(page.warningMessagesCount).toBe(2);
       expect(page.errorMessagesCount).toBe(0);
@@ -296,8 +295,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
           }),
       );
 
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
 
       expect(page.defaultResourceTypesV4Input.checked).toBe(true);
       expect(page.defaultResourceTypesV5Input.checked).toBe(false);
@@ -306,7 +305,6 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect(page.defaultResourceTypesV5Input.checked).toBe(false);
 
       requestGetPromiseResolver(new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()));
-      await waitFor(() => {});
 
       await page.clickOnDefaultResourceTypesV5Input();
       expect(page.defaultResourceTypesV4Input.checked).toBe(false);
@@ -324,8 +322,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
         });
       });
 
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.submitForm();
       expect(page.defaultResourceTypesV4Input.checked).toBe(true);
       expect(page.defaultResourceTypesV5Input.checked).toBe(false);
@@ -346,8 +344,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       const expectedSettingsDto = defaultMetadataTypesSettingsV4Dto();
       const props = defaultProps();
 
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.submitForm();
       expect(props.metadataSettingsServiceWorkerService.saveTypesSettings).toHaveBeenCalledTimes(1);
       expect(props.metadataSettingsServiceWorkerService.saveTypesSettings).toHaveBeenCalledWith(
@@ -362,8 +360,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       const expectedSettingsDto = defaultMetadataTypesSettingsV50FreshDto();
       const props = defaultProps();
 
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.clickOnDefaultResourceTypesV5Input();
       await page.clickOnAllowCreationOfV5ResourcesInput();
       await page.clickOnAllowCreationOfV4ResourcesInput();
@@ -381,8 +379,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(1);
       const props = defaultProps();
 
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.submitForm();
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
     });
@@ -391,8 +389,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(1);
       const props = defaultProps();
 
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.clickOnDefaultResourceTypesV5Input();
       await page.clickOnAllowCreationOfV5ResourcesInput();
       await page.submitForm();
@@ -407,8 +405,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
         throw error;
       });
 
-      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
       await page.submitForm();
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error });
     });

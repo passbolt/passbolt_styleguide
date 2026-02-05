@@ -34,7 +34,6 @@ export default class ShareDialogPage {
           <ShareDialog {...props} listMinSize={20} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

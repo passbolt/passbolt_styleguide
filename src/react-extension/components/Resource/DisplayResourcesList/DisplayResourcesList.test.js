@@ -32,6 +32,8 @@ import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCo
 import { ColumnFields } from "../../../../shared/models/column/ColumnModel";
 import ColumnsResourceSettingCollection from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
 import { defaultTotpViewModelDto } from "../../../../shared/models/entity/totp/totpDto.test.data";
+import { screen } from "@testing-library/react";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -47,31 +49,36 @@ describe("Display Resources", () => {
     it("As LU, I should see initially an empty content when there are no resources", async () => {
       const props = defaultProps();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Welcome to passbolt!");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no resources matching the text search", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.TEXT));
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("None of your passwords matched this search.");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no resources matching the favorite search", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.FAVORITE));
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("None of your passwords are yet marked as favorite.");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no resources matching the group filter", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.GROUP));
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("No passwords are shared with this group yet.");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no resources matching the folder filter", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.FOLDER));
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("It does feel a bit empty here.");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
@@ -79,26 +86,30 @@ describe("Display Resources", () => {
       const page = new DisplayResourcesListPage(
         propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.SHARED_WITH_ME),
       );
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("No passwords are shared with you yet.");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no resources matching the expired search", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.EXPIRED));
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("No passwords have expired yet.");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no private resources matching the private resource search", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.PRIVATE));
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Welcome to passbolt!");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
     it("AS LU, I should see the appropriate filtered list of resources", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       expect(page.resourcesCount).toBe(6);
       expect(page.resource(1).name).toBe("apache");
       expect(page.resource(2).name).toBe("bower");
@@ -113,7 +124,8 @@ describe("Display Resources", () => {
     it("As LU, I should select one resource", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.resource(1).select();
       expect(props.resourceWorkspaceContext.onResourceSelected.single).toHaveBeenCalledWith(
         props.resourceWorkspaceContext.filteredResources[0],
@@ -123,7 +135,8 @@ describe("Display Resources", () => {
     it("As LU, I should unselect one resource", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.resource(1).select();
       expect(props.resourceWorkspaceContext.onResourceSelected.single).toHaveBeenCalledWith(
         props.resourceWorkspaceContext.filteredResources[0],
@@ -137,7 +150,8 @@ describe("Display Resources", () => {
     it("As LU, I should select multiple resources", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.resource(1).selectWithCheckbox();
       await page.resource(2).selectWithCheckbox();
       expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(
@@ -151,7 +165,8 @@ describe("Display Resources", () => {
     it("As LU, I should select a range of resources", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.resource(1).selectWithCheckbox();
       await page.resource(3).selectRangeCheckbox();
       expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(
@@ -165,7 +180,8 @@ describe("Display Resources", () => {
     it("As LU, I should select all resources", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.selectAll();
       expect(props.resourceWorkspaceContext.onResourceSelected.all).toHaveBeenCalled();
     });
@@ -173,7 +189,8 @@ describe("Display Resources", () => {
     it("As LU, I should unselect all resources", async () => {
       const props = propsWithAllResourcesSelected();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.selectAll();
       expect(props.resourceWorkspaceContext.onResourceSelected.none).toHaveBeenCalled();
     });
@@ -182,9 +199,11 @@ describe("Display Resources", () => {
   describe("As LU, I should sort the resource by property column", () => {
     let props, page;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       props = propsWithFilteredResources();
       page = new DisplayResourcesListPage(props);
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
     });
 
     it("As LU, I should sort the resources by favorite", async () => {
@@ -223,7 +242,8 @@ describe("Display Resources", () => {
     it("As LU, I should be able to open a contextual menu for a resource", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.resource(1).openContextualMenu();
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(DisplayResourcesListContextualMenu, {
         resource: props.resourceWorkspaceContext.filteredResources[0],
@@ -234,9 +254,11 @@ describe("Display Resources", () => {
   describe("As LU, I should favorite a resource", () => {
     let props, page;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       props = propsWithFilteredResources();
       page = new DisplayResourcesListPage(props);
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
     });
 
     it("As LU, I should be able to favorite a resources", async () => {
@@ -273,7 +295,8 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
 
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
 
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
 
@@ -291,7 +314,8 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       const totp = defaultTotpViewModelDto();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
 
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ password: "secret-password" }));
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
@@ -324,7 +348,8 @@ describe("Display Resources", () => {
       expect.assertions(2);
       const props = propsWithFilteredResourcesAndDenyUiAction();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ password: "secret-password" }));
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
       expect(page.resource(1).copyPasswordLink.hasAttribute("disabled")).toBeTruthy();
@@ -338,11 +363,13 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       const totp = defaultTotpViewModelDto();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
 
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ password: "secret-password" }));
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
       await page.resource(1).selectViewPassword();
+      await waitForTrue(() => page.resource(1).password === "secret-password");
       expect(page.resource(1).password).toBe("secret-password");
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.secret.find-by-resource-id",
@@ -360,6 +387,7 @@ describe("Display Resources", () => {
         "passbolt.secret.find-by-resource-id",
         props.resourceWorkspaceContext.filteredResources[3].id,
       );
+      await waitForTrue(() => page.resource(4).totp.replaceAll(/\s+/g, "") === code);
       expect(page.resource(4).totp.replaceAll(/\s+/g, "")).toBe(code);
       expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalledTimes(2);
       await page.resource(4).selectViewTotp();
@@ -376,14 +404,16 @@ describe("Display Resources", () => {
       const context = defaultUserAppContext(appContext);
       const props = propsWithFilteredResources({ context }); // The props to pass
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await expect(page.resource(1).isViewPasswordExist).toBeFalsy();
     });
 
     it("AS LU, I shouldn't be able to preview secret of a resource if denied by RBAC.", async () => {
       const props = propsWithFilteredResourcesAndDenyUiAction();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await expect(page.resource(1).isViewPasswordExist).toBeFalsy();
       await expect(page.resource(4).isViewTotpExist).toBeFalsy();
     });
@@ -393,7 +423,8 @@ describe("Display Resources", () => {
     it("As LU, I should be able to follow the uri of a resource", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       jest.spyOn(props.resourceWorkspaceContext, "onGoToResourceUriRequested").mockImplementationOnce(() => {});
       await page.resource(1).selectUri();
       expect(props.resourceWorkspaceContext.onGoToResourceUriRequested).toHaveBeenCalled();
@@ -405,7 +436,8 @@ describe("Display Resources", () => {
       expect.assertions(1);
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.resource(1).selectLocation();
       expect(page.resource(1).locationLink).toStrictEqual("My workspace");
     });
@@ -414,7 +446,8 @@ describe("Display Resources", () => {
       expect.assertions(1);
       const props = propsWithFilteredResourcesAndColumnsHidden();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.resource(1).selectLocation();
       expect(page.resource(1).locationLink).toStrictEqual("Accounting›Bank");
     });
@@ -424,7 +457,8 @@ describe("Display Resources", () => {
     it("As LU, I should be able to resize a column of a resource with mouse move", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
 
       const totalColumnCount = page.columnsCount;
       const fixedSizeColumns = 3;
@@ -473,7 +507,8 @@ describe("Display Resources", () => {
 
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       await page.columns(3).resizeDefault();
       await page.columns(4).resizeDefault();
       await page.columns(5).resizeDefault();
@@ -500,7 +535,8 @@ describe("Display Resources", () => {
 
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
       // Need to resize before to check due to the actual width is negative
       Object.defineProperty(HTMLElement.prototype, "offsetWidth", {
         configurable: true,
@@ -543,7 +579,8 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       props.resourceWorkspaceContext.columnsResourceSetting = columnsResourceSetting;
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
 
       // Width should be the default
       expect(page.columns(2).width).toStrictEqual("20px");
@@ -564,7 +601,8 @@ describe("Display Resources", () => {
 
       const props = propsWithFilteredResourcesAndColumnsHidden();
       const page = new DisplayResourcesListPage(props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("apache");
 
       // 6 columns should be displayed
       expect(page.columnsCount).toStrictEqual(6);
