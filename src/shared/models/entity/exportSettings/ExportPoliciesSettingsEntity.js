@@ -64,7 +64,7 @@ class ExportPoliciesSettingsEntity extends EntityV2 {
    */
   static createFromDefault(data = {}) {
     const defaultData = {
-      allow_csv_format: true,
+      allow_csv_format: false,
       source: SETTINGS_SOURCE_DEFAULT,
     };
     return new ExportPoliciesSettingsEntity({ ...defaultData, ...data });

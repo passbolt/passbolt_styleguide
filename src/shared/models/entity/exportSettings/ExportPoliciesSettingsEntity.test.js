@@ -121,7 +121,7 @@ describe("ExportPoliciesSettingsEntity", () => {
       expect.assertions(3);
       const entity = ExportPoliciesSettingsEntity.createFromDefault();
 
-      expect(entity.allowCsvFormat).toBe(true);
+      expect(entity.allowCsvFormat).toBe(false);
       expect(entity.source).toBe(SETTINGS_SOURCE_DEFAULT);
       expect(entity.id).toBeNull();
     });
