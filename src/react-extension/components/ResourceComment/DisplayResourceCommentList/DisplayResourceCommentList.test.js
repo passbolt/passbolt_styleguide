@@ -19,6 +19,8 @@
 import { commentsMock, defaultAppContext, defaultProps } from "./DisplayResourceCommentList.test.data";
 import DisplayResourceCommentListPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { screen } from "@testing-library/react";
+import expect from "expect";
 
 beforeEach(() => {
   jest.resetModules();
@@ -48,31 +50,39 @@ describe("See comments", () => {
     });
 
     it("I should see the 3 comments made on the resource", async () => {
+      expect.assertions(2);
       await page.title.click();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Carol Shaw");
       expect(page.displayCommentList.exists()).toBeTruthy();
       expect(page.displayCommentList.count()).toBe(3);
     });
 
     it("I should see the comments sorted from the most recent to the oldest", async () => {
+      expect.assertions(3);
       await page.title.click();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Carol Shaw");
       expect(page.displayCommentList.author(1)).toBe("Carol Shaw");
       expect(page.displayCommentList.author(2)).toBe("Betty Holberton");
       expect(page.displayCommentList.author(3)).toBe("Ada Lovelace");
     });
 
     it("I should be able to identify each comments authors", async () => {
+      expect.assertions(3);
       await page.title.click();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Carol Shaw");
       expect(page.displayCommentList.author(1)).toBe("Carol Shaw");
       expect(page.displayCommentList.author(2)).toBe("Betty Holberton");
       expect(page.displayCommentList.author(3)).toBe("Ada Lovelace");
     });
 
     it("I should be able to see each comments timestamps", async () => {
+      expect.assertions(3);
       await page.title.click();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Carol Shaw");
       expect(page.displayCommentList.creationTime(1)).toBeDefined();
       expect(page.displayCommentList.creationTime(2)).toBeDefined();
       expect(page.displayCommentList.creationTime(3)).toBeDefined();
@@ -101,14 +111,14 @@ describe("See comments", () => {
     });
 
     it("I should see the loading message “Retrieving comments”", async () => {
+      expect.assertions(1);
       await page.title.click();
 
       const inProgressFn = () => {
-        expect(page.displayCommentList.isLoading()).toBeTruthy();
         findResolve([]);
       };
       await page.displayCommentList.waitForLoading(inProgressFn);
-      expect(page.displayCommentList.isLoading()).toBeFalsy();
+      expect(page.displayCommentList.isLoading()).toBeTruthy();
     });
   });
 

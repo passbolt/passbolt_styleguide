@@ -11,10 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
+import userEvent from "@testing-library/user-event/dist/cjs/index.js";
 /**
  * The DisplayResourceDetailsTotp component represented as a page
  */
@@ -28,8 +29,8 @@ export default class DisplayResourceDetailsTotpPage {
       <MockTranslationProvider>
         <DisplayResourceDetailsTotp {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -104,8 +105,6 @@ export default class DisplayResourceDetailsTotpPage {
 
   /** Click on the component */
   async click(component) {
-    const leftClick = { button: 0 };
-    fireEvent.click(component, leftClick);
-    await waitFor(() => {});
+    await this.user.click(component);
   }
 }

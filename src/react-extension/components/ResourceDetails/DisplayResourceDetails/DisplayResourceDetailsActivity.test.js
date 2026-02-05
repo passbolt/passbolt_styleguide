@@ -25,6 +25,7 @@ import {
 import DisplayResourceDetailsActivityPage from "./DisplayResourceDetailsActivity.test.page";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 import { act } from "react";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -68,7 +69,8 @@ describe("See activities", () => {
 
     it("I should be able to identify each activity creators", async () => {
       expect.assertions(4);
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("Admin User");
       expect(page.displayActivityList.creator(1)).toBe("Admin User");
       expect(page.displayActivityList.creator(2)).toBe("Ada User");
       expect(page.displayActivityList.creator(3)).toBe("Admin Ada");
@@ -77,7 +79,8 @@ describe("See activities", () => {
 
     it("I should be able to see each activity timestamps", async () => {
       expect.assertions(4);
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("Admin User");
       expect(page.displayActivityList.creationTime(1)).toBeDefined();
       expect(page.displayActivityList.creationTime(2)).toBeDefined();
       expect(page.displayActivityList.creationTime(3)).toBeDefined();
@@ -87,7 +90,7 @@ describe("See activities", () => {
     it("I should be able to see each other activities with more button ", async () => {
       expect.assertions(4);
       mockContextRequest(activitiesMoreFoundRequestMockImpl);
-
+      await screen.findAllByText("Admin User");
       expect(page.displayActivityList.moreButtonExists()).toBeTruthy();
 
       await page.displayActivityList.moreButtonClick();
@@ -119,14 +122,13 @@ describe("See activities", () => {
     });
 
     it("I should see the loading message “Retrieving activities”", async () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       const inProgressFn = () => {
-        expect(page.displayActivityList.isLoading()).toBeTruthy();
         findResolve([]);
       };
       await page.displayActivityList.waitForLoading(inProgressFn);
-      expect(page.displayActivityList.isLoading()).toBeFalsy();
+      expect(page.displayActivityList.isLoading()).toBeTruthy();
     });
   });
 

@@ -51,14 +51,16 @@ describe("Add comments", () => {
 
     it("I should be prompted to insert a new comment", async () => {
       await page.title.click();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("You");
       expect(page.addComment.exists()).toBeTruthy();
       expect(context.port.request).toBeCalled();
     });
 
     it("I should not see the add icon", async () => {
       await page.title.click();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("You");
       expect(page.addIcon.exists()).toBeFalsy();
       expect(context.port.request).toBeCalled();
     });
@@ -79,6 +81,8 @@ describe("Add comments", () => {
 
     it("I should start adding a comment", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       expect(page.addIcon.exists()).toBeTruthy();
       expect(page.addComment.exists()).toBeFalsy();
       expect(context.port.request).toBeCalled();
@@ -103,6 +107,8 @@ describe("Add comments", () => {
 
     it("I should stop adding a comment", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write("I'm starting a new comment");
       await page.addComment.cancel();
@@ -138,6 +144,8 @@ describe("Add comments", () => {
       expect.assertions(2);
       // Since there's a refresh fetch after adding a comment, just need to check if the refresh fetch call is done
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       expect(await screen.queryByPlaceholderText("Add a comment")).not.toBeNull();
 
@@ -166,6 +174,8 @@ describe("Add comments", () => {
     it("I should see the comment “Good men don’t need rules.” at the top of the comments list", async () => {
       // Since there's a refresh fetch after adding a comment, just need to check if the refresh fetch call is done
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write("I'm writing a valid comment");
       await page.addComment.save();
@@ -198,6 +208,8 @@ describe("Add comments", () => {
     it("the adding operation should be stopped", async () => {
       expect.assertions(2);
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       expect(await screen.queryByPlaceholderText("Add a comment")).not.toBeNull();
 
@@ -243,6 +255,8 @@ describe("Add comments", () => {
     it("the adding operation should be stopped", async () => {
       expect.assertions(3);
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       expect(await screen.queryByPlaceholderText("Add a comment")).not.toBeNull();
 
@@ -292,6 +306,8 @@ describe("Add comments", () => {
     it("I should be notified about the success of the operation", async () => {
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write("Good men don’t need rules.");
       await page.addComment.save();
@@ -314,6 +330,8 @@ describe("Add comments", () => {
 
     it("I should see a feedback message explaining to me that the comment is too long", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write(tooLongComment);
       await page.addComment.save();
@@ -323,6 +341,8 @@ describe("Add comments", () => {
 
     it("I should not able to add the comment", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write(tooLongComment);
       await page.addComment.save();
@@ -346,6 +366,8 @@ describe("Add comments", () => {
 
     it("I should see a feedback message explaining to me that the comment is required\n", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write("");
       await page.addComment.save();
@@ -355,6 +377,8 @@ describe("Add comments", () => {
 
     it("I should not able to add the comment", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write("");
       await page.addComment.save();
@@ -380,6 +404,8 @@ describe("Add comments", () => {
 
     it("I should see not see spaces at the end or a the start of the added comment", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write(" I am writing a comment ");
       await page.addComment.save();
@@ -406,6 +432,8 @@ describe("Add comments", () => {
 
     it("it should be displayed “A comment is required.", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write("   ");
       await page.addComment.save();
@@ -415,6 +443,8 @@ describe("Add comments", () => {
 
     it("I should not able to add the comment", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write("   ");
       await page.addComment.save();
@@ -457,6 +487,8 @@ describe("Add comments", () => {
 
     it(" I should see an error message", async () => {
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("You");
       await page.addIcon.click();
       await page.addComment.write("I'm writing a valid comment");
 
