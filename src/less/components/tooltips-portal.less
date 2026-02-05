@@ -141,4 +141,28 @@
       }
     }
   }
+
+  // Specific style for tags badge in grid cell.
+  &.additional-tags {
+    padding: 0;
+
+    .tags-list {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      max-height: 18rem;
+      padding: .4rem .8rem;
+      gap: .4rem;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--Workspace-Elevator) transparent;
+
+      .tag-list-item {
+        width: fit-content;
+
+        .tag .tag-content {
+          max-width: 15rem;
+        }
+      }
+    }
+  }
 }
