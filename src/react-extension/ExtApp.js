@@ -33,7 +33,6 @@ import HandleSessionExpired from "./components/Authentication/HandleSessionExpir
 import HandleExtAppRouteChanged from "./components/Common/Route/HandleExtAppRouteChanged";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
-import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/ManageAnnouncements";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
 import HandleSubscriptionAnnouncement from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
 import ExtAppContextProvider from "./contexts/ExtAppContext";
@@ -164,7 +163,6 @@ class ExtApp extends Component {
                                                               <ManageDialogs />
                                                               <ManageWorkflows />
                                                               <ManageContextualMenu />
-                                                              <ManageAnnouncements />
                                                               <DragContextProvider>
                                                                 <ResizableSidebarContextProvider>
                                                                   <div id="container" className="page password">
@@ -196,7 +194,6 @@ class ExtApp extends Component {
                                                   <ManageDialogs />
                                                   <ManageWorkflows />
                                                   <ManageContextualMenu />
-                                                  <ManageAnnouncements />
                                                   <DragContextProvider>
                                                     <ResizableSidebarContextProvider>
                                                       <div id="container" className="page user">
@@ -213,7 +210,6 @@ class ExtApp extends Component {
                                                 <UserSettingsContextProvider>
                                                   <UserPassphrasePoliciesContextProvider>
                                                     <ManageDialogs />
-                                                    <ManageAnnouncements />
                                                     <div id="container" className="page settings">
                                                       <div id="app" className="app" tabIndex="1000">
                                                         <DisplayUserSettingsWorkspace />

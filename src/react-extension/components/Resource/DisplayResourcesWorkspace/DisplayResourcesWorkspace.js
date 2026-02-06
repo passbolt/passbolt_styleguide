@@ -53,6 +53,7 @@ import {
 } from "../../../../shared/models/entity/rowsSetting/rowsSettingEntity";
 import ResizableSidebar from "../../ResizableSidebar/ResizableSidebar";
 import { withResizableSidebar } from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
+import ManageAnnouncements from "../../Announcement/ManageAnnouncements/ManageAnnouncements";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -257,171 +258,174 @@ class Workspace extends Component {
       (right?.width / containerWidth) * 100 < 25 ? `25%` : `${(right?.width / containerWidth) * 100}%`; // set width of right header
 
     return (
-      <div className="panel main">
-        <ResizableSidebar
-          resizable
-          gutterLeft={false}
-          minWidth={"18%"}
-          maxWidth={"23.4%"}
-          classNames={"resource-workspace left-side-bar"}
-        >
-          <div className="panel left resource-filter">
-            <div className="sidebar-content">
-              <Logo />
-              <div className="main-action-wrapper">
-                <DisplayResourcesWorkspaceMainMenu />
+      <>
+        <ManageAnnouncements />
+        <div className="panel main">
+          <ResizableSidebar
+            resizable
+            gutterLeft={false}
+            minWidth={"18%"}
+            maxWidth={"23.4%"}
+            classNames={"resource-workspace left-side-bar"}
+          >
+            <div className="panel left resource-filter">
+              <div className="sidebar-content">
+                <Logo />
+                <div className="main-action-wrapper">
+                  <DisplayResourcesWorkspaceMainMenu />
+                </div>
+                <div className="sidebar-content-left">
+                  <FilterResourcesByShortcuts />
+                  {canUseFolders && <FilterResourcesByFolders />}
+                  <FilterResourcesByGroups />
+                  {canUseTags && <FilterResourcesByTags />}
+                </div>
               </div>
-              <div className="sidebar-content-left">
-                <FilterResourcesByShortcuts />
-                {canUseFolders && <FilterResourcesByFolders />}
-                <FilterResourcesByGroups />
-                {canUseTags && <FilterResourcesByTags />}
+            </div>
+          </ResizableSidebar>
+          <div className="panel middle">
+            <div className="header">
+              <div className="header-left">
+                <FilterResourcesByText placeholder={this.props.t("Search resource")} />
+              </div>
+              <div className="header-right" style={{ width: rightHeaderWidth }}>
+                <WorkspaceSwitcher
+                  isUserAdmin={this.isUserAdmin}
+                  isUserWorkspaceVisible={this.isUserWorkspaceVisible}
+                  currentWorkspace={WORKSPACE_ENUM.RESOURCE}
+                />
+                <DisplayUserBadgeMenu
+                  baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                  user={this.props.context.loggedInUser}
+                />
               </div>
             </div>
-          </div>
-        </ResizableSidebar>
-        <div className="panel middle">
-          <div className="header">
-            <div className="header-left">
-              <FilterResourcesByText placeholder={this.props.t("Search resource")} />
-            </div>
-            <div className="header-right" style={{ width: rightHeaderWidth }}>
-              <WorkspaceSwitcher
-                isUserAdmin={this.isUserAdmin}
-                isUserWorkspaceVisible={this.isUserWorkspaceVisible}
-                currentWorkspace={WORKSPACE_ENUM.RESOURCE}
-              />
-              <DisplayUserBadgeMenu
-                baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                user={this.props.context.loggedInUser}
-              />
-            </div>
-          </div>
-          <div className="middle-right">
-            <div className="breadcrumbs-and-grid">
-              <div className="top-bar">
-                <FilterResourcesByBreadcrumb />
-                <div className="action-bar" ref={this.actionsBar}>
-                  {this.props.resourceWorkspaceContext.selectedResources?.length > 0 ? (
-                    <DisplayResourcesWorkspaceMenu actionsButtonRef={this.actionsButton} />
-                  ) : (
-                    <DisplayResourcesWorkspaceFilters actionsFilterRef={this.actionsFilter} />
-                  )}
-                  <div className="actions-secondary" ref={this.actionsSecondary}>
-                    <Dropdown>
-                      <DropdownButton>
-                        <ColumnsSVG />
-                        <span>
-                          <Trans>Columns</Trans>
-                        </span>
-                        <CaretDownSVG />
-                      </DropdownButton>
-                      <DropdownMenu direction="left">
-                        <DropdownMenuItem keepOpenOnClick={true}>
-                          <div className="radiolist">
-                            <div className="input radio">
-                              <input
-                                type="radio"
-                                checked={!rowsSetting?.height || rowsSetting?.height === ROW_SETTING_HEIGHT_COMPACT}
-                                value={ROW_SETTING_HEIGHT_COMPACT}
-                                id="rows_setting.height.compact"
-                                name="rows_setting.height"
-                                onChange={this.handleOnChangeRowsSetting}
-                              />
-                              <label htmlFor="rows_setting.height.compact">
-                                <Trans>Compact</Trans>
-                              </label>
-                            </div>
-                          </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem keepOpenOnClick={true} separator={true}>
-                          <div className="radiolist">
-                            <div className="input radio">
-                              <input
-                                type="radio"
-                                checked={rowsSetting?.height === ROW_SETTING_HEIGHT_COMFORTABLE}
-                                value={ROW_SETTING_HEIGHT_COMFORTABLE}
-                                id="rows_setting.height.comfortable"
-                                name="rows_setting.height"
-                                onChange={this.handleOnChangeRowsSetting}
-                              />
-                              <label htmlFor="rows_setting.height.comfortable">
-                                <Trans>Comfortable</Trans>
-                              </label>
-                            </div>
-                          </div>
-                        </DropdownMenuItem>
-                        {this.columnsResourceSetting?.map((column, index) => (
-                          <DropdownMenuItem
-                            keepOpenOnClick={true}
-                            key={column.id}
-                            separator={this.hasSeparator(column, index)}
-                          >
-                            <div className="input checkbox">
-                              <input
-                                type="checkbox"
-                                checked={column.show}
-                                id={column.id}
-                                name={column.id}
-                                onChange={this.handleOnChangeColumnView}
-                              />
-                              <label htmlFor={column.id}>
-                                <Trans>{column.label}</Trans>
-                              </label>
+            <div className="middle-right">
+              <div className="breadcrumbs-and-grid">
+                <div className="top-bar">
+                  <FilterResourcesByBreadcrumb />
+                  <div className="action-bar" ref={this.actionsBar}>
+                    {this.props.resourceWorkspaceContext.selectedResources?.length > 0 ? (
+                      <DisplayResourcesWorkspaceMenu actionsButtonRef={this.actionsButton} />
+                    ) : (
+                      <DisplayResourcesWorkspaceFilters actionsFilterRef={this.actionsFilter} />
+                    )}
+                    <div className="actions-secondary" ref={this.actionsSecondary}>
+                      <Dropdown>
+                        <DropdownButton>
+                          <ColumnsSVG />
+                          <span>
+                            <Trans>Columns</Trans>
+                          </span>
+                          <CaretDownSVG />
+                        </DropdownButton>
+                        <DropdownMenu direction="left">
+                          <DropdownMenuItem keepOpenOnClick={true}>
+                            <div className="radiolist">
+                              <div className="input radio">
+                                <input
+                                  type="radio"
+                                  checked={!rowsSetting?.height || rowsSetting?.height === ROW_SETTING_HEIGHT_COMPACT}
+                                  value={ROW_SETTING_HEIGHT_COMPACT}
+                                  id="rows_setting.height.compact"
+                                  name="rows_setting.height"
+                                  onChange={this.handleOnChangeRowsSetting}
+                                />
+                                <label htmlFor="rows_setting.height.compact">
+                                  <Trans>Compact</Trans>
+                                </label>
+                              </div>
                             </div>
                           </DropdownMenuItem>
-                        ))}
-                        <DropdownMenuItem>
-                          <div className="action-button">
-                            <button
-                              id="reset-columns-settings"
-                              type="button"
-                              onClick={this.handleOnResetColumnsSettings}
+                          <DropdownMenuItem keepOpenOnClick={true} separator={true}>
+                            <div className="radiolist">
+                              <div className="input radio">
+                                <input
+                                  type="radio"
+                                  checked={rowsSetting?.height === ROW_SETTING_HEIGHT_COMFORTABLE}
+                                  value={ROW_SETTING_HEIGHT_COMFORTABLE}
+                                  id="rows_setting.height.comfortable"
+                                  name="rows_setting.height"
+                                  onChange={this.handleOnChangeRowsSetting}
+                                />
+                                <label htmlFor="rows_setting.height.comfortable">
+                                  <Trans>Comfortable</Trans>
+                                </label>
+                              </div>
+                            </div>
+                          </DropdownMenuItem>
+                          {this.columnsResourceSetting?.map((column, index) => (
+                            <DropdownMenuItem
+                              keepOpenOnClick={true}
+                              key={column.id}
+                              separator={this.hasSeparator(column, index)}
                             >
-                              <RevertSVG />
-                              <span>
-                                <Trans>Reset columns</Trans>
-                              </span>
-                            </button>
-                          </div>
-                        </DropdownMenuItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                    <button
-                      type="button"
-                      className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}
-                      onClick={this.handleViewDetailClickEvent}
-                    >
-                      <InfoSVG />
-                      <span className="visuallyhidden">
-                        <Trans>View detail</Trans>
-                      </span>
-                    </button>
+                              <div className="input checkbox">
+                                <input
+                                  type="checkbox"
+                                  checked={column.show}
+                                  id={column.id}
+                                  name={column.id}
+                                  onChange={this.handleOnChangeColumnView}
+                                />
+                                <label htmlFor={column.id}>
+                                  <Trans>{column.label}</Trans>
+                                </label>
+                              </div>
+                            </DropdownMenuItem>
+                          ))}
+                          <DropdownMenuItem>
+                            <div className="action-button">
+                              <button
+                                id="reset-columns-settings"
+                                type="button"
+                                onClick={this.handleOnResetColumnsSettings}
+                              >
+                                <RevertSVG />
+                                <span>
+                                  <Trans>Reset columns</Trans>
+                                </span>
+                              </button>
+                            </div>
+                          </DropdownMenuItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                      <button
+                        type="button"
+                        className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}
+                        onClick={this.handleViewDetailClickEvent}
+                      >
+                        <InfoSVG />
+                        <span className="visuallyhidden">
+                          <Trans>View detail</Trans>
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </div>
+                <DisplayResourcesList />
               </div>
-              <DisplayResourcesList />
+              {this.hasLockDetail() && (
+                <ResizableSidebar
+                  resizable
+                  gutterLeft={true}
+                  minWidth={"25%"}
+                  maxWidth={"35%"}
+                  classNames={"resource-workspace right-side-bar"}
+                >
+                  <div className="panel aside">
+                    {this.shouldDisplayListDetails && <DisplayResourcesListDetails />}
+                    {this.shouldDisplayEmptyDetails && <DisplayEmptyDetails />}
+                    {this.props.resourceWorkspaceContext.details.folder && <DisplayResourceFolderDetails />}
+                    {this.props.resourceWorkspaceContext.details.resource && <DisplayResourceDetails />}
+                    <Footer />
+                  </div>
+                </ResizableSidebar>
+              )}
             </div>
-            {this.hasLockDetail() && (
-              <ResizableSidebar
-                resizable
-                gutterLeft={true}
-                minWidth={"25%"}
-                maxWidth={"35%"}
-                classNames={"resource-workspace right-side-bar"}
-              >
-                <div className="panel aside">
-                  {this.shouldDisplayListDetails && <DisplayResourcesListDetails />}
-                  {this.shouldDisplayEmptyDetails && <DisplayEmptyDetails />}
-                  {this.props.resourceWorkspaceContext.details.folder && <DisplayResourceFolderDetails />}
-                  {this.props.resourceWorkspaceContext.details.resource && <DisplayResourceDetails />}
-                  <Footer />
-                </div>
-              </ResizableSidebar>
-            )}
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

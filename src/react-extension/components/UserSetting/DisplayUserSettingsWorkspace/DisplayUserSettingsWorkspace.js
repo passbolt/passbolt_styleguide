@@ -45,6 +45,7 @@ import ExportAccountToDesktopHelp from "../ExportAccountToDesktop/ExportAccountT
 import DisplayMfaSettingsHelp from "../../MFA/DisplayMfaSettingsHelp/DisplayMfaSettingsHelp";
 import WorkspaceSwitcher, { WORKSPACE_ENUM } from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
+import ManageAnnouncements from "../../Announcement/ManageAnnouncements/ManageAnnouncements";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -152,89 +153,92 @@ class DisplayUserSettingsWorkspace extends React.Component {
   render() {
     const { path } = this.props.match;
     return (
-      <div className="panel main">
-        <div className="panel left">
-          <div className="sidebar-content">
-            <div className="top-bar-left-navigation">
-              <div className="navigation">
-                <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
-                  <ArrowLeftSVG />
-                </button>
-                <span className="title my-profile">
-                  <Trans>My Profile</Trans>
-                </span>
-              </div>
-            </div>
-            <div className="sidebar-content-left">
-              <NavigateIntoUserSettingsWorkspace
-                hasPendingMfaChoice={this.isMfaChoiceRequired}
-                hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="panel middle">
-          <div className="header">
-            <div className="header-right">
-              <WorkspaceSwitcher
-                isUserAdmin={this.isUserAdmin}
-                isUserWorkspaceVisible={this.isUserWorkspaceVisible}
-                currentWorkspace={WORKSPACE_ENUM.USER_PROFILE}
-              />
-              <DisplayUserBadgeMenu
-                baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                user={this.props.context.loggedInUser}
-              />
-            </div>
-          </div>
-          <div className="middle-right">
-            <div className="breadcrumbs-and-grid">
-              <div className="top-bar">
-                <DisplayUserSettingsWorkspaceBreadcrumb />
-              </div>
-              <div className="main-page">
-                <Route path={`${path}/profile`} component={DisplayUserProfile} />
-                <Route path={`${path}/passphrase`} component={ChangeUserPassphrase} />
-                <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
-                {this.canIUseThemeCapability && <Route path={`${path}/theme`} component={DisplayUserTheme} />}
-                {this.canIUseMobileTransferCapability && (
-                  <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
-                )}
-                {this.canIUseDesktopExportCapability && (
-                  <Route path={`${path}/desktop`} component={ExportAccountToDesktop}></Route>
-                )}
-                {this.canIUseAccountRecoveryCapability && (
-                  <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
-                )}
-                <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={OrchestrateMfaSettings}></Route>
-                <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
-              </div>
-            </div>
-            <Switch>
-              <Route path={`${path}/theme`} />
-              <Route>
-                <div className="help-panel">
-                  <div className="sidebar-help">
-                    <Route path={`${path}/profile`} component={DisplayUserProfileHelp} />
-                    <Route path={`${path}/keys`} component={DisplayUserGpgInformationHelp}></Route>
-                    <Route path={`${path}/passphrase`} component={ChangeUserPassphraseHelp} />
-                    <Route path={`${path}/security-token`} component={DisplayUserSecurityTokenHelp}></Route>
-                    <Route path={`${path}/desktop`} component={ExportAccountToDesktopHelp}></Route>
-                    {this.canIUseAccountRecoveryCapability && (
-                      <Route
-                        path={`${path}/account-recovery`}
-                        component={DisplayAccountRecoveryUserSettingsHelp}
-                      ></Route>
-                    )}
-                    <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={DisplayMfaSettingsHelp}></Route>
-                  </div>
-                  <Footer />
+      <>
+        <ManageAnnouncements />
+        <div className="panel main">
+          <div className="panel left">
+            <div className="sidebar-content">
+              <div className="top-bar-left-navigation">
+                <div className="navigation">
+                  <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
+                    <ArrowLeftSVG />
+                  </button>
+                  <span className="title my-profile">
+                    <Trans>My Profile</Trans>
+                  </span>
                 </div>
-              </Route>
-            </Switch>
+              </div>
+              <div className="sidebar-content-left">
+                <NavigateIntoUserSettingsWorkspace
+                  hasPendingMfaChoice={this.isMfaChoiceRequired}
+                  hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="panel middle">
+            <div className="header">
+              <div className="header-right">
+                <WorkspaceSwitcher
+                  isUserAdmin={this.isUserAdmin}
+                  isUserWorkspaceVisible={this.isUserWorkspaceVisible}
+                  currentWorkspace={WORKSPACE_ENUM.USER_PROFILE}
+                />
+                <DisplayUserBadgeMenu
+                  baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                  user={this.props.context.loggedInUser}
+                />
+              </div>
+            </div>
+            <div className="middle-right">
+              <div className="breadcrumbs-and-grid">
+                <div className="top-bar">
+                  <DisplayUserSettingsWorkspaceBreadcrumb />
+                </div>
+                <div className="main-page">
+                  <Route path={`${path}/profile`} component={DisplayUserProfile} />
+                  <Route path={`${path}/passphrase`} component={ChangeUserPassphrase} />
+                  <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
+                  {this.canIUseThemeCapability && <Route path={`${path}/theme`} component={DisplayUserTheme} />}
+                  {this.canIUseMobileTransferCapability && (
+                    <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
+                  )}
+                  {this.canIUseDesktopExportCapability && (
+                    <Route path={`${path}/desktop`} component={ExportAccountToDesktop}></Route>
+                  )}
+                  {this.canIUseAccountRecoveryCapability && (
+                    <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
+                  )}
+                  <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={OrchestrateMfaSettings}></Route>
+                  <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
+                </div>
+              </div>
+              <Switch>
+                <Route path={`${path}/theme`} />
+                <Route>
+                  <div className="help-panel">
+                    <div className="sidebar-help">
+                      <Route path={`${path}/profile`} component={DisplayUserProfileHelp} />
+                      <Route path={`${path}/keys`} component={DisplayUserGpgInformationHelp}></Route>
+                      <Route path={`${path}/passphrase`} component={ChangeUserPassphraseHelp} />
+                      <Route path={`${path}/security-token`} component={DisplayUserSecurityTokenHelp}></Route>
+                      <Route path={`${path}/desktop`} component={ExportAccountToDesktopHelp}></Route>
+                      {this.canIUseAccountRecoveryCapability && (
+                        <Route
+                          path={`${path}/account-recovery`}
+                          component={DisplayAccountRecoveryUserSettingsHelp}
+                        ></Route>
+                      )}
+                      <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={DisplayMfaSettingsHelp}></Route>
+                    </div>
+                    <Footer />
+                  </div>
+                </Route>
+              </Switch>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
