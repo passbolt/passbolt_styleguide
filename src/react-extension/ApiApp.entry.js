@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import React from "react";
-import ReactDOM from "react-dom";
 import ApiApp from "./ApiApp";
+import { createRoot } from "react-dom/client";
 
 /**
  * Entry point - Passbolt application served by the API.
@@ -20,10 +20,5 @@ import ApiApp from "./ApiApp";
  */
 const appDomElement = document.createElement("div");
 document.body.appendChild(appDomElement);
-
-/*
- * TODO: React18 - enable when ready
- * const root = ReactDOM.createRoot(appDomElement);
- */
-/* eslint-disable react/no-deprecated */
-ReactDOM.render(<ApiApp />, appDomElement);
+const root = createRoot(appDomElement);
+root.render(<ApiApp />);
