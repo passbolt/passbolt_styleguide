@@ -102,11 +102,11 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
 
   /**
    * Find the SMTP settings
-   * @return {Promise<void>}
+   * @return {Promise<SmtpSettingsModel> | null}
    */
   async findSmtpSettings() {
     if (!this.props.context.siteSettings.canIUse("smtpSettings")) {
-      return;
+      return null;
     }
 
     let currentSmtpSettings = this.state.currentSmtpSettings;
@@ -127,6 +127,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     }
 
     this.setState({ currentSmtpSettings, isLoaded: true });
+    return currentSmtpSettings;
   }
 
   /**

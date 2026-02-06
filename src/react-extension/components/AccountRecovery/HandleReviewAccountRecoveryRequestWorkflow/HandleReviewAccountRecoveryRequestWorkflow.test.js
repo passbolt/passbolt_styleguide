@@ -18,6 +18,7 @@ import { defaultProps } from "./HandleReviewAccountRecoveryRequestWorkflow.test.
 import HandleReviewAccountRecoveryRequestWorkflowTestPage from "./HandleReviewAccountRecoveryRequestWorkflow.test.page";
 import ReviewAccountRecovery from "../ReviewAccountRecoveryRequest/ReviewAccountRecoveryRequest";
 import ProvideAccountRecoveryOrganizationKey from "../../Administration/ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
+import { act } from "react";
 
 describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
   let page, props, accountRecoveryRequest;
@@ -26,8 +27,7 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
     props = defaultProps();
     accountRecoveryRequest = { id: uuidv4() };
     props.context.port.request = jest.fn(() => accountRecoveryRequest);
-    page = new HandleReviewAccountRecoveryRequestWorkflowTestPage(props);
-    await waitFor(() => {});
+    await act(() => (page = new HandleReviewAccountRecoveryRequestWorkflowTestPage(props)));
   });
 
   describe("As AD I should complete an authentication setup", () => {

@@ -173,7 +173,6 @@ describe("See secure note", () => {
     );
 
     await page.showButton.click();
-    await waitFor(() => {});
 
     expect(displayError).toHaveBeenCalledTimes(1);
     expect(displayError).toHaveBeenCalledWith("The operation was cancelled.");
