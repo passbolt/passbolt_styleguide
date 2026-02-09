@@ -80,6 +80,27 @@ export default class ExportResourcesPage {
   }
 
   /**
+   * Returns the CSV warning checkbox element
+   */
+  get csvWarningCheckbox() {
+    return this._page.container.querySelector("#csv-warning-accept");
+  }
+
+  /**
+   * Returns the CSV warning label element
+   */
+  get csvWarningLabel() {
+    return this._page.container.querySelector('label[for="csv-warning-accept"]');
+  }
+
+  /**
+   * Returns the CSV warning checkbox container element
+   */
+  get csvWarningContainer() {
+    return this._page.container.querySelector(".form-content .input.checkbox");
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -132,5 +153,10 @@ export default class ExportResourcesPage {
   async selectFormat(index) {
     await this.click(this.select);
     await this.click(this.getLocaleList(index));
+  }
+
+  /** Click on CSV warning checkbox */
+  async clickCsvWarningCheckbox() {
+    await this.click(this.csvWarningCheckbox);
   }
 }

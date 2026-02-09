@@ -106,12 +106,12 @@ class ConfirmCreatePage extends React.PureComponent {
     const preparedResource = this.props.prepareResourceContext.consumePreparedResource();
     const resourceDto = {
       resource_type_id: resourceTypeId,
+      expired: this.props.passwordExpiryContext.getDefaultExpirationDate(),
       metadata: {
         name: preparedResource.name,
         username: preparedResource.username,
         uris: [preparedResource.uri],
         resource_type_id: resourceTypeId,
-        expired: this.props.passwordExpiryContext.getDefaultExpirationDate(),
       },
     };
     const secretDto = {

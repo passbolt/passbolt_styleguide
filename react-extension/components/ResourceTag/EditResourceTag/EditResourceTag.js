@@ -27,6 +27,7 @@ import { Trans, withTranslation } from "react-i18next";
 import { maxSizeValidation } from "../../../lib/Error/InputValidator";
 import { RESOURCE_TAG_MAX_LENGTH } from "../../../../shared/constants/inputs.const";
 import AttentionSVG from "../../../../img/svg/attention.svg";
+import TagsServiceWorkerService from "../../../../shared/services/api/tags/TagsServiceWorkerService";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -132,7 +133,8 @@ class EditResourceTag extends Component {
 
     try {
       this.props.loadingContext.add();
-      const updatedTag = await this.props.context.port.request("passbolt.tags.update", tagDto);
+      const tagsService = new TagsServiceWorkerService(this.props.context.port);
+      const updatedTag = await tagsService.update(tagDto);
       await this.handleSaveSuccess(updatedTag);
     } catch (error) {
       this.handleSaveError(error);

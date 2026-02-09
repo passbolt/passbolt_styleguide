@@ -23,9 +23,7 @@ export const defaultPasswordPoliciesContext = (data = {}) => {
   const policies = data?.policies || defaultPasswordPoliciesDto();
   return {
     policies: policies,
-    getPolicies: jest.fn(),
-    findPolicies: jest.fn(),
-    shouldRunDictionaryCheck: jest.fn(() => policies?.external_dictionary_check || false),
+    loadPolicies: jest.fn(() => policies),
     ...data,
   };
 };

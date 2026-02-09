@@ -29,7 +29,6 @@ export default class ConfirmMetadataKeyPageTest {
       <MockTranslationProvider>
         <ConfirmMetadataKeyPage {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

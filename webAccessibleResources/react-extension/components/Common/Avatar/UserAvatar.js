@@ -17,7 +17,7 @@ import { withTranslation } from "react-i18next";
 import UserAvatarSVG from "../../../../img/avatar/user_default.svg";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 
-const DEFAULT_AVATAR_URL_REGEXP = /img\/avatar\/user(_medium)?\.png$/;
+const DEFAULT_AVATAR_URL_REGEXP = /img\/avatar\/user(?:_medium)?\.png$/;
 
 class UserAvatar extends Component {
   /**

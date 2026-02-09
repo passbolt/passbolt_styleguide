@@ -27,7 +27,6 @@ export const PrepareResourceContext = React.createContext({
   onPrepareResource: () => {}, // Whenever a resource has been prepared
   onPasswordGenerated: () => {}, // Whenever the a password has been generated with the generator
   getSettings: () => {}, // Whenever the settings must be get
-  consumeLastGeneratedPassword: () => {}, // Whenever the last generated password must be get
   consumePreparedResource: () => {}, // Whenever the prepared resource must be get
   resetSecretGeneratorSettings: () => {}, // reset the secret generator settings with the organisation's default
 });
@@ -56,7 +55,6 @@ class PrepareResourceContextProvider extends React.Component {
       getSettings: this.getSettings.bind(this), // returns the current generator settings
       onPrepareResource: this.onPrepareResource.bind(this), // Whenever a resource has been prepared
       onPasswordGenerated: this.onPasswordGenerated.bind(this), // Whenever the a password has been generated with the generator
-      consumeLastGeneratedPassword: this.consumeLastGeneratedPassword.bind(this), // Whenever the last generated password must be get
       consumePreparedResource: this.consumePreparedResource.bind(this), // Whenever the prepared resource must be get
       resetSecretGeneratorSettings: this.resetSecretGeneratorSettings.bind(this), // reset the secret generator settings with the organisation's default
     };
@@ -75,8 +73,7 @@ class PrepareResourceContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async resetSecretGeneratorSettings() {
-    await this.props.passwordPoliciesContext.findPolicies();
-    const passwordPolicies = this.props.passwordPoliciesContext.getPolicies();
+    const passwordPolicies = await this.props.passwordPoliciesContext.loadPolicies();
     this.setState({ settings: passwordPolicies });
   }
 
@@ -105,16 +102,6 @@ class PrepareResourceContextProvider extends React.Component {
    */
   getSettings() {
     return this.state.settings;
-  }
-
-  /**
-   * Get the last generated password
-   * @returns {string|null}
-   */
-  consumeLastGeneratedPassword() {
-    const lastGeneratedPassword = this.state.lastGeneratedPassword;
-    this.setState({ lastGeneratedPassword: null });
-    return lastGeneratedPassword;
   }
 
   /**

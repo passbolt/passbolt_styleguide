@@ -240,44 +240,36 @@ class ResourceTypesFormEntity extends EntityV2 {
       error.addError(
         "password_v4",
         "has_content",
-        "One (or more) resource type v4 having a password is deleted but its resources_count is not 0.",
+        "Password content type is disabled but there are existing password resources.",
       );
     }
     if (!this._props.totp_v4 && this._props.totp_v4_count > 0) {
       error = error || new EntityValidationError();
-      error.addError(
-        "totp_v4",
-        "has_content",
-        "One (or more) resource type v4 having a totp is deleted but its resources_count is not 0.",
-      );
+      error.addError("totp_v4", "has_content", "TOTP content type is disabled but there are existing TOTP resources.");
     }
     if (!this._props.password_v5 && this._props.password_v5_count > 0) {
       error = error || new EntityValidationError();
       error.addError(
         "password_v5",
         "has_content",
-        "One (or more) resource type v5 having a password is deleted but its resources_count is not 0.",
+        "Password content type is disabled but there are existing password resources.",
       );
     }
     if (!this._props.totp_v5 && this._props.totp_v5_count > 0) {
       error = error || new EntityValidationError();
-      error.addError(
-        "totp_v5",
-        "has_content",
-        "One (or more) resource type v5 having a totp is deleted but its resources_count is not 0.",
-      );
+      error.addError("totp_v5", "has_content", "TOTP content type is disabled but there are existing TOTP resources.");
     }
     if (!this._props.custom_fields_v5 && this._props.custom_fields_v5_count > 0) {
       error = error || new EntityValidationError();
       error.addError(
         "custom_fields_v5",
         "has_content",
-        "Custom fields resource type is deleted but there is existing custom fields resources.",
+        "Custom fields content type is disabled but there are existing custom fields resources.",
       );
     }
     if (!this._props.note_v5 && this._props.note_v5_count > 0) {
       error = error || new EntityValidationError();
-      error.addError("note_v5", "has_content", "Note resource type is deleted but there is existing note resources.");
+      error.addError("note_v5", "has_content", "Note content type is disabled but there are existing note resources.");
     }
     if (
       !this._props.password_v4 &&
@@ -330,12 +322,12 @@ class ResourceTypesFormEntity extends EntityV2 {
       result.addError(
         "password_v4",
         "is_creation_alowed",
-        "Creation of resource type v4 is allowed but all resource types having passwords are deleted.",
+        "V4 resource creation is enabled but password content type is disabled.",
       );
       result.addError(
         "totp_v4",
         "is_creation_alowed",
-        "Creation of resource type v4 is allowed but all resource types having totps are deleted.",
+        "V4 resource creation is enabled but TOTP content type is disabled.",
       );
     }
 
@@ -360,22 +352,22 @@ class ResourceTypesFormEntity extends EntityV2 {
       result.addError(
         "password_v5",
         "is_creation_alowed",
-        "Creation of resource type v5 is allowed but all resource types having passwords are deleted.",
+        "V5 resource creation is enabled but password content type is disabled.",
       );
       result.addError(
         "totp_v5",
         "is_creation_alowed",
-        "Creation of resource type v5 is allowed but all resource types having totps are deleted.",
+        "V5 resource creation is enabled but TOTP content type is disabled.",
       );
       result.addError(
         "custom_fields_v5",
         "is_creation_alowed",
-        "Creation of resource type v5 is allowed but all resource types having custom fields are deleted.",
+        "V5 resource creation is enabled but custom fields content type is disabled.",
       );
       result.addError(
         "note_v5",
         "is_creation_alowed",
-        "Creation of resource type v5 is allowed but all resource types having notes are deleted.",
+        "V5 resource creation is enabled but note content type is disabled.",
       );
     }
 

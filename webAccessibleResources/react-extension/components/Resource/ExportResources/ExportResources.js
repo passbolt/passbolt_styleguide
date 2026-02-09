@@ -46,6 +46,8 @@ class ExportResources extends React.Component {
   get defaultState() {
     return {
       selectedExportFormat: this.exportFormats[0].value, // The selected export format
+      hasCsvWarningAccepted: false, // Whether user accepted the CSV warning
+      csvWarningError: false, // Whether to show error state on CSV warning checkbox
       actions: {
         processing: false, // Actions flag about processing
       },
@@ -60,6 +62,7 @@ class ExportResources extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleExportFormatSelected = this.handleExportFormatSelected.bind(this);
+    this.handleCsvWarningAcceptChange = this.handleCsvWarningAcceptChange.bind(this);
   }
 
   /**
@@ -88,10 +91,27 @@ class ExportResources extends React.Component {
   }
 
   /**
+   * Returns true if the current format is CSV
+   */
+  get isCsvFormat() {
+    return this.state.selectedExportFormat.startsWith("csv");
+  }
+
+  /**
    * Returns true if actions can be performed
    */
   get areActionsAllowed() {
     return !this.isProcessing;
+  }
+
+  /**
+   * Handles the CSV warning checkbox change
+   */
+  handleCsvWarningAcceptChange() {
+    this.setState({
+      hasCsvWarningAccepted: !this.state.hasCsvWarningAccepted,
+      csvWarningError: false,
+    });
   }
 
   /**
@@ -196,7 +216,11 @@ class ExportResources extends React.Component {
     event.preventDefault();
     const isCsv = this.state.selectedExportFormat.startsWith("csv");
     if (isCsv) {
-      // CSV case
+      // CSV case: validate checkbox first
+      if (!this.state.hasCsvWarningAccepted) {
+        this.setState({ csvWarningError: true });
+        return;
+      }
       await this.setState({ actions: { processing: true } });
       this.export().then(this.onExportSuccess.bind(this)).catch(this.onExportFailure.bind(this));
     } else {
@@ -227,7 +251,11 @@ class ExportResources extends React.Component {
    * @param selectedExportFormat The selected export format
    */
   selectFormat(selectedExportFormat) {
-    this.setState({ selectedExportFormat });
+    this.setState({
+      selectedExportFormat,
+      hasCsvWarningAccepted: false,
+      csvWarningError: false,
+    });
   }
 
   /**
@@ -299,13 +327,14 @@ class ExportResources extends React.Component {
 
     return (
       <DialogWrapper
+        className="export-password-dialog"
         title={this.translate("Export passwords")}
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}
       >
         <form onSubmit={this.handleExport} noValidate>
           <div className="form-content">
-            <div className={`select-wrapper input required ${!this.areActionsAllowed ? "disabled" : ""}`}>
+            <div className={`select-wrapper input required ${this.isProcessing ? "disabled" : ""}`}>
               <label htmlFor="export-format">
                 <Trans>Choose the export format (csv and kdbx are supported)</Trans>
               </label>
@@ -314,7 +343,7 @@ class ExportResources extends React.Component {
                 value={this.state.selectedExportFormat}
                 items={this.exportFormats}
                 onChange={this.handleExportFormatSelected}
-                disabled={!this.areActionsAllowed}
+                disabled={this.isProcessing}
               />
             </div>
             {this.hasFoldersToExport && (
@@ -332,6 +361,30 @@ class ExportResources extends React.Component {
                   })}
                 </em>
               </p>
+            )}
+            {this.isCsvFormat && (
+              <div className={`input checkbox${this.state.csvWarningError ? " error" : ""}`}>
+                <input
+                  id="csv-warning-accept"
+                  type="checkbox"
+                  name="csv-warning-accept"
+                  checked={this.state.hasCsvWarningAccepted}
+                  onChange={this.handleCsvWarningAcceptChange}
+                  disabled={this.isProcessing}
+                />
+                <label htmlFor="csv-warning-accept">
+                  <Trans>
+                    I understand this file is unencrypted and potentially unsafe to open in a spreadsheet software.
+                  </Trans>
+                  <a
+                    href="https://www.passbolt.com/docs/user/basic-features/browser/export/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Trans>Learn more</Trans>
+                  </a>
+                </label>
+              </div>
             )}
           </div>
 

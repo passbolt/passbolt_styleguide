@@ -65,7 +65,7 @@ class SaveResource extends React.Component {
   async componentDidMount() {
     await this.props.passwordExpiryContext.findSettings();
     this.loadPasswordMetaFromTabForm();
-    await this.props.passwordPoliciesContext.findPolicies();
+    await this.props.passwordPoliciesContext.loadPolicies();
   }
 
   /**

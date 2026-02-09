@@ -13,11 +13,10 @@
  */
 import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
-import { defaultProps } from "./FilterResourcesByFavoritePage.test.data";
+import { defaultProps, noResourcesProps } from "./FilterResourcesByFavoritePage.test.data";
 import FilterResourcesByFavoritePagePage from "./FilterResourcesByFavoritePage.test.page";
 import { createMemoryHistory } from "history";
 import { waitForTrue } from "../../../../test/utils/waitFor";
-import { noResourcesProps } from "./FilterResourcesByFavoritePage.test.data";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";

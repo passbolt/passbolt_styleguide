@@ -4920,7 +4920,7 @@ html {
   background: var(--Action-button-Action-button-background);
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border), var(--Menu-drop-shadow-Menu-drop-shadow-X, 0.2rem) var(--Menu-drop-shadow-Menu-drop-shadow-Y, 0.4rem) var(--Menu-drop-shadow-Menu-drop-shadow-blur, 2rem) 0rem var(--Menu-drop-shadow-Menu-drop-shadow, rgba(0, 0, 0, 0.1));
   border-radius: 0.4rem;
-  z-index: 10;
+  z-index: 100;
   display: none;
   padding: 0.8rem 0.1rem;
   font-size: 1.5rem;

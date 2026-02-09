@@ -22,7 +22,7 @@ export function defaultProps(props = {}) {
       getSettings: () => overridenPasswordExpirySettingsEntityDto(),
     }),
     passwordPoliciesContext: defaultPasswordPoliciesContext({
-      getPolicies: jest.fn(() => defaultPasswordPoliciesDto()),
+      loadPolicies: jest.fn(() => defaultPasswordPoliciesDto()),
     }),
   };
   return Object.assign(defaultProps, props);

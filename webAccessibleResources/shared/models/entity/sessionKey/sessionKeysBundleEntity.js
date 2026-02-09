@@ -72,7 +72,7 @@ class SessionKeysBundleEntity extends EntityV2 {
               type: "string",
               maxLength: PGP_STRING_MAX_LENGTH,
               pattern:
-                /^-----BEGIN PGP MESSAGE-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP MESSAGE-----\s*$/,
+                /^-----BEGIN PGP MESSAGE-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z/-9+]{1,76}\r?\n)*)([A-Za-z/-9+]{1,76}={0,2}\r?\n)(=[A-Za-z/-9+]{4}\r?\n)-----END PGP MESSAGE-----\s*$/,
             },
             SessionKeysBundleDataEntity.getSchema(),
           ],

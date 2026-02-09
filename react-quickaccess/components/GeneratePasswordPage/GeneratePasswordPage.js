@@ -39,6 +39,9 @@ class GeneratePasswordPage extends React.Component {
     this.state = this.defaultState;
     this.initEventHandlers();
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(props.context.port);
+    this.copySecretDefault = React.createRef();
+    this.copySecretProcessing = React.createRef();
+    this.copySecretDone = React.createRef();
   }
 
   get defaultState() {
@@ -200,6 +203,7 @@ class GeneratePasswordPage extends React.Component {
 
   render() {
     const generatorConfiguration = this.state.generatorSettings;
+
     return (
       <div className="generate-password">
         <div className="back-link">
@@ -250,7 +254,12 @@ class GeneratePasswordPage extends React.Component {
                   </span>
                 </a>
                 <a onClick={this.handleCopyPassword} className="copy-to-clipboard button button-icon">
-                  <Transition in={this.state.copySecretState === "default"} appear={false} timeout={500}>
+                  <Transition
+                    in={this.state.copySecretState === "default"}
+                    appear={false}
+                    timeout={500}
+                    nodeRef={this.copySecretDefault}
+                  >
                     {(status) => (
                       <span
                         className={`transition fade-${status} ${this.state.copySecretState !== "default" ? "visually-hidden" : ""}`}
@@ -259,7 +268,12 @@ class GeneratePasswordPage extends React.Component {
                       </span>
                     )}
                   </Transition>
-                  <Transition in={this.state.copySecretState === "processing"} appear={true} timeout={500}>
+                  <Transition
+                    in={this.state.copySecretState === "processing"}
+                    appear={true}
+                    timeout={500}
+                    nodeRef={this.copySecretProcessing}
+                  >
                     {(status) => (
                       <span
                         className={`transition fade-${status} ${this.state.copySecretState !== "processing" ? "visually-hidden" : ""}`}
@@ -268,7 +282,12 @@ class GeneratePasswordPage extends React.Component {
                       </span>
                     )}
                   </Transition>
-                  <Transition in={this.state.copySecretState === "done"} appear={true} timeout={500}>
+                  <Transition
+                    in={this.state.copySecretState === "done"}
+                    appear={true}
+                    timeout={500}
+                    nodeRef={this.copySecretDone}
+                  >
                     {(status) => (
                       <span
                         className={`transition fade-${status} ${this.state.copySecretState !== "done" ? "visually-hidden" : ""}`}

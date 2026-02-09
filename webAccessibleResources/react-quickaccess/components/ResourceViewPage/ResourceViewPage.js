@@ -46,6 +46,25 @@ const CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND = 30;
  */
 const DEFAULT_ERROR_DISPLAY_TIME_IN_MS = 5000;
 
+const TRANSITION_STATES = {
+  COPY_LOGIN_STATE_DEFAULT: "copy_login_state_default",
+  COPY_LOGIN_STATE_PROCESSING: "copy_login_state_processing",
+  COPY_LOGIN_STATE_DONE: "copy_login_state_done",
+
+  COPY_PASSWORD_STATE_DEFAULT: "copy_password_state_default",
+  COPY_PASSWORD_STATE_PROCESSING: "copy_password_state_processing",
+  COPY_PASSWORD_STATE_DONE: "copy_password_state_done",
+
+  COPY_TOTP_STATE_DEFAULT: "copy_totp_state_default",
+  COPY_TOTP_STATE_PROCESSING: "copy_totp_state_processing",
+  COPY_TOTP_STATE_DONE: "copy_totp_state_done",
+
+  PASSWORD_DECRYPTING: "password_decrypting",
+  PASSWORD_NOT_DECRYPTING: "password_not_decrypting",
+  TOTP_DECRYPTING: "totp_decrypting",
+  TOTP_NOT_DECRYPTING: "totp_not_decrypting",
+};
+
 class ResourceViewPage extends React.Component {
   constructor(props) {
     super(props);
@@ -54,6 +73,7 @@ class ResourceViewPage extends React.Component {
     this.loadResource();
     this.currentTimeout = null;
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(props.context.port);
+    this.generateNodeRefs();
   }
 
   initEventHandlers() {
@@ -66,6 +86,7 @@ class ResourceViewPage extends React.Component {
     this.handleCopyTotpClick = this.handleCopyTotpClick.bind(this);
     this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
     this.handleClickAdditionalUrisSection = this.handleClickAdditionalUrisSection.bind(this);
+    this.getNodeRef = this.getNodeRef.bind(this);
   }
 
   initState() {
@@ -91,6 +112,29 @@ class ResourceViewPage extends React.Component {
     if (this.currentTimeout) {
       clearTimeout(this.currentTimeout);
     }
+  }
+
+  /**
+   * Create refs for each Transition
+   * @returns {void}
+   */
+  generateNodeRefs() {
+    this.nodeRefs = {};
+    Object.values(TRANSITION_STATES).forEach((stateKey) => {
+      this.nodeRefs[stateKey] = React.createRef();
+    });
+  }
+
+  /**
+   * Get NodeRef or create if it doesn't exist
+   * @param {string} key - The key for the node ref
+   * @returns {React.RefObject<HTMLElement>} The ref object for the node
+   */
+  getNodeRef(key) {
+    if (!this.nodeRefs[key]) {
+      this.nodeRefs[key] = React.createRef();
+    }
+    return this.nodeRefs[key];
   }
 
   /**
@@ -557,7 +601,12 @@ class ResourceViewPage extends React.Component {
                   onClick={this.handleCopyLoginClick}
                   title={this.translate("Copy to clipboard")}
                 >
-                  <Transition in={this.state.copyLoginState === "default"} appear={false} timeout={500}>
+                  <Transition
+                    in={this.state.copyLoginState === "default"}
+                    appear={false}
+                    timeout={500}
+                    nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_LOGIN_STATE_DEFAULT)}
+                  >
                     {(status) => (
                       <span
                         className={`transition fade-${status} ${this.state.copyLoginState !== "default" ? "visually-hidden" : ""}`}
@@ -566,7 +615,12 @@ class ResourceViewPage extends React.Component {
                       </span>
                     )}
                   </Transition>
-                  <Transition in={this.state.copyLoginState === "processing"} appear={true} timeout={500}>
+                  <Transition
+                    in={this.state.copyLoginState === "processing"}
+                    appear={true}
+                    timeout={500}
+                    nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_LOGIN_STATE_PROCESSING)}
+                  >
                     {(status) => (
                       <span
                         className={`transition fade-${status} ${this.state.copyLoginState !== "processing" ? "visually-hidden" : ""}`}
@@ -575,7 +629,12 @@ class ResourceViewPage extends React.Component {
                       </span>
                     )}
                   </Transition>
-                  <Transition in={this.state.copyLoginState === "done"} appear={true} timeout={500}>
+                  <Transition
+                    in={this.state.copyLoginState === "done"}
+                    appear={true}
+                    timeout={500}
+                    nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_LOGIN_STATE_DONE)}
+                  >
                     {(status) => (
                       <span
                         className={`transition fade-${status} ${this.state.copyLoginState !== "done" ? "visually-hidden" : ""}`}
@@ -613,7 +672,12 @@ class ResourceViewPage extends React.Component {
                         className="password-view inline button-transparent"
                         disabled={this.state.isPasswordDecrypting}
                       >
-                        <Transition in={!this.state.isPasswordDecrypting} appear={false} timeout={500}>
+                        <Transition
+                          in={!this.state.isPasswordDecrypting}
+                          appear={false}
+                          timeout={500}
+                          nodeRef={this.getNodeRef(TRANSITION_STATES.PASSWORD_NOT_DECRYPTING)}
+                        >
                           {(status) => (
                             <span
                               className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}
@@ -622,7 +686,12 @@ class ResourceViewPage extends React.Component {
                             </span>
                           )}
                         </Transition>
-                        <Transition in={this.state.isPasswordDecrypting} appear={true} timeout={500}>
+                        <Transition
+                          in={this.state.isPasswordDecrypting}
+                          appear={true}
+                          timeout={500}
+                          nodeRef={this.getNodeRef(TRANSITION_STATES.PASSWORD_DECRYPTING)}
+                        >
                           {(status) => (
                             <span
                               className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}
@@ -646,7 +715,12 @@ class ResourceViewPage extends React.Component {
                       onClick={this.handleCopyPasswordClick}
                       title={this.translate("Copy to clipboard")}
                     >
-                      <Transition in={this.state.copyPasswordState === "default"} appear={false} timeout={500}>
+                      <Transition
+                        in={this.state.copyPasswordState === "default"}
+                        appear={false}
+                        timeout={500}
+                        nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PASSWORD_STATE_DEFAULT)}
+                      >
                         {(status) => (
                           <span
                             className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}
@@ -655,7 +729,12 @@ class ResourceViewPage extends React.Component {
                           </span>
                         )}
                       </Transition>
-                      <Transition in={this.state.copyPasswordState === "processing"} appear={true} timeout={500}>
+                      <Transition
+                        in={this.state.copyPasswordState === "processing"}
+                        appear={true}
+                        timeout={500}
+                        nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PASSWORD_STATE_PROCESSING)}
+                      >
                         {(status) => (
                           <span
                             className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}
@@ -664,7 +743,12 @@ class ResourceViewPage extends React.Component {
                           </span>
                         )}
                       </Transition>
-                      <Transition in={this.state.copyPasswordState === "done"} appear={true} timeout={500}>
+                      <Transition
+                        in={this.state.copyPasswordState === "done"}
+                        appear={true}
+                        timeout={500}
+                        nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PASSWORD_STATE_DONE)}
+                      >
                         {(status) => (
                           <span
                             className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}
@@ -724,7 +808,12 @@ class ResourceViewPage extends React.Component {
                       className="totp-view inline button-transparent"
                       disabled={this.state.isTotpDecrypting}
                     >
-                      <Transition in={!this.state.isTotpDecrypting} appear={false} timeout={500}>
+                      <Transition
+                        in={!this.state.isTotpDecrypting}
+                        appear={false}
+                        timeout={500}
+                        nodeRef={this.getNodeRef(TRANSITION_STATES.TOTP_NOT_DECRYPTING)}
+                      >
                         {(status) => (
                           <span
                             className={`transition fade-${status} ${this.state.isTotpDecrypting ? "visually-hidden" : ""}`}
@@ -733,7 +822,12 @@ class ResourceViewPage extends React.Component {
                           </span>
                         )}
                       </Transition>
-                      <Transition in={this.state.isTotpDecrypting} appear={true} timeout={500}>
+                      <Transition
+                        in={this.state.isTotpDecrypting}
+                        appear={true}
+                        timeout={500}
+                        nodeRef={this.getNodeRef(TRANSITION_STATES.TOTP_DECRYPTING)}
+                      >
                         {(status) => (
                           <span
                             className={`transition fade-${status} ${!this.state.isTotpDecrypting ? "visually-hidden" : ""}`}

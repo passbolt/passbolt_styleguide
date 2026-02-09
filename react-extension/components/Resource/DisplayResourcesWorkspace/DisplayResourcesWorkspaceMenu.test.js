@@ -16,6 +16,7 @@
  * Unit tests on DisplayComments in regard of specifications
  */
 
+import "@testing-library/jest-dom";
 import "../../../../../test/mocks/mockClipboard";
 import DisplayResourcesWorkspaceMenuPage from "./DisplayResourcesWorkspaceMenu.test.page";
 import {
@@ -285,9 +286,28 @@ describe("See Workspace Menu", () => {
         propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id,
       );
       expect(propsOneResourceOwned.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
-        expect.stringMatching(/^[0-9]{6}/),
+        expect.stringMatching(/^\d{6}/),
         "The TOTP has been copied to clipboard.",
       );
+    });
+
+    it("As LU I can start exporting a resource via the more menu", () => {
+      expect.assertions(1);
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuExport).toBeInTheDocument();
+    });
+
+    it("As LU I cannot start exporting a resource via the more menu when export is disabled", () => {
+      expect.assertions(1);
+
+      const context = defaultAppContext();
+      context.siteSettings.settings.passbolt.plugins.export.enabled = false;
+
+      const props = defaultPropsOneTotpResourceOwned({ context });
+      const page = new DisplayResourcesWorkspaceMenuPage(context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuExport).not.toBeInTheDocument();
     });
   });
 
@@ -420,6 +440,25 @@ describe("See Workspace Menu", () => {
       expect(propsMultipleResource.dialogContext.open).toHaveBeenCalledWith(PasswordExpiryDialog, {
         resources: propsMultipleResource.resourceWorkspaceContext.selectedResources,
       });
+    });
+
+    it("As LU I can start exporting a resource via the more menu", () => {
+      expect.assertions(1);
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuExport).toBeInTheDocument();
+    });
+
+    it("As LU I cannot start exporting a resource via the more menu when export is disabled", () => {
+      expect.assertions(1);
+
+      const context = defaultAppContext();
+      context.siteSettings.settings.passbolt.plugins.export.enabled = false;
+
+      const props = defaultPropsMultipleResourceUpdateRights({ context });
+      const page = new DisplayResourcesWorkspaceMenuPage(context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuExport).not.toBeInTheDocument();
     });
   });
 

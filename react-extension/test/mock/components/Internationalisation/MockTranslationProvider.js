@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.3
  */
-import i18n from "i18next";
+import { use, changeLanguage } from "i18next";
 import { initReactI18next } from "react-i18next";
 import { Component } from "react";
 import PropTypes from "prop-types";
@@ -44,9 +44,7 @@ class MockTranslationProvider extends Component {
    */
   constructor(props) {
     super();
-    i18n
-      // pass the i18n instance to react-i18next.
-      .use(initReactI18next)
+    use(initReactI18next)
       // init i18next, for all options read: https://www.i18next.com/overview/configuration-options
       .init({
         // As en-UK is not supported for the english locale we need to use en-GB
@@ -136,7 +134,7 @@ class MockTranslationProvider extends Component {
    */
   async handleChangeLanguage(nextLanguage) {
     if (nextLanguage !== this.props.language) {
-      await i18n.changeLanguage(nextLanguage);
+      await changeLanguage(nextLanguage);
     }
   }
 

@@ -13,9 +13,10 @@
  */
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import LoginPage from "./LoginPage";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The Login component represented as a page
@@ -32,8 +33,9 @@ export default class LoginPageTest {
           <LoginPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -65,14 +67,8 @@ export default class LoginPageTest {
    * @param {function} callback The callback to be used in the waitFor method to ensure the click is done (returns true when it's done)
    * @returns {Promise<void>}
    */
-  async clickOn(element, callback) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {
-      if (!callback()) {
-        throw new Error("Page didn't react yet on the event.");
-      }
-    });
+  async clickOn(element) {
+    await this.user.click(element);
   }
 
   /**
@@ -120,7 +116,7 @@ export default class LoginPageTest {
    * @returns {Promise<void>}
    */
   async clickOnSsoLoginButton() {
-    await this.clickOn(this.ssoLoginButton, () => true);
+    await this.clickOn(this.ssoLoginButton);
   }
 
   /**
@@ -128,7 +124,7 @@ export default class LoginPageTest {
    * @returns {Promise<void>}
    */
   async clickOnSwitchToSsoForm() {
-    await this.clickOn(this.switchToSsoFormButton, () => true);
+    await this.clickOn(this.switchToSsoFormButton);
   }
 
   /**
@@ -136,6 +132,6 @@ export default class LoginPageTest {
    * @returns {Promise<void>}
    */
   async clickOnSwitchToPassphraseForm() {
-    await this.clickOn(this.switchToPassphraseFormButton, () => true);
+    await this.clickOn(this.switchToPassphraseFormButton);
   }
 }

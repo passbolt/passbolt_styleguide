@@ -58,7 +58,6 @@ describe("ResourceCreatePage", () => {
       };
 
       const props = defaultProps();
-      props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => expectedData);
 
       const page = new ResourceCreatePagePage(props);
@@ -122,7 +121,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 300 }).toJSDate().toISOString(),
+        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 350 }).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -131,8 +130,7 @@ describe("ResourceCreatePage", () => {
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
       };
 
-      const props = defaultProps();
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({}, true);
 
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => ({
         name: expectedResourceDto.metadata.name,
@@ -180,7 +178,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 300 }).toJSDate().toISOString(),
+        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 350 }).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -190,8 +188,7 @@ describe("ResourceCreatePage", () => {
         object_type: SECRET_DATA_OBJECT_TYPE,
       };
       const metadataTypeSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
-      const props = defaultProps({ metadataTypeSettings });
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({ metadataTypeSettings }, true);
 
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => ({
         name: expectedResourceDto.metadata.name,
@@ -226,16 +223,13 @@ describe("ResourceCreatePage", () => {
     it("should ask for password creation confirmation if the entropy is too low", async () => {
       expect.assertions(4);
 
-      const props = defaultProps({ history: createMemoryHistory() });
-
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({ history: createMemoryHistory() }, true);
 
       const preparedResource = {
         name: "Passbolt Browser Extension Test",
         uris: ["https://passbolt-browser-extension/test"],
       };
 
-      props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => preparedResource);
       props.context.port.addRequestListener("passbolt.secrets.powned-password", async () => 0);
 
@@ -268,16 +262,13 @@ describe("ResourceCreatePage", () => {
     it("should ask for password creation confirmation if the passphrase is found in a data breach", async () => {
       expect.assertions(4);
 
-      const props = defaultProps({ history: createMemoryHistory() });
-
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({ history: createMemoryHistory() }, true);
 
       const preparedResource = {
         name: "Passbolt Browser Extension Test",
         uris: ["https://passbolt-browser-extension/test"],
       };
 
-      props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => preparedResource);
       props.context.port.addRequestListener("passbolt.secrets.powned-password", async () => 3);
 
@@ -323,7 +314,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 300 }).toJSDate().toISOString(),
+        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 350 }).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -332,8 +323,7 @@ describe("ResourceCreatePage", () => {
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
       };
 
-      const props = defaultProps();
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({}, true);
 
       let isPreparedResourceSet = false;
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => {
@@ -350,8 +340,8 @@ describe("ResourceCreatePage", () => {
       });
 
       props.context.port.addRequestListener("passbolt.resources.create", async (resourceDto, secretDto) => {
-        expect(resourceDto).toStrictEqual(expectedResourceDto);
         expect(secretDto).toStrictEqual(expectedSecretDto);
+        expect(resourceDto).toStrictEqual(expectedResourceDto);
         return defaultResourceDto();
       });
 
@@ -384,8 +374,6 @@ describe("ResourceCreatePage", () => {
       const props = defaultProps({
         passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
       });
-
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
       props.prepareResourceContext.consumePreparedResource.mockImplementation(() => resourceData);
 
       const page = new ResourceCreatePagePage(props);
@@ -417,10 +405,12 @@ describe("ResourceCreatePage", () => {
         },
       };
 
-      const props = defaultProps({
-        passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
-      });
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      const props = defaultProps(
+        {
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
+        },
+        false,
+      );
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => null);
       props.context.port.addRequestListener("passbolt.resources.create", () => {
         throw apiError;
@@ -455,15 +445,17 @@ describe("ResourceCreatePage", () => {
       const error = new Error();
       error.name = "UserAbortsOperationError";
 
-      const props = defaultProps({
-        passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
-      });
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      const props = defaultProps(
+        {
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
+        },
+        false,
+      );
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => null);
 
       let promiseRejecter;
       props.context.port.addRequestListener("passbolt.resources.create", () => {
-        const promise = new Promise((_, reject) => {
+        const promise = new Promise((_resolve, reject) => {
           promiseRejecter = reject;
         });
         return promise;
@@ -502,15 +494,17 @@ describe("ResourceCreatePage", () => {
       const error = new Error(errorMessage);
       error.name = "UnexpectedError";
 
-      const props = defaultProps({
-        passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
-      });
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      const props = defaultProps(
+        {
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
+        },
+        false,
+      );
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => null);
 
       let promiseRejecter;
       props.context.port.addRequestListener("passbolt.resources.create", () => {
-        const promise = new Promise((_, reject) => {
+        const promise = new Promise((_resolve, reject) => {
           promiseRejecter = reject;
         });
         return promise;
