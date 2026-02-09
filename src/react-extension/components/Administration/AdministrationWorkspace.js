@@ -58,6 +58,7 @@ import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministration
 import DisplayScimSettingsAdministration from "./DisplayScimSettingsAdministration/DisplayScimSettingsAdministration.js";
 import DisplayScimAdministrationTeasing from "./DisplayScimAdministrationTeasing/DisplayScimAdministrationTeasing.js";
 import DisplaySecretHistoryAdministration from "./DisplaySecretHistoryAdministration/DisplaySecretHistoryAdministration";
+import ManageAnnouncements from "../Announcement/ManageAnnouncements/ManageAnnouncements";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -352,6 +353,7 @@ class AdministrationWorkspace extends Component {
     return (
       <div id="container" className="page administration">
         <div id="app" className="app">
+          <ManageAnnouncements />
           <div className="panel main">
             <div className="panel left">
               {!this.isHttpError403 && (
