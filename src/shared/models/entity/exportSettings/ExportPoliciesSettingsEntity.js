@@ -16,6 +16,7 @@ import EntityV2 from "../abstract/entityV2";
 const SETTINGS_SOURCE_DEFAULT = "default";
 const SETTINGS_SOURCE_ENV = "env";
 const SETTINGS_SOURCE_DB = "db";
+const SETTINGS_SOURCE_FILE = "file";
 
 class ExportPoliciesSettingsEntity extends EntityV2 {
   /**
@@ -35,7 +36,7 @@ class ExportPoliciesSettingsEntity extends EntityV2 {
         },
         source: {
           type: "string",
-          enum: [SETTINGS_SOURCE_DEFAULT, SETTINGS_SOURCE_ENV, SETTINGS_SOURCE_DB],
+          enum: [SETTINGS_SOURCE_DEFAULT, SETTINGS_SOURCE_ENV, SETTINGS_SOURCE_DB, SETTINGS_SOURCE_FILE],
         },
         created: {
           type: "string",
@@ -168,6 +169,14 @@ class ExportPoliciesSettingsEntity extends EntityV2 {
    */
   static get SETTINGS_SOURCE_DB() {
     return SETTINGS_SOURCE_DB;
+  }
+
+  /**
+   * ExportPoliciesSettingsEntity.SETTINGS_SOURCE_FILE
+   * @returns {string}
+   */
+  static get SETTINGS_SOURCE_FILE() {
+    return SETTINGS_SOURCE_FILE;
   }
 }
 

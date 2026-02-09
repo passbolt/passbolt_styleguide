@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 export const SETTINGS_SOURCE_DEFAULT = "default";
 export const SETTINGS_SOURCE_ENV = "env";
 export const SETTINGS_SOURCE_DB = "db";
+export const SETTINGS_SOURCE_FILE = "file";
 
 /**
  * Build default export policies settings DTO.
@@ -47,6 +48,17 @@ export const envExportPoliciesSettingsDto = (data = {}) => ({
 export const dbExportPoliciesSettingsDto = (data = {}) => ({
   allow_csv_format: true,
   source: SETTINGS_SOURCE_DB,
+  ...data,
+});
+
+/**
+ * Build export policies settings DTO with file source.
+ * @param {object} data The data to override the default DTO.
+ * @returns {object}
+ */
+export const fileExportPoliciesSettingsDto = (data = {}) => ({
+  allow_csv_format: false,
+  source: SETTINGS_SOURCE_FILE,
   ...data,
 });
 

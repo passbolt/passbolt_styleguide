@@ -377,15 +377,6 @@ class ExportResources extends React.Component {
                 </em>
               </p>
             )}
-            {this.hasResourcesToExport && (
-              <p>
-                <em>
-                  {this.translate("{{count}} password is going to be exported.", {
-                    count: resourcesIdsToExport.length,
-                  })}
-                </em>
-              </p>
-            )}
             {this.isCsvFormat && (
               <div className={`input checkbox${this.state.csvWarningError ? " error" : ""}`}>
                 <input
@@ -409,6 +400,15 @@ class ExportResources extends React.Component {
                   </a>
                 </label>
               </div>
+            )}
+            {this.hasResourcesToExport && (
+              <p>
+                <em>
+                  {this.translate("{{count}} password is going to be exported.", {
+                    count: resourcesIdsToExport.length,
+                  })}
+                </em>
+              </p>
             )}
           </div>
 
