@@ -53,8 +53,6 @@ const SEARCH_VISIBLE_ROUTES = [
   "/webAccessibleResources/quickaccess/resources/tag",
 ];
 
-const PASSBOLT_GETTING_STARTED_URL = "https://www.passbolt.com/start";
-
 // Supported bootstrap features.
 export const BOOTSTRAP_FEATURE = {
   LOGIN: "login",
@@ -237,7 +235,7 @@ class ExtQuickAccess extends React.Component {
   async checkPluginIsConfigured() {
     const isConfigured = await this.state.port.request("passbolt.addon.is-configured");
     if (!isConfigured) {
-      await this.props.port.request("passbolt.tabs.open", PASSBOLT_GETTING_STARTED_URL);
+      await this.props.port.request("passbolt.tabs.open-website-getting-started-page");
       await this.closeWindow();
     }
   }
@@ -304,7 +302,7 @@ class ExtQuickAccess extends React.Component {
    * Redirect to MFA authentication.
    */
   async redirectToMfaAuthentication() {
-    await this.props.port.request("passbolt.tabs.open", this.state.userSettings.getTrustedDomain());
+    await this.props.port.request("passbolt.tabs.open-trusted-domain");
     await this.closeWindow();
   }
 
@@ -323,8 +321,8 @@ class ExtQuickAccess extends React.Component {
     this.setState({ isAuthenticated: false });
   }
 
-  async mfaRequiredCallback(url) {
-    await this.props.port.request("passbolt.tabs.open", url);
+  async mfaRequiredCallback() {
+    await this.props.port.request("passbolt.tabs.open-trusted-domain");
     await this.closeWindow();
   }
 

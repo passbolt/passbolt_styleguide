@@ -99,7 +99,7 @@ class LoginPage extends React.Component {
       await this.props.loginSuccessCallback();
       this.props.history.push("/webAccessibleResources/quickaccess/home");
     } else {
-      await this.props.mfaRequiredCallback(this.props.context.userSettings.getTrustedDomain());
+      await this.props.mfaRequiredCallback();
     }
   }
 
