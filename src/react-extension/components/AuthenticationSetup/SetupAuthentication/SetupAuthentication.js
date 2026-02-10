@@ -29,6 +29,7 @@ import ImportGpgKey, { ImportGpgKeyVariations } from "../../Authentication/Impor
 import IntroduceExtension from "../../Authentication/IntroduceExtension/IntroduceExtension";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import DisplayMetadataEnablementError from "../../Authentication/DisplayMetadataEnablementError/DisplayMetadataEnablementError";
+import ExtConfigureSafariExtension from "../../Authentication/ConfigureExtension/ExtConfigureSafariExtension";
 
 /**
  * The component orchestrates the setup authentication process
@@ -41,6 +42,12 @@ class SetupAuthentication extends Component {
     switch (this.props.authenticationSetupContext.state) {
       case AuthenticationSetupWorkflowStates.INTRODUCE_EXTENSION:
         return <IntroduceExtension onComplete={this.props.authenticationSetupContext.goToGenerateGpgKey} />;
+      case AuthenticationSetupWorkflowStates.ENSURE_SAFARI_EXTENSION_CONFIGURATION:
+        return (
+          <ExtConfigureSafariExtension
+            onContinue={this.props.authenticationSetupContext.goToGenerateGpgKey.bind(this)}
+          />
+        );
       case AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY:
         return (
           <CreateGpgKey
