@@ -12,7 +12,7 @@
  * @since         5.10.0
  */
 
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import CellTag from "./CellTag";
 
@@ -116,5 +116,17 @@ export default class CellTagTestPage {
    */
   get hasBadge() {
     return this.badge !== null;
+  }
+
+  /**
+   * Click a tag by index
+   * @param {number} index Tag index
+   */
+  clickTag(index) {
+    const tags = this.allTagElements;
+    if (tags[index]) {
+      const button = tags[index].querySelector("button.tag");
+      fireEvent.click(button);
+    }
   }
 }

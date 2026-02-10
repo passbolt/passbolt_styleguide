@@ -308,9 +308,10 @@ class CellTag extends Component {
             tagRef={(element) => this.setTagRef(index, element)}
             className={this.getTagClassName(index)}
             style={this.getTagStyle(index)}
+            onClick={this.props.onTagClick}
           />
         ))}
-        {measured && <DisplayResourceTagsBadge hiddenTags={this.hiddenTags} />}
+        {measured && <DisplayResourceTagsBadge hiddenTags={this.hiddenTags} onTagClick={this.props.onTagClick} />}
       </div>
     );
   }
@@ -324,6 +325,7 @@ CellTag.propTypes = {
       is_shared: PropTypes.bool,
     }),
   ),
+  onTagClick: PropTypes.func,
 };
 
 export default memo(CellTag);

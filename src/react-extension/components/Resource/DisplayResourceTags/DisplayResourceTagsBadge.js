@@ -25,7 +25,7 @@ class DisplayResourceTagsBadge extends React.Component {
     return (
       <div className="tags-list">
         {this.props.hiddenTags.map((tag) => (
-          <TagItem key={tag.id} tag={tag} className="tag-list-item" />
+          <TagItem onClick={this.props.onTagClick} key={tag.id} tag={tag} className="tag-list-item" />
         ))}
       </div>
     );
@@ -69,6 +69,7 @@ DisplayResourceTagsBadge.propTypes = {
       slug: PropTypes.string.isRequired,
     }),
   ),
+  onTagClick: PropTypes.func,
 };
 
 export default DisplayResourceTagsBadge;

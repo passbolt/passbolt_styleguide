@@ -89,4 +89,23 @@ describe("DisplayResourceTagsBadge", () => {
       expect(page.tagsList.textContent).toContain("gamma");
     });
   });
+
+  describe("As LU I can click on a tag in the tooltip", () => {
+    it("should call onTagClick when clicking a tag in the tooltip", async () => {
+      expect.assertions(2);
+
+      const onTagClick = jest.fn();
+      const props = defaultProps({ onTagClick });
+      const page = new DisplayResourceTagsBadgePage(props);
+      jest
+        .spyOn(window.HTMLElement.prototype, "getBoundingClientRect")
+        .mockImplementation(() => ({ x: 0, y: 0, width: 100, height: 500, top: 0, right: 400, bottom: 500, left: 0 }));
+
+      await page.hover(page.tooltip);
+      page.clickTag(0);
+
+      expect(onTagClick).toHaveBeenCalledTimes(1);
+      expect(onTagClick).toHaveBeenCalledWith(props.hiddenTags[0]);
+    });
+  });
 });

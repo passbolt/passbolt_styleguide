@@ -125,6 +125,7 @@ class DisplayResourcesList extends React.Component {
     this.isPasswordResources = this.isPasswordResources.bind(this);
     this.isTotpResources = this.isTotpResources.bind(this);
     this.handleLocationClick = this.handleLocationClick.bind(this);
+    this.handleTagClick = this.handleTagClick.bind(this);
   }
 
   /**
@@ -214,7 +215,7 @@ class DisplayResourcesList extends React.Component {
     if (this.canUseTags) {
       this.defaultColumns.push(
         new ColumnTagsModel({
-          cellRenderer: { component: CellTag },
+          cellRenderer: { component: CellTag, props: { onTagClick: this.handleTagClick } },
           headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Tags") } },
         }),
       );
@@ -855,6 +856,15 @@ class DisplayResourcesList extends React.Component {
       const filter = { type: ResourceWorkspaceFilterTypes.ROOT_FOLDER };
       this.props.history.push(`/app/passwords`, { filter });
     }
+  }
+
+  /**
+   * Handle the user click on a tag from the grid.
+   * @param {object} tag The clicked tag
+   */
+  handleTagClick(tag) {
+    const filter = { type: ResourceWorkspaceFilterTypes.TAG, payload: { tag } };
+    this.props.history.push({ pathname: "/app/passwords", state: { filter } });
   }
 
   /**
