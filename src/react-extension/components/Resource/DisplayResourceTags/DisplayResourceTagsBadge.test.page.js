@@ -77,4 +77,16 @@ export default class DisplayResourceTagsBadgePage {
     fireEvent.mouseEnter(element);
     await waitFor(() => {});
   }
+
+  /**
+   * Click a tag in the tooltip by index
+   * @param {number} index Tag index
+   */
+  clickTag(index) {
+    const tagItems = this.tagItems;
+    if (tagItems[index]) {
+      const button = tagItems[index].querySelector("button.tag");
+      fireEvent.click(button);
+    }
+  }
 }

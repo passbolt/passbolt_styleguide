@@ -19,6 +19,15 @@ import PropTypes from "prop-types";
  */
 class TagItem extends Component {
   /**
+   * Handle tag click
+   * @param {Event} event
+   */
+  handleClick = (event) => {
+    event.stopPropagation();
+    this.props.onClick?.(this.props.tag);
+  };
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -26,9 +35,9 @@ class TagItem extends Component {
     const { tag, tagRef, className, style } = this.props;
     return (
       <span ref={tagRef} className={className} style={style}>
-        <span className="tag" title={tag.slug}>
+        <button type="button" className="tag" title={tag.slug} onClick={this.handleClick}>
           <span className="tag-content">{tag.slug}</span>
-        </span>
+        </button>
       </span>
     );
   }
@@ -42,6 +51,7 @@ TagItem.propTypes = {
   tagRef: PropTypes.func,
   className: PropTypes.string,
   style: PropTypes.object,
+  onClick: PropTypes.func,
 };
 
 export default TagItem;

@@ -142,4 +142,18 @@ describe("CellTag", () => {
       expect(page.hasTags).toBe(true);
     });
   });
+
+  describe("As a user I can click on a tag", () => {
+    it("should call onTagClick when clicking a visible tag", () => {
+      expect.assertions(2);
+      const onTagClick = jest.fn();
+      const props = propsWithOneTag({ onTagClick });
+      const page = new CellTagTestPage(props);
+
+      page.clickTag(0);
+
+      expect(onTagClick).toHaveBeenCalledTimes(1);
+      expect(onTagClick).toHaveBeenCalledWith(props.value[0]);
+    });
+  });
 });
