@@ -25,6 +25,7 @@ import { withDialog } from "../../../contexts/DialogContext";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import TagsServiceWorkerService from "../../../../shared/services/api/tags/TagsServiceWorkerService";
+import TagItem from "../DisplayResourceTags/TagItem";
 
 class FilterResourcesByTagsList extends React.Component {
   /**
@@ -337,12 +338,8 @@ class FilterResourcesByTagsList extends React.Component {
                     className="main-cell-wrapper"
                     onContextMenu={(event) => this.handleContextualMenuEvent(event, tag)}
                   >
-                    <div className="main-cell tag">
-                      <button className="link no-border" type="button" title={tag.slug}>
-                        <span className="ellipsis tag-name" onClick={() => this.handleOnClickTag(tag)}>
-                          {tag.slug}
-                        </span>
-                      </button>
+                    <div className="main-cell">
+                      <TagItem tag={tag} onClick={() => this.handleOnClickTag(tag)} />
                     </div>
                   </div>
                   {!tag.is_shared && (
