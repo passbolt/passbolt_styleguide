@@ -15,6 +15,6 @@
 import ExportPoliciesSettingsEntity from "../../shared/models/entity/exportSettings/ExportPoliciesSettingsEntity";
 
 export const defaultExportPoliciesSettingsContext = (data = {}) => ({
-  getSettings: () => ExportPoliciesSettingsEntity.createFromDefault(),
+  getSettings: () => ExportPoliciesSettingsEntity.createFromDefault({ allow_csv_format: true }),
   ...data,
 });

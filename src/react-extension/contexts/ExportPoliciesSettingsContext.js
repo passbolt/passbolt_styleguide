@@ -103,7 +103,13 @@ export function withExportPoliciesSettings(WrappedComponent) {
     render() {
       return (
         <ExportPoliciesSettingsContext.Consumer>
-          {(context) => <WrappedComponent exportPoliciesSettingsContext={context} {...this.props} />}
+          {(context) => (
+            <WrappedComponent
+              exportPoliciesSettingsContext={context}
+              exportPoliciesSettings={context.getSettings()}
+              {...this.props}
+            />
+          )}
         </ExportPoliciesSettingsContext.Consumer>
       );
     }

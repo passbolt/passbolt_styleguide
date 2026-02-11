@@ -22,6 +22,8 @@ import { defaultAppContext, defaultProps } from "./ExportResources.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
+import { defaultExportPoliciesSettingsContext } from "../../../contexts/ExportPoliciesSettingsContext.test.data";
+import ExportPoliciesSettingsEntity from "../../../../shared/models/entity/exportSettings/ExportPoliciesSettingsEntity";
 
 beforeEach(() => {
   jest.resetModules();
@@ -262,6 +264,74 @@ describe("As LU I should see the password export dialog", () => {
         "https://www.passbolt.com/docs/user/basic-features/browser/export/",
       );
       expect(learnMoreLink.getAttribute("target")).toBe("_blank");
+    });
+  });
+
+  describe("As LU I should see export formats based on export policies settings", () => {
+    it("As LU I should see only KDBX formats when CSV format is disabled", () => {
+      expect.assertions(1);
+      const exportPoliciesSettingsContext = defaultExportPoliciesSettingsContext({
+        getSettings: () => ExportPoliciesSettingsEntity.createFromDefault({ allow_csv_format: false }),
+      });
+      const props = defaultProps();
+      props.exportPoliciesSettingsContext = exportPoliciesSettingsContext;
+      const page = new ExportResourcesPage(context, props);
+
+      expect(page.exportFormatItems).toEqual(["kdbx (keepass)", "kdbx (keepassXC & others)"]);
+    });
+
+    it("As LU I should see all formats when CSV format is enabled", () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const page = new ExportResourcesPage(context, props);
+
+      expect(page.exportFormatItems).toEqual([
+        "kdbx (keepass)",
+        "kdbx (keepassXC & others)",
+        "csv (keepass)",
+        "csv (lastpass)",
+        "csv (1password)",
+        "csv (chromium based browsers)",
+        "csv (bitwarden)",
+        "csv (mozilla)",
+        "csv (safari)",
+        "csv (dashlane)",
+        "csv (nordpass)",
+        "csv (logmeonce)",
+      ]);
+    });
+
+    it("As LU I should see the label 'kdbx is supported' when CSV format is disabled", () => {
+      expect.assertions(1);
+      const exportPoliciesSettingsContext = defaultExportPoliciesSettingsContext({
+        getSettings: () => ExportPoliciesSettingsEntity.createFromDefault({ allow_csv_format: false }),
+      });
+      const props = defaultProps();
+      props.exportPoliciesSettingsContext = exportPoliciesSettingsContext;
+      const page = new ExportResourcesPage(context, props);
+
+      expect(page.exportFormatLabel).toBe("Choose the export format (kdbx is supported)");
+    });
+
+    it("As LU I should see the label 'csv and kdbx are supported' when CSV format is enabled", () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const page = new ExportResourcesPage(context, props);
+
+      expect(page.exportFormatLabel).toBe("Choose the export format (csv and kdbx are supported)");
+    });
+
+    it("As LU I should see the form disabled while export policies settings are loading", () => {
+      expect.assertions(2);
+      const exportPoliciesSettingsContext = defaultExportPoliciesSettingsContext({
+        getSettings: () => null,
+      });
+      const props = defaultProps();
+      props.exportPoliciesSettingsContext = exportPoliciesSettingsContext;
+      const page = new ExportResourcesPage(context, props);
+
+      expect(page.select.className).toBe("selected-value disabled");
+      expect(page.exportButton.hasAttribute("disabled")).toBeTruthy();
     });
   });
 });

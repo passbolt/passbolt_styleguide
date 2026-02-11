@@ -22,6 +22,7 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withExportPoliciesSettings } from "../../../contexts/ExportPoliciesSettingsContext";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
 import { Trans, withTranslation } from "react-i18next";
 import Select from "../../Common/Select/Select";
@@ -98,10 +99,18 @@ class ExportResources extends React.Component {
   }
 
   /**
+   * Returns the export policies settings entity or null if still loading.
+   * @returns {ExportPoliciesSettingsEntity|null}
+   */
+  get exportPoliciesSettings() {
+    return this.props.exportPoliciesSettingsContext.getSettings();
+  }
+
+  /**
    * Returns true if actions can be performed
    */
   get areActionsAllowed() {
-    return !this.isProcessing;
+    return !this.isProcessing && this.exportPoliciesSettings !== null;
   }
 
   /**
@@ -181,10 +190,21 @@ class ExportResources extends React.Component {
   }
 
   /**
+   * Returns the export format label based on CSV policy
+   * @returns {string}
+   */
+  get exportFormatLabel() {
+    if (this.exportPoliciesSettings?.allowCsvFormat === false) {
+      return this.translate("Choose the export format (kdbx is supported)");
+    }
+    return this.translate("Choose the export format (csv and kdbx are supported)");
+  }
+
+  /**
    * Returns the list of available export formats
    */
   get exportFormats() {
-    return [
+    const allFormats = [
       { label: "kdbx (keepass)", value: "kdbx" },
       { label: "kdbx (keepassXC & others)", value: "kdbx-others" },
       { label: "csv (keepass)", value: "csv-kdbx" },
@@ -198,6 +218,12 @@ class ExportResources extends React.Component {
       { label: "csv (nordpass)", value: "csv-nordpass" },
       { label: "csv (logmeonce)", value: "csv-logmeonce" },
     ];
+
+    if (this.exportPoliciesSettings?.allowCsvFormat === false) {
+      return allFormats.filter((format) => !format.value.startsWith("csv"));
+    }
+
+    return allFormats;
   }
 
   /**
@@ -335,15 +361,13 @@ class ExportResources extends React.Component {
         <form onSubmit={this.handleExport} noValidate>
           <div className="form-content">
             <div className={`select-wrapper input required ${this.isProcessing ? "disabled" : ""}`}>
-              <label htmlFor="export-format">
-                <Trans>Choose the export format (csv and kdbx are supported)</Trans>
-              </label>
+              <label htmlFor="export-format">{this.exportFormatLabel}</label>
               <Select
                 id="export-format"
                 value={this.state.selectedExportFormat}
                 items={this.exportFormats}
                 onChange={this.handleExportFormatSelected}
-                disabled={this.isProcessing}
+                disabled={!this.areActionsAllowed}
               />
             </div>
             {this.hasFoldersToExport && (
@@ -412,9 +436,12 @@ ExportResources.propTypes = {
   resourceWorkspaceContext: PropTypes.object, // The resource workspace context
   dialogContext: PropTypes.object, // The dialog context
   actionFeedbackContext: PropTypes.object, // The action feedback context
+  exportPoliciesSettingsContext: PropTypes.object, // The export policies settings context
   t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(
-  withActionFeedback(withDialog(withResourceWorkspace(withTranslation("common")(ExportResources)))),
+  withActionFeedback(
+    withDialog(withResourceWorkspace(withExportPoliciesSettings(withTranslation("common")(ExportResources)))),
+  ),
 );

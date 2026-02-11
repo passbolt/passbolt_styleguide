@@ -1,4 +1,5 @@
 import MockPort from "../../../test/mock/MockPort";
+import { defaultExportPoliciesSettingsContext } from "../../../contexts/ExportPoliciesSettingsContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -35,6 +36,7 @@ export function defaultProps() {
         resourcesIds: [{ id: "1" }, { id: "2" }],
       },
     },
+    exportPoliciesSettingsContext: defaultExportPoliciesSettingsContext(),
   };
 }
 
