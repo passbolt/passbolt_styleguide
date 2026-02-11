@@ -39,4 +39,26 @@ describe("As AN I should be able to be see Safari configuration helper page", ()
     // link
     expect(page.notDownloaded.textContent).toBe("I didn't install the extension");
   });
+
+  it("As AN I should see the 'Learn more' link with noopener and noreferrer", () => {
+    expect.assertions(2);
+
+    const page = new ApiConfigureSafariExtensionPage();
+
+    expect(page.learnMoreLink.getAttribute("rel")).toContain("noopener");
+    expect(page.learnMoreLink.getAttribute("rel")).toContain("noreferrer");
+  });
+
+  it("As AN I should be able to click on 'I didn't install the extension'", async () => {
+    expect.assertions(1);
+
+    const props = {
+      onExtensionNotDownloaded: jest.fn(),
+    };
+    const page = new ApiConfigureSafariExtensionPage(props);
+
+    await page.clickNotDownloaded();
+
+    expect(props.onExtensionNotDownloaded).toHaveBeenCalled();
+  });
 });
