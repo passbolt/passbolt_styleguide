@@ -95,19 +95,19 @@ class CreateResource extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    await Promise.all([
+    const [, policies] = await Promise.all([
       this.props.passwordExpiryContext.findSettings(),
-      this.props.passwordPoliciesContext.findPolicies(),
+      this.props.passwordPoliciesContext.loadPolicies(),
     ]);
 
-    this.initPwnedPasswordService();
+    this.initPwnedPasswordService(policies);
   }
 
   /**
    * Initialize the pwned password service
    */
-  initPwnedPasswordService() {
-    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+  initPwnedPasswordService(policies) {
+    const isPasswordDictionaryCheckRequested = policies?.external_dictionary_check;
 
     if (isPasswordDictionaryCheckRequested) {
       this.pownedService = new PownedService(this.props.context.port);
@@ -485,22 +485,22 @@ class CreateResource extends Component {
 
   /**
    * Add secret to the resourceFormEntity
-   * @param {string} secret The secret to add
+   * @param {string} secretFormType The secret form type to add
    */
-  onAddSecret(secret) {
-    this.resourceFormEntity.addSecret(secret, { validate: false });
+  onAddSecret(secretFormType) {
+    this.resourceFormEntity.addSecret(secretFormType, { validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
-    this.setState({ resource: this.resourceFormEntity.toDto(), resourceFormSelected: secret, resourceType });
+    this.setState({ resource: this.resourceFormEntity.toDto(), resourceFormSelected: secretFormType, resourceType });
   }
 
   /**
-   * Delete secret to the resourceFormEntity
-   * @param {string} secret The secret to delete
+   * Delete secret from the resourceFormEntity
+   * @param {string} secretFormType The secret form type to delete
    */
-  onDeleteSecret(secret) {
-    this.resourceFormEntity.deleteSecret(secret, { validate: false });
+  onDeleteSecret(secretFormType) {
+    this.resourceFormEntity.deleteSecret(secretFormType, { validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
-    if (this.state.resourceFormSelected === secret) {
+    if (this.state.resourceFormSelected === secretFormType) {
       this.setState({
         resource: this.resourceFormEntity.toDto(),
         resourceFormSelected: this.selectResourceFormByResourceSecretData(),

@@ -14,6 +14,7 @@
 
 import ExportResources from "./ExportResources";
 import { defaultAppContext } from "./ExportResources.test.data";
+import { defaultExportPoliciesSettingsContext } from "../../../contexts/ExportPoliciesSettingsContext.test.data";
 
 export default {
   title: "Components/Resource/ExportResources/ExportResources",
@@ -30,5 +31,6 @@ export const Initial = {
     },
     onClose: () => {},
     context: defaultAppContext(),
+    exportPoliciesSettingsContext: defaultExportPoliciesSettingsContext(),
   },
 };

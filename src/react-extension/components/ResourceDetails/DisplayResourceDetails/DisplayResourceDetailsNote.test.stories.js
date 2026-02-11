@@ -67,7 +67,7 @@ export const SecureNoteWithDecryptionError = {
     context: defaultAppContext({
       port: {
         request: () =>
-          new Promise((_, reject) => {
+          new Promise((_resolve, reject) => {
             setTimeout(() => reject("Something went wrong!"), 1000);
           }),
       },

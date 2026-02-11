@@ -41,12 +41,11 @@ class LoginPage extends React.Component {
    */
   async componentDidMount() {
     this.initDefaultRememberMeChoice();
-    await this.props.ssoContext.loadSsoConfiguration();
-    if (this.props.ssoContext.hasUserAnSsoKit()) {
+    const ssoLocalConfiguredProvider = await this.props.ssoContext.loadSsoConfiguration();
+    if (ssoLocalConfiguredProvider) {
       this.setState({ isSsoAvailable: true, displaySso: true, isReady: true });
     } else {
-      this.setState({ isReady: true });
-      this.focusOnPassphrase();
+      this.setState({ isReady: true }, () => this.focusOnPassphrase());
     }
   }
 
@@ -100,7 +99,7 @@ class LoginPage extends React.Component {
       await this.props.loginSuccessCallback();
       this.props.history.push("/webAccessibleResources/quickaccess/home");
     } else {
-      this.props.mfaRequiredCallback(this.props.context.userSettings.getTrustedDomain());
+      await this.props.mfaRequiredCallback();
     }
   }
 
@@ -145,7 +144,7 @@ class LoginPage extends React.Component {
       await this.handleLoginSuccess();
     } catch (e) {
       if (e.name === "SsoSettingsChangedError") {
-        window.close();
+        await this.props.context.closeWindow();
       }
       if (e.name !== "UserAbortsOperationError") {
         this.setState({ ssoError: e.message });

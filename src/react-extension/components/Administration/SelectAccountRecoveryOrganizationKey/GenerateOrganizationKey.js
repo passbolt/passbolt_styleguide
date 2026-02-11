@@ -76,8 +76,8 @@ class GenerateOrganizationKey extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    await this.props.passwordPoliciesContext.findPolicies();
-    this.initPwnedPasswordService();
+    const policies = await this.props.passwordPoliciesContext.loadPolicies();
+    this.initPwnedPasswordService(policies);
   }
   /**
    * Bind callbacks methods
@@ -103,8 +103,8 @@ class GenerateOrganizationKey extends React.Component {
   /**
    * Initialize the pwned password service
    */
-  initPwnedPasswordService() {
-    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+  initPwnedPasswordService(policies) {
+    const isPwnedServiceAvailable = policies?.external_dictionary_check;
 
     if (isPwnedServiceAvailable) {
       this.pownedService = new PownedService(this.props.context.port);

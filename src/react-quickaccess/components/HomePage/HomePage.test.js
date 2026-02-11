@@ -189,8 +189,6 @@ describe("HomePage", () => {
   describe("As LU I can use resource to auto-fill the current page", () => {
     it("I can click on a suggested resource to use it on the current tab then the quickaccess closes", async () => {
       expect.assertions(3);
-      const originalWindowClose = window.close;
-      window.close = jest.fn();
 
       const expectedOpenerTabId = 1;
       const suggestedResource = defaultResourceDto({ metadata: { name: "apache", uris: ["http://www.apache.org"] } });
@@ -214,11 +212,8 @@ describe("HomePage", () => {
       await waitForTrue(() => page.suggestedResourcesEntries?.length > 0);
 
       await page.clickOnSuggestedResource(0);
-      await waitForTrue(() => window.close.mock.calls.length > 0);
-
-      expect(window.close).toHaveBeenCalledTimes(1);
-
-      window.close = originalWindowClose;
+      await waitForTrue(() => props.context.closeWindow.mock.calls.length > 0);
+      expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
     });
 
     it("I can click on a searched resource to use it on the current tab then the quickaccess closes", async () => {

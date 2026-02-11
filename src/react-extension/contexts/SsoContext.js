@@ -52,13 +52,14 @@ export class SsoContextProvider extends React.Component {
 
   /**
    * Find the sso configuration
-   * @return {Promise<void>}
+   * @return {Promise<string>}
    */
   async loadSsoConfiguration() {
     const ssoLocalConfiguredProvider = await this.props.context.port.request(
       "passbolt.sso.get-local-configured-provider",
     );
     this.setState({ ssoLocalConfiguredProvider });
+    return ssoLocalConfiguredProvider;
   }
 
   /**

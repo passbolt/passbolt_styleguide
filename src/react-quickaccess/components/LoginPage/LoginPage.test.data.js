@@ -3,28 +3,11 @@
  * @param appContext An existing app context
  * @returns {any}
  */
-import MockPort from "../../../react-extension/test/mock/MockPort";
-import UserSettings from "../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
-
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    focusSearch: () => {},
-    updateSearch: () => {},
-    searchHistory: {},
-    search: "",
-    userSettings: new UserSettings(userSettingsFixture),
-    setWindowBlurBehaviour: () => {},
-    shouldCloseAtWindowBlur: true,
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
 
 export function defaultSsoContext(ssoContext) {
   const defaultSsoContext = {
-    loadSsoConfiguration: jest.fn(() => Promise.resolve()),
-    hasUserAnSsoKit: jest.fn(() => true),
+    loadSsoConfiguration: jest.fn(() => "azure"),
     getProvider: jest.fn(() => "azure"),
     runSignInProcess: jest.fn(() => Promise.resolve()),
   };
@@ -47,8 +30,8 @@ export function defaultPropsWithSsoDisabled(data = {}) {
   const ssoContext = Object.assign(
     defaultSsoContext(),
     {
+      loadSsoConfiguration: jest.fn(() => null),
       getProvider: jest.fn(() => null),
-      hasUserAnSsoKit: jest.fn(() => false),
     },
     data.ssoContext,
   );

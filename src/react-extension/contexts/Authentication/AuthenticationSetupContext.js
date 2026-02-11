@@ -25,6 +25,7 @@ export const AuthenticationSetupWorkflowStates = {
   GENERATE_GPG_KEY: "Generate gpg key",
   IMPORT_GPG_KEY: "Import gpg key",
   INTRODUCE_EXTENSION: "Introduce extension",
+  ENSURE_SAFARI_EXTENSION_CONFIGURATION: "Ensure Safari extension configuration",
   LOADING: "Loading",
   SIGNING_IN: "Signing in",
   COMPLETING_SETUP: "Completing setup",
@@ -115,14 +116,21 @@ export class AuthenticationSetupContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async initialize() {
+    const browserName = detectBrowserName();
+    const isChromeBrowser = browserName === BROWSER_NAMES.CHROME;
+    const isSafariBrowser = browserName === BROWSER_NAMES.SAFARI;
+
     const isFirstInstall = await this.setupServiceWorkerService.isFirstInstall();
-    const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
+    const isActivatedOnAllWebsite = isSafariBrowser && (await this.isActivatedOnAllWebsite());
+
     await this.setupServiceWorkerService.startSetup();
     const userPassphrasePolicies = await this.setupServiceWorkerService.getUserPassphrasePolicies();
     // In case of error the background page should just disconnect the extension setup application.
     let state = AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY;
     if (isFirstInstall && isChromeBrowser) {
       state = AuthenticationSetupWorkflowStates.INTRODUCE_EXTENSION;
+    } else if (isSafariBrowser && !isActivatedOnAllWebsite) {
+      state = AuthenticationSetupWorkflowStates.ENSURE_SAFARI_EXTENSION_CONFIGURATION;
     }
     this.setState({ state, userPassphrasePolicies });
   }
@@ -134,6 +142,14 @@ export class AuthenticationSetupContextProvider extends React.Component {
     this.setState({
       state: AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY,
     });
+  }
+
+  /**
+   * Returns true if the extension is not activated on all website.
+   * @returns {Promise<boolean>}
+   */
+  async isActivatedOnAllWebsite() {
+    return await this.props.context.port.request("passbolt.extension.is-allowed-on-every-website");
   }
 
   /**

@@ -43,6 +43,7 @@ import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 import ResizableSidebar from "../../ResizableSidebar/ResizableSidebar";
 import { withResizableSidebar } from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
+import ManageAnnouncements from "../../Announcement/ManageAnnouncements/ManageAnnouncements";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -207,6 +208,7 @@ class DisplayUserWorkspace extends React.Component {
             component={HandleReviewAccountRecoveryRequestRoute}
           />
         )}
+        <ManageAnnouncements />
         <div className="panel main">
           {this.isAccessAllowed ? (
             <>

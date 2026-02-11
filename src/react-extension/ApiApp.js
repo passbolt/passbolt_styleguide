@@ -24,7 +24,6 @@ import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
 import HandleSubscriptionAnnouncement from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
-import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/ManageAnnouncements";
 import ApiAppContextProvider from "./contexts/ApiAppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AppContext from "../shared/context/AppContext/AppContext";
@@ -103,7 +102,6 @@ class ApiApp extends Component {
                                     <AdministrationWorkspaceContextProvider>
                                       <AdminSmtpSettingsContextProvider>
                                         <ManageContextualMenu />
-                                        <ManageAnnouncements />
                                         <AdminUserDirectoryContextProvider>
                                           <AdminSelfRegistrationContextProvider>
                                             <ManageDialogs />

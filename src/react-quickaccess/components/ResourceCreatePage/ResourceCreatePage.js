@@ -13,9 +13,8 @@
  */
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
 import { Trans, withTranslation } from "react-i18next";
 import { SecretGenerator } from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import { withPrepareResourceContext } from "../../contexts/PrepareResourceContext";
@@ -99,8 +98,9 @@ class ResourceCreatePage extends React.Component {
    */
   async componentDidMount() {
     this.props.passwordExpiryContext.findSettings();
-    this.initPwnedPasswordService();
-    this.initResourceViewModel();
+    const policies = await this.props.passwordPoliciesContext.loadPolicies();
+    this.initPwnedPasswordService(policies);
+    await this.initResourceViewModel();
   }
 
   async initResourceViewModel() {
@@ -155,8 +155,8 @@ class ResourceCreatePage extends React.Component {
   /**
    * Initialize the pwned password service
    */
-  initPwnedPasswordService() {
-    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+  initPwnedPasswordService(policies) {
+    const isPasswordDictionaryCheckRequested = policies?.external_dictionary_check;
 
     if (isPasswordDictionaryCheckRequested) {
       this.pownedService = new PownedService(this.props.context.port);
