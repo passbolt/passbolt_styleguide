@@ -121,13 +121,13 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async initialize() {
-    await this.props.ssoContext.loadSsoConfiguration();
+    const ssoLocalConfiguredProvider = await this.props.ssoContext.loadSsoConfiguration();
     const isKeyVerified = await this.verifyServerKey();
     if (!isKeyVerified) {
       return;
     }
 
-    if (!this.isSsoAvailable()) {
+    if (!ssoLocalConfiguredProvider) {
       this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
       return;
     }
