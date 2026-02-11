@@ -23,6 +23,8 @@ import DisplayAlreadyLoggedInError, {
   DisplayAlreadyLoggedInErrorVariations,
 } from "../../Authentication/DisplayAlreadyLoggedInError/DisplayAlreadyLoggedInError";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
+import InstallSafariExtension from "../../Authentication/InstallExtension/InstallSafariExtension";
+import ApiConfigureSafariExtension from "../../Authentication/ConfigureExtension/ApiConfigureSafariExtension";
 
 /**
  * The component orchestrates the api setup authentication workflow.
@@ -50,6 +52,19 @@ class OrchestrateApiSetup extends Component {
     switch (this.props.apiSetupContext.state) {
       case ApiSetupContextState.INSTALL_EXTENSION_STATE:
         return <InstallExtension />;
+      case ApiSetupContextState.INSTALL_SAFARI_EXTENSION_STATE:
+        return (
+          <InstallSafariExtension
+            onExtensionDownloading={this.props.apiSetupContext.handleSafariExtensionDownloading}
+            onExtensionAlreadyInstalled={this.props.apiSetupContext.handleExtensionAlreadyInstalled}
+          />
+        );
+      case ApiSetupContextState.CONFIGURE_SAFARI_EXTENSION_STATE:
+        return (
+          <ApiConfigureSafariExtension
+            onExtensionNotDownloaded={this.props.apiSetupContext.handleSafariExtensionNotDownloaded}
+          />
+        );
       case ApiSetupContextState.DOWNLOAD_SUPPORTED_BROWSER_STATE:
         return <DisplayBrowserNotSupported />;
       case ApiSetupContextState.TOKEN_EXPIRED_STATE:

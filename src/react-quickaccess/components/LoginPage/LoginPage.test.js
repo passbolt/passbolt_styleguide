@@ -137,9 +137,6 @@ describe("Quickaccess::LoginPage", () => {
   });
 
   it(`As AN when I attempt to sign in from the quickaccess via SSO and the API configuration changed, the quickaccess should close and I am redirected to the right tab`, async () => {
-    const originalWindowClose = window.close;
-    window.close = jest.fn();
-
     expect.assertions(1);
 
     const expectedError = new Error("SSO Login can't proceed via quickaccess");
@@ -158,8 +155,6 @@ describe("Quickaccess::LoginPage", () => {
 
     await page.clickOnSsoLoginButton();
 
-    expect(window.close).toHaveBeenCalledTimes(1);
-
-    window.close = originalWindowClose;
+    expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
   });
 });

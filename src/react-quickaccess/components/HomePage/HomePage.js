@@ -177,7 +177,7 @@ class HomePage extends React.Component {
         resource.id,
         this.props.context.getOpenerTabId(),
       );
-      window.close();
+      await this.props.context.closeWindow();
     } catch (error) {
       if (error && error.name === "UserAbortsOperationError") {
         this.setState({ usingOnThisTab: false });

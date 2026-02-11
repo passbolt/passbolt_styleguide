@@ -159,13 +159,26 @@ class NavigationContextProvider extends React.Component {
   async goTo(appName, pathname) {
     if (appName === this.props.context.name) {
       await this.props.history.push({ pathname });
-    } else {
-      const trustedDomain = this.props.context.userSettings
-        ? this.props.context.userSettings.getTrustedDomain()
-        : this.props.context.trustedDomain;
-      const url = `${trustedDomain}${pathname}`;
-      window.open(url, "_parent", "noopener,noreferrer");
+      return;
     }
+
+    /*
+     * Change of application served from browser-extension to api
+     * This is a workaround for Safari due to specific cookie management.
+     * The reason is that the calls come from an iframe, cookies are not sent with same_site = Lax and
+     * therefore the session is lost, the user needs to sign in again
+     */
+    if (appName === "api") {
+      await this.props.context.port.request("passbolt.tabs.open-admin-page", pathname);
+      return;
+    }
+
+    const trustedDomain = this.props.context.userSettings
+      ? this.props.context.userSettings.getTrustedDomain()
+      : this.props.context.trustedDomain;
+
+    const url = `${trustedDomain}${pathname}`;
+    window.open(url, "_parent", "noopener,noreferrer");
   }
 
   /**
