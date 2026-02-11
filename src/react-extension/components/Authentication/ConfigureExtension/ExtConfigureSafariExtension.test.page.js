@@ -12,15 +12,15 @@
  * @since         5.10.0
  */
 
-import { fireEvent, render } from "@testing-library/react";
 import React from "react";
+import { fireEvent, render } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import ApiConfigureSafariExtension from "./ApiConfigureSafariExtension";
+import ExtConfigureSafariExtension from "./ExtConfigureSafariExtension";
 
 /**
- * The ApiConfigureSafariExtension component represented as a page
+ * The ExtConfigureSafariExtension component represented as a page
  */
-export default class ApiConfigureSafariExtensionPage {
+export default class ExtConfigureSafariExtensionPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -28,7 +28,7 @@ export default class ApiConfigureSafariExtensionPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ApiConfigureSafariExtension {...props} />
+        <ExtConfigureSafariExtension {...props} />
       </MockTranslationProvider>,
     );
   }
@@ -62,9 +62,16 @@ export default class ApiConfigureSafariExtensionPage {
   }
 
   /**
-   * Returns the download button
+   * Returns the "Go to settings" button
    */
-  get notDownloaded() {
+  get goToSettingsButton() {
+    return this._page.container.querySelector(".install-extension .form-actions button.button.primary");
+  }
+
+  /**
+   * Returns the "Continue" button
+   */
+  get continueButton() {
     return this._page.container.querySelector(".install-extension .form-actions button.link");
   }
 
@@ -76,10 +83,18 @@ export default class ApiConfigureSafariExtensionPage {
   }
 
   /**
-   * Click on the "I didn't install the extension" button
+   * Click on the "Go to settings" button
    */
-  async clickNotDownloaded() {
+  async clickGoToSettings() {
     const leftClick = { button: 0 };
-    fireEvent.click(this.notDownloaded, leftClick);
+    fireEvent.click(this.goToSettingsButton, leftClick);
+  }
+
+  /**
+   * Click on the "Continue" button
+   */
+  async clickContinue() {
+    const leftClick = { button: 0 };
+    fireEvent.click(this.continueButton, leftClick);
   }
 }

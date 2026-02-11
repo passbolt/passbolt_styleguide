@@ -106,7 +106,7 @@ class ExtConfigureSafariExtension extends React.Component {
           <Trans>
             Once the extension is installed, it must be allowed on every website, otherwise it won&apos;t work as
             expected.{" "}
-            <a href="https://www.passbolt.com/docs/" rel="noopener noreferrer" target="_blank">
+            <a href="https://www.passbolt.com/docs/safari-onboarding" rel="noopener noreferrer" target="_blank">
               Learn more
             </a>
           </Trans>
