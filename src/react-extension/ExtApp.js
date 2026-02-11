@@ -74,6 +74,7 @@ import GettingStartedWithEncryptedMetadataServiceWorkerService from "../shared/s
 import { ResizableSidebarContextProvider } from "./contexts/ResizeSidebar/ResizeSidebarContext";
 import SecretRevisionsSettingsContextProvider from "../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
 import RoleContextProvider from "./contexts/RoleContext";
+import ExportPoliciesSettingsContextProvider from "./contexts/ExportPoliciesSettingsContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -154,30 +155,32 @@ class ExtApp extends Component {
                                                 ]}
                                               >
                                                 <PasswordExpirySettingsContextProvider>
-                                                  <ResourceWorkspaceContextProvider>
-                                                    <MetadataTypesSettingsLocalStorageContextProvider>
-                                                      <MetadataKeysSettingsLocalStorageContextProvider>
-                                                        <ResourceTypesLocalStorageContextProvider>
-                                                          <SecretRevisionsSettingsContextProvider>
-                                                            <ResourcePasswordGeneratorContextProvider>
-                                                              <ManageDialogs />
-                                                              <ManageWorkflows />
-                                                              <ManageContextualMenu />
-                                                              <DragContextProvider>
-                                                                <ResizableSidebarContextProvider>
-                                                                  <div id="container" className="page password">
-                                                                    <div id="app" className="app" tabIndex="1000">
-                                                                      <DisplayResourcesWorkspace />
+                                                  <ExportPoliciesSettingsContextProvider>
+                                                    <ResourceWorkspaceContextProvider>
+                                                      <MetadataTypesSettingsLocalStorageContextProvider>
+                                                        <MetadataKeysSettingsLocalStorageContextProvider>
+                                                          <ResourceTypesLocalStorageContextProvider>
+                                                            <SecretRevisionsSettingsContextProvider>
+                                                              <ResourcePasswordGeneratorContextProvider>
+                                                                <ManageDialogs />
+                                                                <ManageWorkflows />
+                                                                <ManageContextualMenu />
+                                                                <DragContextProvider>
+                                                                  <ResizableSidebarContextProvider>
+                                                                    <div id="container" className="page password">
+                                                                      <div id="app" className="app" tabIndex="1000">
+                                                                        <DisplayResourcesWorkspace />
+                                                                      </div>
                                                                     </div>
-                                                                  </div>
-                                                                </ResizableSidebarContextProvider>
-                                                              </DragContextProvider>
-                                                            </ResourcePasswordGeneratorContextProvider>
-                                                          </SecretRevisionsSettingsContextProvider>
-                                                        </ResourceTypesLocalStorageContextProvider>
-                                                      </MetadataKeysSettingsLocalStorageContextProvider>
-                                                    </MetadataTypesSettingsLocalStorageContextProvider>
-                                                  </ResourceWorkspaceContextProvider>
+                                                                  </ResizableSidebarContextProvider>
+                                                                </DragContextProvider>
+                                                              </ResourcePasswordGeneratorContextProvider>
+                                                            </SecretRevisionsSettingsContextProvider>
+                                                          </ResourceTypesLocalStorageContextProvider>
+                                                        </MetadataKeysSettingsLocalStorageContextProvider>
+                                                      </MetadataTypesSettingsLocalStorageContextProvider>
+                                                    </ResourceWorkspaceContextProvider>
+                                                  </ExportPoliciesSettingsContextProvider>
                                                 </PasswordExpirySettingsContextProvider>
                                               </Route>
                                               {/* Users workspace */}

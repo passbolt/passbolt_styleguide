@@ -303,6 +303,7 @@
   "Choose a new passphrase.": "Choose a new passphrase.",
   "Choose between cleartext metadata and encrypted metadata.": "Choose between cleartext metadata and encrypted metadata.",
   "Choose the export format (csv and kdbx are supported)": "Choose the export format (csv and kdbx are supported)",
+  "Choose the export format (kdbx is supported)": "Choose the export format (kdbx is supported)",
   "Clear": "Clear",
   "Clear selection": "Clear selection",
   "Click save to apply your pending changes.": "Click save to apply your pending changes.",
