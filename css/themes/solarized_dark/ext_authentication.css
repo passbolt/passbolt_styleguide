@@ -287,6 +287,7 @@ html {
  */
 body {
   margin: 0;
+  font-synthesis: none;
 }
 /**
  * Render the `main` element consistently in IE.
@@ -686,6 +687,12 @@ body.iframe {
   font-style: normal;
   font-weight: 400;
   src: local('Inconsolata'), local('Inconsolata-Regular'), url('../../../fonts/inconsolata-regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Passbolt-logo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Passbolt-logo'), url('../../../fonts/passbolt-logo-Regular.otf') format('opentype');
 }
 body {
   font-family: 'Open Sans', Verdana, sans-serif;
@@ -3293,6 +3300,7 @@ html {
 }
 .page .app {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
   flex: 1;
@@ -4717,11 +4725,18 @@ body {
   clear: both;
   cursor: pointer;
 }
+.login.page .install-extension > p {
+  margin-bottom: 2.4rem;
+}
+.login.page .install-extension > .form-actions {
+  margin-top: 2.4rem;
+}
 .login.page .install-extension a.browser-webstore {
   border: 0;
   width: 100%;
 }
-.login.page .install-extension a.browser-webstore img {
+.login.page .install-extension a.browser-webstore img,
+.login.page .install-extension a.browser-webstore svg {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -4733,6 +4748,9 @@ body {
 }
 .login.page .install-extension a.browser-webstore:after {
   content: none;
+}
+.login.page .install-extension .passbolt-logo {
+  font-family: "Passbolt-logo";
 }
 .login.page .introduce-setup-extension .animated-setup-introduction.chrome {
   background: transparent url('../../../img/illustrations/pin_passbolt.gif') center center no-repeat;
@@ -4770,6 +4788,9 @@ body {
   min-width: 0;
   min-height: 0;
   padding: 0.8rem;
+}
+.login.page .browser-not-supported .browser-button-list button.browser img {
+  max-width: 100%;
 }
 .login.page .browser-not-supported .browser-button-list button.browser.focused {
   box-shadow: 0 0 0.4rem hsl(45, 100%, 50%), inset 0 0 0 1px hsl(45, 100%, 45%);

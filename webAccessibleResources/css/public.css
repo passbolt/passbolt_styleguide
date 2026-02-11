@@ -157,6 +157,7 @@ html {
 }
 .page .app {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
   flex: 1;

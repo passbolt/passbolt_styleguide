@@ -99,7 +99,7 @@ class LoginPage extends React.Component {
       await this.props.loginSuccessCallback();
       this.props.history.push("/webAccessibleResources/quickaccess/home");
     } else {
-      this.props.mfaRequiredCallback(this.props.context.userSettings.getTrustedDomain());
+      await this.props.mfaRequiredCallback();
     }
   }
 
@@ -144,7 +144,7 @@ class LoginPage extends React.Component {
       await this.handleLoginSuccess();
     } catch (e) {
       if (e.name === "SsoSettingsChangedError") {
-        window.close();
+        await this.props.context.closeWindow();
       }
       if (e.name !== "UserAbortsOperationError") {
         this.setState({ ssoError: e.message });

@@ -82,12 +82,14 @@ export default class RoleApiService extends AbstractService {
   async update(id, roleDto) {
     if (!id) {
       throw new TypeError("Role update failed, role id is required.");
+    } else if (!isValidUuid(id)) {
+      throw new TypeError("Role update failed, role id is not a valid uuid.");
     }
+
     if (!roleDto || !roleDto.name) {
       throw new TypeError("Role update failed, invalid role data.");
     }
 
-    isValidUuid(id);
     assertString(roleDto.name);
     const response = await this.apiClient.update(id, roleDto);
 
@@ -102,7 +104,9 @@ export default class RoleApiService extends AbstractService {
    * @throws {TypeError} if roleId is not a valid uuid
    */
   async delete(roleId) {
-    isValidUuid(roleId);
+    if (!isValidUuid(roleId)) {
+      throw new TypeError("Role deletion failed, roleId is not a valid uuid.");
+    }
 
     const response = await this.apiClient.delete(roleId);
     return new PassboltResponseEntity(response);

@@ -50,7 +50,9 @@ import CellDate from "../../../../shared/components/Table/CellDate";
 import CellExpiryDate from "../../../../shared/components/Table/CellExpiryDate";
 import CellHeaderDefault from "../../../../shared/components/Table/CellHeaderDefault";
 import ColumnLocationModel from "../../../../shared/models/column/ColumnLocationModel";
+import ColumnTagsModel from "../../../../shared/models/column/ColumnTagsModel";
 import CellLocation from "../../../../shared/components/Table/CellLocation";
+import CellTag from "../../../../shared/components/Table/CellTag";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
@@ -123,6 +125,7 @@ class DisplayResourcesList extends React.Component {
     this.isPasswordResources = this.isPasswordResources.bind(this);
     this.isTotpResources = this.isTotpResources.bind(this);
     this.handleLocationClick = this.handleLocationClick.bind(this);
+    this.handleTagClick = this.handleTagClick.bind(this);
   }
 
   /**
@@ -209,6 +212,14 @@ class DisplayResourcesList extends React.Component {
         headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("URI") } },
       }),
     );
+    if (this.canUseTags) {
+      this.defaultColumns.push(
+        new ColumnTagsModel({
+          cellRenderer: { component: CellTag, props: { onTagClick: this.handleTagClick } },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Tags") } },
+        }),
+      );
+    }
     this.defaultColumns.push(
       new ColumnModifiedModel({
         cellRenderer: { component: CellDate, props: { locale: this.props.context.locale, t: this.props.t } },
@@ -352,6 +363,14 @@ class DisplayResourcesList extends React.Component {
     return (
       this.props.context.siteSettings.canIUse("folders") && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE)
     );
+  }
+
+  /**
+   * Check if the user can use tags.
+   * @returns {boolean}
+   */
+  get canUseTags() {
+    return this.props.context.siteSettings.canIUse("tags") && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
   }
 
   /**
@@ -837,6 +856,15 @@ class DisplayResourcesList extends React.Component {
       const filter = { type: ResourceWorkspaceFilterTypes.ROOT_FOLDER };
       this.props.history.push(`/app/passwords`, { filter });
     }
+  }
+
+  /**
+   * Handle the user click on a tag from the grid.
+   * @param {object} tag The clicked tag
+   */
+  handleTagClick(tag) {
+    const filter = { type: ResourceWorkspaceFilterTypes.TAG, payload: { tag } };
+    this.props.history.push({ pathname: "/app/passwords", state: { filter } });
   }
 
   /**

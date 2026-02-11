@@ -11,21 +11,28 @@
   .tag-list-item {
     display: flex;
     min-width: 0;
+  }
+}
 
-    .tag {
-      padding: 0 1rem .2rem 1rem;
-      gap: .8rem;
-      border-radius: 1.1rem;
-      background: var(--Tags-Tag-background);
-      color: var(--Tags-Tag-text);
-      border: none;
+.tag {
+  padding: .2rem 1rem;
+  white-space: nowrap;
 
-      /* hover */
+  gap: .8rem;
 
-      &:hover {
-        color: var(--Tags-Tag-text);
-      }
-    }
+  border: none;
+  border-radius: 1.1rem;
+  background: var(--Tags-Tag-background);
+  color: var(--Tags-Tag-text);
+  min-width: 1rem;
+
+  &:hover {
+    color: var(--Palette-Contrast-1);
+  }
+
+  .tag-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -46,6 +53,10 @@
     border-radius: var(--Button-border-radius);
     box-shadow: inset 0 0 0 .1rem var(--Action-button-Active-action-button-border);
     background: var(--Action-button-Active-action-button-background);
+
+    &:hover {
+      color: var(--Tags-Tag-text);
+    }
   }
 
   .separator {

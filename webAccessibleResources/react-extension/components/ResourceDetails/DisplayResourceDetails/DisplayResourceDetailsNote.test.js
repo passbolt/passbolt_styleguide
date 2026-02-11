@@ -19,6 +19,7 @@ import { waitFor } from "@testing-library/dom";
 import { defaultProps, resourceWithDescriptionMock } from "./DisplayResourceDetailsNote.test.data";
 import DisplayResourceDetailsNotePage from "./DisplayResourceDetailsNote.test.page";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
+import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 
 describe("See secure note", () => {
   let props;
@@ -154,5 +155,27 @@ describe("See secure note", () => {
 
     expect(page.errorMessage).not.toBeNull();
     expect(page.errorMessage.textContent).toContain("Error: Decryption failed");
+  });
+
+  it("As LU I should see an error notification when I cancel the passphrase input", async () => {
+    expect.assertions(2);
+
+    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => {
+      throw new UserAbortsOperationError();
+    });
+
+    const displayError = jest.fn();
+    const page = new DisplayResourceDetailsNotePage(
+      defaultProps({
+        ...props,
+        actionFeedbackContext: { displayError },
+      }),
+    );
+
+    await page.showButton.click();
+    await waitFor(() => {});
+
+    expect(displayError).toHaveBeenCalledTimes(1);
+    expect(displayError).toHaveBeenCalledWith("The operation was cancelled.");
   });
 });

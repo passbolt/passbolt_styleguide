@@ -26,6 +26,7 @@ export const AuthenticationRecoverWorkflowStates = {
   IMPORT_GPG_KEY: "Import gpg key",
   INITIATE_ACCOUNT_RECOVERY: "Initiate account recovery",
   INTRODUCE_EXTENSION: "Introduce extension",
+  ENSURE_SAFARI_EXTENSION_CONFIGURATION: "Ensure Safari extension configuration",
   LOADING: "Loading",
   REQUESTING_ACCOUNT_RECOVERY: "Requesting account recovery",
   SIGNING_IN: "Signing in",
@@ -130,13 +131,19 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       return;
     }
 
-    const isFirstInstall = await this.props.context.port.request("passbolt.recover.first-install");
-    const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
+    const browserName = detectBrowserName();
+    const isChromeBrowser = browserName === BROWSER_NAMES.CHROME;
+    const isSafariBrowser = browserName === BROWSER_NAMES.SAFARI;
 
-    const state =
-      isFirstInstall && isChromeBrowser
-        ? AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION
-        : AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
+    const isFirstInstall = await this.props.context.port.request("passbolt.recover.first-install");
+    const isActivatedOnAllWebsite = isSafariBrowser && (await this.isActivatedOnAllWebsite());
+
+    let state = AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
+    if (isFirstInstall && isChromeBrowser) {
+      state = AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION;
+    } else if (isSafariBrowser && !isActivatedOnAllWebsite) {
+      state = AuthenticationRecoverWorkflowStates.ENSURE_SAFARI_EXTENSION_CONFIGURATION;
+    }
 
     this.setState({ state, userPassphrasePolicies });
   }
@@ -149,6 +156,14 @@ export class AuthenticationRecoverContextProvider extends React.Component {
     await this.setState({
       state: AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY,
     });
+  }
+
+  /**
+   * Returns true if the extension is not activated on all website.
+   * @returns {Promise<boolean>}
+   */
+  async isActivatedOnAllWebsite() {
+    return await this.props.context.port.request("passbolt.extension.is-allowed-on-every-website");
   }
 
   /**

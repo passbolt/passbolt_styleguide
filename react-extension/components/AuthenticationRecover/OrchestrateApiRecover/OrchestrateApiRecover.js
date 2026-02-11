@@ -23,6 +23,8 @@ import DisplayAlreadyLoggedInError, {
   DisplayAlreadyLoggedInErrorVariations,
 } from "../../Authentication/DisplayAlreadyLoggedInError/DisplayAlreadyLoggedInError";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
+import InstallSafariExtension from "../../Authentication/InstallExtension/InstallSafariExtension";
+import ApiConfigureSafariExtension from "../../Authentication/ConfigureExtension/ApiConfigureSafariExtension";
 
 /**
  * The component orchestrates the api recover authentication workflow.
@@ -50,6 +52,19 @@ class OrchestrateApiRecover extends Component {
     switch (this.props.apiRecoverContext.state) {
       case ApiRecoverContextState.INSTALL_EXTENSION_STATE:
         return <InstallExtension />;
+      case ApiRecoverContextState.INSTALL_SAFARI_EXTENSION_STATE:
+        return (
+          <InstallSafariExtension
+            onExtensionDownloading={this.props.apiRecoverContext.handleSafariExtensionDownloading}
+            onExtensionAlreadyInstalled={this.props.apiRecoverContext.handleExtensionAlreadyInstalled}
+          />
+        );
+      case ApiRecoverContextState.CONFIGURE_SAFARI_EXTENSION_STATE:
+        return (
+          <ApiConfigureSafariExtension
+            onExtensionNotDownloaded={this.props.apiRecoverContext.handleSafariExtensionNotDownloaded}
+          />
+        );
       case ApiRecoverContextState.DOWNLOAD_SUPPORTED_BROWSER_STATE:
         return <DisplayBrowserNotSupported />;
       case ApiRecoverContextState.TOKEN_EXPIRED_STATE:

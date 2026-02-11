@@ -87,6 +87,7 @@ html {
  */
 body {
   margin: 0;
+  font-synthesis: none;
 }
 /**
  * Render the `main` element consistently in IE.
@@ -486,6 +487,12 @@ body.iframe {
   font-style: normal;
   font-weight: 400;
   src: local('Inconsolata'), local('Inconsolata-Regular'), url('../../../fonts/inconsolata-regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Passbolt-logo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Passbolt-logo'), url('../../../fonts/passbolt-logo-Regular.otf') format('opentype');
 }
 body {
   font-family: 'Open Sans', Verdana, sans-serif;
@@ -3093,6 +3100,7 @@ html {
 }
 .page .app {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
   flex: 1;

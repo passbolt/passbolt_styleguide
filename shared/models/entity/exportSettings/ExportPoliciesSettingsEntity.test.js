@@ -18,10 +18,12 @@ import {
   defaultExportPoliciesSettingsDto,
   envExportPoliciesSettingsDto,
   dbExportPoliciesSettingsDto,
+  fileExportPoliciesSettingsDto,
   exportPoliciesSettingsWithMetadataDto,
   SETTINGS_SOURCE_DEFAULT,
   SETTINGS_SOURCE_ENV,
   SETTINGS_SOURCE_DB,
+  SETTINGS_SOURCE_FILE,
 } from "./ExportPoliciesSettingsEntity.test.data";
 
 describe("ExportPoliciesSettingsEntity", () => {
@@ -47,6 +49,7 @@ describe("ExportPoliciesSettingsEntity", () => {
         SETTINGS_SOURCE_DEFAULT,
         SETTINGS_SOURCE_ENV,
         SETTINGS_SOURCE_DB,
+        SETTINGS_SOURCE_FILE,
       ]);
     });
 
@@ -100,6 +103,15 @@ describe("ExportPoliciesSettingsEntity", () => {
       expect(entity.source).toBe(SETTINGS_SOURCE_DB);
     });
 
+    it("works with file source DTO", () => {
+      expect.assertions(2);
+      const dto = fileExportPoliciesSettingsDto();
+      const entity = new ExportPoliciesSettingsEntity(dto);
+
+      expect(entity.allowCsvFormat).toBe(false);
+      expect(entity.source).toBe(SETTINGS_SOURCE_FILE);
+    });
+
     it("works if valid DTO with all fields is provided", () => {
       expect.assertions(8);
       const dto = exportPoliciesSettingsWithMetadataDto();
@@ -121,7 +133,7 @@ describe("ExportPoliciesSettingsEntity", () => {
       expect.assertions(3);
       const entity = ExportPoliciesSettingsEntity.createFromDefault();
 
-      expect(entity.allowCsvFormat).toBe(true);
+      expect(entity.allowCsvFormat).toBe(false);
       expect(entity.source).toBe(SETTINGS_SOURCE_DEFAULT);
       expect(entity.id).toBeNull();
     });
@@ -156,6 +168,10 @@ describe("ExportPoliciesSettingsEntity", () => {
 
     it("should have SETTINGS_SOURCE_DB constant", () => {
       expect(ExportPoliciesSettingsEntity.SETTINGS_SOURCE_DB).toBe(SETTINGS_SOURCE_DB);
+    });
+
+    it("should have SETTINGS_SOURCE_FILE constant", () => {
+      expect(ExportPoliciesSettingsEntity.SETTINGS_SOURCE_FILE).toBe(SETTINGS_SOURCE_FILE);
     });
   });
 });

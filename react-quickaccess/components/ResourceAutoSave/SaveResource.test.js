@@ -62,7 +62,6 @@ describe("See the Create Resource - save resource", () => {
     };
     // functions mocked
     jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
-    jest.spyOn(window, "close").mockImplementation(jest.fn());
     // process
     const page = new SaveResourcePage(props);
 
@@ -88,7 +87,7 @@ describe("See the Create Resource - save resource", () => {
     };
     // expectations
     expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDto, secretDto);
-    expect(window.close).toHaveBeenCalled();
+    expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
   });
 
   it("As a signed-in user creating a password on the quickaccess, I should be able to save resource v5", async () => {
@@ -104,7 +103,6 @@ describe("See the Create Resource - save resource", () => {
     };
     // functions mocked
     jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
-    jest.spyOn(window, "close").mockImplementation(jest.fn());
     // process
     const page = new SaveResourcePage(props);
     await waitFor(() => {});
@@ -131,7 +129,7 @@ describe("See the Create Resource - save resource", () => {
     };
     // expectations
     expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDto, secretDto);
-    expect(window.close).toHaveBeenCalled();
+    expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
   });
 
   it("As a signed-in user, I can change the content of the form", async () => {

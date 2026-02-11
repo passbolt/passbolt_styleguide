@@ -82,7 +82,7 @@ describe("AuthenticationLoginContextProvider", () => {
     it("If the user has an SSO kit valid, the machine state should be set to: SIGN_IN_SSO", async () => {
       const props = defaultProps({
         ssoContext: {
-          hasUserAnSsoKit: () => true,
+          loadSsoConfiguration: () => "azure",
         },
       });
       props.context.port.addRequestListener(
@@ -102,7 +102,7 @@ describe("AuthenticationLoginContextProvider", () => {
     it("If the user attempted an SSO login but the feature is disabled, the machine state should be set to: SSO_DISABLED_ERROR", async () => {
       const props = defaultProps({
         ssoContext: {
-          hasUserAnSsoKit: () => true,
+          loadSsoConfiguration: () => "azure",
         },
       });
       const ssoLoginError = new Error("Sso is disabled");
@@ -129,7 +129,7 @@ describe("AuthenticationLoginContextProvider", () => {
     it("If the user attempted an SSO login but with the wrong provider, the machine state should be set to: SSO_PROVIDER_MISMATCH_ERROR", async () => {
       const props = defaultProps({
         ssoContext: {
-          hasUserAnSsoKit: () => true,
+          loadSsoConfiguration: () => "azure",
         },
       });
       const ssoLoginError = new Error("Sso provider mismatch");
@@ -156,7 +156,7 @@ describe("AuthenticationLoginContextProvider", () => {
     it("If the user hits the SSO login URL with a properly configured kit, the machine state should be set to: SIGN_IN_SSO", async () => {
       const props = defaultProps({
         ssoContext: {
-          hasUserAnSsoKit: () => true,
+          loadSsoConfiguration: () => "azure",
         },
       });
       const ssoLoginError = new Error("Unexpected error");

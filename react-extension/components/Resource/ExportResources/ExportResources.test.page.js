@@ -16,6 +16,7 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ExportResources from "./ExportResources";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import { ExportPoliciesSettingsContext } from "../../../contexts/ExportPoliciesSettingsContext";
 
 /**
  * The ExportResources component represented as a page
@@ -30,7 +31,9 @@ export default class ExportResourcesPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <ExportResources {...props} />
+          <ExportPoliciesSettingsContext.Provider value={props.exportPoliciesSettingsContext}>
+            <ExportResources {...props} />
+          </ExportPoliciesSettingsContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
       { legacyRoot: true },
@@ -105,6 +108,24 @@ export default class ExportResourcesPage {
    */
   exists() {
     return this.dialog !== null;
+  }
+
+  /**
+   * Returns the export format label text
+   */
+  get exportFormatLabel() {
+    return this._page.container.querySelector('label[for="export-format"]')?.textContent;
+  }
+
+  /**
+   * Returns the list of all export format items (selected + dropdown options)
+   */
+  get exportFormatItems() {
+    const selectedValue = this._page.container.querySelector("#export-format .selected-value")?.textContent;
+    const optionValues = Array.from(this._page.container.querySelectorAll("#export-format .option")).map(
+      (el) => el.textContent,
+    );
+    return [selectedValue, ...optionValues].filter(Boolean);
   }
 
   /**

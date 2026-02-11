@@ -111,7 +111,7 @@ export class AdminSsoContextProvider extends React.Component {
 
   /**
    * Find the sso configuration
-   * @return {Promise<void>}
+   * @return {Promise<Object>}
    */
   async loadSsoConfiguration() {
     let ssoConfig = null;
@@ -119,7 +119,7 @@ export class AdminSsoContextProvider extends React.Component {
       ssoConfig = await this.props.context.port.request("passbolt.sso.get-current");
     } catch (error) {
       this.props.dialogContext.open(NotifyError, { error });
-      return;
+      return {};
     }
 
     this.isSsoConfigExisting = Boolean(ssoConfig.provider);
@@ -131,6 +131,7 @@ export class AdminSsoContextProvider extends React.Component {
       providers: ssoConfig.providers,
       isLoaded: true,
     });
+    return ssoConfig;
   }
 
   /**

@@ -59,10 +59,10 @@ class ManageSsoSettings extends React.Component {
   }
 
   async componentDidMount() {
-    await this.props.adminSsoContext.loadSsoConfiguration();
+    const ssoConfig = await this.props.adminSsoContext.loadSsoConfiguration();
     this.setState({
       loading: false,
-      providers: this.props.adminSsoContext.getProviderList() || [],
+      providers: ssoConfig?.providers || [],
     });
   }
 

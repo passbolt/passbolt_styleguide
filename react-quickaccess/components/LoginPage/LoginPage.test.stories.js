@@ -2,7 +2,8 @@ import React from "react";
 import { MemoryRouter, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import LoginPage from "./LoginPage";
-import { defaultAppContext, defaultSsoContext } from "./LoginPage.test.data";
+import { defaultSsoContext } from "./LoginPage.test.data";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {

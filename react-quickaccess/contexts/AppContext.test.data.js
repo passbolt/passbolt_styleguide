@@ -42,6 +42,9 @@ export function defaultAppContext(data = {}) {
     getOpenerTabId: () => 1,
     search: "",
     searchHistory: {},
+    closeWindow: jest.fn(),
+    setWindowBlurBehaviour: () => {},
+    shouldCloseAtWindowBlur: true,
     ...data,
   };
 }

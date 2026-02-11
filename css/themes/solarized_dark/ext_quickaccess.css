@@ -287,6 +287,7 @@ html {
  */
 body {
   margin: 0;
+  font-synthesis: none;
 }
 /**
  * Render the `main` element consistently in IE.
@@ -686,6 +687,12 @@ body.iframe {
   font-style: normal;
   font-weight: 400;
   src: local('Inconsolata'), local('Inconsolata-Regular'), url('../../../fonts/inconsolata-regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Passbolt-logo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Passbolt-logo'), url('../../../fonts/passbolt-logo-Regular.otf') format('opentype');
 }
 body {
   font-family: 'Open Sans', Verdana, sans-serif;
@@ -3293,6 +3300,7 @@ html {
 }
 .page .app {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
   flex: 1;
@@ -3663,6 +3671,9 @@ html {
   line-height: 2.7rem;
 }
 body {
+  overflow: hidden;
+}
+body > .contain-item {
   overflow: hidden;
 }
 .quickaccess {
@@ -5025,6 +5036,25 @@ body {
 }
 .tooltip-portal-text.additional-uris .list-uris .link:last-child {
   margin-bottom: 0;
+}
+.tooltip-portal-text.additional-tags {
+  padding: 0;
+}
+.tooltip-portal-text.additional-tags .tags-list {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  max-height: 19rem;
+  padding: 0.4rem 0.8rem;
+  gap: 0.4rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--Workspace-Elevator) transparent;
+}
+.tooltip-portal-text.additional-tags .tags-list .tag-list-item {
+  width: fit-content;
+}
+.tooltip-portal-text.additional-tags .tags-list .tag-list-item .tag .tag-content {
+  max-width: 15rem;
 }
 .badge {
   display: inline-flex;

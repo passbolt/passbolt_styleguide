@@ -287,6 +287,7 @@ html {
  */
 body {
   margin: 0;
+  font-synthesis: none;
 }
 /**
  * Render the `main` element consistently in IE.
@@ -686,6 +687,12 @@ body.iframe {
   font-style: normal;
   font-weight: 400;
   src: local('Inconsolata'), local('Inconsolata-Regular'), url('../../../fonts/inconsolata-regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Passbolt-logo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Passbolt-logo'), url('../../../fonts/passbolt-logo-Regular.otf') format('opentype');
 }
 body {
   font-family: 'Open Sans', Verdana, sans-serif;
@@ -3293,6 +3300,7 @@ html {
 }
 .page .app {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
   flex: 1;
@@ -3869,7 +3877,8 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.6rem 0.4rem;
+  padding: 0.6rem 0;
+  width: 100%;
 }
 .announcement .announcement-content {
   width: 100%;
@@ -5281,11 +5290,16 @@ html {
   padding-bottom: 0.8rem;
 }
 .navigation-secondary-tree.navigation-tags .row {
+  gap: 0.4rem;
+  justify-content: space-between;
+  width: 100%;
   padding: 0.6rem 0 0.6rem 0.4rem;
+}
+.navigation-secondary-tree.navigation-tags .row .main-cell-wrapper {
+  flex: unset;
 }
 .navigation-secondary-tree.navigation-tags .row .main-cell-wrapper .main-cell button {
   gap: 0.6rem;
-  width: calc(100% - 0.5rem);
 }
 .navigation-secondary-tree.navigation-tags .row .main-cell-wrapper .main-cell button > svg {
   margin-right: 0.2rem;
@@ -5731,6 +5745,25 @@ iframe.cachette {
 }
 .tooltip-portal-text.additional-uris .list-uris .link:last-child {
   margin-bottom: 0;
+}
+.tooltip-portal-text.additional-tags {
+  padding: 0;
+}
+.tooltip-portal-text.additional-tags .tags-list {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  max-height: 19rem;
+  padding: 0.4rem 0.8rem;
+  gap: 0.4rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--Workspace-Elevator) transparent;
+}
+.tooltip-portal-text.additional-tags .tags-list .tag-list-item {
+  width: fit-content;
+}
+.tooltip-portal-text.additional-tags .tags-list .tag-list-item .tag .tag-content {
+  max-width: 15rem;
 }
 .panel.aside .activity.sidebar-section {
   border-bottom: none;
@@ -7133,16 +7166,6 @@ iframe.cachette {
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
-.sidebar .sidebar-content .secure-note .accordion-content.error-message {
-  background-color: var(--Palette-Error);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-.sidebar .sidebar-content .secure-note .accordion-content.error-message button {
-  padding: 0.4rem 1.6rem;
-}
 .sidebar .sidebar-content .secure-note .accordion-content button {
   justify-self: center;
   align-self: center;
@@ -7520,6 +7543,52 @@ iframe.cachette {
 .tableview table td.cell-location span.caret {
   flex-shrink: 0;
 }
+.tableview table td.cell-tags {
+  min-width: 7rem;
+  overflow: hidden;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag {
+  width: 100%;
+  padding: 0;
+  gap: 0.4rem;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag .tag-list-item {
+  flex-shrink: 0;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag .tag-list-item .tag {
+  cursor: pointer;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag .tag-list-item .tag .tag-content {
+  display: block;
+  white-space: nowrap;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag .tag-list-item.ellipsis-tag {
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag .tag-list-item.ellipsis-tag:last-child {
+  flex-grow: 1;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag .tag-list-item.ellipsis-tag .tag {
+  max-width: 100%;
+  overflow: hidden;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag .tag-list-item.ellipsis-tag .tag .tag-content {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag .badge {
+  flex-shrink: 0;
+}
+.tableview table td.cell-tags div.tags-list.cell-tag .badge .tooltip-portal {
+  display: flex;
+}
 .tableview.comfortable .tableview-header {
   height: 4rem;
 }
@@ -7734,17 +7803,22 @@ table.table-info.horizontal tbody tr:hover {
   display: flex;
   min-width: 0;
 }
-.tags-list .tag-list-item .tag {
-  padding: 0 1rem 0.2rem 1rem;
+.tag {
+  padding: 0.2rem 1rem;
+  white-space: nowrap;
   gap: 0.8rem;
+  border: none;
   border-radius: 1.1rem;
   background: var(--Tags-Tag-background);
   color: var(--Tags-Tag-text);
-  border: none;
-  /* hover */
+  min-width: 1rem;
 }
-.tags-list .tag-list-item .tag:hover {
-  color: var(--Tags-Tag-text);
+.tag:hover {
+  color: var(--Palette-Contrast-1);
+}
+.tag .tag-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* tags editor */
 .tag-editor {
@@ -7763,6 +7837,9 @@ table.table-info.horizontal tbody tr:hover {
   border-radius: var(--Button-border-radius);
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Active-action-button-border);
   background: var(--Action-button-Active-action-button-background);
+}
+.tag-editor .tag:hover {
+  color: var(--Tags-Tag-text);
 }
 .tag-editor .separator {
   width: 0.1rem;

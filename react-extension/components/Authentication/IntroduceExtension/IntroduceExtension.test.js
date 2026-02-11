@@ -41,7 +41,7 @@ describe("As AN I should see setup extension page", () => {
       page = new IntroduceExtensionTestPage(props);
       expect(page.exists()).toBeTruthy();
       // title
-      expect(page.title).toBe("Congratulation! Passbolt extension has been installed.");
+      expect(page.title).toBe("Congratulations! Passbolt extension has been installed.");
       // browser image
       expect(page.browser.className).toBe("animated-setup-introduction chrome");
     });
