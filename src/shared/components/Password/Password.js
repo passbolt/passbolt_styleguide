@@ -83,7 +83,7 @@ class Password extends Component {
     if (this.props.disabled) {
       return;
     }
-    this.setState((prevState) => ({ viewPassword: !prevState.viewPassword }));
+    this.setState({ viewPassword: !this.state.viewPassword });
   }
 
   /**

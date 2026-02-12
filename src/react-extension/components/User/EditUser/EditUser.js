@@ -195,15 +195,17 @@ class EditUser extends Component {
   async handleFormSubmit(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
-
-    this.setState({ hasAlreadyBeenValidated: true });
-
     // Do not re-submit an already processing form
+    if (this.state.processing) {
+      return;
+    }
+
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
+
     if (!this.state.processing) {
-      this.toggleProcessing();
       const errors = this.validate();
       if (this.hasValidationError(errors)) {
-        this.toggleProcessing();
+        this.setState({ processing: false });
         this.focusFirstFieldError(errors);
         return;
       }
@@ -251,13 +253,6 @@ class EditUser extends Component {
       error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

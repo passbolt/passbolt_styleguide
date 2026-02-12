@@ -131,11 +131,11 @@ class CreateResourceFolder extends Component {
     // After first submit, inline validation is on
     this.setState({
       inlineValidation: this.state.inlineValidation || true,
+      processing: true,
     });
 
-    this.toggleProcessing();
     if (this.validate()) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       this.focusFirstFieldError();
       return;
     }
@@ -185,13 +185,6 @@ class CreateResourceFolder extends Component {
   }
 
   /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
-  }
-
-  /**
    * Focus the first field of the form which is in error state.
    * @returns {void}
    */
@@ -235,14 +228,6 @@ class CreateResourceFolder extends Component {
   handleNameInputKeyUp() {
     const nameWarning = maxSizeValidation(this.state.name, RESOURCE_NAME_MAX_LENGTH, this.translate);
     this.setState({ nameWarning });
-  }
-
-  /**
-   * Return true if the form has some validation error
-   * @returns {boolean}
-   */
-  hasValidationError() {
-    return this.state.nameError !== false;
   }
 
   /**

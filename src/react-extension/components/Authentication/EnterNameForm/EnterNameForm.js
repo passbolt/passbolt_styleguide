@@ -119,29 +119,21 @@ class EnterNameForm extends Component {
   async handleFormSubmit(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
-
-    this.setState({ hasAlreadyBeenValidated: true });
-
-    // Do not re-submit an already processing form
-    if (!this.state.processing) {
-      this.toggleProcessing();
-      const errors = this.validate();
-
-      if (this.hasValidationError(errors)) {
-        this.toggleProcessing();
-        this.focusFirstFieldError(errors);
-        return;
-      }
-
-      await this.props.apiTriageContext.onRegistrationRequested(this.state.firstname, this.state.lastname);
+    // Prevent submission chile processing
+    if (this.state.processing) {
+      return;
     }
-  }
 
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
+    const errors = this.validate();
+
+    if (this.hasValidationError(errors)) {
+      this.setState({ processing: false });
+      this.focusFirstFieldError(errors);
+      return;
+    }
+
+    await this.props.apiTriageContext.onRegistrationRequested(this.state.firstname, this.state.lastname);
   }
 
   /**

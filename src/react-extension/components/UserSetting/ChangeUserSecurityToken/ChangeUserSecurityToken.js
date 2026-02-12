@@ -55,9 +55,7 @@ class ChangeUserSecurityToken extends Component {
     return {
       background: "", // The token color
       code: "", // The token code
-      actions: {
-        processing: false, // True if one's processing passphrase
-      },
+      processing: false, // True if one's processing passphrase
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyCode: false, // True if the token code is empty
@@ -127,7 +125,7 @@ class ChangeUserSecurityToken extends Component {
    * Returns true if the user can perform actions on the component
    */
   get areActionsAllowed() {
-    return !this.state.actions.processing;
+    return !this.state.processing;
   }
 
   /**
@@ -143,7 +141,7 @@ class ChangeUserSecurityToken extends Component {
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -169,13 +167,17 @@ class ChangeUserSecurityToken extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    this.setState({ hasBeenValidated: true });
+    // Prevent submission while processing
+    if (this.isProcessing) {
+      return;
+    }
+    this.setState({ hasBeenValidated: true, processing: true });
     const errors = this.validate();
 
     if (this.isValid(errors)) {
-      this.toggleProcessing();
       await this.save();
     }
+    this.setState({ processing: false });
   }
 
   /**
@@ -224,9 +226,10 @@ class ChangeUserSecurityToken extends Component {
       await this.props.actionFeedbackContext.displaySuccess(
         this.props.t("The security token has been updated successfully"),
       );
-      this.toggleProcessing();
     } catch (error) {
       await this.onSaveFailure(error);
+    } finally {
+      this.setState({ processing: false });
     }
   }
 
@@ -235,7 +238,6 @@ class ChangeUserSecurityToken extends Component {
    * @param error The error
    */
   async onSaveFailure(error) {
-    this.toggleProcessing();
     const ErrorDialogProps = { error: error };
     this.props.dialogContext.open(NotifyError, ErrorDialogProps);
   }
@@ -307,13 +309,6 @@ class ChangeUserSecurityToken extends Component {
     }
     this.setState({ errors });
     return errors;
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ actions: { processing: !prevState.actions.processing } }));
   }
 
   /**

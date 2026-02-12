@@ -168,11 +168,11 @@ class EditSubscriptionKey extends Component {
       return;
     }
 
-    this.setState({ hasBeenValidated: true });
-    this.toggleProcessing();
+    this.setState({ hasBeenValidated: true, processing: true });
+
     if (!(await this.validate())) {
       this.handleValidateError();
-      this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
     try {
@@ -180,7 +180,7 @@ class EditSubscriptionKey extends Component {
       await this.handleSaveSuccess();
       await this.props.adminSubscriptionContext.findSubscriptionKey();
     } catch (error) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       this.handleSaveError(error);
       this.focusFieldError();
     }
@@ -265,13 +265,6 @@ class EditSubscriptionKey extends Component {
     await this.validateKeyInput();
 
     return this.state.keyError === "";
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

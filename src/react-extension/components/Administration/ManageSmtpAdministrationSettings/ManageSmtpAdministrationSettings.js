@@ -191,7 +191,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    * Handles the click on the advanced settings toggle.
    */
   handleAdvancedSettingsToggle() {
-    this.setState((prevState) => ({ showAdvancedSettings: !prevState.showAdvancedSettings }));
+    this.setState({ showAdvancedSettings: !this.state.showAdvancedSettings });
   }
 
   /**

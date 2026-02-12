@@ -47,13 +47,6 @@ class ChooseAccountRecoveryPreference extends Component {
   }
 
   /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
-  }
-
-  /**
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
@@ -67,7 +60,11 @@ class ChooseAccountRecoveryPreference extends Component {
   async handleSubmit(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
-    this.toggleProcessing();
+    // Prevent submission while processing
+    if (this.state.processing) {
+      return;
+    }
+    this.setState({ processing: true });
     this.complete();
   }
 

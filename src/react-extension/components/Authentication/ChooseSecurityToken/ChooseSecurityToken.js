@@ -47,9 +47,7 @@ class ChooseSecurityToken extends Component {
     return {
       background: "", // The token color
       code: "", // The token code
-      actions: {
-        processing: false, // True if one's processing passphrase
-      },
+      processing: false, // True if one's processing passphrase
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyCode: false, // True if the token code is empty
@@ -110,7 +108,7 @@ class ChooseSecurityToken extends Component {
    * Returns true if the user can perform actions on the component
    */
   get areActionsAllowed() {
-    return !this.state.actions.processing;
+    return !this.state.processing;
   }
 
   /**
@@ -126,7 +124,7 @@ class ChooseSecurityToken extends Component {
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -152,11 +150,15 @@ class ChooseSecurityToken extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
+    // Prevent submission while processing
+    if (this.isProcessing) {
+      return;
+    }
     this.setState({ hasBeenValidated: true });
     const errors = this.validate();
 
     if (this.isValid(errors)) {
-      this.toggleProcessing();
+      this.setState({ processing: true });
       await this.save();
     }
   }
@@ -273,13 +275,6 @@ class ChooseSecurityToken extends Component {
     }
     this.setState({ errors });
     return errors;
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ actions: { processing: !prevState.actions.processing } }));
   }
 
   /**

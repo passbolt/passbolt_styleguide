@@ -162,10 +162,10 @@ class RenameResourceFolder extends Component {
       inlineValidation: this.state.inlineValidation || true,
     });
 
-    this.toggleProcessing();
+    this.setState({ processing: true });
 
     if (this.validate()) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       this.focusFirstFieldError();
       return;
     }
@@ -212,13 +212,6 @@ class RenameResourceFolder extends Component {
       error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

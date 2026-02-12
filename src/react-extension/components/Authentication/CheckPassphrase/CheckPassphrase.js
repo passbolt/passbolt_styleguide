@@ -50,9 +50,7 @@ class CheckPassphrase extends Component {
       passphrase: "", // The passphrase
       rememberMe: false, // The remember passphrase flag
       isObfuscated: true, // True if the passphrase should not be visible
-      actions: {
-        processing: false, // True if one's processing passphrase
-      },
+      processing: false, // True if one's processing passphrase
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
@@ -65,14 +63,14 @@ class CheckPassphrase extends Component {
    * Returns true if the user can perform actions on the component
    */
   get areActionsAllowed() {
-    return !this.state.actions.processing;
+    return !this.state.processing;
   }
 
   /**
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -111,9 +109,13 @@ class CheckPassphrase extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
+    // Prevent submission while processing
+    if (this.isProcessing) {
+      return;
+    }
     const errors = this.validate();
     if (!errors.emptyPassphrase) {
-      this.toggleProcessing();
+      this.setState({ processing: true });
       await this.check();
     } else {
       this.focusOnPassphrase();
@@ -157,9 +159,9 @@ class CheckPassphrase extends Component {
    */
   onCheckFailure(error) {
     // Whenever the passphrase is invalid.
-    this.toggleProcessing();
+    this.setState({ processing: false });
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState((prevState) => ({ errors: { ...prevState.errors, invalidPassphrase: true } }));
+      this.setState({ errors: { ...this.state.errors, invalidPassphrase: true } });
       this.focusOnPassphrase();
     } else {
       throw error;
@@ -182,13 +184,6 @@ class CheckPassphrase extends Component {
     this.setState({ hasBeenValidated: true, errors });
 
     return errors;
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ actions: { processing: !prevState.actions.processing } }));
   }
 
   /**

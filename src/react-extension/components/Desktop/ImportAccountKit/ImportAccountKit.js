@@ -112,12 +112,11 @@ class ImportAccountKit extends React.Component {
       return;
     }
 
-    this.setState({ validation: { hasAlreadyBeenValidated: true } });
+    this.setState({ validation: { hasAlreadyBeenValidated: true, processing: true } });
 
-    this.toggleProcessing();
     const errors = this.validateAccountKitInput();
     if (errors.message !== null) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
     await this.props.importAccountKitContext.verifyAccountKit(this.state.accountKit);
@@ -139,13 +138,6 @@ class ImportAccountKit extends React.Component {
       };
       reader.readAsText(accountKit);
     });
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

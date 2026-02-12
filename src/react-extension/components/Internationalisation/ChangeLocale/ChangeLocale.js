@@ -97,9 +97,9 @@ class ChangeLocale extends Component {
    * @param {string} locale The locale identifier.
    */
   async updateLocale(locale) {
-    this.toggleProcessing();
+    this.setState({ processing: true });
     await this.props.context.onUpdateLocaleRequested(locale);
-    this.toggleProcessing();
+    this.setState({ processing: false });
   }
 
   /**
@@ -107,13 +107,6 @@ class ChangeLocale extends Component {
    */
   initLocale() {
     this.setState({ locale: this.props.context.locale, loading: false });
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

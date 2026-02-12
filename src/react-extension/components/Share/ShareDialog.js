@@ -168,7 +168,7 @@ class ShareDialog extends Component {
       return;
     }
 
-    this.toggleProcessing();
+    this.setState({ processing: true });
     try {
       await this.shareSave();
       await this.handleSaveSuccess();
@@ -433,13 +433,6 @@ class ShareDialog extends Component {
       return "";
     }
     return acos.map((aco) => (aco.permission.aco === "Resource" ? aco.metadata.name : aco.name)).join(", ");
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

@@ -55,9 +55,7 @@ class EditUserProfile extends Component {
         username: "",
         locale: "en-UK",
       },
-      actions: {
-        processing: false, // True if one is processing the edit
-      },
+      processing: false, // True if one is processing the edit
       errors: {
         isFirstnameEmpty: false, // True if the firstname is empty
         isLastnameEmpty: false, // True if the lastname is empty
@@ -70,7 +68,7 @@ class EditUserProfile extends Component {
    * Return trus if the export is processing
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -115,7 +113,7 @@ class EditUserProfile extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState((prevState) => ({ profile: Object.assign(prevState.profile, { [name]: value }) }));
+    this.setState({ profile: Object.assign(this.state.profile, { [name]: value }) });
     if (this.state.hasAlreadyBeenValidated) {
       await this.validate();
     }
@@ -135,6 +133,9 @@ class EditUserProfile extends Component {
   async handleSave(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
+    if (this.isProcessing) {
+      return;
+    }
     await this.save();
   }
 
@@ -151,11 +152,10 @@ class EditUserProfile extends Component {
    * Saves the change on the user profile
    */
   async save() {
-    this.setState({ hasAlreadyBeenValidated: true });
-    this.toggleProcessing();
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
     const errors = this.validate();
     if (this.hasErrors(errors)) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       this.focusFirstFieldError();
       return;
     }
@@ -212,7 +212,7 @@ class EditUserProfile extends Component {
    * @param error The error
    */
   async onSaveError(error) {
-    this.toggleProcessing();
+    this.setState({ processing: false });
     const errorDialogProps = {
       error: error,
     };
@@ -249,18 +249,6 @@ class EditUserProfile extends Component {
     } else if (this.state.errors.isLastnameEmpty) {
       this.lastnameRef.current.focus();
     }
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({
-      actions: {
-        ...prevState.actions,
-        processing: !prevState.actions.processing,
-      },
-    }));
   }
 
   /**

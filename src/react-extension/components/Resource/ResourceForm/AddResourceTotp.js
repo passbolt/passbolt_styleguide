@@ -104,7 +104,7 @@ class AddResourceTotp extends Component {
    * Handles the click on the display secrets button.
    */
   handleDisplayAdvancedSettingsClick() {
-    this.setState((prevState) => ({ displayAdvancedSettings: !prevState.displayAdvancedSettings }));
+    this.setState({ displayAdvancedSettings: !this.state.displayAdvancedSettings });
   }
 
   /**

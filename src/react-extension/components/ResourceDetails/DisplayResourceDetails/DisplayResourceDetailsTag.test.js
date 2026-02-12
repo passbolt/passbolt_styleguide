@@ -343,13 +343,17 @@ describe("See tags", () => {
       expect(page.tagEditor.autocompleteItemName(2).textContent).toBe(TagMock[2].slug);
 
       await page.passwordSidebarTagSection.downArrowKeyDown(page.tagEditor.autocompleteContent);
-      expect(page.tagEditor.component.textContent).toBe("tar");
-      await page.passwordSidebarTagSection.downArrowKeyDown(page.tagEditor.autocompleteContent);
       expect(page.tagEditor.component.textContent).toBe(TagMock[1].slug);
-      await page.passwordSidebarTagSection.upArrowKeyDown(page.tagEditor.autocompleteContent);
+      await page.passwordSidebarTagSection.downArrowKeyDown(page.tagEditor.autocompleteContent);
       expect(page.tagEditor.component.textContent).toBe(TagMock[2].slug);
       await page.passwordSidebarTagSection.downArrowKeyDown(page.tagEditor.autocompleteContent);
+      expect(page.tagEditor.component.textContent).toBe("tar");
+      await page.passwordSidebarTagSection.upArrowKeyDown(page.tagEditor.autocompleteContent);
+      expect(page.tagEditor.component.textContent).toBe(TagMock[2].slug);
+      await page.passwordSidebarTagSection.upArrowKeyDown(page.tagEditor.autocompleteContent);
       expect(page.tagEditor.component.textContent).toBe(TagMock[1].slug);
+      await page.passwordSidebarTagSection.upArrowKeyDown(page.tagEditor.autocompleteContent);
+      expect(page.tagEditor.component.textContent).toBe("tar");
 
       await page.passwordSidebarTagSection.click(page.tagEditor.autocompleteItemName(1));
       expect(page.tagEditor.component.textContent).toBe("");

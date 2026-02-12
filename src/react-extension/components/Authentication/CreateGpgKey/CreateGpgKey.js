@@ -54,9 +54,7 @@ class CreateGpgKey extends Component {
     return {
       passphrase: "", // The current passphrase
       passphraseEntropy: null, // The current passphrase entropy
-      actions: {
-        processing: false, // True if one's processing passphrase
-      },
+      processing: false, // True if one's processing passphrase
       passphraseInDictionnary: false, // True if the passphrase is part of a data breach
     };
   }
@@ -65,7 +63,7 @@ class CreateGpgKey extends Component {
    * Returns true if the user can perform actions on the component
    */
   get areActionsAllowed() {
-    return !this.state.actions.processing;
+    return !this.state.processing;
   }
 
   /**
@@ -81,13 +79,6 @@ class CreateGpgKey extends Component {
   }
 
   /**
-   * Returns the minimum entropy required for the passphrase
-   */
-  get minimumEntropyRequired() {
-    return this.props.userPassphrasePolicies.entropy_minimum;
-  }
-
-  /**
    * Returns true if the component must be in a disabled mode
    */
   get mustBeDisabled() {
@@ -98,7 +89,7 @@ class CreateGpgKey extends Component {
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -167,10 +158,14 @@ class CreateGpgKey extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    this.toggleProcessing();
+    // Prevent submission while processing
+    if (this.isProcessing) {
+      return;
+    }
+    this.setState({ processing: true });
     // is current form valid
     if (!this.isValid) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       this.focusOnPassphrase();
       return;
     }
@@ -178,13 +173,13 @@ class CreateGpgKey extends Component {
     //the form is valid, check if passphrase is pwned
     const isPassphrasePwned = await this.evaluatePassphraseIsInDictionary(this.state.passphrase);
     if (isPassphrasePwned) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       this.focusOnPassphrase();
       return;
     }
 
     await this.generateGpgKey();
-    this.toggleProcessing();
+    this.setState({ processing: false });
   }
 
   /**
@@ -209,18 +204,6 @@ class CreateGpgKey extends Component {
    */
   async generateGpgKey() {
     await this.props.onComplete(this.state.passphrase);
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({
-      actions: {
-        ...prevState.actions,
-        processing: !prevState.actions.processing,
-      },
-    }));
   }
 
   /**

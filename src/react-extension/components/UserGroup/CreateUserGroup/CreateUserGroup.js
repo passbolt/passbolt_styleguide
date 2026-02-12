@@ -156,12 +156,12 @@ class CreateUserGroup extends Component {
    * @param userId
    */
   handleSelectUpdate(event, userId) {
-    const is_admin = event.target.value === true;
-    this.setState((prevState) => ({
-      groups_users: prevState.groups_users.map((groups_user) =>
-        groups_user.user.id === userId ? { ...groups_user, is_admin } : groups_user,
-      ),
-    }));
+    const target = event.target;
+    const is_admin = target.value === true;
+    const groups_users = Object.assign(this.state.groups_users);
+    const index = groups_users.findIndex((groups_user) => groups_user.user.id === userId);
+    groups_users[index] = Object.assign(groups_users[index], { is_admin });
+    this.setState({ groups_users });
   }
 
   /**
@@ -170,9 +170,10 @@ class CreateUserGroup extends Component {
    * @param userId
    */
   handleDeleteClickEvent(event, userId) {
-    this.setState((prevState) => ({
-      groups_users: prevState.groups_users.filter((groups_user) => groups_user.user.id !== userId),
-    }));
+    const groups_users = Object.assign(this.state.groups_users);
+    const index = groups_users.findIndex((groups_user) => groups_user.user.id === userId);
+    groups_users.splice(index, 1);
+    this.setState({ groups_users });
   }
 
   /**
@@ -190,7 +191,7 @@ class CreateUserGroup extends Component {
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      this.toggleProcessing();
+      this.setState({ processing: true });
       try {
         await this.createGroup();
         await this.handleSaveSuccess();
@@ -260,13 +261,6 @@ class CreateUserGroup extends Component {
   async addCurrentUser() {
     const [user] = await this.decorateUsersWithGpgKey([this.props.context.loggedInUser]);
     this.state.groups_users.push({ user, is_admin: true });
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

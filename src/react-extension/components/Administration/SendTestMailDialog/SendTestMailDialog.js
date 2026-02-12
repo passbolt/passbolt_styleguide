@@ -141,7 +141,7 @@ class SendTestMailDialog extends React.Component {
    * Handle the click on "Logs" button by toggling the log details display state.
    */
   handleDisplayLogsClick() {
-    this.setState((prevState) => ({ displayLogs: !prevState.displayLogs }));
+    this.setState({ displayLogs: !this.state.displayLogs });
   }
 
   /**

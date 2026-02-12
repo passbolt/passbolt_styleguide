@@ -116,27 +116,19 @@ class EditRole extends Component {
       return;
     }
 
-    this.setState({ hasAlreadyBeenValidated: true });
-    this.toggleProcessing();
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
 
     // Validate the entity
     const validationError = this.roleEntity.validate();
 
     if (validationError?.hasErrors() || this.roleEntity.isAReservedRole()) {
       this.focusFirstFieldError();
-      this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
 
     await this.props.onSubmit(this.roleEntity);
     this.handleClose();
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

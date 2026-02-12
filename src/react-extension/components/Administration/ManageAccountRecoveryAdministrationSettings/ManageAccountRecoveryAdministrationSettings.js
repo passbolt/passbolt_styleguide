@@ -219,13 +219,6 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
   }
 
   /**
-   * Toggle the processing mode
-   */
-  async toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
-  }
-
-  /**
    * get fingerprint
    * @param fingerprint
    * @returns {JSX.Element}

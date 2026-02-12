@@ -70,7 +70,7 @@ class ConfirmMetadataKey extends Component {
    * Handle more information button click.
    */
   handleMoreInformationClicked() {
-    this.setState((prevState) => ({ openMoreInformation: !prevState.openMoreInformation }));
+    this.setState({ openMoreInformation: !this.state.openMoreInformation });
   }
 
   /**

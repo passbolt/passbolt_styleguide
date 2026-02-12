@@ -57,13 +57,6 @@ class ConfirmSaveAccountRecoverySettings extends Component {
   }
 
   /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
-  }
-
-  /**
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
@@ -76,12 +69,16 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    this.toggleProcessing();
+    // Prevent submission while processing
+    if (this.isProcessing) {
+      return;
+    }
+    this.setState({ processing: true });
     try {
       await this.props.onSubmit();
       this.props.onClose();
     } catch (error) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       if (error.name === "UserAbortsOperationError") {
         // It can happen when the user has closed the passphrase entry dialog by instance. Do nothing.
       } else {

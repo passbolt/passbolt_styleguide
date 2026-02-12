@@ -83,9 +83,7 @@ class YubikeySetup extends Component {
    * set an error to object
    */
   setError(key, value) {
-    this.setState((prevState) => ({
-      error: { ...prevState.error, [key]: value },
-    }));
+    this.setState({ error: { ...this.state.error, [key]: value } });
   }
   /**
    * Handle change of generic form input.

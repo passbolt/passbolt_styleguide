@@ -132,21 +132,21 @@ class ImportResourcesResult extends Component {
    * Toggle the display of the warning resources details
    */
   toggleWarningResourcesDetails() {
-    this.setState((prevState) => ({ showWarningResourcesDetails: !prevState.showWarningResourcesDetails }));
+    this.setState({ showWarningResourcesDetails: !this.state.showWarningResourcesDetails });
   }
 
   /**
    * Toggle the display of the error resources details
    */
   toggleErrorResourcesDetails() {
-    this.setState((prevState) => ({ showErrorResourcesDetails: !prevState.showErrorResourcesDetails }));
+    this.setState({ showErrorResourcesDetails: !this.state.showErrorResourcesDetails });
   }
 
   /**
    * Toggle the display of the error folders details
    */
   toggleErrorFoldersDetails() {
-    this.setState((prevState) => ({ showErrorFoldersDetails: !prevState.showErrorFoldersDetails }));
+    this.setState({ showErrorFoldersDetails: !this.state.showErrorFoldersDetails });
   }
 
   /*

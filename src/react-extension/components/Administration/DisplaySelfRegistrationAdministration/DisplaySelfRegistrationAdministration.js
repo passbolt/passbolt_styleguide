@@ -231,20 +231,16 @@ class DisplaySelfRegistrationAdministration extends React.Component {
 
   /**
    * Handle the click on the self registration title
-   * @param {UserDirectory} userDirectory state
    */
   handleToggleClicked() {
-    this.setState(
-      (prevState) => ({ isEnabled: !prevState.isEnabled }),
-      () => {
-        if (this.state.isEnabled) {
-          this.setupSettings();
-        } else {
-          this.props.adminSelfRegistrationContext.setDomains({ allowedDomains: new Map() });
-          this.props.adminSelfRegistrationContext.setErrors(new Map());
-        }
-      },
-    );
+    const isEnabled = !this.state.isEnabled;
+    if (isEnabled) {
+      this.setupSettings();
+    } else {
+      this.props.adminSelfRegistrationContext.setDomains({ allowedDomains: new Map() });
+      this.props.adminSelfRegistrationContext.setErrors(new Map());
+    }
+    this.setState({ isEnabled });
   }
 
   /**

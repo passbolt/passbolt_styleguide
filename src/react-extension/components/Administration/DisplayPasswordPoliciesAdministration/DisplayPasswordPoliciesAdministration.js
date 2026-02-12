@@ -72,14 +72,14 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
    * Handle change visibility of password configuration block
    */
   handlePasswordSectionToggle() {
-    this.setState((prevState) => ({ showPasswordSection: !prevState.showPasswordSection }));
+    this.setState({ showPasswordSection: !this.state.showPasswordSection });
   }
 
   /**
    * Handle change visibility of passphrase configuration block
    */
   handlePassphraseSectionToggle() {
-    this.setState((prevState) => ({ showPassphraseSection: !prevState.showPassphraseSection }));
+    this.setState({ showPassphraseSection: !this.state.showPassphraseSection });
   }
 
   /**

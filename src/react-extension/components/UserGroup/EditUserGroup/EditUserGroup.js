@@ -56,10 +56,8 @@ class EditUserGroup extends Component {
         name: "",
         groupsUsers: [],
       },
-      actions: {
-        processing: false, // True if one process some operation
-        loading: true, // True if the component is in a loading mode
-      },
+      processing: false, // True if one process some operation
+      loading: true, // True if the component is in a loading mode
       nameError: "",
       nameWarning: "",
       hasAlreadyBeenValidated: false, // True when the form has already been submitted
@@ -78,12 +76,7 @@ class EditUserGroup extends Component {
    */
   componentDidUpdate() {
     if (this.groupToEdit && this.isLoading) {
-      this.setState((prevState) => ({
-        actions: {
-          ...prevState.actions,
-          loading: false,
-        },
-      }));
+      this.setState({ loading: false });
     }
   }
 
@@ -166,7 +159,7 @@ class EditUserGroup extends Component {
    * @type {boolean}
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -174,7 +167,7 @@ class EditUserGroup extends Component {
    * @type {boolean}
    */
   get isLoading() {
-    return this.state.actions.loading;
+    return this.state.loading;
   }
 
   /**
@@ -282,13 +275,7 @@ class EditUserGroup extends Component {
   async handleSubmit(event) {
     event.preventDefault();
 
-    this.setState((prevState) => ({
-      hasAlreadyBeenValidated: true,
-      actions: {
-        ...prevState.actions,
-        processing: true,
-      },
-    }));
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
 
     const nameError = this.validate();
     if (nameError.length > 0) {
@@ -299,12 +286,7 @@ class EditUserGroup extends Component {
       .then(this.onEditSuccess.bind(this))
       .catch(this.onEditFailure.bind(this))
       .finally(() => {
-        this.setState((prevState) => ({
-          actions: {
-            ...prevState.actions,
-            processing: false,
-          },
-        }));
+        this.setState({ processing: false });
       });
   }
 
@@ -312,12 +294,7 @@ class EditUserGroup extends Component {
    * Handle validation error.
    */
   handleValidateError() {
-    this.setState((prevState) => ({
-      actions: {
-        ...prevState.actions,
-        processing: false,
-      },
-    }));
+    this.setState({ processing: false });
     this.focusFieldError();
   }
 
@@ -400,12 +377,7 @@ class EditUserGroup extends Component {
    * @param name The new name
    */
   updateName(name) {
-    this.setState((prevState) => ({
-      groupToEdit: {
-        ...prevState.groupToEdit,
-        name,
-      },
-    }));
+    this.setState({ groupToEdit: { ...this.state.groupToEdit, name } });
 
     if (this.state.hasAlreadyBeenValidated) {
       this.validateName();
@@ -417,21 +389,16 @@ class EditUserGroup extends Component {
 
   /**
    * Changes the group groups users
-   * @param {array} The new groups users
+   * @param {array} groupsUsers The new groups users
    * @param {boolean} shouldScrollToEnd if true triggers a scroll to the end of the list
    */
   updateGroupsUsers(groupsUsers, shouldScrollToEnd) {
-    this.setState(
-      (prevState) => ({
-        groupToEdit: { ...prevState.groupToEdit, groups_users: groupsUsers },
-      }),
-      () => {
-        if (shouldScrollToEnd) {
-          // scroll at the bottom of the group users list
-          this.listRef.current.scrollTo(this.groupsUsers.length - 1);
-        }
-      },
-    );
+    this.setState({ groupToEdit: { ...this.state.groupToEdit, groups_users: groupsUsers } }, () => {
+      if (shouldScrollToEnd) {
+        // scroll at the bottom of the group users list
+        this.listRef.current.scrollTo(this.groupsUsers.length - 1);
+      }
+    });
   }
 
   /**

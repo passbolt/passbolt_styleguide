@@ -196,15 +196,14 @@ class CreateUser extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
 
-    this.setState({ hasAlreadyBeenValidated: true });
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      this.toggleProcessing();
       const errors = this.validate();
 
       if (this.hasValidationError(errors)) {
-        this.toggleProcessing();
+        this.setState({ processing: false });
         this.focusFirstFieldError(errors);
         return;
       }
@@ -261,13 +260,6 @@ class CreateUser extends Component {
       error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

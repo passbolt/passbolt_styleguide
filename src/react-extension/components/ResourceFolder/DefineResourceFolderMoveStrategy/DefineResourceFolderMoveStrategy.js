@@ -114,7 +114,7 @@ class DefineResourceFolderMoveStrategy extends Component {
       return;
     }
 
-    this.toggleProcessing();
+    this.setState({ processing: true });
 
     try {
       await this.props.context.port.emit(this.props.context.folderMoveStrategyProps.requestId, "SUCCESS", {
@@ -159,13 +159,6 @@ class DefineResourceFolderMoveStrategy extends Component {
       error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**

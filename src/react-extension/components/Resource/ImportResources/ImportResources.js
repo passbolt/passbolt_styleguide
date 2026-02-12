@@ -157,18 +157,14 @@ class ImportResources extends Component {
    * Handle the change of import folders option
    */
   handleImportOptionFoldersChanged() {
-    this.setState((prevState) => ({
-      options: { ...prevState.options, folders: !prevState.options.folders },
-    }));
+    this.setState({ options: { ...this.state.options, folders: !this.state.options.folders } });
   }
 
   /**
    * Handle the change of unique tag options
    */
   handleImportOptionTagsChanged() {
-    this.setState((prevState) => ({
-      options: { ...prevState.options, tags: !prevState.options.tags },
-    }));
+    this.setState({ options: { ...this.state.options, tags: !this.state.options.tags } });
   }
 
   /**
@@ -202,13 +198,6 @@ class ImportResources extends Component {
     if (!this.state.processing) {
       this.import();
     }
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /**
@@ -281,7 +270,7 @@ class ImportResources extends Component {
     const credentialsOptions = { credentials: { password: null, keyFile: null } };
     const options = Object.assign({}, this.state.options, credentialsOptions);
 
-    this.toggleProcessing();
+    this.setState({ processing: true });
     try {
       const importResult = await this.props.context.port.request(
         "passbolt.import-resources.import-file",
@@ -303,7 +292,7 @@ class ImportResources extends Component {
     await this.props.resourceWorkspaceContext.onResourceFileImportResult(importResult);
     await this.props.resourceWorkspaceContext.onResourceFileToImport(null);
     await this.props.dialogContext.open(ImportResourcesResult);
-    this.toggleProcessing();
+    this.setState({ processing: false });
     this.close();
   }
 
@@ -321,7 +310,7 @@ class ImportResources extends Component {
       error.name === "KdbxError" && (error.code === "InvalidKey" || error.code === "InvalidArg");
     const isCsvError = error.name === "FileFormatError";
 
-    this.toggleProcessing();
+    this.setState({ processing: false });
     if (isUserAbortsOperation || isUntrustedMetadataKeyError) {
       // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
     } else if (isKdbxProtectedError) {

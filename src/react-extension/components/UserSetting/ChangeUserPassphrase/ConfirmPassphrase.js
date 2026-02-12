@@ -79,13 +79,6 @@ class ConfirmPassphrase extends React.Component {
   }
 
   /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
-  }
-
-  /**
    * Handle form input changes.
    * @params {ReactEvent} The react event
    * @returns {void}
@@ -105,7 +98,7 @@ class ConfirmPassphrase extends React.Component {
     event.preventDefault();
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      this.toggleProcessing();
+      this.setState({ processing: true });
       await this.checkPassphrase();
     }
   }
@@ -125,7 +118,7 @@ class ConfirmPassphrase extends React.Component {
    */
   onCheckFailure(error) {
     // Whenever the passphrase is invalid.
-    this.toggleProcessing();
+    this.setState({ processing: false });
     if (error.name === "InvalidMasterPasswordError") {
       this.setState({ passphraseError: this.translate("The passphrase is invalid.") });
     } else {

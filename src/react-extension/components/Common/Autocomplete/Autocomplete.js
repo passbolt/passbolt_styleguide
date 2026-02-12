@@ -119,12 +119,13 @@ class Autocomplete extends Component {
 
   /**
    * Handle when item is selected by arrows
+   * @param {number} selected
    */
-  handleArrowFocus() {
-    if (this.state.selected === -1) {
+  handleArrowFocus(selected) {
+    if (selected === -1) {
       this.props.onArrowFocus(this.props.value);
     } else {
-      const slug = this.props.autocompleteItems[this.state.selected].slug;
+      const slug = this.props.autocompleteItems[selected].slug;
       this.props.onArrowFocus(slug);
     }
   }
@@ -133,26 +134,30 @@ class Autocomplete extends Component {
    * Navigate to select the previous item
    */
   selectPrevious() {
-    if (this.state.selected === -1) {
-      this.setState({ selected: this.props.autocompleteItems.length - 1 });
+    let selected = this.state.selected;
+    if (selected === -1) {
+      selected = this.props.autocompleteItems.length - 1;
     } else {
-      this.setState((prevState) => ({ selected: prevState.selected - 1 }));
+      selected = selected - 1;
     }
-    this.scrollToSelectedItem();
-    this.handleArrowFocus();
+    this.scrollToSelectedItem(selected);
+    this.handleArrowFocus(selected);
+    this.setState({ selected });
   }
 
   /**
    * Navigate to select the next item
    */
   selectNext() {
-    if (this.state.selected === this.props.autocompleteItems.length - 1) {
-      this.setState({ selected: -1 });
+    let selected = this.state.selected;
+    if (selected === this.props.autocompleteItems.length - 1) {
+      selected = -1;
     } else {
-      this.setState((prevState) => ({ selected: prevState.selected + 1 }));
+      selected = selected + 1;
     }
-    this.scrollToSelectedItem();
-    this.handleArrowFocus();
+    this.scrollToSelectedItem(selected);
+    this.handleArrowFocus(selected);
+    this.setState({ selected });
   }
 
   /**
@@ -181,8 +186,12 @@ class Autocomplete extends Component {
     };
   }
 
-  scrollToSelectedItem() {
-    if (!this.props.autocompleteItems || this.props.autocompleteItems.length === 0 || this.state.selected === -1) {
+  /**
+   * Scroll to the selected item
+   * @param {number} selected
+   */
+  scrollToSelectedItem(selected) {
+    if (!this.props.autocompleteItems || this.props.autocompleteItems.length === 0 || selected === -1) {
       this.listRef.current.scrollTop = 0;
     } else {
       const totalHeight = this.listRef.current.scrollHeight;
@@ -190,7 +199,7 @@ class Autocomplete extends Component {
       const visibleHeight = this.listRef.current.clientHeight;
       const howManyFits = Math.round(visibleHeight / itemHeight);
       const fitOffset = visibleHeight - itemHeight * howManyFits;
-      const currentItemPosition = itemHeight * this.state.selected;
+      const currentItemPosition = itemHeight * selected;
       const currentScroll = this.listRef.current.scrollTop;
       if (currentItemPosition - fitOffset < currentScroll) {
         this.listRef.current.scrollTop = this.listRef.current.scrollTop - visibleHeight;

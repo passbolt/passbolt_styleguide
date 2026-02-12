@@ -116,10 +116,13 @@ class TransferToMobile extends React.Component {
    * Whenever the user wants to start the transfer
    */
   async handleClickStart() {
+    // Prevent click while processing
+    if (this.state.processing) {
+      return;
+    }
     try {
-      this.toggleProcessing();
+      this.setState({ processing: true });
       await this.createTransfer();
-      this.toggleProcessing();
     } catch (error) {
       // Could be that the user canceled or couldn't remember the passphrase
       if (error.name === "UserAbortsOperationError") {
@@ -127,6 +130,8 @@ class TransferToMobile extends React.Component {
       } else {
         return this.handleTransferError(error);
       }
+    } finally {
+      this.setState({ processing: false });
     }
   }
 
@@ -446,7 +451,6 @@ class TransferToMobile extends React.Component {
    * @returns {Promise<void>}
    */
   async handleTransferCancel() {
-    this.toggleProcessing();
     this.clearInterval();
     try {
       // cancel server side if we had the time to create a transfer entity there
@@ -554,13 +558,6 @@ class TransferToMobile extends React.Component {
   async handleClickDone() {
     this.clearInterval();
     this.setState(this.defaultState);
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ processing: !prevState.processing }));
   }
 
   /*

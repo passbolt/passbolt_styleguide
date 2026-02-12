@@ -48,7 +48,7 @@ class ApiError extends Component {
    * Handles the click on the display logs button.
    */
   handleDisplayLogsClick() {
-    this.setState((prevState) => ({ displayLogs: !prevState.displayLogs }));
+    this.setState({ displayLogs: !this.state.displayLogs });
   }
 
   /**

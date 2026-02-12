@@ -57,7 +57,7 @@ class DisplayMetadataEnablementError extends Component {
    * Handle the toggle display of error details
    */
   handleErrorDetailsToggle() {
-    this.setState((prevState) => ({ showErrorDetails: !prevState.showErrorDetails }));
+    this.setState({ showErrorDetails: !this.state.showErrorDetails });
   }
 
   /**

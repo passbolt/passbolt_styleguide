@@ -87,7 +87,7 @@ class DisplayResourceDetailsComment extends React.Component {
    * Whenever the user clicks on the section title
    */
   async handleTitleClickedEvent() {
-    this.setState((previousState) => ({ open: !previousState.open }));
+    this.setState({ open: !this.state.open });
   }
 
   /**

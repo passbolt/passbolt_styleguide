@@ -48,9 +48,7 @@ class ImportGpgKey extends Component {
     return {
       selectedFile: null, // the file to import
       privateKey: "", // The gpg private key
-      actions: {
-        processing: false, // True if one's processing passphrase
-      },
+      processing: false, // True if one's processing passphrase
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPrivateKey: false, // True if the private key is empty
@@ -65,7 +63,7 @@ class ImportGpgKey extends Component {
    * Returns true if the user can perform actions on the component
    */
   get areActionsAllowed() {
-    return !this.state.actions.processing;
+    return !this.state.processing;
   }
 
   /**
@@ -80,7 +78,7 @@ class ImportGpgKey extends Component {
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -115,11 +113,15 @@ class ImportGpgKey extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
+    // Prevent submission while processing
+    if (this.isProcessing) {
+      return;
+    }
     this.setState({ hasBeenValidated: true });
     const errors = await this.validate();
 
     if (this.isValid(errors)) {
-      this.toggleProcessing();
+      this.setState({ processing: true });
       await this.save();
     }
   }
@@ -195,7 +197,7 @@ class ImportGpgKey extends Component {
    */
   onSaveFailure(error) {
     // It can happen when some key validation went wrong.
-    this.toggleProcessing();
+    this.setState({ processing: false });
     if (error.name === "GpgKeyError") {
       this.setState({ errors: { invalidPrivateKey: true }, errorMessage: error.message });
     } else {
@@ -242,13 +244,6 @@ class ImportGpgKey extends Component {
     }
     this.setState({ errors, errorMessage });
     return errors;
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState((prevState) => ({ actions: { processing: !prevState.actions.processing } }));
   }
 
   /**

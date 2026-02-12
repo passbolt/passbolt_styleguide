@@ -146,7 +146,7 @@ class GeneratePasswordPage extends React.Component {
     if (this.state.processing) {
       return;
     }
-    this.setState((prevState) => ({ isObfuscated: !prevState.isObfuscated }));
+    this.setState({ isObfuscated: !this.state.isObfuscated });
   }
 
   /**
