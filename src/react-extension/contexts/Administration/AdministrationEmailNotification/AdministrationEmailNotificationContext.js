@@ -107,12 +107,8 @@ export class AdminEmailNotificationContextProvider extends React.Component {
    * @params {ReactEvent} The react event
    */
   setSettings(key, value) {
-    this.setState((prevState) => ({
-      settings: {
-        ...prevState.settings,
-        [key]: value,
-      },
-    }));
+    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
+    this.setState({ settings: newSettings });
   }
 
   /**

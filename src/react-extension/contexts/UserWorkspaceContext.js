@@ -746,10 +746,10 @@ class UserWorkspaceContextProvider extends React.Component {
    * Lock the group or user details display ( hide or show )
    * @returns {Promise<void>}
    */
-  lockDetails() {
-    this.setState((prevState) => ({
-      details: { ...prevState.details, locked: !prevState.details.locked },
-    }));
+  async lockDetails() {
+    const details = this.state.details;
+    const locked = this.state.details.locked;
+    this.setState({ details: Object.assign({}, details, { locked: !locked }) });
   }
 
   /**

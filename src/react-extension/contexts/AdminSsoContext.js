@@ -411,7 +411,7 @@ export class AdminSsoContextProvider extends React.Component {
    */
   handleSettingsActivation() {
     this.isSsoConfigExisting = true;
-    this.setState((prevState) => ({ originalConfig: prevState.ssoConfig }));
+    this.setState({ originalConfig: this.state.ssoConfig });
   }
 
   /**

@@ -157,12 +157,8 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
         dto.client = dto.client || null;
         await this.smtpSettingsModel.saveSmtpSettings(dto);
         this.props.actionFeedbackContext.displaySuccess(this.props.t("The SMTP settings have been saved successfully"));
-        this.setState((prevState) => ({
-          currentSmtpSettings: {
-            ...prevState.currentSmtpSettings,
-            source: "db",
-          },
-        }));
+        const newSettings = Object.assign({}, this.state.currentSmtpSettings, { source: "db" });
+        this.setState({ currentSmtpSettings: newSettings });
       } catch (e) {
         this.handleError(e);
       }
@@ -221,27 +217,19 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * @param {object} data Settings data to update as key value object.
    */
   setData(data) {
-    this.setState(
-      (prevState) => {
-        const newSettings = {
-          ...prevState.currentSmtpSettings,
-          ...data,
-        };
+    const newSettings = Object.assign({}, this.state.currentSmtpSettings, data);
+    const newState = {
+      currentSmtpSettings: {
+        ...newSettings,
+        provider: this.detectProvider(newSettings),
+      },
+      settingsModified: true,
+    };
 
-        return {
-          currentSmtpSettings: {
-            ...newSettings,
-            provider: this.detectProvider(newSettings),
-          },
-          settingsModified: true,
-        };
-      },
-      () => {
-        if (this.state.hasSumittedForm) {
-          this.validateData(this.state.currentSmtpSettings);
-        }
-      },
-    );
+    this.setState(newState);
+    if (this.state.hasSumittedForm) {
+      this.validateData(newSettings);
+    }
   }
 
   /**
