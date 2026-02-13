@@ -20,7 +20,6 @@ import { commentsMock, defaultAppContext, defaultProps } from "./DisplayResource
 import DisplayResourceCommentListPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import { screen } from "@testing-library/react";
-import expect from "expect";
 
 beforeEach(() => {
   jest.resetModules();

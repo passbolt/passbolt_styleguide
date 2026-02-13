@@ -42,7 +42,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.dynamicRefs = useDynamicRefs();
-    this.checkForPublicDomainDebounce = debounce(() => this.checkForWarnings(this.allowedDomains), 300);
+    this.checkForPublicDomainDebounce = debounce(() => this.assertNotProfessionalDomains(this.allowedDomains), 300);
     this.bindCallbacks();
   }
 
@@ -117,7 +117,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
   async findSettings() {
     const settings = await this.props.adminSelfRegistrationContext.findSettings();
     this.setState({ isEnabled: settings.allowedDomains?.size > 0 });
-    this.checkForWarnings(settings.allowedDomains);
+    this.assertNotProfessionalDomains(settings.allowedDomains);
     this.validateForm();
   }
 
@@ -125,13 +125,11 @@ class DisplaySelfRegistrationAdministration extends React.Component {
    * We check for warnings and errors into the form
    * @param {Map} allowedDomains
    */
-  checkForWarnings(allowedDomains) {
+  assertNotProfessionalDomains(allowedDomains) {
     const warnings = new Map();
     allowedDomains?.forEach((value, key) => {
       if (!DomainUtil.isProfessional(value)) {
         warnings.set(key, "This is not a safe professional domain");
-      } else {
-        warnings.delete(key);
       }
     });
 
@@ -146,7 +144,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
       this.props.adminSelfRegistrationContext.getCurrentSettings(),
     );
     this.props.adminSelfRegistrationContext.setDomains(currentSettings);
-    this.checkForWarnings(currentSettings.allowedDomains);
+    this.assertNotProfessionalDomains(currentSettings.allowedDomains);
 
     if (currentSettings.allowedDomains.size === 0) {
       const domain = DomainUtil.extractDomainFromEmail(this.currentUser?.username);
@@ -175,7 +173,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     const isSaved = this.props.adminSelfRegistrationContext.isSaved();
     if (isSaved) {
       this.props.adminSelfRegistrationContext.setSaved(false);
-      this.checkForWarnings(this.allowedDomains);
+      this.assertNotProfessionalDomains(this.allowedDomains);
     }
   }
 
@@ -210,7 +208,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
       domains.delete(key);
       this.props.adminSelfRegistrationContext.setDomains({ allowedDomains: domains });
       this.validateForm();
-      this.checkForWarnings(domains);
+      this.assertNotProfessionalDomains(domains);
     }
   }
 
