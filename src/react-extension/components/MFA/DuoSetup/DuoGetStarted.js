@@ -78,6 +78,7 @@ class DuoGetStarted extends Component {
    */
   bindCallbacks() {
     this.handleCancelClick = this.handleCancelClick.bind(this);
+    this.handleGetStartedClick = this.handleGetStartedClick.bind(this);
   }
 
   /**
@@ -85,6 +86,13 @@ class DuoGetStarted extends Component {
    */
   handleCancelClick() {
     this.props.mfaContext.goToProviderList();
+  }
+
+  /**
+   * handle the Get Started button click
+   */
+  handleGetStartedClick() {
+    this.props.onGetStartedWithDuo();
   }
 
   /**
@@ -130,18 +138,11 @@ class DuoGetStarted extends Component {
               <Trans>Cancel</Trans>
             </span>
           </button>
-          <form
-            action={`${this.trustedDomain}/mfa/setup/duo/prompt?redirect=/app/settings/mfa/duo`}
-            method="post"
-            target="_top"
-          >
-            <input type="hidden" name="_csrfToken" value={this.state.csrf} />
-            <button className="button primary" type="submit">
-              <span>
-                <Trans>Get started</Trans>
-              </span>
-            </button>
-          </form>
+          <button className="button primary" type="button" onClick={this.handleGetStartedClick}>
+            <span>
+              <Trans>Get started</Trans>
+            </span>
+          </button>
         </div>
       </>
     );
@@ -152,6 +153,7 @@ DuoGetStarted.propTypes = {
   context: PropTypes.object, // the app context
   t: PropTypes.func, // The translation function
   mfaContext: PropTypes.object, // The mfa context
+  onGetStartedWithDuo: PropTypes.func, // The "Get Started" button callback
   csrfTokenServiceWorkerService: PropTypes.object, // The Bext service that handle csrf token requests.
 };
 
