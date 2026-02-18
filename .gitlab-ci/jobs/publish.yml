@@ -1,6 +1,6 @@
 publish-to-npmjs:
   stage: publish
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/node:22
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/node:24
   id_tokens:
     NPM_ID_TOKEN:
       aud: "npm:registry.npmjs.org"
