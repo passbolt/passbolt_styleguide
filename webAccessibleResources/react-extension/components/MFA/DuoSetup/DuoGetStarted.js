@@ -21,7 +21,6 @@ import DuoLoginSuccessIllustration from "./DuoLoginSuccessIllustration";
 import DuoSignInIllustration from "./DuoSignInIllustration";
 import DuoPushNotificationIllustration from "./DuoPushNotificationIllustration";
 import CsrfTokenServiceWorkerService from "../../../../shared/services/serviceWorker/auth/csrfTokenServiceWorkerService";
-import { BROWSER_NAMES, detectBrowserName } from "../../../../shared/lib/Browser/detectBrowserName";
 
 /**
  * This component will display the get started DUO setup
@@ -64,7 +63,6 @@ class DuoGetStarted extends Component {
   get defaultState() {
     return {
       csrf: null, // Csrf token
-      isSafari: detectBrowserName() === BROWSER_NAMES.SAFARI,
     };
   }
 
@@ -80,7 +78,6 @@ class DuoGetStarted extends Component {
    */
   bindCallbacks() {
     this.handleCancelClick = this.handleCancelClick.bind(this);
-    this.handleGetStartedClick = this.handleGetStartedClick.bind(this);
   }
 
   /**
@@ -88,13 +85,6 @@ class DuoGetStarted extends Component {
    */
   handleCancelClick() {
     this.props.mfaContext.goToProviderList();
-  }
-
-  /**
-   * handle the Get Started button click
-   */
-  handleGetStartedClick() {
-    this.props.onGetStartedWithDuo();
   }
 
   /**
@@ -140,26 +130,18 @@ class DuoGetStarted extends Component {
               <Trans>Cancel</Trans>
             </span>
           </button>
-          {this.state.isSafari ? (
-            <button className="button primary" type="button" onClick={this.handleGetStartedClick}>
+          <form
+            action={`${this.trustedDomain}/mfa/setup/duo/prompt?redirect=/app/settings/mfa/duo`}
+            method="post"
+            target="_top"
+          >
+            <input type="hidden" name="_csrfToken" value={this.state.csrf} />
+            <button className="button primary" type="submit">
               <span>
                 <Trans>Get started</Trans>
               </span>
             </button>
-          ) : (
-            <form
-              action={`${this.trustedDomain}/mfa/setup/duo/prompt?redirect=/app/settings/mfa/duo`}
-              method="POST"
-              target="_top"
-            >
-              <input type="hidden" name="_csrfToken" value={this.state.csrf} />
-              <button className="button primary" type="submit">
-                <span>
-                  <Trans>Get started</Trans>
-                </span>
-              </button>
-            </form>
-          )}
+          </form>
         </div>
       </>
     );
@@ -170,7 +152,6 @@ DuoGetStarted.propTypes = {
   context: PropTypes.object, // the app context
   t: PropTypes.func, // The translation function
   mfaContext: PropTypes.object, // The mfa context
-  onGetStartedWithDuo: PropTypes.func, // The "Get Started" button callback
   csrfTokenServiceWorkerService: PropTypes.object, // The Bext service that handle csrf token requests.
 };
 

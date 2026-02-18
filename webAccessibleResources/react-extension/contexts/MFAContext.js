@@ -104,7 +104,6 @@ export class MfaContextProvider extends React.Component {
       validateTotpCode: this.validateTotpCode.bind(this), //Validate the totp code
       removeProvider: this.removeProvider.bind(this), //Remove an existing provider
       validateYubikeyCode: this.validateYubikeyCode.bind(this), //Validate the yubikey code
-      handleGetStartedWithDuo: this.handleGetStartedWithDuo.bind(this), //Handle the "Get started" button click for DUO.
     };
   }
 
@@ -319,15 +318,6 @@ export class MfaContextProvider extends React.Component {
     } finally {
       this.setProcessing(false);
     }
-  }
-
-  /**
-   * Handle the start of the Duo MFA setup process.
-   * Sends a request to the background page to initiate the Duo provider configuration.
-   * @returns {Promise<void>}
-   */
-  async handleGetStartedWithDuo() {
-    await this.props.context.port.request("passbolt.mfa-setup.start-with-duo");
   }
 
   /**
