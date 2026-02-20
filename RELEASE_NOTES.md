@@ -1,0 +1,1 @@
+This version adds filterByTOTPResourceTypes to ResourceTypesCollection.
