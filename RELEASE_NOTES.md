@@ -1,0 +1,1 @@
+This version introduces a design fix for the Yubikey login page.
