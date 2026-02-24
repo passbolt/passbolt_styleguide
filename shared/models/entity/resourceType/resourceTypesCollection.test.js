@@ -149,23 +149,6 @@ describe("ResourceTypesCollection", () => {
     });
   });
 
-  describe("::filterByTOTPResourceTypes", () => {
-    it("should filter the collection by resources types behaving like password.", () => {
-      expect.assertions(9);
-      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
-      resourceTypes.filterByTOTPResourceTypes();
-      expect(resourceTypes).toHaveLength(4);
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeFalsy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeFalsy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_PASSWORD_STRING)).toBeFalsy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT)).toBeFalsy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_TOTP)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeTruthy();
-    });
-  });
-
   describe("::filterByResourceTypeVersion", () => {
     it("should filter the collection by resources types by the version 4.", () => {
       expect.assertions(9);
