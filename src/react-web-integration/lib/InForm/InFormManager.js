@@ -284,7 +284,7 @@ class InFormManager {
    * Whenever the DOM changes
    */
   handleDomChange() {
-    const updateAuthenticationFields = (mutationsList) => {
+    const updateAuthenticationFields = () => {
       /*
        * The only way to prevent an attacker trying to move the host into another parent element and add opacity
        * If the host is not in the body anymore destroy
@@ -294,44 +294,41 @@ class InFormManager {
         this.destroy();
         return;
       }
-      // Check if the mutation is an iframe added or removed by us
-      const isMutationInformIframe = (mutation) => this.isInformIframe(mutation);
-      // Check if our iframe is in the mutation list
-      const hasNotMutationFromInformIframe = !mutationsList.some(isMutationInformIframe);
-      if (hasNotMutationFromInformIframe) {
-        this.findAndSetAuthenticationFields();
-        this.handleInformCallToActionClickEvent();
-      }
+      this.findAndSetAuthenticationFields();
+      this.handleInformCallToActionClickEvent();
     };
-    // Debounce the mutation observer to avoid too many requests
-    const updateAuthenticationFieldsDebounce = debounce(updateAuthenticationFields, 1000, {
-      leading: true,
-      accumulate: false,
-    });
+
+    // Use requestIdleCallback when available to schedule work during browser idle periods,
+    // This enables us perform background and low priority work on the main thread, without
+    // impacting latency-critical events such as animation and input response.
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
+    // If requestIdleCallback is not available as in the case of Safari, fall back to a
+    // simple debounce to avoid too many requests.
+    const updateAuthenticationFieldsDebounce = window.requestIdleCallback
+      ? debounce(
+          () => {
+            requestIdleCallback(
+              () => {
+                updateAuthenticationFields();
+              },
+              { timeout: 1000 },
+            );
+          },
+          300,
+          {
+            leading: false,
+            accumulate: false,
+          },
+        )
+      : debounce(updateAuthenticationFields, 1000, {
+          leading: true,
+          accumulate: false,
+        });
+
     // Search again for authentication callToActionFields to attach when the DOM changes
+    // The mutation observer does not detect mutation in a closed shadow dom
     this.mutationObserver = new MutationObserver(updateAuthenticationFieldsDebounce);
     this.mutationObserver.observe(document.body, { subtree: true, childList: true });
-  }
-
-  /**
-   * Check if the mutation is an iframe added or removed by us
-   * @param mutation
-   * @returns {boolean}
-   */
-  isInformIframe(mutation) {
-    const nodeList = mutation.addedNodes.length > 0 ? mutation.addedNodes : mutation.removedNodes;
-    let isInformIframe = false;
-    // The list add only 1 iframe at a time don't need to check when several nodes are added
-    if (nodeList.length === 1) {
-      if (this.callToActionFields.length > 0) {
-        const isIdPresent = (iframe) => Array.prototype.some.call(nodeList, (node) => iframe.iframeId === node.id);
-        isInformIframe = this.callToActionFields.some(isIdPresent);
-      }
-      if (!isInformIframe && this.menuField) {
-        isInformIframe = Array.prototype.some.call(nodeList, (node) => this.menuField.iframeId === node.id);
-      }
-    }
-    return isInformIframe;
   }
 
   /**
