@@ -21,6 +21,7 @@ import ResourceWorkspaceContextPage from "./ResourceWorkspaceContext.test.page";
 import { ResourceWorkspaceFilterTypes } from "./ResourceWorkspaceContext";
 import { waitFor } from "@testing-library/react";
 import { waitForTrue } from "../../../test/utils/waitFor";
+import { act } from "react";
 
 describe("Resource Workspace Context", () => {
   let page; // The page to test against
@@ -162,7 +163,6 @@ describe("Resource Workspace Context", () => {
         }
       });
 
-      await page.goToAllItems();
       await page.goToGroup(leadershipTeamGroup);
       await waitFor(() => {
         expect(page.filteredResources).toHaveLength(expectedResourcesCount);
@@ -206,21 +206,21 @@ describe("Resource Workspace Context", () => {
 
     it("As LU I should have all resources as selected when the All Selection event has been fired", async () => {
       await page.goToAllItems();
-      await page.selectAll();
+      act(() => page.selectAll());
       expect(page.selectedResources).toHaveLength(context.resources.length);
     });
 
     it("As LU I should have none resources as selected when the None Selection event has been fired", async () => {
       await page.goToAllItems();
-      await page.selectAll();
-      await page.selectNone();
+      page.selectAll();
+      page.selectNone();
       expect(page.selectedResources).toHaveLength(0);
     });
 
     it("As LU I should have one selected resource when the Single Selection event has been fired", async () => {
       await page.goToAllItems();
       const resourceToSelect = context.resources[0];
-      page.select(resourceToSelect);
+      act(() => page.select(resourceToSelect));
       expect(page.selectedResources).toHaveLength(1);
       expect(page.selectedResources[0]).toBe(resourceToSelect);
     });
@@ -229,9 +229,8 @@ describe("Resource Workspace Context", () => {
       expect.assertions(3);
       await page.goToAllItems();
       const resourcesToSelect = [context.resources[0], context.resources[3]];
-      await page.selectMultiple(resourcesToSelect);
+      page.selectMultiple(resourcesToSelect);
 
-      await waitFor(() => page.selectedResources.length === 2);
       expect(page.selectedResources).toHaveLength(2);
       expect(page.selectedResources[0]).toBe(context.resources[0]);
       expect(page.selectedResources[1]).toBe(context.resources[3]);
@@ -240,7 +239,7 @@ describe("Resource Workspace Context", () => {
     it("As LU I should have a range of selected resources when the Range Selection event has been fired", async () => {
       await page.goToAllItems();
       const resourcesToSelect = [context.resources[0], context.resources[3]];
-      await page.selectRange(resourcesToSelect);
+      page.selectRange(resourcesToSelect);
       const expectResourceMatch = (resource, index) => expect(resource).toBe(context.resources[index]);
       expect(page.selectedResources).toHaveLength(4);
       page.selectedResources.slice(0, 4).forEach(expectResourceMatch);
@@ -259,7 +258,7 @@ describe("Resource Workspace Context", () => {
       expect.assertions(2);
       const resource = context.resources[0];
       await page.goToAllItems();
-      await page.select(resource);
+      page.select(resource);
 
       await waitForTrue(() => page.details?.resource !== null);
       expect(page.details.resource).toEqual(resource);
@@ -269,8 +268,8 @@ describe("Resource Workspace Context", () => {
     it("As LU, I should detail nothing when the detail visibility lock is removed", async () => {
       expect.assertions(2);
       const resource = context.resources[0];
-      await page.toggleLockDetails();
-      await page.select(resource);
+      page.toggleLockDetails();
+      page.select(resource);
       await waitForTrue(() => page.details?.resource !== null);
 
       expect(page.details.resource).toEqual(resource);
@@ -279,7 +278,7 @@ describe("Resource Workspace Context", () => {
 
     it("As LU, I should detail nothing when several resources are selected", async () => {
       await page.goToAllItems();
-      await page.selectAll();
+      page.selectAll();
       expect(page.details.folder).toBeNull();
       expect(page.details.resource).toBeNull();
     });
@@ -362,14 +361,14 @@ describe("Resource Workspace Context", () => {
     it("As LU I should be able to show a resource column", async () => {
       expect.assertions(1);
       await page.goToAllItems();
-      await page.onChangeColumnView("name", true);
+      act(() => page.onChangeColumnView("name", true));
       expect(page.columnsResourceSetting.items[1].show).toBeTruthy();
     });
 
     it("As LU I should be able to hide a resource column", async () => {
       expect.assertions(1);
       await page.goToAllItems();
-      await page.onChangeColumnView("name", false);
+      act(() => page.onChangeColumnView("name", false));
       expect(page.columnsResourceSetting.items[2].show).toBeFalsy();
     });
   });
@@ -399,8 +398,10 @@ describe("Resource Workspace Context", () => {
         { id: "location", label: "Location", position: 11, show: true },
       ];
       await page.goToAllItems();
-      await page.onChangeColumnView("name", false);
-      await page.onChangeColumnsSettings(columnsSetting);
+      act(() => {
+        page.onChangeColumnView("name", false);
+        page.onChangeColumnsSettings(columnsSetting);
+      });
       expect(page.columnsResourceSetting.length).toStrictEqual(11);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
     });
@@ -411,17 +412,20 @@ describe("Resource Workspace Context", () => {
       expect.assertions(22);
 
       await page.goToAllItems();
-      await page.onChangeColumnView("favorite", false);
-      await page.onChangeColumnView("icon", false);
-      await page.onChangeColumnView("name", false);
-      await page.onChangeColumnView("username", false);
-      await page.onChangeColumnView("password", false);
-      await page.onChangeColumnView("totp", false);
-      await page.onChangeColumnView("uri", false);
-      await page.onChangeColumnView("tags", false);
-      await page.onChangeColumnView("modified", false);
-      await page.onChangeColumnView("expired", false);
-      await page.onChangeColumnView("location", false);
+      act(() => {
+        page.onChangeColumnView("favorite", false);
+        page.onChangeColumnView("icon", false);
+        page.onChangeColumnView("name", false);
+        page.onChangeColumnView("username", false);
+        page.onChangeColumnView("password", false);
+        page.onChangeColumnView("totp", false);
+        page.onChangeColumnView("uri", false);
+        page.onChangeColumnView("tags", false);
+        page.onChangeColumnView("modified", false);
+        page.onChangeColumnView("expired", false);
+        page.onChangeColumnView("location", false);
+      });
+
       expect(page.columnsResourceSetting.items[0].show).toBeFalsy();
       expect(page.columnsResourceSetting.items[1].show).toBeFalsy();
       expect(page.columnsResourceSetting.items[2].show).toBeFalsy();
@@ -433,7 +437,7 @@ describe("Resource Workspace Context", () => {
       expect(page.columnsResourceSetting.items[8].show).toBeFalsy();
       expect(page.columnsResourceSetting.items[9].show).toBeFalsy();
       expect(page.columnsResourceSetting.items[10].show).toBeFalsy();
-      await page.resetColumnsSettings();
+      await act(async () => page.resetColumnsSettings());
       expect(page.columnsResourceSetting.items[0].show).toBeTruthy();
       expect(page.columnsResourceSetting.items[1].show).toBeTruthy();
       expect(page.columnsResourceSetting.items[2].show).toBeTruthy();

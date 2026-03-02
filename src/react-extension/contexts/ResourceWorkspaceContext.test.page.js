@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import { render, waitFor } from "@testing-library/react";
-import React from "react";
+import { render } from "@testing-library/react";
+import React, { act } from "react";
 import ResourceWorkspaceContextProvider, {
   ResourceWorkspaceContext,
   ResourceWorkspaceFilterTypes,
@@ -204,36 +204,32 @@ export default class ResourceWorkspaceContextPage {
   /**
    * Select all resources
    */
-  async selectAll() {
-    await this.resourceWorkspaceContext.onResourceSelected.all();
+  selectAll() {
+    this.resourceWorkspaceContext.onResourceSelected.all();
   }
 
   /**
    * Select none resources
    */
-  async selectNone() {
-    await this.resourceWorkspaceContext.onResourceSelected.none();
+  selectNone() {
+    this.resourceWorkspaceContext.onResourceSelected.none();
   }
 
   /**
    * Select the given resource
    * @param resource A specific resource
    */
-  async select(resource) {
-    await waitFor(() => {
-      this.resourceWorkspaceContext.onResourceSelected.single(resource);
-    });
+  select(resource) {
+    this.resourceWorkspaceContext.onResourceSelected.single(resource);
   }
 
   /**
    * Select the resources
    * @param resources The resources to select
    */
-  async selectMultiple(resources = []) {
+  selectMultiple(resources = []) {
     for (let index = 0; index < resources.length; index++) {
-      await waitFor(() => {
-        this.resourceWorkspaceContext.onResourceSelected.multiple(resources[index]);
-      });
+      act(() => this.resourceWorkspaceContext.onResourceSelected.multiple(resources[index]));
     }
   }
 
@@ -241,9 +237,9 @@ export default class ResourceWorkspaceContextPage {
    * Select a range of resources
    * @param [startResource, endResource] The range to select
    */
-  async selectRange([startResource, endResource]) {
-    await this.resourceWorkspaceContext.onResourceSelected.range(startResource);
-    await this.resourceWorkspaceContext.onResourceSelected.range(endResource);
+  selectRange([startResource, endResource]) {
+    act(() => this.resourceWorkspaceContext.onResourceSelected.range(startResource));
+    act(() => this.resourceWorkspaceContext.onResourceSelected.range(endResource));
   }
 
   /**
@@ -266,16 +262,16 @@ export default class ResourceWorkspaceContextPage {
    * @param {string} id The id of the column
    * @param {boolean} checked The checked value
    */
-  async onChangeColumnView(id, checked) {
-    await this.resourceWorkspaceContext.onChangeColumnView(id, checked);
+  onChangeColumnView(id, checked) {
+    this.resourceWorkspaceContext.onChangeColumnView(id, checked);
   }
 
   /**
    * On change columns setting
    * @param {Array} columnsSetting The columns setting
    */
-  async onChangeColumnsSettings(columnsSetting) {
-    await this.resourceWorkspaceContext.onChangeColumnsSettings(columnsSetting);
+  onChangeColumnsSettings(columnsSetting) {
+    this.resourceWorkspaceContext.onChangeColumnsSettings(columnsSetting);
   }
 
   /**
@@ -411,7 +407,6 @@ export default class ResourceWorkspaceContextPage {
           </NavLink>
         </Router>
       </AppContext.Provider>,
-      { legacyRoot: true },
     );
   }
 }

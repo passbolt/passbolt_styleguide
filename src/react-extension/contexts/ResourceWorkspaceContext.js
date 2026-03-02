@@ -19,7 +19,6 @@ import { withRouter } from "react-router-dom";
 import { withActionFeedback } from "./ActionFeedbackContext";
 import { withLoading } from "./LoadingContext";
 import sanitizeUrl, { urlProtocols } from "../lib/Sanitize/sanitizeUrl";
-import { DateTime } from "luxon";
 import SorterEntity from "../../shared/models/entity/sorter/sorterEntity";
 import GridUserSettingEntity from "../../shared/models/entity/gridUserSetting/gridUserSettingEntity";
 import GridResourceUserSettingServiceWorkerService from "../../shared/services/serviceWorker/gridResourceUserSetting/GridResourceUserSettingServiceWorkerService";
@@ -108,7 +107,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     super(props);
     this.rowsSetting = RowsSettingEntity.createFromDefault();
     this.state = this.defaultState;
-    this.initializeProperties();
     this.gridResourceUserSetting = new GridResourceUserSettingServiceWorkerService(props.context.port);
     this.resourcesServiceWorkerService = new ResourcesServiceWorkerService(props.context.port);
   }
@@ -156,13 +154,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
       onResourceEdited: this.handleResourceEdited.bind(this), // Whenever a resource descript has been edited
       onResourceDescriptionEdited: this.handleResourceDescriptionEdited.bind(this), // Whenever a resource description has been edited
-      onResourceDescriptionDecrypted: this.handleResourceDescriptionDecryted.bind(this), // Whenever a resource description has been decrypted
+      onResourceDescriptionDecrypted: this.handleResourceDescriptionDecrypted.bind(this), // Whenever a resource description has been decrypted
       onResourceShared: this.handleResourceShared.bind(this), // Whenever a resource is shared
       onResourcePermissionsRefreshed: this.handleResourcePermissionsRefreshed.bind(this), // Whenever the resource permissions have been refreshed
       onResourceCopied: this.handleResourceCopied.bind(this), // Whenever a resource (password) has been copied
       onResourcePreviewed: this.handleResourcePreviewed.bind(this), // Whenever a resource (password) has been copied
       onResourceActivitiesRefreshed: this.handleResourceActivitiesRefreshed.bind(this), // Whenever the resource activities have been refreshed
-      onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
+      onSorterChanged: this.handleUpdatedSorterChange.bind(this), // Whenever the sorter changed
       onResourceSelected: {
         all: this.handleAllResourcesSelected.bind(this), // Whenever all the resources have been selected
         none: this.handleNoneResourcesSelected.bind(this), // Whenever none resources have been selected
@@ -182,11 +180,19 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Initialize class properties out of the state ( for performance purpose )
+   * Get the folders
+   * @return {*}
    */
-  initializeProperties() {
-    this.resources = null; // A cache of the last known list of resources from the App context
-    this.folders = null; // A cache of the last known list of folders from the App context
+  get resources() {
+    return this.props.context.resources;
+  }
+
+  /**
+   * Get the folders
+   * @return {*}
+   */
+  get folders() {
+    return this.props.context.folders;
   }
 
   /**
@@ -200,17 +206,310 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Check if the component is ready for update processing
+   * @returns {boolean}
+   */
+  isContentLoaded() {
+    return this.resources !== null && (!this.canUseFolders || this.folders !== null);
+  }
+
+  /**
+   * Check if the route location has changed
+   * @param {object} prevProps
+   * @returns {boolean}
+   */
+  hasLocationChanged(prevProps) {
+    const hasPathChanged = this.props.location.pathname !== prevProps.location.pathname;
+    const hasStateChanged = this.props.location.state !== prevProps.location?.state;
+    return hasPathChanged || hasStateChanged;
+  }
+
+  /**
+   * Check if this is the first app load
+   * @returns {boolean}
+   */
+  get isAppFirstLoad() {
+    return this.state.filter.type === ResourceWorkspaceFilterTypes.NONE;
+  }
+
+  /**
+   * Get the change from previous props and state
+   * @param prevProps The previous props
+   * @param prevState The previous state
+   * @returns {object} Change flags
+   */
+  getChangesFromPreviousPropsAndState(prevProps, prevState) {
+    return {
+      route: this.hasLocationChanged(prevProps) || this.isAppFirstLoad,
+      folders: prevProps.context.folders !== this.folders,
+      resources: prevProps.context.resources !== this.resources,
+      selection: prevState.selectedResources !== this.state.selectedResources,
+      filter: !this.isFilterEqual(prevState.filter, this.state.filter),
+      details: prevState.details !== this.state.details,
+      sorter: prevState.sorter !== this.state.sorter,
+    };
+  }
+
+  /**
    * Whenever the component has updated in terms of props or state
-   * @param prevProps
-   * @param prevState
+   * @param prevProps The previous props
+   * @param prevState The previous state
    */
   async componentDidUpdate(prevProps, prevState) {
-    await this.handleResourcesLoaded();
-    await this.handleFoldersChange();
-    await this.handleResourcesChange();
-    await this.handleRouteChange(prevProps.location);
-    await this.handleFilterChange(prevState.filter);
-    await this.redirectAfterSelection();
+    if (!this.isContentLoaded()) {
+      return;
+    }
+    this.handleResourcesLoaded();
+
+    // Get the data from the state that could be updated
+    const nextState = {
+      filter: this.state.filter,
+      details: this.state.details,
+      selectedResources: this.state.selectedResources,
+    };
+    const changes = this.getChangesFromPreviousPropsAndState(prevProps, prevState);
+    // Update next state according to the changes detected
+    this.processDataChanges(nextState, changes);
+    const hasFilterChanged = !this.isFilterEqual(nextState.filter, this.state.filter);
+    if (hasFilterChanged) {
+      this.handleFilterChange(nextState);
+    }
+    // Update details according to the selection and redirect if needed
+    this.processSelectionChanges(nextState, changes, hasFilterChanged);
+    // Apply set state if change detected based on next state
+    this.applyStateUpdatesAndSearch(nextState, changes, hasFilterChanged);
+  }
+
+  /**
+   * Process data changes and update next state accordingly
+   * @param {object} nextState - Mutable state object to update
+   * @param {object} changes - Change flags from detectChanges
+   */
+  processDataChanges(nextState, changes) {
+    // Route changed or App first load when resource and folder are loaded or has previous selection changed
+    if (changes.route) {
+      this.handleRouteChange(nextState);
+    }
+    // Folder changed
+    if (changes.folders) {
+      this.handleFoldersChange(nextState);
+    }
+    // Resource changed
+    if (changes.resources) {
+      this.handleResourceChange(nextState);
+    }
+    // Has previous sorter changed
+    if (changes.sorter) {
+      this.handleSorterChange();
+    }
+  }
+
+  /**
+   * Process selection and navigation changes
+   * @param {object} nextState - Mutable state object to update
+   * @param {object} changes - Change flags
+   * @param {boolean} hasFilterChanged - Whether filter changed
+   */
+  processSelectionChanges(nextState, changes, hasFilterChanged) {
+    // Has previous select resources changed and previous filter and details unchanged
+    const shouldUpdateDetailsFromSelection = changes.selection && !changes.filter && !changes.details;
+    // Example of a use case:
+    // Given resources filter by folder with the route
+    // And I select all resources (Selection has changed, route and details are unchanged and details should change to display a list of resources)
+    // Then I should see a list of resources in details
+    // And I unselect all (Selection has changed, route and details are unchanged and details should change to display the folder)
+    // Then I should see the folder details
+    if (shouldUpdateDetailsFromSelection) {
+      // Update details from filter
+      nextState.details = this.getDetailsFromFilter(nextState.filter, nextState.selectedResources);
+    }
+
+    // Has previous select resources changed (Should redirect when one or several resources has been selected)
+    // or filter changed (Should redirect and unselect all resources and display folder details if previously selected)
+    // or route changed (When one resource is selected and same filter is applied and the route should remain on the selected resource)
+    const shouldRedirectAfterSelection = changes.selection || hasFilterChanged || changes.route;
+    if (shouldRedirectAfterSelection) {
+      // Redirect according to the selected resources or filter if needed
+      this.redirectAfterSelection(nextState.selectedResources, nextState.filter);
+    }
+  }
+
+  /**
+   * Apply state updates and trigger search if needed
+   * @param {object} nextState - State to apply
+   * @param {object} changes - Change flags
+   * @param {boolean} hasFilterChanged - Whether filter changed
+   */
+  applyStateUpdatesAndSearch(nextState, changes, hasFilterChanged) {
+    this.handleSelectedResourcesChange(nextState.selectedResources);
+    this.handleDetailsChange(nextState.details);
+    const needsSearch = hasFilterChanged || changes.folders || changes.resources;
+    if (needsSearch) {
+      // The search will set the filter state
+      this.search(nextState.filter);
+    }
+  }
+
+  /**
+   * Handle route change.
+   * Mutates nextState to set filter, details, and selectedResources based on the current route.
+   * @param {object} nextState - The next state object to mutate
+   * @param {object} [nextState.filter] - The filter configuration
+   * @param {object} [nextState.details] - The details panel state (resource or folder)
+   * @param {Array} [nextState.selectedResources] - The list of selected resources
+   */
+  handleRouteChange(nextState) {
+    // Get filter from route
+    nextState.filter = this.getFilterFromRoute(nextState.filter);
+    // Get details from filter
+    nextState.details = this.getDetailsFromFilter(nextState.filter, nextState.selectedResources);
+    // Select resource if route match and details resource exist
+    if (this.props.match.params.selectedResourceId) {
+      // Edge case when resource does not exist anymore and should be selected by the route
+      if (nextState.details.resource === null) {
+        nextState.selectedResources = [];
+        // Display notification message to inform the resource does not exist
+        this.handleUnknownResource();
+      } else {
+        // Select the resource
+        nextState.selectedResources = [nextState.details.resource];
+      }
+    }
+  }
+
+  /**
+   * Get the filter according to the route.
+   * Determines the appropriate filter based on URL parameters (folder ID, filter type, selected resource).
+   * @param {object} filter - The current filter state
+   * @param {string} filter.type - The current filter type
+   * @param {object} [filter.payload] - Optional filter payload
+   * @returns {object} The resolved filter object
+   * @returns {string} return.type - The filter type (e.g., FOLDER, ALL, EXPIRED)
+   * @returns {object} [return.payload] - Optional payload containing filter-specific data
+   * @returns {object} [return.payload.folder] - The folder when filter type is FOLDER
+   */
+  getFilterFromRoute(filter) {
+    if (this.folders !== null && this.props.match.params.filterByFolderId) {
+      const folder = this.folders.find((folder) => folder.id === this.props.match.params.filterByFolderId);
+      if (folder) {
+        if (this.canUseFolders) {
+          this.populateFolders();
+        }
+
+        this.resourcesServiceWorkerService.updateResourceLocalStorageForParentFolderId(folder.id);
+        return { type: ResourceWorkspaceFilterTypes.FOLDER, payload: { folder: folder } };
+      } else {
+        this.handleUnknownFolder();
+        // Return ALL if folder is unknown
+        return { type: ResourceWorkspaceFilterTypes.ALL };
+      }
+    } else if (this.resources !== null && this.props.location.pathname.includes("passwords")) {
+      const isExpiredResourceLocation = this.props.match.params?.filterType === ResourceWorkspaceFilterTypes.EXPIRED;
+      if (isExpiredResourceLocation) {
+        return { type: ResourceWorkspaceFilterTypes.EXPIRED };
+      } else if (this.props.match.params.selectedResourceId) {
+        // Return ALL if the actual filter is none or the actual filter (fix edge case on first load)
+        return filter.type === ResourceWorkspaceFilterTypes.NONE ? { type: ResourceWorkspaceFilterTypes.ALL } : filter;
+      }
+    }
+    // Return ALL if the actual filter is none or the location filter or ALL (fix edge case on filter group tag or home)
+    return filter.type === ResourceWorkspaceFilterTypes.NONE
+      ? { type: ResourceWorkspaceFilterTypes.ALL }
+      : this.props.location.state?.filter || { type: ResourceWorkspaceFilterTypes.ALL };
+  }
+
+  /**
+   * Get the details panel state based on the current filter and selection.
+   * Determines which resource or folder should be displayed in the details panel.
+   * Only one of folder or resource can be set at a time.
+   * @param {object} filter - The current filter
+   * @param {string} filter.type - The filter type
+   * @param {object} [filter.payload] - Optional filter payload
+   * @param {object} [filter.payload.folder] - The folder when filter type is FOLDER
+   * @param {Array} selectedResources - The currently selected resources
+   * @returns {object} The details panel state
+   * @returns {object|null} return.folder - The folder to display, or null
+   * @returns {object|null} return.resource - The resource to display, or null
+   */
+  getDetailsFromFilter(filter, selectedResources) {
+    if (this.props.match.params.selectedResourceId) {
+      // Find the resource with the route
+      const resource = this.resources.find((resource) => resource.id === this.props.match.params.selectedResourceId);
+      if (resource) {
+        return { folder: null, resource: resource };
+      }
+    } else if (selectedResources.length > 1) {
+      // Multiple resources selected (do not display folder or resource details)
+      return { folder: null, resource: null };
+    } else if (filter.type === ResourceWorkspaceFilterTypes.FOLDER) {
+      // If filter is folder and there is no or one resource selected display folder details
+      return { folder: filter.payload.folder, resource: null };
+    }
+    return { folder: null, resource: null };
+  }
+
+  /**
+   * Handle folders change
+   * @param {object} nextState The next state
+   */
+  handleFoldersChange(nextState) {
+    const hasFolderFilter = nextState.filter.type === ResourceWorkspaceFilterTypes.FOLDER;
+    if (hasFolderFilter) {
+      // Update the filter
+      nextState.filter = this.updateFilterFromFoldersChange(nextState.filter);
+      // Update the folder details
+      nextState.details = this.getDetailsFromFilter(nextState.filter, nextState.selectedResources);
+    }
+  }
+
+  /**
+   * Handle resources change
+   * @param {object} nextState The next state
+   */
+  handleResourceChange(nextState) {
+    if (nextState.details.resource !== null) {
+      nextState.details = this.updateResourceDetails(nextState.details.resource);
+    }
+    nextState.selectedResources = this.updateSelectedResourcesFromResourcesChange(nextState.selectedResources);
+  }
+
+  /**
+   * Handle details change
+   * @param {object} details
+   */
+  handleDetailsChange(details) {
+    const hasDetailsChanges =
+      details.folder !== this.state.details.folder || details.resource !== this.state.details.resource;
+    if (hasDetailsChanges) {
+      this.setState({ details });
+      if (details.resource) {
+        this.scrollToResource(details.resource);
+      } else if (details.folder) {
+        this.scrollToFolder(details.folder);
+      }
+    }
+  }
+
+  /**
+   * Handle previous sorter change
+   */
+  handleSorterChange() {
+    if (this.state.filteredResources !== null) {
+      const filteredResources = [...this.state.filteredResources];
+      this.sort(filteredResources);
+      this.setState({ filteredResources });
+    }
+  }
+
+  /**
+   * Handle selected resources change
+   * @param {Array} selectedResources
+   */
+  handleSelectedResourcesChange(selectedResources) {
+    const hasSelectedResourcesChanged = selectedResources !== this.state.selectedResources;
+    if (hasSelectedResourcesChanged) {
+      this.setState({ selectedResources });
+    }
   }
 
   /**
@@ -241,188 +540,67 @@ export class ResourceWorkspaceContextProvider extends React.Component {
 
   /**
    * Handles the resource search filter change
-   * @return {Promise<void>}
+   * @param {object} nextState The next state
+   * @return {void}
    */
-  async handleFilterChange(previousFilter) {
-    const hasFilterChanged = !this.isFilterEqual(previousFilter, this.state.filter);
-    if (hasFilterChanged) {
-      // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
-      const isNonePreviousFilter = previousFilter.type === ResourceWorkspaceFilterTypes.NONE;
-      if (isNonePreviousFilter) {
-        return;
-      }
-      await this.unselectAll();
-
-      if (
-        this.state.filter.type !== ResourceWorkspaceFilterTypes.GROUP &&
-        this.state.filter.type !== ResourceWorkspaceFilterTypes.FOLDER
-      ) {
-        this.populate();
-      }
+  handleFilterChange(nextState) {
+    // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
+    if (!this.isAppFirstLoad) {
+      // Unselect if filter changed and is not the app first load
+      nextState.selectedResources = [];
+    }
+    if (
+      nextState.filter.type !== ResourceWorkspaceFilterTypes.GROUP &&
+      nextState.filter.type !== ResourceWorkspaceFilterTypes.FOLDER
+    ) {
+      this.populate();
     }
   }
 
   /**
-   * Whenever the folders change
+   * Whenever the folders change update the filter
+   * @param {object} filter - The current filter state
+   * @param {string} filter.type - The current filter type
+   * @param {object} [filter.payload] - Optional filter payload
+   * @returns {object} The resolved filter object
+   * @returns {string} return.type - The filter type (e.g., FOLDER, ALL)
+   * @returns {object} [return.payload] - Optional payload containing filter-specific data
+   * @returns {object} [return.payload.folder] - The folder when filter type is FOLDER
    */
-  async handleFoldersChange() {
-    const hasFoldersChanged = this.props.context.folders !== this.folders;
-    if (hasFoldersChanged) {
-      this.folders = this.props.context.folders;
-      await this.refreshSearchFilter();
-      await this.updateDetails();
+  updateFilterFromFoldersChange(filter) {
+    const folder = this.folders.find((folder) => folder.id === filter.payload.folder.id);
+    if (folder) {
+      return { type: ResourceWorkspaceFilterTypes.FOLDER, payload: { folder: folder } };
+    } else {
+      // If folder does not exist go back to ALL filter
+      return { type: ResourceWorkspaceFilterTypes.ALL };
     }
   }
 
   /**
-   * Handle the resources changes
+   * Update resource details
+   * @param {object} outdatedResource The outdated resource
+   * @return {{folder: null, resource: *}|{folder: null, resource: null}}
    */
-  async handleResourcesChange() {
-    const hasResourcesChanged = this.props.context.resources && this.props.context.resources !== this.resources;
-    if (hasResourcesChanged) {
-      this.resources = this.props.context.resources;
-      await this.search(this.state.filter);
-      await this.updateDetails();
-      await this.unselectUnknownResources();
+  updateResourceDetails(outdatedResource) {
+    // Case of resource details
+    const resource = this.resources.find((resource) => resource.id === outdatedResource.id);
+    if (resource) {
+      return { folder: null, resource: resource };
     }
+    // If resource does not exist go back to ALL filter
+    return { folder: null, resource: null };
   }
 
   /**
-   * Handle the route location change
-   * @param previousLocation Previous router location
+   * Remove from the selected resources those which are not known resources in regard of the current resources list
+   * @param {Array<*>} selectedResources
+   * @return {Array<*>}
    */
-  async handleRouteChange(previousLocation) {
-    const hasLocationChanged = this.props.location.key !== previousLocation.key;
-    const isBrowserClosing = !this.props.location.key; // The key property is undefined when the browser history is initialized or destroyed
-    const isAppFirstLoad = this.state.filter.type === ResourceWorkspaceFilterTypes.NONE;
-    if ((hasLocationChanged || isAppFirstLoad) && !isBrowserClosing) {
-      await this.handleFolderRouteChange();
-      await this.handleResourceRouteChange();
-    }
-  }
-
-  /**
-   * Handle the folder view route change
-   * E.g. /folder/view.:filterByFolderId
-   */
-  async handleFolderRouteChange() {
-    if (this.props.context.folders === null) {
-      return;
-    }
-
-    const folderId = this.props.match.params.filterByFolderId;
-    if (!folderId) {
-      return;
-    }
-
-    const folder = this.props.context.folders.find((folder) => folder.id === folderId);
-    // Unknown folder
-    if (!folder) {
-      this.handleUnknownFolder();
-      return;
-    }
-
-    if (this.canUseFolders) {
-      this.populateFolders();
-    }
-
-    this.resourcesServiceWorkerService.updateResourceLocalStorageForParentFolderId(folder.id);
-    await this.search({ type: ResourceWorkspaceFilterTypes.FOLDER, payload: { folder } });
-
-    // Multiple resource selected, do not show details folder
-    const hasMultipleResourceSelected = this.state.selectedResources.length > 1;
-    if (hasMultipleResourceSelected) {
-      return;
-    }
-
-    await this.scrollToFolder(folder);
-    await this.detailFolder(folder);
-  }
-
-  /**
-   * Handle the resource view route change
-   */
-  async handleResourceRouteChange() {
-    const isResourceLocation = this.props.location.pathname.includes("passwords");
-    if (!isResourceLocation) {
-      return;
-    }
-
-    const isExpiredResourceLocation = this.props.match.params?.filterType === "expired";
-    if (isExpiredResourceLocation) {
-      this.handleExpiredResourceRouteChange();
-      return;
-    }
-
-    const resourceId = this.props.match.params.selectedResourceId;
-    if (resourceId) {
-      // Case of password view
-      this.handleSingleResourceRouteChange(resourceId);
-      return;
-    }
-
-    // Case of all and applied filters
-    this.handleAllResourceRouteChange();
-  }
-
-  /**
-   * Handle the resource view route change with a resource id
-   * E.g. /passwords/view/:resourceId
-   */
-  async handleSingleResourceRouteChange(resourceId) {
-    const hasResources = this.resources !== null;
-    if (hasResources) {
-      const resource = this.resources.find((resource) => resource.id === resourceId);
-      const hasNoneFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.NONE;
-      if (hasNoneFilter) {
-        // Case of password view by url bar inputting
-        await this.search({ type: ResourceWorkspaceFilterTypes.ALL });
-      }
-
-      // If the resource does not exist , it should display an error
-      if (resource) {
-        await this.selectFromRoute(resource);
-        await this.scrollToResource(resource);
-        await this.detailResource(resource);
-      } else {
-        this.handleUnknownResource();
-      }
-    }
-  }
-
-  /**
-   * Handle the resource view route change without a resource id in the path
-   * E.g. /password
-   */
-  async handleAllResourceRouteChange() {
-    const hasResources = this.resources !== null;
-    if (!hasResources) {
-      return;
-    }
-
-    const filter = this.props.location.state?.filter || { type: ResourceWorkspaceFilterTypes.ALL };
-    const isSameFilter = this.state.filter === filter;
-    await this.detailNothing();
-    if (!isSameFilter) {
-      await this.search(filter);
-    }
-  }
-
-  /**
-   * Handle the resource view route change for expired resources in the path
-   * E.g. /password/expired
-   */
-  async handleExpiredResourceRouteChange() {
-    const hasResources = this.resources !== null;
-    if (!hasResources) {
-      return;
-    }
-    const filter = { type: ResourceWorkspaceFilterTypes.EXPIRED };
-    const isSameFilter = this.state.filter === filter;
-    await this.detailNothing();
-    if (!isSameFilter) {
-      await this.search(filter);
-    }
+  updateSelectedResourcesFromResourcesChange(selectedResources) {
+    const matchId = (selectedResource) => (resource) => resource.id === selectedResource.id;
+    const matchSelectedResource = (selectedResource) => selectedResources.some(matchId(selectedResource));
+    return this.resources.filter(matchSelectedResource);
   }
 
   /**
@@ -431,152 +609,139 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleLockDetail() {
     const lockDisplayDetail = !this.state.lockDisplayDetail;
-    this.setState({ lockDisplayDetail });
+    return this.setState({ lockDisplayDetail });
   }
 
   /**
-   * Handle an unknown resource ( passe by route parameter resource identifier )
+   * Handle an unknown resource (display an error notification)
    */
   handleUnknownResource() {
     this.props.actionFeedbackContext.displayError("The resource does not exist");
-    this.props.history.push({ pathname: `/app/passwords` });
   }
 
   /**
-   * Handle an unknown folder (passed by route parameter folder identifier)
+   * Handle an unknown folder (display an error notification)
    */
   handleUnknownFolder() {
     this.props.actionFeedbackContext.displayError("The folder does not exist");
-    this.props.history.push({ pathname: `/app/passwords` });
   }
 
   /**
    * Handle the scrolling of a resource
    */
-  async handleResourceScrolled() {
-    await this.scrollNothing();
+  handleResourceScrolled() {
+    this.scrollNothing();
   }
 
   /**
    * Handle the scrolling of a folder
    */
-  async handleFolderScrolled() {
-    await this.scrollNothing();
+  handleFolderScrolled() {
+    this.scrollNothing();
   }
 
   /**
    * Handle the edited resource
    */
   async handleResourceEdited() {
-    await this.refreshSelectedResourceActivities();
+    this.refreshSelectedResourceActivities();
   }
 
   /**
    * Handle the edited resource description
    */
   async handleResourceDescriptionEdited() {
-    await this.refreshSelectedResourceActivities();
+    this.refreshSelectedResourceActivities();
   }
 
   /**
    * Handle the decrypted resource description
    */
-  async handleResourceDescriptionDecryted() {
-    await this.refreshSelectedResourceActivities();
+  async handleResourceDescriptionDecrypted() {
+    this.refreshSelectedResourceActivities();
   }
 
   /**
    * Handle the shared resource
    */
   async handleResourceShared() {
-    await this.refreshSelectedResourceActivities();
-    await this.refreshSelectedResourcePermissions();
+    this.refreshSelectedResourceActivities();
+    this.refreshSelectedResourcePermissions();
   }
 
   /**
    * Handle the refresh of the resource permission
    */
-  async handleResourcePermissionsRefreshed() {
-    await this.setResourcesPermissionsAsRefreshed();
+  handleResourcePermissionsRefreshed() {
+    this.setResourcesPermissionsAsRefreshed();
   }
 
   /**
    * Handle the copied resource
    */
-  async handleResourceCopied() {
-    await this.refreshSelectedResourceActivities();
+  handleResourceCopied() {
+    this.refreshSelectedResourceActivities();
   }
 
   /**
    * Handle the previewed resource
    */
-  async handleResourcePreviewed() {
-    await this.refreshSelectedResourceActivities();
+  handleResourcePreviewed() {
+    this.refreshSelectedResourceActivities();
   }
 
   /**
    * Handle the refresh of the resource activitie
    * @returns {Promise<void>}
    */
-  async handleResourceActivitiesRefreshed() {
-    await this.setResourceActivitiesAsRefreshed();
+  handleResourceActivitiesRefreshed() {
+    this.setResourceActivitiesAsRefreshed();
   }
 
   /**
    * Handle the change of sorter ( on property or direction )
    * @param propertyName The name of the property to sort on
    */
-  async handleSorterChange(propertyName) {
-    await this.updateSorter(propertyName);
-    await this.sort();
+  handleUpdatedSorterChange(propertyName) {
+    this.updateSorter(propertyName);
   }
 
   /**
    * Handle the all resource selection
    */
-  async handleAllResourcesSelected() {
-    await this.selectAll();
-    await this.detailNothing();
+  handleAllResourcesSelected() {
+    this.selectAll();
   }
 
   /**
    * Handle the none resource selection
    */
-  async handleNoneResourcesSelected() {
-    await this.unselectAll();
-    const { filter } = this.state;
-    const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
-    if (isFolderFilter) {
-      // Case of folder filter after unselect, should display folder details
-      await this.handleFolderRouteChange();
-      return;
-    }
-    await this.detailNothing();
+  handleNoneResourcesSelected() {
+    this.unselectAll();
   }
 
   /**
    * Handle the resource selection in a multiple mode
    * @param resource The selected resource
    */
-  async handleMultipleResourcesSelected(resource) {
-    await this.selectMultiple(resource);
-    await this.detailsResourceIfSingleSelection();
+  handleMultipleResourcesSelected(resource) {
+    this.selectMultiple(resource);
   }
 
   /**
    * Handle the resource selection in a range mode
    * @param resource The selected resource
    */
-  async handleResourceRangeSelected(resource) {
-    await this.selectRange(resource);
+  handleResourceRangeSelected(resource) {
+    this.selectRange(resource);
   }
 
   /**
    * Handle the single resource selection
    * @param resource The selected resource
    */
-  async handleResourceSelected(resource) {
-    await this.select(resource);
+  handleResourceSelected(resource) {
+    this.select(resource);
   }
 
   /**
@@ -587,10 +752,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Handle the intial loading of the resources
+   * Handle the initial loading of the resources
    */
   handleResourcesLoaded() {
-    const hasResourcesBeenInitialized = this.resources === null && this.props.context.resources;
+    const hasResourcesBeenInitialized = this.resources !== null;
     if (hasResourcesBeenInitialized) {
       this.props.loadingContext.remove();
       this.handleResourcesLoaded = () => {};
@@ -600,16 +765,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   /**
    * Handle the will to import a resource file
    */
-  async handleResourceFileToImport(resourceFile) {
-    await this.import(resourceFile);
+  handleResourceFileToImport(resourceFile) {
+    this.import(resourceFile);
   }
 
   /**
    * Handle the resource file import result
    * @param result The import result
    */
-  async handleResourceFileImportResult(result) {
-    await this.updateImportResult(result);
+  handleResourceFileImportResult(result) {
+    this.updateImportResult(result);
   }
 
   /**
@@ -617,8 +782,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param resourcesIds The resources ids to export
    * @param foldersIds The folders ids to export
    */
-  async handleResourcesToExportChange({ resourcesIds, foldersIds }) {
-    await this.updateResourcesToExport({ resourcesIds, foldersIds });
+  handleResourcesToExportChange({ resourcesIds, foldersIds }) {
+    this.updateResourcesToExport({ resourcesIds, foldersIds });
   }
 
   /**
@@ -692,7 +857,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Search for the resources which matches the given filter and sort them
    * @param filter
    */
-  async search(filter) {
+  search(filter) {
     // To prevent the filtered resources to be loaded before the columns
     if (this.state.columnsResourceSetting === null) {
       this.setState({ filter });
@@ -708,46 +873,51 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.ITEMS_I_OWN]: this.searchByItemsIOwn.bind(this),
       [ResourceWorkspaceFilterTypes.PRIVATE]: this.searchByPrivate.bind(this),
       [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
-      [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.seachBySharedWithMe.bind(this),
-      [ResourceWorkspaceFilterTypes.EXPIRED]: this.seachByExpired.bind(this),
+      [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.searchBySharedWithMe.bind(this),
+      [ResourceWorkspaceFilterTypes.EXPIRED]: this.searchByExpired.bind(this),
       [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
       [ResourceWorkspaceFilterTypes.NONE]: () => {
         /* No search */
       },
     };
 
-    await searchOperations[filter.type](filter);
-
-    await this.sort();
+    searchOperations[filter.type](filter);
   }
 
   /**
    * All filter ( no filter at all )
-   * @param filter The All filter
+   * @param {object} filter The All filter
    */
   searchAll(filter) {
-    this.setState({ filter, filteredResources: this.resources }, this.sort);
+    this.sort(this.resources);
+    this.setState({ filter, filteredResources: this.resources });
   }
 
   /**
    * Filter the resources which belongs to the filter root folder
+   * @param {object} filter The filter
    */
   searchByRootFolder(filter) {
     const folderResources = this.resources.filter((resource) => !resource.folder_parent_id);
-    this.setState({ filter, filteredResources: folderResources }, this.sort);
+    this.sort(folderResources);
+    this.setState({ filter, filteredResources: folderResources });
   }
 
   /**
    * Filter the resources which belongs to the filter folder
+   * @param {object} filter The filter
    */
   searchByFolder(filter) {
     const folderId = filter.payload.folder.id;
     const folderResources = this.resources.filter((resource) => resource.folder_parent_id === folderId);
-    this.setState({ filter, filteredResources: folderResources }, this.sort);
+    this.sort(folderResources);
+    this.setState({ filter, filteredResources: folderResources });
   }
 
   /**
    * Filter the resources which belongs to the filter tag
+   * @param {object} filter The filter
+   * @return {Array} The resources filter by tag
    */
   searchByTag(filter) {
     const tagId = filter.payload.tag.id;
@@ -755,12 +925,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       (resource) =>
         resource.tags && resource.tags.length > 0 && resource.tags.filter((tag) => tag.id === tagId).length > 0,
     );
-    this.setState({ filter, filteredResources: tagResources }, this.sort);
+    this.sort(tagResources);
+    this.setState({ filter, filteredResources: tagResources });
   }
 
   /**
    * Filter the resources which textual properties matched some user text words
-   * @param filter A textual filter
+   * @param {object} filter A textual filter
    */
   searchByText(filter) {
     const text = filter.payload;
@@ -800,11 +971,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const matchText = (resource) => words.every((word) => matchResource(word, resource));
 
     const filteredResources = this.resources.filter(matchText);
-    this.setState({ filter, filteredResources }, this.sort);
+    this.sort(filteredResources);
+    this.setState({ filter, filteredResources });
   }
 
   /**
    * Filter the resources which belongs to the filter group
+   * @param {object} filter The filter
    */
   searchByGroup(filter) {
     if (this.isFilterEqual(this.state.filter, filter) && Boolean(this.state.filteredResources)) {
@@ -830,85 +1003,62 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         )) || [];
       // keep only the resource with the group
       const groupResources = this.resources.filter((resource) => resourceIds.includes(resource.id));
-      this.setState({ filteredResources: groupResources }, this.sort);
+      this.sort(groupResources);
+      this.setState({ filteredResources: groupResources });
       this.props.loadingContext.remove();
     });
   }
 
   /**
    * Search for resources the current user owned
-   * @param filter The filter
+   * @param {object} filter The filter
    */
   searchByItemsIOwn(filter) {
     const filteredResources = this.resources.filter((resource) => resource.permission.type === 15);
-    this.setState({ filter, filteredResources }, this.sort);
+    this.sort(filteredResources);
+    this.setState({ filter, filteredResources });
   }
 
   /**
    * Search for user private resources
-   * @param filter The filter
+   * @param {object} filter The filter
    */
   searchByPrivate(filter) {
     const filteredResources = this.resources.filter((resource) => Boolean(resource.personal));
-    this.setState({ filter, filteredResources }, this.sort);
+    this.sort(filteredResources);
+    this.setState({ filter, filteredResources });
   }
 
   /**
    * Filter the resources which are the current user favorites one
+   * @param {object} filter The filter
    */
   searchByFavorite(filter) {
     const filteredResources = this.resources.filter((resource) => resource.favorite !== null);
-    this.setState({ filter, filteredResources }, this.sort);
+    this.sort(filteredResources);
+    this.setState({ filter, filteredResources });
   }
 
   /**
    * Filter the resources which are shared wit the current user
+   * @param {object} filter The filter
    */
-  seachBySharedWithMe(filter) {
+  searchBySharedWithMe(filter) {
     const filteredResources = this.resources.filter((resource) => resource.permission.type < 15);
-    this.setState({ filter, filteredResources }, this.sort);
-  }
-
-  /**
-   * Keep the most recently modified resources ( current state: just sort everything with the most recent modified resource )
-   * @param filter A recently modified filter
-   */
-  searchByRecentlyModified(filter) {
-    const recentlyModifiedSorter = (resource1, resource2) =>
-      DateTime.fromISO(resource2.modified) < DateTime.fromISO(resource1.modified) ? -1 : 1;
-    const filteredResources = this.resources.sort(recentlyModifiedSorter);
-    this.setState({ filter, filteredResources }, this.sort);
+    this.sort(filteredResources);
+    this.setState({ filter, filteredResources });
   }
 
   /**
    * Keep the expired resources
    * @param filter A "expired" filter
    */
-  seachByExpired(filter) {
+  searchByExpired(filter) {
     const filteredResources = this.resources.filter(
       (resource) => resource.expired && new Date(resource.expired) <= new Date(),
     );
-    this.setState({ filter, filteredResources }, this.sort);
-  }
-
-  /**
-   * Refresh the filter in case of its payload is outdated due to the updated list of resources
-   */
-  async refreshSearchFilter() {
-    const hasFolderFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.FOLDER;
-    if (hasFolderFilter) {
-      const isFolderStillExist = this.folders.some((folder) => folder.id === this.state.filter.payload.folder.id);
-      if (isFolderStillExist) {
-        // Case of folder exists but may have somme applied changes on it
-        const updatedFolder = this.folders.find((folder) => folder.id === this.state.filter.payload.folder.id);
-        const filter = Object.assign(this.state.filter, { payload: { folder: updatedFolder } });
-        await this.setState({ filter });
-      } else {
-        // Case of filter folder deleted
-        const filter = { type: ResourceWorkspaceFilterTypes.ALL };
-        this.props.history.push({ pathname: "/app/passwords", state: { filter } });
-      }
-    }
+    this.sort(filteredResources);
+    this.setState({ filter, filteredResources });
   }
 
   /** RESOURCE SELECTION */
@@ -917,49 +1067,34 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Select the given resource as the single selected resources if not already selected as single. Otherwise unselect it
    * @param resource The resource to select
    */
-  async select(resource) {
+  select(resource) {
     const mustUnselect =
       this.state.selectedResources.length === 1 && this.state.selectedResources[0].id === resource.id;
-    await this.setState({ selectedResources: mustUnselect ? [] : [resource] });
-  }
-
-  /**
-   * Selects the given resource when one comes from the navigation route
-   * @param resource
-   * @returns {Promise<void>}
-   */
-  async selectFromRoute(resource) {
-    const isAlreadySelected =
-      this.state.selectedResources.length === 1 && this.state.selectedResources[0].id === resource.id;
-    if (!isAlreadySelected) {
-      const selectedResources = [resource];
-      await this.setState({ selectedResources });
-    }
+    this.setState({ selectedResources: mustUnselect ? [] : [resource] });
   }
 
   /**
    * Select the given resource in a multiple selection mode
    * @param resource
-   * @returns {Promise<void>}
    */
-  async selectMultiple(resource) {
+  selectMultiple(resource) {
     const hasNotSameId = (selectedResource) => selectedResource.id !== resource.id;
     const selectionWithoutResource = this.state.selectedResources.filter(hasNotSameId);
     const mustUnselect = this.state.selectedResources.length !== selectionWithoutResource.length;
     const selectedResources = mustUnselect ? selectionWithoutResource : [...this.state.selectedResources, resource];
-    await this.setState({ selectedResources });
+    this.setState({ selectedResources });
   }
 
   /**
    * Select the given resource in a range selection mode
    * @param resource
-   * @returns {Promise<void>}
+   * @returns {void}
    */
-  async selectRange(resource) {
+  selectRange(resource) {
     const hasNoSelection = this.state.selectedResources.length === 0;
 
     if (hasNoSelection) {
-      await this.select(resource);
+      this.setState({ selectedResources: [resource] });
     } else {
       const hasSameId = (resource) => (selectedResource) => selectedResource.id === resource.id;
       const findIndex = (resource) => this.state.filteredResources.findIndex(hasSameId(resource));
@@ -974,66 +1109,45 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         // Up range selection
         selectedResources = this.state.filteredResources.slice(startRangeIndex, endRangeIndex + 1);
       }
-      await this.setState({ selectedResources });
+      return this.setState({ selectedResources });
     }
   }
 
   /**
    * Select all the resources
    */
-  async selectAll() {
-    await this.setState({ selectedResources: [...this.state.filteredResources] });
+  selectAll() {
+    this.setState({ selectedResources: [...this.state.filteredResources] });
   }
 
   /**
    * Unselect all the resources
    */
-  async unselectAll() {
-    const hasSelectedResources = this.state.selectedResources.length !== 0;
-    if (hasSelectedResources) {
-      await this.setState({ selectedResources: [] });
-    }
-  }
-
-  /**
-   * Remove from the selected resources those which are not known resources in regard of the current resources list
-   */
-  async unselectUnknownResources() {
-    const matchId = (selectedResource) => (resource) => resource.id === selectedResource.id;
-    const matchSelectedResource = (selectedResource) => this.state.selectedResources.some(matchId(selectedResource));
-    const resources = this.resources.filter(matchSelectedResource);
-    const matchFilteredResources = (resource) => this.state.filteredResources.includes(resource);
-    const selectedResources = resources.filter(matchFilteredResources);
-    await this.setState({ selectedResources });
+  unselectAll() {
+    this.setState({ selectedResources: [] });
   }
 
   /**
    * Navigate to the appropriate url after some resources selection operation
    */
-  redirectAfterSelection() {
-    const contentLoaded = this.resources !== null && (!this.canUseFolders || this.folders !== null);
-    if (!contentLoaded) {
-      return;
-    }
-
+  redirectAfterSelection(selectedResources, filter) {
     // Case of single selected resource
-    const hasSingleSelectionNow = this.state.selectedResources.length === 1;
+    const hasSingleSelectionNow = selectedResources.length === 1;
     if (hasSingleSelectionNow) {
-      const mustRedirect = this.props.location.pathname !== `/app/passwords/view/${this.state.selectedResources[0].id}`;
+      const mustRedirect = this.props.location.pathname !== `/app/passwords/view/${selectedResources[0].id}`;
       if (mustRedirect) {
-        this.props.history.push(`/app/passwords/view/${this.state.selectedResources[0].id}`);
+        this.props.history.push(`/app/passwords/view/${selectedResources[0].id}`);
       }
       return;
     }
 
     // Case of multiple selected resources
-    const { filter } = this.state;
     const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
     if (isFolderFilter) {
       // Case of folder
-      const mustRedirect = this.props.location.pathname !== `/app/folders/view/${this.state.filter.payload.folder.id}`;
+      const mustRedirect = this.props.location.pathname !== `/app/folders/view/${filter.payload.folder.id}`;
       if (mustRedirect) {
-        this.props.history.push({ pathname: `/app/folders/view/${this.state.filter.payload.folder.id}` });
+        this.props.history.push({ pathname: `/app/folders/view/${filter.payload.folder.id}` });
       }
       return;
     }
@@ -1061,7 +1175,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Update the resources sorter given a property name
    * @param propertyName
    */
-  async updateSorter(propertyName) {
+  updateSorter(propertyName) {
     const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
     const asc = hasSortPropertyChanged || !this.state.sorter.asc;
     const sorter = new SorterEntity({ propertyName, asc });
@@ -1069,17 +1183,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Reset the user sorter
-   */
-  async resetSorter() {
-    const sorter = new SorterEntity({ propertyName: "modified", asc: false });
-    this.setState({ sorter }, () => this.updateGridSetting());
-  }
-
-  /**
    * Sort the resources given the current sorter
+   * @param {Array} resources The resources
    */
-  async sort() {
+  sort(resources) {
     const reverseSorter = (sorter) => (s1, s2) => -sorter(s1, s2);
     const baseSorter = (sorter) => (this.state.sorter.asc ? sorter : reverseSorter(sorter));
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(getPropValue(s1, key), getPropValue(s2, key)));
@@ -1087,70 +1194,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const booleanSorter = (s1, s2) => (s1 === s2 ? 0 : s1 ? -1 : 1);
     const sorter = this.state.sorter.propertyName === "favorite" ? booleanSorter : stringSorter;
     const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
-    if (this.state.filteredResources !== null) {
-      await this.setState({ filteredResources: [...this.state.filteredResources.sort(propertySorter)] });
-    }
-  }
-
-  /** RESOURCE DETAILS  **/
-
-  /**
-   * Set the details focus on the given folder
-   * @param folder The folder to focus on
-   */
-  async detailFolder(folder) {
-    await this.setState({ details: { folder: folder, resource: null } });
-  }
-
-  /**
-   * Set the details focus on the given resource
-   * @param resource The resource to focus on
-   */
-  async detailResource(resource) {
-    await this.setState({ details: { folder: null, resource: resource } });
-  }
-
-  /**
-   * Remove the details on something
-   */
-  async detailNothing() {
-    const hasDetails = this.state.details.resource || this.state.details.folder;
-    if (hasDetails) {
-      await this.setState({ details: { folder: null, resource: null } });
-    }
-  }
-
-  /**
-   * Set the details focus on the selected resource if it's the only one selected
-   * @returns {Promise<void>}
-   */
-  async detailsResourceIfSingleSelection() {
-    const hasSingleSelection = this.state.selectedResources.length === 1;
-    if (hasSingleSelection) {
-      await this.detailResource(this.state.selectedResources[0]);
-    } else {
-      await this.detailNothing();
-    }
-  }
-
-  /**
-   * Update the current details with the current list of resources or folders
-   */
-  async updateDetails() {
-    const hasDetails = this.state.details.resource || this.state.details.folder;
-    if (hasDetails) {
-      const hasResourceDetails = this.state.details.resource;
-      if (hasResourceDetails) {
-        // Case of resource details
-        const updatedResourceDetails = this.resources.find(
-          (resource) => resource.id === this.state.details.resource.id,
-        );
-        await this.setState({ details: { resource: updatedResourceDetails } });
-      } else {
-        // Case of folder details
-        const updatedFolderDetails = this.folders.find((folder) => folder.id === this.state.details.folder.id);
-        await this.setState({ details: { folder: updatedFolderDetails } });
-      }
+    if (resources !== null) {
+      resources.sort(propertySorter);
     }
   }
 
@@ -1160,23 +1205,23 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Set the resource to scroll to
    * @param resource A resource
    */
-  async scrollToResource(resource) {
-    await this.setState({ scrollTo: { resource } });
+  scrollToResource(resource) {
+    this.setState({ scrollTo: { resource } });
   }
 
   /**
    * Set the folder to scroll to
    * @param folder A folder
    */
-  async scrollToFolder(folder) {
-    await this.setState({ scrollTo: { folder } });
+  scrollToFolder(folder) {
+    this.setState({ scrollTo: { folder } });
   }
 
   /**
    * Unset the resource to scroll to
    */
-  async scrollNothing() {
-    await this.setState({ scrollTo: {} });
+  scrollNothing() {
+    this.setState({ scrollTo: {} });
   }
 
   /** RESOURCE ACTIVITIES */
@@ -1184,17 +1229,19 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   /**
    * Refresh the activities of the current selected resource
    */
-  async refreshSelectedResourceActivities() {
-    const refresh = Object.assign({}, this.state.refresh, { activities: true });
-    await this.setState({ refresh });
+  refreshSelectedResourceActivities() {
+    this.setState((currentState) => ({
+      refresh: { ...currentState.refresh, activities: true },
+    }));
   }
 
   /**
    * Set the resources activitie as refreshed
    */
-  async setResourceActivitiesAsRefreshed() {
-    const refresh = Object.assign({}, this.state.refresh, { activities: false });
-    await this.setState({ refresh });
+  setResourceActivitiesAsRefreshed() {
+    this.setState((currentState) => ({
+      refresh: { ...currentState.refresh, activities: false },
+    }));
   }
 
   /** RESOURCE PERMISSION */
@@ -1202,17 +1249,19 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   /**
    * Refresh the permissions of the current selected  resources
    */
-  async refreshSelectedResourcePermissions() {
-    const refresh = Object.assign({}, this.state.refresh, { permissions: true });
-    await this.setState({ refresh });
+  refreshSelectedResourcePermissions() {
+    this.setState((currentState) => ({
+      refresh: { ...currentState.refresh, permissions: true },
+    }));
   }
 
   /**
    * Set the resources permissions as refreshed
    */
-  async setResourcesPermissionsAsRefreshed() {
-    const refresh = Object.assign({}, this.state.refresh, { permissions: false });
-    await this.setState({ refresh });
+  setResourcesPermissionsAsRefreshed() {
+    this.setState((currentState) => ({
+      refresh: { ...currentState.refresh, permissions: false },
+    }));
   }
 
   /** RESOURCE IMPORT */
@@ -1221,16 +1270,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Import the given resource file
    * @param resourceFile A resource file to import
    */
-  async import(resourceFile) {
-    await this.setState({ resourceFileToImport: resourceFile });
+  import(resourceFile) {
+    this.setState({ resourceFileToImport: resourceFile });
   }
 
   /**
    * Update the resource file import result
    * @param result The import result
    */
-  async updateImportResult(result) {
-    await this.setState({ resourceFileImportResult: result });
+  updateImportResult(result) {
+    this.setState({ resourceFileImportResult: result });
   }
 
   /** Resource export */
@@ -1240,8 +1289,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param resourcesIds The resources ids to export
    * @param foldersIds The folders ids to export
    */
-  async updateResourcesToExport({ resourcesIds, foldersIds }) {
-    await this.setState({ resourcesToExport: { resourcesIds, foldersIds } });
+  updateResourcesToExport({ resourcesIds, foldersIds }) {
+    this.setState({ resourcesToExport: { resourcesIds, foldersIds } });
   }
 
   /**
@@ -1269,14 +1318,14 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const rowsSetting = gridUserSettingEntity?.rowsSetting;
     // process the search after the grid setting is loaded
     this.setState({ columnsResourceSetting, sorter, rowsSetting }, async () => {
-      await this.search(this.state.filter);
+      this.search(this.state.filter);
       /*
        * we run scrollTo again here as all data is loaded and the previous sort is loaded as well.
        * This make sure that the computed scroll position takes into account the sort and scolls the grid where it should
        */
       const selectedResources = this.state.selectedResources;
       if (selectedResources.length === 1) {
-        await this.scrollToResource(selectedResources[0]);
+        this.scrollToResource(selectedResources[0]);
       }
     });
   }
@@ -1298,9 +1347,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param show The boolean to show or hide column
    */
   async handleChangeColumnView(id, show) {
-    const columnsResourceSetting = new ColumnsResourceSettingCollection(this.state.columnsResourceSetting.toDto());
-    columnsResourceSetting.updateColumnShowValueFromDefault(id, show);
-    this.setState({ columnsResourceSetting }, () => this.updateGridSetting());
+    this.setState(
+      (currentState) => {
+        const columnsResourceSetting = new ColumnsResourceSettingCollection(
+          currentState.columnsResourceSetting.toDto(),
+        );
+        columnsResourceSetting.updateColumnShowValueFromDefault(id, show);
+        return { columnsResourceSetting };
+      },
+      () => this.updateGridSetting(),
+    );
   }
 
   /**
@@ -1308,23 +1364,33 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param columns
    */
   async handleChangeColumnsSettings(columns) {
-    // Merge the columns setting
-    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(
-      new ColumnsResourceSettingCollection(columns),
-      { keepUnknownValue: false },
+    this.setState(
+      (currentState) => {
+        // Merge the columns setting
+        const columnsResourceSetting = currentState.columnsResourceSetting.deepMerge(
+          new ColumnsResourceSettingCollection(columns),
+          { keepUnknownValue: false },
+        );
+        return { columnsResourceSetting };
+      },
+      () => this.updateGridSetting(),
     );
-    this.setState({ columnsResourceSetting }, () => this.updateGridSetting());
   }
 
   /**
    * Handle change columns setting
-   * @param {RowsSettingEntity} rowsSetting
+   * @param {string} rowsSettingHeight
    */
   onChangeRowSettingsHeight(rowsSettingHeight) {
-    const rowsSetting = new RowsSettingEntity(this.state.rowsSetting);
-    rowsSetting.set("height", rowsSettingHeight);
-    this.rowsSetting = rowsSetting;
-    this.setState({ rowsSetting: rowsSetting.toDto() }, () => this.updateGridSetting());
+    this.setState(
+      (currentState) => {
+        const rowsSetting = new RowsSettingEntity(currentState.rowsSetting);
+        rowsSetting.set("height", rowsSettingHeight);
+        this.rowsSetting = rowsSetting;
+        return { rowsSetting: rowsSetting.toDto() };
+      },
+      () => this.updateGridSetting(),
+    );
   }
 
   /**
