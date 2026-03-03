@@ -25,7 +25,18 @@ class InFormCallToActionField {
    * Retrieve all the DOM elements which can be an in-form username fields
    */
   static findAll(selector) {
-    const domFields = Array.from(document.querySelectorAll(selector));
+    let domFields = Array.from(document.querySelectorAll(selector));
+
+    // Remove nested (duplicated) fields
+    domFields = domFields.filter((nestedField) => {
+      // We ensure that there is no field nested within another field of the `domFiels` list
+      // If this is the case, we remove the nested field(s)
+      // Example:
+      // A field matched having for 6 nested inputs, and those inputs matched as well (for having a specifig class or whatever)
+      // We only keep the parent field and remove the nested ones
+      return domFields.every((domField) => domField === nestedField || !domField.contains(nestedField));
+    });
+
     const iframesFields = InFormCallToActionField.findAllInIframes(selector);
     const shadowDomFields = InFormCallToActionField.findAllInShadowDom(selector);
     return domFields.concat(iframesFields).concat(shadowDomFields);
@@ -149,7 +160,7 @@ class InFormCallToActionField {
     iframe.style.width = "18px";
     iframe.style.height = "18px";
     iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
-    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}&applicationId=${this.id}`;
+    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}&applicationId=${this.id}&fieldType=${this.fieldType}`;
     return iframe;
   }
 

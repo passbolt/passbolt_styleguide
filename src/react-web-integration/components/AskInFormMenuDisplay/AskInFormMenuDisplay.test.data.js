@@ -21,6 +21,7 @@ export const contextWithUnauthenticatedUser = {
     on: jest.fn(),
     request: () => ({ isAuthenticated: false, isMfaRequired: false }),
   },
+  fieldType: "username",
 };
 
 /**
@@ -32,4 +33,5 @@ export const contextWithAuthenticatedUser = {
     on: jest.fn(),
     request: () => ({ isAuthenticated: true, isMfaRequired: false }),
   },
+  fieldType: "username",
 };

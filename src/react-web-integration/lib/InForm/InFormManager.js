@@ -20,6 +20,7 @@ import DomUtils from "../Dom/DomUtils";
 import debounce from "debounce-promise";
 import UserEventsService from "../User/UserEventsService";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
+import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
 
 const Z_INDEX_MAX = 2147483647;
 
@@ -204,68 +205,100 @@ class InFormManager {
    * Find authentication fields in the document and set them as object properties
    */
   findAndSetAuthenticationFields() {
-    this.findAndSetUsernameAndPasswordFields();
+    this.findAndSetInputFields();
     this.findAndSetCredentialsFormFields();
   }
 
   /**
    * Find authentication callToActionFields in the document and set them as object properties
    */
-  findAndSetUsernameAndPasswordFields() {
+  findAndSetInputFields() {
     /*
-     * We find the username / passwords DOM callToActionFields.
+     * We find the username / passwords / OTP DOM callToActionFields.
      * If it was previously found, we reuse the same InformUsernameField, otherwise we create one
      * Else we clean and reset callToActionFields
      */
     const newUsernameFields = InFormCallToActionField.findAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
     const newPasswordFields = InFormCallToActionField.findAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
-    const newFields = newUsernameFields.concat(newPasswordFields);
-    if (newFields.length > 0) {
-      this.removeCallToActionFieldsNotMatches(newFields);
-      this.callToActionFields = newFields.map((newField) => {
-        const matchField = (fieldToMatch) => (callToActionField) => callToActionField.field === fieldToMatch;
-        const existingField = this.callToActionFields.find(matchField(newField));
-        const fieldType = newField.matches(InFormFieldSelector.USERNAME_FIELD_SELECTOR) ? "username" : "password";
-        return existingField || new InFormCallToActionField(newField, fieldType, this.shadowRoot);
-      });
+    const newOTPFields = InFormCallToActionField.findAll(InFormFieldSelector.OTP_FIELD_SELECTOR);
+
+    /**
+     * A function factory to map a field to an existing field or create a new one
+     * @param {"username"|"password"|"otp"} fieldType The type of field to create
+     * @returns {function(HTMLElement): InFormCallToActionField} The function to map a field to an InFormCallToActionField
+     */
+    const mapField = (fieldType) => (field) => {
+      const existingField = this.callToActionFields.find(({ field: ctaField }) => ctaField === field);
+      return existingField ?? new InFormCallToActionField(field, fieldType, this.shadowRoot);
+    };
+
+    let newCTAFields = [
+      ...newUsernameFields.map(mapField("username")),
+      ...newPasswordFields.map(mapField("password")),
+      ...newOTPFields.map(mapField("otp")),
+    ];
+
+    if (newCTAFields.length > 0) {
+      this.removeCallToActionFieldsNotMatching(newCTAFields);
     } else {
       this.clean();
-      this.callToActionFields = [];
     }
+
+    this.callToActionFields = newCTAFields;
   }
 
   /**
-   * Remove call to action fields that is not match new fields
+   * Remove call to action fields that does not match new fields
    * @param newFields The new fields
    */
-  removeCallToActionFieldsNotMatches(newFields) {
-    const matchField = (callToActionField) => (fieldToMatch) => callToActionField.field === fieldToMatch;
-    const callToActionFieldsToRemove = this.callToActionFields.filter((field) => !newFields.some(matchField(field)));
-    callToActionFieldsToRemove.forEach((field) => field.removeIframe());
+  removeCallToActionFieldsNotMatching(newFields) {
+    const newFieldsSet = new Set(newFields.map(({ field }) => field));
+
+    this.callToActionFields.forEach((ctaField) => {
+      // Check if the ctaField is still in the document
+      if (!newFieldsSet.has(ctaField.field)) {
+        // If not, we remove its iframe
+        ctaField.removeIframe();
+      }
+    });
   }
 
   /**
    * Find authentication formFields in the document and set them as object properties
    */
   findAndSetCredentialsFormFields() {
-    /*
+    /**
      * We find the form DOM formFields.
      * If it was previously found, we reuse the same InformFormField, otherwise we create one
      */
     const newCredentialsFormFields = InFormCredentialsFormField.findAll();
+
     if (newCredentialsFormFields.length > 0) {
+      // Get all fields filtered by their types
+      const { usernameCtaFields, passwordCtaFields } = this.callToActionFields.reduce(
+        (acc, ctaField) => {
+          if (ctaField.fieldType === "username") {
+            acc.usernameCtaFields.push(ctaField);
+          } else if (ctaField.fieldType === "password") {
+            acc.passwordCtaFields.push(ctaField);
+          }
+          return acc;
+        },
+        { usernameCtaFields: [], passwordCtaFields: [] },
+      );
+
       this.credentialsFormFields = newCredentialsFormFields.map((newField) => {
-        const matchField = (fieldToMatch) => (credentialsFormField) => credentialsFormField.field === fieldToMatch;
-        const existingField = this.credentialsFormFields.find(matchField(newField));
-        const usernameField = this.callToActionFields.find(
-          (callToActionField) =>
-            callToActionField.fieldType === "username" && newField.contains(callToActionField.field),
-        );
-        const passwordField = this.callToActionFields.find(
-          (callToActionField) =>
-            callToActionField.fieldType === "password" && newField.contains(callToActionField.field),
-        );
-        return existingField || new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
+        const existingField = this.credentialsFormFields.find(({ field: formField }) => formField === newField);
+
+        if (!existingField) {
+          // We try to find username and password fields contained in the new form field
+          const usernameField = usernameCtaFields.find((ctaField) => newField.contains(ctaField.field));
+          const passwordField = passwordCtaFields.find((ctaField) => newField.contains(ctaField.field));
+
+          return new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
+        }
+
+        return existingField;
       });
     } else {
       this.credentialsFormFields = [];
@@ -402,40 +435,53 @@ class InFormManager {
    * Whenever one requests to fill the current page form with given credentials
    */
   handleFillCredentials() {
-    port.on("passbolt.web-integration.fill-credentials", ({ username, password }) => {
+    port.on("passbolt.web-integration.fill-credentials", ({ username, password, totp }) => {
       const currentFieldType = this.lastCallToActionFieldClicked?.fieldType;
+
       const isUsernameType = currentFieldType === "username";
       const isPasswordType = currentFieldType === "password";
-      if (!isUsernameType) {
-        // Simulate a user to autofill the password field
-        UserEventsService.autofill(this.lastCallToActionFieldClicked.field, password);
-        // Get username fields and find the one with the lowest common ancestor
-        const usernameFields = this.callToActionFields.filter(
-          (callToActionField) => callToActionField.fieldType === "username",
-        );
-        const usernameField = DomUtils.getFieldWithLowestCommonAncestor(
-          this.lastCallToActionFieldClicked.field,
-          usernameFields,
-        );
-        if (usernameField) {
-          // Simulate a user to autofill the username field
-          UserEventsService.autofill(usernameField.field, username);
-        }
-      } else if (!isPasswordType) {
-        // Simulate a user to autofill the username field
-        UserEventsService.autofill(this.lastCallToActionFieldClicked.field, username);
-        // Get password fields and find the one with the lowest common ancestor
-        const passwordFields = this.callToActionFields.filter(
-          (callToActionField) => callToActionField.fieldType === "password",
-        );
-        const passwordField = DomUtils.getFieldWithLowestCommonAncestor(
-          this.lastCallToActionFieldClicked.field,
-          passwordFields,
-        );
-        if (passwordField) {
+      const isOTPType = currentFieldType === "otp";
+
+      if (!isOTPType) {
+        if (!isUsernameType) {
           // Simulate a user to autofill the password field
-          UserEventsService.autofill(passwordField.field, password);
+          UserEventsService.autofill(this.lastCallToActionFieldClicked.field, password);
+          // Get username fields and find the one with the lowest common ancestor
+          const usernameFields = this.callToActionFields.filter(
+            (callToActionField) => callToActionField.fieldType === "username",
+          );
+          const usernameField = DomUtils.getFieldWithLowestCommonAncestor(
+            this.lastCallToActionFieldClicked.field,
+            usernameFields,
+          );
+          if (usernameField) {
+            // Simulate a user to autofill the username field
+            UserEventsService.autofill(usernameField.field, username);
+          }
+        } else if (!isPasswordType) {
+          // Simulate a user to autofill the username field
+          UserEventsService.autofill(this.lastCallToActionFieldClicked.field, username);
+          // Get password fields and find the one with the lowest common ancestor
+          const passwordFields = this.callToActionFields.filter(
+            (callToActionField) => callToActionField.fieldType === "password",
+          );
+          const passwordField = DomUtils.getFieldWithLowestCommonAncestor(
+            this.lastCallToActionFieldClicked.field,
+            passwordFields,
+          );
+          if (passwordField) {
+            // Simulate a user to autofill the password field
+            UserEventsService.autofill(passwordField.field, password);
+          }
         }
+      } else if (totp) {
+        // If an OTP value is provided, fill the OTP field
+        const totpValue = TotpCodeGeneratorService.generate(totp);
+        if (!totpValue) {
+          throw new TypeError("Error while generating the TOTP.");
+        }
+
+        UserEventsService.autofill(this.lastCallToActionFieldClicked.field, totpValue);
       }
     });
   }
