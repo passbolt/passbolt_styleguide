@@ -150,6 +150,13 @@ class DisplayInFormMenu extends React.Component {
   }
 
   /**
+   * Returns true if the component has a "otp" display configuration
+   */
+  get isOTPConfiguration() {
+    return this.state.configuration.inputType === "otp";
+  }
+
+  /**
    * Returns the list of the menu items to display
    */
   get items() {
@@ -158,6 +165,8 @@ class DisplayInFormMenu extends React.Component {
         return this.isUsernameFilled ? this.filledUsernameMenuItems : this.emptyUsernameMenuItems;
       } else if (this.isPasswordConfiguration) {
         return this.isPasswordFilled ? this.filledPasswordMenuItems : this.emptyPasswordMenuItems;
+      } else if (this.isOTPConfiguration) {
+        return this.OTPMenuItems;
       }
     }
     return [];
@@ -228,6 +237,14 @@ class DisplayInFormMenu extends React.Component {
     }
     passwordMenuItems.push(this.browseCredentialsItem);
     return passwordMenuItems;
+  }
+
+  /**
+   * Returns the list of menu items in case of OTP configuration
+   * @return {JSX.Element[]}
+   */
+  get OTPMenuItems() {
+    return [...this.suggestedResourcesItems, this.browseCredentialsItem];
   }
 
   /**
@@ -316,6 +333,7 @@ class DisplayInFormMenu extends React.Component {
             title={resource.metadata.name}
             description={resource.metadata?.username}
             icon={<ResourceIcon resource={resource} />}
+            showTimer={this.isOTPConfiguration}
           />,
         ]),
       [],

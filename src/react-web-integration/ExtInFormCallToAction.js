@@ -33,6 +33,7 @@ class ExtInFormCallToAction extends React.Component {
     return {
       port: this.props.port,
       applicationId: this.props.applicationId,
+      fieldType: this.props.fieldType,
     };
   }
 
@@ -53,6 +54,7 @@ class ExtInFormCallToAction extends React.Component {
 ExtInFormCallToAction.propTypes = {
   port: PropTypes.object,
   applicationId: PropTypes.string,
+  fieldType: PropTypes.string,
 };
 
 export default ExtInFormCallToAction;

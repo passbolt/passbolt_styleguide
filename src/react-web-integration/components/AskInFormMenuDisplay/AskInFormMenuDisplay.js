@@ -52,7 +52,10 @@ class AskInFormMenuDisplay extends React.Component {
    * Handle when the user is logged in.
    */
   async handleUserLoggedIn() {
-    const suggestedResourcesCount = await this.props.context.port.request("passbolt.in-form-cta.suggested-resources");
+    const suggestedResourcesCount = await this.props.context.port.request(
+      "passbolt.in-form-cta.suggested-resources",
+      this.props.context.fieldType,
+    );
     this.setState({
       status: {
         isActive: true,
@@ -110,7 +113,7 @@ class AskInFormMenuDisplay extends React.Component {
     const isActive = isAuthenticated && !isMfaRequired;
 
     const suggestedResourcesCount = isActive
-      ? await this.props.context.port.request("passbolt.in-form-cta.suggested-resources")
+      ? await this.props.context.port.request("passbolt.in-form-cta.suggested-resources", this.props.context.fieldType)
       : 0;
 
     this.setState({

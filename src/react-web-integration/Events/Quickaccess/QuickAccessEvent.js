@@ -15,8 +15,8 @@
 import { Autofill } from "../../Autofill/Autofill";
 
 function fillForm() {
-  port.on("passbolt.quickaccess.fill-form", (requestId, username, secret, url) => {
-    const quickaccessFormData = { requestId, username, secret, url };
+  port.on("passbolt.quickaccess.fill-form", (requestId, username, secret, otp, url) => {
+    const quickaccessFormData = { requestId, username, secret, otp, url };
     Autofill.fillForm(quickaccessFormData);
   });
 }
