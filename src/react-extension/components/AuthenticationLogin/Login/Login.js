@@ -223,7 +223,7 @@ class Login extends Component {
    * Toggle the remember me flag value
    */
   toggleRememberMe() {
-    this.setState((prevState) => ({ rememberMe: !prevState.rememberMe }));
+    this.setState({ rememberMe: !this.state.rememberMe });
   }
 
   /**

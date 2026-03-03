@@ -224,11 +224,9 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
    * set an error to object
    */
   setError(key, value) {
-    this.setState((prevState) => {
-      const errors = MapObject.clone(prevState.errors);
-      errors.set(key, value);
-      return { errors };
-    });
+    const errors = MapObject.clone(this.state.errors);
+    errors.set(key, value);
+    this.setState({ errors });
   }
 
   /**

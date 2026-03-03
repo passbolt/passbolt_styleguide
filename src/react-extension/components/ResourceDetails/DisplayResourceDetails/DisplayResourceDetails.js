@@ -136,7 +136,7 @@ class DisplayResourceDetails extends React.Component {
    * Handles the click on the display upgrade button.
    */
   handleDisplayUpgradeClick() {
-    this.setState((prevState) => ({ displayUpgrade: !prevState.displayUpgrade }));
+    this.setState({ displayUpgrade: !this.state.displayUpgrade });
   }
 
   /**

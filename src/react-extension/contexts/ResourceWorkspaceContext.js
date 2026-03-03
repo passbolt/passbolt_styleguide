@@ -1346,35 +1346,22 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param id The column id
    * @param show The boolean to show or hide column
    */
-  async handleChangeColumnView(id, show) {
-    this.setState(
-      (currentState) => {
-        const columnsResourceSetting = new ColumnsResourceSettingCollection(
-          currentState.columnsResourceSetting.toDto(),
-        );
-        columnsResourceSetting.updateColumnShowValueFromDefault(id, show);
-        return { columnsResourceSetting };
-      },
-      () => this.updateGridSetting(),
-    );
+  handleChangeColumnView(id, show) {
+    const columnsResourceSetting = new ColumnsResourceSettingCollection(this.state.columnsResourceSetting.toDto());
+    columnsResourceSetting.updateColumnShowValueFromDefault(id, show);
+    this.setState({ columnsResourceSetting }, () => this.updateGridSetting());
   }
 
   /**
    * Handle change columns setting
    * @param columns
    */
-  async handleChangeColumnsSettings(columns) {
-    this.setState(
-      (currentState) => {
-        // Merge the columns setting
-        const columnsResourceSetting = currentState.columnsResourceSetting.deepMerge(
-          new ColumnsResourceSettingCollection(columns),
-          { keepUnknownValue: false },
-        );
-        return { columnsResourceSetting };
-      },
-      () => this.updateGridSetting(),
+  handleChangeColumnsSettings(columns) {
+    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(
+      new ColumnsResourceSettingCollection(columns),
+      { keepUnknownValue: false },
     );
+    this.setState({ columnsResourceSetting }, () => this.updateGridSetting());
   }
 
   /**
@@ -1382,15 +1369,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param {string} rowsSettingHeight
    */
   onChangeRowSettingsHeight(rowsSettingHeight) {
-    this.setState(
-      (currentState) => {
-        const rowsSetting = new RowsSettingEntity(currentState.rowsSetting);
-        rowsSetting.set("height", rowsSettingHeight);
-        this.rowsSetting = rowsSetting;
-        return { rowsSetting: rowsSetting.toDto() };
-      },
-      () => this.updateGridSetting(),
-    );
+    const rowsSetting = new RowsSettingEntity(this.state.rowsSetting);
+    rowsSetting.set("height", rowsSettingHeight);
+    this.rowsSetting = rowsSetting;
+    this.setState({ rowsSetting: rowsSetting.toDto() }, () => this.updateGridSetting());
   }
 
   /**

@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 import { render } from "@testing-library/react";
-import React from "react";
+import React, { act } from "react";
 import AdministrationWorkspaceContextProvider, {
   AdministrationWorkspaceContext,
 } from "./AdministrationWorkspaceContext";
@@ -189,64 +189,36 @@ export default class AdministrationWorkspaceContextPage {
   /**
    * on save enabled
    */
-  async onSaveEnabled() {
-    await this.administrationWorkspaceContext.onSaveEnabled();
+  onSaveEnabled() {
+    act(() => this.administrationWorkspaceContext.onSaveEnabled());
   }
 
   /**
    * on must save settings
    */
-  async onMustSaveSettings() {
-    await this.administrationWorkspaceContext.onMustSaveSettings();
-  }
-
-  /**
-   * on test enabled
-   */
-  async onTestEnabled() {
-    await this.administrationWorkspaceContext.onTestEnabled(true);
-  }
-
-  /**
-   * on must test settings
-   */
-  async onMustTestSettings() {
-    await this.administrationWorkspaceContext.onMustTestSettings();
+  onMustSaveSettings() {
+    act(() => this.administrationWorkspaceContext.onMustSaveSettings());
   }
 
   /**
    * on must edit subscription key
    */
-  async onMustEditSubscriptionKey() {
-    await this.administrationWorkspaceContext.onMustEditSubscriptionKey();
+  onMustEditSubscriptionKey() {
+    act(() => this.administrationWorkspaceContext.onMustEditSubscriptionKey());
   }
 
   /**
    * on must refresh subscription key
    */
-  async onMustRefreshSubscriptionKey() {
-    await this.administrationWorkspaceContext.onMustRefreshSubscriptionKey();
-  }
-
-  /**
-   * on synchronize enabled
-   */
-  async onSynchronizeEnabled() {
-    await this.administrationWorkspaceContext.onSynchronizeEnabled(true);
-  }
-
-  /**
-   * on must synchronize settings
-   */
-  async onMustSynchronizeSettings() {
-    await this.administrationWorkspaceContext.onMustSynchronizeSettings();
+  onMustRefreshSubscriptionKey() {
+    act(() => this.administrationWorkspaceContext.onMustRefreshSubscriptionKey());
   }
 
   /**
    * on reset actions settings
    */
-  async onResetActionsSettings() {
-    await this.administrationWorkspaceContext.onResetActionsSettings();
+  onResetActionsSettings() {
+    this.administrationWorkspaceContext.onResetActionsSettings();
   }
 
   /**

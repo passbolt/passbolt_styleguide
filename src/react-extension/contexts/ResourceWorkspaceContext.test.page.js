@@ -263,7 +263,7 @@ export default class ResourceWorkspaceContextPage {
    * @param {boolean} checked The checked value
    */
   onChangeColumnView(id, checked) {
-    this.resourceWorkspaceContext.onChangeColumnView(id, checked);
+    act(() => this.resourceWorkspaceContext.onChangeColumnView(id, checked));
   }
 
   /**
@@ -271,7 +271,7 @@ export default class ResourceWorkspaceContextPage {
    * @param {Array} columnsSetting The columns setting
    */
   onChangeColumnsSettings(columnsSetting) {
-    this.resourceWorkspaceContext.onChangeColumnsSettings(columnsSetting);
+    act(() => this.resourceWorkspaceContext.onChangeColumnsSettings(columnsSetting));
   }
 
   /**

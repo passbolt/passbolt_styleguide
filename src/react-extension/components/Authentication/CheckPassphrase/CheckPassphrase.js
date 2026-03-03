@@ -172,7 +172,7 @@ class CheckPassphrase extends Component {
    * Toggle the remember me flag value
    */
   toggleRemmemberMe() {
-    this.setState((prevState) => ({ rememberMe: !prevState.rememberMe }));
+    this.setState({ rememberMe: !this.state.rememberMe });
   }
 
   /**

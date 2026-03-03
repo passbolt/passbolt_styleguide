@@ -132,7 +132,7 @@ class DisplayResourceDetailsNote extends React.Component {
    * Handle when the user selects the folder parent.
    */
   handleTitleClickEvent() {
-    this.setState((prevState) => ({ open: !prevState.open, note: null, isSecretDecrypted: false }));
+    this.setState({ open: !this.state.open, note: null, isSecretDecrypted: false });
   }
 
   /**

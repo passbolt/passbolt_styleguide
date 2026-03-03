@@ -138,7 +138,7 @@ class RenameResourceFolder extends Component {
       },
       () => {
         if (this.state.inlineValidation) {
-          this.validate();
+          this.hasErrors();
         }
       },
     );
@@ -164,7 +164,7 @@ class RenameResourceFolder extends Component {
 
     this.setState({ processing: true });
 
-    if (this.validate()) {
+    if (this.hasErrors()) {
       this.setState({ processing: false });
       this.focusFirstFieldError();
       return;
@@ -244,10 +244,10 @@ class RenameResourceFolder extends Component {
   }
 
   /**
-   * Validate the form.
+   * Check if the form has errors.
    * @returns {boolean}
    */
-  validate() {
+  hasErrors() {
     let nameError = false;
     const name = this.state.name.trim();
     if (!name.length) {

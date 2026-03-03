@@ -398,10 +398,9 @@ describe("Resource Workspace Context", () => {
         { id: "location", label: "Location", position: 11, show: true },
       ];
       await page.goToAllItems();
-      act(() => {
-        page.onChangeColumnView("name", false);
-        page.onChangeColumnsSettings(columnsSetting);
-      });
+      page.onChangeColumnView("name", false);
+      page.onChangeColumnsSettings(columnsSetting);
+
       expect(page.columnsResourceSetting.length).toStrictEqual(11);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
     });
@@ -412,19 +411,18 @@ describe("Resource Workspace Context", () => {
       expect.assertions(22);
 
       await page.goToAllItems();
-      act(() => {
-        page.onChangeColumnView("favorite", false);
-        page.onChangeColumnView("icon", false);
-        page.onChangeColumnView("name", false);
-        page.onChangeColumnView("username", false);
-        page.onChangeColumnView("password", false);
-        page.onChangeColumnView("totp", false);
-        page.onChangeColumnView("uri", false);
-        page.onChangeColumnView("tags", false);
-        page.onChangeColumnView("modified", false);
-        page.onChangeColumnView("expired", false);
-        page.onChangeColumnView("location", false);
-      });
+
+      page.onChangeColumnView("favorite", false);
+      page.onChangeColumnView("icon", false);
+      page.onChangeColumnView("name", false);
+      page.onChangeColumnView("username", false);
+      page.onChangeColumnView("password", false);
+      page.onChangeColumnView("totp", false);
+      page.onChangeColumnView("uri", false);
+      page.onChangeColumnView("tags", false);
+      page.onChangeColumnView("modified", false);
+      page.onChangeColumnView("expired", false);
+      page.onChangeColumnView("location", false);
 
       expect(page.columnsResourceSetting.items[0].show).toBeFalsy();
       expect(page.columnsResourceSetting.items[1].show).toBeFalsy();
