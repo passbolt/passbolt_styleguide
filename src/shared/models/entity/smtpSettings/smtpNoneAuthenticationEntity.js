@@ -1,0 +1,55 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         5.11.0
+ */
+
+import EntityV2 from "../abstract/entityV2";
+import SmtpSettingsEntity from "./smtpSettingsEntity";
+
+const ENTITY_NAME = "SmtpNoneAuthentication";
+
+/**
+ * Entity for SMTP no authentication method
+ */
+class SmtpNoneAuthenticationEntity extends EntityV2 {
+  /**
+   * Get the entity schema
+   * @returns {object}
+   */
+  static getSchema() {
+    return {
+      type: "object",
+      required: [...SmtpSettingsEntity.getSchema().required],
+      properties: {
+        ...SmtpSettingsEntity.getSchema().properties,
+      },
+    };
+  }
+
+  /**
+   * Get the default data for this authentication method.
+   * @returns {object}
+   */
+  static getDefaultData() {
+    return {};
+  }
+
+  /**
+   * Get the entity name
+   * @returns {string}
+   */
+  static get ENTITY_NAME() {
+    return ENTITY_NAME;
+  }
+}
+
+export default SmtpNoneAuthenticationEntity;
