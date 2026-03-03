@@ -15,7 +15,6 @@
 /**
  * Unit tests on DisplayResourceDetailsNote in regard of specifications
  */
-import { waitFor } from "@testing-library/dom";
 import { defaultProps, resourceWithDescriptionMock } from "./DisplayResourceDetailsNote.test.data";
 import DisplayResourceDetailsNotePage from "./DisplayResourceDetailsNote.test.page";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
@@ -59,7 +58,8 @@ describe("See secure note", () => {
     const page = new DisplayResourceDetailsNotePage(props);
 
     expect(page.showButton).not.toBeNull();
-    page.showButton.click();
+
+    await page.clickOn(page.showButton);
 
     // ensuring the spinner is visisble during the decryption process
     expect(page.isLoading()).toStrictEqual(true);
@@ -86,7 +86,7 @@ describe("See secure note", () => {
     const page = new DisplayResourceDetailsNotePage(props);
 
     expect(page.showButton).not.toBeNull();
-    page.showButton.click();
+    await page.clickOn(page.showButton);
 
     await waitForTrue(() => !page.isLoading());
 
@@ -94,7 +94,8 @@ describe("See secure note", () => {
     expect(page.description).not.toBeNull();
     expect(page.description.textContent).toBe(descriptionMessage);
 
-    page.hideButton.click();
+    await page.hideButton.click();
+
     expect(page.description).toBeNull();
   });
 
@@ -108,7 +109,7 @@ describe("See secure note", () => {
 
     const page = new DisplayResourceDetailsNotePage(props);
 
-    page.showButton.click();
+    await page.clickOn(page.showButton);
     await waitForTrue(() => !page.isLoading());
 
     // making sure the description has been decrypted
@@ -133,7 +134,7 @@ describe("See secure note", () => {
 
     const page = new DisplayResourceDetailsNotePage(props);
 
-    page.showButton.click();
+    await page.clickOn(page.showButton);
 
     await waitForTrue(() => !page.isLoading());
 
@@ -150,8 +151,7 @@ describe("See secure note", () => {
 
     const page = new DisplayResourceDetailsNotePage(props);
 
-    await page.showButton.click();
-    await waitFor(() => {});
+    await page.clickOn(page.showButton);
 
     expect(page.errorMessage).not.toBeNull();
     expect(page.errorMessage.textContent).toContain("Error: Decryption failed");
@@ -173,7 +173,6 @@ describe("See secure note", () => {
     );
 
     await page.showButton.click();
-    await waitFor(() => {});
 
     expect(displayError).toHaveBeenCalledTimes(1);
     expect(displayError).toHaveBeenCalledWith("The operation was cancelled.");

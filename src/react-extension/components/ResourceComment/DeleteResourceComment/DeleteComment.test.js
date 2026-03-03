@@ -20,6 +20,7 @@ import { administratorAppContext, defaultAppContext, defaultProps } from "./Dele
 import DisplayResourceDetailsPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import { defaultCommentCollectionDto } from "../../../../shared/models/entity/comment/commentEntityCollection.test.data";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -83,6 +84,8 @@ describe("Delete comments", () => {
       it("the comment should be removed from the comments list", async () => {
         expect.assertions(3);
         await page.title.click();
+        // Wait until the text is found (This will ensure the state has been updated)
+        await screen.findAllByText("You");
         await page.displayCommentList.delete(1);
         expect(page.confirmDeleteComment.exists()).toBeTruthy();
         await page.confirmDeleteComment.confirm();
@@ -113,12 +116,16 @@ describe("Delete comments", () => {
       it("I should prompt to insert a new comment", async () => {
         expect.assertions(1);
         await page.title.click();
+        // Wait until the text is found (This will ensure the state has been updated)
+        await screen.findAllByText("You");
         await page.displayCommentList.delete(1);
 
         // Simulate an empty list after deletion
         mockContextRequest(context, noneCommentFoundRequestMockImpl);
 
         await page.confirmDeleteComment.confirm();
+        // Wait until the text is found (This will ensure the state has been updated)
+        await screen.findAllByText("You");
         expect(page.addComment.exists()).toBeTruthy();
       });
     });
@@ -138,6 +145,8 @@ describe("Delete comments", () => {
       it("I should be notified about the success of the operation", async () => {
         jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
         await page.title.click();
+        // Wait until the text is found (This will ensure the state has been updated)
+        await screen.findAllByText("You");
         await page.displayCommentList.delete(1);
         await page.confirmDeleteComment.confirm();
         expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
@@ -158,6 +167,8 @@ describe("Delete comments", () => {
 
       it("I should not be able to delete the comment", async () => {
         await page.title.click();
+        // Wait until the text is found (This will ensure the state has been updated)
+        await screen.findAllByText("You");
         expect(page.displayCommentList.canDelete(4)).toBeFalsy();
       });
     });

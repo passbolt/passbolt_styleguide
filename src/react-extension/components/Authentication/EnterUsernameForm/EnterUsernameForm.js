@@ -123,11 +123,11 @@ class EnterUsernameForm extends Component {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    await this.setState({ [name]: value });
-
-    if (this.state.hasAlreadyBeenValidated) {
-      await this.validate();
-    }
+    this.setState({ [name]: value }, async () => {
+      if (this.state.hasAlreadyBeenValidated) {
+        this.validate();
+      }
+    });
   }
 
   /**
@@ -148,45 +148,37 @@ class EnterUsernameForm extends Component {
   async handleFormSubmit(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
-
-    await this.setState({ hasAlreadyBeenValidated: true });
-
-    // Do not re-submit an already processing form
-    if (!this.state.processing) {
-      await this.toggleProcessing();
-      await this.validate();
-
-      if (this.hasValidationError()) {
-        await this.toggleProcessing();
-        return;
-      }
-      this.props.apiTriageContext.onTriageRequested(this.state.username.trim());
+    // Prevent submission chile processing
+    if (this.state.processing) {
+      return;
     }
-  }
 
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
+    const errors = this.validate();
+
+    if (this.hasValidationError(errors)) {
+      this.setState({ processing: false });
+      return;
+    }
+    this.props.apiTriageContext.onTriageRequested(this.state.username.trim());
   }
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {object}
    */
-  async validate() {
-    await Promise.all([this.validateUsernameInput(), this.validateAgreedTerms()]);
-    return this.hasValidationError();
+  validate() {
+    const usernameError = this.validateUsernameInput();
+    const agreedTermsError = this.validateAgreedTerms();
+    this.setState({ usernameError, agreedTermsError });
+    return { usernameError, agreedTermsError };
   }
 
   /**
    * Validate the username input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateUsernameInput() {
+  validateUsernameInput() {
     let usernameError = null;
     const username = this.state.username.trim();
     if (!username.length) {
@@ -194,29 +186,31 @@ class EnterUsernameForm extends Component {
     } else if (!AppEmailValidatorService.validate(username, this.props.context.siteSettings)) {
       usernameError = this.translate("Please enter a valid email address.");
     }
-    return this.setState({ username, usernameError });
+    this.setState({ username });
+    return usernameError;
   }
 
   /**
    * Validate the agreed terms checkbox.
-   * @returns {Promise<void>}
+   * @returns {boolean}
    */
-  async validateAgreedTerms() {
+  validateAgreedTerms() {
     let agreedTermsError = false;
     const mustValidateTerms = this.privacyLink || this.termsLink;
     const agreedTerms = this.state.agreedTerms;
     if (mustValidateTerms && !agreedTerms) {
       agreedTermsError = true;
     }
-    return this.setState({ agreedTermsError });
+    return agreedTermsError;
   }
 
   /**
    * Return true if the form has some validation error
+   * @param {object} errors
    * @returns {boolean}
    */
-  hasValidationError() {
-    return this.state.usernameError !== null || this.state.agreedTermsError;
+  hasValidationError(errors) {
+    return errors.usernameError !== null || errors.agreedTermsError;
   }
 
   /**

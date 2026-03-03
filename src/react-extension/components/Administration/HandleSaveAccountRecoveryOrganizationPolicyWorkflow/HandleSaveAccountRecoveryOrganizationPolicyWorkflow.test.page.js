@@ -30,7 +30,6 @@ export default class HandleSaveAccountRecoveryOrganizationPolicyWorkflowPage {
       <MockTranslationProvider>
         <HandleSaveAccountRecovery {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 }

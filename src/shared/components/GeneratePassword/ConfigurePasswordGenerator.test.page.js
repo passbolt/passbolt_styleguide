@@ -30,7 +30,6 @@ export default class ConfigurePasswordGeneratorPage {
       <MockTranslationProvider>
         <ConfigurePasswordGenerator {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

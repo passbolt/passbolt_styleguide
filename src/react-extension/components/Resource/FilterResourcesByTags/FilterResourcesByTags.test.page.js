@@ -55,7 +55,6 @@ export default class FilterResourcesByTagsPage {
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

@@ -30,7 +30,6 @@ export default class ConfirmMigrateMetadataDialogPage {
       <MockTranslationProvider>
         <ConfirmMetadataKeyRotationDialog {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

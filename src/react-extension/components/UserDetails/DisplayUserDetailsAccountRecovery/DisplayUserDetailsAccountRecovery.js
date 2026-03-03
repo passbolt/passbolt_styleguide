@@ -68,7 +68,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
     const hasUserChanged = this.selectedUser.id !== previousUser.id;
     if (hasUserChanged && this.state.open) {
       const state = Object.assign({}, this.defaultState, { open: true });
-      await this.setState(state);
+      this.setState(state);
       await this.findUserRequests();
       this.setState({ loading: false });
     }
@@ -87,9 +87,9 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
       user?.pending_account_recovery_request?.status !==
       this.props.userWorkspaceContext.details.user?.pending_account_recovery_request?.status
     ) {
-      await this.setState({ loading: true });
+      this.setState({ loading: true });
       await this.findUserRequests();
-      await this.setState({ loading: false });
+      this.setState({ loading: false });
     }
   }
 
@@ -110,7 +110,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
       const defaultState = this.defaultState;
       this.setState(defaultState);
     } else {
-      await this.setState({ loading: true, open: true });
+      this.setState({ loading: true, open: true });
       await this.findUserRequests();
       this.setState({ loading: false });
     }

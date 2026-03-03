@@ -30,7 +30,6 @@ export default class FoldersTreeRootFolderContextualMenuPage {
       <MockTranslationProvider>
         <FilterResourcesByRootFolderContextualMenu {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

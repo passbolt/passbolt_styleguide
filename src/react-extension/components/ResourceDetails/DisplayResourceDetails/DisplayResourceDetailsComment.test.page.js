@@ -44,7 +44,6 @@ export default class PasswordSidebarCommentSectionPage {
           </DialogContextProvider>
         </AppContextProvider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

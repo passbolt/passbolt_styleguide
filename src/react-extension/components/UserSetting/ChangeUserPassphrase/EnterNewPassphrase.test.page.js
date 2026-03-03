@@ -11,11 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.1.0
  */
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import EnterNewPassphrase from "./EnterNewPassphrase";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The EnterNewPassphrase component represented as a page
@@ -30,8 +31,8 @@ export default class EnterNewPassphrasePage {
       <MockTranslationProvider>
         <EnterNewPassphrase {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -183,15 +184,7 @@ export default class EnterNewPassphrasePage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
-  }
-
-  /** Click without wait for on the element */
-  clickWithoutWaitFor(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
+    await this.user.click(element);
   }
 
   /** fill the input element with data */
@@ -207,10 +200,8 @@ export default class EnterNewPassphrasePage {
   }
 
   /** click update */
-  async update(inProgressFn = () => {}) {
-    const leftClick = { button: 0 };
-    fireEvent.click(this.updateButton, leftClick);
-    await waitForTrue(inProgressFn);
+  async update() {
+    await this.user.click(this.updateButton);
   }
 
   /** click cancel */

@@ -20,9 +20,9 @@ import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
 /**
- * The SelectSecretHistoryPage component represented as a page
+ * The DisplayCreatorSecretRevisionPage component represented as a page
  */
-export default class SelectSecretHistoryPage {
+export default class DisplayCreatorSecretRevisionPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -32,7 +32,6 @@ export default class SelectSecretHistoryPage {
       <MockTranslationProvider>
         <DisplayCreatorSecretHistory {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

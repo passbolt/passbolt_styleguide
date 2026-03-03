@@ -28,7 +28,6 @@ export default class DisplayResourceCreationMenuPage {
       <MockTranslationProvider>
         <DisplayResourceCreationMenu {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

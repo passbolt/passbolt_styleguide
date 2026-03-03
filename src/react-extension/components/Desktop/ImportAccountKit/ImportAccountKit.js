@@ -75,8 +75,8 @@ class ImportAccountKit extends React.Component {
     const accountKit = await this.readFileContent(uploadedKit);
     this.setState({ filename, accountKit });
     if (this.state.validation.hasAlreadyBeenValidated) {
-      const state = this.validateAccountKitInput();
-      this.setState(state);
+      const errors = this.validateAccountKitInput();
+      this.setState({ errors });
     }
   }
 
@@ -91,9 +91,9 @@ class ImportAccountKit extends React.Component {
    * Whenever the user wants to upload a new account kit
    * @param event A DOM event
    */
-  handleUpload(event) {
+  async handleUpload(event) {
     event.preventDefault();
-    this.upload();
+    await this.upload();
   }
 
   /**
@@ -112,13 +112,11 @@ class ImportAccountKit extends React.Component {
       return;
     }
 
-    await this.setState({ validation: { hasAlreadyBeenValidated: true } });
+    this.setState({ validation: { hasAlreadyBeenValidated: true, processing: true } });
 
-    await this.toggleProcessing();
-    await this.validateAccountKitInput();
-
-    if (this.hasValidationError) {
-      await this.toggleProcessing();
+    const errors = this.validateAccountKitInput();
+    if (errors.message !== null) {
+      this.setState({ processing: false });
       return;
     }
     await this.props.importAccountKitContext.verifyAccountKit(this.state.accountKit);
@@ -143,15 +141,8 @@ class ImportAccountKit extends React.Component {
   }
 
   /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState({ processing: !this.state.processing });
-  }
-
-  /**
    * Validate the account kit input.
-   * @returns {Promise<void>}
+   * @returns {object}
    */
   validateAccountKitInput() {
     let message = null;
@@ -160,7 +151,8 @@ class ImportAccountKit extends React.Component {
     } else if (this.state.filename.split(".").pop() !== "passbolt") {
       message = this.props.t("Only passbolt format is allowed.");
     }
-    return this.setState({ errors: { message } });
+    this.setState({ errors: { message } });
+    return { message };
   }
   /**
    * Render the component

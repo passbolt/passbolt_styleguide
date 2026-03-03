@@ -42,7 +42,6 @@ export default class EditUserGroupTestPage {
           </AppContext.Provider>
         </MockTranslationProvider>
       </Router>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });

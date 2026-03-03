@@ -23,6 +23,7 @@ import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import ConfirmSaveSelfRegistrationSettings from "./ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings";
 import ConfirmDeletionSelfRegistrationSettings from "./ConfirmDeletionSelfRegistrationSettings/ConfirmDeletionSelfRegistrationSettings";
 import { act } from "react";
+import { screen } from "@testing-library/react";
 
 jest.mock("uuid");
 
@@ -80,7 +81,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
 
     it("As a logged in administrator I can enable the User self registration setting", async () => {
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([])));
-      await act(async () => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
+      await act(() => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
 
       expect.assertions(5);
 
@@ -124,9 +125,9 @@ describe("DisplaySelfRegistrationAdministration", () => {
     });
   });
   describe("As a logged administrator I can add domains to the User self registration list", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
-      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+      await act(() => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
     });
 
     it("As a logged in administrator I can add a new input field to the User self registration list", async () => {
@@ -154,7 +155,6 @@ describe("DisplaySelfRegistrationAdministration", () => {
 
     it("As a logged in administrator I can add a new non-professional domain to the User self registration but I should see a warning message", async () => {
       expect.assertions(7);
-
       //Mock API calls
       fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([gmailDomain])));
 
@@ -162,6 +162,9 @@ describe("DisplaySelfRegistrationAdministration", () => {
 
       await page.addDomain();
       await page.fillInput(page.inputByIndex(3), gmailDomain);
+
+      // Wait until the value is found (This will ensure the state has been updated)
+      await screen.findByText("This is not a safe professional domain");
 
       expect(page.warningMessage).toBeDefined();
       expect(page.warningMessage.textContent).toBe("This is not a safe professional domain");
@@ -185,7 +188,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
       //Mock API calls
       fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([])));
 
-      await act(async () => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
+      await act(() => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
 
       await page.clickOnToggle();
       await page.clickOnSave();
@@ -203,7 +206,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
       //Mock get all
       fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
 
-      await act(async () => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
+      await act(() => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
 
       await page.addDomain();
       // fill with non profession domain
@@ -222,7 +225,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
       //Mock API calls
       fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
 
-      await act(async () => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
+      await act(() => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
 
       jest.spyOn(page.inputByIndex(1), "focus");
 
@@ -252,7 +255,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
       //Mock API calls
       fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
 
-      await act(async () => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
+      await act(() => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
 
       jest.spyOn(page.inputByIndex(1), "focus");
 
@@ -267,15 +270,18 @@ describe("DisplaySelfRegistrationAdministration", () => {
       await page.fillInput(page.inputByIndex(2), gmailDomain);
       await page.focusOut(page.inputByIndex(2));
 
+      // Wait until the value is found (This will ensure the state has been updated)
+      await screen.findByText("This is not a safe professional domain");
+
       expect(page.warningMessage).toBeDefined();
       expect(page.warningMessage.textContent).toBe("This is not a safe professional domain");
       expect(page.subtitle.classList.contains("warning")).toBeTruthy();
     });
   });
   describe("As a logged administrator I can remove a domain from the list", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
-      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+      await act(() => (page = new DisplaySelfRegistrationAdministrationPage(context, props)));
     });
     it("As a logged in administrator I can remove a domain from an existing list of domains", async () => {
       expect.assertions(2);

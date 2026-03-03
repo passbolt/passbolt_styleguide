@@ -35,7 +35,6 @@ export default class SaveResourcePage {
           <SaveResource {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

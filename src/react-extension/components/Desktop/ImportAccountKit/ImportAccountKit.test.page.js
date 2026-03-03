@@ -30,7 +30,6 @@ export default class ImportAccountKitPage {
       <MockTranslationProvider>
         <ImportAccountKit {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

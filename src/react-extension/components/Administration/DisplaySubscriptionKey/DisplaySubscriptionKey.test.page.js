@@ -37,7 +37,6 @@ export default class DisplaySubscriptionKeyPage {
           </AdminSubscriptionContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

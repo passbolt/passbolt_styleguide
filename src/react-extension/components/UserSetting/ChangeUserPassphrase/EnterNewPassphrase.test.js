@@ -203,7 +203,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
       expect.assertions(2);
       jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
       await page.insertPassphrase("abcdefgh1234=5ABCD===");
-      await page.update(() => true);
+      await page.update();
       expect(page.isProcessing).toBeFalsy();
       expect(page.passphraseBreachedErrorMessage.textContent).toBe("The passphrase is part of an exposed data breach.");
     });
@@ -213,7 +213,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
       jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
       await page.insertPassphrase("passphrase from breached data");
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
-      await page.update(() => true);
+      await page.update();
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 0.0");
       await page.insertPassphrase("passphrase from breached tada");
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
@@ -236,11 +236,11 @@ describe("As LU I should see the user confirm passphrase page", () => {
       await page.insertPassphrase("passphrase from breached data");
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
 
-      await page.update(() => true);
+      await page.update();
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 0.0");
 
       await page.insertPassphrase(notBreachedPassphrase);
-      await page.update(() => true);
+      await page.update();
     });
   });
 
@@ -265,7 +265,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
         .mockImplementation(() => passphraseIsInDictionnary());
       await page.insertPassphrase("passphrase from breached data");
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
-      await page.update(() => true);
+      await page.update();
       await generateResolve();
       expect(spyOnPownedService).not.toHaveBeenCalled();
     });

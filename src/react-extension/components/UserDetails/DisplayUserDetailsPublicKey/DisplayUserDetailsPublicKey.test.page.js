@@ -40,7 +40,6 @@ export default class DisplayUserDetailsPublicKeyPage {
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

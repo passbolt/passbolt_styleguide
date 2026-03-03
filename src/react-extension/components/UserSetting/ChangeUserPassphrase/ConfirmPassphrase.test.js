@@ -17,7 +17,7 @@
  */
 import ConfirmPassphrasePage from "./ConfirmPassphrase.test.page";
 import { defaultProps } from "./ConfirmPassphrase.test.data";
-import { waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
@@ -97,6 +97,8 @@ describe("As LU I should see the user confirm passphrase page", () => {
         .spyOn(props.userSettingsContext, "onCheckProvidePassphraseRequested")
         .mockImplementationOnce(mockReject(error));
       await page.verify();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("The passphrase is invalid.");
       // Throw error message
       expect(page.passphraseErrorMessage).toBe("The passphrase is invalid.");
 

@@ -45,7 +45,7 @@ export default class AdfsSsoProviderFormPage {
     if (this._page) {
       this._page.rerender(contentToRender);
     } else {
-      this._page = render(contentToRender, { legacyRoot: true });
+      this._page = render(contentToRender);
     }
   }
 

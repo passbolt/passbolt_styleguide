@@ -145,7 +145,7 @@ describe("AuthenticationRecoverContextProvider", () => {
 
       expect.assertions(1);
       await contextProvider.initialize();
-      await contextProvider.goToImportGpgKey();
+      contextProvider.goToImportGpgKey();
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY);
     });
   });
@@ -177,7 +177,7 @@ describe("AuthenticationRecoverContextProvider", () => {
 
       expect.assertions(3);
       await contextProvider.initialize();
-      await contextProvider.goToImportGpgKey();
+      contextProvider.goToImportGpgKey();
       try {
         await contextProvider.importGpgKey("armored_key");
         expect(false).toBeTruthy();
@@ -343,7 +343,7 @@ describe("AuthenticationRecoverContextProvider", () => {
 
       expect.assertions(1);
       await contextProvider.initialize();
-      await contextProvider.initiateAccountRecovery();
+      contextProvider.initiateAccountRecovery();
       expect(contextProvider.state.state).toEqual(
         AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY,
       );

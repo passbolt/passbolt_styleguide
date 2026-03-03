@@ -43,7 +43,6 @@ export default class TestSsoSettingsDialogPage {
           <TestSsoSettingsDialog {...props} />
         </AdminSsoContextProvider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

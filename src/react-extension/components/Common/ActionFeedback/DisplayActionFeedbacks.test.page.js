@@ -31,7 +31,6 @@ export default class DisplayActionFeedbacksPage {
       <MockTranslationProvider>
         <DisplayActionFeedbacks {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

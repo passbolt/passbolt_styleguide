@@ -46,11 +46,11 @@ describe("See description", () => {
       expect.assertions(3);
       await page.title.click();
 
-      expect(page.passwordSidebarDescriptionSection.exists()).toBeTruthy();
-      expect(page.passwordSidebarDescriptionSection.description.textContent).toBe(
+      expect(page.displayResourceDetailsDescription.exists()).toBeTruthy();
+      expect(page.displayResourceDetailsDescription.description.textContent).toBe(
         resourceWithDescriptionMock.metadata.description,
       );
-      expect(page.passwordSidebarDescriptionSection.emptyMessage).toBeNull();
+      expect(page.displayResourceDetailsDescription.emptyMessage).toBeNull();
     });
   });
 
@@ -70,7 +70,7 @@ describe("See description", () => {
     it("See an empty message if the resource has no description", async () => {
       expect.assertions(1);
       await page.title.click();
-      expect(page.passwordSidebarDescriptionSection.emptyMessage.textContent).toBe("There is no description.");
+      expect(page.displayResourceDetailsDescription.emptyMessage.textContent).toBe("There is no description.");
     });
   });
 
@@ -90,10 +90,10 @@ describe("See description", () => {
     it("See a description if the resource has description", async () => {
       expect.assertions(2);
       await page.title.click();
-      expect(page.passwordSidebarDescriptionSection.description.textContent).toBe(
+      expect(page.displayResourceDetailsDescription.description.textContent).toBe(
         resourceOnlyReadWithNoDescriptionMock.metadata.description,
       );
-      expect(page.passwordSidebarDescriptionSection.emptyMessage).toBeNull();
+      expect(page.displayResourceDetailsDescription.emptyMessage).toBeNull();
     });
   });
 });

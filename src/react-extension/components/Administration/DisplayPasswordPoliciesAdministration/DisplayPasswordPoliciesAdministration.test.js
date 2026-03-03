@@ -18,7 +18,7 @@ import { defaultProps } from "./DisplayPasswordPoliciesAdministration.test.data"
 import DisplayPasswordPoliciesAdministrationPage from "./DisplayPasswordPoliciesAdministration.test.page";
 import { waitFor } from "@testing-library/dom";
 import { defaultPasswordPoliciesDto } from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import { screen } from "@testing-library/react";
+import { screen, waitForElementToBeRemoved } from "@testing-library/react";
 
 async function waitForTrue(callback) {
   return waitFor(() => {
@@ -124,6 +124,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
 
       expect(spyOnFeedback).toHaveBeenCalledWith("The password policy settings were updated.");
       expect(spyOnFeedback).toHaveBeenCalledTimes(1);
+      await waitForElementToBeRemoved(() => page.settingsChangedBanner);
       expect(page.settingsChangedBanner).toBeNull();
     });
 

@@ -105,8 +105,8 @@ export class AdminInternationalizationContextProvider extends React.Component {
    * @params {ReactEvent} The react event
    * @returns {void}
    */
-  async setLocale(locale) {
-    await this.setState({ locale });
+  setLocale(locale) {
+    this.setState({ locale });
   }
 
   /**

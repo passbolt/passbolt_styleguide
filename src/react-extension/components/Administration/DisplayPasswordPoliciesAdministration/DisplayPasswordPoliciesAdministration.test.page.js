@@ -40,7 +40,6 @@ export default class DisplayPasswordPoliciesAdministrationPage {
           </AdminPasswordPoliciesContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

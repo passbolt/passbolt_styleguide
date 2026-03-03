@@ -12,6 +12,7 @@
  * @since         4.4.0
  */
 
+import { screen } from "@testing-library/react";
 import { defaultProps } from "./YubikeySetup.test.data";
 import YubikeySetupPage from "./YubikeySetup.test.page";
 
@@ -60,7 +61,7 @@ describe("YubikeySetup", () => {
       await page.fillOtpInput("notavalidcode");
       await page.clickOnValidateButton();
 
-      expect(page.errorMessage.textContent).toEqual("This OTP is not valid.");
+      expect(await screen.findByText("This OTP is not valid.")).toBeTruthy();
     });
 
     it("I should be able to valide the otp code and navigate to the configuration screen", async () => {

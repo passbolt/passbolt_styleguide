@@ -16,6 +16,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayResourceDetailsCustomFields component represented as a page
@@ -30,8 +31,8 @@ export default class DisplayResourceDetailsCustomFieldsPage {
       <MockTranslationProvider>
         <DisplayResourceDetailsCustomFields {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -152,9 +153,7 @@ export default class DisplayResourceDetailsCustomFieldsPage {
 
   /** Click on the component */
   async clickOn(component) {
-    const leftClick = { button: 0 };
-    fireEvent.click(component, leftClick);
-    await waitFor(() => {});
+    await this.user.click(component);
   }
 
   /** Hover over a specific custom field */

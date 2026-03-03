@@ -13,10 +13,11 @@
  */
 
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayContentTypesEncryptedMetadataAdministration from "./DisplayContentTypesEncryptedMetadataAdministration";
+import userEvent from "@testing-library/user-event/dist/cjs/index.js";
 
 export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   /**
@@ -30,8 +31,9 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
           <DisplayContentTypesEncryptedMetadataAdministration {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -228,11 +230,11 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   }
 
   /**
-   * Returns the form element
+   * Returns the submit button element
    * @returns {HTMLElement}
    */
-  get form() {
-    return this.select("form");
+  get submitButton() {
+    return this.select("button.button.primary.form");
   }
 
   /**
@@ -240,8 +242,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    * @returns {Promise<void>}
    */
   async submitForm() {
-    fireEvent.submit(this.form);
-    await waitFor(() => {});
+    await this.user.click(this.submitButton);
   }
 
   /**
@@ -249,9 +250,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    * @returns {Promise<void>}
    */
   async clickOnAllowCreationOfV4ResourcesInput() {
-    const leftClick = { button: 0 };
-    fireEvent.click(this.allowCreationOfV4ResourcesInput, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.allowCreationOfV4ResourcesInput);
   }
 
   /**
@@ -259,9 +258,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    * @returns {Promise<void>}
    */
   async clickOnAllowCreationOfV5ResourcesInput() {
-    const leftClick = { button: 0 };
-    fireEvent.click(this.allowCreationOfV5ResourcesInput, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.allowCreationOfV5ResourcesInput);
   }
 
   /**
@@ -269,8 +266,6 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    * @returns {Promise<void>}
    */
   async clickOnDefaultResourceTypesV5Input() {
-    const leftClick = { button: 0 };
-    fireEvent.click(this.defaultResourceTypesV5Input, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.defaultResourceTypesV5Input);
   }
 }

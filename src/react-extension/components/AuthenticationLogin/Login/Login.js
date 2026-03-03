@@ -49,9 +49,7 @@ class Login extends Component {
     return {
       passphrase: "", // The passphrase
       rememberMe: false, // The remember me flag
-      actions: {
-        processing: false, // True if one's processing passphrase
-      },
+      processing: false, // True if one's processing passphrase
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
@@ -75,15 +73,7 @@ class Login extends Component {
    * @returns {boolean}
    */
   get areActionsAllowed() {
-    return !this.state.actions.processing;
-  }
-
-  /**
-   * Returns true if the passphrase is valid
-   * @returns {boolean}
-   */
-  get isValid() {
-    return Object.values(this.state.errors).every((value) => !value);
+    return !this.state.processing;
   }
 
   /**
@@ -91,7 +81,7 @@ class Login extends Component {
    * @returns {boolean}
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -157,7 +147,7 @@ class Login extends Component {
       return;
     }
 
-    this.toggleProcessing();
+    this.setState({ processing: true });
     if (await this.checkPassphrase()) {
       await this.login();
     }
@@ -204,9 +194,9 @@ class Login extends Component {
   onCheckPassphraseFailure(error) {
     // It can happen when the user has entered the wrong passphrase.
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({ actions: { processing: false }, errors: { invalidPassphrase: true } });
+      this.setState({ processing: false, errors: { invalidPassphrase: true } });
     } else if (error.name === "GpgKeyError") {
-      this.setState({ actions: { processing: false }, errors: { invalidGpgKey: true } });
+      this.setState({ processing: false, errors: { invalidGpgKey: true } });
     } else {
       // Only controlled errors should hit the component.
       throw error;
@@ -252,13 +242,6 @@ class Login extends Component {
     };
     this.setState(state);
     return isValid;
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState({ actions: { processing: !this.state.actions.processing } });
   }
 
   /**

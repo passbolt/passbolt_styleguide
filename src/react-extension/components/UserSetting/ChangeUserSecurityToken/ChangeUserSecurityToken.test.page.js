@@ -18,7 +18,6 @@ export default class ChangeUserSecurityTokenPage {
       <MockTranslationProvider>
         <ChangeUserSecurityToken {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

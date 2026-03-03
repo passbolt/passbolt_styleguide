@@ -30,7 +30,6 @@ export default class DisplayMetadataEnablementErrorPage {
       <MockTranslationProvider>
         <DisplayMetadataEnablementError {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

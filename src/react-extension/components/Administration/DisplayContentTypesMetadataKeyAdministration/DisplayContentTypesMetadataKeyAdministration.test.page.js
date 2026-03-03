@@ -31,7 +31,6 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
           <DisplayContentTypesMetadataKeyAdministration {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -164,14 +163,6 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
    */
   get resumeRotateKeyButton() {
     return this.metadataExpiredKeysWrapper.querySelector(".table-button button");
-  }
-
-  /**
-   * Returns the form element
-   * @returns {HTMLElement}
-   */
-  get form() {
-    return this.select("form");
   }
 
   /**

@@ -131,12 +131,11 @@ class CreateResourceFolder extends Component {
     // After first submit, inline validation is on
     this.setState({
       inlineValidation: this.state.inlineValidation || true,
+      processing: true,
     });
 
-    await this.toggleProcessing();
-    await this.validate();
-    if (this.hasValidationError()) {
-      await this.toggleProcessing();
+    if (this.validate()) {
+      this.setState({ processing: false });
       this.focusFirstFieldError();
       return;
     }
@@ -186,17 +185,6 @@ class CreateResourceFolder extends Component {
   }
 
   /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return new Promise((resolve) => {
-      this.setState({ processing: !prev }, resolve());
-    });
-  }
-
-  /**
    * Focus the first field of the form which is in error state.
    * @returns {void}
    */
@@ -218,29 +206,9 @@ class CreateResourceFolder extends Component {
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {boolean}
    */
-  async validate() {
-    await this.resetValidation();
-    await this.validateNameInput();
-    return this.hasValidationError();
-  }
-
-  /**
-   * Reset validation errors
-   * @returns {Promise<void>}
-   */
-  async resetValidation() {
-    return new Promise((resolve) => {
-      this.setState({ nameError: false }, resolve());
-    });
-  }
-
-  /**
-   * Validate the name input.
-   * @returns {Promise<void>}
-   */
-  validateNameInput() {
+  validate() {
     let nameError = false;
     const name = this.state.name.trim();
     if (!name.length) {
@@ -249,9 +217,9 @@ class CreateResourceFolder extends Component {
     if (name.length > 256) {
       nameError = this.translate("A name can not be more than 256 char in length.");
     }
-    return new Promise((resolve) => {
-      this.setState({ nameError: nameError }, resolve);
-    });
+
+    this.setState({ nameError: nameError });
+    return Boolean(nameError);
   }
 
   /**
@@ -260,14 +228,6 @@ class CreateResourceFolder extends Component {
   handleNameInputKeyUp() {
     const nameWarning = maxSizeValidation(this.state.name, RESOURCE_NAME_MAX_LENGTH, this.translate);
     this.setState({ nameWarning });
-  }
-
-  /**
-   * Return true if the form has some validation error
-   * @returns {boolean}
-   */
-  hasValidationError() {
-    return this.state.nameError !== false;
   }
 
   /**

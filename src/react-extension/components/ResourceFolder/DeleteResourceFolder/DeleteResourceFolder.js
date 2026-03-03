@@ -108,7 +108,7 @@ class DeleteResourceFolder extends Component {
       return;
     }
 
-    await this.toggleProcessing();
+    this.setState({ processing: true });
 
     try {
       this.props.loadingContext.add();
@@ -158,17 +158,6 @@ class DeleteResourceFolder extends Component {
       error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
-  }
-
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return new Promise((resolve) => {
-      this.setState({ processing: !prev }, resolve());
-    });
   }
 
   /**

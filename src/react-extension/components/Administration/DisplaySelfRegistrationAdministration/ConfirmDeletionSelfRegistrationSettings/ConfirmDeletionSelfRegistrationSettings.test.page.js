@@ -36,7 +36,6 @@ export default class ConfirmDeletionSelfRegistrationSettingsPage {
           </AdminSelfRegistrationContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

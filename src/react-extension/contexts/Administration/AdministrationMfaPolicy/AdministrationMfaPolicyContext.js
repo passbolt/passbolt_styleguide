@@ -78,9 +78,7 @@ export class AdminMfaPolicyContextProvider extends React.Component {
     this.setProcessing(true);
     const result = await this.mfaPolicyService.find();
     const currentSettings = new MfaPolicyViewModel(result);
-    //Init saved setting
-    this.setState({ currentSettings });
-    this.setState({ settings: currentSettings }, callback);
+    this.setState({ currentSettings, settings: currentSettings }, callback);
     this.setProcessing(false);
   }
 

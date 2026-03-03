@@ -34,7 +34,6 @@ export default class FilterResourcesByFavoritePagePage {
           <FilterResourcesByFavoritePage {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

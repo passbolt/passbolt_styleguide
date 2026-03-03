@@ -156,17 +156,15 @@ class ImportResources extends Component {
   /**
    * Handle the change of import folders option
    */
-  async handleImportOptionFoldersChanged() {
-    const options = Object.assign({}, this.state.options, { folders: !this.state.options.folders });
-    await this.setState({ options });
+  handleImportOptionFoldersChanged() {
+    this.setState({ options: { ...this.state.options, folders: !this.state.options.folders } });
   }
 
   /**
    * Handle the change of unique tag options
    */
-  async handleImportOptionTagsChanged() {
-    const options = Object.assign({}, this.state.options, { tags: !this.state.options.tags });
-    await this.setState({ options });
+  handleImportOptionTagsChanged() {
+    this.setState({ options: { ...this.state.options, tags: !this.state.options.tags } });
   }
 
   /**
@@ -200,15 +198,6 @@ class ImportResources extends Component {
     if (!this.state.processing) {
       this.import();
     }
-  }
-
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
   }
 
   /**
@@ -281,7 +270,7 @@ class ImportResources extends Component {
     const credentialsOptions = { credentials: { password: null, keyFile: null } };
     const options = Object.assign({}, this.state.options, credentialsOptions);
 
-    await this.toggleProcessing();
+    this.setState({ processing: true });
     try {
       const importResult = await this.props.context.port.request(
         "passbolt.import-resources.import-file",
@@ -303,7 +292,7 @@ class ImportResources extends Component {
     await this.props.resourceWorkspaceContext.onResourceFileImportResult(importResult);
     await this.props.resourceWorkspaceContext.onResourceFileToImport(null);
     await this.props.dialogContext.open(ImportResourcesResult);
-    this.toggleProcessing();
+    this.setState({ processing: false });
     this.close();
   }
 
@@ -321,7 +310,7 @@ class ImportResources extends Component {
       error.name === "KdbxError" && (error.code === "InvalidKey" || error.code === "InvalidArg");
     const isCsvError = error.name === "FileFormatError";
 
-    this.toggleProcessing();
+    this.setState({ processing: false });
     if (isUserAbortsOperation || isUntrustedMetadataKeyError) {
       // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
     } else if (isKdbxProtectedError) {

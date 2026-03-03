@@ -113,9 +113,9 @@ class ImportResourcesKeyUnlock extends Component {
    * Handle the event that a file has been selected
    * @param event A dom event
    */
-  async handleFileSelected(event) {
+  handleFileSelected(event) {
     const [keyFile] = event.target.files;
-    await this.setState({ keyFile });
+    this.setState({ keyFile });
   }
 
   /**
@@ -187,7 +187,7 @@ class ImportResourcesKeyUnlock extends Component {
     const keyfile = await this.readFile();
     const options = Object.assign({}, resourceFileToImport.options, { credentials: { password, keyfile } });
 
-    this.toggleProcessing();
+    this.setState({ processing: true });
     await this.resetValidation();
     try {
       const result = await this.props.context.port.request(
@@ -206,7 +206,7 @@ class ImportResourcesKeyUnlock extends Component {
    * Reset the validation process
    */
   async resetValidation() {
-    await this.setState({ errors: {} });
+    this.setState({ errors: {} });
   }
 
   /**
@@ -229,7 +229,7 @@ class ImportResourcesKeyUnlock extends Component {
     const isUntrustedMetadataKeyError = error.name === "UntrustedMetadataKeyError";
     const isInvalidPasswordOrKeyFile = error.code === "InvalidKey" || error.code === "InvalidArg";
 
-    this.toggleProcessing();
+    this.setState({ processing: false });
 
     if (userAbortsOperation || isUntrustedMetadataKeyError) {
       // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
@@ -250,15 +250,6 @@ class ImportResourcesKeyUnlock extends Component {
    */
   close() {
     this.props.onClose();
-  }
-
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
   }
 
   /**

@@ -33,7 +33,6 @@ export default class DisplayResourceDetailsPage {
           <DisplayResourceDetails {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

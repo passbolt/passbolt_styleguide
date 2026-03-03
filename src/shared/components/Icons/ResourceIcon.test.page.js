@@ -25,7 +25,7 @@ export default class ResourceIconPage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(<ResourceIcon {...props} />, { legacyRoot: true });
+    this._page = render(<ResourceIcon {...props} />);
   }
 
   /**

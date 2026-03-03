@@ -115,7 +115,7 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
       return true;
     } catch (error) {
       // It shouldn't occur. For any errors at this stage, the background page will destroy the iframe an let the application served by the API take care of it.
-      await this.handleUnexpectedError(error);
+      this.handleUnexpectedError(error);
       return false;
     }
   }
@@ -127,9 +127,9 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
   async goToValidatePassphrase() {
     try {
       const account = await this.props.context.port.request("passbolt.account-recovery.get-account");
-      await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.VERIFY_PASSPHRASE, account: account });
+      this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.VERIFY_PASSPHRASE, account: account });
     } catch (error) {
-      await this.handleUnexpectedError(error);
+      this.handleUnexpectedError(error);
     }
   }
 
@@ -147,7 +147,7 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
       if (error.name === "InvalidMasterPasswordError") {
         throw error;
       }
-      await this.handleUnexpectedError(error);
+      this.handleUnexpectedError(error);
     }
   }
 
@@ -158,14 +158,14 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
    * @returns {Promise<void>}
    */
   async complete(passphrase, rememberMe = false) {
-    await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.RECOVERING_ACCOUNT });
+    this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.RECOVERING_ACCOUNT });
     try {
       await this.props.context.port.request("passbolt.account-recovery.recover-account", passphrase);
       this.passphrase = passphrase;
       this.rememberMe = rememberMe;
       this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.DOWNLOAD_RECOVERY_KIT });
     } catch (error) {
-      await this.handleUnexpectedError(error);
+      this.handleUnexpectedError(error);
     }
   }
 
@@ -202,25 +202,25 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
     try {
       await this.props.context.port.request("passbolt.account-recovery.sign-in", passphrase, rememberMe);
     } catch (error) {
-      await this.handleUnexpectedError(error);
+      this.handleUnexpectedError(error);
     }
   }
 
   /**
    * Handle unexpected error.
    * @param {Object} error The error.
-   * @returns {Promise<void>}
+   * @returns {void}
    */
-  async handleUnexpectedError(error) {
-    await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error });
+  handleUnexpectedError(error) {
+    this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error });
   }
 
   /**
    * Whenever the user lost its passphrase.
    * @returns {Promise<void>}
    */
-  async needHelpCredentialsLost() {
-    await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.HELP_CREDENTIALS_LOST });
+  needHelpCredentialsLost() {
+    this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.HELP_CREDENTIALS_LOST });
   }
 
   /**
@@ -230,9 +230,9 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
   async requestHelpCredentialsLost() {
     try {
       await this.props.context.port.request("passbolt.account-recovery.request-help-credentials-lost");
-      await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.CHECK_MAILBOX });
+      this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.CHECK_MAILBOX });
     } catch (error) {
-      await this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 

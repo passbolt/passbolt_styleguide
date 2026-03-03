@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 import MockPort from "../../../test/mock/MockPort";
@@ -50,7 +50,6 @@ const renderInputPassphrase = function (appContext, props) {
         <InputPassphrase debug t={(text) => text} onClose={props.onClose || jest.fn()} />
       </AppContext.Provider>
     </MockTranslationProvider>,
-    { legacyRoot: true },
   );
 };
 
@@ -273,6 +272,7 @@ describe("InputPassphrase", () => {
       await waitFor(() => {});
     }
 
+    await screen.findByText("Your passphrase is wrong! The operation has been aborted.");
     // Dialog label does not exist.
     const dialogLabel = container.querySelector(".dialog-content label");
     expect(dialogLabel).toBeNull();

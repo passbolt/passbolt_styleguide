@@ -30,7 +30,6 @@ export default class DisplayRbacItemPage {
       <MockTranslationProvider>
         <DisplayRbacItem {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

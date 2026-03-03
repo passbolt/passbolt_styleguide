@@ -39,7 +39,6 @@ export default class CreateUserGroupPage {
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
