@@ -29,7 +29,6 @@ export default class AutocompletePage {
       <MockTranslationProvider>
         <Autocomplete {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

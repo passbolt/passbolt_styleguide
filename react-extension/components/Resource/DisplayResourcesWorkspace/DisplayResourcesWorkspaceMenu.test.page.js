@@ -37,7 +37,6 @@ export default class DisplayResourcesWorkspaceMenuPage {
           <DisplayResourcesWorkspaceMenu {...props} />
         </AppContextProvider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

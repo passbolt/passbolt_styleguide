@@ -36,7 +36,6 @@ export default class DisplayUserDetailsInformationPage {
           </RoleContext.Provider>
         </UserWorkspaceContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

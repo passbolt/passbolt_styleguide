@@ -75,9 +75,8 @@ export class ProgressContextProvider extends React.Component {
    */
   open(title, goals, message) {
     const progressDialogProps = { title, goals, message };
-    this.setState({ progressDialogProps });
     const dialogIndex = this.props.dialogContext.open(DisplayProgress);
-    this.setState({ dialogIndex });
+    this.setState({ progressDialogProps, dialogIndex });
   }
 
   /**
@@ -86,34 +85,39 @@ export class ProgressContextProvider extends React.Component {
    * @param {boolean} completed The progress is completed.
    */
   updateMessage(message, completed = false) {
-    const progressDialogProps = {
-      ...this.state.progressDialogProps,
-      message: message || this.state.progressDialogProps.message,
-      completed,
-    };
-    this.setState({ progressDialogProps });
+    this.setState((currState) => ({
+      progressDialogProps: {
+        ...currState.progressDialogProps,
+        message: message || currState.progressDialogProps?.message,
+        completed,
+      },
+    }));
   }
 
   /**
    * Upate the progress dialog goals.
    * @param {integer} goals the goals
    */
-  async updateGoals(goals) {
-    const progressDialogProps = {
-      ...this.state.progressDialogProps,
-      goals: goals,
-    };
-    this.setState({ progressDialogProps });
+  updateGoals(goals) {
+    this.setState((currState) => ({
+      progressDialogProps: {
+        ...currState.progressDialogProps,
+        goals,
+      },
+    }));
   }
 
   /**
    * Close the progress dialog.
    */
   async close() {
-    this.props.dialogContext.close(this.state.dialogIndex);
-    const progressDialogProps = {};
-    const dialogIndex = null;
-    this.setState({ progressDialogProps, dialogIndex });
+    const dialogIndex = this.state.dialogIndex;
+    this.props.dialogContext.close(dialogIndex);
+
+    this.setState({
+      progressDialogProps: {},
+      dialogIndex: null,
+    });
   }
 
   /**

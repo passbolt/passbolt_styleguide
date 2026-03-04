@@ -11,14 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import { fireEvent, render, waitFor } from "@testing-library/react";
-import React from "react";
+import { render } from "@testing-library/react";
+import React, { act } from "react";
 import AdministrationWorkspaceContextProvider, {
   AdministrationWorkspaceContext,
 } from "./AdministrationWorkspaceContext";
 import AppContext from "../../shared/context/AppContext/AppContext";
 import { Router, NavLink, Route, Switch } from "react-router-dom";
 import { createMemoryHistory } from "history";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The AdministrationWorkspaceContextPage component represented as a page
@@ -33,6 +34,7 @@ export default class AdministrationWorkspaceContextPage {
     this.context = appContext;
     this.props = props;
     this.setup(appContext, props);
+    this.user = userEvent.setup();
   }
 
   /**
@@ -105,9 +107,7 @@ export default class AdministrationWorkspaceContextPage {
    */
   async goToLink(linkCssSelector) {
     const element = this._page.container.querySelector(linkCssSelector);
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /**
@@ -189,73 +189,36 @@ export default class AdministrationWorkspaceContextPage {
   /**
    * on save enabled
    */
-  async onSaveEnabled() {
-    await this.administrationWorkspaceContext.onSaveEnabled();
-    await waitFor(() => {});
+  onSaveEnabled() {
+    act(() => this.administrationWorkspaceContext.onSaveEnabled());
   }
 
   /**
    * on must save settings
    */
-  async onMustSaveSettings() {
-    await this.administrationWorkspaceContext.onMustSaveSettings();
-    await waitFor(() => {});
-  }
-
-  /**
-   * on test enabled
-   */
-  async onTestEnabled() {
-    await this.administrationWorkspaceContext.onTestEnabled(true);
-    await waitFor(() => {});
-  }
-
-  /**
-   * on must test settings
-   */
-  async onMustTestSettings() {
-    await this.administrationWorkspaceContext.onMustTestSettings();
-    await waitFor(() => {});
+  onMustSaveSettings() {
+    act(() => this.administrationWorkspaceContext.onMustSaveSettings());
   }
 
   /**
    * on must edit subscription key
    */
-  async onMustEditSubscriptionKey() {
-    await this.administrationWorkspaceContext.onMustEditSubscriptionKey();
-    await waitFor(() => {});
+  onMustEditSubscriptionKey() {
+    act(() => this.administrationWorkspaceContext.onMustEditSubscriptionKey());
   }
 
   /**
    * on must refresh subscription key
    */
-  async onMustRefreshSubscriptionKey() {
-    await this.administrationWorkspaceContext.onMustRefreshSubscriptionKey();
-    await waitFor(() => {});
-  }
-
-  /**
-   * on synchronize enabled
-   */
-  async onSynchronizeEnabled() {
-    await this.administrationWorkspaceContext.onSynchronizeEnabled(true);
-    await waitFor(() => {});
-  }
-
-  /**
-   * on must synchronize settings
-   */
-  async onMustSynchronizeSettings() {
-    await this.administrationWorkspaceContext.onMustSynchronizeSettings();
-    await waitFor(() => {});
+  onMustRefreshSubscriptionKey() {
+    act(() => this.administrationWorkspaceContext.onMustRefreshSubscriptionKey());
   }
 
   /**
    * on reset actions settings
    */
-  async onResetActionsSettings() {
-    await this.administrationWorkspaceContext.onResetActionsSettings();
-    await waitFor(() => {});
+  onResetActionsSettings() {
+    this.administrationWorkspaceContext.onResetActionsSettings();
   }
 
   /**
@@ -312,7 +275,6 @@ export default class AdministrationWorkspaceContextPage {
           </NavLink>
         </Router>
       </AppContext.Provider>,
-      { legacyRoot: true },
     );
   }
 }

@@ -19,6 +19,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import DisplayUsers from "./DisplayUsers";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import { UserWorkspaceContext } from "../../../contexts/UserWorkspaceContext";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The FilterUsersByGroups component represented as a page
@@ -40,8 +41,8 @@ export default class DisplayUsersPage {
           </UserWorkspaceContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.userEvent = userEvent.setup();
   }
 
   /**
@@ -98,8 +99,15 @@ export default class DisplayUsersPage {
    * Returns the index-th user with useful accessors
    * @index The user index
    */
-  user(index) {
+  async user(index) {
+    await waitFor(() => {
+      const rows = this._page.container.querySelectorAll("table tbody tr");
+      if (rows.length < index) {
+        throw new Error(`Waiting for user at index ${index}`);
+      }
+    });
     const element = this._page.container.querySelectorAll("table tbody tr")[index - 1];
+    const userEventInstance = this.userEvent;
     return {
       get username() {
         return element.querySelector(".cell-username div").textContent;
@@ -108,9 +116,7 @@ export default class DisplayUsersPage {
         return Boolean(element.querySelector(".attention-required"));
       },
       async select() {
-        const leftClick = { button: 0 };
-        fireEvent.click(element, leftClick);
-        await waitFor(() => {});
+        await userEventInstance.click(element);
       },
       async rightClick() {
         const rect = element.getBoundingClientRect();
@@ -141,10 +147,7 @@ export default class DisplayUsersPage {
       async clickCheckbox() {
         const checkbox = element.querySelector(".cell-checkbox");
         if (checkbox) {
-          fireEvent.click(checkbox, {
-            stopPropagation: () => {},
-          });
-          await waitFor(() => {});
+          await userEventInstance.click(checkbox);
         }
       },
     };
@@ -155,9 +158,7 @@ export default class DisplayUsersPage {
    */
   async sortByFullname() {
     const element = this._page.container.querySelectorAll("thead th button")[0];
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    fireEvent.click(element);
   }
 
   /**
@@ -165,9 +166,7 @@ export default class DisplayUsersPage {
    */
   async sortByUsername() {
     const element = this._page.container.querySelectorAll("thead th button")[1];
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    fireEvent.click(element);
   }
 
   /**
@@ -175,9 +174,7 @@ export default class DisplayUsersPage {
    */
   async sortByRole() {
     const element = this._page.container.querySelectorAll("thead th button")[2];
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    fireEvent.click(element);
   }
 
   /**
@@ -185,9 +182,7 @@ export default class DisplayUsersPage {
    */
   async sortBySuspended() {
     const element = this._page.container.querySelectorAll("thead th button")[3];
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    fireEvent.click(element);
   }
 
   /**
@@ -195,9 +190,7 @@ export default class DisplayUsersPage {
    */
   async sortByModified() {
     const element = this._page.container.querySelectorAll("thead th button")[4];
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    fireEvent.click(element);
   }
 
   /**
@@ -205,9 +198,7 @@ export default class DisplayUsersPage {
    */
   async sortByLastLoggedIn() {
     const element = this._page.container.querySelectorAll("thead th button")[5];
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    fireEvent.click(element);
   }
 
   /**
@@ -215,9 +206,7 @@ export default class DisplayUsersPage {
    */
   async sortByMFAEnabled() {
     const element = this._page.container.querySelectorAll("thead th button")[6];
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    fireEvent.click(element);
   }
 
   /**
@@ -225,8 +214,6 @@ export default class DisplayUsersPage {
    */
   async sortByAccountRecoveryStatus() {
     const element = this._page.container.querySelectorAll("thead th button")[7];
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    fireEvent.click(element);
   }
 }

@@ -22,10 +22,10 @@ import {
   standaloneTotpResourceProps,
   totpResourceProps,
 } from "./ResourceViewPage.test.data";
-import { waitFor } from "@testing-library/react";
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
 import { denyRbacContext } from "../../../shared/context/Rbac/RbacContext.test.data";
 import { defaultTotpViewModelDto } from "../../../shared/models/entity/totp/totpDto.test.data";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -42,7 +42,6 @@ describe("ResourceViewPage", () => {
       const props = defaultProps(); // The props to pass
       mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
       const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
 
       expect(page.previewPasswordButton.hasAttribute("disabled")).toBeFalsy();
 
@@ -53,8 +52,10 @@ describe("ResourceViewPage", () => {
     it("As LU, I should see username, URI of a resource", async () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.username.textContent).toStrictEqual("admin@passbolt.com");
       expect(page.uri.textContent).toStrictEqual("https://passbolt.com");
@@ -65,7 +66,7 @@ describe("ResourceViewPage", () => {
       const props = disabledApiFlagsProps();
       mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
       const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+
       expect(page.previewPasswordButton).toBeNull();
     });
 
@@ -74,7 +75,7 @@ describe("ResourceViewPage", () => {
       const props = deniedRbacProps(); // The props to pass
       mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
       const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+
       expect(page.previewPasswordButton).toBeNull();
     });
 
@@ -87,8 +88,10 @@ describe("ResourceViewPage", () => {
         description: "description",
         totp: totp,
       }));
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.previewTotpButton.hasAttribute("disabled")).toBeFalsy();
 
@@ -102,8 +105,10 @@ describe("ResourceViewPage", () => {
       const props = standaloneTotpResourceProps(); // The props to pass
       const totp = defaultTotpViewModelDto();
       mockContextRequest(props.context, () => ({ totp: totp }));
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.username).toBeNull();
       expect(page.password).toBeNull();
@@ -118,8 +123,11 @@ describe("ResourceViewPage", () => {
         description: "description",
         totp: defaultTotpViewModelDto(),
       }));
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
       expect(page.previewTotpButton).toBeNull();
     });
 
@@ -131,8 +139,11 @@ describe("ResourceViewPage", () => {
         description: "description",
         totp: defaultTotpViewModelDto(),
       }));
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
       expect(page.previewTotpButton).toBeNull();
     });
   });
@@ -142,8 +153,10 @@ describe("ResourceViewPage", () => {
       expect.assertions(4);
       const props = defaultProps(); // The props to pass
       mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.passwordText).toStrictEqual("Copy to clipboard");
       expect(page.password.hasAttribute("disabled")).toBeFalsy();
@@ -164,8 +177,10 @@ describe("ResourceViewPage", () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
       mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       await page.click(page.copyPasswordButton);
 
@@ -182,8 +197,10 @@ describe("ResourceViewPage", () => {
     it("As LU, I should not be able to copy the secret password of resource  if denied by RBAC.", async () => {
       expect.assertions(3);
       const props = deniedRbacProps(); // The props to pass
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.passwordText).toStrictEqual("Copy to clipboard");
       expect(page.password.hasAttribute("disabled")).toBeTruthy();
@@ -199,8 +216,10 @@ describe("ResourceViewPage", () => {
         description: "description",
         totp: totp,
       }));
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.totpText).toStrictEqual("Copy TOTP to clipboard");
       expect(page.totp.hasAttribute("disabled")).toBeFalsy();
@@ -224,8 +243,10 @@ describe("ResourceViewPage", () => {
         description: "description",
         totp: totp,
       }));
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       await page.click(page.copyTotpButton);
       const code = TotpCodeGeneratorService.generate(totp);
@@ -240,8 +261,10 @@ describe("ResourceViewPage", () => {
     it("As LU, I should not be able to copy the secret totp of resource  if denied by RBAC.", async () => {
       expect.assertions(3);
       const props = totpResourceProps({ rbacContext: denyRbacContext() }); // The props to pass
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.totpText).toStrictEqual("Copy TOTP to clipboard");
       expect(page.totp.hasAttribute("disabled")).toBeTruthy();
@@ -253,8 +276,10 @@ describe("ResourceViewPage", () => {
     it("As LU, I should be able to see additional uris", async () => {
       expect.assertions(1);
       const props = multipleUrisResourceProps(); // The props to pass
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       await page.click(page.additionalUrisSection);
 

@@ -39,7 +39,6 @@ export default class DisplayEmailNotificationsAdministrationPage {
           </AdminEmailNotificationContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

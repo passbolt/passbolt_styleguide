@@ -42,7 +42,6 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
           </AdministrationPasswordExpiryContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

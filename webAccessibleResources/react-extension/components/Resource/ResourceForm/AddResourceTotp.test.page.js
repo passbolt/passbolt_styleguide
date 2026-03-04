@@ -20,6 +20,7 @@ import { ResourceTypesLocalStorageContext } from "../../../../shared/context/Res
 import { ResourcePasswordGeneratorContext } from "../../../contexts/ResourcePasswordGeneratorContext";
 import AddResourceTotp from "./AddResourceTotp";
 import { ManagedClipboardServiceContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import userEvent from "@testing-library/user-event";
 /**
  * The Add resource totp component represented as a page
  */
@@ -45,8 +46,8 @@ export default class AddResourceTotpPage {
           </ResourceTypesLocalStorageContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -152,9 +153,7 @@ export default class AddResourceTotpPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /**
@@ -173,8 +172,6 @@ export default class AddResourceTotpPage {
   /** Click to import file */
   async selectImportFile(file) {
     await this.click(this.uploadQrCode);
-    const data = { target: { files: [file] } };
-    fireEvent.change(this.inputFile, data);
-    await waitFor(() => {});
+    await this.user.upload(this.inputFile, file);
   }
 }

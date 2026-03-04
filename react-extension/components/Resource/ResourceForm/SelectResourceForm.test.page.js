@@ -31,7 +31,6 @@ export default class SelectResourceFormPage {
       <MockTranslationProvider>
         <SelectResourceForm {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

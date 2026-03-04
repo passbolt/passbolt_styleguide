@@ -37,7 +37,6 @@ export default class FilterUsersByTextPage {
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

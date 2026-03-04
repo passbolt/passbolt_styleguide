@@ -26,7 +26,6 @@ export default class AddResourceUrisPage {
       <MockTranslationProvider>
         <AddResourceUris {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

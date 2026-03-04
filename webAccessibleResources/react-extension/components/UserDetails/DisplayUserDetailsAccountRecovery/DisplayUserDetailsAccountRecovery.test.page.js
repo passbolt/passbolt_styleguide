@@ -30,7 +30,6 @@ export default class DisplayUserDetailsAccountRecoveryPage {
       <MockTranslationProvider>
         <DisplayUserDetailsAccountRecovery {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

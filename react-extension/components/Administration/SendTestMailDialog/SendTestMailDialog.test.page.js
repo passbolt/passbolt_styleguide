@@ -16,6 +16,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import SendTestMailDialog from "./SendTestMailDialog";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The ManageSmtpAdministrationSettings component represented as a page
@@ -31,8 +32,8 @@ export default class SendTestMailDialogPage {
       <MockTranslationProvider>
         <SendTestMailDialog {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -49,7 +50,7 @@ export default class SendTestMailDialogPage {
    * @returns {Promise<void>}
    */
   async sendTestEmail() {
-    await this.clickOn(this.submitButton, () => this.submitButton.disabled);
+    await this.clickOn(this.submitButton);
   }
 
   /**
@@ -57,8 +58,7 @@ export default class SendTestMailDialogPage {
    * @returns {Promise<void>}
    */
   async clickOnLogs() {
-    const isLogDetailsAvailable = Boolean(this.logDetails);
-    await this.clickOn(this.logs, () => !isLogDetailsAvailable);
+    await this.clickOn(this.logs);
   }
 
   /**
@@ -67,8 +67,7 @@ export default class SendTestMailDialogPage {
    * @returns {Promise<void>}
    */
   async retry() {
-    const currentTitle = this.title.textContent;
-    await this.clickOn(this.retryButton, () => this.title.textContent !== currentTitle);
+    await this.clickOn(this.retryButton);
   }
 
   /**
@@ -78,14 +77,8 @@ export default class SendTestMailDialogPage {
    * @param {function} callback The callback to be used in the waitFor method to ensure the click is done (returns true when it's done)
    * @returns {Promise<void>}
    */
-  async clickOn(element, callback) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {
-      if (!callback()) {
-        throw new Error("Page didn't react yet on the event.");
-      }
-    });
+  async clickOn(element) {
+    await this.user.click(element);
   }
 
   /**

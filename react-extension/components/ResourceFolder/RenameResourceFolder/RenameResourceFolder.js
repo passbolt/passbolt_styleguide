@@ -138,7 +138,7 @@ class RenameResourceFolder extends Component {
       },
       () => {
         if (this.state.inlineValidation) {
-          this.validate();
+          this.hasErrors();
         }
       },
     );
@@ -162,10 +162,10 @@ class RenameResourceFolder extends Component {
       inlineValidation: this.state.inlineValidation || true,
     });
 
-    await this.toggleProcessing();
-    await this.validate();
-    if (this.hasValidationError()) {
-      await this.toggleProcessing();
+    this.setState({ processing: true });
+
+    if (this.hasErrors()) {
+      this.setState({ processing: false });
       this.focusFirstFieldError();
       return;
     }
@@ -215,17 +215,6 @@ class RenameResourceFolder extends Component {
   }
 
   /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return new Promise((resolve) => {
-      this.setState({ processing: !prev }, resolve());
-    });
-  }
-
-  /**
    * Focus the first field of the form which is in error state.
    * @returns {void}
    */
@@ -255,30 +244,10 @@ class RenameResourceFolder extends Component {
   }
 
   /**
-   * Validate the form.
-   * @returns {Promise<boolean>}
+   * Check if the form has errors.
+   * @returns {boolean}
    */
-  async validate() {
-    await this.resetValidation();
-    await this.validateNameInput();
-    return this.hasValidationError();
-  }
-
-  /**
-   * Reset validation errors
-   * @returns {Promise<void>}
-   */
-  async resetValidation() {
-    return new Promise((resolve) => {
-      this.setState({ nameError: false }, resolve());
-    });
-  }
-
-  /**
-   * Validate the name input.
-   * @returns {Promise<void>}
-   */
-  validateNameInput() {
+  hasErrors() {
     let nameError = false;
     const name = this.state.name.trim();
     if (!name.length) {
@@ -287,9 +256,9 @@ class RenameResourceFolder extends Component {
     if (name.length > 256) {
       nameError = this.translate("A name can not be more than 256 char in length.");
     }
-    return new Promise((resolve) => {
-      this.setState({ nameError: nameError }, resolve);
-    });
+
+    this.setState({ nameError: nameError });
+    return Boolean(nameError);
   }
 
   /**
@@ -298,14 +267,6 @@ class RenameResourceFolder extends Component {
   handleNameInputKeyUp() {
     const nameWarning = maxSizeValidation(this.state.name, RESOURCE_FOLDER_NAME_MAX_LENGTH, this.translate);
     this.setState({ nameWarning });
-  }
-
-  /**
-   * Return true if the form has some validation error
-   * @returns {boolean}
-   */
-  hasValidationError() {
-    return this.state.nameError !== false;
   }
 
   /**

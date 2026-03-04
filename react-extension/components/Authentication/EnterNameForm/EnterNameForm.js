@@ -119,86 +119,80 @@ class EnterNameForm extends Component {
   async handleFormSubmit(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
-
-    await this.setState({ hasAlreadyBeenValidated: true });
-
-    // Do not re-submit an already processing form
-    if (!this.state.processing) {
-      await this.toggleProcessing();
-      await this.validate();
-
-      if (this.hasValidationError()) {
-        await this.toggleProcessing();
-        this.focusFirstFieldError();
-        return;
-      }
-
-      await this.props.apiTriageContext.onRegistrationRequested(this.state.firstname, this.state.lastname);
+    // Prevent submission chile processing
+    if (this.state.processing) {
+      return;
     }
-  }
 
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
+    const errors = this.validate();
+
+    if (this.hasValidationError(errors)) {
+      this.setState({ processing: false });
+      this.focusFirstFieldError(errors);
+      return;
+    }
+
+    await this.props.apiTriageContext.onRegistrationRequested(this.state.firstname, this.state.lastname);
   }
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {object}
    */
-  async validate() {
-    await Promise.all([this.validateFirstnameInput(), this.validateLastnameInput()]);
-    return this.hasValidationError();
+  validate() {
+    const firstnameError = this.validateFirstnameInput();
+    const lastnameError = this.validateLastnameInput();
+    this.setState({ firstnameError, lastnameError });
+    return { firstnameError, lastnameError };
   }
 
   /**
    * Validate the firstname input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateFirstnameInput() {
+  validateFirstnameInput() {
     let firstnameError = null;
     const firstname = this.state.firstname.trim();
     if (!firstname.length) {
       firstnameError = this.translate("A first name is required.");
     }
-    return this.setState({ firstnameError });
+    return firstnameError;
   }
 
   /**
    * Validate the firstname input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateLastnameInput() {
+  validateLastnameInput() {
     let lastnameError = null;
     const lastname = this.state.lastname.trim();
     if (!lastname.length) {
       lastnameError = this.translate("A last name is required.");
     }
-    return this.setState({ lastnameError });
+    return lastnameError;
   }
 
   /**
    * Focus the first field of the form which is in error state.
+   * @param {object} errors
    * @returns {void}
    */
-  focusFirstFieldError() {
-    if (this.state.firstnameError) {
+  focusFirstFieldError(errors) {
+    if (errors.firstnameError) {
       this.firstnameRef.current.focus();
-    } else if (this.state.lastnameError) {
+    } else if (errors.lastnameError) {
       this.lastnameRef.current.focus();
     }
   }
 
   /**
    * Return true if the form has some validation error
+   * @param {object} errors
    * @returns {boolean}
    */
-  hasValidationError() {
-    return this.state.firstnameError !== null || this.state.lastnameError !== null;
+  hasValidationError(errors) {
+    return errors.firstnameError !== null || errors.lastnameError !== null;
   }
 
   /**

@@ -33,7 +33,6 @@ export default class DisplayAdministrationUserPassphrasePoliciesTeasingPage {
           <DisplayAdministrationUserPassphrasePoliciesTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

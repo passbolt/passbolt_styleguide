@@ -31,7 +31,6 @@ export default class DisplayUserThemePage {
       <MockTranslationProvider>
         <DisplayUserTheme {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }

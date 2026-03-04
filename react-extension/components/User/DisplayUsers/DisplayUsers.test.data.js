@@ -28,6 +28,7 @@ export function defaultProps(props) {
     context: defaultAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
     accountRecoveryContext: defaultAccountRecoveryUserContext(),
+    onChange: () => jest.fn(),
     dragContext: {
       onDragStart: jest.fn(),
       onDragEnd: jest.fn(),

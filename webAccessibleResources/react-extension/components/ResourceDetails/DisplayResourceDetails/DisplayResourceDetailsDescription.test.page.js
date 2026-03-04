@@ -18,9 +18,9 @@ import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescripti
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
- * The PasswordSidebarDescriptionSection component represented as a page
+ * The DisplayResourceDetailsDescription component represented as a page
  */
-export default class PasswordSidebarDescriptionSectionPage {
+export default class DisplayResourceDetailsDescriptionPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -30,7 +30,6 @@ export default class PasswordSidebarDescriptionSectionPage {
       <MockTranslationProvider>
         <DisplayResourceDetailsDescription {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -40,7 +39,7 @@ export default class PasswordSidebarDescriptionSectionPage {
    */
   setupPageObjects() {
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
-    this._passwordSidebarDescriptionSection = new PasswordSidebarDescriptionSectionPageObject(this._page.container);
+    this._displayResourceDetailsDescription = new DisplayResourceDetailsDescriptionPageObject(this._page.container);
   }
 
   /**
@@ -53,8 +52,8 @@ export default class PasswordSidebarDescriptionSectionPage {
   /**
    * Returns the page object of display groups
    */
-  get passwordSidebarDescriptionSection() {
-    return this._passwordSidebarDescriptionSection;
+  get displayResourceDetailsDescription() {
+    return this._displayResourceDetailsDescription;
   }
 }
 
@@ -85,7 +84,7 @@ class TitleHeaderPageObject {
   }
 }
 
-class PasswordSidebarDescriptionSectionPageObject {
+class DisplayResourceDetailsDescriptionPageObject {
   /**
    * Default constructor
    * @param container The container which includes the AddComment Component

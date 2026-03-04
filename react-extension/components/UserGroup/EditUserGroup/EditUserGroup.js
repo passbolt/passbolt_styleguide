@@ -56,15 +56,11 @@ class EditUserGroup extends Component {
         name: "",
         groupsUsers: [],
       },
-      actions: {
-        processing: false, // True if one process some operation
-        loading: true, // True if the component is in a loading mode
-      },
-      errors: {},
+      processing: false, // True if one process some operation
+      loading: true, // True if the component is in a loading mode
+      nameError: "",
       nameWarning: "",
-      validation: {
-        hasAlreadyBeenValidated: false, // True when the form has already been submitted
-      },
+      hasAlreadyBeenValidated: false, // True when the form has already been submitted
     };
   }
 
@@ -80,8 +76,7 @@ class EditUserGroup extends Component {
    */
   componentDidUpdate() {
     if (this.groupToEdit && this.isLoading) {
-      const actions = Object.assign(this.state.actions, { loading: false });
-      this.setState({ actions });
+      this.setState({ loading: false });
     }
   }
 
@@ -164,7 +159,7 @@ class EditUserGroup extends Component {
    * @type {boolean}
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -172,7 +167,7 @@ class EditUserGroup extends Component {
    * @type {boolean}
    */
   get isLoading() {
-    return this.state.actions.loading;
+    return this.state.loading;
   }
 
   /**
@@ -280,12 +275,10 @@ class EditUserGroup extends Component {
   async handleSubmit(event) {
     event.preventDefault();
 
-    this.resetErrors();
-    const actions = Object.assign(this.state.actions, { processing: true });
-    this.setState({ actions });
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
 
-    this.validate();
-    if (this.hasErrors()) {
+    const nameError = this.validate();
+    if (nameError.length > 0) {
       return this.handleValidateError();
     }
 
@@ -293,8 +286,7 @@ class EditUserGroup extends Component {
       .then(this.onEditSuccess.bind(this))
       .catch(this.onEditFailure.bind(this))
       .finally(() => {
-        const actions = Object.assign(this.state.actions, { processing: false });
-        this.setState({ actions });
+        this.setState({ processing: false });
       });
   }
 
@@ -302,8 +294,7 @@ class EditUserGroup extends Component {
    * Handle validation error.
    */
   handleValidateError() {
-    const actions = Object.assign(this.state.actions, { processing: false });
-    this.setState({ actions });
+    this.setState({ processing: false });
     this.focusFieldError();
   }
 
@@ -311,9 +302,7 @@ class EditUserGroup extends Component {
    * Focus the field of the form which is in error state.
    */
   focusFieldError() {
-    if (this.hasErrors("name")) {
-      this.references.name.current.focus();
-    }
+    this.references.name.current.focus();
   }
 
   /**
@@ -388,8 +377,9 @@ class EditUserGroup extends Component {
    * @param name The new name
    */
   updateName(name) {
-    this.setState({ groupToEdit: Object.assign({}, this.state.groupToEdit, { name }) });
-    if (this.state.validation.hasAlreadyBeenValidated) {
+    this.setState({ groupToEdit: { ...this.state.groupToEdit, name } });
+
+    if (this.state.hasAlreadyBeenValidated) {
       this.validateName();
     } else {
       const nameWarning = maxSizeValidation(name, RESOURCE_GROUP_NAME_MAX_LENGTH, this.translate);
@@ -399,12 +389,11 @@ class EditUserGroup extends Component {
 
   /**
    * Changes the group groups users
-   * @param {array} The new groups users
+   * @param {array} groupsUsers The new groups users
    * @param {boolean} shouldScrollToEnd if true triggers a scroll to the end of the list
    */
   updateGroupsUsers(groupsUsers, shouldScrollToEnd) {
-    const groupToEdit = Object.assign({}, this.state.groupToEdit, { groups_users: groupsUsers });
-    this.setState({ groupToEdit }, () => {
+    this.setState({ groupToEdit: { ...this.state.groupToEdit, groups_users: groupsUsers } }, () => {
       if (shouldScrollToEnd) {
         // scroll at the bottom of the group users list
         this.listRef.current.scrollTo(this.groupsUsers.length - 1);
@@ -459,69 +448,23 @@ class EditUserGroup extends Component {
 
   /**
    * Validate the form
+   * @return {string}
    */
   validate() {
-    this.validateName();
-    this.setState({ validation: Object.assign({}, this.state.validation, { hasAlreadyBeenValidated: true }) });
+    return this.validateName();
   }
 
   /**
    * Validates the group name
    */
   validateName() {
-    this.resetErrors("name");
     const name = this.state.groupToEdit.name;
+    let nameError = "";
     if (name.trim() === "") {
-      this.setError("name", "empty");
+      nameError = this.translate("A name is required.");
     }
-  }
-
-  /**
-   * Set errors
-   * @param {string} domain The error namespace
-   * @param {string} type The error type
-   * @param {string|boolean?} value the error value
-   */
-  setError(domain, type, value) {
-    value = value || true;
-    const errors = this.state.errors || {};
-    errors[domain] = errors[domain] || {};
-    errors[domain][type] = value;
-    this.setState({ errors });
-  }
-
-  /**
-   * Reset the errors
-   * @param {string?} domain (Optional) The domain to reset.
-   */
-  resetErrors(domain) {
-    let errors = {};
-    if (domain) {
-      errors = this.state.errors;
-      delete errors[domain];
-    }
-    this.setState({ errors });
-  }
-
-  /**
-   * Return true if there are some errors
-   * @param {string?} domain (Optional) The domain to check for. If none precised, check for all
-   * @param {string?} type (Optional) The type of error. If none precised, check for all
-   * @boolean {boolean}
-   */
-  hasErrors(domain, type) {
-    const errors = this.state.errors || {};
-    if (!errors) {
-      return false;
-    }
-    if (!domain) {
-      const errorsReducer = (accumulator, errorPropertyName) => accumulator || this.hasErrors(errorPropertyName);
-      return Object.getOwnPropertyNames(errors).reduce(errorsReducer, false);
-    }
-    if (!type) {
-      return typeof errors[domain] === "object";
-    }
-    return errors[domain] && typeof errors[domain][type] !== "undefined";
+    this.setState({ nameError });
+    return nameError;
   }
 
   /**
@@ -568,8 +511,7 @@ class EditUserGroup extends Component {
     if (error.name === "UserAbortsOperationError") {
       this.setState({ processing: false });
     } else if (this.hasGroupNameAlreadyExists(error.data)) {
-      this.setError("name", "alreadyExists");
-      this.setState({ processing: false });
+      this.setState({ nameError: this.translate("The group name already exists."), processing: false });
     } else {
       // Unexpected error occurred.
       console.error(error);
@@ -599,22 +541,6 @@ class EditUserGroup extends Component {
       this.props.history.push(this.props.location.pathname.replace("edit", "view"));
     }
     this.props.onClose();
-  }
-
-  /**
-   * Format fingerprint
-   * @param {string} fingerprint An user finger print
-   * @returns {JSX.Element}
-   */
-  formatFingerprint(fingerprint) {
-    const result = fingerprint.toUpperCase().replace(/.{4}/g, "$& ");
-    return (
-      <>
-        {result.substr(0, 24)}
-        <br />
-        {result.substr(25)}
-      </>
-    );
   }
 
   /**
@@ -729,7 +655,7 @@ class EditUserGroup extends Component {
    * Render the component
    */
   render() {
-    const shouldDisplayError = this.hasErrors() || (this.hasMembers && !this.hasManager);
+    const shouldDisplayError = this.hasMembers && !this.hasManager;
     return (
       <DialogWrapper
         className="edit-group-dialog"
@@ -741,7 +667,7 @@ class EditUserGroup extends Component {
           <form className="group-form" onSubmit={this.handleSubmit} noValidate>
             <div className="form-content">
               <div
-                className={`input text required ${this.hasErrors("name") ? "error" : ""} ${!this.areActionsAllowed || !this.canEditGroupName() ? "disabled" : ""}`}
+                className={`input text required ${this.state.nameError ? "error" : ""} ${!this.areActionsAllowed || !this.canEditGroupName() ? "disabled" : ""}`}
               >
                 <label htmlFor="js_field_name">
                   <Trans>Group name</Trans>
@@ -757,16 +683,7 @@ class EditUserGroup extends Component {
                   onChange={this.handleNameChange}
                   disabled={!this.areActionsAllowed || !this.canEditGroupName()}
                 />
-                {this.hasErrors("name", "empty") && (
-                  <div className="name error-message">
-                    <Trans>A name is required.</Trans>
-                  </div>
-                )}
-                {this.hasErrors("name", "alreadyExists") && (
-                  <div className="name error-message">
-                    <Trans>The group name already exists.</Trans>
-                  </div>
-                )}
+                {this.state.nameError && <div className="name error-message">{this.state.nameError}</div>}
                 {this.state.nameWarning && (
                   <div className="name warning-message">
                     <strong>
@@ -827,13 +744,11 @@ class EditUserGroup extends Component {
 
                 {shouldDisplayError && (
                   <div className="error message">
-                    {this.hasMembers && !this.hasManager && (
-                      <div className="at-least-one-manager">
-                        <span>
-                          <Trans>Please make sure there is at least one group manager.</Trans>
-                        </span>
-                      </div>
-                    )}
+                    <div className="at-least-one-manager">
+                      <span>
+                        <Trans>Please make sure there is at least one group manager.</Trans>
+                      </span>
+                    </div>
                   </div>
                 )}
                 {this.hasWarnings && !shouldDisplayError && (

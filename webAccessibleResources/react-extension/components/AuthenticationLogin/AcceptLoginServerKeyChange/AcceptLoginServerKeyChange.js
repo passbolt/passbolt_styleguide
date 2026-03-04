@@ -70,17 +70,17 @@ class AcceptLoginServerKeyChange extends Component {
   }
 
   /**
-   * Returns true if the passphrase is valid
+   * Returns true if there is at least one error property is true
    */
-  get isValid() {
-    return Object.values(this.state.errors).every((value) => !value);
+  isValid(errors) {
+    return Object.values(errors).every((value) => !value);
   }
 
   /**
    * Returns true if the component must be in a disabled mode
    */
   get mustBeDisabled() {
-    return this.state.hasBeenValidated && !this.isValid;
+    return this.state.hasBeenValidated && !this.isValid(this.state.errors);
   }
 
   /**
@@ -97,9 +97,10 @@ class AcceptLoginServerKeyChange extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.validate();
+    this.setState({ hasBeenValidated: true });
+    const errors = this.validate();
 
-    if (this.isValid) {
+    if (this.isValid(errors)) {
       await this.accept();
     }
   }
@@ -107,8 +108,8 @@ class AcceptLoginServerKeyChange extends Component {
   /**
    * Whenever the user changes the accept new key checkbox
    */
-  async handleAcceptChange() {
-    await this.toggleAccept();
+  handleAcceptChange() {
+    this.toggleAccept();
   }
 
   /**
@@ -121,23 +122,24 @@ class AcceptLoginServerKeyChange extends Component {
   /**
    * Toggle the accept checkbox
    */
-  async toggleAccept() {
-    await this.setState({ hasAccepted: !this.state.hasAccepted });
+  toggleAccept() {
+    this.setState({ hasAccepted: !this.state.hasAccepted });
     if (this.state.hasBeenValidated) {
-      await this.validate();
+      this.validate();
     }
   }
 
   /**
    * Validate the security token data
    */
-  async validate() {
+  validate() {
     const { hasAccepted } = this.state;
+    const errors = {};
     if (!hasAccepted) {
-      await this.setState({ hasBeenValidated: true, errors: { hasNotAccepted: true } });
-      return;
+      errors.hasNotAccepted = true;
     }
-    await this.setState({ hasBeenValidated: true, errors: {} });
+    this.setState({ errors });
+    return errors;
   }
 
   /**

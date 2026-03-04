@@ -174,11 +174,11 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   async handleTitleClicked() {
     if (this.state.open) {
-      await this.setState({ gpgkeyInfo: {}, open: false });
+      this.setState({ gpgkeyInfo: {}, open: false });
     } else {
-      await this.setState({ open: true, loading: true });
+      this.setState({ open: true, loading: true });
       await this.fetchGpgkeyInfo();
-      await this.setState({ loading: false });
+      this.setState({ loading: false });
     }
   }
 

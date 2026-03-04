@@ -33,7 +33,6 @@ export default class DisplayAccountRecoveryUserSettingsPage {
           <DisplayAccountRecoveryUserSettings {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

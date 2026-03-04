@@ -59,7 +59,7 @@ describe("SendTestMailDialog", () => {
       recipient: "invalid email input",
     });
 
-    await page.clickOn(page.submitButton, () => true);
+    await page.clickOn(page.submitButton);
 
     expect(page.recipient_error.textContent).toBe("Recipient must be a valid email");
   });

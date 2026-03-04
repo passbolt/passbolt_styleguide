@@ -30,7 +30,6 @@ export default class DisplayProviderListPage {
       <MockTranslationProvider>
         <DisplayProviderList {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

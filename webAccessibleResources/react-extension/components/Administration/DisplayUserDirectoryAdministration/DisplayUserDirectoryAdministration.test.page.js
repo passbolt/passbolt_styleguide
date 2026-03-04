@@ -35,7 +35,6 @@ export default class DisplayUserDirectoryAdministrationPage {
           <DisplayUserDirectoryAdministration {...props} />
         </AdminUserDirectoryContextProvider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

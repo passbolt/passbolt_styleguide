@@ -33,7 +33,6 @@ export default class DisplayUserDirectoryAdministrationTeasingPage {
           <DisplayUserDirectoryAdministrationTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

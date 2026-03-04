@@ -50,8 +50,8 @@ class ExtAppContextProvider extends React.Component {
     this.initLocale();
     this.getResources();
     this.getFolders();
-    await this.getAccount();
-    this.getGroups();
+    const account = await this.getAccount();
+    this.getGroups(account);
     this.getUsers();
     const skeleton = document.getElementById("temporary-skeleton");
     if (skeleton) {
@@ -248,8 +248,8 @@ class ExtAppContextProvider extends React.Component {
   /**
    * Returns the list of all groups
    */
-  async getGroups() {
-    const storageKey = `groups-${this.state.account.id}`;
+  async getGroups(account) {
+    const storageKey = `groups-${account.id}`;
     const storageData = await this.props.storage.local.get(storageKey);
     if (storageData[storageKey]) {
       const groups = storageData[storageKey];
@@ -294,6 +294,7 @@ class ExtAppContextProvider extends React.Component {
     const accountDto = await this.props.port.request("passbolt.account.get");
     const account = new AccountEntity(accountDto);
     this.setState({ account });
+    return account;
   }
 
   /**

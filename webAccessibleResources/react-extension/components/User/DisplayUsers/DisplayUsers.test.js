@@ -29,10 +29,10 @@ import {
   createUser,
 } from "./DisplayUsers.test.data";
 import DisplayUsersPage from "./DisplayUsers.test.page";
-import { waitFor } from "@testing-library/dom";
 import { denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -46,50 +46,54 @@ describe("Display Users", () => {
   describe("As LU, I should see the appropriate list of users", () => {
     it("As LU, I should see initially an empty content when there are no users", async () => {
       page = new DisplayUsersPage(propsWithNullUsers());
-      await waitFor(() => {});
+
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no users matching the text search", async () => {
       page = new DisplayUsersPage(propsWithNoUsersWithTextSearch());
-      await waitFor(() => {});
+
       expect(page.hasEmptyContentWithTextSearch).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no users filtered by all statuses filter", async () => {
       page = new DisplayUsersPage(propsWithNoUsersWithAllStatusesFilter());
-      await waitFor(() => {});
+
       expect(page.hasEmptyContentWithFilterApplied).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no users filtered by attention required filter", async () => {
       page = new DisplayUsersPage(propsWithNoUsersAccountRecoveryRequestFilter());
-      await waitFor(() => {});
+
       expect(page.hasEmptyContentWithFilterApplied).toBeTruthy();
     });
 
     it("As LU, I should see an empty content when there are no users filtered by missing metadata keys filter", async () => {
       page = new DisplayUsersPage(propsWithNoUsersMissingMetadataKeyFilter());
-      await waitFor(() => {});
+
       expect(page.hasEmptyContentWithFilterApplied).toBeTruthy();
     });
 
     it("AS LU, I should see the appropriate filtered list of users", async () => {
-      page = new DisplayUsersPage(props);
-      await waitFor(() => {});
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
+
       expect(page.usersCount).toBe(2);
-      expect(page.user(1).username).toBe("carol@passbolt.com");
-      expect(page.user(2).username).toBe("dame@passbolt.com");
+      expect((await page.user(1)).username).toBe("carol@passbolt.com");
+      expect((await page.user(2)).username).toBe("dame@passbolt.com");
     });
 
     it("AS LU, I should see the appropriate filtered list of users with a user attention required", async () => {
       expect.assertions(3);
 
-      page = new DisplayUsersPage(propsWithFirstUserAttentionRequired());
-      await waitFor(() => {});
+      await act(async () => {
+        page = new DisplayUsersPage(propsWithFirstUserAttentionRequired());
+      });
+
       expect(page.usersCount).toBe(2);
-      expect(page.user(1).attentionRequired).toBeTruthy();
-      expect(page.user(2).attentionRequired).toBeTruthy();
+      expect((await page.user(1)).attentionRequired).toBeTruthy();
+      expect((await page.user(2)).attentionRequired).toBeTruthy();
     });
   });
 
@@ -99,18 +103,18 @@ describe("Display Users", () => {
     });
 
     it("As LU, I should select one user", async () => {
-      await page.user(1).select();
+      await (await page.user(1)).select();
       expect(props.userWorkspaceContext.onUserSelected.single).toHaveBeenCalledWith(
         props.userWorkspaceContext.filteredUsers[0],
       );
     });
 
     it("As LU, I should unselect one user", async () => {
-      await page.user(1).select();
+      await (await page.user(1)).select();
       expect(props.userWorkspaceContext.onUserSelected.single).toHaveBeenCalledWith(
         props.userWorkspaceContext.filteredUsers[0],
       );
-      await page.user(1).select();
+      await (await page.user(1)).select();
       expect(props.userWorkspaceContext.onUserSelected.single).toHaveBeenCalledWith(
         props.userWorkspaceContext.filteredUsers[0],
       );
@@ -118,58 +122,77 @@ describe("Display Users", () => {
   });
 
   describe("As LU, I should sort the user by property column", () => {
-    beforeEach(() => {
-      page = new DisplayUsersPage(props);
-    });
-
     it("As LU, I should sort the users by fullname", async () => {
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       await page.sortByFullname();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith("profile");
     });
 
     it("As LU, I should sort the users by username", async () => {
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       await page.sortByUsername();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith("username");
     });
 
     it("As LU, I should sort the users by role", async () => {
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       await page.sortByRole();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith("role_id");
     });
 
     it("As LU, I should sort the users by suspended", async () => {
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       await page.sortBySuspended();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith("disabled");
     });
 
     it("As LU, I should sort the users by modified", async () => {
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       await page.sortByModified();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith("modified");
     });
 
     it("As LU, I should sort the users by the last login date", async () => {
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       await page.sortByLastLoggedIn();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith("last_logged_in");
     });
 
     it("As LU, I should sort the users by mfa enabled", async () => {
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       await page.sortByMFAEnabled();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith("is_mfa_enabled");
     });
 
     it("As LU, I should sort the users by account recovery status", async () => {
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       await page.sortByAccountRecoveryStatus();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith("account_recovery_user_setting.status");
     });
   });
 
   describe("As LU, I should not see suspended, mfa and account recovery column for users", () => {
-    beforeEach(() => {
-      const props = defaultProps({ rbacContext: denyRbacContext(), context: defaultUserAppContext() });
-      page = new DisplayUsersPage(props);
-    });
-
     it("As LU, I should see 6 column", async () => {
+      const props = defaultProps({ rbacContext: denyRbacContext(), context: defaultUserAppContext() });
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       expect(page.columnCount).toStrictEqual(6);
       // The first column is the checkbox
       expect(page.column(2).name).toStrictEqual("Name");
@@ -181,12 +204,13 @@ describe("Display Users", () => {
   });
 
   describe("As LU having account recovery view allowed, I should not see suspended, mfa column for users", () => {
-    beforeEach(() => {
-      const props = defaultProps({ context: defaultUserAppContext() });
-      page = new DisplayUsersPage(props);
-    });
+    beforeEach(() => {});
 
     it("As LU, I should see 6 column", async () => {
+      const props = defaultProps({ context: defaultUserAppContext() });
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
       expect(page.columnCount).toStrictEqual(7);
       // The first column is the checkbox
       expect(page.column(2).name).toStrictEqual("Name");
@@ -204,16 +228,14 @@ describe("Display Users", () => {
     });
 
     it("As LU, I should trigger drag context when dragging a user", async () => {
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       // Verify that drag context is called when drag starts
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
     });
 
     it("As LU, I should trigger drag end when drag operation completes", async () => {
-      await page.user(1).dragEnd();
-      await waitFor(() => {});
+      await (await page.user(1)).dragEnd();
 
       // Verify that drag context is called when drag ends
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
@@ -223,8 +245,7 @@ describe("Display Users", () => {
       // Ensure user is not selected initially
       props.userWorkspaceContext.selectedUsers = [];
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       // When dragging an unselected user, the drag context should be called
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
@@ -234,8 +255,7 @@ describe("Display Users", () => {
       // Pre-select both users
       props.userWorkspaceContext.selectedUsers = props.userWorkspaceContext.filteredUsers;
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       // Drag should include all selected users
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
@@ -248,8 +268,7 @@ describe("Display Users", () => {
     });
 
     it("As LU, I should display context menu when right-clicking a user", async () => {
-      await page.user(1).rightClick();
-      await waitFor(() => {});
+      await (await page.user(1)).rightClick();
 
       // Verify context menu is shown
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(
@@ -264,8 +283,7 @@ describe("Display Users", () => {
       // Ensure user is not selected
       props.userWorkspaceContext.selectedUsers = [];
 
-      await page.user(1).rightClick();
-      await waitFor(() => {});
+      await (await page.user(1)).rightClick();
 
       // User should be selected
       expect(props.userWorkspaceContext.onUserSelected.single).toHaveBeenCalled();
@@ -281,8 +299,7 @@ describe("Display Users", () => {
       // Clear the mock to track only this interaction
       props.userWorkspaceContext.onUserSelected.single.mockClear();
 
-      await page.user(1).rightClick();
-      await waitFor(() => {});
+      await (await page.user(1)).rightClick();
 
       // Context menu should show
       expect(props.contextualMenuContext.show).toHaveBeenCalled();
@@ -291,8 +308,7 @@ describe("Display Users", () => {
     });
 
     it("As LU, I should see context menu with position coordinates", async () => {
-      await page.user(1).rightClick();
-      await waitFor(() => {});
+      await (await page.user(1)).rightClick();
 
       // Context menu should be called with coordinates
       const callArgs = props.contextualMenuContext.show.mock.calls[0];
@@ -310,8 +326,7 @@ describe("Display Users", () => {
     });
 
     it("As LU, I should select user when clicking checkbox", async () => {
-      await page.user(1).clickCheckbox();
-      await waitFor(() => {});
+      await (await page.user(1)).clickCheckbox();
 
       // Checkbox click should trigger user selection
       expect(props.userWorkspaceContext.onUserSelected.single).toHaveBeenCalled();
@@ -319,20 +334,16 @@ describe("Display Users", () => {
 
     it("As LU, I should be able to toggle user selection via checkbox", async () => {
       // First click selects
-      await page.user(1).clickCheckbox();
+      await (await page.user(1)).clickCheckbox();
       expect(props.userWorkspaceContext.onUserSelected.single).toHaveBeenCalledTimes(1);
 
       // Second click toggles (unselects)
-      await page.user(1).clickCheckbox();
+      await (await page.user(1)).clickCheckbox();
       expect(props.userWorkspaceContext.onUserSelected.single).toHaveBeenCalledTimes(2);
     });
   });
 
   describe("As LU, I should verify sorting state", () => {
-    beforeEach(() => {
-      page = new DisplayUsersPage(props);
-    });
-
     it("As LU, I should see active sort indicator on sorted column", async () => {
       // Set a specific sort
       props.userWorkspaceContext.sorter = {
@@ -340,8 +351,9 @@ describe("Display Users", () => {
         asc: true,
       };
 
-      page = new DisplayUsersPage(props);
-      await waitFor(() => {});
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
 
       // The component should render with sorted state
       expect(page.usersCount).toBe(2);
@@ -353,8 +365,9 @@ describe("Display Users", () => {
         asc: true,
       };
 
-      page = new DisplayUsersPage(props);
-      await waitFor(() => {});
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
 
       // Component should show ascending indicator
       expect(page.usersCount).toBe(2);
@@ -366,14 +379,20 @@ describe("Display Users", () => {
         asc: false,
       };
 
-      page = new DisplayUsersPage(props);
-      await waitFor(() => {});
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
 
       // Component should show descending indicator
       expect(page.usersCount).toBe(2);
     });
 
     it("As LU, I should be able to change sort direction", async () => {
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
+      // Wait for the table to be visible
+      // await screen.findByRole("table");
       // Click the same column twice should reverse direction
       await page.sortByUsername();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith("username");
@@ -393,8 +412,7 @@ describe("Display Users", () => {
       props.userWorkspaceContext.selectedUsers = [];
 
       // Right-click should auto-select
-      await page.user(1).rightClick();
-      await waitFor(() => {});
+      await (await page.user(1)).rightClick();
 
       expect(props.userWorkspaceContext.onUserSelected.single).toHaveBeenCalled();
     });
@@ -407,8 +425,7 @@ describe("Display Users", () => {
       props.userWorkspaceContext.onUserSelected.single.mockClear();
 
       // Action on already selected user
-      await page.user(1).rightClick();
-      await waitFor(() => {});
+      await (await page.user(1)).rightClick();
 
       // Context menu shows
       expect(props.contextualMenuContext.show).toHaveBeenCalled();
@@ -419,8 +436,7 @@ describe("Display Users", () => {
       props.userWorkspaceContext.selectedUsers = [firstUser];
 
       // Click second user
-      await page.user(2).select();
-      await waitFor(() => {});
+      await (await page.user(2)).select();
 
       // Should select the second user
       expect(props.userWorkspaceContext.onUserSelected.single).toHaveBeenCalledWith(
@@ -441,10 +457,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -458,10 +472,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -475,10 +487,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -500,10 +510,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -522,10 +530,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -547,10 +553,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -572,10 +576,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -602,10 +604,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -640,10 +640,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUser1), createUser(selectedUser2)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -659,10 +657,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];
@@ -681,10 +677,8 @@ describe("Display Users", () => {
         selectedUsers: [createUser(selectedUserId)],
       });
       page = new DisplayUsersPage(testProps);
-      await waitFor(() => {});
 
-      await page.user(1).dragStart();
-      await waitFor(() => {});
+      await (await page.user(1)).dragStart();
 
       expect(testProps.dragContext.onDragStart).toHaveBeenCalled();
       const draggedItems = testProps.dragContext.onDragStart.mock.calls[0][2];

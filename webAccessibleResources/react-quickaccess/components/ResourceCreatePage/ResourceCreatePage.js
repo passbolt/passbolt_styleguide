@@ -89,7 +89,6 @@ class ResourceCreatePage extends React.Component {
     this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
     this.handleCancelButtonClick = this.handleCancelButtonClick.bind(this);
     this.save = this.save.bind(this);
-    this.rejectCreationConfirmation = this.rejectCreationConfirmation.bind(this);
   }
 
   /**
@@ -353,15 +352,6 @@ class ResourceCreatePage extends React.Component {
       rule: createPageRuleVariation,
     };
     this.props.history.push("/webAccessibleResources/quickaccess/resources/confirm-create", pageProps);
-  }
-
-  /**
-   * Reject the creation confirmation.
-   * @returns {Promise<void>}
-   */
-  async rejectCreationConfirmation() {
-    await this.toggleProcessing();
-    this.passwordInputRef.current.focus();
   }
 
   /**

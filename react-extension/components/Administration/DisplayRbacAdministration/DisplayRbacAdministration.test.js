@@ -14,7 +14,6 @@
 
 import "../../../../../test/mocks/mockPortal.js";
 import { enableFetchMocks } from "jest-fetch-mock";
-import { waitFor } from "@testing-library/react";
 import {
   defaultProps,
   propsWithDisabledFlags,
@@ -41,6 +40,7 @@ import { customRoleDto } from "../../../../shared/models/entity/role/roleEntity.
 import PassboltResponseEntity from "../../../../shared/models/entity/apiService/PassboltResponseEntity";
 import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
 import { rolesCollectionDto } from "../../../../shared/models/entity/role/rolesCollection.test.data";
+import { act } from "react";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
@@ -78,8 +78,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I can see all rbac settings relative to the administrator role", async () => {
       const props = propsWithPopulatedRbacContext();
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(33);
 
       expect(page.getAllSelectsByRole(adminRoleIndex).length).toEqual(17);
@@ -131,8 +134,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I can see all rbac settings relative to the user role", async () => {
       const props = propsWithPopulatedRbacContext();
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(18);
 
       expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(17);
@@ -169,8 +175,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I should not see the rbac settings relative to import if disabled by feature flag", async () => {
       const props = propsWithDisabledFlags(["import"]);
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(2);
 
       expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(16);
@@ -179,8 +188,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I should not see the rbac settings relative to export if disabled by feature flag", async () => {
       const props = propsWithDisabledFlags(["export"]);
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(2);
 
       expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(16);
@@ -189,8 +201,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I should not see the rbac settings relative to preview password if disabled by feature flag", async () => {
       const props = propsWithDisabledFlags(["previewPassword"]);
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(2);
 
       expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(16);
@@ -199,8 +214,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I should not see the rbac settings relative to tags if disabled by feature flag", async () => {
       const props = propsWithDisabledFlags(["tags"]);
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(2);
 
       expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(16);
@@ -209,8 +227,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I should not see the rbac settings relative to folders if disabled by feature flag", async () => {
       const props = propsWithDisabledFlags(["folders"]);
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(2);
 
       expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(16);
@@ -221,8 +242,11 @@ describe("DisplayRbacAdministration", () => {
   describe("As a logged in administrator I can update the rbac settings", () => {
     it("As a logged in administrator I can modify and save the rbacs settings", async () => {
       const props = propsWithPopulatedRbacContext();
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(1);
 
       await page.click(page.select(userRoleIndex, uiActions.RESOURCES_EXPORT));
@@ -233,8 +257,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I should see the updated rbacs highlighted", async () => {
       const props = propsWithUpdatedRbacs();
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(2);
 
       const updatedRbacUiActionName1 = props.adminRbacContext.rbacsUpdated.items[0].uiAction.name;
@@ -245,8 +272,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I should not see the rbac for mobile if plugin is disabled", async () => {
       const props = propsWithDisabledFlags(["mobile"]);
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(2);
 
       expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(16);
@@ -255,8 +285,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I should not see the rbac for desktop if plugin is disabled", async () => {
       const props = propsWithDisabledFlags(["desktop"]);
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(2);
 
       expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(16);
@@ -265,8 +298,11 @@ describe("DisplayRbacAdministration", () => {
 
     it("As a logged in administrator I should not see the rbac user setting if mobile and desktop are not enabled", async () => {
       const props = propsWithDisabledFlags(["desktop", "mobile"]);
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
+
       expect.assertions(3);
 
       expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(15);
@@ -282,8 +318,10 @@ describe("DisplayRbacAdministration", () => {
         .spyOn(props.adminRbacContext.rbacs, "findRbacByRoleAndActionName")
         .mockImplementation(() => ({ controlFunction: controlFunctions.DENY }));
 
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       //Click to open the select
       await page.click(page.select(userRoleIndex, uiActions.FOLDERS_USE));
@@ -301,8 +339,10 @@ describe("DisplayRbacAdministration", () => {
       expect.assertions(3);
 
       const props = defaultProps();
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       expect(page.createRoleButton).toBeDefined();
       await page.click(page.createRoleButton);
@@ -315,8 +355,10 @@ describe("DisplayRbacAdministration", () => {
       expect.assertions(1);
 
       const props = defaultProps({ RoleApiService: RoleApiServiceWithTooManyRoles });
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       await page.click(page.createRoleButton);
 
@@ -332,8 +374,10 @@ describe("DisplayRbacAdministration", () => {
       customisableRoles.filterOutGuestRole();
 
       const props = defaultProps({ RoleApiService: roleApiService });
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       expect(page.displayedRoleCount).toStrictEqual(customisableRoles.length);
     });
@@ -344,8 +388,10 @@ describe("DisplayRbacAdministration", () => {
       const props = propsWithPopulatedRbacContext({
         RbacApiService: RbacApiServiceWithCustomRolesSet,
       });
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       expect(page.getAllSelectsByRole(customRoleIndex).length).toEqual(17);
       expect(page.select(customRoleIndex, uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.DENY);
@@ -377,8 +423,10 @@ describe("DisplayRbacAdministration", () => {
       const props = propsWithPopulatedRbacContext({
         RbacApiService: RbacApiServiceWithCustomRolesSet,
       });
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       expect(page.getMoreButton(customRoleIndex)).toBeDefined();
       expect(page.getMoreButton(adminRoleIndex)).toBeNull();
@@ -391,8 +439,10 @@ describe("DisplayRbacAdministration", () => {
       const props = propsWithPopulatedRbacContext({
         RbacApiService: RbacApiServiceWithCustomRolesSet,
       });
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       const moreButton = page.getMoreButton(customRoleIndex);
       await page.click(moreButton); //open the menu of the custom role
@@ -419,8 +469,10 @@ describe("DisplayRbacAdministration", () => {
         throw apiFetchError;
       });
 
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       const moreButton = page.getMoreButton(customRoleIndex);
       await page.click(moreButton); //open the menu of the custom role
@@ -450,8 +502,10 @@ describe("DisplayRbacAdministration", () => {
         .mockImplementationOnce(
           () => new PassboltResponseEntity({ body: [defaultUserDto({ role_id: roleCustomId })], header: {} }),
         );
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       const moreButton = page.getMoreButton(customRoleIndex);
       await page.click(moreButton); //open the menu of the custom role
@@ -472,8 +526,10 @@ describe("DisplayRbacAdministration", () => {
       const props = propsWithPopulatedRbacContext({
         RbacApiService: RbacApiServiceWithCustomRolesSet,
       });
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       const moreButton = page.getMoreButton(customRoleIndex);
       await page.click(moreButton); //open the menu of the custom role
@@ -507,16 +563,16 @@ describe("DisplayRbacAdministration", () => {
         }
       });
 
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       const moreButton = page.getMoreButton(customRoleIndex);
       await page.click(moreButton); //open the menu of the custom role
 
       const deleteRoleButton = page.getDeleteRoleButton(customRoleIndex);
       await page.click(deleteRoleButton);
-
-      await waitFor(() => {});
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(2);
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error });
@@ -541,8 +597,10 @@ describe("DisplayRbacAdministration", () => {
         }
       });
 
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       const moreButton = page.getMoreButton(customRoleIndex);
       await page.click(moreButton); //open the menu of the custom role
@@ -571,8 +629,10 @@ describe("DisplayRbacAdministration", () => {
         }
       });
 
-      const page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplayRbacAdministrationPage(props);
+      });
 
       await page.click(page.createRoleButton); //open the menu of the custom role
 

@@ -54,7 +54,6 @@ export default class ManageSsoSettingsPage {
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

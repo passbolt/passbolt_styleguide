@@ -31,7 +31,6 @@ export default class CreateRolePage {
       <MockTranslationProvider>
         <CreateRole {...props}></CreateRole>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

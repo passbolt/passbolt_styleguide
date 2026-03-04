@@ -39,7 +39,6 @@ export default class DisplayMfaAdministrationPage {
           </AdminMfaContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

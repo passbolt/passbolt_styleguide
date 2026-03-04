@@ -18,9 +18,9 @@
 import "../../../../../test/mocks/mockPortal";
 import { defaultProps, mockResult, mockUsers } from "./DisplayUserDirectoryAdministration.test.data";
 import DisplayUserDirectoryAdministrationPage from "./DisplayUserDirectoryAdministration.test.page";
-import { waitFor } from "@testing-library/react";
 import DisplayTestUserDirectoryAdministration from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministration";
 import { enableFetchMocks } from "jest-fetch-mock";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 import DisplaySynchronizeUserDirectoryAdministration from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
 import DisplaySimulateSynchronizeUserDirectoryAdministration from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
@@ -53,7 +53,6 @@ describe("As AD I should see the user directory settings", () => {
       expect.assertions(35);
 
       expect(page.exists()).toBeTruthy();
-      await waitFor(() => {});
 
       // check fields in the form
       expect(page.userDirectory.checked).toBeTruthy();
@@ -102,7 +101,6 @@ describe("As AD I should see the user directory settings", () => {
 
     it("As AD I should test the user directory on the administration settings page", async () => {
       expect.assertions(3);
-      await waitFor(() => {});
 
       //button should be enable has we have data
       expect(page.isTestButtonEnabled()).toBeTruthy();
@@ -122,7 +120,6 @@ describe("As AD I should see the user directory settings", () => {
 
     it("As AD I should save the user directory on the administration settings page", async () => {
       expect.assertions(6);
-      await waitFor(() => {});
 
       //button should not be enable without changes
       expect(page.isSaveButtonEnabled()).toBeFalsy();
@@ -145,13 +142,13 @@ describe("As AD I should see the user directory settings", () => {
       );
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       //Simulate buttons and synchronize buttons should be enable
+      await waitForTrue(() => page.isSynchronizeButtonEnabled());
       expect(page.isSynchronizeButtonEnabled()).toBeTruthy();
       expect(page.isSimulateButtonEnabled()).toBeTruthy();
     });
 
     it("As AD I should delete the user directory on the administration settings page", async () => {
       expect.assertions(12);
-      await waitFor(() => {});
 
       //button should not be enable without changes
       expect(page.isSaveButtonEnabled()).toBeFalsy();
@@ -184,7 +181,6 @@ describe("As AD I should see the user directory settings", () => {
 
     it("As AD I shouldn't be able to submit the form if there is an invalid field", async () => {
       expect.assertions(5);
-      await waitFor(() => {});
 
       await page.click(page.directoryConfigurationTitle);
 
@@ -215,7 +211,6 @@ describe("As AD I should see the user directory settings", () => {
 
     it("As AD if I put an invalid value for field mapping, when switching directory type, the value should be resetted", async () => {
       expect.assertions(4);
-      await waitFor(() => {});
 
       await page.click(page.directoryConfigurationTitle);
 
@@ -242,7 +237,6 @@ describe("As AD I should see the user directory settings", () => {
 
     it("As AD I should see an error toaster if the submit operation fails for an unexpected reason", async () => {
       expect.assertions(3);
-      await waitFor(() => {});
 
       //button should not be enable without changes
       expect(page.isSaveButtonEnabled()).toBeFalsy();
@@ -258,14 +252,12 @@ describe("As AD I should see the user directory settings", () => {
       jest.spyOn(props.actionFeedbackContext, "displayError").mockImplementation(() => {});
       await page.saveSettings();
 
-      await waitFor(() => {});
       // Throw general error message
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith(error.message);
     });
 
     it("As AD I should be able to simulate the synchronization", async () => {
       expect.assertions(2);
-      await waitFor(() => {});
 
       //button should be enable has we have data
       expect(page.isSimulateButtonEnabled()).toBeTruthy();
@@ -283,7 +275,6 @@ describe("As AD I should see the user directory settings", () => {
 
     it("As AD I should be able to synchronize the users", async () => {
       expect.assertions(2);
-      await waitFor(() => {});
 
       //button should be enable has we have data
       expect(page.isSynchronizeButtonEnabled()).toBeTruthy();
@@ -302,7 +293,6 @@ describe("As AD I should see the user directory settings", () => {
 
     it("As AD I should see the synchronize popup when requested by simulate", async () => {
       expect.assertions(1);
-      await waitFor(() => {});
 
       //Call to simulate the settings
       fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse(mockResult));
@@ -329,7 +319,6 @@ describe("As AD I should see the user directory settings", () => {
 
     it("::when the source is database", async () => {
       expect.assertions(1);
-      await waitFor(() => {});
 
       const props = defaultProps(); // The props to pass
       mockResult.source = "db";

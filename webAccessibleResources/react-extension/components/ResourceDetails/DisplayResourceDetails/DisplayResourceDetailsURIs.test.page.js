@@ -30,7 +30,6 @@ export default class DisplayResourceDetailsURIsPage {
       <MockTranslationProvider>
         <DisplayResourceDetailsURIs {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

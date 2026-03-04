@@ -36,9 +36,7 @@ class SsoLogin extends Component {
    */
   get defaultState() {
     return {
-      actions: {
-        processing: false, // True if one's processing passphrase
-      },
+      processing: false, // True if one's processing passphrase
     };
   }
 
@@ -47,7 +45,7 @@ class SsoLogin extends Component {
    * @returns {boolean}
    */
   get areActionsAllowed() {
-    return !this.state.actions.processing;
+    return !this.state.processing;
   }
 
   /**
@@ -55,7 +53,7 @@ class SsoLogin extends Component {
    * @returns {boolean}
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -88,13 +86,6 @@ class SsoLogin extends Component {
   }
 
   /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState({ actions: { processing: !this.state.actions.processing } });
-  }
-
-  /**
    * Switches the UI to the passphrase mode.
    */
   handleSwitchToPassphrase(event) {
@@ -110,19 +101,11 @@ class SsoLogin extends Component {
    */
   async handleSignInWithSso(event) {
     event.preventDefault();
-    this.setState({
-      actions: {
-        processing: true,
-      },
-    });
+    this.setState({ processing: true });
 
     await this.props.onSsoSignIn();
 
-    this.setState({
-      actions: {
-        processing: false,
-      },
-    });
+    this.setState({ processing: false });
   }
 
   /**

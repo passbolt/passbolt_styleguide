@@ -15,7 +15,7 @@
 import {
   defaultLocale,
   defaultProps,
-} from "../../../../react-extension/components/Administration/DisplayInternationalizationAdministration/DisplayInternationalizationAdministration.test.data";
+} from "../../../components/Administration/DisplayInternationalizationAdministration/DisplayInternationalizationAdministration.test.data";
 import { AdminInternationalizationContextProvider } from "./AdministrationInternationalizationContext";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 import { enableFetchMocks } from "jest-fetch-mock";

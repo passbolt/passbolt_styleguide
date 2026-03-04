@@ -23,6 +23,7 @@ import DisplaySynchronizeUserDirectoryAdministrationPage from "./DisplaySynchron
 import { enableFetchMocks } from "jest-fetch-mock";
 import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 import { act } from "react";
+import { screen } from "@testing-library/dom";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -38,12 +39,12 @@ describe("See the synchronize user directory administration dialog", () => {
     /**
      * I should see the simulate synchronize report dialog page
      */
-    beforeEach(() => {
-      fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockSynchronizeBody));
-      page = new DisplaySynchronizeUserDirectoryAdministrationPage(context, props);
-    });
 
     it("As AD I should see The full report in the dialog for my synchronize report", async () => {
+      fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockSynchronizeBody));
+      await act(async () => {
+        page = new DisplaySynchronizeUserDirectoryAdministrationPage(context, props);
+      });
       expect(page.title.hyperlink.textContent).toBe("Synchronize report");
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe(
@@ -74,10 +75,11 @@ describe("See the synchronize user directory administration dialog", () => {
         }),
       );
       const props = defaultProps();
-      let page;
+
       await act(async () => (page = new DisplaySynchronizeUserDirectoryAdministrationPage(context, props)));
       expect(page.title.hyperlink.textContent).toBe("Synchronize report");
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
+      await screen.findByText("There is nothing to synchronize");
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.noReportMessage).toBe(
         "There is nothing to synchronize",
       );
@@ -114,9 +116,11 @@ describe("See the synchronize user directory administration dialog", () => {
      */
     beforeEach(() => {
       fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockSynchronizeBody));
-      page = new DisplaySynchronizeUserDirectoryAdministrationPage(context, props);
     });
     it('As AD I can click the "Download the Full Report" link to trigger the downlaod action', async () => {
+      await act(async () => {
+        page = new DisplaySynchronizeUserDirectoryAdministrationPage(context, props);
+      });
       expect(page.title.hyperlink.textContent).toBe("Synchronize report");
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe(
         "2 users have been synchronized.60 groups have been synchronized.",

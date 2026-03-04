@@ -52,13 +52,13 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    */
   async componentDidMount() {
     await this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
-    await this.getAccountRecoveryRequest();
-    await this.displayReviewAccountRecoveryDialog();
+    const accountRecoveryRequest = await this.getAccountRecoveryRequest();
+    await this.displayReviewAccountRecoveryDialog(accountRecoveryRequest);
   }
 
   /**
    * Get the account recovery request
-   * @returns {Promise<Object>}
+   * @returns {Promise<Object>} The account recovery request
    */
   async getAccountRecoveryRequest() {
     let accountRecoveryRequest = this.props.accountRecoveryRequest;
@@ -69,6 +69,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
       );
     }
     this.setState({ accountRecoveryRequest });
+    return accountRecoveryRequest;
   }
 
   /**
@@ -83,11 +84,12 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
 
   /**
    * Display review account recovery dialog
+   * @param {Object} accountRecoveryRequest The account recovery request to pass to the dialog
    * @return {Promise<void>}
    */
-  async displayReviewAccountRecoveryDialog() {
+  async displayReviewAccountRecoveryDialog(accountRecoveryRequest) {
     const dialogId = this.props.dialogContext.open(ReviewAccountRecoveryRequest, {
-      accountRecoveryRequest: this.state.accountRecoveryRequest,
+      accountRecoveryRequest: accountRecoveryRequest,
       onCancel: this.handleCancelDialog,
       onSubmit: this.reviewAccountRecoveryRequest,
     });
@@ -124,7 +126,8 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
   reviewAccountRecoveryRequest(responseStatus) {
     this.setState({ responseStatus });
     if (responseStatus !== "approved") {
-      this.handleSave();
+      // Pass responseStatus directly to avoid React 18 batching issues
+      this.handleSave(null, responseStatus);
     } else {
       this.displayProvideAccountRecoveryOrganizationKeyDialog();
     }
@@ -133,13 +136,15 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
   /**
    * Handle the approved of a review request account recovery with the ORK.
    * @param {Object|null} privateGpgKeyDto the private ORK given by the admin if any.
+   * @param {string|null} responseStatus Optional response status to avoid React 18 batching issues.
    */
-  async handleSave(privateGpgKeyDto) {
+  async handleSave(privateGpgKeyDto, responseStatus = null) {
+    const status = responseStatus || this.state.responseStatus;
     try {
       await this.props.context.port.request(
         "passbolt.account-recovery.review-request",
         this.state.accountRecoveryRequest.id,
-        this.state.responseStatus,
+        status,
         privateGpgKeyDto,
       );
       await this.props.actionFeedbackContext.displaySuccess(

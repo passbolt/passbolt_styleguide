@@ -30,7 +30,6 @@ export default class SearchBarTestPage {
       <MockTranslationProvider>
         <SearchBar {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

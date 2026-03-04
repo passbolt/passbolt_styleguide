@@ -30,7 +30,6 @@ export default class GetStartedDesktopPage {
       <MockTranslationProvider>
         <GetStartedDesktop {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

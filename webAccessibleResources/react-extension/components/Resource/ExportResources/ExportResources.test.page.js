@@ -36,7 +36,6 @@ export default class ExportResourcesPage {
           </ExportPoliciesSettingsContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

@@ -34,7 +34,6 @@ export default class DisplayUserWorkspacePage {
           <DisplayUserWorkspace {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

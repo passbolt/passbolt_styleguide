@@ -25,7 +25,7 @@ export default class ResourceWorkspaceContextPage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(<CardItem {...props} />, { legacyRoot: true });
+    this._page = render(<CardItem {...props} />);
   }
 
   /**

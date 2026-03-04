@@ -28,7 +28,6 @@ export default class AddResourceAppearancePage {
       <MockTranslationProvider>
         <AddResourceAppearance {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

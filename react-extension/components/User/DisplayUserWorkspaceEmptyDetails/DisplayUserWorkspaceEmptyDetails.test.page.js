@@ -28,7 +28,6 @@ export default class DisplayUserWorkspaceEmptyDetailsPage {
       <MockTranslationProvider>
         <DisplayUserWorkspaceEmptyDetails />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

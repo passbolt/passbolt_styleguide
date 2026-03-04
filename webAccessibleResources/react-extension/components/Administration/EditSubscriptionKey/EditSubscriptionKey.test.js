@@ -12,10 +12,12 @@
  * @since         3.2.0
  */
 
+import { screen } from "@testing-library/react";
 import { defaultProps } from "./EditSubscriptionKey.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import EditSubscriptionKeyPage from "./EditSubscriptionKey.test.page";
 import { UPDATE_SUBSCRIPTION_KEY } from "../../../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService";
+import { minimalSubscriptionDto } from "../../../../shared/models/entity/subscription/subscriptionEntity.test.data";
 
 /**
  * Unit tests on EditSubscriptionKey in regard of specifications
@@ -41,23 +43,27 @@ describe("As AD I should edit the subscription key", () => {
   it("As AD I cannot update the form fields while submitting the form", async () => {
     expect.assertions(2);
 
-    const requestMockImpl = jest.fn();
-    props.context.port.addRequestListener(UPDATE_SUBSCRIPTION_KEY, requestMockImpl);
+    const key = "some subscription key";
+    const dto = minimalSubscriptionDto({ data: key });
+    const mockUpdateSubscriptionKey = jest.fn().mockResolvedValue(dto);
+    props.context.port.addRequestListener(UPDATE_SUBSCRIPTION_KEY, mockUpdateSubscriptionKey);
 
-    await page.fill("some subscription key");
-    await page.updateKey(() => expect(page.canChange).toEqual(false));
-    expect(requestMockImpl).toHaveBeenCalled();
+    await page.fill(key);
+    await page.updateKey(() => expect(page.canChange).toBeFalsy());
+    expect(mockUpdateSubscriptionKey).toHaveBeenCalled();
   });
 
   it("As AD I should see a processing feedback while submitting the form", async () => {
     expect.assertions(2);
 
-    const requestMockImpl = jest.fn();
-    props.context.port.addRequestListener(UPDATE_SUBSCRIPTION_KEY, requestMockImpl);
+    const key = "some subscription key";
+    const dto = minimalSubscriptionDto({ data: key });
+    const mockUpdateSubscriptionKey = jest.fn().mockResolvedValue(dto);
+    props.context.port.addRequestListener(UPDATE_SUBSCRIPTION_KEY, mockUpdateSubscriptionKey);
 
     await page.fill("some subscription key");
     await page.updateKey(() => expect(page.saveButtonIsProcessing).toBeDefined());
-    expect(requestMockImpl).toHaveBeenCalled();
+    expect(mockUpdateSubscriptionKey).toHaveBeenCalled();
   });
 
   it("As AD I should see an error if the private key is empty after submitting the form (first validation)", async () => {
@@ -82,6 +88,7 @@ describe("As AD I should edit the subscription key", () => {
     await page.fill("Some subscription key");
     await page.updateKey();
 
+    await screen.findByText("The key is invalid.");
     expect(page.hasSubscriptionKeyError).toEqual(true);
     expect(page.subscriptionKeyErrorMessage).toBe("The key is invalid.");
   });
@@ -96,6 +103,7 @@ describe("As AD I should edit the subscription key", () => {
     await page.fill("Some subscription key");
     await page.updateKey();
 
+    await screen.findByText("The subscription key is invalid.");
     expect(page.hasSubscriptionKeyError).toEqual(true);
     expect(page.subscriptionKeyErrorMessage).toBe("The subscription key is invalid.");
   });

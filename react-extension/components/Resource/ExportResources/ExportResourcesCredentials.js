@@ -104,9 +104,9 @@ class ExportResourcesCredentials extends Component {
    * Handle the event that a file has been selected
    * @param event A dom event
    */
-  async handleFileSelected(event) {
+  handleFileSelected(event) {
     const [keyFile] = event.target.files;
-    await this.setState({ keyFile });
+    this.setState({ keyFile });
   }
 
   /**
@@ -136,7 +136,7 @@ class ExportResourcesCredentials extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.setState({ actions: { processing: true } });
+    this.setState({ actions: { processing: true } });
     await this.export().then(this.onExportSuccess.bind(this)).catch(this.onExportFailure.bind(this));
   }
 

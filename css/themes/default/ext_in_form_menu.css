@@ -3726,11 +3726,14 @@ body {
   height: 2rem;
 }
 .web-integration .in-form-menu-item-content {
-  flex: 1;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 40%;
   color: var(--Text-and-icons-Main-text);
 }
 .web-integration .in-form-menu-item-content-header {
-  width: 280px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3738,7 +3741,6 @@ body {
   -ms-text-overflow: ellipsis;
 }
 .web-integration .in-form-menu-item-content-subheader {
-  width: 280px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3759,13 +3761,23 @@ body {
   /* so the text is still selectable */
 }
 .web-integration .in-form-menu-item-content-description {
-  width: 280px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
   color: var(--Text-and-icons-Secondary-text);
+}
+.web-integration .in-form-menu-item-timer {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 1.2rem;
+}
+.web-integration .in-form-menu-item-timer > svg {
+  height: 1.8rem;
+  width: 1.8rem;
 }
 .web-integration .in-form-menu-item .teaser-image {
   display: flex;

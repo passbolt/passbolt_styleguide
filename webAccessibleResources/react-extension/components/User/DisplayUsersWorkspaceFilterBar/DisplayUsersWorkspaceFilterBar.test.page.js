@@ -32,7 +32,6 @@ export default class DisplayUsersWorkspaceFilterBarPage {
           <DisplayUsersWorkspaceFilterBar.WrappedComponent {...props} />
         </MockTranslationProvider>
       </Router>,
-      { legacyRoot: true },
     );
   }
 

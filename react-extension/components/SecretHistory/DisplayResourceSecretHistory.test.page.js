@@ -37,7 +37,6 @@ export default class DisplayResourceSecretHistoryPage {
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

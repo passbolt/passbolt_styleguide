@@ -63,7 +63,6 @@ export default class CreateResourcePage {
           </AppContext.Provider>
         </MemoryRouter>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

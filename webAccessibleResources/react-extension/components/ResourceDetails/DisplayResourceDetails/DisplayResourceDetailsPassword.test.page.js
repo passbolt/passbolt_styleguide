@@ -11,10 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
+import userEvent from "@testing-library/user-event/dist/cjs/index.js";
 
 /**
  * The DisplayResourceDetailsPassword component represented as a page
@@ -29,8 +30,8 @@ export default class DisplayResourceDetailsPasswordPage {
       <MockTranslationProvider>
         <DisplayResourceDetailsPassword {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.userEvent = userEvent.setup();
   }
 
   /**
@@ -119,8 +120,6 @@ export default class DisplayResourceDetailsPasswordPage {
 
   /** Click on the component */
   async click(component) {
-    const leftClick = { button: 0 };
-    fireEvent.click(component, leftClick);
-    await waitFor(() => {});
+    await this.userEvent.click(component);
   }
 }

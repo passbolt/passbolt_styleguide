@@ -30,7 +30,6 @@ export default class DisplayMigrateMetadataAdministrationPage {
           <DisplayMigrateMetadataAdministration {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

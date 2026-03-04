@@ -29,7 +29,6 @@ export default class DisplayResourcesListContextualMenuPage {
       <MockTranslationProvider>
         <DisplayResourcesListContextualMenu {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

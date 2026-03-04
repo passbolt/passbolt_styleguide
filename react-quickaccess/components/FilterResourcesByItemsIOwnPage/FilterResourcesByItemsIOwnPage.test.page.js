@@ -34,7 +34,6 @@ export default class FilterResourcesByItemsIOwnPagePage {
           <FilterResourcesByItemsIOwnPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

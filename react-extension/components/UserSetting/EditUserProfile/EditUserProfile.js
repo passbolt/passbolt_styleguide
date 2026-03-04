@@ -55,9 +55,7 @@ class EditUserProfile extends Component {
         username: "",
         locale: "en-UK",
       },
-      actions: {
-        processing: false, // True if one is processing the edit
-      },
+      processing: false, // True if one is processing the edit
       errors: {
         isFirstnameEmpty: false, // True if the firstname is empty
         isLastnameEmpty: false, // True if the lastname is empty
@@ -70,7 +68,7 @@ class EditUserProfile extends Component {
    * Return trus if the export is processing
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -82,9 +80,11 @@ class EditUserProfile extends Component {
 
   /**
    * True if the edit has validation errors
+   * @param {object} errors
+   * @return boolean
    */
-  get hasErrors() {
-    return Object.values(this.state.errors).some((value) => value);
+  hasErrors(errors) {
+    return Object.values(errors).some((value) => value);
   }
 
   /**
@@ -133,6 +133,9 @@ class EditUserProfile extends Component {
   async handleSave(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
+    if (this.isProcessing) {
+      return;
+    }
     await this.save();
   }
 
@@ -142,18 +145,17 @@ class EditUserProfile extends Component {
   async populate() {
     const { first_name, last_name } = this.props.context.loggedInUser.profile;
     const locale = this.props.context.locale;
-    await this.setState({ profile: { first_name, last_name, locale } });
+    this.setState({ profile: { first_name, last_name, locale } });
   }
 
   /**
    * Saves the change on the user profile
    */
   async save() {
-    await this.setState({ hasAlreadyBeenValidated: true });
-    await this.toggleProcessing();
-    await this.validate();
-    if (this.hasErrors) {
-      await this.toggleProcessing();
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
+    const errors = this.validate();
+    if (this.hasErrors(errors)) {
+      this.setState({ processing: false });
       this.focusFirstFieldError();
       return;
     }
@@ -210,7 +212,7 @@ class EditUserProfile extends Component {
    * @param error The error
    */
   async onSaveError(error) {
-    await this.toggleProcessing();
+    this.setState({ processing: false });
     const errorDialogProps = {
       error: error,
     };
@@ -226,14 +228,16 @@ class EditUserProfile extends Component {
 
   /**
    * Validates the edit data
+   * @return {object} errors
    */
-  async validate() {
+  validate() {
     const isEmpty = (s) => s.trim().length === 0;
     const errors = {
       isFirstnameEmpty: isEmpty(this.state.profile.first_name),
       isLastnameEmpty: isEmpty(this.state.profile.last_name),
     };
-    await this.setState({ errors });
+    this.setState({ errors });
+    return errors;
   }
 
   /**
@@ -245,15 +249,6 @@ class EditUserProfile extends Component {
     } else if (this.state.errors.isLastnameEmpty) {
       this.lastnameRef.current.focus();
     }
-  }
-
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.actions.processing;
-    return this.setState({ actions: Object.assign(this.state.actions, { processing: !prev }) });
   }
 
   /**

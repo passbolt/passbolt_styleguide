@@ -34,7 +34,6 @@ export default class MoreFiltersPagePage {
           <MoreFiltersPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

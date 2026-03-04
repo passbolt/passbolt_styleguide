@@ -30,7 +30,6 @@ export default class SelectPage {
       <MockTranslationProvider>
         <Select {...props}></Select>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

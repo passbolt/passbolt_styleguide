@@ -26,12 +26,14 @@ beforeEach(() => {
 describe("UserEventsService", () => {
   it("As LU I should autofill field with all events", async () => {
     expect.assertions(6);
-    const field = {
-      click: jest.fn(),
-      value: "",
-      dispatchEvent: jest.fn(),
-    };
-    UserEventsService.autofill(field, "test");
+
+    const field = document.createElement("input");
+
+    jest.spyOn(field, "click");
+    jest.spyOn(field, "dispatchEvent");
+
+    await UserEventsService.autofill(field, "test");
+
     expect(field.click).toHaveBeenCalledTimes(1);
     expect(field.value).toStrictEqual("test");
     expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keydown", { bubbles: true }));
@@ -42,16 +44,51 @@ describe("UserEventsService", () => {
     expect(field.dispatchEvent).toHaveBeenCalledWith(new Event("change", { bubbles: true }));
   });
 
+  it("As LU I should autofill multiple fields with all events", async () => {
+    expect.assertions(24);
+
+    const value = "test";
+    const field = document.createElement("div");
+    const inputs = [];
+    for (let i = 0; i < value.length; i++) {
+      const input = document.createElement("input");
+      field.appendChild(input);
+
+      jest.spyOn(input, "click");
+      jest.spyOn(input, "dispatchEvent");
+
+      inputs[i] = input;
+    }
+
+    await UserEventsService.autofill(field, value);
+
+    for (let i = 0; i < value.length; i++) {
+      const input = inputs[i];
+
+      // The first input is clicked twice because the multiple behaviour tries to fill the first input with the whole value first
+      expect(input.click).toHaveBeenCalledTimes(i === 0 ? 2 : 1);
+      expect(input.value).toStrictEqual(value[i]);
+      expect(input.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keydown", { bubbles: true }));
+      expect(input.dispatchEvent).toHaveBeenCalledWith(
+        new InputEvent("input", { inputType: "insertText", data: value[i], bubbles: true }),
+      );
+      expect(input.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keyup", { bubbles: true }));
+      expect(input.dispatchEvent).toHaveBeenCalledWith(new Event("change", { bubbles: true }));
+    }
+  });
+
   it("As LU I should autofill field with null value", async () => {
     expect.assertions(6);
-    const field = {
-      click: jest.fn(),
-      value: "",
-      dispatchEvent: jest.fn(),
-    };
-    UserEventsService.autofill(field, null);
+
+    const field = document.createElement("input");
+
+    jest.spyOn(field, "click");
+    jest.spyOn(field, "dispatchEvent");
+
+    await UserEventsService.autofill(field, null);
+
     expect(field.click).toHaveBeenCalledTimes(1);
-    expect(field.value).toStrictEqual(null);
+    expect(field.value).toStrictEqual("");
     expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keydown", { bubbles: true }));
     expect(field.dispatchEvent).toHaveBeenCalledWith(
       new InputEvent("input", { inputType: "insertText", data: null, bubbles: true }),
@@ -63,12 +100,6 @@ describe("UserEventsService", () => {
   it("As LU I should not autofill null field", async () => {
     expect.assertions(1);
     const field = null;
-    try {
-      UserEventsService.autofill(field, "test");
-      expect(true).toBeTruthy();
-    } catch (error) {
-      // Should not catch error
-      expect(error).toBeNull();
-    }
+    await expect(UserEventsService.autofill(field, "test")).resolves.not.toThrow();
   });
 });

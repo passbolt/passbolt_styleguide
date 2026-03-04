@@ -17,7 +17,7 @@ import {
   mockMfaSettings,
   mockDuoError,
   mockDefaultMfaModel,
-} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+} from "../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import { AdminMfaContextProvider } from "./AdministrationMfaContext";
 import { enableFetchMocks } from "jest-fetch-mock";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
@@ -37,7 +37,10 @@ describe("AdminMfaContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminMfaContext = new AdminMfaContextProvider(props);
-    const setStateMock = (state) => (adminMfaContext.state = Object.assign(adminMfaContext.state, state));
+    const setStateMock = (state) => {
+      const newState = typeof state === "function" ? state(adminMfaContext.state) : state;
+      adminMfaContext.state = Object.assign(adminMfaContext.state, newState);
+    };
     jest.spyOn(adminMfaContext, "setState").mockImplementation(setStateMock);
     enableFetchMocks();
   });

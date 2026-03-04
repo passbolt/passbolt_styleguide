@@ -17,6 +17,12 @@
  * @param {React.Component} contextProvider The component to mock.
  */
 export default (contextProvider) => {
-  const setStateMock = (state) => (contextProvider.state = Object.assign(contextProvider.state, state));
+  const setStateMock = (stateOrUpdater) => {
+    const newState =
+      typeof stateOrUpdater === "function"
+        ? stateOrUpdater(contextProvider.state) // when updater function is called
+        : stateOrUpdater;
+    contextProvider.state = Object.assign(contextProvider.state, newState);
+  };
   jest.spyOn(contextProvider, "setState").mockImplementation(setStateMock);
 };

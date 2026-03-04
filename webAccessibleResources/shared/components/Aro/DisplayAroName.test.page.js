@@ -26,7 +26,6 @@ export default class DisplayAroNamePage {
       <MockTranslationProvider>
         <DisplayAroName {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

@@ -29,7 +29,6 @@ export default class ActionAbortedMissingMetadataKeysPage {
       <MockTranslationProvider>
         <ActionAbortedMissingMetadataKeys {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

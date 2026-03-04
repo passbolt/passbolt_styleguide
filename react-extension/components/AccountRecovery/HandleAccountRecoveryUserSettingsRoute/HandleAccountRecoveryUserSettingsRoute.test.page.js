@@ -32,7 +32,6 @@ export default class HandleAccountRecoveryUserSettingsRoutePage {
           <HandleAccountRecoveryUserSettingsRoute {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 }

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
@@ -19,6 +19,7 @@ import DialogContextProvider from "../../../contexts/DialogContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DeleteResourceTag from "./DeleteResourceTag";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DeleteResourceTag component represented as a page
@@ -41,7 +42,6 @@ export default class DeleteResourceTagPage {
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -96,6 +96,7 @@ class TagDeletePageObject {
    */
   constructor(container) {
     this._container = container;
+    this.user = userEvent.setup();
   }
 
   /**
@@ -157,15 +158,7 @@ class TagDeletePageObject {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
-  }
-
-  /** Click without wait for on the element */
-  clickWithoutWaitFor(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
+    await this.user.click(element);
   }
 
   /** Click without wait for on the element */

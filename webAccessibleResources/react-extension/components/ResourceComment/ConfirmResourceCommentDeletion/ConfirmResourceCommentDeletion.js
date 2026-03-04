@@ -66,7 +66,7 @@ class ConfirmDeleteDialog extends Component {
     event.preventDefault();
 
     try {
-      await this.setState({ actions: { processing: true } });
+      this.setState({ actions: { processing: true } });
 
       // Start loading bar
       this.props.loadingContext.add();
@@ -83,7 +83,7 @@ class ConfirmDeleteDialog extends Component {
       );
 
       // Stop processing
-      await this.setState({ actions: { processing: false } });
+      this.setState({ actions: { processing: false } });
 
       // Update the context
       this.props.context.setContext({ resourceCommentId: null, mustRefreshComments: true });
@@ -91,7 +91,7 @@ class ConfirmDeleteDialog extends Component {
       // Hides the dialog
       this.props.onClose();
     } catch (error) {
-      await this.setState({ actions: { processing: false } });
+      this.setState({ actions: { processing: false } });
 
       // Show the error
       await this.props.actionFeedbackContext.displayError(error);

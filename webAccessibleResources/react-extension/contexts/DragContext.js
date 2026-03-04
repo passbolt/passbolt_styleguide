@@ -66,16 +66,16 @@ export default class dragContextProvider extends React.Component {
    * @param draggedItemComponent
    * @param draggedItems
    */
-  async handleDragStart(event, draggedItemComponent, draggedItems) {
-    await this.setState({ displayDraggedItemsComponent: [{ draggedItemComponent }], dragging: true, draggedItems });
+  handleDragStart(event, draggedItemComponent, draggedItems) {
+    this.setState({ displayDraggedItemsComponent: [{ draggedItemComponent }], dragging: true, draggedItems });
     event.dataTransfer.setDragImage(this.elementRef.current, 10, 10);
   }
 
   /**
    * Handle drag end
    */
-  async handleDragEnd() {
-    await this.setState({ displayDraggedItemsComponent: [], dragging: false, draggedItems: null });
+  handleDragEnd() {
+    this.setState({ displayDraggedItemsComponent: [], dragging: false, draggedItems: null });
   }
 
   /**

@@ -30,7 +30,6 @@ export default class DownloadRecoveryKitPage {
       <MockTranslationProvider>
         <DownloadRecoveryKit {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

@@ -36,7 +36,6 @@ export default class ConfirmSaveSelfRegistrationSettingsPage {
           </AdminSelfRegistrationContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

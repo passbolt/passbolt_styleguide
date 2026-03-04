@@ -142,8 +142,7 @@ class ScanTotpCode extends Component {
    * set an error to object
    */
   setError(key, value) {
-    const error = Object.assign({}, this.state.error, { [key]: value });
-    this.setState({ error });
+    this.setState({ error: { ...this.state.error, [key]: value } });
   }
 
   /**

@@ -37,7 +37,6 @@ export default class DDisplaySimulateSynchronizeUserDirectoryAdministrationPage 
           </AdminUserDirectoryContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

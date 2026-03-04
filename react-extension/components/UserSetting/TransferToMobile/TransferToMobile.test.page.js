@@ -33,7 +33,6 @@ export default class TransferToMobileTestPage {
           <TransferToMobile {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

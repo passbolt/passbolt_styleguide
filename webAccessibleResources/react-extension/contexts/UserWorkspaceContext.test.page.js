@@ -176,8 +176,13 @@ export default class UserWorkspaceContextPage {
    * @param resource A specific resource
    */
   async select(user) {
+    const currentLength = this.selectedUsers.length;
     await this.userWorkspaceContext.onUserSelected.single(user);
-    await waitFor(() => {});
+    await waitFor(() => {
+      if (this.selectedUsers.length === currentLength) {
+        throw new Error("Selection state not updated yet");
+      }
+    });
   }
 
   /**
@@ -282,7 +287,6 @@ export default class UserWorkspaceContextPage {
           x
         </Router>
       </AppContext.Provider>,
-      { legacyRoot: true },
     );
   }
 }

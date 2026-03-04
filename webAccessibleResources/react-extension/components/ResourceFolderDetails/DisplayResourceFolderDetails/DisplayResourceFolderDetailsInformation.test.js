@@ -19,6 +19,7 @@
 import { defaultProps } from "./DisplayResourceFolderDetailsInformation.test.data";
 import DisplayResourceFolderDetailsInformationPage from "./DisplayResourceFolderDetailsInformation.test.page";
 import { defaultFolderDto } from "../../../../shared/models/entity/folder/folderEntity.test.data";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -60,6 +61,8 @@ describe("See information", () => {
       expect(page.displayInformationList.modified(1).textContent).toContain("ago");
       expect(page.displayInformationList.modified(1).getAttribute("title")).toBe("2020-02-01T00:00:00+00:00");
       expect(page.displayInformationList.modifiedByLabel(1)).toBe("Modified by");
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findAllByText("ada@passbolt.com");
       expect(page.displayInformationList.modifiedBy(1).textContent).toBe("ada@passbolt.com");
       expect(page.displayInformationList.createdLabel(2)).toBe("Created");
       expect(page.displayInformationList.created(2).textContent).toContain("ago");

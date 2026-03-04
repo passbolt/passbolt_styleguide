@@ -25,6 +25,7 @@ import { defaultProfileDto } from "../../../shared/models/entity/profile/Profile
 import { formatDateTimeAgo } from "../../../shared/utils/dateUtils";
 import { defaultGpgkeyDto } from "../../../shared/models/entity/gpgkey/gpgkeyEntity.test.data";
 import "../../../../test/mocks/mockPortal.js";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -116,6 +117,8 @@ describe("DisplayCreatorSecretRevision", () => {
         "passbolt.keyring.get-public-key-info-by-user",
         props.secretRevision.creator.id,
       );
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("0C1D 1761 110D 1E33 C900");
       expect(page.tooltipText).toStrictEqual(gpgKey.fingerprint.replace(/.{4}/g, "$& "));
     });
 
