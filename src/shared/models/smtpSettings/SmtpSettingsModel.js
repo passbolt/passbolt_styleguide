@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import SmtpSettingsService from "../../services/api/smtpSettings/SmtpSettingsService";
+import SmtpSettingsApiService from "../../services/api/smtpSettings/smtpSettingsApiService";
 
 /**
  * Model related to the SMTP settings
@@ -25,15 +25,19 @@ class SmtpSettingsModel {
    * @public
    */
   constructor(apiClientOptions) {
-    this.smtpSettingsService = new SmtpSettingsService(apiClientOptions);
+    this.smtpSettingsService = new SmtpSettingsApiService(apiClientOptions);
   }
 
   /**
    * Find the SMTP settings using Passbolt API
    * @return {Promise<SmtpSettingsDto|null>}
    */
-  findSmtpSettings() {
-    return this.smtpSettingsService.find();
+  async findSmtpSettings() {
+    const apiResponse = await this.smtpSettingsService.find();
+    const settings = apiResponse.body;
+    settings.client = settings.client ?? "";
+    settings.tls = Boolean(settings.tls);
+    return settings;
   }
 
   /**
@@ -41,8 +45,11 @@ class SmtpSettingsModel {
    * @param {SmtpSettingsDto} smtpSettings the settings to save
    * @return {Promise<SmtpSettingsDto|null>}
    */
-  saveSmtpSettings(smtpSettings) {
-    return this.smtpSettingsService.save(smtpSettings);
+  async saveSmtpSettings(smtpSettings) {
+    const response = await this.smtpSettingsService.create(smtpSettings);
+    const savedSettings = response.body;
+    savedSettings.tls = Boolean(savedSettings.tls);
+    return savedSettings;
   }
 }
 
