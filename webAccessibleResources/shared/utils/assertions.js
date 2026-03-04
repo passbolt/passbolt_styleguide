@@ -26,16 +26,3 @@ export const isValidUuid = (data) => new XRegExp(UUID_REGEXP).test(data);
  * @returns {boolean}
  */
 export const isValidSecurityToken = (data) => new XRegExp(SECURITY_TOKEN__REGEXP).test(data);
-
-/**
- * Assert that the given parameter is a valid number.
- * Note: The value has to be defined to be assessed, undefined is considered valid.
- * @param {*} value the parameter to validate
- * @param {string} [errorMessage] the message to throw within the error if any
- * @throws {TypeError} if the parameter is not valid
- */
-export const assertNumber = (value, errorMessage = "The given parameter is not a valid number") => {
-  if (typeof value !== "undefined" && typeof value !== "number") {
-    throw new TypeError(errorMessage);
-  }
-};

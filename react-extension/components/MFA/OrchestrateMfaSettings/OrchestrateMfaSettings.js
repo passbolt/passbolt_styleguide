@@ -61,7 +61,7 @@ class OrchestrateMfaSettings extends Component {
       case MfaSettingsWorkflowStates.SETUPYUBIKEY:
         return <YubikeySetup />;
       case MfaSettingsWorkflowStates.SETUPDUO:
-        return <DuoGetStarted />;
+        return <DuoGetStarted onGetStartedWithDuo={this.props.mfaContext.handleGetStartedWithDuo} />;
       case MfaSettingsWorkflowStates.VIEWCONFIGURATION:
         return <DisplayMfaProviderConfiguration />;
     }

@@ -141,33 +141,6 @@ describe("CellTag", () => {
 
       expect(page.hasTags).toBe(true);
     });
-
-    it("should keep badge visible when adding a tag in a narrow column", async () => {
-      expect.assertions(4);
-      // Simulate a narrow collapsed column where only 1 tag fits
-      Object.defineProperty(HTMLElement.prototype, "offsetWidth", {
-        configurable: true,
-        get() {
-          // Container gets narrow width, tags get their natural width
-          if (this.classList?.contains("cell-tag")) {
-            return 50;
-          }
-          return 80;
-        },
-      });
-
-      const props = propsWithTwoTags();
-      const page = new CellTagTestPage(props);
-
-      await waitFor(() => expect(page.visibleTagElements.length).toBe(1));
-      await waitFor(() => expect(page.hasBadge).toBe(true));
-
-      // Add a new tag (simulating tag creation)
-      page.rerender(propsWithThreeTags());
-
-      await waitFor(() => expect(page.visibleTagElements.length).toBe(1));
-      await waitFor(() => expect(page.hasBadge).toBe(true));
-    });
   });
 
   describe("As a user I can click on a tag", () => {

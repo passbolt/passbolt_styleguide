@@ -49,6 +49,7 @@ export default {
             </div>
           </div>
         </MockTranslationProvider>
+        ;
       </MfaContextProvider>
     ),
   ],

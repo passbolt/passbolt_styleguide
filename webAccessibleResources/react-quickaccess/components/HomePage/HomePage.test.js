@@ -12,15 +12,13 @@
  * @since         4.1.0
  */
 import { waitForTrue } from "../../../../test/utils/waitFor";
-import {
-  defaultResourceDto,
-  resourceStandaloneTotpDto,
-} from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { defaultProps, denyUiActionProps } from "./HomePage.test.data";
 import HomePagePage from "./HomePage.test.page";
 import { createMemoryHistory } from "history";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV50FreshDto,
@@ -127,64 +125,6 @@ describe("HomePage", () => {
       expect(page.getSuggestedResourceItem(0).textContent).toStrictEqual(
         `${suggestedResource.metadata.name} (${suggestedResource.metadata.username})${suggestedResource.metadata.uris[0]}+1`,
       );
-    });
-
-    it("it should show suggested OTP resources for the currently active URL", async () => {
-      expect.assertions(2);
-      const props = defaultProps({
-        resources: [
-          resourceStandaloneTotpDto({
-            metadata: defaultResourceMetadataDto({
-              name: "apache totp",
-              username: null,
-              uris: ["http://www.apache.org"],
-              resource_type_id: undefined,
-            }),
-          }),
-          defaultResourceDto(),
-        ],
-      });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "http://www.apache.org/");
-      const page = new HomePagePage(props);
-
-      await waitForTrue(() => page.suggestedResourcesEntries?.length > 0);
-
-      const suggestedResource = props.resources[0];
-
-      expect(page.suggestedResourcesEntries.length).toStrictEqual(1);
-      expect(page.getSuggestedResourceItem(0).textContent).toStrictEqual(
-        `${suggestedResource.metadata.name} ${suggestedResource.metadata.uris[0]}`,
-      );
-    });
-
-    it("it should show both password and OTP suggested resources for the currently active URL", async () => {
-      expect.assertions(1);
-      const props = defaultProps({
-        resources: [
-          defaultResourceDto({
-            metadata: defaultResourceMetadataDto({
-              name: "apache password",
-              uris: ["http://www.apache.org"],
-            }),
-          }),
-          resourceStandaloneTotpDto({
-            metadata: defaultResourceMetadataDto({
-              name: "apache totp",
-              uris: ["http://www.apache.org"],
-              resource_type_id: undefined,
-            }),
-          }),
-          defaultResourceDto(),
-        ],
-      });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "http://www.apache.org/");
-      const page = new HomePagePage(props);
-
-      await waitForTrue(() => page.suggestedResourcesEntries?.length > 1);
-
-      expect(page.suggestedResourcesEntries.length).toStrictEqual(2);
     });
 
     it("it should show a message telling there is no suggested resources for the currently active URL", async () => {

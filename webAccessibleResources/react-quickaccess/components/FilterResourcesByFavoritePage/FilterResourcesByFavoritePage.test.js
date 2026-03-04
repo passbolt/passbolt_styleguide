@@ -18,6 +18,7 @@ import FilterResourcesByFavoritePagePage from "./FilterResourcesByFavoritePage.t
 import { createMemoryHistory } from "history";
 import { waitForTrue } from "../../../../test/utils/waitFor";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV50FreshDto,

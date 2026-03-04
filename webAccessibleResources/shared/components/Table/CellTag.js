@@ -55,7 +55,8 @@ class CellTag extends Component {
    */
   componentDidUpdate(prevProps) {
     if (prevProps.value !== this.props.value) {
-      this.calculateVisibleTags();
+      this.tagRefs = new Array(this.tags.length);
+      this.setState({ measured: false }, () => this.calculateVisibleTags());
     }
   }
 

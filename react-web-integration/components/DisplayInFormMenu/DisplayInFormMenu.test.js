@@ -20,6 +20,7 @@ import DisplayInFormMenuTestPage from "./DisplayInformMenu.test.page";
 import { defaultProps, defaultPropsWithMissingMetadataKey } from "./DisplayInformMenu.test.data";
 import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultPasswordPoliciesDto } from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { defaultMetadataTypesSettingsV6Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";

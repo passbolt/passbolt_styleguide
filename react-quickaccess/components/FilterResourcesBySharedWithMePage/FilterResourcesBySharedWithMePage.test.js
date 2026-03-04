@@ -22,6 +22,7 @@ import {
   updatePermissionDto,
 } from "../../../shared/models/entity/permission/permissionEntity.test.data";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV50FreshDto,

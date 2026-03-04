@@ -18,6 +18,7 @@
 import { waitFor } from "@testing-library/react";
 import { defaultProps } from "./ActionAbortedMissingMetadataKeysPage.test.data";
 import ActionAbortedMissingMetadataKeysPagePage from "./ActionAbortedMissingMetadataKeysPage.test.page";
+import expect from "expect";
 
 beforeEach(() => {
   jest.resetModules();

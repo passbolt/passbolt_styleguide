@@ -32,6 +32,7 @@ const Template = (args) => (
         </div>
       </div>
     </MockTranslationProvider>
+    ;
   </MfaContextProvider>
 );
 

@@ -15,6 +15,7 @@ import { defaultProps } from "./MoreFiltersPage.test.data";
 import MoreFiltersPage from "./MoreFiltersPage.test.page";
 import { createMemoryHistory } from "history";
 import { waitForTrue } from "../../../../test/utils/waitFor";
+import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV50FreshDto,

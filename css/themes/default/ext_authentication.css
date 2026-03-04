@@ -4836,7 +4836,6 @@ body {
   background: initial;
   margin-bottom: 1.6rem;
   box-shadow: none;
-  padding-left: 0;
 }
 .login.page .totp-setup .input.password label,
 .login.page .yubikey-setup .input.password label {

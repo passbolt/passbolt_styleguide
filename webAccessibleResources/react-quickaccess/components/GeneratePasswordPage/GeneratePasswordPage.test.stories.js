@@ -31,6 +31,7 @@ export default {
             <Story {...args} />
           </div>
         </MemoryRouter>
+        ;
       </AppContext.Provider>
     ),
   ],

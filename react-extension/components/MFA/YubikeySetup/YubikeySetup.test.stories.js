@@ -30,6 +30,7 @@ const Template = (args) => (
         <YubikeySetup {...args} />
       </div>
     </MockTranslationProvider>
+    ;
   </MfaContextProvider>
 );
 
