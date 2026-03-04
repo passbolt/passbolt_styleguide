@@ -28,7 +28,6 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
       <MockTranslationProvider>
         <DisplayContentTypesAllowedContentTypesAdministration {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

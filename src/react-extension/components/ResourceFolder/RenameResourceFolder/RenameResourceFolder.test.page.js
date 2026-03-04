@@ -35,7 +35,6 @@ export default class RenameResourceFolderPage {
           <RenameResourceFolder {...props}></RenameResourceFolder>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }

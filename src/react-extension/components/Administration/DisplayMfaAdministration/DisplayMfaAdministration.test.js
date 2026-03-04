@@ -22,6 +22,7 @@ import DisplayMfaAdministrationPage from "./DisplayMfaAdministration.test.page";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 import { enableFetchMocks } from "jest-fetch-mock";
+import { act } from "react";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -37,9 +38,9 @@ describe("See the MFA settings", () => {
     /**
      * I should see the MFA provider activation state on the administration settings page
      */
-    beforeEach(() => {
+    beforeEach(async () => {
       fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
-      page = new DisplayMfaAdministrationPage(context, props);
+      await act(() => (page = new DisplayMfaAdministrationPage(context, props)));
     });
 
     it("As AD I should see if all fields is available for my Passbolt instance on the administration settings page", async () => {

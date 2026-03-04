@@ -31,7 +31,10 @@ describe("UserDirectoryFormService", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     userDirectoryContext = new AdminUserDirectoryContextProvider(props);
-    const setStateMock = (state) => (userDirectoryContext.state = Object.assign(userDirectoryContext.state, state));
+    const setStateMock = (state) => {
+      const newState = typeof state === "function" ? state(userDirectoryContext.state) : state;
+      userDirectoryContext.state = Object.assign(userDirectoryContext.state, newState);
+    };
     jest.spyOn(userDirectoryContext, "setState").mockImplementation(setStateMock);
     UserDirectoryFormService.killInstance();
     userDirectoryFormService = UserDirectoryFormService.getInstance(userDirectoryContext, translation);

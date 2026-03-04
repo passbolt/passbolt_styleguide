@@ -18,7 +18,6 @@ import { minimalDto, readSecret } from "passbolt-styleguide/src/shared/models/en
 import SecretEntity from "./secretEntity";
 import { defaultSecretDataV5DefaultDto } from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity.test.data";
 import SecretDataV5DefaultEntity from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity";
-import expect from "expect";
 
 describe("SecretsCollection", () => {
   it("schema must validate", () => {

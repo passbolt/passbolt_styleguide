@@ -17,7 +17,6 @@ export default class EditSubscriptionKeyPage {
       <MockTranslationProvider>
         <EditSubscriptionKey {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }

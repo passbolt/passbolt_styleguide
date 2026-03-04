@@ -29,7 +29,6 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultAdminUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
 import { v4 as uuidv4 } from "uuid";
-import expect from "expect";
 import ConfirmMetadataKeyRotationDialog from "./ConfirmMetadataKeyRotationDialog";
 import { defaultMetadataKeyDto } from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
@@ -404,7 +403,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       const props = defaultSettingsAndSingleActiveKeyProps();
 
       let page;
-      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
+      await act(() => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
     });
   });
@@ -414,7 +413,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect.assertions(5);
       const props = defaultProps();
       let page;
-      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
+      await act(() => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
       const saveButton = await screen.findByRole("button", { name: /save/i });
       await page.click(saveButton);
       expect(page.errorMessagesCount).toBe(1);
@@ -451,7 +450,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect.assertions(10);
       const props = defaultProps();
       let page;
-      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
+      await act(() => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
       await page.click(page.generateKeyButton);
       const saveButton = await screen.findByRole("button", { name: /save/i });
       await page.click(saveButton);
@@ -465,6 +464,9 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       );
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
+      await waitForTrue(() =>
+        page.metadataActiveKeysWrapper.textContent.includes(formatDateTimeAgo("2022-10-11T08:09:00+00:00")),
+      );
       expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
       expect(page.metadataExpiredKeysWrapper).toBeNull();
@@ -500,7 +502,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
         throw error;
       });
       let page;
-      await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
+      await act(() => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
       const saveButton = await screen.findByRole("button", { name: /save/i });
       await page.click(saveButton);
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error });

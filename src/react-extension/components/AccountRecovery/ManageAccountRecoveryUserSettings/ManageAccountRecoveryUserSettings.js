@@ -68,13 +68,6 @@ class ManageAccountRecoveryUserSettings extends Component {
   }
 
   /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState({ processing: !this.state.processing });
-  }
-
-  /**
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
@@ -87,7 +80,11 @@ class ManageAccountRecoveryUserSettings extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    this.toggleProcessing();
+    // Prevent submission while processing
+    if (this.isProcessing) {
+      return;
+    }
+    this.setState({ processing: true });
     const accountRecoveryUserSettingDto = { status: this.state.status };
     try {
       await this.props.context.port.request(
@@ -103,7 +100,7 @@ class ManageAccountRecoveryUserSettings extends Component {
       );
       this.close();
     } catch (error) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       if (error.name === "UserAbortsOperationError") {
         return;
       }

@@ -30,7 +30,6 @@ export default class TotpGetStartedPage {
       <MockTranslationProvider>
         <TotpGetStarted {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

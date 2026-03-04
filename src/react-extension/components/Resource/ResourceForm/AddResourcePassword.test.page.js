@@ -42,7 +42,6 @@ export default class AddResourcePasswordPage {
           </ResourceTypesLocalStorageContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

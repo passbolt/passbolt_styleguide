@@ -16,6 +16,7 @@
  * Unit tests on DisplayResourceFolderDetailsActivity in regard of specifications
  */
 
+import { act } from "react";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 import {
   activitiesMock,
@@ -66,6 +67,9 @@ describe("See activities", () => {
     });
 
     it("I should be able to identify each activity creators", async () => {
+      await act(async () => {
+        page = new DisplayResourceFolderDetailsActivityPage(context, props);
+      });
       expect(page.creator(1)).toBe("Admin User");
       expect(page.creator(2)).toBe("Admin User");
       expect(page.creator(3)).toBe("Admin User");
@@ -74,6 +78,9 @@ describe("See activities", () => {
     });
 
     it("I should be able to see each activity timestamps", async () => {
+      await act(async () => {
+        page = new DisplayResourceFolderDetailsActivityPage(context, props);
+      });
       expect(page.creationTime(1)).toBeDefined();
       expect(page.creationTime(2)).toBeDefined();
       expect(page.creationTime(3)).toBeDefined();
@@ -82,7 +89,15 @@ describe("See activities", () => {
     });
 
     it("I should be able to see each other activities with more button ", async () => {
-      mockContextRequest(activitiesMoreFoundRequestMockImpl);
+      //First request returns 5 activities (shows "More" button), subsequent requests return 2 more
+      jest
+        .spyOn(context.port, "request")
+        .mockImplementationOnce(activitiesFoundRequestMockImpl)
+        .mockImplementation(activitiesMoreFoundRequestMockImpl);
+      await act(async () => {
+        page = new DisplayResourceFolderDetailsActivityPage(context, props);
+      });
+      await waitForTrue(() => page.moreButtonExists());
       expect(page.moreButtonExists()).toBeTruthy();
       await page.moreButtonClick();
       expect(page.count()).toBe(7);
@@ -119,6 +134,8 @@ describe("See activities", () => {
         findResolve([]);
       };
       await page.waitForLoading(inProgressFn);
+      await waitForTrue(() => !page.isLoading());
+
       expect(page.isLoading()).toBeFalsy();
     });
   });

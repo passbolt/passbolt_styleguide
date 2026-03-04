@@ -34,7 +34,6 @@ export default class FilterResourcesByGroupPagePage {
           <FilterResourcesByGroupPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

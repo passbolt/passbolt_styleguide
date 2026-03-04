@@ -51,7 +51,6 @@ class HandleStatusCheck extends React.Component {
    */
   async componentDidMount() {
     await this.checkToDisplayDialog();
-    await this.displayDialog();
   }
 
   /**
@@ -65,7 +64,7 @@ class HandleStatusCheck extends React.Component {
 
   /**
    * Update the current state to display the right dialog for the user
-   * @returns {Promise<void>}
+   * @returns {Promise<object>}
    */
   async checkToDisplayDialog() {
     if (this.isCurrentUrlDisallowsUsersDialog()) {
@@ -74,6 +73,7 @@ class HandleStatusCheck extends React.Component {
 
     let isDialogDisplayHandled = false;
     if (!isDialogDisplayHandled && this.props.context.siteSettings.canIUse("accountRecovery")) {
+      await this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
       const shouldDisplayAccountRecovery = await this.checkAccountRecovery();
       this.setState({ shouldDisplayAccountRecovery });
       isDialogDisplayHandled = shouldDisplayAccountRecovery;
@@ -162,7 +162,6 @@ class HandleStatusCheck extends React.Component {
    * @returns {Promise<boolean>}
    */
   async displayDialog() {
-    await this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
     const numberOfDialogs = this.props.dialogContext.dialogs.length;
 
     if (numberOfDialogs > 0) {

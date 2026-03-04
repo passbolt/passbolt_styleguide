@@ -39,7 +39,6 @@ export default class DeleteResourceTestPage {
           </DialogContextProvider>
         </AppContextProvider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

@@ -16,6 +16,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import CreateGpgKey from "./CreateGpgKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The CreateGpgKeyPage component represented as a page
@@ -26,7 +27,8 @@ export default class CreateGpgKeyPage {
    * @param {object} props Props to attach
    */
   constructor(props) {
-    this._page = render(this.jsx(props), { legacyRoot: true });
+    this._page = render(this.jsx(props));
+    this.user = userEvent.setup();
   }
 
   /**
@@ -191,19 +193,15 @@ export default class CreateGpgKeyPage {
    * Generate the key
    * @param inProgressFn Function called while the generation
    */
-  async generateKey(inProgressFn = () => {}) {
-    const leftClick = { button: 0 };
-    fireEvent.click(this.nextButton, leftClick);
-    await waitFor(inProgressFn);
+  async generateKey() {
+    await this.user.click(this.nextButton);
   }
 
   /**
    * Toggle the obfuscate mode
    */
   async toggleObfuscate() {
-    const leftClick = { button: 0 };
-    fireEvent.click(this.obfuscateButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.obfuscateButton);
   }
 
   /**

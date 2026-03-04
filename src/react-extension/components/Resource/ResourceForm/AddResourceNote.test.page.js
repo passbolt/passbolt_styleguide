@@ -28,7 +28,6 @@ export default class AddResourceNotePage {
       <MockTranslationProvider>
         <AddResourceNote {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
   /**

@@ -33,7 +33,6 @@ export default class ManageSsoSettingsTeasingPage {
           <ManageSsoSettingsTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

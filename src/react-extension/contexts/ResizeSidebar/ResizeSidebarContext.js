@@ -53,9 +53,9 @@ export class ResizableSidebarContextProvider extends React.Component {
    * @param {number} width The width of the sidebar.
    */
   setSidebarWidth(side, width) {
-    this.setState(() => ({
+    this.setState({
       [side]: { width },
-    }));
+    });
   }
 
   /**

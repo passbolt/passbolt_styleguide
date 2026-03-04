@@ -39,7 +39,6 @@ export default class PasswordExpiryDialogPage {
       <MockTranslationProvider>
         <PasswordExpiryDialog {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

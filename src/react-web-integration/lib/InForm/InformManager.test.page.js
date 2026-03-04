@@ -84,6 +84,23 @@ export default class InformManagerPage {
   }
 
   /**
+   * Returns the otp element
+   */
+  get otp() {
+    const otp = InFormManager.callToActionFields.find((field) => field.fieldType === "otp");
+    return otp?.field;
+  }
+
+  /**
+   * Returns the otps element
+   */
+  get otps() {
+    const isOtp = (informCallToActionField) => informCallToActionField.fieldType === "otp";
+    const getField = (informCallToActionField) => informCallToActionField.field;
+    return InFormManager.callToActionFields.filter(isOtp).map(getField);
+  }
+
+  /**
    * Returns the search element
    */
   get search() {
@@ -167,6 +184,24 @@ export default class InformManagerPage {
   /** Mouse over on the password element */
   async mouseOverOnPassword() {
     fireEvent.mouseOver(this.password);
+    await waitFor(() => {});
+  }
+
+  /** Focus on the otp element */
+  async focusOnOtp() {
+    fireEvent.focus(this.otp);
+    await waitFor(() => {});
+  }
+
+  /** Blur on the otp element */
+  async blurOnOtp() {
+    fireEvent.blur(this.otp);
+    await waitFor(() => {});
+  }
+
+  /** Mouse over on the otp element */
+  async mouseOverOnOtp() {
+    fireEvent.mouseOver(this.otp);
     await waitFor(() => {});
   }
 

@@ -36,7 +36,6 @@ export default class DisplayAdministrationWorkspaceBreadcrumbPage {
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

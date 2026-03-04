@@ -19,7 +19,6 @@
 import { defaultAppContext, defaultProps } from "./UserWorkspaceContext.test.data";
 import UserWorkspaceContextPage from "./UserWorkspaceContext.test.page";
 import { UserWorkspaceFilterTypes } from "./UserWorkspaceContext";
-import { waitForTrue } from "../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -120,7 +119,7 @@ describe("User Workspace Context", () => {
     it("As LU I should have one selected user when the Single Selection event has been fired", async () => {
       await page.goToAllUsers();
       const userToSelect = context.users[0];
-      page.select(userToSelect);
+      await page.select(userToSelect);
       expect(page.selectedUsers).toHaveLength(1);
       expect(page.selectedUsers[0]).toBe(userToSelect);
     });
@@ -128,8 +127,8 @@ describe("User Workspace Context", () => {
     it("As LU I should have none selected user when the Single Selection event has been fired on a selected user", async () => {
       await page.goToAllUsers();
       const userToSelect = context.users[0];
-      page.select(userToSelect);
-      page.select(userToSelect);
+      await page.select(userToSelect);
+      await page.select(userToSelect);
       expect(page.selectedUsers).toHaveLength(0);
     });
 
@@ -156,17 +155,17 @@ describe("User Workspace Context", () => {
 
     it("As LU, I should detail a user when a user is selected", async () => {
       const user = context.users[0];
+      await page.goToAllUsers();
       await page.select(user);
-      await waitForTrue(() => page.details?.user !== null);
       expect(page.details.user).toBe(user);
       expect(page.lockDisplayDetail).toBeTruthy();
     });
 
     it("As LU, I should detail nothing when the detail visibility lock is removed", async () => {
       const user = context.users[0];
+      await page.goToAllUsers();
       await page.toggleLockDetails();
       await page.select(user);
-      await waitForTrue(() => page.details?.user !== null);
       expect(page.details.user).toBe(user);
       expect(page.lockDisplayDetail).toBeFalsy();
     });
@@ -180,7 +179,6 @@ describe("User Workspace Context", () => {
       const group = context.groups[0];
       await page.updateDetails({ group });
 
-      await waitForTrue(() => page.details?.user !== null);
       expect(page.details.group).toBe(group);
       expect(page.details.user).toBeUndefined();
     });

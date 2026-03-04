@@ -26,5 +26,6 @@ export function defaultProps() {
     dialogContext: {
       open: jest.fn(),
     },
+    onClose: jest.fn(),
   };
 }

@@ -320,7 +320,7 @@ describe("AuthenticationLoginContextProvider", () => {
 
       expect.assertions(1);
       await contextProvider.componentDidMount();
-      await contextProvider.needHelpCredentialsLost();
+      contextProvider.needHelpCredentialsLost();
       expect(contextProvider.state.state).toEqual(AuthenticationLoginWorkflowStates.INITIATE_ACCOUNT_RECOVERY);
     });
 
@@ -331,7 +331,7 @@ describe("AuthenticationLoginContextProvider", () => {
 
       expect.assertions(1);
       await contextProvider.componentDidMount();
-      await contextProvider.needHelpCredentialsLost();
+      contextProvider.needHelpCredentialsLost();
       expect(contextProvider.state.state).toEqual(AuthenticationLoginWorkflowStates.HELP_CREDENTIALS_LOST);
     });
   });

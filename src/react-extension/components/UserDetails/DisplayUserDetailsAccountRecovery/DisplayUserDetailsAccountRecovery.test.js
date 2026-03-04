@@ -22,6 +22,7 @@ import {
 import DisplayUserDetailsAccountRecoveryPage from "./DisplayUserDetailsAccountRecovery.test.page";
 import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import { formatDateTimeAgo } from "../../../../../test/utils/dateUtils";
+import { screen } from "@testing-library/react";
 
 /**
  * Unit tests on DisplayUserDetailsAccountRecovery in regard of specifications
@@ -53,7 +54,8 @@ describe("See account recovery", () => {
       mockContextRequest(userAccountRecoveryRequestMockImpl);
       page = new DisplayUserDetailsAccountRecoveryPage(props);
       await page.toggleCollapse();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Current status");
       expect(page.title).toBe("Account recovery");
       expect(page.currentStatus).toBe("Current status");
       expect(page.currentStatusButton.textContent).toBe("Review");
@@ -66,7 +68,8 @@ describe("See account recovery", () => {
       mockContextRequest(userAccountRecoveryRequestMockImpl);
       page = new DisplayUserDetailsAccountRecoveryPage(props);
       await page.toggleCollapse();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Current status");
       expect(page.currentStatus).toBe("Current status");
       expect(page.currentStatusButton.textContent).toBe("Review");
       expect(page.previousRecoveryRequest).toBe(
@@ -80,7 +83,8 @@ describe("See account recovery", () => {
       mockContextRequest(userAccountRecoveryRequestMockImpl);
       page = new DisplayUserDetailsAccountRecoveryPage(props);
       await page.toggleCollapse();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Current status");
       expect(page.currentStatusButton.textContent).toBe("Review");
       await page.reviewAccountRecovery();
       const accountRecoveryRequestId = props.userWorkspaceContext.details.user.pending_account_recovery_request.id;
@@ -102,6 +106,8 @@ describe("See account recovery", () => {
       page = new DisplayUserDetailsAccountRecoveryPage(props);
       await page.toggleCollapse();
 
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("1");
       expect(page.currentStatusButton).toBeNull();
       expect(page.previousRecoveryRequest).toBe(
         `Approved ${formatDateTimeAgo(oneUserAccountRequestsApproved[0].created)}`,
@@ -115,6 +121,8 @@ describe("See account recovery", () => {
       page = new DisplayUserDetailsAccountRecoveryPage(props);
       await page.toggleCollapse();
 
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("2");
       expect(page.title).toBe("Account recovery");
       expect(page.currentStatusButton).toBeNull();
       expect(page.previousRecoveryRequest).toBe(
@@ -129,6 +137,8 @@ describe("See account recovery", () => {
       page = new DisplayUserDetailsAccountRecoveryPage(props);
       await page.toggleCollapse();
 
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Never");
       expect(page.title).toBe("Account recovery");
       expect(page.currentStatusButton).toBeNull();
       expect(page.previousRecoveryRequest).toBe("Never");
@@ -162,6 +172,8 @@ describe("See account recovery", () => {
         findResolve([]);
       };
       await page.waitForLoading(inProgressFn);
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Never");
       expect(page.isLoading()).toBeFalsy();
     });
   });

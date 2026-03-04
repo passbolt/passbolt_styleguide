@@ -34,7 +34,6 @@ export default class HomePagePage {
           <HomePage {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

@@ -44,16 +44,12 @@ class UploadUserProfileAvatar extends React.Component {
   get defaultState() {
     return {
       avatarFile: null, // The avatar to upload
-      actions: {
-        processing: false, // Actions flag about processing
-      },
+      processing: false, // Actions flag about processing
       errors: {
         // The list of errors
         message: null, // error message
       },
-      validation: {
-        hasAlreadyBeenValidated: false, // True if the form has been already validated once
-      },
+      hasAlreadyBeenValidated: false, // True if the form has been already validated once
     };
   }
 
@@ -75,7 +71,7 @@ class UploadUserProfileAvatar extends React.Component {
    * Return trus if the export is processing
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -116,8 +112,8 @@ class UploadUserProfileAvatar extends React.Component {
    */
   async handleAvatarFileSelected(event) {
     const [avatarFile] = event.target.files;
-    await this.select(avatarFile);
-    if (this.state.validation.hasAlreadyBeenValidated) {
+    this.select(avatarFile);
+    if (this.state.hasAlreadyBeenValidated) {
       const state = this.validateAvatarInput();
       this.setState(state);
     }
@@ -150,8 +146,8 @@ class UploadUserProfileAvatar extends React.Component {
    * Select the next avatar profile
    * @param avatarFile
    */
-  async select(avatarFile) {
-    await this.setState({ avatarFile });
+  select(avatarFile) {
+    this.setState({ avatarFile });
   }
 
   /**
@@ -159,17 +155,16 @@ class UploadUserProfileAvatar extends React.Component {
    */
   async upload() {
     // If the upload is already processing
-    if (this.state.actions.processing) {
+    if (this.state.processing) {
       return;
     }
 
-    await this.setState({ validation: { hasAlreadyBeenValidated: true } });
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
 
-    await this.toggleProcessing();
     await this.validateAvatarInput();
 
     if (this.hasValidationError) {
-      await this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
     const avatarDto = await this.createAvatarDto();
@@ -206,7 +201,7 @@ class UploadUserProfileAvatar extends React.Component {
    * Whenever the upload succeeded
    */
   async onUploadSuccess() {
-    await this.toggleProcessing();
+    this.setState({ processing: false });
     await this.refreshUserProfile();
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been updated successfully"));
     this.props.onClose();
@@ -216,8 +211,7 @@ class UploadUserProfileAvatar extends React.Component {
    * Whenever the upload failed
    */
   async onUploadFailure(error) {
-    console.error(error);
-    await this.toggleProcessing();
+    this.setState({ processing: false });
     if (this.hasFileError(error.data)) {
       this.setState({ errors: { message: error.data.body.profile.avatar.file.validMimeType } });
     } else {
@@ -269,15 +263,6 @@ class UploadUserProfileAvatar extends React.Component {
       };
       reader.readAsDataURL(this.state.avatarFile);
     });
-  }
-
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const previousValue = this.state.actions.processing;
-    await this.setState({ actions: Object.assign(this.state.actions, { processing: !previousValue }) });
   }
 
   /**

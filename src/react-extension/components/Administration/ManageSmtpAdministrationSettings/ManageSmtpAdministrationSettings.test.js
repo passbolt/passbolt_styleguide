@@ -35,7 +35,7 @@ import { enableFetchMocks } from "jest-fetch-mock";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 import { act } from "react";
-import { waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -49,7 +49,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
 
       let page;
-      await act(async () => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
+      await act(() => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
 
       expect(page.exists()).toBeTruthy();
       expect(page.title.textContent).toBe("Email server");
@@ -62,7 +62,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
 
       let page;
-      await act(async () => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
+      await act(() => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
 
       const otherSmtpProviderIndex = SmtpProviders.findIndex((provider) => provider.id === "other");
       await page.selectProvider(otherSmtpProviderIndex);
@@ -97,7 +97,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
 
       let page;
-      await act(async () => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
+      await act(() => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
 
       const providerIndex = 0;
       await page.selectProvider(providerIndex);
@@ -128,7 +128,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
 
       let page;
-      await act(async () => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
+      await act(() => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
 
       const otherSmtpProviderIndex = SmtpProviders.findIndex((provider) => provider.id === "other");
       await page.selectProvider(otherSmtpProviderIndex);
@@ -154,7 +154,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       const smtpSettings = withExistingSmtpSettings({ client: "passbolt.dev", source: "file" });
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
-      await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
+      await act(() => (page = new ManageSmtpAdministrationSettingsPage(props)));
 
       expect(page.username.value).toBe(smtpSettings.username);
       expect(page.password.value).toBe(smtpSettings.password);
@@ -257,7 +257,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       });
       const desiredTlsValue = aweSesConfiguration.tls ? "Yes" : "No";
       if (page.tlsValue !== desiredTlsValue) {
-        await page.setTls(aweSesConfiguration.tls);
+        await page.setTls();
       }
 
       expect(page.providerValue).toBe(awsSesProvider.name);
@@ -391,7 +391,7 @@ describe("ManageSmtpAdministrationSettings", () => {
         client: "passbolt.dev:9090",
       };
       await page.setFormWith(emptyFields);
-      await page.clickOn(page.toolbarActionsSaveButton, () => true);
+      await page.clickOn(page.toolbarActionsSaveButton);
 
       expect(page.username_error).toBeFalsy();
       expect(page.password_error).toBeFalsy();
@@ -692,7 +692,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       await page.setFormWith({ sender_email: "" });
 
       // equivalent of `await page.saveSettings()` without the check of form change state is it shouldn't change.
-      await page.clickOn(page.toolbarActionsSaveButton, () => true);
+      await page.clickOn(page.toolbarActionsSaveButton);
 
       await page.setFormWith({ sender_email });
 
@@ -756,13 +756,13 @@ describe("ManageSmtpAdministrationSettings", () => {
       //first call is a GET call for the settings
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
-      await act(async () => {
+      await act(() => {
         page = new ManageSmtpAdministrationSettingsPage(defaultProps());
       });
       await page.setFormWith({ sender_email: "" });
 
       // equivalent of `await page.saveSettings()` without the check of form change state is it shouldn't change.
-      await page.clickOn(page.toolbarActionsTestButton, () => true);
+      await page.clickOn(page.toolbarActionsTestButton);
 
       expect(page.sender_email_error.textContent).toBe("Sender email is required");
 
@@ -794,16 +794,17 @@ describe("ManageSmtpAdministrationSettings", () => {
       });
 
       let page;
-      await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
+      await act(() => (page = new ManageSmtpAdministrationSettingsPage(props)));
 
       // equivalent of `await page.saveSettings()` without the check of form change state is it shouldn't change.
-      await page.clickOn(page.toolbarActionsTestButton, () => true);
+      await page.clickOn(page.toolbarActionsTestButton);
       await page.testSettings();
 
       expect(page.sendTestEmailDialog).toBeTruthy();
 
       await page.runTestFromDialog();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Logs");
       await page.showLogs();
 
       expect(page.logDetails.value).toBe(JSON.stringify(debugLog.debug, null, 4));

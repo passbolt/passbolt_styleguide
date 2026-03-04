@@ -90,13 +90,14 @@ class IdentifyWithSso extends Component {
     if (this.state.processing) {
       return;
     }
-    this.toggleProcessing();
+    this.setState({ processing: true });
     try {
       await this.identifyViaSsoService.exec();
     } catch (error) {
       console.error(`Failed to identify via sso":`, error);
+    } finally {
+      this.setState({ processing: false });
     }
-    this.toggleProcessing();
   }
 
   /**
@@ -121,14 +122,6 @@ class IdentifyWithSso extends Component {
   handleGoToEmailClick() {
     this.identifyViaSsoService.stopProcess();
     this.props.onSecondaryActionClick();
-  }
-
-  /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    const prev = this.state.processing;
-    this.setState({ processing: !prev });
   }
 
   isProcessing() {

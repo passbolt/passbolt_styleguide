@@ -3,6 +3,7 @@ image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/debian:stable-slim
 stages:
   - test
   - build
+  - release
   - publish
 
 .rules:
@@ -14,4 +15,5 @@ stages:
 include:
   - local: "/.gitlab-ci/jobs/build.yml"
   - local: "/.gitlab-ci/jobs/test.yml"
+  - local: "/.gitlab-ci/jobs/release.yml"
   - local: "/.gitlab-ci/jobs/publish.yml"

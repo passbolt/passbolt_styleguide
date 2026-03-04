@@ -19,6 +19,7 @@ import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 import { defaultProps, settingDto } from "./DisplayMfaPolicyAdministration.test.data";
 import DisplayMfaPolicyAdministrationPage from "./DisplayMfaPolicyAdministration.test.page";
+import { screen, waitForElementToBeRemoved } from "@testing-library/react";
 
 jest.mock("uuid");
 
@@ -54,6 +55,7 @@ describe("DisplayMfaPolicyAdministration", () => {
       );
       //Remember toggle
       expect(page.subtitleRemember.textContent).toBe("Remember a device for a month");
+      await screen.findByRole("checkbox", { name: /remember/i, checked: true });
       expect(page.toggleRemember.checked).toBeTruthy();
       expect(page.toggleRememberLabel.textContent).toBe("Allow “Remember this device for a month.“ option during MFA.");
       // mandatory policy
@@ -117,6 +119,7 @@ describe("DisplayMfaPolicyAdministration", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
         "The MFA policy settings were updated.",
       );
+      await waitForElementToBeRemoved(() => page.settingsChangedBanner);
       expect(page.settingsChangedBanner).toBeNull();
     });
 

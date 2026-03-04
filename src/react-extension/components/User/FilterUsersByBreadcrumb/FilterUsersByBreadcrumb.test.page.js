@@ -23,7 +23,6 @@ export default class FilterUsersByBreadcrumbPage {
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

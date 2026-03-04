@@ -14,6 +14,7 @@
 import UserEventsService from "../lib/User/UserEventsService";
 import InFormFieldSelector from "../lib/InForm/InFormFieldSelector";
 import InFormCallToActionField from "../lib/InForm/InFormCallToActionField";
+import { TotpCodeGeneratorService } from "../../shared/services/otp/TotpCodeGeneratorService";
 
 /**
  * Fill the login form.
@@ -33,10 +34,12 @@ const fillForm = function (formData) {
       throw new Error("The request is not initiated from same origin");
     }
 
-    // Get password element
+    const otpElement = getOTPElement();
     const passwordElement = getPasswordElement();
+
     let usernameElement = null;
-    /*
+
+    /**
      * If password element exists
      * Get username element by using `password's` parent element as reference
      */
@@ -49,7 +52,7 @@ const fillForm = function (formData) {
       // Fill password
       UserEventsService.autofill(passwordElement, formData.secret);
     } else {
-      /*
+      /**
        * When no password element found on the page
        * Check for the username element by giving `document` as reference
        */
@@ -57,17 +60,29 @@ const fillForm = function (formData) {
       // If username element exists, fill username
       if (usernameElement !== null) {
         UserEventsService.autofill(usernameElement, formData.username);
-      } else {
-        throw new Error("Unable to find the username element on this page.");
       }
     }
-    // Throw an error when no password and username elements found on the page
-    if (passwordElement === null && usernameElement === null) {
-      throw new Error("Unable to find the input elements on this page.");
-    } else {
-      // Success message
-      port.emit(formData.requestId, "SUCCESS");
+
+    /**
+     * If OTP element exists
+     * Generate the OTP code and fill it
+     */
+    if (otpElement !== null) {
+      const otp = TotpCodeGeneratorService.generate(formData.otp);
+      if (typeof otp !== "string") {
+        throw new TypeError("Error while generating the TOTP.");
+      }
+
+      UserEventsService.autofill(otpElement, otp);
     }
+
+    // Throw an error when no password and username elements found on the page
+    if (passwordElement === null && usernameElement === null && otpElement === null) {
+      throw new Error("Unable to find the input elements on this page.");
+    }
+
+    // Success message
+    port.emit(formData.requestId, "SUCCESS");
   } catch (error) {
     console.error(error);
     port.emit(formData.requestId, "ERROR", { name: "Error", message: error.message });
@@ -106,18 +121,34 @@ const isRequestInitiatedFromSameOrigin = function (requestedUrl, documentUrl) {
  * @param {object} formData
  * - {string} username The autofill request username parameter
  * - {string} secret The autofill request secret parameter
- *  - {url} url The autofill request url parameter
+ * - {string} otp The autofill request otp parameter
+ * - {url} url The autofill request url parameter
  */
 const validateData = function (formData) {
-  const { username, secret, url } = formData;
-  if (typeof username !== "string") {
-    throw new Error("The parameter username is not valid");
+  const { username, secret, url, otp } = formData;
+
+  if (username || secret) {
+    if (typeof username !== "string") {
+      throw new Error("The parameter username is not valid");
+    }
+
+    if (typeof secret !== "string") {
+      throw new Error("The parameter secret is not valid");
+    }
   }
-  if (typeof secret !== "string") {
-    throw new Error("The parameter secret is not valid");
+
+  if (otp) {
+    if (typeof otp !== "object" || typeof otp.secret_key !== "string") {
+      throw new Error("The parameter otp is not valid");
+    }
   }
+
   if (typeof url !== "string") {
     throw new Error("The parameter url is not valid");
+  }
+
+  if (!username && !secret && !otp) {
+    throw new Error("Either otp or username/secret parameters are required");
   }
 };
 
@@ -199,27 +230,42 @@ const findInputElementInIframe = function (type, iframeDocument) {
 
 /**
  * Find the password element on the page.
- * @return {HTMLInputElement/null}
+ * @return {HTMLInputElement}
  */
 const getPasswordElement = function () {
   const passwordElements = InFormCallToActionField.findAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
 
-  // A password element has been found.
-  if (passwordElements.length) {
-    for (const passwordElement of passwordElements) {
-      if (passwordElement.offsetWidth > 0) {
-        return passwordElement;
-      }
+  for (const passwordElement of passwordElements) {
+    if (passwordElement.offsetWidth > 0) {
+      return passwordElement;
     }
   }
-  // If all passwords are hidden return null to autofill only the username input (PB-20173)
+
+  // No visible password element found
+  return null;
+};
+
+/**
+ * Find the OTP element on the page.
+ * @return {HTMLInputElement}
+ */
+const getOTPElement = function () {
+  const otpElements = InFormCallToActionField.findAll(InFormFieldSelector.OTP_FIELD_SELECTOR);
+
+  for (const otpElement of otpElements) {
+    if (otpElement.offsetWidth > 0) {
+      return otpElement;
+    }
+  }
+
+  // No visible OTP element found
   return null;
 };
 
 /**
  * Find the username element on the page based on password's parent as reference element.
  * @param {DomElement} referenceElement The element reference to start the search.
- * @return {HTMLInputElement/null}
+ * @return {HTMLInputElement}
  */
 const getUsernameElementBasedOnPasswordElement = function (formData, referenceElement) {
   // No parent element found.
@@ -262,7 +308,7 @@ const getUsernameElementBasedOnPasswordElement = function (formData, referenceEl
 /**
  * Find the username element on the page.
  * @param {DomElement} fallbackUsernameElement The element reference to start the search.
- * @return {HTMLInputElement/null}
+ * @return {HTMLInputElement}
  */
 const getUsernameElement = function (formData, fallbackUsernameElement) {
   let usernameElement = null;
