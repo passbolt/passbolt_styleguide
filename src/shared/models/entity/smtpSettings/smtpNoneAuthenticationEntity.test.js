@@ -106,14 +106,14 @@ describe("SmtpNoneAuthenticationEntity", () => {
 
       const dto = defaultSmtpNoneAuthenticationEntityDto();
       const entity = new SmtpNoneAuthenticationEntity(dto);
-      expect(entity.toDto()).toEqual(dto);
+      expect(entity.toDto()).toEqual({ ...dto, username: null, password: null });
     });
 
     it("accepts validate: false with partial data", () => {
       expect.assertions(1);
 
       const entity = new SmtpNoneAuthenticationEntity({}, { validate: false });
-      expect(entity.toDto()).toEqual({});
+      expect(entity.toDto()).toEqual({ username: null, password: null });
     });
   });
 

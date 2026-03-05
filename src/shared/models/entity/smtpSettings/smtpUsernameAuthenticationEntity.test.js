@@ -40,7 +40,7 @@ describe("SmtpUsernameAuthenticationEntity", () => {
 
       const dto = defaultSmtpUsernameAuthenticationEntityDto();
       const entity = new SmtpUsernameAuthenticationEntity(dto);
-      expect(entity.toDto()).toEqual(dto);
+      expect(entity.toDto()).toEqual({ ...dto, password: null });
     });
 
     it("accepts validate: false with partial data", () => {
@@ -48,7 +48,7 @@ describe("SmtpUsernameAuthenticationEntity", () => {
 
       const dto = { username: "test@example.com" };
       const entity = new SmtpUsernameAuthenticationEntity(dto, { validate: false });
-      expect(entity.toDto()).toEqual(dto);
+      expect(entity.toDto()).toEqual({ ...dto, password: null });
     });
   });
 

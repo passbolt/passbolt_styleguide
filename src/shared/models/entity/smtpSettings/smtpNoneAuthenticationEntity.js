@@ -44,6 +44,17 @@ class SmtpNoneAuthenticationEntity extends EntityV2 {
   }
 
   /**
+   * Override toDto to always include username and password as null.
+   * These fields are stripped by EntitySchema.validate() since they are not
+   * in this entity's schema. Explicit nulls signal to the API that credentials
+   * are cleared, and allow UI auth-method detection to work correctly.
+   * @returns {object}
+   */
+  toDto() {
+    return { ...super.toDto(), username: null, password: null };
+  }
+
+  /**
    * Get the entity name
    * @returns {string}
    */

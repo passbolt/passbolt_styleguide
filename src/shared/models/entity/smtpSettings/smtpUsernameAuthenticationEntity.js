@@ -48,6 +48,17 @@ class SmtpUsernameAuthenticationEntity extends EntityV2 {
   }
 
   /**
+   * Override toDto to always include password as null.
+   * This field is stripped by EntitySchema.validate() since it is not in this
+   * entity's schema. An explicit null signals to the API that the password is
+   * cleared, and allows UI auth-method detection to work correctly.
+   * @returns {object}
+   */
+  toDto() {
+    return { ...super.toDto(), password: null };
+  }
+
+  /**
    * Get the entity name
    * @returns {string}
    */

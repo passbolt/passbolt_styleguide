@@ -15,7 +15,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withAppContext } from "../../shared/context/AppContext/AppContext";
-import SmtpSettingsModel from "../../shared/models/smtpSettings/SmtpSettingsModel";
+import FindSmtpSettingsService from "../../shared/services/smtpSettings/findSmtpSettingsService";
+import SaveSmtpSettingsService from "../../shared/services/smtpSettings/saveSmtpSettingsService";
+import SmtpSettingsEntity from "../../shared/models/entity/smtpSettings/smtpSettingsEntity";
 import SmtpTestSettingsApiService from "../../shared/services/api/smtpSettings/smtpTestSettingsApiService";
 import SmtpProviders from "../components/Administration/ManageSmtpAdministrationSettings/SmtpProviders.data";
 import { withDialog } from "./DialogContext";
@@ -55,7 +57,8 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     super(props);
     this.state = this.defaultState;
     const apiClientOptions = props.context.getApiClientOptions();
-    this.smtpSettingsModel = new SmtpSettingsModel(apiClientOptions);
+    this.findSmtpSettingsService = new FindSmtpSettingsService(apiClientOptions);
+    this.saveSmtpSettingsService = new SaveSmtpSettingsService(apiClientOptions);
     this.smtpTestSettingsApiService = new SmtpTestSettingsApiService(apiClientOptions);
     this.fieldToFocus = null;
     this.providerHasChanged = false;
@@ -112,7 +115,9 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     let currentSmtpSettings = this.state.currentSmtpSettings;
 
     try {
-      currentSmtpSettings = await this.smtpSettingsModel.findSmtpSettings();
+      const smtpEntity = await this.findSmtpSettingsService.find();
+      currentSmtpSettings = smtpEntity.toDto();
+      currentSmtpSettings.client = currentSmtpSettings.client ?? "";
       this.setState({ currentSmtpSettings, isLoaded: true });
     } catch (e) {
       // In case of error, the user should still be able to update the settings.
@@ -155,7 +160,8 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
         const dto = { ...this.state.currentSmtpSettings };
         delete dto.provider;
         dto.client = dto.client || null;
-        await this.smtpSettingsModel.saveSmtpSettings(dto);
+        const smtpSettingsEntity = SmtpSettingsEntity.createFromSettings(dto);
+        await this.saveSmtpSettingsService.save(smtpSettingsEntity);
         this.props.actionFeedbackContext.displaySuccess(this.props.t("The SMTP settings have been saved successfully"));
         const newSettings = Object.assign({}, this.state.currentSmtpSettings, { source: "db" });
         this.setState({ currentSmtpSettings: newSettings });

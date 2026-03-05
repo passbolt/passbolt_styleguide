@@ -60,8 +60,6 @@ describe("AdminSmtpSettingsContext", () => {
         tls: true,
         sender_email: "test@passbolt.com",
         sender_name: "Passbolt test",
-        created_by: uuid(),
-        modified_by: uuid(),
         created: "2022-10-11T08:09:00+00:00",
         modified: "2022-10-11T08:09:00+00:00",
       };
@@ -95,8 +93,6 @@ describe("AdminSmtpSettingsContext", () => {
         client: null,
         sender_email: "test@passbolt.com",
         sender_name: "Passbolt test",
-        created_by: uuid(),
-        modified_by: uuid(),
         created: "2022-10-11T08:09:00+00:00",
         modified: "2022-10-11T08:09:00+00:00",
       };
