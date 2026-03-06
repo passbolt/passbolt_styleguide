@@ -18,6 +18,7 @@ import { withAppContext } from "../../shared/context/AppContext/AppContext";
 import { withTranslation } from "react-i18next";
 import { formatDateForApi } from "../../shared/utils/dateUtils";
 import { DateTime } from "luxon";
+import { flushSync } from "react-dom";
 
 /**
  * The User Passphrase Policies Context
@@ -65,7 +66,10 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
       return;
     }
     const settings = await this.props.context.port.request("passbolt.password-expiry.get-or-find");
-    this.setState({ settings });
+    flushSync(() => {
+      // TODO: REACT18 Refactor PasswordExpirySettingsContext https://app.clickup.com/t/86c8njkwk
+      this.setState({ settings });
+    });
   }
 
   /**
