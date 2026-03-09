@@ -52,7 +52,7 @@ describe("AdminAccountRecoveryContext", () => {
 
       expect.assertions(1);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      adminAccountRecoveryContext.changePolicy(newPolicy);
       expect(adminAccountRecoveryContext.state.policyChanges.policy).toEqual(newPolicy);
     });
 
@@ -65,7 +65,7 @@ describe("AdminAccountRecoveryContext", () => {
 
       expect.assertions(1);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      adminAccountRecoveryContext.changePolicy(newPolicy);
       expect(adminAccountRecoveryContext.state.policyChanges.policy).toBeUndefined();
     });
 
@@ -79,9 +79,9 @@ describe("AdminAccountRecoveryContext", () => {
 
       expect.assertions(3);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      adminAccountRecoveryContext.changePublicKey(newPublicKey);
       expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toEqual(newPublicKey);
-      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      adminAccountRecoveryContext.changePolicy(newPolicy);
       expect(adminAccountRecoveryContext.state.policyChanges.policy).toBeUndefined();
       expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toBeUndefined();
     });
@@ -93,7 +93,7 @@ describe("AdminAccountRecoveryContext", () => {
 
       expect.assertions(1);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      adminAccountRecoveryContext.changePublicKey(newPublicKey);
       expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toEqual(newPublicKey);
     });
 
@@ -102,8 +102,8 @@ describe("AdminAccountRecoveryContext", () => {
       const newPublicKey = "new public key";
 
       expect.assertions(2);
-      await adminAccountRecoveryContext.changePolicy(newPolicy);
-      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      adminAccountRecoveryContext.changePolicy(newPolicy);
+      adminAccountRecoveryContext.changePublicKey(newPublicKey);
       expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toEqual(newPublicKey);
       expect(adminAccountRecoveryContext.state.policyChanges.policy).toEqual(newPolicy);
     });
@@ -124,7 +124,7 @@ describe("AdminAccountRecoveryContext", () => {
 
       expect.assertions(1);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      adminAccountRecoveryContext.changePolicy(newPolicy);
       expect(adminAccountRecoveryContext.hasPolicyChanges()).toBeTruthy();
     });
 
@@ -133,7 +133,7 @@ describe("AdminAccountRecoveryContext", () => {
 
       expect.assertions(1);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      adminAccountRecoveryContext.changePublicKey(newPublicKey);
       expect(adminAccountRecoveryContext.hasPolicyChanges()).toBeTruthy();
     });
   });
@@ -163,11 +163,11 @@ describe("AdminAccountRecoveryContext", () => {
     it("it should reset the policy changes", async () => {
       const newPolicy = "new policy";
       const newPublicKey = "new public key";
-      await adminAccountRecoveryContext.changePolicy(newPolicy);
-      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      adminAccountRecoveryContext.changePolicy(newPolicy);
+      adminAccountRecoveryContext.changePublicKey(newPublicKey);
 
       expect.assertions(2);
-      await adminAccountRecoveryContext.resetChanges();
+      adminAccountRecoveryContext.resetChanges();
       expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toBeUndefined();
       expect(adminAccountRecoveryContext.state.policyChanges.policy).toBeUndefined();
     });
@@ -204,8 +204,8 @@ describe("AdminAccountRecoveryContext", () => {
       props.context.port.request = jest.fn();
 
       expect.assertions(1);
-      await adminAccountRecoveryContext.changePolicy(newPolicy);
-      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      adminAccountRecoveryContext.changePolicy(newPolicy);
+      adminAccountRecoveryContext.changePublicKey(newPublicKey);
       await adminAccountRecoveryContext.save();
       expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith(
         "passbolt.account-recovery.save-organization-policy",
@@ -232,8 +232,8 @@ describe("AdminAccountRecoveryContext", () => {
       props.context.port.request = jest.fn();
 
       expect.assertions(1);
-      await adminAccountRecoveryContext.changePolicy(newPolicy);
-      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      adminAccountRecoveryContext.changePolicy(newPolicy);
+      adminAccountRecoveryContext.changePublicKey(newPublicKey);
       await adminAccountRecoveryContext.save(currentPrivateKey);
       expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith(
         "passbolt.account-recovery.save-organization-policy",

@@ -20,6 +20,7 @@ import EditResourceTagsItemViewerPageObject from "../../ResourceTag/EditResource
 import EditResourceTagsPageObject from "../../ResourceTag/EditResourceTags/EditResourceTags.test.page";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourceDetailsTag from "./DisplayResourceDetailsTag";
+import userEvent from "@testing-library/user-event/dist/cjs/index.js";
 
 /**
  * The PasswordSidebarTagSection component represented as a page
@@ -39,7 +40,6 @@ export default class PasswordSidebarTagSectionPage {
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -117,6 +117,7 @@ class PasswordSidebarTagSectionPageObject {
    */
   constructor(container) {
     this._container = container;
+    this.user = userEvent.setup();
   }
 
   /**
@@ -151,15 +152,12 @@ class PasswordSidebarTagSectionPageObject {
 
   /** Click on the component */
   async click(component) {
-    const leftClick = { button: 0 };
-    fireEvent.click(component, leftClick);
-    await waitFor(() => {});
+    await this.user.click(component);
   }
 
   /** Click without wait for on the component */
   clickWithoutWaitFor(component) {
-    const leftClick = { button: 0 };
-    fireEvent.click(component, leftClick);
+    this.user.click(component);
   }
 
   /** change input value on the component */

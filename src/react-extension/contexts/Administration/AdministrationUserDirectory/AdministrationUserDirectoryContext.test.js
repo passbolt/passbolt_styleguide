@@ -43,8 +43,10 @@ describe("AdminUserDirectoryContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminUserDirectoryContext = new AdminUserDirectoryContextProvider(props);
-    const setStateMock = (state) =>
-      (adminUserDirectoryContext.state = Object.assign(adminUserDirectoryContext.state, state));
+    const setStateMock = (state) => {
+      const newState = typeof state === "function" ? state(adminUserDirectoryContext.state) : state;
+      adminUserDirectoryContext.state = Object.assign(adminUserDirectoryContext.state, newState);
+    };
     jest.spyOn(adminUserDirectoryContext, "setState").mockImplementation(setStateMock);
     enableFetchMocks();
   });

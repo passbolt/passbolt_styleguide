@@ -37,7 +37,6 @@ export default class FilterUsersByShortcutPage {
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

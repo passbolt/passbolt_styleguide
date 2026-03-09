@@ -33,7 +33,6 @@ export default class DisplayMfaPolicyAdministrationTeasingPage {
           <DisplayMfaPolicyAdministrationTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

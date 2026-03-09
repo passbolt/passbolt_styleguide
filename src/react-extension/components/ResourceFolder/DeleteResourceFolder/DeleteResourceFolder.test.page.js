@@ -35,7 +35,6 @@ export default class DeleteResourceFolderPage {
           <DeleteResourceFolder {...props}></DeleteResourceFolder>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

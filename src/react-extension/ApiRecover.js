@@ -184,8 +184,8 @@ class ApiRecover extends Component {
    * Whenever the update of the locale is requested
    * @param {string} locale The locale identifier
    */
-  async onUpdateLocaleRequested(locale) {
-    await this.setState({ locale });
+  onUpdateLocaleRequested(locale) {
+    this.setState({ locale });
     this.setUrlLocale(locale);
   }
 

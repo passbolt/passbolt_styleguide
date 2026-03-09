@@ -25,10 +25,11 @@ import {
 } from "./ShareDialog.test.data";
 import { ActionFeedbackContext } from "../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchError";
-import { waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
 import { waitForTrue } from "../../../../test/utils/waitFor";
 import UserAbortsOperationError from "../../lib/Error/UserAbortsOperationError";
+import { act } from "react";
 
 beforeAll(() => {
   global.scrollTo = jest.fn();
@@ -61,7 +62,7 @@ describe("As Lu I should see the share dialog", () => {
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({ shareDialogProps });
       props = defaultProps();
-      page = new ShareDialogPage(context, props);
+      await act(() => (page = new ShareDialogPage(context, props)));
     });
 
     it("As LU I see a success toaster message after sharing resources to users and groups with success", async () => {
@@ -297,7 +298,8 @@ describe("As Lu I should see the share dialog", () => {
       const requestResourcesMockImpl = (path) => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({ shareDialogProps });
-      page = new ShareDialogPage(context, props);
+      props = defaultProps();
+      await act(() => (page = new ShareDialogPage(context, props)));
     });
 
     it("As LU I see a success toaster message after sharing one resource to users and groups with success", async () => {
@@ -391,13 +393,16 @@ describe("As Lu I should see the share dialog", () => {
       const requestResourcesMockImpl = (path) => mockResultsFolders[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({ shareDialogProps });
-      page = new ShareDialogPage(context, props);
+      props = defaultProps();
+      await act(() => (page = new ShareDialogPage(context, props)));
     });
 
     it("As LU I see a success toaster message after sharing one folder to users and groups with success", async () => {
       expect.assertions(12);
       expect(context.port.request).toHaveBeenCalledWith("passbolt.share.get-folders", shareDialogProps.foldersIds);
       expect(page.exists()).toBeTruthy();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Share folder");
       expect(page.title).toBe("Share folder");
       expect(page.subtitle).toBe("apache");
       expect(page.count).toBe(2);

@@ -89,7 +89,7 @@ describe("See the Delete Tag Dialog", () => {
 
       // Mock the request function to make it the expected result
       mockContextRequest(context, requestMockImpl);
-      page.tagDelete.clickWithoutWaitFor(page.tagDelete.saveButton);
+      page.tagDelete.click(page.tagDelete.saveButton);
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
         expect(page.tagDelete.saveButton.getAttribute("disabled")).not.toBeNull();

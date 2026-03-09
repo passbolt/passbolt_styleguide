@@ -38,7 +38,6 @@ export default class ResourceCreatePagePage {
           {/*</PrepareResourceContextProvider>*/}
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -126,7 +125,7 @@ export default class ResourceCreatePagePage {
 
   /**
    * Returns the submit button of the form
-   * @returns {HTLMElement}
+   * @returns {Element}
    */
   get submitButton() {
     return this._page.container.querySelector('[type="submit"]');
@@ -141,7 +140,7 @@ export default class ResourceCreatePagePage {
 
   /**
    * Returns the back button element
-   * @returns {HTLMElement}
+   * @returns {Element}
    */
   get backButton() {
     return this._page.container.querySelector(".back-link a");

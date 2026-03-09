@@ -16,6 +16,7 @@ import SelectAccountRecoveryOrganizationKeyPage from "./SelectAccountRecoveryOrg
 import { defaultProps } from "./GenerateOrganizationKey.test.data";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -276,6 +277,7 @@ describe("As AD I can generate an ORK", () => {
 
     expect(page.passwordWarningMessage === null).toBeTruthy();
     expect(page.passphraseFieldError).not.toBeNull();
+    await screen.findByText("The passphrase should not be part of an exposed data breach.");
     expect(page.passphraseFieldError.textContent).toBe("The passphrase should not be part of an exposed data breach.");
 
     //Typing new password should remove the powned service error

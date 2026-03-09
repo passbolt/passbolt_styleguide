@@ -29,7 +29,6 @@ class DisplayAdministrationMetadataGettingStartedPage {
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

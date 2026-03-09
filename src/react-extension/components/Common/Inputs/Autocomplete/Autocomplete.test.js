@@ -18,6 +18,7 @@
 import { groups } from "../../../UserDetails/DisplayUserDetails/DisplayUserDetails.test.data";
 import { defaultProps } from "./Autocomplete.test.data";
 import AutocompletePage from "./Autocomplete.test.page";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -65,6 +66,8 @@ describe("See the Autocomplete", () => {
       await page.fillInput("at");
       expect(props.searchCallback).toHaveBeenCalledWith("at");
       expect(props.onOpen).toHaveBeenCalled();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("group");
       expect(page.getAutocompleteItemName(1)).toBe("group");
       expect(page.getAutocompleteItemDetails(1)).toBe("One group member");
       await page.clickOnItem(1);
@@ -78,6 +81,8 @@ describe("See the Autocomplete", () => {
       const requestMockImpl = jest.fn(() => items);
       jest.spyOn(props, "searchCallback").mockImplementation(requestMockImpl);
       await page.fillInput("at");
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("10 group members");
       expect(page.getAutocompleteItemDetails(1)).toBe("10 group members");
     });
 
@@ -86,6 +91,8 @@ describe("See the Autocomplete", () => {
       const requestMockImpl = jest.fn(() => []);
       jest.spyOn(props, "searchCallback").mockImplementation(requestMockImpl);
       await page.fillInput("slice");
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("No one found");
       expect(props.searchCallback).toHaveBeenCalledWith("slice");
       expect(props.onOpen).toHaveBeenCalled();
       expect(page.autocompleteEmpty).toBe("No one found");

@@ -37,7 +37,6 @@ import {
 } from "./resourceTypeEntity.test.data";
 import CollectionValidationError from "../../entity/abstract/collectionValidationError";
 import { v4 as uuid } from "uuid";
-import expect from "expect";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
@@ -146,6 +145,23 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_TOTP)).toBeFalsy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeFalsy();
+    });
+  });
+
+  describe("::filterByTOTPResourceTypes", () => {
+    it("should filter the collection by resources types behaving like password.", () => {
+      expect.assertions(9);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      resourceTypes.filterByTOTPResourceTypes();
+      expect(resourceTypes).toHaveLength(4);
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_PASSWORD_STRING)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_TOTP)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeTruthy();
     });
   });
 

@@ -30,7 +30,6 @@ export default class OrchestrateAccountKitImportationPage {
       <MockTranslationProvider>
         <OrchestrateAccountKitImportation {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

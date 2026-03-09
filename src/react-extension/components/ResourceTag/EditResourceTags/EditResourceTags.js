@@ -445,7 +445,7 @@ class EditResourceTags extends React.Component {
         (tag) =>
           this.state.tags.filter((tagResources) => tagResources.slug === tag.slug).length === 0 &&
           this.isTagDeletable(tag) &&
-          tag.slug.toLowerCase().indexOf(inputTagValue.toLowerCase()) != -1,
+          tag.slug.toLowerCase().indexOf(inputTagValue.toLowerCase()) !== -1,
       );
       this.setState({ suggestedTags });
     } else {

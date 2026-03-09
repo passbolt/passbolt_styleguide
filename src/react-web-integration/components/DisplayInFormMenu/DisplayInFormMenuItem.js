@@ -15,6 +15,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
+import TimerSVG from "../../../img/svg/timer.svg";
+import { DEFAULT_TOTP_PERIOD } from "../../../shared/components/Totp/Totp";
 
 class DisplayInFormMenuItem extends React.Component {
   /**
@@ -57,6 +59,17 @@ class DisplayInFormMenuItem extends React.Component {
   }
 
   /**
+   * Return the initial delay for the TOTP timer.
+   * We only rely on default TOTP period for now.
+   * @return {number}
+   */
+  calculateDelayFromNow() {
+    const now = new Date(Date.now());
+    const todaySeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
+    return todaySeconds % DEFAULT_TOTP_PERIOD;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -72,6 +85,16 @@ class DisplayInFormMenuItem extends React.Component {
           <div className="in-form-menu-item-content-subheader">{this.props.subtitle}</div>
           <div className="in-form-menu-item-content-description">{this.props.description}</div>
         </div>
+        {this.props.showTimer && (
+          <div className="in-form-menu-item-timer">
+            <TimerSVG
+              style={{
+                "--timer-duration": `${DEFAULT_TOTP_PERIOD}s`,
+                "--timer-delay": `-${this.calculateDelayFromNow()}s`,
+              }}
+            />
+          </div>
+        )}
       </a>
     );
   }
@@ -89,6 +112,7 @@ DisplayInFormMenuItem.propTypes = {
   processing: PropTypes.bool,
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
+  showTimer: PropTypes.bool,
 };
 
 export default DisplayInFormMenuItem;

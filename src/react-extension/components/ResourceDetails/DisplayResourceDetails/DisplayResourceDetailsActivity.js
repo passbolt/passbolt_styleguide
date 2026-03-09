@@ -136,8 +136,7 @@ class DisplayResourceDetailsActivity extends React.Component {
       this.props.actionFeedbackContext.displayError(error.message);
       // If fetch failed for page 2 or more, decrement page count to try the same page next
       if (this.state.activitiesPage > 1) {
-        const activitiesPage = this.state.activitiesPage - 1;
-        this.setState({ activitiesPage });
+        this.setState((prevState) => ({ activitiesPage: prevState.activitiesPage - 1 }));
       }
     }
   }

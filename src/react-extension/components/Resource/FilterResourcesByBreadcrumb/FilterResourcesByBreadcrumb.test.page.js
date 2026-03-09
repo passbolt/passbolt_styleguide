@@ -40,7 +40,6 @@ export default class FilterResourcesByBreadcrumbPage {
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

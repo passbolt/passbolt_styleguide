@@ -53,7 +53,6 @@ export default class FilterResourcesByFoldersPage {
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

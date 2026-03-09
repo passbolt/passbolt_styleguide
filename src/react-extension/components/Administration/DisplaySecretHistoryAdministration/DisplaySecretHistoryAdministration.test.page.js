@@ -28,7 +28,6 @@ export default class DisplaySecretHistoryAdministrationPage {
       <MockTranslationProvider>
         <DisplaySecretHistoryAdministration {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }

@@ -51,7 +51,6 @@ class HandleStatusCheck extends React.Component {
    */
   async componentDidMount() {
     await this.checkToDisplayDialog();
-    await this.displayDialog();
   }
 
   /**
@@ -65,7 +64,7 @@ class HandleStatusCheck extends React.Component {
 
   /**
    * Update the current state to display the right dialog for the user
-   * @returns {Promise<void>}
+   * @returns {Promise<object>}
    */
   async checkToDisplayDialog() {
     if (this.isCurrentUrlDisallowsUsersDialog()) {
@@ -74,6 +73,7 @@ class HandleStatusCheck extends React.Component {
 
     let isDialogDisplayHandled = false;
     if (!isDialogDisplayHandled && this.props.context.siteSettings.canIUse("accountRecovery")) {
+      await this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
       const shouldDisplayAccountRecovery = await this.checkAccountRecovery();
       this.setState({ shouldDisplayAccountRecovery });
       isDialogDisplayHandled = shouldDisplayAccountRecovery;
@@ -105,15 +105,6 @@ class HandleStatusCheck extends React.Component {
       policy === AccountRecoveryUserContextProvider.POLICY_MANDATORY ||
       policy === AccountRecoveryUserContextProvider.POLICY_OPT_OUT
     );
-  }
-
-  /**
-   * Returns true if the organisation settings require the user to make a choice regarding the MFA options
-   * @returns {boolean}
-   */
-  isOrganizationPolicyRequiresAUserChoiceForMfa() {
-    const policy = this.props.mfaContext.getPolicy();
-    return policy === MfaPolicyEnumerationTypes.MANDATORY;
   }
 
   /**
@@ -151,10 +142,12 @@ class HandleStatusCheck extends React.Component {
       return false;
     }
 
-    await this.props.mfaContext.findPolicy();
-    await this.props.mfaContext.findMfaSettings();
-
-    return !(this.props.mfaContext.hasMfaUserSettings() || !this.isOrganizationPolicyRequiresAUserChoiceForMfa());
+    const policy = await this.props.mfaContext.findPolicy();
+    const result = await this.props.mfaContext.findMfaSettings();
+    const mfaUserSettings = result?.mfaUserSettings;
+    const hasMfaUserSettings = mfaUserSettings && Object.values(mfaUserSettings).some((value) => value);
+    const isMfaMandatory = policy === MfaPolicyEnumerationTypes.MANDATORY;
+    return !hasMfaUserSettings && isMfaMandatory;
   }
 
   /**
@@ -162,7 +155,6 @@ class HandleStatusCheck extends React.Component {
    * @returns {Promise<boolean>}
    */
   async displayDialog() {
-    await this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
     const numberOfDialogs = this.props.dialogContext.dialogs.length;
 
     if (numberOfDialogs > 0) {

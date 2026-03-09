@@ -34,7 +34,6 @@ export default class GeneratePasswordTestPage {
           <GeneratePasswordPage.WrappedComponent {...props} />
         </MockTranslationProvider>
       </Router>,
-      { legacyRoot: true },
     );
   }
 

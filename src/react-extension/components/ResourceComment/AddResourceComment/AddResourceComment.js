@@ -79,10 +79,12 @@ class AddResourceComment extends React.Component {
   }
 
   /**
-   * @returns {boolean} Returns true if the form is valid
+   * Returns true if the form is valid
+   * @param {object} errors The errors
+   * @returns {boolean}
    */
-  get isValid() {
-    return Object.values(this.state.errors).every((value) => !value);
+  isValid(errors) {
+    return Object.values(errors).every((value) => !value);
   }
 
   /**
@@ -93,11 +95,11 @@ class AddResourceComment extends React.Component {
     // Prevent the default browser behavior to post the form.
     event.preventDefault();
 
-    await this.validate();
+    const errors = this.validate();
 
-    if (this.isValid) {
+    if (this.isValid(errors)) {
       try {
-        await this.setState({ actions: { processing: true } });
+        this.setState({ actions: { processing: true } });
         this.props.loadingContext.add();
         const addedComment = await this.add();
         await this.handleSubmitSuccess(addedComment);
@@ -125,7 +127,7 @@ class AddResourceComment extends React.Component {
   async handleSubmitFailure(error) {
     this.props.loadingContext.remove();
     await this.props.actionFeedbackContext.displayError(error.message);
-    await this.setState({
+    this.setState({
       actions: { processing: false },
       errors: { technicalError: error.message },
     });
@@ -178,8 +180,9 @@ class AddResourceComment extends React.Component {
 
   /**
    * Validate the form.
+   * @return {object} errors
    */
-  async validate() {
+  validate() {
     // Rule: the content could not be empty or trimmered empty
     const isEmpty = this.state.content.trim() === "";
 
@@ -187,7 +190,8 @@ class AddResourceComment extends React.Component {
     const isTooLong = this.state.content.length > 256;
 
     const errors = { isEmpty, isTooLong };
-    await this.setState({ errors });
+    this.setState({ errors });
+    return errors;
   }
 
   /**

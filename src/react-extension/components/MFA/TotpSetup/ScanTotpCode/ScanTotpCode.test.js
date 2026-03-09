@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.4.0
  */
+import { screen } from "@testing-library/react";
 import { defaultProps } from "./ScanTotpCode.test.data";
 import ScanTotpCodePage from "./ScanTotpCode.test.page";
 import QRCode from "qrcode";
@@ -85,6 +86,7 @@ describe("ScanTotpCode", () => {
 
       await page.fillOtpInput("123456");
       await page.clickOnValidateButton();
+      await screen.findByText("This OTP is not valid.");
 
       expect(page.errorMessage.textContent).toEqual("This OTP is not valid.");
     });

@@ -18,6 +18,7 @@
 
 import { defaultAppContext, defaultProps, permissionMock } from "./DisplayResourceFolderDetailsPermissions.test.data";
 import DisplayResourceFolderDetailsPermissionsPage from "./DisplayResourceFolderDetailsPermissions.test.page";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -46,7 +47,10 @@ describe("See permissions", () => {
     });
 
     it("I should see the 4 permissions made on the resource", async () => {
+      expect.assertions(3);
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Admin User");
       expect(page.title.hyperlink.textContent).toBe("Shared with");
 
       expect(page.displayPermissionList.exists()).toBeTruthy();
@@ -54,7 +58,10 @@ describe("See permissions", () => {
     });
 
     it("I should be able to identify each permission name", async () => {
+      expect.assertions(6);
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Admin User");
       expect(page.displayPermissionList.name(1)).toBe("Ada Lovelace");
       expect(page.displayPermissionList.name(2)).toBe("Admin User");
       expect(page.displayPermissionList.name(3)).toBe("Admin User2");
@@ -68,7 +75,10 @@ describe("See permissions", () => {
     });
 
     it("I should be able to see each permission type", async () => {
+      expect.assertions(5);
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Admin User");
       expect(page.displayPermissionList.type(1)).toBe("can read");
       expect(page.displayPermissionList.type(2)).toBe("is owner");
       expect(page.displayPermissionList.type(3)).toBe("is owner");
@@ -99,13 +109,16 @@ describe("See permissions", () => {
     });
 
     it("I should see the loading message “Retrieving permissions”", async () => {
+      expect.assertions(2);
       await page.title.click();
 
       const inProgressFn = () => {
         expect(page.displayPermissionList.isLoading()).toBeTruthy();
-        findResolve([]);
+        findResolve(permissionMock);
       };
       await page.displayPermissionList.waitForLoading(inProgressFn);
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Admin User");
       expect(page.displayPermissionList.isLoading()).toBeFalsy();
     });
   });

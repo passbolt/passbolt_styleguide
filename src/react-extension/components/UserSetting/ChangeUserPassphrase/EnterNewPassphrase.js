@@ -48,9 +48,7 @@ class EnterNewPassphrase extends React.Component {
     return {
       passphrase: "", // The current passphrase
       passphraseEntropy: null, // The current passphrase entropy
-      actions: {
-        processing: false, // True if one's processing passphrase
-      },
+      processing: false, // True if one's processing passphrase
     };
   }
   /**
@@ -83,7 +81,7 @@ class EnterNewPassphrase extends React.Component {
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -156,21 +154,24 @@ class EnterNewPassphrase extends React.Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    this.toggleProcessing();
+    // Prevent submission while processing
+    if (this.isProcessing) {
+      return;
+    }
+    this.setState({ processing: true });
     // is current form valid
     if (!this.isValid) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
 
     //the form is valid, check if passphrase is pwned
     const isPassphrasePwned = await this.evaluatePassphraseIsInDictionary(this.state.passphrase);
     if (isPassphrasePwned) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
     await this.generateGpgKey();
-    this.toggleProcessing();
   }
 
   /**
@@ -207,7 +208,7 @@ class EnterNewPassphrase extends React.Component {
    * @param error The error
    */
   onGpgKeyGeneratedFailure(error) {
-    this.toggleProcessing();
+    this.setState({ processing: false });
     this.props.dialogContext.open(NotifyError, { error });
   }
 
@@ -216,17 +217,6 @@ class EnterNewPassphrase extends React.Component {
    */
   handleCancel() {
     this.props.userSettingsContext.onGoToIntroductionPassphraseRequested();
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    const actions = {
-      ...this.state.actions,
-      processing: !this.state.actions.processing,
-    };
-    this.setState({ actions });
   }
 
   /**

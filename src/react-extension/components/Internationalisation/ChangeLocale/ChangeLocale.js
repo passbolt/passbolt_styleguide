@@ -33,26 +33,26 @@ class ChangeLocale extends Component {
   /**
    * Whenever the component is mounted
    */
-  async componentDidMount() {
-    await this.initLocale();
+  componentDidMount() {
+    this.initLocale();
   }
 
   /**
    * Whenever the component has updated in terms of props
    * @param prevProps
    */
-  async componentDidUpdate(prevProps) {
-    await this.handleLocaleChange(prevProps.context.locale);
+  componentDidUpdate(prevProps) {
+    this.handleLocaleChange(prevProps.context.locale);
   }
 
   /**
    * Check if the locale has changed and update
    * @param previousLocale
    */
-  async handleLocaleChange(previousLocale) {
+  handleLocaleChange(previousLocale) {
     const hasLocaleChanged = this.props.context.locale !== previousLocale;
     if (hasLocaleChanged) {
-      await this.setState({ locale: this.props.context.locale });
+      this.setState({ locale: this.props.context.locale });
     }
   }
 
@@ -89,7 +89,7 @@ class ChangeLocale extends Component {
   async handleLocaleInputChange(event) {
     const target = event.target;
     const locale = target.value;
-    await this.updateLocale(locale);
+    this.updateLocale(locale);
   }
 
   /**
@@ -97,25 +97,16 @@ class ChangeLocale extends Component {
    * @param {string} locale The locale identifier.
    */
   async updateLocale(locale) {
-    await this.toggleProcessing();
+    this.setState({ processing: true });
     await this.props.context.onUpdateLocaleRequested(locale);
-    await this.toggleProcessing();
+    this.setState({ processing: false });
   }
 
   /**
    * Get th locale
    */
-  async initLocale() {
-    await this.setState({ locale: this.props.context.locale, loading: false });
-  }
-
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
+  initLocale() {
+    this.setState({ locale: this.props.context.locale, loading: false });
   }
 
   /**

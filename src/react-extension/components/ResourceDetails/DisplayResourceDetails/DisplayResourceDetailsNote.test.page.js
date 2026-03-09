@@ -12,10 +12,11 @@
  * @since         5.0.0
  */
 
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import DisplayResourceDetailsNote from "./DisplayResourceDetailsNote";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayResourceDetailsNote component represented as a page
@@ -31,8 +32,8 @@ export default class DisplayResourceDetailsNotePage {
       <MockTranslationProvider>
         <DisplayResourceDetailsNote {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -107,8 +108,6 @@ export default class DisplayResourceDetailsNotePage {
 
   /** Click on the component */
   async clickOn(component) {
-    const leftClick = { button: 0 };
-    fireEvent.click(component, leftClick);
-    await waitFor(() => {});
+    await this.user.click(component);
   }
 }

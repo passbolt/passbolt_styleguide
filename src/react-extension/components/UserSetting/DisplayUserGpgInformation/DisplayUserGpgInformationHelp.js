@@ -66,7 +66,7 @@ class DisplayUserGpgInformationHelp extends React.Component {
   async populate() {
     if (this.user) {
       const gpgKeyInfo = await this.fetchGpgkeyInfo();
-      await this.setState({ gpgKeyInfo });
+      this.setState({ gpgKeyInfo });
     }
   }
 
@@ -78,7 +78,7 @@ class DisplayUserGpgInformationHelp extends React.Component {
     const canVoid = this.user && this.state.gpgKeyInfo;
     if (mustPopulate) {
       const gpgKeyInfo = await this.fetchGpgkeyInfo();
-      await this.setState({ gpgKeyInfo });
+      this.setState({ gpgKeyInfo });
     } else if (canVoid) {
       this.populateIfNeeded = () => {};
     }

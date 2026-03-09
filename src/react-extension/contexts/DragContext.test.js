@@ -39,13 +39,13 @@ describe("Drag Context", () => {
       const draggedItems = {
         item: "item",
       };
-      await dragContext.state.onDragStart(event, component, draggedItems);
+      dragContext.state.onDragStart(event, component, draggedItems);
       expect(dragContext.state.dragging).toBeTruthy();
       expect(dragContext.state.draggedItems).toBe(draggedItems);
     });
 
     it("As LU I should end the dragging", async () => {
-      await dragContext.state.onDragEnd();
+      dragContext.state.onDragEnd();
       expect(dragContext.state.dragging).toBeFalsy();
       expect(dragContext.state.draggedItems).toBe(null);
     });

@@ -26,7 +26,6 @@ export default class AddResourceCustomFieldsPage {
       <MockTranslationProvider>
         <AddResourceCustomFields {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
