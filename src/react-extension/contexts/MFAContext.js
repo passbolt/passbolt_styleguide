@@ -113,16 +113,17 @@ export class MfaContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async findPolicy() {
-    if (this.getPolicy()) {
-      return;
+    const { policy: currentPolicy } = this.state;
+    if (currentPolicy !== null) {
+      return currentPolicy;
     }
 
     this.setProcessing(true);
-    let policy = null;
     const result = await this.props.context.port.request("passbolt.mfa-policy.get-policy");
-    policy = result ? result.policy : null;
+    const policy = result ? result.policy : null;
     this.setState({ policy });
     this.setProcessing(false);
+    return policy;
   }
 
   /**
@@ -131,14 +132,12 @@ export class MfaContextProvider extends React.Component {
    */
   async findMfaSettings() {
     this.setProcessing(true);
-    let mfaUserSettings = null;
-    let mfaOrganisationSettings = null;
     const settings = await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
-    mfaUserSettings = settings.MfaAccountSettings;
-    mfaOrganisationSettings = settings.MfaOrganizationSettings;
-    this.setState({ mfaUserSettings });
-    this.setState({ mfaOrganisationSettings });
+    const mfaUserSettings = settings.MfaAccountSettings;
+    const mfaOrganisationSettings = settings.MfaOrganizationSettings;
+    this.setState({ mfaUserSettings, mfaOrganisationSettings });
     this.setProcessing(false);
+    return { mfaUserSettings, mfaOrganisationSettings };
   }
 
   /**
@@ -224,8 +223,8 @@ export class MfaContextProvider extends React.Component {
    * @returns {bool}
    */
   async checkMfaChoiceRequired() {
-    await this.findPolicy();
-    if (this.getPolicy() === null || this.getPolicy() !== MfaPolicyEnumerationTypes.MANDATORY) {
+    const policy = await this.findPolicy();
+    if (policy === null || policy !== MfaPolicyEnumerationTypes.MANDATORY) {
       return false;
     }
     await this.findMfaSettings();
