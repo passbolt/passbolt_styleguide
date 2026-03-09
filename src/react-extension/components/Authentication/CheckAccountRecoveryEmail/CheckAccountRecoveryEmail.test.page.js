@@ -29,7 +29,6 @@ export default class CheckAccountRecoveryEmailTestPage {
       <MockTranslationProvider>
         <CheckMailBox />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

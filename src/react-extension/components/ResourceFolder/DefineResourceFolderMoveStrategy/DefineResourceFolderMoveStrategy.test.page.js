@@ -35,7 +35,6 @@ export default class DefineResourceFolderMoveStrategyPage {
           <DefineResourceFolderMoveStrategy {...props}></DefineResourceFolderMoveStrategy>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }

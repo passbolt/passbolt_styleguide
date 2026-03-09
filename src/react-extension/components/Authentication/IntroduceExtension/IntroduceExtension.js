@@ -41,13 +41,6 @@ class IntroduceExtension extends Component {
   }
 
   /**
-   * Toggle the processing mode
-   */
-  async toggleProcessing() {
-    await this.setState({ processing: !this.state.processing });
-  }
-
-  /**
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
@@ -60,7 +53,11 @@ class IntroduceExtension extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.toggleProcessing();
+    // Prevent submission while processing
+    if (this.state.processing) {
+      return;
+    }
+    this.setState({ processing: true });
     this.props.onComplete();
   }
 

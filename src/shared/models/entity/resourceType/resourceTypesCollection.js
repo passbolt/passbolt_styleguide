@@ -25,7 +25,7 @@ import {
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
 } from "./resourceTypeSchemasDefinition";
-import ResourceTypeEntity, { PASSWORD_RESOURCE_TYPES } from "./resourceTypeEntity";
+import ResourceTypeEntity, { PASSWORD_RESOURCE_TYPES, TOTP_RESOURCE_TYPES } from "./resourceTypeEntity";
 import assertString from "validator/es/lib/util/assertString";
 
 const SUPPORTED_RESOURCE_TYPES = [
@@ -108,6 +108,14 @@ class ResourceTypesCollection extends EntityV2Collection {
    */
   filterByPasswordResourceTypes() {
     this.filterByPropertyValueIn("slug", PASSWORD_RESOURCE_TYPES);
+  }
+
+  /**
+   * Filter by TOTP resource types.
+   * @return {void} The function alters the collection itself.
+   */
+  filterByTOTPResourceTypes() {
+    this.filterByPropertyValueIn("slug", TOTP_RESOURCE_TYPES);
   }
 
   /**

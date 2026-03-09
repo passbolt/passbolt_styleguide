@@ -30,7 +30,6 @@ export default class DisplayUserWorkspaceActionsPage {
       <MockTranslationProvider>
         <DisplayUserWorkspaceActions {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

@@ -42,7 +42,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.dynamicRefs = useDynamicRefs();
-    this.checkForPublicDomainDebounce = debounce(this.checkForWarnings, 300);
+    this.checkForPublicDomainDebounce = debounce(() => this.assertNotProfessionalDomains(this.allowedDomains), 300);
     this.bindCallbacks();
   }
 
@@ -115,31 +115,38 @@ class DisplaySelfRegistrationAdministration extends React.Component {
    * Bind callbacks methods
    */
   async findSettings() {
-    await this.props.adminSelfRegistrationContext.findSettings();
-    this.setState({ isEnabled: this.allowedDomains.size > 0 });
-    this.checkForWarnings();
+    const settings = await this.props.adminSelfRegistrationContext.findSettings();
+    this.setState({ isEnabled: settings.allowedDomains?.size > 0 });
+    this.assertNotProfessionalDomains(settings.allowedDomains);
     this.validateForm();
   }
 
   /**
    * We check for warnings and errors into the form
+   * @param {Map} allowedDomains
    */
-  checkForWarnings() {
-    this.setState({ warnings: new Map() }, () => {
-      this.allowedDomains.forEach((value, key) => this.checkDomainIsProfessional(key, value));
+  assertNotProfessionalDomains(allowedDomains) {
+    const warnings = new Map();
+    allowedDomains?.forEach((value, key) => {
+      if (!DomainUtil.isProfessional(value)) {
+        warnings.set(key, "This is not a safe professional domain");
+      }
     });
+
+    this.setState({ warnings });
   }
   /**
    * setup settings for the first time
    */
   setupSettings() {
     // When disable we remove domains from UI, so if the use enable again we should populate existing setting to UI again
-    this.props.adminSelfRegistrationContext.setDomains(
-      new SelfRegistrationDomainsViewModel(this.props.adminSelfRegistrationContext.getCurrentSettings()),
+    const currentSettings = new SelfRegistrationDomainsViewModel(
+      this.props.adminSelfRegistrationContext.getCurrentSettings(),
     );
-    this.checkForWarnings();
+    this.props.adminSelfRegistrationContext.setDomains(currentSettings);
+    this.assertNotProfessionalDomains(currentSettings.allowedDomains);
 
-    if (this.allowedDomains.size === 0) {
+    if (currentSettings.allowedDomains.size === 0) {
       const domain = DomainUtil.extractDomainFromEmail(this.currentUser?.username);
       DomainUtil.checkDomainValidity(domain);
       this.populateUserDomain(domain);
@@ -166,7 +173,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     const isSaved = this.props.adminSelfRegistrationContext.isSaved();
     if (isSaved) {
       this.props.adminSelfRegistrationContext.setSaved(false);
-      this.checkForWarnings();
+      this.assertNotProfessionalDomains(this.allowedDomains);
     }
   }
 
@@ -201,7 +208,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
       domains.delete(key);
       this.props.adminSelfRegistrationContext.setDomains({ allowedDomains: domains });
       this.validateForm();
-      this.checkForWarnings();
+      this.assertNotProfessionalDomains(domains);
     }
   }
 
@@ -222,17 +229,16 @@ class DisplaySelfRegistrationAdministration extends React.Component {
 
   /**
    * Handle the click on the self registration title
-   * @param {UserDirectory} userDirectory state
    */
   handleToggleClicked() {
-    this.setState({ isEnabled: !this.state.isEnabled }, () => {
-      if (this.state.isEnabled) {
-        this.setupSettings();
-      } else {
-        this.props.adminSelfRegistrationContext.setDomains({ allowedDomains: new Map() });
-        this.props.adminSelfRegistrationContext.setErrors(new Map());
-      }
-    });
+    const isEnabled = !this.state.isEnabled;
+    if (isEnabled) {
+      this.setupSettings();
+    } else {
+      this.props.adminSelfRegistrationContext.setDomains({ allowedDomains: new Map() });
+      this.props.adminSelfRegistrationContext.setErrors(new Map());
+    }
+    this.setState({ isEnabled });
   }
 
   /**
@@ -240,21 +246,6 @@ class DisplaySelfRegistrationAdministration extends React.Component {
    */
   handleAddRowClick() {
     this.addRow();
-  }
-
-  /**
-   * check if domain is a professional one
-   */
-  checkDomainIsProfessional(uuid, value) {
-    this.setState((prevState) => {
-      const warnings = MapObject.clone(prevState.warnings);
-      if (!DomainUtil.isProfessional(value)) {
-        warnings.set(uuid, "This is not a safe professional domain");
-      } else {
-        warnings.delete(uuid);
-      }
-      return { warnings };
-    });
   }
 
   /**

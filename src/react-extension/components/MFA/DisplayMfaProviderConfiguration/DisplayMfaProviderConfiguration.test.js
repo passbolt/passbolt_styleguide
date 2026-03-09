@@ -16,6 +16,7 @@ import DisplayMfaProviderConfigurationPage from "./DisplayMfaProviderConfigurati
 import { mockVerifiedDate, propsMfaWithProvider } from "./DisplayMfaProviderConfiguration.test.data";
 import MfaProviders from "../DisplayProviderList/MfaProviders.data";
 import { Providers } from "../../../contexts/MFAContext";
+import { screen } from "@testing-library/react";
 
 /**
  * Unit tests on DisplayMfaProviderConfiguration in regard of specifications
@@ -47,8 +48,10 @@ describe("DisplayMfaProviderConfiguration", () => {
       expect(page.description.textContent).toEqual(provider.configuration.description);
     });
 
-    it("I can see a the verified date", () => {
+    it("I can see a the verified date", async () => {
       expect.assertions(1);
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText(/27 September 2023/i);
       expect(page.verifiedDate.textContent).toContain("27 September 2023");
     });
 

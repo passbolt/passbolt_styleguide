@@ -416,7 +416,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   setErrors(newErrors, callback = () => {}) {
     const errors = Object.assign({}, this.state.errors, newErrors);
-    return this.setState({ errors }, callback);
+    this.setState({ errors }, callback);
   }
 
   /**

@@ -37,13 +37,13 @@ describe("UserSettings Context", () => {
     });
 
     it("As LU I should start initially with the PASSPHRASE_INTRODUCTION state", async () => {
-      await userContext.onIntroductionPassphraseRequested();
+      userContext.onIntroductionPassphraseRequested();
       expect(userContext.state.state).toBe(UserSettingsContextState.PASSPHRASE_INTRODUCTION);
     });
 
     it("As LU I should confirm the passphrase", async () => {
       const passphrase = "passphrase";
-      await userContext.onProvidePassphraseRequested();
+      userContext.onProvidePassphraseRequested();
       expect(userContext.state.state).toBe(UserSettingsContextState.PASSPHRASE_TO_PROVIDE_REQUESTED);
       await userContext.onCheckProvidePassphraseRequested(passphrase);
       expect(userContext.props.context.port.request).toHaveBeenCalledWith(

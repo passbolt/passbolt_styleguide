@@ -255,12 +255,14 @@ class Autocomplete extends Component {
    * @return {void}
    */
   selectPrevious() {
-    if (this.state.selected === 0 || this.state.selected === null) {
-      this.setState({ selected: this.state.autocompleteItems.length - 1 });
+    let selected = this.state.selected;
+    if (selected === 0 || selected === null) {
+      selected = this.state.autocompleteItems.length - 1;
     } else {
-      this.setState({ selected: this.state.selected - 1 });
+      selected = selected - 1;
     }
-    this.scrollToSelectedItem();
+    this.scrollToSelectedItem(selected);
+    this.setState({ selected });
   }
 
   /**
@@ -268,12 +270,14 @@ class Autocomplete extends Component {
    * @return {void}
    */
   selectNext() {
-    if (this.state.selected === null || this.state.selected === this.state.autocompleteItems.length - 1) {
-      this.setState({ selected: 0 });
+    let selected = this.state.selected;
+    if (selected === null || selected === this.state.autocompleteItems.length - 1) {
+      selected = 0;
     } else {
-      this.setState({ selected: this.state.selected + 1 });
+      selected = selected + 1;
     }
-    this.scrollToSelectedItem();
+    this.scrollToSelectedItem(selected);
+    this.setState({ selected });
   }
 
   /**
@@ -311,9 +315,10 @@ class Autocomplete extends Component {
 
   /**
    * Scroll to the selected item
+   * @param {number} selected
    * @return {void}
    */
-  scrollToSelectedItem() {
+  scrollToSelectedItem(selected) {
     if (!this.state.autocompleteItems || this.state.autocompleteItems.length === 0) {
       this.listRef.current.scrollTop = 0;
     } else {
@@ -322,7 +327,7 @@ class Autocomplete extends Component {
       const visibleHeight = this.listRef.current.clientHeight;
       const howManyFits = Math.round(visibleHeight / itemHeight);
       const fitOffset = visibleHeight - itemHeight * howManyFits;
-      const currentItemPosition = itemHeight * this.state.selected;
+      const currentItemPosition = itemHeight * selected;
       const currentScroll = this.listRef.current.scrollTop;
       if (currentItemPosition === 0) {
         this.listRef.current.scrollTop = 0;

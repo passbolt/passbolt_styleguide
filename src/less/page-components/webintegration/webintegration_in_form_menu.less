@@ -55,7 +55,7 @@ body {
           box-shadow: none;
       }
 
-       &-icon {
+      &-icon {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -67,16 +67,19 @@ body {
       }
 
       &-content {
-        flex: 1;
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 40%;
+
         color: var(--Text-and-icons-Main-text);
 
         &-header{
-          width: 280px;
-          .ellipsis()
+          .ellipsis();
         }
 
         &-subheader {
-          width: 280px;
           .ellipsis();
 
           &-password {
@@ -97,9 +100,23 @@ body {
         }
 
         &-description {
-          width: 280px;
           .ellipsis();
           color: var(--Text-and-icons-Secondary-text);
+        }
+      }
+
+      &-timer {
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 1rem 1.2rem;
+
+        > svg {
+          height: 1.8rem;
+          width: 1.8rem;
         }
       }
 

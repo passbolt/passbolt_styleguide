@@ -36,7 +36,6 @@ export default class FilterResourcesByTextPage {
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

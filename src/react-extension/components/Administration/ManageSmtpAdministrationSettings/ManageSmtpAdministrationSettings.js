@@ -107,11 +107,10 @@ export class ManageSmtpAdministrationSettings extends React.Component {
     this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(
       DisplayAdministrationSmtpSettingsActions,
     );
-    await this.props.adminSmtpSettingsContext.findSmtpSettings();
 
-    const settings = this.props.adminSmtpSettingsContext.getCurrentSmtpSettings();
+    const settings = await this.props.adminSmtpSettingsContext.findSmtpSettings();
 
-    this.setState({ showAdvancedSettings: settings.provider?.id === "other" });
+    this.setState({ showAdvancedSettings: settings?.provider?.id === "other" });
   }
 
   /**

@@ -33,7 +33,6 @@ export default class DisplayResourcesListPage {
           <DisplayResourcesList {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

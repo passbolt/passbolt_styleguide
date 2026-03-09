@@ -36,7 +36,6 @@ export default class FilterResourcesByFoldersItemPage {
           </DragContext.Provider>
         </Router>
       </AppContext.Provider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

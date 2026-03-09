@@ -90,7 +90,7 @@ class DisplayUserDetailsActivity extends React.Component {
 
     // Reset the component, and fetch activities for the new user.
     const state = Object.assign({}, this.getDefaultState(), { open: true });
-    await this.setState(state);
+    this.setState(state);
     await this.fetch();
     this.setState({ loading: false });
   }
@@ -117,7 +117,7 @@ class DisplayUserDetailsActivity extends React.Component {
       const defaultState = this.getDefaultState();
       this.setState(defaultState);
     } else {
-      await this.setState({ loading: true, open: true });
+      this.setState({ loading: true, open: true });
       await this.fetch();
       this.setState({ loading: false });
     }

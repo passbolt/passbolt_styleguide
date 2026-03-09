@@ -38,7 +38,6 @@ export default class ConfirmShareMissingMetadataKeysPage {
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

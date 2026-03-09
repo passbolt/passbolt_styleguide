@@ -19,7 +19,7 @@ import { withTranslation } from "react-i18next";
 import { withActionFeedback } from "../../../react-extension/contexts/ActionFeedbackContext";
 import Logger from "../../utils/logger";
 
-const DEFAULT_TOTP_PERIOD = 30;
+export const DEFAULT_TOTP_PERIOD = 30;
 
 /**
  * This component represents an OTP viewer

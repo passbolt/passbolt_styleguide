@@ -29,7 +29,6 @@ export default class DisplayRestartFromScratchErrorPage {
       <MockTranslationProvider>
         <DisplayRestartFromScratchError />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

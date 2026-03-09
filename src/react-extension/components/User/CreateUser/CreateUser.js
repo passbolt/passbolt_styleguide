@@ -196,16 +196,15 @@ class CreateUser extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
 
-    await this.setState({ hasAlreadyBeenValidated: true });
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      await this.toggleProcessing();
-      await this.validate();
+      const errors = this.validate();
 
-      if (this.hasValidationError()) {
-        await this.toggleProcessing();
-        this.focusFirstFieldError();
+      if (this.hasValidationError(errors)) {
+        this.setState({ processing: false });
+        this.focusFirstFieldError(errors);
         return;
       }
       try {
@@ -264,24 +263,16 @@ class CreateUser extends Component {
   }
 
   /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
-  }
-
-  /**
    * Focus the first field of the form which is in error state.
+   * @param {object} errors
    * @returns {void}
    */
-  focusFirstFieldError() {
-    if (this.state.first_nameError) {
+  focusFirstFieldError(errors) {
+    if (errors.first_nameError) {
       this.firstNameRef.current.focus();
-    } else if (this.state.last_nameError) {
+    } else if (errors.last_nameError) {
       this.lastNameRef.current.focus();
-    } else if (this.state.username) {
+    } else if (errors.username) {
       this.usernameRef.current.focus();
     }
   }
@@ -304,45 +295,49 @@ class CreateUser extends Component {
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {object} errors
    */
-  async validate() {
+  validate() {
     // Validate the form inputs.
-    await Promise.all([this.validateFirstNameInput(), this.validateLastNameInput(), this.validateUsernameInput()]);
-    return this.hasValidationError();
+    const first_nameError = this.validateFirstNameInput();
+    const last_nameError = this.validateLastNameInput();
+    const usernameError = this.validateUsernameInput();
+    const errors = { first_nameError, last_nameError, usernameError };
+    this.setState(errors);
+    return errors;
   }
 
   /**
    * Validate the first name input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateFirstNameInput() {
+  validateFirstNameInput() {
     let first_nameError = null;
     const first_name = this.state.first_name.trim();
     if (!first_name.length) {
       first_nameError = this.translate("A first name is required.");
     }
-    return this.setState({ first_nameError });
+    return first_nameError;
   }
 
   /**
    * Validate the last name input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateLastNameInput() {
+  validateLastNameInput() {
     let last_nameError = null;
     const last_name = this.state.last_name.trim();
     if (!last_name.length) {
       last_nameError = this.translate("A last name is required.");
     }
-    return this.setState({ last_nameError });
+    return last_nameError;
   }
 
   /**
    * Validate the username input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateUsernameInput() {
+  validateUsernameInput() {
     let usernameError = null;
     const username = this.state.username.trim();
     if (!username.length) {
@@ -350,17 +345,16 @@ class CreateUser extends Component {
     } else if (!AppEmailValidatorService.validate(username, this.props.context.siteSettings)) {
       usernameError = this.translate("The username should be a valid username address.");
     }
-    return this.setState({ usernameError });
+    return usernameError;
   }
 
   /**
    * Return true if the form has some validation error
+   * @param {object} errors
    * @returns {boolean}
    */
-  hasValidationError() {
-    return (
-      this.state.first_nameError !== null || this.state.last_nameError !== null || this.state.usernameError !== null
-    );
+  hasValidationError(errors) {
+    return errors.first_nameError !== null || errors.last_nameError !== null || errors.usernameError !== null;
   }
 
   /**

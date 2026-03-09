@@ -29,7 +29,6 @@ export default class DisplayScimSettingsAdministrationPage {
           </RoleContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

@@ -144,11 +144,10 @@ class CreateUserGroup extends Component {
   /**
    * Handle name input keyUp event.
    */
-  handleNameInputKeyUp() {
-    const state = this.validateNameInput();
-    this.setState(state);
-    const nameWarning = maxSizeValidation(this.state.name, RESOURCE_GROUP_NAME_MAX_LENGTH, this.translate);
-    this.setState({ nameWarning });
+  handleNameInputKeyUp(event) {
+    const nameError = this.validateNameInput();
+    const nameWarning = maxSizeValidation(event.target.value, RESOURCE_GROUP_NAME_MAX_LENGTH, this.translate);
+    this.setState({ nameError, nameWarning });
   }
 
   /**
@@ -185,14 +184,14 @@ class CreateUserGroup extends Component {
   async handleFormSubmit(event) {
     event.preventDefault();
 
-    if (!(await this.validate())) {
+    if (!this.validate()) {
       this.handleValidateError();
       return;
     }
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      await this.toggleProcessing();
+      this.setState({ processing: true });
       try {
         await this.createGroup();
         await this.handleSaveSuccess();
@@ -265,26 +264,15 @@ class CreateUserGroup extends Component {
   }
 
   /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({ processing: !prev });
-  }
-
-  /**
    * Focus the field of the form which is in error state.
    */
   focusFieldError() {
-    if (this.state.nameError) {
-      this.nameInputRef.current.focus();
-    }
+    this.nameInputRef.current.focus();
   }
 
   /**
    * Validate the name input.
-   * @return {Promise}
+   * @return {string}
    */
   validateNameInput() {
     const name = this.state.name.trim();
@@ -293,26 +281,18 @@ class CreateUserGroup extends Component {
       nameError = this.translate("A name is required.");
     }
 
-    return new Promise((resolve) => {
-      this.setState({ nameError: nameError }, resolve);
-    });
+    return nameError;
   }
 
   /**
    * Validate the form.
-   * @return {Promise<boolean>}
+   * @return {boolean}
    */
-  async validate() {
-    // Reset the form errors.
-    this.setState({
-      error: "",
-      nameError: "",
-    });
-
+  validate() {
     // Validate the form inputs.
-    await this.validateNameInput();
-
-    return this.state.nameError === "";
+    const nameError = this.validateNameInput();
+    this.setState({ nameError });
+    return nameError === "";
   }
 
   /**

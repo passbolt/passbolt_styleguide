@@ -33,7 +33,6 @@ export default class DisplayScimAdministrationTeasingPage {
           <DisplayScimAdministrationTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

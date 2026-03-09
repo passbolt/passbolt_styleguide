@@ -195,16 +195,18 @@ class EditUser extends Component {
   async handleFormSubmit(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
-
-    this.setState({ hasAlreadyBeenValidated: true });
-
     // Do not re-submit an already processing form
+    if (this.state.processing) {
+      return;
+    }
+
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
+
     if (!this.state.processing) {
-      this.toggleProcessing();
-      await this.validate();
-      if (this.hasValidationError()) {
-        this.toggleProcessing();
-        this.focusFirstFieldError();
+      const errors = this.validate();
+      if (this.hasValidationError(errors)) {
+        this.setState({ processing: false });
+        this.focusFirstFieldError(errors);
         return;
       }
 
@@ -254,21 +256,14 @@ class EditUser extends Component {
   }
 
   /**
-   * Toggle processing state
-   */
-  toggleProcessing() {
-    const prev = this.state.processing;
-    this.setState({ processing: !prev });
-  }
-
-  /**
    * Focus the first field of the form which is in error state.
+   * @param {object} errors
    * @returns {void}
    */
-  focusFirstFieldError() {
-    if (this.state.first_nameError) {
+  focusFirstFieldError(errors) {
+    if (errors.first_nameError) {
       this.firstNameRef.current.focus();
-    } else if (this.state.last_nameError) {
+    } else if (errors.last_nameError) {
       this.lastNameRef.current.focus();
     }
   }
@@ -307,46 +302,50 @@ class EditUser extends Component {
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {object}
    */
-  async validate() {
+  validate() {
     // Validate the form inputs.
-    await Promise.all([this.validateFirstNameInput(), this.validateLastNameInput()]);
-    return this.hasValidationError();
+    const first_nameError = this.validateFirstNameInput();
+    const last_nameError = this.validateLastNameInput();
+    const errors = { first_nameError, last_nameError };
+    this.setState(errors);
+    return errors;
   }
 
   /**
    * Validate the first name input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateFirstNameInput() {
+  validateFirstNameInput() {
     let first_nameError = null;
     const first_name = this.state.first_name.trim();
     if (!first_name.length) {
       first_nameError = this.translate("A first name is required.");
     }
-    return this.setState({ first_nameError });
+    return first_nameError;
   }
 
   /**
    * Validate the last name input.
-   * @returns {Promise<void>}
+   * @returns {string | null}
    */
-  async validateLastNameInput() {
+  validateLastNameInput() {
     let last_nameError = null;
     const last_name = this.state.last_name.trim();
     if (!last_name.length) {
       last_nameError = this.translate("A last name is required.");
     }
-    return this.setState({ last_nameError });
+    return last_nameError;
   }
 
   /**
    * Return true if the form has some validation error
+   * @param {object} errors
    * @returns {boolean}
    */
-  hasValidationError() {
-    return this.state.first_nameError !== null || this.state.last_nameError !== null;
+  hasValidationError(errors) {
+    return errors.first_nameError !== null || errors.last_nameError !== null;
   }
 
   /**

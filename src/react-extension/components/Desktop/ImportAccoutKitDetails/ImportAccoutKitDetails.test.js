@@ -12,6 +12,8 @@
  * @since         4.3.0
  */
 
+import { screen } from "@testing-library/react";
+
 beforeEach(() => {
   jest.resetModules();
   jest.useFakeTimers();
@@ -65,7 +67,8 @@ describe("ImportAccoutKitDetails", () => {
         .mockImplementation(() => Promise.reject({ name: "InvalidMasterPasswordError" }));
       await page.fillPassphrase(passphrase);
       await page.clickOnNextButton();
-
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("The passphrase is invalid.");
       expect(page.hasInvalidPassphraseError).toBeTruthy();
       expect(page.invalidPassphrase.textContent).toEqual("The passphrase is invalid.");
     });
@@ -79,6 +82,8 @@ describe("ImportAccoutKitDetails", () => {
       await page.fillPassphrase(passphrase);
       await page.clickOnNextButton();
 
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("The private key is invalid.");
       expect(page.hasInvalidGPGKey).toBeTruthy();
       expect(page.invalidGPGKey.textContent).toEqual("The private key is invalid.");
     });

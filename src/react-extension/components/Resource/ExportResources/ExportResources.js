@@ -247,7 +247,7 @@ class ExportResources extends React.Component {
         this.setState({ csvWarningError: true });
         return;
       }
-      await this.setState({ actions: { processing: true } });
+      this.setState({ actions: { processing: true } });
       this.export().then(this.onExportSuccess.bind(this)).catch(this.onExportFailure.bind(this));
     } else {
       // KDBX case
@@ -302,7 +302,7 @@ class ExportResources extends React.Component {
    * Whenever the export has been performed successfully
    */
   async onExportSuccess() {
-    await this.setState({ actions: { processing: false } });
+    this.setState({ actions: { processing: false } });
     await this.props.actionFeedbackContext.displaySuccess(
       this.translate("The passwords have been exported successfully"),
     );

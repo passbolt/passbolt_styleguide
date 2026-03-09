@@ -632,9 +632,7 @@ describe("See the Create Resource", () => {
           password: "password",
           description: "description",
         }));
-        page = new EditResourcePage(props);
-
-        await waitFor(() => page.exists);
+        await act(() => (page = new EditResourcePage(props)));
       });
 
       it("As a signed-in user I should be able to edit name to a resource", async () => {
@@ -689,7 +687,7 @@ describe("See the Create Resource", () => {
           password: "password",
           description: "description",
         }));
-        page = new EditResourcePage(props);
+        await act(() => (page = new EditResourcePage(props)));
 
         await waitFor(() => page.exists);
         await page.click(page.menuDescription);
@@ -758,10 +756,10 @@ describe("See the Create Resource", () => {
 
     describe("should edit totp form", () => {
       let props, page;
-      beforeEach(() => {
+      beforeEach(async () => {
         props = defaultTotpProps();
         mockContextRequest(props.context, () => ({ object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto() }));
-        page = new EditResourcePage(props);
+        await act(() => (page = new EditResourcePage(props)));
       });
 
       it("As a signed-in user I should be able to edit an URI", async () => {
@@ -956,13 +954,13 @@ describe("See the Create Resource", () => {
 
     describe("should edit custom fields form", () => {
       let props, page;
-      beforeEach(() => {
+      beforeEach(async () => {
         props = defaultCustomFieldsProps();
         mockContextRequest(props.context, () => ({
           object_type: SECRET_DATA_OBJECT_TYPE,
           custom_fields: [{ id: props.resource.metadata.custom_fields[0].id, type: "text", secret_value: "secret-0" }],
         }));
-        page = new EditResourcePage(props);
+        await act(() => (page = new EditResourcePage(props)));
       });
 
       it("As a signed-in user I should be able to add and delete a custom field", async () => {
@@ -1075,9 +1073,7 @@ describe("See the Create Resource", () => {
           password: "password",
           description: "description",
         }));
-        page = new EditResourcePage(props);
-
-        await waitFor(() => page.exists);
+        await act(() => (page = new EditResourcePage(props)));
         await page.click(page.getSectionItem(2));
       });
 

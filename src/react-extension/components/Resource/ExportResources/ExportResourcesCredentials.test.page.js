@@ -34,7 +34,6 @@ export default class ExportResourcesCredentialsPage {
           <ExportResourcesCredentials {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.user = userEvent.setup();
   }

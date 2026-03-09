@@ -34,7 +34,6 @@ export default class CreateResourceFolderPage {
           <CreateResourceFolder.WrappedComponent {...props}></CreateResourceFolder.WrappedComponent>
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

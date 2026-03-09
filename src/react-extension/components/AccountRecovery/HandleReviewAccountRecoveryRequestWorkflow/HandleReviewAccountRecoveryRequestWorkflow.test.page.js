@@ -35,7 +35,6 @@ export default class HandleReviewAccountRecoveryRequestWorkflowTestPage {
           }}
         />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 }

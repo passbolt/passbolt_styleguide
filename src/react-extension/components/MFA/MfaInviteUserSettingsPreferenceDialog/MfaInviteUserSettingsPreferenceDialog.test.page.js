@@ -29,7 +29,6 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
       <MockTranslationProvider>
         <MfaInviteUserSettingsPreferenceDialog {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

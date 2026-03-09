@@ -34,7 +34,6 @@ export default class ImportResourcesKeyUnlockPage {
           <ImportResourcesKeyUnlock {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

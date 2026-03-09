@@ -13,7 +13,6 @@
  */
 import SaveResourcePage from "./SaveResource.test.page";
 import { defaultProps } from "./SaveResource.test.data";
-import { waitFor } from "@testing-library/react";
 import { waitForTrue } from "../../../../test/utils/waitFor";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
@@ -22,6 +21,7 @@ import {
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { defaultMetadataTypesSettingsV6Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import { SECRET_DATA_OBJECT_TYPE } from "../../../shared/models/entity/secretData/secretDataEntity";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,6 +32,7 @@ describe("See the Create Resource - save resource", () => {
     expect.assertions(4);
     // data mocked
     const props = defaultProps(); // The props to pass
+    let page;
     const resourceMetaFromTab = {
       name: "Passbolt",
       uri: "https://passbolt.com",
@@ -41,8 +42,7 @@ describe("See the Create Resource - save resource", () => {
     // functions mocked
     jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
     // process
-    const page = new SaveResourcePage(props);
-    await waitFor(() => {});
+    await act(() => (page = new SaveResourcePage(props)));
     // expectations
     expect(page.name.value).toBe(resourceMetaFromTab.name);
     expect(page.username.value).toBe(resourceMetaFromTab.username);
@@ -54,6 +54,7 @@ describe("See the Create Resource - save resource", () => {
     expect.assertions(2);
     // data mocked
     const props = defaultProps(); // The props to pass
+    let page;
     const resourceMetaFromTab = {
       name: "Passbolt",
       uris: ["https://passbolt.com"],
@@ -63,7 +64,7 @@ describe("See the Create Resource - save resource", () => {
     // functions mocked
     jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
     // process
-    const page = new SaveResourcePage(props);
+    await act(() => (page = new SaveResourcePage(props)));
 
     await page.save();
     // expected data
@@ -95,6 +96,7 @@ describe("See the Create Resource - save resource", () => {
     // data mocked
     const metadataTypeSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
     const props = defaultProps({ metadataTypeSettings }); // The props to pass
+    let page;
     const resourceMetaFromTab = {
       name: "Passbolt",
       uris: ["https://passbolt.com"],
@@ -104,8 +106,8 @@ describe("See the Create Resource - save resource", () => {
     // functions mocked
     jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
     // process
-    const page = new SaveResourcePage(props);
-    await waitFor(() => {});
+    await act(() => (page = new SaveResourcePage(props)));
+
     await page.save();
     // expected data
     const resourceTypeId = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG).id;
@@ -136,6 +138,7 @@ describe("See the Create Resource - save resource", () => {
     expect.assertions(4);
     // data mocked
     const props = defaultProps(); // The props to pass
+    let page;
     const resourceMetaFromTab = {
       name: "",
       uri: "",
@@ -145,8 +148,7 @@ describe("See the Create Resource - save resource", () => {
     // functions mocked
     jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
     // process
-    const page = new SaveResourcePage(props);
-    await waitFor(() => {});
+    await act(() => (page = new SaveResourcePage(props)));
 
     const expectedData = {
       name: "Test input",

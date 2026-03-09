@@ -39,7 +39,6 @@ export default class DisplayInternationalizationAdministrationPage {
           </AdminInternationalizationContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

@@ -30,7 +30,6 @@ export default class DisplayProgressTestPage {
       <MockTranslationProvider>
         <DisplayProgress {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

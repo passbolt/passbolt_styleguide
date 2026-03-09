@@ -32,7 +32,6 @@ export default class DisplayResourcesWorkspaceFiltersPage {
           <DisplayResourcesWorkspaceFilters.WrappedComponent {...props} />
         </MockTranslationProvider>
       </Router>,
-      { legacyRoot: true },
     );
   }
 

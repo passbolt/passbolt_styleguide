@@ -30,7 +30,6 @@ export default class ScanTotpCodePage {
       <MockTranslationProvider>
         <ScanTotpCode {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

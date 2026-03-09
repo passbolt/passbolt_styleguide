@@ -30,7 +30,6 @@ export default class DisplayScimSettingsAdministrationHelpPage {
       <MockTranslationProvider>
         <DisplayScimSettingsAdministrationHelp {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

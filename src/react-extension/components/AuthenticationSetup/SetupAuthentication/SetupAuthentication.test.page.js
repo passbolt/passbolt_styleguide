@@ -30,7 +30,6 @@ export default class SetupAuthenticationPage {
       <MockTranslationProvider>
         <SetupAuthentication {...props}></SetupAuthentication>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

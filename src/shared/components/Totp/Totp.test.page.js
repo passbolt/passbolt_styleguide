@@ -26,7 +26,6 @@ export default class TotpTestPage {
       <MockTranslationProvider>
         <Totp {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

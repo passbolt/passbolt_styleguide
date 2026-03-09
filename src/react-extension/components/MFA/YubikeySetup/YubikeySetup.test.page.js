@@ -30,7 +30,6 @@ export default class YubikeySetupPage {
       <MockTranslationProvider>
         <YubikeySetup {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
