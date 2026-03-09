@@ -1,5 +1,3 @@
-v5.10.3
-
+v5.10.4
 Provide fixes to:
--  make the Expiry column visible again.
--  display the metadata key rotation author appear correctly
+- Configure MFA dialog is still present even when configured
