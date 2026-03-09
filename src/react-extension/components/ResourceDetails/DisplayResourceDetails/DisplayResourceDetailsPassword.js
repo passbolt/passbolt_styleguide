@@ -146,22 +146,21 @@ class DisplayResourceDetailsPassword extends React.Component {
     const isPasswordPreviewed = this.state.isSecretPreviewed;
     let plaintextSecret;
 
-    this.props.progressContext.open(this.props.t("Decrypting secret"));
-
     if (isPasswordPreviewed) {
       plaintextSecret = this.state.plaintextSecret;
     } else {
       try {
+        this.props.progressContext.open(this.props.t("Decrypting secret"));
         const plaintextSecretDto = await this.decryptResourceSecret(resourceId);
         plaintextSecret = plaintextSecretDto?.password;
       } catch (error) {
         if (error.name !== "UserAbortsOperationError") {
           this.props.actionFeedbackContext.displayError(error.message);
         }
+      } finally {
+        this.props.progressContext.close();
       }
     }
-
-    this.props.progressContext.close();
 
     if (!plaintextSecret?.length) {
       await this.props.actionFeedbackContext.displayWarning(
@@ -206,18 +205,17 @@ class DisplayResourceDetailsPassword extends React.Component {
     const isSecretPreviewed = true;
     let plaintextSecret;
 
-    this.props.progressContext.open(this.props.t("Decrypting secret"));
-
     try {
+      this.props.progressContext.open(this.props.t("Decrypting secret"));
       const plaintextSecretDto = await this.decryptResourceSecret(resourceId);
       plaintextSecret = plaintextSecretDto?.password;
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
       }
+    } finally {
+      this.props.progressContext.close();
     }
-
-    this.props.progressContext.close();
 
     if (!plaintextSecret?.length) {
       plaintextSecret = "";
