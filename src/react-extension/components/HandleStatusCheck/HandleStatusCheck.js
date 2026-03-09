@@ -108,15 +108,6 @@ class HandleStatusCheck extends React.Component {
   }
 
   /**
-   * Returns true if the organisation settings require the user to make a choice regarding the MFA options
-   * @returns {boolean}
-   */
-  isOrganizationPolicyRequiresAUserChoiceForMfa() {
-    const policy = this.props.mfaContext.getPolicy();
-    return policy === MfaPolicyEnumerationTypes.MANDATORY;
-  }
-
-  /**
    * Returns a promise set to true if the user should take a decision about its account recovery subscription
    * @returns {Promise<boolean>}
    */
@@ -151,10 +142,12 @@ class HandleStatusCheck extends React.Component {
       return false;
     }
 
-    await this.props.mfaContext.findPolicy();
-    await this.props.mfaContext.findMfaSettings();
-
-    return !(this.props.mfaContext.hasMfaUserSettings() || !this.isOrganizationPolicyRequiresAUserChoiceForMfa());
+    const policy = await this.props.mfaContext.findPolicy();
+    const result = await this.props.mfaContext.findMfaSettings();
+    const mfaUserSettings = result?.mfaUserSettings;
+    const hasMfaUserSettings = mfaUserSettings && Object.values(mfaUserSettings).some((value) => value);
+    const isMfaMandatory = policy === MfaPolicyEnumerationTypes.MANDATORY;
+    return !hasMfaUserSettings && isMfaMandatory;
   }
 
   /**
