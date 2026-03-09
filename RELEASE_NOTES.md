@@ -1,3 +1,3 @@
-v5.10.4
+v5.10.5
 Provide fixes to:
-- Configure MFA dialog is still present even when configured
+- PB-49887 Dialog not disappearing after copying Secret or Password And Totp type Resource
