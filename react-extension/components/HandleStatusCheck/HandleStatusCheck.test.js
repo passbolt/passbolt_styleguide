@@ -146,7 +146,10 @@ describe("As a logged in user, I have to approve or reject the new account recov
     const props = defaultProps(); // The props to pass
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService();
     jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((feature) => feature === "mfaPolicies");
-    jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.MANDATORY);
+    jest.spyOn(props.mfaContext, "findPolicy").mockImplementation(async () => MfaPolicyEnumerationTypes.MANDATORY);
+    jest
+      .spyOn(props.mfaContext, "findMfaSettings")
+      .mockImplementation(async () => ({ mfaUserSettings: null, mfaOrganisationSettings: null }));
 
     // Mock the call for mfa-policy
     props.context.port.addRequestListener(
@@ -178,7 +181,10 @@ describe("As a logged in user, I have to approve or reject the new account recov
     const props = defaultProps(); // The props to pass
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService();
     jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((feature) => feature === "mfaPolicies");
-    jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.OPTIN);
+    jest.spyOn(props.mfaContext, "findPolicy").mockImplementation(async () => MfaPolicyEnumerationTypes.OPTIN);
+    jest
+      .spyOn(props.mfaContext, "findMfaSettings")
+      .mockImplementation(async () => ({ mfaUserSettings: null, mfaOrganisationSettings: null }));
 
     // Mock the call for mfa-policy
 
@@ -212,7 +218,10 @@ describe("As a logged in user, I have to approve or reject the new account recov
     const props = defaultProps(); // The props to pass
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService();
     jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((feature) => feature === "mfaPolicies");
-    jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.MANDATORY);
+    jest.spyOn(props.mfaContext, "findPolicy").mockImplementation(async () => MfaPolicyEnumerationTypes.MANDATORY);
+    jest
+      .spyOn(props.mfaContext, "findMfaSettings")
+      .mockImplementation(async () => ({ mfaUserSettings: null, mfaOrganisationSettings: null }));
 
     // Mock the call for mfa-policy
     let isFunctionCalled = false;
@@ -248,10 +257,19 @@ describe("As a logged in user, I have to approve or reject the new account recov
       "passbolt.mfa-policy.has-user-postponed-user-setting-invitation",
       async () => false,
     );
-    jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.MANDATORY);
-    jest.spyOn(props.mfaContext, "hasMfaSettings").mockImplementationOnce(() => true);
+    jest.spyOn(props.mfaContext, "findPolicy").mockImplementation(async () => MfaPolicyEnumerationTypes.MANDATORY);
+    jest
+      .spyOn(props.mfaContext, "findMfaSettings")
+      .mockImplementation(async () => ({ mfaUserSettings: null, mfaOrganisationSettings: null }));
+    let isFindMfaSettingsCalled = false;
+    jest.spyOn(props.mfaContext, "findPolicy").mockImplementation(async () => MfaPolicyEnumerationTypes.MANDATORY);
+    jest.spyOn(props.mfaContext, "findMfaSettings").mockImplementation(async () => {
+      isFindMfaSettingsCalled = true;
+      return { mfaUserSettings: { totp: true }, mfaOrganisationSettings: {} };
+    });
 
     new HandleStatusCheck(props, mockedAccountRecoveryUserService);
+    await waitForTrue(() => isFindMfaSettingsCalled);
     expect(props.dialogContext.open).not.toHaveBeenCalled();
   });
 
@@ -274,7 +292,10 @@ describe("As a logged in user, I have to approve or reject the new account recov
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
     // Mock the first call for account-recovery
     jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(() => true);
-    jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.MANDATORY);
+    jest.spyOn(props.mfaContext, "findPolicy").mockImplementation(async () => MfaPolicyEnumerationTypes.MANDATORY);
+    jest
+      .spyOn(props.mfaContext, "findMfaSettings")
+      .mockImplementation(async () => ({ mfaUserSettings: null, mfaOrganisationSettings: null }));
 
     // The user didn't postponed the account recovery program enrollment
     props.context.port.addRequestListener(
