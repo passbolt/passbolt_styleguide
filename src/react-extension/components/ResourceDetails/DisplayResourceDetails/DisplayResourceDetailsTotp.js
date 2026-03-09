@@ -136,23 +136,21 @@ class DisplayResourceDetailsTotp extends React.Component {
     const resourceId = this.resource.id;
     const isTotpPreviewed = this.state.isSecretPreviewed;
     let plaintextSecret, code;
-
-    this.props.progressContext.open(this.props.t("Decrypting secret"));
-
     if (isTotpPreviewed) {
       plaintextSecret = this.state.plaintextSecret;
     } else {
       try {
+        this.props.progressContext.open(this.props.t("Decrypting secret"));
         const plaintextSecretDto = await this.decryptResourceSecret(resourceId);
         plaintextSecret = plaintextSecretDto?.totp;
       } catch (error) {
         if (error.name !== "UserAbortsOperationError") {
           this.props.actionFeedbackContext.displayError(error.message);
         }
+      } finally {
+        this.props.progressContext.close();
       }
     }
-
-    this.props.progressContext.close();
 
     if (!plaintextSecret) {
       await this.props.actionFeedbackContext.displayError(
@@ -202,18 +200,17 @@ class DisplayResourceDetailsTotp extends React.Component {
     const isSecretPreviewed = true;
     let plaintextSecret;
 
-    this.props.progressContext.open(this.props.t("Decrypting secret"));
-
     try {
+      this.props.progressContext.open(this.props.t("Decrypting secret"));
       const plaintextSecretDto = await this.decryptResourceSecret(resourceId);
       plaintextSecret = plaintextSecretDto?.totp;
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
       }
+    } finally {
+      this.props.progressContext.close();
     }
-
-    this.props.progressContext.close();
 
     if (!plaintextSecret) {
       await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be previewed."));
