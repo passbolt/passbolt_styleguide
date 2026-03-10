@@ -1,3 +1,3 @@
-v5.10.5
-Provide fixes to:
-- PB-49887 Dialog not disappearing after copying Secret or Password And Totp type Resource
+v5.10.6
+
+This version rollsback the display of Safari support for a later release.
