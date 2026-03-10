@@ -88,13 +88,7 @@ class ApiRecoverContextProvider extends React.Component {
    * @return {void}
    */
   handleStartRecoverSuccess() {
-    const currentBrowser = detectBrowserName();
-
-    const state =
-      currentBrowser === BROWSER_NAMES.SAFARI
-        ? ApiRecoverContextState.INSTALL_SAFARI_EXTENSION_STATE
-        : ApiRecoverContextState.INSTALL_EXTENSION_STATE;
-
+    const state = ApiRecoverContextState.INSTALL_EXTENSION_STATE;
     this.setState({ state });
   }
 
@@ -170,12 +164,7 @@ class ApiRecoverContextProvider extends React.Component {
    */
   isBrowserSupported() {
     const browserName = detectBrowserName();
-    const supportedBrowserNames = [
-      BROWSER_NAMES.CHROME,
-      BROWSER_NAMES.FIREFOX,
-      BROWSER_NAMES.EDGE,
-      BROWSER_NAMES.SAFARI,
-    ];
+    const supportedBrowserNames = [BROWSER_NAMES.CHROME, BROWSER_NAMES.FIREFOX, BROWSER_NAMES.EDGE];
     return supportedBrowserNames.includes(browserName);
   }
 
