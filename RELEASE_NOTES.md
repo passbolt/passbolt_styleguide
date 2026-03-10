@@ -1,5 +1,3 @@
-v5.11.0-alpha.3:
-This version introduces a design fix for the Yubikey login page.
-
-v5.11.0-alpha.2:
-This version adds filterByTOTPResourceTypes to ResourceTypesCollection.
+v5.10.5
+Provide fixes to:
+- PB-49887 Dialog not disappearing after copying Secret or Password And Totp type Resource
