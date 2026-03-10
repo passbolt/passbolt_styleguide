@@ -69,6 +69,10 @@ class DisplayUserBadgeMenu extends Component {
     if (this.props.context.siteSettings.canIUse("mfaPolicies")) {
       this.props.mfaContext.checkMfaChoiceRequired();
     }
+    // Load Account Recovery Policy for pages served by API if not already available
+    if (this.props.context.siteSettings.canIUse("accountRecovery")) {
+      this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
+    }
   }
 
   componentWillUnmount() {

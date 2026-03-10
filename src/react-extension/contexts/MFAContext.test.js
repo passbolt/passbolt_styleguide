@@ -139,16 +139,17 @@ describe("MFAContext", () => {
 
   describe("AdministrationMfaPolicyContext::findMfaSettings", () => {
     it("should retrieve data for current mfa settings, using browser extension", async () => {
-      expect.assertions(3);
+      expect.assertions(4);
       jest.spyOn(props.context.port, "request").mockImplementation(() => mockMfaSettings());
       await mfaContextProvider.findMfaSettings();
 
-      expect(mfaContextProvider.hasMfaSettings()).toBeTruthy();
+      expect(mfaContextProvider.hasMfaOrganisationSettings()).toBeTruthy();
+      expect(mfaContextProvider.hasMfaUserSettings()).toBeTruthy();
 
-      jest.spyOn(props.context.port, "request").mockImplementation(() => mockMfaSettings(noMfaUserDefinedWithTotp));
+      jest.spyOn(props.context.port, "request").mockImplementation(() => noMfaUserDefinedWithTotp.settings);
       await mfaContextProvider.findMfaSettings();
 
-      expect(mfaContextProvider.hasMfaSettings()).toBeTruthy();
+      expect(mfaContextProvider.hasMfaUserSettings()).toBeFalsy();
       expect(mfaContextProvider.isProcessing()).toBeFalsy();
     });
   });
