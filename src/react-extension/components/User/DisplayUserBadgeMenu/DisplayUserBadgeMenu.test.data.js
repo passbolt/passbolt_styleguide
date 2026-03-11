@@ -35,6 +35,7 @@ export function defaultProps(props) {
     },
     accountRecoveryContext: {
       isAccountRecoveryChoiceRequired: jest.fn(),
+      loadAccountRecoveryPolicy: jest.fn(),
     },
     context: {
       onLogoutRequested: () => {},
