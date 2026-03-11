@@ -23,13 +23,13 @@ import { defaultProps } from "./ManageSmtpAdministrationSettings.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 import {
-  defaultSmtpSettings,
-  withoutSmtpSettings,
-  withExistingSmtpSettings,
-  withAwsSesSmtpSettings,
-  withKnownProviderSmtpSettings,
-  withNoAuthenticationMethod,
-  withUsernameAuthenticationMethod,
+  defaultSmtpSettingsDto,
+  defaultWithoutSmtpSettingsDto,
+  defaultExistingSmtpSettingsDto,
+  withAwsSesSmtpSettingsDto,
+  withKnownProviderSmtpSettingsDto,
+  withNoAuthenticationSmtpSettingsDto,
+  withUsernameAuthenticationSmtpSettingsDto,
 } from "../../../contexts/AdminSmtpSettingsContext.test.data";
 import { enableFetchMocks } from "jest-fetch-mock";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
@@ -46,7 +46,7 @@ describe("ManageSmtpAdministrationSettings", () => {
   describe("As AD I should see the SMTP settings", () => {
     it("As a signed-in administrator I can see the SMTP settings screen", async () => {
       expect.assertions(4);
-      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(defaultWithoutSmtpSettingsDto()));
 
       let page;
       await act(() => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
@@ -59,7 +59,7 @@ describe("ManageSmtpAdministrationSettings", () => {
 
     it("As a signed-in administrator I can see a provider different than “other” corresponding setting page", async () => {
       expect.assertions(10);
-      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(defaultWithoutSmtpSettingsDto()));
 
       let page;
       await act(() => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
@@ -94,7 +94,7 @@ describe("ManageSmtpAdministrationSettings", () => {
 
     it("As a signed-in administrator in the Email server settings I can read the SMTP server password via the show button", async () => {
       expect.assertions(2);
-      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(defaultWithoutSmtpSettingsDto()));
 
       let page;
       await act(() => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
@@ -111,7 +111,7 @@ describe("ManageSmtpAdministrationSettings", () => {
 
     it("As a signed-in administrator in the Email server settings with a provider selected, I can see the full list of providers in the “Email provider” dropdown", async () => {
       expect.assertions(2);
-      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(defaultWithoutSmtpSettingsDto()));
 
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
@@ -125,7 +125,7 @@ describe("ManageSmtpAdministrationSettings", () => {
 
     it("As a signed-in administrator in the Email server settings with a selected provider, I can see the advanced settings of the provider pre-populated", async () => {
       expect.assertions(6);
-      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(defaultWithoutSmtpSettingsDto()));
 
       let page;
       await act(() => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
@@ -151,7 +151,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator on the administration workspace, I can see the Email server settings populated with the configuration file settings", async () => {
       expect.assertions(8);
       const props = defaultProps();
-      const smtpSettings = withExistingSmtpSettings({ client: "passbolt.dev", source: "file" });
+      const smtpSettings = defaultExistingSmtpSettingsDto({ client: "passbolt.dev", source: "file" });
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(() => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -169,7 +169,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator when the Email server settings are configured via configuration file, I can see a source warning message when I modify a field.", async () => {
       expect.assertions(2);
       const props = defaultProps();
-      const smtpSettings = withExistingSmtpSettings({ source: "file" });
+      const smtpSettings = defaultExistingSmtpSettingsDto({ source: "file" });
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -184,7 +184,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator when the Email server settings are configured via configuration file, I can see a source warning message when I modify a field.", async () => {
       expect.assertions(2);
       const props = defaultProps();
-      const smtpSettings = withExistingSmtpSettings({ source: "env" });
+      const smtpSettings = defaultExistingSmtpSettingsDto({ source: "env" });
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -199,7 +199,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator when the Email server settings are configured via the database, I do not see a source warning message when I modify a field. ", async () => {
       expect.assertions(2);
       const props = defaultProps();
-      const smtpSettings = withExistingSmtpSettings({ source: "db" });
+      const smtpSettings = defaultExistingSmtpSettingsDto({ source: "db" });
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -214,7 +214,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator in the Email server settings I can see that a selected provider changes to “Other” when I modify the settings", async () => {
       expect.assertions(2);
       const props = defaultProps();
-      const smtpSettings = withAwsSesSmtpSettings();
+      const smtpSettings = withAwsSesSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -233,7 +233,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator in the Email server settings I can see that manual settings change to a specific provider when the setting match the default provider settings", async () => {
       expect.assertions(2);
       const props = defaultProps();
-      const smtpSettings = withExistingSmtpSettings({
+      const smtpSettings = defaultExistingSmtpSettingsDto({
         tls: true,
         port: 587,
       });
@@ -284,7 +284,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator in the Email server settings I can see that a selected authentication method is set to “Username and password” if both username and password returned by the API are set", async () => {
       expect.assertions(3);
       const props = defaultProps();
-      const smtpSettings = withExistingSmtpSettings();
+      const smtpSettings = defaultExistingSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -299,7 +299,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator in the Email server settings I can see that a selected authentication method is set to “Username only” if username is set but password returned by the API is set to null", async () => {
       expect.assertions(3);
       const props = defaultProps();
-      const smtpSettings = withUsernameAuthenticationMethod();
+      const smtpSettings = withUsernameAuthenticationSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -312,7 +312,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator in the Email server settings I can see that a selected authentication method is set to “None” if username and password returned by the API are set to null", async () => {
       expect.assertions(3);
       const props = defaultProps();
-      const smtpSettings = withNoAuthenticationMethod();
+      const smtpSettings = withNoAuthenticationSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -327,7 +327,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator I can access the Email server help page", async () => {
       expect.assertions(1);
       const props = defaultProps();
-      const smtpSettings = withExistingSmtpSettings();
+      const smtpSettings = defaultExistingSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -338,7 +338,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator in the “Email server” setting, after choosing a provider different than 'Other' I can see a second helpbox", async () => {
       expect.assertions(5);
       const props = defaultProps();
-      const smtpSettings = withExistingSmtpSettings();
+      const smtpSettings = defaultExistingSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
@@ -354,7 +354,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     });
 
     it("As a signed-in administrator in the “Email server” setting, I cannot see the second helpbox when the provider is 'Other'", async () => {
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
 
       expect.assertions(4);
@@ -373,7 +373,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     });
 
     it("As a signed-in administrator in the “Email server” setting, I can see error message on fields that are not valid", async () => {
-      const smtpSettings = withExistingSmtpSettings();
+      const smtpSettings = defaultExistingSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
 
       expect.assertions(14);
@@ -426,8 +426,8 @@ describe("ManageSmtpAdministrationSettings", () => {
   });
 
   describe("As a signed-in administrator I can save the Email server settings", () => {
-    it("As a signed-in administrator when the “Email server” settings have not changed, I cannot trigger the “Save settings” action", async () => {
-      const smtpSettings = withKnownProviderSmtpSettings();
+    it("As a signed-in administrator when the “Email server” settings have not changed, I can still trigger the “Save settings” action", async () => {
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
 
       expect.assertions(1);
@@ -435,13 +435,13 @@ describe("ManageSmtpAdministrationSettings", () => {
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
 
-      expect(page.isSaveButtonEnabled()).toBeFalsy();
+      expect(page.isSaveButtonEnabled()).toBeTruthy();
     });
 
     it("As a signed-in administrator saving the “Email server” settings, I cannot edit the form", async () => {
-      expect.assertions(8);
+      expect.assertions(10);
 
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
       const formToSave = {
         username: "username test",
         password: "password test",
@@ -492,7 +492,14 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.username.disabled).toBe(true);
       await act(() => promiseResolution(mockApiResponse(expectedSettingsToSave)));
 
-      expect(page.isSaveButtonEnabled()).toBe(true);
+      // After save completes, form is editable again (not processing) and save button is enabled
+      expect(page.username.disabled).toBe(false);
+
+      // After save completes, the "Don't forget to save" warning should disappear and save button should be enabled (not processing)
+      await waitFor(() => {
+        expect(page.isSaveButtonEnabled()).toBe(true);
+      });
+      expect(page.warningMessage).toBeNull();
 
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
@@ -503,7 +510,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator on the “Email server” settings page, I can edit the form after saving the settings with success", async () => {
       expect.assertions(1);
 
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
       const formToSave = {
         username: "username test",
         password: "password test",
@@ -539,7 +546,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator on the “Email server” settings page, I can edit the form after an unsuccessful attempt to save the settings", async () => {
       expect.assertions(1);
 
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
       const formToSave = {
         username: "username test",
         password: "password test",
@@ -574,7 +581,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator on the “Email server” settings page, I can update the authentication method to 'None' and save the form", async () => {
       expect.assertions(6);
 
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
       const expectedSettingsToSave = {
         ...smtpSettings,
         username: null,
@@ -618,7 +625,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator on the “Email server” settings page, I can update the authentication method to 'Username only' and save the form", async () => {
       expect.assertions(6);
 
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
       const expectedSettingsToSave = {
         ...smtpSettings,
         username: "username-only",
@@ -664,7 +671,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect.assertions(2);
 
       const sender_email = "sender@passbolt.com";
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
 
       const expectedSettingsToSave = {
         ...smtpSettings,
@@ -702,7 +709,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator I can cancel the “Email server” settings when I do not click on the save button and leave the page", async () => {
       expect.assertions(8);
 
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
       const newData = {
         username: "username test",
         password: "password test",
@@ -735,23 +742,23 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.sender_email.value).toBe(smtpSettings.sender_email);
     });
 
-    it("As a signed-in administrator when the “Email server” settings are empty, I cannot trigger the “Send test email” workflow", async () => {
+    it("As a signed-in administrator when the “Email server” settings are empty, I can still trigger the “Send test email” button", async () => {
       expect.assertions(2);
 
-      const smtpSettings = defaultSmtpSettings();
+      const smtpSettings = defaultSmtpSettingsDto();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
 
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
 
       expect(page.exists).toBeTruthy();
-      expect(page.toolbarActionsTestButton.hasAttribute("disabled")).toBeTruthy();
+      expect(page.toolbarActionsTestButton.hasAttribute("disabled")).toBeFalsy();
     });
 
     it("As a signed-in administrator in the “Email server” setting, I cannot trigger the “Send test email” workflow when the form does not validate\nAs a signed-in administrator when the “Email server” settings form validate, I can trigger the “Send test email” workflow", async () => {
       expect.assertions(2);
       const sender_email = "sender@passbolt.com";
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
 
       //first call is a GET call for the settings
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
@@ -776,7 +783,7 @@ describe("ManageSmtpAdministrationSettings", () => {
     it("As a signed-in administrator on the “Send test email” dialog, I can see the “Email sent” dialog when the test email was successfully sent", async () => {
       expect.assertions(3);
       const props = defaultProps();
-      const smtpSettings = withKnownProviderSmtpSettings();
+      const smtpSettings = withKnownProviderSmtpSettingsDto();
       const debugLog = {
         debug: [{ message: "everything is fine" }],
       };
@@ -816,7 +823,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect.assertions(1);
       fetch.doMockOnceIf(/smtp\/settings.json/, () =>
         mockApiResponse(
-          withExistingSmtpSettings({
+          defaultExistingSmtpSettingsDto({
             source: "db",
           }),
         ),
@@ -833,7 +840,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect.assertions(1);
       fetch.doMockOnceIf(/smtp\/settings.json/, () =>
         mockApiResponse(
-          withExistingSmtpSettings({
+          defaultExistingSmtpSettingsDto({
             source: "file",
           }),
         ),
@@ -850,7 +857,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect.assertions(1);
       fetch.doMockOnceIf(/smtp\/settings.json/, () =>
         mockApiResponse(
-          withExistingSmtpSettings({
+          defaultExistingSmtpSettingsDto({
             source: "env",
           }),
         ),

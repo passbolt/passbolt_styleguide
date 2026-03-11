@@ -81,6 +81,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
   get defaultState() {
     return {
       showAdvancedSettings: false,
+      initialized: false,
       source: "db",
     };
   }
@@ -103,14 +104,11 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    * Invoked immediately after component is inserted into the tree
    * @return {void}
    */
-  async componentDidMount() {
+  componentDidMount() {
     this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(
       DisplayAdministrationSmtpSettingsActions,
     );
-
-    const settings = await this.props.adminSmtpSettingsContext.findSmtpSettings();
-
-    this.setState({ showAdvancedSettings: settings?.provider?.id === "other" });
+    this.props.adminSmtpSettingsContext.findSmtpSettings();
   }
 
   /**
@@ -129,13 +127,23 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    */
   componentDidUpdate() {
     const smtpContext = this.props.adminSmtpSettingsContext;
+    const settings = smtpContext.getCurrentSmtpSettings();
+
+    // When data becomes loaded for the first time, set showAdvancedSettings based on provider
+    if (smtpContext.isDataReady() && !this.state.initialized) {
+      this.setState({
+        initialized: true,
+        showAdvancedSettings: settings?.provider === "other",
+      });
+    }
+
     const fieldToFocus = smtpContext.getFieldToFocus();
     if (fieldToFocus) {
       this[`${fieldToFocus}FieldRef`]?.current?.focus();
     }
 
     if (smtpContext.hasProviderChanged()) {
-      this.setState({ showAdvancedSettings: smtpContext.getCurrentSmtpSettings().provider?.id === "other" });
+      this.setState({ showAdvancedSettings: settings?.provider === "other" });
     }
   }
 
@@ -333,7 +341,8 @@ export class ManageSmtpAdministrationSettings extends React.Component {
   render() {
     const settings = this.props.adminSmtpSettingsContext.getCurrentSmtpSettings();
     const errors = this.props.adminSmtpSettingsContext.getErrors();
-    const smtpProviderName = settings?.provider?.name;
+    const providerObject = SmtpProviders.find((p) => p.id === settings?.provider);
+    const smtpProviderName = providerObject?.name;
     const hasChanges = this.props.adminSmtpSettingsContext.isSettingsModified();
     const hasWarnings = hasChanges || this.shouldShowSourceWarningMessage();
     return (
@@ -383,7 +392,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                         id="smtp-settings-form-provider"
                         name="provider"
                         items={this.providerList}
-                        value={settings.provider.id}
+                        value={settings.provider}
                         onChange={this.handleProviderChange}
                         disabled={this.isProcessing()}
                       />
@@ -403,7 +412,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                     </div>
                     {this.shouldDisplayUsername() && (
                       <div
-                        className={`input text ${errors.username ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        className={`input text ${errors?.hasError("username") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
                       >
                         <label htmlFor="smtp-settings-form-username">
                           <Trans>Username</Trans>
@@ -421,12 +430,18 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                           placeholder={this.translate("Username")}
                           disabled={this.isProcessing()}
                         />
-                        {errors.username && <div className="error-message">{errors.username}</div>}
+                        {errors?.hasError("username") && (
+                          <div className="error-message">
+                            <Trans>
+                              This is the maximum size for this field, make sure your data was not truncated.
+                            </Trans>
+                          </div>
+                        )}
                       </div>
                     )}
                     {this.shouldDisplayPassword() && (
                       <div
-                        className={`input-password-wrapper input ${errors.password ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        className={`input-password-wrapper input ${errors?.hasError("password") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
                       >
                         <label htmlFor="smtp-settings-form-password">
                           <Trans>Password</Trans>
@@ -442,7 +457,13 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                           disabled={this.isProcessing()}
                           inputRef={this.passwordFieldRef}
                         />
-                        {errors.password && <div className="password error-message">{errors.password}</div>}
+                        {errors?.hasError("password") && (
+                          <div className="password error-message">
+                            <Trans>
+                              This is the maximum size for this field, make sure your data was not truncated.
+                            </Trans>
+                          </div>
+                        )}
                       </div>
                     )}
                     <div className="accordion-header">
@@ -454,7 +475,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                     {this.state.showAdvancedSettings && (
                       <div className="advanced-settings">
                         <div
-                          className={`input text required ${errors.host ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                          className={`input text required ${errors?.hasError("host") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
                         >
                           <label htmlFor="smtp-settings-form-host">
                             <Trans>SMTP host</Trans>
@@ -473,10 +494,14 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                             placeholder={this.translate("SMTP server address")}
                             disabled={this.isProcessing()}
                           />
-                          {errors.host && <div className="error-message">{errors.host}</div>}
+                          {errors?.hasError("host") && (
+                            <div className="error-message">
+                              <Trans>SMTP Host is required</Trans>
+                            </div>
+                          )}
                         </div>
                         <div
-                          className={`input text required ${errors.tls ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                          className={`input text required ${errors?.hasError("tls") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
                         >
                           <label htmlFor="smtp-settings-form-tls">
                             <Trans>Use TLS</Trans>
@@ -489,9 +514,14 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                             onChange={this.handleInputChange}
                             disabled={this.isProcessing()}
                           />
+                          {errors?.hasError("tls") && (
+                            <div className="error-message">
+                              <Trans>TLS must be set to &apos;Yes&apos; or &apos;No&apos;</Trans>
+                            </div>
+                          )}
                         </div>
                         <div
-                          className={`input text required ${errors.port ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                          className={`input text required ${errors?.hasError("port") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
                         >
                           <label htmlFor="smtp-settings-form-port">
                             <Trans>Port</Trans>
@@ -510,10 +540,18 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                             placeholder={this.translate("Port number")}
                             disabled={this.isProcessing()}
                           />
-                          {errors.port && <div className="error-message">{errors.port}</div>}
+                          {errors?.hasError("port") && (
+                            <div className="error-message">
+                              {errors.hasError("port", "minimum") || errors.hasError("port", "maximum") ? (
+                                <Trans>Port must be a number between 1 and 65535</Trans>
+                              ) : (
+                                <Trans>Port must be a valid number</Trans>
+                              )}
+                            </div>
+                          )}
                         </div>
                         <div
-                          className={`input text ${errors.client ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                          className={`input text ${errors?.hasError("client") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
                         >
                           <label htmlFor="smtp-settings-form-client">
                             <Trans>SMTP client</Trans>
@@ -530,7 +568,11 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                             placeholder={this.translate("SMTP client address")}
                             disabled={this.isProcessing()}
                           />
-                          {errors.client && <div className="error-message">{errors.client}</div>}
+                          {errors?.hasError("client") && (
+                            <div className="error-message">
+                              <Trans>SMTP client should be a valid domain or IP address</Trans>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}
@@ -538,7 +580,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                       <Trans>Sender configuration</Trans>
                     </h4>
                     <div
-                      className={`input text required ${errors.sender_name ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                      className={`input text required ${errors?.hasError("sender_name") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
                     >
                       <label htmlFor="smtp-settings-form-sender-name">
                         <Trans>Sender name</Trans>
@@ -557,7 +599,11 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                         placeholder={this.translate("Sender name")}
                         disabled={this.isProcessing()}
                       />
-                      {errors.sender_name && <div className="error-message">{errors.sender_name}</div>}
+                      {errors?.hasError("sender_name") && (
+                        <div className="error-message">
+                          <Trans>Sender name is required</Trans>
+                        </div>
+                      )}
                       <p>
                         <Trans>
                           This is the name users will see in their mailbox when passbolt sends a notification.
@@ -565,7 +611,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                       </p>
                     </div>
                     <div
-                      className={`input text required ${errors.sender_email ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                      className={`input text required ${errors?.hasError("sender_email") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
                     >
                       <label htmlFor="smtp-settings-form-sender-name">
                         <Trans>Sender email</Trans>
@@ -584,7 +630,15 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                         placeholder={this.translate("Sender email")}
                         disabled={this.isProcessing()}
                       />
-                      {errors.sender_email && <div className="error-message">{errors.sender_email}</div>}
+                      {errors?.hasError("sender_email") && (
+                        <div className="error-message">
+                          {!settings.sender_email || errors.hasError("sender_email", "required") ? (
+                            <Trans>Sender email is required</Trans>
+                          ) : (
+                            <Trans>Sender email must be a valid email</Trans>
+                          )}
+                        </div>
+                      )}
                       <p>
                         <Trans>
                           This is the email address users will see in their mail box when passbolt sends a notification.
@@ -652,12 +706,12 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                 </span>
               </a>
             </div>
-            {settings?.provider && settings?.provider.id !== "other" && (
+            {providerObject && providerObject.id !== "other" && (
               <div className="sidebar-help-section">
                 <h3>
                   <Trans>How do I configure a {{ smtpProviderName }} SMTP server?</Trans>
                 </h3>
-                <a className="button" href={settings.provider.help_page} target="_blank" rel="noopener noreferrer">
+                <a className="button" href={providerObject.help_page} target="_blank" rel="noopener noreferrer">
                   <LinkSVG />
                   <span>
                     <Trans>See the {{ smtpProviderName }} documentation</Trans>
@@ -666,7 +720,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
               </div>
             )}
             {settings?.provider &&
-              (settings.provider.id === "google-mail" || settings.provider.id === "google-workspace") && (
+              (settings.provider === "google-mail" || settings.provider === "google-workspace") && (
                 <div className="sidebar-help-section">
                   <h3>
                     <Trans>Why shouldn&apos;t I use my login password ?</Trans>

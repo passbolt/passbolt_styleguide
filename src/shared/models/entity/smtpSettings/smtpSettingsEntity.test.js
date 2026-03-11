@@ -36,18 +36,21 @@ describe("SmtpSettingsEntity", () => {
     it("validates id property", () => {
       assertEntityProperty.string(SmtpSettingsEntity, "id");
       assertEntityProperty.uuid(SmtpSettingsEntity, "id");
+      assertEntityProperty.nullable(SmtpSettingsEntity, "id");
       assertEntityProperty.notRequired(SmtpSettingsEntity, "id");
     });
 
     it("validates created property", () => {
       assertEntityProperty.string(SmtpSettingsEntity, "created");
       assertEntityProperty.dateTime(SmtpSettingsEntity, "created");
+      assertEntityProperty.nullable(SmtpSettingsEntity, "created");
       assertEntityProperty.notRequired(SmtpSettingsEntity, "created");
     });
 
     it("validates modified property", () => {
       assertEntityProperty.string(SmtpSettingsEntity, "modified");
       assertEntityProperty.dateTime(SmtpSettingsEntity, "modified");
+      assertEntityProperty.nullable(SmtpSettingsEntity, "modified");
       assertEntityProperty.notRequired(SmtpSettingsEntity, "modified");
     });
 
@@ -115,6 +118,14 @@ describe("SmtpSettingsEntity", () => {
       const dto = defaultSmtpSettingsEntityDto();
       const entity = new SmtpSettingsEntity(dto);
       expect(entity.toDto()).toEqual(dto);
+    });
+
+    it("marshalls port from string to integer", () => {
+      expect.assertions(1);
+
+      const dto = defaultSmtpSettingsEntityDto({ port: "587" });
+      const entity = new SmtpSettingsEntity(dto);
+      expect(entity.toDto()).toEqual(defaultSmtpSettingsEntityDto({ port: 587 }));
     });
 
     it("works with optional client field", () => {

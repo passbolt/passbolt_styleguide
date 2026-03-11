@@ -465,6 +465,14 @@ export default class ManageSmtpAdministrationSettingsPage {
   }
 
   /**
+   * Returns the "Don't forget to save" warning message element if exists
+   * @returns {HTMLElement|null}
+   */
+  get warningMessage() {
+    return this.select(".smtp-settings .warning.message");
+  }
+
+  /**
    * Returns the HTMLElement link of the first help block (the one for the Passbolt's help site)
    * @returns {HTMLElement}
    */

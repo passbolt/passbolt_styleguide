@@ -117,6 +117,16 @@ describe("SmtpNoneAuthenticationEntity", () => {
     });
   });
 
+  describe("::marshall", () => {
+    it("marshalls port from string to integer", () => {
+      expect.assertions(1);
+
+      const dto = defaultSmtpNoneAuthenticationEntityDto({ port: "1025" });
+      const entity = new SmtpNoneAuthenticationEntity(dto);
+      expect(entity.toDto().port).toStrictEqual(1025);
+    });
+  });
+
   describe("::validateBuildRules", () => {
     it("throws if host is missing", () => {
       expect.assertions(1);

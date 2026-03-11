@@ -44,6 +44,17 @@ class SmtpUsernamePasswordAuthenticationEntity extends EntityV2 {
   }
 
   /**
+   * Marshall the entity
+   * Coerce port from string to integer (the API may return port as a string).
+   */
+  marshall() {
+    if (typeof this._props.port === "string") {
+      this._props.port = parseInt(this._props.port, 10);
+    }
+    super.marshall();
+  }
+
+  /**
    * Get the default data for this authentication method.
    * @returns {object}
    */

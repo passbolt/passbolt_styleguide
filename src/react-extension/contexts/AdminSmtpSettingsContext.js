@@ -18,14 +18,14 @@ import { withAppContext } from "../../shared/context/AppContext/AppContext";
 import FindSmtpSettingsService from "../../shared/services/smtpSettings/findSmtpSettingsService";
 import SaveSmtpSettingsService from "../../shared/services/smtpSettings/saveSmtpSettingsService";
 import SmtpSettingsEntity from "../../shared/models/entity/smtpSettings/smtpSettingsEntity";
+import SmtpSettingsFormEntity from "../../shared/models/entity/smtpSettings/smtpSettingsFormEntity";
 import SendTestSmtpSettingsService from "../../shared/services/smtpSettings/sendTestSmtpSettingsService";
 import SmtpProviders from "../components/Administration/ManageSmtpAdministrationSettings/SmtpProviders.data";
 import { withDialog } from "./DialogContext";
 import NotifyError from "../components/Common/Error/NotifyError/NotifyError";
 import { withActionFeedback } from "./ActionFeedbackContext";
 import { withTranslation } from "react-i18next";
-import DomainUtil from "../lib/Domain/DomainUtil";
-import AppEmailValidatorService from "../../shared/services/validator/AppEmailValidatorService";
+import memoize from "memoize-one";
 
 export const AdminSmtpSettingsContext = React.createContext({
   getCurrentSmtpSettings: () => {}, // Returns the current SMTP settings
@@ -62,6 +62,8 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     this.sendTestSmtpSettingsService = new SendTestSmtpSettingsService(apiClientOptions);
     this.fieldToFocus = null;
     this.providerHasChanged = false;
+    this.originalSettings = null;
+    this.formSettings = null;
   }
 
   /**
@@ -69,23 +71,10 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      settingsModified: false,
-      currentSmtpSettings: {
-        // The current SMTP settings
-        provider: null,
-        username: "",
-        password: "",
-        host: "",
-        tls: true,
-        port: "",
-        client: "",
-        sender_email: "",
-        sender_name: "Passbolt",
-      },
-      errors: {},
+      settings: {},
       isLoaded: false,
       processing: false,
-      hasSumittedForm: false,
+      hasAlreadyBeenValidated: false,
       getCurrentSmtpSettings: this.getCurrentSmtpSettings.bind(this), // returns the SMTP settings
       findSmtpSettings: this.findSmtpSettings.bind(this), // Find the SMTP settings and store it in the state
       changeProvider: this.changeProvider.bind(this), // Handles change of provider
@@ -104,6 +93,25 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
   }
 
   /**
+   * Memoized form validation. Re-computes only when the settings DTO changes.
+   * @type {function}
+   */
+  validateForm = memoize(
+    (
+      settingsDto, // eslint-disable-line no-unused-vars
+    ) => this.formSettings?.validate({ validateBuildRules: { siteSettings: this.props.context.siteSettings } }),
+  );
+
+  /**
+   * Memoized change detection. Re-computes only when entities or DTO change.
+   * @type {function}
+   */
+
+  hasSettingsChanges = memoize(
+    (originalDto, formDto) => this.originalSettings?.hasDiffProps(this.formSettings) || false, // eslint-disable-line no-unused-vars
+  );
+
+  /**
    * Find the SMTP settings
    * @return {Promise<SmtpSettingsModel> | null}
    */
@@ -112,43 +120,47 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
       return null;
     }
 
-    let currentSmtpSettings = this.state.currentSmtpSettings;
+    let dto;
 
     try {
       const smtpEntity = await this.findSmtpSettingsService.find();
-      currentSmtpSettings = smtpEntity.toDto();
-      currentSmtpSettings.client = currentSmtpSettings.client ?? "";
-      currentSmtpSettings.username = currentSmtpSettings.username ?? null;
-      currentSmtpSettings.password = currentSmtpSettings.password ?? null;
-      this.setState({ currentSmtpSettings, isLoaded: true });
+      dto = smtpEntity.toDto();
+      dto.client = dto.client ?? "";
+      dto.username = dto.username ?? null;
+      dto.password = dto.password ?? null;
     } catch (e) {
       // In case of error, the user should still be able to update the settings.
       this.handleError(e);
+      dto = SmtpSettingsFormEntity.createDefault().toFormDto();
     }
 
-    if (!currentSmtpSettings.sender_email) {
-      currentSmtpSettings.sender_email = this.props.context.loggedInUser.username;
-    }
-    if (currentSmtpSettings.host && currentSmtpSettings.port) {
-      currentSmtpSettings.provider = this.detectProvider(currentSmtpSettings);
+    dto.sender_email = dto.sender_email ?? this.props.context.loggedInUser.username;
+
+    this.originalSettings = new SmtpSettingsFormEntity(dto, { validate: false });
+
+    // Detect provider
+    const originalDto = this.originalSettings.toFormDto();
+    if (originalDto.host && originalDto.port) {
+      const providerId = this.originalSettings.detectProvider(SmtpProviders);
+      this.originalSettings.set("provider", providerId, { validate: false });
     }
 
-    this.setState({ currentSmtpSettings, isLoaded: true });
-    return currentSmtpSettings;
+    this.formSettings = new SmtpSettingsFormEntity(this.originalSettings.toDto(), { validate: false });
+    this.setState({ settings: this.formSettings.toFormDto(), isLoaded: true });
   }
 
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const { settingsModified, currentSmtpSettings, errors, isLoaded, processing, hasSumittedForm } = this.defaultState;
+    this.originalSettings = null;
+    this.formSettings = null;
+    const { settings, isLoaded, processing, hasAlreadyBeenValidated } = this.defaultState;
     this.setState({
-      settingsModified,
-      currentSmtpSettings,
-      errors,
+      settings,
       isLoaded,
       processing,
-      hasSumittedForm,
+      hasAlreadyBeenValidated,
     });
   }
 
@@ -157,20 +169,19 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async saveSmtpSettings() {
-    this._doProcess(async () => {
-      try {
-        const dto = { ...this.state.currentSmtpSettings };
-        delete dto.provider;
-        dto.client = dto.client || null;
-        const smtpSettingsEntity = SmtpSettingsEntity.createFromSettings(dto);
-        await this.saveSmtpSettingsService.save(smtpSettingsEntity);
-        this.props.actionFeedbackContext.displaySuccess(this.props.t("The SMTP settings have been saved successfully"));
-        const newSettings = Object.assign({}, this.state.currentSmtpSettings, { source: "db" });
-        this.setState({ currentSmtpSettings: newSettings });
-      } catch (e) {
-        this.handleError(e);
-      }
-    });
+    this.setState({ processing: true });
+    try {
+      const apiDto = this.formSettings.toApiDto();
+      const smtpSettingsEntity = SmtpSettingsEntity.createFromSettings(apiDto);
+      await this.saveSmtpSettingsService.save(smtpSettingsEntity);
+      this.props.actionFeedbackContext.displaySuccess(this.props.t("The SMTP settings have been saved successfully"));
+      this.originalSettings = new SmtpSettingsFormEntity(this.formSettings.toDto(), { validate: false });
+      this.setState({ settings: this.formSettings.toFormDto() });
+    } catch (e) {
+      this.handleError(e);
+    } finally {
+      this.setState({ processing: false });
+    }
   }
 
   /**
@@ -178,22 +189,9 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * @returns {Promise<object>}
    */
   async sendTestMailTo(recipient) {
-    const dto = { ...this.getCurrentSmtpSettings() };
-    delete dto.provider;
-    dto.client = dto.client || null;
-    const smtpSettingsEntity = SmtpSettingsEntity.createFromSettings(dto);
+    const apiDto = this.formSettings.toApiDto();
+    const smtpSettingsEntity = SmtpSettingsEntity.createFromSettings(apiDto);
     return await this.sendTestSmtpSettingsService.send(smtpSettingsEntity, recipient);
-  }
-
-  /**
-   * Run the given callback by ensuring the "processing" state is handled properly.
-   * @returns {Promise<void>}
-   */
-  _doProcess(callback) {
-    this.setState({ processing: true }, async () => {
-      await callback();
-      this.setState({ processing: false });
-    });
   }
 
   /**
@@ -208,19 +206,14 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
 
   /**
    * Handle change of provider.
-   * @param {object} provider
+   * @param {object} provider The provider object from SmtpProviders.
    */
   changeProvider(provider) {
-    if (provider.id !== this.state.currentSmtpSettings.provider?.id) {
+    const currentProviderId = this.formSettings?.toFormDto()?.provider;
+    if (provider.id !== currentProviderId) {
       this.providerHasChanged = true;
-      this.setState({
-        settingsModified: true,
-        currentSmtpSettings: {
-          ...this.state.currentSmtpSettings,
-          ...provider.defaultConfiguration,
-          provider: provider,
-        },
-      });
+      this.formSettings.applyProviderDefaults(provider);
+      this.setState({ settings: this.formSettings.toFormDto() });
     }
   }
 
@@ -229,39 +222,17 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * @param {object} data Settings data to update as key value object.
    */
   setData(data) {
-    const newSettings = Object.assign({}, this.state.currentSmtpSettings, data);
-    const newState = {
-      currentSmtpSettings: {
-        ...newSettings,
-        provider: this.detectProvider(newSettings),
-      },
-      settingsModified: true,
-    };
-
-    this.setState(newState);
-    if (this.state.hasSumittedForm) {
-      this.validateData(newSettings);
+    for (const key in data) {
+      this.formSettings.set(key, data[key], { validate: false });
     }
-  }
+    // Re-detect provider after any data change
+    const providerId = this.formSettings.detectProvider(SmtpProviders);
+    this.formSettings.set("provider", providerId, { validate: false });
 
-  /**
-   * Returns a provider based on the current configuration or the provider "other" if none detected
-   * @param {object} settings the settings from which to detect the provider
-   * @returns {object}
-   */
-  detectProvider(settings) {
-    for (let i = 0; i < SmtpProviders.length; i++) {
-      const provider = SmtpProviders[i];
-      const foundConfiguration = provider.availableConfigurations.find(
-        (config) =>
-          config.host === settings.host && config.port === parseInt(settings.port, 10) && config.tls === settings.tls,
-      );
-
-      if (foundConfiguration) {
-        return provider;
-      }
+    this.setState({ settings: this.formSettings.toFormDto() });
+    if (this.state.hasAlreadyBeenValidated) {
+      this.validateData();
     }
-    return SmtpProviders.find((provider) => provider.id === "other");
   }
 
   /**
@@ -281,222 +252,39 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
   }
 
   /**
-   * Returns true if the current settings has been modified in the state
+   * Returns true if the current settings has been modified
    * @returns {boolean}
    */
   isSettingsModified() {
-    return this.state.settingsModified;
+    return this.hasSettingsChanges(this.originalSettings?.toFormDto(), this.formSettings?.toFormDto());
   }
 
   /**
    * Returns all the errors found during the validation step
-   * @returns {object}
+   * @returns {EntityValidationError|null}
    */
   getErrors() {
-    return this.state.errors;
+    if (!this.state.hasAlreadyBeenValidated) {
+      return null;
+    }
+    return this.validateForm(this.state.settings);
   }
 
   /**
    * Validates the current data in the state
-   * @param {object} settings (Optional) The settings to validate, if not provided use the settings from the state.
    * @returns {boolean} true if the data is valid, false otherwise
    */
-  validateData(settings) {
-    settings = settings || this.state.currentSmtpSettings;
-    const errors = {};
-
-    let isFormValid = true;
-    isFormValid = this.validate_host(settings.host, errors) && isFormValid;
-    isFormValid = this.validate_sender_email(settings.sender_email, errors) && isFormValid;
-    isFormValid = this.validate_sender_name(settings.sender_name, errors) && isFormValid;
-    isFormValid = this.validate_username(settings.username, errors) && isFormValid;
-    isFormValid = this.validate_password(settings.password, errors) && isFormValid;
-    isFormValid = this.validate_port(settings.port, errors) && isFormValid;
-    isFormValid = this.validate_tls(settings.tls, errors) && isFormValid;
-    isFormValid = this.validate_client(settings.client, errors) && isFormValid;
+  validateData() {
+    const validationError = this.validateForm(this.state.settings);
+    const isFormValid = !validationError;
 
     if (!isFormValid) {
-      this.fieldToFocus = this.getFirstFieldInError(errors, [
-        "username",
-        "password",
-        "host",
-        "tls",
-        "port",
-        "client",
-        "sender_name",
-        "sender_email",
-      ]);
+      const fieldPriority = ["username", "password", "host", "tls", "port", "client", "sender_name", "sender_email"];
+      this.fieldToFocus = fieldPriority.find((field) => validationError.hasError(field));
     }
 
-    this.setState({ errors, hasSumittedForm: true });
-
+    this.setState({ hasAlreadyBeenValidated: true });
     return isFormValid;
-  }
-
-  /**
-   * Returns true if the host value is valid
-   * @param {string} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validate_host(data, errors) {
-    if (typeof data !== "string") {
-      errors.host = this.props.t("SMTP Host must be a valid string");
-      return false;
-    }
-
-    if (data.length === 0) {
-      errors.host = this.props.t("SMTP Host is required");
-      return false;
-    }
-    return true;
-  }
-
-  /**
-   * Returns true if the client value is valid
-   * @param {string|null} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validate_client(data, errors) {
-    if (data.length === 0 || (DomainUtil.isValidHostname(data) && data.length <= 2048)) {
-      return true;
-    }
-    errors.client = this.props.t("SMTP client should be a valid domain or IP address");
-    return false;
-  }
-
-  /**
-   * Returns true if the sender_email value is valid
-   * @param {string} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validate_sender_email(data, errors) {
-    if (typeof data !== "string") {
-      errors.sender_email = this.props.t("Sender email must be a valid email");
-      return false;
-    }
-
-    if (data.length === 0) {
-      errors.sender_email = this.props.t("Sender email is required");
-      return false;
-    }
-
-    if (!AppEmailValidatorService.validate(data, this.props.context.siteSettings)) {
-      errors.sender_email = this.props.t("Sender email must be a valid email");
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Returns true if the sender_name value is valid
-   * @param {string} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validate_sender_name(data, errors) {
-    if (typeof data !== "string") {
-      errors.sender_name = this.props.t("Sender name must be a valid string");
-      return false;
-    }
-
-    if (data.length === 0) {
-      errors.sender_name = this.props.t("Sender name is required");
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Returns true if the username value is valid
-   * @param {string|null} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validate_username(data, errors) {
-    if (data === null) {
-      return true;
-    }
-    if (typeof data !== "string") {
-      errors.username = this.props.t("Username must be a valid string");
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Returns true if the password value is valid
-   * @param {string|null} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validate_password(data, errors) {
-    if (data === null) {
-      return true;
-    }
-    if (typeof data !== "string") {
-      errors.password = this.props.t("Password must be a valid string");
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Returns true if the tls value is valid
-   * @param {string} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validate_tls(data, errors) {
-    if (typeof data !== "boolean") {
-      errors.tls = this.props.t("TLS must be set to 'Yes' or 'No'");
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Returns true if the port value is valid
-   * @param {string} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validate_port(data, errors) {
-    const portNum = parseInt(data, 10);
-    if (isNaN(portNum)) {
-      errors.port = this.props.t("Port must be a valid number");
-      return false;
-    }
-
-    if (portNum < 1 || portNum > 65535) {
-      errors.port = this.props.t("Port must be a number between 1 and 65535");
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Returns the first field with an error (first in the given list)
-   * @param {object} errors a ref object to put the validation onto
-   * @param {Array<string>} fieldPriority the ordered list of field to check
-   * @returns {string|null}
-   */
-  getFirstFieldInError(errors, fieldPriority) {
-    for (let i = 0; i < fieldPriority.length; i++) {
-      const fieldName = fieldPriority[i];
-      if (typeof errors[fieldName] !== "undefined") {
-        return fieldName;
-      }
-    }
-    return null;
   }
 
   /**
@@ -504,7 +292,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * @returns {object}
    */
   getCurrentSmtpSettings() {
-    return this.state.currentSmtpSettings;
+    return this.state.settings;
   }
 
   /**

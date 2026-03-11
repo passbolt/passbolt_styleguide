@@ -58,6 +58,16 @@ describe("SmtpUsernamePasswordAuthenticationEntity", () => {
     });
   });
 
+  describe("::marshall", () => {
+    it("marshalls port from string to integer", () => {
+      expect.assertions(1);
+
+      const dto = defaultSmtpUsernamePasswordAuthenticationEntityDto({ port: "1025" });
+      const entity = new SmtpUsernamePasswordAuthenticationEntity(dto);
+      expect(entity.toDto().port).toStrictEqual(1025);
+    });
+  });
+
   describe("::validateBuildRules", () => {
     it("throws if host is missing (inherited from SmtpSettingsEntity)", () => {
       expect.assertions(1);

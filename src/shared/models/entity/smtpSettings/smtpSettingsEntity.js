@@ -37,9 +37,9 @@ class SmtpSettingsEntity extends EntityV2 {
       type: "object",
       required: ["host", "port", "sender_name", "sender_email"],
       properties: {
-        id: { type: "string", format: "uuid" },
-        created: { type: "string", format: "date-time" },
-        modified: { type: "string", format: "date-time" },
+        id: { type: "string", format: "uuid", nullable: true },
+        created: { type: "string", format: "date-time", nullable: true },
+        modified: { type: "string", format: "date-time", nullable: true },
         source: {
           type: "string",
           enum: [SETTINGS_SOURCE_DEFAULT, SETTINGS_SOURCE_ENV, SETTINGS_SOURCE_DB, SETTINGS_SOURCE_FILE],
@@ -78,10 +78,20 @@ class SmtpSettingsEntity extends EntityV2 {
   }
 
   /**
+   * Marshall the entity
+   * Coerce port from string to integer (the API may return port as a string).
+   */
+  marshall() {
+    if (typeof this._props.port === "string") {
+      this._props.port = parseInt(this._props.port, 10);
+    }
+    super.marshall();
+  }
+
+  /**
    * Builds the appropriate SMTP auth entity subclass from flat settings.
    * @param {object} settings The SMTP settings dto
-   * @param {object} [options] The entity constructor options. Check the constructors options parameters of the entities
-   *   this factory is building to know more.
+   * @param {object} [options] The entity constructor options.
    * @returns {SmtpNoneAuthenticationEntity|SmtpUsernameAuthenticationEntity|
    *           SmtpUsernamePasswordAuthenticationEntity|SmtpOAuthCredentialsGrantSettingsEntity}
    */
