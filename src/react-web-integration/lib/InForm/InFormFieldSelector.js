@@ -40,6 +40,7 @@ export default {
   input[type='text' i][id*='benutzerkennung' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='benutzername' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='utilisateur' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='name' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='create-account-input' i]:not([hidden]):not([disabled]),
