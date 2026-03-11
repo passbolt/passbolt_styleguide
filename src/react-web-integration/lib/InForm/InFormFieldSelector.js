@@ -33,6 +33,7 @@ export default {
   input[type='text' i][name*='benutzername' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='utilisateur' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='logto' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='identifier' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='login' i]:not([hidden]):not([disabled]),
