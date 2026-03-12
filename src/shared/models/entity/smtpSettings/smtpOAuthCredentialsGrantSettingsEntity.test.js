@@ -31,6 +31,7 @@ describe("SmtpOAuthCredentialsGrantSettingsEntity", () => {
       assertEntityProperty.string(SmtpOAuthCredentialsGrantSettingsEntity, "oauth_username");
       assertEntityProperty.maxLength(SmtpOAuthCredentialsGrantSettingsEntity, "oauth_username", 256);
       assertEntityProperty.required(SmtpOAuthCredentialsGrantSettingsEntity, "oauth_username");
+      assertEntityProperty.emailFormat(SmtpOAuthCredentialsGrantSettingsEntity, "oauth_username");
     });
 
     it("validates tenant_id property", () => {
@@ -47,6 +48,7 @@ describe("SmtpOAuthCredentialsGrantSettingsEntity", () => {
 
     it("validates client_secret property", () => {
       assertEntityProperty.string(SmtpOAuthCredentialsGrantSettingsEntity, "client_secret");
+      assertEntityProperty.minLength(SmtpOAuthCredentialsGrantSettingsEntity, "client_secret", 1);
       assertEntityProperty.maxLength(SmtpOAuthCredentialsGrantSettingsEntity, "client_secret", 256);
       assertEntityProperty.required(SmtpOAuthCredentialsGrantSettingsEntity, "client_secret");
     });
@@ -59,6 +61,16 @@ describe("SmtpOAuthCredentialsGrantSettingsEntity", () => {
       const dto = defaultSmtpOAuthCredentialsGrantSettingsEntityDto();
       const entity = new SmtpOAuthCredentialsGrantSettingsEntity(dto);
       expect(entity.toDto()).toEqual(dto);
+    });
+
+    it("preserves username and password as null in toDto", () => {
+      expect.assertions(2);
+
+      const dto = defaultSmtpOAuthCredentialsGrantSettingsEntityDto({ username: null, password: null });
+      const entity = new SmtpOAuthCredentialsGrantSettingsEntity(dto);
+      const result = entity.toDto();
+      expect(result.username).toBeNull();
+      expect(result.password).toBeNull();
     });
 
     it("accepts validate: false with partial data", () => {

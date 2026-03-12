@@ -39,6 +39,7 @@ class SmtpOAuthCredentialsGrantSettingsEntity extends EntityV2 {
         ...SmtpSettingsEntity.getSchema().properties,
         oauth_username: {
           type: "string",
+          format: "email",
           maxLength: 256,
         },
         tenant_id: {
@@ -51,7 +52,16 @@ class SmtpOAuthCredentialsGrantSettingsEntity extends EntityV2 {
         },
         client_secret: {
           type: "string",
+          minLength: 1,
           maxLength: 256,
+        },
+        username: {
+          type: "string",
+          nullable: true,
+        },
+        password: {
+          type: "string",
+          nullable: true,
         },
       },
     };

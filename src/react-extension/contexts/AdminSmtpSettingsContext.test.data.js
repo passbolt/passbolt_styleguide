@@ -79,6 +79,22 @@ export const withUsernameAuthenticationSmtpSettingsDto = (data = {}) =>
     ...data,
   });
 
+export const withOAuthSmtpSettingsDto = (data = {}) => {
+  const office365Provider = SmtpProviders.find((provider) => provider.id === "office-365");
+  return defaultExistingSmtpSettingsDto({
+    host: office365Provider.defaultConfiguration.host,
+    port: office365Provider.defaultConfiguration.port,
+    tls: office365Provider.defaultConfiguration.tls,
+    username: null,
+    password: null,
+    oauth_username: "admin@contoso.com",
+    tenant_id: uuid(),
+    client_id: uuid(),
+    client_secret: "super-secret",
+    ...data,
+  });
+};
+
 export const withExistingSmtpSettingsFormDto = (data = {}) => ({
   host: "smtp.passbolt.com",
   port: 587,

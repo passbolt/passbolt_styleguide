@@ -238,17 +238,17 @@ describe("AdminSmtpSettingsContext", () => {
 
     it("should return an EntityValidationError with the relevant errors after validation", async () => {
       expect.assertions(2);
-      const currentSmtpSettings = withExistingSmtpSettingsApiDto({ client: null, host: "" });
+      const currentSmtpSettings = withExistingSmtpSettingsApiDto({ client: null });
 
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(currentSmtpSettings));
       await adminSmtpContext.findSmtpSettings();
-      adminSmtpContext.setData({ host: "" });
+      adminSmtpContext.setData({ sender_email: "not-an-email" });
 
       const isValid = adminSmtpContext.validateData();
       expect(isValid).toBe(false);
 
       const errors = adminSmtpContext.getErrors();
-      expect(errors.hasError("host")).toBe(true);
+      expect(errors.hasError("sender_email")).toBe(true);
     });
   });
 });

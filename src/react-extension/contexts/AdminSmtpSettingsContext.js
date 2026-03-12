@@ -31,6 +31,8 @@ export const AdminSmtpSettingsContext = React.createContext({
   getCurrentSmtpSettings: () => {}, // Returns the current SMTP settings
   findSmtpSettings: () => {}, // Find the current smtp settings and store it in the state
   changeProvider: () => {}, // Handles change of provider
+  changeAuthenticationMethod: () => {}, // Change the authentication method
+  getAuthenticationMethod: () => {}, // Returns the current authentication method
   setData: () => {}, // Set a field of the form
   isSettingsModified: () => {}, // returns settingsModified state
   isSettingsValid: () => {}, // returns true if the current form data is valid
@@ -78,6 +80,8 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
       getCurrentSmtpSettings: this.getCurrentSmtpSettings.bind(this), // returns the SMTP settings
       findSmtpSettings: this.findSmtpSettings.bind(this), // Find the SMTP settings and store it in the state
       changeProvider: this.changeProvider.bind(this), // Handles change of provider
+      changeAuthenticationMethod: this.changeAuthenticationMethod.bind(this), // Change the authentication method
+      getAuthenticationMethod: this.getAuthenticationMethod.bind(this), // Returns the current authentication method
       setData: this.setData.bind(this), // Set a field of the form
       isSettingsModified: this.isSettingsModified.bind(this),
       getErrors: this.getErrors.bind(this),
@@ -205,6 +209,29 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
   }
 
   /**
+   * Change the authentication method.
+   * @param {string} method The authentication method constant.
+   */
+  changeAuthenticationMethod(method) {
+    this.formSettings.changeAuthenticationMethod(method);
+    // Re-detect provider after auth method change
+    const providerId = this.formSettings.detectProvider(SmtpProviders);
+    this.formSettings.set("provider", providerId, { validate: false });
+    this.setState({ settings: this.formSettings.toFormDto() });
+    if (this.state.hasAlreadyBeenValidated) {
+      this.validateData({ setFocus: false });
+    }
+  }
+
+  /**
+   * Returns the current authentication method.
+   * @returns {string|null}
+   */
+  getAuthenticationMethod() {
+    return this.formSettings?.getAuthenticationMethod() ?? null;
+  }
+
+  /**
    * Handle change of provider.
    * @param {object} provider The provider object from SmtpProviders.
    */
@@ -213,6 +240,13 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     if (provider.id !== currentProviderId) {
       this.providerHasChanged = true;
       this.formSettings.applyProviderDefaults(provider);
+      // Reset OAuth auth method when switching away from Office 365
+      if (
+        provider.id !== "office-365" &&
+        this.formSettings.getAuthenticationMethod() === SmtpSettingsFormEntity.AUTHENTICATION_METHOD_OAUTH
+      ) {
+        this.formSettings.changeAuthenticationMethod(SmtpSettingsFormEntity.AUTHENTICATION_METHOD_USERNAME_PASSWORD);
+      }
       this.setState({ settings: this.formSettings.toFormDto() });
     }
   }
@@ -228,10 +262,17 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     // Re-detect provider after any data change
     const providerId = this.formSettings.detectProvider(SmtpProviders);
     this.formSettings.set("provider", providerId, { validate: false });
+    // Reset OAuth auth method when provider is no longer Office 365
+    if (
+      providerId !== "office-365" &&
+      this.formSettings.getAuthenticationMethod() === SmtpSettingsFormEntity.AUTHENTICATION_METHOD_OAUTH
+    ) {
+      this.formSettings.changeAuthenticationMethod(SmtpSettingsFormEntity.AUTHENTICATION_METHOD_USERNAME_PASSWORD);
+    }
 
     this.setState({ settings: this.formSettings.toFormDto() });
     if (this.state.hasAlreadyBeenValidated) {
-      this.validateData();
+      this.validateData({ setFocus: false });
     }
   }
 
@@ -274,12 +315,25 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * Validates the current data in the state
    * @returns {boolean} true if the data is valid, false otherwise
    */
-  validateData() {
+  validateData({ setFocus = true } = {}) {
     const validationError = this.validateForm(this.state.settings);
     const isFormValid = !validationError;
 
-    if (!isFormValid) {
-      const fieldPriority = ["username", "password", "host", "tls", "port", "client", "sender_name", "sender_email"];
+    if (!isFormValid && setFocus) {
+      const fieldPriority = [
+        "username",
+        "password",
+        "oauth_username",
+        "tenant_id",
+        "client_id",
+        "client_secret",
+        "host",
+        "tls",
+        "port",
+        "client",
+        "sender_name",
+        "sender_email",
+      ];
       this.fieldToFocus = fieldPriority.find((field) => validationError.hasError(field));
     }
 

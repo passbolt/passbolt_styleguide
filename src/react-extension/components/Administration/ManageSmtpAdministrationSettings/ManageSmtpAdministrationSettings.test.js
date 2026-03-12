@@ -17,7 +17,6 @@
  */
 import "../../../../../test/mocks/mockPortal.js";
 import SmtpProviders from "./SmtpProviders.data";
-import { ManageSmtpAdministrationSettings } from "./ManageSmtpAdministrationSettings";
 import ManageSmtpAdministrationSettingsPage from "./ManageSmtpAdministrationSettings.test.page";
 import { defaultProps } from "./ManageSmtpAdministrationSettings.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -30,6 +29,7 @@ import {
   withKnownProviderSmtpSettingsDto,
   withNoAuthenticationSmtpSettingsDto,
   withUsernameAuthenticationSmtpSettingsDto,
+  withOAuthSmtpSettingsDto,
 } from "../../../contexts/AdminSmtpSettingsContext.test.data";
 import { enableFetchMocks } from "jest-fetch-mock";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
@@ -289,9 +289,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
 
-      expect(page.authenticationMethodValue).toBe(
-        ManageSmtpAdministrationSettings.AUTHENTICATION_METHOD_USERNAME_PASSWORD,
-      );
+      expect(page.authenticationMethodValue).toBe("Username & password");
       expect(page.username.value).toBe(smtpSettings.username);
       expect(page.password.value).toBe(smtpSettings.password);
     });
@@ -304,7 +302,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
 
-      expect(page.authenticationMethodValue).toBe(ManageSmtpAdministrationSettings.AUTHENTICATION_METHOD_USERNAME);
+      expect(page.authenticationMethodValue).toBe("Username only");
       expect(page.username.value).toBe(smtpSettings.username);
       expect(page.isPasswordVisible).toBeFalsy();
     });
@@ -317,9 +315,67 @@ describe("ManageSmtpAdministrationSettings", () => {
       let page;
       await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
 
-      expect(page.authenticationMethodValue).toBe(ManageSmtpAdministrationSettings.AUTHENTICATION_METHOD_NONE);
+      expect(page.authenticationMethodValue).toBe("None");
       expect(page.isUsernameVisible).toBeFalsy();
       expect(page.isPasswordVisible).toBeFalsy();
+    });
+
+    it("As a signed-in administrator in the Email server settings I can see that a selected authentication method is set to OAuth (Client Credentials Grant) if OAuth fields are returned by the API", async () => {
+      expect.assertions(6);
+      const props = defaultProps();
+      const smtpSettings = withOAuthSmtpSettingsDto();
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
+      let page;
+      await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
+
+      expect(page.authenticationMethodValue).toBe("OAuth (Client Credentials Grant)");
+      expect(page.isUsernameVisible).toBeFalsy();
+      expect(page.isPasswordVisible).toBeFalsy();
+      expect(page.isOAuthUsernameVisible).toBeTruthy();
+      expect(page.oauth_username.value).toBe(smtpSettings.oauth_username);
+      expect(page.client_id.value).toBe(smtpSettings.client_id);
+    });
+
+    it("As a signed-in administrator in the Email server settings I can select the OAuth authentication method from the dropdown when provider is Office 365", async () => {
+      expect.assertions(6);
+      const props = defaultProps();
+      const smtpSettings = withOAuthSmtpSettingsDto({
+        username: "test username",
+        password: "test password",
+        oauth_username: null,
+        tenant_id: null,
+        client_id: null,
+        client_secret: null,
+      });
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
+      let page;
+      await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
+
+      // Select dropdown shows 3 items (excludes currently selected "Username & password")
+      // Items: None=0, Username only=1, OAuth (Client Credentials Grant)=2
+      await page.selectAuthenticationMethod(2);
+
+      expect(page.authenticationMethodValue).toBe("OAuth (Client Credentials Grant)");
+      expect(page.isUsernameVisible).toBeFalsy();
+      expect(page.isPasswordVisible).toBeFalsy();
+      expect(page.isOAuthUsernameVisible).toBeTruthy();
+      expect(page.tenant_id).toBeTruthy();
+      expect(page.client_secret).toBeTruthy();
+    });
+
+    it("As a signed-in administrator in the Email server settings with OAuth authentication, I can see an error message when the OAuth Username is not a valid email", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      const smtpSettings = withOAuthSmtpSettingsDto();
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
+      let page;
+      await act(async () => (page = new ManageSmtpAdministrationSettingsPage(props)));
+
+      await page.setFormWith({ oauth_username: "not-an-email" });
+      await page.clickOn(page.toolbarActionsSaveButton, () => true);
+
+      expect(page.oauth_username_error).toBeTruthy();
+      expect(page.oauth_username_error.textContent).toBe("OAuth Username must be a valid email.");
     });
   });
 

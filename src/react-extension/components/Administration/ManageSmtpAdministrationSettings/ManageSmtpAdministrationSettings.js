@@ -22,6 +22,7 @@ import SmtpProviders from "./SmtpProviders.data";
 import Password from "../../../../shared/components/Password/Password";
 import Select from "../../Common/Select/Select";
 import { withAdminSmtpSettings } from "../../../contexts/AdminSmtpSettingsContext";
+import SmtpSettingsFormEntity from "../../../../shared/models/entity/smtpSettings/smtpSettingsFormEntity";
 import DisplayAdministrationSmtpSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSmtpSettingsActions/DisplayAdministrationSmtpSettingsActions";
 import { createSafePortal } from "../../../../shared/utils/portals";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
@@ -33,9 +34,10 @@ import LinkSVG from "../../../../img/svg/link.svg";
 /*
  * Supported authentication methods.
  */
-const AUTHENTICATION_METHOD_NONE = "None";
-const AUTHENTICATION_METHOD_USERNAME = "Username only";
-const AUTHENTICATION_METHOD_USERNAME_PASSWORD = "Username & password";
+const AUTHENTICATION_METHOD_NONE = SmtpSettingsFormEntity.AUTHENTICATION_METHOD_NONE;
+const AUTHENTICATION_METHOD_USERNAME = SmtpSettingsFormEntity.AUTHENTICATION_METHOD_USERNAME;
+const AUTHENTICATION_METHOD_USERNAME_PASSWORD = SmtpSettingsFormEntity.AUTHENTICATION_METHOD_USERNAME_PASSWORD;
+const AUTHENTICATION_METHOD_OAUTH = SmtpSettingsFormEntity.AUTHENTICATION_METHOD_OAUTH;
 
 export class ManageSmtpAdministrationSettings extends React.Component {
   /**
@@ -60,6 +62,14 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    */
   static get AUTHENTICATION_METHOD_USERNAME_PASSWORD() {
     return AUTHENTICATION_METHOD_USERNAME_PASSWORD;
+  }
+
+  /**
+   * The authentication method OAuth2 Client Credentials
+   * @returns {string}
+   */
+  static get AUTHENTICATION_METHOD_OAUTH() {
+    return AUTHENTICATION_METHOD_OAUTH;
   }
 
   /**
@@ -97,6 +107,10 @@ export class ManageSmtpAdministrationSettings extends React.Component {
     this.clientFieldRef = React.createRef();
     this.senderEmailFieldRef = React.createRef();
     this.senderNameFieldRef = React.createRef();
+    this.oauth_usernameFieldRef = React.createRef();
+    this.tenant_idFieldRef = React.createRef();
+    this.client_idFieldRef = React.createRef();
+    this.client_secretFieldRef = React.createRef();
   }
 
   /**
@@ -172,17 +186,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    * @params {ReactEvent} The react event
    */
   handleAuthenticationMethodChange(event) {
-    let username = null;
-    let password = null;
-
-    if (event.target.value === AUTHENTICATION_METHOD_USERNAME) {
-      username = "";
-    } else if (event.target.value === AUTHENTICATION_METHOD_USERNAME_PASSWORD) {
-      username = "";
-      password = "";
-    }
-
-    this.props.adminSmtpSettingsContext.setData({ username, password });
+    this.props.adminSmtpSettingsContext.changeAuthenticationMethod(event.target.value);
   }
 
   /**
@@ -226,11 +230,16 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    * @returns {Array<object>}
    */
   get authenticationMethodList() {
-    return [
+    const settings = this.props.adminSmtpSettingsContext.getCurrentSmtpSettings();
+    const list = [
       { value: AUTHENTICATION_METHOD_NONE, label: this.translate("None") },
       { value: AUTHENTICATION_METHOD_USERNAME, label: this.translate("Username only") },
       { value: AUTHENTICATION_METHOD_USERNAME_PASSWORD, label: this.translate("Username & password") },
     ];
+    if (settings?.provider === "office-365") {
+      list.push({ value: AUTHENTICATION_METHOD_OAUTH, label: this.translate("OAuth (Client Credentials Grant)") });
+    }
+    return list;
   }
 
   /**
@@ -255,16 +264,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    * @return {string}
    */
   get authenticationMethod() {
-    const smtpContext = this.props.adminSmtpSettingsContext;
-    const smtpSettings = smtpContext.getCurrentSmtpSettings();
-
-    if (smtpSettings?.username === null) {
-      return AUTHENTICATION_METHOD_NONE;
-    } else if (smtpSettings?.password === null) {
-      return AUTHENTICATION_METHOD_USERNAME;
-    } else {
-      return AUTHENTICATION_METHOD_USERNAME_PASSWORD;
-    }
+    return this.props.adminSmtpSettingsContext.getAuthenticationMethod();
   }
 
   /**
@@ -284,6 +284,14 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    */
   shouldDisplayPassword() {
     return this.authenticationMethod === AUTHENTICATION_METHOD_USERNAME_PASSWORD;
+  }
+
+  /**
+   * Return true if the OAuth fields should be displayed
+   * @return {boolean}
+   */
+  shouldDisplayOAuth() {
+    return this.authenticationMethod === AUTHENTICATION_METHOD_OAUTH;
   }
 
   /**
@@ -465,6 +473,115 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                           </div>
                         )}
                       </div>
+                    )}
+                    {this.shouldDisplayOAuth() && (
+                      <>
+                        <div
+                          className={`input text required ${errors?.hasError("oauth_username") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        >
+                          <label htmlFor="smtp-settings-form-oauth-username">
+                            <Trans>OAuth Username</Trans>
+                          </label>
+                          <input
+                            id="smtp-settings-form-oauth-username"
+                            ref={this.oauth_usernameFieldRef}
+                            name="oauth_username"
+                            aria-required={true}
+                            className="fluid"
+                            maxLength="256"
+                            type="text"
+                            autoComplete="off"
+                            value={settings.oauth_username}
+                            onChange={this.handleInputChange}
+                            placeholder={this.translate("OAuth Username")}
+                            disabled={this.isProcessing()}
+                          />
+                          {errors?.hasError("oauth_username") && (
+                            <div className="error-message">
+                              {!settings.oauth_username || errors.hasError("oauth_username", "required") ? (
+                                <Trans>OAuth Username is required.</Trans>
+                              ) : (
+                                <Trans>OAuth Username must be a valid email.</Trans>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div
+                          className={`input text required ${errors?.hasError("tenant_id") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        >
+                          <label htmlFor="smtp-settings-form-tenant-id">
+                            <Trans>Tenant ID</Trans>
+                          </label>
+                          <input
+                            id="smtp-settings-form-tenant-id"
+                            ref={this.tenant_idFieldRef}
+                            name="tenant_id"
+                            aria-required={true}
+                            className="fluid"
+                            maxLength="256"
+                            type="text"
+                            autoComplete="off"
+                            value={settings.tenant_id}
+                            onChange={this.handleInputChange}
+                            placeholder={this.translate("Tenant ID")}
+                            disabled={this.isProcessing()}
+                          />
+                          {errors?.hasError("tenant_id") && (
+                            <div className="error-message">
+                              <Trans>Tenant ID is required.</Trans>
+                            </div>
+                          )}
+                        </div>
+                        <div
+                          className={`input text required ${errors?.hasError("client_id") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        >
+                          <label htmlFor="smtp-settings-form-client-id">
+                            <Trans>Client ID</Trans>
+                          </label>
+                          <input
+                            id="smtp-settings-form-client-id"
+                            ref={this.client_idFieldRef}
+                            name="client_id"
+                            aria-required={true}
+                            className="fluid"
+                            maxLength="256"
+                            type="text"
+                            autoComplete="off"
+                            value={settings.client_id}
+                            onChange={this.handleInputChange}
+                            placeholder={this.translate("Client ID")}
+                            disabled={this.isProcessing()}
+                          />
+                          {errors?.hasError("client_id") && (
+                            <div className="error-message">
+                              <Trans>Client ID is required.</Trans>
+                            </div>
+                          )}
+                        </div>
+                        <div
+                          className={`input-password-wrapper input required ${errors?.hasError("client_secret") ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        >
+                          <label htmlFor="smtp-settings-form-client-secret">
+                            <Trans>Client Secret</Trans>
+                          </label>
+                          <Password
+                            id="smtp-settings-form-client-secret"
+                            name="client_secret"
+                            autoComplete="new-password"
+                            placeholder={this.translate("Client Secret")}
+                            preview={true}
+                            value={settings.client_secret}
+                            onChange={this.handleInputChange}
+                            disabled={this.isProcessing()}
+                            inputRef={this.client_secretFieldRef}
+                          />
+                          {errors?.hasError("client_secret") && (
+                            <div className="password error-message">
+                              <Trans>Client Secret is required.</Trans>
+                            </div>
+                          )}
+                        </div>
+                      </>
                     )}
                     <div className="accordion-header">
                       <button type="button" className="link no-border" onClick={this.handleAdvancedSettingsToggle}>
