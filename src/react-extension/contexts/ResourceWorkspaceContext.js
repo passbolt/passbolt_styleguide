@@ -1191,7 +1191,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const baseSorter = (sorter) => (this.state.sorter.asc ? sorter : reverseSorter(sorter));
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(getPropValue(s1, key), getPropValue(s2, key)));
     const stringSorter = (s1, s2) => (s1 || "").localeCompare(s2 || "");
-    const arrayStringSorter = (s1, s2) => (s1[0] || "").localeCompare(s2[0] || "");
+    const arrayStringSorter = (s1, s2) => (s1?.[0] || "").localeCompare(s2?.[0] || "");
     const booleanSorter = (s1, s2) => (s1 === s2 ? 0 : s1 ? -1 : 1);
     const mapSorter = { favorite: booleanSorter, "metadata.uris": arrayStringSorter };
     const sorter = mapSorter[this.state.sorter.propertyName] ?? stringSorter;

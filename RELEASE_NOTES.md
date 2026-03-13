@@ -1,3 +1,3 @@
-v5.10.6
+v5.10.7
 
-This version rollsback the display of Safari support for a later release.
+This version fixes an issue with sorting resources by URI, as reported by users.
