@@ -17,6 +17,8 @@ import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
 import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
 import { withAdminPasswordPolicies } from "../../../../contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
+import { withPasswordPolicies } from "../../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import PasswordPoliciesDto from "../../../../../shared/models/passwordPolicies/PasswordPoliciesDto";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -58,6 +60,8 @@ class DisplayAdministrationPasswordPoliciesActions extends React.Component {
 
     try {
       await this.props.adminPasswordPoliciesContext.save();
+      const settings = this.props.adminPasswordPoliciesContext.getSettings();
+      this.props.passwordPoliciesContext.setPolicies(new PasswordPoliciesDto(settings));
       await this.handleSaveSuccess();
     } catch (error) {
       await this.handleSaveError(error);
@@ -107,11 +111,12 @@ class DisplayAdministrationPasswordPoliciesActions extends React.Component {
 }
 
 DisplayAdministrationPasswordPoliciesActions.propTypes = {
-  adminPasswordPoliciesContext: PropTypes.object, // The password policy context
+  adminPasswordPoliciesContext: PropTypes.object, // The admin password policy context
+  passwordPoliciesContext: PropTypes.object, // The password policy context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
 export default withAdminPasswordPolicies(
-  withActionFeedback(withTranslation("common")(DisplayAdministrationPasswordPoliciesActions)),
+  withPasswordPolicies(withActionFeedback(withTranslation("common")(DisplayAdministrationPasswordPoliciesActions))),
 );
