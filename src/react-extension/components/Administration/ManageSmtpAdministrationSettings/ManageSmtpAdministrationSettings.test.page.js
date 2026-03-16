@@ -409,6 +409,77 @@ export default class ManageSmtpAdministrationSettingsPage {
   }
 
   /**
+   * Returns the oauth_username field
+   * @returns {HTMLElement}
+   */
+  get oauth_username() {
+    return this.select(".smtp-settings #smtp-settings-form-oauth-username");
+  }
+
+  /**
+   * Returns true if the oauth_username field is visible
+   */
+  get isOAuthUsernameVisible() {
+    return Boolean(this.oauth_username);
+  }
+
+  /**
+   * Returns the oauth_username error HTMLElement
+   * @returns {HTMLElement}
+   */
+  get oauth_username_error() {
+    return this.select(".smtp-settings #smtp-settings-form-oauth-username + .error-message");
+  }
+
+  /**
+   * Returns the tenant_id field
+   * @returns {HTMLElement}
+   */
+  get tenant_id() {
+    return this.select(".smtp-settings #smtp-settings-form-tenant-id");
+  }
+
+  /**
+   * Returns the tenant_id error HTMLElement
+   * @returns {HTMLElement}
+   */
+  get tenant_id_error() {
+    return this.select(".smtp-settings #smtp-settings-form-tenant-id + .error-message");
+  }
+
+  /**
+   * Returns the client_id field
+   * @returns {HTMLElement}
+   */
+  get client_id() {
+    return this.select(".smtp-settings #smtp-settings-form-client-id");
+  }
+
+  /**
+   * Returns the client_id error HTMLElement
+   * @returns {HTMLElement}
+   */
+  get client_id_error() {
+    return this.select(".smtp-settings #smtp-settings-form-client-id + .error-message");
+  }
+
+  /**
+   * Returns the client_secret field
+   * @returns {HTMLElement}
+   */
+  get client_secret() {
+    return this.select(".smtp-settings #smtp-settings-form-client-secret");
+  }
+
+  /**
+   * Returns the client_secret error HTMLElement
+   * @returns {HTMLElement}
+   */
+  get client_secret_error() {
+    return this.select(".smtp-settings #smtp-settings-form-client-secret + .error-message");
+  }
+
+  /**
    * Returns the advanced settings HTMLElements
    * @returns {HTMLElement}
    */
@@ -462,6 +533,14 @@ export default class ManageSmtpAdministrationSettingsPage {
    */
   get settingsFromFileWarningMessage() {
     return this.select(".smtp-settings #smtp-settings-source-warning")?.textContent;
+  }
+
+  /**
+   * Returns the "Don't forget to save" warning message element if exists
+   * @returns {HTMLElement|null}
+   */
+  get warningMessage() {
+    return this.select(".smtp-settings .warning.message");
   }
 
   /**
