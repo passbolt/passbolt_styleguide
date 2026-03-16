@@ -8855,8 +8855,7 @@ svg .section-card .card .title:first-child {
   margin: 0.8rem 0;
   display: inline-block;
 }
-.send-test-email-dialog .dialog #recipient,
-.send-test-email-dialog .dialog .input {
+.send-test-email-dialog .dialog #recipient {
   margin-bottom: 0;
 }
 .recovery-account-policy-dialog .form-content,

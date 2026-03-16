@@ -25,7 +25,6 @@ class FilterResourcesByText extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.debounceTimeoutId = null; // Set the debounce timeout identifier
     this.bindCallbacks();
   }
 
@@ -43,6 +42,7 @@ class FilterResourcesByText extends Component {
   get defaultState() {
     return {
       text: "", // Current search text
+      debounceTimeoutIt: null, // Set the debounce timeout identifier
     };
   }
 
@@ -57,7 +57,7 @@ class FilterResourcesByText extends Component {
    * Whenever the component will unmount
    */
   componentWillUnmount() {
-    clearTimeout(this.debounceTimeoutId);
+    clearTimeout(this.state.debounceTimeoutIt);
   }
 
   /**
@@ -85,12 +85,12 @@ class FilterResourcesByText extends Component {
    * @param text
    */
   search(text) {
-    clearTimeout(this.debounceTimeoutId);
-    this.debounceTimeoutId = setTimeout(() => {
+    clearTimeout(this.state.debounceTimeoutId);
+    const debounceTimeoutId = setTimeout(() => {
       const filter = this.generateFilter(text);
       this.props.history.push({ pathname: "/app/passwords", state: { filter } });
     }, 300);
-    this.setState({ text });
+    this.setState({ debounceTimeoutId, text });
   }
 
   /**

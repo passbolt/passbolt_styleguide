@@ -69,6 +69,11 @@ class DisplayBrowserNotSupported extends Component {
         img: "vivaldi.svg",
         url: "https://www.vivaldi.com/",
       },
+      {
+        name: "Safari",
+        img: "safari.svg",
+        url: "https://www.apple.com/safari/",
+      },
     ];
   }
   /**
