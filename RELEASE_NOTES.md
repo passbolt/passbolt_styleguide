@@ -1,3 +1,3 @@
-v5.10.5
+v5.11.0-alpha.5
 Provide fixes to:
-- PB-49887 Dialog not disappearing after copying Secret or Password And Totp type Resource
+- PB-50058 - OAuth SMTP: add the new styleguide to backend
