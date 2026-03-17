@@ -24,6 +24,8 @@ class PasswordPoliciesDto {
     this.default_generator = settings.provider;
     this.external_dictionary_check = settings.policyPassphraseExternalServices;
     this.password_generator_settings = {
+      min_length: settings.minLength ?? 8,
+      max_length: settings.minLength ?? 128,
       length: settings.passwordLength,
       mask_upper: settings.mask_upper,
       mask_lower: settings.mask_lower,
@@ -38,6 +40,8 @@ class PasswordPoliciesDto {
       exclude_look_alike_chars: settings.excludeLookAlikeCharacters,
     };
     this.passphrase_generator_settings = {
+      min_words: settings.minWords ?? 4,
+      max_words: settings.maxWords ?? 40,
       words: settings.wordsCount,
       word_separator: settings.wordsSeparator,
       word_case: settings.wordCase,
