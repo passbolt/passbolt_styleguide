@@ -31,6 +31,7 @@ import getPropValue from "../lib/Object/getPropValue";
 import { withTranslation } from "react-i18next";
 import RowsSettingEntity from "../../shared/models/entity/rowsSetting/rowsSettingEntity";
 import ResourcesServiceWorkerService from "../../shared/services/serviceWorker/resources/resourcesServiceWorkerService";
+import TabsServiceWorkerService from "../../shared/services/serviceWorker/tabs/tabsServiceWorkerService";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -109,6 +110,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     this.state = this.defaultState;
     this.gridResourceUserSetting = new GridResourceUserSettingServiceWorkerService(props.context.port);
     this.resourcesServiceWorkerService = new ResourcesServiceWorkerService(props.context.port);
+    this.tabsServiceWorkerService = new TabsServiceWorkerService(props.context.port);
   }
 
   /**
@@ -797,7 +799,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     });
 
     if (safeUri) {
-      window.open(safeUri, "_blank", "noopener,noreferrer");
+      this.tabsServiceWorkerService.openResourceUriInNewTab(safeUri);
     }
   }
 
