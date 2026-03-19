@@ -170,12 +170,13 @@ class ApiRecoverContextProvider extends React.Component {
    */
   isBrowserSupported() {
     const browserName = detectBrowserName();
-    const supportedBrowserNames = [
-      BROWSER_NAMES.CHROME,
-      BROWSER_NAMES.FIREFOX,
-      BROWSER_NAMES.EDGE,
-      BROWSER_NAMES.SAFARI,
-    ];
+    const supportedBrowserNames = [BROWSER_NAMES.CHROME, BROWSER_NAMES.FIREFOX, BROWSER_NAMES.EDGE];
+
+    const isSafariEnabled = this.props.context.siteSettings.canIUse("safari");
+    if (isSafariEnabled) {
+      supportedBrowserNames.push(BROWSER_NAMES.SAFARI);
+    }
+
     return supportedBrowserNames.includes(browserName);
   }
 
