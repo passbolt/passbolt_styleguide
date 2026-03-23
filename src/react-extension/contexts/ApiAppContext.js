@@ -56,7 +56,7 @@ class ApiAppContextProvider extends React.Component {
    * Whenever the component is unmount.
    */
   componentWillUnmount() {
-    clearTimeout(this.state.onExpiredSession);
+    clearTimeout(this.scheduledCheckIsAuthenticatedTimeout);
   }
 
   /**
