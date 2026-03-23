@@ -1461,10 +1461,4 @@ export const ResourceWorkspaceFilterTypes = {
 /**
  * The list of resource link authorized protocols
  */
-export const resourceLinkAuthorizedProtocols = [
-  urlProtocols.FTP,
-  urlProtocols.FTPS,
-  urlProtocols.HTTPS,
-  urlProtocols.HTTP,
-  urlProtocols.SSH,
-];
+export const resourceLinkAuthorizedProtocols = [urlProtocols.HTTPS, urlProtocols.HTTP];
