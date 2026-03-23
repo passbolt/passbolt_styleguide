@@ -22,7 +22,7 @@ import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProv
 import TestSsoSettingsDialog from "../components/Administration/TestSsoSettingsDialog/TestSsoSettingsDialog";
 import ConfirmDeleteSsoSettingsDialog from "../components/Administration/ConfirmDeleteSsoSettingsDialog/ConfirmDeleteSsoSettingsDialog";
 import AzureSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
-import AzureSsoSettingsViewModel from "../../shared/models/ssoSettings/AzureSsoSettingsViewModel";
+import AzureSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/AzureSsoSettingsFormEntity";
 import OAuth2SsoSettingsEntity from "../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
 import OAuth2SsoSettingsViewModel from "../../shared/models/ssoSettings/OAuth2SsoSettingsViewModel";
 import GoogleSsoSettingsEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
@@ -146,7 +146,7 @@ export class AdminSsoContextProvider extends React.Component {
 
     switch (settings.provider) {
       case AzureSsoSettingsEntity.PROVIDER_ID: {
-        return AzureSsoSettingsViewModel.fromEntityDto(settings);
+        return AzureSsoSettingsFormEntity.fromEntityDto(settings);
       }
       case GoogleSsoSettingsEntity.PROVIDER_ID: {
         return GoogleSsoSettingsViewModel.fromEntityDto(settings);
@@ -203,7 +203,8 @@ export class AdminSsoContextProvider extends React.Component {
     return (
       (this.state.originalConfig !== null && this.state.ssoConfig === null) ||
       (this.state.originalConfig === null && this.state.ssoConfig !== null) ||
-      this.state.originalConfig?.isDataDifferent(this.state.ssoConfig)
+      (this.state.originalConfig?.hasDiffProps?.(this.state.ssoConfig) ??
+        this.state.originalConfig?.isDataDifferent?.(this.state.ssoConfig))
     );
   }
 
@@ -213,7 +214,16 @@ export class AdminSsoContextProvider extends React.Component {
    * @param {string} value
    */
   setValue(key, value) {
-    const ssoConfig = this.state.ssoConfig.cloneWithMutation(key, value);
+    const currentConfig = this.state.ssoConfig;
+    let ssoConfig;
+    // ViewModels (Google, OAuth2, ADFS) use cloneWithMutation; EntityV2-based FormEntities (Azure) use toDto + constructor.
+    if (typeof currentConfig.cloneWithMutation === "function") {
+      ssoConfig = currentConfig.cloneWithMutation(key, value);
+    } else {
+      const dto = currentConfig.toDto();
+      dto[key] = value;
+      ssoConfig = new currentConfig.constructor(dto, { validate: false });
+    }
 
     this.setState({ ssoConfig }, () => {
       if (this.state.hasBeenValidated) {

@@ -18,7 +18,7 @@ import {
 } from "./SsoSettingsViewModel.test.data";
 import GoogleSsoSettingsViewModel from "./GoogleSsoSettingsViewModel";
 import GoogleSsoSettingsEntity from "../entity/ssoSettings/GoogleSsoSettingsEntity";
-import AzureSsoSettingsViewModel from "./AzureSsoSettingsViewModel";
+import AzureSsoSettingsFormEntity from "../entity/ssoSettings/AzureSsoSettingsFormEntity";
 
 describe("GoogleSsoSettingsViewModel", () => {
   describe("::constructor", () => {
@@ -71,7 +71,7 @@ describe("GoogleSsoSettingsViewModel", () => {
       expect.assertions(1);
 
       const viewModelA = new GoogleSsoSettingsViewModel(defaultGoogleSsoSettingsViewModelDto());
-      const viewModelB = new AzureSsoSettingsViewModel(defaultAzureSsoSettingsViewModelDto());
+      const viewModelB = new AzureSsoSettingsFormEntity(defaultAzureSsoSettingsViewModelDto());
 
       expect(viewModelA.isDataDifferent(viewModelB)).toStrictEqual(true);
     });
