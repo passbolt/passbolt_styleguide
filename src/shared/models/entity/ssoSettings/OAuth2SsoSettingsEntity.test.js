@@ -17,7 +17,7 @@ import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
 import { defaultOAuth2SsoSettingsDto } from "./SsoSettingsEntity.test.data";
-import { defaultOAuth2SsoSettingsViewModelDto } from "../../ssoSettings/SsoSettingsViewModel.test.data";
+import { defaultOAuth2SsoSettingsFormEntityDto } from "../../ssoSettings/SsoSettingsViewModel.test.data";
 
 describe("OAuth2SsoSettingsEntity", () => {
   it("schema must validate", () => {
@@ -93,7 +93,7 @@ describe("OAuth2SsoSettingsEntity", () => {
       "https://192.168.1.1",
     ]).describe("Should validate the supported URL", (url) => {
       it(`${url}`, () => {
-        const dto = defaultOAuth2SsoSettingsViewModelDto({ url });
+        const dto = defaultOAuth2SsoSettingsFormEntityDto({ url });
         expect(() => new OAuth2SsoSettingsEntity(dto)).not.toThrow();
       });
     });
@@ -128,7 +128,7 @@ describe("OAuth2SsoSettingsEntity", () => {
       "ftp://192.168.1.1/",
     ]).describe("Should not validate an unsupported URL", (url) => {
       it(`${url}`, () => {
-        const dto = defaultOAuth2SsoSettingsViewModelDto({ url });
+        const dto = defaultOAuth2SsoSettingsFormEntityDto({ url });
         expect(() => new OAuth2SsoSettingsEntity(dto)).toThrow(EntityValidationError);
       });
     });

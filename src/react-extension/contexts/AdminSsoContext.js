@@ -24,7 +24,7 @@ import ConfirmDeleteSsoSettingsDialog from "../components/Administration/Confirm
 import AzureSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
 import AzureSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/AzureSsoSettingsFormEntity";
 import OAuth2SsoSettingsEntity from "../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
-import OAuth2SsoSettingsViewModel from "../../shared/models/ssoSettings/OAuth2SsoSettingsViewModel";
+import OAuth2SsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/OAuth2SsoSettingsFormEntity";
 import GoogleSsoSettingsEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
 import GoogleSsoSettingsViewModel from "../../shared/models/ssoSettings/GoogleSsoSettingsViewModel";
 import AdfsSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AdfsSsoSettingsEntity";
@@ -152,7 +152,7 @@ export class AdminSsoContextProvider extends React.Component {
         return GoogleSsoSettingsViewModel.fromEntityDto(settings);
       }
       case OAuth2SsoSettingsEntity.PROVIDER_ID: {
-        return OAuth2SsoSettingsViewModel.fromEntityDto(settings);
+        return OAuth2SsoSettingsFormEntity.fromEntityDto(settings);
       }
       case AdfsSsoSettingsEntity.PROVIDER_ID: {
         return AdfsSsoSettingsViewModel.fromEntityDto(settings);

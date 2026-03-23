@@ -77,7 +77,7 @@ export const defaultGoogleSsoSettingsViewModelDto = (data = {}) => {
  * @param {Object} data The data to override
  * @returns {Object}
  */
-export const defaultOAuth2SsoSettingsViewModelDto = (data = {}) => {
+export const defaultOAuth2SsoSettingsFormEntityDto = (data = {}) => {
   const defaultData = {
     url: "https://openid.passbolt.com",
     openid_configuration_path: "/.well-known/openid-configuration",
@@ -157,7 +157,7 @@ export const oAuth2SsoSettingsEntityDtoFromApi = (data = {}) => {
   const defaultData = defaultSsoSettingsViewModelDto({
     id: uuid(),
     provider: OAuth2SsoSettingsEntity.PROVIDER_ID,
-    data: defaultOAuth2SsoSettingsViewModelDto(data.data),
+    data: defaultOAuth2SsoSettingsFormEntityDto(data.data),
     created: "2023-08-06T10:05:46+00:00",
     created_by: uuid(),
     modified: "2023-08-06T10:05:46+00:00",
