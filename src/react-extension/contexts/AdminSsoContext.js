@@ -26,9 +26,10 @@ import AzureSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/A
 import OAuth2SsoSettingsEntity from "../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
 import OAuth2SsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/OAuth2SsoSettingsFormEntity";
 import GoogleSsoSettingsEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
-import GoogleSsoSettingsViewModel from "../../shared/models/ssoSettings/GoogleSsoSettingsViewModel";
+import GoogleSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsFormEntity";
 import AdfsSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AdfsSsoSettingsEntity";
 import AdfsSsoSettingsViewModel from "../../shared/models/ssoSettings/AdfsSsoSettingsViewModel";
+import EntityV2 from "../../shared/models/entity/abstract/entityV2";
 
 export const AdminSsoContext = React.createContext({
   ssoConfig: null, // The current sso configuration
@@ -149,7 +150,7 @@ export class AdminSsoContextProvider extends React.Component {
         return AzureSsoSettingsFormEntity.fromEntityDto(settings);
       }
       case GoogleSsoSettingsEntity.PROVIDER_ID: {
-        return GoogleSsoSettingsViewModel.fromEntityDto(settings);
+        return GoogleSsoSettingsFormEntity.fromEntityDto(settings);
       }
       case OAuth2SsoSettingsEntity.PROVIDER_ID: {
         return OAuth2SsoSettingsFormEntity.fromEntityDto(settings);
@@ -200,11 +201,22 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   hasFormChanged() {
+    // Revert this in PB-50189 as we should now be comparing only EntityV2.
+    if (this.state.originalConfig && this.state.ssoConfig) {
+      if (typeof this.state.originalConfig.hasDiffProps === "function" && this.state.ssoConfig instanceof EntityV2) {
+        try {
+          return this.state.originalConfig.hasDiffProps(this.state.ssoConfig);
+        } catch {
+          return true;
+        }
+      }
+
+      return this.state.originalConfig.isDataDifferent?.(this.state.ssoConfig) ?? true;
+    }
+
     return (
       (this.state.originalConfig !== null && this.state.ssoConfig === null) ||
-      (this.state.originalConfig === null && this.state.ssoConfig !== null) ||
-      (this.state.originalConfig?.hasDiffProps?.(this.state.ssoConfig) ??
-        this.state.originalConfig?.isDataDifferent?.(this.state.ssoConfig))
+      (this.state.originalConfig === null && this.state.ssoConfig !== null)
     );
   }
 

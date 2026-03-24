@@ -11,26 +11,28 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.11.0
  */
+
 import EntityV2 from "../abstract/entityV2";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
-import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
+import GoogleSsoSettingsEntity from "./GoogleSsoSettingsEntity";
 
-const ENTITY_NAME = "OAuth2SsoSettingsForm";
+const ENTITY_NAME = "GoogleSsoSettingsForm";
 
-class OAuth2SsoSettingsFormEntity extends EntityV2 {
+class GoogleSsoSettingsFormEntity extends EntityV2 {
   /**
    * Get entity schema
    * @returns {Object} schema
    */
   static getSchema() {
-    const baseSchema = OAuth2SsoSettingsEntity.getSchema();
+    const baseSchema = GoogleSsoSettingsEntity.getSchema();
 
     return {
       ...baseSchema,
       properties: {
         id: {
           type: "string",
+          format: "uuid",
         },
         ...baseSchema.properties,
       },
@@ -42,38 +44,15 @@ class OAuth2SsoSettingsFormEntity extends EntityV2 {
    * @returns {string}
    */
   get provider() {
-    return OAuth2SsoSettingsEntity.PROVIDER_ID;
+    return GoogleSsoSettingsEntity.PROVIDER_ID;
   }
+
   /**
    * Get the id
    * @returns {string}
    */
   get id() {
     return this._props.id || null;
-  }
-
-  /**
-   * Get the url
-   * @returns {string}
-   */
-  get url() {
-    return this._props.url || null;
-  }
-
-  /**
-   * Get the openid configuration path
-   * @returns {string}
-   */
-  get openid_configuration_path() {
-    return this._props.openid_configuration_path || null;
-  }
-
-  /**
-   * Get the scope
-   * @returns {string}
-   */
-  get scope() {
-    return this._props.scope || null;
   }
 
   /**
@@ -119,9 +98,6 @@ class OAuth2SsoSettingsFormEntity extends EntityV2 {
   toFormDto() {
     return {
       id: this._props.id,
-      url: this._props.url,
-      openid_configuration_path: this._props.openid_configuration_path,
-      scope: this._props.scope,
       client_id: this._props.client_id,
       client_secret: this._props.client_secret,
     };
@@ -145,25 +121,23 @@ class OAuth2SsoSettingsFormEntity extends EntityV2 {
   }
 
   /**
-   * Parse an entity DTO to create a new OAuth2SsoSettingsFormEntity
+   * Parse an entity DTO to create a new GoogleSsoSettingsFormEntity
    * @param {Object} dto The API response
-   * @returns {OAuth2SsoSettingsFormEntity} The parsed entity
+   * @returns {GoogleSsoSettingsFormEntity} The parsed entity
    */
-  static fromEntityDto({ id, data } = {}) {
+  static fromEntityDto({ id, data, ...rest } = {}) {
+    console.log(id, data, rest);
     const dto = {
       id,
-      url: data.url,
-      openid_configuration_path: data.openid_configuration_path,
-      scope: data.scope,
       client_id: data.client_id,
       client_secret: data.client_secret,
     };
 
-    return new OAuth2SsoSettingsFormEntity(dto, { validate: false });
+    return new GoogleSsoSettingsFormEntity(dto, { validate: false });
   }
 
   static createDefault(defaultConfig = {}) {
-    return new OAuth2SsoSettingsFormEntity(defaultConfig, { validate: false });
+    return new GoogleSsoSettingsFormEntity(defaultConfig, { validate: false });
   }
 
   static get ENTITY_NAME() {
@@ -171,4 +145,4 @@ class OAuth2SsoSettingsFormEntity extends EntityV2 {
   }
 }
 
-export default OAuth2SsoSettingsFormEntity;
+export default GoogleSsoSettingsFormEntity;

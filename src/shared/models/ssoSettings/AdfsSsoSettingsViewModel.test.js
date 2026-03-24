@@ -13,12 +13,12 @@
  */
 import each from "jest-each";
 import {
-  defaultGoogleSsoSettingsViewModelDto,
+  defaultGoogleSsoSettingsFormEntityDto,
   defaultAdfsSsoSettingsViewModelDto,
 } from "./SsoSettingsViewModel.test.data";
 import AdfsSsoSettingsViewModel from "./AdfsSsoSettingsViewModel";
 import AdfsSsoSettingsEntity from "../entity/ssoSettings/AdfsSsoSettingsEntity";
-import GoogleSsoSettingsViewModel from "./GoogleSsoSettingsViewModel";
+import GoogleSsoSettingsFormEntity from "../entity/ssoSettings/GoogleSsoSettingsFormEntity";
 
 describe("AdfsSsoSettingsViewModel", () => {
   describe("::constructor", () => {
@@ -74,7 +74,7 @@ describe("AdfsSsoSettingsViewModel", () => {
       expect.assertions(1);
 
       const viewModelA = new AdfsSsoSettingsViewModel(defaultAdfsSsoSettingsViewModelDto());
-      const viewModelB = new GoogleSsoSettingsViewModel(defaultGoogleSsoSettingsViewModelDto());
+      const viewModelB = new GoogleSsoSettingsFormEntity(defaultGoogleSsoSettingsFormEntityDto());
 
       expect(viewModelA.isDataDifferent(viewModelB)).toStrictEqual(true);
     });

@@ -63,7 +63,7 @@ export const defaultAzureSsoSettingsViewModelDto = (data = {}) => {
  * @param {Object} data The data to override
  * @returns {Object}
  */
-export const defaultGoogleSsoSettingsViewModelDto = (data = {}) => {
+export const defaultGoogleSsoSettingsFormEntityDto = (data = {}) => {
   const defaultData = {
     client_id: uuid(),
     client_secret: "This is a secret",
@@ -136,7 +136,7 @@ export const googleSsoSettingsEntityDtoFromApi = (data = {}) => {
   const defaultData = defaultSsoSettingsViewModelDto({
     id: uuid(),
     provider: GoogleSsoSettingsEntity.PROVIDER_ID,
-    data: defaultGoogleSsoSettingsViewModelDto(data.data),
+    data: defaultGoogleSsoSettingsFormEntityDto(data.data),
     created: "2023-08-06T10:05:46+00:00",
     created_by: uuid(),
     modified: "2023-08-06T10:05:46+00:00",
