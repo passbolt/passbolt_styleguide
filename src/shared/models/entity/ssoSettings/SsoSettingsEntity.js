@@ -17,6 +17,7 @@ import AzureSsoSettingsEntity from "./AzureSsoSettingsEntity";
 import GoogleSsoSettingsEntity from "./GoogleSsoSettingsEntity";
 import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
 import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
+import PingOneSsoSettingsEntity from "./PingOneSsoSettingsEntity";
 
 const ENTITY_NAME = "SsoSettings";
 
@@ -112,6 +113,8 @@ class SsoSettingsEntity extends Entity {
         return new OAuth2SsoSettingsEntity(data, options);
       case AdfsSsoSettingsEntity.PROVIDER_ID:
         return new AdfsSsoSettingsEntity(data, options);
+      case PingOneSsoSettingsEntity.PROVIDER_ID:
+        return new PingOneSsoSettingsEntity(data, options);
       default:
         /*
          * We don't throw an Error here as this could happen.
@@ -206,6 +209,7 @@ class SsoSettingsEntity extends Entity {
       GoogleSsoSettingsEntity.PROVIDER_ID,
       OAuth2SsoSettingsEntity.PROVIDER_ID,
       AdfsSsoSettingsEntity.PROVIDER_ID,
+      PingOneSsoSettingsEntity.PROVIDER_ID,
     ];
   }
 }
