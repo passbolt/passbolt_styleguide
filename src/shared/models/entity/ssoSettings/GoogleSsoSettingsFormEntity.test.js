@@ -13,6 +13,8 @@
  */
 
 import { v4 as uuid } from "uuid";
+import EntitySchema from "../abstract/entitySchema";
+import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {
   defaultGoogleSsoSettingsFormEntityDto,
   googleSsoSettingsEntityDtoFromApi,
@@ -22,6 +24,30 @@ import GoogleSsoSettingsEntity from "./GoogleSsoSettingsEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 
 describe("GoogleSsoSettingsFormEntity", () => {
+  describe("::getSchema", () => {
+    it("schema must validate", () => {
+      EntitySchema.validateSchema(GoogleSsoSettingsFormEntity.ENTITY_NAME, GoogleSsoSettingsFormEntity.getSchema());
+    });
+
+    it("validates id property", () => {
+      assertEntityProperty.string(GoogleSsoSettingsFormEntity, "id");
+      assertEntityProperty.notRequired(GoogleSsoSettingsFormEntity, "id");
+      assertEntityProperty.uuid(GoogleSsoSettingsFormEntity, "id");
+    });
+
+    it("validates client_id property", () => {
+      assertEntityProperty.string(GoogleSsoSettingsFormEntity, "client_id");
+      assertEntityProperty.required(GoogleSsoSettingsFormEntity, "client_id");
+      assertEntityProperty.minLength(GoogleSsoSettingsFormEntity, "client_id", 1);
+    });
+
+    it("validates client_secret property", () => {
+      assertEntityProperty.string(GoogleSsoSettingsFormEntity, "client_secret");
+      assertEntityProperty.required(GoogleSsoSettingsFormEntity, "client_secret");
+      assertEntityProperty.minLength(GoogleSsoSettingsFormEntity, "client_secret", 1);
+    });
+  });
+
   describe("::constructor", () => {
     it("should create a new GoogleSsoSettingsFormEntity with valid data", () => {
       expect.assertions(2);
