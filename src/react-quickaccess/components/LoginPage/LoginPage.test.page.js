@@ -12,7 +12,7 @@
  * @since         3.10.0
  */
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { MemoryRouter as Router } from "react-router-dom";
 import { render, waitFor } from "@testing-library/react";
 import LoginPage from "./LoginPage";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";

@@ -12,7 +12,7 @@ import MoreFiltersPage from "./components/MoreFiltersPage/MoreFiltersPage";
 import ResourceCreatePage from "./components/ResourceCreatePage/ResourceCreatePage";
 import ResourceViewPage from "./components/ResourceViewPage/ResourceViewPage";
 import Search from "./components/Search/Search";
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { MemoryRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import AnimatedSwitch from "./components/AnimatedSwitch/AnimatedSwitch";
 import PassphraseDialog from "./components/PassphraseDialog/PassphraseDialog";
 import PropTypes from "prop-types";
@@ -430,7 +430,7 @@ class ExtQuickAccess extends React.Component {
           loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json"
           locale={this.state?.locale}
         >
-          <Router>
+          <Router initialEntries={[`/webAccessibleResources/quickaccess.html`]}>
             <div className="container quickaccess" onKeyDown={this.handleKeyDown}>
               <Header logoutSuccessCallback={this.logoutSuccessCallback} />
               {!isReady && !this.state.hasError && (
