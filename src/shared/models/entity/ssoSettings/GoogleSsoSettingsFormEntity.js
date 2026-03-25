@@ -125,8 +125,7 @@ class GoogleSsoSettingsFormEntity extends EntityV2 {
    * @param {Object} dto The API response
    * @returns {GoogleSsoSettingsFormEntity} The parsed entity
    */
-  static fromEntityDto({ id, data, ...rest } = {}) {
-    console.log(id, data, rest);
+  static fromEntityDto({ id, data } = {}) {
     const dto = {
       id,
       client_id: data.client_id,

@@ -12,6 +12,8 @@
  * @since         5.11.0
  */
 import { v4 as uuid } from "uuid";
+import EntitySchema from "../abstract/entitySchema";
+import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {
   defaultOAuth2SsoSettingsFormEntityDto,
   oAuth2SsoSettingsEntityDtoFromApi,
@@ -21,6 +23,46 @@ import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 
 describe("OAuth2SsoSettingsFormEntity", () => {
+  describe("::getSchema", () => {
+    it("schema must validate", () => {
+      EntitySchema.validateSchema(OAuth2SsoSettingsFormEntity.ENTITY_NAME, OAuth2SsoSettingsFormEntity.getSchema());
+    });
+
+    it("validates id property", () => {
+      assertEntityProperty.string(OAuth2SsoSettingsFormEntity, "id");
+      assertEntityProperty.notRequired(OAuth2SsoSettingsFormEntity, "id");
+    });
+
+    it("validates url property", () => {
+      assertEntityProperty.string(OAuth2SsoSettingsFormEntity, "url");
+      assertEntityProperty.required(OAuth2SsoSettingsFormEntity, "url");
+    });
+
+    it("validates openid_configuration_path property", () => {
+      assertEntityProperty.string(OAuth2SsoSettingsFormEntity, "openid_configuration_path");
+      assertEntityProperty.required(OAuth2SsoSettingsFormEntity, "openid_configuration_path");
+      assertEntityProperty.minLength(OAuth2SsoSettingsFormEntity, "openid_configuration_path", 1);
+    });
+
+    it("validates scope property", () => {
+      assertEntityProperty.string(OAuth2SsoSettingsFormEntity, "scope");
+      assertEntityProperty.required(OAuth2SsoSettingsFormEntity, "scope");
+      assertEntityProperty.minLength(OAuth2SsoSettingsFormEntity, "scope", 1);
+    });
+
+    it("validates client_id property", () => {
+      assertEntityProperty.string(OAuth2SsoSettingsFormEntity, "client_id");
+      assertEntityProperty.required(OAuth2SsoSettingsFormEntity, "client_id");
+      assertEntityProperty.minLength(OAuth2SsoSettingsFormEntity, "client_id", 1);
+    });
+
+    it("validates client_secret property", () => {
+      assertEntityProperty.string(OAuth2SsoSettingsFormEntity, "client_secret");
+      assertEntityProperty.required(OAuth2SsoSettingsFormEntity, "client_secret");
+      assertEntityProperty.minLength(OAuth2SsoSettingsFormEntity, "client_secret", 1);
+    });
+  });
+
   describe("::constructor", () => {
     it("should construct a OAuth2SsoSettingsFormEntity with valid data", () => {
       expect.assertions(5);

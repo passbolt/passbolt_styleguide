@@ -12,6 +12,8 @@
  * @since         5.11.0
  */
 import each from "jest-each";
+import EntitySchema from "../abstract/entitySchema";
+import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {
   defaultAzureSsoSettingsViewModelDto,
   azureSsoSettingsEntityDtoFromApi,
@@ -20,6 +22,66 @@ import AzureSsoSettingsFormEntity from "./AzureSsoSettingsFormEntity";
 import AzureSsoSettingsEntity from "./AzureSsoSettingsEntity";
 
 describe("AzureSsoSettingsFormEntity", () => {
+  describe("::getSchema", () => {
+    it("schema must validate", () => {
+      EntitySchema.validateSchema(AzureSsoSettingsFormEntity.ENTITY_NAME, AzureSsoSettingsFormEntity.getSchema());
+    });
+
+    it("validates id property", () => {
+      assertEntityProperty.string(AzureSsoSettingsFormEntity, "id");
+      assertEntityProperty.notRequired(AzureSsoSettingsFormEntity, "id");
+      assertEntityProperty.uuid(AzureSsoSettingsFormEntity, "id");
+    });
+
+    it("validates url property", () => {
+      assertEntityProperty.string(AzureSsoSettingsFormEntity, "url");
+      assertEntityProperty.required(AzureSsoSettingsFormEntity, "url");
+    });
+
+    it("validates client_id property", () => {
+      assertEntityProperty.string(AzureSsoSettingsFormEntity, "client_id");
+      assertEntityProperty.required(AzureSsoSettingsFormEntity, "client_id");
+      assertEntityProperty.uuid(AzureSsoSettingsFormEntity, "client_id");
+    });
+
+    it("validates tenant_id property", () => {
+      assertEntityProperty.string(AzureSsoSettingsFormEntity, "tenant_id");
+      assertEntityProperty.required(AzureSsoSettingsFormEntity, "tenant_id");
+      assertEntityProperty.uuid(AzureSsoSettingsFormEntity, "tenant_id");
+    });
+
+    it("validates client_secret property", () => {
+      assertEntityProperty.string(AzureSsoSettingsFormEntity, "client_secret");
+      assertEntityProperty.required(AzureSsoSettingsFormEntity, "client_secret");
+      assertEntityProperty.minLength(AzureSsoSettingsFormEntity, "client_secret", 1);
+    });
+
+    it("validates client_secret_expiry property", () => {
+      assertEntityProperty.required(AzureSsoSettingsFormEntity, "client_secret_expiry");
+    });
+
+    it("validates email_claim property", () => {
+      assertEntityProperty.string(AzureSsoSettingsFormEntity, "email_claim");
+      assertEntityProperty.required(AzureSsoSettingsFormEntity, "email_claim");
+      assertEntityProperty.enumeration(
+        AzureSsoSettingsFormEntity,
+        "email_claim",
+        ["email", "preferred_username", "upn"],
+        ["invalid"],
+      );
+    });
+
+    it("validates prompt property", () => {
+      assertEntityProperty.string(AzureSsoSettingsFormEntity, "prompt");
+      assertEntityProperty.required(AzureSsoSettingsFormEntity, "prompt");
+      assertEntityProperty.enumeration(AzureSsoSettingsFormEntity, "prompt", ["login", "none"], ["invalid"]);
+    });
+
+    it("validates login_hint property", () => {
+      assertEntityProperty.boolean(AzureSsoSettingsFormEntity, "login_hint");
+    });
+  });
+
   describe("::constructor", () => {
     it("should construct a FormEntity with validate: false", () => {
       expect.assertions(8);
