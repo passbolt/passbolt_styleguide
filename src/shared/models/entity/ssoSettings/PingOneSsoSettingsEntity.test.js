@@ -13,8 +13,8 @@
  */
 import PingOneSsoSettingsEntity from "./PingOneSsoSettingsEntity";
 import EntityValidationError from "../abstract/entityValidationError";
-import { defaultPingOneSsoSettingsDto } from "./PingOneSsoSettingsEntity.test.data";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
+import { defaultPingOneSsoSettingsDto } from "./SsoSettingsEntity.test.data";
 
 describe("PingOneSsoSettingsEntity", () => {
   describe("::constructor", () => {
