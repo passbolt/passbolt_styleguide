@@ -141,6 +141,7 @@ const SsoProviders = [
       environment_id: "",
       client_id: "",
       client_secret: "",
+      email_claim: "email",
     },
   },
 ];
