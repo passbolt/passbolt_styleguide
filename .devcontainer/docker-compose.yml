@@ -1,0 +1,11 @@
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: passbolt-styleguide-devcontainer
+    volumes:
+      - ..:/workspaces/passbolt-styleguide:cached
+      - ${HOME}/.claude:/home/node/.claude:cached
+      - ${HOME}/.claude/managed-settings:/etc/claude-code:ro
+    command: sleep infinity
