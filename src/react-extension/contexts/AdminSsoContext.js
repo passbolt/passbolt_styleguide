@@ -21,6 +21,7 @@ import { withActionFeedback } from "./ActionFeedbackContext";
 import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProviders.data";
 import TestSsoSettingsDialog from "../components/Administration/TestSsoSettingsDialog/TestSsoSettingsDialog";
 import ConfirmDeleteSsoSettingsDialog from "../components/Administration/ConfirmDeleteSsoSettingsDialog/ConfirmDeleteSsoSettingsDialog";
+import EntityV2 from "../../shared/models/entity/abstract/entityV2";
 import AzureSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
 import AzureSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/AzureSsoSettingsFormEntity";
 import OAuth2SsoSettingsEntity from "../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
@@ -28,8 +29,7 @@ import OAuth2SsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/
 import GoogleSsoSettingsEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
 import GoogleSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsFormEntity";
 import AdfsSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AdfsSsoSettingsEntity";
-import AdfsSsoSettingsViewModel from "../../shared/models/ssoSettings/AdfsSsoSettingsViewModel";
-import EntityV2 from "../../shared/models/entity/abstract/entityV2";
+import AdfsSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/AdfsSsoSettingsFormEntity";
 
 export const AdminSsoContext = React.createContext({
   ssoConfig: null, // The current sso configuration
@@ -156,7 +156,7 @@ export class AdminSsoContextProvider extends React.Component {
         return OAuth2SsoSettingsFormEntity.fromEntityDto(settings);
       }
       case AdfsSsoSettingsEntity.PROVIDER_ID: {
-        return AdfsSsoSettingsViewModel.fromEntityDto(settings);
+        return AdfsSsoSettingsFormEntity.fromEntityDto(settings);
       }
     }
 
