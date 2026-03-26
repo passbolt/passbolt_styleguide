@@ -65,6 +65,14 @@ describe("PingOneSsoSettingsFormEntity", () => {
     });
   });
 
+  describe("::SCOPE", () => {
+    it("should return the scope", () => {
+      expect.assertions(1);
+
+      expect(PingOneSsoSettingsFormEntity.SCOPE).toStrictEqual("openid profile email");
+    });
+  });
+
   describe("::provider", () => {
     it("should return the PingOne provider id", () => {
       expect.assertions(1);

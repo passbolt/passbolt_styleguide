@@ -18,6 +18,8 @@ import PingOneSsoSettingsEntity from "./PingOneSsoSettingsEntity";
 
 const ENTITY_NAME = "PingOneSsoSettingsForm";
 
+const SCOPE = "openid profile email";
+
 class PingOneSsoSettingsFormEntity extends EntityV2 {
   /**
    * Get entity schema
@@ -170,6 +172,10 @@ class PingOneSsoSettingsFormEntity extends EntityV2 {
    */
   static createDefault(defaultConfig = {}) {
     return new PingOneSsoSettingsFormEntity(defaultConfig, { validate: false });
+  }
+
+  static get SCOPE() {
+    return SCOPE;
   }
 
   static get ENTITY_NAME() {
