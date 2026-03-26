@@ -106,6 +106,6 @@ export default {
   input[name*='mfa' i]:not([hidden]):not([disabled]),
   input[id*='mfa' i]:not([hidden]):not([disabled]),
   input[class*='mfa' i]:not([hidden]):not([disabled]),
-  *:has(> input ~ input ~ input ~ input ~ input ~ input)
+  *:has(> input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]))
   `,
 };

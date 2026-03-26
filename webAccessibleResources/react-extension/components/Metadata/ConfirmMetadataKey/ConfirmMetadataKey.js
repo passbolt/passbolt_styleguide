@@ -109,7 +109,7 @@ class ConfirmMetadataKey extends Component {
    */
   render() {
     const isMetadataKeyRotation = this.isMetadataKeyRotation;
-
+    const creatorName = this.props.metadataKey.creator.getUserFormattedName(this.translate);
     return (
       <DialogWrapper
         className="confirm-metadata-key-dialog"
@@ -126,10 +126,7 @@ class ConfirmMetadataKey extends Component {
                       <span className="name">
                         <Trans>
                           The encryption key used to share metadata between users has been updated by{" "}
-                          <span className="creator">
-                            {this.props.metadataKey.creator.getUserFormattedName(this.translate)}
-                          </span>
-                          .
+                          <span className="creator">{{ creatorName }}</span>.
                         </Trans>
                       </span>
                     </div>

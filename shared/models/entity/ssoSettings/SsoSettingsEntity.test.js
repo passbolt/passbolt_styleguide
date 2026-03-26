@@ -25,9 +25,11 @@ import {
   defaultSsoSettingsWithAzure,
   defaultSsoSettingsWithGoogle,
   defaultSsoSettingsWithOAuth2,
+  defaultSsoSettingsWithPingOne,
 } from "./SsoSettingsEntity.test.data";
 import { v4 as uuid } from "uuid";
 import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
+import PingOneSsoSettingsEntity from "./PingOneSsoSettingsEntity";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 
 describe("SsoSettingsEntity", () => {
@@ -53,7 +55,7 @@ describe("SsoSettingsEntity", () => {
     });
 
     it("validates provider property", () => {
-      const successValues = ["azure", "adfs", "google", "oauth2"];
+      const successValues = ["azure", "adfs", "google", "oauth2", "pingone"];
 
       const failingValues = ["test", "other", "unknown"];
 
@@ -113,6 +115,7 @@ describe("SsoSettingsEntity", () => {
       { provider: GoogleSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithGoogle({ id: uuid() }) },
       { provider: OAuth2SsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithOAuth2({ id: uuid() }) },
       { provider: AdfsSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAdfs({ id: uuid() }) },
+      { provider: PingOneSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithPingOne({ id: uuid() }) },
     ]).describe("it should instantiate the entity with a minimal dto", (scenario) => {
       it(`For: ${scenario.provider}`, () => {
         expect.assertions(4);

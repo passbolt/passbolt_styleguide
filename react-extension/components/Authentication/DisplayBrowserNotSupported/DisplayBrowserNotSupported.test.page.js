@@ -24,10 +24,10 @@ export default class DisplayBrowserNotSupportedPage {
   /**
    * Default constructor
    */
-  constructor() {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayBrowserNotSupported />
+        <DisplayBrowserNotSupported {...props} />
       </MockTranslationProvider>,
     );
   }

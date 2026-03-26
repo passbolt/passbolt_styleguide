@@ -30,6 +30,7 @@ export function defaultProps(props = {}) {
     context: defaultAdministratorAppContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
+    passwordPoliciesContext: { setPolicies: jest.fn() },
     t: (text) => text,
     ...props,
   };

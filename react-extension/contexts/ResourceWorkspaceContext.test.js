@@ -53,51 +53,61 @@ describe("Resource Workspace Context", () => {
 
     it("AS LU I should have an SHARED-WITH-ME filter when I went to /app/passwords with such a filter", async () => {
       await page.goToShareWithMe();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.SHARED_WITH_ME);
     });
 
     it("AS LU I should have an EXPIRED filter when I went to /app/passwords/filter/expried with such a filter", async () => {
       await page.goToExpired();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.EXPIRED);
     });
 
     it("AS LU I should have an ITEMS-I-OWN filter when I went to /app/passwords with such a filter", async () => {
       await page.goToItemsIOwn();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.ITEMS_I_OWN);
     });
 
     it("AS LU I should have an PRIVATE filter when I went to /app/passwords with such a filter", async () => {
       await page.goToPrivate();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.PRIVATE);
     });
 
     it("AS LU I should have an FAVORITE filter when I went to /app/passwords with such a filter", async () => {
       await page.goToFavorite();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.FAVORITE);
     });
 
     it("AS LU I should have an TEXT filter when I went to /app/passwords with such a filter", async () => {
       await page.goToText("some text");
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.TEXT);
     });
 
     it("AS LU I should have an GROUP filter when I went to /app/passwords with such a filter", async () => {
       await page.goToGroup({ group: { id: "some group id" } });
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.GROUP);
     });
 
     it("AS LU I should have an TAG filter when I went to /app/passwords with such a filter", async () => {
       await page.goToTag({ tag: { id: "some tag id" } });
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.TAG);
     });
 
     it("AS LU I should have an FOLDER filter when I went to /app/folders/{folder-id} with such a filter", async () => {
       await page.goToFolder(context.folders[0]);
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.FOLDER);
     });
 
     it("AS LU I should have an ROOT-FOLDER filter when I went to /app/folders/{folder-id} with such a filter", async () => {
       await page.goToRootFolder();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.ROOT_FOLDER);
     });
   });
