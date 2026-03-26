@@ -12,6 +12,21 @@
  * @since         3.9.0
  */
 import { v4 as uuid } from "uuid";
+import { defaultPingOneSsoSettingsDto } from "../../shared/models/entity/ssoSettings/SsoSettingsEntity.test.data";
+import { defaultAppContext } from "./ApiAppContext.test.data";
+import { defaultActionFeedbackContext } from "./ActionFeedbackContext.test.data";
+import { defaultDialogContext } from "./DialogContext.test.data";
+
+export function defaultProps(data = {}) {
+  const defaultData = {
+    context: defaultAppContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
+    dialogContext: defaultDialogContext(),
+    t: (s) => s,
+  };
+
+  return Object.assign(defaultData, data);
+}
 
 export function defaultSsoSettings(data = {}) {
   const defaultData = {
@@ -107,6 +122,24 @@ export function withAdfsSsoSettings(data = {}) {
       scope: "openid email profile",
       openid_configuration_path: "/.well-known/sso-configuration",
     },
+    created_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+    modified_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+    created: "2022-11-24T09:14:13+00:00",
+    modified: "2022-11-24T09:14:13+00:00",
+  });
+
+  return {
+    ...defaultData,
+    ...data,
+  };
+}
+
+export function withPingOneSsoSettings(data = {}) {
+  const defaultData = defaultSsoSettings({
+    id: uuid(),
+    status: "active",
+    provider: "pingone",
+    data: defaultPingOneSsoSettingsDto(),
     created_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     modified_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     created: "2022-11-24T09:14:13+00:00",
