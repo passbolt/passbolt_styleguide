@@ -180,7 +180,7 @@ class PingOneSsoProviderForm extends PureComponent {
             <div className="error-message">{this.displayErrors(errors.getError("environment_id"))}</div>
           )}
           <p>
-            <Trans>The public identifier for the PingOne application.</Trans>
+            <Trans>The public identifier for the PingOne application.</Trans>{" "}
             <a
               href="https://docs.pingidentity.com/pingone/applications/p1_edit_application_oidc.html"
               rel="noopener noreferrer"
@@ -209,7 +209,7 @@ class PingOneSsoProviderForm extends PureComponent {
             <div className="error-message">{this.displayErrors(errors.getError("client_id"))}</div>
           )}
           <p>
-            <Trans>The public identifier for the app in PingOne in UUID format.</Trans>
+            <Trans>The public identifier for the app in PingOne in UUID format.</Trans>{" "}
             <a
               href="https://docs.pingidentity.com/pingone/applications/p1_edit_application_oidc.html"
               rel="noopener noreferrer"
@@ -239,7 +239,7 @@ class PingOneSsoProviderForm extends PureComponent {
             <div className="error-message">{this.displayErrors(errors.getError("client_secret"))}</div>
           )}
           <p>
-            <Trans>Allows PingOne and Passbolt API to securely share information.</Trans>
+            <Trans>Allows PingOne and Passbolt API to securely share information.</Trans>{" "}
             <a
               href="https://docs.pingidentity.com/pingone/applications/p1_edit_application_oidc.html"
               rel="noopener noreferrer"

@@ -126,9 +126,15 @@ export class AdminSsoContextProvider extends React.Component {
    * Memoized change detection. Re-computes only when entities or DTO change.
    * @type {function}
    */
-  hasSettingsChanges = memoize(
-    (originalDto, formDto) => this.originalSettings?.hasDiffProps(this.formSettings) || false, // eslint-disable-line no-unused-vars
-  );
+  // eslint-disable-next-line no-unused-vars
+  hasSettingsChanges = memoize((originalDto, formDto) => {
+    // Here we need a try/catch because `hasDiffProps` will throw an error when the entities don't share the same properties.
+    try {
+      return this.originalSettings?.hasDiffProps(this.formSettings) ?? false;
+    } catch {
+      return true;
+    }
+  });
 
   /**
    * Returns the current sso config DTO for state synchronization.
