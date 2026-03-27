@@ -194,10 +194,7 @@ class ExportResources extends React.Component {
    * @returns {string}
    */
   get exportFormatLabel() {
-    if (this.exportPoliciesSettings?.allowCsvFormat === false) {
-      return this.translate("Choose the export format (kdbx is supported)");
-    }
-    return this.translate("Choose the export format (csv and kdbx are supported)");
+    return this.translate("Choose the export format");
   }
 
   /**
@@ -391,13 +388,6 @@ class ExportResources extends React.Component {
                   <Trans>
                     I understand this file is unencrypted and potentially unsafe to open in a spreadsheet software.
                   </Trans>
-                  <a
-                    href="https://www.passbolt.com/docs/user/basic-features/browser/export/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Trans>Learn more</Trans>
-                  </a>
                 </label>
               </div>
             )}
@@ -413,6 +403,14 @@ class ExportResources extends React.Component {
           </div>
 
           <div className="submit-wrapper clearfix">
+            <a
+              className="button"
+              href="https://www.passbolt.com/docs/user/basic-features/browser/export/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Trans>Learn more</Trans>
+            </a>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
