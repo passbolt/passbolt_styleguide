@@ -182,7 +182,9 @@ class UserWorkspaceContextProvider extends React.Component {
       const filteredUsers = await this.search(this.state.filter);
       if (filteredUsers) {
         await this.updateDetails(filteredUsers);
-        await this.unselectUsersNotFiltered(filteredUsers);
+        const selectedUsers = this.updateSelectedUsersFromUsersChange(filteredUsers);
+        this.setState({ selectedUsers });
+        this.redirectAfterSelection(selectedUsers);
       }
     }
   }
@@ -591,10 +593,19 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param {Array} filteredUsers The filtered users array
    */
   async unselectUsersNotFiltered(filteredUsers) {
+    const selectedUsers = this.updateSelectedUsersFromUsersChange(filteredUsers);
+    this.setState({ selectedUsers });
+  }
+
+  /**
+   * Return the selected users that are still present in the given filtered users list
+   * @param {Array} filteredUsers The filtered users array
+   * @returns {Array} The selected users still present in the filtered list
+   */
+  updateSelectedUsersFromUsersChange(filteredUsers) {
     const matchId = (selectedUser) => (user) => user.id === selectedUser.id;
     const matchSelectedUser = (selectedUser) => filteredUsers.some(matchId(selectedUser));
-    const selectedUsers = this.state.selectedUsers.filter(matchSelectedUser);
-    this.setState({ selectedUsers });
+    return this.state.selectedUsers.filter(matchSelectedUser);
   }
 
   /**
