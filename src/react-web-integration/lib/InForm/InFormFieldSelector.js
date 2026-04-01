@@ -48,6 +48,7 @@ export default {
   input[type='text' i][class*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='create-account-input' i]:not([hidden]):not([disabled]),
+  input[type='text' i][class*='pwt-flex-fill' i][required]:not([role]):not([hidden]):not([disabled]),
   input[type='text' i][autocomplete*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][autocomplete*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='user' i]:not([hidden]):not([disabled]),
