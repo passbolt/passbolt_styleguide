@@ -45,6 +45,7 @@ export class PasswordPoliciesContextProvider extends React.Component {
     return {
       policies: null,
       loadPolicies: this.loadPolicies.bind(this), // Find the current password settings  Policy
+      setPolicies: this.setPolicies.bind(this), // Find the current password settings  Policy
     };
   }
 
@@ -60,8 +61,16 @@ export class PasswordPoliciesContextProvider extends React.Component {
     }
 
     const newPolicies = await this.props.context.port.request("passbolt.password-policies.get");
-    this.setState({ policies: newPolicies });
+    this.setPolicies(newPolicies);
     return newPolicies;
+  }
+
+  /**
+   * Set the policies
+   * @param {object} policies The policies to set
+   */
+  setPolicies(policies) {
+    this.setState({ policies });
   }
 
   /**

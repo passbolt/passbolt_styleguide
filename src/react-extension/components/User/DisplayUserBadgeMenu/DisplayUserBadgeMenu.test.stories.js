@@ -31,6 +31,7 @@ export const DefaultUserBadgeMenu = {
 const propsAttentionRequired = {
   accountRecoveryContext: {
     isAccountRecoveryChoiceRequired: () => true,
+    loadAccountRecoveryPolicy: jest.fn(),
   },
 };
 

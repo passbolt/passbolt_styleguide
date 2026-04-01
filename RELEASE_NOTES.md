@@ -1,3 +1,3 @@
-v5.10.7
-
-This version fixes an issue with sorting resources by URI, as reported by users.
+v5.11.0-alpha.5
+Provide fixes to:
+- PB-50058 - OAuth SMTP: add the new styleguide to backend

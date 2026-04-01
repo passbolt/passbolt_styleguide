@@ -24,6 +24,7 @@ export default {
    * The selector benutzerkennung is for german website
    * The selector benutzername is also for somes german websites
    * The selector utilisateur is for french website
+   * The selector utente is for italian website
    */
   USERNAME_FIELD_SELECTOR: `${Object.values(UsernameFieldSelectorException).join(",")},
   input[type='text' i][name*='user' i]:not([hidden]):not([disabled]),
@@ -32,7 +33,9 @@ export default {
   input[type='text' i][name*='benutzerkennung' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='benutzername' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='utilisateur' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='utente' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='logto' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='identifier' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='login' i]:not([hidden]):not([disabled]),
@@ -40,15 +43,19 @@ export default {
   input[type='text' i][id*='benutzerkennung' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='benutzername' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='utilisateur' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='utente' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='name' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='create-account-input' i]:not([hidden]):not([disabled]),
+  input[type='text' i][class*='pwt-flex-fill' i][required]:not([role]):not([hidden]):not([disabled]),
   input[type='text' i][autocomplete*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][autocomplete*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='e-mail' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='utilisateur' i]:not([hidden]):not([disabled]),
+  input[type='text' i][placeholder*='utente' i]:not([hidden]):not([disabled]),
   input[type='email' i]:not([hidden]):not([disabled]),
   input[name*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='email' i]:not([type]):not([hidden]):not([disabled]),
@@ -56,12 +63,14 @@ export default {
   input[name*='benutzerkennung' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='benutzername' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
+  input[name*='utente' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='email' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='login' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='benutzerkennung' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='benutzername' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='utente' i]:not([type]):not([hidden]):not([disabled]),
   input[class*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[class*='email' i]:not([type]):not([hidden]):not([disabled]),
   input[class*='create-account-input' i]:not([type]):not([hidden]):not([disabled]),
@@ -70,7 +79,8 @@ export default {
   input[placeholder*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[placeholder*='email' i]:not([type]):not([hidden]):not([disabled]),
   input[placeholder*='e-mail' i]:not([type]):not([hidden]):not([disabled]),
-  input[placeholder*='utilisateur' i]:not([type]):not([hidden]):not([disabled])`,
+  input[placeholder*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
+  input[placeholder*='utente' i]:not([type]):not([hidden]):not([disabled])`,
   /** Selectors to detect password inputs (input type password or type text with id or class or name contain password) */
   PASSWORD_FIELD_SELECTOR: `input[type='password' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='password' i]:not([hidden]):not([disabled]),
@@ -104,6 +114,6 @@ export default {
   input[name*='mfa' i]:not([hidden]):not([disabled]),
   input[id*='mfa' i]:not([hidden]):not([disabled]),
   input[class*='mfa' i]:not([hidden]):not([disabled]),
-  *:has(> input ~ input ~ input ~ input ~ input ~ input)
+  *:has(> input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]) + input:not([type='hidden']):not([hidden]):not([disabled]))
   `,
 };

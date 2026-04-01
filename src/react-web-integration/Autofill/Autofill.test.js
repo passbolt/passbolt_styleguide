@@ -32,6 +32,10 @@ import {
   domSingleOTPField,
   domSingleOTPFieldWithUsernameAndPassword,
   domSingleOTPMultiField,
+  domPartslink24ThreeFieldLogin,
+  domSDRLoginForm,
+  domBestKeywordOnFirstElement,
+  domSameKeywordPriorityTwoElements,
 } from "../lib/InForm/InformManager.test.data";
 import { defaultFormData } from "./Autofill.test.data";
 import MockPort from "../../react-extension/test/mock/MockPort";
@@ -359,6 +363,66 @@ describe("Autofill::extractUsernameElementWithFallback", () => {
     const passwordEl = document.querySelector('input[type="password"]');
     expect(UserEventsService.autofill).toHaveBeenCalledTimes(1);
     expect(UserEventsService.autofill).toHaveBeenCalledWith(passwordEl, formData.secret);
+    expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+  });
+
+  it("Should prefer userLogin over accountLogin on partslink24 3-field form", () => {
+    expect.assertions(4);
+    document.body.innerHTML = domPartslink24ThreeFieldLogin;
+
+    const formData = defaultFormData();
+    const page = new AutofillPage();
+    page.fillForm(formData);
+
+    const expectedUsernameEl = document.querySelector('[name="userLogin"]');
+    const expectedPasswordEl = document.querySelector('[type="password"]');
+    expect(UserEventsService.autofill).toHaveBeenCalledTimes(2);
+    expect(UserEventsService.autofill).toHaveBeenCalledWith(expectedUsernameEl, formData.username);
+    expect(UserEventsService.autofill).toHaveBeenCalledWith(expectedPasswordEl, formData.secret);
+    expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+  });
+
+  it("Should autofill Italian 'Utente' username field on SDR login form", () => {
+    expect.assertions(4);
+    document.body.innerHTML = domSDRLoginForm;
+
+    const formData = defaultFormData();
+    const page = new AutofillPage();
+    page.fillForm(formData);
+
+    const expectedUsernameEl = document.querySelector("#Utente");
+    const expectedPasswordEl = document.querySelector("#Password");
+    expect(UserEventsService.autofill).toHaveBeenCalledTimes(2);
+    expect(UserEventsService.autofill).toHaveBeenCalledWith(expectedUsernameEl, formData.username);
+    expect(UserEventsService.autofill).toHaveBeenCalledWith(expectedPasswordEl, formData.secret);
+    expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+  });
+
+  it("Should pick the first element when it has the best keyword score", () => {
+    expect.assertions(3);
+    document.body.innerHTML = domBestKeywordOnFirstElement;
+
+    const formData = defaultFormData();
+    const page = new AutofillPage();
+    page.fillForm(formData);
+
+    const expectedUsernameEl = document.querySelector('[name="username"]');
+    expect(UserEventsService.autofill).toHaveBeenCalledTimes(2);
+    expect(UserEventsService.autofill).toHaveBeenCalledWith(expectedUsernameEl, formData.username);
+    expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+  });
+
+  it("Should pick the first element in DOM order when two elements have the same keyword priority", () => {
+    expect.assertions(3);
+    document.body.innerHTML = domSameKeywordPriorityTwoElements;
+
+    const formData = defaultFormData();
+    const page = new AutofillPage();
+    page.fillForm(formData);
+
+    const expectedUsernameEl = document.querySelector('[name="main_user"]');
+    expect(UserEventsService.autofill).toHaveBeenCalledTimes(2);
+    expect(UserEventsService.autofill).toHaveBeenCalledWith(expectedUsernameEl, formData.username);
     expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
   });
 });

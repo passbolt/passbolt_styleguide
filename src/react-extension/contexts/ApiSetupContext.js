@@ -86,7 +86,13 @@ class ApiSetupContextProvider extends React.Component {
    * @return {void}
    */
   handleStartSetupSuccess() {
-    const state = ApiSetupContextState.INSTALL_EXTENSION_STATE;
+    const currentBrowser = detectBrowserName();
+
+    const state =
+      currentBrowser === BROWSER_NAMES.SAFARI
+        ? ApiSetupContextState.INSTALL_SAFARI_EXTENSION_STATE
+        : ApiSetupContextState.INSTALL_EXTENSION_STATE;
+
     this.setState({ state });
   }
 
@@ -163,6 +169,12 @@ class ApiSetupContextProvider extends React.Component {
   isBrowserSupported() {
     const browserName = detectBrowserName();
     const supportedBrowserNames = [BROWSER_NAMES.CHROME, BROWSER_NAMES.FIREFOX, BROWSER_NAMES.EDGE];
+
+    const isSafariEnabled = this.props.context.siteSettings.canIUse("safari");
+    if (isSafariEnabled) {
+      supportedBrowserNames.push(BROWSER_NAMES.SAFARI);
+    }
+
     return supportedBrowserNames.includes(browserName);
   }
 

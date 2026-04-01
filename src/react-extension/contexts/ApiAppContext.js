@@ -56,7 +56,7 @@ class ApiAppContextProvider extends React.Component {
    * Whenever the component is unmount.
    */
   componentWillUnmount() {
-    clearTimeout(this.state.onExpiredSession);
+    clearTimeout(this.scheduledCheckIsAuthenticatedTimeout);
   }
 
   /**
@@ -138,7 +138,10 @@ class ApiAppContextProvider extends React.Component {
   async getLoggedInUser() {
     const apiClientOptions = this.getApiClientOptions().setResourceName("users");
     const apiClient = new ApiClient(apiClientOptions);
-    const result = await apiClient.get("me");
+    // To ensure account_recovery_user_setting is available for pages served by API
+    const result = await apiClient.get("me", {
+      "contain[account_recovery_user_setting]": "1",
+    });
     const loggedInUser = result.body;
     this.setState({ loggedInUser });
   }

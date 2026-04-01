@@ -16,9 +16,9 @@ import React from "react";
 import ManageSmtpAdministrationSettings from "../ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings";
 import { defaultProps } from "./ManageSmtpAdministrationSettings.test.data";
 import {
-  withExistingSmtpSettings,
-  withAwsSesSmtpSettings,
-  emptySmtpSettings,
+  defaultExistingSmtpSettingsDto,
+  withAwsSesSmtpSettingsDto,
+  defaultEmptySmtpSettingsDto,
 } from "../../../contexts/AdminSmtpSettingsContext.test.data";
 import MockFetch from "../../../test/mock/MockFetch";
 import AdminSmtpSettingsContextProvider from "../../../contexts/AdminSmtpSettingsContext";
@@ -62,16 +62,16 @@ const mockFetch = new MockFetch();
 mockFetch.addGetFetchRequest(/smtp\/settings\.json/, async () => {
   switch (currentStory) {
     case "default": {
-      return mockApiResponse(emptySmtpSettings());
+      return mockApiResponse(defaultEmptySmtpSettingsDto());
     }
     case "with-smtp-settings": {
-      return mockApiResponse(withExistingSmtpSettings());
+      return mockApiResponse(defaultExistingSmtpSettingsDto());
     }
     case "with-smtp-settings-from-file": {
-      return mockApiResponse(withExistingSmtpSettings({ source: "file" }));
+      return mockApiResponse(defaultExistingSmtpSettingsDto({ source: "file" }));
     }
     case "with-known-smtp-settings": {
-      return mockApiResponse(withAwsSesSmtpSettings());
+      return mockApiResponse(withAwsSesSmtpSettingsDto());
     }
     case "with-error-from-server": {
       throw new Error("Something went wrong!");

@@ -47,7 +47,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * Handle save settings
    */
   async handleSaveClick() {
-    if (this.smtpSettings.isProcessing()) {
+    if (!this.isSaveEnabled()) {
       return;
     }
     const isFormValid = this.smtpSettings.validateData();
@@ -86,7 +86,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   isSaveEnabled() {
-    return this.smtpSettings.isSettingsModified() && !this.smtpSettings.isProcessing();
+    return !this.smtpSettings.isProcessing();
   }
 
   /**
@@ -94,7 +94,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   isTestEnabled() {
-    return this.smtpSettings.isSettingsModified() && !this.smtpSettings.isProcessing();
+    return !this.smtpSettings.isProcessing();
   }
 
   /**

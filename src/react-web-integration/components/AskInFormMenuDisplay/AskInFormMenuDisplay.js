@@ -110,6 +110,7 @@ class AskInFormMenuDisplay extends React.Component {
     const { isAuthenticated, isMfaRequired } = await this.props.context.port.request(
       "passbolt.in-form-cta.check-status",
     );
+
     const isActive = isAuthenticated && !isMfaRequired;
 
     const suggestedResourcesCount = isActive
@@ -127,7 +128,8 @@ class AskInFormMenuDisplay extends React.Component {
 
   /**
    * Returns the Inform logo to be displayed based on the user auth status and suggested resources count.
-   * @returns {ReactDOM}
+   * NOTE: data-count is used for unit tests
+   * @returns {React.ReactElement}
    */
   get informLogo() {
     if (!this.state.status.isActive) {
@@ -135,18 +137,23 @@ class AskInFormMenuDisplay extends React.Component {
     }
 
     const count = this.state.status.suggestedResourcesCount;
-    if (count > 5) {
-      return <IconBadge5PlusSVG className="in-form-icon-logo" />;
-    }
 
-    return {
-      0: <IconWithoutBadgeSVG className="in-form-icon-logo" />,
-      1: <IconBadge1SVG className="in-form-icon-logo" />,
-      2: <IconBadge2SVG className="in-form-icon-logo" />,
-      3: <IconBadge3SVG className="in-form-icon-logo" />,
-      4: <IconBadge4SVG className="in-form-icon-logo" />,
-      5: <IconBadge5SVG className="in-form-icon-logo" />,
-    }[count];
+    switch (count) {
+      case 0:
+        return <IconWithoutBadgeSVG className="in-form-icon-logo" data-count={count} />;
+      case 1:
+        return <IconBadge1SVG className="in-form-icon-logo" data-count={count} />;
+      case 2:
+        return <IconBadge2SVG className="in-form-icon-logo" data-count={count} />;
+      case 3:
+        return <IconBadge3SVG className="in-form-icon-logo" data-count={count} />;
+      case 4:
+        return <IconBadge4SVG className="in-form-icon-logo" data-count={count} />;
+      case 5:
+        return <IconBadge5SVG className="in-form-icon-logo" data-count={count} />;
+      default:
+        return <IconBadge5PlusSVG className="in-form-icon-logo" data-count={"5+"} />;
+    }
   }
 
   /**

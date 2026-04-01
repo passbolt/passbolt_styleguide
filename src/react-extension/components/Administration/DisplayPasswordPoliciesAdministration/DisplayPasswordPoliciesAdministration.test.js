@@ -85,7 +85,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
     });
 
     it("As a logged in administrator I can save the current configuration", async () => {
-      expect.assertions(5);
+      expect.assertions(6);
 
       const newPasswordLength = "20";
       const newPassphraseWordCount = "20";
@@ -126,6 +126,8 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(spyOnFeedback).toHaveBeenCalledTimes(1);
       await waitForElementToBeRemoved(() => page.settingsChangedBanner);
       expect(page.settingsChangedBanner).toBeNull();
+
+      expect(props.passwordPoliciesContext.setPolicies).toHaveBeenCalledTimes(1);
     });
 
     it("As a logged in administrator I should see an error notification if the configuration could not be saved", async () => {

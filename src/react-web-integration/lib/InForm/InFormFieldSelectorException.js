@@ -12,6 +12,6 @@
  * Custom username selector for specified url
  */
 export const UsernameFieldSelectorException = {
-  "ovh.com": "input[type='text' i][id='account'][class*='ovh-field-input']:not([hidden]):not([disabled])",
+  "ovh.com": "input[type='text' i][id='account'][aria-labelledby*='login-account-label']:not([hidden]):not([disabled])",
   "cisecurity.com": "form[action*='cisecurity.org/login'] input[type='login'][name='login']",
 };

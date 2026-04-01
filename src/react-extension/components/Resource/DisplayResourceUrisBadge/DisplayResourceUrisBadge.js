@@ -15,6 +15,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import sanitizeUrl, { urlProtocols } from "../../../lib/Sanitize/sanitizeUrl";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import TabsServiceWorkerService from "../../../../shared/services/serviceWorker/tabs/tabsServiceWorkerService";
 
 const linkAuthorizedProtocols = [
   urlProtocols.FTP,
@@ -25,6 +27,15 @@ const linkAuthorizedProtocols = [
 ];
 
 class DisplayResourceUrisBadge extends React.Component {
+  /**
+   * @constructor
+   * @param {object} props The component props
+   */
+  constructor(props) {
+    super(props);
+    this.tabsServiceWorkerService = new TabsServiceWorkerService(props.context.port);
+  }
+
   /**
    * Get safe uri of a resource
    * @param {string} link The resource to get the safe uri for
@@ -44,7 +55,7 @@ class DisplayResourceUrisBadge extends React.Component {
    * @param {string} safeUri The safe URI to open in the new window.
    */
   handleClick(safeUri) {
-    window.open(safeUri, "_blank", "noopener,noreferrer");
+    this.tabsServiceWorkerService.openResourceUriInNewTab(safeUri);
   }
 
   /**
@@ -103,4 +114,4 @@ DisplayResourceUrisBadge.propTypes = {
   additionalUris: PropTypes.arrayOf(PropTypes.string), // The uris
 };
 
-export default DisplayResourceUrisBadge;
+export default withAppContext(DisplayResourceUrisBadge);

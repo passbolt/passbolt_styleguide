@@ -344,16 +344,22 @@ const extractUsernameElementWithFallback = function (elements) {
   // @todo Translations should be added in order to increase the algorithm success.
   const inputAttrValues = ["user", "email", "name", "login"];
 
-  // Iterate over visible input list to find the matching input based on filter elements.
-  foundBreakPoint: {
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
-      for (let j = 0; j < inputAttributes.length; j++) {
-        for (let k = 0; k < inputAttrValues.length; k++) {
-          const matchedInput = element.querySelectorAll(`input[${inputAttributes[j]}*='${inputAttrValues[k]}' i]`);
-          if (matchedInput.length) {
-            usernameElement = matchedInput[0];
-            break foundBreakPoint;
+  /*
+   * Score each candidate element and keep the one most likely to be the username field.
+   * The score formula (k * attributeCount + j) ensures keyword priority takes precedence
+   * over attribute priority: an element matching "user" (k=0) in any attribute always wins
+   * over one matching "login" (k=3) even in a higher-priority attribute.
+   */
+  let bestScore = Infinity;
+  for (let i = 0; i < elements.length; i++) {
+    const element = elements[i];
+    for (let j = 0; j < inputAttributes.length; j++) {
+      for (let k = 0; k < inputAttrValues.length; k++) {
+        if (element.matches(`input[${inputAttributes[j]}*='${inputAttrValues[k]}' i]`)) {
+          const score = k * inputAttributes.length + j;
+          if (score < bestScore) {
+            bestScore = score;
+            usernameElement = element;
           }
         }
       }

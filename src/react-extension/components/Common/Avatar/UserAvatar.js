@@ -107,11 +107,6 @@ class UserAvatar extends Component {
    * @returns {boolean}
    */
   shouldDisplayDefaultAvatar() {
-    //@todo: remove this workaround when Safari stops breaking user session when downloading "cross-domain" images
-    if (this.isRunningUnderSafari()) {
-      return true;
-    }
-
     const hasAvatarUrl = Boolean(this.getAvatarSrc());
     return this.state.error || !this.props.user || this.isDefaultAvatarUrlFromApi() || !hasAvatarUrl;
   }

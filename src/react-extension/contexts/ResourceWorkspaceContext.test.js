@@ -53,51 +53,61 @@ describe("Resource Workspace Context", () => {
 
     it("AS LU I should have an SHARED-WITH-ME filter when I went to /app/passwords with such a filter", async () => {
       await page.goToShareWithMe();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.SHARED_WITH_ME);
     });
 
     it("AS LU I should have an EXPIRED filter when I went to /app/passwords/filter/expried with such a filter", async () => {
       await page.goToExpired();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.EXPIRED);
     });
 
     it("AS LU I should have an ITEMS-I-OWN filter when I went to /app/passwords with such a filter", async () => {
       await page.goToItemsIOwn();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.ITEMS_I_OWN);
     });
 
     it("AS LU I should have an PRIVATE filter when I went to /app/passwords with such a filter", async () => {
       await page.goToPrivate();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.PRIVATE);
     });
 
     it("AS LU I should have an FAVORITE filter when I went to /app/passwords with such a filter", async () => {
       await page.goToFavorite();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.FAVORITE);
     });
 
     it("AS LU I should have an TEXT filter when I went to /app/passwords with such a filter", async () => {
       await page.goToText("some text");
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.TEXT);
     });
 
     it("AS LU I should have an GROUP filter when I went to /app/passwords with such a filter", async () => {
       await page.goToGroup({ group: { id: "some group id" } });
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.GROUP);
     });
 
     it("AS LU I should have an TAG filter when I went to /app/passwords with such a filter", async () => {
       await page.goToTag({ tag: { id: "some tag id" } });
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.TAG);
     });
 
     it("AS LU I should have an FOLDER filter when I went to /app/folders/{folder-id} with such a filter", async () => {
       await page.goToFolder(context.folders[0]);
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.FOLDER);
     });
 
     it("AS LU I should have an ROOT-FOLDER filter when I went to /app/folders/{folder-id} with such a filter", async () => {
       await page.goToRootFolder();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.ROOT_FOLDER);
     });
   });
@@ -285,19 +295,19 @@ describe("Resource Workspace Context", () => {
   });
 
   describe("As LU I be able to follow a resource uri", () => {
-    it("As LU I be able to follow a safe resource uri", () => {
+    it("As LU I be able to follow a safe resource uri", async () => {
       const resource = context.resources[0];
-      jest.spyOn(window, "open").mockImplementationOnce(() => {});
-      page.goToResourceUri(resource.metadata.uris[0]);
-      expect(window.open).toHaveBeenCalledWith("https://passbolt.com/", "_blank", "noopener,noreferrer");
+      jest.spyOn(context.port, "request");
+      await page.goToResourceUri(resource.metadata.uris[0]);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.tabs.open-resource-uri", "https://passbolt.com/");
     });
 
-    it("As LU I not be able to follow an unsafe resource uri", () => {
+    it("As LU I not be able to follow an unsafe resource uri", async () => {
       const resource = context.resources[0];
       resource.uri = "javascript://mars-attack";
-      jest.spyOn(window, "open").mockImplementationOnce(() => {});
-      page.goToResourceUri(resource.uri);
-      expect(window.open).toHaveBeenCalledTimes(0);
+      jest.spyOn(context.port, "request");
+      await page.goToResourceUri(resource.uri);
+      expect(context.port.request).not.toHaveBeenCalledWith("passbolt.tabs.open-resource-uri", expect.anything());
     });
   });
 
