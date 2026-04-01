@@ -63,7 +63,7 @@ export const defaultAzureSsoSettingsViewModelDto = (data = {}) => {
  * @param {Object} data The data to override
  * @returns {Object}
  */
-export const defaultGoogleSsoSettingsFormEntityDto = (data = {}) => {
+export const defaultGoogleSsoSettingsViewModelDto = (data = {}) => {
   const defaultData = {
     client_id: uuid(),
     client_secret: "This is a secret",
@@ -77,7 +77,7 @@ export const defaultGoogleSsoSettingsFormEntityDto = (data = {}) => {
  * @param {Object} data The data to override
  * @returns {Object}
  */
-export const defaultOAuth2SsoSettingsFormEntityDto = (data = {}) => {
+export const defaultOAuth2SsoSettingsViewModelDto = (data = {}) => {
   const defaultData = {
     url: "https://openid.passbolt.com",
     openid_configuration_path: "/.well-known/openid-configuration",
@@ -136,7 +136,7 @@ export const googleSsoSettingsEntityDtoFromApi = (data = {}) => {
   const defaultData = defaultSsoSettingsViewModelDto({
     id: uuid(),
     provider: GoogleSsoSettingsEntity.PROVIDER_ID,
-    data: defaultGoogleSsoSettingsFormEntityDto(data.data),
+    data: defaultGoogleSsoSettingsViewModelDto(data.data),
     created: "2023-08-06T10:05:46+00:00",
     created_by: uuid(),
     modified: "2023-08-06T10:05:46+00:00",
@@ -157,7 +157,7 @@ export const oAuth2SsoSettingsEntityDtoFromApi = (data = {}) => {
   const defaultData = defaultSsoSettingsViewModelDto({
     id: uuid(),
     provider: OAuth2SsoSettingsEntity.PROVIDER_ID,
-    data: defaultOAuth2SsoSettingsFormEntityDto(data.data),
+    data: defaultOAuth2SsoSettingsViewModelDto(data.data),
     created: "2023-08-06T10:05:46+00:00",
     created_by: uuid(),
     modified: "2023-08-06T10:05:46+00:00",

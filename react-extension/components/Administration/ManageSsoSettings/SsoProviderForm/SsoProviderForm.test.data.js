@@ -18,7 +18,6 @@ import {
   googleSsoSettingsEntityDtoFromApi,
   oAuth2SsoSettingsEntityDtoFromApi,
 } from "../../../../../shared/models/ssoSettings/SsoSettingsViewModel.test.data";
-import { pingOneSsoSettingsEntityDto } from "../../../../../shared/models/entity/ssoSettings/PingOneSsoSettingsEntity.test.data";
 import { defaultClipboardContext } from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 import { defaultAppContext } from "../../../../contexts/ExtAppContext.test.data";
 
@@ -88,21 +87,6 @@ export function defaultAdfsProps(data = {}) {
       getErrors: () => new EntityValidationError(),
       isProcessing: () => false,
       shouldFocusOnError: () => false,
-    },
-    actionFeedbackContext: {
-      displaySuccess: jest.fn(),
-    },
-  });
-  return Object.assign(defaultData, data);
-}
-
-export function defaultPingOneProps(data = {}) {
-  const defaultData = defaultProps({
-    adminSsoContext: {
-      getSsoConfiguration: () => pingOneSsoSettingsEntityDto(),
-      getErrors: () => new EntityValidationError(),
-      isProcessing: () => false,
-      consumeFocusOnError: () => false,
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),

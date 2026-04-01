@@ -11,59 +11,26 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.6.0
  */
+
 import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
-import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
 import { defaultAdfsSsoSettingsDto } from "./SsoSettingsEntity.test.data";
+import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
 import { defaultAdfsSsoSettingsViewModelDto } from "../../ssoSettings/SsoSettingsViewModel.test.data";
 
 describe("AdfsSsoSettingsEntity", () => {
-  describe("::getSchema", () => {
-    it("schema must validate", () => {
-      EntitySchema.validateSchema(AdfsSsoSettingsEntity.ENTITY_NAME, AdfsSsoSettingsEntity.getSchema());
-    });
-
-    it("validates url property", () => {
-      assertEntityProperty.string(AdfsSsoSettingsEntity, "url");
-      assertEntityProperty.required(AdfsSsoSettingsEntity, "url");
-    });
-
-    it("validates openid_configuration_path property", () => {
-      assertEntityProperty.string(AdfsSsoSettingsEntity, "openid_configuration_path");
-      assertEntityProperty.required(AdfsSsoSettingsEntity, "openid_configuration_path");
-      assertEntityProperty.minLength(AdfsSsoSettingsEntity, "openid_configuration_path", 1);
-    });
-
-    it("validates scope property", () => {
-      assertEntityProperty.string(AdfsSsoSettingsEntity, "scope");
-      assertEntityProperty.required(AdfsSsoSettingsEntity, "scope");
-      assertEntityProperty.minLength(AdfsSsoSettingsEntity, "scope", 1);
-    });
-
-    it("validates client_id property", () => {
-      assertEntityProperty.string(AdfsSsoSettingsEntity, "client_id");
-      assertEntityProperty.required(AdfsSsoSettingsEntity, "client_id");
-      assertEntityProperty.minLength(AdfsSsoSettingsEntity, "client_id", 1);
-    });
-
-    it("validates client_secret property", () => {
-      assertEntityProperty.string(AdfsSsoSettingsEntity, "client_secret");
-      assertEntityProperty.required(AdfsSsoSettingsEntity, "client_secret");
-      assertEntityProperty.minLength(AdfsSsoSettingsEntity, "client_secret", 1);
-    });
+  it("schema must validate", () => {
+    EntitySchema.validateSchema(AdfsSsoSettingsEntity.ENTITY_NAME, AdfsSsoSettingsEntity.getSchema());
   });
 
-  describe("::constructor", () => {
-    it("it should instantiate the entity with a minimal dto", () => {
-      expect.assertions(2);
-      const dto = defaultAdfsSsoSettingsDto();
-      const entity = new AdfsSsoSettingsEntity(dto);
+  it("it should instantiate the entity with a minimal dto", () => {
+    expect.assertions(2);
+    const dto = defaultAdfsSsoSettingsDto();
+    const entity = new AdfsSsoSettingsEntity(dto);
 
-      expect(entity).toBeInstanceOf(AdfsSsoSettingsEntity);
-      expect(entity.toJSON()).toEqual(dto);
-    });
+    expect(entity).toBeInstanceOf(AdfsSsoSettingsEntity);
+    expect(entity.toJSON()).toEqual(dto);
   });
 
   it("it should give the right provider ID", () => {
@@ -71,7 +38,53 @@ describe("AdfsSsoSettingsEntity", () => {
     expect(AdfsSsoSettingsEntity.PROVIDER_ID).toStrictEqual("adfs");
   });
 
-  describe("Should validate only the supported URL of ADFS", () => {
+  it("should throw an exception if required fields are not present", () => {
+    const requiredFieldNames = AdfsSsoSettingsEntity.getSchema().required;
+    const requiredFieldCount = 5;
+    expect.assertions(requiredFieldCount * 2 + 1);
+
+    expect(requiredFieldNames.length).toStrictEqual(requiredFieldCount);
+
+    for (let i = 0; i < requiredFieldNames.length; i++) {
+      const fieldName = requiredFieldNames[i];
+      const dto = defaultAdfsSsoSettingsDto();
+      delete dto[fieldName];
+      try {
+        new AdfsSsoSettingsEntity(dto);
+      } catch (e) {
+        expect(e).toBeInstanceOf(EntityValidationError);
+        expect(e.hasError(fieldName, "required")).toStrictEqual(true);
+      }
+    }
+  });
+
+  each([
+    { dto: { url: -1 }, errorType: "type" },
+    { dto: { url: "test" }, errorType: "pattern" },
+
+    { dto: { openid_configuration_path: -1 }, errorType: "type" },
+    { dto: { openid_configuration_path: "" }, errorType: "minLength" },
+
+    { dto: { client_id: -1 }, errorType: "type" },
+    { dto: { client_id: "" }, errorType: "minLength" },
+
+    { dto: { client_secret: -1 }, errorType: "type" },
+    { dto: { client_secret: "" }, errorType: "minLength" },
+  ]).describe("should throw an exception if DTO contains invalid values", (scenario) => {
+    it(`scenario: ${JSON.stringify(scenario)}`, () => {
+      expect.assertions(2);
+      const fieldName = Object.keys(scenario.dto)[0];
+      const erroneousDto = defaultAdfsSsoSettingsDto(scenario.dto);
+      try {
+        new AdfsSsoSettingsEntity(erroneousDto);
+      } catch (e) {
+        expect(e).toBeInstanceOf(EntityValidationError);
+        expect(e.hasError(fieldName, scenario.errorType)).toStrictEqual(true);
+      }
+    });
+  });
+
+  describe("Should validate only the supported URL of OAuth2", () => {
     each([
       "https://login.adfs.com",
       "https://login.adfs.us",
@@ -86,16 +99,28 @@ describe("AdfsSsoSettingsEntity", () => {
     });
 
     each([
+      //ending with trailing slashes
       "https://login.adfs.com/",
       "https://login.adfs.us/",
       "https://login.partner.adfs.lu/",
       "https://localhost/",
       "https://192.168.1.1/",
+
+      //with a prefix
+      "hack+https://login.adfs.com/",
+      "hack+https://login.adfs.us/",
+      "hack+https://login.partner.adfs.lu/",
+      "hack+https://localhost/",
+      "hack+https://192.168.1.1./",
+
+      //not secure HTTP protocol
       "http://login.adfs.com/",
       "http://login.adfs.us/",
       "http://login.partner.adfs.lu/",
       "http://localhost/",
       "http://192.168.1.1/",
+
+      //other protocol
       "ftp://login.adfs.com/",
       "ftp://login.adfs.us/",
       "ftp://login.partner.adfs.lu/",

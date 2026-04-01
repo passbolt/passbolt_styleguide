@@ -82,6 +82,46 @@ export const domElementLoginWithNameAttributeLogin = `
 </div>`;
 
 /**
+ * Create a login form with name attribute utente (Italian) in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNameAttributeUtente = `
+<div>
+  <input type="text" name="Utente"/>
+  <input type="password"/>
+</div>`;
+
+/**
+ * Create a login form with no type and name attribute utente (Italian) in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNoTypeAndNameAttributeUtente = `
+<div>
+  <input name="Utente"/>
+  <input type="password"/>
+</div>`;
+
+/**
+ * Create a login form with id attribute utente (Italian) in DOM
+ * @type {string}
+ */
+export const domElementLoginWithIdAttributeUtente = `
+<div>
+  <input type="text" id="Utente"/>
+  <input type="text" id="Password"/>
+</div>`;
+
+/**
+ * Create a login form with no type and id attribute utente (Italian) in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNoTypeAndIdAttributeUtente = `
+<div>
+  <input id="Utente"/>
+  <input type="text" id="password"/>
+</div>`;
+
+/**
  * Create a login form with name attribute login in DOM
  * @type {string}
  */
@@ -586,6 +626,57 @@ export const domSingleOTPMultiField = `
     <input type="text" />
     <input type="text" />
     <input type="text" />
+</div>`;
+
+/**
+ * Create a login form similar to partslink24.com with 3 fields: Company ID, Username, Password.
+ * Both accountLogin and userLogin match username selectors (contain "login").
+ * The disambiguation should prefer userLogin (contains "user") over accountLogin.
+ * @type {string}
+ */
+export const domPartslink24ThreeFieldLogin = `
+<div>
+  <form>
+    <input type="text" name="accountLogin" id="login-id"/>
+    <input type="text" name="userLogin" id="login-name"/>
+    <input type="password" name="loginBean.password" id="inputPassword"/>
+  </form>
+</div>`;
+
+/**
+ * Create a login form similar to societadistribuzionericambi.it with Italian field names.
+ * @type {string}
+ */
+export const domSDRLoginForm = `
+<div>
+  <form>
+    <input type="text" id="Utente" name="Utente"/>
+    <input type="password" id="Password" name="Password"/>
+  </form>
+</div>`;
+
+/**
+ * Create a login form where the best keyword match ("user") is on the first DOM element.
+ * Verifies that element iteration picks the first element when it has the best score.
+ * @type {string}
+ */
+export const domBestKeywordOnFirstElement = `
+<div>
+  <input type="text" name="username" id="field-user"/>
+  <input type="text" name="accountLogin" id="field-login"/>
+  <input type="password"/>
+</div>`;
+
+/**
+ * Create a login form where two elements have the same keyword priority ("user").
+ * Verifies that DOM order is the tiebreaker when scores are equal.
+ * @type {string}
+ */
+export const domSameKeywordPriorityTwoElements = `
+<div>
+  <input type="text" name="main_user" id="first"/>
+  <input type="text" name="alt_user" id="second"/>
+  <input type="password"/>
 </div>`;
 
 /**

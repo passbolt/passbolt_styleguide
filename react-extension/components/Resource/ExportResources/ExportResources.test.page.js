@@ -96,6 +96,13 @@ export default class ExportResourcesPage {
   }
 
   /**
+   * Returns the Learn more link element in the submit wrapper
+   */
+  get learnMoreLink() {
+    return this._page.container.querySelector(".submit-wrapper a.button");
+  }
+
+  /**
    * Returns the CSV warning checkbox container element
    */
   get csvWarningContainer() {

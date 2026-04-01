@@ -31,6 +31,7 @@ import getPropValue from "../lib/Object/getPropValue";
 import { withTranslation } from "react-i18next";
 import RowsSettingEntity from "../../shared/models/entity/rowsSetting/rowsSettingEntity";
 import ResourcesServiceWorkerService from "../../shared/services/serviceWorker/resources/resourcesServiceWorkerService";
+import TabsServiceWorkerService from "../../shared/services/serviceWorker/tabs/tabsServiceWorkerService";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -109,6 +110,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     this.state = this.defaultState;
     this.gridResourceUserSetting = new GridResourceUserSettingServiceWorkerService(props.context.port);
     this.resourcesServiceWorkerService = new ResourcesServiceWorkerService(props.context.port);
+    this.tabsServiceWorkerService = new TabsServiceWorkerService(props.context.port);
   }
 
   /**
@@ -797,7 +799,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     });
 
     if (safeUri) {
-      window.open(safeUri, "_blank", "noopener,noreferrer");
+      this.tabsServiceWorkerService.openResourceUriInNewTab(safeUri);
     }
   }
 
@@ -1191,8 +1193,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const baseSorter = (sorter) => (this.state.sorter.asc ? sorter : reverseSorter(sorter));
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(getPropValue(s1, key), getPropValue(s2, key)));
     const stringSorter = (s1, s2) => (s1 || "").localeCompare(s2 || "");
+    const arrayStringSorter = (s1, s2) => (s1?.[0] || "").localeCompare(s2?.[0] || "");
     const booleanSorter = (s1, s2) => (s1 === s2 ? 0 : s1 ? -1 : 1);
-    const sorter = this.state.sorter.propertyName === "favorite" ? booleanSorter : stringSorter;
+    const mapSorter = { favorite: booleanSorter, "metadata.uris": arrayStringSorter };
+    const sorter = mapSorter[this.state.sorter.propertyName] ?? stringSorter;
     const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
     if (resources !== null) {
       resources.sort(propertySorter);
@@ -1459,10 +1463,4 @@ export const ResourceWorkspaceFilterTypes = {
 /**
  * The list of resource link authorized protocols
  */
-export const resourceLinkAuthorizedProtocols = [
-  urlProtocols.FTP,
-  urlProtocols.FTPS,
-  urlProtocols.HTTPS,
-  urlProtocols.HTTP,
-  urlProtocols.SSH,
-];
+export const resourceLinkAuthorizedProtocols = [urlProtocols.HTTPS, urlProtocols.HTTP];

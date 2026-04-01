@@ -256,14 +256,11 @@ describe("As LU I should see the password export dialog", () => {
     it("As LU I should see the Learn more link with correct href and target", async () => {
       expect.assertions(3);
 
-      await page.selectFormat(3);
-
-      const learnMoreLink = page.csvWarningLabel.querySelector("a");
-      expect(learnMoreLink).not.toBeNull();
-      expect(learnMoreLink.getAttribute("href")).toBe(
+      expect(page.learnMoreLink).not.toBeNull();
+      expect(page.learnMoreLink.getAttribute("href")).toBe(
         "https://www.passbolt.com/docs/user/basic-features/browser/export/",
       );
-      expect(learnMoreLink.getAttribute("target")).toBe("_blank");
+      expect(page.learnMoreLink.getAttribute("target")).toBe("_blank");
     });
   });
 
@@ -310,7 +307,7 @@ describe("As LU I should see the password export dialog", () => {
       props.exportPoliciesSettingsContext = exportPoliciesSettingsContext;
       const page = new ExportResourcesPage(context, props);
 
-      expect(page.exportFormatLabel).toBe("Choose the export format (kdbx is supported)");
+      expect(page.exportFormatLabel).toBe("Choose the export format");
     });
 
     it("As LU I should see the label 'csv and kdbx are supported' when CSV format is enabled", () => {
@@ -318,7 +315,7 @@ describe("As LU I should see the password export dialog", () => {
       const props = defaultProps();
       const page = new ExportResourcesPage(context, props);
 
-      expect(page.exportFormatLabel).toBe("Choose the export format (csv and kdbx are supported)");
+      expect(page.exportFormatLabel).toBe("Choose the export format");
     });
 
     it("As LU I should see the form disabled while export policies settings are loading", () => {

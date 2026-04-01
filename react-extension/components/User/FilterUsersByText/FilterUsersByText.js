@@ -29,6 +29,7 @@ class FilterUsersByText extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.debounceTimeoutId = null; // Set the debounce timeout identifier
     this.bindCallbacks();
   }
 
@@ -46,7 +47,6 @@ class FilterUsersByText extends Component {
   get defaultState() {
     return {
       text: "", // Current search text
-      debounceTimeoutIt: null, // Set the debounce timeout identifier
     };
   }
 
@@ -61,7 +61,7 @@ class FilterUsersByText extends Component {
    * Whenever the component will unmount
    */
   componentWillUnmount() {
-    clearTimeout(this.state.debounceTimeoutIt);
+    clearTimeout(this.debounceTimeoutId);
   }
 
   /**
@@ -89,12 +89,12 @@ class FilterUsersByText extends Component {
    * @param text
    */
   search(text) {
-    clearTimeout(this.state.debounceTimeoutId);
-    const debounceTimeoutId = setTimeout(() => {
+    clearTimeout(this.debounceTimeoutId);
+    this.debounceTimeoutId = setTimeout(() => {
       const filter = { type: UserWorkspaceFilterTypes.TEXT, payload: text };
       this.props.history.push({ pathname: "/app/users", state: { filter } });
     }, 300);
-    this.setState({ debounceTimeoutId, text });
+    this.setState({ text });
   }
 
   /**

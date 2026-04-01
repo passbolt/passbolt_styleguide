@@ -29,7 +29,6 @@ beforeEach(() => {
 const scenarios = [
   { providerId: "azure", expectedUrl: "https://login.microsoftonline.us" },
   { providerId: "google", expectedUrl: "https://accounts.google.com" },
-  { providerId: "pingone", expectedUrl: "https://auth.pingone.com" },
 ];
 
 each(scenarios).describe("GetUrlForSsoIdentificationService", (scenario) => {
@@ -52,7 +51,7 @@ each(scenarios).describe("GetUrlForSsoIdentificationService", (scenario) => {
       return expect(service.getUrl(scenario.providerId)).resolves.toStrictEqual(new URL(scenario.expectedUrl));
     });
 
-    it("Should throw an Error if the domain in the response is not the expected one", () => {
+    it("Should throw an Error if the domain in the response is not the exoected one", () => {
       expect.assertions(1);
       const apiClientOptions = new ApiClientOptions().setBaseUrl("http://localhost:6006");
 

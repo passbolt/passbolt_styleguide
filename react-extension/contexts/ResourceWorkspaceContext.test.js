@@ -295,19 +295,19 @@ describe("Resource Workspace Context", () => {
   });
 
   describe("As LU I be able to follow a resource uri", () => {
-    it("As LU I be able to follow a safe resource uri", () => {
+    it("As LU I be able to follow a safe resource uri", async () => {
       const resource = context.resources[0];
-      jest.spyOn(window, "open").mockImplementationOnce(() => {});
-      page.goToResourceUri(resource.metadata.uris[0]);
-      expect(window.open).toHaveBeenCalledWith("https://passbolt.com/", "_blank", "noopener,noreferrer");
+      jest.spyOn(context.port, "request");
+      await page.goToResourceUri(resource.metadata.uris[0]);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.tabs.open-resource-uri", "https://passbolt.com/");
     });
 
-    it("As LU I not be able to follow an unsafe resource uri", () => {
+    it("As LU I not be able to follow an unsafe resource uri", async () => {
       const resource = context.resources[0];
       resource.uri = "javascript://mars-attack";
-      jest.spyOn(window, "open").mockImplementationOnce(() => {});
-      page.goToResourceUri(resource.uri);
-      expect(window.open).toHaveBeenCalledTimes(0);
+      jest.spyOn(context.port, "request");
+      await page.goToResourceUri(resource.uri);
+      expect(context.port.request).not.toHaveBeenCalledWith("passbolt.tabs.open-resource-uri", expect.anything());
     });
   });
 

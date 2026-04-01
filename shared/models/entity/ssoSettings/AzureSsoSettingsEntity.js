@@ -23,6 +23,8 @@ const SUPPORTED_URLS = [
   "https://login.partner.microsoftonline.cn",
 ];
 
+const AZURE_SUPPORTED_URLS = /^https:\/\/login\.(microsoftonline\.(com|us)|partner\.microsoftonline\.cn)$/;
+
 /**
  * Entity related to the SSO settings
  */
@@ -53,7 +55,7 @@ class AzureSsoSettingsEntity extends Entity {
       properties: {
         url: {
           type: "string",
-          enum: SUPPORTED_URLS,
+          pattern: AZURE_SUPPORTED_URLS,
         },
         client_id: {
           type: "string",
