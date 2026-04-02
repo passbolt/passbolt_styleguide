@@ -5712,8 +5712,8 @@ svg .section-card .card .title:first-child {
   flex-direction: column;
 }
 .sso-login-form .sso-login-button {
-  border-radius: 0;
-  background: none;
+  border-radius: var(--Login-button-radius);
+  background: var(--Palette-Gradient-2);
   font-weight: bold;
   padding: 0.8rem 1.2rem;
 }

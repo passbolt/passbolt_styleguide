@@ -32,6 +32,8 @@ import AdfsSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/
 import { createSafePortal } from "../../../../shared/utils/portals";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
 import GoSVG from "../../../../img/svg/go.svg";
+import PingOneSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/PingOneSsoSettingsEntity";
+import PingOneSsoProviderForm from "./SsoProviderForm/PingOneSsoProviderForm";
 
 /**
  * This component displays the SSO administration settings
@@ -222,6 +224,7 @@ class ManageSsoSettings extends React.Component {
                 {ssoConfig?.provider === GoogleSsoSettingsEntity.PROVIDER_ID && <GoogleSsoProviderForm />}
                 {ssoConfig?.provider === OAuth2SsoSettingsEntity.PROVIDER_ID && <OAuth2SsoProviderForm />}
                 {ssoConfig?.provider === AdfsSsoSettingsEntity.PROVIDER_ID && <AdfsSsoProviderForm />}
+                {ssoConfig?.provider === PingOneSsoSettingsEntity.PROVIDER_ID && <PingOneSsoProviderForm />}
               </form>
             )}
           </div>
@@ -318,6 +321,24 @@ class ManageSsoSettings extends React.Component {
                 <a
                   className="button"
                   href="https://learn.microsoft.com/en-gb/microsoft-365/troubleshoot/active-directory/set-up-adfs-for-single-sign-on"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <GoSVG />
+                  <span>
+                    <Trans>Read the documentation</Trans>
+                  </span>
+                </a>
+              </div>
+            )}
+            {ssoConfig?.provider === PingOneSsoSettingsEntity.PROVIDER_ID && (
+              <div className="sidebar-help-section">
+                <h3>
+                  <Trans>How do I configure PingOne SSO?</Trans>
+                </h3>
+                <a
+                  className="button"
+                  href="https://docs.pingidentity.com/pingone/applications/p1_applications_add_applications.html"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
