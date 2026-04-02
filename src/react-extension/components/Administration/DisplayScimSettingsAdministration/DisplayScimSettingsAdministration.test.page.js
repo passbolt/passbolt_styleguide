@@ -106,6 +106,14 @@ export default class DisplayScimSettingsAdministrationPage {
   }
 
   /**
+   * Returns the SCIM secret token expiry input element
+   * @returns {HTMLElement}
+   */
+  get scimSecretTokenExpiryInput() {
+    return this.select("input#scim-secret-token-expiry-input");
+  }
+
+  /**
    * Returns the SCIM user select element
    * @returns {HTMLElement}
    */
