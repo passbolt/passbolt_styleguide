@@ -54,6 +54,11 @@ class ScimSettingsEntity extends EntityV2 {
           pattern: SECRET_TOKEN_PATTERN,
           nullable: true,
         },
+        expired: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
+        },
       },
     };
   }
@@ -108,6 +113,14 @@ class ScimSettingsEntity extends EntityV2 {
    */
   get secretToken() {
     return this._props.secret_token || null;
+  }
+
+  /**
+   * Get the expired date
+   * @returns {string|null} date string or null
+   */
+  get expired() {
+    return this._props.expired || null;
   }
 
   /**
