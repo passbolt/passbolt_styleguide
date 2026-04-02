@@ -12,11 +12,12 @@
  * @since         4.5.0
  */
 import { v4 as uuid } from "uuid";
+import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
 import AzureSsoSettingsEntity from "./AzureSsoSettingsEntity";
 import GoogleSsoSettingsEntity from "./GoogleSsoSettingsEntity";
 import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
+import PingOneSsoSettingsEntity from "./PingOneSsoSettingsEntity";
 import SsoSettingsEntity from "./SsoSettingsEntity";
-import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
 
 export function defaultSsoSettings(data = {}) {
   const defaultData = {
@@ -54,6 +55,14 @@ export function defaultSsoSettingsWithAdfs(data = {}) {
   const defaultData = defaultSsoSettings({
     provider: AdfsSsoSettingsEntity.PROVIDER_ID,
     data: defaultAdfsSsoSettingsDto(),
+  });
+  return Object.assign(defaultData, data);
+}
+
+export function defaultSsoSettingsWithPingOne(data = {}) {
+  const defaultData = defaultSsoSettings({
+    provider: PingOneSsoSettingsEntity.PROVIDER_ID,
+    data: defaultPingOneSsoSettingsDto(),
   });
   return Object.assign(defaultData, data);
 }
@@ -105,3 +114,12 @@ export const defaultAdfsSsoSettingsDto = (data = {}) => {
 
   return Object.assign(defaultData, data);
 };
+
+export const defaultPingOneSsoSettingsDto = (data = {}) => ({
+  url: "https://auth.pingone.com",
+  client_id: "passbolt-client-id",
+  client_secret: "passbolt-client-secret",
+  environment_id: "env-123-456",
+  email_claim: "email",
+  ...data,
+});

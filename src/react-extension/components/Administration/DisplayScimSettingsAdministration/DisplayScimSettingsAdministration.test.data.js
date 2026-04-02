@@ -89,3 +89,21 @@ export function defaultScimSettingsConfiguredProps(props = {}) {
     ...props,
   });
 }
+
+/**
+ * Props with expired secret token.
+ * @param {Object} props The props to override
+ * @returns {object}
+ */
+export function defaultScimSettingsExpiredTokenProps(props = {}) {
+  return defaultProps({
+    scimSettingsServiceWorkerService: {
+      findSettings: () =>
+        defaultScimSettingsDto({
+          expired: "2020-01-01",
+        }),
+      updateSettings: jest.fn(),
+    },
+    ...props,
+  });
+}
