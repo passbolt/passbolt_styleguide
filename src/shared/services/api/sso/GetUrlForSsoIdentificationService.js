@@ -15,10 +15,12 @@
 import { ApiClient } from "../../../lib/apiClient/apiClient";
 import AzureSsoSettingsEntity from "../../../models/entity/ssoSettings/AzureSsoSettingsEntity";
 import GoogleSsoSettingsEntity from "../../../models/entity/ssoSettings/GoogleSsoSettingsEntity";
+import PingOneSsoSettingsEntity from "../../../models/entity/ssoSettings/PingOneSsoSettingsEntity";
 
 const SSO_LOGIN_SUPPORTED_URLS = {
   [AzureSsoSettingsEntity.PROVIDER_ID]: AzureSsoSettingsEntity.SUPPORTED_URLS,
   [GoogleSsoSettingsEntity.PROVIDER_ID]: GoogleSsoSettingsEntity.SUPPORTED_URLS,
+  [PingOneSsoSettingsEntity.PROVIDER_ID]: PingOneSsoSettingsEntity.SUPPORTED_URLS,
 };
 
 /**
@@ -45,13 +47,13 @@ class GetUrlForSsoIdentificationService {
     const response = await apiClient.create();
     const url = new URL(response.body.url);
 
-    const supportedUrl = SSO_LOGIN_SUPPORTED_URLS[providerId];
+    const supportedUrls = SSO_LOGIN_SUPPORTED_URLS[providerId];
 
-    if (!supportedUrl) {
+    if (!supportedUrls) {
       throw new Error("The url should be part of the list of supported single sign-on urls.");
     }
 
-    const isValidUrl = supportedUrl.some((supportedUrl) => supportedUrl === url.origin);
+    const isValidUrl = supportedUrls.some((supportedUrl) => supportedUrl === url.origin);
     if (!isValidUrl) {
       throw new Error("The url should be part of the list of supported single sign-on urls.");
     }
