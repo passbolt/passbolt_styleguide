@@ -30,7 +30,7 @@ describe("As AD I can see the dialog of the different save step of account recov
   it("As AD I should not see a dialog", async () => {
     const props = defaultProps();
     new HandleSaveAccountRecoveryOrganizationPolicyWorkflowPage(props);
-    expect(props.dialogContext.open).not.toBeCalled();
+    expect(props.dialogContext.open).not.toHaveBeenCalled();
   });
 
   it("As AD I should see the confirm save account recovery settings", async () => {

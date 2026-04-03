@@ -247,6 +247,8 @@ describe("Display Resources", () => {
       await page.resource(1).openContextualMenu();
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(DisplayResourcesListContextualMenu, {
         resource: props.resourceWorkspaceContext.filteredResources[0],
+        left: 0,
+        top: 0,
       });
     });
   });

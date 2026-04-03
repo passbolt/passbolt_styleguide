@@ -140,13 +140,13 @@ describe("See the Edit User Group", () => {
     it("As AD I can stop editing a group by clicking on the cancel button", async () => {
       expect.assertions(1);
       await page.cancel();
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As AD I can stop editing a group by closing the dialog", async () => {
       expect.assertions(1);
       await page.close();
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As AD I should see an error dialog if the submit operation fails for an unexpected reason", async () => {

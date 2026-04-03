@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.4.0
  */
-import each from "jest-each";
 import {
   defaultPasswordExpirySettingsViewModelDto,
   passwordExpirySettingsEntityDtoFromApi,
@@ -66,12 +65,12 @@ describe("PasswordExpirySettingsViewModel", () => {
   });
 
   describe("::isDataDifferent", () => {
-    each([
+    describe.each([
       { automatic_update: false },
       { policy_override: true },
       { automatic_expiry: false },
       { default_expiry_period: 60 },
-    ]).describe("should return true if at least 1 difference is found between 2 ViewModel", (scenario) => {
+    ])("should return true if at least 1 difference is found between 2 ViewModel", (scenario) => {
       it(`for: ${JSON.stringify(scenario)}`, () => {
         expect.assertions(1);
 
@@ -129,7 +128,7 @@ describe("PasswordExpirySettingsViewModel", () => {
   });
 
   describe("::validate", () => {
-    each(["automatic_expiry", "automatic_update"]).describe("should validates the required field", (requiredField) => {
+    describe.each(["automatic_expiry", "automatic_update"])("should validates the required field", (requiredField) => {
       it(`for: ${requiredField}`, () => {
         expect.assertions(2);
         const viewModel = new PasswordExpirySettingsViewModel();
@@ -141,7 +140,7 @@ describe("PasswordExpirySettingsViewModel", () => {
       });
     });
 
-    each([
+    describe.each([
       {
         dto: { id: 50 },
         expectedErrors: { id: { type: "The id is not a valid string." } },
@@ -162,7 +161,7 @@ describe("PasswordExpirySettingsViewModel", () => {
         dto: { default_expiry_period: -1 },
         expectedErrors: { default_expiry_period: { type: "The default_expiry_period is not a valid null." } },
       },
-    ]).describe("should validate the current data set with PasswordExpirySettingsEntity", (scenario) => {
+    ])("should validate the current data set with PasswordExpirySettingsEntity", (scenario) => {
       it(`for: ${JSON.stringify(scenario.dto)}`, () => {
         const expectedErroneousField = Object.keys(scenario.expectedErrors);
         const expectedErroneousFieldCount = expectedErroneousField.length;
@@ -181,7 +180,7 @@ describe("PasswordExpirySettingsViewModel", () => {
       });
     });
 
-    each([
+    describe.each([
       {
         dto: { id: 50 },
         expectedErrors: { id: { type: "The id is not a valid string." } },
@@ -202,7 +201,7 @@ describe("PasswordExpirySettingsViewModel", () => {
         dto: { default_expiry_period: -1 },
         expectedErrors: { default_expiry_period: { type: "The default_expiry_period is not a valid integer." } },
       },
-    ]).describe("should validate the current data set with PasswordExpiryProSettingsEntity", (scenario) => {
+    ])("should validate the current data set with PasswordExpiryProSettingsEntity", (scenario) => {
       it(`for: ${JSON.stringify(scenario.dto)}`, () => {
         const expectedErroneousField = Object.keys(scenario.expectedErrors);
         const expectedErroneousFieldCount = expectedErroneousField.length;

@@ -48,8 +48,8 @@ describe("As LU I should see the user confirm passphrase page", () => {
       expect(page.password).toBe("");
       expect(page.passwordInput.getAttribute("type")).toBe("password");
       const passwordInputStyle = window.getComputedStyle(page.passwordInput);
-      expect(passwordInputStyle.background).toBe("white");
-      expect(passwordInputStyle.color).toBe("");
+      expect(passwordInputStyle.background).toBe("rgb(255, 255, 255)");
+      expect(passwordInputStyle.color).toBe("initial");
 
       // Password view button exists.
       expect(page.eyeButton).not.toBeNull();

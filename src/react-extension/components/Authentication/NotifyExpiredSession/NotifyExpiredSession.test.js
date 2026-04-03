@@ -54,13 +54,13 @@ describe("As LU I should see the session expired dialog", () => {
     it.skip("As LU I can go to login page by closing the dialog", async () => {
       // @todo test the hyperlink
       await page.closeDialog();
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it.skip("As LU I can go to login page with the keyboard (escape)", async () => {
       // @todo test the hyperlink
       await page.escapeKey();
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
   });
 });

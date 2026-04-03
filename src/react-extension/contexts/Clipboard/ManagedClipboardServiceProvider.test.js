@@ -39,8 +39,8 @@ describe("ManagedClipboardServiceProvider", () => {
       const contextProvider = new ManagedClipboardServiceProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
-      expect(() => contextProvider.copy(42, "test")).rejects.toThrowError();
-      expect(() => contextProvider.copy("test", 42)).rejects.toThrowError();
+      expect(() => contextProvider.copy(42, "test")).rejects.toThrow();
+      expect(() => contextProvider.copy("test", 42)).rejects.toThrow();
     });
   });
 
@@ -71,8 +71,8 @@ describe("ManagedClipboardServiceProvider", () => {
       const contextProvider = new ManagedClipboardServiceProvider(props);
       mockComponentSetState(contextProvider);
 
-      expect(() => contextProvider.copyTemporarily(42, "test")).rejects.toThrowError();
-      expect(() => contextProvider.copyTemporarily("test", 42)).rejects.toThrowError();
+      expect(() => contextProvider.copyTemporarily(42, "test")).rejects.toThrow();
+      expect(() => contextProvider.copyTemporarily("test", 42)).rejects.toThrow();
     });
   });
 });

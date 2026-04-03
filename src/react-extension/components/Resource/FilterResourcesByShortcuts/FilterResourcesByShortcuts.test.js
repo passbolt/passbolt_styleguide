@@ -19,7 +19,6 @@
 import { defaultProps } from "./FilterResourcesByShortcuts.test.data";
 import FilterResourcesByShortcutsPage from "./FilterResourcesByShortcuts.test.page";
 import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
-import each from "jest-each";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
@@ -39,7 +38,7 @@ describe("See Resource FilterResourcesByShortcuts", () => {
     });
   });
 
-  each([{ filter: ResourceWorkspaceFilterTypes.ALL, itemSelected: "Home", itemIndex: 1 }]).describe(
+  describe.each([{ filter: ResourceWorkspaceFilterTypes.ALL, itemSelected: "Home", itemIndex: 1 }])(
     "I should be able to identify the filters",
     (scenario) => {
       it(`for: ${scenario.filter}`, async () => {
@@ -61,7 +60,7 @@ describe("See Resource FilterResourcesByShortcuts", () => {
             type: scenario.filter,
           },
         };
-        expect(props.history.push).toBeCalledWith({ pathname, state });
+        expect(props.history.push).toHaveBeenCalledWith({ pathname, state });
       });
     },
   );
