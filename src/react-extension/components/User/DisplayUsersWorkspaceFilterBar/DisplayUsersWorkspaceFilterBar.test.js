@@ -28,7 +28,6 @@ import {
   propsWithUsersFilteredByAccountRecovery,
   propsWithUsersFilteredByMissingMetadata,
 } from "./DisplayUsersWorkspaceFilterBar.test.data";
-import each from "jest-each";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
@@ -104,11 +103,11 @@ describe("As a signed-in users I can see filters", () => {
     });
   });
 
-  each([
+  describe.each([
     { filter: UserWorkspaceFilterTypes.SUSPENDED_USER, props: propsFilterBySuspended() },
     { filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, props: propsWithUsersFilteredByAccountRecovery() },
     { filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY, props: propsWithUsersFilteredByMissingMetadata() },
-  ]).describe("As LU I should be able to remove filter", (scenario) => {
+  ])("As LU I should be able to remove filter", (scenario) => {
     it(`for:  ${scenario.filter}`, async () => {
       expect.assertions(4);
       const props = scenario.props;
@@ -126,11 +125,11 @@ describe("As a signed-in users I can see filters", () => {
           type: UserWorkspaceFilterTypes.ALL,
         },
       };
-      expect(props.history.push).toBeCalledWith({ pathname, state });
+      expect(props.history.push).toHaveBeenCalledWith({ pathname, state });
     });
   });
 
-  each([
+  describe.each([
     {
       filter: UserWorkspaceFilterTypes.SUSPENDED_USER,
       itemSelected: "Suspended",
@@ -159,7 +158,7 @@ describe("As a signed-in users I can see filters", () => {
       props: defaultPropsWithAttentionRequiredUsers(),
       button: "openAttentionRequiredFilterButton",
     }, // For Admins only
-  ]).describe("as LU I should be able to filter", (scenario) => {
+  ])("as LU I should be able to filter", (scenario) => {
     it(`for: ${scenario.filter}`, async () => {
       expect.assertions(1);
       const props = scenario.props; // The props
@@ -175,11 +174,11 @@ describe("As a signed-in users I can see filters", () => {
           type: scenario.filter,
         },
       };
-      expect(props.history.push).toBeCalledWith({ pathname, state });
+      expect(props.history.push).toHaveBeenCalledWith({ pathname, state });
     });
   });
 
-  each([
+  describe.each([
     { filter: UserWorkspaceFilterTypes.SUSPENDED_USER, itemSelected: "Suspended", props: defaultProps },
     {
       filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY,
@@ -196,7 +195,7 @@ describe("As a signed-in users I can see filters", () => {
       itemSelected: "Account Recovery Requests",
       props: propsWithAttentionRequiredUsersNotAdminWithRbacAllowed,
     }, // For Admins and user having rbac allowed only
-  ]).describe("As LU I should be able to identify the filters", (scenario) => {
+  ])("As LU I should be able to identify the filters", (scenario) => {
     it(`for: ${scenario.filter}`, async () => {
       expect.assertions(3);
       const props = scenario.props({
@@ -215,7 +214,7 @@ describe("As a signed-in users I can see filters", () => {
     });
   });
 
-  each([{ filter: UserWorkspaceFilterTypes.NONE }, { filter: UserWorkspaceFilterTypes.ALL }]).describe(
+  describe.each([{ filter: UserWorkspaceFilterTypes.NONE }, { filter: UserWorkspaceFilterTypes.ALL }])(
     "I should not see the filters button",
     (scenario) => {
       it(`for: ${scenario.filter}`, async () => {

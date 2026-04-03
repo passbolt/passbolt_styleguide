@@ -38,7 +38,7 @@ describe("As AD I should see the account recovery settings", () => {
     const props = defaultProps(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
     await waitFor(() => {});
-    expect(props.adminAccountRecoveryContext.findAccountRecoveryPolicy).toBeCalled();
+    expect(props.adminAccountRecoveryContext.findAccountRecoveryPolicy).toHaveBeenCalled();
     expect(page.exists()).toBeTruthy();
     expect(page.title).toBe("Account Recovery");
     expect(page.accountRecoveryPolicyTitle).toBe("Account Recovery Policy");

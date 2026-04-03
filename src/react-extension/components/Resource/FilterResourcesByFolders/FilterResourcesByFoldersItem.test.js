@@ -81,6 +81,8 @@ describe("As LU I should see each folders", () => {
       await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(1);
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {
         folder: foldersMock[0],
+        left: 0,
+        top: 0,
       });
     });
   });

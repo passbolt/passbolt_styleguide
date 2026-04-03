@@ -101,6 +101,6 @@ describe("Display change user security token", () => {
     jest.spyOn(props.dialogContext, "open").mockImplementationOnce(jest.fn());
     await page.fillCode("ABC");
     await page.save();
-    expect(props.dialogContext.open).toBeCalledWith(NotifyError, { error: error });
+    expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
   });
 });

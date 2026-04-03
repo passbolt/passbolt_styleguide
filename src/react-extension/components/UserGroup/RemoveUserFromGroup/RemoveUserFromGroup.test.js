@@ -115,7 +115,7 @@ describe("See Remove User From Group Dialog", () => {
       const closeButton = page.displayRemoveUserFromGroupDialog.closeButton;
 
       await page.displayRemoveUserFromGroupDialog.click(closeButton);
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As AD I should be able to cancel the operation by clicking on the cancel button", async () => {
@@ -123,7 +123,7 @@ describe("See Remove User From Group Dialog", () => {
       const cancelButton = page.displayRemoveUserFromGroupDialog.cancelButton;
 
       await page.displayRemoveUserFromGroupDialog.click(cancelButton);
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As AD I should be able to cancel the edition with the keyboard (escape)", () => {
@@ -132,7 +132,7 @@ describe("See Remove User From Group Dialog", () => {
       const escapeKeyDown = { keyCode: 27 };
       fireEvent.keyDown(page.displayRemoveUserFromGroupDialog.dialogTitle, escapeKeyDown);
 
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("Displays an error when the API call fail", async () => {

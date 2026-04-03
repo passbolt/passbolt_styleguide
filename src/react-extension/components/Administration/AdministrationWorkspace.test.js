@@ -20,7 +20,6 @@ import { defaultProps } from "./AdministrationWorkspace.test.data";
 import AdministrationWorkspacePage from "./AdministrationWorkspace.test.page";
 import { waitFor } from "@testing-library/dom";
 import { AdministrationWorkspaceMenuTypes } from "../../contexts/AdministrationWorkspaceContext";
-import each from "jest-each";
 
 jest.mock("./DisplayAdministrationMenu/DisplayAdministrationMenu", () => () => <></>);
 jest.mock("./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb", () => () => <></>);
@@ -165,7 +164,7 @@ const ceScenarios = [
   { selectedMenu: AdministrationWorkspaceMenuTypes.SCIM, field: "isScimTeasingSelected" },
 ];
 
-each(scenarios).describe("Display Administration Workspace", (currentScenario) => {
+describe.each(scenarios)("Display Administration Workspace", (currentScenario) => {
   it(`As AD, I should see: ${currentScenario.selectedMenu}`, async () => {
     expect.assertions(scenarios.length);
 
@@ -182,7 +181,7 @@ each(scenarios).describe("Display Administration Workspace", (currentScenario) =
   });
 });
 
-each(ceScenarios).describe("Display Administration Workspace for CE Admins", (currentScenario) => {
+describe.each(ceScenarios)("Display Administration Workspace for CE Admins", (currentScenario) => {
   it(`As AD, I should see: ${currentScenario.selectedMenu}`, async () => {
     expect.assertions(ceScenarios.length);
 

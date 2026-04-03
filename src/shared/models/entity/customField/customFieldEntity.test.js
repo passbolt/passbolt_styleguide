@@ -283,8 +283,8 @@ describe("CustomFieldEntity", () => {
       const dto = defaultCustomField();
       const entity = new CustomFieldEntity(dto);
 
-      expect(() => CustomFieldEntity.areFieldsDifferent(entity, null)).toThrowError();
-      expect(() => CustomFieldEntity.areFieldsDifferent(null, entity)).toThrowError();
+      expect(() => CustomFieldEntity.areFieldsDifferent(entity, null)).toThrow();
+      expect(() => CustomFieldEntity.areFieldsDifferent(null, entity)).toThrow();
     });
   });
 

@@ -130,14 +130,14 @@ describe("See Delete Group Dialog", () => {
       const closeButton = page.displayDeleteGroupWithConflictsDialog.closeButton;
 
       await page.displayDeleteGroupWithConflictsDialog.click(closeButton);
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As AD I should be able to cancel the operation by clicking on the cancel button", async () => {
       const cancelButton = page.displayDeleteGroupWithConflictsDialog.cancelButton;
 
       await page.displayDeleteGroupWithConflictsDialog.click(cancelButton);
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As AD I should be able to cancel the edition with the keyboard (escape)", () => {
@@ -145,7 +145,7 @@ describe("See Delete Group Dialog", () => {
       const escapeKeyDown = { keyCode: 27 };
       fireEvent.keyDown(page.displayDeleteGroupWithConflictsDialog.dialogTitle, escapeKeyDown);
 
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("Displays an error when the API call fail", async () => {
