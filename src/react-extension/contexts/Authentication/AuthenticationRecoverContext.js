@@ -26,6 +26,7 @@ export const AuthenticationRecoverWorkflowStates = {
   IMPORT_GPG_KEY: "Import gpg key",
   INITIATE_ACCOUNT_RECOVERY: "Initiate account recovery",
   INTRODUCE_EXTENSION: "Introduce extension",
+  ENSURE_SAFARI_EXTENSION_CONFIGURATION: "Ensure Safari extension configuration",
   LOADING: "Loading",
   REQUESTING_ACCOUNT_RECOVERY: "Requesting account recovery",
   SIGNING_IN: "Signing in",
@@ -130,25 +131,39 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       return;
     }
 
-    const isFirstInstall = await this.props.context.port.request("passbolt.recover.first-install");
-    const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
+    const browserName = detectBrowserName();
+    const isChromeBrowser = browserName === BROWSER_NAMES.CHROME;
+    const isSafariBrowser = browserName === BROWSER_NAMES.SAFARI;
 
-    const state =
-      isFirstInstall && isChromeBrowser
-        ? AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION
-        : AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
+    const isFirstInstall = await this.props.context.port.request("passbolt.recover.first-install");
+    const isActivatedOnAllWebsite = isSafariBrowser && (await this.isActivatedOnAllWebsite());
+
+    let state = AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
+    if (isFirstInstall && isChromeBrowser) {
+      state = AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION;
+    } else if (isSafariBrowser && !isActivatedOnAllWebsite) {
+      state = AuthenticationRecoverWorkflowStates.ENSURE_SAFARI_EXTENSION_CONFIGURATION;
+    }
 
     this.setState({ state, userPassphrasePolicies });
   }
 
   /**
    * Whenever the user wants to go to the import gpg key step.
-   * @returns {Promise<void>}
+   * @returns {void}
    */
-  async goToImportGpgKey() {
-    await this.setState({
+  goToImportGpgKey() {
+    this.setState({
       state: AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY,
     });
+  }
+
+  /**
+   * Returns true if the extension is not activated on all website.
+   * @returns {Promise<boolean>}
+   */
+  async isActivatedOnAllWebsite() {
+    return await this.props.context.port.request("passbolt.extension.is-allowed-on-every-website");
   }
 
   /**
@@ -161,12 +176,12 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async importGpgKey(armoredKey) {
     try {
       await this.props.context.port.request("passbolt.recover.import-key", armoredKey);
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE });
     } catch (error) {
       if (error.name === "GpgKeyError") {
         throw error;
       } else {
-        await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+        this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
       }
     }
   }
@@ -209,7 +224,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.recover.sign-in", this.state.rememberMe);
       await this.props.context.port.request("passbolt.auth.post-login-redirect");
     } catch (error) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -222,18 +237,18 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       "passbolt.recover.has-user-enabled-account-recovery",
     );
     if (hasUserAccountRecoveryEnabled) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY });
     } else {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST });
     }
   }
 
   /**
    * Whenever the user wants to initiate the account recovery process.
-   * @returns {Promise<void>}
+   * @returns {void}
    */
-  async initiateAccountRecovery() {
-    await this.setState({ state: AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY });
+  initiateAccountRecovery() {
+    this.setState({ state: AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY });
   }
 
   /**
@@ -243,9 +258,9 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async requestHelpCredentialsLost() {
     try {
       await this.props.context.port.request("passbolt.recover.request-help-credentials-lost");
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.CHECK_MAILBOX });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.CHECK_MAILBOX });
     } catch (error) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -258,9 +273,9 @@ export class AuthenticationRecoverContextProvider extends React.Component {
     const generateKeyDto = { passphrase };
     try {
       await this.props.context.port.request("passbolt.recover.generate-account-recovery-request-key", generateKeyDto);
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN });
     } catch (error) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 
@@ -276,7 +291,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.recover.initiate-account-recovery-request");
       this.setState({ state: AuthenticationRecoverWorkflowStates.CHECK_ACCOUNT_RECOVERY_EMAIL });
     } catch (error) {
-      await this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
+      this.setState({ state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error });
     }
   }
 

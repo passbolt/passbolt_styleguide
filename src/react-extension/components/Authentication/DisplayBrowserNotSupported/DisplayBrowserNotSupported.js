@@ -43,7 +43,7 @@ class DisplayBrowserNotSupported extends Component {
    * @returns {Array<object>}
    */
   get compatibleBrowserList() {
-    return [
+    const browserList = [
       {
         name: "Mozilla Firefox",
         img: "firefox.svg",
@@ -70,6 +70,16 @@ class DisplayBrowserNotSupported extends Component {
         url: "https://www.vivaldi.com/",
       },
     ];
+
+    const isSafariEnabled = this.props.context.siteSettings.canIUse("safari");
+    if (isSafariEnabled) {
+      browserList.push({
+        name: "Safari",
+        img: "safari.svg",
+        url: "https://www.apple.com/safari/",
+      });
+    }
+    return browserList;
   }
   /**
    * Render the component

@@ -347,8 +347,8 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * selected resources
-   * @returns {[]|null}
+   * Selected resources
+   * @returns {Array|null}
    */
   get selectedResources() {
     return this.props.resourceWorkspaceContext.selectedResources;
@@ -375,7 +375,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   canShare() {
-    return this.selectedResources.every((resource) => resource.permission.type === 15);
+    return (
+      this.props.rbacContext.canIUseAction(uiActions.SHARE_VIEW_LIST) &&
+      this.selectedResources.every((resource) => resource.permission.type === 15)
+    );
   }
 
   /**
@@ -414,12 +417,13 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * Can display secret history
+   * Can view secret history
    * @return {boolean}
    */
-  get canDisplaySecretHistory() {
-    const isFeatureEnabled = this.props.context.siteSettings.canIUse("secretRevisions");
-    return isFeatureEnabled && this.props.secretRevisionsSettings?.isFeatureEnabled;
+  canViewSecretHistory() {
+    return (
+      this.props.context.siteSettings.canIUse("secretRevisions") && this.props.secretRevisionsSettings?.isFeatureEnabled
+    );
   }
 
   /**
@@ -459,7 +463,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   hasMoreActionAllowed() {
-    return this.canExport() || (this.canOverridePasswordExpiry && this.canUpdate());
+    return this.canExport() || (this.canOverridePasswordExpiry() && this.canUpdate()) || this.canViewSecretHistory();
   }
 
   /**
@@ -473,19 +477,27 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
 
   /**
    * Can use Totp
-   * @return {*}
+   * @return {boolean}
    */
-  get canUseTotp() {
+  canUseTotp() {
     return this.props.context.siteSettings.canIUse("totpResourceTypes");
   }
 
   /**
-   * Can use password expiry
+   * Can override password expiry
    * @return {boolean}
    */
-  get canOverridePasswordExpiry() {
+  canOverridePasswordExpiry() {
     const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
     return this.props.passwordExpiryContext.isFeatureEnabled() && passwordExpirySettings?.policy_override;
+  }
+
+  /**
+   * Can copy secrets
+   * @return {boolean}
+   */
+  canCopySecrets() {
+    return this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
   }
 
   /**
@@ -501,19 +513,25 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const count = this.selectedResources?.length;
     const hasOneResourceSelected = this.hasOneResourceSelected();
 
-    const canShare = this.canShare();
-    const canUpdate = this.canUpdate();
-
-    const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
-    const canViewShare = this.props.rbacContext.canIUseAction(uiActions.SHARE_VIEW_LIST) && canShare;
+    // Main actions
+    const canViewShare = this.canShare();
     const canViewCopy = hasOneResourceSelected;
+    const canUpdate = this.canUpdate();
     const canViewEdit = hasOneResourceSelected && canUpdate;
     const canViewDelete = canUpdate;
-    const canViewSecretHistory = hasOneResourceSelected && this.canDisplaySecretHistory;
+    const hasMoreActionAllowed = this.hasMoreActionAllowed();
 
-    const count = this.props.resourceWorkspaceContext.selectedResources?.length;
+    // Three dot menu
+    const canExport = this.canExport();
+    const canViewSecretHistory = hasOneResourceSelected && this.canViewSecretHistory();
+    const canSetExpiryDate = this.canOverridePasswordExpiry() && canUpdate;
+
+    // Copy menu
+    const canCopySecret = this.canCopySecrets() && this.canCopyPassword();
+    const canCopyTotp = this.canUseTotp() && this.canCopyTotp();
 
     return (
       <div className="actions" ref={this.props.actionsButtonRef}>
@@ -556,7 +574,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                         </button>
                       </DropdownMenuItem>
                     )}
-                    {canCopySecret && this.canCopyPassword() && (
+                    {canCopySecret && (
                       <DropdownMenuItem>
                         <button
                           id="secret_action"
@@ -571,7 +589,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                         </button>
                       </DropdownMenuItem>
                     )}
-                    {this.canUseTotp && this.canCopyTotp() && (
+                    {canCopyTotp && (
                       <DropdownMenuItem>
                         <button
                           id="totp_action"
@@ -637,17 +655,15 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                 </button>
               </li>
             )}
-            {this.hasMoreActionAllowed() && (
+            {hasMoreActionAllowed && (
               <li>
                 <Dropdown>
                   <DropdownButton className="more button-action-contextual button-action-icon">
                     <MoreHorizontalSVG />
                   </DropdownButton>
                   <DropdownMenu className="menu-action-contextual">
-                    {this.canExport() && (
-                      <DropdownMenuItem
-                        separator={!(this.canOverridePasswordExpiry && canUpdate) && canViewSecretHistory}
-                      >
+                    {canExport && (
+                      <DropdownMenuItem separator={!canSetExpiryDate && canViewSecretHistory}>
                         <button
                           id="export_action"
                           type="button"
@@ -661,7 +677,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                         </button>
                       </DropdownMenuItem>
                     )}
-                    {this.canOverridePasswordExpiry && canUpdate && (
+                    {canSetExpiryDate && (
                       <>
                         <DropdownMenuItem>
                           <button

@@ -60,6 +60,9 @@ class ApiRecoverContextProvider extends React.Component {
       unexpectedError: null, // The unexpected error obejct if any
       onInitializeRecoverRequested: this.onInitializeRecoverRequested.bind(this), // Whenever the initialization of the recover is requested.
       logoutUserAndRefresh: this.logoutUserAndRefresh.bind(this), // Callback to be used when a user is unexpectedly logged in.
+      handleSafariExtensionDownloading: this.handleSafariExtensionDownloading.bind(this), // callback when user clicked on the Safari extension download button
+      handleSafariExtensionNotDownloaded: this.handleSafariExtensionNotDownloaded.bind(this), // callback when user clicked on the "I didn't download the Safari extension" button
+      handleExtensionAlreadyInstalled: this.handleExtensionAlreadyInstalled.bind(this), // callback when user clicked on "already installed extension" button
     };
   }
 
@@ -85,7 +88,41 @@ class ApiRecoverContextProvider extends React.Component {
    * @return {void}
    */
   handleStartRecoverSuccess() {
-    this.setState({ state: ApiRecoverContextState.INSTALL_EXTENSION_STATE });
+    const currentBrowser = detectBrowserName();
+
+    const state =
+      currentBrowser === BROWSER_NAMES.SAFARI
+        ? ApiRecoverContextState.INSTALL_SAFARI_EXTENSION_STATE
+        : ApiRecoverContextState.INSTALL_EXTENSION_STATE;
+
+    this.setState({ state });
+  }
+
+  /**
+   * When the user click on the Safari extension link for downloading.
+   * @return {void}
+   */
+  handleSafariExtensionDownloading() {
+    const state = ApiRecoverContextState.CONFIGURE_SAFARI_EXTENSION_STATE;
+    this.setState({ state });
+  }
+
+  /**
+   * When the user click on "I didn't download the extension".
+   * @return {void}
+   */
+  handleSafariExtensionNotDownloaded() {
+    const state = ApiRecoverContextState.INSTALL_SAFARI_EXTENSION_STATE;
+    this.setState({ state });
+  }
+
+  /**
+   * When the user click on "Already installed extension" button.
+   * @return {void}
+   */
+  handleExtensionAlreadyInstalled() {
+    const state = ApiRecoverContextState.CONFIGURE_SAFARI_EXTENSION_STATE;
+    this.setState({ state });
   }
 
   /**
@@ -134,6 +171,12 @@ class ApiRecoverContextProvider extends React.Component {
   isBrowserSupported() {
     const browserName = detectBrowserName();
     const supportedBrowserNames = [BROWSER_NAMES.CHROME, BROWSER_NAMES.FIREFOX, BROWSER_NAMES.EDGE];
+
+    const isSafariEnabled = this.props.context.siteSettings.canIUse("safari");
+    if (isSafariEnabled) {
+      supportedBrowserNames.push(BROWSER_NAMES.SAFARI);
+    }
+
     return supportedBrowserNames.includes(browserName);
   }
 
@@ -187,6 +230,8 @@ export const ApiRecoverContextState = {
   INITIAL_STATE: "Initial state",
   DOWNLOAD_SUPPORTED_BROWSER_STATE: "Download supported browser state",
   INSTALL_EXTENSION_STATE: "Install extension state",
+  INSTALL_SAFARI_EXTENSION_STATE: "Install Safari extension state",
+  CONFIGURE_SAFARI_EXTENSION_STATE: "Configure Safari extension state",
   TOKEN_EXPIRED_STATE: "Token expired state",
   ERROR_ALREADY_SIGNED_IN_STATE: "Error, already signed in state",
   REQUEST_INVITATION_ERROR: "Request inviration error state",

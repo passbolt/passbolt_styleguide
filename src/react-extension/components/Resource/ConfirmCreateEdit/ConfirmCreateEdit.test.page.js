@@ -28,7 +28,6 @@ export default class ConfirmCreateEditPage {
       <MockTranslationProvider>
         <ConfirmCreateEdit {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

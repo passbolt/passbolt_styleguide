@@ -25,6 +25,7 @@ import {
 import PasswordSidebarTagSectionPage from "./DisplayResourceDetailsTag.test.page";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import { waitForElementToBeRemoved } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -342,13 +343,17 @@ describe("See tags", () => {
       expect(page.tagEditor.autocompleteItemName(2).textContent).toBe(TagMock[2].slug);
 
       await page.passwordSidebarTagSection.downArrowKeyDown(page.tagEditor.autocompleteContent);
-      expect(page.tagEditor.component.textContent).toBe("tar");
-      await page.passwordSidebarTagSection.downArrowKeyDown(page.tagEditor.autocompleteContent);
       expect(page.tagEditor.component.textContent).toBe(TagMock[1].slug);
-      await page.passwordSidebarTagSection.upArrowKeyDown(page.tagEditor.autocompleteContent);
+      await page.passwordSidebarTagSection.downArrowKeyDown(page.tagEditor.autocompleteContent);
       expect(page.tagEditor.component.textContent).toBe(TagMock[2].slug);
       await page.passwordSidebarTagSection.downArrowKeyDown(page.tagEditor.autocompleteContent);
+      expect(page.tagEditor.component.textContent).toBe("tar");
+      await page.passwordSidebarTagSection.upArrowKeyDown(page.tagEditor.autocompleteContent);
+      expect(page.tagEditor.component.textContent).toBe(TagMock[2].slug);
+      await page.passwordSidebarTagSection.upArrowKeyDown(page.tagEditor.autocompleteContent);
       expect(page.tagEditor.component.textContent).toBe(TagMock[1].slug);
+      await page.passwordSidebarTagSection.upArrowKeyDown(page.tagEditor.autocompleteContent);
+      expect(page.tagEditor.component.textContent).toBe("tar");
 
       await page.passwordSidebarTagSection.click(page.tagEditor.autocompleteItemName(1));
       expect(page.tagEditor.component.textContent).toBe("");
@@ -389,6 +394,7 @@ describe("See tags", () => {
       expect(page.tagEditor.component.textContent).toBe("");
       expect(page.tagEditor.count()).toBe(1);
       await page.passwordSidebarTagSection.enterKeyPressed(page.tagEditor.component);
+      await waitForElementToBeRemoved(() => page.tagEditor.component);
       expect(page.tagEditor.component).toBeNull();
       const tagsDto = [
         {

@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { withRouter } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";

@@ -16,6 +16,7 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ExportResources from "./ExportResources";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import { ExportPoliciesSettingsContext } from "../../../contexts/ExportPoliciesSettingsContext";
 
 /**
  * The ExportResources component represented as a page
@@ -30,10 +31,11 @@ export default class ExportResourcesPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <ExportResources {...props} />
+          <ExportPoliciesSettingsContext.Provider value={props.exportPoliciesSettingsContext}>
+            <ExportResources {...props} />
+          </ExportPoliciesSettingsContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
@@ -80,10 +82,56 @@ export default class ExportResourcesPage {
   }
 
   /**
+   * Returns the CSV warning checkbox element
+   */
+  get csvWarningCheckbox() {
+    return this._page.container.querySelector("#csv-warning-accept");
+  }
+
+  /**
+   * Returns the CSV warning label element
+   */
+  get csvWarningLabel() {
+    return this._page.container.querySelector('label[for="csv-warning-accept"]');
+  }
+
+  /**
+   * Returns the Learn more link element in the submit wrapper
+   */
+  get learnMoreLink() {
+    return this._page.container.querySelector(".submit-wrapper a.button");
+  }
+
+  /**
+   * Returns the CSV warning checkbox container element
+   */
+  get csvWarningContainer() {
+    return this._page.container.querySelector(".form-content .input.checkbox");
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
     return this.dialog !== null;
+  }
+
+  /**
+   * Returns the export format label text
+   */
+  get exportFormatLabel() {
+    return this._page.container.querySelector('label[for="export-format"]')?.textContent;
+  }
+
+  /**
+   * Returns the list of all export format items (selected + dropdown options)
+   */
+  get exportFormatItems() {
+    const selectedValue = this._page.container.querySelector("#export-format .selected-value")?.textContent;
+    const optionValues = Array.from(this._page.container.querySelectorAll("#export-format .option")).map(
+      (el) => el.textContent,
+    );
+    return [selectedValue, ...optionValues].filter(Boolean);
   }
 
   /**
@@ -132,5 +180,10 @@ export default class ExportResourcesPage {
   async selectFormat(index) {
     await this.click(this.select);
     await this.click(this.getLocaleList(index));
+  }
+
+  /** Click on CSV warning checkbox */
+  async clickCsvWarningCheckbox() {
+    await this.click(this.csvWarningCheckbox);
   }
 }

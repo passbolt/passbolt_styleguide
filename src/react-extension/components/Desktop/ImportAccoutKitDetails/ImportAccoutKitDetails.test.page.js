@@ -30,7 +30,6 @@ export default class ImportAccoutKitDetailsPage {
       <MockTranslationProvider>
         <ImportAccoutKitDetails {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

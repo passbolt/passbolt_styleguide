@@ -26,7 +26,6 @@ import MockPort from "../../../test/mock/MockPort";
 import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import expect from "expect";
 
 beforeEach(() => {
   jest.resetModules();

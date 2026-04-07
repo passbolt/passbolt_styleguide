@@ -16,6 +16,7 @@
  * Unit tests on DisplayError in regard of specifications
  */
 
+import { defaultProps } from "./DisplayBrowserNotSupported.test.data";
 import DisplayBrowserNotSupportedPage from "./DisplayBrowserNotSupported.test.page";
 
 beforeAll(() => {
@@ -70,7 +71,7 @@ describe("As AN I should see not supported browser page", () => {
      */
 
     beforeEach(() => {
-      page = new DisplayBrowserNotSupportedPage();
+      page = new DisplayBrowserNotSupportedPage(defaultProps());
     });
 
     it("As AN I should see that my browser is not supported", async () => {

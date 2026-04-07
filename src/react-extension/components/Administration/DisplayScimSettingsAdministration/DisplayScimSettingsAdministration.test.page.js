@@ -29,7 +29,6 @@ export default class DisplayScimSettingsAdministrationPage {
           </RoleContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
@@ -104,6 +103,14 @@ export default class DisplayScimSettingsAdministrationPage {
    */
   get isScimSecretTokenInputDisabled() {
     return this.scimSecretTokenInput.hasAttribute("disabled");
+  }
+
+  /**
+   * Returns the SCIM secret token expiry input element
+   * @returns {HTMLElement}
+   */
+  get scimSecretTokenExpiryInput() {
+    return this.select("input#scim-secret-token-expiry-input");
   }
 
   /**

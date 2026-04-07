@@ -12,13 +12,15 @@
  * @since         4.1.0
  */
 import { waitForTrue } from "../../../../test/utils/waitFor";
-import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import {
+  defaultResourceDto,
+  resourceStandaloneTotpDto,
+} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { defaultProps, denyUiActionProps } from "./HomePage.test.data";
 import HomePagePage from "./HomePage.test.page";
 import { createMemoryHistory } from "history";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
-import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV50FreshDto,
@@ -127,6 +129,64 @@ describe("HomePage", () => {
       );
     });
 
+    it("it should show suggested OTP resources for the currently active URL", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resources: [
+          resourceStandaloneTotpDto({
+            metadata: defaultResourceMetadataDto({
+              name: "apache totp",
+              username: null,
+              uris: ["http://www.apache.org"],
+              resource_type_id: undefined,
+            }),
+          }),
+          defaultResourceDto(),
+        ],
+      });
+      props.context.getOpenerTabId = () => 1;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "http://www.apache.org/");
+      const page = new HomePagePage(props);
+
+      await waitForTrue(() => page.suggestedResourcesEntries?.length > 0);
+
+      const suggestedResource = props.resources[0];
+
+      expect(page.suggestedResourcesEntries.length).toStrictEqual(1);
+      expect(page.getSuggestedResourceItem(0).textContent).toStrictEqual(
+        `${suggestedResource.metadata.name} ${suggestedResource.metadata.uris[0]}`,
+      );
+    });
+
+    it("it should show both password and OTP suggested resources for the currently active URL", async () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resources: [
+          defaultResourceDto({
+            metadata: defaultResourceMetadataDto({
+              name: "apache password",
+              uris: ["http://www.apache.org"],
+            }),
+          }),
+          resourceStandaloneTotpDto({
+            metadata: defaultResourceMetadataDto({
+              name: "apache totp",
+              uris: ["http://www.apache.org"],
+              resource_type_id: undefined,
+            }),
+          }),
+          defaultResourceDto(),
+        ],
+      });
+      props.context.getOpenerTabId = () => 1;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "http://www.apache.org/");
+      const page = new HomePagePage(props);
+
+      await waitForTrue(() => page.suggestedResourcesEntries?.length > 1);
+
+      expect(page.suggestedResourcesEntries.length).toStrictEqual(2);
+    });
+
     it("it should show a message telling there is no suggested resources for the currently active URL", async () => {
       expect.assertions(2);
       const props = defaultProps({
@@ -189,8 +249,6 @@ describe("HomePage", () => {
   describe("As LU I can use resource to auto-fill the current page", () => {
     it("I can click on a suggested resource to use it on the current tab then the quickaccess closes", async () => {
       expect.assertions(3);
-      const originalWindowClose = window.close;
-      window.close = jest.fn();
 
       const expectedOpenerTabId = 1;
       const suggestedResource = defaultResourceDto({ metadata: { name: "apache", uris: ["http://www.apache.org"] } });
@@ -214,11 +272,8 @@ describe("HomePage", () => {
       await waitForTrue(() => page.suggestedResourcesEntries?.length > 0);
 
       await page.clickOnSuggestedResource(0);
-      await waitForTrue(() => window.close.mock.calls.length > 0);
-
-      expect(window.close).toHaveBeenCalledTimes(1);
-
-      window.close = originalWindowClose;
+      await waitForTrue(() => props.context.closeWindow.mock.calls.length > 0);
+      expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
     });
 
     it("I can click on a searched resource to use it on the current tab then the quickaccess closes", async () => {

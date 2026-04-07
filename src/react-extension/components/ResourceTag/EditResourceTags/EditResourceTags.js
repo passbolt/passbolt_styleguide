@@ -19,6 +19,7 @@ import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import { withLoading } from "../../../contexts/LoadingContext";
 import { Trans, withTranslation } from "react-i18next";
 import CloseSVG from "../../../../img/svg/close.svg";
+import TagsServiceWorkerService from "../../../../shared/services/api/tags/TagsServiceWorkerService";
 
 const TAG_MAX_LENGTH = 128;
 
@@ -109,7 +110,8 @@ class EditResourceTags extends React.Component {
    * @return {Promise<void>}
    */
   async fetchAllTags() {
-    const allTags = await this.props.context.port.request("passbolt.tags.find-all");
+    const tagsService = new TagsServiceWorkerService(this.props.context.port);
+    const allTags = await tagsService.findAll();
     if (allTags) {
       this.setState({ allTags });
     }
@@ -411,11 +413,8 @@ class EditResourceTags extends React.Component {
   async updateTags() {
     try {
       this.props.loadingContext.add();
-      await this.props.context.port.request(
-        "passbolt.tags.update-resource-tags",
-        this.props.resourceId,
-        this.state.tags,
-      );
+      const tagsService = new TagsServiceWorkerService(this.props.context.port);
+      await tagsService.updateResourceTags(this.props.resourceId, this.state.tags);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The tags have been updated successfully"));
       this.setState({ processing: false });
@@ -446,7 +445,7 @@ class EditResourceTags extends React.Component {
         (tag) =>
           this.state.tags.filter((tagResources) => tagResources.slug === tag.slug).length === 0 &&
           this.isTagDeletable(tag) &&
-          tag.slug.toLowerCase().indexOf(inputTagValue.toLowerCase()) != -1,
+          tag.slug.toLowerCase().indexOf(inputTagValue.toLowerCase()) !== -1,
       );
       this.setState({ suggestedTags });
     } else {

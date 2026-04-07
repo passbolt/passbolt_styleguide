@@ -43,7 +43,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @param {boolean} withManagePanel should the ManageSmtpAdministrationSettings be rendered
    */
   render(props, withManagePanel = true) {
-    const contentToRender = (
+    this._page = render(
       <MockTranslationProvider>
         <DialogContextProvider>
           <AdminSmtpSettingsContextProvider {...props}>
@@ -52,14 +52,8 @@ export default class ManageSmtpAdministrationSettingsPage {
             <DisplayAdministrationSmtpSettingsActions />
           </AdminSmtpSettingsContextProvider>
         </DialogContextProvider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
     );
-
-    if (this._page) {
-      this._page.rerender(contentToRender);
-    } else {
-      this._page = render(contentToRender, { legacyRoot: true });
-    }
 
     this.user = userEvent.setup();
   }
@@ -120,7 +114,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async saveSettings() {
-    await this.clickOn(this.toolbarActionsSaveButton, () => !this.isSaveButtonEnabled());
+    await this.clickOn(this.toolbarActionsSaveButton);
   }
 
   /**
@@ -129,7 +123,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async testSettings() {
-    await this.clickOn(this.toolbarActionsTestButton, () => Boolean(this.sendTestEmailDialog));
+    await this.clickOn(this.toolbarActionsTestButton);
   }
 
   /**
@@ -138,11 +132,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async runTestFromDialog() {
-    const currentDialogTitle = this.sendTestEmailDialogTitle.textContent;
-    await this.clickOn(
-      this.submitFormDialogButton,
-      () => currentDialogTitle !== this.sendTestEmailDialogTitle.textContent,
-    );
+    await this.clickOn(this.submitFormDialogButton);
   }
 
   /**
@@ -151,14 +141,13 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async showLogs() {
-    await this.clickOn(this.showLogsButton, () => Boolean(this.logDetails));
+    await this.clickOn(this.showLogsButton);
   }
 
   /**
    * Simulates a click on the given HTML element.
    * The clicks is consider done when the callback returns {true}.
    * @param {HTMLElement} element The HTML element onto simulate the click
-   * @param {function} callback The callback to be used in the waitFor method to ensure the click is done (returns true when it's done)
    * @returns {Promise<void>}
    */
   async clickOn(element) {
@@ -172,7 +161,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    */
   async selectProvider(providerIndex) {
     const providerButton = this.providerButtons[providerIndex];
-    await this.clickOn(providerButton, () => this.form !== null);
+    await this.clickOn(providerButton);
   }
 
   /**
@@ -181,11 +170,9 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async selectProviderInSelectField(providerIndex) {
-    const currentProviderValue = this.providerValue;
-
-    await this.clickOn(this.provider, () => true);
+    await this.clickOn(this.provider);
     const providerItem = this.providerSelectFieldItems[providerIndex];
-    await this.clickOn(providerItem, () => currentProviderValue !== this.providerValue);
+    await this.clickOn(providerItem);
   }
 
   /**
@@ -194,14 +181,9 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async selectAuthenticationMethod(authenticationMethodIndex) {
-    const currentAuthenticationMethodValue = this.providerValue;
-
-    await this.clickOn(this.authenticationMethod, () => true);
+    await this.clickOn(this.authenticationMethod);
     const authenticationMethodItem = this.authenticationMethodSelectFieldItems[authenticationMethodIndex];
-    await this.clickOn(
-      authenticationMethodItem,
-      () => currentAuthenticationMethodValue !== this.authenticationMethodValue,
-    );
+    await this.clickOn(authenticationMethodItem);
   }
 
   /**
@@ -218,15 +200,13 @@ export default class ManageSmtpAdministrationSettingsPage {
 
   /**
    * Set the TLS value in the custom Select component
-   * @param {boolean} tls the value to choose
    * @returns {Promise<void>}
    */
-  async setTls(tls) {
-    const textContent = tls ? "Yes" : "No";
-    await this.clickOn(this.tls, () => true);
+  async setTls() {
+    await this.clickOn(this.tls);
     //There are 2 possible choices and the options are only the non selected items, so elem at index 0 is always what we are looking for in this case
     const tlsItem = this.tlsSelectFieldItems[0];
-    await this.clickOn(tlsItem, () => this.tlsValue === textContent);
+    await this.clickOn(tlsItem);
   }
 
   /**
@@ -234,9 +214,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async showAdvancedSettings() {
-    return await this.clickOn(this.select(".smtp-settings .accordion-header button.link"), () =>
-      Boolean(this.advancedSettings),
-    );
+    return await this.clickOn(this.select(".smtp-settings .accordion-header button.link"));
   }
 
   /**
@@ -245,8 +223,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    */
   async togglePasswordShow() {
     const passwordToggle = this.select(".smtp-settings .password-view-wrapper button");
-    const passwordFiledtype = this.password.getAttribute("type");
-    await this.clickOn(passwordToggle, () => passwordFiledtype !== this.password.getAttribute("type"));
+    await this.clickOn(passwordToggle);
   }
 
   /**
@@ -432,6 +409,77 @@ export default class ManageSmtpAdministrationSettingsPage {
   }
 
   /**
+   * Returns the oauth_username field
+   * @returns {HTMLElement}
+   */
+  get oauth_username() {
+    return this.select(".smtp-settings #smtp-settings-form-oauth-username");
+  }
+
+  /**
+   * Returns true if the oauth_username field is visible
+   */
+  get isOAuthUsernameVisible() {
+    return Boolean(this.oauth_username);
+  }
+
+  /**
+   * Returns the oauth_username error HTMLElement
+   * @returns {HTMLElement}
+   */
+  get oauth_username_error() {
+    return this.select(".smtp-settings #smtp-settings-form-oauth-username + .error-message");
+  }
+
+  /**
+   * Returns the tenant_id field
+   * @returns {HTMLElement}
+   */
+  get tenant_id() {
+    return this.select(".smtp-settings #smtp-settings-form-tenant-id");
+  }
+
+  /**
+   * Returns the tenant_id error HTMLElement
+   * @returns {HTMLElement}
+   */
+  get tenant_id_error() {
+    return this.select(".smtp-settings #smtp-settings-form-tenant-id + .error-message");
+  }
+
+  /**
+   * Returns the client_id field
+   * @returns {HTMLElement}
+   */
+  get client_id() {
+    return this.select(".smtp-settings #smtp-settings-form-client-id");
+  }
+
+  /**
+   * Returns the client_id error HTMLElement
+   * @returns {HTMLElement}
+   */
+  get client_id_error() {
+    return this.select(".smtp-settings #smtp-settings-form-client-id + .error-message");
+  }
+
+  /**
+   * Returns the client_secret field
+   * @returns {HTMLElement}
+   */
+  get client_secret() {
+    return this.select(".smtp-settings #smtp-settings-form-client-secret");
+  }
+
+  /**
+   * Returns the client_secret error HTMLElement
+   * @returns {HTMLElement}
+   */
+  get client_secret_error() {
+    return this.select(".smtp-settings #smtp-settings-form-client-secret + .error-message");
+  }
+
+  /**
    * Returns the advanced settings HTMLElements
    * @returns {HTMLElement}
    */
@@ -485,6 +533,14 @@ export default class ManageSmtpAdministrationSettingsPage {
    */
   get settingsFromFileWarningMessage() {
     return this.select(".smtp-settings #smtp-settings-source-warning")?.textContent;
+  }
+
+  /**
+   * Returns the "Don't forget to save" warning message element if exists
+   * @returns {HTMLElement|null}
+   */
+  get warningMessage() {
+    return this.select(".smtp-settings .warning.message");
   }
 
   /**

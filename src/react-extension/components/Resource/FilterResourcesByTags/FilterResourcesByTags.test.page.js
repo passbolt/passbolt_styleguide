@@ -55,7 +55,6 @@ export default class FilterResourcesByTagsPage {
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -231,7 +230,7 @@ class SidebarTagFilterSectionPageObject {
    * @param index The display rank of name's tag
    */
   name(index) {
-    return this.list.querySelectorAll(".tag-item")[index - 1].querySelector(".tag-name").textContent;
+    return this.list.querySelectorAll(".tag")[index - 1].querySelector(".tag-content").textContent;
   }
 
   get errorDialogExist() {

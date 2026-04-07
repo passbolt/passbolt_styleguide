@@ -37,7 +37,6 @@ export default class DisplayResourcesWorkspaceMenuPage {
           <DisplayResourcesWorkspaceMenu {...props} />
         </AppContextProvider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -118,7 +117,7 @@ class DisplayMenuPageObject {
   }
 
   /**
-   * Returns the mark as expired menu elements of password workspace menu
+   * Returns the mark as expired menu elements of more workspace menu
    * @returns {HTMLElement}
    */
   get dropdownMenuMarkAsExpired() {
@@ -126,7 +125,7 @@ class DisplayMenuPageObject {
   }
 
   /**
-   * Returns the "set expiry date" menu element of the password workspace menu
+   * Returns the "set expiry date" menu element of the more workspace menu
    * @returns {HTMLElement}
    */
   get dropdownMenuSetExpiryDate() {
@@ -134,11 +133,19 @@ class DisplayMenuPageObject {
   }
 
   /**
-   * Returns the "secret history" menu element of the password workspace menu
+   * Returns the "secret history" menu element of the more workspace menu
    * @returns {HTMLElement}
    */
   get dropdownMenuSecretHistory() {
     return this._container.querySelector("#secret_history_action");
+  }
+
+  /**
+   * Returns the "export" menu element of the more workspace menu
+   * @returns {HTMLElement}
+   */
+  get dropdownMenuExport() {
+    return this._container.querySelector("#export_action");
   }
 
   /**

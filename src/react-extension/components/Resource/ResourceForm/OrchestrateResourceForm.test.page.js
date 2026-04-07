@@ -30,7 +30,6 @@ export default class OrchestrateResourceFormPage {
       <MockTranslationProvider>
         <OrchestrateResourceForm {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

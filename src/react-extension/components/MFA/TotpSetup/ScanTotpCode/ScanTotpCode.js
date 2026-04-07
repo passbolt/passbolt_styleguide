@@ -14,8 +14,7 @@
 
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withTranslation } from "react-i18next";
-import { Trans } from "react-i18next";
+import { withTranslation, Trans } from "react-i18next";
 import QRCode from "qrcode";
 import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
 import { MfaSettingsWorkflowStates, withMfa } from "../../../../contexts/MFAContext";
@@ -143,8 +142,7 @@ class ScanTotpCode extends Component {
    * set an error to object
    */
   setError(key, value) {
-    const error = Object.assign({}, this.state.error, { [key]: value });
-    this.setState({ error });
+    this.setState({ error: { ...this.state.error, [key]: value } });
   }
 
   /**

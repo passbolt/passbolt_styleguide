@@ -179,9 +179,13 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasUsersChanged = this.props.context.users && this.props.context.users !== this.users;
     if (hasUsersChanged) {
       this.users = this.props.context.users;
-      await this.search(this.state.filter);
-      await this.updateDetails();
-      await this.unselectUsersNotFiltered();
+      const filteredUsers = await this.search(this.state.filter);
+      if (filteredUsers) {
+        await this.updateDetails(filteredUsers);
+        const selectedUsers = this.updateSelectedUsersFromUsersChange(filteredUsers);
+        this.setState({ selectedUsers });
+        this.redirectAfterSelection(selectedUsers);
+      }
     }
   }
 
@@ -193,8 +197,8 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasGroupsChanged = this.props.context.groups && this.props.context.groups !== this.groups;
     if (hasGroupsChanged) {
       this.groups = this.props.context.groups;
-      await this.refreshSearchFilter();
-      await this.updateDetails();
+      const filteredUsers = await this.refreshSearchFilter();
+      await this.updateDetails(filteredUsers);
     }
   }
 
@@ -351,7 +355,6 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async handleSorterChange(propertyName) {
     await this.updateSorter(propertyName);
-    await this.sort();
   }
 
   /**
@@ -359,8 +362,8 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param {User} user The selected user
    */
   async handleUserSelected(user) {
-    await this.select(user);
-    this.redirectAfterSelection();
+    const selectedUsers = await this.select(user);
+    this.redirectAfterSelection(selectedUsers);
   }
 
   /**
@@ -419,6 +422,7 @@ class UserWorkspaceContextProvider extends React.Component {
   /**
    * Search for the users which matches the given filter and sort them
    * @param {Object} filter
+   * @returns {Array} The filtered users array
    */
   async search(filter) {
     const isRecentlyModifiedFilter = filter.type === UserWorkspaceFilterTypes.RECENTLY_MODIFIED;
@@ -434,38 +438,44 @@ class UserWorkspaceContextProvider extends React.Component {
       [UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST]: this.searchByAccountRecoveryRequestUsers.bind(this),
       [UserWorkspaceFilterTypes.MISSING_METADATA_KEY]: this.searchByMissingMetadataKeyUsers.bind(this),
     };
-    await searchOperations[filter.type](filter);
+    let filteredUsers = searchOperations[filter.type](filter);
+
     if (!isRecentlyModifiedFilter) {
-      await this.sort();
+      filteredUsers = this.sort(filteredUsers);
     } else {
       await this.resetSorter();
     }
+    this.setState({ filter, filteredUsers });
+
+    return filteredUsers;
   }
 
   /**
    * All filter ( no filter at all )
    * @param {string} filter The All filter
+   * @returns {Array} All users
    */
-  async searchAll(filter) {
-    this.setState({ filter, filteredUsers: this.users });
+  searchAll() {
+    return this.users;
   }
 
   /**
    * Filter the users which belongs to the given group
    * @param {string} filter The group filter
+   * @returns {Array} Filtered users
    */
-  async searchByGroup(filter) {
+  searchByGroup(filter) {
     const group = filter.payload.group;
     const usersGroupIds = group.groups_users.map((groupUser) => groupUser.user_id);
-    const filteredUsers = this.users.filter((user) => usersGroupIds.some((userId) => userId === user.id));
-    this.setState({ filter, filteredUsers });
+    return this.users.filter((user) => usersGroupIds.some((userId) => userId === user.id));
   }
 
   /**
    * Filter the users which textual properties matched some user text words
    * @param {string} filter A textual filter
+   * @returns {Array} Filtered users
    */
-  async searchByText(filter) {
+  searchByText(filter) {
     const text = filter.payload;
     const words = (text && text.split(/\s+/)) || [""];
 
@@ -480,50 +490,51 @@ class UserWorkspaceContextProvider extends React.Component {
     const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
     const matchText = (user) => words.every((word) => matchUser(word, user));
 
-    const filteredUsers = this.users.filter(matchText);
-    this.setState({ filter, filteredUsers });
+    return this.users.filter(matchText);
   }
 
   /**
    * Keep the most recently modified users ( current state: just sort everything with the most recent modified users )
    * @param {string} filter A recently modified filter
+   * @returns {Array} Sorted users (same reference as this.users)
    */
-  async searchByRecentlyModified(filter) {
+  searchByRecentlyModified() {
     const recentlyModifiedSorter = (user1, user2) =>
       DateTime.fromISO(user2.modified) < DateTime.fromISO(user1.modified) ? -1 : 1;
-    const filteredUsers = this.users.sort(recentlyModifiedSorter);
-    this.setState({ filter, filteredUsers });
+    return this.users.sort(recentlyModifiedSorter);
   }
 
   /**
    * Keep only the currently suspended users
    * @param {string} filter A suspended users filter
+   * @returns {Array} Filtered users
    */
-  async searchBySuspendedUsers(filter) {
-    const filteredUsers = this.users.filter((u) => isUserSuspended(u));
-    this.setState({ filter, filteredUsers });
+  searchBySuspendedUsers() {
+    return this.users.filter((u) => isUserSuspended(u));
   }
 
   /**
    * Keep only the users who have account recovery requests
    * @param {string} filter A account recovery request users filter
+   * @returns {Array} Filtered users
    */
-  async searchByAccountRecoveryRequestUsers(filter) {
-    const filteredUsers = this.users.filter((user) => isAccountRecoveryRequested(user));
-    this.setState({ filter, filteredUsers });
+  searchByAccountRecoveryRequestUsers() {
+    return this.users.filter((user) => isAccountRecoveryRequested(user));
   }
 
   /**
    * Keep only the users who have missing metadata keys
    * @param {string} filter A missing metadata key users filter
+   * @returns {Array} Filtered users
    */
-  async searchByMissingMetadataKeyUsers(filter) {
-    const filteredUsers = this.users.filter((user) => isMissingMetadataKey(user));
-    this.setState({ filter, filteredUsers });
+  searchByMissingMetadataKeyUsers() {
+    return this.users.filter((user) => isMissingMetadataKey(user));
   }
 
   /**
    * Refresh the filter in case of its payload is outdated due to the updated list of users
+   * @returns {Promise<Array|null>} The filtered users array if group filter was refreshed,
+   * null if group does not exist
    */
   async refreshSearchFilter() {
     const hasGroupFilter = this.state.filter.type === UserWorkspaceFilterTypes.GROUP;
@@ -533,11 +544,13 @@ class UserWorkspaceContextProvider extends React.Component {
         // Case of group exists but may have somme applied changes on it
         const updatedGroup = this.groups.find((group) => group.id === this.state.filter.payload.group.id);
         const filter = Object.assign(this.state.filter, { payload: { group: updatedGroup } });
-        await this.search(filter);
+        const filteredUsers = this.search(filter);
+        return filteredUsers;
       } else {
         // Case of filter group deleted
         const filter = { type: UserWorkspaceFilterTypes.ALL };
         this.props.history.push({ pathname: "/app/users", state: { filter } });
+        return null;
       }
     }
   }
@@ -547,10 +560,13 @@ class UserWorkspaceContextProvider extends React.Component {
   /**
    * Select the given user as the single selected users if not already selected as single. Otherwise unselect it
    * @param {User} user The user to select
+   * @returns {Array} The new selectedUsers array
    */
   async select(user) {
     const mustUnselect = this.state.selectedUsers.length === 1 && this.state.selectedUsers[0].id === user.id;
-    this.setState({ selectedUsers: mustUnselect ? [] : [user] });
+    const selectedUsers = mustUnselect ? [] : [user];
+    this.setState({ selectedUsers });
+    return selectedUsers;
   }
 
   /**
@@ -574,24 +590,34 @@ class UserWorkspaceContextProvider extends React.Component {
 
   /**
    * Remove from the selected users those which are not present in regard of the current displayed list
+   * @param {Array} filteredUsers The filtered users array
    */
-  async unselectUsersNotFiltered() {
-    const matchId = (selectedUser) => (user) => user.id === selectedUser.id;
-    const matchSelectedUser = (selectedUser) => this.state.filteredUsers.some(matchId(selectedUser));
-    const selectedUsers = this.state.selectedUsers.filter(matchSelectedUser);
+  async unselectUsersNotFiltered(filteredUsers) {
+    const selectedUsers = this.updateSelectedUsersFromUsersChange(filteredUsers);
     this.setState({ selectedUsers });
+  }
+
+  /**
+   * Return the selected users that are still present in the given filtered users list
+   * @param {Array} filteredUsers The filtered users array
+   * @returns {Array} The selected users still present in the filtered list
+   */
+  updateSelectedUsersFromUsersChange(filteredUsers) {
+    const matchId = (selectedUser) => (user) => user.id === selectedUser.id;
+    const matchSelectedUser = (selectedUser) => filteredUsers.some(matchId(selectedUser));
+    return this.state.selectedUsers.filter(matchSelectedUser);
   }
 
   /**
    * Navigate to the appropriate url after some users selection operation
    */
-  redirectAfterSelection() {
+  redirectAfterSelection(selectedUsers) {
     const hasUsersAndGroups = this.users !== null && this.groups !== null;
     if (hasUsersAndGroups) {
-      const hasUserSelected = this.state.selectedUsers.length === 1;
+      const hasUserSelected = selectedUsers.length === 1;
       if (hasUserSelected) {
         // Case of selected user
-        this.props.history.push(`/app/users/view/${this.state.selectedUsers[0].id}`);
+        this.props.history.push(`/app/users/view/${selectedUsers[0].id}`);
       } else {
         const { filter } = this.state;
         const isGroupFilter = filter.type === UserWorkspaceFilterTypes.GROUP;
@@ -621,7 +647,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
     const asc = hasSortPropertyChanged || !this.state.sorter.asc;
     const sorter = { propertyName, asc };
-    this.setState({ sorter });
+    this.setState({ sorter }, () => this.sort());
   }
 
   /**
@@ -634,8 +660,12 @@ class UserWorkspaceContextProvider extends React.Component {
 
   /**
    * Sort the users given the current sorter
+   * @param {Array} users Optional users array to sort. If not provided, sorts and updates state.filteredUsers
+   * @returns {Array} Sorted users array
    */
-  async sort() {
+  sort(users = null) {
+    const usersToSort = users ?? this.state.filteredUsers;
+
     const reverseSorter = (sorter) => (s1, s2) => -sorter(s1, s2);
     const baseSorter = (sorter) => (this.state.sorter.asc ? sorter : reverseSorter(sorter));
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
@@ -682,7 +712,14 @@ class UserWorkspaceContextProvider extends React.Component {
       propertySorter = keySorter(this.state.sorter.propertyName, dateOrStringSorter);
     }
 
-    this.setState({ filteredUsers: this.state.filteredUsers.sort(propertySorter) });
+    const sortedUsers = usersToSort.sort(propertySorter);
+
+    // If no users parameter provided, update state (ex: called from handleSorterChange, user clicks column header)
+    if (!users) {
+      this.setState({ filteredUsers: sortedUsers });
+    }
+
+    return sortedUsers;
   }
 
   /** USER DETAILS  **/
@@ -729,16 +766,16 @@ class UserWorkspaceContextProvider extends React.Component {
   /**
    * Update the current details with the current list of users or groups
    * Note: The user details will be reset whenever the user is not part of the filtered list.
+   * @param {Array} filteredUsers Optional filtered users array (to avoid React 18 batching issues)
    */
-  async updateDetails() {
+  async updateDetails(filteredUsers = null) {
     const hasDetails = this.state.details.user || this.state.details.group;
     if (hasDetails) {
       const hasUserDetails = this.state.details.user;
       const locked = this.state.details.locked;
       if (hasUserDetails) {
         // Case of user details
-        const updatedUserDetails =
-          this.state.filteredUsers.find((user) => user.id === this.state.details.user.id) || null;
+        const updatedUserDetails = filteredUsers.find((user) => user.id === this.state.details.user.id) || null;
         this.setState({ details: { user: updatedUserDetails, group: null, locked } });
       } else {
         // Case of group details

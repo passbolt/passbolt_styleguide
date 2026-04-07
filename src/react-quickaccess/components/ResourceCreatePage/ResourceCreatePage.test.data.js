@@ -19,7 +19,7 @@ import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity
  * @param {object} props The props to override
  * @return {object}
  */
-export const defaultProps = (props = {}) => ({
+export const defaultProps = (props = {}, runExternalDictionaryCheck = false) => ({
   prepareResourceContext: defaultPrepareResourceContext(),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
@@ -27,7 +27,7 @@ export const defaultProps = (props = {}) => ({
     getSettings: () => overridenPasswordExpirySettingsEntityDto(),
   }),
   passwordPoliciesContext: defaultPasswordPoliciesContext({
-    getPolicies: jest.fn(() => defaultPasswordPoliciesDto()),
+    loadPolicies: jest.fn(() => defaultPasswordPoliciesDto({ external_dictionary_check: runExternalDictionaryCheck })),
   }),
   context: defaultAppContext({
     isAuthenticated: true,

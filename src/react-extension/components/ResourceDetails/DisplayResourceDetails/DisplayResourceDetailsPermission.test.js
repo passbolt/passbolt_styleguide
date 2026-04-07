@@ -18,6 +18,7 @@
 
 import { defaultProps, permissionMock } from "./DisplayResourceDetailsPermission.test.data";
 import DisplayResourceDetailsPermissionPage from "./DisplayResourceDetailsPermission.test.page";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -48,6 +49,8 @@ describe("See permissions", () => {
     it("I should see the 4 permissions made on the resource", async () => {
       expect.assertions(3);
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Admin User (admin@passbolt.com)");
       expect(page.title.hyperlink.textContent).toBe("Shared with");
 
       expect(page.displayPermissionList.exists()).toBeTruthy();
@@ -57,6 +60,8 @@ describe("See permissions", () => {
     it("I should be able to identify each permission name", async () => {
       expect.assertions(4);
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Admin User (admin@passbolt.com)");
       expect(page.displayPermissionList.name(1)).toBe("Admin User (admin@passbolt.com)");
       expect(page.displayPermissionList.name(2)).toBe("Marketing");
       expect(page.displayPermissionList.name(3)).toBe("Ada Lovelace (ada@passbolt.com)");
@@ -70,6 +75,8 @@ describe("See permissions", () => {
     it("I should be able to see each permission type", async () => {
       expect.assertions(3);
       await page.title.click();
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Admin User (admin@passbolt.com)");
       expect(page.displayPermissionList.type(1)).toBe("is owner");
       expect(page.displayPermissionList.type(2)).toBe("can update");
       expect(page.displayPermissionList.type(3)).toBe("can read");
@@ -103,9 +110,11 @@ describe("See permissions", () => {
 
       const inProgressFn = () => {
         expect(page.displayPermissionList.isLoading()).toBeTruthy();
-        findResolve([]);
+        findResolve(permissionMock);
       };
       await page.displayPermissionList.waitForLoading(inProgressFn);
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Admin User (admin@passbolt.com)");
       expect(page.displayPermissionList.isLoading()).toBeFalsy();
     });
   });

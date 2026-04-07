@@ -12,9 +12,8 @@
  * @since         3.2.0
  */
 
-import { cleanup } from "@testing-library/react";
+import { cleanup, screen } from "@testing-library/react";
 import "../../../shared/lib/Secret/SecretComplexity";
-import { waitFor } from "@testing-library/dom";
 import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
 import { defaultProps } from "./ResourceCreatePage.test.data";
 import { ConfirmCreatePageRuleVariations } from "../ConfirmCreatePage/ConfirmCreatePage";
@@ -31,6 +30,7 @@ import { defaultPasswordExpirySettingsContext } from "../../../react-extension/c
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { defaultMetadataTypesSettingsV6Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import { SECRET_DATA_OBJECT_TYPE } from "../../../shared/models/entity/secretData/secretDataEntity";
+import { act } from "react";
 
 // Reset the modules before each test.
 beforeEach(() => {
@@ -58,11 +58,11 @@ describe("ResourceCreatePage", () => {
       };
 
       const props = defaultProps();
-      props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
-      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => expectedData);
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => expectedData);
 
       const page = new ResourceCreatePagePage(props);
-      await waitForTrue(() => Boolean(page.name.value));
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findByDisplayValue(expectedData.name);
 
       // Assert the form.
       expect(page.name.value).toStrictEqual(expectedData.name);
@@ -122,7 +122,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 300 }).toJSDate().toISOString(),
+        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 100 }).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -131,8 +131,7 @@ describe("ResourceCreatePage", () => {
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
       };
 
-      const props = defaultProps();
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({}, true);
 
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => ({
         name: expectedResourceDto.metadata.name,
@@ -141,17 +140,16 @@ describe("ResourceCreatePage", () => {
 
       props.context.port.addRequestListener("passbolt.secrets.powned-password", () => 0);
 
-      let resourceCreated = false;
+      let resourceCreated, secretCreated;
       props.context.port.addRequestListener("passbolt.resources.create", (resourceDto, secretDto) => {
-        expect(resourceDto).toStrictEqual(expectedResourceDto);
-        expect(secretDto).toStrictEqual(expectedSecretDto);
-        resourceCreated = true;
+        resourceCreated = resourceDto;
+        secretCreated = secretDto;
         return defaultResourceDto();
       });
 
       const page = new ResourceCreatePagePage(props);
-      jest.setSystemTime(fakeNow.toMillis());
-      await waitForTrue(() => page.name.value === expectedResourceDto.metadata.name);
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findByDisplayValue(expectedResourceDto.metadata.name);
 
       // Fill the form empty fields"
       await page.setFormWith({
@@ -161,7 +159,9 @@ describe("ResourceCreatePage", () => {
 
       // Submit the form.
       await page.submitForm();
-      await waitForTrue(() => resourceCreated);
+
+      expect(resourceCreated).toStrictEqual(expectedResourceDto);
+      expect(secretCreated).toStrictEqual(expectedSecretDto);
     });
 
     it("should create a new password v5 on submit", async () => {
@@ -180,7 +180,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 300 }).toJSDate().toISOString(),
+        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 100 }).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -190,8 +190,7 @@ describe("ResourceCreatePage", () => {
         object_type: SECRET_DATA_OBJECT_TYPE,
       };
       const metadataTypeSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
-      const props = defaultProps({ metadataTypeSettings });
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({ metadataTypeSettings }, true);
 
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => ({
         name: expectedResourceDto.metadata.name,
@@ -209,8 +208,8 @@ describe("ResourceCreatePage", () => {
       });
 
       const page = new ResourceCreatePagePage(props);
-      jest.setSystemTime(fakeNow.toMillis());
-      await waitForTrue(() => page.name.value === expectedResourceDto.metadata.name);
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findByDisplayValue(expectedResourceDto.metadata.name);
 
       // Fill the form empty fields"
       await page.setFormWith({
@@ -226,21 +225,19 @@ describe("ResourceCreatePage", () => {
     it("should ask for password creation confirmation if the entropy is too low", async () => {
       expect.assertions(4);
 
-      const props = defaultProps({ history: createMemoryHistory() });
-
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({ history: createMemoryHistory() }, true);
 
       const preparedResource = {
         name: "Passbolt Browser Extension Test",
         uris: ["https://passbolt-browser-extension/test"],
       };
 
-      props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => preparedResource);
       props.context.port.addRequestListener("passbolt.secrets.powned-password", async () => 0);
 
       const page = new ResourceCreatePagePage(props);
-      await waitForTrue(() => page.name.value === preparedResource.name);
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findByDisplayValue(preparedResource.name);
 
       expect(page.complexityText).toBe("Quality Entropy: 0.0 bits");
 
@@ -268,21 +265,19 @@ describe("ResourceCreatePage", () => {
     it("should ask for password creation confirmation if the passphrase is found in a data breach", async () => {
       expect.assertions(4);
 
-      const props = defaultProps({ history: createMemoryHistory() });
-
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({ history: createMemoryHistory() }, true);
 
       const preparedResource = {
         name: "Passbolt Browser Extension Test",
         uris: ["https://passbolt-browser-extension/test"],
       };
 
-      props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => preparedResource);
       props.context.port.addRequestListener("passbolt.secrets.powned-password", async () => 3);
 
       const page = new ResourceCreatePagePage(props);
-      await waitForTrue(() => page.name.value === preparedResource.name);
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findByDisplayValue(preparedResource.name);
 
       expect(page.complexityText).toBe("Quality Entropy: 0.0 bits");
 
@@ -323,7 +318,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 300 }).toJSDate().toISOString(),
+        expired: fakeNow.plus({ days: 30 }).plus({ milliseconds: 100 }).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -332,8 +327,7 @@ describe("ResourceCreatePage", () => {
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
       };
 
-      const props = defaultProps();
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+      const props = defaultProps({}, true);
 
       let isPreparedResourceSet = false;
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => {
@@ -350,12 +344,14 @@ describe("ResourceCreatePage", () => {
       });
 
       props.context.port.addRequestListener("passbolt.resources.create", async (resourceDto, secretDto) => {
-        expect(resourceDto).toStrictEqual(expectedResourceDto);
         expect(secretDto).toStrictEqual(expectedSecretDto);
+        expect(resourceDto).toStrictEqual(expectedResourceDto);
         return defaultResourceDto();
       });
 
       const page = new ResourceCreatePagePage(props);
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findByDisplayValue(expectedResourceDto.metadata.name);
       await waitForTrue(() => page.name.value === expectedResourceDto.metadata.name);
 
       await waitForTrue(() => isPreparedResourceSet);
@@ -384,12 +380,11 @@ describe("ResourceCreatePage", () => {
       const props = defaultProps({
         passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
       });
-
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
       props.prepareResourceContext.consumePreparedResource.mockImplementation(() => resourceData);
 
       const page = new ResourceCreatePagePage(props);
-      await waitForTrue(() => page.name.value === resourceData.name);
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findAllByDisplayValue(42);
 
       // Fill the form empty fields
       await page.setFormWith({
@@ -417,10 +412,12 @@ describe("ResourceCreatePage", () => {
         },
       };
 
-      const props = defaultProps({
-        passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
-      });
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      const props = defaultProps(
+        {
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
+        },
+        false,
+      );
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => null);
       props.context.port.addRequestListener("passbolt.resources.create", () => {
         throw apiError;
@@ -432,7 +429,8 @@ describe("ResourceCreatePage", () => {
       }));
 
       const page = new ResourceCreatePagePage(props);
-      await waitForTrue(() => page.name.value === "Resource name");
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findByDisplayValue("Resource name");
 
       // Fill the form empty fields
       await page.setFormWith({
@@ -441,7 +439,8 @@ describe("ResourceCreatePage", () => {
 
       await page.submitForm();
 
-      await waitForTrue(() => Boolean(page.nameError?.textContent));
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("The name is invalid");
 
       expect(page.nameError.textContent).toStrictEqual("The name is invalid");
       expect(page.uriError.textContent).toStrictEqual("The uri is invalid, The uri contains a forbidden scheme");
@@ -455,18 +454,19 @@ describe("ResourceCreatePage", () => {
       const error = new Error();
       error.name = "UserAbortsOperationError";
 
-      const props = defaultProps({
-        passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
-      });
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      const props = defaultProps(
+        {
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
+        },
+        false,
+      );
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => null);
 
       let promiseRejecter;
       props.context.port.addRequestListener("passbolt.resources.create", () => {
-        const promise = new Promise((_, reject) => {
+        return new Promise((_resolve, reject) => {
           promiseRejecter = reject;
         });
-        return promise;
       });
 
       const expectedValues = {
@@ -479,14 +479,14 @@ describe("ResourceCreatePage", () => {
       props.prepareResourceContext.lastGeneratedPassword = expectedValues.password;
 
       const page = new ResourceCreatePagePage(props);
-      await waitForTrue(() => page.name.value === expectedValues.name);
-      await waitFor(() => {});
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findByDisplayValue(expectedValues.name);
 
       await page.submitForm();
 
       expect(page.isSubmitting).toStrictEqual(true);
 
-      await promiseRejecter(error);
+      await act(() => promiseRejecter(error));
       await waitForTrue(() => !page.isSubmitting);
 
       expect(page.name.value).toStrictEqual(expectedValues.name);
@@ -502,18 +502,19 @@ describe("ResourceCreatePage", () => {
       const error = new Error(errorMessage);
       error.name = "UnexpectedError";
 
-      const props = defaultProps({
-        passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
-      });
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      const props = defaultProps(
+        {
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({ automatic_update: false }),
+        },
+        false,
+      );
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => null);
 
       let promiseRejecter;
       props.context.port.addRequestListener("passbolt.resources.create", () => {
-        const promise = new Promise((_, reject) => {
+        return new Promise((_resolve, reject) => {
           promiseRejecter = reject;
         });
-        return promise;
       });
 
       const expectedValues = {
@@ -526,13 +527,15 @@ describe("ResourceCreatePage", () => {
       props.prepareResourceContext.lastGeneratedPassword = expectedValues.password;
 
       const page = new ResourceCreatePagePage(props);
-      await waitForTrue(() => page.name.value === expectedValues.name);
+      // Wait until the input value is found (This will ensure the state has been updated)
+      await screen.findByDisplayValue(expectedValues.name);
 
       await page.submitForm();
 
       expect(page.isSubmitting).toStrictEqual(true);
 
-      await promiseRejecter(error);
+      await act(() => promiseRejecter(error));
+
       await waitForTrue(() => !page.isSubmitting);
 
       expect(page.name.value).toStrictEqual(expectedValues.name);

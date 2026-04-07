@@ -27,6 +27,8 @@ import CopySVG from "../../../../img/svg/copy.svg";
 import RefreshSVG from "../../../../img/svg/refresh.svg";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import Password from "../../../../shared/components/Password/Password";
+import CalendarSVG from "../../../../img/svg/calendar.svg";
+import { DateTime } from "luxon";
 import Select from "../../Common/Select/Select";
 import { getUserFormattedName } from "../../../../shared/utils/userUtils";
 import { createSafePortal } from "../../../../shared/utils/portals";
@@ -358,6 +360,18 @@ class DisplayScimSettingsAdministration extends Component {
   }
 
   /**
+   * Check if the secret token is expired
+   * @returns {boolean} true if the expired date is in the past
+   */
+  isSecretTokenExpired() {
+    const expired = this.state.settings?.expired;
+    if (!expired) {
+      return false;
+    }
+    return DateTime.fromISO(expired) < DateTime.now();
+  }
+
+  /**
    * Return the formatted scim url
    * @returns {string} the formated scim url
    */
@@ -460,6 +474,22 @@ class DisplayScimSettingsAdministration extends Component {
                       </button>
                     </div>
                   </div>
+                  <div className={`input text date-wrapper disabled`}>
+                    <label>
+                      <Trans>Secret token expiry</Trans>
+                    </label>
+                    <div className="button-inline">
+                      <input
+                        id="scim-secret-token-expiry-input"
+                        type="date"
+                        className={`fluid form-element ${this.state.settings.expired ? "" : "empty"}`}
+                        name="expired"
+                        value={this.state.settings.expired || ""}
+                        disabled
+                      />
+                      <CalendarSVG className="svg-icon" />
+                    </div>
+                  </div>
                   <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                     <label>
                       <Trans>SCIM User</Trans>
@@ -533,6 +563,14 @@ class DisplayScimSettingsAdministration extends Component {
                 <div className="form-banner">
                   <p>
                     <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                  </p>
+                </div>
+              )}
+
+              {this.state.enabled && this.isSecretTokenExpired() && (
+                <div className="form-banner">
+                  <p>
+                    <Trans>The secret token is expired, you are requested to rotate it.</Trans>
                   </p>
                 </div>
               )}

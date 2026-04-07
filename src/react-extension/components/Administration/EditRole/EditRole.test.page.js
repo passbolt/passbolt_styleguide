@@ -31,7 +31,6 @@ export default class EditRolePage {
       <MockTranslationProvider>
         <EditRole {...props}></EditRole>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

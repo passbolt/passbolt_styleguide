@@ -22,7 +22,6 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
-import DisplayAroName, { DisplayAroNameVariations } from "../../../../shared/components/Aro/DisplayAroName";
 
 class ConfirmMetadataKey extends Component {
   constructor(props) {
@@ -110,7 +109,7 @@ class ConfirmMetadataKey extends Component {
    */
   render() {
     const isMetadataKeyRotation = this.isMetadataKeyRotation;
-
+    const creatorName = this.props.metadataKey.creator.getUserFormattedName(this.translate);
     return (
       <DialogWrapper
         className="confirm-metadata-key-dialog"
@@ -127,13 +126,7 @@ class ConfirmMetadataKey extends Component {
                       <span className="name">
                         <Trans>
                           The encryption key used to share metadata between users has been updated by{" "}
-                          <span className="creator">
-                            <DisplayAroName
-                              displayAs={DisplayAroNameVariations.USER}
-                              user={this.props.metadataKey.creator}
-                            />
-                          </span>
-                          .
+                          <span className="creator">{{ creatorName }}</span>.
                         </Trans>
                       </span>
                     </div>

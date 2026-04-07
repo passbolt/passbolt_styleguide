@@ -158,19 +158,19 @@ class EditResource extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    await Promise.all([
+    const [, policies] = await Promise.all([
       this.props.passwordExpiryContext.findSettings(),
-      this.props.passwordPoliciesContext.findPolicies(),
+      this.props.passwordPoliciesContext.loadPolicies(),
     ]);
 
-    this.initPwnedPasswordService();
+    this.initPwnedPasswordService(policies);
   }
 
   /**
    * Initialize the pwned password service
    */
-  initPwnedPasswordService() {
-    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+  initPwnedPasswordService(policies) {
+    const isPasswordDictionaryCheckRequested = policies?.external_dictionary_check;
 
     if (isPasswordDictionaryCheckRequested) {
       this.pownedService = new PownedService(this.props.context.port);
@@ -282,8 +282,7 @@ class EditResource extends Component {
       return;
     }
 
-    this.setState({ hasAlreadyBeenValidated: true });
-    await this.toggleProcessing();
+    this.setState({ hasAlreadyBeenValidated: true, isProcessing: true });
 
     try {
       // Create a clone entity from DTO and remove empty secret and add required secret
@@ -294,7 +293,7 @@ class EditResource extends Component {
 
       if (validationError?.hasErrors()) {
         this.selectResourceFormByFirstError(validationError);
-        await this.toggleProcessing();
+        this.setState({ isProcessing: false });
         return;
       }
 
@@ -308,7 +307,7 @@ class EditResource extends Component {
 
       await this.save(resourceFormEntity);
     } catch (error) {
-      await this.toggleProcessing();
+      this.setState({ isProcessing: false });
       this.handleSaveError(error);
     }
   }
@@ -406,7 +405,7 @@ class EditResource extends Component {
     try {
       await this.save(resourceFormEntity);
     } catch (error) {
-      await this.toggleProcessing();
+      this.setState({ isProcessing: false });
       this.handleSaveError(error);
     }
   }
@@ -540,17 +539,6 @@ class EditResource extends Component {
   }
 
   /**
-   * Toggle processing state when validating / saving
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.isProcessing;
-    return new Promise((resolve) => {
-      this.setState({ isProcessing: !prev }, () => resolve());
-    });
-  }
-
-  /**
    * Handle close
    */
   handleClose() {
@@ -568,22 +556,22 @@ class EditResource extends Component {
 
   /**
    * Add secret to the resourceFormEntity
-   * @param {string} secret The secret to add
+   * @param {string} secretFormType The secret form type to add
    */
-  onAddSecret(secret) {
-    this.resourceFormEntity.addSecret(secret, { validate: false });
+  onAddSecret(secretFormType) {
+    this.resourceFormEntity.addSecret(secretFormType, { validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
-    this.setState({ resource: this.resourceFormEntity.toDto(), resourceFormSelected: secret, resourceType });
+    this.setState({ resource: this.resourceFormEntity.toDto(), resourceFormSelected: secretFormType, resourceType });
   }
 
   /**
-   * Delete secret to the resourceFormEntity
-   * @param {string} secret The secret to delete
+   * Delete secret from the resourceFormEntity
+   * @param {string} secretFormType The secret form type to delete
    */
-  onDeleteSecret(secret) {
-    this.resourceFormEntity.deleteSecret(secret, { validate: false });
+  onDeleteSecret(secretFormType) {
+    this.resourceFormEntity.deleteSecret(secretFormType, { validate: false });
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
-    if (this.state.resourceFormSelected === secret) {
+    if (this.state.resourceFormSelected === secretFormType) {
       this.setState({
         resource: this.resourceFormEntity.toDto(),
         resourceFormSelected: this.selectResourceFormByResourceSecretData(),

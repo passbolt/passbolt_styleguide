@@ -14,11 +14,11 @@
 
 import DisplaySecretHistoryAdministration from "./DisplaySecretHistoryAdministration.test.page";
 import { defaultProps } from "./DisplaySecretHistoryAdministration.test.data";
-import { waitFor } from "@testing-library/react";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { v4 as uuidv4 } from "uuid";
+import { act } from "react";
 
 describe("DisplaySecretHistoryAdministration", () => {
   beforeEach(() => {
@@ -34,7 +34,6 @@ describe("DisplaySecretHistoryAdministration", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultSecretRevisionsSettingsDto());
 
       const page = new DisplaySecretHistoryAdministration(props);
-      await waitFor(() => {});
 
       expect(page.title.textContent).toBe("Secret history");
     });
@@ -46,8 +45,10 @@ describe("DisplaySecretHistoryAdministration", () => {
       const props = defaultProps();
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultSecretRevisionsSettingsDto());
 
-      const page = new DisplaySecretHistoryAdministration(props);
-      await waitFor(() => {});
+      let page;
+      await act(async () => {
+        page = new DisplaySecretHistoryAdministration(props);
+      });
 
       await page.setHistoryLength(5);
 
@@ -63,7 +64,6 @@ describe("DisplaySecretHistoryAdministration", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultSecretRevisionsSettingsDto());
 
       const page = new DisplaySecretHistoryAdministration(props);
-      await waitFor(() => {});
 
       await page.clickOnFeature();
 
@@ -81,7 +81,6 @@ describe("DisplaySecretHistoryAdministration", () => {
         .mockImplementationOnce(() => SecretRevisionsSettingsEntity.createFromDefault().toDto());
 
       const page = new DisplaySecretHistoryAdministration(props);
-      await waitFor(() => {});
 
       await page.clickOnFeature();
 
@@ -101,7 +100,6 @@ describe("DisplaySecretHistoryAdministration", () => {
         .mockImplementationOnce(() => SecretRevisionsSettingsEntity.createFromDefault().toDto());
 
       const page = new DisplaySecretHistoryAdministration(props);
-      await waitFor(() => {});
 
       await page.clickOnFeature();
       await page.setHistoryLength(0);
@@ -135,7 +133,6 @@ describe("DisplaySecretHistoryAdministration", () => {
         .mockImplementationOnce((requestName, settings) => ({ id: uuidv4(), ...settings.toDto() }));
 
       const page = new DisplaySecretHistoryAdministration(props);
-      await waitFor(() => {});
 
       await page.clickOnFeature();
       await page.setHistoryLength(5);
@@ -171,7 +168,6 @@ describe("DisplaySecretHistoryAdministration", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(jest.fn());
 
       const page = new DisplaySecretHistoryAdministration(props);
-      await waitFor(() => {});
 
       await page.clickOnFeature();
       await page.setHistoryLength(5);
@@ -206,7 +202,6 @@ describe("DisplaySecretHistoryAdministration", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(jest.fn());
 
       const page = new DisplaySecretHistoryAdministration(props);
-      await waitFor(() => {});
 
       await page.clickOnFeature();
 
@@ -232,7 +227,6 @@ describe("DisplaySecretHistoryAdministration", () => {
       });
 
       const page = new DisplaySecretHistoryAdministration(props);
-      await waitFor(() => {});
 
       await page.clickOnFeature();
 

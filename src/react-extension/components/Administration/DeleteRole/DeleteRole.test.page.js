@@ -31,7 +31,6 @@ export default class DeleteRolePage {
       <MockTranslationProvider>
         <DeleteRole {...props}></DeleteRole>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

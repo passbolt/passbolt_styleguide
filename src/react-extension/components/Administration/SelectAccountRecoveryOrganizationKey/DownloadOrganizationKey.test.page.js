@@ -31,7 +31,6 @@ export default class DownloadOrganizationKeyPage {
       <MockTranslationProvider>
         <DownloadOrganizationKey {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

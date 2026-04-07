@@ -13,9 +13,10 @@
  */
 
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayRbacAdministration from "./DisplayRbacAdministration";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayRbacAdministration component represented as a page
@@ -30,8 +31,8 @@ export default class DisplayRbacAdministrationPage {
       <MockTranslationProvider>
         <DisplayRbacAdministration {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -47,7 +48,7 @@ export default class DisplayRbacAdministrationPage {
    * @returns {string}
    */
   formatActionNameInClassName(actionName) {
-    return actionName.toLowerCase().replaceAll(/[^\w]/g, "-");
+    return actionName.toLowerCase().replaceAll(/\W/g, "-");
   }
 
   /**
@@ -179,9 +180,7 @@ export default class DisplayRbacAdministrationPage {
    * @param {HTMLElement} element
    */
   async click(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /**

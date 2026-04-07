@@ -31,7 +31,13 @@ class HandleExtAppBootstrapRouteChangeRequested extends Component {
    */
   handleRouteChangeRequested() {
     this.props.port.on("passbolt.app-bootstrap.change-route", (pathname) => {
-      if (/^\/[A-Za-z0-9\-\/]*$/.test(pathname)) {
+      /*
+       * No need to update the URL history when the URL didn't change.
+       * There is no added value for the end user in navigating back to the same URL, nor is there any internal value in tracking a navigation to the same URL.
+       * Additionally, changing the URL will trigger a navigation event that will re-trigger the whole navigation detection (tabEvent),
+       * which is unnecessary and brittle when solicited too frequently for some users under Linux (PB-50077).
+       */
+      if (/^\/[A-Z/-9\-]*$/i.test(pathname) && this.props.location.pathname !== pathname) {
         this.props.history.replace(pathname);
       }
     });
@@ -48,6 +54,7 @@ class HandleExtAppBootstrapRouteChangeRequested extends Component {
 
 HandleExtAppBootstrapRouteChangeRequested.propTypes = {
   history: PropTypes.object,
+  location: PropTypes.object,
   port: PropTypes.any,
 };
 export default withRouter(HandleExtAppBootstrapRouteChangeRequested);

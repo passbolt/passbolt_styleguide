@@ -69,8 +69,7 @@ class ResourcePasswordGeneratorContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async resetSecretGeneratorSettings() {
-    await this.props.passwordPoliciesContext.findPolicies();
-    const passwordPolicies = this.props.passwordPoliciesContext.getPolicies();
+    const passwordPolicies = await this.props.passwordPoliciesContext.loadPolicies();
     this.setState({ settings: passwordPolicies });
   }
 

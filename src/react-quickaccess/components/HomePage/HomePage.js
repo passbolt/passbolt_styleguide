@@ -134,7 +134,7 @@ class HomePage extends React.Component {
     for (const i in resources) {
       const resource = resources[i];
       if (
-        this.isPasswordResource(resource.resource_type_id) &&
+        (this.isPasswordResource(resource.resource_type_id) || this.isOTPResource(resource.resource_type_id)) &&
         CanSuggestService.canSuggestUris(activeTabUrl, resource.metadata.uris)
       ) {
         suggestedResources.push(resource);
@@ -177,7 +177,7 @@ class HomePage extends React.Component {
         resource.id,
         this.props.context.getOpenerTabId(),
       );
-      window.close();
+      await this.props.context.closeWindow();
     } catch (error) {
       if (error && error.name === "UserAbortsOperationError") {
         this.setState({ usingOnThisTab: false });
@@ -199,6 +199,14 @@ class HomePage extends React.Component {
    */
   isPasswordResource(resourceId) {
     return this.props.resourceTypes?.getFirstById(resourceId)?.hasPassword();
+  }
+
+  /**
+   * Is OTP resource
+   * @returns {boolean}
+   */
+  isOTPResource(resourceId) {
+    return this.props.resourceTypes?.getFirstById(resourceId)?.hasTotp();
   }
 
   /**

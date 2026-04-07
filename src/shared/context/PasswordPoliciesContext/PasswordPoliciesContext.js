@@ -22,9 +22,7 @@ import { withAppContext } from "../AppContext/AppContext";
  */
 export const PasswordPoliciesContext = React.createContext({
   policies: null, // the currently loaded password policies
-  getPolicies: () => {}, // Returns the currently loaded password policies
-  findPolicies: () => {}, // Find the current password policies and store it in the state
-  shouldRunDictionaryCheck: () => {}, // returns true if the password policies allows external dictionary checks
+  loadPolicies: () => {}, // Returns the currently loaded password policies
 });
 
 /**
@@ -46,38 +44,33 @@ export class PasswordPoliciesContextProvider extends React.Component {
   get defaultState() {
     return {
       policies: null,
-      getPolicies: this.getPolicies.bind(this), // Returns policy for password settings Policy
-      findPolicies: this.findPolicies.bind(this), // Find the current password settings  Policy
-      shouldRunDictionaryCheck: this.shouldRunDictionaryCheck.bind(this), // returns true if the password policies allows external dictionary checks
+      loadPolicies: this.loadPolicies.bind(this), // Find the current password settings  Policy
+      setPolicies: this.setPolicies.bind(this), // Find the current password settings  Policy
     };
   }
 
   /**
-   * Find the password policies settings
+   * Return Password policies
+   * return them if already loaded, else load
    * @return {Promise<void>}
    */
-  async findPolicies() {
-    if (this.getPolicies() !== null) {
-      return;
+  async loadPolicies() {
+    const { policies } = this.state;
+    if (policies !== null) {
+      return policies;
     }
-    const policies = await this.props.context.port.request("passbolt.password-policies.get");
+
+    const newPolicies = await this.props.context.port.request("passbolt.password-policies.get");
+    this.setPolicies(newPolicies);
+    return newPolicies;
+  }
+
+  /**
+   * Set the policies
+   * @param {object} policies The policies to set
+   */
+  setPolicies(policies) {
     this.setState({ policies });
-  }
-
-  /**
-   * Returns the policies for password setting.
-   * @returns {object}
-   */
-  getPolicies() {
-    return this.state.policies;
-  }
-
-  /**
-   * Returns true if the password policies allows external dictionary checks
-   * @returns {boolean}
-   */
-  shouldRunDictionaryCheck() {
-    return Boolean(this.state.policies?.external_dictionary_check);
   }
 
   /**

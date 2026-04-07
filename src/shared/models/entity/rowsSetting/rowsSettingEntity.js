@@ -69,7 +69,7 @@ export default class RowsSettingEntity extends EntityV2 {
    */
   /**
    * Get the associated columns
-   * @returns {(ColumnsSettingCollection|[])}
+   * @returns {string}
    */
   get height() {
     return this._props.height;

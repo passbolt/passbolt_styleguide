@@ -22,6 +22,7 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withExportPoliciesSettings } from "../../../contexts/ExportPoliciesSettingsContext";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
 import { Trans, withTranslation } from "react-i18next";
 import Select from "../../Common/Select/Select";
@@ -46,6 +47,8 @@ class ExportResources extends React.Component {
   get defaultState() {
     return {
       selectedExportFormat: this.exportFormats[0].value, // The selected export format
+      hasCsvWarningAccepted: false, // Whether user accepted the CSV warning
+      csvWarningError: false, // Whether to show error state on CSV warning checkbox
       actions: {
         processing: false, // Actions flag about processing
       },
@@ -60,6 +63,7 @@ class ExportResources extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleExportFormatSelected = this.handleExportFormatSelected.bind(this);
+    this.handleCsvWarningAcceptChange = this.handleCsvWarningAcceptChange.bind(this);
   }
 
   /**
@@ -88,10 +92,35 @@ class ExportResources extends React.Component {
   }
 
   /**
+   * Returns true if the current format is CSV
+   */
+  get isCsvFormat() {
+    return this.state.selectedExportFormat.startsWith("csv");
+  }
+
+  /**
+   * Returns the export policies settings entity or null if still loading.
+   * @returns {ExportPoliciesSettingsEntity|null}
+   */
+  get exportPoliciesSettings() {
+    return this.props.exportPoliciesSettingsContext.getSettings();
+  }
+
+  /**
    * Returns true if actions can be performed
    */
   get areActionsAllowed() {
-    return !this.isProcessing;
+    return !this.isProcessing && this.exportPoliciesSettings !== null;
+  }
+
+  /**
+   * Handles the CSV warning checkbox change
+   */
+  handleCsvWarningAcceptChange() {
+    this.setState({
+      hasCsvWarningAccepted: !this.state.hasCsvWarningAccepted,
+      csvWarningError: false,
+    });
   }
 
   /**
@@ -161,10 +190,18 @@ class ExportResources extends React.Component {
   }
 
   /**
+   * Returns the export format label based on CSV policy
+   * @returns {string}
+   */
+  get exportFormatLabel() {
+    return this.translate("Choose the export format");
+  }
+
+  /**
    * Returns the list of available export formats
    */
   get exportFormats() {
-    return [
+    const allFormats = [
       { label: "kdbx (keepass)", value: "kdbx" },
       { label: "kdbx (keepassXC & others)", value: "kdbx-others" },
       { label: "csv (keepass)", value: "csv-kdbx" },
@@ -178,6 +215,12 @@ class ExportResources extends React.Component {
       { label: "csv (nordpass)", value: "csv-nordpass" },
       { label: "csv (logmeonce)", value: "csv-logmeonce" },
     ];
+
+    if (this.exportPoliciesSettings?.allowCsvFormat === false) {
+      return allFormats.filter((format) => !format.value.startsWith("csv"));
+    }
+
+    return allFormats;
   }
 
   /**
@@ -196,8 +239,12 @@ class ExportResources extends React.Component {
     event.preventDefault();
     const isCsv = this.state.selectedExportFormat.startsWith("csv");
     if (isCsv) {
-      // CSV case
-      await this.setState({ actions: { processing: true } });
+      // CSV case: validate checkbox first
+      if (!this.state.hasCsvWarningAccepted) {
+        this.setState({ csvWarningError: true });
+        return;
+      }
+      this.setState({ actions: { processing: true } });
       this.export().then(this.onExportSuccess.bind(this)).catch(this.onExportFailure.bind(this));
     } else {
       // KDBX case
@@ -227,7 +274,11 @@ class ExportResources extends React.Component {
    * @param selectedExportFormat The selected export format
    */
   selectFormat(selectedExportFormat) {
-    this.setState({ selectedExportFormat });
+    this.setState({
+      selectedExportFormat,
+      hasCsvWarningAccepted: false,
+      csvWarningError: false,
+    });
   }
 
   /**
@@ -248,7 +299,7 @@ class ExportResources extends React.Component {
    * Whenever the export has been performed successfully
    */
   async onExportSuccess() {
-    await this.setState({ actions: { processing: false } });
+    this.setState({ actions: { processing: false } });
     await this.props.actionFeedbackContext.displaySuccess(
       this.translate("The passwords have been exported successfully"),
     );
@@ -299,16 +350,15 @@ class ExportResources extends React.Component {
 
     return (
       <DialogWrapper
+        className="export-password-dialog"
         title={this.translate("Export passwords")}
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}
       >
         <form onSubmit={this.handleExport} noValidate>
           <div className="form-content">
-            <div className={`select-wrapper input required ${!this.areActionsAllowed ? "disabled" : ""}`}>
-              <label htmlFor="export-format">
-                <Trans>Choose the export format (csv and kdbx are supported)</Trans>
-              </label>
+            <div className={`select-wrapper input required ${this.isProcessing ? "disabled" : ""}`}>
+              <label htmlFor="export-format">{this.exportFormatLabel}</label>
               <Select
                 id="export-format"
                 value={this.state.selectedExportFormat}
@@ -324,6 +374,23 @@ class ExportResources extends React.Component {
                 </em>
               </p>
             )}
+            {this.isCsvFormat && (
+              <div className={`input checkbox${this.state.csvWarningError ? " error" : ""}`}>
+                <input
+                  id="csv-warning-accept"
+                  type="checkbox"
+                  name="csv-warning-accept"
+                  checked={this.state.hasCsvWarningAccepted}
+                  onChange={this.handleCsvWarningAcceptChange}
+                  disabled={this.isProcessing}
+                />
+                <label htmlFor="csv-warning-accept">
+                  <Trans>
+                    I understand this file is unencrypted and potentially unsafe to open in a spreadsheet software.
+                  </Trans>
+                </label>
+              </div>
+            )}
             {this.hasResourcesToExport && (
               <p>
                 <em>
@@ -336,6 +403,14 @@ class ExportResources extends React.Component {
           </div>
 
           <div className="submit-wrapper clearfix">
+            <a
+              className="button"
+              href="https://www.passbolt.com/docs/user/basic-features/browser/export/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Trans>Learn more</Trans>
+            </a>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
@@ -359,9 +434,12 @@ ExportResources.propTypes = {
   resourceWorkspaceContext: PropTypes.object, // The resource workspace context
   dialogContext: PropTypes.object, // The dialog context
   actionFeedbackContext: PropTypes.object, // The action feedback context
+  exportPoliciesSettingsContext: PropTypes.object, // The export policies settings context
   t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(
-  withActionFeedback(withDialog(withResourceWorkspace(withTranslation("common")(ExportResources)))),
+  withActionFeedback(
+    withDialog(withResourceWorkspace(withExportPoliciesSettings(withTranslation("common")(ExportResources)))),
+  ),
 );

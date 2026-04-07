@@ -37,7 +37,6 @@ export default class DisplayUsersContextualMenuPage {
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

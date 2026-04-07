@@ -51,13 +51,6 @@ class DisplayChangePassphraseIntroduction extends React.Component {
   }
 
   /**
-   * Toggle the processing mode
-   */
-  async toggleProcessing() {
-    await this.setState({ processing: !this.state.processing });
-  }
-
-  /**
    * Handle form input changes.
    * @params {ReactEvent} The react event
    * @returns {void}
@@ -84,11 +77,11 @@ class DisplayChangePassphraseIntroduction extends React.Component {
   async startUpdatePassphrase() {
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      await this.toggleProcessing();
+      this.setState({ processing: true });
       await this.validateUnderstandPassphrase();
 
       if (this.hasValidationError()) {
-        await this.toggleProcessing();
+        this.setState({ processing: false });
         return;
       }
       this.props.userSettingsContext.onProvidePassphraseRequested();

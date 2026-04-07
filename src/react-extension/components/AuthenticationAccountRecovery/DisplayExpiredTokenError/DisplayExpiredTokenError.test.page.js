@@ -30,7 +30,6 @@ export default class DisplayExpiredTokenErrorTestPage {
       <MockTranslationProvider>
         <DisplayExpiredTokenError {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

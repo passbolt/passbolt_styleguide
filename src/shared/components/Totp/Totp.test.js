@@ -15,6 +15,7 @@
 import TotpTestPage from "./Totp.test.page";
 import { defaultProps, secretKeyInvalidProps } from "./Totp.test.data";
 import { TotpCodeGeneratorService } from "../../services/otp/TotpCodeGeneratorService";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -44,7 +45,9 @@ describe("Totp", () => {
 
       const code = TotpCodeGeneratorService.generate(props.totp);
       expect(page.code).toEqual(code);
-      jest.advanceTimersByTime(31000);
+      act(() => {
+        jest.advanceTimersByTime(31000);
+      });
 
       const code2 = TotpCodeGeneratorService.generate(props.totp);
       expect(code2).not.toEqual(code);

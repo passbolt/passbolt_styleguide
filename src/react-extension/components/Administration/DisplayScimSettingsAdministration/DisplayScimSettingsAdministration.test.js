@@ -16,16 +16,17 @@ import {
   defaultProps,
   defaultScimSettingsConfiguredProps,
   defaultScimSettingsDisabledProps,
+  defaultScimSettingsExpiredTokenProps,
 } from "./DisplayScimSettingsAdministration.test.data";
 import DisplayScimSettingsAdministrationPage from "./DisplayScimSettingsAdministration.test.page";
 import { waitFor } from "@testing-library/dom";
+import { act } from "react";
 
 describe("DisplayScimSettingsAdministration", () => {
   let page, props;
-
-  beforeEach(() => {
+  beforeEach(async () => {
     props = defaultProps();
-    page = new DisplayScimSettingsAdministrationPage(props);
+    await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
   });
 
   it("should display the title and description", async () => {
@@ -55,8 +56,8 @@ describe("DisplayScimSettingsAdministration", () => {
   it("should allow enabling SCIM settings", async () => {
     expect.assertions(4);
 
-    props = new defaultScimSettingsDisabledProps();
-    page = new DisplayScimSettingsAdministrationPage(props);
+    props = defaultScimSettingsDisabledProps();
+    await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
     expect(page.exists()).toBeTruthy();
 
     await page.toggleScimSettings();
@@ -78,8 +79,8 @@ describe("DisplayScimSettingsAdministration", () => {
   it("should not be able to copy secret token if not exist", async () => {
     expect.assertions(3);
 
-    props = new defaultScimSettingsConfiguredProps();
-    page = new DisplayScimSettingsAdministrationPage(props);
+    props = defaultScimSettingsConfiguredProps();
+    await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
     await waitFor(() => page.copySecretTokenButton !== null);
     expect(page.exists()).toBeTruthy();
     expect(page.isScimSecretTokenInputDisabled).toBeTruthy();
@@ -119,5 +120,26 @@ describe("DisplayScimSettingsAdministration", () => {
 
     await page.clickSaveButton();
     expect(props.scimSettingsServiceWorkerService.updateSettings).toHaveBeenCalled();
+  });
+
+  it("should display the secret token expiry date field when SCIM is enabled", async () => {
+    expect.assertions(1);
+
+    expect(page.scimSecretTokenExpiryInput).not.toBeNull();
+  });
+
+  it("should display a warning when the secret token is expired", async () => {
+    expect.assertions(1);
+
+    props = defaultScimSettingsExpiredTokenProps();
+    await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
+
+    expect(page.warning.textContent).toContain("The secret token is expired, you are requested to rotate it.");
+  });
+
+  it("should not display expiry warnings when the expiry date is in the future", async () => {
+    expect.assertions(1);
+
+    expect(page.warning.textContent).not.toContain("The secret token is expired");
   });
 });

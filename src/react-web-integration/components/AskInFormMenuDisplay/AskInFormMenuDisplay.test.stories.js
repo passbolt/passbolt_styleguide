@@ -14,11 +14,11 @@
 
 import React, { useEffect } from "react";
 import AskInFormMenuDisplay from "./AskInFormMenuDisplay";
-import ReactDOM from "react-dom/client";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import PropTypes from "prop-types";
 import { defaultAppContext } from "../../../react-extension/contexts/ExtAppContext.test.data";
+import { createRoot } from "react-dom/client";
 
 export default {
   title: "Components/WebIntegration/AskInFormMenuDisplay",
@@ -47,7 +47,7 @@ const InFormAnchor = ({ context }) => {
       </AppContext.Provider>
     );
 
-    const root = ReactDOM.createRoot(anchor);
+    const root = createRoot(anchor);
     root.render(<InForm />);
   }, []);
   return <></>;

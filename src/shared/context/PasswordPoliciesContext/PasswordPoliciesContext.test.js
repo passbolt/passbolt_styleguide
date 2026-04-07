@@ -17,23 +17,9 @@ import { defaultPasswordPoliciesDto } from "../../models/passwordPolicies/Passwo
 import { PasswordPoliciesContextProvider } from "./PasswordPoliciesContext";
 
 describe("PasswordPoliciesContext", () => {
-  describe("::getPolicies", () => {
-    it("should return the current policies set", () => {
-      expect.assertions(1);
-      const contextProvider = new PasswordPoliciesContextProvider();
-      mockState(contextProvider);
-
-      const expectedPolicies = defaultPasswordPoliciesDto();
-      contextProvider.setState({ policies: expectedPolicies });
-
-      const registeredPolicies = contextProvider.getPolicies();
-      expect(registeredPolicies).toStrictEqual(expectedPolicies);
-    });
-  });
-
-  describe("::findPolicies", () => {
+  describe("::loadPolicies", () => {
     it("should request the background page to retrieve the current policies settings", async () => {
-      expect.assertions(4);
+      expect.assertions(3);
       const contextProvider = new PasswordPoliciesContextProvider({
         context: defaultAppContext(),
       });
@@ -46,11 +32,10 @@ describe("PasswordPoliciesContext", () => {
         "passbolt.password-policies.get",
         async () => expectedPolicies,
       ),
-        await contextProvider.findPolicies());
+        await contextProvider.loadPolicies());
       expect(requestSpy).toHaveBeenCalledTimes(1);
       expect(requestSpy).toHaveBeenCalledWith("passbolt.password-policies.get");
       expect(contextProvider.setState).toHaveBeenCalledWith({ policies: expectedPolicies });
-      expect(contextProvider.getPolicies()).toStrictEqual(expectedPolicies);
     });
 
     it("should not request the background page to get password policies if they are already set", async () => {
@@ -63,50 +48,8 @@ describe("PasswordPoliciesContext", () => {
       const requestSpy = jest.spyOn(contextProvider.props.context.port, "request");
       contextProvider.setState({ policies: defaultPasswordPoliciesDto() });
 
-      await contextProvider.findPolicies();
+      await contextProvider.loadPolicies();
       expect(requestSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("::shouldRunDictionaryCheck", () => {
-    it("should return true if the policies state that an external check should be done", () => {
-      expect.assertions(1);
-      const contextProvider = new PasswordPoliciesContextProvider({
-        context: defaultAppContext(),
-      });
-      mockState(contextProvider);
-
-      contextProvider.setState({
-        policies: defaultPasswordPoliciesDto({
-          external_dictionary_check: true,
-        }),
-      });
-
-      expect(contextProvider.shouldRunDictionaryCheck()).toStrictEqual(true);
-    });
-
-    it("should return false if the policies state that no external check should be done", () => {
-      expect.assertions(1);
-      const contextProvider = new PasswordPoliciesContextProvider({
-        context: defaultAppContext(),
-      });
-      mockState(contextProvider);
-
-      contextProvider.setState({
-        policies: defaultPasswordPoliciesDto({
-          external_dictionary_check: false,
-        }),
-      });
-
-      expect(contextProvider.shouldRunDictionaryCheck()).toStrictEqual(false);
-    });
-
-    it("should return false if the policies are not set yet", () => {
-      expect.assertions(1);
-      const contextProvider = new PasswordPoliciesContextProvider({
-        context: defaultAppContext(),
-      });
-      expect(contextProvider.shouldRunDictionaryCheck()).toStrictEqual(false);
     });
   });
 });

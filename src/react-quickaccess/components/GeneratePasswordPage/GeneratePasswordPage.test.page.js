@@ -14,7 +14,7 @@
 
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { MemoryRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import GeneratePasswordPage from "./GeneratePasswordPage";
 import { waitForTrue } from "../../../../test/utils/waitFor";
@@ -34,7 +34,6 @@ export default class GeneratePasswordTestPage {
           <GeneratePasswordPage.WrappedComponent {...props} />
         </MockTranslationProvider>
       </Router>,
-      { legacyRoot: true },
     );
   }
 

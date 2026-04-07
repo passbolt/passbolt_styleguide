@@ -93,13 +93,20 @@ class DisplayResourceDetailsNote extends React.Component {
       this.props.resourceWorkspaceContext.onResourceDescriptionDecrypted();
     } catch (error) {
       console.error(error);
+
+      const userCancelled = error.name === "UserAbortsOperationError";
       this.setState({
         note: null,
         isSecretDecrypting: false,
         isSecretDecrypted: false,
-        error: true,
+        error: !userCancelled,
       });
-      await this.props.actionFeedbackContext.displayError(error.message);
+
+      if (userCancelled) {
+        this.props.actionFeedbackContext.displayError(this.props.t("The operation was cancelled."));
+      } else {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
     }
   }
 
@@ -206,14 +213,16 @@ class DisplayResourceDetailsNote extends React.Component {
                     <strong>Error: </strong>Decryption failed
                   </Trans>
                 </p>
-                <button
-                  type="button"
-                  disabled={this.state.isSecretDecrypting}
-                  onClick={this.handleRetryDecryptClickEvent}
-                >
-                  {this.state.isSecretDecrypting ? <SpinnerSVG /> : <RevertSVG />}
-                  <Trans>Retry</Trans>
-                </button>
+                <div className="actions">
+                  <button
+                    type="button"
+                    disabled={this.state.isSecretDecrypting}
+                    onClick={this.handleRetryDecryptClickEvent}
+                  >
+                    {this.state.isSecretDecrypting ? <SpinnerSVG /> : <RevertSVG />}
+                    <Trans>Retry</Trans>
+                  </button>
+                </div>
               </>
             )}
             {this.mustShowEmptyNote() && (

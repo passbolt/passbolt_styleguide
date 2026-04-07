@@ -12,24 +12,82 @@
  * @since         3.3.0
  */
 
+import MockPort from "../../../react-extension/test/mock/MockPort";
+
 /**
  * Context with an unanthenticated user
- * @type {{port: {request: (function(): {isAuthenticated: boolean, isMfaRequired: boolean})}}}
+ * @returns {{port: MockPort}}
  */
-export const contextWithUnauthenticatedUser = {
-  port: {
-    on: jest.fn(),
-    request: () => ({ isAuthenticated: false, isMfaRequired: false }),
-  },
+export const getContextWithUnauthenticatedUser = (data) => {
+  const context = {
+    port: new MockPort(),
+    fieldType: "username",
+    applicationId: 1,
+    ...data,
+  };
+
+  context.port.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+    isAuthenticated: false,
+    isMfaRequired: false,
+  }));
+
+  return context;
 };
 
 /**
  * Context with an authenticated user
- * @type {{port: {request: (function(): {isAuthenticated: boolean, isMfaRequired: boolean})}}}
+ * @returns {{port: MockPort}}
  */
-export const contextWithAuthenticatedUser = {
-  port: {
-    on: jest.fn(),
-    request: () => ({ isAuthenticated: true, isMfaRequired: false }),
-  },
+export const getContextWithAuthenticatedUser = () => {
+  const context = getContextWithUnauthenticatedUser({
+    fieldType: "username",
+  });
+
+  context.port.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+    isAuthenticated: true,
+    isMfaRequired: false,
+  }));
+
+  return context;
+};
+
+/**
+ * Context with an authenticated user and resources
+ * @param {number} suggestedResourcesCount The number of suggested resources
+ * @returns {{port: MockPort}}
+ */
+export const getContextWithAuthenticatedUserAndResources = (suggestedResourcesCount = 4) => {
+  const context = getContextWithAuthenticatedUser();
+
+  context.port.addRequestListener("passbolt.in-form-cta.suggested-resources", () => suggestedResourcesCount);
+
+  return context;
+};
+
+/**
+ * Context with an unauthenticated user and overlaid actions
+ * @param {boolean} isApplicationOverlaid Whether the application is overlaid
+ * @returns {{port: MockPort}}
+ */
+export const getContextWithUnauthenticatedUserAndAppOverlaid = (isApplicationOverlaid = false) => {
+  const context = getContextWithUnauthenticatedUser();
+
+  context.port.addRequestListener("passbolt.in-form-cta.is-application-overlaid", () => isApplicationOverlaid);
+  context.port.addRequestListener("passbolt.in-form-cta.execute", () => {});
+
+  return context;
+};
+
+/**
+ * Context with an authenticated user and overlaid actions
+ * @param {boolean} isApplicationOverlaid Whether the application is overlaid
+ * @returns {{port: MockPort}}
+ */
+export const getContextWithAuthenticatedUserAndAppOverlaid = (isApplicationOverlaid = false) => {
+  const context = getContextWithAuthenticatedUser();
+
+  context.port.addRequestListener("passbolt.in-form-cta.is-application-overlaid", () => isApplicationOverlaid);
+  context.port.addRequestListener("passbolt.in-form-cta.execute", () => {});
+
+  return context;
 };

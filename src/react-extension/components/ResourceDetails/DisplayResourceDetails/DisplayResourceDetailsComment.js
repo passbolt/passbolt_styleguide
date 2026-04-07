@@ -70,7 +70,7 @@ class DisplayResourceDetailsComment extends React.Component {
    * Check if the resource has changed and fetch
    * @param previousResource
    */
-  async handleResourceChange(previousResource) {
+  handleResourceChange(previousResource) {
     // do nothing if the section is closed.
     if (!this.state.open) {
       return;
@@ -80,37 +80,36 @@ class DisplayResourceDetailsComment extends React.Component {
       return;
     }
 
-    await this.setState({ mustRefresh: true });
+    this.setState({ mustRefresh: true });
   }
 
   /**
    * Whenever the user clicks on the section title
    */
   async handleTitleClickedEvent() {
-    const open = !this.state.open;
-    this.setState({ open });
+    this.setState({ open: !this.state.open });
   }
 
   /**
    * Whenever the user added a new comment
    * @returns {Promise<void>}
    */
-  async handleAddedEvent() {
-    await this.setState({ mustRefresh: true, canAdd: false, canAddByIcon: true });
+  handleAddedEvent() {
+    this.setState({ mustRefresh: true, canAdd: false, canAddByIcon: true });
   }
 
   /**
    * Whenever the user cancelled the adding of new comment
    */
-  async handleCancelledAddEvent() {
-    await this.setState({ canAdd: false });
+  handleCancelledAddEvent() {
+    this.setState({ canAdd: false });
   }
 
   /**
    * Whenever the user requested to add a new comment ( call-to-action )
    */
-  async handleRequestedAddEvent() {
-    await this.setState({ canAdd: true });
+  handleRequestedAddEvent() {
+    this.setState({ canAdd: true });
   }
 
   /**
@@ -118,9 +117,9 @@ class DisplayResourceDetailsComment extends React.Component {
    * @param comments The fetched comments
    */
 
-  async handleFetchedEvent(comments) {
+  handleFetchedEvent(comments) {
     const hasComments = comments && comments.length > 0;
-    await this.setState({ mustRefresh: false, canAdd: !hasComments, canAddByIcon: hasComments });
+    this.setState({ mustRefresh: false, canAdd: !hasComments, canAddByIcon: hasComments });
   }
 
   /**

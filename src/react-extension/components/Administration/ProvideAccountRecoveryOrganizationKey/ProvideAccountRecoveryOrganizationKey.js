@@ -98,7 +98,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
   async handleSelectOrganizationKeyFile(event) {
     const [organizationFile] = event.target.files;
     const organizationKey = await this.readOrganizationKeyFile(organizationFile);
-    await this.fillOrganizationKey(organizationKey);
+    this.fillOrganizationKey(organizationKey);
     this.setState({ selectedFile: organizationFile });
     if (this.state.hasAlreadyBeenValidated) {
       await this.validate();
@@ -127,8 +127,8 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    * Fill the organization key
    * @param organizationKey A subscription key
    */
-  async fillOrganizationKey(organizationKey) {
-    await this.setState({ key: organizationKey });
+  fillOrganizationKey(organizationKey) {
+    this.setState({ key: organizationKey });
   }
 
   /**
@@ -211,12 +211,15 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    * Save the changes.
    */
   async save() {
-    this.setState({ hasAlreadyBeenValidated: true });
-    await this.toggleProcessing();
+    // Prevent submission while processing
+    if (this.state.processing) {
+      return;
+    }
+    this.setState({ hasAlreadyBeenValidated: true, processing: true });
 
     if (!(await this.validate())) {
       this.handleValidateError();
-      await this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
 
@@ -230,11 +233,11 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
         privateGpgKeyDto,
       );
       await this.props.onSubmit(privateGpgKeyDto);
-      await this.toggleProcessing();
+      this.setState({ processing: false });
       this.props.onClose();
     } catch (error) {
       await this.handleSubmitError(error);
-      await this.toggleProcessing();
+      this.setState({ processing: false });
     }
   }
 
@@ -295,13 +298,6 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     await this.validateKeyInput();
 
     return this.state.keyError === "" && this.state.passwordError === "";
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  async toggleProcessing() {
-    await this.setState({ processing: !this.state.processing });
   }
 
   /**

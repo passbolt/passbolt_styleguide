@@ -18,9 +18,12 @@
 
 import DisplayInFormMenuTestPage from "./DisplayInformMenu.test.page";
 import { defaultProps, defaultPropsWithMissingMetadataKey } from "./DisplayInformMenu.test.data";
-import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import {
+  defaultResourceDto,
+  resourceStandaloneTotpDto,
+  resourceWithTotpDto,
+} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultPasswordPoliciesDto } from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { defaultMetadataTypesSettingsV6Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -40,7 +43,7 @@ beforeEach(() => {
 describe("See the Inform Menu", () => {
   let page;
   describe("As a signed-in user I should see menu items", () => {
-    it("I should see all menu items for username with not value in input", async () => {
+    it("I should see all menu items for username with no value in input", async () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
@@ -66,7 +69,7 @@ describe("See the Inform Menu", () => {
       expect(page.informMenuItems.length).toBe(4);
     });
 
-    it("I should see all menu items for password with not value in input", async () => {
+    it("I should see all menu items for password with no value in input", async () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
@@ -90,6 +93,32 @@ describe("See the Inform Menu", () => {
       await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(4);
+    });
+
+    it("I should see all menu items for OTP with no value in input", async () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const resources = [resourceWithTotpDto(), resourceStandaloneTotpDto()];
+      const configuration = { inputType: "otp", inputValue: "", suggestedResources: resources };
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
+
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
+
+      expect(page.informMenuItems.length).toBe(3);
+    });
+
+    it("I should see all menu items for OTP with value in input", async () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const resources = [resourceWithTotpDto(), resourceStandaloneTotpDto()];
+      const configuration = { inputType: "otp", inputValue: "123456", suggestedResources: resources };
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
+
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
+
+      expect(page.informMenuItems.length).toBe(3);
     });
 
     it("I should  see create credentials menu items if I am missing the shared metadata key but it is not enforced", async () => {

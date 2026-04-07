@@ -25,7 +25,7 @@ import {
 } from "./DisplaySubscriptionKey.test.data";
 import DisplaySubscriptionKeyPage from "./DisplaySubscriptionKey.test.page";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import { waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { DateTime } from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
@@ -48,7 +48,8 @@ describe("DisplaySubscriptionKeyPage", () => {
      */
     it("As AD I should see all details about the subscription", async () => {
       page = new DisplaySubscriptionKeyPage(props.context, props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Subscription key details");
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Subscription key details");
       expect(page.subscriptionDetailsTitle).toBe("Your subscription key is valid and up to date!");
@@ -71,7 +72,8 @@ describe("DisplaySubscriptionKeyPage", () => {
         throw new PassboltSubscriptionError("users exceeded", mockSubscriptionUsersExceeded);
       });
       page = new DisplaySubscriptionKeyPage(props.context, props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Subscription key details");
 
       expect(page.subscriptionDetailsTitle).toBe("Your subscription key is not valid.");
       expect(page.customerId).toBe(mockSubscriptionUsersExceeded.customer_id);
@@ -96,7 +98,8 @@ describe("DisplaySubscriptionKeyPage", () => {
         throw new PassboltSubscriptionError("key expired", mockSubscriptionExpired);
       });
       page = new DisplaySubscriptionKeyPage(props.context, props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Subscription key details");
 
       expect(page.subscriptionDetailsTitle).toBe("Your subscription key is not valid.");
       expect(page.customerId).toBe(mockSubscriptionExpired.customer_id);
@@ -122,7 +125,8 @@ describe("DisplaySubscriptionKeyPage", () => {
         throw new PassboltApiFetchError("missing key", {});
       });
       page = new DisplaySubscriptionKeyPage(props.context, props);
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Subscription key details");
 
       expect(page.subscriptionDetailsTitle).toBe("Your subscription key is either missing or not valid.");
 
@@ -138,8 +142,8 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect.assertions(2);
       jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementationOnce(() => {});
       page = new DisplaySubscriptionKeyPage(props.context, props);
-
-      await waitFor(() => {});
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("Subscription key details");
 
       const editSubscriptionKey = {
         key: null,

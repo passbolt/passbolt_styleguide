@@ -63,12 +63,12 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
 
       expect(page.passwordV4Warning).not.toBeNull();
       expect(page.passwordV4Warning.textContent).toStrictEqual(
-        "Creation of content type v4 is allowed but all content types having passwords are deleted.",
+        "V4 resource creation is enabled but password content type is disabled.",
       );
 
       expect(page.totpV4Warning).not.toBeNull();
       expect(page.totpV4Warning.textContent).toStrictEqual(
-        "Creation of content type v4 is allowed but all content types having totp are deleted.",
+        "V4 resource creation is enabled but TOTP content type is disabled.",
       );
 
       await page.clickOn(page.passwordV4Checkbox);
@@ -87,22 +87,22 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
 
       expect(page.passwordV5Warning).not.toBeNull();
       expect(page.passwordV5Warning.textContent).toStrictEqual(
-        "Creation of content type v5 is allowed but all content types having passwords are deleted.",
+        "V5 resource creation is enabled but password content type is disabled.",
       );
 
       expect(page.totpV5Warning).not.toBeNull();
       expect(page.totpV5Warning.textContent).toStrictEqual(
-        "Creation of content type v5 is allowed but all content types having totp are deleted.",
+        "V5 resource creation is enabled but TOTP content type is disabled.",
       );
 
       expect(page.customFieldsV5Warning).not.toBeNull();
       expect(page.customFieldsV5Warning.textContent).toStrictEqual(
-        "Creation of content type v5 is allowed but custom fields resource type is deleted.",
+        "V5 resource creation is enabled but custom fields content type is disabled.",
       );
 
       expect(page.noteV5Warning).not.toBeNull();
       expect(page.noteV5Warning.textContent).toStrictEqual(
-        "Creation of content type v5 is allowed but note resource type is deleted.",
+        "V5 resource creation is enabled but note content type is disabled.",
       );
 
       await page.clickOn(page.passwordV5Checkbox);

@@ -16,6 +16,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withAppContext } from "../../shared/context/AppContext/AppContext";
 import { MfaPolicyEnumerationTypes } from "../../shared/models/mfaPolicy/MfaPolicyEnumeration";
+import MfaPolicyService from "../../shared/services/api/mfaPolicy/MfaPolicyService";
+import MFAService from "../../shared/services/api/Mfa/MfaService";
 
 // The mfa settings workflow states.
 export const MfaSettingsWorkflowStates = {
@@ -92,7 +94,6 @@ export class MfaContextProvider extends React.Component {
       findMfaSettings: this.findMfaSettings.bind(this), // Find the current MFA settings
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
       setProcessing: this.setProcessing.bind(this), // set processing
-      hasMfaSettings: this.hasMfaSettings.bind(this), // returns if user and organisation has already defined his mfa settings
       hasMfaOrganisationSettings: this.hasMfaOrganisationSettings.bind(this), // returns if organisation has already defined his mfa settings
       hasMfaUserSettings: this.hasMfaUserSettings.bind(this), // returns if user has already defined his mfa settings
       clearContext: this.clearContext.bind(this), // put the data to its default state value
@@ -104,6 +105,7 @@ export class MfaContextProvider extends React.Component {
       validateTotpCode: this.validateTotpCode.bind(this), //Validate the totp code
       removeProvider: this.removeProvider.bind(this), //Remove an existing provider
       validateYubikeyCode: this.validateYubikeyCode.bind(this), //Validate the yubikey code
+      handleGetStartedWithDuo: this.handleGetStartedWithDuo.bind(this), //Handle the "Get started" button click for DUO.
     };
   }
 
@@ -112,16 +114,24 @@ export class MfaContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async findPolicy() {
-    if (this.getPolicy()) {
-      return;
+    const { policy: currentPolicy } = this.state;
+    if (currentPolicy !== null) {
+      return currentPolicy;
     }
 
     this.setProcessing(true);
-    let policy = null;
-    const result = await this.props.context.port.request("passbolt.mfa-policy.get-policy");
-    policy = result ? result.policy : null;
+    let result;
+    if (this.props.context.port) {
+      result = await this.props.context.port.request("passbolt.mfa-policy.get-policy");
+    } else {
+      // Fallback for pages served by API
+      const mfaPolicyService = new MfaPolicyService(this.props.context.getApiClientOptions());
+      result = await mfaPolicyService.find();
+    }
+    const policy = result ? result.policy : null;
     this.setState({ policy });
     this.setProcessing(false);
+    return policy;
   }
 
   /**
@@ -130,14 +140,19 @@ export class MfaContextProvider extends React.Component {
    */
   async findMfaSettings() {
     this.setProcessing(true);
-    let mfaUserSettings = null;
-    let mfaOrganisationSettings = null;
-    const settings = await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
-    mfaUserSettings = settings.MfaAccountSettings;
-    mfaOrganisationSettings = settings.MfaOrganizationSettings;
-    this.setState({ mfaUserSettings });
-    this.setState({ mfaOrganisationSettings });
+    let settings;
+    if (this.props.context.port) {
+      settings = await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
+    } else {
+      // Fallback for pages served by API
+      const mfaService = new MFAService(this.props.context.getApiClientOptions());
+      settings = await mfaService.findAllSettings();
+    }
+    const mfaUserSettings = settings.MfaAccountSettings;
+    const mfaOrganisationSettings = settings.MfaOrganizationSettings;
+    this.setState({ mfaUserSettings, mfaOrganisationSettings });
     this.setProcessing(false);
+    return { mfaUserSettings, mfaOrganisationSettings };
   }
 
   /**
@@ -162,14 +177,6 @@ export class MfaContextProvider extends React.Component {
    */
   getMfaUserSettings() {
     return this.state.mfaUserSettings;
-  }
-
-  /**
-   * Returns if mfa settings are defined.
-   * @returns {object}
-   */
-  hasMfaSettings() {
-    return !this.hasMfaOrganisationSettings() || this.hasMfaUserSettings();
   }
 
   /**
@@ -223,12 +230,15 @@ export class MfaContextProvider extends React.Component {
    * @returns {bool}
    */
   async checkMfaChoiceRequired() {
-    await this.findPolicy();
-    if (this.getPolicy() === null || this.getPolicy() !== MfaPolicyEnumerationTypes.MANDATORY) {
+    const policy = await this.findPolicy();
+    if (policy === null || policy !== MfaPolicyEnumerationTypes.MANDATORY) {
       return false;
     }
-    await this.findMfaSettings();
-    this.setState({ mfaChoiceRequired: !this.hasMfaSettings() });
+    const { mfaUserSettings, mfaOrganisationSettings } = await this.findMfaSettings();
+    const hasOrgSettings = mfaOrganisationSettings && Object.values(mfaOrganisationSettings).some((value) => value);
+    const hasUserSettings = mfaUserSettings && Object.values(mfaUserSettings).some((value) => value);
+    // set the latest value returned from findMfaSettings instead of reading stale data
+    this.setState({ mfaChoiceRequired: hasOrgSettings && !hasUserSettings });
   }
 
   /**
@@ -318,6 +328,15 @@ export class MfaContextProvider extends React.Component {
     } finally {
       this.setProcessing(false);
     }
+  }
+
+  /**
+   * Handle the start of the Duo MFA setup process.
+   * Sends a request to the background page to initiate the Duo provider configuration.
+   * @returns {Promise<void>}
+   */
+  async handleGetStartedWithDuo() {
+    await this.props.context.port.request("passbolt.mfa-setup.start-with-duo");
   }
 
   /**

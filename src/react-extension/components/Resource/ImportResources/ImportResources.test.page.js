@@ -30,7 +30,6 @@ export default class ImportResourcesPage {
       <MockTranslationProvider>
         <ImportResources {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

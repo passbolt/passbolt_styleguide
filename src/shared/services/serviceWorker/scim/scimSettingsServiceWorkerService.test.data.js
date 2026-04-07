@@ -25,6 +25,7 @@ export const defaultScimSettingsDto = (data = {}) => ({
   scim_user_id: uuidv4(),
   setting_id: uuidv4(),
   secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefg",
+  expired: "2027-01-01",
   ...data,
 });
 

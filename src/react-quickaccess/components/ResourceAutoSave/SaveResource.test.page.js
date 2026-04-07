@@ -13,10 +13,9 @@
  *
  */
 import React from "react";
-import { render } from "@testing-library/react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { render, fireEvent } from "@testing-library/react";
+import { MemoryRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import { fireEvent } from "@testing-library/react";
 import SaveResource from "./SaveResource";
 import { waitForTrue } from "../../../../test/utils/waitFor";
 import userEvent from "@testing-library/user-event";
@@ -36,7 +35,6 @@ export default class SaveResourcePage {
           <SaveResource {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();

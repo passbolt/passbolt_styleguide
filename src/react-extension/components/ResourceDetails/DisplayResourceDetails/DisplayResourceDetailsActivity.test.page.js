@@ -37,7 +37,6 @@ export default class PasswordSidebarActivitySectionPage {
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
     this.setupPageObjects();
   }

@@ -42,8 +42,8 @@ class ApiAppContextProvider extends React.Component {
    */
   async componentDidMount() {
     await this.getLoggedInUser();
-    await this.getSiteSettings();
-    await this.getRbacs();
+    const siteSettings = await this.getSiteSettings();
+    await this.getRbacs(siteSettings);
     this.initLocale();
     this.removeSplashScreen();
     const skeleton = document.querySelector(".temporary.skeleton");
@@ -56,7 +56,7 @@ class ApiAppContextProvider extends React.Component {
    * Whenever the component is unmount.
    */
   componentWillUnmount() {
-    clearTimeout(this.state.onExpiredSession);
+    clearTimeout(this.scheduledCheckIsAuthenticatedTimeout);
   }
 
   /**
@@ -138,17 +138,21 @@ class ApiAppContextProvider extends React.Component {
   async getLoggedInUser() {
     const apiClientOptions = this.getApiClientOptions().setResourceName("users");
     const apiClient = new ApiClient(apiClientOptions);
-    const result = await apiClient.get("me");
+    // To ensure account_recovery_user_setting is available for pages served by API
+    const result = await apiClient.get("me", {
+      "contain[account_recovery_user_setting]": "1",
+    });
     const loggedInUser = result.body;
     this.setState({ loggedInUser });
   }
 
   /**
    * Retrieve the rbacs.
+   * @param {object} siteSettings
    * @returns {Promise<void>}
    */
-  async getRbacs() {
-    const canIUseRbac = this.state.siteSettings.canIUse("rbacs");
+  async getRbacs(siteSettings) {
+    const canIUseRbac = siteSettings.canIUse("rbacs");
     if (!canIUseRbac) {
       this.setState({ rbacs: new RbacsCollection() });
       return;
@@ -168,8 +172,10 @@ class ApiAppContextProvider extends React.Component {
   async getSiteSettings() {
     const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
-    const siteSettings = await apiClient.findAll();
-    await this.setState({ siteSettings: new SiteSettings(siteSettings.body) });
+    const settings = await apiClient.findAll();
+    const siteSettings = new SiteSettings(settings.body);
+    this.setState({ siteSettings });
+    return siteSettings;
   }
 
   /**

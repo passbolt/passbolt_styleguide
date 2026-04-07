@@ -30,7 +30,6 @@ export default class DuoGetStartedPage {
       <MockTranslationProvider>
         <DuoGetStarted {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

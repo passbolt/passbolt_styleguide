@@ -34,7 +34,6 @@ export default class ActionAbortedMissingMetadataKeysPagePage {
           <ActionAbortedMissingMetadataKeysPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

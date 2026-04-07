@@ -23,7 +23,7 @@ export default class DisplayResourceUrisBadgePage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(<DisplayResourceUrisBadge {...props} />, { legacyRoot: true });
+    this._page = render(<DisplayResourceUrisBadge {...props} />);
   }
   /**
    * Returns the badge

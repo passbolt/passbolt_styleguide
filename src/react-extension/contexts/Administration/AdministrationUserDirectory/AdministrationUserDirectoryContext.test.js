@@ -12,17 +12,17 @@
  * @since         3.8.0
  */
 
-import { defaultProps } from "../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
+import {
+  defaultProps,
+  mockResult,
+  mockUsers,
+  mockErrors,
+} from "../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
 import { enableFetchMocks } from "jest-fetch-mock";
 import { AdminUserDirectoryContextProvider } from "./AdministrationUserDirectoryContext";
 import { mockApiResponse, mockApiResponseError } from "../../../../../test/mocks/mockApiResponse";
-import {
-  mockResult,
-  mockUsers,
-} from "../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
 import UserDirectoryModel from "../../../../shared/models/userDirectory/UserDirectoryModel";
 import UserDirectoryDTO from "../../../../shared/models/userDirectory/UserDirectoryDTO";
-import { mockErrors } from "../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
 import NotifyError from "../../../components/Common/Error/NotifyError/NotifyError";
 
 describe("AdminUserDirectoryContext", () => {
@@ -43,8 +43,10 @@ describe("AdminUserDirectoryContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminUserDirectoryContext = new AdminUserDirectoryContextProvider(props);
-    const setStateMock = (state) =>
-      (adminUserDirectoryContext.state = Object.assign(adminUserDirectoryContext.state, state));
+    const setStateMock = (state) => {
+      const newState = typeof state === "function" ? state(adminUserDirectoryContext.state) : state;
+      adminUserDirectoryContext.state = Object.assign(adminUserDirectoryContext.state, newState);
+    };
     jest.spyOn(adminUserDirectoryContext, "setState").mockImplementation(setStateMock);
     enableFetchMocks();
   });

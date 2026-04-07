@@ -12,9 +12,11 @@
  * @since         3.6.0
  */
 
-import { waitFor } from "@testing-library/react";
 import SelectAccountRecoveryOrganizationKeyPage from "./SelectAccountRecoveryOrganizationKey.test.page";
 import { defaultProps } from "./GenerateOrganizationKey.test.data";
+import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import { screen } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -44,7 +46,7 @@ describe("As AD I can generate an ORK", () => {
   it("As a logged in administrator on the account recovery settings in the administration workspace, I can open a dialog to generate an Organization Recovery Key", async () => {
     expect.assertions(13);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => {});
+
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
@@ -82,7 +84,7 @@ describe("As AD I can generate an ORK", () => {
   it("As a logged in administrator in the administration workspace, I can not select the algorithm type of the Organization Recovery Key generator", async () => {
     expect.assertions(5);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => {});
+
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
@@ -156,16 +158,12 @@ describe("As AD I can generate an ORK", () => {
   it("As a logged in administrator in the administration workspace, I cannot generate OpenPGP Public key in the Organization Recovery Key settings without a valid email and name", async () => {
     expect.assertions(4);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => {});
+
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
     await page.clickOnGenerateTab();
 
-    await page.clickOnGenerateButton(() => {
-      if (page.nameError === null) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateButton();
 
     expect(page.nameFieldError).not.toBeNull();
     expect(page.emailFieldError).not.toBeNull();
@@ -192,11 +190,7 @@ describe("As AD I can generate an ORK", () => {
     await page.type("test@passbolt.com", page.emailField);
     await page.type("almost fair", page.passphraseField);
 
-    await page.clickOnGenerateButton(() => {
-      if (page.passphraseFieldError === null) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateButton();
 
     expect(page.passphraseFieldError).not.toBeNull();
     expect(page.passphraseFieldError.textContent).toBe(
@@ -234,7 +228,7 @@ describe("As AD I can generate an ORK", () => {
     await page.type(expectedDto.passphrase, page.passphraseField);
     await page.type(expectedDto.passphrase, page.passphraseConfirmationField);
 
-    await page.clickOnGenerateButton(() => {});
+    await page.clickOnGenerateButton();
 
     expect(page.nameFieldError).toBeNull();
     expect(page.emailFieldError).toBeNull();
@@ -245,7 +239,9 @@ describe("As AD I can generate an ORK", () => {
   it("As AD I should not be blocked if the powned password service is unavailable", async () => {
     expect.assertions(1);
     const props = defaultProps();
-    jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
+    jest
+      .spyOn(PownedService.prototype, "evaluateSecret")
+      .mockRejectedValueOnce(new ExternalServiceUnavailableError("The service is unavailable"));
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
 
     await page.clickOnGenerateTab();
@@ -255,9 +251,7 @@ describe("As AD I can generate an ORK", () => {
     await page.type("This a strong passphrase to test a service not working", page.passphraseField);
     await page.type("This a strong passphrase to test a service not working", page.passphraseConfirmationField);
 
-    await waitFor(() => {});
-
-    await page.clickOnGenerateButton(() => {});
+    await page.clickOnGenerateButton();
 
     expect(page.passphraseFieldError.textContent).toBe("");
   });
@@ -279,10 +273,11 @@ describe("As AD I can generate an ORK", () => {
 
     expect(page.passphraseFieldError).toBeNull();
 
-    await page.clickOnGenerateButton(() => {});
+    await page.clickOnGenerateButton();
 
     expect(page.passwordWarningMessage === null).toBeTruthy();
     expect(page.passphraseFieldError).not.toBeNull();
+    await screen.findByText("The passphrase should not be part of an exposed data breach.");
     expect(page.passphraseFieldError.textContent).toBe("The passphrase should not be part of an exposed data breach.");
 
     //Typing new password should remove the powned service error

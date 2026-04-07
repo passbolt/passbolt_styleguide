@@ -34,6 +34,7 @@ import RequestAccountRecovery, {
 import CreateGpgKey, { CreateGpgKeyVariation } from "../../Authentication/CreateGpgKey/CreateGpgKey";
 import CheckAccountRecoveryEmail from "../../Authentication/CheckAccountRecoveryEmail/CheckAccountRecoveryEmail";
 import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
+import ExtConfigureSafariExtension from "../../Authentication/ConfigureExtension/ExtConfigureSafariExtension";
 
 /**
  * The component orchestrates the recover authentication process
@@ -46,6 +47,12 @@ class RecoverAuthentication extends Component {
     switch (this.props.authenticationRecoverContext.state) {
       case AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION:
         return <IntroduceExtension onComplete={this.props.authenticationRecoverContext.goToImportGpgKey.bind(this)} />;
+      case AuthenticationRecoverWorkflowStates.ENSURE_SAFARI_EXTENSION_CONFIGURATION:
+        return (
+          <ExtConfigureSafariExtension
+            onContinue={this.props.authenticationRecoverContext.goToImportGpgKey.bind(this)}
+          />
+        );
       case AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY:
         return (
           <ImportGpgKey

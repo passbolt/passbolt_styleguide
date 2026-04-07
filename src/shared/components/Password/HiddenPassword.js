@@ -77,7 +77,7 @@ HiddenPassword.defaultProps = {
 
 HiddenPassword.propTypes = {
   preview: PropTypes.string, // Is the secret previewed.
-  emptySecretSentence: PropTypes.string, // String to display when the secret is empty
+  emptySecretSentence: PropTypes.oneOfType([PropTypes.string, PropTypes.node]), // String to display when the secret is empty - default <Trans> react element
   canClick: PropTypes.bool, // Can the password be clicked on.
   onClick: PropTypes.func, // On click handler.
   t: PropTypes.func, // the translation function

@@ -168,20 +168,19 @@ class EditSubscriptionKey extends Component {
       return;
     }
 
-    await this.setState({ hasBeenValidated: true });
-    await this.toggleProcessing();
+    this.setState({ hasBeenValidated: true, processing: true });
+
     if (!(await this.validate())) {
       this.handleValidateError();
-      await this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
-
     try {
       await this.subscriptionKeyService.updateOrganizationSubscriptionKey(this.state.key);
       await this.handleSaveSuccess();
       await this.props.adminSubscriptionContext.findSubscriptionKey();
     } catch (error) {
-      await this.toggleProcessing();
+      this.setState({ processing: false });
       this.handleSaveError(error);
       this.focusFieldError();
     }
@@ -210,7 +209,7 @@ class EditSubscriptionKey extends Component {
    * Handle save operation error.
    * @param {object} error The returned error
    */
-  async handleSaveError(error) {
+  handleSaveError(error) {
     if (error.name === "PassboltSubscriptionError") {
       this.setState({ keyError: error.message });
     } else if (error.name === "EntityValidationError") {
@@ -266,13 +265,6 @@ class EditSubscriptionKey extends Component {
     await this.validateKeyInput();
 
     return this.state.keyError === "";
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  async toggleProcessing() {
-    await this.setState({ processing: !this.state.processing });
   }
 
   /**

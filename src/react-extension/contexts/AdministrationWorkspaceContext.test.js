@@ -21,6 +21,7 @@ import AdministrationWorkspaceContextPage from "./AdministrationWorkspaceContext
 import { AdministrationWorkspaceMenuTypes } from "./AdministrationWorkspaceContext";
 import { defaultAppContext } from "./ExtAppContext.test.data";
 import { waitFor } from "@testing-library/dom";
+import { waitForTrue } from "../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -122,7 +123,8 @@ describe("Administration Workspace Context", () => {
   describe("As AD I should have the appropriate button enabled at any time", () => {
     it("As AD I should have the save enabled", async () => {
       expect.assertions(1);
-      await page.onSaveEnabled();
+      page.onSaveEnabled();
+      await waitForTrue(() => page.isSaveEnabled);
       expect(page.isSaveEnabled).toBeTruthy();
     });
   });
@@ -130,31 +132,36 @@ describe("Administration Workspace Context", () => {
   describe("As AD I should have the appropriate action enable at any time", () => {
     it("As AD I should enabled must save settings", async () => {
       expect.assertions(1);
-      await page.onMustSaveSettings();
+      page.onMustSaveSettings();
+      await waitForTrue(() => page.mustSaveSettings);
       expect(page.mustSaveSettings).toBeTruthy();
     });
 
     it("As AD I should enabled must edit subscription key", async () => {
       expect.assertions(1);
-      await page.onMustEditSubscriptionKey();
+      page.onMustEditSubscriptionKey();
+      await waitForTrue(() => page.mustEditSubscriptionKey);
       expect(page.mustEditSubscriptionKey).toBeTruthy();
     });
 
     it("As AD I should enabled must refresh subscription key", async () => {
       expect.assertions(1);
-      await page.onMustRefreshSubscriptionKey();
+      page.onMustRefreshSubscriptionKey();
+      await waitForTrue(() => page.mustRefreshSubscriptionKey);
       expect(page.mustRefreshSubscriptionKey).toBeTruthy();
     });
 
     it("As AD I should enabled reset all action settings", async () => {
       expect.assertions(6);
-      await page.onMustSaveSettings();
-      await page.onMustEditSubscriptionKey();
-      await page.onMustRefreshSubscriptionKey();
+      page.onMustSaveSettings();
+      page.onMustEditSubscriptionKey();
+      page.onMustRefreshSubscriptionKey();
+      await waitForTrue(() => page.mustSaveSettings);
       expect(page.mustSaveSettings).toBeTruthy();
       expect(page.mustEditSubscriptionKey).toBeTruthy();
       expect(page.mustRefreshSubscriptionKey).toBeTruthy();
-      await page.onResetActionsSettings();
+      page.onResetActionsSettings();
+      await waitForTrue(() => !page.mustSaveSettings);
       expect(page.mustSaveSettings).toBeFalsy();
       expect(page.mustEditSubscriptionKey).toBeFalsy();
       expect(page.mustRefreshSubscriptionKey).toBeFalsy();

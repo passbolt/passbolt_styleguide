@@ -55,9 +55,7 @@ class ChangeUserSecurityToken extends Component {
     return {
       background: "", // The token color
       code: "", // The token code
-      actions: {
-        processing: false, // True if one's processing passphrase
-      },
+      processing: false, // True if one's processing passphrase
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyCode: false, // True if the token code is empty
@@ -127,21 +125,23 @@ class ChangeUserSecurityToken extends Component {
    * Returns true if the user can perform actions on the component
    */
   get areActionsAllowed() {
-    return !this.state.actions.processing;
+    return !this.state.processing;
   }
 
   /**
-   * Returns true if the passphrase is valid
+   * Returns true if there is at least one error property is true
+   * @param {object} errors The errors
+   * @return boolean
    */
-  get isValid() {
-    return Object.values(this.state.errors).every((value) => !value);
+  isValid(errors) {
+    return Object.values(errors).every((value) => !value);
   }
 
   /**
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
-    return this.state.actions.processing;
+    return this.state.processing;
   }
 
   /**
@@ -167,12 +167,17 @@ class ChangeUserSecurityToken extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.validate();
+    // Prevent submission while processing
+    if (this.isProcessing) {
+      return;
+    }
+    this.setState({ hasBeenValidated: true, processing: true });
+    const errors = this.validate();
 
-    if (this.isValid) {
-      await this.toggleProcessing();
+    if (this.isValid(errors)) {
       await this.save();
     }
+    this.setState({ processing: false });
   }
 
   /**
@@ -180,9 +185,9 @@ class ChangeUserSecurityToken extends Component {
    */
   async handleSelectColor(color) {
     if (this.areActionsAllowed) {
-      await this.selectColor(color);
+      this.selectColor(color);
       if (this.state.hasBeenValidated) {
-        await this.validate();
+        this.validate();
       }
     }
   }
@@ -201,9 +206,9 @@ class ChangeUserSecurityToken extends Component {
    */
   async handleChangeCode(event) {
     const code = event.target.value;
-    await this.selectCode(code);
+    this.selectCode(code);
     if (this.state.hasBeenValidated) {
-      await this.validate();
+      this.validate();
     }
   }
 
@@ -221,9 +226,10 @@ class ChangeUserSecurityToken extends Component {
       await this.props.actionFeedbackContext.displaySuccess(
         this.props.t("The security token has been updated successfully"),
       );
-      await this.toggleProcessing();
     } catch (error) {
       await this.onSaveFailure(error);
+    } finally {
+      this.setState({ processing: false });
     }
   }
 
@@ -232,7 +238,6 @@ class ChangeUserSecurityToken extends Component {
    * @param error The error
    */
   async onSaveFailure(error) {
-    await this.toggleProcessing();
     const ErrorDialogProps = { error: error };
     this.props.dialogContext.open(NotifyError, ErrorDialogProps);
   }
@@ -241,9 +246,9 @@ class ChangeUserSecurityToken extends Component {
    * Select a token color
    * @param color A color
    */
-  async selectColor(color) {
+  selectColor(color) {
     if (color.hex !== this.state.background) {
-      await this.setState({ background: color.hex });
+      this.setState({ background: color.hex });
     }
   }
 
@@ -251,25 +256,25 @@ class ChangeUserSecurityToken extends Component {
    * Select a token code
    * @param code A code
    */
-  async selectCode(code) {
-    await this.setState({ code });
+  selectCode(code) {
+    this.setState({ code });
   }
 
   /**
    * Randomize a token code
    */
-  async randomizeCode() {
+  randomizeCode() {
     const code = SecretComplexity.generate(3, ["uppercase"]);
-    await this.selectCode(code);
+    this.selectCode(code);
     if (this.state.hasBeenValidated) {
-      await this.validate();
+      this.validate();
     }
   }
 
   /**
    * Randomize a color
    */
-  async randomizeColor() {
+  randomizeColor() {
     let color;
     do {
       const number = parseInt(SecretComplexity.generate(3, ["digit"])) % this.defaultColors.length;
@@ -277,41 +282,33 @@ class ChangeUserSecurityToken extends Component {
         hex: this.defaultColors[number],
       };
     } while (color.hex === this.state.background);
-    await this.selectColor(color);
+    this.selectColor(color);
   }
 
   /**
    * Validate the security token data
+   * @return {object} errors
    */
-  async validate() {
+  validate() {
     const { code } = this.state;
+    const errors = {};
 
     const emptyCode = code.trim() === "";
     if (emptyCode) {
-      await this.setState({ hasBeenValidated: true, errors: { emptyCode } });
-      return;
+      errors.emptyCode = true;
+    } else {
+      const lengthCode = code.trim().length !== 3;
+      if (lengthCode) {
+        errors.lengthCode = true;
+      } else {
+        const invalidRegex = !isValidSecurityToken(code.trim());
+        if (invalidRegex) {
+          errors.invalidRegex = true;
+        }
+      }
     }
-
-    const lengthCode = code.trim().length !== 3;
-    if (lengthCode) {
-      await this.setState({ hasBeenValidated: true, errors: { lengthCode } });
-      return;
-    }
-
-    const invalidRegex = !isValidSecurityToken(code.trim());
-    if (invalidRegex) {
-      await this.setState({ hasBeenValidated: true, errors: { invalidRegex } });
-      return;
-    }
-
-    await this.setState({ hasBeenValidated: true, errors: {} });
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  async toggleProcessing() {
-    await this.setState({ actions: { processing: !this.state.actions.processing } });
+    this.setState({ errors });
+    return errors;
   }
 
   /**

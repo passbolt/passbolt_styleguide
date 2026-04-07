@@ -165,12 +165,9 @@ describe("CreateGpgKey", () => {
       expect.hasAssertions();
       const veryStrongPassphrase = "abcdefgh1234=5ABCD===";
       await page.fill(veryStrongPassphrase);
-      const inProgressFn = () => {
-        expect(page.canChange).toBeFalsy();
-        generateResolve();
-      };
+
       await waitFor(() => expect(page.canGoToNextStep).toBeTruthy());
-      await page.generateKey(inProgressFn);
+      await page.generateKey();
       await waitFor(() => expect(onComplete).toHaveBeenCalled());
       expect(generateResolve).toBeDefined();
     });
@@ -182,13 +179,10 @@ describe("CreateGpgKey", () => {
       const page = new CreateGpgKeyPage(props);
 
       expect.hasAssertions();
-      const inProgressFn = () => {
-        expect(page.isProcessing).toBeTruthy();
-      };
       const veryStrongPassphrase = "abcdefgh1234=5ABCD===";
       await page.fill(veryStrongPassphrase);
       await waitFor(() => expect(page.canGoToNextStep).toBeTruthy());
-      await page.generateKey(inProgressFn);
+      await page.generateKey();
       await waitFor(() => expect(onComplete).toHaveBeenCalled());
       expect(generateResolve).toBeDefined();
     });

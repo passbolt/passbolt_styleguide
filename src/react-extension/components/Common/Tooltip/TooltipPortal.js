@@ -78,7 +78,8 @@ class TooltipPortal extends Component {
    */
   findBestPosition() {
     const tooltipContainer = this.tooltipRef.current.getBoundingClientRect();
-    const tooltipText = this.tooltipTextRef.current.getBoundingClientRect();
+    // With REACT 18 portal could be displayed after and the ref is not rendered
+    const tooltipText = this.tooltipTextRef.current?.getBoundingClientRect() || 0;
     const { innerHeight, innerWidth } = window;
     // Tooltip top position center with tooltip container
     const topTooltipText = tooltipContainer.top + tooltipContainer.height / 2 - tooltipText.height / 2;

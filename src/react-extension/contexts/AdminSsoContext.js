@@ -22,13 +22,16 @@ import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProv
 import TestSsoSettingsDialog from "../components/Administration/TestSsoSettingsDialog/TestSsoSettingsDialog";
 import ConfirmDeleteSsoSettingsDialog from "../components/Administration/ConfirmDeleteSsoSettingsDialog/ConfirmDeleteSsoSettingsDialog";
 import AzureSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
-import AzureSsoSettingsViewModel from "../../shared/models/ssoSettings/AzureSsoSettingsViewModel";
+import AzureSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/AzureSsoSettingsFormEntity";
 import OAuth2SsoSettingsEntity from "../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
-import OAuth2SsoSettingsViewModel from "../../shared/models/ssoSettings/OAuth2SsoSettingsViewModel";
+import OAuth2SsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/OAuth2SsoSettingsFormEntity";
 import GoogleSsoSettingsEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
-import GoogleSsoSettingsViewModel from "../../shared/models/ssoSettings/GoogleSsoSettingsViewModel";
+import GoogleSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsFormEntity";
 import AdfsSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AdfsSsoSettingsEntity";
-import AdfsSsoSettingsViewModel from "../../shared/models/ssoSettings/AdfsSsoSettingsViewModel";
+import AdfsSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/AdfsSsoSettingsFormEntity";
+import PingOneSsoSettingsEntity from "../../shared/models/entity/ssoSettings/PingOneSsoSettingsEntity";
+import PingOneSsoSettingsFormEntity from "../../shared/models/entity/ssoSettings/PingOneSsoSettingsFormEntity";
+import memoize from "memoize-one";
 
 export const AdminSsoContext = React.createContext({
   ssoConfig: null, // The current sso configuration
@@ -65,6 +68,9 @@ export class AdminSsoContextProvider extends React.Component {
     this.bindCallbacks();
     this.isSsoConfigExisting = false;
     this.shouldFocusOnError = false;
+    this.formSettings = null;
+    this.originalSettings = null;
+    this.cachedSsoConfig = {};
   }
 
   /**
@@ -72,11 +78,8 @@ export class AdminSsoContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      ssoConfig: null, // The current sso configuration
+      ssoConfig: null, // The current sso configuration DTO
       providers: [], // The list of the current available providers on the API.
-      errors: null,
-      originalConfig: null, // the current configuration from the API
-      cachedSsoConfig: {}, // The currently cached SSO configuration,
       isLoaded: false, // is the SSO settings data loading from the server finished
       processing: false, // true when the form is being processed
       hasBeenValidated: false, // true when the has been validated once but not submitted
@@ -110,8 +113,44 @@ export class AdminSsoContextProvider extends React.Component {
   }
 
   /**
+   * Memoized form validation. Re-computes only when the settings DTO changes.
+   * @type {function}
+   */
+  validateForm = memoize(
+    (
+      ssoConfigDto, // eslint-disable-line no-unused-vars
+    ) => this.formSettings?.validate(),
+  );
+
+  /**
+   * Memoized change detection. Re-computes only when entities or DTO change.
+   * @type {function}
+   */
+  // eslint-disable-next-line no-unused-vars
+  hasSettingsChanges = memoize((originalDto, formDto) => {
+    // Here we need a try/catch because `hasDiffProps` will throw an error when the entities don't share the same properties.
+    try {
+      return this.originalSettings?.hasDiffProps(this.formSettings) ?? false;
+    } catch {
+      return true;
+    }
+  });
+
+  /**
+   * Returns the current sso config DTO for state synchronization.
+   * @returns {object|null}
+   * @private
+   */
+  getSsoConfigDto() {
+    if (!this.formSettings) {
+      return null;
+    }
+    return { provider: this.formSettings.provider, ...this.formSettings.toFormDto() };
+  }
+
+  /**
    * Find the sso configuration
-   * @return {Promise<void>}
+   * @return {Promise<Object>}
    */
   async loadSsoConfiguration() {
     let ssoConfig = null;
@@ -119,42 +158,46 @@ export class AdminSsoContextProvider extends React.Component {
       ssoConfig = await this.props.context.port.request("passbolt.sso.get-current");
     } catch (error) {
       this.props.dialogContext.open(NotifyError, { error });
-      return;
+      return {};
     }
 
     this.isSsoConfigExisting = Boolean(ssoConfig.provider);
-    const registeredConfig = this.getSsoProviderViewModel(ssoConfig);
+    this.formSettings = this.getSsoProviderFormEntity(ssoConfig);
+    this.originalSettings = this.getSsoProviderFormEntity(ssoConfig);
 
     this.setState({
-      ssoConfig: registeredConfig,
-      originalConfig: registeredConfig,
+      ssoConfig: this.getSsoConfigDto(),
       providers: ssoConfig.providers,
       isLoaded: true,
     });
+    return ssoConfig;
   }
 
   /**
-   * Constructor
-   * @param {SsoSettingsDto} settings
-   * @returns {SsoSettingsViewModel}
+   * Returns the form entity matching the given SSO settings provider.
+   * @param {object} settings
+   * @returns {EntityV2|null}
    */
-  getSsoProviderViewModel(settings) {
+  getSsoProviderFormEntity(settings) {
     if (!settings?.provider) {
       return null;
     }
 
     switch (settings.provider) {
       case AzureSsoSettingsEntity.PROVIDER_ID: {
-        return AzureSsoSettingsViewModel.fromEntityDto(settings);
+        return AzureSsoSettingsFormEntity.fromEntityDto(settings);
       }
       case GoogleSsoSettingsEntity.PROVIDER_ID: {
-        return GoogleSsoSettingsViewModel.fromEntityDto(settings);
+        return GoogleSsoSettingsFormEntity.fromEntityDto(settings);
       }
       case OAuth2SsoSettingsEntity.PROVIDER_ID: {
-        return OAuth2SsoSettingsViewModel.fromEntityDto(settings);
+        return OAuth2SsoSettingsFormEntity.fromEntityDto(settings);
       }
       case AdfsSsoSettingsEntity.PROVIDER_ID: {
-        return AdfsSsoSettingsViewModel.fromEntityDto(settings);
+        return AdfsSsoSettingsFormEntity.fromEntityDto(settings);
+      }
+      case PingOneSsoSettingsEntity.PROVIDER_ID: {
+        return PingOneSsoSettingsFormEntity.fromEntityDto(settings);
       }
     }
 
@@ -163,7 +206,7 @@ export class AdminSsoContextProvider extends React.Component {
 
   /**
    * Get the current sso config from the context's state.
-   * @returns {Object}
+   * @returns {object}
    */
   getSsoConfiguration() {
     return this.state.ssoConfig;
@@ -179,11 +222,11 @@ export class AdminSsoContextProvider extends React.Component {
 
   /**
    * Get the current SSO configuration with data ready for the background page.
-   * @return {Object}
+   * @return {object}
    * @private
    */
   getSsoConfigurationDto() {
-    return this.state.ssoConfig.toEntityDto();
+    return this.formSettings.toEntityDto();
   }
 
   /**
@@ -191,7 +234,7 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   isSsoConfigActivated() {
-    return Boolean(this.state.ssoConfig);
+    return Boolean(this.formSettings);
   }
 
   /**
@@ -199,10 +242,13 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   hasFormChanged() {
+    if (this.originalSettings && this.formSettings) {
+      return this.hasSettingsChanges(this.originalSettings.toFormDto(), this.formSettings.toFormDto());
+    }
+
     return (
-      (this.state.originalConfig !== null && this.state.ssoConfig === null) ||
-      (this.state.originalConfig === null && this.state.ssoConfig !== null) ||
-      this.state.originalConfig?.isDataDifferent(this.state.ssoConfig)
+      (this.originalSettings !== null && this.formSettings === null) ||
+      (this.originalSettings === null && this.formSettings !== null)
     );
   }
 
@@ -212,9 +258,9 @@ export class AdminSsoContextProvider extends React.Component {
    * @param {string} value
    */
   setValue(key, value) {
-    const ssoConfig = this.state.ssoConfig.cloneWithMutation(key, value);
+    this.formSettings.set(key, value, { validate: false });
 
-    this.setState({ ssoConfig }, () => {
+    this.setState({ ssoConfig: this.getSsoConfigDto() }, () => {
       if (this.state.hasBeenValidated) {
         this.validateData();
       }
@@ -225,10 +271,11 @@ export class AdminSsoContextProvider extends React.Component {
    * Disable the Sso configuration.
    */
   disableSso() {
-    const cachedSsoConfig = this.state.cachedSsoConfig;
-    cachedSsoConfig[this.state.ssoConfig.provider] = this.state.ssoConfig;
-    const ssoConfig = null;
-    this.setState({ ssoConfig, cachedSsoConfig });
+    if (this.formSettings) {
+      this.cachedSsoConfig[this.formSettings.provider] = this.formSettings;
+    }
+    this.formSettings = null;
+    this.setState({ ssoConfig: null });
   }
 
   /**
@@ -255,16 +302,15 @@ export class AdminSsoContextProvider extends React.Component {
       return;
     }
 
-    const cachedSsoConfig = this.state.cachedSsoConfig;
-    const currentProviderConfig = this.state.ssoConfig?.provider;
-    if (currentProviderConfig) {
-      cachedSsoConfig[currentProviderConfig] = this.state.ssoConfig;
+    if (this.formSettings?.provider) {
+      this.cachedSsoConfig[this.formSettings.provider] = this.formSettings;
     }
+
+    this.formSettings = this.getCachedSsoConfigOrDefault(provider.id);
 
     this.setState(
       {
-        ssoConfig: this.getCachedSsoConfigOrDefault(provider.id),
-        cachedSsoConfig,
+        ssoConfig: this.getSsoConfigDto(),
       },
       () => {
         if (this.state.hasBeenValidated) {
@@ -277,20 +323,20 @@ export class AdminSsoContextProvider extends React.Component {
   /**
    * For the given provider returns the SSO config cached or the default configuration if none exists yet.
    * @param {string} providerId
-   * @returns {SsoSettingsViewModel}
+   * @returns {EntityV2}
    */
   getCachedSsoConfigOrDefault(providerId) {
-    if (this.state.cachedSsoConfig[providerId]) {
-      return this.state.cachedSsoConfig[providerId];
+    if (this.cachedSsoConfig[providerId]) {
+      return this.cachedSsoConfig[providerId];
     }
 
     const defaultProviderConfiguration = SsoProviders.find((provider) => provider.id === providerId);
     const entityDto = {
-      id: this.state.ssoConfig?.id,
+      id: this.formSettings?.id,
       provider: providerId,
       data: defaultProviderConfiguration.defaultConfig,
     };
-    return this.getSsoProviderViewModel(entityDto);
+    return this.getSsoProviderFormEntity(entityDto);
   }
 
   /**
@@ -299,11 +345,10 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean} true if the data is valid, false otherwise
    */
   validateData(applyFieldFocusOnError = false) {
-    const validattionError = this.state.ssoConfig.validate();
-    const hasErrors = validattionError.hasErrors();
-    const errors = hasErrors ? validattionError : null;
-    this.setState({ errors, hasBeenValidated: true });
+    const validationError = this.validateForm(this.state.ssoConfig);
+    const hasErrors = Boolean(validationError?.hasErrors());
     this.shouldFocusOnError = applyFieldFocusOnError && hasErrors;
+    this.setState({ hasBeenValidated: true });
     return !hasErrors;
   }
 
@@ -319,10 +364,13 @@ export class AdminSsoContextProvider extends React.Component {
 
   /**
    * Returns the error set during validation.
-   * @returns {EntityValidationError}
+   * @returns {EntityValidationError|null}
    */
   getErrors() {
-    return this.state.errors;
+    if (!this.state.hasBeenValidated) {
+      return null;
+    }
+    return this.validateForm(this.state.ssoConfig);
   }
 
   /**
@@ -342,8 +390,8 @@ export class AdminSsoContextProvider extends React.Component {
     }
 
     await this.runTestConfig(draftConfiguration);
-    const ssoConfig = this.getSsoProviderViewModel(draftConfiguration);
-    this.setState({ ssoConfig });
+    this.formSettings = this.getSsoProviderFormEntity(draftConfiguration);
+    this.setState({ ssoConfig: this.getSsoConfigDto() });
   }
 
   /**
@@ -351,7 +399,7 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   canDeleteSettings() {
-    return this.isSsoConfigExisting && this.state.ssoConfig === null;
+    return this.isSsoConfigExisting && this.formSettings === null;
   }
 
   /**
@@ -368,13 +416,13 @@ export class AdminSsoContextProvider extends React.Component {
   async deleteSettings() {
     this.setState({ processing: true });
     try {
-      const ssoSettingsId = this.state.originalConfig.id;
-      await this.props.context.port.request("passbolt.sso.delete-settings", ssoSettingsId);
+      await this.props.context.port.request("passbolt.sso.delete-settings", this.originalSettings.id);
       this.props.actionFeedbackContext.displaySuccess(this.props.t("The SSO settings have been deleted successfully"));
       this.isSsoConfigExisting = false;
+      this.formSettings = null;
+      this.originalSettings = null;
       this.setState({
         ssoConfig: null,
-        originalConfig: null,
         processing: false,
       });
     } catch (e) {
@@ -386,7 +434,7 @@ export class AdminSsoContextProvider extends React.Component {
   /**
    * Opens the test SSO settings dialog
    *
-   * @param {SsoConfigurationDto} draftConfiguration
+   * @param {object} draftConfiguration
    */
   async runTestConfig(draftConfiguration) {
     const selectedProvider = SsoProviders.find((provider) => provider.id === draftConfiguration.provider);
@@ -410,7 +458,11 @@ export class AdminSsoContextProvider extends React.Component {
    */
   handleSettingsActivation() {
     this.isSsoConfigExisting = true;
-    this.setState({ originalConfig: this.state.ssoConfig });
+    this.originalSettings = this.getSsoProviderFormEntity({
+      id: this.formSettings.id,
+      provider: this.formSettings.provider,
+      data: this.formSettings.toFormDto(),
+    });
   }
 
   /**

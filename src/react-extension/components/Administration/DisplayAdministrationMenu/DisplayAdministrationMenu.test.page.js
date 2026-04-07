@@ -36,7 +36,6 @@ export default class DisplayAdministrationMenuPage {
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

@@ -76,8 +76,8 @@ class GenerateOrganizationKey extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    await this.props.passwordPoliciesContext.findPolicies();
-    this.initPwnedPasswordService();
+    const policies = await this.props.passwordPoliciesContext.loadPolicies();
+    this.initPwnedPasswordService(policies);
   }
   /**
    * Bind callbacks methods
@@ -103,8 +103,8 @@ class GenerateOrganizationKey extends React.Component {
   /**
    * Initialize the pwned password service
    */
-  initPwnedPasswordService() {
-    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+  initPwnedPasswordService(policies) {
+    const isPwnedServiceAvailable = policies?.external_dictionary_check;
 
     if (isPwnedServiceAvailable) {
       this.pownedService = new PownedService(this.props.context.port);
@@ -360,18 +360,22 @@ class GenerateOrganizationKey extends React.Component {
    * Save the changes.
    */
   async save() {
-    this.toggleProcessing();
+    // Prevent submission while processing
+    if (this.state.processing) {
+      return;
+    }
+    this.setState({ processing: true });
 
     if (!(await this.validate())) {
       this.handleValidateError();
-      this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
 
     //the form is valid, check if passphrase is pwned
     const isPassphrasePwned = await this.evaluatePassphraseIsInDictionary(this.state.passphrase);
     if (isPassphrasePwned) {
-      this.toggleProcessing();
+      this.setState({ processing: false });
       return;
     }
 
@@ -410,13 +414,6 @@ class GenerateOrganizationKey extends React.Component {
       "passbolt.account-recovery.generate-organization-key",
       generateGpgKeyDto,
     );
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  toggleProcessing() {
-    this.setState({ processing: !this.state.processing });
   }
 
   /**

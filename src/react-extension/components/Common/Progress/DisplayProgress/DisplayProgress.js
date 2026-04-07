@@ -55,8 +55,7 @@ class DisplayProgress extends Component {
     }
 
     this.infiniteTimerUpdateIntervalId = setInterval(() => {
-      const infiniteTimer = this.state.infiniteTimer + 2;
-      this.setState({ infiniteTimer });
+      this.setState({ infiniteTimer: this.state.infiniteTimer + 2 });
     }, 500);
   }
 
@@ -82,7 +81,7 @@ class DisplayProgress extends Component {
    * @returns {boolean}
    */
   isInfiniteProgressMode() {
-    return !this.props.progressContext.progressDialogProps.goals;
+    return !this.props.progressContext.progressDialogProps?.goals;
   }
 
   /**
@@ -120,8 +119,8 @@ class DisplayProgress extends Component {
    * @return {number}
    */
   calculateGoalsProgress() {
-    const completed = this.props.progressContext.progressDialogProps.completed || 0;
-    let progress = Math.round((100 * completed) / this.props.progressContext.progressDialogProps.goals);
+    const completed = this.props.progressContext.progressDialogProps?.completed || 0;
+    let progress = Math.round((100 * completed) / this.props.progressContext.progressDialogProps?.goals);
     if (progress > 100) {
       progress = 100;
     }
@@ -159,7 +158,7 @@ class DisplayProgress extends Component {
           <div className="dialog-header">
             <span className="dialog-title-wrapper">
               <h2>
-                {this.decodedHtmlCharacters(this.props.progressContext.progressDialogProps.title) || (
+                {this.decodedHtmlCharacters(this.props.progressContext.progressDialogProps?.title) || (
                   <Trans>Please wait...</Trans>
                 )}
               </h2>
@@ -177,7 +176,7 @@ class DisplayProgress extends Component {
                 {!this.isInfiniteProgressMode() && (
                   <div className="progress-details">
                     <span className="progress-step-label">
-                      {this.decodedHtmlCharacters(this.props.progressContext.progressDialogProps.message) || (
+                      {this.decodedHtmlCharacters(this.props.progressContext.progressDialogProps?.message) || (
                         <Trans>Please wait...</Trans>
                       )}
                     </span>

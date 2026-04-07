@@ -12,8 +12,8 @@
  * @since         3.3.0
  */
 
-import { render } from "@testing-library/react";
 import React from "react";
+import { render } from "@testing-library/react";
 import AskInFormMenuDisplay from "./AskInFormMenuDisplay";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 
@@ -34,9 +34,38 @@ export default class AskInFormMenuDisplayTestPage {
   }
 
   /**
+   * Returns the Passbolt logo icon
+   */
+  get icon() {
+    return this._page.container.querySelector(".in-form-icon-logo");
+  }
+
+  /**
+   * Returns the Passbolt logo icon
+   */
+  get iconCount() {
+    return this.icon.dataset.count ?? null;
+  }
+
+  /**
+   * Returns true if the page container
+   */
+  get hasChildren() {
+    return this._page.container.hasChildNodes();
+  }
+
+  /**
    * Returns true if the in-form icon is in an active mode
    */
   get isActive() {
-    return this._page.container.querySelector(".in-form-icon-logo.inactive") === null;
+    return this.icon ? !this.icon.classList.contains("inactive") : false;
+  }
+
+  /**
+   * Clicks on the icon
+   */
+  clickIcon() {
+    const link = this._page.container.querySelector("a");
+    link.click();
   }
 }

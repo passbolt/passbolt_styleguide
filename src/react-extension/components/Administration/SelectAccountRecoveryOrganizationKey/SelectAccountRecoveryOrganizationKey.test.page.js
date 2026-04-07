@@ -35,7 +35,6 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
       <MockTranslationProvider>
         <SelectAccountRecoveryOrganizationKey {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -376,9 +375,8 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
     await this.user.click(this.showPassphraseConfirmationButton);
   }
 
-  async clickOnGenerateButton(waitForCallback) {
+  async clickOnGenerateButton() {
     await this.user.click(this.generateButton);
-    await waitFor(waitForCallback);
   }
 
   async type(text, element) {

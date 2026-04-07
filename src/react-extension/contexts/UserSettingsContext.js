@@ -25,7 +25,7 @@ export const UserSettingsContext = React.createContext({
   onGoToIntroductionPassphraseRequested: () => {}, // Whenever the user wants to go back to the passphrase introduction
   onDownloadRecoveryKitRequested: () => {}, // Whenever the user wants download the recovery kit.
   onUpdateSecurityTokenRequested: () => {}, // Whenever the user wants update the security token.
-  onUpdateUserLocaleRequested: () => {}, // Whenever the update of the locale is requested.
+  onUpdateLocaleUserRequested: () => {}, // Whenever the update of the locale is requested.
 });
 
 /**
@@ -62,15 +62,15 @@ export class UserSettingsContextProvider extends React.Component {
   /**
    * Whenever the introduction passphrase is requested
    */
-  async onIntroductionPassphraseRequested() {
-    await this.setState({ state: UserSettingsContextState.PASSPHRASE_INTRODUCTION });
+  onIntroductionPassphraseRequested() {
+    this.setState({ state: UserSettingsContextState.PASSPHRASE_INTRODUCTION });
   }
 
   /**
    * Whenever the provide passphrase is requested
    */
-  async onProvidePassphraseRequested() {
-    await this.setState({ state: UserSettingsContextState.PASSPHRASE_TO_PROVIDE_REQUESTED });
+  onProvidePassphraseRequested() {
+    this.setState({ state: UserSettingsContextState.PASSPHRASE_TO_PROVIDE_REQUESTED });
   }
 
   /**
@@ -79,14 +79,14 @@ export class UserSettingsContextProvider extends React.Component {
    */
   async onCheckProvidePassphraseRequested(passphrase) {
     await this.props.context.port.request("passbolt.auth.verify-passphrase", passphrase);
-    await this.setState({ state: UserSettingsContextState.PASSPHRASE_TO_PROVIDE_CHECKED, oldPassphrase: passphrase });
+    this.setState({ state: UserSettingsContextState.PASSPHRASE_TO_PROVIDE_CHECKED, oldPassphrase: passphrase });
   }
 
   /**
    * Whenever the user wants to go back to the passphrase introduction
    */
-  async onGoToIntroductionPassphraseRequested() {
-    await this.setState({ state: UserSettingsContextState.PASSPHRASE_INTRODUCTION, oldPassphrase: null });
+  onGoToIntroductionPassphraseRequested() {
+    this.setState({ state: UserSettingsContextState.PASSPHRASE_INTRODUCTION, oldPassphrase: null });
   }
 
   /**
@@ -95,7 +95,7 @@ export class UserSettingsContextProvider extends React.Component {
    */
   async onUpdatePassphraseRequested(passphrase) {
     await this.props.context.port.request("passbolt.user.update-private-key", this.state.oldPassphrase, passphrase);
-    await this.setState({ state: UserSettingsContextState.PASSPHRASE_UPDATED, oldPassphrase: null });
+    this.setState({ state: UserSettingsContextState.PASSPHRASE_UPDATED, oldPassphrase: null });
   }
 
   /**

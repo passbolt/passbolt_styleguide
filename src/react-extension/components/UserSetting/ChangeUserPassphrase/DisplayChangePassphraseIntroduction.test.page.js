@@ -29,7 +29,6 @@ export default class DisplayChangePassphraseIntroductionPage {
       <MockTranslationProvider>
         <DisplayChangePassphraseIntroduction {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
