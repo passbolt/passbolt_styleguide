@@ -22,6 +22,13 @@
       ]
     }
   },
+  "forwardPorts": [6006],
+  "portsAttributes": {
+    "6006": {
+      "label": "Storybook",
+      "onAutoForward": "notify"
+    }
+  },
   "remoteUser": "node",
   "initializeCommand": "mkdir -p ${localEnv:HOME}/.claude/managed-settings && cp \"/Library/Application Support/ClaudeCode/managed-settings.json\" ${localEnv:HOME}/.claude/managed-settings/ 2>/dev/null || true",
   "postCreateCommand": "npm install && echo 'Dev environment is ready!'",
