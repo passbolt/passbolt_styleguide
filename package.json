@@ -60,7 +60,7 @@
     "prettier": "3.6.2",
     "rimraf": "^6.1.2",
     "webpack": "^5.105.2",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^7.0.2"
   },
   "dependencies": {
     "debounce-promise": "^3.1.2",
