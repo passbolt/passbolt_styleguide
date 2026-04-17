@@ -26,6 +26,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
 } from "../resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
@@ -37,6 +38,7 @@ const partialCheckboxesMapping = {
   totpV5: [RESOURCE_TYPE_V5_TOTP_SLUG],
   customFieldsV5: [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG],
   noteV5: [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG],
+  pinCodeV5: [RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG],
 };
 
 const fullResourceTypesMapping = {
@@ -54,6 +56,7 @@ const fullResourceTypesMapping = {
   totpV5: [RESOURCE_TYPE_V5_TOTP_SLUG, RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG],
   customFieldsV5: [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG],
   noteV5: [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG],
+  pinCodeV5: [RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG],
 };
 
 class ResourceTypesFormEntity extends EntityV2 {
@@ -83,12 +86,14 @@ class ResourceTypesFormEntity extends EntityV2 {
         "totp_v5",
         "custom_fields_v5",
         "note_v5",
+        "pin_code_v5",
         "password_v4_count",
         "password_v5_count",
         "totp_v4_count",
         "totp_v5_count",
         "custom_fields_v5_count",
         "note_v5_count",
+        "pin_code_v5_count",
         "resource_types",
         "has_v4_resource_types",
         "has_v5_resource_types",
@@ -112,6 +117,9 @@ class ResourceTypesFormEntity extends EntityV2 {
         note_v5: {
           type: "boolean",
         },
+        pin_code_v5: {
+          type: "boolean",
+        },
         password_v4_count: {
           type: "integer",
         },
@@ -128,6 +136,9 @@ class ResourceTypesFormEntity extends EntityV2 {
           type: "integer",
         },
         note_v5_count: {
+          type: "integer",
+        },
+        pin_code_v5_count: {
           type: "integer",
         },
         has_v4_resource_types: {
@@ -163,6 +174,7 @@ class ResourceTypesFormEntity extends EntityV2 {
       availableResourceTypes,
     );
     const note_v5 = this._areAllResourceTypesAvailable(partialCheckboxesMapping.noteV5, availableResourceTypes);
+    const pin_code_v5 = this._areAllResourceTypesAvailable(partialCheckboxesMapping.pinCodeV5, availableResourceTypes);
 
     const password_v4_count = this._getResourcesCountForResourceTypeFamily(
       fullResourceTypesMapping.passwordV4,
@@ -179,6 +191,10 @@ class ResourceTypesFormEntity extends EntityV2 {
       availableResourceTypes,
     );
     const note_v5_count = this._getResourcesCountForResourceTypeFamily(fullResourceTypesMapping.noteV5, resource_types);
+    const pin_code_v5_count = this._getResourcesCountForResourceTypeFamily(
+      fullResourceTypesMapping.pinCodeV5,
+      resource_types,
+    );
 
     const has_v4_resource_types = resource_types.hasSomeOfVersion("v4");
     const has_v5_resource_types = resource_types.hasSomeOfVersion("v5");
@@ -190,11 +206,13 @@ class ResourceTypesFormEntity extends EntityV2 {
       totp_v5,
       custom_fields_v5,
       note_v5,
+      pin_code_v5,
       password_v4_count,
       password_v5_count,
       totp_v4_count,
       totp_v5_count,
       note_v5_count,
+      pin_code_v5_count,
       custom_fields_v5_count,
       has_v4_resource_types,
       has_v5_resource_types,
@@ -271,12 +289,21 @@ class ResourceTypesFormEntity extends EntityV2 {
       error = error || new EntityValidationError();
       error.addError("note_v5", "has_content", "Note content type is disabled but there are existing note resources.");
     }
+    if (!this._props.pin_code_v5 && this._props.pin_code_v5_count > 0) {
+      error = error || new EntityValidationError();
+      error.addError(
+        "pin_code_v5",
+        "has_content",
+        "Pin code content type is disabled but there are existing pin code resources.",
+      );
+    }
     if (
       !this._props.password_v4 &&
       !this._props.totp_v4 &&
       !this._props.password_v5 &&
       !this._props.totp_v5 &&
-      !this._props.note_v5
+      !this._props.note_v5 &&
+      !this._props.pin_code_v5
     ) {
       const message = "At least one content type should be allowed";
       const rule = "minimum_requirement";
@@ -288,6 +315,7 @@ class ResourceTypesFormEntity extends EntityV2 {
       error.addError("totp_v5", rule, message);
       error.addError("custom_fields_v5", rule, message);
       error.addError("note_v5", rule, message);
+      error.addError("pin_code_v5", rule, message);
     }
 
     if (error) {
@@ -346,7 +374,8 @@ class ResourceTypesFormEntity extends EntityV2 {
       !this._props.password_v5 &&
       !this._props.totp_v5 &&
       !this._props.custom_fields_v5 &&
-      !this._props.note_v5
+      !this._props.note_v5 &&
+      !this._props.pin_code_v5
     ) {
       result = result || new EntityValidationError();
       result.addError(
@@ -368,6 +397,11 @@ class ResourceTypesFormEntity extends EntityV2 {
         "note_v5",
         "is_creation_alowed",
         "V5 resource creation is enabled but note content type is disabled.",
+      );
+      result.addError(
+        "pin_code_v5",
+        "is_creation_alowed",
+        "V5 resource creation is enabled but pin code content type is disabled.",
       );
     }
 
@@ -391,6 +425,11 @@ class ResourceTypesFormEntity extends EntityV2 {
       result.addError("custom_fields_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
     }
 
+    if (!metadataTypesSettings.allowCreationOfV5Resources && this._props.pin_code_v5) {
+      result = result || new EntityValidationError();
+      result.addError("pin_code_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
+    }
+
     const activeMetadataKeysCollection = metadataKeysCollection.items.filter((metadataKey) => !metadataKey.expired);
     if (activeMetadataKeysCollection.length === 0 && this._props.password_v5) {
       result = result || new EntityValidationError();
@@ -412,6 +451,11 @@ class ResourceTypesFormEntity extends EntityV2 {
       result.addError("note_v5", "active_metadata_key", "No active metadata key defined.");
     }
 
+    if (activeMetadataKeysCollection.length === 0 && this._props.pin_code_v5) {
+      result = result || new EntityValidationError();
+      result.addError("pin_code_v5", "active_metadata_key", "No active metadata key defined.");
+    }
+
     return result;
   }
 
@@ -427,12 +471,14 @@ class ResourceTypesFormEntity extends EntityV2 {
       totp_v5: this._props.totp_v5,
       custom_fields_v5: this._props.custom_fields_v5,
       note_v5: this._props.note_v5,
+      pin_code_v5: this._props.pin_code_v5,
       password_v4_count: this._props.password_v4_count,
       password_v5_count: this._props.password_v5_count,
       totp_v4_count: this._props.totp_v4_count,
       totp_v5_count: this._props.totp_v5_count,
       custom_fields_v5_count: this._props.custom_fields_v5_count,
       note_v5_count: this._props.note_v5_count,
+      pin_code_v5_count: this._props.pin_code_v5_count,
       has_v4_resource_types: this._props.has_v4_resource_types,
       has_v5_resource_types: this._props.has_v5_resource_types,
       resource_types: this._resource_types,
@@ -454,7 +500,8 @@ class ResourceTypesFormEntity extends EntityV2 {
         (this._props.totp_v5 && rt.isV5() && !rt.hasPassword() && rt.hasTotp()) || // standalone v5 only resource types
         (this._props.totp_v5 && this._props.password_v5 && rt.isV5() && rt.hasPassword() && rt.hasTotp()) || // password + totp v5 resource types
         (this._props.custom_fields_v5 && rt.slug === RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG) || // note v5 only resource types
-        (this._props.note_v5 && rt.slug === RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG), // note v5 only resource types
+        (this._props.note_v5 && rt.slug === RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG) || // note v5 only resource types
+        (this._props.pin_code_v5 && rt.slug === RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG), // pin code v5 only resource types
     );
     const deletedResourceTypes = this._resource_types.items.filter(
       (rt) => !availableResourceTypes.some((art) => rt.id === art.id),
