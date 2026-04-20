@@ -74,7 +74,7 @@ export const resourceTypesV4CollectionDto = () => [
 
 /**
  * Resource types collection v5 dto.
- * @returns {object}
+ * @returns {Array<object>}
  */
 export const resourceTypesV5CollectionDto = () => [
   resourceTypeV5DefaultDto(),
