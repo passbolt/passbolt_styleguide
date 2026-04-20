@@ -27,7 +27,6 @@ import {
   resourceTypeV5TotpDto,
   resourceTypeWithoutSecretDefinitionDto,
 } from "./resourceTypeEntity.test.data";
-import EntityValidationError from "../abstract/entityValidationError";
 
 describe("ResourceTypeEntity", () => {
   describe("::getSchema", () => {
@@ -118,9 +117,7 @@ describe("ResourceTypeEntity", () => {
       const dto = resourceTypePasswordAndDescriptionDto({
         slug: "wrong-slug",
       });
-      expect(() => new ResourceTypeEntity(dto)).toThrow(
-        new EntityValidationError("Could not validate entity ResourceTypeEntity."),
-      );
+      expect(() => new ResourceTypeEntity(dto)).toThrow("Could not validate entity ResourceTypeEntity.");
     });
 
     it("should throw an error if slug is invalid", () => {
@@ -128,9 +125,7 @@ describe("ResourceTypeEntity", () => {
       const dto = resourceTypePasswordAndDescriptionDto({
         slug: 42,
       });
-      expect(() => new ResourceTypeEntity(dto)).toThrow(
-        new EntityValidationError("Could not validate entity ResourceTypeEntity."),
-      );
+      expect(() => new ResourceTypeEntity(dto)).toThrow("Could not validate entity ResourceTypeEntity.");
     });
   });
 

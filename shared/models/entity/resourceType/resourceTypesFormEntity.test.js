@@ -165,7 +165,7 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError("note_v5", "minimum_requirement", "At least one content type should be allowed");
 
       const dto = withDeletedResourceTypesHavingResources();
-      expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
+      expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError.message);
     });
 
     it("should throw an error if the resource_types is not a valid ResourceTypesCollection", () => {
@@ -173,7 +173,7 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError("resource_types", "type", "The resource_types is not a valid ResourceTypesCollection.");
 
       const dto = withDeletedResourceTypesHavingResources({ resource_types: [] });
-      expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
+      expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError.message);
     });
 
     it("should throw an error if custom_fields_v5 is deleted but custom_fields_v5_count is greater than 0", () => {
@@ -190,7 +190,7 @@ describe("ResourceTypesFormEntity", () => {
         custom_fields_v5: false,
         custom_fields_v5_count: 5,
       });
-      expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
+      expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError.message);
     });
   });
 

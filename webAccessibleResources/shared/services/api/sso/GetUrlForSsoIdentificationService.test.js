@@ -19,7 +19,6 @@ import { ApiClientOptions } from "../../../lib/apiClient/apiClientOptions";
 import GetUrlForSsoIdentificationService from "./GetUrlForSsoIdentificationService";
 import { enableFetchMocks } from "jest-fetch-mock";
 import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
-import each from "jest-each";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -32,7 +31,7 @@ const scenarios = [
   { providerId: "pingone", expectedUrl: "https://auth.pingone.com" },
 ];
 
-each(scenarios).describe("GetUrlForSsoIdentificationService", (scenario) => {
+describe.each(scenarios)("GetUrlForSsoIdentificationService", (scenario) => {
   describe(`GetUrlForSsoIdentificationService::getUrl (with provider '${scenario.providerId}')`, () => {
     it("Should return an URL for SSO identification given the provider id", async () => {
       expect.assertions(3);

@@ -16,10 +16,9 @@
  * Unit tests on DisplayHttpError in regard of specifications
  */
 import DisplayHttpErrorPage from "./DisplayHttpError.test.page";
-import each from "jest-each";
 
 describe("Display Http Error", () => {
-  each([
+  describe.each([
     {
       errorCode: 403,
       title: "Whoops... access is denied",
@@ -30,7 +29,7 @@ describe("Display Http Error", () => {
       title: "Whoops... looks like you are lost.",
       description: "We could not find the page you are looking for.",
     },
-  ]).describe("As LU, I should see a proper HTTP error code page", (scenario) => {
+  ])("As LU, I should see a proper HTTP error code page", (scenario) => {
     it(`with ${scenario.errorCode}`, () => {
       expect.assertions(3);
       const page = new DisplayHttpErrorPage(scenario.errorCode);

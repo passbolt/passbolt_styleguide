@@ -18,7 +18,6 @@
 import { defaultProps } from "./EditRole.test.data";
 import EditRolePage from "./EditRole.test.page";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
-import each from "jest-each";
 
 beforeEach(() => {
   jest.resetModules();
@@ -91,11 +90,11 @@ describe("Edit role", () => {
       expect(page.errorMessage).toStrictEqual("The name contains forbidden trailing spaces.");
     });
 
-    each([
+    describe.each([
       { scenario: "admin", value: RoleEntity.ROLE_ADMIN },
       { scenario: "user", value: RoleEntity.ROLE_USER },
       { scenario: "guest", value: RoleEntity.ROLE_GUEST },
-    ]).describe("Should display error message role is reserved", (test) => {
+    ])("Should display error message role is reserved", (test) => {
       it(`AS AD I should not fill a role name that is reserved: ${test.scenario}`, async () => {
         expect.assertions(2);
         await page.fillInput(page.inputName, test.value);

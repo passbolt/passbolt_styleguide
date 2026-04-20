@@ -19,6 +19,7 @@
 import InstallExtensionTestPage from "./InstallExtension.test.page";
 import { defaultProps } from "./InstallExtension.test.data";
 import { CHROME_STORE_BROWSER_EXTENSION_URL } from "./InstallExtension";
+import WindowNavigationService from "../../../../shared/utils/windowNavigationService";
 
 beforeAll(() => {
   Object.defineProperty(window, "matchMedia", {
@@ -102,12 +103,10 @@ describe("As AN I should see install extension page", () => {
     });
 
     it("As AN I should be able to refresh the page", async () => {
-      Object.defineProperty(window, "location", {
-        value: { reload: jest.fn() },
-      });
+      jest.spyOn(WindowNavigationService, "reload").mockImplementation(() => {});
       page = new InstallExtensionTestPage();
       await page.refresh();
-      expect(window.location.reload).toHaveBeenCalled();
+      expect(WindowNavigationService.reload).toHaveBeenCalled();
     });
   });
 });

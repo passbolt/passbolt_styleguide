@@ -17,7 +17,6 @@
  */
 import SsoPopupHandlerService, { AUTHENTICATION_SUCCESS_CASES } from "./SsoPopupHandlerService";
 import { v4 as uuid } from "uuid";
-import each from "jest-each";
 
 const mockWindowOpen = () => {
   window.originalOpen = window.open;
@@ -56,7 +55,7 @@ afterAll(() => {
 
 const scenarios = [{ providerId: "azure" }, { providerId: "google" }];
 
-each(scenarios).describe("SsoPopupHandlerService", (scenario) => {
+describe.each(scenarios)("SsoPopupHandlerService", (scenario) => {
   describe(`SsoPopupHandlerService::exec (with provider '${scenario.providerId}')`, () => {
     it("Should create a popup window", () => {
       expect.assertions(4);

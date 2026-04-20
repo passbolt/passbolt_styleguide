@@ -22,26 +22,18 @@ import PropTypes from "prop-types";
  * This component allows user to delete a tag of the resources
  */
 class NotifyExpiredSession extends Component {
-  /**
-   * Constructor
-   * @param {object} props
-   */
   constructor(props) {
     super(props);
     this.initEventHandlers();
     this.createReferences();
   }
 
-  /**
-   * Init the component event handlers.
-   */
   initEventHandlers() {
     this.handleCloseClick = this.handleCloseClick.bind(this);
-    this.handleSignInClick = this.handleSignInClick.bind(this);
   }
 
   /**
-   * Create component references.
+   * Create references
    */
   createReferences() {
     this.loginLinkRef = React.createRef();
@@ -55,37 +47,22 @@ class NotifyExpiredSession extends Component {
   }
 
   /**
-   * Handle sign-in button click.
-   */
-  handleSignInClick() {
-    this.goToLogin();
-  }
-
-  /**
    * Go to the login page.
    */
   goToLogin() {
-    /*
-     * PB-50644
-     * Force a full page reload instead of navigating via tabs.update to the
-     * auth login url.
-     *
-     * Starting with Chrome 147, the page may be restored from the browser's
-     * Back/Forward Cache (BFCache) when navigating with tabs update primitive.
-     * When this happens, the extension message port is closed ("The page
-     * keeping the extension port is moved into back/forward cache, so the
-     * message channel is closed") and the extension fails to re-initialize
-     * on the restored page.
-     *
-     * Using tabs.reload bypasses BFCache and forces a fresh page load,
-     * ensuring the content script and message port are properly re-established.
-     */
-    this.props.context.port.request("passbolt.tab.reload");
+    this.loginLinkRef.current.click();
   }
 
   /**
-   * @returns {Element}
+   * Get the login url
+   * @returns {string}
    */
+  get loginUrl() {
+    let baseUrl = this.props.context.userSettings && this.props.context.userSettings.getTrustedDomain();
+    baseUrl = baseUrl || this.props.context.trustedDomain;
+    return `${baseUrl}/auth/login`;
+  }
+
   render() {
     return (
       <DialogWrapper
@@ -101,7 +78,7 @@ class NotifyExpiredSession extends Component {
         <div className="submit-wrapper clearfix">
           <a
             ref={this.loginLinkRef}
-            onClick={this.handleSignInClick}
+            href={this.loginUrl}
             className="primary button form"
             target="_parent"
             role="button"

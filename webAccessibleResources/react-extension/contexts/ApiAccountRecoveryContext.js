@@ -19,6 +19,7 @@ import { ApiClient } from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltServiceUnavailableError from "../../shared/lib/Error/PassboltServiceUnavailableError";
 import AuthLogoutService from "../../shared/services/api/auth/AuthLogoutService";
+import WindowNavigationService from "../../shared/utils/windowNavigationService";
 
 /**
  * The ApiAccountRecovery context.
@@ -123,7 +124,7 @@ export class ApiAccountRecoveryContextProvider extends React.Component {
       return this.setState({ unexpectedError: error, state: ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE });
     }
 
-    window.location.reload();
+    WindowNavigationService.reload();
   }
 
   /**

@@ -1599,6 +1599,7 @@
   "The URL to enter in your provider when configuring user provisioning.": "The URL to enter in your provider when configuring user provisioning.",
   "The URL to provide to Azure when registering the application.": "The URL to provide to Azure when registering the application.",
   "The URL to provide to Google when registering the application.": "The URL to provide to Google when registering the application.",
+  "The URL to provide to PingOne when registering the application.": "The URL to provide to PingOne when registering the application.",
   "The URL to provide to the AD FS platform when registering the application.": "The URL to provide to the AD FS platform when registering the application.",
   "The URL to provide to the OAuth2 platform when registering the application.": "The URL to provide to the OAuth2 platform when registering the application.",
   "The user directory settings for the organization were updated.": "The user directory settings for the organization were updated.",

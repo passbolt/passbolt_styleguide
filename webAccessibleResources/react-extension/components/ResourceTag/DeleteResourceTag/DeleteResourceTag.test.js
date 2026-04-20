@@ -74,7 +74,7 @@ describe("See the Delete Tag Dialog", () => {
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.delete", tagToDelete.id);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As LU I cannot update the form fields and I should see a processing feedback while submitting the form", async () => {
@@ -102,19 +102,19 @@ describe("See the Delete Tag Dialog", () => {
     it("As LU I can stop deleting a user by clicking on the cancel button", async () => {
       expect(page.tagDelete.exists()).toBeTruthy();
       await page.tagDelete.click(page.tagDelete.cancelButton);
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As LU I can stop deleteing a user by closing the dialog", async () => {
       expect(page.tagDelete.exists()).toBeTruthy();
       await page.tagDelete.click(page.tagDelete.dialogClose);
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As LU I can stop adding a user with the keyboard (escape)", async () => {
       expect(page.tagDelete.exists()).toBeTruthy();
       await page.tagDelete.escapeKey(page.tagDelete.dialogClose);
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As LU I want to see a long  resource/tag/folders name fitting its delete dialog", async () => {

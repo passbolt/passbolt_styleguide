@@ -109,7 +109,7 @@ describe("AdministrationRbacContext", () => {
 
       const rbacsUpdated = defaultSettingsRbacsCollectionData;
       adminRbacContext.setRbacsUpdated(new RbacsCollection(rbacsUpdated));
-      await expect(() => adminRbacContext.save()).rejects.toThrowError(PassboltServiceUnavailableError);
+      await expect(() => adminRbacContext.save()).rejects.toThrow(PassboltServiceUnavailableError);
       expect(adminRbacContext.state.rbacsUpdated).toEqual(new RbacsCollection(rbacsUpdated));
       expect(adminRbacContext.state.rbacs).toEqual(null);
     });

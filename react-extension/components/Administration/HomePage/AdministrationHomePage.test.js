@@ -19,7 +19,6 @@ import React from "react";
 import AdministrationHomePagePage from "./AdministrationHomePage.test.page";
 import { defaultProps } from "./AdministrationHomePage.test.data";
 import { waitFor } from "@testing-library/dom";
-import each from "jest-each";
 
 beforeEach(() => {
   jest.resetModules();
@@ -157,7 +156,7 @@ const scenarios = [
  * For CE Admin, pro-teasing icon should be visible for pro menu items and not for others
  * Clicking on menu item should redirect to respective component
  */
-each(scenarios).describe("Display Administration Menu for PRO Admins", (currentScenario) => {
+describe.each(scenarios)("Display Administration Menu for PRO Admins", (currentScenario) => {
   it(`As AD, I should see: ${currentScenario.title}`, async () => {
     const props = defaultProps();
     jest.spyOn(props.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(false);
@@ -180,7 +179,7 @@ each(scenarios).describe("Display Administration Menu for PRO Admins", (currentS
   });
 });
 
-each(scenarios).describe("Display Administration Menu for CE Admins", (currentScenario) => {
+describe.each(scenarios)("Display Administration Menu for CE Admins", (currentScenario) => {
   it(`As AD, I should see: ${currentScenario.title}`, async () => {
     const props = defaultProps({}, true);
     jest.spyOn(props.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
