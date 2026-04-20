@@ -130,10 +130,8 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
   });
 
   describe("As a signed-in administrator, I should see errors", () => {
-    // PINCODE: REVERT `.skip` IN WP2.2
-    // `resourceTypesServiceWorkerService` returns pin code while it's currently unsupported by the component
-    it.skip("displays error on fields if no resource types is selected and admin tries to save", async () => {
-      expect.assertions(11);
+    it("displays error on fields if no resource types is selected and admin tries to save", async () => {
+      expect.assertions(12);
 
       let page;
       await act(async () => (page = new DisplayContentTypesAllowedContentTypesAdministration(defaultProps())));
@@ -143,6 +141,7 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       await page.clickOn(page.passwordV5Checkbox);
       await page.clickOn(page.totpV5Checkbox);
       await page.clickOn(page.noteV5Checkbox);
+      await page.clickOn(page.pinCodeV5Checkbox);
 
       await page.save();
 
@@ -157,6 +156,7 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       expect(page.totpV5Error.textContent).toStrictEqual("At least one content type should be allowed");
       expect(page.customFieldsV5Error.textContent).toStrictEqual("At least one content type should be allowed");
       expect(page.noteV5Error.textContent).toStrictEqual("At least one content type should be allowed");
+      expect(page.pinCodeV5Error.textContent).toStrictEqual("At least one content type should be allowed");
     });
   });
 });
