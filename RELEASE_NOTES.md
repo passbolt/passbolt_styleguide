@@ -1,4 +1,4 @@
-## v5.11.0-alpha.0
+## v5.12.0-alpha.0
 
 ### Fixed
 - PINCODE - 1.1 Add the PIN code resource type slug in resourceTypeSchemasDefinition
