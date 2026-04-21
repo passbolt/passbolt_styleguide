@@ -114,9 +114,9 @@ describe("ResourceViewModelFactory", () => {
       const dto = defaultResourcePasswordDescriptionTotpViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypeV5DefaultDto());
       resourceType._props.slug = "test";
-      expect(() => ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto)).toThrow(
-        "No ViewModel has been found for the resource type.",
-      );
+      expect(() =>
+        ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto),
+      ).toThrowError(new Error("No ViewModel has been found for the resource type."));
     });
   });
 
@@ -222,8 +222,8 @@ describe("ResourceViewModelFactory", () => {
       const dto = defaultResourcePasswordDescriptionTotpViewModelDto();
       const resourceType = new ResourceTypeEntity(resourceTypeV5DefaultDto());
       resourceType._props.slug = "test";
-      expect(() => ResourceViewModelFactory.createFromResourceTypeAndEntityDto(resourceType, dto)).toThrow(
-        "No ViewModel has been found for the resource type.",
+      expect(() => ResourceViewModelFactory.createFromResourceTypeAndEntityDto(resourceType, dto)).toThrowError(
+        new Error("No ViewModel has been found for the resource type."),
       );
     });
   });

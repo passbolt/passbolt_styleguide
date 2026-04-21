@@ -15,6 +15,7 @@
 import EntitySchema from "../abstract/entitySchema";
 import ColumnSettingEntity from "./columnSettingEntity";
 import { defaultColumnSettingData } from "./columnSettingEntity.test.data";
+import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
 
 describe("ColumnSettingEntity", () => {
@@ -33,10 +34,10 @@ describe("ColumnSettingEntity", () => {
       expect(entity.label).toEqual(dto.label);
     });
 
-    describe.each([
+    each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
-    ])("Should validate the id", (test) => {
+    ]).describe("Should validate the id", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultColumnSettingData({
@@ -51,10 +52,10 @@ describe("ColumnSettingEntity", () => {
       });
     });
 
-    describe.each([
+    each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
-    ])("Should validate the label", (test) => {
+    ]).describe("Should validate the label", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultColumnSettingData({

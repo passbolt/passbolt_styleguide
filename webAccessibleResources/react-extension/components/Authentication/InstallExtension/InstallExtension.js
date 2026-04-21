@@ -16,7 +16,6 @@ import { BROWSER_NAMES, detectBrowserName } from "../../../../shared/lib/Browser
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
-import WindowNavigationService from "../../../../shared/utils/windowNavigationService";
 
 export const CHROME_STORE_BROWSER_EXTENSION_URL = "https://download.passbolt.com/extension/chrome";
 const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/firefox/addon/passbolt";
@@ -100,7 +99,7 @@ class InstallExtension extends Component {
    * Refresh the page
    */
   handleRefreshClick() {
-    WindowNavigationService.reload();
+    window.location.reload();
   }
 
   /**

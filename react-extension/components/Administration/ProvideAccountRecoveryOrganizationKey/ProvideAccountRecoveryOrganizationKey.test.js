@@ -18,6 +18,7 @@
 import { defaultProps } from "./ProvideAccountRecoveryOrganizationKey.test.data";
 import ProvideAccountRecoveryOrganizationKeyPage from "./ProvideAccountRecoveryOrganizationKey.test.page";
 import { waitFor } from "@testing-library/dom";
+import each from "jest-each";
 
 const formatFingerprint = (fingerprint) => {
   const result = fingerprint.toUpperCase().replace(/.{4}/g, "$& ");
@@ -64,10 +65,10 @@ describe("Provide Organization Key", () => {
     expect(page.orkField.value).toBe(fileContent.content);
   });
 
-  describe.each([
+  each([
     { scenario: "encrypted private key", privateKey: adaPrivateKey, privateKeyPassword: "ada@passbolt.com" },
     { scenario: "decrypted private key", privateKey: adaDecryptedPrivateKey, privateKeyPassword: "" },
-  ])("As AD, I should be able to provide a valid ORK", (test) => {
+  ]).describe("As AD, I should be able to provide a valid ORK", (test) => {
     it(`As AD, I should be able to provide a valid ORK: ${test.scenario}`, async () => {
       expect.assertions(2);
       const props = defaultProps();

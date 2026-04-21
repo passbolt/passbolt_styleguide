@@ -50,7 +50,7 @@ describe("MetadataGettingStartedSettingsApiService", () => {
         throw new Error("Something goes wrong! ");
       });
 
-      await expect(() => service.get()).rejects.toThrow();
+      await expect(() => service.get()).rejects.toThrowError();
     });
   });
 });

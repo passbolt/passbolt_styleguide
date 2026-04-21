@@ -100,7 +100,7 @@ describe("See the Create Dialog Group", () => {
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.groups.create", groupDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I should see a processing feedback while submitting the form", async () => {
@@ -167,19 +167,19 @@ describe("See the Create Dialog Group", () => {
     it("As AD I can stop adding a group by clicking on the cancel button", async () => {
       expect(page.createGroup.exists()).toBeTruthy();
       await page.createGroup.click(page.createGroup.cancelButton);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I can stop adding a group by closing the dialog", async () => {
       expect(page.createGroup.exists()).toBeTruthy();
       await page.createGroup.click(page.createGroup.dialogClose);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I can stop adding a group with the keyboard (escape)", async () => {
       expect(page.createGroup.exists()).toBeTruthy();
       await page.createGroup.escapeKey(page.createGroup.dialogClose);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I should see an error dialog if the submit operation fails for an unexpected reason", async () => {

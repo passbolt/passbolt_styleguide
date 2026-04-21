@@ -19,6 +19,7 @@
 import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import DisplayResourcesWorkspaceFiltersPage from "./DisplayResourcesWorkspaceFilters.test.page";
 import { defaultProps, propsFilterByPrivate } from "./DisplayResourcesWorkspaceFilters.test.data";
+import each from "jest-each";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
@@ -53,10 +54,10 @@ describe("As a signed-in users I can see filters", () => {
         type: ResourceWorkspaceFilterTypes.ALL,
       },
     };
-    expect(props.history.push).toHaveBeenCalledWith({ pathname, state });
+    expect(props.history.push).toBeCalledWith({ pathname, state });
   });
 
-  describe.each([
+  each([
     { filter: ResourceWorkspaceFilterTypes.FAVORITE, itemSelected: "Starred", itemIndex: 1 },
     { filter: ResourceWorkspaceFilterTypes.SHARED_WITH_ME, itemSelected: "Shared with me", itemIndex: 2 },
     { filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Items I own", itemIndex: 3 },
@@ -67,7 +68,7 @@ describe("As a signed-in users I can see filters", () => {
       pathname: "/app/passwords/filter/expired",
       itemIndex: 5,
     },
-  ])("I should be able to filter", (scenario) => {
+  ]).describe("I should be able to filter", (scenario) => {
     it(`for: ${scenario.filter}`, async () => {
       expect.assertions(1);
       const props = defaultProps(); // The props
@@ -83,17 +84,17 @@ describe("As a signed-in users I can see filters", () => {
           type: scenario.filter,
         },
       };
-      expect(props.history.push).toHaveBeenCalledWith({ pathname, state });
+      expect(props.history.push).toBeCalledWith({ pathname, state });
     });
   });
 
-  describe.each([
+  each([
     { filter: ResourceWorkspaceFilterTypes.FAVORITE, itemSelected: "Starred" },
     { filter: ResourceWorkspaceFilterTypes.SHARED_WITH_ME, itemSelected: "Shared with me" },
     { filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Items I own" },
     { filter: ResourceWorkspaceFilterTypes.PRIVATE, itemSelected: "Private" },
     { filter: ResourceWorkspaceFilterTypes.EXPIRED, itemSelected: "Expired" },
-  ])("I should be able to identify the filters", (scenario) => {
+  ]).describe("I should be able to identify the filters", (scenario) => {
     it(`for: ${scenario.filter}`, async () => {
       expect.assertions(2);
       const props = defaultProps({
@@ -111,14 +112,14 @@ describe("As a signed-in users I can see filters", () => {
     });
   });
 
-  describe.each([
+  each([
     { filter: ResourceWorkspaceFilterTypes.NONE },
     { filter: ResourceWorkspaceFilterTypes.ALL },
     { filter: ResourceWorkspaceFilterTypes.ROOT_FOLDER },
     { filter: ResourceWorkspaceFilterTypes.GROUP },
     { filter: ResourceWorkspaceFilterTypes.TAG },
     { filter: ResourceWorkspaceFilterTypes.FOLDER },
-  ])("I should not see the filters button", (scenario) => {
+  ]).describe("I should not see the filters button", (scenario) => {
     it(`for: ${scenario.filter}`, async () => {
       expect.assertions(2);
       const props = defaultProps({

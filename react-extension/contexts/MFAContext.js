@@ -146,7 +146,7 @@ export class MfaContextProvider extends React.Component {
     } else {
       // Fallback for pages served by API
       const mfaService = new MFAService(this.props.context.getApiClientOptions());
-      settings = await mfaService.getUserSettings();
+      settings = await mfaService.findAllSettings();
     }
     const mfaUserSettings = settings.MfaAccountSettings;
     const mfaOrganisationSettings = settings.MfaOrganizationSettings;

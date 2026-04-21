@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
+import each from "jest-each";
 import { defaultProps } from "./AskForAuthenticationHelpCredentialLost.test.data";
 import AskForAuthenticationHelpCredentialLostTestPage from "./AskForAuthenticationHelpCredentialLost.test.page";
 import { AskForAuthenticationHelpCredentialLostVariations } from "./AskForAuthenticationHelpCredentialLost";
@@ -20,10 +21,10 @@ beforeEach(() => {
 });
 
 describe("AskForAuthenticationHelpCredentialLost", () => {
-  describe.each([
+  each([
     { displayAs: AskForAuthenticationHelpCredentialLostVariations.SETUP }, // Login
     { displayAs: AskForAuthenticationHelpCredentialLostVariations.RECOVER }, // recover account
-  ])("Common behavior to all context", (_props) => {
+  ]).describe("Common behavior to all context", (_props) => {
     let page, props;
 
     beforeEach(() => {

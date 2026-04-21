@@ -94,7 +94,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       await page.cancel();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can stop saving an account recovery settings by closing the dialog", async () => {
@@ -103,7 +103,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       await page.close();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
   });
 });

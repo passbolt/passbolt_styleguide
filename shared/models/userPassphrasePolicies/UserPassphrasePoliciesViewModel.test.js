@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.3.0
  */
+import each from "jest-each";
 import {
   defaultUserPassphrasePoliciesEntityDto,
   defaultUserPassphrasePoliciesViewModelDto,
@@ -61,11 +62,11 @@ describe("UserPassphrasePoliciesViewModel", () => {
   });
 
   describe("::isDataDifferent", () => {
-    describe.each([
+    each([
       { entropy_minimum: 150 },
       { external_dictionary_check: false },
       { external_dictionary_check: false, entropy_minimum: 200 },
-    ])("should return true if at least 1 difference is found between 2 ViewModel", (scenario) => {
+    ]).describe("should return true if at least 1 difference is found between 2 ViewModel", (scenario) => {
       it(`for: ${JSON.stringify(scenario)}`, () => {
         expect.assertions(1);
 
@@ -123,7 +124,7 @@ describe("UserPassphrasePoliciesViewModel", () => {
   });
 
   describe("::validate", () => {
-    describe.each(["entropy_minimum", "external_dictionary_check"])(
+    each(["entropy_minimum", "external_dictionary_check"]).describe(
       "should validates the required field",
       (requiredField) => {
         it(`for: ${requiredField}`, () => {
@@ -138,7 +139,7 @@ describe("UserPassphrasePoliciesViewModel", () => {
       },
     );
 
-    describe.each([
+    each([
       {
         dto: {
           entropy_minimum: "string",
@@ -165,7 +166,7 @@ describe("UserPassphrasePoliciesViewModel", () => {
           entropy_minimum: { maximum: "The entropy_minimum should be lesser or equal to 224." },
         },
       },
-    ])("should validate the current data set", (scenario) => {
+    ]).describe("should validate the current data set", (scenario) => {
       it(`for: ${JSON.stringify(scenario.dto)}`, () => {
         const expectedErroneousField = Object.keys(scenario.expectedErrors);
         const expectedErroneousFieldCount = expectedErroneousField.length;

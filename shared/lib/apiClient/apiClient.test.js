@@ -14,6 +14,7 @@
 import { ApiClient } from "./apiClient";
 import { ApiClientOptions } from "./apiClientOptions";
 import { enableFetchMocks } from "jest-fetch-mock";
+import each from "jest-each";
 import { v4 as uuid } from "uuid";
 import PassboltBadResponseError from "../Error/PassboltBadResponseError";
 import PassboltServiceUnavailableError from "../Error/PassboltServiceUnavailableError";
@@ -54,12 +55,12 @@ describe("Unit testing apiClient with mocked fetch", () => {
   const resourceName = "fake-resource";
   const options = new ApiClientOptions().setBaseUrl(url).setResourceName(resourceName);
 
-  describe.each([
+  each([
     { responseBody: responseHtml, method: "GET" },
     { responseBody: responseHtml, method: "POST" },
     { responseBody: responseJson, method: "GET" },
     { responseBody: responseJson, method: "POST" },
-  ])(`Should call the endpoint and return the response as-is with sendRequest`, (scenario) => {
+  ]).describe(`Should call the endpoint and return the response as-is with sendRequest`, (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(4);
       const testClient = new ApiClient(options);
@@ -97,10 +98,10 @@ describe("Unit testing apiClient with mocked fetch", () => {
     expect(spyOnAssertBody).toHaveBeenCalledWith(body);
   });
 
-  describe.each([
+  each([
     { responseBody: responseJson, method: "GET" },
     { responseBody: responseJson, method: "POST" },
-  ])(`should call the endpoint and parse the response as JSON with fetchAndHandleResponse`, (scenario) => {
+  ]).describe(`should call the endpoint and parse the response as JSON with fetchAndHandleResponse`, (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(4);
       const testClient = new ApiClient(options);
@@ -129,23 +130,20 @@ describe("Unit testing apiClient with mocked fetch", () => {
       throw new Error(errorMessage);
     });
 
-    expect(testClient.fetchAndHandleResponse("POST", currentUrl)).rejects.toThrow(PassboltServiceUnavailableError);
+    expect(testClient.fetchAndHandleResponse("POST", currentUrl)).rejects.toThrowError(PassboltServiceUnavailableError);
   });
 
   it("should throw an exception if server respond with an error", async () => {
-    expect.assertions(2);
+    expect.assertions(1);
     const testClient = new ApiClient(options);
     const currentUrl = new URL(url);
     const errorMessage = "Something went wrong!";
 
     fetch.mockResponse(() => mockApiResponseError(500, errorMessage));
 
-    try {
-      await testClient.fetchAndHandleResponse("POST", currentUrl);
-    } catch (error) {
-      expect(error).toBeInstanceOf(PassboltApiFetchError);
-      expect(error.message).toBe(errorMessage);
-    }
+    expect(testClient.fetchAndHandleResponse("POST", currentUrl)).rejects.toThrowError(
+      new PassboltApiFetchError(errorMessage),
+    );
   });
 
   it("should throw an exception if response is not JSON but JSON is expected", async () => {
@@ -155,7 +153,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
 
     fetch.mockResponse(async () => responseHtml);
 
-    expect(testClient.fetchAndHandleResponse("POST", currentUrl)).rejects.toThrow(PassboltBadResponseError);
+    expect(testClient.fetchAndHandleResponse("POST", currentUrl)).rejects.toThrowError(PassboltBadResponseError);
   });
 
   const assertUrlEmptyError = new TypeError("ApliClient.assertUrl error: url is required.");
@@ -163,7 +161,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
   const assertUrlInvalidProtocolError = new TypeError(
     "ApliClient.assertUrl error: url protocol should only be https or http.",
   );
-  describe.each([
+  each([
     { url: null, error: assertUrlEmptyError },
     { url: undefined, error: assertUrlEmptyError },
     { url: false, error: assertUrlEmptyError },
@@ -177,7 +175,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     { url: new URL("file:///etc/"), error: assertUrlInvalidProtocolError },
     { url: new URL("ssh://passbolt.com"), error: assertUrlInvalidProtocolError },
     { url: new URL("chrome-extension://passbolt.com"), error: assertUrlInvalidProtocolError },
-  ])("should throw an Error if the URL can't be asserted", (scenario) => {
+  ]).describe("should throw an Error if the URL can't be asserted", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
@@ -199,11 +197,11 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  describe.each([
+  each([
     { url: new URL("https://www.passbolt.com") },
     { url: new URL("https://www.passbolt.com/sub-folder/") },
     { url: new URL("https://www.google.com") },
-  ])("should successfully assert the URL if it's correct", (scenario) => {
+  ]).describe("should successfully assert the URL if it's correct", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
@@ -217,13 +215,13 @@ describe("Unit testing apiClient with mocked fetch", () => {
   });
 
   const assertMethodTypeError = new TypeError("ApiClient.assertValidMethod method should be a string.");
-  describe.each([
+  each([
     { method: null, error: assertMethodTypeError },
     { method: undefined, error: assertMethodTypeError },
     { method: false, error: assertMethodTypeError },
     { method: 0, error: assertMethodTypeError },
     { method: 1, error: assertMethodTypeError },
-  ])("should throw an Error if the method is not a string", (scenario) => {
+  ]).describe("should throw an Error if the method is not a string", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
@@ -247,7 +245,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  describe.each([{ method: "HEAD" }, { method: "OPTION" }, { method: "head" }, { method: "option" }])(
+  each([{ method: "HEAD" }, { method: "OPTION" }, { method: "head" }, { method: "option" }]).describe(
     "should throw an Error if the method is not unsupported",
     (scenario) => {
       it(`scenario: ${JSON.stringify(scenario)}`, async () => {
@@ -277,7 +275,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     },
   );
 
-  describe.each([
+  each([
     { method: "GET" },
     { method: "POST" },
     { method: "PUT" },
@@ -286,7 +284,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     { method: "post" },
     { method: "put" },
     { method: "delete" },
-  ])("should successfully assert the method if it's correct", (scenario) => {
+  ]).describe("should successfully assert the method if it's correct", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
@@ -302,13 +300,13 @@ describe("Unit testing apiClient with mocked fetch", () => {
 
   const assertIdEmptyError = new TypeError("ApiClient.assertValidId error: id cannot be empty");
   const assertIdTypeError = new TypeError("ApiClient.assertValidId error: id should be a string");
-  describe.each([
+  each([
     { id: null, error: assertIdEmptyError },
     { id: undefined, error: assertIdEmptyError },
     { id: false, error: assertIdEmptyError },
     { id: 0, error: assertIdEmptyError },
     { id: {}, error: assertIdTypeError },
-  ])("should throw an Error if the ID can't be asserted", (scenario) => {
+  ]).describe("should throw an Error if the ID can't be asserted", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(1);
       const testClient = new ApiClient(options);
@@ -321,7 +319,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  describe.each([{ id: "https://www.passbolt.com" }, { id: uuid() }, { id: "me" }, { id: "test.json" }])(
+  each([{ id: "https://www.passbolt.com" }, { id: uuid() }, { id: "me" }, { id: "test.json" }]).describe(
     "should successfully assert the ID if it's correct",
     (scenario) => {
       it(`scenario: ${JSON.stringify(scenario)}`, () => {
@@ -334,12 +332,12 @@ describe("Unit testing apiClient with mocked fetch", () => {
   );
 
   const assertBodyError = new TypeError(`ApiClient.assertBody error: body should be a string or a FormData.`);
-  describe.each([
+  each([
     { body: 1, error: assertBodyError },
     { body: true, error: assertBodyError },
     { body: [], error: assertBodyError },
     { body: {}, error: assertBodyError },
-  ])("should throw an Error if the body is not a string", (scenario) => {
+  ]).describe("should throw an Error if the body is not a string", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
@@ -363,7 +361,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  describe.each([{ body: null }, { body: undefined }, { body: 0 }])(
+  each([{ body: null }, { body: undefined }, { body: 0 }]).describe(
     "should ignore the body if it has a falsy value",
     (scenario) => {
       it(`scenario: ${JSON.stringify(scenario)}`, async () => {
@@ -385,7 +383,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     },
   );
 
-  describe.each([{ body: JSON.stringify({ string: "string", object: {}, array: [] }) }, { body: uuid() }])(
+  each([{ body: JSON.stringify({ string: "string", object: {}, array: [] }) }, { body: uuid() }]).describe(
     "should send the given body if it is a string or a form data",
     (scenario) => {
       it(`scenario: ${JSON.stringify(scenario)}`, async () => {
@@ -408,7 +406,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
   );
 
   const userUuid = uuid();
-  describe.each([
+  each([
     {
       expectedUrl: "https://test.passbolt.com/resource.json?api-version=v2",
       url: "https://test.passbolt.com/resource",
@@ -461,7 +459,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
         "contain[permissions.group]": "1",
       },
     },
-  ])("should run the build URL properly", (scenario) => {
+  ]).describe("should run the build URL properly", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(1);
       const testClient = new ApiClient(options);
@@ -659,7 +657,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     expect(spyAssertId).toHaveBeenCalledWith(resourceId);
   });
 
-  describe.each([
+  each([
     { baseUrl: "http://local.passbolt.dev", resourceName: "/resource", expected: "http://local.passbolt.dev/resource" },
     {
       baseUrl: "http://local.passbolt.dev/",
@@ -768,15 +766,18 @@ describe("Unit testing apiClient with mocked fetch", () => {
       resourceName: "resource/other/",
       expected: "http://local.passbolt.dev/subfolder/resource/other",
     },
-  ])("Should set a proper baseUrl with ending slashes in baseUrl and starting slash in resource name", (scenario) => {
-    it(`with the URL: ${scenario.baseUrl}/${scenario.resourceName}`, async () => {
-      expect.assertions(1);
-      const options = new ApiClientOptions().setBaseUrl(scenario.baseUrl).setResourceName(scenario.resourceName);
-      const apiClient = new ApiClient(options);
+  ]).describe(
+    "Should set a proper baseUrl with ending slashes in baseUrl and starting slash in resource name",
+    (scenario) => {
+      it(`with the URL: ${scenario.baseUrl}/${scenario.resourceName}`, async () => {
+        expect.assertions(1);
+        const options = new ApiClientOptions().setBaseUrl(scenario.baseUrl).setResourceName(scenario.resourceName);
+        const apiClient = new ApiClient(options);
 
-      expect(apiClient.baseUrl.toString()).toStrictEqual(scenario.expected);
-    });
-  });
+        expect(apiClient.baseUrl.toString()).toStrictEqual(scenario.expected);
+      });
+    },
+  );
 
   it("should use a custom fetch strategy if provided.", async () => {
     expect.assertions(2);

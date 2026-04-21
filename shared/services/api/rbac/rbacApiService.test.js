@@ -111,7 +111,7 @@ describe("RbacApiService", () => {
       const error = { message: "The service is unavailable" };
       fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async () => await rbacApiService.findAll()).rejects.toThrow(PassboltServiceUnavailableError);
+      expect(async () => await rbacApiService.findAll()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 
@@ -181,7 +181,7 @@ describe("RbacApiService", () => {
       const error = { message: "The service is unavailable" };
       fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async () => await rbacApiService.updateAll()).rejects.toThrow(PassboltServiceUnavailableError);
+      expect(async () => await rbacApiService.updateAll()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 
@@ -249,7 +249,7 @@ describe("RbacApiService", () => {
       const error = { message: "The service is unavailable" };
       fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async () => await rbacApiService.findMe()).rejects.toThrow(PassboltServiceUnavailableError);
+      expect(async () => await rbacApiService.findMe()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 });

@@ -62,7 +62,7 @@ describe("See the synchronize user directory administration dialog", () => {
         page.displaySynchronizeUserDirectoryAdministrationDialog.synchronize,
       );
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.downloadReportLink).not.toBeNull();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
       expect.assertions(8);
     });
 
@@ -104,7 +104,7 @@ describe("See the synchronize user directory administration dialog", () => {
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(
         page.displaySynchronizeUserDirectoryAdministrationDialog.dialogClose,
       );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
       expect.assertions(3);
     });
   });

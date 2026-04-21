@@ -13,6 +13,7 @@
  */
 
 import DOMUtils from "./DomUtils";
+import each from "jest-each";
 
 beforeEach(() => {
   jest.resetModules();
@@ -62,7 +63,7 @@ describe("DomUtils", () => {
   });
 
   describe("DomUtils::_calculateCellSize", () => {
-    describe.each([
+    each([
       { scenario: "1 for 0", value: 0, result: 1 },
       { scenario: "1 for 1", value: 1, result: 1 },
       { scenario: "2 for 18", value: 18, result: 2 },
@@ -71,7 +72,7 @@ describe("DomUtils", () => {
       { scenario: "6 for 99.99", value: 99.99, result: 6 },
       { scenario: "10 for 100", value: 100, result: 10 },
       { scenario: "10 for 370", value: 370, result: 10 },
-    ])("Calculate the value from the function", (test) => {
+    ]).describe("Calculate the value from the function", (test) => {
       it(`Should return the value: ${test.scenario}`, async () => {
         expect(DOMUtils._calculateCellSize(test.value)).toEqual(test.result);
       });

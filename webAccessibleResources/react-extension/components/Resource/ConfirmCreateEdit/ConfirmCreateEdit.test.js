@@ -101,7 +101,7 @@ describe("ConfirmCreateEdit", () => {
       const page = new ConfirmCreateEditPage(props);
       await waitFor(() => {});
       await page.closeDialog();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can cancel with the keyboard (escape)", async () => {
@@ -110,7 +110,7 @@ describe("ConfirmCreateEdit", () => {
       const page = new ConfirmCreateEditPage(props);
       await waitFor(() => {});
       await page.escapeKey();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
   });
 

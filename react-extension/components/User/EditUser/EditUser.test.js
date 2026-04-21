@@ -94,7 +94,7 @@ describe("See the Create Dialog User", () => {
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.users.update", userDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I cannot update the form fields and I should see a processing feedback while submitting the form", async () => {
@@ -139,21 +139,21 @@ describe("See the Create Dialog User", () => {
       expect.assertions(2);
       expect(page.editUser.exists()).toBeTruthy();
       await page.editUser.click(page.editUser.cancelButton);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I can stop editing a user by closing the dialog", async () => {
       expect.assertions(2);
       expect(page.editUser.exists()).toBeTruthy();
       await page.editUser.click(page.editUser.dialogClose);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I can stop adding a user with the keyboard (escape)", async () => {
       expect.assertions(2);
       expect(page.editUser.exists()).toBeTruthy();
       await page.editUser.escapeKey(page.editUser.dialogClose);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I should see an error dialog if the submit operation fails for an unexpected reason", async () => {

@@ -12,6 +12,7 @@
  * @since         4.1.0
  */
 
+import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import RbacEntity from "./rbacEntity";
 import {
@@ -68,11 +69,11 @@ describe("RbacEntity", () => {
       expect(entity.uiAction.toDto()).toEqual(dto.ui_action);
     });
 
-    describe.each([
+    each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
       { scenario: "valid uuid", rule: "format", value: "invalid-id" },
-    ])("Should validate the id", (test) => {
+    ]).describe("Should validate the id", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({
@@ -87,11 +88,11 @@ describe("RbacEntity", () => {
       });
     });
 
-    describe.each([
+    each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
       { scenario: "valid uuid", rule: "format", value: "invalid-id" },
-    ])("Should validate the role id", (test) => {
+    ]).describe("Should validate the role id", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({
@@ -106,11 +107,11 @@ describe("RbacEntity", () => {
       });
     });
 
-    describe.each([
+    each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
       { scenario: "valid foreign model", rule: "enum", value: "invalidForeignModel" },
-    ])("Should validate the foreign model", (test) => {
+    ]).describe("Should validate the foreign model", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({
@@ -125,11 +126,11 @@ describe("RbacEntity", () => {
       });
     });
 
-    describe.each([
+    each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
       { scenario: "valid uuid", rule: "format", value: "invalid-id" },
-    ])("Should validate the foreign id", (test) => {
+    ]).describe("Should validate the foreign id", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({
@@ -144,11 +145,11 @@ describe("RbacEntity", () => {
       });
     });
 
-    describe.each([
+    each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
       { scenario: "enum", rule: "enum", value: "invalid-control-function" },
-    ])("Should validate the control function", (test) => {
+    ]).describe("Should validate the control function", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultRbacData({

@@ -12,6 +12,7 @@
  * @since         4.3.0
  */
 
+import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "..//abstract/entityValidationError";
 import UserPassphrasePoliciesEntity from "./userPassphrasePoliciesEntity";
@@ -49,7 +50,7 @@ describe("UserPassphrasePolicies entity", () => {
     }
   });
 
-  describe.each([
+  each([
     { dto: { id: "string but not uuid" }, errorType: "format" },
     { dto: { id: -1 }, errorType: "type" },
 
@@ -71,7 +72,7 @@ describe("UserPassphrasePolicies entity", () => {
 
     { dto: { modified_by: "string but not uuid" }, errorType: "format" },
     { dto: { modified_by: -1 }, errorType: "type" },
-  ])("should throw an exception if DTO contains invalid values", (scenario) => {
+  ]).describe("should throw an exception if DTO contains invalid values", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(2);
       const fieldName = Object.keys(scenario.dto)[0];

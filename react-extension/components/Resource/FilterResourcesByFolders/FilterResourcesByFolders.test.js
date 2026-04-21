@@ -113,10 +113,7 @@ describe("See Folders", () => {
     it("As LU I should be able to open a contextual menu for root folder with right click", async () => {
       expect.assertions(1);
       await page.filterResourcesByFolders.openContextualMenuWithRightClick;
-      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByRootFolderContextualMenu, {
-        left: 0,
-        top: 0,
-      });
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByRootFolderContextualMenu, {});
     });
 
     it("As LU I should be able to open a contextual menu for a folder with right click on a child folder", async () => {
@@ -125,8 +122,6 @@ describe("See Folders", () => {
       await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(6);
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {
         folder: foldersMock[2],
-        left: 0,
-        top: 0,
       });
     });
 

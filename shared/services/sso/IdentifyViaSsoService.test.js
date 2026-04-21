@@ -21,6 +21,7 @@ import SsoPopupHandlerService from "./SsoPopupHandlerService";
 import IdentifyViaSsoService from "./IdentifyViaSsoService";
 import { v4 as uuid } from "uuid";
 import { defaultAppContext } from "./IdentifyViaSsoService.test.data";
+import each from "jest-each";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -31,7 +32,7 @@ const scenarios = [
   { providerId: "google", ssoLoginUrl: "https://accounts.google.com/o/oauth2/v2/auth" },
 ];
 
-describe.each(scenarios)("IdentifyWithSsoService", (scenario) => {
+each(scenarios).describe("IdentifyWithSsoService", (scenario) => {
   describe(`IdentifyWithSsoService::exec (with provider '${scenario.providerId}')`, () => {
     it("Should run the SSO login process and get back an URL for the user to proceed", () => {
       expect.assertions(5);

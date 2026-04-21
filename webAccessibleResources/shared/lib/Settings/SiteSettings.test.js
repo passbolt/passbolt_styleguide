@@ -52,7 +52,7 @@ describe("SiteSettings", () => {
     it("should throw an error if the parameter is not a string", () => {
       expect.assertions(1);
       const settings = new SiteSettings(defaultProSiteSettings());
-      expect(() => settings.isFeatureBeta(42)).toThrow();
+      expect(() => settings.isFeatureBeta(42)).toThrowError();
     });
   });
 

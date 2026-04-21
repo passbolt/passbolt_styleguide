@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
 import IdentifyViaSsoService from "../../../../shared/services/sso/IdentifyViaSsoService";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
-import WindowNavigationService from "../../../../shared/utils/windowNavigationService";
 
 class IdentifyWithSso extends Component {
   /**
@@ -106,7 +105,7 @@ class IdentifyWithSso extends Component {
    * @param {string} recoverUrl the URL to redirect to
    */
   handleSsoAuthSuccess(recoverUrl) {
-    WindowNavigationService.redirectTo(recoverUrl);
+    window.location.href = recoverUrl;
   }
 
   /**

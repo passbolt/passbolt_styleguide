@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
+import each from "jest-each";
 import EntitySchema from "./entitySchema";
 import {
   SCENARIO_ARRAY,
@@ -61,40 +62,40 @@ import {
 
 describe("EntitySchema", () => {
   describe("::validate", () => {
-    describe.each([
+    each([
       SCENARIO_NULL,
       SCENARIO_UNDEFINED,
       // @todo The function should be reworked and assert the kind of expected data, additional test should be written to support it.
-    ])("throws a TyperError if the argument name is not valid.", (scenario) => {
+    ]).describe("throws a TyperError if the argument name is not valid.", (scenario) => {
       it(`scenario: ${scenario.label}`, async () => {
         expect.assertions(1);
         expect(() => EntitySchema.validate(scenario.data, { name: "test" }, schemaValidateSimple)).toThrow(TypeError);
       });
     });
 
-    describe.each([
+    each([
       SCENARIO_NULL,
       SCENARIO_UNDEFINED,
       // @todo The function should be reworked and assert the kind of expected data, additional test should be written to support it.
-    ])("throws a TyperError if the argument dto is not valid.", (scenario) => {
+    ]).describe("throws a TyperError if the argument dto is not valid.", (scenario) => {
       it(`scenario: ${scenario.label}`, async () => {
         expect.assertions(1);
         expect(() => EntitySchema.validate("TestObject", scenario.data, schemaValidateSimple)).toThrow(TypeError);
       });
     });
 
-    describe.each([
+    each([
       SCENARIO_NULL,
       SCENARIO_UNDEFINED,
       // @todo The function should be reworked and assert the kind of expected data, additional test should be written to support it.
-    ])("throws a TyperError if the argument schema is not valid.", (scenario) => {
+    ]).describe("throws a TyperError if the argument schema is not valid.", (scenario) => {
       it(`scenario: ${scenario.label}`, async () => {
         expect.assertions(1);
         expect(() => EntitySchema.validate("TestObject", { name: "test" }, scenario.data)).toThrow(TypeError);
       });
     });
 
-    describe.each([SCENARIO_NULL, SCENARIO_UNDEFINED, { label: "invalid-type", data: "invalid-type" }])(
+    each([SCENARIO_NULL, SCENARIO_UNDEFINED, { label: "invalid-type", data: "invalid-type" }]).describe(
       "throws a TyperError if the schema type is not supported.",
       (scenario) => {
         it(`scenario: ${scenario.label}`, async () => {
@@ -186,7 +187,7 @@ describe("EntitySchema", () => {
         );
       });
 
-      describe.each([
+      each([
         SCENARIO_NULL,
         SCENARIO_INTEGER,
         SCENARIO_FLOAT,
@@ -204,7 +205,7 @@ describe("EntitySchema", () => {
         { label: "0 as an string", data: "0" },
         SCENARIO_BOOL_TRUE,
         SCENARIO_BOOL_FALSE,
-      ])("validates if the property is valid.", (scenario) => {
+      ]).describe("validates if the property is valid.", (scenario) => {
         it(`scenario: ${scenario.label}`, async () => {
           expect.assertions(1);
           const testObject = { property: scenario.data };
@@ -256,7 +257,7 @@ describe("EntitySchema", () => {
       });
 
       describe("::type::boolean", () => {
-        describe.each([
+        each([
           SCENARIO_NULL,
           SCENARIO_UNDEFINED,
           SCENARIO_INTEGER,
@@ -275,7 +276,7 @@ describe("EntitySchema", () => {
           { label: "0 as an integer", data: 0 },
           { label: "1 as a string", data: "1" },
           { label: "0 as a string", data: "0" },
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -285,7 +286,7 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([SCENARIO_BOOL_TRUE, SCENARIO_BOOL_FALSE])("validates if the property is valid.", (scenario) => {
+        each([SCENARIO_BOOL_TRUE, SCENARIO_BOOL_FALSE]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -295,7 +296,7 @@ describe("EntitySchema", () => {
       });
 
       describe("::type::string", () => {
-        describe.each([
+        each([
           SCENARIO_NULL,
           SCENARIO_UNDEFINED,
           SCENARIO_INTEGER,
@@ -305,7 +306,7 @@ describe("EntitySchema", () => {
           SCENARIO_ARRAY_EMPTY,
           SCENARIO_BOOL_TRUE,
           SCENARIO_BOOL_FALSE,
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -315,7 +316,7 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([
+        each([
           SCENARIO_EMPTY,
           SCENARIO_STRING,
           SCENARIO_STRING_UTF8,
@@ -324,7 +325,7 @@ describe("EntitySchema", () => {
           SCENARIO_DATE_YEAR_MONTH,
           SCENARIO_DATE_YEAR_MONTH_DAY,
           SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
-        ])("validates if the property is valid.", (scenario) => {
+        ]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -334,7 +335,7 @@ describe("EntitySchema", () => {
       });
 
       describe("::type::integer", () => {
-        describe.each([
+        each([
           SCENARIO_NULL,
           SCENARIO_UNDEFINED,
           SCENARIO_FLOAT,
@@ -350,7 +351,7 @@ describe("EntitySchema", () => {
           SCENARIO_DATE_YEAR_MONTH,
           SCENARIO_DATE_YEAR_MONTH_DAY,
           SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -360,7 +361,7 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([SCENARIO_INTEGER])("validates if the property is valid.", (scenario) => {
+        each([SCENARIO_INTEGER]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -370,7 +371,7 @@ describe("EntitySchema", () => {
       });
 
       describe("::type::number", () => {
-        describe.each([
+        each([
           SCENARIO_NULL,
           SCENARIO_UNDEFINED,
           SCENARIO_OBJECT,
@@ -385,7 +386,7 @@ describe("EntitySchema", () => {
           SCENARIO_DATE_YEAR_MONTH,
           SCENARIO_DATE_YEAR_MONTH_DAY,
           SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -395,7 +396,7 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([SCENARIO_INTEGER, SCENARIO_FLOAT])("validates if the property is valid.", (scenario) => {
+        each([SCENARIO_INTEGER, SCENARIO_FLOAT]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -405,7 +406,7 @@ describe("EntitySchema", () => {
       });
 
       describe("::type::object", () => {
-        describe.each([
+        each([
           SCENARIO_UNDEFINED,
           /*
            * @todo Entity schema validation should be strict
@@ -424,7 +425,7 @@ describe("EntitySchema", () => {
           SCENARIO_DATE_YEAR_MONTH,
           SCENARIO_DATE_YEAR_MONTH_DAY,
           SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -434,13 +435,13 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([
+        each([
           SCENARIO_OBJECT,
           // @todo Entity schema validation should be strict and the following should not validate.
           SCENARIO_NULL,
           SCENARIO_ARRAY,
           SCENARIO_ARRAY_EMPTY,
-        ])("validates if the property is valid.", (scenario) => {
+        ]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -450,7 +451,7 @@ describe("EntitySchema", () => {
       });
 
       describe("::type::array", () => {
-        describe.each([
+        each([
           SCENARIO_NULL,
           SCENARIO_UNDEFINED,
           SCENARIO_INTEGER,
@@ -465,7 +466,7 @@ describe("EntitySchema", () => {
           SCENARIO_DATE_YEAR_MONTH,
           SCENARIO_DATE_YEAR_MONTH_DAY,
           SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -475,7 +476,7 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([SCENARIO_ARRAY, SCENARIO_ARRAY_EMPTY])("validates if the property is valid.", (scenario) => {
+        each([SCENARIO_ARRAY, SCENARIO_ARRAY_EMPTY]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -504,7 +505,7 @@ describe("EntitySchema", () => {
       });
 
       describe("::format::uuid", () => {
-        describe.each([
+        each([
           SCENARIO_EMPTY,
           SCENARIO_STRING,
           SCENARIO_STRING_UTF8,
@@ -512,7 +513,7 @@ describe("EntitySchema", () => {
           SCENARIO_DATE_YEAR_MONTH,
           SCENARIO_DATE_YEAR_MONTH_DAY,
           SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -522,7 +523,7 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([SCENARIO_UUID])("validates if the property is valid.", (scenario) => {
+        each([SCENARIO_UUID]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -532,13 +533,13 @@ describe("EntitySchema", () => {
       });
 
       describe("::format::date-time", () => {
-        describe.each([
+        each([
           SCENARIO_EMPTY,
           SCENARIO_STRING,
           SCENARIO_STRING_UTF8,
           SCENARIO_UUID,
           { label: "Date expressed in common language", data: "yesterday" },
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -548,12 +549,12 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([
+        each([
           SCENARIO_DATE_YEAR,
           SCENARIO_DATE_YEAR_MONTH,
           SCENARIO_DATE_YEAR_MONTH_DAY,
           SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
-        ])("validates if the property is valid.", (scenario) => {
+        ]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -563,7 +564,7 @@ describe("EntitySchema", () => {
       });
 
       describe("::format::email", () => {
-        describe.each([
+        each([
           SCENARIO_EMPTY,
           SCENARIO_STRING,
           SCENARIO_STRING_UTF8,
@@ -596,7 +597,7 @@ describe("EntitySchema", () => {
            * @todo Cleanup: does not validate in IsEmailValidator custom regex, but validate with the library Validator.isEmail
            * {label: "ÊXÃMPLÊ@HÕST.ÇÕM", data: "ÊXÃMPLÊ@HÕST.ÇÕM"},
            */
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -606,7 +607,7 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([
+        each([
           { label: "abc.efg@domain.com", data: "abc.efg@domain.com" },
           { label: "efg@domain.com", data: "efg@domain.com" },
           { label: "abc-efg@domain.com", data: "abc-efg@domain.com" },
@@ -668,7 +669,7 @@ describe("EntitySchema", () => {
           { label: "ÊXÃMPLÊ@HÕST.LU", data: "ÊXÃMPLÊ@HÕST.LU" },
           // @todo Cleanup: does not validate in IsEmailValidator custom regex, but validate with the library Validator.isEmail
           { label: "ÊXÃMPLÊ@HÕST.ÇÕM", data: "ÊXÃMPLÊ@HÕST.ÇÕM" },
-        ])("validates if the property is valid.", (scenario) => {
+        ]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -678,7 +679,7 @@ describe("EntitySchema", () => {
       });
 
       describe("::format::x-hex-color", () => {
-        describe.each([
+        each([
           { label: "", data: "" },
           { label: "#012#01", data: "#012#01" },
           { label: "##01201", data: "##01201" },
@@ -695,7 +696,7 @@ describe("EntitySchema", () => {
           { label: "123456789", data: "123456789" },
           { label: "#abcdefgh", data: "#abcdefgh" },
           { label: "abcdefgh", data: "abcdefgh" },
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -705,7 +706,7 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([
+        each([
           { label: "#012", data: "#012" },
           { label: "345", data: "345" },
           { label: "#678", data: "#678" },
@@ -714,7 +715,7 @@ describe("EntitySchema", () => {
           { label: "234567", data: "234567" },
           { label: "#89aBcDeF", data: "#89aBcDeF" },
           { label: "01234567", data: "01234567" },
-        ])("validates if the property is valid.", (scenario) => {
+        ]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -724,12 +725,12 @@ describe("EntitySchema", () => {
       });
 
       describe("::format::x-base64", () => {
-        describe.each([
+        each([
           { label: "aGVsbG8gcGFzc2JvbHQ", data: "aGVsbG8gcGFzc2JvbHQ" },
           { label: "aGVsbG8gcG==Fzc2JvbHQ", data: "aGVsbG8gcG==Fzc2JvbHQ" },
           { label: "==aGVsbG8gcGFzc2JvbHQ", data: "==aGVsbG8gcGFzc2JvbHQ" },
           { label: "$€`£ù%*:", data: "$€`£ù%*:" },
-        ])("throws an EntityValidationError if the property is not valid.", (scenario) => {
+        ]).describe("throws an EntityValidationError if the property is not valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };
@@ -739,14 +740,14 @@ describe("EntitySchema", () => {
           });
         });
 
-        describe.each([
+        each([
           { label: "aGVsbG8gcGFzc2JvbHQ=", data: "aGVsbG8gcGFzc2JvbHQ=" },
           { label: "aGVsbG8gcGFzc2JvbHQ+", data: "aGVsbG8gcGFzc2JvbHQ+" },
           {
             label: "aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj02LUhVZ3pZUG05Zw==",
             data: "aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj02LUhVZ3pZUG05Zw==",
           },
-        ])("validates if the property is valid.", (scenario) => {
+        ]).describe("validates if the property is valid.", (scenario) => {
           it(`scenario: ${scenario.label}`, async () => {
             expect.assertions(1);
             const testObject = { property: scenario.data };

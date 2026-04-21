@@ -99,7 +99,7 @@ describe("Display the Confirm share missing metadata keys Dialog", () => {
 
       await page.confirm();
 
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I should cancel the operation", async () => {
@@ -110,7 +110,7 @@ describe("Display the Confirm share missing metadata keys Dialog", () => {
 
       await page.cancel();
 
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I should see an error message if the user MFA disabling goes wrong", async () => {

@@ -62,7 +62,7 @@ describe("SecretRevisionsSettingsServiceWorkerService", () => {
       const port = new MockPort();
 
       const service = new SecretRevisionsSettingsServiceWorkerService(port);
-      await expect(() => service.saveSettings(wrongEntity)).rejects.toThrow();
+      await expect(() => service.saveSettings(wrongEntity)).rejects.toThrowError();
     });
   });
 

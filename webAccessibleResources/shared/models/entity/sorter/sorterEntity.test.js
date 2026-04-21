@@ -15,6 +15,7 @@
 import EntitySchema from "../abstract/entitySchema";
 import SorterEntity from "./sorterEntity";
 import { defaultSorterData } from "./sorterEntity.test.data";
+import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
 
 describe("SorterEntity", () => {
@@ -33,10 +34,10 @@ describe("SorterEntity", () => {
       expect(entity.asc).toEqual(dto.asc);
     });
 
-    describe.each([
+    each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
-    ])("Should validate the propertyName", (test) => {
+    ]).describe("Should validate the propertyName", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultSorterData({
@@ -51,10 +52,10 @@ describe("SorterEntity", () => {
       });
     });
 
-    describe.each([
+    each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
-    ])("Should validate the asc", (test) => {
+    ]).describe("Should validate the asc", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultSorterData({

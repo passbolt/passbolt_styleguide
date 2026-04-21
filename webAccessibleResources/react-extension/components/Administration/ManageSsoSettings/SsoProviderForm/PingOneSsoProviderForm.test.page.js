@@ -66,22 +66,6 @@ export default class PingOneSsoProviderFormPage {
   }
 
   /**
-   * Returns the redirect url input HTML element
-   * @returns {HTMLElement}
-   */
-  get redirectUrl() {
-    return this.select("#sso-pingone-redirect-url-input");
-  }
-
-  /**
-   * Returns the copy redirect url button HTML element
-   * @returns {HTMLElement}
-   */
-  get redirectUrlCopyButton() {
-    return this.select(".copy-to-clipboard");
-  }
-
-  /**
    * Returns the environment_id input HTML element
    * @returns {HTMLElement}
    */

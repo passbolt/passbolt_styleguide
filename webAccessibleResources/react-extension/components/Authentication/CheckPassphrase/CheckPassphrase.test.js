@@ -17,6 +17,7 @@
  */
 import { defaultProps, defaultPropsForRecover } from "./CheckPassphrase.test.data";
 import CheckPassphrasePage from "./CheckPassphrase.test.page";
+import each from "jest-each";
 import { CheckPassphraseVariations } from "./CheckPassphrase";
 import { waitFor } from "@testing-library/dom";
 
@@ -35,12 +36,12 @@ describe("Check passphrase", () => {
   let page, // The page to test against.
     props; // The component props
 
-  describe.each([
+  each([
     { displayAs: CheckPassphraseVariations.SETUP, canRememberMe: true }, // Setup with remember me enabled
     { displayAs: CheckPassphraseVariations.SETUP, canRememberMe: false }, // Setup with remember me disabled
     { displayAs: CheckPassphraseVariations.RECOVER, canRememberMe: true }, // Recover with remember me enabled
     { displayAs: CheckPassphraseVariations.RECOVER, canRememberMe: false }, // Recover with remember me disabled
-  ])("Common behavior to all context", (_props) => {
+  ]).describe("Common behavior to all context", (_props) => {
     it(`As AN I should be able to enter my secret key passphrase, scenario: ${JSON.stringify(_props)}`, async () => {
       props = defaultProps(_props);
       page = new CheckPassphrasePage(props);

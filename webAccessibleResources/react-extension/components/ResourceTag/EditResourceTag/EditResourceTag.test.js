@@ -88,7 +88,7 @@ describe("See the Edit Tag Dialog", () => {
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update", tagDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I cannot update the form fields and I should see a processing feedback while submitting the form", async () => {
@@ -127,19 +127,19 @@ describe("See the Edit Tag Dialog", () => {
     it("As LU I can stop editing a user by clicking on the cancel button", async () => {
       expect(page.tagEdit.exists()).toBeTruthy();
       await page.tagEdit.click(page.tagEdit.cancelButton);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can stop editing a user by closing the dialog", async () => {
       expect(page.tagEdit.exists()).toBeTruthy();
       await page.tagEdit.click(page.tagEdit.dialogClose);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can stop adding a user with the keyboard (escape)", async () => {
       expect(page.tagEdit.exists()).toBeTruthy();
       await page.tagEdit.escapeKey(page.tagEdit.dialogClose);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I should see an error dialog if the submit operation fails for an unexpected reason", async () => {

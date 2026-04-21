@@ -14,6 +14,7 @@
 
 import RequestAccountRecoveryPage from "./RequestAccountRecovery.test.page";
 import { defaultProps } from "./RequestAccountRecovery.test.data";
+import each from "jest-each";
 import { RequestAccountRecoveryVariations } from "./RequestAccountRecovery";
 
 beforeEach(() => {
@@ -21,11 +22,11 @@ beforeEach(() => {
 });
 
 describe("RequestAccountRecoveryPage", () => {
-  describe.each([
+  each([
     { displayAs: RequestAccountRecoveryVariations.SETUP }, // Login
     { displayAs: RequestAccountRecoveryVariations.RECOVER }, // recover account
     { displayAs: RequestAccountRecoveryVariations.ACCOUNT_RECOVERY }, // account recovery
-  ])("Common behavior to all context", (_props) => {
+  ]).describe("Common behavior to all context", (_props) => {
     let page, props;
 
     beforeEach(() => {

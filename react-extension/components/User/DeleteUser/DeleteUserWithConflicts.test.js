@@ -125,14 +125,14 @@ describe("See Delete User Dialog", () => {
       const closeButton = page.displayDeleteUserWithConflictsDialog.closeButton;
 
       await page.displayDeleteUserWithConflictsDialog.click(closeButton);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I should be able to cancel the operation by clicking on the cancel button", async () => {
       const cancelButton = page.displayDeleteUserWithConflictsDialog.cancelButton;
 
       await page.displayDeleteUserWithConflictsDialog.click(cancelButton);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I should be able to cancel the edition with the keyboard (escape)", () => {
@@ -140,7 +140,7 @@ describe("See Delete User Dialog", () => {
       const escapeKeyDown = { keyCode: 27 };
       fireEvent.keyDown(page.displayDeleteUserWithConflictsDialog.dialogTitle, escapeKeyDown);
 
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I want to see a long resource/tag/folders name fitting its delete dialog", async () => {

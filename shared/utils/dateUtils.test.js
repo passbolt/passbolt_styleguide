@@ -14,6 +14,7 @@
 
 import { DateTime } from "luxon";
 import { formatDateForApi, formatDateTimeAgo, formatExpirationDateTimeAgo } from "./dateUtils";
+import each from "jest-each";
 
 describe("dateUtils", () => {
   beforeEach(() => {
@@ -87,7 +88,7 @@ describe("dateUtils", () => {
 
     jest.useFakeTimers().setSystemTime(now);
 
-    describe.each([0, false, null, undefined, []])("should return 'Never' if the given date is falsy", (scenario) => {
+    each([0, false, null, undefined, []]).describe("should return 'Never' if the given date is falsy", (scenario) => {
       it(`with: ${scenario}`, () => {
         expect.assertions(3);
         const date = null;

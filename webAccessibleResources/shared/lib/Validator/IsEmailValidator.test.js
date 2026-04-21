@@ -11,11 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.12.0
  */
+import each from "jest-each";
 import IsEmailValidator from "./IsEmailValidator";
 
 describe("IsEmailValidator", () => {
   describe("IsRegexValidator::validate", () => {
-    describe.each([
+    each([
       "abc.efg@domain.com",
       "efg@domain.com",
       "abc-efg@domain.com",
@@ -72,14 +73,14 @@ describe("IsEmailValidator", () => {
       "example@HOST.ORG",
       "EXAMPLE@HOST.LU",
       "ÊXÃMPLÊ@HÕST.LU",
-    ])("Should accept.", (value) => {
+    ]).describe("Should accept.", (value) => {
       it(`should accept: ${value}`, async () => {
         expect.assertions(1);
         expect(IsEmailValidator.validate(value)).toBeTruthy();
       });
     });
 
-    describe.each([
+    each([
       "abc@example",
       "@example.com",
       "abc@",
@@ -106,7 +107,7 @@ describe("IsEmailValidator", () => {
       false,
       {},
       [],
-    ])("Should not accept.", (value) => {
+    ]).describe("Should not accept.", (value) => {
       it(`should not accept: ${value}`, async () => {
         expect.assertions(1);
         expect(IsEmailValidator.validate(value)).toBeFalsy();

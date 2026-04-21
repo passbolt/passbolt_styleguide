@@ -17,7 +17,6 @@ import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import WindowNavigationService from "../../../../shared/utils/windowNavigationService";
 
 class DisplayUnexpectedError extends Component {
   /**
@@ -54,7 +53,7 @@ class DisplayUnexpectedError extends Component {
       // A reload from iframe cannot reload the parent due to cross origin so the extension will do
       this.props.context.port.request("passbolt.tab.reload");
     } else {
-      WindowNavigationService.reload();
+      window.location.reload();
     }
   }
 

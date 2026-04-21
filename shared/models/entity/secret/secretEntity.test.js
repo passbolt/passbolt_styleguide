@@ -119,7 +119,7 @@ describe("SecretEntity", () => {
       const expectedError = new EntityValidationError("This is not a valid OpenPGP armored message");
       expectedError.addError("data", "empty", "The OpenPGP armored message should not be empty.");
 
-      expect(() => SecretEntity.assertValidMessage(42)).toThrow(expectedError.message);
+      expect(() => SecretEntity.assertValidMessage(42)).toThrow(expectedError);
     });
 
     it("should throw an error if the data is not a starting with the expected delimiter", () => {
@@ -128,7 +128,7 @@ describe("SecretEntity", () => {
       const expectedError = new EntityValidationError("This is not a valid OpenPGP armored message");
       expectedError.addError("data", "begin", "The OpenPGP armored message should contain a start delimiter.");
 
-      expect(() => SecretEntity.assertValidMessage("It's a string!")).toThrow(expectedError.message);
+      expect(() => SecretEntity.assertValidMessage("It's a string!")).toThrow(expectedError);
     });
 
     it("should throw an error if the data is not a ending with the expected delimiter", () => {
@@ -137,7 +137,7 @@ describe("SecretEntity", () => {
       const expectedError = new EntityValidationError("This is not a valid OpenPGP armored message");
       expectedError.addError("data", "begin", "The OpenPGP armored message should contain a start delimiter.");
 
-      expect(() => SecretEntity.assertValidMessage("-----BEGIN PGP MESSAGE-----")).toThrow(expectedError.message);
+      expect(() => SecretEntity.assertValidMessage("-----BEGIN PGP MESSAGE-----")).toThrow(expectedError);
     });
   });
 

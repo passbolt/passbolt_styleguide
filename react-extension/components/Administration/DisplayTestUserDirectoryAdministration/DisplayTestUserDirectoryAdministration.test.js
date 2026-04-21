@@ -52,7 +52,7 @@ describe("See the test user directory administration Dialog", () => {
       await page.displayTestUserDirectoryAdministrationDialog.click(
         page.displayTestUserDirectoryAdministrationDialog.buttonOk,
       );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As AD I should see The list and Structure associated to those user(s) and group(s) in the dialog for my Test settings report", async () => {

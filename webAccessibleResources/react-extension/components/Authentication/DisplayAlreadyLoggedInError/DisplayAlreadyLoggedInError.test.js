@@ -14,17 +14,18 @@
 import { defaultProps } from "./DisplayAlreadyLoggedInError.test.data";
 import DisplayAlreadyLoggedInErrorPage from "./DisplayAlreadyLoggedInError.test.page";
 import { DisplayAlreadyLoggedInErrorVariations } from "./DisplayAlreadyLoggedInError";
+import each from "jest-each";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("DisplayAlreadyLoggedInError", () => {
-  describe.each([
+  each([
     { displayAs: DisplayAlreadyLoggedInErrorVariations.SETUP }, // Login
     { displayAs: DisplayAlreadyLoggedInErrorVariations.RECOVER }, // recover account
     { displayAs: DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY }, // account recovery
-  ])("Common behavior to all context", (_props) => {
+  ]).describe("Common behavior to all context", (_props) => {
     it(`As LU I should be able to log out. Scenario: ${_props.displayAs}`, async () => {
       const props = defaultProps(_props);
       const page = new DisplayAlreadyLoggedInErrorPage(props);

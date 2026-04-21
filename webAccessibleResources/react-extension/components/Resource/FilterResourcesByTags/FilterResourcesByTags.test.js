@@ -162,7 +162,7 @@ describe("See tags", () => {
           type: ResourceWorkspaceFilterTypes.ALL,
         },
       };
-      expect(props.history.push).toHaveBeenCalledWith({ pathname, state });
+      expect(props.history.push).toBeCalledWith({ pathname, state });
     });
   });
 
@@ -211,7 +211,7 @@ describe("See tags", () => {
           type: ResourceWorkspaceFilterTypes.ALL,
         },
       };
-      expect(props.history.push).toHaveBeenCalledWith({ pathname, state });
+      expect(props.history.push).toBeCalledWith({ pathname, state });
     });
   });
 

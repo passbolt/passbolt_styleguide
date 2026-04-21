@@ -58,7 +58,7 @@ describe("See Resource SearchBar", () => {
         },
       };
       await waitFor(() => {
-        expect(props.history.push).toHaveBeenCalledWith({ pathname, state });
+        expect(props.history.push).toBeCalledWith({ pathname, state });
       });
     });
 

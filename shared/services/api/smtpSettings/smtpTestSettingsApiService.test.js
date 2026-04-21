@@ -63,7 +63,7 @@ describe("SmtpTestSettingsApiService", () => {
 
       fetch.doMockOnceIf(/smtp\/email\.json/, () => Promise.reject({ message: "The service is unavailable" }));
 
-      expect(async () => await service.create({ email_test_to: "test@passbolt.com" })).rejects.toThrow(
+      expect(async () => await service.create({ email_test_to: "test@passbolt.com" })).rejects.toThrowError(
         PassboltServiceUnavailableError,
       );
     });

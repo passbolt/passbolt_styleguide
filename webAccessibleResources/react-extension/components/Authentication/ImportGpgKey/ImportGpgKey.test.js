@@ -16,6 +16,7 @@
  * Unit tests on CreateGpgKey in regard of specifications
  */
 import ImportGpgKeyPage from "./ImportGpgKey.test.page";
+import each from "jest-each";
 import { ImportGpgKeyVariations } from "./ImportGpgKey";
 import { defaultProps } from "./ImportGpgKey.test.data";
 
@@ -24,10 +25,10 @@ beforeEach(() => {
 });
 
 describe("ImportGpgKey", () => {
-  describe.each([
+  each([
     { displayAs: ImportGpgKeyVariations.SETUP }, // Import a gpg key for the setup workflow
     { displayAs: ImportGpgKeyVariations.RECOVER }, // Import a gpg key for the recover workflow
-  ])("Common behavior to all context", (_props) => {
+  ]).describe("Common behavior to all context", (_props) => {
     it(`As AN I should be able to paste my secret key, scenario: ${JSON.stringify(_props)}`, async () => {
       const props = defaultProps(_props);
       const page = new ImportGpgKeyPage(props);

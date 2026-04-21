@@ -115,7 +115,7 @@ describe("Rbacs Collection", () => {
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByRoleAndActionName(dto, uiActions.USERS_VIEW_WORKSPACE)).toThrow(
+      expect(() => collection.findRbacByRoleAndActionName(dto, uiActions.USERS_VIEW_WORKSPACE)).toThrowError(
         "The role parameter should be a role entity.",
       );
     });
@@ -129,7 +129,7 @@ describe("Rbacs Collection", () => {
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByRoleAndActionName(role, {})).toThrow(
+      expect(() => collection.findRbacByRoleAndActionName(role, {})).toThrowError(
         "The name parameter should be a valid string.",
       );
     });
@@ -165,7 +165,7 @@ describe("Rbacs Collection", () => {
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByUiActionName({})).toThrow("The name parameter should be a valid string.");
+      expect(() => collection.findRbacByUiActionName({})).toThrowError("The name parameter should be a valid string.");
     });
   });
 
@@ -198,7 +198,7 @@ describe("Rbacs Collection", () => {
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByRoleAndActionName(dto, actions.GROUPS_ADD)).toThrow(
+      expect(() => collection.findRbacByRoleAndActionName(dto, actions.GROUPS_ADD)).toThrowError(
         "The role parameter should be a role entity.",
       );
     });
@@ -210,7 +210,7 @@ describe("Rbacs Collection", () => {
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByRoleAndActionName(role, {})).toThrow(
+      expect(() => collection.findRbacByRoleAndActionName(role, {})).toThrowError(
         "The name parameter should be a valid string.",
       );
     });
@@ -238,7 +238,7 @@ describe("Rbacs Collection", () => {
       const collectionDto = [rbacDto, defaultRbacWithUiActionData()];
       const collection = new RbacsCollection(collectionDto);
 
-      expect(() => collection.findRbacByActionName({})).toThrow("The name parameter should be a valid string.");
+      expect(() => collection.findRbacByActionName({})).toThrowError("The name parameter should be a valid string.");
     });
   });
 });

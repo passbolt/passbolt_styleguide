@@ -34,7 +34,6 @@ import {
   resourceTypeV5TotpDto,
   resourceTypeV5DefaultDto,
   TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
-  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "./resourceTypeEntity.test.data";
 import CollectionValidationError from "../../entity/abstract/collectionValidationError";
 import { v4 as uuid } from "uuid";
@@ -185,11 +184,11 @@ describe("ResourceTypesCollection", () => {
     });
 
     it("should filter the collection by resources types by the version 5.", () => {
-      expect.assertions(11);
+      expect.assertions(10);
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       resourceTypes.filterByResourceTypeVersion("v5");
 
-      expect(resourceTypes).toHaveLength(7);
+      expect(resourceTypes).toHaveLength(6);
 
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeFalsy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeFalsy();
@@ -200,7 +199,6 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_TOTP)).toBeFalsy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE)).toBeTruthy();
     });
   });
 
@@ -353,30 +351,6 @@ describe("ResourceTypesCollection", () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
       expect(resourceTypes.hasSomeNoteResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeFalsy();
-    });
-  });
-
-  describe("::hasSomePinCodeResourceTypes", () => {
-    it("should have some pin code resource types v5.", () => {
-      expect.assertions(1);
-      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
-      expect(resourceTypes.hasSomePinCodeResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeTruthy();
-    });
-
-    it("should not have some pin code resource types v4.", () => {
-      expect.assertions(2);
-
-      let resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
-      expect(resourceTypes.hasSomePinCodeResourceTypes()).toBeFalsy();
-
-      resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
-      expect(resourceTypes.hasSomePinCodeResourceTypes(RESOURCE_TYPE_VERSION_4)).toBeFalsy();
-    });
-
-    it("should not have some pin code resource types v5.", () => {
-      expect.assertions(1);
-      const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
-      expect(resourceTypes.hasSomePinCodeResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeFalsy();
     });
   });
 
@@ -744,7 +718,7 @@ describe("ResourceTypesCollection", () => {
       const start = performance.now();
       const collection = new ResourceTypesCollection(dtos);
       const time = performance.now() - start;
-      expect(collection).toHaveLength(11);
+      expect(collection).toHaveLength(10);
       expect(time).toBeLessThan(5_000);
     });
   });

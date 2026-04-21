@@ -13,6 +13,7 @@
  */
 
 import "../../../../../../test/mocks/mockClipboard";
+import each from "jest-each";
 import { waitFor } from "@testing-library/dom";
 import GoogleSsoProviderFormPage from "./GoogleSsoProviderForm.test.page";
 import { defaultGoogleProps } from "./SsoProviderForm.test.data";
@@ -78,7 +79,7 @@ describe("GoogleSsoProviderForm", () => {
       expect(page.clientSecretError.textContent).toStrictEqual(rawErrors.client_secret);
     });
 
-    describe.each(Object.keys(rawErrors).map((key) => ({ field: key })))(
+    each(Object.keys(rawErrors).map((key) => ({ field: key }))).describe(
       "Should focus on the right erroneous field in the form",
       (scenario) => {
         it(`For: ${scenario.field}`, async () => {

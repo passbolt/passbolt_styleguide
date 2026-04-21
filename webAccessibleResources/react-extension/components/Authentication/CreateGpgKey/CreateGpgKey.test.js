@@ -16,6 +16,7 @@
  * Unit tests on CreateGpgKey in regard of specifications
  */
 import { waitFor } from "@testing-library/react";
+import each from "jest-each";
 import { CreateGpgKeyVariation } from "./CreateGpgKey";
 import { defaultProps } from "./CreateGpgKey.test.data";
 import CreateGpgKeyPage from "./CreateGpgKey.test.page";
@@ -35,10 +36,10 @@ afterEach(() => {
 });
 
 describe("CreateGpgKey", () => {
-  describe.each([
+  each([
     { displayAs: CreateGpgKeyVariation.SETUP }, // Create a gpg key for the setup workflow
     { displayAs: CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY }, // Create a gpg key for the account recovery workflow
-  ])("Common behavior to all context", (_props) => {
+  ]).describe("Common behavior to all context", (_props) => {
     it(`As AN I should be able to enter a passphrase, scenario: ${JSON.stringify(_props)}`, async () => {
       expect.assertions(1);
       const props = defaultProps(_props);

@@ -13,6 +13,7 @@
  */
 
 import "../../../../../../test/mocks/mockClipboard";
+import each from "jest-each";
 import EntityValidationError from "../../../../../shared/models/entity/abstract/entityValidationError";
 import AdfsSsoProviderFormPage from "./AdfsSsoProviderForm.test.page";
 import { defaultAdfsProps } from "./SsoProviderForm.test.data";
@@ -87,7 +88,7 @@ describe("AdfsSsoProviderForm", () => {
       expect(page.scopeError.textContent).toStrictEqual(rawErrors.scope);
     });
 
-    describe.each(Object.keys(rawErrors).map((key) => ({ field: key })))(
+    each(Object.keys(rawErrors).map((key) => ({ field: key }))).describe(
       "Should focus on the right erroneous field in the form",
       (scenario) => {
         it(`For: ${scenario.field}`, async () => {

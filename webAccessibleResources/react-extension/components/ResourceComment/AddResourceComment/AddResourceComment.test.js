@@ -54,7 +54,7 @@ describe("Add comments", () => {
       // Wait until the text is found (This will ensure the state has been updated)
       await screen.findByText("You");
       expect(page.addComment.exists()).toBeTruthy();
-      expect(context.port.request).toHaveBeenCalled();
+      expect(context.port.request).toBeCalled();
     });
 
     it("I should not see the add icon", async () => {
@@ -62,7 +62,7 @@ describe("Add comments", () => {
       // Wait until the text is found (This will ensure the state has been updated)
       await screen.findByText("You");
       expect(page.addIcon.exists()).toBeFalsy();
-      expect(context.port.request).toHaveBeenCalled();
+      expect(context.port.request).toBeCalled();
     });
   });
 
@@ -85,7 +85,7 @@ describe("Add comments", () => {
       await screen.findAllByText("You");
       expect(page.addIcon.exists()).toBeTruthy();
       expect(page.addComment.exists()).toBeFalsy();
-      expect(context.port.request).toHaveBeenCalled();
+      expect(context.port.request).toBeCalled();
 
       await page.addIcon.click();
       expect(page.addIcon.exists()).toBeFalsy();

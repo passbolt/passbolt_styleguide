@@ -151,7 +151,7 @@ describe("As Lu I should see the share dialog", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
         "The permissions have been changed successfully.",
       );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can remove a permission", async () => {
@@ -210,21 +210,21 @@ describe("As Lu I should see the share dialog", () => {
       expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.click(page.cancelButton);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can stop sharing resources by closing the dialog", async () => {
       expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.click(page.dialogClose);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can stop sharing resources with the keyboard (escape)", async () => {
       expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.escapeKey(page.dialogClose);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("displays an error dialog if the resource details cannot be loaded due to an unexpected error", async () => {
@@ -240,7 +240,7 @@ describe("As Lu I should see the share dialog", () => {
       page = new ShareDialogPage(context, props);
 
       // Throw general error message
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
 
@@ -257,7 +257,7 @@ describe("As Lu I should see the share dialog", () => {
       page = new ShareDialogPage(context, props);
 
       // Throw general error message
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
       expect(props.dialogContext.open).not.toHaveBeenCalled();
     });
 
@@ -378,7 +378,7 @@ describe("As Lu I should see the share dialog", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
         "The permissions have been changed successfully.",
       );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
   });
 
@@ -456,7 +456,7 @@ describe("As Lu I should see the share dialog", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
         "The permissions have been changed successfully.",
       );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
   });
 

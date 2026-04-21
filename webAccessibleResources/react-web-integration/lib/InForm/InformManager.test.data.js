@@ -600,7 +600,7 @@ export const domTwoEmailInputsAndPassword = `
  */
 export const domSingleOTPField = `
 <div>
-  <input type="number" autocomplete="one-time-code" data-testid="otp" />
+  <input autocomplete="one-time-code" />
 </div>`;
 
 /**
@@ -611,7 +611,7 @@ export const domSingleOTPFieldWithUsernameAndPassword = `
 <div>
   <input type="text" name="username" />
   <input type="password" />
-  <input type="number" autocomplete="one-time-code" data-testid="otp" />
+  <input autocomplete="one-time-code" />
 </div>`;
 
 /**
@@ -619,10 +619,70 @@ export const domSingleOTPFieldWithUsernameAndPassword = `
  * @type {string}
  */
 export const domSingleOTPMultiField = `
-<div data-testid="otp">
+<div>
+    <input class="time-otp" />
+    <input class="time-otp" />
+    <input class="time-otp" />
+    <input class="time-otp" />
+    <input class="time-otp" />
+    <input class="time-otp" />
+</div>`;
+
+/**
+ * Create a login form with an OTP field composed of 6 inputs with aria-label.
+ * @type {string}
+ */
+export const domSingleOTPMultiFieldAriaLabel = `
+<div>
+    <input aria-label="time-based otp" />
+    <input aria-label="time-based otp" />
+    <input aria-label="time-based otp" />
+    <input aria-label="time-based otp" />
+    <input aria-label="time-based otp" />
+    <input aria-label="time-based otp" />
+</div>`;
+
+/**
+ * Create a login form with a single input using a generic numeric pattern
+ * @type {string}
+ */
+export const domOTPSingleFieldPatternLookalike = `
+<div>
+  <input pattern="^\\d+$" />
+</div>`;
+
+/**
+ * Create a login form with a single input using custom pattern
+ * @type {string}
+ */
+export const domOTPSingleFieldCustomPatternLookalike = `
+<div>
+  <input pattern="-?\d*([.]\d{0,6})?" />
+</div>`;
+
+/**
+ * Create a login form with a DOM looking like a OTP field composed of 6 inputs type number.
+ * @type {string}
+ */
+export const domOTPMultiFieldNumberLookalike = `
+<div>
     <input type="number" />
     <input type="number" />
     <input type="number" />
+    <input type="number" />
+    <input type="number" />
+    <input type="number" />
+</div>`;
+
+/**
+ * Create a login form with a DOM looking like a OTP field composed of 6 inputs type text.
+ * @type {string}
+ */
+export const domOTPMultiFieldTextLookalike = `
+<div>
+    <input type="text" />
+    <input type="text" />
+    <input type="text" />
     <input type="text" />
     <input type="text" />
     <input type="text" />

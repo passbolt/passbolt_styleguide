@@ -13,6 +13,7 @@
  */
 
 import "../../../../../test/mocks/mockPortal";
+import each from "jest-each";
 import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 import { defaultProps } from "./DisplayAdministrationUserPassphrasePolicies.test.data";
 import {
@@ -77,11 +78,11 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       expect(page.externalDictionaryCheck.checked).toStrictEqual(false);
     });
 
-    describe.each([
+    each([
       { external_dictionary_check: true, entropy_minimum: 64 },
       { external_dictionary_check: false, entropy_minimum: 128 },
       { external_dictionary_check: true, entropy_minimum: 50 },
-    ])("As an administrator I should see the custom settings", (dto) => {
+    ]).describe("As an administrator I should see the custom settings", (dto) => {
       it(`with ${JSON.stringify(dto)}`, async () => {
         expect.assertions(2);
 

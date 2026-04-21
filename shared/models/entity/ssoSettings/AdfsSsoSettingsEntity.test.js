@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.6.0
  */
-
+import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
@@ -72,20 +72,20 @@ describe("AdfsSsoSettingsEntity", () => {
   });
 
   describe("Should validate only the supported URL of ADFS", () => {
-    describe.each([
+    each([
       "https://login.adfs.com",
       "https://login.adfs.us",
       "https://login.partner.adfs.lu",
       "https://localhost",
       "https://192.168.1.1",
-    ])("Should validate the supported URL", (url) => {
+    ]).describe("Should validate the supported URL", (url) => {
       it(`${url}`, () => {
         const dto = defaultAdfsSsoSettingsViewModelDto({ url });
         expect(() => new AdfsSsoSettingsEntity(dto)).not.toThrow();
       });
     });
 
-    describe.each([
+    each([
       "https://login.adfs.com/",
       "https://login.adfs.us/",
       "https://login.partner.adfs.lu/",
@@ -101,7 +101,7 @@ describe("AdfsSsoSettingsEntity", () => {
       "ftp://login.partner.adfs.lu/",
       "ftp://localhost/",
       "ftp://192.168.1.1/",
-    ])("Should not validate an unsupported URL", (url) => {
+    ]).describe("Should not validate an unsupported URL", (url) => {
       it(`${url}`, () => {
         const dto = defaultAdfsSsoSettingsViewModelDto({ url });
         expect(() => new AdfsSsoSettingsEntity(dto)).toThrow(EntityValidationError);

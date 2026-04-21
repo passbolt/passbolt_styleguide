@@ -72,7 +72,7 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
       expect(props.resourceWorkspaceContext.onResourceFileImportResult).toHaveBeenCalled();
       expect(props.resourceWorkspaceContext.onResourceFileToImport).toHaveBeenCalled();
       expect(props.dialogContext.open).toHaveBeenCalledWith(ImportResourcesResult);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I cannot update the form fields and I should see a processing feedback while submitting the form", async () => {
@@ -128,13 +128,13 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
     it("As LU I can stop importing passwords by clicking on the cancel button", async () => {
       expect.assertions(1);
       await page.click(page.cancelButton);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can stop importing passwords by closing the dialog", async () => {
       expect.assertions(1);
       await page.click(page.dialogClose);
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I should see the password field focused when the component is mounted", async () => {
@@ -147,7 +147,7 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
     it("As LU I can stop importing passwords with the keyboard (escape)", async () => {
       expect.assertions(1);
       await page.escapeKey();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I should see an error dialog if the submit operation fails for an unexpected reason", async () => {

@@ -17,15 +17,12 @@ import { Trans, withTranslation } from "react-i18next";
 
 import { withAdminSso } from "../../../../contexts/AdminSsoContext";
 import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
-import { withClipboard } from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 import PingOneSsoSettingsEntity from "../../../../../shared/models/entity/ssoSettings/PingOneSsoSettingsEntity";
 
 import Select from "../../../Common/Select/Select";
 import Password from "../../../../../shared/components/Password/Password";
 import PingOneSsoSettingsFormEntity from "../../../../../shared/models/entity/ssoSettings/PingOneSsoSettingsFormEntity";
-
-import CopySVG from "../../../../../img/svg/copy.svg";
 
 /**
  * This component displays the PingOne SSO settings form
@@ -46,7 +43,6 @@ class PingOneSsoProviderForm extends PureComponent {
    */
   bindCallbacks() {
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleCopyRedirectUrl = this.handleCopyRedirectUrl.bind(this);
   }
 
   /**
@@ -102,16 +98,6 @@ class PingOneSsoProviderForm extends PureComponent {
   }
 
   /**
-   * Handle the copy to clipboard button
-   */
-  async handleCopyRedirectUrl() {
-    await this.props.clipboardContext.copy(
-      this.fullRedirectUrl,
-      this.translate("The redirection URL has been copied to the clipboard."),
-    );
-  }
-
-  /**
    * Should input be disabled? True if state is loading or processing
    * @returns {boolean}
    */
@@ -137,14 +123,6 @@ class PingOneSsoProviderForm extends PureComponent {
       value: url,
       label: url,
     }));
-  }
-
-  /**
-   * Get the full redirection URL;
-   */
-  get fullRedirectUrl() {
-    const trustedDomain = this.props.context.userSettings.getTrustedDomain();
-    return `${trustedDomain}/sso/pingone/redirect`;
   }
 
   /**
@@ -181,29 +159,6 @@ class PingOneSsoProviderForm extends PureComponent {
           {errors?.hasError("url") && <div className="error-message">{this.displayErrors(errors.getError("url"))}</div>}
           <p>
             <Trans>The PingOne authentication URL for your region.</Trans>
-          </p>
-        </div>
-        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
-          <label>
-            <Trans>Redirect URL</Trans>
-          </label>
-          <div className="button-inline">
-            <input
-              id="sso-pingone-redirect-url-input"
-              type="text"
-              className="fluid form-element disabled"
-              name="redirect_url"
-              value={this.fullRedirectUrl}
-              placeholder={this.translate("Redirect URL")}
-              readOnly
-              disabled
-            />
-            <button type="button" onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
-              <CopySVG />
-            </button>
-          </div>
-          <p>
-            <Trans>The URL to provide to PingOne when registering the application.</Trans>
           </p>
         </div>
         <div className={`input text required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
@@ -277,7 +232,7 @@ class PingOneSsoProviderForm extends PureComponent {
             placeholder={this.translate("Secret")}
             disabled={this.hasAllInputDisabled()}
             value={ssoConfig.client_secret}
-            preview
+            preview={true}
             inputRef={this.inputRefs.client_secret}
           />
           {errors?.hasError("client_secret") && (
@@ -340,9 +295,8 @@ class PingOneSsoProviderForm extends PureComponent {
 
 PingOneSsoProviderForm.propTypes = {
   adminSsoContext: PropTypes.object, // The administration sso configuration context
-  clipboardContext: PropTypes.object, // The clipboard context
   context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withClipboard(withAdminSso(withTranslation("common")(PingOneSsoProviderForm))));
+export default withAppContext(withAdminSso(withTranslation("common")(PingOneSsoProviderForm)));

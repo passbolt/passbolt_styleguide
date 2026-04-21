@@ -133,7 +133,7 @@ describe("EntityV2", () => {
       const expectedError = new Error("The entity class should declare its schema.");
       const dto = minimalTestEntityV2Dto({ name: "K4r3n" });
       const entity = new EntityV2(dto, { validate: false });
-      expect(() => entity.validateSchema()).toThrow(expectedError.message);
+      expect(() => entity.validateSchema()).toThrow(expectedError);
     });
 
     it("validates the entity schema.", () => {
@@ -268,7 +268,7 @@ describe("EntityV2", () => {
       const expectedError = new Error("The entity class should declare its schema.");
       const dto = minimalTestEntityV2Dto({ name: "K4r3n" });
       const entity = new EntityV2(dto, { validate: false });
-      expect(() => entity.validate()).toThrow(expectedError.message);
+      expect(() => entity.validate()).toThrow(expectedError);
     });
   });
 
@@ -298,7 +298,7 @@ describe("EntityV2", () => {
         "associated_entity",
         new EntityValidationError("id", "required", "Could not validate entity TestAssociatedEntityV2."),
       );
-      expect(() => entity.validateAssociations()).toThrow(validationErrors.message);
+      expect(() => entity.validateAssociations()).toThrow(validationErrors);
     });
   });
   describe("::associations", () => {
@@ -338,14 +338,16 @@ describe("EntityV2", () => {
     it("throws if property not defined in entity schema.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.get("undefined_prop")).toThrow('The property "undefined_prop" has no schema definition.');
+      expect(() => entity.get("undefined_prop")).toThrow(
+        new Error('The property "undefined_prop" has no schema definition.'),
+      );
     });
 
     it("throws if property is relative to an object.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       expect(() => entity.get("object")).toThrow(
-        'The property "associated_entity" should reference scalar properties only.',
+        new Error('The property "associated_entity" should reference scalar properties only.'),
       );
     });
 
@@ -353,7 +355,7 @@ describe("EntityV2", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       expect(() => entity.get("array")).toThrow(
-        'The property "associated_entity" should reference scalar properties only.',
+        new Error('The property "associated_entity" should reference scalar properties only.'),
       );
     });
 
@@ -361,7 +363,7 @@ describe("EntityV2", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       expect(() => entity.get("associated_entity")).toThrow(
-        'The property "associated_entity" should reference scalar properties only.',
+        new Error('The property "associated_entity" should reference scalar properties only.'),
       );
     });
   });
@@ -396,14 +398,16 @@ describe("EntityV2", () => {
     it("throws if property not defined in entity schema.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("undefined_prop")).toThrow('The property "undefined_prop" has no schema definition.');
+      expect(() => entity.set("undefined_prop")).toThrow(
+        new Error('The property "undefined_prop" has no schema definition.'),
+      );
     });
 
     it("throws if property is relative to an object.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       expect(() => entity.set("object")).toThrow(
-        'The property "associated_entity" should reference scalar properties only.',
+        new Error('The property "associated_entity" should reference scalar properties only.'),
       );
     });
 
@@ -444,7 +448,7 @@ describe("EntityV2", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       expect(() => entity.set("associated_entity", { id: "no uuid" })).toThrow(
-        "Could not validate entity TestAssociatedEntityV2.",
+        new Error("Could not validate entity TestAssociatedEntityV2."),
       );
     });
 
@@ -452,39 +456,39 @@ describe("EntityV2", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       expect(() => entity.set("associated_entity", new EntityV2({ id: "no uuid" }, { validate: false }))).toThrow(
-        "Could not validate entity TestAssociatedEntityV2.",
+        new Error("Could not validate entity TestAssociatedEntityV2."),
       );
     });
 
     it("throws if association property value with property in the association is not valid.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("associated_entity.id", "no uuid")).toThrow("Could not validate property id.");
+      expect(() => entity.set("associated_entity.id", "no uuid")).toThrow(new Error("Could not validate property id."));
     });
 
     it("throws if association property value with property in an new association is not valid.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(minimalTestEntityV2Dto());
-      expect(() => entity.set("associated_entity.id", "no uuid")).toThrow("Could not validate property id.");
+      expect(() => entity.set("associated_entity.id", "no uuid")).toThrow(new Error("Could not validate property id."));
     });
 
     it("throws if array prop index is not defined.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("array")).toThrow('The property "array" has no index passed.');
+      expect(() => entity.set("array")).toThrow(new Error('The property "array" has no index passed.'));
     });
 
     it("throws if array prop index has an incorrect format.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       expect(() => entity.set("array.[0]")).toThrow(
-        'The property "array" has an invalid index format. Expected format: digits.',
+        new Error('The property "array" has an invalid index format. Expected format: digits.'),
       );
     });
     it("throws if array prop items does not respect items type.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("array.0", [])).toThrow("Could not validate property array.");
+      expect(() => entity.set("array.0", [])).toThrow(new Error("Could not validate property array."));
     });
 
     it("should set the array properties.", () => {
@@ -533,7 +537,7 @@ describe("EntityV2", () => {
       const id = uuid();
       expect(entity.associatedCollection).toBeDefined();
       expect(() => entity.set("associated_collection.1.id", id)).toThrow(
-        'The collection "associatedCollection" has no item at the index "1".',
+        new Error('The collection "associatedCollection" has no item at the index "1".'),
       );
     });
 
@@ -541,7 +545,7 @@ describe("EntityV2", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       expect(() => entity.set("associated_collection.0.id", { id: "no uuid" })).toThrow(
-        "Could not validate property id.",
+        new Error("Could not validate property id."),
       );
     });
   });

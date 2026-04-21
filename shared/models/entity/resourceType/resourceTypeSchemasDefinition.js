@@ -23,9 +23,8 @@ export const RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG = "v5-default-with-totp";
 export const RESOURCE_TYPE_V5_TOTP_SLUG = "v5-totp-standalone";
 export const RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG = "v5-custom-fields";
 export const RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG = "v5-note";
-export const RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG = "v5-pin-code";
 
-// Plaintext secret schema for slug: "password-string"
+//Plaintext secret schema for slug: "password-string"
 export const RESOURCE_TYPE_PASSWORD_STRING_LEGACY_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -58,7 +57,7 @@ export const RESOURCE_TYPE_PASSWORD_STRING_LEGACY_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "password-and-description"
+//Plaintext secret schema for slug: "password-and-description"
 const RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -97,7 +96,7 @@ const RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "totp"
+//Plaintext secret schema for slug: "totp"
 const RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -145,7 +144,7 @@ const RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "password-description-totp"
+//Plaintext secret schema for slug: "password-description-totp"
 const RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -185,7 +184,7 @@ const RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "v5-custom-fields"
+//Plaintext secret schema for slug: "v5-custom-fields"
 const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -301,7 +300,7 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "v5-default"
+//Plaintext secret schema for slug: "v5-default"
 const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -375,7 +374,7 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "v5-password-string"
+//Plaintext secret schema for slug: "v5-password-string"
 const RESOURCE_TYPE_V5_PASSWORD_STRING_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -431,7 +430,7 @@ const RESOURCE_TYPE_V5_PASSWORD_STRING_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "v5-default-with-totp"
+//Plaintext secret schema for slug: "v5-default-with-totp"
 const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -506,7 +505,7 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "v5-totp-standalone"
+//Plaintext secret schema for slug: "v5-totp-standalone"
 const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -586,7 +585,7 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "v5-note"
+//Plaintext secret schema for slug: "v5-note"
 const RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
@@ -647,65 +646,6 @@ const RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "v5-pin-code"
-const RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_DEFINITION_SCHEMA = {
-  resource: {
-    type: "object",
-    required: ["name"],
-    properties: {
-      name: {
-        type: "string",
-        maxLength: 255,
-      },
-      description: {
-        type: "string",
-        maxLength: 10000,
-        nullable: true,
-      },
-      icon: {
-        type: "object",
-        required: [],
-        properties: {
-          type: {
-            type: "string",
-            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
-          },
-          value: {
-            type: "number",
-            minimum: 0,
-            nullable: true,
-          },
-          background_color: {
-            type: "string",
-            nullable: true,
-          },
-        },
-      },
-    },
-  },
-  secret: {
-    type: "object",
-    required: ["pin_code", "object_type"],
-    properties: {
-      object_type: {
-        type: "string",
-        enum: ["PASSBOLT_SECRET_DATA"],
-      },
-      pin_code: {
-        type: "string",
-        minLength: 4,
-        maxLength: 12,
-        pattern: "^\\d+$",
-      },
-      description: {
-        type: "string",
-        maxLength: 50000,
-        nullable: true,
-      },
-    },
-  },
-};
-
 export const V4_TO_V5_RESOURCE_TYPE_MAPPING = {
   [RESOURCE_TYPE_PASSWORD_STRING_SLUG]: RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   [RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG]: RESOURCE_TYPE_V5_DEFAULT_SLUG,
@@ -726,7 +666,6 @@ class ResourceTypeSchemasDefinition {
       [RESOURCE_TYPE_V5_TOTP_SLUG]: RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG]: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA,
-      [RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_DEFINITION_SCHEMA,
     };
   }
 }

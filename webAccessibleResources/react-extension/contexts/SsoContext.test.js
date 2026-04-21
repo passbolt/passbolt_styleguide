@@ -12,6 +12,7 @@
  * @since         3.9.0
  */
 
+import each from "jest-each";
 import mockComponentSetState from "../test/mock/components/React/mockSetState";
 import { SsoContextProvider } from "./SsoContext";
 import { defaultProps } from "./SsoContext.test.data";
@@ -22,10 +23,10 @@ beforeEach(() => {
 });
 
 describe("SsoContextProvider", () => {
-  describe.each([
+  each([
     { name: "provider is Azure", providerId: "azure" },
     { name: "no provider available", providerId: null },
-  ])(`SsoContextProvider configuration handling`, (scenario) => {
+  ]).describe(`SsoContextProvider configuration handling`, (scenario) => {
     it(`SsoContextProvider::loadSsoConfiguration: Should call for the background page to retrieve the SSO provider data and set it on its state: ${scenario.name}`, async () => {
       const props = defaultProps(null, scenario.providerId);
       const contextProvider = new SsoContextProvider(props);

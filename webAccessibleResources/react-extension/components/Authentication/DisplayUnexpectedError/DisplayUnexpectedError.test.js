@@ -14,7 +14,6 @@
 import { defaultProps, passboltApiFetchErrorProps } from "./DisplayUnexpectedError.test.data";
 import DisplayUnexpectedErrorTestPage from "./DisplayUnexpectedError.test.page";
 import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
-import WindowNavigationService from "../../../../shared/utils/windowNavigationService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,10 +25,12 @@ describe("DisplayUnexpectedError", () => {
     const page = new DisplayUnexpectedErrorTestPage(props);
 
     expect.assertions(2);
-    jest.spyOn(WindowNavigationService, "reload").mockImplementation(() => {});
+    Object.defineProperty(window, "location", {
+      value: { reload: jest.fn() },
+    });
     expect(page.moreDetailsCta).toBeNull();
     await page.tryAgain();
-    expect(WindowNavigationService.reload).toHaveBeenCalled();
+    expect(window.location.reload).toHaveBeenCalled();
   });
 
   it("As a user I should see error details if the error carry some", async () => {
@@ -49,6 +50,9 @@ describe("DisplayUnexpectedError", () => {
 
     jest.spyOn(props.context.port, "request");
     expect.assertions(2);
+    Object.defineProperty(window, "location", {
+      value: { reload: jest.fn() },
+    });
     expect(page.moreDetailsCta).toBeNull();
     await page.tryAgain();
     expect(props.context.port.request).toHaveBeenCalledWith("passbolt.tab.reload");

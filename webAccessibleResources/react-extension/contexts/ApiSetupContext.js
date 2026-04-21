@@ -19,7 +19,6 @@ import { BROWSER_NAMES, detectBrowserName } from "../../shared/lib/Browser/detec
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltServiceUnavailableError from "../../shared/lib/Error/PassboltServiceUnavailableError";
 import AuthLogoutService from "../../shared/services/api/auth/AuthLogoutService";
-import WindowNavigationService from "../../shared/utils/windowNavigationService";
 
 /**
  * The Api setup context.
@@ -136,7 +135,7 @@ class ApiSetupContextProvider extends React.Component {
       return this.setState({ unexpectedError: error, state: ApiSetupContextState.UNEXPECTED_ERROR_STATE });
     }
 
-    WindowNavigationService.reload();
+    window.location.reload();
   }
 
   /**

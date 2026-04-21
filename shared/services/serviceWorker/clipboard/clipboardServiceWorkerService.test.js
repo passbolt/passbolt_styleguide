@@ -42,7 +42,7 @@ describe("ClipboardServiceWorkerService", () => {
 
       const clipboardContent = 42;
 
-      await expect(() => service.copyTemporarily(clipboardContent)).rejects.toThrow();
+      await expect(() => service.copyTemporarily(clipboardContent)).rejects.toThrowError();
     });
   });
 
@@ -68,7 +68,7 @@ describe("ClipboardServiceWorkerService", () => {
 
       const clipboardContent = 42;
 
-      await expect(() => service.copy(clipboardContent)).rejects.toThrow();
+      await expect(() => service.copy(clipboardContent)).rejects.toThrowError();
     });
   });
 });

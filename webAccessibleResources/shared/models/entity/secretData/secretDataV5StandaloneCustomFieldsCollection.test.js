@@ -167,7 +167,7 @@ describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
       const collection = new SecretDataV5StandaloneCustomFieldsCollection(
         defaultSecretDataV5StandaloneCustomFieldsCollectionDtos(),
       );
-      expect(() => collection.areSecretsDifferent(null)).toThrow();
+      expect(() => collection.areSecretsDifferent(null)).toThrowError();
     });
 
     it("returns true if both collections have different size", () => {

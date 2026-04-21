@@ -24,7 +24,6 @@ import {
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
 } from "./resourceTypeSchemasDefinition";
 import ResourceTypeEntity, { PASSWORD_RESOURCE_TYPES, TOTP_RESOURCE_TYPES } from "./resourceTypeEntity";
 import assertString from "validator/es/lib/util/assertString";
@@ -40,7 +39,6 @@ const SUPPORTED_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
 ];
 
 class ResourceTypesCollection extends EntityV2Collection {
@@ -196,15 +194,6 @@ class ResourceTypesCollection extends EntityV2Collection {
    */
   hasSomeNoteResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
     return this.items.some((resourceType) => resourceType.hasSecretDescription() && resourceType.version === version);
-  }
-
-  /**
-   * Has some pin code resource types
-   * @param {string} [version] The version @todo adapt when v5 will be the default
-   * @returns {boolean}
-   */
-  hasSomePinCodeResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
-    return this.items.some((resourceType) => resourceType.hasPinCode() && resourceType.version === version);
   }
 
   /**

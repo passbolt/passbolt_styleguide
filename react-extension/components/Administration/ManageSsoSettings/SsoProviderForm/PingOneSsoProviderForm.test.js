@@ -22,13 +22,11 @@ beforeEach(() => {
 
 describe("PingOneSsoProviderForm", () => {
   it("Should display the form", () => {
-    expect.assertions(8);
+    expect.assertions(6);
 
     const page = new PingOneSsoProviderFormPage(defaultPingOneProps());
 
     expect(page.exists()).toStrictEqual(true);
-    expect(page.redirectUrl).toBeDefined();
-    expect(page.redirectUrlCopyButton).toBeDefined();
     expect(page.environmentId).toBeDefined();
     expect(page.clientId).toBeDefined();
     expect(page.clientSecret).toBeDefined();
@@ -97,37 +95,6 @@ describe("PingOneSsoProviderForm", () => {
         expect(targetElement).toBeDefined();
         expect(page.currentActiveElement).toStrictEqual(targetElement);
       });
-    });
-  });
-
-  describe("Redirect URL", () => {
-    it("Should generate the redirect URL", () => {
-      expect.assertions(1);
-
-      const page = new PingOneSsoProviderFormPage(defaultPingOneProps());
-
-      expect(page.redirectUrl.value).toEqual("http://localhost/sso/pingone/redirect");
-    });
-
-    it("Should copy the redirect URL", () => {
-      expect.assertions(2);
-
-      const copyMock = jest.fn().mockResolvedValue(null);
-      const page = new PingOneSsoProviderFormPage(
-        defaultPingOneProps({
-          clipboardContext: {
-            copy: copyMock,
-          },
-        }),
-      );
-
-      page.redirectUrlCopyButton.click();
-
-      expect(copyMock).toHaveBeenCalledTimes(1);
-      expect(copyMock).toHaveBeenCalledWith(
-        "http://localhost/sso/pingone/redirect",
-        "The redirection URL has been copied to the clipboard.",
-      );
     });
   });
 });

@@ -23,7 +23,6 @@ import SsoPopupHandlerService from "../../../../shared/services/sso/SsoPopupHand
 import { v4 as uuid } from "uuid";
 import GetRecoverUrlService from "../../../../shared/services/api/sso/GetRecoverUrlService";
 import { act } from "react";
-import WindowNavigationService from "../../../../shared/utils/windowNavigationService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -47,8 +46,13 @@ describe("IdentifyWithSso", () => {
       const expectedUrl = "https://www.passbolt.test";
       const popupUrl = "https://third-party.auth.com";
       const expectedToken = uuid();
+      const location = window.location;
+      delete window.location;
 
-      jest.spyOn(WindowNavigationService, "redirectTo").mockImplementation(() => {});
+      window.location = {
+        href: "/",
+      };
+
       jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async () => popupUrl);
       jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async (url) => {
         expect(url).toStrictEqual(popupUrl);
@@ -69,7 +73,9 @@ describe("IdentifyWithSso", () => {
       // start the SSO process
       await page.clickOnSsoButton();
 
-      expect(WindowNavigationService.redirectTo).toHaveBeenCalledWith(expectedUrl);
+      expect(window.location.href).toStrictEqual(expectedUrl);
+
+      window.location = location;
     });
 
     it("As AN I want to be redirected to the self_registration a successful login attempt and if I am not a registered user", async () => {

@@ -74,7 +74,7 @@ describe("As LU I should see the password export dialog", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
         "The passwords have been exported successfully",
       );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I see a export resources credential dialog after exporting resources in kdbx with success", async () => {
@@ -88,7 +88,7 @@ describe("As LU I should see the password export dialog", () => {
       await waitFor(() => {});
 
       expect(props.dialogContext.open).toHaveBeenCalledWith(ExportResourcesCredentials, { format: "kdbx" });
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I cannot update the form fields and I should see a processing feedback while submitting the form", async () => {
@@ -125,7 +125,7 @@ describe("As LU I should see the password export dialog", () => {
         resourcesIds: null,
         foldersIds: null,
       });
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can stop exporting passwords by closing the dialog", async () => {
@@ -135,7 +135,7 @@ describe("As LU I should see the password export dialog", () => {
         resourcesIds: null,
         foldersIds: null,
       });
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can stop exporting passwords with the keyboard (escape)", async () => {
@@ -145,7 +145,7 @@ describe("As LU I should see the password export dialog", () => {
         resourcesIds: null,
         foldersIds: null,
       });
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I should see an error dialog if the submit operation fails for an unexpected reason", async () => {

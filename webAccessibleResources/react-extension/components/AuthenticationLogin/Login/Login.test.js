@@ -15,6 +15,7 @@
 /**
  * Unit tests on Login in regard of specifications
  */
+import each from "jest-each";
 import LoginPage from "./Login.test.page";
 import { LoginVariations } from "./Login";
 import { defaultProps } from "./Login.test.data";
@@ -25,10 +26,10 @@ beforeEach(() => {
 });
 
 describe("Login", () => {
-  describe.each([
+  each([
     { displayAs: LoginVariations.SETUP }, // Login
     { displayAs: LoginVariations.RECOVER }, // Account recovery check passphrase
-  ])("Common behavior to all context", (_props) => {
+  ]).describe("Common behavior to all context", (_props) => {
     it(`As AN I should be able to enter my secret key passphrase, scenario: ${JSON.stringify(_props)}`, async () => {
       expect.assertions(2);
       const props = defaultProps(_props);

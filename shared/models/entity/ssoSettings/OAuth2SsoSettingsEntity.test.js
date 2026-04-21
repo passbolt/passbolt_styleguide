@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.6.0
  */
-
+import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
@@ -72,20 +72,20 @@ describe("OAuth2SsoSettingsEntity", () => {
   });
 
   describe("Should validate only the supported URL of OAuth2", () => {
-    describe.each([
+    each([
       "https://login.oauth2.com",
       "https://login.oauth2.us",
       "https://login.partner.oauth2.lu",
       "https://localhost",
       "https://192.168.1.1",
-    ])("Should validate the supported URL", (url) => {
+    ]).describe("Should validate the supported URL", (url) => {
       it(`${url}`, () => {
         const dto = defaultOAuth2SsoSettingsFormEntityDto({ url });
         expect(() => new OAuth2SsoSettingsEntity(dto)).not.toThrow();
       });
     });
 
-    describe.each([
+    each([
       "https://login.oauth2.com/",
       "https://login.oauth2.us/",
       "https://login.partner.oauth2.lu/",
@@ -101,7 +101,7 @@ describe("OAuth2SsoSettingsEntity", () => {
       "ftp://login.partner.oauth2.lu/",
       "ftp://localhost/",
       "ftp://192.168.1.1/",
-    ])("Should not validate an unsupported URL", (url) => {
+    ]).describe("Should not validate an unsupported URL", (url) => {
       it(`${url}`, () => {
         const dto = defaultOAuth2SsoSettingsFormEntityDto({ url });
         expect(() => new OAuth2SsoSettingsEntity(dto)).toThrow(EntityValidationError);

@@ -20,8 +20,8 @@ describe("ResourceViewModel", () => {
   describe("::createFromEntity", () => {
     it("should throw an error if used from the abstract class", () => {
       expect.assertions(1);
-      expect(() => ResourceViewModel.createFromEntity()).toThrow(
-        "The ViewModel class should declare how to create a ResourceViewModel from a resource entity.",
+      expect(() => ResourceViewModel.createFromEntity()).toThrowError(
+        new Error("The ViewModel class should declare how to create a ResourceViewModel from a resource entity."),
       );
     });
   });
@@ -29,15 +29,17 @@ describe("ResourceViewModel", () => {
   describe("::getSchema", () => {
     it("should throw an error if used from the abstract class", () => {
       expect.assertions(1);
-      expect(() => ResourceViewModel.getSchema()).toThrow("The ViewModel class should declare its schema.");
+      expect(() => ResourceViewModel.getSchema()).toThrowError(
+        new Error("The ViewModel class should declare its schema."),
+      );
     });
   });
 
   describe("::resourceTypeSlug", () => {
     it("should throw an error if used from the abstract class", () => {
       expect.assertions(1);
-      expect(() => ResourceViewModel.resourceTypeSlug).toThrow(
-        "The ViewModel class should declare its resource type slug.",
+      expect(() => ResourceViewModel.resourceTypeSlug).toThrowError(
+        new Error("The ViewModel class should declare its resource type slug."),
       );
     });
   });
@@ -46,8 +48,8 @@ describe("ResourceViewModel", () => {
     it("should throw an error if used from the abstract class", () => {
       expect.assertions(1);
       const viewModel = new ResourceViewModel();
-      expect(() => viewModel.updateSecret()).toThrow(
-        "The ViewModel class should declare how to update its secret fields.",
+      expect(() => viewModel.updateSecret()).toThrowError(
+        new Error("The ViewModel class should declare how to update its secret fields."),
       );
     });
   });
@@ -56,8 +58,8 @@ describe("ResourceViewModel", () => {
     it("should throw an error if used from the abstract class", () => {
       expect.assertions(1);
       const viewModel = new ResourceViewModel();
-      expect(() => viewModel.canToggleDescription()).toThrow(
-        "The ViewModel class should declare if description can be toggled.",
+      expect(() => viewModel.canToggleDescription()).toThrowError(
+        new Error("The ViewModel class should declare if description can be toggled."),
       );
     });
   });
@@ -66,8 +68,8 @@ describe("ResourceViewModel", () => {
     it("should throw an error as it is using an abstract method", () => {
       expect.assertions(1);
       const viewModel = new ResourceViewModel();
-      expect(() => viewModel.isDescriptionUnencrypted()).toThrow(
-        "The ViewModel class should declare if description is unencrypted.",
+      expect(() => viewModel.isDescriptionUnencrypted()).toThrowError(
+        new Error("The ViewModel class should declare if description is unencrypted."),
       );
     });
   });
@@ -76,8 +78,8 @@ describe("ResourceViewModel", () => {
     it("should throw an error as it is using an abstract method", () => {
       expect.assertions(1);
       const viewModel = new ResourceViewModel();
-      expect(() => viewModel.toResourceDto()).toThrow(
-        "The ViewModel class should declare how to export to a resource dto.",
+      expect(() => viewModel.toResourceDto()).toThrowError(
+        new Error("The ViewModel class should declare how to export to a resource dto."),
       );
     });
   });
@@ -86,8 +88,8 @@ describe("ResourceViewModel", () => {
     it("should throw an error as it is using an abstract method", () => {
       expect.assertions(1);
       const viewModel = new ResourceViewModel();
-      expect(() => viewModel.toSecretDto()).toThrow(
-        "The ViewModel class should declare how to export to a secret dto.",
+      expect(() => viewModel.toSecretDto()).toThrowError(
+        new Error("The ViewModel class should declare how to export to a secret dto."),
       );
     });
   });
@@ -138,8 +140,8 @@ describe("ResourceViewModel", () => {
     it("should throw an error as it is using an abstract method", () => {
       expect.assertions(1);
       const viewModel = new ResourceViewModel();
-      expect(() => viewModel.areSecretsDifferent()).toThrow(
-        "The ViewModel class should declare how to compare secrets.",
+      expect(() => viewModel.areSecretsDifferent()).toThrowError(
+        new Error("The ViewModel class should declare how to compare secrets."),
       );
     });
   });

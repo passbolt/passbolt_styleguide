@@ -46,7 +46,7 @@ describe("As LU I should see the password import result dialog", () => {
       expect(page.hasErrorsFoldersSection).toBeFalsy();
 
       await page.acceptResult();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I see the import result dialog with warnings and errors", async () => {
@@ -63,7 +63,7 @@ describe("As LU I should see the password import result dialog", () => {
       expect(page.hasErrorsFoldersSection).toBeTruthy();
 
       await page.acceptResult();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can open and see warnings resources details", async () => {
@@ -120,7 +120,7 @@ describe("As LU I should see the password import result dialog", () => {
       page = new ImportResourcesResultPage(context, props);
       await page.filterByReference();
       const filter = { type: ResourceWorkspaceFilterTypes.TAG, payload: { tag: { slug: "tag" } } };
-      expect(props.history.push).toHaveBeenCalledWith({ pathname: "/app/passwords", state: { filter } });
+      expect(props.history.push).toBeCalledWith({ pathname: "/app/passwords", state: { filter } });
     });
 
     it("As LU I can filter by folder", async () => {
@@ -128,7 +128,7 @@ describe("As LU I should see the password import result dialog", () => {
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
       await page.filterByReference();
-      expect(props.history.push).toHaveBeenCalledWith(
+      expect(props.history.push).toBeCalledWith(
         `/app/folders/view/${props.resourceWorkspaceContext.resourceFileImportResult.references.folder.id}`,
       );
     });
@@ -138,7 +138,7 @@ describe("As LU I should see the password import result dialog", () => {
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
       await page.closeDialog();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it("As LU I can stop to see the import result dialog with the keyboard (escape)", async () => {
@@ -146,7 +146,7 @@ describe("As LU I should see the password import result dialog", () => {
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
       await page.escapeKey();
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onClose).toBeCalled();
     });
   });
 });
