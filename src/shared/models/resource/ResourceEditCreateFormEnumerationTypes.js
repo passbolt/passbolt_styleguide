@@ -15,7 +15,7 @@
  * Enum corresponding to the entity resource form entity
  *
  * Warning: If the value do not have a "." the mechanism of addSecret in the resource form entity need update
- * @type {{PASSWORD: string, TOTP: string, NOTE: string, PIN_CODE: string, DESCRIPTION: string, APPEARANCE: string}}
+ * @type {{PASSWORD: string, TOTP: string, CUSTOM_FIELDS: string, NOTE: string, PIN_CODE: string, DESCRIPTION: string, URIS: string, APPEARANCE: string}}
  */
 export const ResourceEditCreateFormEnumerationTypes = {
   PASSWORD: "secret.password",

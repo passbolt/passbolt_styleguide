@@ -76,6 +76,16 @@ export const METADATA_DESCRIPTION_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
 ];
 
+// All v5 resource types except PIN code have URIs metadata
+export const METADATA_URIS_RESOURCE_TYPES = [
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
+  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
+  RESOURCE_TYPE_V5_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+];
+
 export const CUSTOM_FIELDS_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
@@ -291,6 +301,14 @@ class ResourceTypeEntity extends EntityV2 {
    */
   hasMetadataDescription() {
     return METADATA_DESCRIPTION_RESOURCE_TYPES.includes(this.slug);
+  }
+
+  /**
+   * Has metadata URIs
+   * @returns {boolean}
+   */
+  hasMetadataUris() {
+    return METADATA_URIS_RESOURCE_TYPES.includes(this.slug);
   }
 
   /**

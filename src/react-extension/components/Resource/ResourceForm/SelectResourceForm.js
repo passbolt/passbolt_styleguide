@@ -19,6 +19,7 @@ import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import AddSVG from "../../../../img/svg/add.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import PinCodeSVG from "../../../../img/passbolt-default-resource-type-icons/pincode.svg";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DropdownItem from "../../Common/Dropdown/DropdownMenuItem";
 import KeySVG from "../../../../img/svg/key.svg";
@@ -192,11 +193,27 @@ class SelectResourceForm extends Component {
   }
 
   /**
+   * Is resource has pin code
+   * @returns {boolean}
+   */
+  get isResourceHasPinCode() {
+    return this.resource?.secret?.pin_code != null;
+  }
+
+  /**
    * Is resource type has description metadata
    * @returns {boolean}
    */
   get isResourceTypeHasDescriptionMetadata() {
     return this.props.resourceType?.hasMetadataDescription();
+  }
+
+  /**
+   * Is resource type has uris metadata
+   * @returns {boolean}
+   */
+  get isResourceTypeHasUrisMetadata() {
+    return this.props.resourceType?.hasMetadataUris();
   }
 
   /**
@@ -241,7 +258,13 @@ class SelectResourceForm extends Component {
    * @returns {boolean}
    */
   get canAddSecret() {
-    return this.canAddSecretPassword || this.canAddSecretTotp || this.canAddSecretNote || this.canAddSecretCustomFields;
+    return (
+      this.canAddSecretPassword ||
+      this.canAddSecretTotp ||
+      this.canAddSecretNote ||
+      this.canAddSecretCustomFields ||
+      this.canAddSecretPinCode
+    );
   }
 
   /**
@@ -250,6 +273,7 @@ class SelectResourceForm extends Component {
    */
   get canAddSecretPassword() {
     return (
+      !this.isResourceHasPinCode &&
       !this.isResourceHasPassword &&
       this.props.resourceTypes?.hasSomePasswordResourceTypes(this.props.resourceType?.version)
     );
@@ -261,7 +285,9 @@ class SelectResourceForm extends Component {
    */
   get canAddSecretTotp() {
     return (
-      !this.isResourceHasTotp && this.props.resourceTypes?.hasSomeTotpResourceTypes(this.props.resourceType?.version)
+      !this.isResourceHasPinCode &&
+      !this.isResourceHasTotp &&
+      this.props.resourceTypes?.hasSomeTotpResourceTypes(this.props.resourceType?.version)
     );
   }
 
@@ -271,6 +297,7 @@ class SelectResourceForm extends Component {
    */
   get canAddSecretCustomFields() {
     return (
+      !this.isResourceHasPinCode &&
       !this.isResourceHasCustomFields &&
       this.props.resourceTypes?.hasSomeCustomFieldsResourceTypes(this.props.resourceType?.version)
     );
@@ -285,6 +312,22 @@ class SelectResourceForm extends Component {
       !this.isResourceHasNote &&
       !this.isResourceTypeV4PasswordString &&
       this.props.resourceTypes?.hasSomeNoteResourceTypes(this.props.resourceType?.version)
+    );
+  }
+
+  /**
+   * Can add secret pin code
+   * A PIN code can only be mixed with a note.
+   * @returns {boolean}
+   */
+  get canAddSecretPinCode() {
+    return (
+      !this.isResourceHasMultipleSecret &&
+      !this.isResourceHasPassword &&
+      !this.isResourceHasCustomFields &&
+      !this.isResourceHasTotp &&
+      !this.isResourceHasPinCode &&
+      this.props.resourceTypes?.hasSomePinCodeResourceTypes(this.props.resourceType?.version)
     );
   }
 
@@ -370,6 +413,21 @@ class SelectResourceForm extends Component {
                     <NotesSVG />
                     <span>
                       <Trans>Note</Trans>
+                    </span>
+                  </button>
+                </DropdownItem>
+              )}
+              {this.canAddSecretPinCode && (
+                <DropdownItem>
+                  <button
+                    id="pin_code_action"
+                    type="button"
+                    className="no-border"
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.PIN_CODE)}
+                  >
+                    <PinCodeSVG />
+                    <span>
+                      <Trans>Pin code</Trans>
                     </span>
                   </button>
                 </DropdownItem>
@@ -508,6 +566,35 @@ class SelectResourceForm extends Component {
                   )}
                 </div>
               )}
+              {this.isResourceHasPinCode && (
+                <div
+                  className={`section-content ${ResourceEditCreateFormEnumerationTypes.PIN_CODE === this.selectedForm ? "selected" : ""}`}
+                >
+                  <button
+                    type="button"
+                    className="no-border"
+                    id="secret-pin-code-tab"
+                    disabled={this.props.disabled}
+                    onClick={(event) => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.PIN_CODE)}
+                  >
+                    <PinCodeSVG />
+                    <span className="ellipsis">
+                      <Trans>Pin code</Trans>
+                    </span>
+                  </button>
+                  {this.isResourceHasMultipleSecret && (
+                    <button
+                      type="button"
+                      id="delete-pin-code"
+                      disabled={this.props.disabled}
+                      className="button-transparent inline"
+                      onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.PIN_CODE)}
+                    >
+                      <DeleteSVG />
+                    </button>
+                  )}
+                </div>
+              )}
             </>
           )}
           {this.shouldDisplayMetadataSection && (
@@ -525,42 +612,42 @@ class SelectResourceForm extends Component {
               {this.state.displayMetadata && (
                 <>
                   {this.isResourceTypeV5 && (
-                    <>
-                      <div
-                        className={`section-content ${ResourceEditCreateFormEnumerationTypes.APPEARANCE === this.selectedForm ? "selected" : ""}`}
+                    <div
+                      className={`section-content ${ResourceEditCreateFormEnumerationTypes.APPEARANCE === this.selectedForm ? "selected" : ""}`}
+                    >
+                      <button
+                        type="button"
+                        id="menu-appearance"
+                        className="no-border"
+                        disabled={this.props.disabled}
+                        onClick={(event) =>
+                          this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.APPEARANCE)
+                        }
                       >
-                        <button
-                          type="button"
-                          id="menu-appearance"
-                          className="no-border"
-                          disabled={this.props.disabled}
-                          onClick={(event) =>
-                            this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.APPEARANCE)
-                          }
-                        >
-                          <PaintBrushSVG />
-                          <span className="ellipsis">
-                            <Trans>Appearance</Trans>
-                          </span>
-                        </button>
-                      </div>
-                      <div
-                        className={`section-content ${ResourceEditCreateFormEnumerationTypes.URIS === this.selectedForm ? "selected" : ""}`}
+                        <PaintBrushSVG />
+                        <span className="ellipsis">
+                          <Trans>Appearance</Trans>
+                        </span>
+                      </button>
+                    </div>
+                  )}
+                  {this.isResourceTypeHasUrisMetadata && (
+                    <div
+                      className={`section-content ${ResourceEditCreateFormEnumerationTypes.URIS === this.selectedForm ? "selected" : ""}`}
+                    >
+                      <button
+                        type="button"
+                        id="menu-uris"
+                        className="no-border"
+                        disabled={this.props.disabled}
+                        onClick={(event) => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.URIS)}
                       >
-                        <button
-                          type="button"
-                          id="menu-uris"
-                          className="no-border"
-                          disabled={this.props.disabled}
-                          onClick={(event) => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.URIS)}
-                        >
-                          <LinkSVG />
-                          <span className="ellipsis">
-                            <Trans>URIs</Trans>
-                          </span>
-                        </button>
-                      </div>
-                    </>
+                        <LinkSVG />
+                        <span className="ellipsis">
+                          <Trans>URIs</Trans>
+                        </span>
+                      </button>
+                    </div>
                   )}
                   {this.isResourceTypeHasDescriptionMetadata && (
                     <div
