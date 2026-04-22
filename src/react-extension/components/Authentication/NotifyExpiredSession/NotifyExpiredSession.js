@@ -22,18 +22,26 @@ import PropTypes from "prop-types";
  * This component allows user to delete a tag of the resources
  */
 class NotifyExpiredSession extends Component {
+  /**
+   * Constructor
+   * @param {object} props
+   */
   constructor(props) {
     super(props);
     this.initEventHandlers();
     this.createReferences();
   }
 
+  /**
+   * Init the component event handlers.
+   */
   initEventHandlers() {
     this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.handleSignInClick = this.handleSignInClick.bind(this);
   }
 
   /**
-   * Create references
+   * Create component references.
    */
   createReferences() {
     this.loginLinkRef = React.createRef();
@@ -47,22 +55,37 @@ class NotifyExpiredSession extends Component {
   }
 
   /**
-   * Go to the login page.
+   * Handle sign-in button click.
    */
-  goToLogin() {
-    this.loginLinkRef.current.click();
+  handleSignInClick() {
+    this.goToLogin();
   }
 
   /**
-   * Get the login url
-   * @returns {string}
+   * Go to the login page.
    */
-  get loginUrl() {
-    let baseUrl = this.props.context.userSettings && this.props.context.userSettings.getTrustedDomain();
-    baseUrl = baseUrl || this.props.context.trustedDomain;
-    return `${baseUrl}/auth/login`;
+  goToLogin() {
+    /*
+     * PB-50644
+     * Force a full page reload instead of navigating via tabs.update to the
+     * auth login url.
+     *
+     * Starting with Chrome 147, the page may be restored from the browser's
+     * Back/Forward Cache (BFCache) when navigating with tabs update primitive.
+     * When this happens, the extension message port is closed ("The page
+     * keeping the extension port is moved into back/forward cache, so the
+     * message channel is closed") and the extension fails to re-initialize
+     * on the restored page.
+     *
+     * Using tabs.reload bypasses BFCache and forces a fresh page load,
+     * ensuring the content script and message port are properly re-established.
+     */
+    this.props.context.port.request("passbolt.tab.reload");
   }
 
+  /**
+   * @returns {Element}
+   */
   render() {
     return (
       <DialogWrapper
@@ -78,7 +101,7 @@ class NotifyExpiredSession extends Component {
         <div className="submit-wrapper clearfix">
           <a
             ref={this.loginLinkRef}
-            href={this.loginUrl}
+            onClick={this.handleSignInClick}
             className="primary button form"
             target="_parent"
             role="button"
