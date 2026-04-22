@@ -600,7 +600,7 @@ export const domTwoEmailInputsAndPassword = `
  */
 export const domSingleOTPField = `
 <div>
-  <input autocomplete="one-time-code" />
+  <input autocomplete="one-time-code" data-testid="otp" />
 </div>`;
 
 /**
@@ -611,7 +611,7 @@ export const domSingleOTPFieldWithUsernameAndPassword = `
 <div>
   <input type="text" name="username" />
   <input type="password" />
-  <input autocomplete="one-time-code" />
+  <input autocomplete="one-time-code" data-testid="otp" />
 </div>`;
 
 /**
@@ -619,7 +619,7 @@ export const domSingleOTPFieldWithUsernameAndPassword = `
  * @type {string}
  */
 export const domSingleOTPMultiField = `
-<div>
+<div data-testid="otp">
     <input class="time-otp" />
     <input class="time-otp" />
     <input class="time-otp" />
@@ -633,7 +633,7 @@ export const domSingleOTPMultiField = `
  * @type {string}
  */
 export const domSingleOTPMultiFieldAriaLabel = `
-<div>
+<div data-testid="otp">
     <input aria-label="time-based otp" />
     <input aria-label="time-based otp" />
     <input aria-label="time-based otp" />
