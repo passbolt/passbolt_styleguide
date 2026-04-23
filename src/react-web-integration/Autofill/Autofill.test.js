@@ -36,6 +36,8 @@ import {
   domSDRLoginForm,
   domBestKeywordOnFirstElement,
   domSameKeywordPriorityTwoElements,
+  domOTPSingleFieldPatternLookalike,
+  domOTPMultiFieldNumberLookalike,
 } from "../lib/InForm/InformManager.test.data";
 import { defaultFormData } from "./Autofill.test.data";
 import MockPort from "../../react-extension/test/mock/MockPort";
@@ -323,6 +325,30 @@ describe("Autofill::getOTPElement", () => {
     expect(UserEventsService.autofill).toHaveBeenCalledWith(page.otp, totp);
 
     expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+  });
+
+  [
+    { label: "the pattern isn't supported", value: domOTPSingleFieldPatternLookalike },
+    {
+      label: "there is a single OTP field represented by multiple generic number inputs",
+      value: domOTPMultiFieldNumberLookalike,
+    },
+  ].forEach(({ label, value: testCase }) => {
+    it(`Shouldn't get the OTP field when ${label}`, () => {
+      expect.assertions(2);
+      document.body.innerHTML = testCase;
+
+      const formData = defaultFormData();
+      const page = new AutofillPage();
+
+      page.fillForm(formData);
+
+      expect(UserEventsService.autofill).toHaveBeenCalledTimes(0);
+      expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "ERROR", {
+        message: "Unable to find the input elements on this page.",
+        name: "Error",
+      });
+    });
   });
 });
 
