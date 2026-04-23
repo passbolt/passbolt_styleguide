@@ -23,6 +23,7 @@ export default {
    * The selector create-account-input is for ovh.com website
    * The selector benutzerkennung is for german website
    * The selector benutzername is also for somes german websites
+   * The selector benutzer is also for somes german websites
    * The selector utilisateur is for french website
    * The selector utente is for italian website
    */
@@ -42,6 +43,7 @@ export default {
   input[type='text' i][id*='logto' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='benutzerkennung' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='benutzername' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='benutzer' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='utilisateur' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='utente' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='name' i]:not([hidden]):not([disabled]),
