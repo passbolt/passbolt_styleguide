@@ -1,4 +1,4 @@
-## v5.11.2
+## v5.11.4
 
 ### Fixed
-- PB-50617 - Add PingOne redirect URL field
+- PB-51067 - Rework TOTP selectors
