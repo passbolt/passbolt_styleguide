@@ -77,7 +77,7 @@ class SecretDataV5StandalonePinCodeEntity extends SecretDataEntity {
    * @returns {boolean}
    */
   areSecretsDifferent(secretDto) {
-    return this.pinCode !== secretDto.pin_code || this.description !== secretDto.description;
+    return this.pin_code !== secretDto.pin_code || this.description !== secretDto.description;
   }
 
   /*
@@ -90,7 +90,7 @@ class SecretDataV5StandalonePinCodeEntity extends SecretDataEntity {
    * Get pin code
    * @returns {string} pin code
    */
-  get pinCode() {
+  get pin_code() {
     return this._props.pin_code;
   }
 

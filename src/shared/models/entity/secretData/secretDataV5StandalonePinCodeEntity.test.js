@@ -55,7 +55,7 @@ describe("secretDataV5StandalonePinCodeEntity", () => {
 
       const dto = defaultSecretDataV5StandalonePinCodeDto({ pin_code: "1234" });
       const entity = new SecretDataV5StandalonePinCodeEntity(dto);
-      expect(entity.pinCode).toStrictEqual("1234");
+      expect(entity.pin_code).toStrictEqual("1234");
 
       expect(
         () => new SecretDataV5StandalonePinCodeEntity(defaultSecretDataV5StandalonePinCodeDto({ pin_code: "12ab" })),
@@ -71,7 +71,7 @@ describe("secretDataV5StandalonePinCodeEntity", () => {
       const entity = new SecretDataV5StandalonePinCodeEntity(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
-      expect(entity.pinCode).toStrictEqual(dto.pin_code);
+      expect(entity.pin_code).toStrictEqual(dto.pin_code);
       expect(entity.description).toStrictEqual(dto.description);
     });
   });
@@ -83,7 +83,7 @@ describe("secretDataV5StandalonePinCodeEntity", () => {
       const entity = SecretDataV5StandalonePinCodeEntity.createFromDefault({}, { validate: false });
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
-      expect(entity.pinCode).toStrictEqual("");
+      expect(entity.pin_code).toStrictEqual("");
     });
 
     it("create with data provided", () => {
@@ -92,7 +92,7 @@ describe("secretDataV5StandalonePinCodeEntity", () => {
       const entity = SecretDataV5StandalonePinCodeEntity.createFromDefault(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
-      expect(entity.pinCode).toStrictEqual(dto.pin_code);
+      expect(entity.pin_code).toStrictEqual(dto.pin_code);
     });
   });
 

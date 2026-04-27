@@ -26,14 +26,31 @@ import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 class AddResourcePinCode extends Component {
   constructor(props) {
     super(props);
+
     this.state = this.defaultState;
+
     this.bindCallbacks();
     this.createReferences();
   }
 
+  /**
+   * Returns the default component state.
+   * pinCodeLength is set to the length of the provided pin code if it is within the constraints.
+   * Otherwise, it is set to the default length.
+   * @returns {object}
+   */
   get defaultState() {
+    let pinCodeLength = PIN_CODE_LENGTH_CONSTRAINTS.DEFAULT;
+
+    if (
+      this.props.resource?.secret?.pin_code?.length >= PIN_CODE_LENGTH_CONSTRAINTS.MIN &&
+      this.props.resource?.secret?.pin_code?.length <= PIN_CODE_LENGTH_CONSTRAINTS.MAX
+    ) {
+      pinCodeLength = this.props.resource.secret.pin_code.length;
+    }
+
     return {
-      pinCodeLength: PIN_CODE_LENGTH_CONSTRAINTS.DEFAULT,
+      pinCodeLength,
       displayAdvancedSettings: false,
     };
   }
@@ -169,7 +186,7 @@ class AddResourcePinCode extends Component {
           </h2>
         </div>
         <div className="content">
-          <div className="pin-code-fields">
+          <div className="password-fields">
             <div
               className={`input-password-wrapper input ${this.hasFieldPinCodeError() ? "error" : ""} ${this.props.disabled ? "disabled" : ""}`}
             >
