@@ -484,6 +484,23 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Check if selected resources are expired.
+   * @returns {boolean} true if at least one resource is expired
+   */
+  isResourcesExpired() {
+    return this.selectedResources?.length > 0
+      ? this.selectedResources.every((resource) => {
+          if (resource.expired) {
+            const expiryDate = new Date(resource.expired);
+            return expiryDate <= new Date();
+          }
+
+          return false;
+        })
+      : false;
+  }
+
+  /**
    * Can override password expiry
    * @return {boolean}
    */
@@ -527,6 +544,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     // Three dot menu
     const canExport = this.canExport();
     const canViewSecretHistory = hasOneResourceSelected && this.canViewSecretHistory();
+    const isExpired = this.isResourcesExpired();
     const canSetExpiryDate = this.canOverridePasswordExpiry() && canUpdate;
 
     // Copy menu
@@ -692,19 +710,21 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                             </span>
                           </button>
                         </DropdownMenuItem>
-                        <DropdownMenuItem separator={canViewSecretHistory}>
-                          <button
-                            id="mark_as_expired_action"
-                            type="button"
-                            className="no-border"
-                            onClick={this.handleMarkAsExpiredClick}
-                          >
-                            <AlarmClockSVG />
-                            <span>
-                              <Trans>Mark as expired</Trans>
-                            </span>
-                          </button>
-                        </DropdownMenuItem>
+                        {!isExpired && (
+                          <DropdownMenuItem separator={canViewSecretHistory}>
+                            <button
+                              id="mark_as_expired_action"
+                              type="button"
+                              className="no-border"
+                              onClick={this.handleMarkAsExpiredClick}
+                            >
+                              <AlarmClockSVG />
+                              <span>
+                                <Trans>Mark as expired</Trans>
+                              </span>
+                            </button>
+                          </DropdownMenuItem>
+                        )}
                       </>
                     )}
                     {canViewSecretHistory && (

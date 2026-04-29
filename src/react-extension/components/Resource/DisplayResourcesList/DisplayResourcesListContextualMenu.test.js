@@ -19,6 +19,7 @@ import "../../../../../test/mocks/mockClipboard";
 import {
   defaultProps,
   propsDenyUIActions,
+  propsResourceExpired,
   propsResourceStandaloneTotp,
   propsResourceTotp,
   propsResourceWithReadOnlyPermission,
@@ -412,6 +413,16 @@ describe("DisplayResourcesListContextualMenu", () => {
       page = new DisplayResourcesListContextualMenuPage(props);
       expect(page.markAsExpiredItem).toBeNull();
       expect(page.setExpiryDateItem).toBeNull();
+    });
+
+    it("As LU I should not see the mark as expired action if the resource is already expired", () => {
+      expect.assertions(2);
+
+      const props = propsResourceExpired();
+      page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.markAsExpiredItem).toBeNull();
+      expect(page.setExpiryDateItem).not.toBeNull();
     });
   });
 

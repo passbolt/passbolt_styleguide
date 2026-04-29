@@ -21,6 +21,7 @@ import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {
   defaultResourceDto,
+  resourceExpiredDto,
   resourceStandaloneTotpDto,
   resourceWithFavoriteDto,
   resourceWithReadPermissionDto,
@@ -182,6 +183,38 @@ export const defaultPropsMultipleResource = (data = {}) =>
  */
 export const defaultPropsMultipleResourceUpdateRights = (data = {}) => {
   const selectedResources = [resourcesMock[0], resourcesMock[1]];
+  return defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources,
+      lockDisplayDetail: true,
+    }),
+    passwordExpiryContext: defaultPasswordExpirySettingsContext({ policy_override: true }),
+    ...data,
+  });
+};
+
+/**
+ * Default props multiple selected resources where all are expired
+ * @returns {{resourceWorkspaceContext}}
+ */
+export const defaultPropsMultipleResourceAllExpired = (data = {}) => {
+  const selectedResources = [resourceExpiredDto({ name: "expired-1" }), resourceExpiredDto({ name: "expired-2" })];
+  return defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources,
+      lockDisplayDetail: true,
+    }),
+    passwordExpiryContext: defaultPasswordExpirySettingsContext({ policy_override: true }),
+    ...data,
+  });
+};
+
+/**
+ * Default props multiple selected resources where only some are expired
+ * @returns {{resourceWorkspaceContext}}
+ */
+export const defaultPropsMultipleResourceSomeExpired = (data = {}) => {
+  const selectedResources = [resourcesMock[0], resourceExpiredDto({ name: "expired" })];
   return defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources,
