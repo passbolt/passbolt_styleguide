@@ -46,7 +46,6 @@
     "grunt-contrib-less": "^3.0.0",
     "grunt-contrib-symlink": "^1.0.0",
     "grunt-contrib-watch": "^1.1.0",
-    "grunt-header": "^1.1.0",
     "grunt-shell": "^4.0.0",
     "history": "^4.10.0",
     "i18next-parser": "^9.3.0",
