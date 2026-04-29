@@ -18,6 +18,7 @@ import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorks
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import {
   defaultResourceDto,
+  resourceExpiredDto,
   resourceStandaloneTotpDto,
   resourceWithReadPermissionDto,
   resourceWithTotpDto,
@@ -97,6 +98,17 @@ export function propsResourceWithUpdatePermission() {
   return {
     ...defaultProps(),
     resource: resourceWithUpdatePermissionDto(),
+  };
+}
+
+/**
+ * Props with a selected resource that is already expired
+ * @returns {object}
+ */
+export function propsResourceExpired() {
+  return {
+    ...defaultProps(),
+    resource: resourceExpiredDto(),
   };
 }
 
