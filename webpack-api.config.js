@@ -9,7 +9,6 @@ const config = {
     "api-triage": path.resolve(__dirname, "./src/react-extension/ApiTriage.entry.js"), // The triage application served by the API
     "api-feedback": path.resolve(__dirname, "./src/react-extension/ApiFeedback.entry.js"), // The feedback application served by the API
   },
-  mode: "production",
   module: {
     rules: [
       {
@@ -18,9 +17,9 @@ const config = {
         loader: "babel-loader",
         options: {
           presets: ["@babel/react"],
-        }
+        },
       },
-      {test: /\.json$/, loader: 'json-loader'},
+      { test: /\.json$/, loader: "json-loader" },
       // Transform SVG as react component
       {
         test: /\.svg$/i,
@@ -32,7 +31,7 @@ const config = {
               svgoConfig: {
                 plugins: [
                   {
-                    name: 'preset-default',
+                    name: "preset-default",
                     params: {
                       overrides: {
                         removeViewBox: false,
@@ -43,19 +42,19 @@ const config = {
                     },
                   },
                   {
-                    name: 'prefixIds',
+                    name: "prefixIds",
                     params: {
                       prefixIds: false,
-                      prefixClassNames: false
+                      prefixClassNames: false,
                     },
                   },
                 ],
-              }
-            }
-          }
+              },
+            },
+          },
         ],
-      }
-    ]
+      },
+    ],
   },
   optimization: {
     splitChunks: {
@@ -63,25 +62,25 @@ const config = {
         commons: {
           test: /[\\/]node_modules[\\/]/,
           name: "api-vendors",
-          chunks: "all"
+          chunks: "all",
         },
-      }
+      },
     },
   },
-  resolve: {extensions: ["*", ".js", ".jsx"]},
+  resolve: { extensions: [".js", ".jsx"] },
   output: {
     path: path.resolve(__dirname, "build/js/dist/"),
     pathinfo: true,
-    filename: "[name].js"
+    filename: "[name].js",
   },
 };
 
-exports.default = function (env) {
-  env = env || {};
-  // Enable debug mode.
-  if (env.debug) {
-    config.mode = "development";
+exports.default = function () {
+  const isDevelopment = process.env.NODE_ENV === "development";
+  config.mode = isDevelopment ? "development" : "production";
+  if (isDevelopment) {
     config.devtool = "inline-source-map";
   }
+
   return config;
 };
