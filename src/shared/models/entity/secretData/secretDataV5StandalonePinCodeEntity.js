@@ -66,6 +66,8 @@ class SecretDataV5StandalonePinCodeEntity extends SecretDataEntity {
     switch (propName) {
       case "pin_code":
         return "";
+      case "description":
+        return "";
       default:
         return;
     }

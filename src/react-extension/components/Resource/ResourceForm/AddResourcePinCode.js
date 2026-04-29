@@ -191,7 +191,7 @@ class AddResourcePinCode extends Component {
               className={`input-password-wrapper input ${this.hasFieldPinCodeError() ? "error" : ""} ${this.props.disabled ? "disabled" : ""}`}
             >
               <label htmlFor="resource-pin-code">
-                <Trans>Pin code</Trans>
+                <Trans>Code</Trans>
               </label>
               <div className="password-button-inline">
                 <Password
@@ -220,7 +220,7 @@ class AddResourcePinCode extends Component {
           <div className="additional-information">
             <button type="button" className="section-header no-border" onClick={this.toggleDisplayAdvancedSettings}>
               <h4>
-                <Trans>Advanced settings</Trans>
+                <Trans>Advanced pin code generation</Trans>
               </h4>
               {this.state.displayAdvancedSettings ? <CaretDownSVG /> : <CaretRightSVG />}
             </button>

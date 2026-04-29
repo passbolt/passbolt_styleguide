@@ -31,7 +31,7 @@ import KeySVG from "../../../../img/svg/key.svg";
 import TotpSVG from "../../../../img/svg/totp.svg";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 import NoteSVG from "../../../../img/svg/notes.svg";
-import PinCodeSVG from "../../../../img/passbolt-default-resource-type-icons/pincode.svg";
+import PinCodeSVG from "../../../../img/svg/pin.svg";
 
 class DisplayContentTypesAllowedContentTypesAdministration extends Component {
   /** @type {ResourceTypesFormEntity}*/

@@ -102,6 +102,11 @@ describe("secretDataV5StandalonePinCodeEntity", () => {
       expect(SecretDataV5StandalonePinCodeEntity.getDefaultProp("pin_code")).toStrictEqual("");
     });
 
+    it("get default description", () => {
+      expect.assertions(1);
+      expect(SecretDataV5StandalonePinCodeEntity.getDefaultProp("description")).toStrictEqual("");
+    });
+
     it("get default unknown", () => {
       expect.assertions(1);
       expect(SecretDataV5StandalonePinCodeEntity.getDefaultProp("unknown")).toBeUndefined();

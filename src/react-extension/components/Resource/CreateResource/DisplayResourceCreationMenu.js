@@ -24,7 +24,7 @@ import Tabs from "../../Common/Tab/Tabs";
 import KeySVG from "../../../../img/svg/key.svg";
 import TotpSVG from "../../../../img/svg/totp.svg";
 import NotesSVG from "../../../../img/svg/notes.svg";
-import PinCodeSVG from "../../../../img/passbolt-default-resource-type-icons/pincode.svg";
+import PinCodeSVG from "../../../../img/svg/pin.svg";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import MetadataTypesSettingsEntity, {
   RESOURCE_TYPE_VERSION_4,

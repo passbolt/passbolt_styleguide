@@ -19,7 +19,7 @@ import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import AddSVG from "../../../../img/svg/add.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import PinCodeSVG from "../../../../img/passbolt-default-resource-type-icons/pincode.svg";
+import PinCodeSVG from "../../../../img/svg/pin.svg";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DropdownItem from "../../Common/Dropdown/DropdownMenuItem";
 import KeySVG from "../../../../img/svg/key.svg";
@@ -537,35 +537,6 @@ class SelectResourceForm extends Component {
                   )}
                 </div>
               )}
-              {this.isResourceHasNote && (
-                <div
-                  className={`section-content ${ResourceEditCreateFormEnumerationTypes.NOTE === this.selectedForm ? "selected" : ""}`}
-                >
-                  <button
-                    type="button"
-                    className="no-border"
-                    id="secret-note-tab"
-                    disabled={this.props.disabled}
-                    onClick={(event) => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.NOTE)}
-                  >
-                    <NotesSVG />
-                    <span className="ellipsis">
-                      <Trans>Note</Trans>
-                    </span>
-                  </button>
-                  {this.isResourceHasMultipleSecret && (
-                    <button
-                      type="button"
-                      id="delete-note"
-                      disabled={this.props.disabled}
-                      className="button-transparent inline"
-                      onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.NOTE)}
-                    >
-                      <DeleteSVG />
-                    </button>
-                  )}
-                </div>
-              )}
               {this.isResourceHasPinCode && (
                 <div
                   className={`section-content ${ResourceEditCreateFormEnumerationTypes.PIN_CODE === this.selectedForm ? "selected" : ""}`}
@@ -589,6 +560,35 @@ class SelectResourceForm extends Component {
                       disabled={this.props.disabled}
                       className="button-transparent inline"
                       onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.PIN_CODE)}
+                    >
+                      <DeleteSVG />
+                    </button>
+                  )}
+                </div>
+              )}
+              {this.isResourceHasNote && (
+                <div
+                  className={`section-content ${ResourceEditCreateFormEnumerationTypes.NOTE === this.selectedForm ? "selected" : ""}`}
+                >
+                  <button
+                    type="button"
+                    className="no-border"
+                    id="secret-note-tab"
+                    disabled={this.props.disabled}
+                    onClick={(event) => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.NOTE)}
+                  >
+                    <NotesSVG />
+                    <span className="ellipsis">
+                      <Trans>Note</Trans>
+                    </span>
+                  </button>
+                  {this.isResourceHasMultipleSecret && (
+                    <button
+                      type="button"
+                      id="delete-note"
+                      disabled={this.props.disabled}
+                      className="button-transparent inline"
+                      onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.NOTE)}
                     >
                       <DeleteSVG />
                     </button>
