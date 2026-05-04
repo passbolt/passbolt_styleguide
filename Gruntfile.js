@@ -6,9 +6,6 @@ module.exports = function (grunt) {
       "build-apps": {
         command: ["npm run build"].join(" && "),
       },
-      "clean-all": {
-        command: ["npm run build:clean:all"].join(" && "),
-      },
     },
   });
 
@@ -24,5 +21,5 @@ module.exports = function (grunt) {
 
   // 'grunt' will check code quality, and if no errors,
   // compile LESS to CSS, and minify and concatonate all JS and CSS
-  grunt.registerTask("default", ["shell:clean-all", "shell:build-apps"]);
+  grunt.registerTask("default", ["shell:build-apps"]);
 };

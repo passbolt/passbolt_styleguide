@@ -91,6 +91,7 @@ exports.default = {
     extensions: [".js", ".jsx"],
   },
   output: {
+    clean: true,
     path: path.resolve(__dirname, "build/"),
     filename: "js/dist/[name].js",
   },

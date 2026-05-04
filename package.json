@@ -57,7 +57,6 @@
     "less-loader": "^12.3.2",
     "lockfile-lint": "^4.14.1",
     "prettier": "3.6.2",
-    "rimraf": "^6.1.2",
     "webpack": "^5.105.2",
     "webpack-cli": "^7.0.2"
   },
@@ -93,7 +92,6 @@
   "scripts": {
     "build": "npm run build-api-app",
     "build-api-app": "webpack --config webpack-api.config.js",
-    "build:clean:all": "rimraf ./build/css/*",
     "test": "npm run test:unit",
     "test:unit": "jest --no-cache ./src",
     "test:coverage": "jest --no-cache ./src --coverage",
