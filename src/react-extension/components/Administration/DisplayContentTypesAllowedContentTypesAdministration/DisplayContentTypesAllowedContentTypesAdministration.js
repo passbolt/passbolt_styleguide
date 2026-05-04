@@ -566,7 +566,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                           <div className="allow-content-type-item">
                             <PinCodeSVG />
                             <span className="name">
-                              <Trans>PIN code</Trans>
+                              <Trans>Pin code</Trans>
                             </span>
                             <span className="info">
                               {this.props.t(`({{count}} resources)`, { count: this.state.settings.pin_code_v5_count })}
