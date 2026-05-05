@@ -119,6 +119,14 @@ class DisplayMainMenuPageObject {
   }
 
   /**
+   * Returns the new pin code menu element of password workspace menu
+   * @return {HTMLElement}
+   */
+  get newStandalonePinCodeMenu() {
+    return this._container.querySelector("#pin_code_action");
+  }
+
+  /**
    * Returns the new standalone note menu elements of password workspace menu
    * @return {HTMLElement}
    */

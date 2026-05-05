@@ -32,13 +32,13 @@ import {
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import MetadataTypesSettingsEntity, {
-  RESOURCE_TYPE_VERSION_5,
-} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import AddSVG from "../../../../img/svg/add.svg";
+import PinCodeSVG from "../../../../img/svg/pin.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import DropdownItem from "../../Common/Dropdown/DropdownMenuItem";
 import KeySVG from "../../../../img/svg/key.svg";
@@ -80,6 +80,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     this.handleMenuCreateFolderClickEvent = this.handleMenuCreateFolderClickEvent.bind(this);
     this.handleImportClickEvent = this.handleImportClickEvent.bind(this);
     this.handleMenuCreateOtherClickEvent = this.handleMenuCreateOtherClickEvent.bind(this);
+    this.handleMenuCreateStandalonePinCodeClickEvent = this.handleMenuCreateStandalonePinCodeClickEvent.bind(this);
   }
   /**
    * Handle password click event
@@ -142,6 +143,19 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       return;
     }
     const resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
+    this.openCreateDialog(resourceType);
+  }
+
+  /**
+   * Handle pin code click event
+   */
+  handleMenuCreateStandalonePinCodeClickEvent() {
+    const isMetadataKeyRequiredAndMissing = this.isMetadataKeyRequiredAndMissing();
+    if (isMetadataKeyRequiredAndMissing) {
+      this.displayMissingKeysDialog();
+      return;
+    }
+    const resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG);
     this.openCreateDialog(resourceType);
   }
 
@@ -247,9 +261,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @returns {boolean}
    */
   hasMetadataTypesV4AndV5() {
-    return (
-      this.props.metadataTypeSettings.allowCreationOfV5Resources &&
-      this.props.metadataTypeSettings.allowCreationOfV4Resources
+    return Boolean(
+      this.props.metadataTypeSettings?.allowCreationOfV5Resources &&
+        this.props.metadataTypeSettings?.allowCreationOfV4Resources,
     );
   }
 
@@ -294,6 +308,18 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
+   * Can create pin code
+   * @returns {boolean}
+   */
+  get canCreatePinCode() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG);
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Can create standalone note
    * @returns {boolean}
    */
@@ -307,27 +333,11 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
 
   /**
    * Should the "Other" menu items be displayed.
+   * "Other" is only displayed if the user has access to metadata types v4 and v5 at the same type.
    * @returns {boolean}
    */
   canSeeOther() {
-    // the v5 is not available anyway
-    if (!this.props.metadataTypeSettings?.allowCreationOfV5Resources) {
-      return false;
-    }
-
-    const canCreateBothV4AndV5 = this.hasMetadataTypesV4AndV5();
-
-    //both version are active, other needs to be shown anyway
-    if (canCreateBothV4AndV5) {
-      return true;
-    }
-
-    const otherV5ContentTypes = this.props.resourceTypes?.items.filter(
-      (rt) =>
-        rt.version === RESOURCE_TYPE_VERSION_5 && !rt.hasPassword() && !rt.hasTotp() && !rt.hasSecretDescription(),
-    );
-
-    return otherV5ContentTypes?.length > 0;
+    return this.hasMetadataTypesV4AndV5();
   }
 
   /**
@@ -417,7 +427,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                 </DropdownItem>
               )}
               {this.canCreateCustomFields && (
-                <DropdownItem separator={!this.canCreateStandaloneNote}>
+                <DropdownItem separator={!this.canCreatePinCode}>
                   <button
                     id="custom_fields_action"
                     type="button"
@@ -427,6 +437,21 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                     <TablePropertiesSVG />
                     <span>
                       <Trans>Custom fields</Trans>
+                    </span>
+                  </button>
+                </DropdownItem>
+              )}
+              {this.canCreatePinCode && (
+                <DropdownItem separator={!this.canCreateStandaloneNote}>
+                  <button
+                    id="pin_code_action"
+                    type="button"
+                    className="no-border"
+                    onClick={this.handleMenuCreateStandalonePinCodeClickEvent}
+                  >
+                    <PinCodeSVG />
+                    <span>
+                      <Trans>Pin code</Trans>
                     </span>
                   </button>
                 </DropdownItem>

@@ -305,7 +305,7 @@
             flex-direction: column;
           }
 
-          .password-value, .totp-value, .field-secret-value {
+          .password-value, .totp-value, .pin-code-value, .field-secret-value {
             .secret {
               float: left;
               max-width: 100%;
@@ -316,20 +316,20 @@
                 text-overflow: ellipsis;
               }
             }
-            .password-view, .totp-view {
+            .password-view, .totp-view, .pin-code-view {
               display: none;
               align-items: center;
               margin: 0 0 0 .6rem;
               float: left;
             }
             &:hover {
-              .secret:has(+ .password-view, + .totp-view) {
+              .secret:has(+ .password-view, + .totp-view, + .pin-code-view) {
                 max-width: calc(100% - 2.6rem); // secret field - secret preview button
               }
               .secret button:disabled {
                 color: var(--Text-and-icons-Main-text);
               }
-              .password-view, .totp-view {
+              .password-view, .totp-view, .pin-code-view {
                 display: flex;
               }
             }

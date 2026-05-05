@@ -24,6 +24,7 @@ export const TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_TOTP = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE = uuidv4();
+export const TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE = uuidv4();
 
 /**
  * Resource with string password resource type DTO.
@@ -917,6 +918,75 @@ export const resourceTypeV5StandaloneNoteDto = (data = {}) => ({
         description: {
           type: "string",
           maxLength: 50000,
+        },
+      },
+    },
+  },
+  ...data,
+});
+
+/**
+ * Standalone pin code type DTO.
+ * @param {object} data The data to override
+ * @returns {object}
+ */
+export const resourceTypeV5StandalonePinCodeDto = (data = {}) => ({
+  id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+  name: "V5 Standalone pin code",
+  slug: "v5-pin-code",
+  definition: {
+    resource: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: {
+          type: "string",
+          maxLength: 255,
+        },
+        description: {
+          type: "string",
+          maxLength: 10000,
+          nullable: true,
+        },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true,
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          },
+        },
+      },
+    },
+    secret: {
+      type: "object",
+      required: ["pin_code", "object_type"],
+      properties: {
+        object_type: {
+          type: "string",
+          enum: ["PASSBOLT_SECRET_DATA"],
+        },
+        pin_code: {
+          type: "string",
+          minLength: 4,
+          maxLength: 12,
+          pattern: "^\\d+$",
+        },
+        description: {
+          type: "string",
+          maxLength: 50000,
+          nullable: true,
         },
       },
     },

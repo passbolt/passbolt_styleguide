@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import { withTranslation } from "react-i18next";
 import AddResourcePassword from "./AddResourcePassword";
 import AddResourceTotp from "./AddResourceTotp";
+import AddResourcePinCode from "./AddResourcePinCode";
 import AddResourceNote from "./AddResourceNote";
 import AddResourceDescription from "./AddResourceDescription";
 import { ResourceEditCreateFormEnumerationTypes } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
@@ -49,6 +50,16 @@ class OrchestrateResourceForm extends Component {
       case ResourceEditCreateFormEnumerationTypes.TOTP:
         return (
           <AddResourceTotp
+            resource={this.props.resource}
+            onChange={this.props.onChange}
+            warnings={this.props.warnings}
+            errors={this.props.errors}
+            disabled={this.props.disabled}
+          />
+        );
+      case ResourceEditCreateFormEnumerationTypes.PIN_CODE:
+        return (
+          <AddResourcePinCode
             resource={this.props.resource}
             onChange={this.props.onChange}
             warnings={this.props.warnings}

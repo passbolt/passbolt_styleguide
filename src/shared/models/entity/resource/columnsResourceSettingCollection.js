@@ -31,12 +31,13 @@ class ColumnsResourceSettingCollection extends ColumnsSettingCollection {
       { id: "name", label: "Name", position: 3, show: true },
       { id: "username", label: "Username", position: 4, show: true },
       { id: "password", label: "Password", position: 5, show: true },
-      { id: "totp", label: "TOTP", position: 6, show: true },
-      { id: "uri", label: "URI", position: 7, show: true },
-      { id: "tags", label: "Tags", position: 8, show: true },
-      { id: "expired", label: "Expiry", position: 9, show: true },
-      { id: "modified", label: "Modified", position: 10, show: true },
-      { id: "location", label: "Location", position: 11, show: true },
+      { id: "pin_code", label: "Pin code", position: 6, show: false },
+      { id: "totp", label: "TOTP", position: 7, show: true },
+      { id: "uri", label: "URI", position: 8, show: true },
+      { id: "tags", label: "Tags", position: 9, show: true },
+      { id: "expired", label: "Expiry", position: 10, show: true },
+      { id: "modified", label: "Modified", position: 11, show: true },
+      { id: "location", label: "Location", position: 12, show: true },
     ]);
   }
 }
