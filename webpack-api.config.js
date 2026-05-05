@@ -1,8 +1,13 @@
 const path = require("path");
 
+const CopyPlugin = require("copy-webpack-plugin");
+const I18nextExtractionPlugin = require("./config/webpack.i18n");
 const { buildLessEntries, lessRule, lessMinimizer } = require("./config/webpack.less");
 
-const config = {
+const isDevelopment = process.env.NODE_ENV === "development";
+
+exports.default = {
+  mode: isDevelopment ? "development" : "production",
   entry: () => ({
     "api-account-recovery": path.resolve(__dirname, "./src/react-extension/ApiAccountRecovery.entry.js"), // The account recovery application served by the API
     "api-app": path.resolve(__dirname, "./src/react-extension/ApiApp.entry.js"), // The passbolt application served by the API
@@ -11,6 +16,9 @@ const config = {
     "api-triage": path.resolve(__dirname, "./src/react-extension/ApiTriage.entry.js"), // The triage application served by the API
     "api-feedback": path.resolve(__dirname, "./src/react-extension/ApiFeedback.entry.js"), // The feedback application served by the API
     ...buildLessEntries(),
+  }),
+  ...(isDevelopment && {
+    devtool: "eval-cheap-module-source-map",
   }),
   module: {
     rules: [
@@ -60,6 +68,12 @@ const config = {
       },
     ],
   },
+  plugins: [
+    new I18nextExtractionPlugin(),
+    new CopyPlugin({
+      patterns: [{ from: path.resolve(__dirname, "./src/locales"), to: path.resolve(__dirname, "./build/locales") }],
+    }),
+  ],
   optimization: {
     splitChunks: {
       cacheGroups: {
@@ -80,14 +94,4 @@ const config = {
     path: path.resolve(__dirname, "build/"),
     filename: "js/dist/[name].js",
   },
-};
-
-exports.default = function () {
-  const isDevelopment = process.env.NODE_ENV === "development";
-  config.mode = isDevelopment ? "development" : "production";
-  if (isDevelopment) {
-    config.devtool = "inline-source-map";
-  }
-
-  return config;
 };
