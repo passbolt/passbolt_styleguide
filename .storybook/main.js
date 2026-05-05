@@ -4,28 +4,32 @@ const config = {
     "./stories/**/*.mdx",
     "./stories/**/*.stories.@(js|jsx|ts|tsx)",
     "../src/**/*.mdx",
-    "../src/**/*.stories.@(js|jsx|ts|tsx)"
+    "../src/**/*.stories.@(js|jsx|ts|tsx)",
   ],
-  addons: ["@storybook/addon-links", {
-    name: "@storybook/addon-essentials",
-    options: {
-      backgrounds: false
-    }
-  }, "@storybook/addon-webpack5-compiler-swc"],
+  addons: [
+    "@storybook/addon-links",
+    {
+      name: "@storybook/addon-essentials",
+      options: {
+        backgrounds: false,
+      },
+    },
+    "@storybook/addon-webpack5-compiler-swc",
+  ],
   core: {
-    "disableTelemetry": true
+    disableTelemetry: true,
   },
 
-  "staticDirs": ['../src', {from: '../src', to: '/webAccessibleResources' }],
+  staticDirs: ["../src", { from: "../src", to: "/webAccessibleResources" }, { from: "../build/css", to: "/css" }],
 
-  "env": (config) => ({
+  env: (config) => ({
     ...config,
-    ORIGIN_URL: 'https://passbolt.github.io/passbolt_styleguide',
+    ORIGIN_URL: "https://passbolt.github.io/passbolt_styleguide",
   }),
 
   framework: {
     name: "@storybook/react-webpack5",
-    options: {fastRefresh: true}
+    options: { fastRefresh: true },
   },
   webpackFinal: async (config) => {
     const fileLoaderRule = config.module?.rules?.find((rule) => {
@@ -49,31 +53,31 @@ const config = {
         use: [
           {
             loader: "@svgr/webpack",
-              options: {
-                svgoConfig: {
-                  plugins: [
-                    {
-                      name: 'preset-default',
-                      params: {
-                        overrides: {
-                          removeViewBox: false,
-                          cleanupIds: false,
-                          removeTitle: false,
-                          removeDesc: false,
-                        },
+            options: {
+              svgoConfig: {
+                plugins: [
+                  {
+                    name: "preset-default",
+                    params: {
+                      overrides: {
+                        removeViewBox: false,
+                        cleanupIds: false,
+                        removeTitle: false,
+                        removeDesc: false,
                       },
                     },
-                    {
-                      name: 'prefixIds',
-                      params: {
-                        prefixIds: false,
-                        prefixClassNames: false
-                      },
-                    }
-                  ],
-                }
-              }
-          }
+                  },
+                  {
+                    name: "prefixIds",
+                    params: {
+                      prefixIds: false,
+                      prefixClassNames: false,
+                    },
+                  },
+                ],
+              },
+            },
+          },
         ],
       },
     );
@@ -83,6 +87,6 @@ const config = {
 
     return config;
   },
-}
+};
 
 export default config;

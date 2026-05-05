@@ -1,14 +1,17 @@
 const path = require("path");
 
+const { buildLessEntries, lessRule, lessMinimizer } = require("./config/webpack.less");
+
 const config = {
-  entry: {
+  entry: () => ({
     "api-account-recovery": path.resolve(__dirname, "./src/react-extension/ApiAccountRecovery.entry.js"), // The account recovery application served by the API
     "api-app": path.resolve(__dirname, "./src/react-extension/ApiApp.entry.js"), // The passbolt application served by the API
     "api-recover": path.resolve(__dirname, "./src/react-extension/ApiRecover.entry.js"), // The recover application served by the API
     "api-setup": path.resolve(__dirname, "./src/react-extension/ApiSetup.entry.js"), // The setup application served by the API
     "api-triage": path.resolve(__dirname, "./src/react-extension/ApiTriage.entry.js"), // The triage application served by the API
     "api-feedback": path.resolve(__dirname, "./src/react-extension/ApiFeedback.entry.js"), // The feedback application served by the API
-  },
+    ...buildLessEntries(),
+  }),
   module: {
     rules: [
       {
@@ -19,6 +22,7 @@ const config = {
           presets: ["@babel/react"],
         },
       },
+      lessRule,
       { test: /\.json$/, loader: "json-loader" },
       // Transform SVG as react component
       {
@@ -66,12 +70,15 @@ const config = {
         },
       },
     },
+    // This is only enabled in production mode
+    minimizer: ["...", lessMinimizer],
   },
-  resolve: { extensions: [".js", ".jsx"] },
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
   output: {
-    path: path.resolve(__dirname, "build/js/dist/"),
-    pathinfo: true,
-    filename: "[name].js",
+    path: path.resolve(__dirname, "build/"),
+    filename: "js/dist/[name].js",
   },
 };
 

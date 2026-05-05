@@ -1,113 +1,18 @@
 module.exports = function (grunt) {
-  var banner =
-    "/*!\n" +
-    " * @name\t\t<%= pkg.name %>\n" +
-    " * @version\t\tv<%= pkg.version %>\n" +
-    ' * @date\t\t<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-    " * @copyright\t<%= pkg.copyright %>\n" +
-    " * @source\t\t<%= pkg.repository %>\n" +
-    " * @license\t\t<%= pkg.license %>\n */";
-
   // ========================================================================
   // Configure task options
 
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
-    less: {
-      options: {
-        javascriptEnabled: true,
-        banner,
-      },
-      public: {
-        expand: true,
-        flatten: true,
-        cwd: "src/less/",
-        src: "*.less",
-        dest: "src/css/",
-        ext: ".css",
-      },
-      theme_default: {
-        expand: true,
-        flatten: true,
-        cwd: "src/less/themes/default",
-        src: "*.less",
-        dest: "src/css/themes/default",
-        ext: ".css",
-      },
-      theme_midgar: {
-        expand: true,
-        flatten: true,
-        cwd: "src/less/themes/midgar",
-        src: "*.less",
-        dest: "src/css/themes/midgar",
-        ext: ".css",
-      },
-      theme_solarized_light: {
-        expand: true,
-        flatten: true,
-        cwd: "src/less/themes/solarized_light",
-        src: "*.less",
-        dest: "src/css/themes/solarized_light",
-        ext: ".css",
-      },
-      theme_solarized_dark: {
-        expand: true,
-        flatten: true,
-        cwd: "src/less/themes/solarized_dark",
-        src: "*.less",
-        dest: "src/css/themes/solarized_dark",
-        ext: ".css",
-      },
-    },
     shell: {
       "build-apps": {
         command: ["npm run build"].join(" && "),
-      },
-      "clean-css": {
-        command: ["npm run build:clean:css"].join(" && "),
       },
       "clean-all": {
         command: ["npm run build:clean:all"].join(" && "),
       },
       externalize: {
         command: ["npm run i18n:externalize"].join(" && "),
-      },
-    },
-    cssmin: {
-      public: {
-        expand: true,
-        cwd: "src/css/",
-        src: ["*.css", "!*.min.css"],
-        dest: "build/css/",
-        ext: ".min.css",
-      },
-      theme_default: {
-        expand: true,
-        cwd: "src/css/themes/default",
-        src: ["*.css", "!*.min.css"],
-        dest: "build/css/themes/default",
-        ext: ".min.css",
-      },
-      theme_midgar: {
-        expand: true,
-        cwd: "src/css/themes/midgar",
-        src: ["*.css", "!*.min.css"],
-        dest: "build/css/themes/midgar",
-        ext: ".min.css",
-      },
-      theme_solarized_light: {
-        expand: true,
-        cwd: "src/css/themes/solarized_light",
-        src: ["*.css", "!*.min.css"],
-        dest: "build/css/themes/solarized_light",
-        ext: ".min.css",
-      },
-      theme_solarized_dark: {
-        expand: true,
-        cwd: "src/css/themes/solarized_dark",
-        src: ["*.css", "!*.min.css"],
-        dest: "build/css/themes/solarized_dark",
-        ext: ".min.css",
       },
     },
     symlink: {
@@ -127,19 +32,11 @@ module.exports = function (grunt) {
         ],
       },
     },
-    watch: {
-      less: {
-        files: ["Gruntfile.js", "package.json", "src/less/*.less", "src/less/**/*.less"],
-        tasks: ["css"],
-      },
-    },
   });
 
   // ========================================================================
   // Initialise
 
-  grunt.loadNpmTasks("grunt-contrib-cssmin");
-  grunt.loadNpmTasks("grunt-contrib-less");
   grunt.loadNpmTasks("grunt-contrib-symlink");
   grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-shell");
@@ -151,36 +48,6 @@ module.exports = function (grunt) {
 
   // 'grunt' will check code quality, and if no errors,
   // compile LESS to CSS, and minify and concatonate all JS and CSS
-  grunt.registerTask("default", [
-    "shell:clean-all",
-    "less",
-    "cssmin",
-    "shell:build-apps",
-    "externalize-locale-string",
-    "symlink",
-  ]);
-  grunt.registerTask("css", ["shell:clean-css", "less", "cssmin"]);
+  grunt.registerTask("default", ["shell:clean-all", "shell:build-apps", "externalize-locale-string", "symlink"]);
   grunt.registerTask("externalize-locale-string", ["shell:externalize"]);
-
-  // Tasks to add the custom theme in the less and watch config
-  grunt.registerTask("custom_theme", "Add the custom theme in less task", function () {
-    grunt.config.data.less.theme_custom = {
-      expand: true,
-      flatten: true,
-      cwd: "src/less/themes/custom",
-      src: "*.less",
-      dest: "src/css/themes/custom",
-      ext: ".css",
-    };
-  });
-  grunt.registerTask("custom_theme_watch", "Add the custom theme in less task", function () {
-    grunt.config.data.watch = {
-      less: {
-        files: ["src/less/*.less", "src/less/**/*.less"],
-        tasks: ["build_custom_theme"],
-      },
-    };
-  });
-  grunt.registerTask("build_custom_theme", ["custom_theme", "less"]);
-  grunt.registerTask("watch_custom_theme", ["custom_theme_watch", "watch"]);
 };
