@@ -18,7 +18,7 @@ module.exports = {
     ...buildLessEntries(),
   }),
   ...(isDevelopment && {
-    devtool: "eval-cheap-module-source-map",
+    devtool: "inline-cheap-module-source-map",
   }),
   module: {
     rules: [
