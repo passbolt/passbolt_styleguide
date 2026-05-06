@@ -30,11 +30,9 @@ const runExtraction = async () => {
 
 class I18nextExtractionPlugin {
   apply(compiler) {
-    const tap = (compilation, callback) => {
+    compiler.hooks.beforeRun.tapAsync(PLUGIN_NAME, (compilation, callback) => {
       runExtraction().then(callback).catch(callback);
-    };
-    compiler.hooks.beforeRun.tapAsync(PLUGIN_NAME, tap);
-    compiler.hooks.watchRun.tapAsync(PLUGIN_NAME, tap);
+    });
   }
 }
 

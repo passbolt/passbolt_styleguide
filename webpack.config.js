@@ -6,7 +6,7 @@ const { buildLessEntries, lessRule, lessMinimizer } = require("./config/webpack.
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
-exports.default = {
+module.exports = {
   mode: isDevelopment ? "development" : "production",
   entry: () => ({
     "api-account-recovery": path.resolve(__dirname, "./src/react-extension/ApiAccountRecovery.entry.js"), // The account recovery application served by the API
