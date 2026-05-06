@@ -82,7 +82,7 @@ describe("CustomFieldsCollection", () => {
       const data = { secret_value: "a".repeat(5_000) };
       const collectionDto = customFieldsCollectionDtos(10, data);
 
-      expect(() => new CustomFieldsCollection(collectionDto)).not.toThrowError();
+      expect(() => new CustomFieldsCollection(collectionDto)).not.toThrow();
     });
 
     it("should throw if the content total size exceed the maximum allowed: with strings", () => {
@@ -238,8 +238,8 @@ describe("CustomFieldsCollection", () => {
 
       const collection = new CustomFieldsCollection(defaultCustomFieldsCollection());
 
-      expect(() => CustomFieldsCollection.areCollectionsDifferent(null, collection)).toThrowError();
-      expect(() => CustomFieldsCollection.areCollectionsDifferent(collection, null)).toThrowError();
+      expect(() => CustomFieldsCollection.areCollectionsDifferent(null, collection)).toThrow();
+      expect(() => CustomFieldsCollection.areCollectionsDifferent(collection, null)).toThrow();
     });
 
     it("should return false if both collection are identical.", async () => {
@@ -280,8 +280,8 @@ describe("CustomFieldsCollection", () => {
 
       const collection = new CustomFieldsCollection(defaultCustomFieldsCollection());
 
-      expect(() => CustomFieldsCollection.mergeCollectionsMetadataAndSecret(null, collection)).toThrowError();
-      expect(() => CustomFieldsCollection.mergeCollectionsMetadataAndSecret(collection, null)).toThrowError();
+      expect(() => CustomFieldsCollection.mergeCollectionsMetadataAndSecret(null, collection)).toThrow();
+      expect(() => CustomFieldsCollection.mergeCollectionsMetadataAndSecret(collection, null)).toThrow();
     });
 
     it("should return a collection merged between them.", async () => {

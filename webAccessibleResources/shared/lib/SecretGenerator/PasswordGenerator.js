@@ -27,7 +27,7 @@ const charactersToExclude = ["O", "l", "|", "I", "0", "1"];
  * @param {integer} min The minimum number
  * @param {integer} max The maximum number
  */
-function randomNumberRange(min, max) {
+export function randomNumberRange(min, max) {
   const arr = new Uint32Array(1);
   window.crypto.getRandomValues(arr);
   const random = arr[0] / (0xffffffff + 1);

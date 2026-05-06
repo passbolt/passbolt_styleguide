@@ -19,7 +19,6 @@ import NavigateIntoUserSettingsWorkspacePage from "./NavigateIntoUserSettingsWor
 import { defaultProps } from "./NavigateIntoUserSettingsWorkspace.test.data";
 import { defaultUserRbacContext, denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
-import each from "jest-each";
 
 describe("NavigateIntoUserSettingsWorkspace", () => {
   let page; // The page to test against
@@ -68,10 +67,10 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
     expect(page.attentionRequired.length === 2).toBeTruthy();
   });
 
-  each([
+  describe.each([
     { uiAction: uiActions.MOBILE_TRANSFER, pageProperty: "mobileTransferMenuItem" },
     { uiAction: uiActions.DESKTOP_TRANSFER, pageProperty: "desktopTransferMenuItem" },
-  ]).describe("rbac controls", (scenario) => {
+  ])("rbac controls", (scenario) => {
     it(`should allow access: ${scenario.uiAction}`, async () => {
       expect.assertions(1);
 

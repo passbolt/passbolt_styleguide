@@ -19,6 +19,7 @@ import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_TOTP,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "../resourceType/resourceTypeEntity.test.data";
 import { defaultUserDto } from "../user/userEntity.test.data";
 import { defaultPermissionsDtos } from "../permission/permissionCollection.test.data";
@@ -169,6 +170,19 @@ export const resourceStandaloneTotpDto = (data = {}, options = {}) =>
       resource_type_id: TEST_RESOURCE_TYPE_TOTP,
       metadata: defaultResourceMetadataDto({
         resource_type_id: TEST_RESOURCE_TYPE_TOTP,
+        username: null,
+      }),
+      ...data,
+    },
+    options,
+  );
+
+export const resourceStandalonePinCodeDto = (data = {}, options = {}) =>
+  defaultResourceDto(
+    {
+      resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+      metadata: defaultResourceMetadataDto({
+        resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
         username: null,
       }),
       ...data,

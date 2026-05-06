@@ -123,6 +123,15 @@ export default class DisplayResourcesListPage {
       get copyTotpLink() {
         return element.querySelector(".cell-totp .secret-copy button");
       },
+      get pinCode() {
+        return element.querySelector(".cell-pin_code .secret button span").textContent;
+      },
+      get isViewPinCodeExist() {
+        return Boolean(element.querySelector(".cell-pin_code .pin-code-view"));
+      },
+      get copyPinCodeLink() {
+        return element.querySelector(".cell-pin_code .secret-copy button");
+      },
       get locationLink() {
         return element.querySelector(".cell-location button").textContent;
       },
@@ -154,6 +163,16 @@ export default class DisplayResourcesListPage {
       async selectViewTotp() {
         const viewPassword = element.querySelector(".cell-totp .totp-view");
         fireEvent.click(viewPassword, leftClick);
+        await waitFor(() => {});
+      },
+      async selectPinCode() {
+        const pinCode = element.querySelector(".cell-pin_code .secret button");
+        fireEvent.click(pinCode, leftClick);
+        await waitFor(() => {});
+      },
+      async selectViewPinCode() {
+        const viewPinCode = element.querySelector(".cell-pin_code .pin-code-view");
+        fireEvent.click(viewPinCode, leftClick);
         await waitFor(() => {});
       },
       async selectUri() {

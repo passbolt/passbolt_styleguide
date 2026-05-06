@@ -80,4 +80,12 @@ export default class OrchestrateResourceFormPage {
   get hasAppearanceForm() {
     return Boolean(this._page.container.querySelector(".appearance-workspace"));
   }
+
+  /**
+   * Returns the pin code form
+   * @returns {boolean}
+   */
+  get hasPinCodeForm() {
+    return Boolean(this._page.container.querySelector(".pin-code"));
+  }
 }

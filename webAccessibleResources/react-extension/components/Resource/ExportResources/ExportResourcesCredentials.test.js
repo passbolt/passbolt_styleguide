@@ -75,7 +75,7 @@ describe("As LU I should see the export resources credentials dialog", () => {
         resourcesIds: null,
         foldersIds: null,
       });
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As LU I cannot update the form fields and I should see a processing feedback while submitting the form", async () => {
@@ -109,19 +109,19 @@ describe("As LU I should see the export resources credentials dialog", () => {
     it("As LU I can stop importing passwords by clicking on the cancel button", async () => {
       expect.assertions(1);
       await page.cancelExport();
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As LU I can stop importing passwords by closing the dialog", async () => {
       expect.assertions(1);
       await page.closeDialog();
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As LU I can stop importing passwords with the keyboard (escape)", async () => {
       expect.assertions(1);
       await page.escapeKey();
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As LU I should see an error dialog if the submit operation fails for an unexpected reason", async () => {

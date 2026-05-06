@@ -15,7 +15,6 @@
 import EntitySchema from "../abstract/entitySchema";
 import GridUserSettingEntity from "./gridUserSettingEntity";
 import { defaultGridUserSettingData } from "./gridUserSettingEntity.test.data";
-import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
 
 describe("GridUserSettingEntity", () => {
@@ -34,10 +33,10 @@ describe("GridUserSettingEntity", () => {
       expect(entity.sorter.toDto()).toEqual(dto.sorter);
     });
 
-    each([
+    describe.each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
-    ]).describe("Should validate the columns_setting", (test) => {
+    ])("Should validate the columns_setting", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultGridUserSettingData({
@@ -52,7 +51,7 @@ describe("GridUserSettingEntity", () => {
       });
     });
 
-    each([{ scenario: "required", rule: "type" }]).describe("Should validate the sorter", (test) => {
+    describe.each([{ scenario: "required", rule: "type" }])("Should validate the sorter", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultGridUserSettingData({

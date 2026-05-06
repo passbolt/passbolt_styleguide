@@ -4336,6 +4336,9 @@ body > .contain-item {
 .quickaccess .item-browse .properties .secret.secret-copy.secret-password > button:before {
   content: '00000000';
 }
+.quickaccess .item-browse .properties .secret.secret-copy.secret-pin-code > button:before {
+  content: '0000';
+}
 .quickaccess .item-browse .properties .secret.secret-copy.secret-totp > button:before {
   content: '000';
 }

@@ -12,19 +12,7 @@
  * @since         2.14.0
  */
 
-import UserSettings from "../../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-
-/**
- * Default props
- * @returns {{}}
- */
-export function defaultAppContext(context) {
-  const defaultContext = {
-    userSettings: new UserSettings(userSettingsFixture),
-  };
-  return Object.assign(defaultContext, context || {});
-}
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
@@ -32,7 +20,7 @@ export function defaultAppContext(context) {
  */
 export function defaultProps(props) {
   const defaultProps = {
-    context: defaultAppContext,
+    context: defaultAppContext(),
     onClose: jest.fn(),
   };
   return Object.assign(defaultProps, props || {});

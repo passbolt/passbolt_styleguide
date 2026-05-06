@@ -12,7 +12,6 @@
  * @since         4.5.0
  */
 
-import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import SsoSettingsEntity from "./SsoSettingsEntity";
@@ -109,14 +108,14 @@ describe("SsoSettingsEntity", () => {
   });
 
   describe("SsoSettingsEntity:constructor", () => {
-    each([
+    describe.each([
       { provider: null, dto: defaultSsoSettings() },
       { provider: AzureSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAzure({ id: uuid() }) },
       { provider: GoogleSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithGoogle({ id: uuid() }) },
       { provider: OAuth2SsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithOAuth2({ id: uuid() }) },
       { provider: AdfsSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAdfs({ id: uuid() }) },
       { provider: PingOneSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithPingOne({ id: uuid() }) },
-    ]).describe("it should instantiate the entity with a minimal dto", (scenario) => {
+    ])("it should instantiate the entity with a minimal dto", (scenario) => {
       it(`For: ${scenario.provider}`, () => {
         expect.assertions(4);
         const entity = new SsoSettingsEntity(scenario.dto);

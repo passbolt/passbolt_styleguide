@@ -414,10 +414,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         return filter.type === ResourceWorkspaceFilterTypes.NONE ? { type: ResourceWorkspaceFilterTypes.ALL } : filter;
       }
     }
-    // Return ALL if the actual filter is none or the location filter or ALL (fix edge case on filter group tag or home)
-    return filter.type === ResourceWorkspaceFilterTypes.NONE
-      ? { type: ResourceWorkspaceFilterTypes.ALL }
-      : this.props.location.state?.filter || { type: ResourceWorkspaceFilterTypes.ALL };
+    // Return the location filter if available, or ALL as fallback (fix edge case on filter group tag or home)
+    return this.props.location.state?.filter || { type: ResourceWorkspaceFilterTypes.ALL };
   }
 
   /**

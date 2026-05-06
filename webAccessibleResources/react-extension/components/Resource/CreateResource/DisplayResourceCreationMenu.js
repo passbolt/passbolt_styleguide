@@ -24,6 +24,7 @@ import Tabs from "../../Common/Tab/Tabs";
 import KeySVG from "../../../../img/svg/key.svg";
 import TotpSVG from "../../../../img/svg/totp.svg";
 import NotesSVG from "../../../../img/svg/notes.svg";
+import PinCodeSVG from "../../../../img/svg/pin.svg";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import MetadataTypesSettingsEntity, {
   RESOURCE_TYPE_VERSION_4,
@@ -36,6 +37,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import CreateResource from "./CreateResource";
@@ -219,6 +221,14 @@ class DisplayResourceCreationMenu extends Component {
   }
 
   /**
+   * Returns true if there is a v5 standalone note available.
+   * @returns {boolean}
+   */
+  get hasStandalonePinCodeV5() {
+    return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG);
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -289,6 +299,21 @@ class DisplayResourceCreationMenu extends Component {
             <div className="card-information">
               <span className="title">
                 <Trans>Custom fields</Trans>
+              </span>
+            </div>
+          </button>
+        )}
+        {this.hasStandalonePinCodeV5 && (
+          <button
+            id="standalone_pin_code_action"
+            type="button"
+            className="button-transparent card"
+            onClick={(e) => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG)}
+          >
+            <PinCodeSVG />
+            <div className="card-information">
+              <span className="title">
+                <Trans>Pin code</Trans>
               </span>
             </div>
           </button>

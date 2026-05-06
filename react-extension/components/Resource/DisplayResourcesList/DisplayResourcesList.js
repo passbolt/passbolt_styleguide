@@ -42,7 +42,9 @@ import ColumnModifiedModel from "../../../../shared/models/column/ColumnModified
 import ColumnModel, { ColumnModelTypes } from "../../../../shared/models/column/ColumnModel";
 import { withProgress } from "../../../contexts/ProgressContext";
 import CellTotp from "../../../../shared/components/Table/CellTotp";
+import CellPinCode from "../../../../shared/components/Table/CellPinCode";
 import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
+import ColumnPinCodeModel from "../../../../shared/models/column/ColumnPinCodeModel";
 import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import ColumnExpiredModel from "../../../../shared/models/column/ColumnExpiredModel";
 import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
@@ -54,6 +56,7 @@ import ColumnTagsModel from "../../../../shared/models/column/ColumnTagsModel";
 import CellLocation from "../../../../shared/components/Table/CellLocation";
 import CellTag from "../../../../shared/components/Table/CellTag";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import { RESOURCE_TYPE_VERSION_5 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
 import CellName from "../../../../shared/components/Table/CellName";
@@ -120,10 +123,14 @@ class DisplayResourcesList extends React.Component {
     this.handlePreviewPasswordButtonClick = this.handlePreviewPasswordButtonClick.bind(this);
     this.handleCopyTotpClick = this.handleCopyTotpClick.bind(this);
     this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
+    this.handleCopyPinCodeClick = this.handleCopyPinCodeClick.bind(this);
+    this.handlePreviewPinCodeButtonClick = this.handlePreviewPinCodeButtonClick.bind(this);
     this.getPreviewPassword = this.getPreviewPassword.bind(this);
     this.getPreviewTotp = this.getPreviewTotp.bind(this);
+    this.getPreviewPinCode = this.getPreviewPinCode.bind(this);
     this.isPasswordResources = this.isPasswordResources.bind(this);
     this.isTotpResources = this.isTotpResources.bind(this);
+    this.isPinCodeResources = this.isPinCodeResources.bind(this);
     this.handleLocationClick = this.handleLocationClick.bind(this);
     this.handleTagClick = this.handleTagClick.bind(this);
   }
@@ -187,6 +194,25 @@ class DisplayResourcesList extends React.Component {
         headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Password") } },
       }),
     );
+    if (this.hasPinCodeResourceTypes) {
+      this.defaultColumns.push(
+        new ColumnPinCodeModel({
+          cellRenderer: {
+            component: CellPinCode,
+            props: {
+              title: this.translate("Click to copy"),
+              getPreviewPinCode: this.getPreviewPinCode,
+              canCopy: this.canCopySecret,
+              canPreview: this.canPreviewSecret,
+              onPinCodeClick: this.handleCopyPinCodeClick,
+              onPreviewPinCodeClick: this.handlePreviewPinCodeButtonClick,
+              hasPinCode: this.isPinCodeResources,
+            },
+          },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Pin code") } },
+        }),
+      );
+    }
     if (this.props.context.siteSettings.canIUse("totpResourceTypes")) {
       this.defaultColumns.push(
         new ColumnTotpModel({
@@ -500,6 +526,15 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
+   * Get the previewed pin code
+   * @param {object} resource The resource
+   * @return {string|undefined}
+   */
+  getPreviewPinCode(resource) {
+    return this.isCellulePreviewed("pin_code", resource.id) ? this.state.plaintextSecretDto?.pin_code : undefined;
+  }
+
+  /**
    * Handle copy username click
    * @param username
    * @return {Promise<void>}
@@ -538,6 +573,22 @@ class DisplayResourcesList extends React.Component {
    */
   async handlePreviewTotpButtonClick(resource) {
     await this.togglePreviewTotp(resource.id);
+  }
+
+  /**
+   * Handle copy pin code button click.
+   * @param {object} resource The resource
+   */
+  async handleCopyPinCodeClick(resource) {
+    await this.copyPinCodeToClipboard(resource.id);
+  }
+
+  /**
+   * Handle preview pin code button click.
+   * @param {object} resource The resource to preview the pin code for
+   */
+  async handlePreviewPinCodeButtonClick(resource) {
+    await this.togglePreviewPinCode(resource.id);
   }
 
   /**
@@ -728,6 +779,96 @@ class DisplayResourcesList extends React.Component {
     }
 
     const columnId = "totp";
+    const previewedCellule = { resourceId, columnId };
+    this.setState({ previewedCellule, plaintextSecretDto });
+  }
+
+  /**
+   * Copy a resource pin code to clipboard.
+   * @param {string} resourceId The target resource id
+   * @returns {Promise<void>}
+   */
+  async copyPinCodeToClipboard(resourceId) {
+    let plaintextSecretDto;
+
+    if (this.isCellulePreviewed("pin_code", resourceId)) {
+      plaintextSecretDto = this.state.plaintextSecretDto;
+    } else {
+      this.props.progressContext.open(this.props.t("Decrypting secret"));
+
+      try {
+        plaintextSecretDto = await this.decryptResourceSecret(resourceId);
+      } catch (error) {
+        if (error.name !== "UserAbortsOperationError") {
+          this.props.actionFeedbackContext.displayError(error.message);
+        }
+      }
+
+      this.props.progressContext.close();
+    }
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto?.pin_code?.length) {
+      await this.props.actionFeedbackContext.displayWarning(
+        this.translate("The pin code is empty and cannot be copied to clipboard."),
+      );
+      return;
+    }
+
+    await this.props.clipboardContext.copyTemporarily(
+      plaintextSecretDto.pin_code,
+      this.translate("The pin code has been copied to clipboard."),
+    );
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+  }
+
+  /**
+   * Toggle preview pin code for a given resource
+   * @param {string} resourceId The resource id to preview the pin code for
+   * @returns {Promise<void>}
+   */
+  async togglePreviewPinCode(resourceId) {
+    const isPinCodePreviewed = this.isCellulePreviewed("pin_code", resourceId);
+    if (isPinCodePreviewed) {
+      this.hidePreviewedCellule();
+    } else {
+      await this.previewPinCode(resourceId);
+      await this.props.resourceWorkspaceContext.onResourcePreviewed();
+    }
+  }
+
+  /**
+   * Preview pin code for a given resource
+   * @param {string} resourceId The resource id to preview the pin code for
+   * @returns {Promise<void>}
+   */
+  async previewPinCode(resourceId) {
+    let plaintextSecretDto;
+
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
+
+    try {
+      plaintextSecretDto = await this.decryptResourceSecret(resourceId);
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
+    }
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto?.pin_code?.length) {
+      plaintextSecretDto.pin_code = "";
+    }
+
+    const columnId = "pin_code";
     const previewedCellule = { resourceId, columnId };
     this.setState({ previewedCellule, plaintextSecretDto });
   }
@@ -932,6 +1073,23 @@ class DisplayResourcesList extends React.Component {
    */
   isTotpResources(resource) {
     return this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.hasTotp();
+  }
+
+  /**
+   * Is pin code resource
+   * @param resource
+   * @return {boolean}
+   */
+  isPinCodeResources(resource) {
+    return this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.hasPinCode();
+  }
+
+  /**
+   * Returns true if pin code resource types are available.
+   * @returns {boolean}
+   */
+  get hasPinCodeResourceTypes() {
+    return this.props.resourceTypes?.hasSomePinCodeResourceTypes(RESOURCE_TYPE_VERSION_5);
   }
 
   /**

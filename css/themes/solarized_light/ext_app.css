@@ -6677,6 +6677,9 @@ iframe.cachette {
 .secret-copy.secret-custom-fields > button:before {
   content: '00000000';
 }
+.secret-copy.secret-pin-code > button:before {
+  content: '0000';
+}
 .secret-copy.secret-totp > button:before {
   content: '000';
 }
@@ -6986,6 +6989,8 @@ iframe.cachette {
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .secret,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .secret,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .secret,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value .secret,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value .secret,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .secret,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .secret {
   float: left;
@@ -6995,6 +7000,8 @@ iframe.cachette {
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .secret button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .secret button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .secret button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value .secret button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value .secret button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .secret button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .secret button {
   white-space: nowrap;
@@ -7005,31 +7012,47 @@ iframe.cachette {
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .totp-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .totp-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .totp-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value .totp-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .totp-view,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .totp-view {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .pin-code-view {
   display: none;
   align-items: center;
   margin: 0 0 0 0.6rem;
   float: left;
 }
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value:hover .secret:has(+ .password-view, + .totp-view),
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .secret:has(+ .password-view, + .totp-view),
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .secret:has(+ .password-view, + .totp-view),
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .secret:has(+ .password-view, + .totp-view),
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .secret:has(+ .password-view, + .totp-view),
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .secret:has(+ .password-view, + .totp-view) {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view) {
   max-width: calc(100% - 2.6rem);
 }
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value:hover .secret button:disabled,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .secret button:disabled,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .secret button:disabled,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .secret button:disabled,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value:hover .secret button:disabled,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value:hover .secret button:disabled,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .secret button:disabled,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .secret button:disabled {
   color: var(--Text-and-icons-Main-text);
@@ -7038,20 +7061,34 @@ iframe.cachette {
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value:hover .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value:hover .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value:hover .totp-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .totp-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .totp-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value:hover .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value:hover .totp-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .totp-view,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .totp-view {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value:hover .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value:hover .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value:hover .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .pin-code-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .pin-code-view {
   display: flex;
 }
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .secret-copy button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .secret-copy button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .secret-copy button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .secret-copy button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .pin-code-value .secret-copy button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .pin-code-value .secret-copy button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .secret-copy button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .secret-copy button {
   line-height: 1.9rem;
@@ -7507,37 +7544,51 @@ iframe.cachette {
   --icon-color: var(--Text-and-icons-Main-text);
 }
 .tableview table td.cell-password .secret,
-.tableview table td.cell-totp .secret {
+.tableview table td.cell-totp .secret,
+.tableview table td.cell-pin_code .secret {
   float: left;
   max-width: 100%;
 }
 .tableview table td.cell-password .secret button,
-.tableview table td.cell-totp .secret button {
+.tableview table td.cell-totp .secret button,
+.tableview table td.cell-pin_code .secret button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .tableview table td.cell-password .password-view,
 .tableview table td.cell-totp .password-view,
+.tableview table td.cell-pin_code .password-view,
 .tableview table td.cell-password .totp-view,
-.tableview table td.cell-totp .totp-view {
+.tableview table td.cell-totp .totp-view,
+.tableview table td.cell-pin_code .totp-view,
+.tableview table td.cell-password .pin-code-view,
+.tableview table td.cell-totp .pin-code-view,
+.tableview table td.cell-pin_code .pin-code-view {
   display: none;
   align-items: center;
   margin: 0 0 0 0.6rem;
   float: left;
 }
-.tableview table td.cell-password:hover .secret:has(+ .password-view, + .totp-view),
-.tableview table td.cell-totp:hover .secret:has(+ .password-view, + .totp-view) {
+.tableview table td.cell-password:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view),
+.tableview table td.cell-totp:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view),
+.tableview table td.cell-pin_code:hover .secret:has(+ .password-view, + .totp-view, + .pin-code-view) {
   max-width: calc(100% - 2.6rem);
 }
 .tableview table td.cell-password:hover .secret button:disabled,
-.tableview table td.cell-totp:hover .secret button:disabled {
+.tableview table td.cell-totp:hover .secret button:disabled,
+.tableview table td.cell-pin_code:hover .secret button:disabled {
   color: var(--Text-and-icons-Main-text);
 }
 .tableview table td.cell-password:hover .password-view,
 .tableview table td.cell-totp:hover .password-view,
+.tableview table td.cell-pin_code:hover .password-view,
 .tableview table td.cell-password:hover .totp-view,
-.tableview table td.cell-totp:hover .totp-view {
+.tableview table td.cell-totp:hover .totp-view,
+.tableview table td.cell-pin_code:hover .totp-view,
+.tableview table td.cell-password:hover .pin-code-view,
+.tableview table td.cell-totp:hover .pin-code-view,
+.tableview table td.cell-pin_code:hover .pin-code-view {
   display: flex;
 }
 .tableview table td.cell-location span.caret {
@@ -9736,7 +9787,7 @@ svg .section-card .card .title:first-child {
 .create-resource .edit-workspace .content .additional-information .advanced-settings,
 .edit-resource .edit-workspace .content .additional-information .advanced-settings {
   align-self: stretch;
-  padding: 1.6rem 1.6rem 0 1.6rem;
+  padding: 0 1.6rem;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;

@@ -421,6 +421,17 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * Is resource expired
+   * @return {boolean}
+   */
+  get isResourceExpired() {
+    if (!this.resource.expired) {
+      return false;
+    }
+    return new Date(this.resource.expired) <= new Date();
+  }
+
+  /**
    * Can copy uri
    * @returns {boolean}
    */
@@ -612,25 +623,27 @@ class DisplayResourcesListContextualMenu extends React.Component {
                 </div>
               </div>
             </li>
-            <li key="option-mark-as-expired-resource" className="ready separator-after">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button
-                      type="button"
-                      id="mark-as-expired"
-                      className="link no-border"
-                      onClick={this.handleMarkAsExpiredClick}
-                    >
-                      <ClockIcon />
-                      <span>
-                        <Trans>Mark as expired</Trans>
-                      </span>
-                    </button>
+            {!this.isResourceExpired && (
+              <li key="option-mark-as-expired-resource" className="ready separator-after">
+                <div className="row">
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button
+                        type="button"
+                        id="mark-as-expired"
+                        className="link no-border"
+                        onClick={this.handleMarkAsExpiredClick}
+                      >
+                        <ClockIcon />
+                        <span>
+                          <Trans>Mark as expired</Trans>
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
+              </li>
+            )}
           </>
         )}
         {this.canUpdate() && (

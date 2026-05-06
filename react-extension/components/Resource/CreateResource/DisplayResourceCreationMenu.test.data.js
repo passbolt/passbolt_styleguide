@@ -32,7 +32,6 @@ import {
   resourceTypePasswordStringDto,
   resourceTypeTotpDto,
   resourceTypeV5DefaultDto,
-  resourceTypeV5DefaultTotpDto,
   resourceTypeV5PasswordStringDto,
   resourceTypeV5TotpDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
@@ -98,10 +97,7 @@ export const fullV5AndPartialV4ContentTypes = (data = {}) =>
     resourceTypes: new ResourceTypesCollection([
       resourceTypePasswordStringDto(),
       resourceTypePasswordAndDescriptionDto(),
-      resourceTypeV5DefaultDto(),
-      resourceTypeV5PasswordStringDto(),
-      resourceTypeV5DefaultTotpDto(),
-      resourceTypeV5TotpDto(),
+      ...resourceTypesV5CollectionDto(),
     ]),
     ...data,
     metadataTypeSettings: new MetadataTypesSettingsEntity(

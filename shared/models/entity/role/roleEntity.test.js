@@ -91,11 +91,11 @@ describe("Role entity", () => {
 
       const expectedError = new EntityValidationError();
       expectedError.addError("name", "trailing-spaces", `The property (name) contains forbidden trailing spaces.`);
-      expect(() => new RoleEntity(dto1)).toThrow(expectedError);
-      expect(() => new RoleEntity(dto2)).toThrow(expectedError);
-      expect(() => new RoleEntity(dto3)).toThrow(expectedError);
-      expect(() => new RoleEntity(dto4)).toThrow(expectedError);
-      expect(() => new RoleEntity(dto5)).toThrow(expectedError);
+      expect(() => new RoleEntity(dto1)).toThrow(expectedError.message);
+      expect(() => new RoleEntity(dto2)).toThrow(expectedError.message);
+      expect(() => new RoleEntity(dto3)).toThrow(expectedError.message);
+      expect(() => new RoleEntity(dto4)).toThrow(expectedError.message);
+      expect(() => new RoleEntity(dto5)).toThrow(expectedError.message);
     });
   });
 

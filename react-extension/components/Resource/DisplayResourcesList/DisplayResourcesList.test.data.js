@@ -22,6 +22,7 @@ import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorks
 import { defaultContextualMenuContext } from "../../../contexts/ContextualMenuContext.test.data";
 import {
   defaultResourceDto,
+  resourceStandalonePinCodeDto,
   resourceStandaloneTotpDto,
   resourceWithFavoriteDto,
   resourceWithTotpDto,
@@ -32,6 +33,7 @@ import { defaultResourceMetadataDto } from "../../../../shared/models/entity/res
 import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_TOTP,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
@@ -72,6 +74,12 @@ const getResources = () => [
   resourceStandaloneTotpDto({
     metadata: defaultResourceMetadataDto({ name: "standalone totp", resource_type_id: TEST_RESOURCE_TYPE_TOTP }),
   }),
+  resourceStandalonePinCodeDto({
+    metadata: defaultResourceMetadataDto({
+      name: "pin code",
+      resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+    }),
+  }),
   defaultResourceDto({
     metadata: defaultResourceMetadataDto({ name: "will-expire" }),
     expired: "3023-12-25T00:00:00.000Z",
@@ -88,6 +96,34 @@ export function propsWithFilteredResources(data = {}) {
   return defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filteredResources: resources,
+    }),
+    ...data,
+  });
+}
+
+/**
+ * Props with populated filtered resources and the pin code column visible.
+ * @param {object} data Override the default props.
+ * @returns {object}
+ */
+export function propsWithFilteredResourcesAndPinCodeColumnVisible(data = {}) {
+  const resources = getResources();
+  return defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filteredResources: resources,
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        { id: "favorite", label: "Favorite", position: 1, show: true },
+        { id: "icon", label: "Icon", position: 2, show: true },
+        { id: "name", label: "Name", position: 3, show: true },
+        { id: "username", label: "Username", position: 4, show: true },
+        { id: "password", label: "Password", position: 5, show: true },
+        { id: "pin_code", label: "Pin code", position: 6, show: true },
+        { id: "totp", label: "TOTP", position: 7, show: true },
+        { id: "uri", label: "URI", position: 8, show: true },
+        { id: "expired", label: "Expiry", position: 9, show: true },
+        { id: "modified", label: "Modified", position: 10, show: true },
+        { id: "location", label: "Location", position: 11, show: true },
+      ]),
     }),
     ...data,
   });
@@ -138,10 +174,11 @@ export function propsWithFilteredResourcesAndColumnsHidden(data = {}) {
         { id: "expires", label: "Expires", position: 4, show: true },
         { id: "username", label: "Username", position: 5, show: false },
         { id: "password", label: "Password", position: 6, show: true },
-        { id: "totp", label: "TOTP", position: 7, show: false },
-        { id: "uri", label: "URI", position: 8, show: true },
-        { id: "modified", label: "Modified", position: 9, show: false },
-        { id: "location", label: "Location", position: 10, show: true },
+        { id: "pin_code", label: "Pin code", position: 7, show: false },
+        { id: "totp", label: "TOTP", position: 8, show: false },
+        { id: "uri", label: "URI", position: 9, show: true },
+        { id: "modified", label: "Modified", position: 10, show: false },
+        { id: "location", label: "Location", position: 11, show: true },
       ]),
     }),
     ...data,

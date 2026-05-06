@@ -186,7 +186,7 @@ class TestSsoSettingsDialog extends React.Component {
             {this.state.uiState === uiStateEnum.SUCCESS && (
               <p>
                 {this.translate(
-                  `You susccessfully signed in with your {{providerName}} account. You can safely save your configuration.`,
+                  `You successfully signed in with your {{providerName}} account. You can safely save your configuration.`,
                   { providerName: this.props.provider.name },
                 )}
               </p>

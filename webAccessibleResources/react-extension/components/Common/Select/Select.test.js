@@ -16,7 +16,6 @@
  * Unit tests on Select in regard of specifications
  */
 
-import each from "jest-each";
 import { DirectionEnum } from "./Select";
 import { defaultAllProps, defaultProps, defaultPropsWithSearch, items } from "./Select.test.data";
 import SelectPage, { SelectorEnum } from "./Select.test.page";
@@ -27,7 +26,7 @@ describe("Select", () => {
   let page, // The page to test against.
     props; // The component props
 
-  each([
+  describe.each([
     {
       scenario: "Should init with default properties",
       props: defaultProps(),
@@ -44,7 +43,7 @@ describe("Select", () => {
         className: false,
       },
     },
-  ]).describe("Check select initialization", (args) => {
+  ])("Check select initialization", (args) => {
     it(args.scenario, () => {
       page = new SelectPage(args.props);
 
@@ -59,10 +58,10 @@ describe("Select", () => {
     });
   });
 
-  each([
+  describe.each([
     { scenario: "Should open select and close it", props: {}, open: true },
     { scenario: "Should not open select when disable", props: { disabled: true }, open: false },
-  ]).describe("Check click on select", (args) => {
+  ])("Check click on select", (args) => {
     beforeEach(() => {
       props = defaultProps(args.props);
       page = new SelectPage(props);
@@ -86,12 +85,12 @@ describe("Select", () => {
     });
   });
 
-  each([
+  describe.each([
     { scenario: "Should display select to the bottom by default", props: {}, direction: DirectionEnum.bottom },
     { scenario: "Should display select to the top", direction: DirectionEnum.top },
     { scenario: "Should display select to the left", direction: DirectionEnum.left },
     { scenario: "Should display select to the right", direction: DirectionEnum.right },
-  ]).describe("Check direction apply", (args) => {
+  ])("Check direction apply", (args) => {
     beforeEach(() => {
       props = defaultProps({ direction: args.direction });
       page = new SelectPage(props);
@@ -107,7 +106,7 @@ describe("Select", () => {
     });
   });
 
-  each([
+  describe.each([
     { scenario: "Should not filter items without search", search: "", size: 6, match: items().shift() },
     { scenario: "Should filter items and return 1 match", search: "#1", size: 1, match: [items()[1]] },
     { scenario: "Should filter items and return empty match", search: "@3", size: 1, match: [`${noResultMessage} @3`] },
@@ -117,7 +116,7 @@ describe("Select", () => {
       size: 1,
       match: [`${noResultMessage} #1`],
     },
-  ]).describe("Check search action", (args) => {
+  ])("Check search action", (args) => {
     beforeEach(() => {
       props = defaultPropsWithSearch();
       page = new SelectPage(props);
@@ -133,7 +132,7 @@ describe("Select", () => {
     });
   });
 
-  each([
+  describe.each([
     {
       scenario: "Should prevent close select when clicking on search input",
       item: SelectorEnum.searchInput,
@@ -154,7 +153,7 @@ describe("Select", () => {
       left: false,
       right: true,
     },
-  ]).describe("Check click on document event", (args) => {
+  ])("Check click on document event", (args) => {
     beforeEach(() => {
       props = defaultPropsWithSearch();
       page = new SelectPage(props);
@@ -173,10 +172,10 @@ describe("Select", () => {
     });
   });
 
-  each([
+  describe.each([
     { scenario: "Should close when scrolling outside", item: SelectorEnum.container, expect: false },
     { scenario: "Should not close when scrolling on select", item: SelectorEnum.items, expect: true },
-  ]).describe("Check scroll event", (args) => {
+  ])("Check scroll event", (args) => {
     beforeEach(() => {
       props = defaultProps();
       page = new SelectPage(props);
@@ -200,10 +199,10 @@ describe("Select", () => {
     });
   });
 
-  each([
+  describe.each([
     { scenario: "Should select item on select event", item: SelectorEnum.select },
     { scenario: "Should select item on item event", item: SelectorEnum.option },
-  ]).describe("Check key down events", (args) => {
+  ])("Check key down events", (args) => {
     beforeEach(() => {
       props = defaultProps();
       page = new SelectPage(props);

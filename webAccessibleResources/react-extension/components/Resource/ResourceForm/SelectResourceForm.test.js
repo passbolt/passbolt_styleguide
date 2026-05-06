@@ -26,10 +26,15 @@ import {
   resourceTypePasswordDescriptionTotpDto,
   resourceTypePasswordStringDto,
   resourceTypeV5CustomFieldsDto,
+  resourceTypeV5DefaultDto,
   resourceTypeV5DefaultTotpDto,
+  resourceTypeV5PasswordStringDto,
+  resourceTypeV5StandaloneNoteDto,
+  resourceTypeV5StandalonePinCodeDto,
   resourceTypeV5TotpDto,
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -235,6 +240,63 @@ describe("SelectResourceForm", () => {
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("Appearance");
     });
+
+    it("As LU the resource secret section pin code should be selected.", async () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PIN_CODE,
+        resourceType: new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()),
+        resource: defaultResourceFormDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+          secret: { pin_code: "123456" },
+        }),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.sectionItemSelected.textContent).toStrictEqual("Pin code");
+    });
+
+    it("As LU I do not see the resource uris for a v5 standalone pin code.", async () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resourceType: new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()),
+        resource: defaultResourceFormDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+          secret: { pin_code: "123456" },
+        }),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      const sections = Array.from(
+        page.selectResourceForm.querySelectorAll(".sidebar-content-sections .section-content"),
+      );
+      const hasUris = sections.some((section) => section.textContent === "URIs");
+      expect(hasUris).toEqual(false);
+    });
+
+    it.each([
+      { name: "v5 default", dto: resourceTypeV5DefaultDto },
+      { name: "v5 password string", dto: resourceTypeV5PasswordStringDto },
+      { name: "v5 default totp", dto: resourceTypeV5DefaultTotpDto },
+      { name: "v5 totp", dto: resourceTypeV5TotpDto },
+      { name: "v5 custom fields", dto: resourceTypeV5CustomFieldsDto },
+      { name: "v5 standalone note", dto: resourceTypeV5StandaloneNoteDto },
+    ])("As LU I can see the resource uris metadata for a $name resource type.", async ({ dto }) => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resourceType: new ResourceTypeEntity(dto()),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      const sections = Array.from(
+        page.selectResourceForm.querySelectorAll(".sidebar-content-sections .section-content"),
+      );
+      const hasUris = sections.some((section) => section.textContent === "URIs");
+      expect(hasUris).toEqual(true);
+    });
   });
 
   describe("As LU I can select another resource form.", () => {
@@ -427,6 +489,74 @@ describe("SelectResourceForm", () => {
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
+      expect(page.addSecret.hasAttribute("disabled")).toBeTruthy();
+    });
+
+    it("As LU I can see that pin code can be added for a resource v5 from a note lead.", async () => {
+      expect.assertions(5);
+      const props = defaultProps({
+        resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE,
+        resource: defaultResourceFormDto({ secret: { description: "" } }),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+
+      expect(page.addSecretPassword).toBeDefined();
+      expect(page.addSecretTotp).toBeDefined();
+      expect(page.addSecretCustomFields).toBeDefined();
+      expect(page.addSecretNote).toBeNull();
+      expect(page.addSecretPinCode).toBeDefined();
+    });
+
+    it("As LU I cannot see pin code as an addable secret from a password lead.", async () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+
+      expect(page.addSecretPinCode).toBeNull();
+    });
+
+    it("As LU I can see note as an addable secret from a pin code lead.", async () => {
+      expect.assertions(5);
+      const props = defaultProps({
+        resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PIN_CODE,
+        resourceType: new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()),
+        resource: defaultResourceFormDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+          secret: { pin_code: "123456" },
+        }),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+
+      expect(page.addSecretPassword).toBeNull();
+      expect(page.addSecretTotp).toBeNull();
+      expect(page.addSecretCustomFields).toBeNull();
+      expect(page.addSecretPinCode).toBeNull();
+      expect(page.addSecretNote).toBeDefined();
+    });
+
+    it("As LU I can see add secrets disabled when pin code and note are already present.", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PIN_CODE,
+        resourceType: new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()),
+        resource: defaultResourceFormDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+          secret: { pin_code: "123456", description: "note" },
+        }),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.addSecretPinCode).toBeNull();
       expect(page.addSecret.hasAttribute("disabled")).toBeTruthy();
     });
   });
@@ -661,6 +791,40 @@ describe("SelectResourceForm", () => {
 
       expect(page.addSecret.hasAttribute("disabled")).toBeTruthy();
     });
+
+    it("As LU I can add pin code for a resource v5 from a note lead.", async () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE,
+        resource: defaultResourceFormDto({ secret: { description: "" } }),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretPinCode);
+
+      expect(props.onAddSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.PIN_CODE);
+    });
+
+    it("As LU I can add secret note for a resource v5 from a pin code lead.", async () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PIN_CODE,
+        resourceType: new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()),
+        resource: defaultResourceFormDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+          secret: { pin_code: "123456" },
+        }),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretNote);
+
+      expect(props.onAddSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.NOTE);
+    });
   });
 
   describe("As LU I can delete secret.", () => {
@@ -809,6 +973,40 @@ describe("SelectResourceForm", () => {
 
       expect(page.deleteSecretPassword).toBeNull();
     });
+
+    it("As LU I can delete secret pin code for a resource v5 standalone pin code with a note.", async () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PIN_CODE,
+        resourceType: new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()),
+        resource: defaultResourceFormDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+          secret: { pin_code: "123456", description: "note" },
+        }),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.deleteSecretPinCode);
+
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.PIN_CODE);
+    });
+
+    it("As LU I cannot see delete pin code if the pin code is the only secret.", async () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PIN_CODE,
+        resourceType: new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()),
+        resource: defaultResourceFormDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+          secret: { pin_code: "123456" },
+        }),
+      });
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.deleteSecretPinCode).toBeNull();
+    });
   });
 
   describe("As LU I can upgrade a resource.", () => {
@@ -851,6 +1049,25 @@ describe("SelectResourceForm", () => {
       expect(page.getSectionItem(3).hasAttribute("disabled")).toBeTruthy();
       expect(page.getSectionItem(4).hasAttribute("disabled")).toBeTruthy();
       expect(page.getSectionItem(5).hasAttribute("disabled")).toBeTruthy();
+    });
+
+    it("As LU I can see the select form disabled for a resource v5 standalone pin code.", async () => {
+      expect.assertions(3);
+
+      const props = defaultProps({
+        disabled: true,
+        resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PIN_CODE,
+        resourceType: new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()),
+        resource: defaultResourceFormDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+          secret: { pin_code: "123456", description: "note" },
+        }),
+      });
+      page = new SelectResourceFormPage(props);
+
+      expect(page.addSecret.hasAttribute("disabled")).toBeTruthy();
+      expect(page.deleteSecretPinCode.hasAttribute("disabled")).toBeTruthy();
+      expect(page.deleteSecretNote.hasAttribute("disabled")).toBeTruthy();
     });
   });
 });

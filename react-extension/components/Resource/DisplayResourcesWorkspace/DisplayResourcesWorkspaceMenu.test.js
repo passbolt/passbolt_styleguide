@@ -23,6 +23,8 @@ import {
   defaultAppContext,
   defaultPropsMultipleResource,
   defaultPropsMultipleResourceUpdateRights,
+  defaultPropsMultipleResourceAllExpired,
+  defaultPropsMultipleResourceSomeExpired,
   defaultPropsOneResourceNotOwned,
   defaultPropsOneResourceOwned,
   defaultPropsOneResourceV5Private,
@@ -459,6 +461,36 @@ describe("See Workspace Menu", () => {
 
       page.displayMenu.clickOnMoreMenu();
       expect(page.displayMenu.dropdownMenuExport).not.toBeInTheDocument();
+    });
+  });
+
+  describe("As LU I should see the mark as expired item only when some selected resources are not expired", () => {
+    it("As LU I shouldn't see the mark as expired item when all selected resources are expired", () => {
+      expect.assertions(3);
+
+      const props = defaultPropsMultipleResourceAllExpired();
+      page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+
+      page.displayMenu.clickOnMoreMenu();
+
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).toBeNull();
+      expect(page.displayMenu.dropdownMenuSetExpiryDate).not.toBeNull();
+    });
+
+    it("As LU I should see the mark as expired item when only some selected resources are expired", () => {
+      expect.assertions(3);
+
+      const props = defaultPropsMultipleResourceSomeExpired();
+      page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+
+      page.displayMenu.clickOnMoreMenu();
+
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).not.toBeNull();
+      expect(page.displayMenu.dropdownMenuSetExpiryDate).not.toBeNull();
     });
   });
 

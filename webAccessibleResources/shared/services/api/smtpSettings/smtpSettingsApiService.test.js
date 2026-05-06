@@ -58,7 +58,7 @@ describe("SmtpSettingsApiService", () => {
 
       fetch.doMockOnceIf(/smtp\/settings\.json/, () => Promise.reject({ message: "The service is unavailable" }));
 
-      expect(async () => await service.find()).rejects.toThrowError(PassboltServiceUnavailableError);
+      expect(async () => await service.find()).rejects.toThrow(PassboltServiceUnavailableError);
     });
   });
 
@@ -92,7 +92,7 @@ describe("SmtpSettingsApiService", () => {
 
       fetch.doMockOnceIf(/smtp\/settings\.json/, () => Promise.reject({ message: "The service is unavailable" }));
 
-      expect(async () => await service.create(defaultSmtpSettingsEntityDto())).rejects.toThrowError(
+      expect(async () => await service.create(defaultSmtpSettingsEntityDto())).rejects.toThrow(
         PassboltServiceUnavailableError,
       );
     });
