@@ -26,6 +26,7 @@ import ResourceTypeSchemasDefinition, {
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
 } from "./resourceTypeSchemasDefinition";
 
 const RESOURCE_TYPE_NAME_MAX_LENGTH = 255;
@@ -61,6 +62,7 @@ export const SECRET_DESCRIPTION_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
 ];
 
 export const METADATA_DESCRIPTION_RESOURCE_TYPES = [
@@ -68,6 +70,17 @@ export const METADATA_DESCRIPTION_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
+];
+
+// All v5 resource types except PIN code have URIs metadata
+export const METADATA_URIS_RESOURCE_TYPES = [
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
+  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
@@ -243,6 +256,22 @@ class ResourceTypeEntity extends EntityV2 {
   }
 
   /**
+   * Has pin code
+   * @returns {boolean}
+   */
+  hasPinCode() {
+    return RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG === this.slug;
+  }
+
+  /**
+   * Is standalone pin code
+   * @returns {boolean}
+   */
+  isStandalonePinCode() {
+    return this.hasPinCode();
+  }
+
+  /**
    * Is standalone totp
    * @returns {boolean}
    */
@@ -272,6 +301,14 @@ class ResourceTypeEntity extends EntityV2 {
    */
   hasMetadataDescription() {
     return METADATA_DESCRIPTION_RESOURCE_TYPES.includes(this.slug);
+  }
+
+  /**
+   * Has metadata URIs
+   * @returns {boolean}
+   */
+  hasMetadataUris() {
+    return METADATA_URIS_RESOURCE_TYPES.includes(this.slug);
   }
 
   /**

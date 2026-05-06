@@ -112,18 +112,14 @@ describe("RoleApiService", () => {
     it("should throw a TypeError if roleDto is not provided", async () => {
       expect.assertions(2);
 
-      await expect(() => roleApiService.create()).rejects.toThrow(
-        new TypeError("Role creation failed, invalid role data."),
-      );
+      await expect(() => roleApiService.create()).rejects.toThrow("Role creation failed, invalid role data.");
       expect(fetch).not.toHaveBeenCalled();
     });
 
     it("should throw a TypeError if roleDto.name is not provided", async () => {
       expect.assertions(2);
 
-      await expect(() => roleApiService.create({})).rejects.toThrow(
-        new TypeError("Role creation failed, invalid role data."),
-      );
+      await expect(() => roleApiService.create({})).rejects.toThrow("Role creation failed, invalid role data.");
       expect(fetch).not.toHaveBeenCalled();
     });
 
@@ -169,7 +165,7 @@ describe("RoleApiService", () => {
       expect.assertions(2);
 
       await expect(() => roleApiService.update(null, customRoleDto())).rejects.toThrow(
-        new TypeError("Role update failed, role id is required."),
+        "Role update failed, role id is required.",
       );
       expect(fetch).not.toHaveBeenCalled();
     });
@@ -178,7 +174,7 @@ describe("RoleApiService", () => {
       expect.assertions(2);
 
       await expect(() => roleApiService.update("test", null)).rejects.toThrow(
-        new TypeError("Role update failed, role id is not a valid uuid."),
+        "Role update failed, role id is not a valid uuid.",
       );
       expect(fetch).not.toHaveBeenCalled();
     });
@@ -187,7 +183,7 @@ describe("RoleApiService", () => {
       expect.assertions(2);
 
       await expect(() => roleApiService.update(TEST_ROLE_USER_ID, null)).rejects.toThrow(
-        new TypeError("Role update failed, invalid role data."),
+        "Role update failed, invalid role data.",
       );
       expect(fetch).not.toHaveBeenCalled();
     });
@@ -197,7 +193,7 @@ describe("RoleApiService", () => {
 
       const roleDto = customRoleDto({ name: undefined });
       await expect(() => roleApiService.update(roleDto.id, roleDto)).rejects.toThrow(
-        new TypeError("Role update failed, invalid role data."),
+        "Role update failed, invalid role data.",
       );
       expect(fetch).not.toHaveBeenCalled();
     });
@@ -244,7 +240,7 @@ describe("RoleApiService", () => {
 
       const roleId = "test";
       await expect(() => roleApiService.delete(roleId)).rejects.toThrow(
-        new TypeError("Role deletion failed, roleId is not a valid uuid."),
+        "Role deletion failed, roleId is not a valid uuid.",
       );
       expect(fetch).not.toHaveBeenCalled();
     });

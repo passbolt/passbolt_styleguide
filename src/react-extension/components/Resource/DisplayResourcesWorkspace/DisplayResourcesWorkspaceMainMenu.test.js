@@ -28,6 +28,7 @@ import {
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -446,6 +447,114 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
     });
   });
 
+  describe("As LU I can create standalone pin code", () => {
+    it("As LU I can create a standalone pin code if I have not selected any folder", async () => {
+      expect.assertions(5);
+
+      const props = defaultProps({
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
+      });
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toEqual(true);
+
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toEqual(false);
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+
+      expect(page.displayMenu.newStandalonePinCodeMenu).not.toBeNull();
+      await page.displayMenu.clickOnMenu(page.displayMenu.newStandalonePinCodeMenu);
+
+      const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {
+        folderParentId: null,
+        resourceType: resourceTypeExpected,
+      });
+    });
+
+    it("As LU I can create standalone pin code if I have selected a folder I am allowed to create in", async () => {
+      expect.assertions(5);
+
+      const props = defaultPropsFolderOwned({
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
+      });
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toEqual(true);
+
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toEqual(false);
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+
+      expect(page.displayMenu.newStandalonePinCodeMenu).not.toBeNull();
+      await page.displayMenu.clickOnMenu(page.displayMenu.newStandalonePinCodeMenu);
+
+      const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {
+        folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id,
+        resourceType: resourceTypeExpected,
+      });
+    });
+
+    it("As LU I cannot create a standalone pin code if metadata type settings default is V4 and resource types is only v5", async () => {
+      expect.assertions(4);
+
+      const props = defaultProps({ resourceTypes: new ResourceTypesCollection(resourceTypesV5CollectionDto()) });
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toEqual(true);
+
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toEqual(false);
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+
+      expect(page.displayMenu.newStandalonePinCodeMenu).toBeNull();
+    });
+
+    it("As LU I cannot create a standalone pin code if metadata type settings default is V5 and resource types is only v4", async () => {
+      expect.assertions(4);
+
+      const props = defaultProps({
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
+        resourceTypes: new ResourceTypesCollection(resourceTypesV4CollectionDto()),
+      });
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toEqual(true);
+
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toEqual(false);
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+
+      expect(page.displayMenu.newStandalonePinCodeMenu).toBeNull();
+    });
+
+    it("As LU I cannot create a standalone pin code v5 if metadata keys settings enforced metadata shared key and user has missing keys", async () => {
+      expect.assertions(4);
+
+      const props = defaultProps({
+        context: defaultUserAppContext({
+          loggedInUser: defaultUserDto({ missing_metadata_key_ids: [uuidv4()] }, { withRole: true }),
+        }),
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
+        metadataKeysSettings: new MetadataKeysSettingsEntity(
+          defaultMetadataKeysSettingsDto({ allow_usage_of_personal_keys: false }),
+        ),
+      });
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toEqual(true);
+
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toEqual(false);
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.newStandalonePinCodeMenu);
+
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ActionAbortedMissingMetadataKeys);
+    });
+  });
+
   describe("As LU I can create standalone note", () => {
     it("As LU I can create a standalone note if I have not selected any folder", async () => {
       expect.assertions(5);
@@ -546,10 +655,10 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.newOtherMenu).toBeNull();
     });
 
-    it("As LU I cannot see other menu if I have only resource type v5 and no more than password, totp or note", async () => {
+    it("As LU I cannot see other menu if I have only resource type v5 allowed", async () => {
       expect.assertions(4);
       const props = defaultProps({
-        resourceTypes: new ResourceTypesCollection(resourceTypesV5CollectionDto()),
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
       }); // The props to pass
       const page = new DisplayResourcesWorkspaceMainMenuPage(props);
 

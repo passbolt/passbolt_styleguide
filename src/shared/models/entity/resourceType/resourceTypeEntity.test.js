@@ -25,9 +25,9 @@ import {
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5PasswordStringDto,
   resourceTypeV5TotpDto,
+  resourceTypeV5StandalonePinCodeDto,
   resourceTypeWithoutSecretDefinitionDto,
 } from "./resourceTypeEntity.test.data";
-import EntityValidationError from "../abstract/entityValidationError";
 
 describe("ResourceTypeEntity", () => {
   describe("::getSchema", () => {
@@ -118,9 +118,7 @@ describe("ResourceTypeEntity", () => {
       const dto = resourceTypePasswordAndDescriptionDto({
         slug: "wrong-slug",
       });
-      expect(() => new ResourceTypeEntity(dto)).toThrow(
-        new EntityValidationError("Could not validate entity ResourceTypeEntity."),
-      );
+      expect(() => new ResourceTypeEntity(dto)).toThrow("Could not validate entity ResourceTypeEntity.");
     });
 
     it("should throw an error if slug is invalid", () => {
@@ -128,9 +126,7 @@ describe("ResourceTypeEntity", () => {
       const dto = resourceTypePasswordAndDescriptionDto({
         slug: 42,
       });
-      expect(() => new ResourceTypeEntity(dto)).toThrow(
-        new EntityValidationError("Could not validate entity ResourceTypeEntity."),
-      );
+      expect(() => new ResourceTypeEntity(dto)).toThrow("Could not validate entity ResourceTypeEntity.");
     });
   });
 
@@ -339,6 +335,15 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasTotp()).toBeFalsy();
     });
+
+    it("standalone pin code should not have totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasTotp()).toBeFalsy();
+    });
   });
 
   describe("::hasPassword", () => {
@@ -413,10 +418,20 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasPassword()).toBeFalsy();
     });
+
     it("v5 custom fields should not have password", () => {
       expect.assertions(1);
 
       const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPassword()).toBeFalsy();
+    });
+
+    it("standalone pin code should not have password", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasPassword()).toBeFalsy();
@@ -495,6 +510,7 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasCustomFields()).toBeFalsy();
     });
+
     it("v5 custom fields should have custom fields", () => {
       expect.assertions(1);
 
@@ -502,6 +518,15 @@ describe("ResourceTypeEntity", () => {
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasCustomFields()).toBeTruthy();
+    });
+
+    it("standalone pin code should not have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeFalsy();
     });
   });
 
@@ -582,6 +607,15 @@ describe("ResourceTypeEntity", () => {
       expect.assertions(1);
 
       const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneTotp()).toBeFalsy();
+    });
+
+    it("standalone pin code should not be standalone totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.isStandaloneTotp()).toBeFalsy();
@@ -669,6 +703,7 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasSecretDescription()).toBeFalsy();
     });
+
     it("v5 custom fields should not have secret description", () => {
       expect.assertions(1);
 
@@ -676,6 +711,15 @@ describe("ResourceTypeEntity", () => {
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasSecretDescription()).toBeFalsy();
+    });
+
+    it("standalone pin code should have secret description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasSecretDescription()).toBeTruthy();
     });
   });
 
@@ -751,6 +795,7 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasMetadataDescription()).toBeTruthy();
     });
+
     it("v5 custom fields should have metadata description", () => {
       expect.assertions(1);
 
@@ -764,6 +809,15 @@ describe("ResourceTypeEntity", () => {
       expect.assertions(1);
 
       const dto = resourceTypeV5StandaloneNoteDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasMetadataDescription()).toBeTruthy();
+    });
+
+    it("standalone pin code should have metadata description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasMetadataDescription()).toBeTruthy();
@@ -859,6 +913,16 @@ describe("ResourceTypeEntity", () => {
       expect(entity.isV5()).toBeTruthy();
       expect(entity.isV4()).toBeFalsy();
     });
+
+    it("standalone pin code should be v5 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeTruthy();
+      expect(entity.isV4()).toBeFalsy();
+    });
   });
 
   describe("::isPasswordString", () => {
@@ -941,6 +1005,127 @@ describe("ResourceTypeEntity", () => {
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.isPasswordString()).toBeFalsy();
+    });
+
+    it("standalone pin code should not be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeFalsy();
+    });
+  });
+
+  describe("::hasPinCode", () => {
+    it("standalone pin code should have pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPinCode()).toBeTruthy();
+    });
+
+    it("password string should not have pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPinCode()).toBeFalsy();
+    });
+
+    it("password and description should not have pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordAndDescriptionDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPinCode()).toBeFalsy();
+    });
+
+    it("standalone totp should not have pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPinCode()).toBeFalsy();
+    });
+
+    it("v5 default should not have pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPinCode()).toBeFalsy();
+    });
+
+    it("v5 standalone note should not have pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandaloneNoteDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPinCode()).toBeFalsy();
+    });
+  });
+
+  describe("::isStandalonePinCode", () => {
+    it("standalone pin code should be truthy", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandalonePinCode()).toBeTruthy();
+    });
+
+    it("password string should not be standalone pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandalonePinCode()).toBeFalsy();
+    });
+
+    it("password and description should not be standalone pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordAndDescriptionDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandalonePinCode()).toBeFalsy();
+    });
+
+    it("standalone totp should not be standalone pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandalonePinCode()).toBeFalsy();
+    });
+
+    it("v5 default should not be standalone pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandalonePinCode()).toBeFalsy();
+    });
+
+    it("v5 standalone note should not be standalone pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandaloneNoteDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandalonePinCode()).toBeFalsy();
     });
   });
 });

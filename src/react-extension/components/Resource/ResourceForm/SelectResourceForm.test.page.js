@@ -115,6 +115,22 @@ export default class SelectResourceFormPage {
   }
 
   /**
+   * Returns the add pin code button
+   * @returns {Element}
+   */
+  get addSecretPinCode() {
+    return this.selectResourceForm.querySelector("#pin_code_action");
+  }
+
+  /**
+   * Returns the delete pin code button
+   * @returns {Element}
+   */
+  get deleteSecretPinCode() {
+    return this._page.container.querySelector("#delete-pin-code");
+  }
+
+  /**
    * Returns the sidebar sections secret
    * @returns {Element}
    */

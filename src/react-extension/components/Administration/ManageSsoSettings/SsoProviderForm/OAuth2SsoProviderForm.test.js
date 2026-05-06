@@ -13,7 +13,6 @@
  */
 
 import "../../../../../../test/mocks/mockClipboard";
-import each from "jest-each";
 import { waitFor } from "@testing-library/dom";
 import OAuth2SsoProviderFormPage from "./OAuth2SsoProviderForm.test.page";
 import { defaultOAuth2Props } from "./SsoProviderForm.test.data";
@@ -88,7 +87,7 @@ describe("OAuth2SsoProviderForm", () => {
       expect(page.scopeError.textContent).toStrictEqual(rawErrors.scope);
     });
 
-    each(Object.keys(rawErrors).map((key) => ({ field: key }))).describe(
+    describe.each(Object.keys(rawErrors).map((key) => ({ field: key })))(
       "Should focus on the right erroneous field in the form",
       (scenario) => {
         it(`For: ${scenario.field}`, async () => {

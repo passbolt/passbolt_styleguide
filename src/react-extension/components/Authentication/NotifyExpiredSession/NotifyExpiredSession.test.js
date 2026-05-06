@@ -17,7 +17,6 @@
  */
 import NotifyExpiredSessionPage from "./NotifyExpiredSession.test.page";
 import { defaultProps } from "./NotifyExpiredSession.test.data";
-import { defaultAppContext } from "../../User/DeleteUser/DeleteUser.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -25,8 +24,7 @@ beforeEach(() => {
 
 describe("As LU I should see the session expired dialog", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
-  const props = defaultProps({ context }); // The
+  const props = defaultProps(); // The
 
   describe("As LU I can start go to login", () => {
     /**
@@ -37,6 +35,7 @@ describe("As LU I should see the session expired dialog", () => {
     });
 
     it("matches the styleguide", async () => {
+      expect.assertions(4);
       // Dialog title exists and correct
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Session Expired");
@@ -49,21 +48,24 @@ describe("As LU I should see the session expired dialog", () => {
     });
 
     it("As LU I should go to login page by clicking on the login button", async () => {
-      jest.spyOn(context.port, "request");
+      expect.assertions(1);
+      jest.spyOn(props.context.port, "request");
       await page.goToLogin();
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tab.reload");
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.tab.reload");
     });
 
     it("As LU I can go to login page by closing the dialog", async () => {
-      jest.spyOn(context.port, "request");
+      expect.assertions(1);
+      jest.spyOn(props.context.port, "request");
       await page.closeDialog();
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tab.reload");
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.tab.reload");
     });
 
     it("As LU I can go to login page with the keyboard (escape)", async () => {
-      jest.spyOn(context.port, "request");
+      expect.assertions(1);
+      jest.spyOn(props.context.port, "request");
       await page.escapeKey();
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tab.reload");
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.tab.reload");
     });
   });
 });

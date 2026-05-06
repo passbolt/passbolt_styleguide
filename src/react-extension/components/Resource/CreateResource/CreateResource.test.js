@@ -79,8 +79,8 @@ describe("See the Create Resource", () => {
         expect(page.password.value).toBe("");
         expect(page.password.getAttribute("type")).toBe("password");
         const passwordInputStyle = window.getComputedStyle(page.password);
-        expect(passwordInputStyle.background).toBe("white");
-        expect(passwordInputStyle.color).toBe("");
+        expect(passwordInputStyle.background).toBe("rgb(255, 255, 255)");
+        expect(passwordInputStyle.color).toBe("initial");
 
         // Complexity label exists but is not yet defined.
         expect(page.complexityText.textContent).toBe("Quality Entropy: 0.0 bits");
@@ -1296,7 +1296,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v5 default with totp empty", async () => {
@@ -1348,7 +1348,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v5 default with totp and custom fields", async () => {
@@ -1438,7 +1438,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v5 default with totp with password null", async () => {
@@ -1500,7 +1500,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v5 totp after password, custom fields and note deleted", async () => {
@@ -1561,7 +1561,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v5 standalone custom fields", async () => {
@@ -1633,7 +1633,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v4 default with password deleted", async () => {
@@ -1683,7 +1683,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v4 default totp with password deleted", async () => {
@@ -1739,7 +1739,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v4 default totp", async () => {
@@ -1793,7 +1793,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v4 totp after password and note deleted", async () => {
@@ -1842,7 +1842,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As a signed-in user I should be able to save a resource v4 password string", async () => {
@@ -1890,7 +1890,7 @@ describe("See the Create Resource", () => {
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
         "The resource has been added successfully",
       );
-      expect(props.onClose).toBeCalled();
+      expect(props.onClose).toHaveBeenCalled();
     });
 
     it("As LU I should see an error dialog if the submit operation fails for an unexpected reason", async () => {

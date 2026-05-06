@@ -31,6 +31,7 @@ import KeySVG from "../../../../img/svg/key.svg";
 import TotpSVG from "../../../../img/svg/totp.svg";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 import NoteSVG from "../../../../img/svg/notes.svg";
+import PinCodeSVG from "../../../../img/svg/pin.svg";
 
 class DisplayContentTypesAllowedContentTypesAdministration extends Component {
   /** @type {ResourceTypesFormEntity}*/
@@ -78,11 +79,13 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
         totp_v4: false,
         totp_v5: false,
         note_v5: false,
+        pin_code_v5: false,
         password_v4_count: 0,
         password_v5_count: 0,
         totp_v4_count: 0,
         totp_v5_count: 0,
         note_v5_count: 0,
+        pin_code_v5_count: 0,
         has_password_v4: false,
         has_totp_v4: false,
         has_password_v5: false,
@@ -255,9 +258,9 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
 
   /**
    * Display the content surrounded or not with a toolti.
-   * @param {ReactDOM} content content to display
+   * @param {ReactElement} content content to display
    * @param {boolean} isDisabled if disabled the tooltip is added
-   * @returns {ReactDOM}
+   * @returns {ReactElement}
    */
   addTooltipOnDisabledElement(content, isDisabled) {
     return isDisabled ? (
@@ -535,6 +538,65 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                               </div>
                             )}
                             {warnings?.hasError("note_v5", "is_creation_not_alowed") && (
+                              <div className="warning-message">
+                                <Trans>Creation of content type v5 is not allowed.</Trans>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </label>
+                    </span>
+                    <span
+                      className={`input checkbox form-element ${errors?.hasError("pin_code_v5") && "error"} ${!errors?.hasError("pin_code_v5") && warnings?.hasError("pin_code_v5") && "warning"}`}
+                    >
+                      <input
+                        type="checkbox"
+                        id="pinCodeV5Input"
+                        className="checkbox"
+                        name="pin_code_v5"
+                        onChange={this.handleInputChange}
+                        checked={this.state.settings.pin_code_v5}
+                        disabled={this.isInputDisabled(
+                          this.state.settings.pin_code_v5_count,
+                          this.state.settings.pin_code_v5,
+                        )}
+                      />
+                      <label htmlFor="pinCodeV5Input">
+                        {this.addTooltipOnDisabledElement(
+                          <div className="allow-content-type-item">
+                            <PinCodeSVG />
+                            <span className="name">
+                              <Trans>Pin code</Trans>
+                            </span>
+                            <span className="info">
+                              {this.props.t(`({{count}} resources)`, { count: this.state.settings.pin_code_v5_count })}
+                            </span>
+                          </div>,
+                          this.isInputDisabled(this.state.settings.pin_code_v5_count, this.state.settings.pin_code_v5),
+                        )}
+                        {errors?.hasError("pin_code_v5", "has_content") && (
+                          <div className="error-message">
+                            <Trans>PIN code content type is disabled but there are existing PIN code resources.</Trans>
+                          </div>
+                        )}
+                        {errors?.hasError("pin_code_v5", "minimum_requirement") && (
+                          <div className="error-message">
+                            <Trans>At least one content type should be allowed</Trans>
+                          </div>
+                        )}
+                        {!errors?.hasError("pin_code_v5") && (
+                          <>
+                            {warnings?.hasError("pin_code_v5", "is_creation_alowed") && (
+                              <div className="warning-message">
+                                <Trans>V5 resource creation is enabled but PIN code content type is disabled.</Trans>
+                              </div>
+                            )}
+                            {warnings?.hasError("pin_code_v5", "active_metadata_key") && (
+                              <div className="warning-message">
+                                <Trans>No active metadata key defined.</Trans>
+                              </div>
+                            )}
+                            {warnings?.hasError("pin_code_v5", "is_creation_not_alowed") && (
                               <div className="warning-message">
                                 <Trans>Creation of content type v5 is not allowed.</Trans>
                               </div>

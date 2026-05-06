@@ -45,7 +45,7 @@ describe("SecretRevisionsResourceServiceWorkerService", () => {
       const port = new MockPort();
 
       const service = new SecretRevisionsResourceServiceWorkerService(port);
-      await expect(() => service.findAllByResourceIdForDisplay(42)).rejects.toThrowError();
+      await expect(() => service.findAllByResourceIdForDisplay(42)).rejects.toThrow();
     });
   });
 });
