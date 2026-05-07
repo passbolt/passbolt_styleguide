@@ -27,6 +27,7 @@ class ColumnModifiedModel extends ColumnModel {
     columnDto.field = ColumnFields.MODIFIED;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
+    columnDto.minWidth = 120;
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = true;

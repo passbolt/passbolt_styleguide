@@ -27,6 +27,7 @@ class ColumnPasswordModel extends ColumnModel {
     columnDto.field = ColumnFields.PASSWORD;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
+    columnDto.minWidth = 122;
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = false;

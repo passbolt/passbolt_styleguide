@@ -206,8 +206,9 @@ class CellHeaderWrapper extends Component {
   handleResizeColumnMouseMoveEvent(event) {
     // Determine how far the mouse has been moved
     const dx = event.clientX - this.state.mouseXPosition;
-    // Update the width of column
-    const width = this.state.columnToResizeWidth + dx > 50 ? this.state.columnToResizeWidth + dx : 50;
+    // Update the width of column, clamped to the column's min width (or 50 fallback)
+    const minWidth = this.column.minWidth ?? 50;
+    const width = Math.max(this.state.columnToResizeWidth + dx, minWidth);
     // Update the width
     this.props.tableContext.onResizeColumn(this.props.index, width);
   }
@@ -275,7 +276,14 @@ class CellHeaderWrapper extends Component {
    */
   get columnWidthStyle() {
     // Get the column width
-    return this.column?.width ? { width: `${this.column.width}px` } : null;
+    if (!this.column?.width) {
+      return null;
+    }
+    const style = { width: `${this.column.width}px` };
+    if (this.column.minWidth) {
+      style.minWidth = `${this.column.minWidth}px`;
+    }
+    return style;
   }
 
   /**
