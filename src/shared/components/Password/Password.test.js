@@ -102,4 +102,30 @@ describe("As LU I should see the user confirm passphrase page", () => {
       expect(page.isObfuscated).toBeTruthy();
     });
   });
+
+  describe("As LU I cannot exceed the password max length", () => {
+    it("maxLength is 4096 when no maxLength prop is provided", () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const page = new PasswordPage(props);
+      expect(page.passwordInput.maxLength).toBe(4096);
+    });
+
+    it("forwards a custom maxLength prop to the input element", () => {
+      expect.assertions(1);
+      const props = defaultProps({ maxLength: 12 });
+      const page = new PasswordPage(props);
+      expect(page.passwordInput.maxLength).toBe(12);
+    });
+
+    it("reflects an updated maxLength when the prop changes", () => {
+      expect.assertions(2);
+      const props = defaultProps({ maxLength: 8 });
+      const page = new PasswordPage(props);
+      expect(page.passwordInput.maxLength).toBe(8);
+
+      page.rerender(defaultProps({ maxLength: 16 }));
+      expect(page.passwordInput.maxLength).toBe(16);
+    });
+  });
 });
