@@ -13,7 +13,7 @@
  */
 
 import AddResourcePinCodePage from "./AddResourcePinCode.test.page";
-import { defaultProps, defaultPropsWithValue, pinCodeErrors } from "./AddResourcePinCode.test.data";
+import { defaultProps, defaultPropsWithValue, pinCodeErrors, pinCodeWarnings } from "./AddResourcePinCode.test.data";
 import { PinCodeGenerator } from "../../../../shared/lib/SecretGenerator/PinCodeGenerator";
 
 beforeEach(() => {
@@ -228,6 +228,38 @@ describe("AddResourcePinCode", () => {
       const page = new AddResourcePinCodePage(props);
 
       expect(page.pinCodeErrorMessage.textContent).toEqual("The PIN code is required.");
+    });
+  });
+
+  describe("Warnings", () => {
+    it("renders the maxLength warning message and the attention icon when warnings include secret.pin_code maxLength.", () => {
+      expect.assertions(2);
+
+      const props = defaultProps({
+        warnings: pinCodeWarnings("maxLength"),
+        resource: { secret: { pin_code: "123456789012" } },
+      });
+      const page = new AddResourcePinCodePage(props);
+
+      expect(page.pinCodeWarningMessage.textContent).toEqual(
+        "Warning: this is the maximum size for this field, make sure your data was not truncated.",
+      );
+      expect(page.attentionIcon).not.toBeNull();
+    });
+
+    it("suppresses the maxLength warning when a maxLength error is also present.", () => {
+      expect.assertions(3);
+
+      const props = defaultProps({
+        errors: pinCodeErrors("maxLength"),
+        warnings: pinCodeWarnings("maxLength"),
+        resource: { secret: { pin_code: "1234567890123" } },
+      });
+      const page = new AddResourcePinCodePage(props);
+
+      expect(page.pinCodeErrorMessage.textContent).toEqual("The PIN code cannot exceed 12 digits.");
+      expect(page.pinCodeWarningMessage).toBeNull();
+      expect(page.attentionIcon).toBeNull();
     });
   });
 });
