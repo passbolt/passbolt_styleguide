@@ -61,3 +61,14 @@ export function pinCodeErrors(rule) {
 
   return errors;
 }
+
+/**
+ * Build warnings prop with a single `secret.pin_code` rule violation.
+ * @param {string} rule e.g. "maxLength"
+ * @returns {EntityValidationError}
+ */
+export function pinCodeWarnings(rule) {
+  const warnings = new EntityValidationError();
+  warnings.addError("secret.pin_code", rule, `pin_code ${rule} warning`);
+  return warnings;
+}

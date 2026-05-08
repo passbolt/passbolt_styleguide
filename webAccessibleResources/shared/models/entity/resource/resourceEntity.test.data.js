@@ -25,7 +25,6 @@ import { defaultUserDto } from "../user/userEntity.test.data";
 import { defaultPermissionsDtos } from "../permission/permissionCollection.test.data";
 import { defaultTagsDtos } from "../tag/tagCollection.test.data";
 import { defaultResourceMetadataDto } from "./metadata/resourceMetadataEntity.test.data";
-import { defaultOfflineItemDto } from "../offline/offlineItemEntity.test.data";
 
 /**
  * Build default resource dto.
@@ -35,8 +34,7 @@ import { defaultOfflineItemDto } from "../offline/offlineItemEntity.test.data";
  * @param {boolean} [options.withCreator=false] Add creator default dto.
  * @param {boolean|integer} [options.withPermissions=0] Add permission default dtos.
  * @param {boolean|integer} [options.withFavorite=false] Add favorite default dto.
- * @param {boolean|integer} [options.withTags=false] Add tags default dto.
- * @param {boolean|integer} [options.withOffline=false] Add offline default dto.
+ * @param {boolean|integer} [options.withTags=false] Add favorite default dto.
  * @returns {object}
  */
 export const defaultResourceDto = (data = {}, options = {}) => {
@@ -85,10 +83,6 @@ export const defaultResourceDto = (data = {}, options = {}) => {
 
   if (!data.tags && options?.withTags) {
     defaultData.tags = defaultTagsDtos();
-  }
-
-  if (!data.offline && options?.withOffline) {
-    defaultData.offline = defaultOfflineItemDto();
   }
 
   return defaultData;

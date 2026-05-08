@@ -184,7 +184,7 @@ class Password extends Component {
         <input
           id={this.props.id}
           name={this.props.name}
-          maxLength="4096"
+          maxLength={this.props.maxLength}
           placeholder={this.props.placeholder}
           type={this.state.viewPassword && !this.props.disabled ? "text" : "password"}
           onKeyUp={this.props.onKeyUp}
@@ -232,6 +232,7 @@ Password.defaultProps = {
   id: "",
   name: "",
   autoComplete: "off",
+  maxLength: 4096,
 };
 
 Password.propTypes = {
@@ -252,6 +253,7 @@ Password.propTypes = {
     backgroundColor: PropTypes.string,
     textColor: PropTypes.string,
   }), // The securityTokenDto
+  maxLength: PropTypes.number, // The max length of the input
 };
 
 export default withTranslation("common")(Password);

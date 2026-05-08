@@ -22,6 +22,7 @@ import { PinCodeGenerator, PIN_CODE_LENGTH_CONSTRAINTS } from "../../../../share
 import DiceSVG from "../../../../img/svg/dice.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class AddResourcePinCode extends Component {
   constructor(props) {
@@ -158,10 +159,20 @@ class AddResourcePinCode extends Component {
   }
 
   /**
-   * Does the pin code length exceeds the max pin code length?
+   * Checks if the pin code length exceeds the max pin code length
    */
   isMaxLengthError() {
     return this.props.errors?.details?.secret?.hasError("pin_code", "maxLength");
+  }
+
+  /**
+   * Checks if there is a max length warning for a specific property.
+   * @param {string} propName The name of the property to check.
+   * @param {string} association The association name.
+   * @returns {boolean}
+   */
+  isMaxLengthWarnings(propName, association) {
+    return !this.isMaxLengthError() && this.props.warnings?.hasError(`${association}.${propName}`, "maxLength");
   }
 
   /**
@@ -192,6 +203,7 @@ class AddResourcePinCode extends Component {
             >
               <label htmlFor="resource-pin-code">
                 <Trans>Code</Trans>
+                {this.isMaxLengthWarnings("pin_code", "secret") && <AttentionSVG className="attention-required" />}
               </label>
               <div className="password-button-inline">
                 <Password
@@ -200,6 +212,7 @@ class AddResourcePinCode extends Component {
                   autoComplete="off"
                   placeholder={this.translate("Pin code")}
                   preview={true}
+                  maxLength={PIN_CODE_LENGTH_CONSTRAINTS.MAX}
                   value={this.props.resource?.secret?.pin_code}
                   onChange={this.handlePinCodeInputChange}
                   inputRef={this.pinCodeInputRef}
@@ -215,6 +228,14 @@ class AddResourcePinCode extends Component {
                 </button>
               </div>
               {this.hasFieldPinCodeError() && <div className="pin-code error-message">{this.pinCodeErrorMessage}</div>}
+              {this.isMaxLengthWarnings("pin_code", "secret") && (
+                <div className="pin-code warning-message">
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              )}
             </div>
           </div>
           <div className="additional-information">
