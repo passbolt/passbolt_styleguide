@@ -20,7 +20,10 @@ import {
   defaultOfflineSettingsDto,
   defaultOfflineSettingsDtoFromApi,
 } from "../../models/entity/offline/offlineSettingsEntity.test.data";
-import { OFFLINE_FIND_SETTINGS_EVENT } from "../../services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
+import {
+  OFFLINE_FIND_SETTINGS_EVENT,
+  OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT,
+} from "../../services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
 import OfflineSettingsEntity from "../../models/entity/offline/offlineSettingsEntity";
 
 beforeEach(() => {
@@ -201,7 +204,7 @@ describe("OfflineSettingsLocalStorageContext", () => {
       const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
 
       props.context.storage.local.set({ [contextProvider.storageKey]: null });
-      props.context.port.addRequestListener(OFFLINE_FIND_SETTINGS_EVENT, async () =>
+      props.context.port.addRequestListener(OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT, async () =>
         defaultOfflineSettingsDtoFromApi(),
       );
 
@@ -212,7 +215,7 @@ describe("OfflineSettingsLocalStorageContext", () => {
       await contextProvider.loadLocalStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
-      expect(spyOnRequest).toHaveBeenCalledWith(OFFLINE_FIND_SETTINGS_EVENT);
+      expect(spyOnRequest).toHaveBeenCalledWith(OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT);
     });
   });
 
@@ -225,7 +228,10 @@ describe("OfflineSettingsLocalStorageContext", () => {
 
       const expectedOfflineSettings = defaultOfflineSettingsDtoFromApi();
       props.context.storage.local.set({ [contextProvider.storageKey]: null });
-      props.context.port.addRequestListener(OFFLINE_FIND_SETTINGS_EVENT, async () => expectedOfflineSettings);
+      props.context.port.addRequestListener(
+        OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT,
+        async () => expectedOfflineSettings,
+      );
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 
@@ -234,7 +240,7 @@ describe("OfflineSettingsLocalStorageContext", () => {
       await contextProvider.updateLocalStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
-      expect(spyOnRequest).toHaveBeenCalledWith(OFFLINE_FIND_SETTINGS_EVENT);
+      expect(spyOnRequest).toHaveBeenCalledWith(OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT);
       expect(contextProvider.state.offlineSettings.toDto()).toStrictEqual(expectedOfflineSettings);
     });
 
@@ -253,7 +259,7 @@ describe("OfflineSettingsLocalStorageContext", () => {
       contextProvider.updateLocalStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
-      expect(spyOnRequest).toHaveBeenCalledWith(OFFLINE_FIND_SETTINGS_EVENT);
+      expect(spyOnRequest).toHaveBeenCalledWith(OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT);
 
       contextProvider.updateLocalStorage();
 
