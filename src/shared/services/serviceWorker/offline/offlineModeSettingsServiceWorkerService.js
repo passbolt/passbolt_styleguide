@@ -17,6 +17,7 @@ import { isValidUuid } from "../../../utils/assertions";
 export const OFFLINE_FIND_SETTINGS_EVENT = "passbolt.offline.find-settings";
 export const OFFLINE_SAVE_SETTINGS_EVENT = "passbolt.offline.save-settings";
 export const OFFLINE_DELETE_SETTINGS_EVENT = "passbolt.offline.delete-settings";
+export const OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT = "passbolt.offline.get-or-find-settings";
 
 class OfflineModeSettingsServiceWorkerService {
   /**

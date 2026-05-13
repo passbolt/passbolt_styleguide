@@ -110,6 +110,10 @@ const siteSettings = (isProEdition = true) => ({
         version: "2.0.0",
         enabled: true,
       },
+      offline: {
+        version: "1.0.0",
+        enabled: true,
+      },
       previewPassword: {
         version: "3.0.0",
       },
