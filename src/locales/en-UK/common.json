@@ -1263,6 +1263,7 @@
   "Set debug = false; in {{configurationFilePath}}": "Set debug = false; in {{configurationFilePath}}",
   "Set expiry date": "Set expiry date",
   "Set how long a user remains authenticated in offline mode before being required to re-enter their passphrase to view cached secrets.": "Set how long a user remains authenticated in offline mode before being required to re-enter their passphrase to view cached secrets.",
+  "Set how long a user remains authenticated in offline mode before being required to re-enter their passphrase to view cached secrets.": "Set how long a user remains authenticated in offline mode before being required to re-enter their passphrase to view cached secrets.",
   "Set passbolt.js.build in {{configurationFilePath}}": "Set passbolt.js.build in {{configurationFilePath}}",
   "Set passbolt.meta.robots to false in {{configurationFilePath}}": "Set passbolt.meta.robots to false in {{configurationFilePath}}",
   "Set passbolt.selenium.active to false in {{configurationFilePath}}": "Set passbolt.selenium.active to false in {{configurationFilePath}}",
