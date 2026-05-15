@@ -187,6 +187,7 @@
   "Allow the extension on every website.": "Allow the extension on every website.",
   "Allow the use of personal keys. (Recommended)": "Allow the use of personal keys. (Recommended)",
   "Allow users to access resources when the API is not reachable.": "Allow users to access resources when the API is not reachable.",
+  "Allow users to access resources when the API is not reachable.": "Allow users to access resources when the API is not reachable.",
   "Allow users to override the default policy.": "Allow users to override the default policy.",
   "Allow users to upgrade their content from cleartext to encrypted metadata type.": "Allow users to upgrade their content from cleartext to encrypted metadata type.",
   "Allowed domains": "Allowed domains",
