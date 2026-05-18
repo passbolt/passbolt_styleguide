@@ -1,4 +1,3 @@
-## v5.11.4
+# v5.12.1
 
-### Fixed
-- PB-51067 - Rework TOTP selectors
+Fix various issues regarding pin code

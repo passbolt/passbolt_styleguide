@@ -166,6 +166,34 @@ class FilterResourcesByTagPage extends React.Component {
   });
 
   /**
+   * Is password resource
+   * @param {string} resourceTypeId
+   * @returns {boolean}
+   */
+  isPasswordResource(resourceTypeId) {
+    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.hasPassword();
+  }
+
+  /**
+   * Is OTP resource
+   * @param {string} resourceTypeId
+   * @returns {boolean}
+   */
+  isOTPResource(resourceTypeId) {
+    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.hasTotp();
+  }
+
+  /**
+   * Get resource filtered by resource type to have only resource with password and totp
+   * @return {Array}
+   */
+  get resourcesFilterByResourceTypePasswordAndTotp() {
+    const keepOnlyResourcesPasswordAndTotp = (resource) =>
+      this.isPasswordResource(resource.resource_type_id) || this.isOTPResource(resource.resource_type_id);
+    return this.props.resources.filter(keepOnlyResourcesPasswordAndTotp);
+  }
+
+  /**
    * Get the tags to display
    * @param {Array<Object>} tags the tag list to filter from
    * @param {string} search the keyword to search for in the list if any
@@ -251,14 +279,11 @@ class FilterResourcesByTagPage extends React.Component {
     let browsedTags, browsedResources;
 
     if (isReady) {
+      const resources = this.resourcesFilterByResourceTypePasswordAndTotp;
       if (listTagsOnly) {
-        browsedTags = this.filterSearchedTags(this.props.resources, this.props.context.search);
+        browsedTags = this.filterSearchedTags(resources, this.props.context.search);
       } else {
-        browsedResources = this.filterSearchedResources(
-          this.props.resources,
-          this.props.context.search,
-          selectedTag?.id,
-        );
+        browsedResources = this.filterSearchedResources(resources, this.props.context.search, selectedTag?.id);
       }
     }
 

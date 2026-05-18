@@ -68,13 +68,32 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
     this.props.history.push(`/webAccessibleResources/quickaccess/resources/view/${resourceId}`);
   }
 
-  async findAndLoadResources() {
-    const storageData = await this.props.context.storage.local.get(["resources"]);
-    if (storageData.resources) {
-      const resources = storageData.resources;
-      this.sortResourcesByModifiedDesc(resources);
-      this.setState({ resources });
-    }
+  /**
+   * Is password resource
+   * @param {string} resourceTypeId
+   * @returns {boolean}
+   */
+  isPasswordResource(resourceTypeId) {
+    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.hasPassword();
+  }
+
+  /**
+   * Is OTP resource
+   * @param {string} resourceTypeId
+   * @returns {boolean}
+   */
+  isOTPResource(resourceTypeId) {
+    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.hasTotp();
+  }
+
+  /**
+   * Get resource filtered by resource type to have only resource with password and totp
+   * @return {Array}
+   */
+  get resourcesFilterByResourceTypePasswordAndTotp() {
+    const keepOnlyResourcesPasswordAndTotp = (resource) =>
+      this.isPasswordResource(resource.resource_type_id) || this.isOTPResource(resource.resource_type_id);
+    return this.props.resources.filter(keepOnlyResourcesPasswordAndTotp);
   }
 
   /**
@@ -82,7 +101,7 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
    * @returns {Array}
    */
   sortResourcesByModifiedDesc() {
-    return this.props.resources.sort(
+    return this.resourcesFilterByResourceTypePasswordAndTotp.sort(
       (resource1, resource2) => new Date(resource2.modified) - new Date(resource1.modified),
     );
   }
