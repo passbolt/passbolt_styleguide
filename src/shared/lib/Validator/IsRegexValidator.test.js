@@ -11,12 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.12.0
  */
-import each from "jest-each";
 import IsRegexValidator from "./IsRegexValidator";
 
 describe("IsRegexValidator", () => {
   describe("IsRegexValidator::validate", () => {
-    each([
+    describe.each([
       { value: "12345", regex: "(?<!\\S)\\d+(?!\\S)" },
       { value: "123456", regex: ".*" },
       { value: "1234567", regex: "^[0-9A-Za-z\\s&]*$" },
@@ -25,14 +24,14 @@ describe("IsRegexValidator", () => {
         regex:
           "^[\\p{L}0-9!#$%&'*+\\/=?^_\\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\\/=?^_\\`{|}~-]+)*@(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[A-Za-z]{2,})$",
       },
-    ]).describe("Should accept.", (props) => {
+    ])("Should accept.", (props) => {
       it(`should accept: ${props.value}`, async () => {
         expect.assertions(1);
         expect(new IsRegexValidator(props.regex).validate(props.value)).toBeTruthy();
       });
     });
 
-    each([
+    describe.each([
       { value: "Text", regex: "(?<!\\S)\\d+(?!\\S)" },
       { value: "123.45", regex: "(?<!\\S)\\d+(?!\\S)" },
       { value: 1, regex: "^[0-9A-Za-z\\s&]*$" },
@@ -42,7 +41,7 @@ describe("IsRegexValidator", () => {
         regex:
           "/^[\\p{L}0-9!#$%&'*+\\/=?^_\\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\\/=?^_\\`{|}~-]+)*@(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[A-Za-z]{2,})$/ui",
       },
-    ]).describe("Should not accept.", (props) => {
+    ])("Should not accept.", (props) => {
       it(`should not accept: ${props.value}`, async () => {
         expect.assertions(1);
         expect(new IsRegexValidator(props.regex).validate(props.value)).toBeFalsy();

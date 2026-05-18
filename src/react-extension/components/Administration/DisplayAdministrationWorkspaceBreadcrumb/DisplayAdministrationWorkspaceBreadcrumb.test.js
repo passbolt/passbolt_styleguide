@@ -19,7 +19,6 @@
 import DisplayAdministrationWorkspaceBreadcrumbPage from "./DisplayAdministrationWorkspaceBreadcrumb.test.page";
 import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
 import { defaultAppContext, defaultProps } from "./DisplayAdministrationWorkspaceBreadcrumb.test.data";
-import each from "jest-each";
 
 beforeEach(() => {
   jest.resetModules();
@@ -40,7 +39,7 @@ describe("As AD I can see a Breadcrumb", () => {
     expect(page.count).toBe(0);
   });
 
-  each([
+  describe.each([
     { menuType: AdministrationWorkspaceMenuTypes.MFA, expectedBreadcrumb: "Multi Factor Authentication" },
     { menuType: AdministrationWorkspaceMenuTypes.USER_DIRECTORY, expectedBreadcrumb: "Users Directory" },
     { menuType: AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION, expectedBreadcrumb: "Email Notification" },
@@ -69,7 +68,7 @@ describe("As AD I can see a Breadcrumb", () => {
     { menuType: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED, expectedBreadcrumb: "Getting started" },
     { menuType: AdministrationWorkspaceMenuTypes.SCIM, expectedBreadcrumb: "SCIM" },
     { menuType: AdministrationWorkspaceMenuTypes.SECRET_HISTORY, expectedBreadcrumb: "Secret history" },
-  ]).describe("As AD I should see a breadcrumb for each menu", (scenario) => {
+  ])("As AD I should see a breadcrumb for each menu", (scenario) => {
     it(`for: ${scenario.menuType}`, () => {
       const props = defaultProps(scenario.menuType); // The props to pass
       page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);

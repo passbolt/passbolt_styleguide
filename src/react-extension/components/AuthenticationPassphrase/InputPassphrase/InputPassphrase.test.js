@@ -156,9 +156,9 @@ describe("InputPassphrase", () => {
     const leftClick = { button: 0 };
     const dialogCloseIcon = container.querySelector(".dialog-close");
     fireEvent.click(dialogCloseIcon, leftClick);
-    expect(props.onClose).toBeCalled();
+    expect(props.onClose).toHaveBeenCalled();
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    expect(context.port.emit).toBeCalledWith(undefined, "ERROR", error);
+    expect(context.port.emit).toHaveBeenCalledWith(undefined, "ERROR", error);
   });
 
   it("calls onClose props when clicking on the cancel button.", () => {
@@ -172,9 +172,9 @@ describe("InputPassphrase", () => {
     const leftClick = { button: 0 };
     const cancelButton = container.querySelector(".submit-wrapper .cancel");
     fireEvent.click(cancelButton, leftClick);
-    expect(props.onClose).toBeCalled();
+    expect(props.onClose).toHaveBeenCalled();
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    expect(context.port.emit).toBeCalledWith(undefined, "ERROR", error);
+    expect(context.port.emit).toHaveBeenCalledWith(undefined, "ERROR", error);
   });
 
   it("changes the style of its security token when the passphrase input get or lose focus.", () => {
@@ -206,8 +206,8 @@ describe("InputPassphrase", () => {
     fireEvent.blur(passphraseInput);
     securityTokenStyle = window.getComputedStyle(securityTokenElement);
     passphraseInputStyle = window.getComputedStyle(passphraseInput);
-    expect(passphraseInputStyle.background).toBe("white");
-    expect(passphraseInputStyle.color).toBe("");
+    expect(passphraseInputStyle.background).toBe("rgb(255, 255, 255)");
+    expect(passphraseInputStyle.color).toBe("initial");
     expect(securityTokenStyle.background).toBe("rgb(0, 0, 0)");
     expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
   });
@@ -289,9 +289,9 @@ describe("InputPassphrase", () => {
 
     // Clicking on close.
     fireEvent.click(closeButton, leftClick);
-    expect(props.onClose).toBeCalled();
+    expect(props.onClose).toHaveBeenCalled();
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    expect(context.port.emit).toBeCalledWith(undefined, "ERROR", error);
+    expect(context.port.emit).toHaveBeenCalledWith(undefined, "ERROR", error);
   });
 
   it("Should capture passphrase.", async () => {
@@ -315,8 +315,8 @@ describe("InputPassphrase", () => {
 
     await waitFor(() => {
       // Assert the dialog well respond to the original request call.
-      expect(props.onClose).toBeCalled();
-      expect(context.port.emit).toBeCalledWith(undefined, "SUCCESS", {
+      expect(props.onClose).toHaveBeenCalled();
+      expect(context.port.emit).toHaveBeenCalledWith(undefined, "SUCCESS", {
         passphrase: "ada@passbolt.com",
         rememberMe: false,
       });
@@ -356,8 +356,8 @@ describe("InputPassphrase", () => {
 
     await waitFor(() => {
       // Assert the dialog well respond to the original request call.
-      expect(props.onClose).toBeCalled();
-      expect(context.port.emit).toBeCalledWith(undefined, "SUCCESS", {
+      expect(props.onClose).toHaveBeenCalled();
+      expect(context.port.emit).toHaveBeenCalledWith(undefined, "SUCCESS", {
         passphrase: "ada@passbolt.com",
         rememberMe: 1800,
       });
@@ -385,8 +385,8 @@ describe("InputPassphrase", () => {
 
     await waitFor(() => {
       // Assert the dialog well respond to the original request call.
-      expect(props.onClose).toBeCalled();
-      expect(context.port.emit).toBeCalledWith(undefined, "SUCCESS", {
+      expect(props.onClose).toHaveBeenCalled();
+      expect(context.port.emit).toHaveBeenCalledWith(undefined, "SUCCESS", {
         passphrase: "ada@passbolt.com",
         rememberMe: false,
       });

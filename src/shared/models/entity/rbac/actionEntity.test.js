@@ -15,7 +15,6 @@
 import EntitySchema from "../abstract/entitySchema";
 import ActionEntity from "./actionEntity";
 import { defaultActionData } from "./actionEntity.test.data";
-import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
 import { v4 as uuid } from "uuid";
 
@@ -35,11 +34,11 @@ describe("ActionEntity", () => {
       expect(entity.name).toEqual(dto.name);
     });
 
-    each([
+    describe.each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
       { scenario: "valid uuid", rule: "format", value: "invalid-id" },
-    ]).describe("Should validate the id", (test) => {
+    ])("Should validate the id", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultActionData({
@@ -54,11 +53,11 @@ describe("ActionEntity", () => {
       });
     });
 
-    each([
+    describe.each([
       { scenario: "required", rule: "type" },
       { scenario: "not null", rule: "type", value: null },
       { scenario: "max length", rule: "maxLength", value: "a".repeat(256) },
-    ]).describe("Should validate the name", (test) => {
+    ])("Should validate the name", (test) => {
       it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultActionData({

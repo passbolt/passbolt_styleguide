@@ -171,6 +171,14 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   }
 
   /**
+   * Returns the pin code v5 error element
+   * @returns {HTMLElement}
+   */
+  get pinCodeV5Error() {
+    return this.select("#pinCodeV5Input + label .error-message");
+  }
+
+  /**
    * Returns the password v4 checkbox element
    * @returns {HTMLElement}
    */
@@ -216,6 +224,14 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    */
   get noteV5Checkbox() {
     return this.select("#noteV5Input");
+  }
+
+  /**
+   * Returns the note v5 pin code element
+   * @returns {HTMLElement}
+   */
+  get pinCodeV5Checkbox() {
+    return this.select("#pinCodeV5Input");
   }
 
   /**

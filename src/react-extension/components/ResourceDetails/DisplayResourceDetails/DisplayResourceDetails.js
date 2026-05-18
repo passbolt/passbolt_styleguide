@@ -29,6 +29,7 @@ import { withResourceTypesLocalStorage } from "../../../../shared/context/Resour
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
+import DisplayResourceDetailsPinCode from "./DisplayResourceDetailsPinCode";
 import LinkSVG from "../../../../img/svg/link.svg";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
@@ -37,7 +38,20 @@ import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
 import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import { V4_TO_V5_RESOURCE_TYPE_MAPPING } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
+  RESOURCE_TYPE_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
+  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
+  RESOURCE_TYPE_V5_TOTP_SLUG,
+  V4_TO_V5_RESOURCE_TYPE_MAPPING,
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import { withMetadataTypesSettingsLocalStorage } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
@@ -94,21 +108,23 @@ class DisplayResourceDetails extends React.Component {
 
     const resourceType = this.props.resourceTypes.getFirstById(resource.resource_type_id);
     switch (resourceType?.slug) {
-      case "password-string":
-      case "v5-password-string":
+      case RESOURCE_TYPE_PASSWORD_STRING_SLUG:
+      case RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG:
         return this.translate("Password");
-      case "password-and-description":
-      case "v5-default":
+      case RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG:
+      case RESOURCE_TYPE_V5_DEFAULT_SLUG:
         return this.translate("Password and Note");
-      case "password-description-totp":
-      case "v5-default-with-totp":
+      case RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG:
+      case RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG:
         return this.translate("Password, Note and TOTP");
-      case "totp":
-      case "v5-totp-standalone":
+      case RESOURCE_TYPE_TOTP_SLUG:
+      case RESOURCE_TYPE_V5_TOTP_SLUG:
         return this.translate("TOTP");
-      case "v5-custom-fields":
+      case RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG:
+        return this.translate("PIN code");
+      case RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG:
         return this.translate("Custom fields");
-      case "v5-note":
+      case RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG:
         return this.translate("Note");
       default:
         return this.translate("Resource");
@@ -285,6 +301,14 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
+   * Is pin code resource
+   * @return {boolean}
+   */
+  get isPinCodeResources() {
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasPinCode();
+  }
+
+  /**
    * Has description
    * @return {boolean}
    */
@@ -363,6 +387,7 @@ class DisplayResourceDetails extends React.Component {
       <>
         {this.isPasswordResources && <DisplayResourceDetailsPassword />}
         {this.isTotpResources && <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource} />}
+        {this.isPinCodeResources && <DisplayResourceDetailsPinCode />}
         {this.hasCustomFields && <DisplayResourceDetailsCustomFields />}
         {this.hasSecureNote && <DisplayResourceDetailsNote />}
         {this.hasMultipleUris && <DisplayResourceDetailsURIs />}

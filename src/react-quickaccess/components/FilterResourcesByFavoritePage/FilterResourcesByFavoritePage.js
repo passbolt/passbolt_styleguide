@@ -114,6 +114,34 @@ class FilterResourcesByFavoritePage extends React.Component {
   });
 
   /**
+   * Is password resource
+   * @param {string} resourceTypeId
+   * @returns {boolean}
+   */
+  isPasswordResource(resourceTypeId) {
+    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.hasPassword();
+  }
+
+  /**
+   * Is OTP resource
+   * @param {string} resourceTypeId
+   * @returns {boolean}
+   */
+  isOTPResource(resourceTypeId) {
+    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.hasTotp();
+  }
+
+  /**
+   * Get resource filtered by resource type to have only resource with password and totp
+   * @return {Array}
+   */
+  get resourcesFilterByResourceTypePasswordAndTotp() {
+    const keepOnlyResourcesPasswordAndTotp = (resource) =>
+      this.isPasswordResource(resource.resource_type_id) || this.isOTPResource(resource.resource_type_id);
+    return this.props.resources.filter(keepOnlyResourcesPasswordAndTotp);
+  }
+
+  /**
    * Has metadata types settings
    * @returns {boolean}
    */
@@ -161,7 +189,10 @@ class FilterResourcesByFavoritePage extends React.Component {
     let browsedResources;
 
     if (isReady) {
-      browsedResources = this.filterSearchedResources(this.props.resources, this.props.context.search);
+      browsedResources = this.filterSearchedResources(
+        this.resourcesFilterByResourceTypePasswordAndTotp,
+        this.props.context.search,
+      );
     }
 
     /**

@@ -26,6 +26,7 @@ import {
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {
@@ -50,7 +51,7 @@ import { resourceWorkspaceContextWithSelectedFolderIOwn } from "../../../context
 describe("See the Display Resource Creation Menu", () => {
   describe("Styleguide specifications", () => {
     it("should display the component matches the styleguide", async () => {
-      expect.assertions(12);
+      expect.assertions(14);
 
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
@@ -69,6 +70,8 @@ describe("See the Display Resource Creation Menu", () => {
       expect(page.encryptedMetadataTab.textContent).toBe("Resources with encrypted metadata");
       expect(page.legacyCleartextMetadataTab.textContent).toBe("Legacy resources");
 
+      expect(page.displayedContentTypes.length).toEqual(5);
+
       // first content type available
       expect(page.getContentTypeName(1).textContent).toStrictEqual("Password");
 
@@ -80,6 +83,9 @@ describe("See the Display Resource Creation Menu", () => {
 
       // fourth content type available
       expect(page.getContentTypeName(4).textContent).toStrictEqual("Custom fields");
+
+      // fifth content type available
+      expect(page.getContentTypeName(5).textContent).toStrictEqual("Pin code");
     });
 
     it("should close the dialog when pressing escape", async () => {
@@ -94,7 +100,7 @@ describe("See the Display Resource Creation Menu", () => {
     });
 
     it("should display only encrypted metadata content types without tabs", () => {
-      expect.assertions(5);
+      expect.assertions(9);
 
       const props = onlyV5ContentTypesProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
@@ -106,15 +112,26 @@ describe("See the Display Resource Creation Menu", () => {
       // tabs should not be displayed
       expect(page.tabs).toBeNull();
 
+      expect(page.displayedContentTypes.length).toEqual(5);
+
       // first content type available
       expect(page.getContentTypeName(1).textContent).toStrictEqual("Password");
 
       // second content type available
       expect(page.getContentTypeName(2).textContent).toStrictEqual("TOTP");
+
+      // third content type available
+      expect(page.getContentTypeName(3).textContent).toStrictEqual("Note");
+
+      // fourth content type available
+      expect(page.getContentTypeName(4).textContent).toStrictEqual("Custom fields");
+
+      // fifth content type available
+      expect(page.getContentTypeName(5).textContent).toStrictEqual("Pin code");
     });
 
     it("should display only legacy cleartext metadata content types without tabs", () => {
-      expect.assertions(7);
+      expect.assertions(8);
 
       const props = onlyV4ContentTypesProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
@@ -125,6 +142,8 @@ describe("See the Display Resource Creation Menu", () => {
 
       // tabs should not be displayed
       expect(page.tabs).toBeNull();
+
+      expect(page.displayedContentTypes.length).toEqual(2);
 
       // first content type available
       expect(page.getContentTypeName(1).textContent).toStrictEqual("Password (legacy)");
@@ -176,7 +195,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(page.getContentTypeName(2)).toBeUndefined();
     });
 
-    it("should not display TOTP V5 button if no totp content type is available", () => {
+    it("should not display extra V5 button if no totp/pin code/... content type is available", () => {
       expect.assertions(3);
 
       const props = onlyPasswordV5ContentTypes(); // The props to pass
@@ -233,7 +252,7 @@ describe("See the Display Resource Creation Menu", () => {
 
   describe("should open the resource creation dialog with the right parameters", () => {
     it("should open the dialog with the right resource type", async () => {
-      expect.assertions(8);
+      expect.assertions(9);
 
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
@@ -264,6 +283,12 @@ describe("See the Display Resource Creation Menu", () => {
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
+      //click on pin code v5
+      page.clickOn(page.displayedContentTypes[4]);
+      await waitFor(() => {});
+      resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
+
       //switch tab
       page.clickOn(page.legacyCleartextMetadataTab);
       await waitFor(() => {});
@@ -280,12 +305,12 @@ describe("See the Display Resource Creation Menu", () => {
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
-      expect(props.dialogContext.open).toHaveBeenCalledTimes(6);
-      expect(props.onClose).toHaveBeenCalledTimes(6);
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(7);
+      expect(props.onClose).toHaveBeenCalledTimes(7);
     });
 
     it("should open the action aborted dialog if shared metadata key is enforced and missing", async () => {
-      expect.assertions(5);
+      expect.assertions(6);
 
       const props = defaultProps({
         context: defaultUserAppContext({
@@ -315,11 +340,16 @@ describe("See the Display Resource Creation Menu", () => {
       await waitFor(() => {});
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(4, ActionAbortedMissingMetadataKeys);
 
-      expect(props.dialogContext.open).toHaveBeenCalledTimes(4);
+      //click on pin code v5
+      page.clickOn(page.displayedContentTypes[4]);
+      await waitFor(() => {});
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(5, ActionAbortedMissingMetadataKeys);
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(5);
     });
 
     it("should open the action aborted dialog if shared metadata key is missing to create a shared resource", async () => {
-      expect.assertions(5);
+      expect.assertions(6);
 
       const props = defaultProps({
         context: defaultUserAppContext({
@@ -349,7 +379,12 @@ describe("See the Display Resource Creation Menu", () => {
       await waitFor(() => {});
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(4, ActionAbortedMissingMetadataKeys);
 
-      expect(props.dialogContext.open).toHaveBeenCalledTimes(4);
+      //click on pin code v5
+      page.clickOn(page.displayedContentTypes[4]);
+      await waitFor(() => {});
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(5, ActionAbortedMissingMetadataKeys);
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(5);
     });
 
     it("should open the dialog with the right folder parent id set", async () => {

@@ -23,6 +23,7 @@ import {
   resourceTypeV5TotpDto,
   resourceTypeV5CustomFieldsDto,
   resourceTypeV5StandaloneNoteDto,
+  resourceTypeV5StandalonePinCodeDto,
 } from "./resourceTypeEntity.test.data";
 import { v4 as uuidv4 } from "uuid";
 
@@ -41,6 +42,7 @@ export const resourceTypesCollectionDto = () => [
   resourceTypeV5TotpDto(),
   resourceTypeV5CustomFieldsDto(),
   resourceTypeV5StandaloneNoteDto(),
+  resourceTypeV5StandalonePinCodeDto(),
 ];
 
 /**
@@ -72,7 +74,7 @@ export const resourceTypesV4CollectionDto = () => [
 
 /**
  * Resource types collection v5 dto.
- * @returns {object}
+ * @returns {Array<object>}
  */
 export const resourceTypesV5CollectionDto = () => [
   resourceTypeV5DefaultDto(),
@@ -81,6 +83,7 @@ export const resourceTypesV5CollectionDto = () => [
   resourceTypeV5TotpDto(),
   resourceTypeV5CustomFieldsDto(),
   resourceTypeV5StandaloneNoteDto(),
+  resourceTypeV5StandalonePinCodeDto(),
 ];
 
 /**

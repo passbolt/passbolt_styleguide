@@ -20,6 +20,7 @@ import {
   propsWithFilteredResources,
   propsWithFilteredResourcesAndColumnsHidden,
   propsWithFilteredResourcesAndDenyUiAction,
+  propsWithFilteredResourcesAndPinCodeColumnVisible,
   propsWithNoResourcesForFilter,
 } from "./DisplayResourcesList.test.data";
 import DisplayResourcesListPage from "./DisplayResourcesList.test.page";
@@ -110,13 +111,14 @@ describe("Display Resources", () => {
       const page = new DisplayResourcesListPage(props);
       // Wait until the text is found (This will ensure the state has been updated)
       await screen.findByText("apache");
-      expect(page.resourcesCount).toBe(6);
+      expect(page.resourcesCount).toBe(7);
       expect(page.resource(1).name).toBe("apache");
       expect(page.resource(2).name).toBe("bower");
       expect(page.resource(3).name).toBe("test");
       expect(page.resource(4).name).toBe("totp");
       expect(page.resource(5).name).toBe("standalone totp");
-      expect(page.resource(6).name).toBe("will-expire");
+      expect(page.resource(6).name).toBe("pin code");
+      expect(page.resource(7).name).toBe("will-expire");
     });
   });
 
@@ -247,6 +249,8 @@ describe("Display Resources", () => {
       await page.resource(1).openContextualMenu();
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(DisplayResourcesListContextualMenu, {
         resource: props.resourceWorkspaceContext.filteredResources[0],
+        left: 0,
+        top: 0,
       });
     });
   });
@@ -416,6 +420,49 @@ describe("Display Resources", () => {
       await screen.findByText("apache");
       await expect(page.resource(1).isViewPasswordExist).toBeFalsy();
       await expect(page.resource(4).isViewTotpExist).toBeFalsy();
+    });
+  });
+
+  describe("As LU, I should copy the pin code.", () => {
+    it("As LU, I should be able to copy the pin code of a resource", async () => {
+      expect.assertions(2);
+      const props = propsWithFilteredResourcesAndPinCodeColumnVisible();
+      const page = new DisplayResourcesListPage(props);
+      await screen.findByText("apache");
+
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ pin_code: "1234" }));
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      await page.resource(6).selectPinCode();
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.filteredResources[5].id,
+      );
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
+        "1234",
+        "The pin code has been copied to clipboard.",
+      );
+    });
+  });
+
+  describe("As LU, I should preview the pin code.", () => {
+    it("AS LU, I should preview the pin code of a resource", async () => {
+      expect.assertions(4);
+      const props = propsWithFilteredResourcesAndPinCodeColumnVisible();
+      const page = new DisplayResourcesListPage(props);
+      await screen.findByText("apache");
+
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ pin_code: "5678" }));
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
+      await page.resource(6).selectViewPinCode();
+      await waitForTrue(() => page.resource(6).pinCode === "5678");
+      expect(page.resource(6).pinCode).toBe("5678");
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.filteredResources[5].id,
+      );
+      expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalledTimes(1);
+      await page.resource(6).selectViewPinCode();
+      expect(page.resource(6).pinCode).toBe("Copy to clipboard");
     });
   });
 

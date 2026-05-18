@@ -12,7 +12,6 @@
  * @since         3.8.3
  */
 
-import each from "jest-each";
 import DomainUtil from "./DomainUtil";
 
 describe("DomainUtil", () => {
@@ -55,7 +54,7 @@ describe("DomainUtil", () => {
   });
 
   describe("DomainUtil::checkDomainValidity", () => {
-    each([
+    describe.each([
       {
         scenario: "TLD",
         domain: passboltDomain,
@@ -68,7 +67,7 @@ describe("DomainUtil", () => {
         scenario: "TLD with 4 subdomain",
         domain: `${"test.".repeat(4)}${passboltDomain}`,
       },
-    ]).describe("should validate", (_props) => {
+    ])("should validate", (_props) => {
       it(`should validate: ${_props.scenario}`, () => {
         expect.assertions(2);
         expect(() => DomainUtil.checkDomainValidity(_props.domain)).not.toThrow(matchError);
@@ -76,7 +75,7 @@ describe("DomainUtil", () => {
       });
     });
 
-    each([
+    describe.each([
       {
         scenario: "No domain",
         domain: "/passwords",
@@ -113,7 +112,7 @@ describe("DomainUtil", () => {
         scenario: "TLD valid but not respecting max size",
         domain: `${"test.".repeat(20)}${passboltDomain}`,
       },
-    ]).describe("should not parse", (_props) => {
+    ])("should not parse", (_props) => {
       it(`should not validate: ${_props.scenario}`, () => {
         expect.assertions(1);
         expect(() => DomainUtil.checkDomainValidity(_props.url)).toThrow(matchError);
@@ -122,7 +121,7 @@ describe("DomainUtil", () => {
   });
 
   describe("DomainUtil::isValidHostname", () => {
-    each([
+    describe.each([
       {
         scenario: "TLD",
         domain: passboltDomain,
@@ -143,14 +142,14 @@ describe("DomainUtil", () => {
         scenario: "IP v6",
         domain: "2001:db8:3333:4444:5555:6666:7777:8888",
       },
-    ]).describe("should validate", (_props) => {
+    ])("should validate", (_props) => {
       it(`should validate: ${_props.scenario}`, () => {
         expect.assertions(1);
         expect(DomainUtil.isValidHostname(_props.domain)).toBeTruthy();
       });
     });
 
-    each([
+    describe.each([
       {
         scenario: "No domain",
         domain: "/passwords",
@@ -179,7 +178,7 @@ describe("DomainUtil", () => {
         scenario: "TLD valid but not respecting max size",
         domain: `${"test.".repeat(20)}${passboltDomain}`,
       },
-    ]).describe("should not parse", (_props) => {
+    ])("should not parse", (_props) => {
       it(`should not validate: ${_props.scenario}`, () => {
         expect.assertions(1);
         expect(DomainUtil.isValidHostname(_props.url)).toBeFalsy();

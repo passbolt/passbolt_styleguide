@@ -1,5 +1,6 @@
 {
   "testEnvironment": "jsdom",
+  "testPathIgnorePatterns": ["/node_modules/", "/storybook-static/"],
   "setupFiles": [
     "jest-webextension-mock"
   ],

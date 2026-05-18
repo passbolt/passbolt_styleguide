@@ -17,14 +17,13 @@ import AccountRecoveryInviteUserSettingPreferenceDialogPage from "./AccountRecov
 import { waitFor } from "@testing-library/react";
 import { PolicyVariations } from "./AccountRecoveryInviteUserSettingPreferenceDialog";
 import { defaultProps } from "./AccountRecoveryInviteUserSettingPreferenceDialog.test.data";
-import each from "jest-each";
 
 beforeEach(() => {
   jest.resetModules();
   jest.resetAllMocks();
 });
 
-each([
+describe.each([
   {
     displayAs: PolicyVariations.MANDATORY,
     text: "It is mandatory to share securely a copy of your private key with your organization recovery contacts. Would you like to continue?",
@@ -33,7 +32,7 @@ each([
     displayAs: PolicyVariations.OPT_OUT,
     text: "It is recommended to share securely a copy of your private key with your organization recovery contacts. Would you like to continue?",
   },
-]).describe("AccountRecoveryInviteUserSettingPreferenceDialog", (scenario) => {
+])("AccountRecoveryInviteUserSettingPreferenceDialog", (scenario) => {
   const props = defaultProps({
     policy: scenario.displayAs,
   });
