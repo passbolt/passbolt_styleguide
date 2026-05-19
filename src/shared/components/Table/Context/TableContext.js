@@ -111,7 +111,22 @@ export default class TableContextProvider extends Component {
       // Set default widths for all columns
       columns.forEach((column) => (column.width = column.defaultWidth));
     }
+    this.clampColumnsToMinWidth(columns);
     return columns;
+  }
+
+  /**
+   * Ensure every column.width is >= column.minWidth so the JS state matches the rendered min-width.
+   * Without this, persisted widths older than the new floors leave width < minWidth: the browser
+   * respects min-width visually but getTableWidth() and the resizer math believe the smaller value.
+   * @param {array} columns
+   */
+  clampColumnsToMinWidth(columns) {
+    columns.forEach((column) => {
+      if (column.minWidth && column.width < column.minWidth) {
+        column.width = column.minWidth;
+      }
+    });
   }
 
   /**
@@ -132,6 +147,9 @@ export default class TableContextProvider extends Component {
    * Whenever the component has updated in terms of props
    */
   componentDidUpdate(prevProps) {
+    if (prevProps.columns !== this.props.columns) {
+      this.clampColumnsToMinWidth(this.props.columns);
+    }
     if (prevProps.columns.length > this.props.columns.length) {
       this.removeColumn();
     } else if (prevProps.columns.length < this.props.columns.length) {
@@ -287,6 +305,9 @@ export default class TableContextProvider extends Component {
         if (column.resizable) {
           // rounding down avoids a slight shift on the left of the grid that happens sometimes and a scrolling
           column.width = Math.floor(column.width * ratio);
+          if (column.minWidth) {
+            column.width = Math.max(column.width, column.minWidth);
+          }
         }
       });
       // Get the table width from all columns
