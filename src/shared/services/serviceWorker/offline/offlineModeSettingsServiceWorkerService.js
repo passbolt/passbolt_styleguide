@@ -14,12 +14,9 @@
 import OfflineSettingsEntity from "../../../models/entity/offline/offlineSettingsEntity";
 import { isValidUuid } from "../../../utils/assertions";
 
-export const  OFFLINE_FIND_SETTINGS_EVENT =
-  "passbolt.offline.find-settings";
-export const  OFFLINE_SAVE_SETTINGS_EVENT =
-  "passbolt.offline.save-settings";
-export const  OFFLINE_DELETE_SETTINGS_EVENT =
-  "passbolt.offline.delete-settings";
+export const OFFLINE_FIND_SETTINGS_EVENT = "passbolt.offline.find-settings";
+export const OFFLINE_SAVE_SETTINGS_EVENT = "passbolt.offline.save-settings";
+export const OFFLINE_DELETE_SETTINGS_EVENT = "passbolt.offline.delete-settings";
 
 class OfflineModeSettingsServiceWorkerService {
   /**
@@ -59,15 +56,15 @@ class OfflineModeSettingsServiceWorkerService {
   }
 
   /**
-     * Disable the Offline settings.
-     * @param {string} id The Offline settings id.
-     * @return {Promise<void>}
-     */
-    async disableSettings(id) {
+   * Disable the Offline settings.
+   * @param {string} id The Offline settings id.
+   * @return {Promise<void>}
+   */
+  async disableSettings(id) {
     if (!isValidUuid(id)) {
       return;
     }
-      await this.port.request(OFFLINE_DELETE_SETTINGS_EVENT, id);
-    }
+    await this.port.request(OFFLINE_DELETE_SETTINGS_EVENT, id);
+  }
 }
 export default OfflineModeSettingsServiceWorkerService;
