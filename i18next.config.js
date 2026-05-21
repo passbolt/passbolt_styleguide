@@ -17,6 +17,6 @@ module.exports = defineConfig({
     transComponents: ["Trans"],
     warnOnConflicts: true,
     removeUnusedKeys: false,
-    transKeepBasicHtmlNodesFor: ["br"],
+    transKeepBasicHtmlNodesFor: [],
   },
 });
