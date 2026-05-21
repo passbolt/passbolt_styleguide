@@ -26,6 +26,7 @@ import {
   defaultPropsMultipleResourceAllExpired,
   defaultPropsMultipleResourceSomeExpired,
   defaultPropsOneResourceNotOwned,
+  defaultPropsOneResourceOfflineAvailable,
   defaultPropsOneResourceOwned,
   defaultPropsOneResourceV5Private,
   defaultPropsOneResourceV5Shared,
@@ -44,6 +45,7 @@ import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity
 import { v4 as uuidv4 } from "uuid";
 import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import OfflineModeServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeServiceWorkerService";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 beforeEach(() => {
@@ -611,6 +613,94 @@ describe("See Workspace Menu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.shareMenu);
 
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+    });
+  });
+
+  describe("As LU I should be able to mark a selected resource available offline or remove it", () => {
+    it("As LU I should see the 'Make available offline' item when one resource not yet available offline is selected", () => {
+      expect.assertions(3);
+      const props = defaultPropsOneResourceOwned();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+      expect(page.displayMenu.dropdownMenuOffline.textContent).toBe("Make available offline");
+    });
+
+    it("As LU I should see the 'Remove offline availability' item when one resource already available offline is selected", () => {
+      expect.assertions(3);
+      const props = defaultPropsOneResourceOfflineAvailable();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+      expect(page.displayMenu.dropdownMenuOffline.textContent).toBe("Remove offline availability");
+    });
+
+    it("As LU I should not see the offline availability item when multiple resources are selected", () => {
+      expect.assertions(2);
+      const props = defaultPropsMultipleResourceUpdateRights();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).toBeNull();
+    });
+
+    it("As LU I can mark the selected resource as available offline", async () => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceOwned();
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuOffline);
+
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource has been made available offline.",
+      );
+    });
+
+    it("As LU I can remove the selected resource from offline availability", async () => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceOfflineAvailable();
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "unmarkItem").mockResolvedValue();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuOffline);
+
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource is no longer available offline.",
+      );
+    });
+
+    it("As LU I should see an error notification if the offline update fails", async () => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceOwned();
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {
+        throw new Error("offline failure");
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displayError").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuOffline);
+
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(
+        "Unable to update the offline availability of the resource.",
+      );
     });
   });
 });
