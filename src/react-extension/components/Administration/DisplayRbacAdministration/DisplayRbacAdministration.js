@@ -511,11 +511,7 @@ class DisplayRbacAdministration extends React.Component {
                     )}
                     {this.canIUseOfflineMode && (
                       <>
-                        <DisplayRbacSection
-                          label={this.props.t("Offline Mode")}
-                          level={1}
-                          rolesCount={rolesCount}
-                        >
+                        <DisplayRbacSection label={this.props.t("Offline Mode")} level={1} rolesCount={rolesCount}>
                           <DisplayRbacItem
                             label={this.props.t("Access to offline capability (Global feature setting)")}
                             actionName={actions.OFFLINE_MODE_FEATURE}
