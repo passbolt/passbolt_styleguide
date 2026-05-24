@@ -108,7 +108,12 @@
         }
 
         .browse-resource-entry {
+          display: flex;
+          align-items: stretch;
+
           a {
+            flex: 1 1 auto;
+            min-width: 0;
             .inline-resource-entry {
               flex: 1 1 auto;
               width: 80%;
@@ -136,6 +141,23 @@
                   margin-top: .2rem;
                 }
               }
+            }
+          }
+
+          .launch-resource-button {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 1.6rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--Text-and-icons-Secondary-text);
+            box-shadow: inset 0 -.1rem 0 var(--Workspace-Dividers);
+
+            &:hover {
+              background: var(--Quick-Access-Filter-hover);
+              color: var(--Text-and-icons-Main-text);
             }
           }
         }

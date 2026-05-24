@@ -222,7 +222,7 @@ describe("HomePage", () => {
 
       expect(page.browsedResources.length).toStrictEqual(1);
       expect(page.browsedResources[0].textContent).toStrictEqual(
-        `${expectedResource.metadata.name} (${expectedResource.metadata.username})${expectedResource.metadata.uris[0]}`,
+        `${expectedResource.metadata.name} (${expectedResource.metadata.username})${expectedResource.metadata.uris[0]}Open in a new tab`,
       );
     });
 

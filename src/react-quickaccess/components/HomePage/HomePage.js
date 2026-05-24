@@ -34,6 +34,7 @@ import {
 import DisplayResourceUrisBadge from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import CanSuggestService from "../../../shared/services/canSuggestService/canSuggestService";
 import CaretRightSVG from "../../../img/svg/caret_right.svg";
+import GoSVG from "../../../img/svg/go.svg";
 import FilterSVG from "../../../img/svg/filter.svg";
 import UsersSVG from "../../../img/svg/users.svg";
 import TagV2SVG from "../../../img/svg/tag_v2.svg";
@@ -100,6 +101,7 @@ class HomePage extends React.Component {
    */
   initEventHandlers() {
     this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
+    this.handleLaunchResourceClick = this.handleLaunchResourceClick.bind(this);
   }
 
   /**
@@ -187,6 +189,32 @@ class HomePage extends React.Component {
           ),
         });
       }
+    }
+  }
+
+  /**
+   * Handles the click on a search-result row's "open in a new tab" action.
+   * Navigates a new browser tab to the resource's stored URI without decrypting
+   * or autofilling any secret. The background controller sanitises the URI.
+   * @param {Event} event
+   * @param {Object} resource
+   * @returns {Promise<void>}
+   */
+  async handleLaunchResourceClick(event, resource) {
+    // The button is a sibling of the row link; prevent the row navigation.
+    event.preventDefault();
+    event.stopPropagation();
+
+    const uri = resource.metadata?.uris?.[0];
+    if (!uri) {
+      return;
+    }
+
+    try {
+      await this.props.context.port.request("passbolt.tabs.open-resource-uri", uri);
+      await this.props.context.closeWindow();
+    } catch (error) {
+      console.error("Unable to open the resource URL in a new tab.", error);
     }
   }
 
@@ -386,6 +414,19 @@ class HomePage extends React.Component {
                           </div>
                           <CaretRightSVG />
                         </Link>
+                        {resource.metadata.uris?.[0] && (
+                          <button
+                            type="button"
+                            className="launch-resource-button"
+                            onClick={(event) => this.handleLaunchResourceClick(event, resource)}
+                            title={this.props.t("Open in a new tab")}
+                          >
+                            <GoSVG />
+                            <span className="visually-hidden">
+                              <Trans>Open in a new tab</Trans>
+                            </span>
+                          </button>
+                        )}
                       </li>
                     ))}
                 </React.Fragment>
