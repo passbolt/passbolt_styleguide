@@ -7,6 +7,20 @@
             scrollbar-width: thin;
             scrollbar-color: var(--Workspace-Elevator) transparent;
         }
+        /* Visible keyboard-focus indicator for list rows (suggested, browse, filters, launch). */
+        .resource-details,
+        .chevron-right-wrapper,
+        .launch-resource-button,
+        .browse-resource-entry > a,
+        .filter-entry > a {
+            /* !important so the focus ring wins over each control's base inset box-shadow (divider). */
+            &:focus-visible {
+                box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus) !important;
+                outline: none;
+                position: relative;
+                z-index: 1;
+            }
+        }
         .list-title {
             background: var(--Quick-Access-Header-and-footer-background);
         }
