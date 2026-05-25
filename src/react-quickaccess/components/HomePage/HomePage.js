@@ -117,6 +117,7 @@ class HomePage extends React.Component {
   initEventHandlers() {
     this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
     this.handleLaunchResourceClick = this.handleLaunchResourceClick.bind(this);
+    this.handleOpenResourceClick = this.handleOpenResourceClick.bind(this);
     this.handleListKeyDown = this.handleListKeyDown.bind(this);
   }
 
@@ -157,6 +158,28 @@ class HomePage extends React.Component {
     // Fire-and-forget: do not await; the controller continues in the background after the popup closes.
     this.props.context.port
       .request("passbolt.quickaccess.launch-resource", resource.id, this.props.context.getOpenerTabId())
+      .catch((error) => console.error(error));
+    this.props.context.closeWindow();
+  }
+
+  /**
+   * Handles the click on a search-result row's launch action when autofill on launch is disabled.
+   * Opens the resource URI in a tab without decrypting or autofilling any secret. The background
+   * reuses the opener tab when it is blank (e.g. an incognito new-tab page), otherwise opens a new
+   * tab, matching the autofill-enabled behaviour. The popup is closed immediately.
+   * @param {Event} event
+   * @param {Object} resource
+   * @returns {void}
+   */
+  handleOpenResourceClick(event, resource) {
+    event.preventDefault();
+    const uri = resource.metadata?.uris?.[0];
+    if (!uri) {
+      return;
+    }
+    // Fire-and-forget: do not await; navigation continues in the background after the popup closes.
+    this.props.context.port
+      .request("passbolt.quickaccess.open-resource-uri", uri, this.props.context.getOpenerTabId())
       .catch((error) => console.error(error));
     this.props.context.closeWindow();
   }
@@ -525,19 +548,17 @@ class HomePage extends React.Component {
                               </span>
                             </button>
                           ) : (
-                            <a
-                              href={this.sanitizeResourceUrl(resource.metadata.uris?.[0])}
-                              role="button"
+                            <button
+                              type="button"
                               className="launch-resource-button"
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              onClick={(event) => this.handleOpenResourceClick(event, resource)}
                               title={this.props.t("Open in a new tab")}
                             >
                               <GoSVG />
                               <span className="visually-hidden">
                                 <Trans>Open in a new tab</Trans>
                               </span>
-                            </a>
+                            </button>
                           ))}
                       </li>
                     ))}
