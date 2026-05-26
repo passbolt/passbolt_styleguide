@@ -1285,6 +1285,19 @@ class DisplayResourcesList extends React.Component {
                 </div>
               </div>
             )}
+            {filterType === ResourceWorkspaceFilterTypes.OFFLINE && (
+              <div className="empty-content">
+                <CircleOffSVG />
+                <div className="message">
+                  <h1>
+                    <Trans>No passwords are offline available yet.</Trans>
+                  </h1>
+                  <p>
+                    <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {this.isGridReady && (
