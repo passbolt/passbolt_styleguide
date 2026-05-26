@@ -22,6 +22,7 @@ import { ResourceWorkspaceFilterTypes } from "./ResourceWorkspaceContext";
 import { waitFor } from "@testing-library/react";
 import { waitForTrue } from "../../../test/utils/waitFor";
 import { act } from "react";
+import { defaultResourceDto } from "../../shared/models/entity/resource/resourceEntity.test.data";
 
 describe("Resource Workspace Context", () => {
   let page; // The page to test against
@@ -61,6 +62,12 @@ describe("Resource Workspace Context", () => {
       await page.goToExpired();
       await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.EXPIRED);
+    });
+
+    it("AS LU I should have an OFFLINE filter when I go to /app/passwords/filter/offline with such a filter", async () => {
+      await page.goToOffline();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
+      expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.OFFLINE);
     });
 
     it("AS LU I should have an ITEMS-I-OWN filter when I went to /app/passwords with such a filter", async () => {
@@ -205,6 +212,20 @@ describe("Resource Workspace Context", () => {
       const expectedResourcesCount = 10;
       await page.goToRootFolder();
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
+    });
+
+    it("AS LU I should have only the resources available offline when the filter is OFFLINE", async () => {
+      expect.assertions(2);
+      const offlineResource = defaultResourceDto({}, { withOffline: true });
+      const onlineResource = defaultResourceDto();
+      const customContext = defaultAppContext({
+        resources: [offlineResource, onlineResource],
+      });
+      const customPage = new ResourceWorkspaceContextPage(customContext, defaultProps());
+      await customPage.goToOffline();
+      await waitForTrue(() => customPage.filter.type === ResourceWorkspaceFilterTypes.OFFLINE);
+      expect(customPage.filteredResources).toHaveLength(1);
+      expect(customPage.filteredResources[0].id).toBe(offlineResource.id);
     });
   });
 
