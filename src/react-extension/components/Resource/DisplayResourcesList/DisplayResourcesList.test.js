@@ -108,6 +108,13 @@ describe("Display Resources", () => {
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
+    it("As LU, I should see an empty content when there are no resources matching the offline filter", async () => {
+      const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.OFFLINE));
+      // Wait until the text is found (This will ensure the state has been updated)
+      await screen.findByText("No passwords are offline available yet.");
+      expect(page.hasEmptyContent).toBeTruthy();
+    });
+
     it("AS LU, I should see the appropriate filtered list of resources", async () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
