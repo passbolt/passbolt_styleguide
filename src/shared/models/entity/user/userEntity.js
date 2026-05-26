@@ -15,6 +15,9 @@ import EntityV2 from "../abstract/entityV2";
 import RoleEntity from "../role/roleEntity";
 import GpgkeyEntity from "../gpgkey/gpgkeyEntity";
 import ProfileEntity from "../profile/profileEntity";
+import GroupsUsersCollection from "../groupUser/groupsUsersCollection";
+import AccountRecoveryUserSettingEntity from "../accountRecovery/accountRecoveryUserSettingEntity";
+import PendingAccountRecoveryRequestEntity from "../accountRecovery/pendingAccountRecoveryRequestEntity";
 
 const ENTITY_NAME = "User";
 
@@ -30,14 +33,8 @@ export const USER_STATUS = {
 };
 
 /**
- * class UserEntity
- *
- * This is a duplicate of the UserEntity coming from the browser extension and it has been adapted to make it work.
- * TODO: migrate fully the UserEntity from the Bext to here. However, the email validation needs to be solved first before fiinishing the migration.
- * At the moment, the email validation is dependent on an external service that fetches site settings data from the API which implied that we don't
- * fully validated email right now here.
- * Also, as this entity usage is limited to display user information, only the required associated entity are kepts, the others are removed.
- * As a consequence, migrating from the bext to here will also bring other data to this entity and may have an impact later.
+ * UserEntity
+ * Source of truth for user data shared across the styleguide and browser extension.
  */
 class UserEntity extends EntityV2 {
   /**
@@ -58,6 +55,24 @@ class UserEntity extends EntityV2 {
     if (this._props.gpgkey) {
       this._gpgkey = new GpgkeyEntity(this._props.gpgkey, { ...options, clone: false });
       delete this._props.gpgkey;
+    }
+    if (this._props.groups_users) {
+      this._groups_users = new GroupsUsersCollection(this._props.groups_users, { ...options, clone: false });
+      delete this._props.groups_users;
+    }
+    if (this._props.account_recovery_user_setting) {
+      this._account_recovery_user_setting = new AccountRecoveryUserSettingEntity(
+        this._props.account_recovery_user_setting,
+        { ...options, clone: false },
+      );
+      delete this._props.account_recovery_user_setting;
+    }
+    if (this._props.pending_account_recovery_request) {
+      this._pending_account_recovery_request = new PendingAccountRecoveryRequestEntity(
+        this._props.pending_account_recovery_request,
+        { ...options, clone: false },
+      );
+      delete this._props.pending_account_recovery_request;
     }
   }
 
@@ -121,10 +136,27 @@ class UserEntity extends EntityV2 {
           type: "string",
           format: "date-time",
         },
+        last_logged_in: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
+        },
+        is_mfa_enabled: {
+          type: "boolean",
+          nullable: true,
+        },
+        locale: {
+          type: "string",
+          pattern: /^[a-z]{2}-[A-Z]{2}$/,
+          nullable: true,
+        },
         // Associated models
         role: RoleEntity.getSchema(),
         profile: ProfileEntity.getSchema(),
         gpgkey: GpgkeyEntity.getSchema(),
+        groups_users: GroupsUsersCollection.getSchema(),
+        account_recovery_user_setting: AccountRecoveryUserSettingEntity.getSchema(),
+        pending_account_recovery_request: PendingAccountRecoveryRequestEntity.getSchema(),
       },
     };
   }
@@ -156,6 +188,15 @@ class UserEntity extends EntityV2 {
     }
     if (this.gpgkey && contain.gpgkey) {
       result.gpgkey = this.gpgkey.toDto();
+    }
+    if (this.groupsUsers && contain.groups_users) {
+      result.groups_users = this.groupsUsers.toDto();
+    }
+    if (this.accountRecoveryUserSetting && contain.account_recovery_user_setting) {
+      result.account_recovery_user_setting = this.accountRecoveryUserSetting.toDto();
+    }
+    if (this.pendingAccountRecoveryUserRequest && contain.pending_account_recovery_request) {
+      result.pending_account_recovery_request = this.pendingAccountRecoveryUserRequest.toDto();
     }
     return result;
   }
@@ -244,6 +285,41 @@ class UserEntity extends EntityV2 {
   }
 
   /**
+   * Get user last login date
+   * @returns {(string|null)} date
+   */
+  get lastLoggedIn() {
+    return this._props.last_logged_in || null;
+  }
+
+  /**
+   * Get mfa enabled flag
+   * @returns {(boolean|null)} true if mfa is enabled
+   */
+  get isMfaEnabled() {
+    if (typeof this._props.is_mfa_enabled === "undefined") {
+      return null;
+    }
+    return this._props.is_mfa_enabled;
+  }
+
+  /**
+   * Get the user locale.
+   * @returns {(string|null)}
+   */
+  get locale() {
+    return this._props.locale || null;
+  }
+
+  /**
+   * Set the user locale
+   * @params {string} locale The locale to set
+   */
+  set locale(locale) {
+    this._props.locale = locale;
+  }
+
+  /**
    * Get the user formatted name
    * @param {function} translate The translate function
    * @param {object} [options] The options
@@ -300,6 +376,9 @@ class UserEntity extends EntityV2 {
       profile: ProfileEntity.ALL_CONTAIN_OPTIONS,
       role: true,
       gpgkey: true,
+      groups_users: true,
+      account_recovery_user_setting: true,
+      pending_account_recovery_request: true,
     };
   }
 
@@ -343,6 +422,30 @@ class UserEntity extends EntityV2 {
    */
   get gpgkey() {
     return this._gpgkey || null;
+  }
+
+  /**
+   * Get user groups
+   * @returns {(GroupsUsersCollection|null)} users groups
+   */
+  get groupsUsers() {
+    return this._groups_users || null;
+  }
+
+  /**
+   * Get user account recover setting
+   * @returns {(AccountRecoveryUserSettingEntity|null)} account recover setting
+   */
+  get accountRecoveryUserSetting() {
+    return this._account_recovery_user_setting || null;
+  }
+
+  /**
+   * Get the pending account recovery request
+   * @returns {AccountRecoveryRequestEntity|null} pending account recovery request
+   */
+  get pendingAccountRecoveryUserRequest() {
+    return this._pending_account_recovery_request || null;
   }
 }
 
