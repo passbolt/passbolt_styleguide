@@ -27,6 +27,7 @@ class ColumnExpiredModel extends ColumnModel {
     columnDto.field = ColumnFields.EXPIRED;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
+    columnDto.minWidth = 107;
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = true;

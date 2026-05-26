@@ -55,7 +55,14 @@ class CellWrapper extends Component {
    */
   get columnWidthStyle() {
     // Get the column width
-    return this.column?.width ? { width: `${this.column.width}px` } : null;
+    if (!this.column?.width) {
+      return null;
+    }
+    const style = { width: `${this.column.width}px` };
+    if (this.column.minWidth) {
+      style.minWidth = `${this.column.minWidth}px`;
+    }
+    return style;
   }
 
   /**

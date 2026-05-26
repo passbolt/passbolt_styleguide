@@ -569,7 +569,7 @@ describe("Display Resources", () => {
       expect(page.columns(5).width).toStrictEqual("210px");
       expect(page.columns(6).width).toStrictEqual("145px");
       expect(page.columns(7).width).toStrictEqual("145px");
-      expect(page.columns(8).width).toStrictEqual("210px");
+      expect(page.columns(8).width).toStrictEqual("215px");
       expect(page.columns(9).width).toStrictEqual("145px");
       // onChangeColumnsSettings called
       expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(7);
@@ -632,12 +632,12 @@ describe("Display Resources", () => {
       // Width should be the default
       expect(page.columns(2).width).toStrictEqual("20px");
       expect(page.columns(3).width).toStrictEqual("188px");
-      expect(page.columns(4).width).toStrictEqual("130px");
+      expect(page.columns(4).width).toStrictEqual("129px");
       expect(page.columns(5).width).toStrictEqual("188px");
-      expect(page.columns(6).width).toStrictEqual("130px");
-      expect(page.columns(7).width).toStrictEqual("130px");
-      expect(page.columns(8).width).toStrictEqual("188px");
-      expect(page.columns(9).width).toStrictEqual("130px");
+      expect(page.columns(6).width).toStrictEqual("129px");
+      expect(page.columns(7).width).toStrictEqual("129px");
+      expect(page.columns(8).width).toStrictEqual("215px");
+      expect(page.columns(9).width).toStrictEqual("129px");
       expect(page.columns(10).width).toStrictEqual("188px");
     });
   });

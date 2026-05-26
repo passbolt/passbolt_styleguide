@@ -79,12 +79,12 @@ class PasswordComplexity extends Component {
     /*
      * The parser can't find the translation for passwordStrength.label
      * To fix that we can use it in comment
-     * this.translate("n/a")
-     * this.translate("Very weak")
-     * this.translate("Weak")
-     * this.translate("Fair")
-     * this.translate("Strong")
-     * this.translate("Very strong")
+     * t("N/A")
+     * t("Very weak")
+     * t("Weak")
+     * t("Fair")
+     * t("Strong")
+     * t("Very strong")
      */
     const strength = SecretGeneratorComplexity.strength(this.props.entropy);
     return <>{strength.label}</>;

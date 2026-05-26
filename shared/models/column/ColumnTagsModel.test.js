@@ -18,13 +18,14 @@ import { ColumnModelTypes, ColumnFields } from "./ColumnModel";
 describe("ColumnTagsModel", () => {
   describe("ColumnTagsModel:constructor", () => {
     it("should instantiate with default values", () => {
-      expect.assertions(7);
+      expect.assertions(8);
       const model = new ColumnTagsModel();
 
       expect(model.id).toBe(ColumnModelTypes.TAGS);
       expect(model.field).toBe(ColumnFields.TAGS);
       expect(model.width).toBe(145);
       expect(model.defaultWidth).toBe(145);
+      expect(model.minWidth).toBe(160);
       expect(model.resizable).toBe(true);
       expect(model.draggable).toBe(true);
       expect(model.sortable).toBe(false);
