@@ -18,7 +18,6 @@ import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEnt
 import RoleEntity from "../role/roleEntity";
 import ProfileEntity from "../profile/profileEntity";
 import GpgkeyEntity from "../gpgkey/gpgkeyEntity";
-import GroupsUsersCollection from "../groupUser/groupsUsersCollection";
 import AccountRecoveryUserSettingEntity from "../accountRecovery/accountRecoveryUserSettingEntity";
 import PendingAccountRecoveryRequestEntity from "../accountRecovery/pendingAccountRecoveryRequestEntity";
 import { defaultGroupUser } from "../groupUser/groupUserEntity.test.data";
