@@ -75,7 +75,7 @@ export class MetadataTypesSettingsLocalStorageContextProvider extends React.Comp
    * Handles update of the metadata type settings in the local storage.
    */
   handleStorageChange(changes) {
-    if (changes[this.storageKey] && changes[this.storageKey].newValue) {
+    if (changes[this.storageKey]) {
       this.set(changes[this.storageKey].newValue);
     }
   }

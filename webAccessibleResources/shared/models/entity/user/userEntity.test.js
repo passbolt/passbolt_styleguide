@@ -18,15 +18,11 @@ import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEnt
 import RoleEntity from "../role/roleEntity";
 import ProfileEntity from "../profile/profileEntity";
 import GpgkeyEntity from "../gpgkey/gpgkeyEntity";
+import AccountRecoveryUserSettingEntity from "../accountRecovery/accountRecoveryUserSettingEntity";
+import PendingAccountRecoveryRequestEntity from "../accountRecovery/pendingAccountRecoveryRequestEntity";
+import { defaultGroupUser } from "../groupUser/groupUserEntity.test.data";
 import { v4 as uuid } from "uuid";
 
-/**
- * These tests are duplicata and adaptation from the UserEntity of the Bext.
- * TODO: migrate the bext tests to here and add the missing ones.
- * Currently, as the entity has been simplified to keep only necessary elements, the
- * tests have to be adapted as well by removing the unrelevant ones.
- * Once the entity migrated, the tests should be completed with the one from the bext.
- */
 describe("UserEntity", () => {
   describe("UserEntity::getSchema", () => {
     it("schema must validate", () => {
@@ -83,6 +79,35 @@ describe("UserEntity", () => {
       assertEntityProperty.dateTime(UserEntity, "modified");
       assertEntityProperty.notRequired(UserEntity, "modified");
     });
+
+    it("validates last_logged_in property", () => {
+      const failDatetimeScenario = [
+        { scenario: "not a date", value: "not-a-date" },
+        { scenario: "year, month, day, time and zulu", value: "2018-10-18T08:04:30+00:00Z" },
+      ];
+
+      assertEntityProperty.assert(
+        UserEntity,
+        "last_logged_in",
+        assertEntityProperty.SUCCESS_DATETIME_SCENARIO,
+        failDatetimeScenario,
+        "format",
+      );
+      assertEntityProperty.nullable(UserEntity, "last_logged_in");
+      assertEntityProperty.notRequired(UserEntity, "last_logged_in");
+    });
+
+    it("validates is_mfa_enabled property", () => {
+      assertEntityProperty.boolean(UserEntity, "is_mfa_enabled");
+      assertEntityProperty.nullable(UserEntity, "is_mfa_enabled");
+      assertEntityProperty.notRequired(UserEntity, "is_mfa_enabled");
+    });
+
+    it("validates locale property", () => {
+      assertEntityProperty.locale(UserEntity, "locale");
+      assertEntityProperty.nullable(UserEntity, "locale");
+      assertEntityProperty.notRequired(UserEntity, "locale");
+    });
   });
 
   describe("UserEntity::constructor", () => {
@@ -99,16 +124,25 @@ describe("UserEntity", () => {
       expect(entity.isDeleted).toBeNull();
       expect(entity.created).toBeNull();
       expect(entity.modified).toBeNull();
+      expect(entity.lastLoggedIn).toBeNull();
+      expect(entity.isMfaEnabled).toBeNull();
+      expect(entity.locale).toBeNull();
       expect(entity.profile).toBeNull();
       expect(entity.gpgkey).toBeNull();
+      expect(entity.groupsUsers).toBeNull();
+      expect(entity.accountRecoveryUserSetting).toBeNull();
+      expect(entity.pendingAccountRecoveryUserRequest).toBeNull();
     });
 
     it("works if valid DTO with associated entity data is provided", () => {
       const dto = defaultUserDto(
         {},
         {
+          withGroupsUsers: true,
           withRole: true,
           withGpgkey: true,
+          withAccountRecoveryUserSetting: true,
+          withPendingAccountRecoveryUserRequest: true,
         },
       );
       const filtered = {
@@ -120,6 +154,8 @@ describe("UserEntity", () => {
         disabled: dto.disabled,
         created: dto.created,
         modified: dto.modified,
+        last_logged_in: dto.last_logged_in,
+        is_mfa_enabled: dto.is_mfa_enabled,
       };
 
       const entity = new UserEntity(dto);
@@ -129,17 +165,77 @@ describe("UserEntity", () => {
       expect(entity.role).toBeInstanceOf(RoleEntity);
       expect(entity.profile).toBeInstanceOf(ProfileEntity);
       expect(entity.gpgkey).toBeInstanceOf(GpgkeyEntity);
+      expect(entity.accountRecoveryUserSetting).toBeInstanceOf(AccountRecoveryUserSettingEntity);
       expect(entity.role.name).toEqual("user");
+      expect(entity.isMfaEnabled).toBe(false);
       expect(entity.gpgkey.armoredKey.startsWith("-----BEGIN PGP PUBLIC KEY BLOCK-----")).toBe(true);
+      expect(entity.accountRecoveryUserSetting.status).toEqual("approved");
+      expect(entity.pendingAccountRecoveryUserRequest).toBeInstanceOf(PendingAccountRecoveryRequestEntity);
+      expect(entity.pendingAccountRecoveryUserRequest.status).toEqual("pending");
 
       const dtoWithContain = entity.toDto({
         role: true,
         profile: true,
         gpgkey: true,
+        account_recovery_user_setting: true,
+        pending_account_recovery_request: true,
       });
       expect(dtoWithContain.role.name).toEqual("user");
       expect(dtoWithContain.profile.first_name).toEqual(dto.profile.first_name);
       expect(dtoWithContain.gpgkey.armored_key.startsWith("-----BEGIN PGP PUBLIC KEY BLOCK-----")).toBe(true);
+      expect(dtoWithContain.is_mfa_enabled).toBe(false);
+      expect(dtoWithContain.pending_account_recovery_request.status).toBe("pending");
+    });
+
+    it("should marshall last_logged_in if empty string given", () => {
+      expect.assertions(1);
+      const dto = defaultUserDto({ last_logged_in: "" });
+      const entity = new UserEntity(dto);
+      expect(entity.lastLoggedIn).toBeNull();
+    });
+
+    it("should, with enabling the ignore invalid option, ignore groups users which do not validate their schema", () => {
+      const dto = defaultUserDto({
+        groups_users: [defaultGroupUser({ group_id: 42 }), defaultGroupUser()],
+      });
+
+      expect.assertions(2);
+      const entity = new UserEntity(dto, { ignoreInvalidEntity: true });
+      expect(entity._groups_users).toHaveLength(1);
+      expect(entity._groups_users.items[0]._props.id).toEqual(dto.groups_users[1].id);
+    });
+
+    /*
+     * @todo Associated entities validation error details to review when entity will aggregate them.
+     * @see EntityV2.constructor
+     */
+    it("should throw if one of associated collection data item does not validate their schema", () => {
+      const dto = defaultUserDto({
+        groups_users: [defaultGroupUser({ group_id: 42 }), defaultGroupUser()],
+      });
+
+      expect.assertions(2);
+      expect(() => new UserEntity(dto)).toThrowCollectionValidationError("0.group_id.type");
+      expect(() => new UserEntity(dto)).not.toThrowCollectionValidationError("groups_users.0.group_id.type");
+    });
+  });
+
+  describe("UserEntity::getters", () => {
+    it("mfa enabled can be null or ommited", () => {
+      const dto = {
+        role_id: "a58de6d3-f52c-5080-b79b-a601a647ac85",
+        username: "dame@passbolt.com",
+        is_mfa_enabled: null,
+      };
+      const entity = new UserEntity(dto);
+      expect(entity.isMfaEnabled).toBeNull();
+
+      const dto2 = {
+        role_id: "a58de6d3-f52c-5080-b79b-a601a647ac85",
+        username: "dame@passbolt.com",
+      };
+      const entity2 = new UserEntity(dto2);
+      expect(entity2.isMfaEnabled).toBeNull();
     });
   });
 
@@ -196,16 +292,14 @@ describe("UserEntity", () => {
       const dto = defaultUserDto(
         {},
         {
+          withGroupsUsers: true,
           withRole: true,
           withGpgkey: true,
+          withAccountRecoveryUserSetting: true,
+          withPendingAccountRecoveryUserRequest: true,
         },
       );
       const entity = new UserEntity(dto);
-
-      //todo: put back when UserEntity is fully migrated
-      delete dto.last_logged_in;
-      delete dto.is_mfa_enabled;
-
       expect(entity.toDto(UserEntity.ALL_CONTAIN_OPTIONS)).toEqual(dto);
     });
   });

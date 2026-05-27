@@ -233,9 +233,7 @@ class DisplayHealthcheckAdministration extends Component {
             <Trans>The application is not able to connect to the database</Trans>
             <Tooltip
               message={
-                <Trans>
-                  Double check the host, database name, username and password in {{ configurationFilePath }}
-                </Trans>
+                <Trans>Double check the host, database name, username and password in {configurationFilePath}</Trans>
               }
             >
               <InfoSVG className="baseline svg-icon" />
@@ -251,7 +249,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>{{ count }} tables found</Trans>
+            <Trans count={count}>{{ count }} tables found</Trans>
           </span>
         );
       }
@@ -292,7 +290,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>Debug mode is on</Trans>
-            <Tooltip message={<Trans>Set debug = false; in {{ configurationFilePath }}</Trans>}>
+            <Tooltip message={<Trans>Set debug = false; in {configurationFilePath}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
           </span>
@@ -348,7 +346,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>Full base url is set to {{ fullBaseUrl }}</Trans>
+            <Trans>Full base url is set to {fullBaseUrl}</Trans>
           </span>
         );
       } else {
@@ -357,7 +355,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>Full base url is not set</Trans>
-            <Tooltip message={<Trans>Edit App.fullBaseUrl in {{ configurationFilePath }}</Trans>}>
+            <Tooltip message={<Trans>Edit App.fullBaseUrl in {configurationFilePath}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
           </span>
@@ -379,7 +377,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>App.fullBaseUrl does not validate</Trans>
-            <Tooltip message={<Trans>Edit App.fullBaseUrl in {{ configurationFilePath }}</Trans>}>
+            <Tooltip message={<Trans>Edit App.fullBaseUrl in {configurationFilePath}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
           </span>
@@ -401,7 +399,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>Could not reach the /healthcheck/status with the url specified in App.fullBaseUrl</Trans>
-            <Tooltip message={<Trans>Check that the domain name is correct in {{ configurationFilePath }}</Trans>}>
+            <Tooltip message={<Trans>Check that the domain name is correct in {configurationFilePath}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
           </span>
@@ -692,7 +690,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>The environment variable GNUPGHOME is set to {{ gpgHomeDirectory }}</Trans>
+            <Trans>The environment variable GNUPGHOME is set to {gpgHomeDirectory}</Trans>
           </span>
         );
       } else {
@@ -700,7 +698,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>
-              The environment variable GNUPGHOME is set to {{ gpgHomeDirectory }} but the directory does not exist
+              The environment variable GNUPGHOME is set to {gpgHomeDirectory} but the directory does not exist
             </Trans>
             <Tooltip
               message={this.props.t("Ensure the keyring location exists and is accessible by the webserver user.")}
@@ -718,16 +716,14 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>The directory {{ gpgHomeDirectory }} containing the keyring is writable by the webserver user</Trans>
+            <Trans>The directory {gpgHomeDirectory} containing the keyring is writable by the webserver user</Trans>
           </span>
         );
       } else {
         return (
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
-            <Trans>
-              The directory {{ gpgHomeDirectory }} containing the keyring is not writable by the webserver user
-            </Trans>
+            <Trans>The directory {gpgHomeDirectory} containing the keyring is not writable by the webserver user</Trans>
             <Tooltip
               message={this.props.t("Ensure the keyring location exists and is accessible by the webserver user.")}
             >
@@ -748,19 +744,19 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>The public key file is defined in {{ configurationFilePath }} and readable.</Trans>
+            <Trans>The public key file is defined in {configurationFilePath} and readable.</Trans>
           </span>
         );
       } else {
         return (
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
-            <Trans>The public key file is not defined in {{ configurationFilePath }} or not readable.</Trans>
+            <Trans>The public key file is not defined in {configurationFilePath} or not readable.</Trans>
             <Tooltip
               message={
                 <Trans>
                   Ensure the public key file is defined by the variable passbolt.gpg.serverKey.public in{" "}
-                  {{ configurationFilePath }}
+                  {configurationFilePath}
                 </Trans>
               }
             >
@@ -781,19 +777,19 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>The private key file is defined in {{ configurationFilePath }} and readable.</Trans>
+            <Trans>The private key file is defined in {configurationFilePath} and readable.</Trans>
           </span>
         );
       } else {
         return (
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
-            <Trans>The private key file is not defined in {{ configurationFilePath }} or not readable.</Trans>
+            <Trans>The private key file is not defined in {configurationFilePath} or not readable.</Trans>
             <Tooltip
               message={
                 <Trans>
                   Ensure the private key file is defined by the variable passbolt.gpg.serverKey.private in{" "}
-                  {{ configurationFilePath }}
+                  {configurationFilePath}
                 </Trans>
               }
             >
@@ -813,14 +809,14 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>The server key fingerprint matches the one defined in {{ configurationFilePath }}</Trans>
+            <Trans>The server key fingerprint matches the one defined in {configurationFilePath}</Trans>
           </span>
         );
       } else {
         return (
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
-            <Trans>The server key fingerprint doesn&#39;t matches the one defined in {{ configurationFilePath }}</Trans>
+            <Trans>The server key fingerprint doesn&#39;t matches the one defined in {configurationFilePath}</Trans>
             <Tooltip message={this.props.t("Double check the key fingerprint")}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
@@ -836,8 +832,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
             <Trans>
-              The server public key defined in the {{ configurationFilePath }} (or environment variables) is in the
-              keyring
+              The server public key defined in the {configurationFilePath} (or environment variables) is in the keyring
             </Trans>
           </span>
         );
@@ -846,7 +841,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>
-              The server public key defined in the {{ configurationFilePath }} (or environment variables) is not in the
+              The server public key defined in the {configurationFilePath} (or environment variables) is not in the
               keyring
             </Trans>
             <Tooltip message={this.props.t("Import the private server key in the keyring of the webserver user.")}>
@@ -1087,7 +1082,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>Passbolt is not configured to force SSL use</Trans>
-            <Tooltip message={<Trans>Set passbolt.ssl.force to true in {{ configurationFilePath }}</Trans>}>
+            <Tooltip message={<Trans>Set passbolt.ssl.force to true in {configurationFilePath}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
           </span>
@@ -1109,7 +1104,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>App.fullBaseUrl is not set to HTTPS</Trans>
-            <Tooltip message={<Trans>Check App.fullBaseUrl url scheme in {{ configurationFilePath }}</Trans>}>
+            <Tooltip message={<Trans>Check App.fullBaseUrl url scheme in {configurationFilePath}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
           </span>
@@ -1131,7 +1126,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>Selenium API endpoints are active. This setting should be used for testing only</Trans>
-            <Tooltip message={<Trans>Set passbolt.selenium.active to false in {{ configurationFilePath }}</Trans>}>
+            <Tooltip message={<Trans>Set passbolt.selenium.active to false in {configurationFilePath}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
           </span>
@@ -1153,7 +1148,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
             <Trans>Search engine robots are not told not to index content</Trans>
-            <Tooltip message={<Trans>Set passbolt.meta.robots to false in {{ configurationFilePath }}</Trans>}>
+            <Tooltip message={<Trans>Set passbolt.meta.robots to false in {configurationFilePath}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
           </span>
@@ -1208,14 +1203,14 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>The deprecated self registration public settings was not found in {{ configurationFilePath }}</Trans>
+            <Trans>The deprecated self registration public settings was not found in {configurationFilePath}</Trans>
           </span>
         );
       } else {
         return (
           <span className="healthcheck-warning">
             <TriangleAlertSVG />
-            <Trans>The deprecated self registration public settings was found in {{ configurationFilePath }}</Trans>
+            <Trans>The deprecated self registration public settings was found in {configurationFilePath}</Trans>
             <Tooltip message={this.props.t("You may remove the passbolt.registration.public setting")}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
@@ -1259,7 +1254,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className="healthcheck-warning">
             <TriangleAlertSVG />
             <Trans>Using non-compiled Javascript. Passbolt will be slower</Trans>
-            <Tooltip message={<Trans>Set passbolt.js.build in {{ configurationFilePath }}</Trans>}>
+            <Tooltip message={<Trans>Set passbolt.js.build in {configurationFilePath}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
           </span>

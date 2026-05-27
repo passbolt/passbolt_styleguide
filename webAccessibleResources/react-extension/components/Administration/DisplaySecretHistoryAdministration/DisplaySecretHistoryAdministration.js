@@ -252,7 +252,6 @@ class DisplaySecretHistoryAdministration extends Component {
    * @returns {JSX}
    */
   render() {
-    const maxRevisionsLimitToDisplay = this.maxRevisionsLimitToDisplay;
     const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.settings) : null;
     const hasSettingsChanges = this.hasSettingsChanges(this.state.settings, this.state.isFeatureEnabled);
     const hasMaxRevisionsError =
@@ -327,7 +326,7 @@ class DisplaySecretHistoryAdministration extends Component {
                     </p>
                     {hasMaxRevisionsError && (
                       <div id="maxRevisions-error" className="error-message">
-                        <Trans>The history length must be between 1 and {{ maxRevisionsLimitToDisplay }}.</Trans>
+                        <Trans>The history length must be between 1 and {this.maxRevisionsLimitToDisplay}.</Trans>
                       </div>
                     )}
                   </div>

@@ -165,7 +165,7 @@ class DisplayMfaPolicyAdministration extends React.Component {
                   id="remember-toggle-button"
                 />
                 <label htmlFor="remember-toggle-button">
-                  <Trans>Allow &ldquo;Remember this device for a month.&rdquo; option during MFA.</Trans>
+                  <Trans>Allow &ldquo;Remember this device for a month.&ldquo; option during MFA.</Trans>
                 </label>
               </span>
             </form>

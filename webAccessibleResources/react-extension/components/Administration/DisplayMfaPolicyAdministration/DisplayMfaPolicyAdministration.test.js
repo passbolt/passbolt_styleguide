@@ -57,7 +57,7 @@ describe("DisplayMfaPolicyAdministration", () => {
       expect(page.subtitleRemember.textContent).toBe("Remember a device for a month");
       await screen.findByRole("checkbox", { name: /remember/i, checked: true });
       expect(page.toggleRemember.checked).toBeTruthy();
-      expect(page.toggleRememberLabel.textContent).toBe("Allow “Remember this device for a month.” option during MFA.");
+      expect(page.toggleRememberLabel.textContent).toBe("Allow “Remember this device for a month.“ option during MFA.");
       // mandatory policy
       expect(page.mandatoryPolicy.checked).toBeFalsy();
       expect(page.mandatoryPolicyName.textContent).toEqual("Prompt");

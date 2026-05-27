@@ -44,15 +44,6 @@ describe("As LU I should see the password export dialog", () => {
       page = new ExportResourcesPage(context, props);
     });
 
-    it("As LU I should see the label 'Choose the export format'", () => {
-      expect.assertions(1);
-
-      const props = defaultProps();
-      const page = new ExportResourcesPage(context, props);
-
-      expect(page.exportFormatLabel).toBe("Choose the export format");
-    });
-
     it("As LU I see a success toaster after exporting resources in csv with success", async () => {
       expect.assertions(6);
       expect(page.exists()).toBeTruthy();
@@ -305,6 +296,26 @@ describe("As LU I should see the password export dialog", () => {
         "csv (nordpass)",
         "csv (logmeonce)",
       ]);
+    });
+
+    it("As LU I should see the label 'kdbx is supported' when CSV format is disabled", () => {
+      expect.assertions(1);
+      const exportPoliciesSettingsContext = defaultExportPoliciesSettingsContext({
+        getSettings: () => ExportPoliciesSettingsEntity.createFromDefault({ allow_csv_format: false }),
+      });
+      const props = defaultProps();
+      props.exportPoliciesSettingsContext = exportPoliciesSettingsContext;
+      const page = new ExportResourcesPage(context, props);
+
+      expect(page.exportFormatLabel).toBe("Choose the export format");
+    });
+
+    it("As LU I should see the label 'csv and kdbx are supported' when CSV format is enabled", () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const page = new ExportResourcesPage(context, props);
+
+      expect(page.exportFormatLabel).toBe("Choose the export format");
     });
 
     it("As LU I should see the form disabled while export policies settings are loading", () => {

@@ -145,7 +145,11 @@ class ReviewAccountRecoveryRequest extends Component {
    * @returns {JSX}
    */
   get creatorName() {
-    return `${this.creator.profile.first_name} ${this.creator.profile.last_name} (${this.creator.username})`;
+    return (
+      <>
+        {this.creator.profile.first_name} {this.creator.profile.last_name} ({this.creator.username})
+      </>
+    );
   }
 
   /**
@@ -240,7 +244,7 @@ class ReviewAccountRecoveryRequest extends Component {
                     <Trans>Reject</Trans>
                   </span>
                   <span className="info">
-                    <Trans>{{ creatorName }} did not initiate this request.</Trans>
+                    <Trans>{creatorName} did not initiate this request.</Trans>
                   </span>
                 </label>
               </div>
@@ -260,7 +264,7 @@ class ReviewAccountRecoveryRequest extends Component {
                   </span>
                   <span className="info">
                     <Trans>
-                      I verified with <span>{{ creatorName }}</span> that the request is valid.
+                      I verified with <span>{creatorName}</span> that the request is valid.
                     </Trans>
                   </span>
                 </label>
