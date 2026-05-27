@@ -313,7 +313,7 @@ class UserEntity extends EntityV2 {
 
   /**
    * Set the user locale
-   * @params {string} locale The locale to set
+   * @param {string} locale The locale to set
    */
   set locale(locale) {
     this._props.locale = locale;
@@ -361,7 +361,7 @@ class UserEntity extends EntityV2 {
 
   /**
    * Set the user missing metadata keys ids
-   * @params {array} the missing metadata keys ids
+   * @param {array} missingMetadataKeysIds the missing metadata keys ids
    */
   set missingMetadataKeysIds(missingMetadataKeysIds) {
     this._props.missing_metadata_key_ids = missingMetadataKeysIds;
@@ -442,7 +442,7 @@ class UserEntity extends EntityV2 {
 
   /**
    * Get the pending account recovery request
-   * @returns {AccountRecoveryRequestEntity|null} pending account recovery request
+   * @returns {PendingAccountRecoveryRequestEntity|null} pending account recovery request
    */
   get pendingAccountRecoveryUserRequest() {
     return this._pending_account_recovery_request || null;
