@@ -60,8 +60,8 @@ class FilterResourcesByGroups extends React.Component {
   async loadGroupsData() {
     if (!this.state.loading) {
       this.setState({ loading: true });
-      const groups = await this.groupServiceWorkerService.findMyGroups();
-      this.setState({ groups, loading: false });
+      const groupsCollection = await this.groupServiceWorkerService.findMyGroups();
+      this.setState({ groups: groupsCollection.toDto(), loading: false });
     }
   }
 

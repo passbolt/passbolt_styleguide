@@ -129,7 +129,8 @@ class FilterResourcesByGroupPage extends React.Component {
    * @returns {Promise<void>}
    */
   async findAndLoadGroups() {
-    const groups = await this.groupServiceWorkerService.findMyGroups();
+    const groupsCollection = await this.groupServiceWorkerService.findMyGroups();
+    const groups = groupsCollection.toDto();
     this.sortGroupsAlphabetically(groups);
     this.setState({ groups });
   }
