@@ -28,7 +28,7 @@ import {
 import { DefaultRoleApiService } from "../../../../shared/services/api/role/roleApiService.test.data";
 import { DefaultRbacApiService } from "../../../../shared/services/api/rbac/rbacApiService.test.data";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
-import { DefaultUserApiService } from "../../../../shared/services/api/user/userService.test.data";
+import { DefaultUserApiService } from "../../../../shared/services/api/user/userApiService.test.data";
 
 export function defaultProps(props = {}) {
   return {
