@@ -118,12 +118,12 @@ class GroupPermissionItem extends Component {
   render() {
     const isInputDisabled = this.props.disabled;
     return (
-      <li
-        id={`permission-item-${this.props.id}`}
-        className={this.getClassName()}
-        onClick={this.handleToggleGroupMemberVisibility}
-      >
-        <button type="button" className="link no-border group-visibility-toggle">
+      <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
+        <button
+          type="button"
+          className="link no-border group-visibility-toggle"
+          onClick={this.handleToggleGroupMemberVisibility}
+        >
           {this.props.shouldDisplayGroupMembers ? (
             <CaretDownSVG className="baseline svg-icon" />
           ) : (
