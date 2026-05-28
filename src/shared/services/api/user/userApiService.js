@@ -114,7 +114,8 @@ class UserApiService extends AbstractService {
    * @public
    */
   async findAll(contains, filters, orders) {
-    const legacyContain = UserApiService.remapToLegacyContain(contains); // crassette
+    // @deprecated dirty fix to support old versions of contain: to remove when support for v2.14 is dropped
+    const legacyContain = UserApiService.remapToLegacyContain(contains);
     contains = contains ? this.formatContainOptions(legacyContain, UserApiService.getSupportedContainOptions()) : null;
     filters = filters ? this.formatFilterOptions(filters, UserApiService.getSupportedFiltersOptions()) : null;
     orders = orders ? this.formatOrderOptions(orders, UserApiService.getSupportedOrdersOptions()) : null;
