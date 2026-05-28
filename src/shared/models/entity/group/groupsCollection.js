@@ -89,28 +89,6 @@ class GroupsCollection extends EntityV2Collection {
     super.pushMany(data, entityOptions, options);
   }
 
-  /*
-   * ==================================================
-   * Getters
-   * ==================================================
-   */
-  /**
-   * Get groups
-   * @returns {Array<GroupEntity>}
-   */
-  get groups() {
-    return this._items;
-  }
-
-  /**
-   * Get all the ids of the groups in the collection
-   *
-   * @returns {Array<string>}
-   */
-  get ids() {
-    return this._items.map((r) => r.id);
-  }
-
   /**
    * Remove a group identified by an Id
    * @param groupId
