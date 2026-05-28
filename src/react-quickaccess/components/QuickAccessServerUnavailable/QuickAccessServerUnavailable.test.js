@@ -51,7 +51,7 @@ describe("QuickAccessServerUnavailable", () => {
     await page.clickSignOutLocally();
 
     expect(props.context.port.request).toHaveBeenCalledTimes(1);
-    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth.logout", false);
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth.local-logout");
     expect(props.logoutSuccessCallback).toHaveBeenCalledTimes(1);
   });
 
