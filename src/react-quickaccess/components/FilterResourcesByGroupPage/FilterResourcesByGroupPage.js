@@ -22,6 +22,7 @@ import CloseSVG from "../../../img/svg/close.svg";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import GroupServiceWorkerService from "../../../shared/services/serviceWorker/group/groupServiceWorkerService";
+import GroupEntity from "../../../shared/models/entity/group/groupEntity";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 const BROWSED_GROUPS_LIMIT = 500;
@@ -103,7 +104,7 @@ class FilterResourcesByGroupPage extends React.Component {
     this.props.context.searchHistory[this.props.location.pathname] = this.props.context.search;
     this.props.context.updateSearch("");
     this.props.history.push(`/webAccessibleResources/quickaccess/resources/group/${selectedGroup.id}`, {
-      selectedGroup,
+      selectedGroup: selectedGroup.toDto(GroupEntity.ALL_CONTAIN_OPTIONS),
     });
   }
 
@@ -129,9 +130,11 @@ class FilterResourcesByGroupPage extends React.Component {
    * @returns {Promise<void>}
    */
   async findAndLoadGroups() {
-    const groups = await this.groupServiceWorkerService.findMyGroups();
-    this.sortGroupsAlphabetically(groups);
-    this.setState({ groups });
+    const groupsCollection = await this.groupServiceWorkerService.findMyGroups();
+    groupsCollection.items.sort((group1, group2) =>
+      group1.name.localeCompare(group2.name, undefined, { sensitivity: "base" }),
+    );
+    this.setState({ groups: groupsCollection });
   }
 
   /**
@@ -158,14 +161,6 @@ class FilterResourcesByGroupPage extends React.Component {
     sortResourcesAlphabetically(groupResources);
     return groupResources;
   });
-
-  /**
-   * Sort an array of groups alphabetically
-   * @param {Array} groups The array of group to filter.
-   */
-  sortGroupsAlphabetically(groups) {
-    groups.sort((group1, group2) => group1.name.localeCompare(group2.name, undefined, { sensitivity: "base" }));
-  }
 
   /**
    * Filter groups by keywords.
@@ -300,7 +295,7 @@ class FilterResourcesByGroupPage extends React.Component {
     if (listGroupsOnly) {
       isReady = this.state.groups !== null;
       if (isReady) {
-        browsedGroups = this.filterSearchedGroups(this.state.groups, this.props.context.search);
+        browsedGroups = this.filterSearchedGroups(this.state.groups.items, this.props.context.search);
       }
     } else {
       isReady = this.props.resources !== null && this.state.groupResourceIds !== null;
