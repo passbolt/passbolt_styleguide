@@ -54,9 +54,9 @@ class GroupUserPermissionItem extends Component {
    * @returns {string}
    */
   getUserFullname() {
-    const formatedName = getUserFormattedName(this.props.user, this.props.t, { withUsername: false });
+    const formattedName = getUserFormattedName(this.props.user, this.props.t, { withUsername: false });
     const isSuspended = this.isUserSuspended ? ` ${this.translate("(suspended)")}` : "";
-    return `${formatedName}${isSuspended}`;
+    return `${formattedName}${isSuspended}`;
   }
 
   /**
