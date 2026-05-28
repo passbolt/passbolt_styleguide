@@ -17,7 +17,7 @@ import ApiSetup from "./ApiSetup";
 
 /**
  * Entry point - Setup application served by the API.
- * This entry point will be used to compile the production code see webpack-api.config.js
+ * This entry point will be used to compile the production code see webpack.config.js
  */
 const appDomElement = document.createElement("div");
 document.body.appendChild(appDomElement);

@@ -1,0 +1,8 @@
+/*!
+* @name					passbolt-styleguide
+* @version			v5.13.0-alpha.4
+* @date					2026-05-28
+* @copyright		Copyright 2023 Passbolt SA
+* @source				https://github.com/passbolt/passbolt_styleguide
+* @license			AGPL-3.0
+**/iframe{background:0 0;border:0;font-size:100%;margin:0;outline:0;padding:0;vertical-align:baseline}iframe#passbolt-iframe-account-recovery,iframe#passbolt-iframe-login,iframe#passbolt-iframe-recover,iframe#passbolt-iframe-setup{min-height:76.8rem;min-width:42rem}iframe#passbolt-iframe-app{min-height:76.8rem;min-width:128rem}iframe.full-screen{height:100%;left:0;top:0;width:100%}iframe.cachette,iframe.full-screen{border:0;position:absolute;z-index:999}iframe.cachette{bottom:0;height:1px;right:0;width:1px}

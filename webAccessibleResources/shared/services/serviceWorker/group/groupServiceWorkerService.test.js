@@ -13,8 +13,10 @@
  */
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
+import GroupsCollection from "../../../models/entity/group/groupsCollection";
 import GroupsUsersCollection from "../../../models/entity/groupUser/groupsUsersCollection";
 import { defaultGroupDto } from "../../../models/entity/group/groupEntity.test.data";
+import { defaultGroupsDtos } from "../../../models/entity/group/groupsCollection.test.data";
 import GroupServiceWorkerService, {
   GROUPS_FIND_MY_GROUPS,
   GROUPS_GET_BY_IDS,
@@ -34,22 +36,27 @@ describe("GroupServiceWorkerService", () => {
   });
 
   describe("::findMyGroups", () => {
-    it("requests the service worker with the expected event and return a group collection.", async () => {
-      expect.assertions(2);
+    it("requests the service worker with the expected event and returns a GroupsCollection.", async () => {
+      expect.assertions(4);
 
-      jest.spyOn(port, "request").mockImplementation(() => {});
-      await service.findMyGroups();
+      const groupsDto = defaultGroupsDtos(3);
+      port.addRequestListener(GROUPS_FIND_MY_GROUPS, () => groupsDto);
+      jest.spyOn(port, "request");
+
+      const result = await service.findMyGroups();
 
       expect(port.request).toHaveBeenCalledTimes(1);
       expect(port.request).toHaveBeenCalledWith(GROUPS_FIND_MY_GROUPS);
+      expect(result).toBeInstanceOf(GroupsCollection);
+      expect(result.toDto()).toStrictEqual(groupsDto);
     });
   });
 
   describe("::getByIds", () => {
-    it("requests the service worker with the expected event and returns the raw dto array.", async () => {
-      expect.assertions(3);
+    it("requests the service worker with the expected event and returns a GroupsCollection.", async () => {
+      expect.assertions(4);
 
-      const groupsDto = [defaultGroupDto(), defaultGroupDto(), defaultGroupDto()];
+      const groupsDto = defaultGroupsDtos(3);
       const requestedIds = groupsDto.map((group) => group.id);
       port.addRequestListener(GROUPS_GET_BY_IDS, () => groupsDto);
       jest.spyOn(port, "request");
@@ -58,7 +65,8 @@ describe("GroupServiceWorkerService", () => {
 
       expect(port.request).toHaveBeenCalledTimes(1);
       expect(port.request).toHaveBeenCalledWith(GROUPS_GET_BY_IDS, requestedIds);
-      expect(result).toStrictEqual(groupsDto);
+      expect(result).toBeInstanceOf(GroupsCollection);
+      expect(result.toDto()).toStrictEqual(groupsDto);
     });
   });
 
