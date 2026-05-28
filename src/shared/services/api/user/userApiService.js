@@ -130,7 +130,7 @@ class UserApiService extends AbstractService {
    * @return {Promise<PassboltResponseEntity>}
    */
   async findByRoleId(roleId) {
-    isValidUuid(roleId);
+    this.assertValidId(roleId);
     return this.findAll({}, { "has-role-id": roleId });
   }
 

@@ -442,7 +442,9 @@ describe("UserApiService", () => {
 
       fetch.doMockOnceIf(/users\/recover\.json/, () => Promise.reject(new Error()));
 
-      await expect(() => userApiService.resendInvite("ada@passbolt.com")).rejects.toThrow(PassboltServiceUnavailableError);
+      await expect(() => userApiService.resendInvite("ada@passbolt.com")).rejects.toThrow(
+        PassboltServiceUnavailableError,
+      );
       expect(fetch).toHaveBeenCalledTimes(1);
     });
   });
