@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import { withDialog } from "../../DialogContext";
 import UserDirectoryService from "../../../../shared/services/api/userDirectory/UserDirectoryService";
-import UserService from "../../../../shared/services/api/user/userService";
+import UserApiService from "../../../../shared/services/api/user/userApiService";
 import UserDirectoryModel from "../../../../shared/models/userDirectory/UserDirectoryModel";
 import UserDirectoryDTO from "../../../../shared/models/userDirectory/UserDirectoryDTO";
 import NotifyError from "../../../components/Common/Error/NotifyError/NotifyError";
@@ -73,7 +73,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.userDirectoryService = new UserDirectoryService(props.context.getApiClientOptions());
-    this.userService = new UserService(props.context.getApiClientOptions());
+    this.userApiService = new UserApiService(props.context.getApiClientOptions());
   }
 
   /**
@@ -140,7 +140,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
     } catch (e) {
       this.handleError(e);
     }
-    const apiResponse = await this.userService.findAll();
+    const apiResponse = await this.userApiService.findAll();
     const users = apiResponse.body;
     const userLogged = users.find((user) => this.props.context.loggedInUser.id === user.id);
     //@todo replace this approach with the ViewModel
