@@ -24,7 +24,7 @@ class QuickAccessServerUnavailable extends Component {
   }
 
   async handleSignOutLocallyClick() {
-    await this.props.context.port.request("passbolt.auth.logout", false);
+    await this.props.context.port.request("passbolt.auth.local-logout");
     this.props.logoutSuccessCallback?.();
   }
 
