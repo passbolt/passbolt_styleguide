@@ -15,7 +15,6 @@ import React from "react";
 import UserPermissionItem from "./UserPermissionItem";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import {
-  defaultAppContext,
   defaultReadProps,
   defaultUpdateProps,
   defaultOwnerProps,
@@ -40,29 +39,29 @@ export default {
 };
 
 export const CanRead = {
-  args: { context: defaultAppContext(), ...defaultReadProps() },
+  args: defaultReadProps(),
 };
 
 export const CanUpdate = {
-  args: { context: defaultAppContext(), ...defaultUpdateProps() },
+  args: defaultUpdateProps(),
 };
 
 export const IsOwner = {
-  args: { context: defaultAppContext(), ...defaultOwnerProps() },
+  args: defaultOwnerProps(),
 };
 
 export const Suspended = {
-  args: { context: defaultAppContext(), ...defaultSuspendedUserProps() },
+  args: defaultSuspendedUserProps(),
 };
 
 export const Varies = {
-  args: { context: defaultAppContext(), ...defaultVariesProps() },
+  args: defaultVariesProps(),
 };
 
 export const Disabled = {
-  args: { context: defaultAppContext(), ...defaultOwnerProps({ disabled: true }) },
+  args: defaultOwnerProps({ disabled: true }),
 };
 
 export const Updated = {
-  args: { context: defaultAppContext(), ...defaultOwnerProps({ updated: true }) },
+  args: defaultOwnerProps({ updated: true }),
 };
