@@ -224,4 +224,61 @@ describe("GroupsCollection", () => {
       expect(JSON.stringify(collection)).toEqual(JSON.stringify(dtos));
     });
   });
+
+  describe("GroupsCollection::remove", () => {
+    it("should remove the group matching the given id", () => {
+      const dto1 = defaultGroupDto({ name: "group1" });
+      const dto2 = defaultGroupDto({ name: "group2" });
+      const dto3 = defaultGroupDto({ name: "group3" });
+      const collection = new GroupsCollection([dto1, dto2, dto3]);
+
+      collection.remove(dto2.id);
+
+      expect.assertions(3);
+      expect(collection).toHaveLength(2);
+      expect(collection.items[0].id).toEqual(dto1.id);
+      expect(collection.items[1].id).toEqual(dto3.id);
+    });
+
+    it("should be a no-op when no group matches the given id", () => {
+      const dto1 = defaultGroupDto({ name: "group1" });
+      const dto2 = defaultGroupDto({ name: "group2" });
+      const collection = new GroupsCollection([dto1, dto2]);
+
+      collection.remove("00000000-0000-0000-0000-000000000000");
+
+      expect.assertions(3);
+      expect(collection).toHaveLength(2);
+      expect(collection.items[0].id).toEqual(dto1.id);
+      expect(collection.items[1].id).toEqual(dto2.id);
+    });
+  });
+
+  describe("GroupsCollection::removeMany", () => {
+    it("should remove all groups matching the given ids", () => {
+      const dto1 = defaultGroupDto({ name: "group1" });
+      const dto2 = defaultGroupDto({ name: "group2" });
+      const dto3 = defaultGroupDto({ name: "group3" });
+      const dto4 = defaultGroupDto({ name: "group4" });
+      const collection = new GroupsCollection([dto1, dto2, dto3, dto4]);
+
+      collection.removeMany([dto1.id, dto3.id]);
+
+      expect.assertions(3);
+      expect(collection).toHaveLength(2);
+      expect(collection.items[0].id).toEqual(dto2.id);
+      expect(collection.items[1].id).toEqual(dto4.id);
+    });
+
+    it("should be a no-op when given an empty array of ids", () => {
+      const dto1 = defaultGroupDto({ name: "group1" });
+      const dto2 = defaultGroupDto({ name: "group2" });
+      const collection = new GroupsCollection([dto1, dto2]);
+
+      collection.removeMany([]);
+
+      expect.assertions(1);
+      expect(collection).toHaveLength(2);
+    });
+  });
 });

@@ -16,9 +16,6 @@ import EntityV2Collection from "../abstract/entityV2Collection";
 
 const ENTITY_NAME = "Groups";
 
-const RULE_UNIQUE_ID = "unique_id";
-const RULE_UNIQUE_GROUP_NAME = "unique_group_name";
-
 class GroupsCollection extends EntityV2Collection {
   /**
    * @inheritDoc
@@ -120,6 +117,9 @@ class GroupsCollection extends EntityV2Collection {
    */
   remove(groupId) {
     const i = this.items.findIndex((item) => item.id === groupId);
+    if (i === -1) {
+      return;
+    }
     this.items.splice(i, 1);
   }
 
@@ -144,22 +144,6 @@ class GroupsCollection extends EntityV2Collection {
    */
   static get ENTITY_NAME() {
     return ENTITY_NAME;
-  }
-
-  /**
-   * GroupsCollection.RULE_UNIQUE_ID
-   * @returns {string}
-   */
-  static get RULE_UNIQUE_ID() {
-    return RULE_UNIQUE_ID;
-  }
-
-  /**
-   * GroupsCollection.RULE_UNIQUE_GROUP_NAME
-   * @returns {string}
-   */
-  static get RULE_UNIQUE_GROUP_NAME() {
-    return RULE_UNIQUE_GROUP_NAME;
   }
 }
 
