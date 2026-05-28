@@ -13,7 +13,6 @@
  */
 import AbstractService from "../abstract/abstractService";
 import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
-import { isValidUuid } from "../../../utils/assertions";
 
 const USER_SERVICE_RESOURCE_NAME = "users";
 
