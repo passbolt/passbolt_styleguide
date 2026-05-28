@@ -360,18 +360,6 @@ class PermissionEntity extends EntityV2 {
    * ==================================================
    */
   /**
-   * Return true if two given permission have the same id
-   *
-   * @param {PermissionEntity} p1
-   * @param {PermissionEntity} p2
-   * @returns {boolean} true if permission ids match
-   */
-  static isIdMatching(p1, p2) {
-    PermissionEntity.assertArePermissions(p1, p2);
-    return p1.id === p2.id;
-  }
-
-  /**
    * Return true if two given permission are about the same user or group
    *
    * @param {PermissionEntity} p1
@@ -418,43 +406,6 @@ class PermissionEntity extends EntityV2 {
   static isTypeMatching(p1, p2) {
     PermissionEntity.assertArePermissions(p1, p2);
     return p1.type === p2.type;
-  }
-
-  /**
-   * Return true if two given permission aco, aro and type matches
-   *
-   * @param {PermissionEntity} p1
-   * @param {PermissionEntity} p2
-   * @returns {boolean} true if permissions match
-   */
-  static isMatchingAroAcoType(p1, p2) {
-    PermissionEntity.assertArePermissions(p1, p2);
-    return PermissionEntity.isAcoAndAroMatching(p1, p2) && PermissionEntity.isTypeMatching(p1, p2);
-  }
-
-  /**
-   * Return the highest permission type
-   *
-   * @param {PermissionEntity} p1
-   * @param {PermissionEntity} p2
-   * @returns {int} highest permission type
-   */
-  static getHighestPermissionType(p1, p2) {
-    PermissionEntity.assertArePermissions(p1, p2);
-    return p1.type > p2.type ? p1.type : p2.type;
-  }
-
-  /**
-   * Return true if two given permission are the same type
-   * Example both permission are about an update right
-   *
-   * @param {PermissionEntity} p1
-   * @param {PermissionEntity} p2
-   * @returns {PermissionEntity} the permission with highest type
-   */
-  static getHighestPermission(p1, p2) {
-    PermissionEntity.assertArePermissions(p1, p2);
-    return p1.type > p2.type ? p1 : p2;
   }
 
   /*

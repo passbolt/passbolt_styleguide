@@ -18,8 +18,6 @@ import CollectionValidationError from "../abstract/collectionValidationError";
 
 const ENTITY_NAME = "Permissions";
 
-const RULE_UNIQUE_ID = "unique_id";
-const RULE_UNIQUE_ARO = "unique_aro";
 const RULE_SAME_ACO = "same_aco";
 const RULE_ONE_OWNER = "owner";
 
@@ -448,22 +446,6 @@ class PermissionsCollection extends EntityV2Collection {
    */
   static get ENTITY_NAME() {
     return ENTITY_NAME;
-  }
-
-  /**
-   * PermissionsCollection.RULE_UNIQUE_ID
-   * @returns {string}
-   */
-  static get RULE_UNIQUE_ID() {
-    return RULE_UNIQUE_ID;
-  }
-
-  /**
-   * PermissionsCollection.PERMISSION_COLLECTION_RULE_UNIQUE_ARO
-   * @returns {string}
-   */
-  static get RULE_UNIQUE_ARO() {
-    return RULE_UNIQUE_ARO;
   }
 
   /**
