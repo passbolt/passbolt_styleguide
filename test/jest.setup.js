@@ -14,6 +14,8 @@
 import "./mocks/mockCrypto";
 import "./mocks/mockTextEncoder";
 import "./matchers/extendExpect";
+import MockNavigatorLocks from "./mocks/mockNavigatorLocks";
+import MockDirectoryHandle from "./mocks/mockDirectoryHandle";
 
 /*
  * Disable console debug, warning and error while executing the tests.
@@ -23,12 +25,27 @@ global.console = {
   ...console,
   debug: jest.fn(),
   error: jest.fn(),
-  warning: jest.fn()
+  warning: jest.fn(),
 };
 
 global.scrollTo = jest.fn();
 
-global.structuredClone = obj => JSON.parse(JSON.stringify(obj));
+global.structuredClone = (obj) => JSON.parse(JSON.stringify(obj));
+
+if (!global.navigator.locks) {
+  global.navigator.locks = new MockNavigatorLocks();
+}
+
+if (!global.storage?.getDirectory) {
+  const directoryHandle = new MockDirectoryHandle("");
+  Object.defineProperty(global.navigator, "storage", {
+    configurable: true,
+    writable: true,
+    value: {
+      getDirectory: () => directoryHandle,
+    },
+  });
+}
 
 /*
  * Fix jest-webextension-mock after upgrading webextension-polyfill to 0.9.0
@@ -38,7 +55,7 @@ chrome.runtime.id = "test id";
 
 browser.cookies = {
   ...browser.cookies,
-  get: jest.fn().mockImplementation(async options => {
+  get: jest.fn().mockImplementation(async (options) => {
     if (options.name === "csrfToken") {
       return "csrfToken";
     }
