@@ -176,9 +176,14 @@ class EditSubscriptionKey extends Component {
       return;
     }
     try {
-      await this.subscriptionKeyService.updateOrganizationSubscriptionKey(this.state.key);
-      await this.handleSaveSuccess();
-      await this.props.adminSubscriptionContext.findSubscriptionKey();
+      if (this.props.onSave) {
+        await this.props.onSave(this.state.key);
+      } else {
+        // TODO: Extract this to `src/shared/services/actions/subscription/SubscriptionActionService.js` (original caller)
+        await this.subscriptionKeyService.updateOrganizationSubscriptionKey(this.state.key);
+        await this.handleSaveSuccess();
+        await this.props.adminSubscriptionContext.findSubscriptionKey();
+      }
     } catch (error) {
       this.setState({ processing: false });
       this.handleSaveError(error);
@@ -286,7 +291,7 @@ class EditSubscriptionKey extends Component {
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Edit subscription key")}
+        title={this.props.title ?? this.translate("Edit subscription key")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="edit-subscription-dialog"
@@ -362,6 +367,8 @@ EditSubscriptionKey.propTypes = {
   adminSubscriptionContext: PropTypes.object, // The email notification context
   dialogContext: PropTypes.any, // The dialog congtext
   administrationWorkspaceContext: PropTypes.any, // The administration workspace context
+  title: PropTypes.string, // Optional dialog title override
+  onSave: PropTypes.func, // Optional save handler override; receives the subscription key string
   t: PropTypes.func,
 };
 

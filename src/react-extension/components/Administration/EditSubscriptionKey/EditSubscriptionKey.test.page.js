@@ -22,6 +22,13 @@ export default class EditSubscriptionKeyPage {
   }
 
   /**
+   * Returns the dialog title text
+   */
+  get dialogTitle() {
+    return this._page.container.querySelector(".dialog-header-title")?.textContent;
+  }
+
+  /**
    * Returns the subscription key input
    */
   get subscriptionKeyInput() {
