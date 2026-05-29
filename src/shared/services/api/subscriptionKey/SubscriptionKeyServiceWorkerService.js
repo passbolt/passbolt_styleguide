@@ -15,6 +15,7 @@
 import assertString from "validator/es/lib/util/assertString";
 import SubscriptionEntity from "../../../models/entity/subscription/subscriptionEntity";
 
+export const CREATE_SUBSCRIPTION_KEY = "passbolt.subscription.create";
 export const GET_SUBSCRIPTION_KEY = "passbolt.subscription.get";
 export const UPDATE_SUBSCRIPTION_KEY = "passbolt.subscription.update";
 
@@ -25,6 +26,21 @@ class SubscriptionKeyServiceWorkerService {
    */
   constructor(port) {
     this.port = port;
+  }
+
+  /**
+   * Create the subscription key (upgrade CE to PRO)
+   * @param {string} subscriptionKey The new subscription key
+   * @returns {Promise<SubscriptionEntity>} The created subscription entity
+   */
+  async createOrganizationSubscriptionKey(subscriptionKey) {
+    assertString(subscriptionKey);
+
+    const response = await this.port.request(CREATE_SUBSCRIPTION_KEY, {
+      data: subscriptionKey,
+    });
+
+    return new SubscriptionEntity(response);
   }
 
   /**
