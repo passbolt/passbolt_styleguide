@@ -64,32 +64,9 @@ class UsersCollection extends EntityV2Collection {
 
   /*
    * ==================================================
-   * Getters
-   * ==================================================
-   */
-  /**
-   * Get users
-   * @returns {Array<UserEntity>}
-   */
-  get users() {
-    return this._items;
-  }
-
-  /**
-   * Get all the ids of the users in the collection
-   *
-   * @returns {Array<string>}
-   */
-  get ids() {
-    return this._items.map((r) => r.id);
-  }
-
-  /*
-   * ==================================================
    * Setters
    * ==================================================
    */
-
   /**
    * @inheritDoc
    * This method creates caches of unique ids and names to improve the build rules performance.
