@@ -18,6 +18,7 @@ import SubscriptionEntity from "../../../models/entity/subscription/subscription
 export const CREATE_SUBSCRIPTION_KEY = "passbolt.subscription.create";
 export const GET_SUBSCRIPTION_KEY = "passbolt.subscription.get";
 export const UPDATE_SUBSCRIPTION_KEY = "passbolt.subscription.update";
+export const DOWNGRADE_SUBSCRIPTION_KEY = "passbolt.subscription.downgrade";
 
 class SubscriptionKeyServiceWorkerService {
   /**
@@ -65,6 +66,14 @@ class SubscriptionKeyServiceWorkerService {
     });
 
     return new SubscriptionEntity(response);
+  }
+
+  /**
+   * Delete the subscription key (downgrade PRO to CE)
+   * @returns {Promise<void>}
+   */
+  async deleteOrganizationSubscriptionKey() {
+    await this.port.request(DOWNGRADE_SUBSCRIPTION_KEY);
   }
 }
 

@@ -17,6 +17,7 @@ import SubscriptionEntity from "../../../models/entity/subscription/subscription
 import { minimalSubscriptionDto } from "../../../models/entity/subscription/subscriptionEntity.test.data";
 import SubscriptionKeyServiceWorkerService, {
   CREATE_SUBSCRIPTION_KEY,
+  DOWNGRADE_SUBSCRIPTION_KEY,
   GET_SUBSCRIPTION_KEY,
   UPDATE_SUBSCRIPTION_KEY,
 } from "./SubscriptionKeyServiceWorkerService";
@@ -79,6 +80,19 @@ describe("SubscriptionKeyServiceWorkerService", () => {
       // Can't use `toHaveBeenCalledWith` because MockPort forces an additional argument
       expect(mockUpdateSubscriptionKey.mock.calls[0][0]).toEqual({ data: newKey });
       expect(result).toEqual(new SubscriptionEntity(dto));
+    });
+  });
+
+  describe("::deleteOrganizationSubscriptionKey", () => {
+    it("requests the service worker to delete the organisation subscription key", async () => {
+      expect.assertions(1);
+
+      const mockDeleteSubscriptionKey = jest.fn().mockResolvedValue();
+      port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDeleteSubscriptionKey);
+
+      await service.deleteOrganizationSubscriptionKey();
+
+      expect(mockDeleteSubscriptionKey).toHaveBeenCalledTimes(1);
     });
   });
 });
