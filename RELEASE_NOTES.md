@@ -1,3 +1,8 @@
-# v5.13.0-alpha.2
+# v5.13.0-alpha.6
 
-Remove Grunt for Webpack.
+Move the following elements from the bext to styleguide:
+- UserEntity
+- GroupEntity
+- PermissionEntity
+- UserCollection
+- GroupCollection

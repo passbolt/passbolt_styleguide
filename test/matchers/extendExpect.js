@@ -13,13 +13,13 @@
  */
 
 import {toThrowEntityValidationErrorOnProperties} from "./toThrowEntityValidationErrorOnProperties";
-import {toThrowCollectionValidationError} from "./toThrowCollectionValidationError";
-import {toThrowEntityValidationError} from "./toThrowEntityValidationError";
+import { toThrowCollectionValidationError } from "./toThrowCollectionValidationError";
+import { toThrowEntityValidationError } from "./toThrowEntityValidationError";
 
 const extensions = {
   toThrowEntityValidationErrorOnProperties,
   toThrowCollectionValidationError,
-  toThrowEntityValidationError
+  toThrowEntityValidationError,
 };
 
 expect.extend(extensions);

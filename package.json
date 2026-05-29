@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "5.13.0-alpha.2",
+  "version": "5.13.0-alpha.6",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2023 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -102,7 +102,7 @@
     "deploy-storybook": "storybook-to-ghpages --remote github",
     "dev:storybook:build": "NODE_OPTIONS=--max_old_space_size=2048 storybook build",
     "dev:storybook:install": "./scripts/installStorybookDependencies.sh",
-    "dev:storybook:start": "STORYBOOK_DEV=true storybook dev -p 6006",
+    "dev:storybook:start": "STORYBOOK_DEV=true storybook dev -p 6006 --no-open",
     "watch": "NODE_ENV=development webpack --watch"
   }
 }

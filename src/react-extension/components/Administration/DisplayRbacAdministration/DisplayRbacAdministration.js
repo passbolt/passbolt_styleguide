@@ -44,7 +44,7 @@ import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import DeleteRole from "../DeleteRole/DeleteRole";
 import EditRole from "../EditRole/EditRole";
 import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
-import UserService from "../../../../shared/services/api/user/userService";
+import UserApiService from "../../../../shared/services/api/user/userApiService";
 import DeleteRoleNotAllowed from "../DeleteRole/DeleteRoleNotAllowed";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
@@ -708,7 +708,7 @@ class DisplayRbacAdministration extends React.Component {
 DisplayRbacAdministration.defaultProps = {
   RoleApiService: RoleApiService,
   RbacApiService: RbacApiService,
-  UserApiService: UserService,
+  UserApiService: UserApiService,
 };
 
 DisplayRbacAdministration.propTypes = {

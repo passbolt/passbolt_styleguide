@@ -11,8 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.7.0
  */
+import GroupsCollection from "../../../models/entity/group/groupsCollection";
+import GroupsUsersCollection from "../../../models/entity/groupUser/groupsUsersCollection";
 
 export const GROUPS_FIND_MY_GROUPS = "passbolt.groups.find-my-groups";
+export const GROUPS_GET_BY_IDS = "passbolt.groups.get-by-ids";
+export const GROUPS_USERS_GET_BY_GROUP_ID = "passbolt.groups_users.get-by-group-id";
 
 export default class GroupServiceWorkerService {
   /**
@@ -25,9 +29,32 @@ export default class GroupServiceWorkerService {
 
   /**
    * Find all the groups the current user is member of.
-   * @returns {Promise<Array<object>>}
+   * @returns {Promise<GroupsCollection>}
    */
   async findMyGroups() {
-    return await this.port.request(GROUPS_FIND_MY_GROUPS);
+    const groupsDto = await this.port.request(GROUPS_FIND_MY_GROUPS);
+    return new GroupsCollection(groupsDto);
+  }
+
+  /**
+   * Get the groups matching the given ids. The list comes from the service-worker local-storage cache
+   * when initialised, otherwise it is fetched from the API.
+   * @param {Array<string>} groupIds The ids of the groups to retrieve.
+   * @returns {Promise<GroupsCollection>}
+   */
+  async getByIds(groupIds) {
+    const groupsDto = await this.port.request(GROUPS_GET_BY_IDS, groupIds);
+    return new GroupsCollection(groupsDto);
+  }
+
+  /**
+   * Get the members of the group matching the given id. The list comes from the service-worker
+   * local-storage cache when initialised, otherwise it is fetched from the API.
+   * @param {string} groupId The id of the group whose members are requested.
+   * @returns {Promise<GroupsUsersCollection>}
+   */
+  async getGroupsUsersByGroupId(groupId) {
+    const groupsUsersDto = await this.port.request(GROUPS_USERS_GET_BY_GROUP_ID, groupId);
+    return new GroupsUsersCollection(groupsUsersDto);
   }
 }
