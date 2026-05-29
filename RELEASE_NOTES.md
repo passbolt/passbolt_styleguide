@@ -1,4 +1,8 @@
-# v5.13.0-alpha.5
+# v5.13.0-alpha.6
 
-Moves UserEntity from the bext to the styleguide.
-Also move GroupEntity and PermissionEntity.
+Move the following elements from the bext to styleguide:
+- UserEntity
+- GroupEntity
+- PermissionEntity
+- UserCollection
+- GroupCollection
