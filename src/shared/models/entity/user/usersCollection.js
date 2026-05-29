@@ -117,6 +117,9 @@ class UsersCollection extends EntityV2Collection {
    */
   remove(userId) {
     const i = this.items.findIndex((item) => item.id === userId);
+    if (i === -1) {
+      return;
+    }
     this.items.splice(i, 1);
   }
 
