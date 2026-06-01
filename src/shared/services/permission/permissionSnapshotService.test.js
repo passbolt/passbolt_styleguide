@@ -106,36 +106,28 @@ describe("PermissionSnapshotService", () => {
     });
 
     it("synchronises the keyring before the permission fetch, and fetches the permissions before the groups and users", async () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
       const folderId = uuidv4();
-      const callOrder = [];
-      port.addRequestListener(KEYRING_SYNC_EVENT, () => {
-        callOrder.push(KEYRING_SYNC_EVENT);
-      });
-      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => {
-        callOrder.push(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY);
-        return [];
-      });
-      port.addRequestListener(GROUPS_GET_BY_IDS, () => {
-        callOrder.push(GROUPS_GET_BY_IDS);
-        return [];
-      });
-      port.addRequestListener(USERS_GET_BY_IDS, () => {
-        callOrder.push(USERS_GET_BY_IDS);
-        return [];
-      });
+      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => []);
+      port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
+      port.addRequestListener(USERS_GET_BY_IDS, () => []);
+      jest.spyOn(port, "request");
 
       await service.buildSnapshotForResourceCreation(folderId);
 
-      expect(callOrder.indexOf(KEYRING_SYNC_EVENT)).toBeLessThan(
-        callOrder.indexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY),
+      // Deterministic prefix: keyring sync first, then the permission fetch.
+      expect(port.request).toHaveBeenNthCalledWith(1, KEYRING_SYNC_EVENT);
+      expect(port.request).toHaveBeenNthCalledWith(2, PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, folderId, "Folder");
+      // Groups and users are fetched in parallel (Promise.all); assert both happen after the permission
+      // fetch without pinning their relative order.
+      const events = port.request.mock.calls.map(([event]) => event);
+      expect(events.indexOf(GROUPS_GET_BY_IDS)).toBeGreaterThan(
+        events.indexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY),
       );
-      expect(callOrder.indexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY)).toBeLessThan(
-        callOrder.indexOf(GROUPS_GET_BY_IDS),
-      );
-      expect(callOrder.indexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY)).toBeLessThan(
-        callOrder.indexOf(USERS_GET_BY_IDS),
+      expect(events.indexOf(USERS_GET_BY_IDS)).toBeGreaterThan(
+        events.indexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY),
       );
     });
 
