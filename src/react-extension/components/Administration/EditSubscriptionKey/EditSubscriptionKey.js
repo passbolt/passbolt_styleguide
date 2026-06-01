@@ -68,7 +68,7 @@ class EditSubscriptionKey extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    this.setState({ key: this.props.context.editSubscriptionKey.key || "" });
+    this.setState({ key: this.props.context.editSubscriptionKey?.key || "" });
   }
 
   /**
@@ -181,9 +181,10 @@ class EditSubscriptionKey extends Component {
       } else {
         // TODO: Extract this to `src/shared/services/actions/subscription/SubscriptionActionService.js` (original caller)
         await this.subscriptionKeyService.updateOrganizationSubscriptionKey(this.state.key);
-        await this.handleSaveSuccess();
-        await this.props.adminSubscriptionContext.findSubscriptionKey();
       }
+
+      await this.handleSaveSuccess();
+      await this.props.adminSubscriptionContext.findSubscriptionKey();
     } catch (error) {
       this.setState({ processing: false });
       this.handleSaveError(error);

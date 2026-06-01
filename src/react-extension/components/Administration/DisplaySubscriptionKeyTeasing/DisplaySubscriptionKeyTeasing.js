@@ -13,17 +13,54 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import { Trans, withTranslation } from "react-i18next";
-import { withNavigationContext } from "../../../contexts/NavigationContext";
+
 import { createSafePortal } from "../../../../shared/utils/portals";
-import EmailSVG from "../../../../img/svg/email.svg";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import SubscriptionKeyServiceWorkerService from "../../../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService";
+import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
+import EmailSVG from "../../../../img/svg/email.svg";
+import ProIllustrationSVG from "../../../../img/svg/pro_illustration.svg";
 
 /**
  * This component allows to display the subscription key for the administration
  */
 class DisplaySubscriptionKeyTeasing extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.subscriptionKeyService = new SubscriptionKeyServiceWorkerService(props.context.port);
+
+    this.bindCallbacks();
+  }
+
+  bindCallbacks() {
+    this.handleAddSubscriptionKey = this.handleAddSubscriptionKey.bind(this);
+    this.handleSaveSubscriptionKey = this.handleSaveSubscriptionKey.bind(this);
+  }
+
+  /**
+   * Save the subscription key
+   * @param {string} subscriptionKey
+   * @returns {Promise<SubscriptionEntity>}
+   */
+  handleSaveSubscriptionKey(subscriptionKey) {
+    return this.subscriptionKeyService.createOrganizationSubscriptionKey(subscriptionKey);
+  }
+
+  /**
+   * Open the EditSubscriptionKey dialog to upload a new subscription key (CE to PRO upgrade).
+   */
+  handleAddSubscriptionKey() {
+    this.props.dialogContext.open(EditSubscriptionKey, {
+      title: this.props.t("New subscription key"),
+      onSave: this.handleSaveSubscriptionKey,
+    });
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -38,7 +75,7 @@ class DisplaySubscriptionKeyTeasing extends React.Component {
               <h3 className="title">
                 <Trans>Subscription</Trans>
               </h3>
-              <h4 className="">
+              <h4>
                 <Trans>Details</Trans>
               </h4>
               <div className="subscription-information">
@@ -67,8 +104,8 @@ class DisplaySubscriptionKeyTeasing extends React.Component {
                   </div>
                 </div>
               </div>
-              <h4 className="">
-                <Trans>Subscription Key</Trans>
+              <h4>
+                <Trans>Passbolt Community Edition</Trans>
               </h4>
               <div className="subscription-key-teasing-info">
                 <AnimatedFeedback name="infinity_illustration" />
@@ -76,11 +113,11 @@ class DisplaySubscriptionKeyTeasing extends React.Component {
                   <div className="title-text">
                     <Trans>Passbolt CE is free forever!</Trans>
                   </div>
-                  <span>
+                  <p>
                     <Trans>
                       Passbolt Community Edition (CE) includes all essential features for team collaboration at no cost.
                     </Trans>
-                    &nbsp;
+                    {/* &nbsp; FIXME: CLEAN THIS UP BEFORE MERGING
                     <Trans>
                       For advanced needs such as Single Sign-On (SSO), AD or SCIM integration, consider upgrading to
                       Passbolt Pro.
@@ -89,21 +126,49 @@ class DisplaySubscriptionKeyTeasing extends React.Component {
                     <Trans>
                       The Pro version also offers premium technical support from our engineering team to ensure smooth
                       operation and expert assistance.
+                    </Trans> */}
+                  </p>
+                </div>
+              </div>
+              <h4>
+                <Trans>Passbolt Pro Edition</Trans>
+              </h4>
+              <div className="subscription-key-teasing-info">
+                <div className="illustration icon-feedback">
+                  <ProIllustrationSVG />
+                </div>
+                <div className="subscription-information">
+                  <div className="title-text">
+                    <Trans>Take your team to the next level with Passbolt Pro!</Trans>
+                  </div>
+                  <p>
+                    <Trans>
+                      Unlock enterprise-grade capabilities such as Single Sign-On (SSO), Active Directory and SCIM
+                      provisioning, advanced password and access policies, detailed audit logs, and high-availability
+                      deployment options.
                     </Trans>
-                  </span>
+                    &nbsp;
+                    <Trans>
+                      Passbolt Pro Edition also comes with premium technical support from our engineering team, with
+                      guaranteed response times so you can keep your team productive and secure.
+                    </Trans>
+                  </p>
+                  <div className="subscription-key-teasing-info">
+                    <button type="button" className="button secondary" onClick={this.handleAddSubscriptionKey}>
+                      <Trans>Add a new subscription key</Trans>
+                    </button>
+                    <a
+                      className="button primary"
+                      href="https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Trans>Learn more about Passbolt Pro Edition</Trans>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="actions-wrapper">
-            <a
-              className="button primary"
-              href="https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Trans>Upgrade to Passbolt Pro</Trans>
-            </a>
           </div>
         </>
         {createSafePortal(
@@ -133,7 +198,10 @@ class DisplaySubscriptionKeyTeasing extends React.Component {
 DisplaySubscriptionKeyTeasing.propTypes = {
   context: PropTypes.any, // The application context
   navigationContext: PropTypes.any, // The application navigation context
+  dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func,
 };
 
-export default withAppContext(withNavigationContext(withTranslation("common")(DisplaySubscriptionKeyTeasing)));
+export default withAppContext(
+  withDialog(withNavigationContext(withTranslation("common")(DisplaySubscriptionKeyTeasing))),
+);

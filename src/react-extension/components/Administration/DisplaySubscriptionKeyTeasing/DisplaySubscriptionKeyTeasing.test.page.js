@@ -72,13 +72,6 @@ export default class DisplaySubscriptionKeyTeasingPage {
   }
 
   /**
-   * Returns the upgrade to Passbolt pro button element
-   */
-  get upgradeButton() {
-    return this._page.container.querySelector(".actions-wrapper .button.primary");
-  }
-
-  /**
    * Returns the help box
    */
   get helpBox() {
@@ -124,15 +117,56 @@ export default class DisplaySubscriptionKeyTeasingPage {
    * Returns subscription key teasing info description element
    */
   get subscriptionKeyTeasingInfoDescription() {
-    return this.subscriptionKeyTeasingInfo.querySelector("span").textContent;
+    return this.subscriptionKeyTeasingInfo.querySelector("p").textContent;
   }
 
   /**
-   * Upgrade to Passbolt pro
+   * Returns the Passbolt Pro Edition section h4 text
    */
-  async clickUpgradeToPro() {
-    const leftClick = { button: 0 };
-    fireEvent.click(this.upgradeButton, leftClick);
+  get proEditionTitle() {
+    return this._page.container.querySelectorAll(".main-content h4")[2].textContent;
+  }
+
+  /**
+   * Returns the Pro teasing info element (second .subscription-key-teasing-info, after the CE one)
+   */
+  get proSubscriptionInfo() {
+    return this._page.container.querySelectorAll(".subscription-key-teasing-info")[1];
+  }
+
+  /**
+   * Returns the Pro teasing info tagline (.title-text)
+   */
+  get proSubscriptionInfoTitle() {
+    return this.proSubscriptionInfo.querySelector(".title-text").textContent;
+  }
+
+  /**
+   * Returns the Pro teasing info body text
+   */
+  get proSubscriptionInfoDescription() {
+    return this.proSubscriptionInfo.querySelector("p").textContent;
+  }
+
+  /**
+   * Returns the "Learn more about Passbolt Pro Edition" link
+   */
+  get learnMoreLink() {
+    return this.proSubscriptionInfo.querySelector("a");
+  }
+
+  /**
+   * Returns the "Add a new subscription key" button inside the Pro section
+   */
+  get addSubscriptionKeyButton() {
+    return this.proSubscriptionInfo.querySelector("button.button.secondary");
+  }
+
+  /**
+   * Click the "Add a new subscription key" button
+   */
+  async clickAddSubscriptionKey() {
+    fireEvent.click(this.addSubscriptionKeyButton, { button: 0 });
     await waitFor(() => {});
   }
 }

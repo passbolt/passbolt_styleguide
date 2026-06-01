@@ -35,6 +35,9 @@ export function defaultProps(props = {}) {
   const defaultProps = {
     context: defaultAppContext(Object.assign(defaultContext, props?.context), true),
     navigationContext: defaultNavigationContext(),
+    dialogContext: {
+      open: jest.fn(),
+    },
   };
   delete props.context; // Treated in the default
 
