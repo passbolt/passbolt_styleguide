@@ -18,13 +18,17 @@ import { DateTime } from "luxon";
 import { withAdministrationWorkspace } from "../../../contexts/AdministrationWorkspaceContext";
 import { Trans, withTranslation } from "react-i18next";
 import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import { withNavigationContext } from "../../../contexts/NavigationContext";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 import SubscriptionActionService from "../../../../shared/services/actions/subscription/SubscriptionActionService";
+import SubscriptionKeyServiceWorkerService from "../../../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService";
 import { withAdminSubscription } from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
 import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
 import { createSafePortal } from "../../../../shared/utils/portals";
 import EmailSVG from "../../../../img/svg/email.svg";
+import ConfirmDowngradeSubscriptionDialog from "../ConfirmDowngradeSubscriptionDialog/ConfirmDowngradeSubscriptionDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 /**
  * This component allows to display the subscription key for the administration
@@ -36,9 +40,13 @@ class DisplaySubscriptionKey extends React.Component {
    */
   constructor(props) {
     super(props);
+
     this.state = this.defaultState;
+
     this.bindCallbacks();
+
     this.subscriptionActionService = SubscriptionActionService.getInstance(this.props);
+    this.subscriptionKeyService = new SubscriptionKeyServiceWorkerService(this.props.context.port);
   }
 
   /**
@@ -78,6 +86,38 @@ class DisplaySubscriptionKey extends React.Component {
   bindCallbacks() {
     this.handleRenewKey = this.handleRenewKey.bind(this);
     this.handleUpdateKey = this.handleUpdateKey.bind(this);
+    this.handleDowngradeClick = this.handleDowngradeClick.bind(this);
+  }
+
+  /**
+   * Open the downgrade confirmation dialog.
+   */
+  handleDowngradeClick() {
+    const dialogKey = this.props.dialogContext.open(ConfirmDowngradeSubscriptionDialog, {
+      onClose: () => this.props.dialogContext.close(dialogKey),
+      onSubmit: () => this.handleDowngradeSubmit(dialogKey),
+    });
+  }
+
+  /**
+   * Perform the downgrade.
+   * @param {string} dialogKey The dialog identifier returned by dialogContext.open.
+   * @returns {Promise<void>}
+   */
+  async handleDowngradeSubmit(dialogKey) {
+    try {
+      await this.subscriptionKeyService.deleteOrganizationSubscriptionKey();
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.translate("Subscription has been removed successfully. The instance is now on Community Edition."),
+      );
+      this.props.dialogContext.close(dialogKey);
+    } catch (error) {
+      if (error?.name === "UserAbortsOperationError") {
+        return;
+      }
+
+      this.props.dialogContext.open(NotifyError, { error });
+    }
   }
 
   /**
@@ -146,14 +186,11 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   /**
-   * Should show renew key
+   * Should show the dedicated renew/downgrade section (only when the key is expiring or expired).
    * @returns {boolean}
    */
-  get shouldShowRenewKey() {
-    return (
-      this.hasSubscriptionKey() &&
-      (this.hasLimitUsersExceeded() || this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire())
-    );
+  get shouldShowDowngradeSection() {
+    return this.hasSubscriptionKey() && (this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire());
   }
 
   /**
@@ -304,14 +341,51 @@ class DisplaySubscriptionKey extends React.Component {
                     )}
                   </div>
                 </div>
+                {this.shouldShowDowngradeSection && (
+                  <>
+                    <div className="subscription-information">
+                      <h4>
+                        <Trans>Renew or downgrade your subscription</Trans>
+                      </h4>
+                      <p>
+                        <Trans>
+                          Your subscription key is expiring soon. Please renew your subscription to continue using the
+                          service. If you don&apos;t renew your subscription, you will not be able to use the Pro
+                          edition features and will be automatically downgraded to the Community edition.
+                        </Trans>
+                      </p>
+                      <p>
+                        <Trans>
+                          You will still be able to use the Community edition features without subscription, but you
+                          will lose access to Pro edition features such as Active Directory and SCIM provisioning,
+                          advanced password and access policies, detailed audit logs, premium support and all data
+                          relative to those features will be deleted from the database.
+                        </Trans>
+                      </p>
+                      <p>
+                        <Trans>
+                          If you don&apos;t want to renew your subscription, you can choose to downgrade now or wait
+                          until your subscription expires. Renew now for uninterrupted service.
+                        </Trans>
+                        &nbsp;
+                      </p>
+                    </div>
+                    <a href="https://www.passbolt.com/community" target="_blank" rel="noopener noreferrer">
+                      <Trans>Learn more about Community Edition</Trans>
+                    </a>
+                    <div className="actions-wrapper">
+                      <button className="button secondary" type="button" onClick={this.handleRenewKey}>
+                        <Trans>Renew key</Trans>
+                      </button>
+                      <button className="button warning" type="button" onClick={this.handleDowngradeClick}>
+                        <Trans>Downgrade now</Trans>
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
             <div className="actions-wrapper">
-              {this.shouldShowRenewKey && (
-                <button className="button secondary" type="button" onClick={this.handleRenewKey}>
-                  <Trans>Renew key</Trans>
-                </button>
-              )}
               {this.hasSubscriptionKey() ? (
                 <button className="button primary form" type="button" onClick={this.handleUpdateKey}>
                   <Trans>Update key</Trans>
@@ -354,11 +428,14 @@ DisplaySubscriptionKey.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   adminSubscriptionContext: PropTypes.object, // The administration subscription context
   dialogContext: PropTypes.any, // The dialog congtext
+  actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func,
 };
 
 export default withAppContext(
   withNavigationContext(
-    withAdminSubscription(withAdministrationWorkspace(withDialog(withTranslation("common")(DisplaySubscriptionKey)))),
+    withAdminSubscription(
+      withAdministrationWorkspace(withDialog(withActionFeedback(withTranslation("common")(DisplaySubscriptionKey)))),
+    ),
   ),
 );

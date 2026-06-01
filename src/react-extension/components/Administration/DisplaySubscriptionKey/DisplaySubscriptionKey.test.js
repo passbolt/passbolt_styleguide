@@ -17,7 +17,9 @@
  */
 import {
   defaultProps,
+  expiredProps,
   formatDate,
+  goingToExpireProps,
   mockSubscription,
   mockSubscriptionExpired,
   mockSubscriptionUsersExceeded,
@@ -29,6 +31,9 @@ import { screen, waitFor } from "@testing-library/react";
 import { DateTime } from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
+import ConfirmDowngradeSubscriptionDialog from "../ConfirmDowngradeSubscriptionDialog/ConfirmDowngradeSubscriptionDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import { DOWNGRADE_SUBSCRIPTION_KEY } from "../../../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -153,6 +158,107 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       expect(props.dialogContext.open).toHaveBeenCalledWith(EditSubscriptionKey);
       expect(props.context.setContext).toHaveBeenCalledWith({ editSubscriptionKey });
+    });
+  });
+
+  describe(" As AD with an expiring or expired subscription I can downgrade to CE", () => {
+    it("As AD I should not see the renew/downgrade section when the subscription is valid", async () => {
+      page = new DisplaySubscriptionKeyPage(props.context, props);
+      await screen.findByText("Subscription key details");
+      expect(page.downgradeSection).toBeNull();
+    });
+
+    it("As AD I should see the renew/downgrade section when the subscription key is expiring", async () => {
+      const sectionProps = goingToExpireProps();
+      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
+      await screen.findByText("Renew or downgrade your subscription");
+
+      expect(page.downgradeSection).not.toBeNull();
+      expect(page.downgradeSectionTitle).toBe("Renew or downgrade your subscription");
+      expect(page.downgradeSectionParagraphs).toHaveLength(3);
+      expect(page.downgradeLearnMoreLink.textContent).toBe("Learn more about Community Edition");
+      expect(page.downgradeLearnMoreLink.getAttribute("href")).toBe("https://www.passbolt.com/community");
+      expect(page.renewKeyButton.textContent.trim()).toBe("Renew key");
+      expect(page.downgradeNowButton.textContent.trim()).toBe("Downgrade now");
+    });
+
+    it("As AD I should see the renew/downgrade section when the subscription key is expired", async () => {
+      const sectionProps = expiredProps();
+      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
+      await screen.findByText("Renew or downgrade your subscription");
+
+      expect(page.downgradeSection).not.toBeNull();
+      expect(page.downgradeNowButton).not.toBeNull();
+    });
+
+    it("As AD clicking Downgrade now should open ConfirmDowngradeSubscriptionDialog with onSubmit and onClose", async () => {
+      const sectionProps = goingToExpireProps();
+      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
+      await screen.findByText("Renew or downgrade your subscription");
+
+      await page.clickDowngradeNow();
+
+      expect(sectionProps.dialogContext.open).toHaveBeenCalledTimes(1);
+      const [dialogComponent, dialogProps] = sectionProps.dialogContext.open.mock.calls[0];
+      expect(dialogComponent).toBe(ConfirmDowngradeSubscriptionDialog);
+      expect(typeof dialogProps.onSubmit).toBe("function");
+      expect(typeof dialogProps.onClose).toBe("function");
+    });
+
+    it("As AD the captured onSubmit should dispatch passbolt.subscription.downgrade, show a success toast and close the dialog", async () => {
+      const sectionProps = goingToExpireProps();
+      const dialogKey = "dialog-key-test";
+      sectionProps.dialogContext.open = jest.fn().mockReturnValue(dialogKey);
+      const mockDowngrade = jest.fn().mockResolvedValue(undefined);
+      sectionProps.context.port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDowngrade);
+
+      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
+      await screen.findByText("Renew or downgrade your subscription");
+
+      await page.clickDowngradeNow();
+      const { onSubmit } = sectionProps.dialogContext.open.mock.calls[0][1];
+      await onSubmit();
+
+      expect(mockDowngrade).toHaveBeenCalledTimes(1);
+      expect(sectionProps.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
+        "Subscription has been removed successfully. The instance is now on Community Edition.",
+      );
+      expect(sectionProps.dialogContext.close).toHaveBeenCalledWith(dialogKey);
+    });
+
+    it("As AD on UserAbortsOperationError no success toast or NotifyError is shown and the dialog stays open", async () => {
+      const sectionProps = goingToExpireProps();
+      const mockDowngrade = jest.fn().mockRejectedValue({ name: "UserAbortsOperationError" });
+      sectionProps.context.port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDowngrade);
+
+      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
+      await screen.findByText("Renew or downgrade your subscription");
+
+      await page.clickDowngradeNow();
+      const { onSubmit } = sectionProps.dialogContext.open.mock.calls[0][1];
+      await onSubmit();
+
+      expect(sectionProps.actionFeedbackContext.displaySuccess).not.toHaveBeenCalled();
+      expect(sectionProps.dialogContext.close).not.toHaveBeenCalled();
+      expect(sectionProps.dialogContext.open).toHaveBeenCalledTimes(1);
+    });
+
+    it("As AD on an unexpected error a NotifyError dialog should be opened", async () => {
+      const sectionProps = goingToExpireProps();
+      const error = new Error("boom");
+      const mockDowngrade = jest.fn().mockRejectedValue(error);
+      sectionProps.context.port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDowngrade);
+      jest.spyOn(console, "error").mockImplementation(() => {});
+
+      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
+      await screen.findByText("Renew or downgrade your subscription");
+
+      await page.clickDowngradeNow();
+      const { onSubmit } = sectionProps.dialogContext.open.mock.calls[0][1];
+      await onSubmit();
+
+      expect(sectionProps.dialogContext.open).toHaveBeenCalledTimes(2);
+      expect(sectionProps.dialogContext.open).toHaveBeenLastCalledWith(NotifyError, { error });
     });
   });
 

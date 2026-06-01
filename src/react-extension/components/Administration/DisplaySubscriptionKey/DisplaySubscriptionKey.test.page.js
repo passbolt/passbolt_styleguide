@@ -62,10 +62,56 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
-   * Returns the enew Key button element
+   * Returns the dedicated renew/downgrade section
+   */
+  get downgradeSection() {
+    const infos = this._page.container.querySelectorAll(".main-content .subscription-information");
+    return infos.length > 1 ? infos[1] : null;
+  }
+
+  /**
+   * Returns the renew Key button element (inside the section's nested .actions-wrapper).
    */
   get renewKeyButton() {
     return this._page.container.querySelector(".actions-wrapper button.secondary");
+  }
+
+  /**
+   * Returns the dedicated renew/downgrade section h4 text.
+   */
+  get downgradeSectionTitle() {
+    return this.downgradeSection?.querySelector("h4")?.textContent;
+  }
+
+  /**
+   * Returns the body paragraph elements inside the renew/downgrade section.
+   * @returns {Element[]}
+   */
+  get downgradeSectionParagraphs() {
+    return [...(this.downgradeSection?.querySelectorAll("p") ?? [])];
+  }
+
+  /**
+   * Returns the "Learn more about Community Edition" link.
+   */
+  get downgradeLearnMoreLink() {
+    return this._page.container.querySelector('a[href="https://www.passbolt.com/community"]');
+  }
+
+  /**
+   * Returns the "Downgrade now" button (inside the section's nested .actions-wrapper).
+   */
+  get downgradeNowButton() {
+    return this._page.container.querySelector(".actions-wrapper button.warning");
+  }
+
+  /**
+   * Click the "Downgrade now" button.
+   */
+  async clickDowngradeNow() {
+    const leftClick = { button: 0 };
+    fireEvent.click(this.downgradeNowButton, leftClick);
+    await waitFor(() => {});
   }
 
   /**
