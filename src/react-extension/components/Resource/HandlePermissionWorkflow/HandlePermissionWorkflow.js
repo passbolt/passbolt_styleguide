@@ -13,106 +13,51 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
-import { withDialog } from "../../../contexts/DialogContext";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import PermissionSnapshotService from "../../../../shared/services/permission/permissionSnapshotService";
+import ResourceCreationFlow from "./flows/ResourceCreationFlow";
 
 /**
- * Status values driving the permission workflow state machine.
- * @type {Readonly<{INITIALIZING: string, READY: string, ERROR: string}>}
+ * The set of permission-touching operations this workflow can drive.
+ * Each value corresponds to a focused flow component under `flows/`.
+ *
+ * @todo Only `CREATE_RESOURCE` is wired today. `EDIT_RESOURCE`, `MOVE_RESOURCES`, and
+ *       `SHARE_RESOURCE` land with their respective tickets — passing one of those keys to the
+ *       dispatcher will throw until the matching flow component exists.
+ * @type {Readonly<{CREATE_RESOURCE: string, EDIT_RESOURCE: string, MOVE_RESOURCES: string, SHARE_RESOURCE: string}>}
  */
-export const HANDLE_PERMISSION_WORKFLOW_STATUS = Object.freeze({
-  INITIALIZING: "initializing",
-  READY: "ready",
-  ERROR: "error",
+export const PERMISSION_WORKFLOW_OPERATION = Object.freeze({
+  CREATE_RESOURCE: "create-resource",
+  EDIT_RESOURCE: "edit-resource",
+  MOVE_RESOURCES: "move-resources",
+  SHARE_RESOURCE: "share-resource",
 });
 
 /**
- * Orchestrates the resource creation / edition dialogs and the permission-confirmation dialog. This
- * iteration only implements the initial state: capturing an immutable permission snapshot for the
- * resource-creation flow. Subsequent tickets will extend the state machine to dispatch the actual
- * dialogs.
+ * Single entry point for every permission-touching operation. Callers reach this component via
+ * `workflowContext.start(HandlePermissionWorkflow, { operation, ...flowProps })`; we pick the
+ * matching per-operation flow component and render it. Each flow owns its own state machine,
+ * dialog sequence, and API ordering.
+ *
+ * Only `CREATE_RESOURCE` is wired today. `EDIT_RESOURCE`, `MOVE_RESOURCES`, and `SHARE_RESOURCE`
+ * land with their respective tickets and slot in as additional cases here without bloating this
+ * file.
  */
 export class HandlePermissionWorkflow extends React.Component {
   /**
-   * Default constructor
-   */
-  constructor(props) {
-    super(props);
-    this.state = this.defaultState;
-    this.permissionSnapshotService = new PermissionSnapshotService(props.context.port);
-    this.bindCallbacks();
-  }
-
-  /**
-   * Get default state
-   * @returns {Object}
-   */
-  get defaultState() {
-    return {
-      status: HANDLE_PERMISSION_WORKFLOW_STATUS.INITIALIZING,
-      snapshot: null,
-    };
-  }
-
-  /**
-   * Component did mount
-   * @returns {Promise<void>}
-   */
-  async componentDidMount() {
-    await this.buildInitialSnapshot();
-  }
-
-  /**
-   * Build the initial permission snapshot shown to the operator before a resource is created.
-   * Stores it in state and transitions to READY on success; transitions to ERROR and opens a
-   * NotifyError dialog on failure (except for UserAbortsOperationError which is silenced).
-   * A second snapshot taken at submission time (drift detection) will land in a follow-up ticket.
-   * @returns {Promise<void>}
-   */
-  async buildInitialSnapshot() {
-    try {
-      const snapshot = await this.permissionSnapshotService.buildSnapshotForResourceCreation(this.props.folderParentId);
-      this.setState({ status: HANDLE_PERMISSION_WORKFLOW_STATUS.READY, snapshot });
-    } catch (error) {
-      this.handleError(error);
-    }
-  }
-
-  /**
-   * Binds the callbacks
-   */
-  bindCallbacks() {
-    this.handleError = this.handleError.bind(this);
-  }
-
-  /**
-   * Handle an unexpected error encountered while running the workflow.
-   * @param {Error} error The error to handle.
-   * @returns {void}
-   */
-  handleError(error) {
-    if (error?.name === "UserAbortsOperationError") {
-      return;
-    }
-    this.setState({ status: HANDLE_PERMISSION_WORKFLOW_STATUS.ERROR });
-    this.props.dialogContext.open(NotifyError, { error });
-  }
-
-  /**
-   * Renders the component
+   * Picks the per-operation flow component for the requested operation and renders it.
    * @returns {JSX.Element}
    */
   render() {
-    return <></>;
+    switch (this.props.operation) {
+      case PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE:
+        return <ResourceCreationFlow {...this.props} />;
+      default:
+        throw new Error(`HandlePermissionWorkflow: unsupported operation "${this.props.operation}".`);
+    }
   }
 }
 
 HandlePermissionWorkflow.propTypes = {
-  context: PropTypes.object, // the app context
-  dialogContext: PropTypes.any, // the dialog context
-  folderParentId: PropTypes.string.isRequired, // the id of the parent folder whose permissions form the snapshot
+  operation: PropTypes.oneOf(Object.values(PERMISSION_WORKFLOW_OPERATION)).isRequired,
 };
 
-export default withAppContext(withDialog(HandlePermissionWorkflow));
+export default HandlePermissionWorkflow;
