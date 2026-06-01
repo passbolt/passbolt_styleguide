@@ -1910,4 +1910,71 @@ describe("See the Create Resource", () => {
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
   });
+
+  describe("As LU submitting through a workflow handler (onSubmit prop provided)", () => {
+    it("As LU I should hand the validated form entity to onSubmit instead of saving directly", async () => {
+      expect.assertions(4);
+      const onSubmit = jest.fn();
+      const props = defaultProps({ onSubmit });
+      jest.spyOn(props.context.port, "request");
+      const page = new CreateResourcePage(props);
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+      await page.click(page.saveButton);
+
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+      expect(onSubmit.mock.calls[0][0]).toBeDefined();
+      expect(onSubmit.mock.calls[0][0].secret.password).toEqual("RN9n8XuECN3");
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.resources.create",
+        expect.anything(),
+        expect.anything(),
+      );
+    });
+
+    it("As LU I should not see a success toast when onSubmit is provided (the workflow owns the side-effects)", async () => {
+      expect.assertions(1);
+      const onSubmit = jest.fn();
+      const props = defaultProps({ onSubmit });
+      const page = new CreateResourcePage(props);
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+      await page.click(page.saveButton);
+
+      expect(props.actionFeedbackContext.displaySuccess).not.toHaveBeenCalled();
+    });
+
+    it("As LU I should see the dialog close itself after a controlled-mode submit so the dialog stack stays clean for the workflow's next dialog", async () => {
+      expect.assertions(2);
+      // Resolve only after we've checked nothing closed prematurely — confirms the close runs
+      // strictly AFTER `onSubmit` resolves, not in parallel.
+      let resolveSubmit;
+      const onSubmit = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            resolveSubmit = resolve;
+          }),
+      );
+      const props = defaultProps({ onSubmit });
+      const page = new CreateResourcePage(props);
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+      await page.click(page.saveButton);
+
+      // onSubmit is in-flight; close must not have fired yet.
+      expect(props.onClose).not.toHaveBeenCalled();
+      await waitFor(() => {
+        if (!onSubmit.mock.calls.length) {
+          throw new Error("onSubmit not yet invoked");
+        }
+      });
+      resolveSubmit();
+      await waitFor(() => {
+        if (!props.onClose.mock.calls.length) {
+          throw new Error("onClose not yet invoked");
+        }
+      });
+      expect(props.onClose).toHaveBeenCalledTimes(1);
+    });
+  });
 });

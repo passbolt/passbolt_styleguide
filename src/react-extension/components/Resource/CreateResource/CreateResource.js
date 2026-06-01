@@ -405,11 +405,23 @@ class CreateResource extends Component {
   }
 
   /**
-   * Save the resource
+   * Save the resource.
+   *
+   * When the optional `onSubmit` prop is provided (workflow-controlled mode), the validated
+   * resource form entity is handed over to the workflow handler instead of being persisted
+   * directly. In that mode the workflow owns the API call, the success notification, and the
+   * post-create navigation; this component only validates, yields, and closes itself so the
+   * dialog stack is left clean for any follow-up dialog the workflow opens.
+   *
    * @param {ResourceFormEntity} resource
    * @returns {Promise<void>}
    */
   async save(resource) {
+    if (this.props.onSubmit) {
+      await this.props.onSubmit(resource);
+      this.handleClose();
+      return;
+    }
     const createdResource = await this.createResource(resource);
     await this.handleSaveSuccess(createdResource);
   }
@@ -632,6 +644,7 @@ CreateResource.propTypes = {
   history: PropTypes.object, // Router history
   folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
+  onSubmit: PropTypes.func, // Workflow-controlled callback invoked with the validated ResourceFormEntity instead of the internal save path
   dialogContext: PropTypes.object, // The dialog context
   passwordExpiryContext: PropTypes.object, // The password expiry context
   passwordPoliciesContext: PropTypes.object, // The password policy context
