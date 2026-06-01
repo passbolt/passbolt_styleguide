@@ -28,6 +28,7 @@ import { withDialog } from "../../contexts/DialogContext";
 import { withActionFeedback } from "../../contexts/ActionFeedbackContext";
 import { withResourceWorkspace } from "../../contexts/ResourceWorkspaceContext";
 import { Trans, withTranslation } from "react-i18next";
+import PermissionEntity from "../../../shared/models/entity/permission/permissionEntity";
 
 class ShareDialog extends Component {
   /**
@@ -46,18 +47,28 @@ class ShareDialog extends Component {
 
   /**
    * ComponentDidMount
-   * Invoked immediately after component is inserted into the tree
+   * Invoked immediately after component is inserted into the tree.
+   *
+   * Controlled mode: when `initialPermissions` is provided (alongside `initialGroups`,
+   * `initialUsers`, and an `onConfirm` callback) the dialog seeds itself from those
+   * collections instead of fetching via the port. Used by the resource-creation workflow
+   * to review the parent folder's permissions before the resource exists on the server.
+   *
    * @return {void}
    */
   async componentDidMount() {
-    if (this.props.context.shareDialogProps.resourcesIds) {
-      await this.findResourcesDetails();
-    }
-    if (this.props.context.shareDialogProps.foldersIds) {
-      this.folders = await this.props.context.port.request(
-        "passbolt.share.get-folders",
-        this.props.context.shareDialogProps.foldersIds,
-      );
+    if (this.isControlledMode()) {
+      this.resources = [this.buildSyntheticResourceFromControlledProps()];
+    } else {
+      if (this.props.context.shareDialogProps.resourcesIds) {
+        await this.findResourcesDetails();
+      }
+      if (this.props.context.shareDialogProps.foldersIds) {
+        this.folders = await this.props.context.port.request(
+          "passbolt.share.get-folders",
+          this.props.context.shareDialogProps.foldersIds,
+        );
+      }
     }
 
     this.shareChanges = new ShareChanges(this.resources, this.folders);
@@ -66,6 +77,59 @@ class ShareDialog extends Component {
       // scroll at the top of the permission list
       this.permissionListRef.current.scrollTo(0);
     });
+  }
+
+  /**
+   * True when the dialog is operated by the workflow handler with controlled-mode props.
+   * @returns {boolean}
+   */
+  isControlledMode() {
+    return Boolean(this.props.initialPermissions);
+  }
+
+  /**
+   * Build a synthetic resource DTO from the controlled-mode props so the dialog renders
+   * the snapshot's permissions through the existing ShareChanges + ReactList path without
+   * touching the server. The synthetic resource has no id (the underlying resource does not
+   * exist yet) and a placeholder metadata; ShareChanges only needs the embedded permissions
+   * to render and track edits.
+   * @returns {object}
+   */
+  buildSyntheticResourceFromControlledProps() {
+    const groupsById = {};
+    this.props.initialGroups?.items.forEach((group) => {
+      groupsById[group.id] = group.toDto();
+    });
+    const usersById = {};
+    this.props.initialUsers?.items.forEach((user) => {
+      usersById[user.id] = user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS);
+    });
+
+    // Remap the snapshot's permissions onto the synthetic resource: the original DTOs reference
+    // the parent folder's aco/aco_foreign_key but ShareChanges needs them associated with the
+    // (id-less) resource we're about to create, otherwise delete/update operations silently
+    // no-op (aco_foreign_key mismatch) and any emitted change would be filtered out of
+    // `getResourcesChanges()` for having `aco: "Folder"`.
+    const permissions = this.props.initialPermissions.items.map((permission) => {
+      const dto = permission.toDto();
+      dto.aco = PermissionEntity.ACO_RESOURCE;
+      dto.aco_foreign_key = null;
+      if (dto.aro === PermissionEntity.ARO_USER) {
+        dto.user = usersById[dto.aro_foreign_key];
+      } else if (dto.aro === PermissionEntity.ARO_GROUP) {
+        dto.group = groupsById[dto.aro_foreign_key];
+      }
+      return dto;
+    });
+
+    return {
+      id: null,
+      metadata: { name: "" },
+      // The operator is the owner of the to-be-created resource; the snapshot's permissions are
+      // grafted on top via `permissions`.
+      permission: { type: PermissionEntity.PERMISSION_OWNER },
+      permissions,
+    };
   }
 
   /**
@@ -180,8 +244,16 @@ class ShareDialog extends Component {
 
   /**
    * Handle save operation success.
+   *
+   * In controlled mode the workspace refresh (`onResourceShared`) and the success toast are
+   * the workflow handler's responsibility — the underlying resource doesn't even exist yet
+   * when this dialog closes — so we only close.
    */
   async handleSaveSuccess() {
+    if (this.isControlledMode()) {
+      this.props.onClose();
+      return;
+    }
     await this.props.actionFeedbackContext.displaySuccess(
       this.translate("The permissions have been changed successfully."),
     );
@@ -261,10 +333,20 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Save the permissions
+   * Save the permissions.
+   *
+   * In controlled mode the dialog never calls the server — it hands the operator-confirmed
+   * permission changes (in the same DTO shape that `passbolt.share.resources.save` would
+   * accept) to the `onConfirm` callback so the workflow handler can orchestrate the
+   * create-then-share sequence safely.
+   *
    * @returns {Promise<void>}
    */
   async shareSave() {
+    if (this.isControlledMode()) {
+      await this.props.onConfirm(this.shareChanges.getResourcesChanges());
+      return;
+    }
     if (this.props.context.shareDialogProps.resourcesIds && this.props.context.shareDialogProps.foldersIds) {
       throw new Error(this.translate("Multi resource and folder share is not implemented."));
     }
@@ -325,8 +407,8 @@ class ShareDialog extends Component {
    */
   isAboutItems() {
     return (
-      this.props.context.shareDialogProps.resourcesIds &&
-      this.props.context.shareDialogProps.foldersIds &&
+      this.props.context.shareDialogProps?.resourcesIds &&
+      this.props.context.shareDialogProps?.foldersIds &&
       this.props.context.shareDialogProps.resourcesIds.length &&
       this.props.context.shareDialogProps.foldersIds.length
     );
@@ -338,7 +420,7 @@ class ShareDialog extends Component {
    */
   isAboutResources() {
     return (
-      this.props.context.shareDialogProps.resourcesIds && this.props.context.shareDialogProps.resourcesIds.length > 1
+      this.props.context.shareDialogProps?.resourcesIds && this.props.context.shareDialogProps.resourcesIds.length > 1
     );
   }
 
@@ -347,7 +429,7 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   isAboutFolders() {
-    return this.props.context.shareDialogProps.foldersIds && this.props.context.shareDialogProps.foldersIds.length > 1;
+    return this.props.context.shareDialogProps?.foldersIds && this.props.context.shareDialogProps.foldersIds.length > 1;
   }
 
   /**
@@ -356,7 +438,7 @@ class ShareDialog extends Component {
    */
   isAboutAFolder() {
     return (
-      this.props.context.shareDialogProps.foldersIds && this.props.context.shareDialogProps.foldersIds.length === 1
+      this.props.context.shareDialogProps?.foldersIds && this.props.context.shareDialogProps.foldersIds.length === 1
     );
   }
 
@@ -366,7 +448,7 @@ class ShareDialog extends Component {
    */
   isAboutAResource() {
     return (
-      this.props.context.shareDialogProps.resourcesIds && this.props.context.shareDialogProps.resourcesIds.length === 1
+      this.props.context.shareDialogProps?.resourcesIds && this.props.context.shareDialogProps.resourcesIds.length === 1
     );
   }
 
@@ -377,6 +459,9 @@ class ShareDialog extends Component {
   getTitle() {
     if (this.state.loading) {
       return this.translate("Loading...");
+    }
+    if (this.isControlledMode()) {
+      return this.translate("Share");
     }
     if (this.isAboutItems()) {
       return this.translate("Share {{count}} items", {
@@ -602,6 +687,10 @@ ShareDialog.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   listMinSize: PropTypes.number, // The minimum size to be renderered in the permission list
+  initialPermissions: PropTypes.object, // Controlled mode: PermissionsCollection used to seed the dialog instead of fetching from the API
+  initialGroups: PropTypes.object, // Controlled mode: GroupsCollection providing the groups referenced by initialPermissions
+  initialUsers: PropTypes.object, // Controlled mode: UsersCollection providing the users referenced by initialPermissions
+  onConfirm: PropTypes.func, // Controlled mode: callback invoked with the operator-confirmed permission changes instead of saving via the port
   t: PropTypes.func, // The translation function
 };
 

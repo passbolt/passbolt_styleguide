@@ -25,11 +25,17 @@ import {
 } from "./ShareDialog.test.data";
 import { ActionFeedbackContext } from "../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchError";
-import { screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
 import { waitForTrue } from "../../../../test/utils/waitFor";
 import UserAbortsOperationError from "../../lib/Error/UserAbortsOperationError";
 import { act } from "react";
+import PermissionsCollection from "../../../shared/models/entity/permission/permissionsCollection";
+import GroupsCollection from "../../../shared/models/entity/group/groupsCollection";
+import UsersCollection from "../../../shared/models/entity/user/usersCollection";
+import { defaultPermissionDto } from "../../../shared/models/entity/permission/permissionEntity.test.data";
+import { defaultUserDto } from "../../../shared/models/entity/user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 beforeAll(() => {
   global.scrollTo = jest.fn();
@@ -498,5 +504,96 @@ describe("As Lu I should see the share dialog", () => {
         error: new Error("Multi resource and folder share is not implemented."),
       });
     });
+  });
+});
+
+describe("As LU running ShareDialog in controlled mode (workflow-driven)", () => {
+  let page;
+  const context = defaultAppContext();
+  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
+
+  /**
+   * Build a self-consistent triplet of {permissions, groups, users} simulating a snapshot
+   * captured from a shared parent folder. The operator is the owner; a second user has read access.
+   */
+  function buildControlledModeProps() {
+    const operatorId = uuidv4();
+    const operatorUser = defaultUserDto({ id: operatorId, username: "operator@passbolt.com" });
+    const readerId = uuidv4();
+    const readerUser = defaultUserDto({ id: readerId, username: "reader@passbolt.com" });
+    const folderId = uuidv4();
+    const permissionsDto = [
+      defaultPermissionDto({
+        aco: "Folder",
+        aco_foreign_key: folderId,
+        aro: "User",
+        aro_foreign_key: operatorId,
+        type: 15,
+      }),
+      defaultPermissionDto({
+        aco: "Folder",
+        aco_foreign_key: folderId,
+        aro: "User",
+        aro_foreign_key: readerId,
+        type: 1,
+      }),
+    ];
+    return {
+      ...defaultProps(),
+      initialPermissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+      initialGroups: new GroupsCollection([]),
+      initialUsers: new UsersCollection([operatorUser, readerUser]),
+      onConfirm: jest.fn(),
+    };
+  }
+
+  it("As LU I should not see the dialog fetch resource permissions when controlled-mode props are provided", async () => {
+    expect.assertions(2);
+    const props = buildControlledModeProps();
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+
+    expect(context.port.request).not.toHaveBeenCalledWith(
+      "passbolt.resources.find-all-by-ids-for-display-permissions",
+      expect.anything(),
+    );
+    expect(page.count).toBe(2);
+  });
+
+  it("As LU I should see the snapshot's permissions rendered in the order they were captured", async () => {
+    expect.assertions(2);
+    const props = buildControlledModeProps();
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+
+    // Both rendered rows match the synthetic AROs we provided via initialUsers.
+    expect(page.aroDetails(1)).toEqual(expect.stringContaining("@passbolt.com"));
+    expect(page.aroDetails(2)).toEqual(expect.stringContaining("@passbolt.com"));
+  });
+
+  it("As LU confirming the dialog I should see onConfirm called with the permission changes and the port left untouched", async () => {
+    expect.assertions(3);
+    const props = buildControlledModeProps();
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+    // Remove the reader to make the form dirty (single-click delete, no autocomplete).
+    await page.selectRemovePermission(2);
+    // Submit the form directly to avoid relying on the save button being enabled in the DOM.
+    await act(async () => {
+      fireEvent.submit(page.form);
+    });
+
+    expect(props.onConfirm).toHaveBeenCalledTimes(1);
+    const changes = props.onConfirm.mock.calls[0][0];
+    expect(changes).toEqual(expect.arrayContaining([expect.objectContaining({ delete: true })]));
+    // Controlled mode must never invoke the server-side share endpoint.
+    expect(context.port.request).not.toHaveBeenCalledWith(
+      "passbolt.share.resources.save",
+      expect.anything(),
+      expect.anything(),
+    );
   });
 });
