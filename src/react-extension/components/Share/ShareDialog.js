@@ -21,7 +21,9 @@ import FormCancelButton from "../Common/Inputs/FormSubmitButton/FormCancelButton
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
 import Autocomplete from "../Common/Inputs/Autocomplete/Autocomplete";
 import ShareChanges from "./Utility/ShareChanges";
-import SharePermissionItem from "./SharePermissionItem";
+import UserPermissionItem from "./UserPermissionItem";
+import GroupPermissionItem from "./GroupPermissionItem";
+import GroupUserPermissionItem from "./GroupUserPermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { withDialog } from "../../contexts/DialogContext";
@@ -41,6 +43,8 @@ class ShareDialog extends Component {
     this.folders = [];
     this.state = this.getDefaultState();
     this.shareChanges = null;
+    // Flat list of rows to display, derived from the permission list on each render.
+    this.displayedPermissions = [];
     this.permissionListRef = React.createRef();
     this.bindEventHandlers();
   }
@@ -145,6 +149,9 @@ class ShareDialog extends Component {
       // permission list
       permissions: null,
 
+      // ids of the groups whose members are currently expanded (controlled mode only)
+      expandedGroupIds: [],
+
       // autocomplete
       autocompleteOpen: false,
     };
@@ -165,6 +172,7 @@ class ShareDialog extends Component {
 
     this.handlePermissionUpdate = this.handlePermissionUpdate.bind(this);
     this.handlePermissionDelete = this.handlePermissionDelete.bind(this);
+    this.handleToggleGroupMemberVisibility = this.handleToggleGroupMemberVisibility.bind(this);
 
     this.renderItem = this.renderItem.bind(this);
     this.renderContainer = this.renderContainer.bind(this);
@@ -330,6 +338,62 @@ class ShareDialog extends Component {
     this.shareChanges.deleteAroPermissions(aroId);
     const newPermissions = this.state.permissions.filter((permission) => permission.aro.id !== aroId);
     this.setState({ permissions: newPermissions });
+  }
+
+  /**
+   * Toggle the visibility of a group's members in the permission list.
+   * Only relevant in controlled mode, where the members can be resolved from the initial collections.
+   * @param {string} groupId The group identifier
+   */
+  handleToggleGroupMemberVisibility(groupId) {
+    const expandedGroupIds = new Set(this.state.expandedGroupIds);
+    if (expandedGroupIds.has(groupId)) {
+      expandedGroupIds.delete(groupId);
+    } else {
+      expandedGroupIds.add(groupId);
+    }
+    this.setState({ expandedGroupIds: [...expandedGroupIds] });
+  }
+
+  /**
+   * Resolve the member users of a group from the controlled-mode initial collections.
+   * The group entity carries its memberships (groups_users), each referencing a user by id that is
+   * looked up in the initial users collection. Members not present in the initial users collection
+   * (i.e. without a direct permission) cannot be resolved and are omitted.
+   * @param {string} groupId The group identifier
+   * @returns {Array<object>} The member users DTOs
+   */
+  getGroupMembers(groupId) {
+    const group = this.props.initialGroups?.items.find((item) => item.id === groupId);
+    const groupsUsers = group?.groupsUsers?.items || [];
+    return groupsUsers
+      .map((groupUser) => this.props.initialUsers?.items.find((user) => user.id === groupUser.userId))
+      .filter(Boolean)
+      .map((user) => user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS));
+  }
+
+  /**
+   * Derive the flat list of rows to display from the permission list.
+   * Each permission becomes either a "user" or a "group" row. When a group is expanded (controlled
+   * mode), its member users are appended as "group-user" rows right after the group row.
+   * @returns {Array<{kind: string, permission?: object, user?: object, groupId?: string}>}
+   */
+  getDisplayedPermissions() {
+    const displayedPermissions = [];
+    this.state.permissions.forEach((permission) => {
+      const isGroup = !permission.aro.profile;
+      if (!isGroup) {
+        displayedPermissions.push({ kind: "user", permission });
+        return;
+      }
+      displayedPermissions.push({ kind: "group", permission });
+      if (this.isControlledMode() && this.state.expandedGroupIds.includes(permission.aro.id)) {
+        this.getGroupMembers(permission.aro.id).forEach((user) => {
+          displayedPermissions.push({ kind: "group-user", user, groupId: permission.aro.id });
+        });
+      }
+    });
+    return displayedPermissions;
   }
 
   /**
@@ -551,20 +615,43 @@ class ShareDialog extends Component {
    * @returns {JSX.Element}
    */
   renderItem(index) {
-    const permission = this.state.permissions[index];
-    const sharePermissionItemKey = permission.aro.id;
+    const item = this.displayedPermissions[index];
+
+    if (item.kind === "group-user") {
+      return <GroupUserPermissionItem key={`${item.groupId}-${item.user.id}`} user={item.user} />;
+    }
+
+    const permission = item.permission;
+    if (item.kind === "group") {
+      return (
+        <GroupPermissionItem
+          id={permission.aro.id}
+          key={permission.aro.id}
+          group={permission.aro}
+          permissionType={permission.type}
+          variesDetails={permission.variesDetails}
+          updated={permission.updated}
+          disabled={this.hasAllInputDisabled()}
+          onUpdate={this.handlePermissionUpdate}
+          onDelete={this.handlePermissionDelete}
+          onToggleGroupMemberVisibility={this.handleToggleGroupMemberVisibility}
+          shouldDisplayGroupMembers={this.state.expandedGroupIds.includes(permission.aro.id)}
+          canDisplayGroupMembers={this.isControlledMode()}
+        />
+      );
+    }
+
     return (
-      <SharePermissionItem
+      <UserPermissionItem
         id={permission.aro.id}
-        key={sharePermissionItemKey}
-        aro={permission.aro}
+        key={permission.aro.id}
+        user={permission.aro}
         permissionType={permission.type}
         variesDetails={permission.variesDetails}
         updated={permission.updated}
         disabled={this.hasAllInputDisabled()}
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
-        canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
       />
     );
   }
@@ -604,6 +691,8 @@ class ShareDialog extends Component {
    * @returns {*}
    */
   render() {
+    // Computed once per render so ReactList's length and itemRenderer read the same list.
+    this.displayedPermissions = this.state.loading ? [] : this.getDisplayedPermissions();
     return (
       <DialogWrapper
         className="share-dialog"
@@ -627,9 +716,9 @@ class ShareDialog extends Component {
                 <ReactList
                   itemRenderer={this.renderItem}
                   itemsRenderer={this.renderContainer}
-                  length={this.state.permissions.length}
+                  length={this.displayedPermissions.length}
                   minSize={this.props.listMinSize}
-                  type={this.state.permissions.length < 4 ? "simple" : "uniform"}
+                  type={this.displayedPermissions.length < 4 ? "simple" : "uniform"}
                   ref={this.permissionListRef}
                   usePosition={true}
                   threshold={30}

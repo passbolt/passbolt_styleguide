@@ -149,6 +149,43 @@ export default class ShareDialogPage {
   }
 
   /**
+   * Returns the group member visibility toggle button for the 'index' row
+   * @param index the display of the permission row
+   */
+  groupVisibilityToggle(index) {
+    return this._page.container
+      .querySelectorAll(".permissions .row")
+      [index - 1].querySelector(".group-visibility-toggle");
+  }
+
+  /**
+   * Returns the number of group member visibility toggles rendered
+   */
+  get groupToggleCount() {
+    return this._page.container.querySelectorAll(".permissions .group-visibility-toggle").length;
+  }
+
+  /**
+   * Returns the number of displayed group member rows
+   */
+  get groupMemberCount() {
+    return this._page.container.querySelectorAll(".permissions .row.group-user-item").length;
+  }
+
+  /**
+   * Returns the group member row for the 'index' one
+   * @param index the display of the group member row
+   */
+  groupMember(index) {
+    return this._page.container.querySelectorAll(".permissions .row.group-user-item")[index - 1];
+  }
+
+  /** Toggle the group member visibility for the 'index' row */
+  async toggleGroupMemberVisibility(index) {
+    await this.click(this.groupVisibilityToggle(index));
+  }
+
+  /**
    * Returns the save button element
    */
   get saveButton() {

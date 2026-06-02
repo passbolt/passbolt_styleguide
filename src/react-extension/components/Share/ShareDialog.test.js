@@ -17,6 +17,7 @@
  */
 import ShareDialogPage from "./ShareDialog.test.page";
 import {
+  controlledModeWithGroupProps,
   defaultAppContext,
   defaultProps,
   mockResultsFolders,
@@ -166,6 +167,14 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.count).toBe(11);
       await page.selectRemovePermission(1);
       expect(page.count).toBe(10);
+    });
+
+    it("As LU in legacy mode I should not see any group members toggle", async () => {
+      expect.assertions(2);
+      await waitForTrue(() => page.count !== 3);
+      // The fixture contains group permissions, but the members toggle is a controlled-mode feature.
+      expect(page.count).toBe(11);
+      expect(page.groupToggleCount).toBe(0);
     });
 
     it("As LU I should see a processing feedback while submitting the form", async () => {
@@ -595,5 +604,36 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       expect.anything(),
       expect.anything(),
     );
+  });
+
+  describe("Group members expansion", () => {
+    // Permissions are sorted by aro name: user "Ada Lovelace" (row 1), group "Developer" (row 2).
+    it("As LU I should see a members toggle on group rows but not on user rows", async () => {
+      expect.assertions(3);
+      const props = controlledModeWithGroupProps();
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      expect(page.count).toBe(2);
+      expect(page.groupVisibilityToggle(1)).toBeNull();
+      expect(page.groupVisibilityToggle(2)).not.toBeNull();
+    });
+
+    it("As LU expanding a group I should see its members, and collapsing should hide them", async () => {
+      expect.assertions(4);
+      const props = controlledModeWithGroupProps();
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      expect(page.groupMemberCount).toBe(0);
+      await page.toggleGroupMemberVisibility(2);
+      expect(page.groupMemberCount).toBe(2);
+      // Member rows are display-only: no permission select nor delete button.
+      expect(page.groupMember(1).querySelector(".select")).toBeNull();
+      await page.toggleGroupMemberVisibility(2);
+      expect(page.groupMemberCount).toBe(0);
+    });
   });
 });

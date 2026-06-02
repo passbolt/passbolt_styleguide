@@ -6,6 +6,7 @@ import { TEST_ROLE_USER_ID } from "../../../shared/models/entity/role/roleEntity
 import SiteSettingsEntity from "../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../test/fixture/Settings/siteSettings";
 import {
+  defaultPermissionDto,
   ownerGroupPermissionDto,
   ownerPermissionDto,
   readGroupPermissionDto,
@@ -18,6 +19,11 @@ import { defaultFullAvatarDto } from "../../../shared/models/entity/avatar/avata
 import { defaultProfileDto } from "../../../shared/models/entity/profile/ProfileEntity.test.data";
 import { defaultUserDto } from "../../../shared/models/entity/user/userEntity.test.data";
 import { defaultGroupDto } from "../../../shared/models/entity/group/groupEntity.test.data";
+import { defaultGroupUser } from "../../../shared/models/entity/groupUser/groupUserEntity.test.data";
+import PermissionsCollection from "../../../shared/models/entity/permission/permissionsCollection";
+import GroupsCollection from "../../../shared/models/entity/group/groupsCollection";
+import UsersCollection from "../../../shared/models/entity/user/usersCollection";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Returns the default app context for the unit test
@@ -877,3 +883,64 @@ export const mockResultsResourcesAndFolders = {
   "passbolt.share.get-folders": folders,
   "passbolt.keyring.get-public-key-info-by-user": gpgKey,
 };
+
+/**
+ * Build controlled-mode props with a mix of a user and a group permission, where the group carries
+ * resolvable members. Simulates a snapshot captured from a shared parent folder. The user is the
+ * owner; a group has read access and two members both present in the initial users collection so
+ * they can be displayed when the group is expanded.
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function controlledModeWithGroupProps(data = {}) {
+  const folderId = uuidv4();
+
+  const ownerUser = defaultUserDto({
+    username: "ada@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Ada", last_name: "Lovelace" }),
+  });
+  const memberUserA = defaultUserDto({
+    username: "betty@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Betty", last_name: "Holberton" }),
+  });
+  const memberUserB = defaultUserDto({
+    username: "carol@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Carol", last_name: "Shaw" }),
+  });
+
+  const groupId = uuidv4();
+  const groupDto = defaultGroupDto({
+    id: groupId,
+    name: "Developer",
+    groups_users: [
+      defaultGroupUser({ user_id: memberUserA.id, group_id: groupId, is_admin: true }),
+      defaultGroupUser({ user_id: memberUserB.id, group_id: groupId, is_admin: false }),
+    ],
+  });
+
+  const permissionsDto = [
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: folderId,
+      aro: "User",
+      aro_foreign_key: ownerUser.id,
+      type: 15,
+    }),
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: folderId,
+      aro: "Group",
+      aro_foreign_key: groupDto.id,
+      type: 1,
+    }),
+  ];
+
+  return {
+    ...defaultProps(),
+    initialPermissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+    initialGroups: new GroupsCollection([groupDto]),
+    initialUsers: new UsersCollection([ownerUser, memberUserA, memberUserB]),
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
