@@ -26,6 +26,7 @@ import { defaultPermissionsDtos } from "../permission/permissionCollection.test.
 import { defaultTagsDtos } from "../tag/tagCollection.test.data";
 import { defaultResourceMetadataDto } from "./metadata/resourceMetadataEntity.test.data";
 import { defaultOfflineItemDto } from "../offline/offlineItemEntity.test.data";
+import { metadata } from "../../../../../test/fixture/encryptedMetadata/metadata";
 
 /**
  * Build default resource dto.
@@ -209,6 +210,15 @@ export const resourceExpiredDto = (data = {}, options = {}) =>
   defaultResourceDto(
     {
       expired: "2022-03-04T13:59:11+00:00",
+      ...data,
+    },
+    options,
+  );
+
+export const resourceMetadataEncryptedDto = (data = {}, options = {}) =>
+  defaultResourceDto(
+    {
+      metadata: metadata.withSharedKey.encryptedMetadata[0],
       ...data,
     },
     options,
