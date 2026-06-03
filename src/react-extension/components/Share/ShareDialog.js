@@ -43,8 +43,6 @@ class ShareDialog extends Component {
     this.folders = [];
     this.state = this.getDefaultState();
     this.shareChanges = null;
-    // Flat list of rows to display, derived from the permission list on each render.
-    this.displayedPermissions = [];
     this.permissionListRef = React.createRef();
     this.bindEventHandlers();
   }
@@ -174,7 +172,6 @@ class ShareDialog extends Component {
     this.handlePermissionDelete = this.handlePermissionDelete.bind(this);
     this.handleToggleGroupMemberVisibility = this.handleToggleGroupMemberVisibility.bind(this);
 
-    this.renderItem = this.renderItem.bind(this);
     this.renderContainer = this.renderContainer.bind(this);
   }
 
@@ -612,10 +609,11 @@ class ShareDialog extends Component {
   /**
    * Use to render a single item of the share permission list
    * @param {integer} index of the item in the source list
+   * @param {Array<object>} displayedPermissions the flat list of rows being rendered
    * @returns {JSX.Element}
    */
-  renderItem(index) {
-    const item = this.displayedPermissions[index];
+  renderItem(index, displayedPermissions) {
+    const item = displayedPermissions[index];
 
     if (item.kind === "group-user") {
       return <GroupUserPermissionItem key={`${item.groupId}-${item.user.id}`} user={item.user} />;
@@ -692,7 +690,7 @@ class ShareDialog extends Component {
    */
   render() {
     // Computed once per render so ReactList's length and itemRenderer read the same list.
-    this.displayedPermissions = this.state.loading ? [] : this.getDisplayedPermissions();
+    const displayedPermissions = this.state.loading ? [] : this.getDisplayedPermissions();
     return (
       <DialogWrapper
         className="share-dialog"
@@ -714,11 +712,11 @@ class ShareDialog extends Component {
               )}
               {!this.state.loading && (
                 <ReactList
-                  itemRenderer={this.renderItem}
+                  itemRenderer={(index) => this.renderItem(index, displayedPermissions)}
                   itemsRenderer={this.renderContainer}
-                  length={this.displayedPermissions.length}
+                  length={displayedPermissions.length}
                   minSize={this.props.listMinSize}
-                  type={this.displayedPermissions.length < 4 ? "simple" : "uniform"}
+                  type={displayedPermissions.length < 4 ? "simple" : "uniform"}
                   ref={this.permissionListRef}
                   usePosition={true}
                   threshold={30}
