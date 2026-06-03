@@ -43,6 +43,7 @@ export function defaultNavigationContext(context = {}) {
     onGoToUserSettingsPassphraseRequested: jest.fn(),
     onGoToUserSettingsSecurityTokenRequested: jest.fn(),
     onGoToUserSettingsThemeRequested: jest.fn(),
+    onGoToUserSettingsInFormIntegrationRequested: jest.fn(),
     onGoToUserSettingsMfaRequested: jest.fn(),
     onGoToUserSettingsKeysRequested: jest.fn(),
     onGoToUserSettingsMobileRequested: jest.fn(),

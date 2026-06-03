@@ -26,7 +26,8 @@ async function init() {
   QuickAccessEvent.fillForm();
 
   const siteSettings = await getSiteSettings();
-  if (siteSettings?.canIUse("inFormIntegration")) {
+  const isInFormMenuEnabledByUser = await isInFormMenuEnabled();
+  if (siteSettings?.canIUse("inFormIntegration") && isInFormMenuEnabledByUser) {
     InFormManager.initialize();
   }
 }
@@ -41,6 +42,22 @@ async function getSiteSettings() {
     return new SiteSettings(siteSettingsDto);
   } catch (error) {
     console.error(error);
+  }
+}
+
+/**
+ * Whether the user has enabled the in-form menu in their own settings.
+ * The in-form menu is enabled by default; it is only skipped when the user explicitly disabled it,
+ * so an unset preference or an unexpected error preserves the current behaviour.
+ * @returns {Promise<boolean>}
+ */
+async function isInFormMenuEnabled() {
+  try {
+    const settings = await port.request("passbolt.in-form-integration-settings.get");
+    return settings?.isInFormMenuEnabled !== false;
+  } catch (error) {
+    console.error(error);
+    return true;
   }
 }
 

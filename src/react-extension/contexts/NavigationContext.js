@@ -47,6 +47,7 @@ export const NavigationContext = React.createContext({
   onGoToUserSettingsPassphraseRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace passphrase section.
   onGoToUserSettingsSecurityTokenRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace security token section.
   onGoToUserSettingsThemeRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace theme section.
+  onGoToUserSettingsInFormIntegrationRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace autofill (in-form integration) section.
   onGoToUserSettingsMfaRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mfa section.
   onGoToUserSettingsKeysRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace keys section.
   onGoToUserSettingsMobileRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mobile section.
@@ -125,6 +126,7 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsPassphraseRequested: this.onGoToUserSettingsPassphraseRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace pasphrase section.
       onGoToUserSettingsSecurityTokenRequested: this.onGoToUserSettingsSecurityTokenRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace security token section.
       onGoToUserSettingsThemeRequested: this.onGoToUserSettingsThemeRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace theme section.
+      onGoToUserSettingsInFormIntegrationRequested: this.onGoToUserSettingsInFormIntegrationRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace autofill (in-form integration) section.
       onGoToUserSettingsMfaRequested: this.onGoToUserSettingsMfaRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mfa section.
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
       onGoToUserSettingsMobileRequested: this.onGoToUserSettingsMobileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
@@ -577,6 +579,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToUserSettingsThemeRequested() {
     await this.goTo("browser-extension", "/app/settings/theme");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace autofill (in-form integration) section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsInFormIntegrationRequested() {
+    await this.goTo("browser-extension", "/app/settings/in-form-integration");
   }
 
   /**
