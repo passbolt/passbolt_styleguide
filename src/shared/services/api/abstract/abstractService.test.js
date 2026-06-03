@@ -93,7 +93,7 @@ describe("Abstract service", () => {
 
         const supportedOptions = ["Resources.modified asc"];
 
-        const formatedPageOptions = service.formatPageOptions({ orders: ["Entity.id desc"] }, supportedOptions);
+        const formatedPageOptions = service.formatPageOptions({ sorts: ["Entity.id desc"] }, supportedOptions);
 
         expect(formatedPageOptions).toStrictEqual({});
       });
