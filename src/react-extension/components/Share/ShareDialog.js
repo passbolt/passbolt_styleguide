@@ -620,13 +620,18 @@ class ShareDialog extends Component {
     }
 
     const permission = item.permission;
+    const permissionType = parseInt(permission.type, 10);
+    if (isNaN(permissionType)) {
+      throw new TypeError(this.translate("Invalid permission type for share permission item."));
+    }
+
     if (item.kind === "group") {
       return (
         <GroupPermissionItem
           id={permission.aro.id}
           key={permission.aro.id}
           group={permission.aro}
-          permissionType={permission.type}
+          permissionType={permissionType}
           variesDetails={permission.variesDetails}
           updated={permission.updated}
           disabled={this.hasAllInputDisabled()}
@@ -644,7 +649,7 @@ class ShareDialog extends Component {
         id={permission.aro.id}
         key={permission.aro.id}
         user={permission.aro}
-        permissionType={permission.type}
+        permissionType={permissionType}
         variesDetails={permission.variesDetails}
         updated={permission.updated}
         disabled={this.hasAllInputDisabled()}
