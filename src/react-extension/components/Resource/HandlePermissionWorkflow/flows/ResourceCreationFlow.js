@@ -22,6 +22,7 @@ import ShareDialog from "../../../Share/ShareDialog";
 import ResourceTypeEntity from "../../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import { RESOURCE_TYPE_PASSWORD_STRING_SLUG } from "../../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import { AbstractPermissionFlow, PERMISSION_FLOW_STATUS } from "./AbstractPermissionFlow";
+import PermissionSnapshotDriftError from "../../../../lib/Error/PermissionSnapshotDriftError";
 
 /**
  * Status values driving the resource-creation flow state machine.
@@ -161,14 +162,26 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
 
   /**
    * Handle the operator's confirmation of the permission set in ShareDialog (controlled mode).
-   * Creates the resource then applies the confirmed permissions in the spec-mandated safe order
-   * (resource exists with the operator as sole owner BEFORE permissions are extended).
+   * Before encrypting anything, re-snapshot the parent folder and compare it to the initial
+   * snapshot; any drift aborts the submission so the operator re-reviews a fresh baseline.
+   * Then creates the resource and applies the confirmed permissions in the spec-mandated safe
+   * order (resource exists with the operator as sole owner BEFORE permissions are extended).
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
    * @returns {Promise<void>}
    */
   async handleShareDialogConfirm(permissionChanges) {
     this.shareConfirmed = true;
     try {
+      const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForResourceCreation(
+        this.props.folderParentId,
+      );
+      if (!this.state.snapshot.equals(currentSnapshot)) {
+        throw new PermissionSnapshotDriftError(
+          this.props.t(
+            "The parent folder permissions changed during your review. Please retry the operation and verify the permissions again.",
+          ),
+        );
+      }
       const created = await this.createResource(this.pendingResourceFormEntity);
       if (permissionChanges.length > 0) {
         await this.props.context.port.request("passbolt.share.resources.save", [created.id], permissionChanges);

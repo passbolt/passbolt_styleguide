@@ -108,4 +108,83 @@ describe("PermissionSnapshotEntity", () => {
       expect(JSON.parse(JSON.stringify(entity))).toEqual(entity.toDto());
     });
   });
+
+  describe("PermissionSnapshotEntity::equals", () => {
+    it("returns true for two snapshots built from identical permissions, groups, and users", () => {
+      expect.assertions(1);
+      const dto = defaultPermissionSnapshotDto();
+      const a = new PermissionSnapshotEntity(dto);
+      const b = new PermissionSnapshotEntity(dto);
+      expect(a.equals(b)).toBe(true);
+    });
+
+    it("ignores differing `created` timestamps so two back-to-back captures of an unchanged parent compare equal", () => {
+      expect.assertions(1);
+      const dto = defaultPermissionSnapshotDto({ created: "2026-04-21T12:24:00+00:00" });
+      const a = new PermissionSnapshotEntity(dto);
+      const b = new PermissionSnapshotEntity({ ...dto, created: "2026-04-21T12:25:00+00:00" });
+      expect(a.equals(b)).toBe(true);
+    });
+
+    it("returns true regardless of the order in which permissions are returned by the server", () => {
+      expect.assertions(1);
+      const dto = defaultPermissionSnapshotDto();
+      const a = new PermissionSnapshotEntity(dto);
+      const reversed = { ...dto, permissions: [...dto.permissions].reverse() };
+      const b = new PermissionSnapshotEntity(reversed);
+      expect(a.equals(b)).toBe(true);
+    });
+
+    it("returns false when a permission was added to the parent folder", () => {
+      expect.assertions(1);
+      const dto = defaultPermissionSnapshotDto();
+      const a = new PermissionSnapshotEntity(dto);
+      const extraPermissionDto = {
+        aco: dto.permissions[0].aco,
+        aco_foreign_key: dto.permissions[0].aco_foreign_key,
+        aro: "User",
+        aro_foreign_key: "33333333-3333-4333-8333-333333333333",
+        type: 1,
+      };
+      const b = new PermissionSnapshotEntity({
+        ...dto,
+        permissions: [...dto.permissions, extraPermissionDto],
+      });
+      expect(a.equals(b)).toBe(false);
+    });
+
+    it("returns false when a permission's type changed (e.g. read promoted to owner)", () => {
+      expect.assertions(1);
+      const dto = defaultPermissionSnapshotDto();
+      const a = new PermissionSnapshotEntity(dto);
+      const promoted = [...dto.permissions];
+      promoted[0] = { ...promoted[0], type: promoted[0].type === 15 ? 1 : 15 };
+      const b = new PermissionSnapshotEntity({ ...dto, permissions: promoted });
+      expect(a.equals(b)).toBe(false);
+    });
+
+    it("returns false when the groups collection differs", () => {
+      expect.assertions(1);
+      const dto = defaultPermissionSnapshotDto();
+      const a = new PermissionSnapshotEntity(dto);
+      const b = new PermissionSnapshotEntity({ ...dto, groups: dto.groups.slice(0, dto.groups.length - 1) });
+      expect(a.equals(b)).toBe(false);
+    });
+
+    it("returns false when the users collection differs", () => {
+      expect.assertions(1);
+      const dto = defaultPermissionSnapshotDto();
+      const a = new PermissionSnapshotEntity(dto);
+      const b = new PermissionSnapshotEntity({ ...dto, users: dto.users.slice(0, dto.users.length - 1) });
+      expect(a.equals(b)).toBe(false);
+    });
+
+    it("returns false when compared to null or a non-snapshot value", () => {
+      expect.assertions(3);
+      const entity = new PermissionSnapshotEntity(defaultPermissionSnapshotDto());
+      expect(entity.equals(null)).toBe(false);
+      expect(entity.equals(undefined)).toBe(false);
+      expect(entity.equals({})).toBe(false);
+    });
+  });
 });

@@ -138,6 +138,51 @@ class PermissionSnapshotEntity extends EntityV2 {
 
   /*
    * ==================================================
+   * Comparison
+   * ==================================================
+   */
+  /**
+   * Return true when this snapshot describes the exact same permission state as `other`:
+   * same set of permissions (by DTO content, order-insensitive), same set of groups, same set
+   * of users. The snapshot's own `created` timestamp is intentionally excluded so two
+   * back-to-back captures of an unchanged parent compare equal.
+   *
+   * Used by the drift-detection check the resource-creation workflow runs right before
+   * encryption: any difference reported by this method aborts the submission so the operator
+   * can re-review the actual permissions.
+   * @param {PermissionSnapshotEntity} other
+   * @returns {boolean}
+   */
+  equals(other) {
+    if (!(other instanceof PermissionSnapshotEntity)) {
+      return false;
+    }
+    return (
+      PermissionSnapshotEntity._collectionEquals(this._permissions, other._permissions) &&
+      PermissionSnapshotEntity._collectionEquals(this._groups, other._groups) &&
+      PermissionSnapshotEntity._collectionEquals(this._users, other._users)
+    );
+  }
+
+  /**
+   * Compare two EntityV2Collection instances by their DTO content, order-insensitive.
+   * Items are sorted by `id` before serialization so the row order returned by the server
+   * across two reads doesn't cause false positives.
+   * @param {EntityV2Collection} a
+   * @param {EntityV2Collection} b
+   * @returns {boolean}
+   * @private
+   */
+  static _collectionEquals(a, b) {
+    if (a.length !== b.length) {
+      return false;
+    }
+    const sortById = (dtos) => [...dtos].sort((x, y) => x.id.localeCompare(y.id));
+    return JSON.stringify(sortById(a.toDto())) === JSON.stringify(sortById(b.toDto()));
+  }
+
+  /*
+   * ==================================================
    * Static properties getters
    * ==================================================
    */

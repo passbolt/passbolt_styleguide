@@ -21,6 +21,7 @@ import { RESOURCE_CREATION_FLOW_STATUS } from "./ResourceCreationFlow";
 import CreateResource from "../../CreateResource/CreateResource";
 import ShareDialog from "../../../Share/ShareDialog";
 import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
+import PermissionSnapshotDriftError from "../../../../lib/Error/PermissionSnapshotDriftError";
 import { KEYRING_SYNC_EVENT } from "../../../../../shared/services/serviceWorker/keyring/keyringServiceWorkerService";
 import { PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY } from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
 import { GROUPS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
@@ -71,7 +72,7 @@ function dialogPropsFor(dialogContext, DialogComponent) {
 describe("ResourceCreationFlow", () => {
   describe("As LU creating a resource in a shared folder", () => {
     it("As LU I should be asked to review the parent folder's permissions before the resource is created", async () => {
-      expect.assertions(5);
+      expect.assertions(7);
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
       wireSnapshotListeners(props.context.port, {
@@ -128,17 +129,25 @@ describe("ResourceCreationFlow", () => {
         }),
       );
 
-      // Confirm the share dialog: workflow creates the resource then applies the share changes.
+      // Confirm the share dialog: workflow re-snapshots the parent, sees no drift, creates the
+      // resource, then applies the share changes. Register the create-resource listener directly
+      // (instead of mockImplementation) so the snapshot listeners stay live for the second snapshot
+      // the drift check fetches.
       const createdResourceId = uuidv4();
-      jest.spyOn(props.context.port, "request").mockImplementation((event) => {
-        if (event === "passbolt.resources.create") {
-          return { id: createdResourceId };
-        }
-        return undefined;
-      });
+      props.context.port.addRequestListener("passbolt.resources.create", () => ({ id: createdResourceId }));
+      props.context.port.addRequestListener("passbolt.share.resources.save", () => undefined);
+      jest.spyOn(props.context.port, "request");
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
       const fakeChanges = [{ aro_foreign_key: uuidv4(), type: 1, is_new: true }];
       await act(() => shareProps.onConfirm(fakeChanges));
+
+      // The drift-detection snapshot fetch must happen BEFORE the resource is created — otherwise
+      // we'd encrypt against a stale view of the parent's permissions.
+      const events = props.context.port.request.mock.calls.map(([event]) => event);
+      const secondFindIndex = events.lastIndexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY);
+      const createIndex = events.indexOf("passbolt.resources.create");
+      expect(secondFindIndex).toBeGreaterThan(-1);
+      expect(createIndex).toBeGreaterThan(secondFindIndex);
 
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.resources.create",
@@ -149,6 +158,80 @@ describe("ResourceCreationFlow", () => {
         "passbolt.share.resources.save",
         [createdResourceId],
         fakeChanges,
+      );
+      expect(props.onStop).toHaveBeenCalled();
+    });
+
+    it("As LU I should see the workflow refuse the submission when the parent folder permissions changed during my review", async () => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const operatorId = props.context.loggedInUser.id;
+      const initialPermissionsDto = [
+        operatorOwnerPermissionDto(operatorId, props.folderParentId),
+        {
+          id: uuidv4(),
+          aco: "Folder",
+          aco_foreign_key: props.folderParentId,
+          aro: "User",
+          aro_foreign_key: uuidv4(),
+          type: 1,
+        },
+      ];
+      // Second fetch returns a different permission set (third user appeared while operator was
+      // reviewing) — drift must be detected.
+      const driftedPermissionsDto = [
+        ...initialPermissionsDto,
+        {
+          id: uuidv4(),
+          aco: "Folder",
+          aco_foreign_key: props.folderParentId,
+          aro: "User",
+          aro_foreign_key: uuidv4(),
+          type: 1,
+        },
+      ];
+      let permissionsFindCallCount = 0;
+      props.context.port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      props.context.port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => {
+        permissionsFindCallCount += 1;
+        return permissionsFindCallCount === 1 ? initialPermissionsDto : driftedPermissionsDto;
+      });
+      props.context.port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
+      props.context.port.addRequestListener(USERS_GET_BY_IDS, () => [
+        { id: operatorId, username: "operator@passbolt.com" },
+        { id: uuidv4(), username: "reader@passbolt.com" },
+      ]);
+
+      let page;
+      await act(() => (page = new ResourceCreationFlowTestPage(props)));
+      await waitFor(() => {
+        if (page._instance.state.status !== RESOURCE_CREATION_FLOW_STATUS.CREATE_RESOURCE_OPEN) {
+          throw new Error("CreateResource not yet opened");
+        }
+      });
+
+      const createProps = dialogPropsFor(props.dialogContext, CreateResource);
+      const fakeResourceFormEntity = { toResourceDto: () => ({}), toSecretDto: () => ({}) };
+      await act(() => createProps.onSubmit(fakeResourceFormEntity));
+      await waitFor(() => {
+        if (page._instance.state.status !== RESOURCE_CREATION_FLOW_STATUS.SHARE_DIALOG_OPEN) {
+          throw new Error("ShareDialog not yet opened");
+        }
+      });
+
+      jest.spyOn(props.context.port, "request");
+      const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
+      await act(() => shareProps.onConfirm([{ aro_foreign_key: uuidv4(), type: 1, is_new: true }]));
+
+      // Drift was detected: a PermissionSnapshotDriftError flows through NotifyError + onStop, and
+      // `passbolt.resources.create` is NEVER called (no encryption against a stale view).
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
+        error: expect.any(PermissionSnapshotDriftError),
+      });
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.resources.create",
+        expect.anything(),
+        expect.anything(),
       );
       expect(props.onStop).toHaveBeenCalled();
     });
