@@ -226,7 +226,8 @@ describe("ResourceCreationFlow", () => {
       // `passbolt.resources.create` is NEVER called (no encryption against a stale view).
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
         error: expect.objectContaining({
-          message: "The parent folder permissions changed during your review. Please retry the operation and verify the permissions again.",
+          message:
+            "The parent folder permissions changed during your review. Please retry the operation and verify the permissions again.",
         }),
       });
       expect(props.context.port.request).not.toHaveBeenCalledWith(
