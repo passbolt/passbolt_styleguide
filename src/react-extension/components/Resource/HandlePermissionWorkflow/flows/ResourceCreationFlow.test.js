@@ -21,7 +21,6 @@ import { RESOURCE_CREATION_FLOW_STATUS } from "./ResourceCreationFlow";
 import CreateResource from "../../CreateResource/CreateResource";
 import ShareDialog from "../../../Share/ShareDialog";
 import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
-import PermissionSnapshotDriftError from "../../../../lib/Error/PermissionSnapshotDriftError";
 import { KEYRING_SYNC_EVENT } from "../../../../../shared/services/serviceWorker/keyring/keyringServiceWorkerService";
 import { PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY } from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
 import { GROUPS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
@@ -223,10 +222,12 @@ describe("ResourceCreationFlow", () => {
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
       await act(() => shareProps.onConfirm([{ aro_foreign_key: uuidv4(), type: 1, is_new: true }]));
 
-      // Drift was detected: a PermissionSnapshotDriftError flows through NotifyError + onStop, and
+      // Drift was detected: the error flows through NotifyError + onStop, and
       // `passbolt.resources.create` is NEVER called (no encryption against a stale view).
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
-        error: expect.any(PermissionSnapshotDriftError),
+        error: expect.objectContaining({
+          message: "The parent folder permissions changed during your review. Please retry the operation and verify the permissions again.",
+        }),
       });
       expect(props.context.port.request).not.toHaveBeenCalledWith(
         "passbolt.resources.create",

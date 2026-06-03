@@ -22,7 +22,6 @@ import ShareDialog from "../../../Share/ShareDialog";
 import ResourceTypeEntity from "../../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import { RESOURCE_TYPE_PASSWORD_STRING_SLUG } from "../../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import { AbstractPermissionFlow, PERMISSION_FLOW_STATUS } from "./AbstractPermissionFlow";
-import PermissionSnapshotDriftError from "../../../../lib/Error/PermissionSnapshotDriftError";
 
 /**
  * Status values driving the resource-creation flow state machine.
@@ -176,7 +175,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
         this.props.folderParentId,
       );
       if (!this.state.snapshot.equals(currentSnapshot)) {
-        throw new PermissionSnapshotDriftError(
+        throw new Error(
           this.props.t(
             "The parent folder permissions changed during your review. Please retry the operation and verify the permissions again.",
           ),
