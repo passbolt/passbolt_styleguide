@@ -345,6 +345,7 @@ class EditSubscriptionKey extends Component {
                 </button>
               </div>
               {this.state.keyError && <div className="key error-message">{this.state.keyError}</div>}
+              {this.props.warning && <p>{this.props.warning}</p>}
             </div>
           </div>
           <div className="submit-wrapper clearfix">
@@ -369,6 +370,7 @@ EditSubscriptionKey.propTypes = {
   dialogContext: PropTypes.any, // The dialog congtext
   administrationWorkspaceContext: PropTypes.any, // The administration workspace context
   title: PropTypes.string, // Optional dialog title override
+  warning: PropTypes.string, // Optional warning text
   onSave: PropTypes.func, // Optional save handler override; receives the subscription key string
   t: PropTypes.func,
 };

@@ -26,7 +26,6 @@ import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministra
 import DisplayUserDirectoryAdministrationTeasing from "./DisplayUserDirectoryAdministrationTeasing/DisplayUserDirectoryAdministrationTeasing";
 import DisplayEmailNotificationsAdministration from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
-import DisplaySubscriptionKeyTeasing from "./DisplaySubscriptionKeyTeasing/DisplaySubscriptionKeyTeasing";
 import DisplayInternationalizationAdministration from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
 import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings";
 import ManageAccountRecoveryAdministrationSettingsTeasing from "./ManageAccountRecoveryAdministrationSettingsTeasing/ManageAccountRecoveryAdministrationSettingsTeasing";
@@ -422,8 +421,7 @@ class AdministrationWorkspace extends Component {
                         <DisplayUserDirectoryAdministration />
                       ))}
                     {this.isEmailNotificationsSelected() && <DisplayEmailNotificationsAdministration />}
-                    {this.isSubscriptionSelected() &&
-                      (this.isCommunityEdition() ? <DisplaySubscriptionKeyTeasing /> : <DisplaySubscriptionKey />)}
+                    {this.isSubscriptionSelected() && <DisplaySubscriptionKey />}
                     {this.isInternationalizationSelected() && <DisplayInternationalizationAdministration />}
                     {this.isAccountRecoverySelected() &&
                       (this.isCommunityEdition() ? (

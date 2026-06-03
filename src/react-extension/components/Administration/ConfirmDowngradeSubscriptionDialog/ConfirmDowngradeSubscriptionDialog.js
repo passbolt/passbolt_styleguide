@@ -110,8 +110,11 @@ class ConfirmDowngradeSubscriptionDialog extends Component {
               <Trans>
                 All ongoing processes such as an import will be stopped and the data could be lost. Please make sure
                 your users are not actively using the platform during the process. This process should take a few
-                minutes.
+                seconds.
               </Trans>
+            </p>
+            <p>
+              <Trans>You and your team will be disconnected at the end of the process.</Trans>
             </p>
             <p>
               <Trans>Your team will also lose access to premium technical support. This action cannot be undone.</Trans>

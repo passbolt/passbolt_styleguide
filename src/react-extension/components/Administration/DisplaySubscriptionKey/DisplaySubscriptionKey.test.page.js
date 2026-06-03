@@ -41,119 +41,168 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
-   * Returns the totp input element
+   * Returns the root subscription-key column
    */
   get subscriptionKey() {
     return this._page.container.querySelector(".subscription-key");
   }
 
   /**
-   * Returns the title element
+   * Returns the main "Details" title text
    */
   get title() {
-    return this._page.container.querySelector(".subscription-key h3").textContent;
+    return this._page.container.querySelector(".subscription-key h3")?.textContent;
   }
 
   /**
    * Returns the subscription details title element
    */
   get subscriptionDetailsTitle() {
-    return this._page.container.querySelector(".subscription-information h4").textContent;
+    return this._page.container.querySelector(".subscription-information h4")?.textContent ?? null;
   }
 
   /**
-   * Returns the dedicated renew/downgrade section
-   */
-  get downgradeSection() {
-    const infos = this._page.container.querySelectorAll(".main-content .subscription-information");
-    return infos.length > 1 ? infos[1] : null;
-  }
-
-  /**
-   * Returns the renew Key button element (inside the section's nested .actions-wrapper).
+   * Returns the renew button
    */
   get renewKeyButton() {
-    return this._page.container.querySelector(".actions-wrapper button.secondary");
+    return this._page.container.querySelector(".subscription-actions button.secondary");
   }
 
   /**
-   * Returns the dedicated renew/downgrade section h4 text.
+   * Returns the "Downgrade to Community" button
    */
-  get downgradeSectionTitle() {
-    return this.downgradeSection?.querySelector("h4")?.textContent;
+  get downgradeToCommunityButton() {
+    return this._page.container.querySelector(".subscription-editions .edition button.secondary");
   }
 
   /**
-   * Returns the body paragraph elements inside the renew/downgrade section.
-   * @returns {Element[]}
+   * Click the "Downgrade to Community" button
    */
-  get downgradeSectionParagraphs() {
-    return [...(this.downgradeSection?.querySelectorAll("p") ?? [])];
-  }
-
-  /**
-   * Returns the "Learn more about Community Edition" link.
-   */
-  get downgradeLearnMoreLink() {
-    return this._page.container.querySelector('a[href="https://www.passbolt.com/community"]');
-  }
-
-  /**
-   * Returns the "Downgrade now" button (inside the section's nested .actions-wrapper).
-   */
-  get downgradeNowButton() {
-    return this._page.container.querySelector(".actions-wrapper button.warning");
-  }
-
-  /**
-   * Click the "Downgrade now" button.
-   */
-  async clickDowngradeNow() {
+  async clickDowngradeToCommunity() {
     const leftClick = { button: 0 };
-    fireEvent.click(this.downgradeNowButton, leftClick);
+    fireEvent.click(this.downgradeToCommunityButton, leftClick);
     await waitFor(() => {});
+  }
+
+  /**
+   * Returns the edition label (Community / Business) in the info table
+   */
+  get edition() {
+    return this._page.container.querySelector(".edition.value")?.textContent;
+  }
+
+  /**
+   * Returns the server version text
+   */
+  get serverVersion() {
+    return this._page.container.querySelector(".server-version.value")?.textContent;
+  }
+
+  /**
+   * Returns the client version text
+   */
+  get clientVersion() {
+    return this._page.container.querySelector(".client-version.value")?.textContent;
+  }
+
+  /**
+   * Returns the "Plans" section title
+   */
+  get plansTitle() {
+    return [...this._page.container.querySelectorAll(".main-content h3")][1]?.textContent;
+  }
+
+  /**
+   * Returns the Community edition card
+   */
+  get communityCard() {
+    return this._page.container.querySelector(".subscription-editions .edition:first-child");
+  }
+
+  /**
+   * Returns the Business edition card
+   */
+  get businessCard() {
+    return this._page.container.querySelector(".subscription-editions .edition:last-child");
+  }
+
+  /**
+   * Returns the current edition card
+   */
+  get currentEditionCard() {
+    return this._page.container.querySelector(".subscription-editions .current-edition");
+  }
+
+  /**
+   * Returns the "Current plan" indicator text
+   */
+  get currentEditionIndicator() {
+    return this._page.container.querySelector(".subscription-editions .current-edition-indicator")?.textContent;
+  }
+
+  /**
+   * Returns the "See pricing page" link
+   */
+  get seePricingLink() {
+    return [...this._page.container.querySelectorAll(".subscription-editions a")].find(
+      (a) => a.textContent === "See pricing page",
+    );
+  }
+
+  /**
+   * Returns the "Buy now" link
+   */
+  get buyNowLink() {
+    return this._page.container.querySelector('.subscription-editions a.button.primary[href*="/pricing/pro"]');
+  }
+
+  /**
+   * Returns the "Start a free trial" link
+   */
+  get startTrialLink() {
+    return this._page.container.querySelector('.subscription-editions a[href*="free-trial"]');
   }
 
   /**
    * Returns the customer id element
    */
   get customerId() {
-    return this._page.container.querySelector(".customer-id.value").textContent;
+    return this._page.container.querySelector(".customer-id.value")?.textContent;
   }
 
   /**
    * Returns the subscription id element
    */
   get subscriptionId() {
-    return this._page.container.querySelector(".subscription-id.value").textContent;
+    return this._page.container.querySelector(".subscription-id.value")?.textContent;
   }
 
   /**
    * Returns the email element
    */
   get email() {
-    return this._page.container.querySelector(".email.value").textContent;
+    return this._page.container.querySelector(".email.value")?.textContent;
   }
 
   /**
    * Returns the users element
    */
   get users() {
-    return this._page.container.querySelector(".users.value").textContent;
+    return this._page.container.querySelector(".users.value")?.textContent;
   }
 
   /**
    * Returns the created element
    */
   get created() {
-    return this._page.container.querySelector(".created.value").textContent;
+    return this._page.container.querySelector(".created.value")?.textContent;
   }
 
   /**
    * Returns the expiry element
    */
   get expiry() {
-    return this._page.container.querySelector(".expiry.value").textContent;
+    return this._page.container.querySelector(".expiry.value")?.textContent;
   }
 
   /**
@@ -164,6 +213,20 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
+   * Returns the help sidebar's title element
+   */
+  get helpBoxTitle() {
+    return this._page.container.querySelector("#administration-help-panel h3");
+  }
+
+  /**
+   * Returns the help sidebar's description paragraph
+   */
+  get helpBoxDescription() {
+    return this._page.container.querySelector("#administration-help-panel p");
+  }
+
+  /**
    * Returns the help contact sales element
    */
   get helpContactSales() {
@@ -171,11 +234,11 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
-   * Returns the HTMLElement button of the toolbar that is the "Update key"
-   * @returns {HTMLElement}
+   * Returns the HTMLElement button of the toolbar that is the "Update key" / "Upload subscription key".
+   * @returns {HTMLButtonElement}
    */
   get toolbarActionsUpdateButton() {
-    return this._page.container.querySelector(".actions-wrapper button.primary");
+    return this._page.container.querySelector(".subscription-actions button.primary");
   }
 
   /**
