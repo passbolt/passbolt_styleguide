@@ -119,8 +119,8 @@ describe("Abstract service", () => {
         const options = new ApiClientOptions().setBaseUrl("https://test.passbolt.test/");
         const service = new AbstractService(options, "test");
 
-        await expect(() => service.formatPageOptions({ limit: "test" })).toThrowError();
-        await expect(() => service.formatPageOptions({ limit: "10" })).toThrowError();
+        await expect(() => service.formatPageOptions({ limit: "test" })).toThrow();
+        await expect(() => service.formatPageOptions({ limit: "10" })).toThrow();
       });
 
       it("should ignore 'limit' if it is falsy", async () => {
@@ -169,8 +169,8 @@ describe("Abstract service", () => {
         const options = new ApiClientOptions().setBaseUrl("https://test.passbolt.test/");
         const service = new AbstractService(options, "test");
 
-        await expect(() => service.formatPageOptions({ limit: 1, page: "test" })).toThrowError();
-        await expect(() => service.formatPageOptions({ limit: 1, page: "10" })).toThrowError();
+        await expect(() => service.formatPageOptions({ limit: 1, page: "test" })).toThrow();
+        await expect(() => service.formatPageOptions({ limit: 1, page: "10" })).toThrow();
       });
 
       it("should ignore 'page' if it is falsy", async () => {
