@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         6.0.0
+ * @since         5.13.0
  */
 import each from "jest-each";
 import { assertNumber } from "./assertions";
