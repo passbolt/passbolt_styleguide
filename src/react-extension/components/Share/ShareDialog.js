@@ -109,7 +109,7 @@ class ShareDialog extends Component {
 
     // Remap aco/aco_foreign_key to the synthetic resource so ShareChanges treats these as the
     // resource's perms; the folder permission `id` is kept (stale but non-undefined) — the
-    // workflow's PermissionDriftDetectionService rebases ids after the resource exists.
+    // workflow's PermissionChangesService rebases ids after the resource exists.
     const permissions = this.props.initialPermissions.items.map((permission) => {
       const dto = permission.toDto();
       dto.aco = PermissionEntity.ACO_RESOURCE;

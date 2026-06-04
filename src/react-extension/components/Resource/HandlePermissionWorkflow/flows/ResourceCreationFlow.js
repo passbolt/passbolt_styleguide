@@ -161,10 +161,10 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
 
   /**
    * Handle the operator's confirmation of the permission set in ShareDialog (controlled mode).
-   * Before encrypting anything, re-snapshot the parent folder and compare it to the initial
-   * snapshot; any drift aborts the submission so the operator re-reviews a fresh baseline.
-   * Then creates the resource and applies the confirmed permissions in the spec-mandated safe
-   * order (resource exists with the operator as sole owner BEFORE permissions are extended).
+   * Re-snapshot the parent folder and compare against the initial snapshot — any drift aborts
+   * the submission. Then create the resource (the backend auto-inherits the parent folder's
+   * permissions onto it) and apply the operator's edits on top via `share.resources.save`;
+   * confirming as-is means no edits and the share call is skipped entirely.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
    * @returns {Promise<void>}
    */
@@ -183,7 +183,16 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
       }
       const created = await this.createResource(this.pendingResourceFormEntity);
       if (permissionChanges.length > 0) {
-        await this.props.context.port.request("passbolt.share.resources.save", [created.id], permissionChanges);
+        // The dialog seeded itself from the parent folder's snapshot, so deltas carry the folder's
+        // permission ids and a null `aco_foreign_key`. The backend's `share.resources.save` wants
+        // permission ids that exist on the newly-created resource, so rebase before sending.
+        const rebasedChanges = await this.permissionChangesService.rebaseChangesForResource(
+          permissionChanges,
+          created.id,
+        );
+        if (rebasedChanges.length > 0) {
+          await this.props.context.port.request("passbolt.share.resources.save", [created.id], rebasedChanges);
+        }
       }
       await this.finalizeSuccess(
         this.props.t("The resource has been added successfully"),

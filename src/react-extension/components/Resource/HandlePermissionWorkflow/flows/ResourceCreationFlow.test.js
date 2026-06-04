@@ -137,7 +137,11 @@ describe("ResourceCreationFlow", () => {
       props.context.port.addRequestListener("passbolt.share.resources.save", () => undefined);
       jest.spyOn(props.context.port, "request");
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
-      const fakeChanges = [{ aro_foreign_key: uuidv4(), type: 1, is_new: true }];
+      // ShareDialog emits changes with aco_foreign_key: null (resource doesn't exist yet); the
+      // workflow stamps them with the created resource id before calling share.resources.save.
+      const fakeChanges = [
+        { aro_foreign_key: uuidv4(), aco_foreign_key: null, aco: "Resource", type: 1, is_new: true },
+      ];
       await act(() => shareProps.onConfirm(fakeChanges));
 
       // The drift-detection snapshot fetch must happen BEFORE the resource is created — otherwise
@@ -156,7 +160,7 @@ describe("ResourceCreationFlow", () => {
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.share.resources.save",
         [createdResourceId],
-        fakeChanges,
+        [{ ...fakeChanges[0], aco_foreign_key: createdResourceId }],
       );
       expect(props.onStop).toHaveBeenCalled();
     });

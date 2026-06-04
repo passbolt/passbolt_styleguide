@@ -15,6 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 import PermissionSnapshotService from "../../../../../shared/services/permission/permissionSnapshotService";
+import PermissionChangesService from "../../../../../shared/services/permission/permissionChangesService";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
 
 /**
@@ -46,6 +47,7 @@ export class AbstractPermissionFlow extends React.Component {
   constructor(props) {
     super(props);
     this.permissionSnapshotService = new PermissionSnapshotService(props.context.port);
+    this.permissionChangesService = new PermissionChangesService(props.context.port);
     this.handleError = this.handleError.bind(this);
     this.terminate = this.terminate.bind(this);
     this.finalizeSuccess = this.finalizeSuccess.bind(this);
