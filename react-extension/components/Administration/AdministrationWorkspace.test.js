@@ -83,9 +83,6 @@ jest.mock("./DisplayPasswordPoliciesAdministrationTeasing/DisplayPasswordPolicie
 jest.mock("./DisplayUserDirectoryAdministrationTeasing/DisplayUserDirectoryAdministrationTeasing", () => () => (
   <span className="user-directory-details-teasing"></span>
 ));
-jest.mock("./DisplaySubscriptionKeyTeasing/DisplaySubscriptionKeyTeasing", () => () => (
-  <span className="subscription-key-details-teasing"></span>
-));
 jest.mock(
   "./ManageAccountRecoveryAdministrationSettingsTeasing/ManageAccountRecoveryAdministrationSettingsTeasing",
   () => () => <span className="account-recovery-details-teasing"></span>,
@@ -139,7 +136,7 @@ const ceScenarios = [
   { selectedMenu: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES, field: "isPasswordPoliciesTeasingSelected" },
   { selectedMenu: AdministrationWorkspaceMenuTypes.USER_DIRECTORY, field: "isUserDirectoryTeasingSelected" },
   { selectedMenu: AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION, field: "isEmailNotificationsSelected" },
-  { selectedMenu: AdministrationWorkspaceMenuTypes.SUBSCRIPTION, field: "isSubscriptionKeyTeasingSelected" },
+  { selectedMenu: AdministrationWorkspaceMenuTypes.SUBSCRIPTION, field: "isSubscriptionKeySelected" },
   { selectedMenu: AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION, field: "isInternationalizationSelected" },
   { selectedMenu: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY, field: "isAccountRecoveryTeasingSelected" },
   { selectedMenu: AdministrationWorkspaceMenuTypes.SMTP_SETTINGS, field: "isSmtpSettingsSelected" },

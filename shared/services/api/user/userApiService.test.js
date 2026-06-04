@@ -213,19 +213,6 @@ describe("UserApiService", () => {
       expect(fetch).toHaveBeenCalledTimes(1);
     });
 
-    it("should call the API with order options", async () => {
-      expect.assertions(3);
-
-      fetch.doMockOnceIf(/users\.json/, async (req) => {
-        expect(req.method).toStrictEqual("GET");
-        expect(req.url).toContain("order%5B%5D=Profile.first_name+ASC");
-        return mockApiResponse([]);
-      });
-
-      await userApiService.findAll({}, {}, { "Profile.first_name ASC": true });
-      expect(fetch).toHaveBeenCalledTimes(1);
-    });
-
     it("should ignore unsupported contain options", async () => {
       expect.assertions(3);
 

@@ -12,6 +12,10 @@
  */
 import { ApiClient } from "../../../lib/apiClient/apiClient";
 import Validator from "validator";
+import { assertNumber } from "../../../utils/assertions";
+
+const DIRECTION_ASC = "asc";
+const DIRECTION_DESC = "desc";
 
 class AbstractService {
   /**
@@ -76,19 +80,48 @@ class AbstractService {
   }
 
   /**
-   * Format contain orders
+   * Format page options
    *
-   * @param {object} orders example: {"orders": ['Resources.name ASC']}
-   * @param {array} supportedOrders example: ['Resources.name ASC', 'Resources.name DESC']
-   * @returns {object} to be used in API request
+   * @param {Object} pageOptions example: {"sorts": {'Resources.name': 'ASC'}, page: 1, limit: 1000}
+   * @param {Array<String>} [pageOptions.sorts]
+   * @param {number} [pageOptions.page]
+   * @param {number} [pageOptions.limit]
+   * @param {Array<String>} supportedOrders example: ['Resources.name', 'Resources.modified']
+   * @returns {Object} to be used in API request
    */
-  formatOrderOptions(orders, supportedOrders) {
+  formatPageOptions(pageOptions, supportedSorts) {
     const result = {};
-    for (const order in orders) {
-      if (supportedOrders.includes(order)) {
-        result[`order[]`] = order;
+
+    if (pageOptions.limit) {
+      assertNumber(pageOptions.limit);
+      if (pageOptions.limit < 1) {
+        throw new Error("The 'limit' parameter must be an integer greater than or equal to 1");
       }
+
+      result.limit = pageOptions.limit.toString();
     }
+
+    if (pageOptions.page && result.limit) {
+      assertNumber(pageOptions.page);
+      if (pageOptions.page < 1) {
+        throw new Error("The 'page' parameter must be an integer greater than or equal to 1");
+      }
+
+      result.page = pageOptions.page.toString();
+    }
+
+    if (pageOptions.sorts) {
+      const fields = Object.keys(pageOptions.sorts);
+      fields.forEach((field) => {
+        if (!supportedSorts.includes(field)) {
+          return;
+        }
+
+        const direction = pageOptions.sorts[field] === DIRECTION_DESC ? DIRECTION_DESC : DIRECTION_ASC;
+        result[`sort[${field}]`] = direction;
+      });
+    }
+
     return result;
   }
 

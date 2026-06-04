@@ -16,6 +16,8 @@ import MockPort from "../../../../react-extension/test/mock/MockPort";
 import SubscriptionEntity from "../../../models/entity/subscription/subscriptionEntity";
 import { minimalSubscriptionDto } from "../../../models/entity/subscription/subscriptionEntity.test.data";
 import SubscriptionKeyServiceWorkerService, {
+  CREATE_SUBSCRIPTION_KEY,
+  DOWNGRADE_SUBSCRIPTION_KEY,
   GET_SUBSCRIPTION_KEY,
   UPDATE_SUBSCRIPTION_KEY,
 } from "./SubscriptionKeyServiceWorkerService";
@@ -33,6 +35,23 @@ describe("SubscriptionKeyServiceWorkerService", () => {
   beforeEach(() => {
     port = new MockPort();
     service = new SubscriptionKeyServiceWorkerService(port);
+  });
+
+  describe("::createOrganizationSubscriptionKey", () => {
+    it("requests the service worker to create the organisation subscription key", async () => {
+      expect.assertions(3);
+
+      const newKey = "new key";
+      const dto = minimalSubscriptionDto({ data: newKey });
+      const mockCreateSubscriptionKey = jest.fn().mockResolvedValue(dto);
+      port.addRequestListener(CREATE_SUBSCRIPTION_KEY, mockCreateSubscriptionKey);
+
+      const result = await service.createOrganizationSubscriptionKey(newKey);
+
+      expect(mockCreateSubscriptionKey).toHaveBeenCalledTimes(1);
+      expect(mockCreateSubscriptionKey.mock.calls[0][0]).toEqual({ data: newKey });
+      expect(result).toEqual(new SubscriptionEntity(dto));
+    });
   });
 
   describe("::findOrganizationSubscriptionKey", () => {
@@ -61,6 +80,19 @@ describe("SubscriptionKeyServiceWorkerService", () => {
       // Can't use `toHaveBeenCalledWith` because MockPort forces an additional argument
       expect(mockUpdateSubscriptionKey.mock.calls[0][0]).toEqual({ data: newKey });
       expect(result).toEqual(new SubscriptionEntity(dto));
+    });
+  });
+
+  describe("::deleteOrganizationSubscriptionKey", () => {
+    it("requests the service worker to delete the organisation subscription key", async () => {
+      expect.assertions(1);
+
+      const mockDeleteSubscriptionKey = jest.fn().mockResolvedValue();
+      port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDeleteSubscriptionKey);
+
+      await service.deleteOrganizationSubscriptionKey();
+
+      expect(mockDeleteSubscriptionKey).toHaveBeenCalledTimes(1);
     });
   });
 });
