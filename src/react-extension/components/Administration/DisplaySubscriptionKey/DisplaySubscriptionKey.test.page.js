@@ -85,7 +85,7 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
-   * Returns the edition label (Community / Business) in the info table
+   * Returns the edition label (Community / Pro) in the info table
    */
   get edition() {
     return this._page.container.querySelector(".edition.value")?.textContent;
@@ -120,9 +120,9 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
-   * Returns the Business edition card
+   * Returns the Pro edition card
    */
-  get businessCard() {
+  get proCard() {
     return this._page.container.querySelector(".subscription-editions .edition:last-child");
   }
 

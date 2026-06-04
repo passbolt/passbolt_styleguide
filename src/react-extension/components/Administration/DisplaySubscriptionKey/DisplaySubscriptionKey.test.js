@@ -50,7 +50,7 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Details");
-      expect(page.edition).toBe("Business");
+      expect(page.edition).toBe("Pro");
       expect(page.serverVersion).toBe("3.5.0");
       expect(page.customerId).toBe(mockSubscription.customer_id);
       expect(page.subscriptionId).toBe(mockSubscription.subscription_id);
@@ -62,7 +62,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.expiry).toBe(
         `${formatDate(mockSubscription.expiry)} (${DateTime.fromISO(mockSubscription.expiry).toRelative()})`,
       );
-      expect(page.currentEditionCard).toBe(page.businessCard);
+      expect(page.currentEditionCard).toBe(page.proCard);
       expect(page.help).toBeTruthy();
       expect(page.helpContactSales.getAttribute("href")).toBe("https://www.passbolt.com/contact");
     });
@@ -307,7 +307,7 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       expect(page.plansTitle).toBe("Plans");
       expect(page.communityCard).not.toBeNull();
-      expect(page.businessCard).not.toBeNull();
+      expect(page.proCard).not.toBeNull();
     });
 
     it("As CE AD I should see the Upload subscription key button", async () => {
@@ -318,7 +318,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.toolbarActionsUpdateButton.textContent.trim()).toBe("Upload subscription key");
     });
 
-    it("As CE AD I should see Buy now, Start a free trial and See pricing page links on the Business plan card", async () => {
+    it("As CE AD I should see Buy now, Start a free trial and See pricing page links on the Pro plan card", async () => {
       page = new DisplaySubscriptionKeyPage(ceProps.context, ceProps);
       await screen.findByText("Details");
 
@@ -330,12 +330,12 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.seePricingLink.getAttribute("href")).toBe("https://www.passbolt.com/pricing/pro");
     });
 
-    it("As AD with a valid subscription the Business edition card should be badged as the current plan", async () => {
+    it("As AD with a valid subscription the Pro edition card should be badged as the current plan", async () => {
       page = new DisplaySubscriptionKeyPage(props.context, props);
       await screen.findByText("Details");
 
-      expect(page.currentEditionCard).toBe(page.businessCard);
-      expect(page.edition).toBe("Business");
+      expect(page.currentEditionCard).toBe(page.proCard);
+      expect(page.edition).toBe("Pro");
     });
   });
 });

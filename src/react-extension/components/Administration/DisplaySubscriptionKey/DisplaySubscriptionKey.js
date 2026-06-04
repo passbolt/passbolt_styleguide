@@ -321,7 +321,7 @@ class DisplaySubscriptionKey extends React.Component {
                     </div>
                     <div className="information-value">
                       <span className="edition value">
-                        {!this.props.context.siteSettings.isCommunityEdition && <Trans>Business</Trans>}
+                        {!this.props.context.siteSettings.isCommunityEdition && <Trans>Pro</Trans>}
                         {this.props.context.siteSettings.isCommunityEdition && (
                           <>
                             <Trans>Community</Trans>
@@ -457,7 +457,7 @@ class DisplaySubscriptionKey extends React.Component {
                     </div>
                   )}
                   <h3>
-                    <Trans>Business</Trans>
+                    <Trans>Pro</Trans>
                   </h3>
                   <div className="features">
                     <span className="subtitle">
