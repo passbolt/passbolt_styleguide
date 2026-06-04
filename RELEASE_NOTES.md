@@ -1,8 +1,3 @@
-# v5.13.0-alpha.6
+# v5.13.0-alpha.7
 
-Move the following elements from the bext to styleguide:
-- UserEntity
-- GroupEntity
-- PermissionEntity
-- UserCollection
-- GroupCollection
+CE/PRO upgrade/downgrade feature
