@@ -633,6 +633,27 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     expect(changes[0]).toMatchObject({ delete: true, aco: "Resource" });
   });
 
+  it("As LU I should open the dialog without crashing even when a stale single-folder share selection lingers in the context", async () => {
+    // Regression: controlled mode never populates `this.folders`, but a leftover
+    // `shareDialogProps.foldersIds` of length 1 from a previous folder share used to make
+    // `getSubtitle()` dereference the empty `this.folders[0]` and throw. The controlled-mode guard
+    // skips the subtitle entirely.
+    expect.assertions(2);
+    const props = buildControlledModeProps();
+    const previousShareDialogProps = context.shareDialogProps;
+    context.shareDialogProps = { foldersIds: [uuidv4()] };
+    mockContextRequest(jest.fn());
+
+    try {
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      expect(page.title).toBe("Share");
+      expect(page.count).toBe(2);
+    } finally {
+      context.shareDialogProps = previousShareDialogProps;
+    }
+  });
+
   describe("Group members expansion", () => {
     // Permissions are sorted by aro name: user "Ada Lovelace" (row 1), group "Developer" (row 2).
     it("As LU I should see a members toggle on group rows but not on user rows", async () => {

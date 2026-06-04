@@ -547,7 +547,7 @@ class ShareDialog extends Component {
    * @returns {string}
    */
   getSubtitle() {
-    if (this.state.loading) {
+    if (this.state.loading || this.isControlledMode()) {
       return;
     }
     if (this.isAboutAResource()) {
