@@ -26,7 +26,7 @@ import {
 } from "./ShareDialog.test.data";
 import { ActionFeedbackContext } from "../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchError";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
 import { waitForTrue } from "../../../../test/utils/waitFor";
 import UserAbortsOperationError from "../../lib/Error/UserAbortsOperationError";
@@ -522,11 +522,15 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
   const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
 
   /**
-   * Build a self-consistent triplet of {permissions, groups, users} simulating a snapshot
-   * captured from a shared parent folder. The operator is the owner; a second user has read access.
+   * Build a self-consistent triplet of {permissions, groups, users} simulating a snapshot captured
+   * from a shared parent folder. The operator is the logged-in user (so the controlled-mode submit
+   * logic exercises its operator-skip path); a second user has read access.
    */
   function buildControlledModeProps() {
-    const operatorId = uuidv4();
+    // Local defaultAppContext for these tests doesn't seed `loggedInUser`; set it to the snapshot's
+    // owner so the controlled-mode submit logic exercises its operator-skip path.
+    const operatorId = context.userSettings.id;
+    context.loggedInUser = { id: operatorId };
     const operatorUser = defaultUserDto({ id: operatorId, username: "operator@passbolt.com" });
     const readerId = uuidv4();
     const readerUser = defaultUserDto({ id: readerId, username: "reader@passbolt.com" });
@@ -582,28 +586,51 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     expect(page.aroDetails(2)).toEqual(expect.stringContaining("@passbolt.com"));
   });
 
-  it("As LU confirming the dialog I should see onConfirm called with the permission changes and the port left untouched", async () => {
+  it("As LU I should see the Save button enabled as soon as the dialog opens so I can confirm the snapshot as-is", async () => {
+    expect.assertions(1);
+    const props = buildControlledModeProps();
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+
+    expect(page.saveButton.hasAttribute("disabled")).toBe(false);
+  });
+
+  it("As LU confirming the dialog as-is I should see onConfirm called with an empty delta (backend already inherits parent perms)", async () => {
     expect.assertions(3);
     const props = buildControlledModeProps();
     mockContextRequest(jest.fn());
 
     await act(() => (page = new ShareDialogPage(context, props)));
-    // Remove the reader to make the form dirty (single-click delete, no autocomplete).
-    await page.selectRemovePermission(2);
-    // Submit the form directly to avoid relying on the save button being enabled in the DOM.
-    await act(async () => {
-      fireEvent.submit(page.form);
-    });
+    // No edits — click Save. The backend already inherits the parent folder's permissions on
+    // resource creation, so confirming as-is emits an empty delta and the workflow skips the
+    // share-save call entirely.
+    await act(() => page.savePermissions());
 
     expect(props.onConfirm).toHaveBeenCalledTimes(1);
-    const changes = props.onConfirm.mock.calls[0][0];
-    expect(changes).toEqual(expect.arrayContaining([expect.objectContaining({ delete: true })]));
-    // Controlled mode must never invoke the server-side share endpoint.
+    expect(props.onConfirm.mock.calls[0][0]).toEqual([]);
     expect(context.port.request).not.toHaveBeenCalledWith(
       "passbolt.share.resources.save",
       expect.anything(),
       expect.anything(),
     );
+  });
+
+  it("As LU removing a row before confirming I should see a delete delta emitted for that row", async () => {
+    expect.assertions(3);
+    const props = buildControlledModeProps();
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+    // Remove the reader (row 2) and confirm. The delta carries `delete: true` so the workflow
+    // can revoke the inherited reader permission on the freshly-created resource.
+    await page.selectRemovePermission(2);
+    await act(() => page.savePermissions());
+
+    expect(props.onConfirm).toHaveBeenCalledTimes(1);
+    const changes = props.onConfirm.mock.calls[0][0];
+    expect(changes).toHaveLength(1);
+    expect(changes[0]).toMatchObject({ delete: true, aco: "Resource" });
   });
 
   describe("Group members expansion", () => {

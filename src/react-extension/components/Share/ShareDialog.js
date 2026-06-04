@@ -107,11 +107,9 @@ class ShareDialog extends Component {
       usersById[user.id] = user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS);
     });
 
-    // Remap the snapshot's permissions onto the synthetic resource: the original DTOs reference
-    // the parent folder's aco/aco_foreign_key but ShareChanges needs them associated with the
-    // (id-less) resource we're about to create, otherwise delete/update operations silently
-    // no-op (aco_foreign_key mismatch) and any emitted change would be filtered out of
-    // `getResourcesChanges()` for having `aco: "Folder"`.
+    // Remap aco/aco_foreign_key to the synthetic resource so ShareChanges treats these as the
+    // resource's perms; the folder permission `id` is kept (stale but non-undefined) — the
+    // workflow's PermissionDriftDetectionService rebases ids after the resource exists.
     const permissions = this.props.initialPermissions.items.map((permission) => {
       const dto = permission.toDto();
       dto.aco = PermissionEntity.ACO_RESOURCE;
@@ -394,13 +392,8 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Save the permissions.
-   *
-   * In controlled mode the dialog never calls the server — it hands the operator-confirmed
-   * permission changes (in the same DTO shape that `passbolt.share.resources.save` would
-   * accept) to the `onConfirm` callback so the workflow handler can orchestrate the
-   * create-then-share sequence safely.
-   *
+   * Save the permissions. In controlled mode the dialog hands the deltas to `onConfirm` instead
+   * of calling the server, so the workflow owns the create-then-share sequence.
    * @returns {Promise<void>}
    */
   async shareSave() {
@@ -599,11 +592,19 @@ class ShareDialog extends Component {
 
   /**
    * Return true if submit button should be disabled
-   * True if there is no owner, if all input should be disabled, if there is no change since the start
+   * True if there is no owner, if all input should be disabled, if there is no change since the start.
+   * Controlled mode drops the `!hasChanges()` gate so the operator can confirm the inherited
+   * permissions as-is (empty deltas — the workflow then skips the share call entirely).
    * @returns {boolean}
    */
   hasSubmitDisabled() {
-    return this.hasNoOwner() || this.hasAllInputDisabled() || !this.hasChanges();
+    if (this.hasNoOwner() || this.hasAllInputDisabled()) {
+      return true;
+    }
+    if (this.isControlledMode()) {
+      return false;
+    }
+    return !this.hasChanges();
   }
 
   /**
