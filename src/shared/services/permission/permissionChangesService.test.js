@@ -13,9 +13,8 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import MockPort from "../../../react-extension/test/mock/MockPort";
 import PermissionChangesService from "./permissionChangesService";
-import { PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY } from "../serviceWorker/permission/permissionServiceWorkerService";
+import PermissionSnapshotEntity from "../../models/entity/permission/permissionSnapshotEntity";
 import { defaultPermissionDto } from "../../models/entity/permission/permissionEntity.test.data";
 
 beforeEach(() => {
@@ -23,207 +22,157 @@ beforeEach(() => {
 });
 
 describe("PermissionChangesService", () => {
-  let port, service;
+  const service = new PermissionChangesService();
 
-  beforeEach(() => {
-    port = new MockPort();
-    service = new PermissionChangesService(port);
-  });
-
-  describe("::rebaseChangesForResource", () => {
-    it("stamps the aco_foreign_key on an is_new delta and never fetches resource permissions", async () => {
-      expect.assertions(2);
-
-      const resourceId = uuidv4();
-      const aroId = uuidv4();
-      jest.spyOn(port, "request");
-
-      const rebased = await service.rebaseChangesForResource(
-        [{ is_new: true, aro: "User", aro_foreign_key: aroId, aco: "Resource", aco_foreign_key: null, type: 1 }],
-        resourceId,
-      );
-
-      expect(rebased).toEqual([
-        { is_new: true, aro: "User", aro_foreign_key: aroId, aco: "Resource", aco_foreign_key: resourceId, type: 1 },
-      ]);
-      // No `findPermissions` call is needed when every delta is `is_new` — the lookup would be wasted.
-      expect(port.request).not.toHaveBeenCalledWith(
-        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
-        expect.anything(),
-        expect.anything(),
-      );
+  /**
+   * Build a `PermissionSnapshotEntity` over a set of permissions targeting `folderId` with
+   * sensible defaults for groups/users (unused in `buildResourcePermissionChanges`).
+   */
+  function snapshotWithPermissions(permissionsDto) {
+    return new PermissionSnapshotEntity({
+      permissions: permissionsDto,
+      groups: [],
+      users: [],
+      created: "2026-04-21T12:24:00+00:00",
     });
+  }
 
-    it("replaces the folder permission id on a delete delta with the resource permission id looked up by aro_foreign_key", async () => {
-      expect.assertions(2);
+  describe("::buildResourcePermissionChanges", () => {
+    it("emits every non-operator snapshot row as is_new targeting the new resource when there are no dialog edits", () => {
+      expect.assertions(3);
 
       const resourceId = uuidv4();
-      const readerAroId = uuidv4();
-      const inheritedResourcePermId = uuidv4();
-      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => [
+      const operatorId = uuidv4();
+      const readerId = uuidv4();
+      const folderId = uuidv4();
+      const snapshot = snapshotWithPermissions([
         defaultPermissionDto({
-          id: inheritedResourcePermId,
-          aco: "Resource",
-          aco_foreign_key: resourceId,
+          aco: "Folder",
+          aco_foreign_key: folderId,
           aro: "User",
-          aro_foreign_key: readerAroId,
+          aro_foreign_key: operatorId,
+          type: 15,
+        }),
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "User",
+          aro_foreign_key: readerId,
           type: 1,
         }),
       ]);
-      jest.spyOn(port, "request");
 
-      const rebased = await service.rebaseChangesForResource(
-        [
-          {
-            id: "stale-folder-permission-id",
-            delete: true,
-            aro: "User",
-            aro_foreign_key: readerAroId,
-            aco: "Resource",
-            aco_foreign_key: null,
-            type: 1,
-          },
-        ],
-        resourceId,
-      );
+      const changes = service.buildResourcePermissionChanges(snapshot, [], resourceId, operatorId);
 
-      expect(port.request).toHaveBeenCalledWith(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, resourceId, "Resource");
-      expect(rebased).toEqual([
-        {
-          id: inheritedResourcePermId,
-          delete: true,
-          aro: "User",
-          aro_foreign_key: readerAroId,
-          aco: "Resource",
-          aco_foreign_key: resourceId,
-          type: 1,
-        },
-      ]);
+      expect(changes).toHaveLength(1);
+      expect(changes[0]).toMatchObject({
+        is_new: true,
+        aro: "User",
+        aro_foreign_key: readerId,
+        aco: "Resource",
+        aco_foreign_key: resourceId,
+        type: 1,
+      });
+      // Operator row is the implicit owner on the newly-created resource and must not be emitted.
+      expect(changes.find((change) => change.aro_foreign_key === operatorId)).toBeUndefined();
     });
 
-    it("replaces the folder permission id on a type-update delta with the resource permission id", async () => {
+    it("drops a snapshot row when the operator's dialog edits include a matching `delete` delta", () => {
       expect.assertions(1);
 
+      const folderId = uuidv4();
       const resourceId = uuidv4();
-      const aroId = uuidv4();
-      const inheritedResourcePermId = uuidv4();
-      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => [
-        defaultPermissionDto({
-          id: inheritedResourcePermId,
-          aco: "Resource",
-          aco_foreign_key: resourceId,
-          aro: "User",
-          aro_foreign_key: aroId,
-          type: 1,
-        }),
+      const operatorId = uuidv4();
+      const readerId = uuidv4();
+      const snapshot = snapshotWithPermissions([
+        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: operatorId, type: 15 }),
+        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: readerId, type: 1 }),
       ]);
+      const dialogChanges = [
+        { delete: true, aro: "User", aro_foreign_key: readerId, aco: "Resource", aco_foreign_key: null, type: 1 },
+      ];
 
-      const rebased = await service.rebaseChangesForResource(
-        [
-          {
-            id: "stale-folder-permission-id",
-            aro: "User",
-            aro_foreign_key: aroId,
-            aco: "Resource",
-            aco_foreign_key: null,
-            type: 15,
-          },
-        ],
-        resourceId,
-      );
+      const changes = service.buildResourcePermissionChanges(snapshot, dialogChanges, resourceId, operatorId);
 
-      expect(rebased[0]).toMatchObject({
-        id: inheritedResourcePermId,
+      expect(changes).toEqual([]);
+    });
+
+    it("patches the type of a snapshot row when the operator's dialog edits include a type-update delta", () => {
+      expect.assertions(2);
+
+      const folderId = uuidv4();
+      const resourceId = uuidv4();
+      const operatorId = uuidv4();
+      const readerId = uuidv4();
+      const snapshot = snapshotWithPermissions([
+        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: operatorId, type: 15 }),
+        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: readerId, type: 1 }),
+      ]);
+      const dialogChanges = [
+        { aro: "User", aro_foreign_key: readerId, aco: "Resource", aco_foreign_key: null, type: 15 },
+      ];
+
+      const changes = service.buildResourcePermissionChanges(snapshot, dialogChanges, resourceId, operatorId);
+
+      expect(changes).toHaveLength(1);
+      expect(changes[0]).toMatchObject({ is_new: true, aro_foreign_key: readerId, type: 15 });
+    });
+
+    it("appends a brand-new aro from the operator's dialog edits with aco_foreign_key stamped", () => {
+      expect.assertions(2);
+
+      const folderId = uuidv4();
+      const resourceId = uuidv4();
+      const operatorId = uuidv4();
+      const newAroId = uuidv4();
+      const snapshot = snapshotWithPermissions([
+        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: operatorId, type: 15 }),
+      ]);
+      const dialogChanges = [
+        { is_new: true, aro: "User", aro_foreign_key: newAroId, aco: "Resource", aco_foreign_key: null, type: 1 },
+      ];
+
+      const changes = service.buildResourcePermissionChanges(snapshot, dialogChanges, resourceId, operatorId);
+
+      expect(changes).toHaveLength(1);
+      expect(changes[0]).toMatchObject({
+        is_new: true,
+        aro_foreign_key: newAroId,
+        aco: "Resource",
         aco_foreign_key: resourceId,
-        type: 15,
+        type: 1,
       });
     });
 
-    it("drops a non-is_new delta when the resource has no inherited permission for that aro_foreign_key", async () => {
+    it("excludes the operator's own row from the output even when the snapshot lists it explicitly", () => {
+      expect.assertions(2);
+
+      const folderId = uuidv4();
+      const resourceId = uuidv4();
+      const operatorId = uuidv4();
+      const readerId = uuidv4();
+      const snapshot = snapshotWithPermissions([
+        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: operatorId, type: 15 }),
+        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: readerId, type: 1 }),
+      ]);
+
+      const changes = service.buildResourcePermissionChanges(snapshot, [], resourceId, operatorId);
+
+      expect(changes).toHaveLength(1);
+      expect(changes.find((change) => change.aro_foreign_key === operatorId)).toBeUndefined();
+    });
+
+    it("returns an empty array when the snapshot has only the operator and the dialog has no edits", () => {
       expect.assertions(1);
 
+      const folderId = uuidv4();
       const resourceId = uuidv4();
-      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => []);
-
-      const rebased = await service.rebaseChangesForResource(
-        [
-          {
-            id: "stale-folder-permission-id",
-            delete: true,
-            aro: "User",
-            aro_foreign_key: uuidv4(),
-            aco: "Resource",
-            aco_foreign_key: null,
-            type: 1,
-          },
-        ],
-        resourceId,
-      );
-
-      expect(rebased).toEqual([]);
-    });
-
-    it("mixes is_new and delete deltas in a single rebase: is_new is just stamped, delete uses the resource perm lookup", async () => {
-      expect.assertions(2);
-
-      const resourceId = uuidv4();
-      const newAroId = uuidv4();
-      const inheritedReaderAroId = uuidv4();
-      const inheritedReaderPermId = uuidv4();
-      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => [
-        defaultPermissionDto({
-          id: inheritedReaderPermId,
-          aco: "Resource",
-          aco_foreign_key: resourceId,
-          aro: "User",
-          aro_foreign_key: inheritedReaderAroId,
-          type: 1,
-        }),
+      const operatorId = uuidv4();
+      const snapshot = snapshotWithPermissions([
+        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: operatorId, type: 15 }),
       ]);
 
-      const rebased = await service.rebaseChangesForResource(
-        [
-          {
-            is_new: true,
-            aro: "User",
-            aro_foreign_key: newAroId,
-            aco: "Resource",
-            aco_foreign_key: null,
-            type: 15,
-          },
-          {
-            id: "stale-folder-permission-id",
-            delete: true,
-            aro: "User",
-            aro_foreign_key: inheritedReaderAroId,
-            aco: "Resource",
-            aco_foreign_key: null,
-            type: 1,
-          },
-        ],
-        resourceId,
-      );
-
-      expect(rebased).toHaveLength(2);
-      expect(rebased).toEqual([
-        expect.objectContaining({ is_new: true, aro_foreign_key: newAroId, aco_foreign_key: resourceId }),
-        expect.objectContaining({
-          id: inheritedReaderPermId,
-          delete: true,
-          aro_foreign_key: inheritedReaderAroId,
-          aco_foreign_key: resourceId,
-        }),
-      ]);
-    });
-
-    it("returns an empty array when given no changes and never touches the port", async () => {
-      expect.assertions(2);
-
-      jest.spyOn(port, "request");
-      const rebased = await service.rebaseChangesForResource([], uuidv4());
-
-      expect(rebased).toEqual([]);
-      expect(port.request).not.toHaveBeenCalled();
+      expect(service.buildResourcePermissionChanges(snapshot, [], resourceId, operatorId)).toEqual([]);
     });
   });
 });

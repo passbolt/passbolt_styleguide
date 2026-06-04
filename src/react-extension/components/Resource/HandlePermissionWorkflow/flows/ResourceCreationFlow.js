@@ -162,9 +162,9 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   /**
    * Handle the operator's confirmation of the permission set in ShareDialog (controlled mode).
    * Re-snapshot the parent folder and compare against the initial snapshot — any drift aborts
-   * the submission. Then create the resource (the backend auto-inherits the parent folder's
-   * permissions onto it) and apply the operator's edits on top via `share.resources.save`;
-   * confirming as-is means no edits and the share call is skipped entirely.
+   * the submission. Fold the operator's edits onto the snapshot to get the final share set, then
+   * delegate the operator-only create + share orchestration to the extension via a single
+   * `passbolt.resources.create` call carrying both the secret and the permission changes.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
    * @returns {Promise<void>}
    */
@@ -181,19 +181,16 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
           ),
         );
       }
-      const created = await this.createResource(this.pendingResourceFormEntity);
-      if (permissionChanges.length > 0) {
-        // The dialog seeded itself from the parent folder's snapshot, so deltas carry the folder's
-        // permission ids and a null `aco_foreign_key`. The backend's `share.resources.save` wants
-        // permission ids that exist on the newly-created resource, so rebase before sending.
-        const rebasedChanges = await this.permissionChangesService.rebaseChangesForResource(
-          permissionChanges,
-          created.id,
-        );
-        if (rebasedChanges.length > 0) {
-          await this.props.context.port.request("passbolt.share.resources.save", [created.id], rebasedChanges);
-        }
-      }
+      const finalChanges = this.permissionChangesService.buildResourcePermissionChanges(
+        this.state.snapshot,
+        permissionChanges,
+        // The dialog seeds is_new deltas with aco_foreign_key: null because the resource doesn't
+        // exist yet. The extension stamps real ids server-side as part of its create-then-share
+        // orchestration, so passing null here is fine.
+        null,
+        this.props.context.loggedInUser.id,
+      );
+      const created = await this.createResource(this.pendingResourceFormEntity, finalChanges);
       await this.finalizeSuccess(
         this.props.t("The resource has been added successfully"),
         `/app/passwords/view/${created.id}`,
@@ -216,18 +213,22 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Call `passbolt.resources.create` with the DTOs the resource form entity exposes.
+   * Call `passbolt.resources.create` with the DTOs the resource form entity exposes. When
+   * `permissionChanges` is non-empty the extension creates the resource operator-only and then
+   * runs `share.resources.save` in the same orchestrated call (single passphrase prompt, single
+   * progress dialog, atomic-feeling result to the operator).
    * @param {ResourceFormEntity} resourceFormEntity
+   * @param {Array<object>} [permissionChanges] Operator-confirmed final permission set.
    * @returns {Promise<Object>} The newly created resource DTO.
    */
-  createResource(resourceFormEntity) {
+  createResource(resourceFormEntity, permissionChanges) {
     const resourceDto = resourceFormEntity.toResourceDto();
     const resourceType = resourceFormEntity.resourceTypeId
       ? this.props.context.resourceTypesCollection?.getFirstById(resourceFormEntity.resourceTypeId)
       : null;
     const isV4PasswordString = resourceType?.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
     const secretDto = isV4PasswordString ? resourceFormEntity.toSecretDto().password : resourceFormEntity.toSecretDto();
-    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
+    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto, permissionChanges);
   }
 }
 

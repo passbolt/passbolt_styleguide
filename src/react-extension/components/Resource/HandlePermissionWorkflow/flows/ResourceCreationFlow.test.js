@@ -71,9 +71,10 @@ function dialogPropsFor(dialogContext, DialogComponent) {
 describe("ResourceCreationFlow", () => {
   describe("As LU creating a resource in a shared folder", () => {
     it("As LU I should be asked to review the parent folder's permissions before the resource is created", async () => {
-      expect.assertions(7);
+      expect.assertions(8);
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
+      const readerId = uuidv4();
       wireSnapshotListeners(props.context.port, {
         permissions: [
           operatorOwnerPermissionDto(operatorId, props.folderParentId),
@@ -82,13 +83,13 @@ describe("ResourceCreationFlow", () => {
             aco: "Folder",
             aco_foreign_key: props.folderParentId,
             aro: "User",
-            aro_foreign_key: uuidv4(),
+            aro_foreign_key: readerId,
             type: 1,
           },
         ],
         users: [
           { id: operatorId, username: "operator@passbolt.com" },
-          { id: uuidv4(), username: "reader@passbolt.com" },
+          { id: readerId, username: "reader@passbolt.com" },
         ],
       });
 
@@ -128,19 +129,17 @@ describe("ResourceCreationFlow", () => {
         }),
       );
 
-      // Confirm the share dialog: workflow re-snapshots the parent, sees no drift, creates the
-      // resource, then applies the share changes. Register the create-resource listener directly
-      // (instead of mockImplementation) so the snapshot listeners stay live for the second snapshot
-      // the drift check fetches.
+      // Confirm the share dialog: workflow re-snapshots the parent, sees no drift, then hands the
+      // operator-only-create + extended-share orchestration to the extension via a single
+      // `passbolt.resources.create` call carrying the final permission set.
       const createdResourceId = uuidv4();
       props.context.port.addRequestListener("passbolt.resources.create", () => ({ id: createdResourceId }));
-      props.context.port.addRequestListener("passbolt.share.resources.save", () => undefined);
       jest.spyOn(props.context.port, "request");
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
-      // ShareDialog emits changes with aco_foreign_key: null (resource doesn't exist yet); the
-      // workflow stamps them with the created resource id before calling share.resources.save.
+      // The operator adds a brand-new aro via autocomplete (is_new delta from the dialog).
+      const newAroId = uuidv4();
       const fakeChanges = [
-        { aro_foreign_key: uuidv4(), aco_foreign_key: null, aco: "Resource", type: 1, is_new: true },
+        { aro_foreign_key: newAroId, aco_foreign_key: null, aco: "Resource", type: 1, is_new: true },
       ];
       await act(() => shareProps.onConfirm(fakeChanges));
 
@@ -152,15 +151,24 @@ describe("ResourceCreationFlow", () => {
       expect(secondFindIndex).toBeGreaterThan(-1);
       expect(createIndex).toBeGreaterThan(secondFindIndex);
 
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.create",
+      // The styleguide never makes a separate share.resources.save call — orchestration is the
+      // extension's responsibility now.
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.share.resources.save",
         expect.anything(),
         expect.anything(),
       );
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.share.resources.save",
-        [createdResourceId],
-        [{ ...fakeChanges[0], aco_foreign_key: createdResourceId }],
+      // The single create call carries both the resource DTO + secret + the final permission set.
+      // The set contains BOTH the snapshot's reader (folded in by permissionChangesService) and
+      // the operator's autocomplete addition; the operator's own row is excluded.
+      const createCall = props.context.port.request.mock.calls.find(([event]) => event === "passbolt.resources.create");
+      const createPermissionsArg = createCall[3];
+      expect(createPermissionsArg).toHaveLength(2);
+      expect(createPermissionsArg).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ is_new: true, aro_foreign_key: readerId, type: 1 }),
+          expect.objectContaining({ is_new: true, aro_foreign_key: newAroId, type: 1 }),
+        ]),
       );
       expect(props.onStop).toHaveBeenCalled();
     });
@@ -276,6 +284,7 @@ describe("ResourceCreationFlow", () => {
         "passbolt.resources.create",
         expect.anything(),
         expect.anything(),
+        undefined,
       );
       expect(props.dialogContext.open).not.toHaveBeenCalledWith(ShareDialog, expect.anything());
       expect(props.onStop).toHaveBeenCalled();
