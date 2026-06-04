@@ -519,27 +519,6 @@ class DisplaySubscriptionKey extends React.Component {
         )}
         {createSafePortal(
           <div className="sidebar-help-section">
-            {this.props.context.siteSettings.isCommunityEdition && (
-              <>
-                <h3>
-                  <Trans>Discover Business</Trans>
-                </h3>
-                <p>
-                  <Trans>Take a guided tour of Business features and see how they work for your team.</Trans>
-                </p>
-                <a
-                  className="button"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://www.passbolt.com/pricing/pro"
-                >
-                  <EmailSVG />
-                  <span>
-                    <Trans>Take the tour</Trans>
-                  </span>
-                </a>
-              </>
-            )}
             <h3>
               <Trans>Need help?</Trans>
             </h3>
