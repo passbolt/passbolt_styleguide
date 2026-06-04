@@ -22,6 +22,8 @@ import { GROUPS_GET_BY_IDS } from "../serviceWorker/group/groupServiceWorkerServ
 import { USERS_GET_BY_IDS } from "../serviceWorker/user/userServiceWorkerService";
 import { defaultPermissionDto } from "../../models/entity/permission/permissionEntity.test.data";
 import { defaultGroupsDtos } from "../../models/entity/group/groupsCollection.test.data";
+import { defaultGroupDto } from "../../models/entity/group/groupEntity.test.data";
+import { defaultGroupUser } from "../../models/entity/groupUser/groupUserEntity.test.data";
 import { defaultUsersDtos } from "../../models/entity/user/usersCollection.test.data";
 
 beforeEach(() => {
@@ -120,15 +122,56 @@ describe("PermissionSnapshotService", () => {
       // Deterministic prefix: keyring sync first, then the permission fetch.
       expect(port.request).toHaveBeenNthCalledWith(1, KEYRING_SYNC_EVENT);
       expect(port.request).toHaveBeenNthCalledWith(2, PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, folderId, "Folder");
-      // Groups and users are fetched in parallel (Promise.all); assert both happen after the permission
-      // fetch without pinning their relative order.
+      // Groups are fetched before users (their members feed the user ids), and both happen after the
+      // permission fetch.
       const events = port.request.mock.calls.map(([event]) => event);
       expect(events.indexOf(GROUPS_GET_BY_IDS)).toBeGreaterThan(
         events.indexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY),
       );
-      expect(events.indexOf(USERS_GET_BY_IDS)).toBeGreaterThan(
-        events.indexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY),
-      );
+      expect(events.indexOf(USERS_GET_BY_IDS)).toBeGreaterThan(events.indexOf(GROUPS_GET_BY_IDS));
+    });
+
+    it("also fetches the users that are members of the permissioned groups, deduplicated against the directly-permissioned users", async () => {
+      expect.assertions(1);
+
+      const folderId = uuidv4();
+      const groupId = uuidv4();
+      const directUserId = uuidv4();
+      const memberUserId = uuidv4();
+      const permissionsDto = [
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "Group",
+          aro_foreign_key: groupId,
+          type: 1,
+        }),
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "User",
+          aro_foreign_key: directUserId,
+          type: 15,
+        }),
+      ];
+      // The group carries two members: one new (memberUserId) and one who is also directly
+      // permissioned (directUserId) — the latter must be deduplicated.
+      const groupDto = defaultGroupDto({
+        id: groupId,
+        groups_users: [
+          defaultGroupUser({ user_id: memberUserId, group_id: groupId, is_admin: true }),
+          defaultGroupUser({ user_id: directUserId, group_id: groupId, is_admin: false }),
+        ],
+      });
+      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => permissionsDto);
+      port.addRequestListener(GROUPS_GET_BY_IDS, () => [groupDto]);
+      port.addRequestListener(USERS_GET_BY_IDS, () => []);
+      jest.spyOn(port, "request");
+
+      await service.buildSnapshotForResourceCreation(folderId);
+
+      expect(port.request).toHaveBeenCalledWith(USERS_GET_BY_IDS, [directUserId, memberUserId]);
     });
 
     it("propagates the error when the keyring synchronisation fails", async () => {

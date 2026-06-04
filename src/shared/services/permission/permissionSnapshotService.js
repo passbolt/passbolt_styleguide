@@ -53,13 +53,21 @@ export default class PermissionSnapshotService {
     const groupIds = permissions.items
       .filter((permission) => permission.aro === PermissionEntity.ARO_GROUP)
       .map((permission) => permission.aroForeignKey);
-    const userIds = permissions.items
-      .filter((permission) => permission.aro === PermissionEntity.ARO_USER)
-      .map((permission) => permission.aroForeignKey);
-    const [groups, users] = await Promise.all([
-      this.groupServiceWorkerService.getByIds(groupIds),
-      this.userServiceWorkerService.getByIds(userIds),
-    ]);
+    // The groups carry their memberships (groups_users); their member users are resolved alongside
+    // the directly-permissioned users so the dialog can list a group's members when expanded.
+    const groups = await this.groupServiceWorkerService.getByIds(groupIds);
+    const memberUserIds = groups.items.flatMap((group) =>
+      (group.groupsUsers?.items ?? []).map((groupUser) => groupUser.userId),
+    );
+    const userIds = [
+      ...new Set([
+        ...permissions.items
+          .filter((permission) => permission.aro === PermissionEntity.ARO_USER)
+          .map((permission) => permission.aroForeignKey),
+        ...memberUserIds,
+      ]),
+    ];
+    const users = await this.userServiceWorkerService.getByIds(userIds);
     return new PermissionSnapshotEntity({
       permissions: permissions.toDto(),
       groups: groups.toDto(),
