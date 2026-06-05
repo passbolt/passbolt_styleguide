@@ -37,6 +37,7 @@ class GetRecoverUrlService {
    * Request the API to get a recover URL consuming the given token.
    * @param {string} ssoToken the token found after a sucessful SSO login
    * @returns {Promise<URL>}
+   * @throws Error if the response URL to redirect to is not on the same origin of the instance
    */
   async getRecoverUrl(ssoToken) {
     const dto = {
