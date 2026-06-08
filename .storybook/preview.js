@@ -36,7 +36,7 @@ function withStylesheet(Story, context) {
 
   return (
     <>
-      <link rel="stylesheet" href={`css/themes/${themeName}/${css}.css`}/>
+      <link rel="stylesheet" href={`css/themes/${themeName}/${css}.min.css`}/>
       <Story/>
     </>
   );

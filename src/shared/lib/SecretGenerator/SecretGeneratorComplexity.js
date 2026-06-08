@@ -29,7 +29,7 @@ export const ENTROPY_THRESHOLDS = {
 const STRENGTH = [
   {
     id: "not_available",
-    label: "n/a",
+    label: "N/A",
     strength: ENTROPY_THRESHOLDS.NOT_AVAILABLE,
   },
   {

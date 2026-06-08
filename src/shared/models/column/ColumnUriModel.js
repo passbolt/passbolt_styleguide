@@ -25,8 +25,9 @@ class ColumnUriModel extends ColumnModel {
   constructor(columnDto = {}) {
     columnDto.id = ColumnModelTypes.URI;
     columnDto.field = ColumnFields.METADATA_URIS;
-    columnDto.width = columnDto.width || 210;
-    columnDto.defaultWidth = 210;
+    columnDto.width = columnDto.width || 215;
+    columnDto.defaultWidth = 215;
+    columnDto.minWidth = 215;
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = true;

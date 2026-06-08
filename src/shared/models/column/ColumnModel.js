@@ -26,6 +26,7 @@ class ColumnModel {
     this.label = columnDto.label;
     this.width = columnDto.width;
     this.defaultWidth = columnDto.defaultWidth;
+    this.minWidth = columnDto.minWidth;
     this.resizable = columnDto.resizable;
     this.draggable = columnDto.draggable;
     this.sortable = columnDto.sortable;

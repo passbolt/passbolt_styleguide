@@ -75,7 +75,7 @@ export class MetadataKeysSettingsLocalStorageContextProvider extends React.Compo
    * Handles update of the metadata key settings in the local storage.
    */
   handleStorageChange(changes) {
-    if (changes[this.storageKey]) {
+    if (changes[this.storageKey] && changes[this.storageKey].newValue) {
       this.set(changes[this.storageKey].newValue);
     }
   }

@@ -21,6 +21,7 @@ import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import UsersSVG from "../../../../img/svg/users.svg";
 import GroupServiceWorkerService from "../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
+import GroupEntity from "../../../../shared/models/entity/group/groupEntity";
 
 /**
  * This component display groups to filter the resources
@@ -60,8 +61,8 @@ class FilterResourcesByGroups extends React.Component {
   async loadGroupsData() {
     if (!this.state.loading) {
       this.setState({ loading: true });
-      const groups = await this.groupServiceWorkerService.findMyGroups();
-      this.setState({ groups, loading: false });
+      const groupsCollection = await this.groupServiceWorkerService.findMyGroups();
+      this.setState({ groups: groupsCollection, loading: false });
     }
   }
 
@@ -90,7 +91,10 @@ class FilterResourcesByGroups extends React.Component {
    */
   handleClickGroupEvent(group) {
     // filter the resources by group;
-    const filter = { type: ResourceWorkspaceFilterTypes.GROUP, payload: { group } };
+    const filter = {
+      type: ResourceWorkspaceFilterTypes.GROUP,
+      payload: { group: group.toDto(GroupEntity.ALL_CONTAIN_OPTIONS) },
+    };
     this.props.history.push({ pathname: "/app/passwords", state: { filter } });
   }
 
@@ -126,7 +130,7 @@ class FilterResourcesByGroups extends React.Component {
    * @returns {*}
    */
   get groupsSorted() {
-    return this.groups.sort((groupA, groupB) => groupA.name.localeCompare(groupB.name));
+    return [...this.groups.items].sort((groupA, groupB) => groupA.name.localeCompare(groupB.name));
   }
 
   /**
