@@ -23,11 +23,6 @@ import SsoPopupHandlerService from "../../../../shared/services/sso/SsoPopupHand
 import { v4 as uuid } from "uuid";
 import GetRecoverUrlService from "../../../../shared/services/api/sso/GetRecoverUrlService";
 import { act } from "react";
-import WindowNavigationService from "../../../../shared/utils/windowNavigationService";
-
-beforeEach(() => {
-  jest.resetModules();
-});
 
 describe("IdentifyWithSso", () => {
   describe("As AN I be able to SSO to identify myself instead of using the email process", () => {
@@ -44,11 +39,10 @@ describe("IdentifyWithSso", () => {
 
     it("As AN I want to be redirected to the setup or recover page after a successful login attempt", async () => {
       expect.assertions(3);
-      const expectedUrl = "https://www.passbolt.test";
+      const expectedUrl = "http://localhost/#redirected";
       const popupUrl = "https://third-party.auth.com";
       const expectedToken = uuid();
 
-      jest.spyOn(WindowNavigationService, "redirectTo").mockImplementation(() => {});
       jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async () => popupUrl);
       jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async (url) => {
         expect(url).toStrictEqual(popupUrl);
@@ -68,8 +62,34 @@ describe("IdentifyWithSso", () => {
 
       // start the SSO process
       await page.clickOnSsoButton();
+      expect(window.location.href).toStrictEqual(expectedUrl);
+    });
 
-      expect(WindowNavigationService.redirectTo).toHaveBeenCalledWith(expectedUrl);
+    it("As AN I should not be redirected if the recover URL is on a different origin", async () => {
+      expect.assertions(1);
+      const maliciousUrl = "https://malicious.passbolt.test/setup/recover";
+      const popupUrl = "https://third-party.auth.com";
+      const expectedToken = uuid();
+
+      jest.spyOn(console, "error");
+      jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async () => popupUrl);
+      jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async () => ({
+        case: "default",
+        token: expectedToken,
+      }));
+      jest.spyOn(GetRecoverUrlService.prototype, "getRecoverUrl").mockImplementation(() => maliciousUrl);
+
+      const props = defaultProps();
+      const page = new IdentifyWithSsoPage(props);
+
+      // start the SSO process
+      await act(() => page.clickOnSsoButton());
+
+      // The redirection should be blocked and the window location left untouched.
+      expect(console.error).toHaveBeenCalledWith(
+        'Failed to identify via sso":',
+        new Error("The redirection URL is invalid. It must happen within the same origin has the current window"),
+      );
     });
 
     it("As AN I want to be redirected to the self_registration a successful login attempt and if I am not a registered user", async () => {
