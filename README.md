@@ -4,16 +4,15 @@
 	   / ____/ /_/ (__  |__  ) /_/ / /_/ / / /_
 	  /_/    \__,_/____/____/_.___/\____/_/\__/
 
-	The open source password manager for teams
-	(c) 2023 Passbolt SA
+	Open source password manager for teams
+	(c) 2026 Passbolt SA
+	https://www.passbolt.com
 
-
-License
-==============
+## License
 
 Passbolt - Open source password manager for teams
 
-(c) 2023 Passbolt SA
+(c) 2026 Passbolt SA
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 Public License (AGPL) as published by the Free Software Foundation version 3.
@@ -28,23 +27,29 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See GNU Affero 
 You should have received a copy of the GNU Affero General Public License along with this program. If not,
 see [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html).
 
-Images and logos in /src/img/third_party belongs to their respective owner.
+## About passbolt
 
-About
-=========
+Passbolt is an open source password manager for teams. It allows to securely share and store credentials.
+For instance, the wifi password of your office, or the administrator password of a router, or your organisation social
+media account password, all of them can be secured using Passbolt.
 
-This is the official styleguide for Passbolt the open source password manager for teams.
-This styleguide is used to extend, minify and test the stylesheets used by the different
-passbolt components such as the website, the firefox addon, etc.
+You can try a demo of passbolt at [https://demo.passbolt.com](https://demo.passbolt.com).
 
-In /src and /build you can find the assets that are used by other projects, like the images
-the less files, the minified css files, fonts, etc.
+You will need to install a plugin, you can find a step by step guide in the website
+[help section](https://www.passbolt.com/help/start/firefox)
 
-Credits
-=========
+Or, of course, you can use the code in this repository to build it yourself and run it!
 
-https://www.passbolt.com/credits
+## About passbolt styleguide
 
+The styleguide gathers the UI code shared across passbolt's applications: the browser extension, the desktop application,
+and the web application served by the API.
+
+# Contributing
+
+## Reporting a security Issue
+
+If you've found a security related issue in Passbolt, please don't open an issue on GitHub. Follow our responsible disclosure process: https://www.passbolt.com/docs/contribute/security/vulnerability/.
 
 Install
 =========
@@ -148,3 +153,9 @@ Executing the stories locally to ensure no regression was introduced can be done
 ```
 npm run test:storybook
 ```
+
+Credits
+=========
+
+https://www.passbolt.com/credits
+
