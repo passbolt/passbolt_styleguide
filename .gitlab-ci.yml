@@ -1,4 +1,1 @@
-include:
-  - project: "passbolt/groups/front-end-group/ci-definitions"
-    ref: "${REMOTE_CI_BRANCH}"
-    file: "passbolt-styleguide/.gitlab-ci.yml"
+# Empty file to make NPMJS happy :D
