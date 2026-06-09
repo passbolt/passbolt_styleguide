@@ -29,8 +29,6 @@ PB-51798 PCD 2.17 - Update FindAndUpdateGroupsLocalStorageService to add a metho
 PB-51799 PCD 2.18 - Align UserLocalStorage to add memory cache
 PB-51800 PCD 2.19 - Rename UserService to UserApiService
 PB-52047 CE/PRO upgrade
-
-
 PB-49605 Grid columns min-width
 PB-51783 PCD 2.02 - Create KeyringServiceWorkerService
 PB-51800 PCD 2.19 - Rename UserService to UserApiService
