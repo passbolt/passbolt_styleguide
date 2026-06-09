@@ -44,6 +44,7 @@ import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity
 import { v4 as uuidv4 } from "uuid";
 import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 beforeEach(() => {
   jest.resetModules();
@@ -222,6 +223,32 @@ describe("See Workspace Menu", () => {
       const propsOneResourceOwned = defaultPropsOneResourceOwned({
         secretRevisionsSettings: SecretRevisionsSettingsEntity.createFromDefault(),
       }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecretHistory).toBeNull();
+    });
+
+    it("As LU I cannot start to display a resource secret history if the preview secret capability is denied by rbac", () => {
+      expect.assertions(3);
+      const context = defaultAppContext(); // The applicative context
+      const propsOneResourceOwned = defaultPropsOneResourceOwned({
+        rbacContext: { canIUseAction: (action) => action !== uiActions.SECRETS_PREVIEW },
+      }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecretHistory).toBeNull();
+    });
+
+    it("As LU I cannot start to display a resource secret history if the preview password site setting is disabled", () => {
+      expect.assertions(3);
+      const context = defaultAppContext(); // The applicative context
+      context.siteSettings.settings.passbolt.plugins.previewPassword.enabled = false;
+
+      const propsOneResourceOwned = defaultPropsOneResourceOwned({ context: context }); // The props to pass
       const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.moreMenu).not.toBeNull();
