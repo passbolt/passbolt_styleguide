@@ -65,8 +65,6 @@ PB-51937 Fix ws GHSA-58qx-3vcg-4xpx - MEDIUM CVSS3.1
 PB-51938 Fix brace-expansion GHSA-jxxr-4gwj-5jf2 - MEDIUM CVSS3.1
 PB-51940 Fix qs GHSA-q8mj-m7cp-5q26 - MEDIUM CVSS4.0
 PB-52030 Fix webpack-dev-server GHSA-79cf-xcqc-c78w - MEDIUM CVSS3.1
-
-
 PB-51698 Use correct passbolt repo names in safe-chain whitelist
 
 ### Fixed
