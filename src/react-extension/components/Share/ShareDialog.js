@@ -672,6 +672,7 @@ class ShareDialog extends Component {
           id={permission.aro.id}
           key={permission.aro.id}
           group={permission.aro}
+          membersCount={this.isControlledMode() ? this.getGroupMembers(permission.aro.id).length : null}
           permissionType={permissionType}
           variesDetails={permission.variesDetails}
           updated={permission.updated}

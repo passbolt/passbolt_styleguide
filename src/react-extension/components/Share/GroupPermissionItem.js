@@ -51,6 +51,9 @@ class GroupPermissionItem extends Component {
     if (this.props.updated) {
       className += " permission-updated";
     }
+    if (this.props.canDisplayGroupMembers) {
+      className += " has-caret";
+    }
     return className;
   }
 
@@ -125,7 +128,11 @@ class GroupPermissionItem extends Component {
             <span className="ellipsis">{this.props.group.name}</span>
           </div>
           <div className="aro-details">
-            <span className="ellipsis">{"Group"}</span>
+            <span className="ellipsis">
+              {this.props.membersCount != null
+                ? this.translate("Group with {{count}} member", { count: this.props.membersCount })
+                : this.translate("Group")}
+            </span>
           </div>
         </div>
 
@@ -163,6 +170,7 @@ GroupPermissionItem.defaultProps = {
 GroupPermissionItem.propTypes = {
   id: PropTypes.string, // uuid
   group: PropTypes.object, // {id: <uuid>, name: <string>}
+  membersCount: PropTypes.number, // The group member count (controlled mode only), null otherwise
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
   updated: PropTypes.bool,
   disabled: PropTypes.bool,
