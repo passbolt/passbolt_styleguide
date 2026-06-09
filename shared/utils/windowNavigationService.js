@@ -16,8 +16,4 @@ export default class WindowNavigationService {
   static reload() {
     window.location.reload();
   }
-
-  static redirectTo(url) {
-    window.location.href = url;
-  }
 }
