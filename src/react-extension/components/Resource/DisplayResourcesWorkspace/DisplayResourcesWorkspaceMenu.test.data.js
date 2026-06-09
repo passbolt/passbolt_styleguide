@@ -17,7 +17,7 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {
   defaultResourceDto,
@@ -41,10 +41,10 @@ import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/ent
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettingsEntity, port: MockPort} & {})}
  */
 export const defaultAppContext = (appContext = {}) => {
-  const siteSettings = new SiteSettings(siteSettingsFixture);
+  const siteSettings = new SiteSettingsEntity(siteSettingsFixture);
   const defaultAppContext = {
     port: new MockPort(),
     userSettings: new UserSettings(userSettingsFixture),

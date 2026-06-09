@@ -1,4 +1,4 @@
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
@@ -9,7 +9,7 @@ export function defaultProps() {
   const props = {
     context: {
       locale: "en-UK",
-      siteSettings: new SiteSettings(siteSettingsFixture),
+      siteSettings: new SiteSettingsEntity(siteSettingsFixture),
       onUpdateLocaleRequested: jest.fn(),
     },
   };
