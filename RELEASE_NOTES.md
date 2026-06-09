@@ -70,10 +70,9 @@ PB-51698 Use correct passbolt repo names in safe-chain whitelist
 ### Fixed
 PB-52148 CSP is blocking upload to TOTP QRCode on Firefox
 PB-50949 Fix MetadataKeysSettingsLocalStorageContext and MetadataTypesSettingsLocalStorageContext entity issue on storage changes
-
-
 PB-52047 Fix Passbolt Pro Edition wording
 PB-52156 Fix password preview button min-width
+
 ### Maintenance
 PB-48560 Use NODE_ENV for webpack mode config
 PB-48564 Remove grunt-header
