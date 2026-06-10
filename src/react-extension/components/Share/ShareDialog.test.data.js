@@ -944,3 +944,33 @@ export function controlledModeWithGroupProps(data = {}) {
     ...data,
   };
 }
+
+/**
+ * Build the artifacts simulating a group added through the autocomplete during the dialog session.
+ * Such a group is not part of the controlled-mode initial collections, so its members must be fetched
+ * on demand when it is expanded. Returns the search result the autocomplete receives (no members,
+ * just a user_count), the group's memberships, and the member user DTOs — to be returned respectively
+ * by the `passbolt.share.search-aros`, `passbolt.groups_users.get-by-group-id`, and
+ * `passbolt.users.get-by-ids` port mocks.
+ * @returns {{searchResult: object, groupsUsers: Array<object>, members: Array<object>}}
+ */
+export function addedGroupWithMembersFixture() {
+  const groupId = uuidv4();
+  const memberUserC = defaultUserDto({
+    username: "dave@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Dave", last_name: "Cutler" }),
+  });
+  const memberUserD = defaultUserDto({
+    username: "erin@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Erin", last_name: "Brockovich" }),
+  });
+
+  return {
+    searchResult: { id: groupId, name: "Marketing", user_count: 2 },
+    groupsUsers: [
+      defaultGroupUser({ user_id: memberUserC.id, group_id: groupId, is_admin: true }),
+      defaultGroupUser({ user_id: memberUserD.id, group_id: groupId, is_admin: false }),
+    ],
+    members: [memberUserC, memberUserD],
+  };
+}

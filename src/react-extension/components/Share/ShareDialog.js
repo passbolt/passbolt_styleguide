@@ -31,6 +31,8 @@ import { withActionFeedback } from "../../contexts/ActionFeedbackContext";
 import { withResourceWorkspace } from "../../contexts/ResourceWorkspaceContext";
 import { Trans, withTranslation } from "react-i18next";
 import PermissionEntity from "../../../shared/models/entity/permission/permissionEntity";
+import GroupServiceWorkerService from "../../../shared/services/serviceWorker/group/groupServiceWorkerService";
+import UserServiceWorkerService from "../../../shared/services/serviceWorker/user/userServiceWorkerService";
 
 class ShareDialog extends Component {
   /**
@@ -147,6 +149,10 @@ class ShareDialog extends Component {
 
       // ids of the groups whose members are currently expanded (controlled mode only)
       expandedGroupIds: [],
+
+      // members fetched on demand for groups added during the dialog session (not in initialGroups),
+      // keyed by group id: { [groupId]: Array<userDto> }
+      fetchedGroupMembers: {},
 
       // autocomplete
       autocompleteOpen: false,
@@ -346,8 +352,38 @@ class ShareDialog extends Component {
       expandedGroupIds.delete(groupId);
     } else {
       expandedGroupIds.add(groupId);
+      // Groups added during the dialog session are not in initialGroups and carry no members yet;
+      // fetch them lazily the first time they are expanded. Members render once the fetch resolves.
+      const isInitialGroup = this.props.initialGroups?.items.some((item) => item.id === groupId);
+      if (!isInitialGroup && !this.state.fetchedGroupMembers[groupId]) {
+        this.fetchGroupMembers(groupId);
+      }
     }
     this.setState({ expandedGroupIds: [...expandedGroupIds] });
+  }
+
+  /**
+   * Fetch the member users of a group that was added during the dialog session and cache their DTOs
+   * in the state, keyed by group id. The members are resolved from the service-worker local-storage
+   * cache (falling back to the API). A failure leaves the group with no displayed members rather than
+   * interrupting the dialog with an error popup.
+   * @param {string} groupId The group identifier
+   * @returns {Promise<void>}
+   */
+  async fetchGroupMembers(groupId) {
+    try {
+      const groupServiceWorkerService = new GroupServiceWorkerService(this.props.context.port);
+      const userServiceWorkerService = new UserServiceWorkerService(this.props.context.port);
+      const groupsUsers = await groupServiceWorkerService.getGroupsUsersByGroupId(groupId);
+      const memberUserIds = groupsUsers.items.map((groupUser) => groupUser.userId);
+      const users = await userServiceWorkerService.getByIds(memberUserIds);
+      const members = users.items.map((user) => user.toDto(users.entityClass?.ALL_CONTAIN_OPTIONS));
+      this.setState({
+        fetchedGroupMembers: { ...this.state.fetchedGroupMembers, [groupId]: members },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /**
@@ -359,6 +395,10 @@ class ShareDialog extends Component {
    * @returns {Array<object>} The member users DTOs
    */
   getGroupMembers(groupId) {
+    // Groups added during the dialog session have their members fetched on demand and cached.
+    if (this.state.fetchedGroupMembers[groupId]) {
+      return this.state.fetchedGroupMembers[groupId];
+    }
     const group = this.props.initialGroups?.items.find((item) => item.id === groupId);
     const groupsUsers = group?.groupsUsers?.items || [];
     return groupsUsers

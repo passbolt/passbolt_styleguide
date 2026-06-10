@@ -17,6 +17,7 @@
  */
 import ShareDialogPage from "./ShareDialog.test.page";
 import {
+  addedGroupWithMembersFixture,
   controlledModeWithGroupProps,
   defaultAppContext,
   defaultProps,
@@ -682,6 +683,37 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       expect(page.groupMember(1).querySelector(".select")).toBeNull();
       await page.toggleGroupMemberVisibility(2);
       expect(page.groupMemberCount).toBe(0);
+    });
+
+    it("As LU expanding a group I added during the session I should see its members fetched on demand", async () => {
+      expect.assertions(3);
+      const props = controlledModeWithGroupProps();
+      const addedGroup = addedGroupWithMembersFixture();
+      const requestBextMockImpl = (request) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return [addedGroup.searchResult];
+          case "passbolt.groups_users.get-by-group-id":
+            return addedGroup.groupsUsers;
+          case "passbolt.users.get-by-ids":
+            return addedGroup.members;
+        }
+      };
+      mockContextRequest(requestBextMockImpl);
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      // Add a group that is not part of the controlled-mode initial collections via the autocomplete.
+      await page.searchName("market");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      expect(page.count).toBe(3);
+
+      // Expanding it fetches its members on demand (they are not pre-loaded) and displays them.
+      expect(page.groupMemberCount).toBe(0);
+      await act(() => page.toggleGroupMemberVisibility(3));
+      await waitForTrue(() => page.groupMemberCount === 2);
+      expect(page.groupMemberCount).toBe(2);
     });
   });
 });
