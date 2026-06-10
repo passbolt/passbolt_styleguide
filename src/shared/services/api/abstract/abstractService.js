@@ -80,23 +80,6 @@ class AbstractService {
   }
 
   /**
-   * Format contain orders
-   *
-   * @param {object} orders example: {"orders": ['Resources.name ASC']}
-   * @param {array} supportedOrders example: ['Resources.name ASC', 'Resources.name DESC']
-   * @returns {object} to be used in API request
-   */
-  formatOrderOptions(orders, supportedOrders) {
-    const result = {};
-    for (const order in orders) {
-      if (supportedOrders.includes(order)) {
-        result[`order[]`] = order;
-      }
-    }
-    return result;
-  }
-
-  /**
    * Format page options
    *
    * @param {Object} pageOptions example: {"sorts": {'Resources.name': 'ASC'}, page: 1, limit: 1000}
