@@ -15,7 +15,7 @@
 import { defaultAppContext } from "../ExtAppContext.test.data";
 import MockPort from "../../test/mock/MockPort";
 import ServerKeyChangedError from "../../lib/Error/ServerKeyChangedError";
-import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../test/fixture/Settings/siteSettings";
 
 /**
@@ -52,7 +52,7 @@ export function defaultAuthenticationLoginAppContext(appContext = {}) {
 
   const defaultAuthenticationLoginAppContext = {
     port: port,
-    siteSettings: new SiteSettings(siteSettingsFixture),
+    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
   };
   return Object.assign(defaultAppContext(defaultAuthenticationLoginAppContext), appContext);
 }
@@ -66,7 +66,7 @@ export function defaultAuthenticationLoginAppContextWithAccountRecoveryDisabled(
   const siteSettingsWithAccountRecoveryDisabled = JSON.parse(JSON.stringify(siteSettingsFixture));
   siteSettingsWithAccountRecoveryDisabled.passbolt.plugins.accountRecovery.enabled = false;
   return defaultAuthenticationLoginAppContext({
-    siteSettings: new SiteSettings(siteSettingsWithAccountRecoveryDisabled),
+    siteSettings: new SiteSettingsEntity(siteSettingsWithAccountRecoveryDisabled),
     ...appContext,
   });
 }

@@ -14,7 +14,7 @@
 
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
@@ -22,12 +22,12 @@ import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackCo
 
 /**
  * Returns the default app context for the unit test
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettingsEntity, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext = {}) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettings(siteSettingsFixture),
+    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
     port: new MockPort(),
   };
   return Object.assign(defaultAppContext, appContext);

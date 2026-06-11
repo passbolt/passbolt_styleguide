@@ -191,7 +191,7 @@ describe("See Workspace Menu", () => {
     it("As LU when I open the more menu, the password expiry feature is not present", () => {
       expect.assertions(2);
       const context = defaultAppContext(); // The applicative context
-      context.siteSettings.settings.passbolt.plugins.passwordExpiry.enabled = false;
+      context.siteSettings._props.passbolt.plugins.passwordExpiry.enabled = false;
 
       const propsOneResourceOwned = defaultPropsOneResourceOwned(); // The props to pass
       const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
@@ -206,7 +206,7 @@ describe("See Workspace Menu", () => {
     it("As LU I cannot start to display a resource secret history if the feature flag is enabled but the feature is disabled", () => {
       expect.assertions(3);
       const context = defaultAppContext(); // The applicative context
-      context.siteSettings.settings.passbolt.plugins.secretRevisions.enabled = false;
+      context.siteSettings._props.passbolt.plugins.secretRevisions.enabled = false;
 
       const propsOneResourceOwned = defaultPropsOneResourceOwned({ context: context }); // The props to pass
       const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
@@ -303,7 +303,7 @@ describe("See Workspace Menu", () => {
       expect.assertions(1);
 
       const context = defaultAppContext();
-      context.siteSettings.settings.passbolt.plugins.export.enabled = false;
+      context.siteSettings._props.passbolt.plugins.export.enabled = false;
 
       const props = defaultPropsOneTotpResourceOwned({ context });
       const page = new DisplayResourcesWorkspaceMenuPage(context, props);
@@ -454,7 +454,7 @@ describe("See Workspace Menu", () => {
       expect.assertions(1);
 
       const context = defaultAppContext();
-      context.siteSettings.settings.passbolt.plugins.export.enabled = false;
+      context.siteSettings._props.passbolt.plugins.export.enabled = false;
 
       const props = defaultPropsMultipleResourceUpdateRights({ context });
       const page = new DisplayResourcesWorkspaceMenuPage(context, props);

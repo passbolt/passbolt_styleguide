@@ -16,7 +16,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import AppContext from "../shared/context/AppContext/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import SiteSettings from "../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
 import Footer from "./components/Common/Footer/Footer";
 import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
 import AuthenticationAccountRecoveryContextProvider from "./contexts/Authentication/AuthenticationAccountRecoveryContext";
@@ -94,11 +94,11 @@ class ExtAuthenticationAccountRecovery extends Component {
 
   /**
    * Get the list of site settings from background page and set it in the state
-   * Using SiteSettings
+   * Using SiteSettingsEntity
    */
   async getSiteSettings() {
     const settings = await this.props.port.request("passbolt.organization-settings.get");
-    const siteSettings = new SiteSettings(settings);
+    const siteSettings = new SiteSettingsEntity(settings);
     const trustedDomain = siteSettings.url;
     this.setState({ siteSettings, trustedDomain });
   }

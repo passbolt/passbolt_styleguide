@@ -16,7 +16,7 @@ import { MemoryRouter as Router, Redirect, Route, Switch } from "react-router-do
 import AnimatedSwitch from "./components/AnimatedSwitch/AnimatedSwitch";
 import PassphraseDialog from "./components/PassphraseDialog/PassphraseDialog";
 import PropTypes from "prop-types";
-import SiteSettings from "../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
 import UserSettings from "../shared/lib/Settings/UserSettings";
 import TranslationProvider from "../shared/components/Internationalisation/TranslationProvider";
 import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtensionInProgress/SetupExtensionInProgress";
@@ -248,7 +248,7 @@ class ExtQuickAccess extends React.Component {
 
   async getSiteSettings() {
     const siteSettingsDto = await this.state.port.request("passbolt.organization-settings.get");
-    const siteSettings = new SiteSettings(siteSettingsDto);
+    const siteSettings = new SiteSettingsEntity(siteSettingsDto);
     this.setState({ siteSettings });
     return siteSettings;
   }

@@ -17,7 +17,7 @@ import { ApiClientOptions } from "../shared/lib/apiClient/apiClientOptions";
 import ApiTriageContextProvider from "./contexts/ApiTriageContext";
 import OrchestrateApiTriage from "./components/AuthenticationTriage/OrchestrateApiTriage/OrchestrateApiTriage";
 import { ApiClient } from "../shared/lib/apiClient/apiClient";
-import SiteSettings from "../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
 import Footer from "./components/Common/Footer/Footer";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import ChangeApiTriageLocale from "./components/Internationalisation/ChangeLocale/ChangeApiTriageLocale";
@@ -85,13 +85,13 @@ class ApiTriage extends Component {
 
   /**
    * Retrieve the site settings
-   * @returns {Promise<SiteSettings>}
+   * @returns {Promise<SiteSettingsEntity>}
    */
   async getSiteSettings() {
     const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
     const { body } = await apiClient.findAll();
-    const siteSettings = new SiteSettings(body);
+    const siteSettings = new SiteSettingsEntity(body);
     this.setState({ siteSettings });
     return siteSettings;
   }
@@ -103,7 +103,7 @@ class ApiTriage extends Component {
    * 2. The browser locale if supported;
    * 3. The browser similar locale;
    * 4. The organization locale;
-   * @param {SiteSettings} siteSettings The site settings
+   * @param {SiteSettingsEntity} siteSettings The site settings
    * @warning Require the site settings to be fetch to work.
    */
   initLocale(siteSettings) {
@@ -118,7 +118,7 @@ class ApiTriage extends Component {
 
   /**
    * Get the locale from the url i.e. ?locale=en-UK
-   * @param {SiteSettings} siteSettings The site settings
+   * @param {SiteSettingsEntity} siteSettings The site settings
    * @returns {string}
    */
   getUrlLocale(siteSettings) {
@@ -134,7 +134,7 @@ class ApiTriage extends Component {
 
   /**
    * Get the browser locale if supported.
-   * @param {SiteSettings} siteSettings The site settings
+   * @param {SiteSettingsEntity} siteSettings The site settings
    * @returns {string}
    */
   getBrowserLocale(siteSettings) {
@@ -148,7 +148,7 @@ class ApiTriage extends Component {
 
   /**
    * Get the browser similar locale if supported.
-   * @param {SiteSettings} siteSettings The site settings
+   * @param {SiteSettingsEntity} siteSettings The site settings
    * @returns {string}
    */
   getBrowserSimilarLocale(siteSettings) {
