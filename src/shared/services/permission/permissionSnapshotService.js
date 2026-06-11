@@ -45,11 +45,32 @@ export default class PermissionSnapshotService {
    * @returns {Promise<PermissionSnapshotEntity>}
    */
   async buildSnapshotForResourceCreation(parentFolderId) {
+    return this._buildSnapshot(parentFolderId, PermissionEntity.ACO_FOLDER);
+  }
+
+  /**
+   * Build the permission snapshot shown to the operator while editing an existing resource.
+   * Unlike creation, the permissions are captured from the resource itself (not from a parent
+   * folder) so the operator reviews exactly who will receive the re-encrypted secret.
+   * @param {string} resourceId The id of the resource being edited.
+   * @returns {Promise<PermissionSnapshotEntity>}
+   */
+  async buildSnapshotForResourceEdition(resourceId) {
+    return this._buildSnapshot(resourceId, PermissionEntity.ACO_RESOURCE);
+  }
+
+  /**
+   * Build an immutable permission snapshot for an ACO together with every group and user
+   * referenced by its permissions. Forces a keyring synchronisation first so the operator
+   * validates against the latest keys.
+   * @param {string} acoId The id of the ACO (folder for creation, resource for edition).
+   * @param {string} acoType The ACO type (PermissionEntity.ACO_FOLDER or ACO_RESOURCE).
+   * @returns {Promise<PermissionSnapshotEntity>}
+   * @private
+   */
+  async _buildSnapshot(acoId, acoType) {
     await this.keyringServiceWorkerService.synchroniseKeyring();
-    const permissions = await this.permissionServiceWorkerService.findPermissions(
-      parentFolderId,
-      PermissionEntity.ACO_FOLDER,
-    );
+    const permissions = await this.permissionServiceWorkerService.findPermissions(acoId, acoType);
     const groupIds = permissions.items
       .filter((permission) => permission.aro === PermissionEntity.ARO_GROUP)
       .map((permission) => permission.aroForeignKey);

@@ -16,8 +16,14 @@ import React from "react";
 import { render } from "@testing-library/react";
 import HandlePermissionWorkflow, { PERMISSION_WORKFLOW_OPERATION } from "./HandlePermissionWorkflow";
 import ResourceCreationFlow from "./flows/ResourceCreationFlow";
+import ResourceEditFlow from "./flows/ResourceEditFlow";
 
 jest.mock("./flows/ResourceCreationFlow", () => ({
+  __esModule: true,
+  default: jest.fn(() => null),
+}));
+
+jest.mock("./flows/ResourceEditFlow", () => ({
   __esModule: true,
   default: jest.fn(() => null),
 }));
@@ -42,6 +48,28 @@ describe("HandlePermissionWorkflow (dispatcher)", () => {
       expect.objectContaining({
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         folderParentId: "some-folder-id",
+        onStop,
+      }),
+      expect.anything(),
+    );
+  });
+
+  it("As LU starting an edit-resource workflow I should see the resource-edition flow rendered with the same props", () => {
+    expect.assertions(1);
+    const onStop = jest.fn();
+    const resource = { id: "some-resource-id" };
+    render(
+      <HandlePermissionWorkflow
+        operation={PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE}
+        resource={resource}
+        onStop={onStop}
+      />,
+    );
+
+    expect(ResourceEditFlow).toHaveBeenCalledWith(
+      expect.objectContaining({
+        operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
+        resource,
         onStop,
       }),
       expect.anything(),

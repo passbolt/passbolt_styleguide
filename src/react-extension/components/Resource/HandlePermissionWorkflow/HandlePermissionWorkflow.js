@@ -14,12 +14,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ResourceCreationFlow from "./flows/ResourceCreationFlow";
+import ResourceEditFlow from "./flows/ResourceEditFlow";
 
 /**
  * The set of permission-touching operations this workflow can drive.
  * Each value corresponds to a focused flow component under `flows/`.
  *
- * @todo Only `CREATE_RESOURCE` is wired today. `EDIT_RESOURCE`, `MOVE_RESOURCES`, and
+ * @todo `CREATE_RESOURCE` and `EDIT_RESOURCE` are wired today. `MOVE_RESOURCES` and
  *       `SHARE_RESOURCE` land with their respective tickets — passing one of those keys to the
  *       dispatcher will throw until the matching flow component exists.
  * @type {Readonly<{CREATE_RESOURCE: string, EDIT_RESOURCE: string, MOVE_RESOURCES: string, SHARE_RESOURCE: string}>}
@@ -37,7 +38,7 @@ export const PERMISSION_WORKFLOW_OPERATION = Object.freeze({
  * matching per-operation flow component and render it. Each flow owns its own state machine,
  * dialog sequence, and API ordering.
  *
- * Only `CREATE_RESOURCE` is wired today. `EDIT_RESOURCE`, `MOVE_RESOURCES`, and `SHARE_RESOURCE`
+ * `CREATE_RESOURCE` and `EDIT_RESOURCE` are wired today. `MOVE_RESOURCES` and `SHARE_RESOURCE`
  * land with their respective tickets and slot in as additional cases here without bloating this
  * file.
  */
@@ -50,6 +51,8 @@ export class HandlePermissionWorkflow extends React.Component {
     switch (this.props.operation) {
       case PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE:
         return <ResourceCreationFlow {...this.props} />;
+      case PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE:
+        return <ResourceEditFlow {...this.props} />;
       default:
         throw new Error(`HandlePermissionWorkflow: unsupported operation "${this.props.operation}".`);
     }

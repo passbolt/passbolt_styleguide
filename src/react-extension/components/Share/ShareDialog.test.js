@@ -634,6 +634,34 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     expect(changes[0]).toMatchObject({ delete: true, aco: "Resource" });
   });
 
+  describe("Read-only mode", () => {
+    it("As LU with update-but-not-owner access I should not see the autocomplete to add people or groups", async () => {
+      expect.assertions(2);
+      const props = { ...buildControlledModeProps(), readOnly: true };
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      // The permissions are still rendered for review, but the add-people autocomplete is hidden.
+      expect(page.count).toBe(2);
+      expect(page.shareNameInput).toBeNull();
+    });
+
+    it("As LU in read-only mode I should still be able to confirm the set as-is (empty delta)", async () => {
+      expect.assertions(3);
+      const props = { ...buildControlledModeProps(), readOnly: true };
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      expect(page.saveButton.hasAttribute("disabled")).toBe(false);
+      await act(() => page.savePermissions());
+
+      expect(props.onConfirm).toHaveBeenCalledTimes(1);
+      expect(props.onConfirm.mock.calls[0][0]).toEqual([]);
+    });
+  });
+
   it("As LU I should open the dialog without crashing even when a stale single-folder share selection lingers in the context", async () => {
     // Regression: controlled mode never populates `this.folders`, but a leftover
     // `shareDialogProps.foldersIds` of length 1 from a previous folder share used to make

@@ -92,6 +92,16 @@ class ShareDialog extends Component {
   }
 
   /**
+   * True when the dialog is displayed read-only: the operator can review the permission set and
+   * confirm it as-is but cannot change it. Used by the edit workflow when the operator has update
+   * but not owner permission on the resource. Only meaningful in controlled mode.
+   * @returns {boolean}
+   */
+  isReadOnly() {
+    return Boolean(this.props.readOnly);
+  }
+
+  /**
    * Build a synthetic resource DTO from the controlled-mode props so the dialog renders
    * the snapshot's permissions through the existing ShareChanges + ReactList path without
    * touching the server. The synthetic resource has no id (the underlying resource does not
@@ -676,7 +686,7 @@ class ShareDialog extends Component {
           permissionType={permissionType}
           variesDetails={permission.variesDetails}
           updated={permission.updated}
-          disabled={this.hasAllInputDisabled()}
+          disabled={this.hasAllInputDisabled() || this.isReadOnly()}
           onUpdate={this.handlePermissionUpdate}
           onDelete={this.handlePermissionDelete}
           onToggleGroupMemberVisibility={this.handleToggleGroupMemberVisibility}
@@ -694,7 +704,7 @@ class ShareDialog extends Component {
         permissionType={permissionType}
         variesDetails={permission.variesDetails}
         updated={permission.updated}
-        disabled={this.hasAllInputDisabled()}
+        disabled={this.hasAllInputDisabled() || this.isReadOnly()}
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
       />
@@ -770,27 +780,29 @@ class ShareDialog extends Component {
                 ></ReactList>
               )}
             </div>
-            <div className="permission-add">
-              <Autocomplete
-                id="share-name-input"
-                name="name"
-                label={this.translate("Share with people or groups")}
-                placeholder={this.translate("Start typing a user or group name")}
-                searchCallback={this.fetchAutocompleteItems}
-                onSelect={this.handleAutocompleteSelect}
-                onOpen={this.handleAutocompleteOpen}
-                onClose={this.handleAutocompleteClose}
-                disabled={this.hasAllInputDisabled()}
-                baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
-              />
-            </div>
-            {this.hasNoOwner() && (
+            {!this.isReadOnly() && (
+              <div className="permission-add">
+                <Autocomplete
+                  id="share-name-input"
+                  name="name"
+                  label={this.translate("Share with people or groups")}
+                  placeholder={this.translate("Start typing a user or group name")}
+                  searchCallback={this.fetchAutocompleteItems}
+                  onSelect={this.handleAutocompleteSelect}
+                  onOpen={this.handleAutocompleteOpen}
+                  onClose={this.handleAutocompleteClose}
+                  disabled={this.hasAllInputDisabled()}
+                  baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                  canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
+                />
+              </div>
+            )}
+            {!this.isReadOnly() && this.hasNoOwner() && (
               <div className="message error">
                 <Trans>Please make sure there is at least one owner.</Trans>
               </div>
             )}
-            {this.hasChanges() && !this.hasNoOwner() && (
+            {!this.isReadOnly() && this.hasChanges() && !this.hasNoOwner() && (
               <div className="message warning">
                 <Trans>Click save to apply your pending changes.</Trans>
               </div>
@@ -825,6 +837,7 @@ ShareDialog.propTypes = {
   initialGroups: PropTypes.object, // Controlled mode: GroupsCollection providing the groups referenced by initialPermissions
   initialUsers: PropTypes.object, // Controlled mode: UsersCollection providing the users referenced by initialPermissions
   onConfirm: PropTypes.func, // Controlled mode: callback invoked with the operator-confirmed permission changes instead of saving via the port
+  readOnly: PropTypes.bool, // Controlled mode: display the permission set read-only (review/confirm only, no edits)
   t: PropTypes.func, // The translation function
 };
 
