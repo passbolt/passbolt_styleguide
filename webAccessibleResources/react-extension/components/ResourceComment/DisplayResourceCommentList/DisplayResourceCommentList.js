@@ -148,7 +148,7 @@ class DisplayResourceCommentList extends React.Component {
                 <div className="left-column">
                   <UserAvatar
                     user={comment.creator}
-                    baseUrl={this.props.context.siteSettings.settings.app.url}
+                    baseUrl={this.props.context.siteSettings.url}
                     className="author profile picture avatar"
                   />
                 </div>

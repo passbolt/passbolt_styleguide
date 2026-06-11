@@ -417,12 +417,25 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Can the user preview a secret
+   * @return {boolean}
+   */
+  canPreviewSecret() {
+    return (
+      this.props.context.siteSettings.canIUse("previewPassword") &&
+      this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW)
+    );
+  }
+
+  /**
    * Can view secret history
    * @return {boolean}
    */
   canViewSecretHistory() {
     return (
-      this.props.context.siteSettings.canIUse("secretRevisions") && this.props.secretRevisionsSettings?.isFeatureEnabled
+      this.props.context.siteSettings.canIUse("secretRevisions") &&
+      this.props.secretRevisionsSettings?.isFeatureEnabled &&
+      this.canPreviewSecret()
     );
   }
 
