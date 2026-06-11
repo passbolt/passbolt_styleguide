@@ -246,7 +246,7 @@ describe("See Workspace Menu", () => {
     it("As LU I cannot start to display a resource secret history if the preview password site setting is disabled", () => {
       expect.assertions(3);
       const context = defaultAppContext(); // The applicative context
-      context.siteSettings.settings.passbolt.plugins.previewPassword.enabled = false;
+      jest.spyOn(context.siteSettings, "canIUse").mockImplementation((plugin) => plugin !== "previewPassword");
 
       const propsOneResourceOwned = defaultPropsOneResourceOwned({ context: context }); // The props to pass
       const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
