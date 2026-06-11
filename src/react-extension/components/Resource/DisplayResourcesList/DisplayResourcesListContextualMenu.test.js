@@ -28,7 +28,9 @@ import {
 } from "./DisplayResourcesListContextualMenu.test.data";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
-import EditResource from "../EditResource/EditResource";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
 import ShareDialog from "../../Share/ShareDialog";
 import DisplayResourcesListContextualMenuPage from "./DisplayResourcesListContextualMenu.test.page";
 import {
@@ -144,7 +146,10 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it("As LU I can start to edit a resource", async () => {
       await page.edit();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource, { resource: props.resource });
+      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
+        resource: props.resource,
+      });
       expect(props.hide).toHaveBeenCalled();
     });
 

@@ -16,8 +16,11 @@ import PropTypes from "prop-types";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import { withDialog } from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import EditResource from "../EditResource/EditResource";
 import ShareDialog from "../../Share/ShareDialog";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
 import { resourceLinkAuthorizedProtocols, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
@@ -88,7 +91,10 @@ class DisplayResourcesListContextualMenu extends React.Component {
   handleEditClickEvent() {
     const canEditResource = this.canEditResource();
     if (canEditResource) {
-      this.props.dialogContext.open(EditResource, { resource: this.resource });
+      this.props.workflowContext.start(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
+        resource: this.resource,
+      });
     } else {
       this.displayActionAborted();
     }
@@ -738,6 +744,7 @@ DisplayResourcesListContextualMenu.propTypes = {
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
   resourceWorkspaceContext: PropTypes.any, // Resource workspace context
+  workflowContext: PropTypes.any, // the permission workflow context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   dialogContext: PropTypes.any, // the dialog context
   progressContext: PropTypes.any, // The progress context
@@ -759,7 +766,9 @@ export default withAppContext(
             withPasswordExpiry(
               withSecretRevisionsSettings(
                 withDialog(
-                  withProgress(withActionFeedback(withTranslation("common")(DisplayResourcesListContextualMenu))),
+                  withWorkflow(
+                    withProgress(withActionFeedback(withTranslation("common")(DisplayResourcesListContextualMenu))),
+                  ),
                 ),
               ),
             ),
