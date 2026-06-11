@@ -22,7 +22,6 @@ import {
 import DisplayAdministrationUserPassphrasePoliciesPage from "./DisplayAdministrationUserPassphrasePolicies.test.page";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import { waitForElementToBeRemoved } from "@testing-library/react";
 
 /**
  * Unit tests on DisplayAdministrationUserPassphrasePolicies in regard of specifications
@@ -148,7 +147,7 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       await page.clickOnSave();
 
       //changes are not pending anymore, saved happened
-      await waitForElementToBeRemoved(() => page.saveWarningBanner);
+      await waitForTrue(() => page.saveWarningBanner === null);
       expect(page.saveWarningBanner).toBeNull();
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
     });
