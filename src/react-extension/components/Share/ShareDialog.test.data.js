@@ -957,12 +957,12 @@ export function controlledModeWithGroupProps(data = {}) {
 export function addedGroupWithMembersFixture() {
   const groupId = uuidv4();
   const memberUserC = defaultUserDto({
-    username: "dave@passbolt.com",
-    profile: defaultProfileDto({ first_name: "Dave", last_name: "Cutler" }),
+    username: "nancy@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Nancy", last_name: "Leveson" }),
   });
   const memberUserD = defaultUserDto({
-    username: "erin@passbolt.com",
-    profile: defaultProfileDto({ first_name: "Erin", last_name: "Brockovich" }),
+    username: "thelma@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Thelma", last_name: "Estrin" }),
   });
 
   return {
