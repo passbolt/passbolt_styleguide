@@ -19,8 +19,11 @@ import { withAppContext } from "../../../../shared/context/AppContext/AppContext
 import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import { withDialog } from "../../../contexts/DialogContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
-import EditResource from "../EditResource/EditResource";
 import ShareDialog from "../../Share/ShareDialog";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
 import ExportResources from "../ExportResources/ExportResources";
 import { Trans, withTranslation } from "react-i18next";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
@@ -136,7 +139,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   handleEditClickEvent() {
     const canEditResource = this.canEditResource();
     if (canEditResource) {
-      this.props.dialogContext.open(EditResource, { resource: this.selectedResources[0] });
+      this.props.workflowContext.start(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
+        resource: this.selectedResources[0],
+      });
     } else {
       this.displayActionAborted();
     }
@@ -781,6 +787,7 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   rbacContext: PropTypes.any, // The role based access control context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
+  workflowContext: PropTypes.any, // the permission workflow context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   passwordExpiryContext: PropTypes.object, // the password expiry context
   dialogContext: PropTypes.any, // the dialog context
@@ -796,12 +803,14 @@ export default withAppContext(
     withClipboard(
       withRbac(
         withDialog(
-          withProgress(
-            withPasswordExpiry(
-              withSecretRevisionsSettings(
-                withResourceWorkspace(
-                  withResourceTypesLocalStorage(
-                    withActionFeedback(withTranslation("common")(DisplayResourcesWorkspaceMenu)),
+          withWorkflow(
+            withProgress(
+              withPasswordExpiry(
+                withSecretRevisionsSettings(
+                  withResourceWorkspace(
+                    withResourceTypesLocalStorage(
+                      withActionFeedback(withTranslation("common")(DisplayResourcesWorkspaceMenu)),
+                    ),
                   ),
                 ),
               ),
