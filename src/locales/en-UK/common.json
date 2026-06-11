@@ -675,7 +675,7 @@
   "Group path": "Group path",
   "Group path is used in addition to the base DN while searching groups.": "Group path is used in addition to the base DN while searching groups.",
   "Group users field mapping": "Group users field mapping",
-  "Group with {{count}} member_one": "Group with {{count}} member",
+  "Group with {{count}} member_one": "Group with one member",
   "Group with {{count}} member_other": "Group with {{count}} member",
   "Groups": "Groups",
   "Groups (Not supported).": "Groups (Not supported).",
