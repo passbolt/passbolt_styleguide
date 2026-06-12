@@ -43,6 +43,9 @@ export function defaultProps(props = {}) {
       resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
     dialogContext: defaultDialogContext(),
+    actionFeedbackContext: {
+      displaySuccess: jest.fn(),
+    },
     navigationContext: defaultNavigationContext(),
   };
   delete props.context; // Treated in the default
@@ -56,7 +59,7 @@ export function defaultProps(props = {}) {
  */
 export function goingToExpireProps() {
   const context = {
-    onGetSubscriptionKeyRequested: () => mockSubscriptionGoingToExpire,
+    onGetSubscriptionKeyRequested: () => new SubscriptionEntity(mockSubscriptionGoingToExpire),
   };
   return defaultProps({ context });
 }
@@ -67,7 +70,7 @@ export function goingToExpireProps() {
  */
 export function expiredProps() {
   const context = {
-    onGetSubscriptionKeyRequested: () => mockSubscriptionExpired,
+    onGetSubscriptionKeyRequested: () => new SubscriptionEntity(mockSubscriptionExpired),
   };
   return defaultProps({ context });
 }
@@ -78,7 +81,7 @@ export function expiredProps() {
  */
 export function usersExceededProps() {
   const context = {
-    onGetSubscriptionKeyRequested: () => mockSubscriptionUsersExceeded,
+    onGetSubscriptionKeyRequested: () => new SubscriptionEntity(mockSubscriptionUsersExceeded),
   };
   return defaultProps({ context });
 }

@@ -5,9 +5,9 @@
 .jest.config.json
 .jest.setup.js
 .storybook
-Gruntfile.js
 crowdin.yml
 node_modules
+config
 src/css
 src/less
 src/video
@@ -16,7 +16,7 @@ src/img/papericon
 src/img/screenshots
 scripts
 storybook-static
-webpack-api.config.js
+webpack.config.js
 
 #jest test coverage
 ######################

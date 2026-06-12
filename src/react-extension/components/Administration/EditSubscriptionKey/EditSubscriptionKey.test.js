@@ -122,4 +122,36 @@ describe("As AD I should edit the subscription key", () => {
 
     expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: expectedError });
   });
+
+  it("As AD I should see the default dialog title when no title prop is provided", () => {
+    expect.assertions(1);
+
+    expect(page.dialogTitle).toBe("Edit subscription key");
+  });
+
+  it("As AD I should see a custom dialog title when the title prop is provided", () => {
+    expect.assertions(1);
+
+    const customTitle = "New subscription key";
+    page = new EditSubscriptionKeyPage({ ...defaultProps(), title: customTitle });
+
+    expect(page.dialogTitle).toBe(customTitle);
+  });
+
+  it("As AD I should call the onSave prop instead of the default update service when onSave is provided", async () => {
+    expect.assertions(3);
+
+    const key = "some subscription key";
+    const onSave = jest.fn().mockResolvedValue(undefined);
+    const mockUpdateSubscriptionKey = jest.fn();
+    props.context.port.addRequestListener(UPDATE_SUBSCRIPTION_KEY, mockUpdateSubscriptionKey);
+    page = new EditSubscriptionKeyPage({ ...props, onSave });
+
+    await page.fill(key);
+    await page.updateKey();
+
+    expect(onSave).toHaveBeenCalledTimes(1);
+    expect(onSave).toHaveBeenCalledWith(key);
+    expect(mockUpdateSubscriptionKey).not.toHaveBeenCalled();
+  });
 });

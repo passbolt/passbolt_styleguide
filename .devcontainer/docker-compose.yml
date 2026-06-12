@@ -9,3 +9,5 @@ services:
       - ${HOME}/.claude:/home/node/.claude:cached
       - ${HOME}/.claude/managed-settings:/etc/claude-code:ro
     command: sleep infinity
+    ports:
+      - "6006:6006"

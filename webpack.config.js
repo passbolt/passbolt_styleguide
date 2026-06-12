@@ -1,15 +1,25 @@
 const path = require("path");
 
-const config = {
-  entry: {
+const CopyPlugin = require("copy-webpack-plugin");
+const I18nextExtractionPlugin = require("./config/webpack.i18n");
+const { buildLessEntries, lessRule, lessMinimizer } = require("./config/webpack.less");
+
+const isDevelopment = process.env.NODE_ENV === "development";
+
+module.exports = {
+  mode: isDevelopment ? "development" : "production",
+  entry: () => ({
     "api-account-recovery": path.resolve(__dirname, "./src/react-extension/ApiAccountRecovery.entry.js"), // The account recovery application served by the API
     "api-app": path.resolve(__dirname, "./src/react-extension/ApiApp.entry.js"), // The passbolt application served by the API
     "api-recover": path.resolve(__dirname, "./src/react-extension/ApiRecover.entry.js"), // The recover application served by the API
     "api-setup": path.resolve(__dirname, "./src/react-extension/ApiSetup.entry.js"), // The setup application served by the API
     "api-triage": path.resolve(__dirname, "./src/react-extension/ApiTriage.entry.js"), // The triage application served by the API
     "api-feedback": path.resolve(__dirname, "./src/react-extension/ApiFeedback.entry.js"), // The feedback application served by the API
-  },
-  mode: "production",
+    ...buildLessEntries(),
+  }),
+  ...(isDevelopment && {
+    devtool: "inline-cheap-module-source-map",
+  }),
   module: {
     rules: [
       {
@@ -18,9 +28,10 @@ const config = {
         loader: "babel-loader",
         options: {
           presets: ["@babel/react"],
-        }
+        },
       },
-      {test: /\.json$/, loader: 'json-loader'},
+      lessRule,
+      { test: /\.json$/, loader: "json-loader" },
       // Transform SVG as react component
       {
         test: /\.svg$/i,
@@ -32,7 +43,7 @@ const config = {
               svgoConfig: {
                 plugins: [
                   {
-                    name: 'preset-default',
+                    name: "preset-default",
                     params: {
                       overrides: {
                         removeViewBox: false,
@@ -43,45 +54,45 @@ const config = {
                     },
                   },
                   {
-                    name: 'prefixIds',
+                    name: "prefixIds",
                     params: {
                       prefixIds: false,
-                      prefixClassNames: false
+                      prefixClassNames: false,
                     },
                   },
                 ],
-              }
-            }
-          }
+              },
+            },
+          },
         ],
-      }
-    ]
+      },
+    ],
   },
+  plugins: [
+    new I18nextExtractionPlugin(),
+    new CopyPlugin({
+      patterns: [{ from: path.resolve(__dirname, "./src/locales"), to: path.resolve(__dirname, "./build/locales") }],
+    }),
+  ],
   optimization: {
     splitChunks: {
       cacheGroups: {
         commons: {
           test: /[\\/]node_modules[\\/]/,
           name: "api-vendors",
-          chunks: "all"
+          chunks: "all",
         },
-      }
+      },
     },
+    // This is only enabled in production mode
+    minimizer: ["...", lessMinimizer],
   },
-  resolve: {extensions: ["*", ".js", ".jsx"]},
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
   output: {
-    path: path.resolve(__dirname, "build/js/dist/"),
-    pathinfo: true,
-    filename: "[name].js"
+    clean: true,
+    path: path.resolve(__dirname, "build/"),
+    filename: "js/dist/[name].js",
   },
-};
-
-exports.default = function (env) {
-  env = env || {};
-  // Enable debug mode.
-  if (env.debug) {
-    config.mode = "development";
-    config.devtool = "inline-source-map";
-  }
-  return config;
 };

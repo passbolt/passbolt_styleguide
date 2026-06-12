@@ -32,7 +32,7 @@ import DeleteRole from "../DeleteRole/DeleteRole.js";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity.js";
 import EditRole from "../EditRole/EditRole.js";
 import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
-import { UserApiServiceWithUsersHavingCustomRoles } from "../../../../shared/services/api/user/userService.test.data";
+import { UserApiServiceWithUsersHavingCustomRoles } from "../../../../shared/services/api/user/userApiService.test.data";
 import DeleteRoleNotAllowed from "../DeleteRole/DeleteRoleNotAllowed";
 import PassboltApiFetchError from "../../../../shared/error/passboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";

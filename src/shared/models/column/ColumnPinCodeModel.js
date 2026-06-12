@@ -27,6 +27,7 @@ class ColumnPinCodeModel extends ColumnModel {
     columnDto.field = ColumnFields.PIN_CODE;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
+    columnDto.minWidth = 105;
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = false;

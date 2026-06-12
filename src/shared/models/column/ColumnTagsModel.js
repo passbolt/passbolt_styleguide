@@ -27,6 +27,7 @@ class ColumnTagsModel extends ColumnModel {
     columnDto.field = ColumnFields.TAGS;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
+    columnDto.minWidth = 160;
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = false;

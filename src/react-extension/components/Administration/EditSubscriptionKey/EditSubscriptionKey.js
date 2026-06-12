@@ -68,7 +68,7 @@ class EditSubscriptionKey extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    this.setState({ key: this.props.context.editSubscriptionKey.key || "" });
+    this.setState({ key: this.props.context.editSubscriptionKey?.key || "" });
   }
 
   /**
@@ -176,7 +176,13 @@ class EditSubscriptionKey extends Component {
       return;
     }
     try {
-      await this.subscriptionKeyService.updateOrganizationSubscriptionKey(this.state.key);
+      if (this.props.onSave) {
+        await this.props.onSave(this.state.key);
+      } else {
+        // TODO: Extract this to `src/shared/services/actions/subscription/SubscriptionActionService.js` (original caller)
+        await this.subscriptionKeyService.updateOrganizationSubscriptionKey(this.state.key);
+      }
+
       await this.handleSaveSuccess();
       await this.props.adminSubscriptionContext.findSubscriptionKey();
     } catch (error) {
@@ -286,7 +292,7 @@ class EditSubscriptionKey extends Component {
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Edit subscription key")}
+        title={this.props.title ?? this.translate("Edit subscription key")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="edit-subscription-dialog"
@@ -339,6 +345,7 @@ class EditSubscriptionKey extends Component {
                 </button>
               </div>
               {this.state.keyError && <div className="key error-message">{this.state.keyError}</div>}
+              {this.props.warning && <p>{this.props.warning}</p>}
             </div>
           </div>
           <div className="submit-wrapper clearfix">
@@ -362,6 +369,9 @@ EditSubscriptionKey.propTypes = {
   adminSubscriptionContext: PropTypes.object, // The email notification context
   dialogContext: PropTypes.any, // The dialog congtext
   administrationWorkspaceContext: PropTypes.any, // The administration workspace context
+  title: PropTypes.string, // Optional dialog title override
+  warning: PropTypes.string, // Optional warning text
+  onSave: PropTypes.func, // Optional save handler override; receives the subscription key string
   t: PropTypes.func,
 };
 
