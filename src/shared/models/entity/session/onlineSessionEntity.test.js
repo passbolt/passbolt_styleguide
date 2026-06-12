@@ -36,18 +36,17 @@ describe("OnlineSession", () => {
     it("validates last_online_logged_in property", () => {
       assertEntityProperty.string(OnlineSessionEntity, "last_online_logged_in");
       assertEntityProperty.dateTime(OnlineSessionEntity, "last_online_logged_in");
-      assertEntityProperty.required(OnlineSessionEntity, "last_online_logged_in");
+      assertEntityProperty.notRequired(OnlineSessionEntity, "last_online_logged_in");
     });
   });
 
   describe("::constructor", () => {
     it("constructor works if minimal dto is provided.", () => {
-      expect.assertions(2);
+      expect.assertions(1);
       const dto = minimalOnlineSessionDto();
       const entity = new OnlineSessionEntity(dto);
 
       expect(entity._props.is_authenticated).toStrictEqual(dto.is_authenticated);
-      expect(entity._props.last_online_logged_in).toStrictEqual(dto.last_online_logged_in);
     });
 
     it("constructor works if valid DTO is provided", () => {

@@ -21,7 +21,7 @@ class OnlineSessionEntity extends EntityV2 {
   static getSchema() {
     return {
       type: "object",
-      required: ["is_authenticated", "last_online_logged_in"],
+      required: ["is_authenticated"],
       properties: {
         is_authenticated: {
           type: "boolean",
