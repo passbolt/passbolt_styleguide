@@ -55,7 +55,7 @@
     "less-loader": "^12.3.2",
     "lockfile-lint": "^4.14.1",
     "prettier": "3.6.2",
-    "webpack": "^5.105.2",
+    "webpack": "^5.107.2",
     "webpack-cli": "^7.0.2"
   },
   "dependencies": {
