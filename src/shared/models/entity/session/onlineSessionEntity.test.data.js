@@ -19,7 +19,6 @@
  */
 export const minimalOnlineSessionDto = (data = {}) => ({
   is_authenticated: true,
-  last_online_logged_in: "2025-08-04T18:59:11+00:00",
   ...data,
 });
 
