@@ -323,11 +323,17 @@ describe("DisplaySubscriptionKeyPage", () => {
       await screen.findByText("Details");
 
       expect(page.buyNowLink).not.toBeNull();
-      expect(page.buyNowLink.getAttribute("href")).toBe("https://www.passbolt.com/pricing/pro");
+      expect(page.buyNowLink.getAttribute("href")).toBe(
+        "https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
+      );
       expect(page.startTrialLink).not.toBeNull();
-      expect(page.startTrialLink.getAttribute("href")).toBe("https://www.passbolt.com/contact/pro/free-trial");
+      expect(page.startTrialLink.getAttribute("href")).toBe(
+        "https://www.passbolt.com/contact/pro/free-trial?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
+      );
       expect(page.seePricingLink).not.toBeNull();
-      expect(page.seePricingLink.getAttribute("href")).toBe("https://www.passbolt.com/pricing/pro");
+      expect(page.seePricingLink.getAttribute("href")).toBe(
+        "https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
+      );
     });
 
     it("As AD with a valid subscription the Pro edition card should be badged as the current plan", async () => {
