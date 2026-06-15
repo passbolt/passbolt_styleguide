@@ -71,4 +71,65 @@ describe("SiteSettings", () => {
       expect(settings.isCommunityEdition).toStrictEqual(false);
     });
   });
+
+  describe("::canIUse", () => {
+    it("should return true if the plugin is enabled", () => {
+      expect.assertions(1);
+
+      const settingsDto = defaultProSiteSettings();
+      settingsDto.passbolt.plugins.testPlugin = { enabled: true };
+      const settings = new SiteSettings(settingsDto);
+
+      expect(settings.canIUse("testPlugin")).toStrictEqual(true);
+    });
+
+    it("should return true if the plugin exists but the enabled flag is missing", () => {
+      expect.assertions(1);
+
+      const settingsDto = defaultProSiteSettings();
+      settingsDto.passbolt.plugins.testPlugin = { version: "1.0.0" };
+      const settings = new SiteSettings(settingsDto);
+
+      expect(settings.canIUse("testPlugin")).toStrictEqual(true);
+    });
+
+    it("should return false if the plugin is disabled", () => {
+      expect.assertions(1);
+
+      const settingsDto = defaultProSiteSettings();
+      settingsDto.passbolt.plugins.testPlugin = { enabled: false };
+      const settings = new SiteSettings(settingsDto);
+
+      expect(settings.canIUse("testPlugin")).toStrictEqual(false);
+    });
+
+    it("should return false if the plugin does not exist", () => {
+      expect.assertions(1);
+
+      const settings = new SiteSettings(defaultProSiteSettings());
+
+      expect(settings.canIUse("testPlugin")).toStrictEqual(false);
+    });
+  });
+
+  describe("::getPluginSettings", () => {
+    it("should return the plugin settings when the plugin exists", () => {
+      expect.assertions(1);
+
+      const settingsDto = defaultProSiteSettings();
+      const testPluginSettings = { enabled: true, version: "1.0.0" };
+      settingsDto.passbolt.plugins.testPlugin = testPluginSettings;
+      const settings = new SiteSettings(settingsDto);
+
+      expect(settings.getPluginSettings("testPlugin")).toStrictEqual(testPluginSettings);
+    });
+
+    it("should return undefined when the plugin does not exist", () => {
+      expect.assertions(1);
+
+      const settings = new SiteSettings(defaultProSiteSettings());
+
+      expect(settings.getPluginSettings("testPlugin")).toBeUndefined();
+    });
+  });
 });

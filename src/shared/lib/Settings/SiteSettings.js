@@ -60,8 +60,7 @@ export default class SiteSettings {
    */
   canIUse(name) {
     let result = false;
-    const configPath = `passbolt.plugins.${name}`;
-    const pluginSettings = getPropValue(this.settings, configPath) || null;
+    const pluginSettings = this.getPluginSettings(name);
 
     /*
      * For now each capability is represented by a plugin.
