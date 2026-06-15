@@ -230,7 +230,7 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
       : null;
     const isV4PasswordString = resourceType?.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
     const secretDto = isV4PasswordString ? resourceFormEntity.toSecretDto().password : resourceFormEntity.toSecretDto();
-    return this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto, permissionChanges);
+    return this.permissionServiceWorkerService.updateResource(resourceDto, secretDto, permissionChanges);
   }
 }
 
