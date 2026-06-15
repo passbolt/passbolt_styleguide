@@ -23,6 +23,7 @@ import {
   disabledPasswordExpirySettingsViewModelDto,
   passwordExpirySettingsEntityDtoFromApi,
 } from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
+import { waitForElementToBeRemoved } from "@testing-library/react";
 
 /**
  * Unit tests on DisplayAdministrationPasswordExpirySettingsPage in regard of specifications
@@ -142,7 +143,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       await page.clickOnFeatureToggle();
       await page.clickOnSave();
 
-      await waitForTrue(() => page.saveWarningBanner === null);
+      await waitForElementToBeRemoved(page.saveWarningBanner);
 
       //changes are not pending anymore, saved happened
       expect(page.saveWarningBanner).toBeNull();

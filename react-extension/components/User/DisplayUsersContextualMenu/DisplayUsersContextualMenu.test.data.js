@@ -21,7 +21,7 @@ import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettingsEntity, port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {

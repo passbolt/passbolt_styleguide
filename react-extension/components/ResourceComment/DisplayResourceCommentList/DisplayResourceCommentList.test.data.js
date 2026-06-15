@@ -1,6 +1,6 @@
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import { v4 as uuidv4 } from "uuid";
@@ -8,13 +8,13 @@ import { v4 as uuidv4 } from "uuid";
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettingsEntity, port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     loggedInUser: { id: "f848277c-5398-58f8-a82a-72397af2d450" },
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
+    siteSettings: new SiteSettings(siteSettingsFixture),
     port: new MockPort(),
   };
   return Object.assign(defaultAppContext, appContext || {});

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import SiteSettingsEntity from "../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
 import RbacsCollection from "../../../shared/models/entity/rbac/rbacsCollection";
 import ApiAppContextProvider from "../../contexts/ApiAppContext";
 import siteSettingsPro from "../fixture/Settings/siteSettings";
@@ -30,7 +30,7 @@ class MockApiAppContextProvider extends ApiAppContextProvider {
 
   getSiteSettings() {
     this.setState({
-      siteSettings: new SiteSettingsEntity(siteSettingsPro),
+      siteSettings: new SiteSettings(siteSettingsPro),
     });
   }
   /**

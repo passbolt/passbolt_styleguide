@@ -14,20 +14,6 @@
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-
-/**
- * Default app context.
- * @param {object} data Override the default context.
- * @returns {object}
- */
-export function defaultAppContext(data = {}) {
-  return {
-    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
-    ...data,
-  };
-}
 
 /**
  * Default component props.

@@ -18,7 +18,7 @@ import ApiAccountRecoveryContextProvider from "./contexts/ApiAccountRecoveryCont
 import { ApiClientOptions } from "../shared/lib/apiClient/apiClientOptions";
 import Footer from "./components/Common/Footer/Footer";
 import { ApiClient } from "../shared/lib/apiClient/apiClient";
-import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import ChangeApiRecoverLocale from "./components/Internationalisation/ChangeLocale/ChangeApiRecoverLocale";
 import OrchestrateApiAccountRecovery from "./components/AuthenticationAccountRecovery/OrchestrateApiAccountRecovery/OrchestrateApiAccountRecovery";
@@ -105,13 +105,13 @@ class ApiAccountRecovery extends Component {
 
   /**
    * Retrieve the site settings
-   * @returns {Promise<SiteSettingsEntity>}
+   * @returns {Promise<SiteSettings>}
    */
   async getSiteSettings() {
     const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
     const { body } = await apiClient.findAll();
-    const siteSettings = new SiteSettingsEntity(body);
+    const siteSettings = new SiteSettings(body);
     this.setState({ siteSettings });
     return siteSettings;
   }
@@ -124,7 +124,7 @@ class ApiAccountRecovery extends Component {
    * 2. The browser locale if supported;
    * 3. The browser similar locale;
    * 4. The organization locale;
-   * @param {SiteSettingsEntity} siteSettings The site settings
+   * @param {SiteSettings} siteSettings The site settings
    * @warning Require the site settings to be fetch to work.
    */
   initLocale(siteSettings) {
@@ -138,7 +138,7 @@ class ApiAccountRecovery extends Component {
 
   /**
    * Get the locale from the url i.e. ?locale=en-UK
-   * @param {SiteSettingsEntity} siteSettings The site settings
+   * @param {SiteSettings} siteSettings The site settings
    * @returns {string}
    */
   getUrlLocale(siteSettings) {
@@ -154,7 +154,7 @@ class ApiAccountRecovery extends Component {
 
   /**
    * Get the browser locale if supported.
-   * @param {SiteSettingsEntity} siteSettings The site settings
+   * @param {SiteSettings} siteSettings The site settings
    * @returns {string}
    */
   getBrowserLocale(siteSettings) {
@@ -168,7 +168,7 @@ class ApiAccountRecovery extends Component {
 
   /**
    * Get the browser similar locale if supported.
-   * @param {SiteSettingsEntity} siteSettings The site settings
+   * @param {SiteSettings} siteSettings The site settings
    * @returns {string}
    */
   getBrowserSimilarLocale(siteSettings) {

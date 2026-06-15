@@ -14,7 +14,7 @@
 import React from "react";
 import AppContext from "../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import SiteSettingsEntity from "../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import { ApiClientOptions } from "../../shared/lib/apiClient/apiClientOptions";
 import { ApiClient } from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
@@ -173,7 +173,7 @@ class ApiAppContextProvider extends React.Component {
     const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
     const settings = await apiClient.findAll();
-    const siteSettings = new SiteSettingsEntity(settings.body);
+    const siteSettings = new SiteSettings(settings.body);
     this.setState({ siteSettings });
     return siteSettings;
   }

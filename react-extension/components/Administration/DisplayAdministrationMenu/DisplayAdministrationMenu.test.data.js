@@ -1,4 +1,4 @@
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import MetadataGettingStartedSettingsEntity from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
 import { defaultMetadataGettingStartedSettingsDto } from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
 import siteSettingsPro, { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
@@ -22,7 +22,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps(data = {}, isCommunityEdition = false) {
   const siteSettingsValue = isCommunityEdition ? siteSettingsCe : siteSettingsPro;
-  const siteSettings = new SiteSettingsEntity(siteSettingsValue);
+  const siteSettings = new SiteSettings(siteSettingsValue);
   return Object.assign(
     {
       context: {

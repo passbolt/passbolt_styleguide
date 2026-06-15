@@ -20,7 +20,7 @@ import DisplayAdministrationWorkspaceBreadcrumb from "../DisplayAdministrationWo
 import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
 import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
 import { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
 
@@ -67,7 +67,7 @@ export default {
 };
 
 const betaMetadataProApiContext = defaultAppContext();
-betaMetadataProApiContext.siteSettings._props.passbolt.plugins.metadata.isInBeta = true;
+betaMetadataProApiContext.siteSettings.settings.passbolt.plugins.metadata.isInBeta = true;
 
 export const ProApi = {
   args: {
@@ -94,7 +94,7 @@ export const ProApiWithGettingStarted = {
 export const CeApi = {
   args: {
     context: {
-      siteSettings: new SiteSettingsEntity(siteSettingsCe),
+      siteSettings: new SiteSettings(siteSettingsCe),
     },
     navigationContext: defaultNavigationContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({

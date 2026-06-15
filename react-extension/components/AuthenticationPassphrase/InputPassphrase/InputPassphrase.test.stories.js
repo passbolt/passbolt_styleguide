@@ -12,7 +12,7 @@
  * @since         2.12.0
  */
 import InputPassphrase from "./InputPassphrase";
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
@@ -26,7 +26,7 @@ const context = defaultAppContext({
     getTrustedDomain: () => new URL(window.location.href).origin,
     getSecurityToken: () => ({ backgroundColor: "#a85632", code: "ABC", textColor: "#ffffff" }),
   },
-  siteSettings: new SiteSettingsEntity(siteSettingsFixture),
+  siteSettings: new SiteSettings(siteSettingsFixture),
 });
 
 export const Initial = {

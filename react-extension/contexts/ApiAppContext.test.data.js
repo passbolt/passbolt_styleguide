@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import SiteSettingsEntity from "../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../test/fixture/Settings/siteSettings";
 import { ApiClientOptions } from "../../shared/lib/apiClient/apiClientOptions";
 import MockPort from "../test/mock/MockPort";
@@ -25,7 +25,7 @@ import userSettingsFixture from "../test/fixture/Settings/userSettings";
  */
 export function defaultAppContext(appContext = {}) {
   const userSettings = new UserSettings(userSettingsFixture);
-  const siteSettings = new SiteSettingsEntity(siteSettingsFixture);
+  const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     locale: "en-UK",
     onRefreshLocaleRequested: jest.fn(),

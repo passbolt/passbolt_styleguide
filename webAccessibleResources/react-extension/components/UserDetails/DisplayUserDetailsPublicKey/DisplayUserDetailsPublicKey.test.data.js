@@ -1,12 +1,12 @@
 import MockPort from "../../../test/mock/MockPort";
 import { TEST_ROLE_USER_ID } from "../../../../shared/models/entity/role/roleEntity.test.data";
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettingsEntity, port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
@@ -14,7 +14,7 @@ export function defaultAppContext(appContext) {
     userSettings: {
       getTrustedDomain: () => new URL(window.location.href).origin,
     },
-    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
+    siteSettings: new SiteSettings(siteSettingsFixture),
     roles: [
       {
         id: "a58de6d3-f52c-5080-b79b-a601a647ac85",

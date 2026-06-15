@@ -19,7 +19,7 @@ import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationErro
 import MockPort from "../../../test/mock/MockPort";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import InputPassphrase from "./InputPassphrase";
@@ -32,7 +32,7 @@ beforeEach(() => {
 const getAppContext = function (appContext) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
+    siteSettings: new SiteSettings(siteSettingsFixture),
     port: new MockPort(),
     setContext: () => {},
   };
@@ -132,7 +132,7 @@ describe("InputPassphrase", () => {
   it("Should not display the remember me section if no remember me options provided", () => {
     const siteSettingsFixtureWithoutRememberMe = JSON.parse(JSON.stringify(siteSettingsFixture));
     siteSettingsFixtureWithoutRememberMe.passbolt.plugins.rememberMe.options = {};
-    const siteSettings = new SiteSettingsEntity(siteSettingsFixtureWithoutRememberMe);
+    const siteSettings = new SiteSettings(siteSettingsFixtureWithoutRememberMe);
     const appContext = getAppContext({ siteSettings });
     const { container } = renderInputPassphrase(appContext);
 

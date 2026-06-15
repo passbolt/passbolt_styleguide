@@ -110,6 +110,7 @@ export default {
   input[id*='mfa' i]:not([hidden]):not([disabled]),
   input[class*='mfa' i]:not([hidden]):not([disabled]),
   input[name*='2fa' i]:not([hidden]):not([disabled]),
+  input[id*='2fa' i]:not([hidden]):not([disabled]),
   input[class*='2fa' i]:not([hidden]):not([disabled]),
   *:has(> input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled])),
   input[name*='otp' i]:not([hidden]):not([disabled]),

@@ -14,7 +14,7 @@
 
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../test/fixture/Settings/userSettings";
-import SiteSettingsEntity from "../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../test/fixture/Settings/siteSettings";
 import MockPort from "../test/mock/MockPort";
 import MockStorage from "../test/mock/MockStorage";
@@ -27,20 +27,20 @@ import {
 } from "../../shared/models/entity/role/roleEntity.test.data";
 import { defaultAccountDto } from "../../shared/models/entity/account/accountEntity.test.data";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
-import { defaultCeSiteSettings } from "../../shared/models/entity/siteSettings/siteSettingsEntity.test.data";
+import { defaultCeSiteSettings } from "../test/fixture/Settings/siteSettings.test.data";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import { settingsRbacsCollectionData } from "../../shared/models/entity/rbac/rbacsCollection.test.data";
 
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettingsEntity, port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext = {}, isCommunityEdition = false) {
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = isCommunityEdition
-    ? new SiteSettingsEntity(defaultCeSiteSettings())
-    : new SiteSettingsEntity(siteSettingsFixture);
+    ? new SiteSettings(defaultCeSiteSettings())
+    : new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     locale: "en-UK",
     userSettings,
@@ -80,7 +80,7 @@ export function defaultAppContext(appContext = {}, isCommunityEdition = false) {
  * @returns {object}
  */
 export const defaultUserAppContext = (data = {}) => {
-  const siteSettings = new SiteSettingsEntity(siteSettingsFixture);
+  const siteSettings = new SiteSettings(siteSettingsFixture);
 
   return {
     locale: "en-UK",

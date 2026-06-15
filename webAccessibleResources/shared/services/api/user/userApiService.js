@@ -107,16 +107,18 @@ class UserApiService extends AbstractService {
    *
    * @param {Object} [contains] optional example: {profile: true}
    * @param {Object} [filters] optional
+   * @param {Object} [orders] optional
    * @return {Promise<PassboltResponseEntity>}
    * @throws {Error} if options are invalid or API error
    * @public
    */
-  async findAll(contains, filters) {
+  async findAll(contains, filters, orders) {
     // @deprecated dirty fix to support old versions of contain: to remove when support for v2.14 is dropped
     const legacyContain = UserApiService.remapToLegacyContain(contains);
     contains = contains ? this.formatContainOptions(legacyContain, UserApiService.getSupportedContainOptions()) : null;
     filters = filters ? this.formatFilterOptions(filters, UserApiService.getSupportedFiltersOptions()) : null;
-    const options = { ...contains, ...filters };
+    orders = orders ? this.formatOrderOptions(orders, UserApiService.getSupportedOrdersOptions()) : null;
+    const options = { ...contains, ...filters, ...orders };
     const response = await this.apiClient.findAll(options);
     return new PassboltResponseEntity(response);
   }

@@ -13,7 +13,7 @@
  */
 
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import { v4 as uuidv4 } from "uuid";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
@@ -21,13 +21,13 @@ import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Returns the app context as administrator for the unit test
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettingsEntity, port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function administratorAppContext() {
   return {
     loggedInUser: { id: "f848277c-5398-58f8-a82a-72397af2d450", role: { name: "admin" } },
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
+    siteSettings: new SiteSettings(siteSettingsFixture),
     port: new MockPort(),
     resourceCommentId: "9e56b21f-36f1-44a7-a363-1c6ccbbf09e2", // Selected resource comment id
     mustRefreshComments: false, // Flag telling whether the current list of comments should be refreshed
@@ -36,13 +36,13 @@ export function administratorAppContext() {
 
 /**
  * Returns the default app context for the unit test
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettingsEntity, port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext() {
   return {
     loggedInUser: { id: "f848277c-5398-58f8-a82a-72397af2d450" },
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
+    siteSettings: new SiteSettings(siteSettingsFixture),
     port: new MockPort(),
     resourceCommentId: "9e56b21f-36f1-44a7-a363-1c6ccbbf09e2", // Selected resource comment id
     mustRefreshComments: false, // Flag telling whether the current list of comments should be refreshed

@@ -212,7 +212,7 @@ class AddResourceComment extends React.Component {
         <div className="left-column">
           <UserAvatar
             user={this.props.context.loggedInUser}
-            baseUrl={this.props.context.siteSettings.url}
+            baseUrl={this.props.context.siteSettings.settings.app.url}
             className="author profile picture avatar"
           />
         </div>

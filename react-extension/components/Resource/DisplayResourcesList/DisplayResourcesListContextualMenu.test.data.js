@@ -13,7 +13,6 @@
  */
 
 import { defaultUserRbacContext, denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
-import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
@@ -121,16 +120,5 @@ export function propsDenyUIActions() {
   return {
     ...defaultProps(),
     rbacContext: denyRbacContext(),
-  };
-}
-
-/**
- * Props with the preview secret capability denied by rbac
- * @returns {object}
- */
-export function propsDenySecretsPreview() {
-  return {
-    ...defaultProps(),
-    rbacContext: { canIUseAction: (action) => action !== uiActions.SECRETS_PREVIEW },
   };
 }

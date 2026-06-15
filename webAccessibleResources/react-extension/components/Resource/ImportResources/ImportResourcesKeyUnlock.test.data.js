@@ -1,5 +1,5 @@
 import MockPort from "../../../test/mock/MockPort";
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
@@ -10,7 +10,7 @@ import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
-    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
+    siteSettings: new SiteSettings(siteSettingsFixture),
     setContext: function (newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);

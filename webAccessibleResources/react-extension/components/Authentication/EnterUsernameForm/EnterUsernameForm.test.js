@@ -19,7 +19,7 @@ import EnterUsernameFormPage from "./EnterUsernameForm.test.page";
 import { defaultProps } from "./EnterUsernameForm.test.data";
 import { waitFor } from "@testing-library/react";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 
 beforeEach(() => {
   jest.resetModules();
@@ -47,7 +47,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
     it("As AN I should be able to submit a username with success with no terms or privacy policy required by the API", async () => {
       const siteSettingsFixtureClone = JSON.parse(JSON.stringify(siteSettingsFixture));
       siteSettingsFixtureClone.passbolt.legal = {};
-      const siteSettings = new SiteSettingsEntity(siteSettingsFixtureClone);
+      const siteSettings = new SiteSettings(siteSettingsFixtureClone);
       const props = defaultProps({ context: { siteSettings } });
       jest.spyOn(props.apiTriageContext, "onTriageRequested").mockImplementation(() => {});
       page = new EnterUsernameFormPage(props);
