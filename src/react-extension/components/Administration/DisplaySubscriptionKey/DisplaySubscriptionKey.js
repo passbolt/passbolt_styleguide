@@ -487,7 +487,11 @@ class DisplaySubscriptionKey extends React.Component {
                       </li>
                     </ul>
                     <div>
-                      <a target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/pricing/pro">
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
+                      >
                         <Trans>See pricing page</Trans>
                       </a>
                     </div>
@@ -497,7 +501,7 @@ class DisplaySubscriptionKey extends React.Component {
                           className="button primary"
                           target="_blank"
                           rel="noopener noreferrer"
-                          href="https://www.passbolt.com/pricing/pro"
+                          href="https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
                         >
                           <Trans>Buy now</Trans>
                         </a>
@@ -505,7 +509,7 @@ class DisplaySubscriptionKey extends React.Component {
                           className="button"
                           target="_blank"
                           rel="noopener noreferrer"
-                          href="https://www.passbolt.com/contact/pro/free-trial"
+                          href="https://www.passbolt.com/contact/pro/free-trial?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
                         >
                           <Trans>Start a free trial</Trans>
                         </a>
