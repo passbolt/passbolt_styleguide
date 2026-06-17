@@ -17,6 +17,7 @@ import { render } from "@testing-library/react";
 import HandlePermissionWorkflow, { PERMISSION_WORKFLOW_OPERATION } from "./HandlePermissionWorkflow";
 import ResourceCreationFlow from "./flows/ResourceCreationFlow";
 import ResourceEditFlow from "./flows/ResourceEditFlow";
+import FolderShareFlow from "./flows/FolderShareFlow";
 
 jest.mock("./flows/ResourceCreationFlow", () => ({
   __esModule: true,
@@ -24,6 +25,11 @@ jest.mock("./flows/ResourceCreationFlow", () => ({
 }));
 
 jest.mock("./flows/ResourceEditFlow", () => ({
+  __esModule: true,
+  default: jest.fn(() => null),
+}));
+
+jest.mock("./flows/FolderShareFlow", () => ({
   __esModule: true,
   default: jest.fn(() => null),
 }));
@@ -70,6 +76,28 @@ describe("HandlePermissionWorkflow (dispatcher)", () => {
       expect.objectContaining({
         operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
         resource,
+        onStop,
+      }),
+      expect.anything(),
+    );
+  });
+
+  it("As LU starting a share-folder workflow I should see the folder-share flow rendered with the same props", () => {
+    expect.assertions(1);
+    const onStop = jest.fn();
+    const folder = { id: "some-folder-id" };
+    render(
+      <HandlePermissionWorkflow
+        operation={PERMISSION_WORKFLOW_OPERATION.SHARE_FOLDER}
+        folder={folder}
+        onStop={onStop}
+      />,
+    );
+
+    expect(FolderShareFlow).toHaveBeenCalledWith(
+      expect.objectContaining({
+        operation: PERMISSION_WORKFLOW_OPERATION.SHARE_FOLDER,
+        folder,
         onStop,
       }),
       expect.anything(),
