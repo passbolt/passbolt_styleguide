@@ -19,7 +19,6 @@ import { withAppContext } from "../../../../shared/context/AppContext/AppContext
 import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import { withDialog } from "../../../contexts/DialogContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
-import ShareDialog from "../../Share/ShareDialog";
 import HandlePermissionWorkflow, {
   PERMISSION_WORKFLOW_OPERATION,
 } from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
@@ -173,12 +172,13 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   /**
    * handle share resources
    */
-  async handleShareClickEvent() {
+  handleShareClickEvent() {
     const canShareResource = this.canShareResource();
     if (canShareResource) {
-      const resourcesIds = this.selectedResources.map((resource) => resource.id);
-      await this.props.context.setContext({ shareDialogProps: { resourcesIds } });
-      this.props.dialogContext.open(ShareDialog);
+      this.props.workflowContext.start(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.SHARE_RESOURCE,
+        resources: this.selectedResources,
+      });
     } else {
       this.displayActionAborted();
     }

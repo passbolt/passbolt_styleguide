@@ -97,6 +97,18 @@ describe("See Workspace Menu", () => {
       });
     });
 
+    it("As LU clicking share should start the share-resource permission workflow with the selected resources", async () => {
+      expect.assertions(2);
+      expect(page.displayMenu.shareMenu).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.shareMenu);
+
+      expect(propsOneResourceOwned.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.SHARE_RESOURCE,
+        resources: propsOneResourceOwned.resourceWorkspaceContext.selectedResources,
+      });
+    });
+
     it("As LU I can start to display a resource secret history via the workspace more menu", () => {
       expect.assertions(3);
       expect(page.displayMenu.exists()).toBeTruthy();
