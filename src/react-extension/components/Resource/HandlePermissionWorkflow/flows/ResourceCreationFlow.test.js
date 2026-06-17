@@ -123,7 +123,9 @@ describe("ResourceCreationFlow", () => {
       expect(props.dialogContext.open).toHaveBeenCalledWith(
         ShareDialog,
         expect.objectContaining({
-          initialPermissions: page._instance.state.snapshot.permissions,
+          initialResources: [
+            expect.objectContaining({ id: null, permissions: page._instance.state.snapshot.permissions }),
+          ],
           initialGroups: page._instance.state.snapshot.groups,
           initialUsers: page._instance.state.snapshot.users,
         }),

@@ -53,16 +53,21 @@ class ShareDialog extends Component {
    * ComponentDidMount
    * Invoked immediately after component is inserted into the tree.
    *
-   * Controlled mode: when `initialPermissions` is provided (alongside `initialGroups`,
+   * Controlled mode: when `initialResources` is provided (alongside `initialGroups`,
    * `initialUsers`, and an `onConfirm` callback) the dialog seeds itself from those
-   * collections instead of fetching via the port. Used by the resource-creation workflow
-   * to review the parent folder's permissions before the resource exists on the server.
+   * collections instead of fetching via the port. Used by the HandlePermissionWorkflow flows
+   * to review a permission set before applying it.
    *
    * @return {void}
    */
   async componentDidMount() {
     if (this.isControlledMode()) {
-      this.resources = [this.buildSyntheticResourceFromControlledProps()];
+      const controlledAcos = this.buildControlledResources();
+      if (this.props.acoType === PermissionEntity.ACO_FOLDER) {
+        this.folders = controlledAcos;
+      } else {
+        this.resources = controlledAcos;
+      }
     } else {
       if (this.props.context.shareDialogProps.resourcesIds) {
         await this.findResourcesDetails();
@@ -88,7 +93,7 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   isControlledMode() {
-    return Boolean(this.props.initialPermissions);
+    return Boolean(this.props.initialResources);
   }
 
   /**
@@ -102,14 +107,14 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Build a synthetic resource DTO from the controlled-mode props so the dialog renders
-   * the snapshot's permissions through the existing ShareChanges + ReactList path without
-   * touching the server. The synthetic resource has no id (the underlying resource does not
-   * exist yet) and a placeholder metadata; ShareChanges only needs the embedded permissions
-   * to render and track edits.
-   * @returns {object}
+   * Build the resource DTOs the dialog renders in controlled mode so ShareChanges + ReactList work
+   * without touching the server: one entry per resource provided in `initialResources`, each seeded
+   * with its id, metadata, the operator's own permission, and its permission set. Create/edit pass a
+   * single synthetic resource whose id is null (the resource does not exist yet); share passes the
+   * real resources. The user/group lookup maps are built once and shared across resources.
+   * @returns {Array<object>}
    */
-  buildSyntheticResourceFromControlledProps() {
+  buildControlledResources() {
     const groupsById = {};
     this.props.initialGroups?.items.forEach((group) => {
       groupsById[group.id] = group.toDto();
@@ -119,13 +124,24 @@ class ShareDialog extends Component {
       usersById[user.id] = user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS);
     });
 
-    // Remap aco/aco_foreign_key to the synthetic resource so ShareChanges treats these as the
-    // resource's perms; the folder permission `id` is kept (stale but non-undefined) — the
-    // workflow's PermissionChangesService rebases ids after the resource exists.
-    const permissions = this.props.initialPermissions.items.map((permission) => {
+    return this.props.initialResources.map((resource) => this.buildControlledResource(resource, groupsById, usersById));
+  }
+
+  /**
+   * Build a single controlled-mode resource DTO, embedding the referenced user/group from the
+   * provided lookup maps so ShareChanges can render and track edits. The resource id (null for a
+   * not-yet-created resource, the real id when sharing an existing one) is stamped as each
+   * permission's `aco_foreign_key`.
+   * @param {{id: (string|null), metadata: object, permission: object, permissions: PermissionsCollection}} resource
+   * @param {object} groupsById The referenced groups keyed by id.
+   * @param {object} usersById The referenced users keyed by id.
+   * @returns {object}
+   */
+  buildControlledResource(resource, groupsById, usersById) {
+    const mappedPermissions = resource.permissions.items.map((permission) => {
       const dto = permission.toDto();
-      dto.aco = PermissionEntity.ACO_RESOURCE;
-      dto.aco_foreign_key = null;
+      dto.aco = this.props.acoType ?? PermissionEntity.ACO_RESOURCE;
+      dto.aco_foreign_key = resource.id;
       if (dto.aro === PermissionEntity.ARO_USER) {
         dto.user = usersById[dto.aro_foreign_key];
       } else if (dto.aro === PermissionEntity.ARO_GROUP) {
@@ -135,12 +151,10 @@ class ShareDialog extends Component {
     });
 
     return {
-      id: null,
-      metadata: { name: "" },
-      // The operator is the owner of the to-be-created resource; the snapshot's permissions are
-      // grafted on top via `permissions`.
-      permission: { type: PermissionEntity.PERMISSION_OWNER },
-      permissions,
+      id: resource.id,
+      metadata: { name: resource.metadata?.name ?? "" },
+      permission: { type: resource.permission?.type ?? PermissionEntity.PERMISSION_OWNER },
+      permissions: mappedPermissions,
     };
   }
 
@@ -448,7 +462,11 @@ class ShareDialog extends Component {
    */
   async shareSave() {
     if (this.isControlledMode()) {
-      await this.props.onConfirm(this.shareChanges.getResourcesChanges());
+      const changes =
+        this.props.acoType === PermissionEntity.ACO_FOLDER
+          ? this.shareChanges.getFoldersChanges()
+          : this.shareChanges.getResourcesChanges();
+      await this.props.onConfirm(changes);
       return;
     }
     if (this.props.context.shareDialogProps.resourcesIds && this.props.context.shareDialogProps.foldersIds) {
@@ -621,7 +639,12 @@ class ShareDialog extends Component {
     if (!acos || !acos.length || acos.length === 1) {
       return "";
     }
-    return acos.map((aco) => (aco.permission.aco === "Resource" ? aco.metadata.name : aco.name)).join(", ");
+    // `metadata.name` covers resources (and controlled-mode ACOs, which expose no top-level name);
+    // folders fall back to `aco.name`. Empty names are dropped so the result is never bare commas.
+    return acos
+      .map((aco) => aco.metadata?.name ?? aco.name)
+      .filter(Boolean)
+      .join(", ");
   }
 
   /**
@@ -833,9 +856,10 @@ ShareDialog.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   listMinSize: PropTypes.number, // The minimum size to be renderered in the permission list
-  initialPermissions: PropTypes.object, // Controlled mode: PermissionsCollection used to seed the dialog instead of fetching from the API
-  initialGroups: PropTypes.object, // Controlled mode: GroupsCollection providing the groups referenced by initialPermissions
-  initialUsers: PropTypes.object, // Controlled mode: UsersCollection providing the users referenced by initialPermissions
+  initialResources: PropTypes.array, // Controlled mode: the ACOs to seed the dialog with instead of fetching from the API, each as { id, metadata, permission, permissions: PermissionsCollection }
+  acoType: PropTypes.string, // Controlled mode: the ACO type of the seeded entries (PermissionEntity.ACO_RESOURCE, default, or ACO_FOLDER)
+  initialGroups: PropTypes.object, // Controlled mode: GroupsCollection providing the groups referenced by the resources' permissions
+  initialUsers: PropTypes.object, // Controlled mode: UsersCollection providing the users referenced by the resources' permissions
   onConfirm: PropTypes.func, // Controlled mode: callback invoked with the operator-confirmed permission changes instead of saving via the port
   readOnly: PropTypes.bool, // Controlled mode: display the permission set read-only (review/confirm only, no edits)
   t: PropTypes.func, // The translation function

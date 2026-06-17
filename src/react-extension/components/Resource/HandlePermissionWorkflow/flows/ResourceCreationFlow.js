@@ -20,6 +20,7 @@ import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
 import CreateResource from "../../CreateResource/CreateResource";
 import ShareDialog from "../../../Share/ShareDialog";
 import ResourceTypeEntity from "../../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
 import { RESOURCE_TYPE_PASSWORD_STRING_SLUG } from "../../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import { AbstractPermissionFlow, PERMISSION_FLOW_STATUS } from "./AbstractPermissionFlow";
 
@@ -113,7 +114,14 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
    */
   openShareDialog() {
     this.props.dialogContext.open(ShareDialog, {
-      initialPermissions: this.state.snapshot.permissions,
+      initialResources: [
+        {
+          id: null,
+          metadata: { name: "" },
+          permission: { type: PermissionEntity.PERMISSION_OWNER },
+          permissions: this.state.snapshot.permissions,
+        },
+      ],
       initialGroups: this.state.snapshot.groups,
       initialUsers: this.state.snapshot.users,
       onConfirm: this.handleShareDialogConfirm,

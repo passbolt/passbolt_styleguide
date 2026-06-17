@@ -82,7 +82,7 @@ async function mountUntilEditOpen(props) {
 describe("ResourceEditFlow", () => {
   describe("As LU editing a shared resource I own", () => {
     it("As LU I should review the resource permissions (editable) and the confirmed changes should reach passbolt.resources.update", async () => {
-      expect.assertions(6);
+      expect.assertions(8);
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
       const readerId = uuidv4();
@@ -120,7 +120,9 @@ describe("ResourceEditFlow", () => {
       // Owner → the dialog is editable (not read-only), seeded from the snapshot.
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
       expect(shareProps.readOnly).toBe(false);
-      expect(shareProps.initialPermissions).toBe(page._instance.state.snapshot.permissions);
+      expect(shareProps.initialResources).toHaveLength(1);
+      expect(shareProps.initialResources[0].id).toBeNull();
+      expect(shareProps.initialResources[0].permissions).toBe(page._instance.state.snapshot.permissions);
 
       // Confirm with deltas: no drift, update carries the deltas straight through (4th arg).
       props.context.port.addRequestListener("passbolt.resources.update", () => ({ id: props.resource.id }));

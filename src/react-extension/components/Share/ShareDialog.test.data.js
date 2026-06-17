@@ -937,7 +937,14 @@ export function controlledModeWithGroupProps(data = {}) {
 
   return {
     ...defaultProps(),
-    initialPermissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+    initialResources: [
+      {
+        id: null,
+        metadata: { name: "" },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+      },
+    ],
     initialGroups: new GroupsCollection([groupDto]),
     initialUsers: new UsersCollection([ownerUser, memberUserA, memberUserB]),
     onConfirm: jest.fn(),

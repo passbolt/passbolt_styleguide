@@ -122,7 +122,14 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    */
   openShareDialog() {
     this.props.dialogContext.open(ShareDialog, {
-      initialPermissions: this.state.snapshot.permissions,
+      initialResources: [
+        {
+          id: null,
+          metadata: { name: "" },
+          permission: { type: PermissionEntity.PERMISSION_OWNER },
+          permissions: this.state.snapshot.permissions,
+        },
+      ],
       initialGroups: this.state.snapshot.groups,
       initialUsers: this.state.snapshot.users,
       readOnly: this.isShareReadOnly,

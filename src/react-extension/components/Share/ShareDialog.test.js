@@ -554,7 +554,14 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     ];
     return {
       ...defaultProps(),
-      initialPermissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+      initialResources: [
+        {
+          id: null,
+          metadata: { name: "" },
+          permission: { type: 15 },
+          permissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+        },
+      ],
       initialGroups: new GroupsCollection([]),
       initialUsers: new UsersCollection([operatorUser, readerUser]),
       onConfirm: jest.fn(),
@@ -632,6 +639,126 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     const changes = props.onConfirm.mock.calls[0][0];
     expect(changes).toHaveLength(1);
     expect(changes[0]).toMatchObject({ delete: true, aco: "Resource" });
+  });
+
+  it("As LU sharing a folder (acoType Folder) I should see the emitted deltas target the folder", async () => {
+    expect.assertions(2);
+    // Folder mode: the seeded entry is the folder itself; its edits must be emitted as Folder deltas
+    // so the workflow saves them via the folder-share path.
+    const props = { ...buildControlledModeProps(), acoType: "Folder" };
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+    await page.selectRemovePermission(2);
+    await act(() => page.savePermissions());
+
+    const changes = props.onConfirm.mock.calls[0][0];
+    expect(changes).toHaveLength(1);
+    expect(changes[0]).toMatchObject({ delete: true, aco: "Folder" });
+  });
+
+  it("As LU adding a recipient to a folder (acoType Folder) I should see the new permission emitted as a Folder delta", async () => {
+    expect.assertions(2);
+    // Regression: a newly added recipient on a folder share used to be emitted with `aco: "Resource"`
+    // (ShareChanges tags new permissions from the ACO bucket type). The folder-share save then
+    // received an empty delta and silently did nothing. The seeded folder must live in the folder
+    // bucket so additions are emitted as Folder deltas.
+    const props = { ...buildControlledModeProps(), acoType: "Folder" };
+    const newUserId = uuidv4();
+    const newUser = defaultUserDto({ id: newUserId, username: "newcomer@passbolt.com" });
+    mockContextRequest((request) => {
+      switch (request) {
+        case "passbolt.keyring.get-public-key-info-by-user":
+          return { fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6" };
+        case "passbolt.share.search-aros":
+          return [newUser];
+      }
+    });
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+    await page.searchName("newcomer");
+    await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+    await page.selectUserOrGroup(1);
+    await act(() => page.savePermissions());
+
+    const changes = props.onConfirm.mock.calls[0][0];
+    expect(changes).toHaveLength(1);
+    expect(changes[0]).toMatchObject({ is_new: true, aco: "Folder", aro_foreign_key: newUserId });
+  });
+
+  describe("Seeded with initialResources (share)", () => {
+    /**
+     * Build controlled-mode props seeded with two resources (share mode). The operator owns both;
+     * a reader has read access to both. Each resource carries its own single-ACO permission set.
+     */
+    function buildInitialResourcesProps() {
+      const operatorId = context.userSettings.id;
+      context.loggedInUser = { id: operatorId };
+      const operatorUser = defaultUserDto({ id: operatorId, username: "operator@passbolt.com" });
+      const readerId = uuidv4();
+      const readerUser = defaultUserDto({ id: readerId, username: "reader@passbolt.com" });
+      const buildResource = (name) => {
+        const resourceId = uuidv4();
+        return {
+          id: resourceId,
+          metadata: { name },
+          permission: { type: 15 },
+          permissions: new PermissionsCollection(
+            [
+              defaultPermissionDto({
+                aco: "Resource",
+                aco_foreign_key: resourceId,
+                aro: "User",
+                aro_foreign_key: operatorId,
+                type: 15,
+              }),
+              defaultPermissionDto({
+                aco: "Resource",
+                aco_foreign_key: resourceId,
+                aro: "User",
+                aro_foreign_key: readerId,
+                type: 1,
+              }),
+            ],
+            { assertAtLeastOneOwner: false },
+          ),
+        };
+      };
+      return {
+        ...defaultProps(),
+        initialResources: [buildResource("RA"), buildResource("RB")],
+        initialGroups: new GroupsCollection([]),
+        initialUsers: new UsersCollection([operatorUser, readerUser]),
+        onConfirm: jest.fn(),
+      };
+    }
+
+    it("As LU I should see the recipients aggregated across the resources without fetching from the API", async () => {
+      expect.assertions(2);
+      const props = buildInitialResourcesProps();
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      expect(context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.resources.find-all-by-ids-for-display-permissions",
+        expect.anything(),
+      );
+      // Operator + reader, aggregated across the two resources.
+      expect(page.count).toBe(2);
+    });
+
+    it("As LU sharing several resources I should see their names listed in the title tooltip", async () => {
+      expect.assertions(1);
+      const props = buildInitialResourcesProps();
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      // Regression: controlled-mode ACOs expose only `metadata.name`, so the tooltip must not
+      // resolve to bare commas.
+      expect(page.titleTooltip).toBe("RA, RB");
+    });
   });
 
   describe("Read-only mode", () => {

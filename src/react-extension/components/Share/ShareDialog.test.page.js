@@ -47,6 +47,13 @@ export default class ShareDialogPage {
   }
 
   /**
+   * Returns the title info tooltip text, or null when no tooltip is rendered
+   */
+  get titleTooltip() {
+    return this._page.container.querySelector(".dialog-title-wrapper .tooltip-text")?.textContent ?? null;
+  }
+
+  /**
    * Returns the dialog subtitle
    */
   get subtitle() {
