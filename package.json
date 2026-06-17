@@ -85,7 +85,8 @@
     "xregexp": "^5.1.2"
   },
   "overrides": {
-    "uuid": "^14.0.0"
+    "uuid": "^14.0.0",
+    "js-yaml": "^4.2.0"
   },
   "scripts": {
     "build": "webpack",
