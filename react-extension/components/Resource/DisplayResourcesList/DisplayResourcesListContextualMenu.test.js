@@ -18,6 +18,7 @@
 import "../../../../../test/mocks/mockClipboard";
 import {
   defaultProps,
+  propsDenySecretsPreview,
   propsDenyUIActions,
   propsResourceExpired,
   propsResourceStandaloneTotp,
@@ -428,6 +429,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
   describe("As LU I should not see secret history feature items", () => {
     it("when the feature flag is disabled", () => {
+      expect.assertions(1);
       const props = propsResourceWithUpdatePermission();
       props.secretRevisionsSettings = SecretRevisionsSettingsEntity.createFromDefault();
       jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((plugin) => plugin !== "secretRevisions");
@@ -436,8 +438,24 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
 
     it("when the feature flag is enabled but the settings are set to disabled", () => {
+      expect.assertions(1);
       const props = propsResourceWithUpdatePermission();
       props.secretRevisionsSettings = SecretRevisionsSettingsEntity.createFromDefault();
+      page = new DisplayResourcesListContextualMenuPage(props);
+      expect(page.secretHistoryItem).toBeNull();
+    });
+
+    it("when the preview secret capability is denied by rbac", () => {
+      expect.assertions(1);
+      const props = propsDenySecretsPreview();
+      page = new DisplayResourcesListContextualMenuPage(props);
+      expect(page.secretHistoryItem).toBeNull();
+    });
+
+    it("when the preview password site setting is disabled", () => {
+      expect.assertions(1);
+      const props = propsResourceWithUpdatePermission();
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((plugin) => plugin !== "previewPassword");
       page = new DisplayResourcesListContextualMenuPage(props);
       expect(page.secretHistoryItem).toBeNull();
     });

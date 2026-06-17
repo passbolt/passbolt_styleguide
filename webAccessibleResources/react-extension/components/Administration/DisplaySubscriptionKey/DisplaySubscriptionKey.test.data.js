@@ -22,27 +22,6 @@ import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
 import SubscriptionEntity from "../../../../shared/models/entity/subscription/subscriptionEntity";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-
-/**
- * Site settings with the "edition" plugin.
- * @returns {SiteSettings}
- */
-function siteSettingsWithEditionPlugin() {
-  const settings = {
-    ...siteSettingsFixture,
-    passbolt: {
-      ...siteSettingsFixture.passbolt,
-      plugins: {
-        ...siteSettingsFixture.passbolt.plugins,
-        edition: { enabled: true },
-      },
-    },
-  };
-
-  return new SiteSettings(settings);
-}
 
 /**
  * Default component props
@@ -55,7 +34,6 @@ export function defaultProps(props = {}) {
   const defaultContext = {
     onGetSubscriptionKeyRequested: () => new SubscriptionEntity(mockSubscription),
     port: port,
-    siteSettings: siteSettingsWithEditionPlugin(),
   };
 
   const defaultProps = {
@@ -117,20 +95,6 @@ export function notFoundProps() {
     onGetSubscriptionKeyRequested: () => {},
   };
   return defaultProps({ context });
-}
-
-/**
- * Props without the "edition" plugin
- * @param {Object} props Optional override of defaultProps
- * @return {Object}
- */
-export function propsWithoutEditionPlugin(props = {}) {
-  const context = {
-    ...props.context,
-    siteSettings: new SiteSettings(siteSettingsFixture),
-  };
-
-  return defaultProps({ ...props, context });
 }
 
 /**

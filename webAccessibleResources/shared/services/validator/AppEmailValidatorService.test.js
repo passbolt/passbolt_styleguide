@@ -15,11 +15,11 @@
 import IsEmailValidator from "../../lib/Validator/IsEmailValidator";
 import AppEmailValidatorService from "./AppEmailValidatorService";
 import IsRegexValidator from "../../lib/Validator/IsRegexValidator";
-import SiteSettings from "../../lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../models/entity/siteSettings/siteSettingsEntity";
 import {
-  customEmailValidationSiteSettings,
+  customEmailValidationProSiteSettings,
   defaultCeSiteSettings,
-} from "../../../react-extension/test/fixture/Settings/siteSettings.test.data";
+} from "../../models/entity/siteSettings/siteSettingsEntity.test.data";
 
 describe("AppEmailValidatorService", () => {
   describe("AppEmailValidatorService.getValidator", () => {
@@ -30,13 +30,13 @@ describe("AppEmailValidatorService", () => {
 
     it("should return IsRegexValidator if the application settings customize the email regex validation.", async () => {
       expect.assertions(1);
-      const siteSettings = new SiteSettings(customEmailValidationSiteSettings());
+      const siteSettings = new SiteSettingsEntity(customEmailValidationProSiteSettings());
       expect(AppEmailValidatorService.getValidator(siteSettings)).toBeInstanceOf(IsRegexValidator);
     });
 
     it("should fallback on IsEmailValidator if application settings did not customize the email regex validation.", async () => {
       expect.assertions(1);
-      const siteSettings = new SiteSettings(defaultCeSiteSettings());
+      const siteSettings = new SiteSettingsEntity(defaultCeSiteSettings());
       expect(AppEmailValidatorService.getValidator(siteSettings)).toBe(IsEmailValidator);
     });
 
@@ -55,7 +55,7 @@ describe("AppEmailValidatorService", () => {
 
     it("should validate custom email if the application settings customize the email regex validation.", async () => {
       expect.assertions(2);
-      const siteSettings = new SiteSettings(customEmailValidationSiteSettings());
+      const siteSettings = new SiteSettingsEntity(customEmailValidationProSiteSettings());
       expect(AppEmailValidatorService.validate("ada@passbolt.c", siteSettings)).toBeTruthy();
       expect(AppEmailValidatorService.validate("ada@passbolt.lu", siteSettings)).toBeFalsy();
     });

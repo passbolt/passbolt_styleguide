@@ -12,7 +12,7 @@
  * @since         3.12.0
  */
 
-import SiteSettings from "../../lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../models/entity/siteSettings/siteSettingsEntity";
 import IsEmailValidator from "../../lib/Validator/IsEmailValidator";
 import IsRegexValidator from "../../lib/Validator/IsRegexValidator";
 
@@ -20,7 +20,7 @@ export default class AppEmailValidatorService {
   /**
    * Validate an email
    * @param {string} value The value to validate.
-   * @param {SiteSettings} appSettings The application settings.
+   * @param {SiteSettingsEntity} appSettings The application settings.
    * @returns {boolean|boolean}
    */
   static validate(value, appSettings) {
@@ -33,11 +33,11 @@ export default class AppEmailValidatorService {
    * Note 1: This method is used in a non asynchronous context (Entity).
    * Note 2: This method requires the application settings to be loaded and stored in the app settings model cache.
    *
-   * @params {SiteSettings} appSettings The application settings
+   * @params {SiteSettingsEntity} appSettings The application settings
    * @returns {IsRegexValidator|IsEmailValidator}
    */
   static getValidator(appSettings) {
-    if (appSettings && appSettings instanceof SiteSettings && appSettings.emailValidateRegex) {
+    if (appSettings && appSettings instanceof SiteSettingsEntity && appSettings.emailValidateRegex) {
       return new IsRegexValidator(appSettings.emailValidateRegex);
     }
 

@@ -457,12 +457,23 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * Can the user preview a secret
+   * @return {boolean}
+   */
+  get canPreviewSecret() {
+    return (
+      this.props.context.siteSettings.canIUse("previewPassword") &&
+      this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW)
+    );
+  }
+
+  /**
    * Can use secret history
    * @return {boolean}
    */
   get canUseSecretHistory() {
     const isFeatureEnabled = this.props.context.siteSettings.canIUse("secretRevisions");
-    return isFeatureEnabled && this.props.secretRevisionsSettings?.isFeatureEnabled;
+    return isFeatureEnabled && this.props.secretRevisionsSettings?.isFeatureEnabled && this.canPreviewSecret;
   }
 
   /**

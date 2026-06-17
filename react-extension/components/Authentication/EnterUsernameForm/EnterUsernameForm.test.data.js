@@ -12,13 +12,13 @@
  * @since         2.11.0
  */
 
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 export function defaultAppContext(context) {
   const defaultAppContext = {
     setContext: jest.fn(),
-    siteSettings: new SiteSettings(siteSettingsFixture),
+    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
     trustedDomain: "http://127.0.0.1:3001",
   };
   return Object.assign(defaultAppContext, context || {});

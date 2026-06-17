@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import SiteSettings from "../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../react-extension/test/fixture/Settings/siteSettings";
 import MockPort from "../../react-extension/test/mock/MockPort";
 import MockStorage from "../../react-extension/test/mock/MockStorage";
@@ -26,7 +26,7 @@ import { defaultUserDto } from "../../shared/models/entity/user/userEntity.test.
  * @returns {Object}
  */
 export function defaultAppContext(data = {}) {
-  const siteSettings = new SiteSettings(siteSettingsFixture);
+  const siteSettings = new SiteSettingsEntity(siteSettingsFixture);
 
   return {
     locale: "en-UK",

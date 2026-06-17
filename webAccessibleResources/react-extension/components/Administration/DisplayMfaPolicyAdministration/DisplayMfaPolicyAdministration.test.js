@@ -19,7 +19,8 @@ import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 import { defaultProps, settingDto } from "./DisplayMfaPolicyAdministration.test.data";
 import DisplayMfaPolicyAdministrationPage from "./DisplayMfaPolicyAdministration.test.page";
-import { screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 jest.mock("uuid");
 
@@ -119,7 +120,7 @@ describe("DisplayMfaPolicyAdministration", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
         "The MFA policy settings were updated.",
       );
-      await waitForElementToBeRemoved(() => page.settingsChangedBanner);
+      await waitForTrue(() => page.settingsChangedBanner === null);
       expect(page.settingsChangedBanner).toBeNull();
     });
 

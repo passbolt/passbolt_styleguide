@@ -15,7 +15,7 @@
 import MockPort from "../../../test/mock/MockPort";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import { TEST_ROLE_USER_ID } from "../../../../shared/models/entity/role/roleEntity.test.data";
 import { defaultAccountRecoveryUserContext } from "../../../contexts/AccountRecoveryUserContext.test.data";
@@ -26,13 +26,13 @@ import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettingsEntity, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettings(siteSettingsFixture),
+    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
     groups,
   };
   return Object.assign(defaultAppContext, appContext || {});

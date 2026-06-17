@@ -3,7 +3,7 @@ import userSettingsFixture from "../../test/fixture/Settings/userSettings";
 import { users, groups } from "../../contexts/UserWorkspaceContext.test.data";
 import MockPort from "../../test/mock/MockPort";
 import { TEST_ROLE_USER_ID } from "../../../shared/models/entity/role/roleEntity.test.data";
-import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../test/fixture/Settings/siteSettings";
 import {
   ownerGroupPermissionDto,
@@ -37,7 +37,7 @@ export function defaultAppContext(appContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
-    siteSettings: new SiteSettings(siteSettingsFixture),
+    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
