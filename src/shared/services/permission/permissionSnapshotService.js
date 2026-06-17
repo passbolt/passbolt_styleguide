@@ -60,6 +60,39 @@ export default class PermissionSnapshotService {
   }
 
   /**
+   * Build the permission snapshot shown to the operator while sharing a folder. The permissions are
+   * captured from the folder itself so the operator reviews and edits the folder's own permission
+   * set before the share is propagated to its content. Also used to re-snapshot the folder for drift
+   * detection.
+   * @param {string} folderId The id of the folder being shared.
+   * @returns {Promise<PermissionSnapshotEntity>}
+   */
+  async buildSnapshotForFolderShare(folderId) {
+    return this._buildSnapshot(folderId, PermissionEntity.ACO_FOLDER);
+  }
+
+  /**
+   * Build the permission snapshots shown to the operator while sharing a selection of resources.
+   * Each resource is captured independently (a snapshot's permission set targets a single ACO), so
+   * this returns one snapshot per resource, aligned with the given ids. A single-resource share is
+   * simply a selection of one. The keyring is synchronised once for the whole selection rather than
+   * per resource.
+   * @param {Array<string>} resourcesIds The ids of the resources being shared.
+   * @returns {Promise<Array<PermissionSnapshotEntity>>}
+   */
+  async buildSnapshotForResourcesShare(resourcesIds) {
+    if (resourcesIds.length === 0) {
+      return [];
+    }
+    await this.keyringServiceWorkerService.synchroniseKeyring();
+    return Promise.all(
+      resourcesIds.map((resourceId) =>
+        this._buildSnapshotForSynchronisedKeyring(resourceId, PermissionEntity.ACO_RESOURCE),
+      ),
+    );
+  }
+
+  /**
    * Build an immutable permission snapshot for an ACO together with every group and user
    * referenced by its permissions. Forces a keyring synchronisation first so the operator
    * validates against the latest keys.
@@ -70,7 +103,30 @@ export default class PermissionSnapshotService {
    */
   async _buildSnapshot(acoId, acoType) {
     await this.keyringServiceWorkerService.synchroniseKeyring();
+    return this._buildSnapshotForSynchronisedKeyring(acoId, acoType);
+  }
+
+  /**
+   * Build an immutable permission snapshot for an ACO together with every group and user
+   * referenced by its permissions, assuming the keyring has already been synchronised by the
+   * caller.
+   * @param {string} acoId The id of the ACO (folder for creation, resource for edition).
+   * @param {string} acoType The ACO type (PermissionEntity.ACO_FOLDER or ACO_RESOURCE).
+   * @returns {Promise<PermissionSnapshotEntity>}
+   * @private
+   */
+  async _buildSnapshotForSynchronisedKeyring(acoId, acoType) {
     const permissions = await this.permissionServiceWorkerService.findPermissions(acoId, acoType);
+    return this._buildSnapshotFromPermissions(permissions);
+  }
+
+  /**
+   * Resolve the groups and users referenced by a permission set and assemble the immutable snapshot.
+   * @param {PermissionsCollection} permissions The permission set to capture.
+   * @returns {Promise<PermissionSnapshotEntity>}
+   * @private
+   */
+  async _buildSnapshotFromPermissions(permissions) {
     const groupIds = permissions.items
       .filter((permission) => permission.aro === PermissionEntity.ARO_GROUP)
       .map((permission) => permission.aroForeignKey);

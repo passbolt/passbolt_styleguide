@@ -186,4 +186,104 @@ describe("PermissionSnapshotService", () => {
       await expect(service.buildSnapshotForResourceCreation(folderId)).rejects.toThrow("Keyring sync failed");
     });
   });
+
+  describe("::buildSnapshotForResourcesShare", () => {
+    it("returns one PermissionSnapshotEntity per resource, each built from the resource itself", async () => {
+      expect.assertions(4);
+
+      const resourcesIds = [uuidv4(), uuidv4()];
+      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, (acoId) => [
+        defaultPermissionDto({
+          aco: "Resource",
+          aco_foreign_key: acoId,
+          aro: "User",
+          aro_foreign_key: uuidv4(),
+          type: 15,
+        }),
+      ]);
+      port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
+      port.addRequestListener(USERS_GET_BY_IDS, () => []);
+      jest.spyOn(port, "request");
+
+      const snapshots = await service.buildSnapshotForResourcesShare(resourcesIds);
+
+      expect(snapshots).toHaveLength(2);
+      expect(snapshots[0]).toBeInstanceOf(PermissionSnapshotEntity);
+      // Each snapshot is captured from its own resource (ACO_RESOURCE).
+      expect(port.request).toHaveBeenCalledWith(
+        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
+        resourcesIds[0],
+        "Resource",
+      );
+      expect(port.request).toHaveBeenCalledWith(
+        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
+        resourcesIds[1],
+        "Resource",
+      );
+    });
+
+    it("synchronises the keyring only once for the whole selection, before any permission fetch", async () => {
+      expect.assertions(3);
+
+      const resourcesIds = [uuidv4(), uuidv4(), uuidv4()];
+      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => []);
+      port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
+      port.addRequestListener(USERS_GET_BY_IDS, () => []);
+      jest.spyOn(port, "request");
+
+      await service.buildSnapshotForResourcesShare(resourcesIds);
+
+      const events = port.request.mock.calls.map(([event]) => event);
+      // The keyring is synced once, not once per resource.
+      expect(events.filter((event) => event === KEYRING_SYNC_EVENT)).toHaveLength(1);
+      // ...while each resource still gets its own permission fetch.
+      expect(events.filter((event) => event === PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY)).toHaveLength(3);
+      // The single keyring sync happens before any permission fetch.
+      expect(events.indexOf(KEYRING_SYNC_EVENT)).toBeLessThan(
+        events.indexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY),
+      );
+    });
+
+    it("returns an empty array for an empty selection without synchronising the keyring", async () => {
+      expect.assertions(2);
+      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      jest.spyOn(port, "request");
+
+      const snapshots = await service.buildSnapshotForResourcesShare([]);
+
+      expect(snapshots).toStrictEqual([]);
+      expect(port.request).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("::buildSnapshotForFolderShare", () => {
+    it("synchronises the keyring then captures the folder's own permissions (ACO_FOLDER) and returns a PermissionSnapshotEntity", async () => {
+      expect.assertions(3);
+
+      const folderId = uuidv4();
+      const userId = uuidv4();
+      const permissionsDto = [
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "User",
+          aro_foreign_key: userId,
+          type: 15,
+        }),
+      ];
+      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => permissionsDto);
+      port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
+      port.addRequestListener(USERS_GET_BY_IDS, () => defaultUsersDtos(1));
+      jest.spyOn(port, "request");
+
+      const snapshot = await service.buildSnapshotForFolderShare(folderId);
+
+      expect(port.request).toHaveBeenCalledWith(KEYRING_SYNC_EVENT);
+      expect(port.request).toHaveBeenCalledWith(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, folderId, "Folder");
+      expect(snapshot).toBeInstanceOf(PermissionSnapshotEntity);
+    });
+  });
 });
