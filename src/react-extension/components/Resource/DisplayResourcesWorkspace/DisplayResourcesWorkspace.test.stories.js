@@ -107,7 +107,7 @@ export const proVersion = {
 
 const ceStorage = mockStorage();
 const cePort = mockPort(ceStorage);
-cePort.addRequestListener("passbolt.organization-settings.get", () => siteSettingsCe);
+cePort.addRequestListener("passbolt.site-settings.get-or-find", () => siteSettingsCe);
 export const ceVersion = {
   args: {
     port: cePort,

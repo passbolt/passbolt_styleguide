@@ -66,7 +66,7 @@ export default {
 const storage = mockStorage();
 const port = mockPort(storage);
 
-port.addRequestListener("passbolt.organization-settings.get", () => siteSettingsCe);
+port.addRequestListener("passbolt.site-settings.get-or-find", () => siteSettingsCe);
 port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({ description: "This is a secure note." }));
 
 export const Default = {
