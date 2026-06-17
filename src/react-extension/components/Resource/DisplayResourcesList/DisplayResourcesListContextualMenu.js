@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import { withDialog } from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import ShareDialog from "../../Share/ShareDialog";
 import HandlePermissionWorkflow, {
   PERMISSION_WORKFLOW_OPERATION,
 } from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
@@ -129,9 +128,10 @@ class DisplayResourcesListContextualMenu extends React.Component {
   handleShareClickEvent() {
     const canShareResource = this.canShareResource();
     if (canShareResource) {
-      const resourcesIds = [this.resource.id];
-      this.props.context.setContext({ shareDialogProps: { resourcesIds } });
-      this.props.dialogContext.open(ShareDialog);
+      this.props.workflowContext.start(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.SHARE_RESOURCE,
+        resources: [this.resource],
+      });
     } else {
       this.displayActionAborted();
     }

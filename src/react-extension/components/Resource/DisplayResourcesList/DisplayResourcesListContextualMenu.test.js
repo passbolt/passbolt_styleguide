@@ -31,7 +31,6 @@ import DeleteResource from "../DeleteResource/DeleteResource";
 import HandlePermissionWorkflow, {
   PERMISSION_WORKFLOW_OPERATION,
 } from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
-import ShareDialog from "../../Share/ShareDialog";
 import DisplayResourcesListContextualMenuPage from "./DisplayResourcesListContextualMenu.test.page";
 import {
   plaintextSecretPasswordDescriptionTotpDto,
@@ -155,7 +154,10 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it("As LU I can start to share a resource", async () => {
       await page.share();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ShareDialog);
+      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.SHARE_RESOURCE,
+        resources: [props.resource],
+      });
       expect(props.hide).toHaveBeenCalled();
     });
 
