@@ -138,7 +138,6 @@ DisplayResourceFolderDetails.propTypes = {
   groups: PropTypes.array,
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
-  onEditPermissions: PropTypes.func,
   users: PropTypes.array,
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
