@@ -208,7 +208,7 @@ class OAuth2SsoProviderForm extends React.Component {
             <Trans>The URL to provide to the OAuth2 platform when registering the application.</Trans>
           </p>
         </div>
-        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+        <div className={`input text required input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
           <label>
             <Trans>OpenId Configuration Path</Trans>
           </label>
