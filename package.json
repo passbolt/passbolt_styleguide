@@ -86,7 +86,8 @@
   },
   "overrides": {
     "uuid": "^14.0.0",
-    "js-yaml": "^4.2.0"
+    "js-yaml": "^4.2.0",
+    "http-proxy-middleware": "^3.0.6"
   },
   "scripts": {
     "build": "webpack",
