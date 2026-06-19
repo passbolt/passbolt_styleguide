@@ -247,7 +247,7 @@ class ExtQuickAccess extends React.Component {
   }
 
   async getSiteSettings() {
-    const siteSettingsDto = await this.state.port.request("passbolt.organization-settings.get");
+    const siteSettingsDto = await this.state.port.request("passbolt.site-settings.get-or-find");
     const siteSettings = new SiteSettingsEntity(siteSettingsDto);
     this.setState({ siteSettings });
     return siteSettings;

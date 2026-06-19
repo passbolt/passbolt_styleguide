@@ -91,7 +91,7 @@ class ExtAuthenticationLogin extends Component {
    * Using SiteSettingsEntity
    */
   async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.organization-settings.get");
+    const settings = await this.props.port.request("passbolt.site-settings.get-or-find");
     const siteSettings = new SiteSettingsEntity(settings);
     this.setState({ siteSettings });
   }
