@@ -247,6 +247,7 @@ describe("See Workspace Menu", () => {
       expect.assertions(3);
       const context = defaultAppContext(); // The applicative context
       jest.spyOn(context.siteSettings, "canIUse").mockImplementation((plugin) => plugin !== "previewPassword");
+      context.siteSettings._props.passbolt.plugins.previewPassword.enabled = false;
 
       const propsOneResourceOwned = defaultPropsOneResourceOwned({ context: context }); // The props to pass
       const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
