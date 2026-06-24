@@ -247,11 +247,11 @@ class DisplayHealthcheckAdministration extends Component {
 
     const numberOfTables = () => {
       if (healthcheckData.database.connect === true && healthcheckData.database.tablesCount) {
-        const count = healthcheckData.database.info.tablesCount.toString();
+        const count = healthcheckData.database.info.tablesCount;
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>{{ count }} tables found</Trans>
+            <Trans count={count}>{{ count }} tables found</Trans>
           </span>
         );
       }
