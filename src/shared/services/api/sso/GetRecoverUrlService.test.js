@@ -113,6 +113,56 @@ describe("GetRecoverUrlService", () => {
       return expect(service.getRecoverUrl(uuid())).rejects.toStrictEqual(structuralError);
     });
 
+    it("Should throw an Error if a foreign origin smuggles a valid setup path in its query string", () => {
+      expect.assertions(1);
+      const siteDomain = "https://www.passbolt.test/";
+      const apiClientOptions = new ApiClientOptions().setBaseUrl("http://localhost:6006");
+      const service = new GetRecoverUrlService(new URL(siteDomain), apiClientOptions);
+
+      const url = `https://something.else.com/anything?back=${siteDomain}setup/recover/${uuid()}/${uuid()}`;
+      fetch.doMockOnce(() => mockApiResponse({ url }));
+
+      const expectedError = new Error("The url should be from the same origin.");
+      return expect(service.getRecoverUrl(uuid())).rejects.toStrictEqual(expectedError);
+    });
+
+    it("Should throw an Error if a foreign origin smuggles a valid setup path in its fragment", () => {
+      expect.assertions(1);
+      const siteDomain = "https://www.passbolt.test/";
+      const apiClientOptions = new ApiClientOptions().setBaseUrl("http://localhost:6006");
+      const service = new GetRecoverUrlService(new URL(siteDomain), apiClientOptions);
+
+      const url = `https://something.else.com/anything#back=${siteDomain}setup/recover/${uuid()}/${uuid()}`;
+      fetch.doMockOnce(() => mockApiResponse({ url }));
+
+      const expectedError = new Error("The url should be from the same origin.");
+      return expect(service.getRecoverUrl(uuid())).rejects.toStrictEqual(expectedError);
+    });
+
+    it("Should throw an Error if a same origin URL smuggles a valid setup path in its query string", () => {
+      expect.assertions(1);
+      const siteDomain = "https://www.passbolt.test/";
+      const apiClientOptions = new ApiClientOptions().setBaseUrl("http://localhost:6006");
+      const service = new GetRecoverUrlService(new URL(siteDomain), apiClientOptions);
+
+      const url = `${siteDomain}anything?back=${siteDomain}setup/recover/${uuid()}/${uuid()}`;
+      fetch.doMockOnce(() => mockApiResponse({ url }));
+
+      return expect(service.getRecoverUrl(uuid())).rejects.toStrictEqual(structuralError);
+    });
+
+    it("Should throw an Error if a same origin URL smuggles a valid setup path in its fragment", () => {
+      expect.assertions(1);
+      const siteDomain = "https://www.passbolt.test/";
+      const apiClientOptions = new ApiClientOptions().setBaseUrl("http://localhost:6006");
+      const service = new GetRecoverUrlService(new URL(siteDomain), apiClientOptions);
+
+      const url = `${siteDomain}anything#back=/setup/recover/${uuid()}/${uuid()}`;
+      fetch.doMockOnce(() => mockApiResponse({ url }));
+
+      return expect(service.getRecoverUrl(uuid())).rejects.toStrictEqual(structuralError);
+    });
+
     it("Should resolve a valid start URL", () => {
       expect.assertions(1);
       const siteDomain = "https://www.passbolt.test/";
