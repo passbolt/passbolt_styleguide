@@ -92,7 +92,7 @@ class ExtAuthenticationRecover extends Component {
    * Using SiteSettingsEntity
    */
   async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.organization-settings.get");
+    const settings = await this.props.port.request("passbolt.site-settings.get-or-find");
     const siteSettings = new SiteSettingsEntity(settings);
     const trustedDomain = siteSettings.url;
     this.setState({ siteSettings, trustedDomain });

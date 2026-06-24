@@ -243,6 +243,9 @@ const siteSettings = (isProEdition = true) => ({
         enabled: true,
         maxRevisionsLimit: 11,
       },
+      offline: {
+        enabled: true,
+      },
     },
   },
 });

@@ -104,6 +104,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("SCIM");
       case AdministrationWorkspaceMenuTypes.SECRET_HISTORY:
         return this.translate("Secret history");
+      case AdministrationWorkspaceMenuTypes.OFFLINE:
+        return this.translate("Offline mode");
       default:
         return "";
     }

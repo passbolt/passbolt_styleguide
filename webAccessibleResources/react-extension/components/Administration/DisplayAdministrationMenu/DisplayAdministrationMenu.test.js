@@ -769,6 +769,33 @@ describe("As AD I can see the administration menu", () => {
     });
   });
 
+  describe("As a signed-in administrator on the administration workspace, I can see the offline mode option in the left-side bar", () => {
+    it("If the feature flag is true, the menu should be visible", async () => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.OFFLINE },
+      }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag === "offline");
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.gotoOfflineSettings();
+      expect(page.offlineSettings).toBeTruthy();
+      expect(page.menuSelected).toBe("Offline mode");
+      expect(props.navigationContext.onGoToAdministrationOfflineRequested).toHaveBeenCalled();
+    });
+
+    it("If the feature flag is false, the menu should not be visible", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.OFFLINE },
+      }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag !== "offline");
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.offlineSettings).toBeNull();
+    });
+  });
+
   describe("As a signed-in administrator on the administration workspace, I can see the secret history option in the left-side bar", () => {
     it("If the feature flag is true, the menu should be visible", async () => {
       expect.assertions(4);

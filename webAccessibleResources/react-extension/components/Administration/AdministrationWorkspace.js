@@ -57,6 +57,7 @@ import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministration
 import DisplayScimSettingsAdministration from "./DisplayScimSettingsAdministration/DisplayScimSettingsAdministration.js";
 import DisplayScimAdministrationTeasing from "./DisplayScimAdministrationTeasing/DisplayScimAdministrationTeasing.js";
 import DisplaySecretHistoryAdministration from "./DisplaySecretHistoryAdministration/DisplaySecretHistoryAdministration";
+import DisplayOfflineAdministration from "./DisplayOfflineAdministration/DisplayOfflineAdministration";
 import ManageAnnouncements from "../Announcement/ManageAnnouncements/ManageAnnouncements";
 
 class AdministrationWorkspace extends Component {
@@ -314,6 +315,16 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
+   * If offline mode is selected
+   * @returns {boolean}
+   */
+  isOfflineSelected() {
+    return (
+      AdministrationWorkspaceMenuTypes.OFFLINE === this.props.administrationWorkspaceContext.selectedAdministration
+    );
+  }
+
+  /**
    * Handle go back to resource workspace
    */
   handleGoBack() {
@@ -456,6 +467,7 @@ class AdministrationWorkspace extends Component {
                         <DisplayScimSettingsAdministration />
                       ))}
                     {this.isSecretHistorySelected() && <DisplaySecretHistoryAdministration />}
+                    {this.isOfflineSelected() && <DisplayOfflineAdministration />}
                   </div>
                 </div>
                 <Switch>

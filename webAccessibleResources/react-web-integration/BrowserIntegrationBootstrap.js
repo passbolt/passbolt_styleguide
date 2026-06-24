@@ -37,7 +37,7 @@ async function init() {
  */
 async function getSiteSettings() {
   try {
-    const siteSettingsDto = await port.request("passbolt.organization-settings.get", false);
+    const siteSettingsDto = await port.request("passbolt.site-settings.get-or-find", false);
     return new SiteSettingsEntity(siteSettingsDto);
   } catch (error) {
     console.error(error);

@@ -48,6 +48,8 @@ import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissin
 import { v4 as uuidv4 } from "uuid";
 import DisplayResourceSecretHistory from "../../SecretHistory/DisplayResourceSecretHistory";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import { defaultOfflineItemDto } from "../../../../shared/models/entity/offline/offlineItemEntity.test.data";
+import OfflineModeServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeServiceWorkerService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -511,6 +513,78 @@ describe("DisplayResourcesListContextualMenu", () => {
 
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
       expect(props.hide).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("As LU I should be able to mark a resource available offline or remove it", () => {
+    it("As LU I should see the 'Make available offline' item when the resource is not yet available offline", () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).not.toBeNull();
+      expect(page.offlineAvailabilityItem.textContent).toBe("Make available offline");
+    });
+
+    it("As LU I should see the 'Remove offline availability' item when the resource is already available offline", () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({ offline: defaultOfflineItemDto() }),
+      });
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).not.toBeNull();
+      expect(page.offlineAvailabilityItem.textContent).toBe("Remove offline availability");
+    });
+
+    it("As LU I can mark a resource as available offline", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.toggleOfflineAvailability();
+
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource has been made available offline.",
+      );
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it("As LU I can remove offline availability from a resource already available offline", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({ offline: defaultOfflineItemDto() }),
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "unmarkItem").mockResolvedValue();
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.toggleOfflineAvailability();
+
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource is no longer available offline.",
+      );
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it("As LU I should see an error notification if the offline update fails", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {
+        jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
+        throw new Error("offline failure");
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displayError").mockImplementation(() => {});
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.toggleOfflineAvailability();
+
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(
+        "Unable to update the offline availability of the resource.",
+      );
+      expect(props.hide).toHaveBeenCalled();
     });
   });
 });
