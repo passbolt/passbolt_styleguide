@@ -88,8 +88,38 @@ describe("IdentifyWithSso", () => {
       // The redirection should be blocked and the window location left untouched.
       expect(console.error).toHaveBeenCalledWith(
         'Failed to identify via sso":',
-        new Error("The redirection URL is invalid. It must happen within the same origin has the current window"),
+        new Error("The redirection URL is invalid. It must happen within the same origin as the current window"),
       );
+    });
+
+    it.each([
+      { scenario: "a javascript: scheme", recoverUrl: "javascript:alert(document.domain)" },
+      { scenario: "a data: scheme", recoverUrl: "data:text/html,<script>alert(1)</script>" },
+      { scenario: "a non absolute URL", recoverUrl: "not a url" },
+    ])("As AN I should not be redirected if the recover URL uses $scenario", async ({ recoverUrl }) => {
+      expect.assertions(2);
+      const popupUrl = "https://third-party.auth.com";
+      const expectedToken = uuid();
+      const initialLocation = window.location.href;
+
+      jest.spyOn(console, "error");
+      jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async () => popupUrl);
+      jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async () => ({
+        case: "default",
+        token: expectedToken,
+      }));
+      jest.spyOn(GetRecoverUrlService.prototype, "getRecoverUrl").mockImplementation(() => recoverUrl);
+
+      const props = defaultProps();
+      const page = new IdentifyWithSsoPage(props);
+
+      await act(() => page.clickOnSsoButton());
+
+      expect(console.error).toHaveBeenCalledWith(
+        'Failed to identify via sso":',
+        new Error("The redirection URL is invalid. It must use a valid http or https protocol."),
+      );
+      expect(window.location.href).toStrictEqual(initialLocation);
     });
 
     it("As AN I want to be redirected to the self_registration a successful login attempt and if I am not a registered user", async () => {
