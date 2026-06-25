@@ -1727,11 +1727,11 @@ describe("InformManager", () => {
       expect(InFormManager.host.parentNode).toBe(dialog);
     });
 
-    it("As LU I should destroy inform when the host is moved outside the body and any dialog", async () => {
+    it("As LU it tries to remount the host when it is moved outside the body or a dialog", async () => {
       expect.assertions(2);
 
       document.body.innerHTML = domElementLoginWithNameAttributeUsername;
-      jest.spyOn(InFormManager, "destroy");
+      const retryMountHostSpy = jest.spyOn(InFormManager, "retryMountHost").mockImplementationOnce(() => {});
 
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
@@ -1740,10 +1740,68 @@ describe("InformManager", () => {
       // Move the host into another element
       const otherElement = document.createElement("div");
       document.body.append(otherElement);
-      otherElement.appendChild(InFormManager.host);
+      otherElement.appendChild(informManager.host);
       await informManager.focusOnUsername();
 
-      expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
+      expect(retryMountHostSpy).toHaveBeenCalledTimes(1);
+    });
+
+    describe("InFormManager::retryMountHost", () => {
+      let destroySpy;
+      let findAndSetAuthenticationFieldsSpy;
+
+      beforeEach(() => {
+        jest.useFakeTimers();
+        destroySpy = jest.spyOn(InFormManager, "destroy");
+        findAndSetAuthenticationFieldsSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields");
+      });
+
+      afterEach(() => {
+        findAndSetAuthenticationFieldsSpy.mockRestore();
+        destroySpy.mockRestore();
+      });
+
+      afterAll(() => {
+        jest.useRealTimers();
+      });
+
+      it("As LU it retries to remount the host with an increasing delay then destroys if it keeps being moved", async () => {
+        expect.assertions(1);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        let informManager;
+        await act(async () => (informManager = new InformManagerPage()));
+
+        // Move the host into another element; the re-mount never sticks.
+        const otherElement = document.createElement("div");
+        document.body.append(otherElement);
+        otherElement.appendChild(informManager.host);
+        findAndSetAuthenticationFieldsSpy.mockImplementation(() => {});
+
+        InFormManager.retryMountHost();
+
+        jest.advanceTimersByTime(600); // 100 + 200 + 300 = 600 ms, 3 attemps to remount with increasing delay
+        expect(destroySpy).toHaveBeenCalledTimes(1);
+      });
+
+      it("As LU it does not destroy inform when the host is successfully remounted", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        let informManager;
+        await act(async () => (informManager = new InformManagerPage()));
+
+        // Move the host into another element; the real findAndSetAuthenticationFields moves it back.
+        const otherElement = document.createElement("div");
+        document.body.append(otherElement);
+        otherElement.appendChild(informManager.host);
+
+        InFormManager.retryMountHost();
+        jest.advanceTimersByTime(100);
+
+        expect(destroySpy).not.toHaveBeenCalled();
+        expect(informManager.host.parentNode).toBe(document.body);
+      });
     });
 
     it("As LU I should move the host into a dialog that opens after initialization", async () => {
