@@ -23,6 +23,8 @@ import ClipboardServiceWorkerService from "../../../shared/services/serviceWorke
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
 
 const Z_INDEX_MAX = 2147483647;
+const HOST_MOUNT_MAX_RETRIES = 3;
+const HOST_MOUNT_RETRY_DELAY = 100;
 
 /**
  * Manages the in-form web integration including call-to-action and menu
@@ -344,27 +346,62 @@ class InFormManager {
   }
 
   /**
+   * Checks if the host is mounted at an expected location (body/dialog)
+   * @returns {boolean}
+   */
+  isHostInValidLocation() {
+    const parent = this.host?.parentNode;
+
+    const belongsToDocument = parent?.ownerDocument === document;
+    const isConnected = parent?.isConnected ?? false;
+    const isInBody = parent === document.body;
+    const isInDialog = parent?.nodeName === "DIALOG";
+
+    return belongsToDocument && isConnected && (isInBody || isInDialog);
+  }
+
+  /**
+   * Remount the host up to 3 times if it is moved out of the DOM
+   * If the host keeps being moved out, it is destroyed.
+   * @param {number} attempt Remount counter.
+   */
+  retryMountHost(attempt = 1) {
+    console.warn(`The host has been moved out of the DOM, retrying... (${attempt}/${HOST_MOUNT_MAX_RETRIES})`);
+
+    // Remount the host
+    this.findAndSetAuthenticationFields();
+    this.handleInformCallToActionClickEvent();
+
+    // Wait N milliseconds before checking again
+    setTimeout(() => {
+      if (!this.isHostInValidLocation()) {
+        if (attempt < HOST_MOUNT_MAX_RETRIES) {
+          // If there are still attempts left, retry
+          this.retryMountHost(attempt + 1);
+        } else {
+          // Otherwise, destroy the host
+          console.debug("Someone has moved the host of the shadow root");
+          this.destroy();
+        }
+      }
+    }, HOST_MOUNT_RETRY_DELAY * attempt);
+  }
+
+  /**
    * Whenever the DOM changes
    */
   handleDomChange() {
     const updateAuthenticationFields = () => {
       /**
        * The only way to prevent an attacker trying to move the host into another parent element and add opacity.
-       * The host must be either in the body or inside a dialog. Anything else is considered tampering and the host is destroyed.
+       * The host must be either in the body or inside a dialog. Anything else is considered tampering: we try to
+       * re-mount the host a few times before giving up and destroying it.
        */
-      const parent = this.host.parentNode;
-
-      const isInBody = parent === document.body;
-      const isInDialog = parent?.nodeName === "DIALOG";
-      const isConnected = parent?.isConnected;
-      const belongsToDocument = parent?.ownerDocument === document;
-
-      if (belongsToDocument && isConnected && (isInBody || isInDialog)) {
+      if (this.isHostInValidLocation()) {
         this.findAndSetAuthenticationFields();
         this.handleInformCallToActionClickEvent();
       } else {
-        console.debug("Someone has moved the host of the shadow root");
-        this.destroy();
+        this.retryMountHost();
       }
     };
 
