@@ -16,7 +16,7 @@ import { MemoryRouter as Router, Redirect, Route, Switch } from "react-router-do
 import AnimatedSwitch from "./components/AnimatedSwitch/AnimatedSwitch";
 import PassphraseDialog from "./components/PassphraseDialog/PassphraseDialog";
 import PropTypes from "prop-types";
-import SiteSettings from "../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
 import UserSettings from "../shared/lib/Settings/UserSettings";
 import TranslationProvider from "../shared/components/Internationalisation/TranslationProvider";
 import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtensionInProgress/SetupExtensionInProgress";
@@ -42,6 +42,7 @@ import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataT
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import ActionAbortedMissingMetadataKeysPage from "./components/ActionAbortedMissingMetadataKeysPage/ActionAbortedMissingMetadataKeysPage";
 import RbacServiceWorkerService from "../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
+import OnlineSessionEntity from "../shared/models/entity/session/onlineSessionEntity";
 
 const SEARCH_VISIBLE_ROUTES = [
   "/webAccessibleResources/quickaccess/home",
@@ -247,8 +248,8 @@ class ExtQuickAccess extends React.Component {
   }
 
   async getSiteSettings() {
-    const siteSettingsDto = await this.state.port.request("passbolt.organization-settings.get");
-    const siteSettings = new SiteSettings(siteSettingsDto);
+    const siteSettingsDto = await this.state.port.request("passbolt.site-settings.get-or-find");
+    const siteSettings = new SiteSettingsEntity(siteSettingsDto);
     this.setState({ siteSettings });
     return siteSettings;
   }
@@ -286,16 +287,17 @@ class ExtQuickAccess extends React.Component {
    * the passbolt application.
    *
    * This function requires the user settings to be present in the component state.
-   * @returns {Promise<void>}
+   * @returns {Promise<boolean>}
    */
   async checkAuthStatus() {
-    const { isAuthenticated, isMfaRequired } = await this.state.port.request("passbolt.auth.check-status");
-    if (isMfaRequired) {
+    const activeSession = await this.state.port.request("passbolt.auth.check-status");
+    const activeSessionEntity = new OnlineSessionEntity(activeSession);
+    if (!activeSessionEntity.isMfaAuthenticated) {
       await this.redirectToMfaAuthentication();
       return;
     }
-    this.setState({ isAuthenticated });
-    return isAuthenticated;
+    this.setState({ isAuthenticated: activeSessionEntity.isAuthenticated });
+    return activeSessionEntity.isAuthenticated;
   }
 
   /**

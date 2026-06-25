@@ -14,12 +14,12 @@
 import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
 import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
 import { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
 
 const betaMetadataProApiContext = defaultAppContext();
-betaMetadataProApiContext.siteSettings.settings.passbolt.plugins.metadata.isInBeta = true;
+betaMetadataProApiContext.siteSettings._props.passbolt.plugins.metadata.isInBeta = true;
 
 /**
  * Default props
@@ -29,7 +29,7 @@ betaMetadataProApiContext.siteSettings.settings.passbolt.plugins.metadata.isInBe
 export function defaultProps(props = {}, isCommunityEdition = false) {
   const context = isCommunityEdition
     ? {
-        siteSettings: new SiteSettings(siteSettingsCe),
+        siteSettings: new SiteSettingsEntity(siteSettingsCe),
       }
     : betaMetadataProApiContext;
 

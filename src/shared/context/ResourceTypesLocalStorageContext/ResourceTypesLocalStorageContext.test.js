@@ -176,9 +176,10 @@ describe("ResourceTypesLocalStorageContext", () => {
       const resourceTypes = resourceTypesCollectionDto();
 
       const props = defaultProps();
-      props.context.storage.local.set({ resourceTypes: resourceTypes });
-
       const contextProvider = new ResourceTypesLocalStorageContextProvider(props);
+
+      props.context.storage.local.set({ [contextProvider.storageKey]: resourceTypes });
+
       mockComponentSetState(contextProvider);
 
       await contextProvider.loadLocalStorage();
