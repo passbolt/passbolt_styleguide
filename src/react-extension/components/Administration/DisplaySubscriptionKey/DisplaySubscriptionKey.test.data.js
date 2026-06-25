@@ -22,12 +22,12 @@ import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
 import SubscriptionEntity from "../../../../shared/models/entity/subscription/subscriptionEntity";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Site settings with the "edition" plugin.
- * @returns {SiteSettings}
+ * @returns {SiteSettingsEntity}
  */
 function siteSettingsWithEditionPlugin() {
   const settings = {
@@ -41,7 +41,7 @@ function siteSettingsWithEditionPlugin() {
     },
   };
 
-  return new SiteSettings(settings);
+  return new SiteSettingsEntity(settings);
 }
 
 /**
@@ -127,7 +127,7 @@ export function notFoundProps() {
 export function propsWithoutEditionPlugin(props = {}) {
   const context = {
     ...props.context,
-    siteSettings: new SiteSettings(siteSettingsFixture),
+    siteSettings: new SiteSettingsEntity(siteSettingsFixture),
   };
 
   return defaultProps({ ...props, context });
