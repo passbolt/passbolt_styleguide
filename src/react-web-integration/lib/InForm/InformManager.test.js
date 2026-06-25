@@ -18,6 +18,8 @@
  */
 
 import {
+  domDialogLoginWithUsernamePassword,
+  domDialogWithoutInputAndLoginInBody,
   domElementLoginOnlyPasswordWithSubmitButton,
   domElementLoginWithAutocompleteAttributeEmail,
   domElementLoginWithAutocompleteAttributeUsername,
@@ -88,6 +90,7 @@ import InformManagerPage from "./InformManager.test.page";
 import InFormManager from "./InFormManager";
 import DomUtils from "../Dom/DomUtils";
 import { act } from "react";
+import { waitFor } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -115,6 +118,8 @@ describe("InformManager", () => {
         });
         return iframeMock;
       }
+
+      return Document.prototype.createElement.call(document, elementName);
     });
   });
 
@@ -1629,6 +1634,222 @@ describe("InformManager", () => {
 
       expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
       expect(informManager.iframesLength).toBe(0);
+    });
+  });
+
+  describe("Dialog parent element", () => {
+    describe("InFormManager::getContainerElement", () => {
+      it("As LU the container is the dialog when one of the given fields is contained in a dialog", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domDialogLoginWithUsernamePassword;
+
+        let informManager;
+        await act(async () => (informManager = new InformManagerPage()));
+
+        const dialog = document.querySelector("dialog");
+        expect(informManager.iframesLength).toBe(0);
+        expect(InFormManager.getContainerElement(informManager.usernames, informManager.passwords)).toBe(dialog);
+      });
+
+      it("As LU the container is the body when none of the given fields is contained in a dialog", async () => {
+        expect.assertions(1);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+
+        let informManager;
+        await act(async () => (informManager = new InformManagerPage()));
+        expect(InFormManager.getContainerElement(informManager.usernames, informManager.passwords)).toBe(document.body);
+      });
+    });
+
+    it("As LU I should mount the host inside the dialog when an input is contained in a dialog", async () => {
+      expect.assertions(3);
+
+      document.body.innerHTML = domDialogLoginWithUsernamePassword;
+
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      const dialog = document.querySelector("dialog");
+      expect(InFormManager.host.parentNode).toBe(dialog);
+      expect(informManager.iframesLength).toBe(0);
+
+      await informManager.focusOnUsername();
+      expect(informManager.iframesLength).toBe(1);
+    });
+
+    it("As LU I should mount the host in the body when no input is contained in a dialog", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      expect(InFormManager.host.parentNode).toBe(document.body);
+
+      await informManager.focusOnUsername();
+      expect(informManager.iframesLength).toBe(1);
+    });
+
+    it("As LU I should mount the host in the body when a dialog has no input and the form is in the body", async () => {
+      expect.assertions(3);
+
+      document.body.innerHTML = domDialogWithoutInputAndLoginInBody;
+
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      const dialog = document.querySelector("dialog");
+      expect(InFormManager.host.parentNode).toBe(document.body);
+      expect(dialog.contains(InFormManager.host)).toBe(false);
+      expect(informManager.iframesLength).toBe(0);
+    });
+
+    it("As LU I should not destroy inform when the host is legitimately inside a dialog and the DOM changes", async () => {
+      expect.assertions(3);
+
+      document.body.innerHTML = domDialogLoginWithUsernamePassword;
+
+      jest.spyOn(InFormManager, "destroy");
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      const dialog = document.querySelector("dialog");
+      expect(InFormManager.host.parentNode).toBe(dialog);
+
+      // A DOM change elsewhere triggers the mutation observer
+      document.body.append(document.createElement("div"));
+      await informManager.focusOnUsername();
+
+      expect(InFormManager.destroy).not.toHaveBeenCalled();
+      expect(InFormManager.host.parentNode).toBe(dialog);
+    });
+
+    it("As LU I should destroy inform when the host is moved outside the body and any dialog", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      jest.spyOn(InFormManager, "destroy");
+
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+      expect(InFormManager.host.parentNode).toBe(document.body);
+
+      // Move the host into another element
+      const otherElement = document.createElement("div");
+      document.body.append(otherElement);
+      otherElement.appendChild(InFormManager.host);
+      await informManager.focusOnUsername();
+
+      expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
+    });
+
+    it("As LU I should move the host into a dialog that opens after initialization", async () => {
+      expect.assertions(3);
+
+      document.body.innerHTML = `<div>No login fields here</div>`;
+
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      expect(InFormManager.host.parentNode).toBe(document.body);
+      expect(informManager.iframesLength).toBe(0);
+
+      // A modal dialog containing a login form opens afterwards
+      const dialog = document.createElement("dialog");
+      dialog.open = true;
+      const username = document.createElement("input");
+      username.type = "text";
+      username.name = "username";
+      const password = document.createElement("input");
+      password.type = "password";
+      dialog.append(username, password);
+
+      document.body.append(dialog);
+
+      await act(async () => {
+        InFormManager.findAndSetInputFields();
+        await waitFor(() => {});
+      });
+
+      expect(InFormManager.host.parentNode).toBe(dialog);
+    });
+  });
+
+  describe("IFrame positioning", () => {
+    it("should be positionned at the top-left of the containing block", async () => {
+      expect.assertions(3);
+
+      document.body.innerHTML = domElementOnlyUsername;
+      InFormManager.host = null;
+
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      expect(informManager.iframesLength).toBe(0);
+
+      expect(informManager.host.getAttribute("style")).toContain("top: 0");
+      expect(informManager.host.getAttribute("style")).toContain("left: 0");
+    });
+
+    it("As LU the call-to-action is positioned relative to the host containing block", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementOnlyUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      jest
+        .spyOn(informManager.username, "getBoundingClientRect")
+        .mockReturnValue({ top: 100, left: 200, width: 300, height: 40 });
+      jest.spyOn(informManager.host, "getBoundingClientRect").mockReturnValue({ top: 30, left: 40 });
+
+      await informManager.focusOnUsername();
+
+      expect(informManager.callToActionIframe.style.left).toBe("435px");
+      expect(informManager.callToActionIframe.style.top).toBe("81px");
+    });
+
+    it("menu should be positioned relative to the containing block", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementOnlyUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      jest
+        .spyOn(informManager.username, "getBoundingClientRect")
+        .mockReturnValue({ top: 100, left: 200, width: 300, height: 40 });
+      jest.spyOn(informManager.host, "getBoundingClientRect").mockReturnValue({ top: 50, left: 60 });
+
+      await informManager.focusOnUsername();
+      await informManager.clickOnInformCallToAction();
+      await informManager.openInFormMenu();
+
+      expect(informManager.menuIframe.style.left).toBe("73px");
+      expect(informManager.menuIframe.style.top).toBe("90px");
+    });
+
+    it("menu should be clamped to zero", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementOnlyUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      jest
+        .spyOn(informManager.username, "getBoundingClientRect")
+        .mockReturnValue({ top: 10, left: 50, width: 100, height: 20 });
+      jest.spyOn(informManager.host, "getBoundingClientRect").mockReturnValue({ top: 100, left: 0 });
+
+      await informManager.focusOnUsername();
+      await informManager.clickOnInformCallToAction();
+      await informManager.openInFormMenu();
+
+      expect(informManager.menuIframe.style.left).toBe("0px");
+      expect(informManager.menuIframe.style.top).toBe("0px");
     });
   });
 });
