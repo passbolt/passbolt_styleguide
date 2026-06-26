@@ -22,11 +22,14 @@ import {
   goingToExpireProps,
   mockSubscription,
   mockSubscriptionExpired,
+  mockSubscriptionGoingToExpire,
   mockSubscriptionUsersExceeded,
   mockUsers,
+  propsWithoutEditionPlugin,
 } from "./DisplaySubscriptionKey.test.data";
 import DisplaySubscriptionKeyPage from "./DisplaySubscriptionKey.test.page";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import SubscriptionEntity from "../../../../shared/models/entity/subscription/subscriptionEntity";
 import { screen, waitFor } from "@testing-library/react";
 import { DateTime } from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
@@ -323,11 +326,17 @@ describe("DisplaySubscriptionKeyPage", () => {
       await screen.findByText("Details");
 
       expect(page.buyNowLink).not.toBeNull();
-      expect(page.buyNowLink.getAttribute("href")).toBe("https://www.passbolt.com/pricing/pro");
+      expect(page.buyNowLink.getAttribute("href")).toBe(
+        "https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
+      );
       expect(page.startTrialLink).not.toBeNull();
-      expect(page.startTrialLink.getAttribute("href")).toBe("https://www.passbolt.com/contact/pro/free-trial");
+      expect(page.startTrialLink.getAttribute("href")).toBe(
+        "https://www.passbolt.com/contact/pro/free-trial?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
+      );
       expect(page.seePricingLink).not.toBeNull();
-      expect(page.seePricingLink.getAttribute("href")).toBe("https://www.passbolt.com/pricing/pro");
+      expect(page.seePricingLink.getAttribute("href")).toBe(
+        "https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
+      );
     });
 
     it("As AD with a valid subscription the Pro edition card should be badged as the current plan", async () => {
@@ -336,6 +345,55 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       expect(page.currentEditionCard).toBe(page.proCard);
       expect(page.edition).toBe("Pro");
+    });
+  });
+
+  describe("As AD when the edition plugin is not present", () => {
+    it("As AD in PRO mode the subscription actions should not be rendered", async () => {
+      expect.assertions(2);
+
+      const noPluginProps = propsWithoutEditionPlugin();
+      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
+      await screen.findByText("Details");
+
+      expect(page.subscriptionActions).toBeNull();
+      expect(page.toolbarActionsUpdateButton).toBeNull();
+    });
+
+    it("As AD with an expiring subscription the Renew and Downgrade to Community buttons should not be rendered", async () => {
+      expect.assertions(2);
+
+      const noPluginProps = propsWithoutEditionPlugin({
+        context: { onGetSubscriptionKeyRequested: () => new SubscriptionEntity(mockSubscriptionGoingToExpire) },
+      });
+      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
+      await screen.findByText("Details");
+
+      expect(page.renewKeyButton).toBeNull();
+      expect(page.downgradeToCommunityButton).toBeNull();
+    });
+
+    it("As CE AD the Upload subscription key button should not be rendered", async () => {
+      expect.assertions(1);
+
+      const noPluginProps = propsWithoutEditionPlugin();
+      jest.spyOn(noPluginProps.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
+      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
+      await screen.findByText("Details");
+
+      expect(page.toolbarActionsUpdateButton).toBeNull();
+    });
+
+    it("As AD the Details and Plans sections should still be rendered", async () => {
+      expect.assertions(3);
+
+      const noPluginProps = propsWithoutEditionPlugin();
+      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
+      await screen.findByText("Details");
+
+      expect(page.title).toBe("Details");
+      expect(page.plansTitle).toBe("Plans");
+      expect(page.proCard).not.toBeNull();
     });
   });
 });
