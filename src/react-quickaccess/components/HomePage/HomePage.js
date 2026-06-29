@@ -39,6 +39,7 @@ import UsersSVG from "../../../img/svg/users.svg";
 import TagV2SVG from "../../../img/svg/tag_v2.svg";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import { sortResourcesByUriMatchingScore } from "../../../shared/utils/sortUtils";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -141,12 +142,7 @@ class HomePage extends React.Component {
       }
     }
 
-    // Sort the resources by uri lengths, the greater on top.
-    return suggestedResources.sort((a, b) => {
-      const aUrisLength = a.metadata.uris[0].length || 0;
-      const bUrisLength = b.metadata.uris[0].length || 0;
-      return bUrisLength - aUrisLength;
-    });
+    return sortResourcesByUriMatchingScore(suggestedResources, activeTabUrl);
   });
 
   /**
