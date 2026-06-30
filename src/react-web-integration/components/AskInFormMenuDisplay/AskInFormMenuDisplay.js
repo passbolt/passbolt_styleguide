@@ -23,6 +23,7 @@ import IconBadge4SVG from "../../../img/logo/icon-badge-4.svg";
 import IconBadge5SVG from "../../../img/logo/icon-badge-5.svg";
 import IconBadge5PlusSVG from "../../../img/logo/icon-badge-5+.svg";
 import Logger from "../../../shared/utils/logger";
+import OnlineSessionEntity from "../../../shared/models/entity/session/onlineSessionEntity";
 /**
  * This component is a call-to-action integrated into a target web page which includes
  * an identified authentication form. When some Passbolt actions are available, the performed call-to-action
@@ -107,11 +108,10 @@ class AskInFormMenuDisplay extends React.Component {
    * Check the user authentication status
    */
   async checkAuthenticationStatus() {
-    const { isAuthenticated, isMfaRequired } = await this.props.context.port.request(
-      "passbolt.in-form-cta.check-status",
-    );
+    const activeSession = await this.props.context.port.request("passbolt.in-form-cta.check-status");
+    const activeSessionEntity = new OnlineSessionEntity(activeSession);
 
-    const isActive = isAuthenticated && !isMfaRequired;
+    const isActive = activeSessionEntity.isAuthenticated && activeSessionEntity.isMfaAuthenticated;
 
     const suggestedResourcesCount = isActive
       ? await this.props.context.port.request("passbolt.in-form-cta.suggested-resources", this.props.context.fieldType)
