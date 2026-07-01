@@ -223,8 +223,10 @@ class OAuth2SsoProviderForm extends React.Component {
             placeholder={this.translate("OpenId Configuration Path")}
             disabled={this.hasAllInputDisabled()}
           />
-          {errors?.hasError("openid_configuration_path") && (
-            <div className="error-message">{this.displayErrors(errors.getError("openid_configuration_path"))}</div>
+          {errors?.hasError("openid_configuration_path", "minLength") && (
+            <div className="error-message">
+              <Trans>The OpenId configuration path is required.</Trans>
+            </div>
           )}
           <p>
             <Trans>The OpenId configuration relative path from the given login url.</Trans>
