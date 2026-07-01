@@ -130,45 +130,6 @@ export function propsWithFilteredResourcesAndPinCodeColumnVisible(data = {}) {
 }
 
 /**
- * Props with populated filtered resources and the offline column enabled.
- * @param {object} data Override the default props.
- * @returns {object}
- */
-export function propsWithFilteredResourcesAndOfflineEnabled(data = {}) {
-  const baseContext = defaultUserAppContext();
-  const baseCanIUse = baseContext.siteSettings.canIUse.bind(baseContext.siteSettings);
-  baseContext.siteSettings.canIUse = (name) => (name === "offline" ? true : baseCanIUse(name));
-
-  const resources = [
-    defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "available-offline" }) }, { withOffline: true }),
-    defaultResourceDto({
-      metadata: defaultResourceMetadataDto({ name: "not-available-offline" }),
-    }),
-  ];
-
-  return defaultProps({
-    context: baseContext,
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      filteredResources: resources,
-      columnsResourceSetting: new ColumnsResourceSettingCollection([
-        { id: "favorite", label: "Favorite", position: 1, show: true },
-        { id: "icon", label: "Icon", position: 2, show: true },
-        { id: "name", label: "Name", position: 3, show: true },
-        { id: "username", label: "Username", position: 4, show: true },
-        { id: "password", label: "Password", position: 5, show: true },
-        { id: "totp", label: "TOTP", position: 6, show: true },
-        { id: "uri", label: "URI", position: 7, show: true },
-        { id: "expired", label: "Expiry", position: 8, show: true },
-        { id: "modified", label: "Modified", position: 9, show: true },
-        { id: "location", label: "Location", position: 10, show: true },
-        { id: "offline_mode", label: "Offline Mode", position: 11, show: true },
-      ]),
-    }),
-    ...data,
-  });
-}
-
-/**
  * Props with populated filtered resources and denied UI action.
  * @param {object} data Override the default props.
  * @returns {object}

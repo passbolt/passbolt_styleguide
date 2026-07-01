@@ -20,7 +20,6 @@ import {
   propsWithFilteredResources,
   propsWithFilteredResourcesAndColumnsHidden,
   propsWithFilteredResourcesAndDenyUiAction,
-  propsWithFilteredResourcesAndOfflineEnabled,
   propsWithFilteredResourcesAndPinCodeColumnVisible,
   propsWithNoResourcesForFilter,
 } from "./DisplayResourcesList.test.data";
@@ -30,7 +29,6 @@ import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspac
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
-import { denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import { ColumnFields } from "../../../../shared/models/column/ColumnModel";
 import ColumnsResourceSettingCollection from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
@@ -105,13 +103,6 @@ describe("Display Resources", () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.PRIVATE));
       // Wait until the text is found (This will ensure the state has been updated)
       await screen.findByText("Welcome to passbolt!");
-      expect(page.hasEmptyContent).toBeTruthy();
-    });
-
-    it("As LU, I should see an empty content when there are no resources matching the offline filter", async () => {
-      const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.OFFLINE));
-      // Wait until the text is found (This will ensure the state has been updated)
-      await screen.findByText("No passwords are offline available yet.");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
@@ -648,37 +639,6 @@ describe("Display Resources", () => {
       expect(page.columns(8).width).toStrictEqual("215px");
       expect(page.columns(9).width).toStrictEqual("129px");
       expect(page.columns(10).width).toStrictEqual("188px");
-    });
-  });
-
-  describe("As LU, I should see the offline mode column when offline mode is enabled and allowed by RBAC.", () => {
-    it("As LU, I should not see the offline mode column by default", async () => {
-      expect.assertions(1);
-      const props = propsWithFilteredResources();
-      const page = new DisplayResourcesListPage(props);
-      await screen.findByText("apache");
-      const columnNames = Array.from({ length: page.columnsCount }, (_, index) => page.columns(index + 1).name);
-      expect(columnNames).not.toContain("Offline Mode");
-    });
-
-    it("As LU, I should see the offline mode column when the offline capability is enabled and allowed by RBAC", async () => {
-      expect.assertions(3);
-      const props = propsWithFilteredResourcesAndOfflineEnabled();
-      const page = new DisplayResourcesListPage(props);
-      await screen.findByText("available-offline");
-      const columnNames = Array.from({ length: page.columnsCount }, (_, index) => page.columns(index + 1).name);
-      expect(columnNames).toContain("Offline Mode");
-      expect(page.resource(1).offlineMode).toBe("Available offline");
-      expect(page.resource(2).offlineMode).toBe("Not available offline");
-    });
-
-    it("As LU, I should not see the offline mode column when offline is enabled but denied by RBAC", async () => {
-      expect.assertions(1);
-      const props = propsWithFilteredResourcesAndOfflineEnabled({ rbacContext: denyRbacContext() });
-      const page = new DisplayResourcesListPage(props);
-      await screen.findByText("available-offline");
-      const columnNames = Array.from({ length: page.columnsCount }, (_, index) => page.columns(index + 1).name);
-      expect(columnNames).not.toContain("Offline Mode");
     });
   });
 

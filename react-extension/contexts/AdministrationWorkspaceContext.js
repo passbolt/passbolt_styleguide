@@ -197,7 +197,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const gettingStarted = ADMIN_URL_REGEXP.gettingStarted.test(location);
     const scim = ADMIN_URL_REGEXP.scim.test(location);
     const secretHistory = ADMIN_URL_REGEXP.secretHistory.test(location);
-    const offline = ADMIN_URL_REGEXP.offline.test(location);
 
     const isMfaPolicyLocationTeasing = ADMIN_URL_REGEXP.mfaPolicyTeasing.test(location);
     const isPasswordPoliciesLocationTeasing = ADMIN_URL_REGEXP.passwordPoliciesTeasing.test(location);
@@ -255,8 +254,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SCIM;
     } else if (secretHistory) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SECRET_HISTORY;
-    } else if (offline) {
-      selectedAdministration = AdministrationWorkspaceMenuTypes.OFFLINE;
     }
 
     // let's check if the current URL is actually supported
@@ -370,7 +367,6 @@ export const AdministrationWorkspaceMenuTypes = {
   METADATA_GETTING_STARTED: "METADATA_GETTING_STARTED", // metadata getting started menu selected``
   SCIM: "SCIM", // SCIM menu selected
   SECRET_HISTORY: "SECRET_HISTORY", // Secret history menu selected
-  OFFLINE: "OFFLINE", // Offline mode menu selected
 };
 
 /**
@@ -435,7 +431,6 @@ const ADMIN_URL_REGEXP = {
   scim: /^\/app\/administration\/user-provisionning\/scim\/?$/,
   scimTeasing: /^\/app\/administration\/scim-teasing\/?$/,
   secretHistory: /^\/app\/administration\/secret-history\/?$/,
-  offline: /^\/app\/administration\/offline\/?$/,
 };
 
 /**

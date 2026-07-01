@@ -57,7 +57,6 @@ export const ColumnModelTypes = {
   LAST_LOGGED_IN: "last_logged_in",
   MFA: "mfa",
   ACCOUNT_RECOVERY: "account_recovery",
-  OFFLINE_MODE: "offline_mode",
 };
 
 export const ColumnFields = {
@@ -80,5 +79,4 @@ export const ColumnFields = {
   USER_LAST_LOGGED_IN: "last_logged_in",
   USER_MFA: "is_mfa_enabled",
   USER_ACCOUNT_RECOVERY: "account_recovery_user_setting.status",
-  OFFLINE: "offline",
 };

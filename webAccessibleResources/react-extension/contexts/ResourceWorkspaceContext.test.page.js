@@ -202,14 +202,6 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
-   * Go to the Offline search filter route
-   */
-  async goToOffline() {
-    this.setup(this.context, this.props);
-    await this.goToLink(".offline");
-  }
-
-  /**
    * Select all resources
    */
   selectAll() {
@@ -360,14 +352,6 @@ export default class ResourceWorkspaceContextPage {
             }}
           >
             <a className="expired"></a>
-          </NavLink>
-          <NavLink
-            to={{
-              pathname: "/app/passwords/filter/offline",
-              state: { filter: { type: ResourceWorkspaceFilterTypes.OFFLINE } },
-            }}
-          >
-            <a className="offline"></a>
           </NavLink>
           <NavLink
             to={{ pathname: "/app/passwords", state: { filter: { type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN } } }}

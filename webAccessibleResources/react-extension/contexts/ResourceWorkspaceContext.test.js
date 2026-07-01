@@ -22,7 +22,6 @@ import { ResourceWorkspaceFilterTypes } from "./ResourceWorkspaceContext";
 import { waitFor } from "@testing-library/react";
 import { waitForTrue } from "../../../test/utils/waitFor";
 import { act } from "react";
-import { defaultResourceDto } from "../../shared/models/entity/resource/resourceEntity.test.data";
 
 describe("Resource Workspace Context", () => {
   let page; // The page to test against
@@ -62,12 +61,6 @@ describe("Resource Workspace Context", () => {
       await page.goToExpired();
       await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.EXPIRED);
-    });
-
-    it("AS LU I should have an OFFLINE filter when I go to /app/passwords/filter/offline with such a filter", async () => {
-      await page.goToOffline();
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
-      expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.OFFLINE);
     });
 
     it("AS LU I should have an ITEMS-I-OWN filter when I went to /app/passwords with such a filter", async () => {
@@ -213,20 +206,6 @@ describe("Resource Workspace Context", () => {
       await page.goToRootFolder();
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
-
-    it("AS LU I should have only the resources available offline when the filter is OFFLINE", async () => {
-      expect.assertions(2);
-      const offlineResource = defaultResourceDto({}, { withOffline: true });
-      const onlineResource = defaultResourceDto();
-      const customContext = defaultAppContext({
-        resources: [offlineResource, onlineResource],
-      });
-      const customPage = new ResourceWorkspaceContextPage(customContext, defaultProps());
-      await customPage.goToOffline();
-      await waitForTrue(() => customPage.filter.type === ResourceWorkspaceFilterTypes.OFFLINE);
-      expect(customPage.filteredResources).toHaveLength(1);
-      expect(customPage.filteredResources[0].id).toBe(offlineResource.id);
-    });
   });
 
   describe("As LU I should have the appropriate selected resources at any time", () => {
@@ -349,9 +328,8 @@ describe("Resource Workspace Context", () => {
         { id: "expired", label: "Expiry", position: 10, show: true },
         { id: "modified", label: "Modified", position: 11, show: true },
         { id: "location", label: "Location", position: 12, show: true },
-        { id: "offline_mode", label: "Offline Mode", position: 13, show: false },
       ];
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(13);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(12);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(defaultColumnsSetting);
     });
 
@@ -370,7 +348,6 @@ describe("Resource Workspace Context", () => {
         { id: "expired", label: "Expiry", position: 10, show: true },
         { id: "modified", label: "Modified", position: 11, show: true },
         { id: "location", label: "Location", position: 12, show: true },
-        { id: "offline_mode", label: "Offline Mode", position: 13, show: false },
       ];
       const sorter = {
         propertyName: "name",
@@ -386,7 +363,7 @@ describe("Resource Workspace Context", () => {
       });
       await page.goToAllItems();
       await page.goToRootFolder();
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(13);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(12);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(columnsSetting);
       expect(page.sorter.toDto()).toStrictEqual(sorter);
     });
@@ -432,13 +409,12 @@ describe("Resource Workspace Context", () => {
         { id: "expired", label: "Expiry", position: 10, show: true },
         { id: "modified", label: "Modified", position: 5, width: 250, show: true },
         { id: "location", label: "Location", position: 12, show: true },
-        { id: "offline_mode", label: "Offline Mode", position: 13, show: false },
       ];
       await page.goToAllItems();
       page.onChangeColumnView("name", false);
       page.onChangeColumnsSettings(columnsSetting);
 
-      expect(page.columnsResourceSetting.length).toStrictEqual(13);
+      expect(page.columnsResourceSetting.length).toStrictEqual(12);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
     });
   });
