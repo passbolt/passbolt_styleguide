@@ -58,16 +58,26 @@ class Footer extends Component {
    * i.e. SERVER_VERSION / BROWSER_EXTENSION_VERSION
    */
   get versions() {
-    const versions = [];
+    const clientVersion = this.props.context.extensionVersion;
     const serverVersion = this.props.context.siteSettings.version;
-    if (serverVersion) {
-      versions.push(`${this.props.t("Server")} ${serverVersion}`);
-    }
-    if (this.props.context.extensionVersion) {
-      versions.push(`${this.props.t("Client")} ${this.props.context.extensionVersion}`);
-    }
 
-    return versions.join(" / ");
+    return (
+      <div>
+        {clientVersion && (
+          <div>
+            {this.props.t("Client")} {clientVersion}
+          </div>
+        )}
+        {serverVersion && (
+          <>
+            {clientVersion && <hr />}
+            <div>
+              {this.props.t("Server")} {serverVersion}
+            </div>
+          </>
+        )}
+      </div>
+    );
   }
 
   /**
@@ -80,6 +90,14 @@ class Footer extends Component {
     const debug = this.props.context.siteSettings.debug;
     const isHttpMode = this.props.context.siteSettings.url.startsWith("http://");
     return debug || isHttpMode;
+  }
+
+  /**
+   * Returns true if the application is served on Passbolt's cloud
+   */
+  get isCloud() {
+    const currentURL = new URL(this.props.context.siteSettings.url);
+    return currentURL.protocol === "https:" && currentURL.hostname.match(/cloud.passbolt.com$/);
   }
 
   /**
@@ -97,28 +115,38 @@ class Footer extends Component {
               </a>
             </li>
           )}
-          {this.termsUrl && (
+          {!this.isCloud && (
+            <>
+              {this.props.context.siteSettings.isCommunityEdition && (
+                <li>
+                  <p>
+                    <Trans>
+                      <strong>Community Edition</strong> (free)
+                    </Trans>
+                  </p>
+                </li>
+              )}
+              {!this.props.context.siteSettings.isCommunityEdition && (
+                <li>
+                  <Trans>
+                    <strong>Pro Edition</strong>
+                  </Trans>
+                </li>
+              )}
+            </>
+          )}
+          {this.isCloud && (
             <li>
-              <a href={this.termsUrl} target="_blank" rel="noopener noreferrer">
-                <Trans>Terms</Trans>
-              </a>
+              <p>
+                <Trans>
+                  <strong>Cloud Edition</strong>
+                </Trans>
+              </p>
             </li>
           )}
-          {this.privacyUrl && (
-            <li>
-              <a href={this.privacyUrl} target="_blank" rel="noopener noreferrer">
-                <Trans>Privacy</Trans>
-              </a>
-            </li>
-          )}
-          <li>
-            <a href={this.creditsUrl} target="_blank" rel="noopener noreferrer">
-              <Trans>Credits</Trans>
-            </a>
-          </li>
           <li>
             {this.versions && (
-              <Tooltip message={this.versions} direction="left">
+              <Tooltip message={this.versions} direction="top-left">
                 <a
                   className="button button-transparent inline"
                   href={this.creditsUrl}

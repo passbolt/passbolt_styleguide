@@ -24,6 +24,7 @@ import DropdownMenuItem from "../../Dropdown/DropdownMenuItem";
 import { withNavigationContext } from "../../../../contexts/NavigationContext";
 import CogSVG from "../../../../../img/svg/cog.svg";
 import HelpSVG from "../../../../../img/svg/help.svg";
+import ScaleSVG from "../../../../../img/svg/scale.svg";
 
 export const WORKSPACE_ENUM = {
   RESOURCE: "RESOURCE",
@@ -76,6 +77,14 @@ class WorkspaceSwitcher extends React.PureComponent {
                 <HelpSVG />
                 <span>
                   <Trans>Help</Trans>
+                </span>
+              </button>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <button type="button" className="no-border" onClick={this.props.navigationContext.onGoToTermsRequested}>
+                <ScaleSVG />
+                <span>
+                  <Trans>Terms & Credits</Trans>
                 </span>
               </button>
             </DropdownMenuItem>
