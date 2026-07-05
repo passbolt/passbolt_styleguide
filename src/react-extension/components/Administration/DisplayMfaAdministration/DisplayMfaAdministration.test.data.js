@@ -60,6 +60,7 @@ export const mockDefaultMfaModel = {
   yubikeyClientIdentifier: "",
   yubikeySecretKey: "",
   yubikeyToggle: false,
+  webauthnToggle: false,
 };
 
 /**
@@ -75,6 +76,7 @@ export const mockModel = {
   duoHostname: "api-123456af.duosecurity.com",
   duoClientId: "PAGI605APMFKP8YSME6T",
   duoClientSecret: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT",
+  webauthnToggle: false,
 };
 
 /**

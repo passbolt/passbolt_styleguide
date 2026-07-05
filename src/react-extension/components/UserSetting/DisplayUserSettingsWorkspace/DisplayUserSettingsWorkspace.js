@@ -43,6 +43,9 @@ import DisplayAccountRecoveryUserSettingsHelp from "../DisplayUserAccountRecover
 import DisplayUserSecurityTokenHelp from "../ChangeUserSecurityToken/DisplayUserSecurityTokenHelp";
 import ExportAccountToDesktopHelp from "../ExportAccountToDesktop/ExportAccountToDesktopHelp";
 import DisplayMfaSettingsHelp from "../../MFA/DisplayMfaSettingsHelp/DisplayMfaSettingsHelp";
+import DisplayPasskeyUserSettings from "../DisplayPasskeyUserSettings/DisplayPasskeyUserSettings";
+import DisplayPasskeyUserSettingsHelp from "../DisplayPasskeyUserSettings/DisplayPasskeyUserSettingsHelp";
+import DisplayPasskeyPinUserSettings from "../DisplayPasskeyPinUserSettings/DisplayPasskeyPinUserSettings";
 import WorkspaceSwitcher, { WORKSPACE_ENUM } from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import ManageAnnouncements from "../../Announcement/ManageAnnouncements/ManageAnnouncements";
@@ -210,6 +213,8 @@ class DisplayUserSettingsWorkspace extends React.Component {
                     <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
                   )}
                   <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={OrchestrateMfaSettings}></Route>
+                  <Route path={`${path}/passkey`} component={DisplayPasskeyUserSettings}></Route>
+                  <Route path={`${path}/passkey-pin`} component={DisplayPasskeyPinUserSettings}></Route>
                   <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
                 </div>
               </div>
@@ -230,6 +235,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
                         ></Route>
                       )}
                       <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={DisplayMfaSettingsHelp}></Route>
+                      <Route path={`${path}/passkey`} component={DisplayPasskeyUserSettingsHelp}></Route>
                     </div>
                     <Footer />
                   </div>

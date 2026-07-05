@@ -17,6 +17,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
+import { withPasskey } from "../../../contexts/Authentication/PasskeyContext";
 
 /**
  * The component display variations.
@@ -66,6 +67,7 @@ class Login extends Component {
   componentDidMount() {
     this.focusOnPassphrase();
     this.initDefaultRememberMeChoice();
+    this.props.passkeyContext.loadConfiguration();
   }
 
   /**
@@ -121,6 +123,7 @@ class Login extends Component {
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
     this.handleSwitchToSso = this.handleSwitchToSso.bind(this);
+    this.handlePasskeySignIn = this.handlePasskeySignIn.bind(this);
   }
 
   /**
@@ -253,6 +256,31 @@ class Login extends Component {
   }
 
   /**
+   * Whenever the user wants to sign in with a passkey.
+   */
+  async handlePasskeySignIn() {
+    if (this.state.processing) {
+      return;
+    }
+    this.setState({ processing: true, hasBeenValidated: false, errors: {} });
+    try {
+      // On success the background redirects; on failure we re-enable the form.
+      await this.props.passkeyContext.runSignInProcess();
+    } catch (error) {
+      console.error(error);
+      this.setState({ processing: false, errors: { passkeyFailed: true } });
+    }
+  }
+
+  /**
+   * Whether the current profile can sign in with a passkey (and the organization allows it).
+   * @returns {boolean}
+   */
+  get isPasskeyAvailable() {
+    return this.props.passkeyContext.isOrgEnabled() && this.props.passkeyContext.hasUserAPasskeyKit();
+  }
+
+  /**
    * Initialise the rememberMe choice with the latest choice made by the user or false if none
    * @returns {Promise<void>}
    */
@@ -370,6 +398,21 @@ class Login extends Component {
                 }[this.props.displayAs]
               }
             </button>
+            {this.isPasskeyAvailable && (
+              <button
+                type="button"
+                className="link js-passkey-sign-in"
+                onClick={this.handlePasskeySignIn}
+                disabled={this.isProcessing}
+              >
+                <Trans>Sign in with a passkey.</Trans>
+              </button>
+            )}
+            {this.state.errors.passkeyFailed && (
+              <div className="passkey-failed error-message">
+                <Trans>The passkey sign-in failed. Please try again or use your passphrase.</Trans>
+              </div>
+            )}
             {this.props.isSsoAvailable && (
               <button type="button" className="link switchToSso" onClick={this.handleSwitchToSso}>
                 <Trans>Sign in with Single Sign-On.</Trans>
@@ -404,6 +447,7 @@ Login.propTypes = {
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
   switchToSsoLogin: PropTypes.func, // Whenever the user want to sign-in via SSO
   ssoProvider: PropTypes.object, // The SSO provider if any
+  passkeyContext: PropTypes.object, // The passkey context
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation("common")(Login));
+export default withAppContext(withPasskey(withTranslation("common")(Login)));

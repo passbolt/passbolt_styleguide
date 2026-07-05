@@ -16,6 +16,7 @@ import SecretDataEntity, { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
 import CustomFieldsCollection from "../customField/customFieldsCollection";
 import CustomFieldEntity from "../customField/customFieldEntity";
+import PasskeysCollection from "../passkey/passkeysCollection";
 
 class SecretDataV5DefaultEntity extends SecretDataEntity {
   /**
@@ -39,6 +40,7 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
           nullable: true,
         },
         custom_fields: CustomFieldsCollection.getSchema(),
+        passkeys: PasskeysCollection.getSchema(),
       },
     };
   }
@@ -49,6 +51,7 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
   static get associations() {
     return {
       custom_fields: CustomFieldsCollection,
+      passkeys: PasskeysCollection,
     };
   }
 
@@ -106,6 +109,10 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
       return true;
     }
 
+    if (SecretDataV5DefaultEntity.arePasskeysDifferent(this.passkeys, secretDto.passkeys)) {
+      return true;
+    }
+
     const isCustomFieldDefined = typeof this.customFields !== "undefined" && this.customFields !== null;
     const isOtherCustomFieldDefined =
       typeof secretDto.custom_fields !== "undefined" && secretDto.custom_fields !== null;
@@ -123,6 +130,23 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
   }
 
   /**
+   * Whether a passkeys collection differs from a plain passkeys dto array (order-insensitive).
+   * @param {PasskeysCollection|null} passkeysCollection
+   * @param {Array|undefined} otherArray
+   * @returns {boolean}
+   */
+  static arePasskeysDifferent(passkeysCollection, otherArray) {
+    const normalize = (list) =>
+      (list || [])
+        .map((passkey) => JSON.stringify(passkey))
+        .sort()
+        .join("|");
+    const current = normalize(passkeysCollection ? passkeysCollection.toDto() : []);
+    const other = normalize(Array.isArray(otherArray) ? otherArray : []);
+    return current !== other;
+  }
+
+  /**
    * Get the DTO of properties managed by the form.
    * @returns {object}
    */
@@ -131,6 +155,10 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
 
     if (this.customFields) {
       result.custom_fields = this.customFields.toDto();
+    }
+
+    if (this.passkeys) {
+      result.passkeys = this.passkeys.toDto();
     }
 
     return result;
@@ -163,6 +191,14 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
    */
   get customFields() {
     return this._customFields || null;
+  }
+
+  /**
+   * Get the associated passkeys collection
+   * @returns {PasskeysCollection | null}
+   */
+  get passkeys() {
+    return this._passkeys || null;
   }
 }
 

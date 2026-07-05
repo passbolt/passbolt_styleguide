@@ -38,6 +38,9 @@ class MfaModel {
     this.duoHostname = "duo" in mfaDTO ? mfaDTO.duo.hostName : ""; // duo hostname
     this.duoClientId = "duo" in mfaDTO ? mfaDTO.duo.integrationKey : ""; // duo client id
     this.duoClientSecret = "duo" in mfaDTO ? mfaDTO.duo.secretKey : ""; // duo client key
+
+    // WEBAUTHN (no organization level configuration, relying party is derived from the base url)
+    this.webauthnToggle = "providers" in mfaDTO ? mfaDTO.providers.includes(MfaProviders.webauthn) : false; // security key toggle value
   }
 }
 

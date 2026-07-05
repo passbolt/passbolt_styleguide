@@ -23,6 +23,7 @@ export const NavigationContext = React.createContext({
   // Administration
   onGoToAdministrationRequested: () => {}, // Whenever the users wants to navigate to the administration workspace
   onGoToAdministrationSelfRegistrationRequested: () => {}, // Whenever the users wants to navigate to the administration workspace self registration
+  onGoToAdministrationPasskeyRequested: () => {}, // Whenever the users wants to navigate to the administration workspace passkey login settings
   onGoToAdministrationMfaRequested: () => {}, // Whenever the users wants to navigate to the administration workspace mfa
   onGoToAdministrationUsersDirectoryRequested: () => {}, // Whenever the users wants to navigate to the administration workspace users directory
   onGoToAdministrationEmailNotificationsRequested: () => {}, // Whenever the users wants to navigate to the administration workspace email notifications
@@ -48,6 +49,8 @@ export const NavigationContext = React.createContext({
   onGoToUserSettingsSecurityTokenRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace security token section.
   onGoToUserSettingsThemeRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace theme section.
   onGoToUserSettingsMfaRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mfa section.
+  onGoToUserSettingsPasskeyRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace passkey section.
+  onGoToUserSettingsPasskeyPinRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace passkey PIN section.
   onGoToUserSettingsKeysRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace keys section.
   onGoToUserSettingsMobileRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mobile section.
   onGoToUserSettingsDesktopRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace desktop section.
@@ -99,6 +102,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationAccountRecoveryRequested: this.onGoToAdministrationAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace account recovery
       onGoToAdministrationSmtpSettingsRequested: this.onGoToAdministrationSmtpSettingsRequested.bind(this), // Whenever the users wants to navigate to the administration workspace SMTP settings
       onGoToAdministrationSelfRegistrationRequested: this.onGoToAdministrationSelfRegistrationRequested.bind(this), //Whenever the users wants to navigate to the administration workspace self registration settings
+      onGoToAdministrationPasskeyRequested: this.onGoToAdministrationPasskeyRequested.bind(this), //Whenever the users wants to navigate to the administration workspace passkey login settings
       onGoToAdministrationSsoRequested: this.onGoToAdministrationSsoRequested.bind(this), // Whenever the user wants to navigate to the administration workspace sso
       onGoToAdministrationMfaPolicyRequested: this.onGoToAdministrationMfaPolicyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       onGoToAdministrationPasswordPoliciesRequested: this.onGoToAdministrationPasswordPoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password policies
@@ -126,6 +130,8 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsSecurityTokenRequested: this.onGoToUserSettingsSecurityTokenRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace security token section.
       onGoToUserSettingsThemeRequested: this.onGoToUserSettingsThemeRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace theme section.
       onGoToUserSettingsMfaRequested: this.onGoToUserSettingsMfaRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mfa section.
+      onGoToUserSettingsPasskeyRequested: this.onGoToUserSettingsPasskeyRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace passkey section.
+      onGoToUserSettingsPasskeyPinRequested: this.onGoToUserSettingsPasskeyPinRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace passkey PIN section.
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
       onGoToUserSettingsMobileRequested: this.onGoToUserSettingsMobileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsDesktopRequested: this.onGoToUserSettingsDesktopRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
@@ -241,6 +247,17 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationSelfRegistrationRequested() {
     await this.goTo("api", "/app/administration/self-registration");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace passkey login settings.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationPasskeyRequested() {
+    // Client-side (extension) navigation, like the other extension-rendered admin sections (SSO,
+    // account recovery, …). Passkey login is a custom section the API's served bundle does not know,
+    // so an "api" full reload would 404; the extension renders it from its own bundle.
+    await this.goTo("browser-extension", "/app/administration/passkey");
   }
 
   /**
@@ -585,6 +602,22 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToUserSettingsMfaRequested() {
     await this.goTo("browser-extension", "/app/settings/mfa");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace passkey PIN section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsPasskeyPinRequested() {
+    await this.goTo("browser-extension", "/app/settings/passkey-pin");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the user settings passkey section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsPasskeyRequested() {
+    await this.goTo("browser-extension", "/app/settings/passkey");
   }
 
   /**

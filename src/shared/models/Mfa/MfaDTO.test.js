@@ -37,6 +37,7 @@ describe("MfaDTO model", () => {
       model.yubikeyToggle = false;
       model.duoToggle = false;
       model.totpProviderToggle = false;
+      model.webauthnToggle = false;
       const dto = new MfaDTO(model);
 
       expect.assertions(3);
@@ -44,6 +45,14 @@ describe("MfaDTO model", () => {
       expect(dto.providers).toEqual([]);
       expect(dto.duo).toEqual({});
       expect(dto.yubikey).toEqual({});
+    });
+
+    it("should add the webauthn provider when the webauthn toggle is enabled", () => {
+      const dto = new MfaDTO({ webauthnToggle: true });
+
+      expect.assertions(1);
+
+      expect(dto.providers).toEqual([MfaProviders.webauthn]);
     });
   });
 });

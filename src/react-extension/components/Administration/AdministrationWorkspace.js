@@ -31,6 +31,7 @@ import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecovery
 import ManageAccountRecoveryAdministrationSettingsTeasing from "./ManageAccountRecoveryAdministrationSettingsTeasing/ManageAccountRecoveryAdministrationSettingsTeasing";
 import ManageSmtpAdministrationSettings from "./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings.js";
 import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration";
+import DisplayPasskeyAdministration from "./DisplayPasskeyAdministration/DisplayPasskeyAdministration";
 import ManageSsoSettings from "./ManageSsoSettings/ManageSsoSettings";
 import ManageSsoSettingsTeasing from "./ManageSsoSettingsTeasing/ManageSsoSettingsTeasing";
 import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration";
@@ -198,6 +199,16 @@ class AdministrationWorkspace extends Component {
     return (
       AdministrationWorkspaceMenuTypes.SELF_REGISTRATION ===
       this.props.administrationWorkspaceContext.selectedAdministration
+    );
+  }
+
+  /**
+   * If Passkey login menu is selected
+   * @returns {boolean}
+   */
+  isPasskeySelected() {
+    return (
+      AdministrationWorkspaceMenuTypes.PASSKEY === this.props.administrationWorkspaceContext.selectedAdministration
     );
   }
 
@@ -431,6 +442,7 @@ class AdministrationWorkspace extends Component {
                       ))}
                     {this.isSmtpSettingsSelected() && <ManageSmtpAdministrationSettings />}
                     {this.isSelfRegistrationSelected() && <DisplaySelfRegistrationAdministration />}
+                    {this.isPasskeySelected() && <DisplayPasskeyAdministration />}
                     {this.isSsoSelected() &&
                       (this.isCommunityEdition() ? <ManageSsoSettingsTeasing /> : <ManageSsoSettings />)}
                     {this.isRbacSelected() && <DisplayRbacAdministration />}

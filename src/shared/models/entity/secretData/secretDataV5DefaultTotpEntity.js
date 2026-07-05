@@ -18,6 +18,7 @@ import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
 import CustomFieldsCollection from "../customField/customFieldsCollection";
 import CustomFieldEntity from "../customField/customFieldEntity";
+import PasskeysCollection from "../passkey/passkeysCollection";
 
 class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
   /**
@@ -43,6 +44,7 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
     return {
       totp: TotpEntity,
       custom_fields: CustomFieldsCollection,
+      passkeys: PasskeysCollection,
     };
   }
 
@@ -113,6 +115,10 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
       return true;
     }
 
+    if (SecretDataV5DefaultEntity.arePasskeysDifferent(this.passkeys, secretDto.passkeys)) {
+      return true;
+    }
+
     const isCustomFieldDefined = typeof this.customFields !== "undefined" && this.customFields !== null;
     const isOtherCustomFieldDefined =
       typeof secretDto.custom_fields !== "undefined" && secretDto.custom_fields !== null;
@@ -142,6 +148,10 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
 
     if (this.customFields) {
       result.custom_fields = this.customFields.toDto();
+    }
+
+    if (this.passkeys) {
+      result.passkeys = this.passkeys.toDto();
     }
 
     return result;

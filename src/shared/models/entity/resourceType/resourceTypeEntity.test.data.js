@@ -282,6 +282,81 @@ export const resourceTypeWithoutSecretDefinitionDto = (data = {}) => ({
  * @param {object} data The data to override
  * @returns {object}
  */
+// Shared `passkeys` secret property fixture (mirrors RESOURCE_TYPE_V5_PASSKEYS_SECRET_PROPERTY_SCHEMA).
+const passkeysSecretPropertySchema = {
+  type: "array",
+  maxItems: 64,
+  items: {
+    type: "object",
+    required: ["credential_id", "rp_id", "private_key", "algorithm"],
+    properties: {
+      id: {
+        type: "string",
+        format: "uuid",
+      },
+      credential_id: {
+        type: "string",
+        maxLength: 1024,
+      },
+      rp_id: {
+        type: "string",
+        maxLength: 253,
+      },
+      user_handle: {
+        type: "string",
+        maxLength: 1024,
+        nullable: true,
+      },
+      user_name: {
+        type: "string",
+        maxLength: 255,
+        nullable: true,
+      },
+      user_display_name: {
+        type: "string",
+        maxLength: 255,
+        nullable: true,
+      },
+      private_key: {
+        type: "string",
+        maxLength: 4096,
+      },
+      public_key: {
+        type: "string",
+        maxLength: 4096,
+        nullable: true,
+      },
+      algorithm: {
+        type: "number",
+      },
+      counter: {
+        type: "number",
+        minimum: 0,
+        nullable: true,
+      },
+      discoverable: {
+        type: "boolean",
+        nullable: true,
+      },
+      label: {
+        type: "string",
+        maxLength: 255,
+        nullable: true,
+      },
+      created: {
+        type: "string",
+        maxLength: 64,
+        nullable: true,
+      },
+      deleted_at: {
+        type: "string",
+        maxLength: 64,
+        nullable: true,
+      },
+    },
+  },
+};
+
 export const resourceTypeV5DefaultDto = (data = {}) => ({
   id: TEST_RESOURCE_TYPE_V5_DEFAULT,
   name: "V5 Default",
@@ -380,6 +455,7 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
           maxLength: 50000,
           nullable: true,
         },
+        passkeys: passkeysSecretPropertySchema,
         custom_fields: {
           type: "array",
           maxItems: 128,
@@ -582,6 +658,7 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
           maxLength: 50000,
           nullable: true,
         },
+        passkeys: passkeysSecretPropertySchema,
         totp: {
           type: "object",
           required: ["secret_key", "digits", "algorithm"],

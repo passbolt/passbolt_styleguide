@@ -27,12 +27,15 @@ export const MfaSettingsWorkflowStates = {
   VIEWCONFIGURATION: "View a totp configuration",
   SETUPYUBIKEY: "Setup Yubikey",
   SETUPDUO: "Setup Duo",
+  SETUPWEBAUTHN: "Setup Webauthn",
+  MANAGEWEBAUTHN: "Manage Webauthn",
 };
 
 export const Providers = {
   TOTP: "totp",
   YUBIKEY: "yubikey",
   DUO: "duo",
+  WEBAUTHN: "webauthn",
 };
 
 /**
@@ -106,6 +109,9 @@ export class MfaContextProvider extends React.Component {
       removeProvider: this.removeProvider.bind(this), //Remove an existing provider
       validateYubikeyCode: this.validateYubikeyCode.bind(this), //Validate the yubikey code
       handleGetStartedWithDuo: this.handleGetStartedWithDuo.bind(this), //Handle the "Get started" button click for DUO.
+      handleGetStartedWithWebauthn: this.handleGetStartedWithWebauthn.bind(this), //Handle the "Get started" button click for WebAuthn (Safari).
+      getWebauthnCredentials: this.getWebauthnCredentials.bind(this), //List the user's registered security keys.
+      removeWebauthnCredential: this.removeWebauthnCredential.bind(this), //Remove one registered security key.
     };
   }
 
@@ -337,6 +343,58 @@ export class MfaContextProvider extends React.Component {
    */
   async handleGetStartedWithDuo() {
     await this.props.context.port.request("passbolt.mfa-setup.start-with-duo");
+  }
+
+  /**
+   * Handle the start of the WebAuthn MFA setup process on Safari.
+   * The registration ceremony must run on a top-level page served by the passbolt origin so that
+   * navigator.credentials.create() binds to the correct relying party id. On Safari the extension
+   * cannot rely on a target="_top" form submit, so the background page opens the setup page instead.
+   * @returns {Promise<void>}
+   */
+  async handleGetStartedWithWebauthn() {
+    await this.props.context.port.request("passbolt.mfa-setup.start-with-webauthn");
+  }
+
+  /**
+   * List the current user's registered WebAuthn security keys.
+   * @returns {Promise<Array>}
+   */
+  async getWebauthnCredentials() {
+    try {
+      this.setProcessing(true);
+      let result;
+      if (this.props.context.port) {
+        result = await this.props.context.port.request("passbolt.mfa-setup.webauthn.list-credentials");
+      } else {
+        // Fallback for pages served by API
+        const mfaService = new MFAService(this.props.context.getApiClientOptions());
+        result = await mfaService.findWebauthnCredentials();
+      }
+      return result?.credentials ?? [];
+    } finally {
+      this.setProcessing(false);
+    }
+  }
+
+  /**
+   * Remove one of the current user's registered WebAuthn security keys.
+   * @param {string} credentialId The base64url credential id
+   * @returns {Promise<void>}
+   */
+  async removeWebauthnCredential(credentialId) {
+    try {
+      this.setProcessing(true);
+      if (this.props.context.port) {
+        await this.props.context.port.request("passbolt.mfa-setup.webauthn.remove-credential", credentialId);
+      } else {
+        // Fallback for pages served by API
+        const mfaService = new MFAService(this.props.context.getApiClientOptions());
+        await mfaService.removeWebauthnCredential(credentialId);
+      }
+    } finally {
+      this.setProcessing(false);
+    }
   }
 
   /**

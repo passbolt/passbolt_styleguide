@@ -119,7 +119,12 @@ class DisplayProviderList extends Component {
     const mfaUserSettings = this.props.mfaContext.getMfaUserSettings();
     this.props.mfaContext.setProvider(provider);
     if (mfaUserSettings[provider]) {
-      this.props.mfaContext.navigate(MfaSettingsWorkflowStates.VIEWCONFIGURATION);
+      // WebAuthn supports several keys, so it opens a dedicated management screen.
+      if (provider === Providers.WEBAUTHN) {
+        this.props.mfaContext.navigate(MfaSettingsWorkflowStates.MANAGEWEBAUTHN);
+      } else {
+        this.props.mfaContext.navigate(MfaSettingsWorkflowStates.VIEWCONFIGURATION);
+      }
     } else {
       switch (provider) {
         case Providers.TOTP:
@@ -130,6 +135,9 @@ class DisplayProviderList extends Component {
           break;
         case Providers.YUBIKEY:
           this.props.mfaContext.navigate(MfaSettingsWorkflowStates.SETUPYUBIKEY);
+          break;
+        case Providers.WEBAUTHN:
+          this.props.mfaContext.navigate(MfaSettingsWorkflowStates.SETUPWEBAUTHN);
           break;
       }
     }
@@ -201,6 +209,17 @@ class DisplayProviderList extends Component {
                         </a>
                         <div className={`mfa-provider-status ${this.userMfaSettings["yubikey"]}`}>
                           {this.userMfaSettings["yubikey"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
+                        </div>
+                      </li>
+                    )}
+                    {this.organisationMfaProviders["webauthn"] && (
+                      <li id="webauthn">
+                        <a href="#" onClick={() => this.handleProviderClick("webauthn")}>
+                          <div className="provider-img">{this.getProvider("webauthn").icon}</div>
+                          <p className="provider-name">{this.getProvider("webauthn").name}</p>
+                        </a>
+                        <div className={`mfa-provider-status ${this.userMfaSettings["webauthn"]}`}>
+                          {this.userMfaSettings["webauthn"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
                         </div>
                       </li>
                     )}

@@ -25,6 +25,7 @@ import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/re
 import AddResourceUris from "./AddResourceUris";
 import AddResourceAppearance from "./AddResourceAppearance";
 import AddResourceCustomFields from "./AddResourceCustomFields";
+import AddResourcePasskeys from "./AddResourcePasskeys";
 
 /**
  * The component orchestrates the resource form edition and creation.
@@ -73,6 +74,14 @@ class OrchestrateResourceForm extends Component {
             resource={this.props.resource}
             onChange={this.props.onChange}
             warnings={this.props.warnings}
+            disabled={this.props.disabled}
+          />
+        );
+      case ResourceEditCreateFormEnumerationTypes.PASSKEYS:
+        return (
+          <AddResourcePasskeys
+            resource={this.props.resource}
+            onChange={this.props.onChange}
             disabled={this.props.disabled}
           />
         );
