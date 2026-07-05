@@ -50,12 +50,14 @@ import {
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
   V4_TO_V5_RESOURCE_TYPE_MAPPING,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import { withMetadataTypesSettingsLocalStorage } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
+import DisplayResourceDetailsPasskeys from "./DisplayResourceDetailsPasskeys";
 import DisplayResourceDetailsURIs from "./DisplayResourceDetailsURIs";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
@@ -126,6 +128,8 @@ class DisplayResourceDetails extends React.Component {
         return this.translate("Custom fields");
       case RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG:
         return this.translate("Note");
+      case RESOURCE_TYPE_V5_PASSKEY_SLUG:
+        return this.translate("Passkey");
       default:
         return this.translate("Resource");
     }
@@ -293,6 +297,17 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
+   * Can this resource carry passkeys (v5 default types or the standalone passkey type).
+   * @return {boolean}
+   */
+  get isPasskeyCapableResource() {
+    const slug = this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.slug;
+    return [RESOURCE_TYPE_V5_DEFAULT_SLUG, RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG, RESOURCE_TYPE_V5_PASSKEY_SLUG].includes(
+      slug,
+    );
+  }
+
+  /**
    * Is totp resource
    * @return {boolean}
    */
@@ -390,6 +405,7 @@ class DisplayResourceDetails extends React.Component {
         {this.isPinCodeResources && <DisplayResourceDetailsPinCode />}
         {this.hasCustomFields && <DisplayResourceDetailsCustomFields />}
         {this.hasSecureNote && <DisplayResourceDetailsNote />}
+        {this.isPasskeyCapableResource && <DisplayResourceDetailsPasskeys />}
         {this.hasMultipleUris && <DisplayResourceDetailsURIs />}
         {canViewShare && <DisplayResourceDetailsPermission />}
         <DisplayResourceDetailsInformation />

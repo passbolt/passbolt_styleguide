@@ -43,6 +43,9 @@ class MfaDTO {
     if (mfaModel.duoToggle) {
       this.providers.push(MfaProviders.duo);
     }
+    if (mfaModel.webauthnToggle) {
+      this.providers.push(MfaProviders.webauthn);
+    }
   }
 }
 

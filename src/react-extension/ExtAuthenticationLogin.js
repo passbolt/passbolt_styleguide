@@ -23,6 +23,7 @@ import OrchestrateLoginBoxMain from "./components/AuthenticationLogin/Orchestrat
 import Footer from "./components/Common/Footer/Footer";
 import OrchestrateLoginBoxFooter from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxFooter";
 import SsoContextProvider from "./contexts/SsoContext";
+import PasskeyContextProvider from "./contexts/Authentication/PasskeyContext";
 import LogoSVG from "../img/svg/logo.svg";
 
 /**
@@ -130,24 +131,26 @@ class ExtAuthenticationLogin extends Component {
           <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
             <Router>
               <SsoContextProvider>
-                <AuthenticationLoginContextProvider>
-                  <div id="container" className="container page login">
-                    <div className="content">
-                      <div className="header">
-                        <div className="logo-svg">
-                          <LogoSVG role="img" width="20rem" height="3.5rem" />
+                <PasskeyContextProvider>
+                  <AuthenticationLoginContextProvider>
+                    <div id="container" className="container page login">
+                      <div className="content">
+                        <div className="header">
+                          <div className="logo-svg">
+                            <LogoSVG role="img" width="20rem" height="3.5rem" />
+                          </div>
+                        </div>
+                        <div className="login-form">
+                          <OrchestrateLoginBoxMain />
+                        </div>
+                        <div className="login-box-footer">
+                          <OrchestrateLoginBoxFooter />
                         </div>
                       </div>
-                      <div className="login-form">
-                        <OrchestrateLoginBoxMain />
-                      </div>
-                      <div className="login-box-footer">
-                        <OrchestrateLoginBoxFooter />
-                      </div>
+                      <Footer />
                     </div>
-                    <Footer />
-                  </div>
-                </AuthenticationLoginContextProvider>
+                  </AuthenticationLoginContextProvider>
+                </PasskeyContextProvider>
               </SsoContextProvider>
             </Router>
           </TranslationProvider>

@@ -23,6 +23,8 @@ import TotpGetStarted from "../TotpSetup/TotpGetStarted/TotpGetStarted";
 import DisplayMfaProviderConfiguration from "../DisplayMfaProviderConfiguration/DisplayMfaProviderConfiguration";
 import YubikeySetup from "../YubikeySetup/YubikeySetup";
 import DuoGetStarted from "../DuoSetup/DuoGetStarted";
+import WebauthnSetup from "../WebauthnSetup/WebauthnSetup";
+import WebauthnManage from "../WebauthnManage/WebauthnManage";
 import { withRouter } from "react-router-dom";
 
 /**
@@ -62,6 +64,10 @@ class OrchestrateMfaSettings extends Component {
         return <YubikeySetup />;
       case MfaSettingsWorkflowStates.SETUPDUO:
         return <DuoGetStarted onGetStartedWithDuo={this.props.mfaContext.handleGetStartedWithDuo} />;
+      case MfaSettingsWorkflowStates.SETUPWEBAUTHN:
+        return <WebauthnSetup onGetStartedWithWebauthn={this.props.mfaContext.handleGetStartedWithWebauthn} />;
+      case MfaSettingsWorkflowStates.MANAGEWEBAUTHN:
+        return <WebauthnManage />;
       case MfaSettingsWorkflowStates.VIEWCONFIGURATION:
         return <DisplayMfaProviderConfiguration />;
     }

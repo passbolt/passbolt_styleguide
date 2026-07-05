@@ -350,6 +350,37 @@ class DisplayMfaAdministration extends React.Component {
                     </>
                   )}
                 </div>
+                <div className="provider-section">
+                  <h4>
+                    <span className="input toggle-switch form-element ready">
+                      <input
+                        id="webauthn-provider-toggle-button"
+                        type="checkbox"
+                        className="toggle-switch-checkbox checkbox"
+                        name="webauthnToggle"
+                        onChange={this.handleInputChange}
+                        checked={settings.webauthnToggle}
+                        disabled={this.hasAllInputDisabled()}
+                      />
+                      <label htmlFor="webauthn-provider-toggle-button">
+                        <Trans>Security key (WebAuthn)</Trans>
+                      </label>
+                    </span>
+                  </h4>
+                  {!settings.webauthnToggle && (
+                    <p className="description">
+                      <Trans>The security key provider is disabled for all users.</Trans>
+                    </p>
+                  )}
+                  {settings.webauthnToggle && (
+                    <p className="description enabled">
+                      <Trans>
+                        The security key (WebAuthn/FIDO2) provider is enabled for all users. They can register a
+                        security key in their profile and use it as second factor authentication.
+                      </Trans>
+                    </p>
+                  )}
+                </div>
               </>
             )}
           </div>

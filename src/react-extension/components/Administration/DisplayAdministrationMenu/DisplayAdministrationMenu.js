@@ -235,6 +235,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleAccountRecoveryClick = this.handleAccountRecoveryClick.bind(this);
     this.handleSmtpSettingsClick = this.handleSmtpSettingsClick.bind(this);
     this.handleSelfRegistrationClick = this.handleSelfRegistrationClick.bind(this);
+    this.handlePasskeyClick = this.handlePasskeyClick.bind(this);
     this.handleSsoClick = this.handleSsoClick.bind(this);
     this.handleMfaPolicyClick = this.handleMfaPolicyClick.bind(this);
     this.handleRbacsClick = this.handleRbacsClick.bind(this);
@@ -330,6 +331,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleSelfRegistrationClick() {
     this.props.navigationContext.onGoToAdministrationSelfRegistrationRequested();
+  }
+
+  /**
+   * Handle when the user click on the passkey login settings menu
+   */
+  handlePasskeyClick() {
+    this.props.navigationContext.onGoToAdministrationPasskeyRequested();
   }
 
   /**
@@ -581,6 +589,24 @@ class DisplayAdministrationMenu extends React.Component {
       AdministrationWorkspaceMenuTypes.SELF_REGISTRATION ===
       this.props.administrationWorkspaceContext.selectedAdministration
     );
+  }
+
+  /**
+   * If Passkey login settings menu is selected
+   * @returns {boolean}
+   */
+  isPasskeySettingsSelected() {
+    return (
+      AdministrationWorkspaceMenuTypes.PASSKEY === this.props.administrationWorkspaceContext.selectedAdministration
+    );
+  }
+
+  /**
+   * Passkey login is a community-edition feature: always available in the authentication menu.
+   * @returns {boolean}
+   */
+  get canIUsePasskey() {
+    return true;
   }
 
   /**
@@ -1082,6 +1108,21 @@ class DisplayAdministrationMenu extends React.Component {
                                 <button className="link no-border" type="button" onClick={this.handleMfaClick}>
                                   <span>
                                     <Trans>Multi Factor Authentication</Trans>
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      )}
+                      {this.canIUsePasskey && (
+                        <li id="passkey_menu">
+                          <div className={`row ${this.isPasskeySettingsSelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handlePasskeyClick}>
+                                  <span>
+                                    <Trans>Passkey login</Trans>
                                   </span>
                                 </button>
                               </div>

@@ -185,6 +185,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isAccountRecoveryLocation = ADMIN_URL_REGEXP.accountRecovery.test(location);
     const isSmtpSettingsLocation = ADMIN_URL_REGEXP.smtpSettings.test(location);
     const isSelfRegistrationLocation = ADMIN_URL_REGEXP.selfRegistration.test(location);
+    const isPasskeyLocation = ADMIN_URL_REGEXP.passkey.test(location);
     const isSso = ADMIN_URL_REGEXP.sso.test(location);
     const rbac = ADMIN_URL_REGEXP.rbac.test(location);
     const isUserPassphrasePolicies = ADMIN_URL_REGEXP.userPassphrasePolicies.test(location);
@@ -230,6 +231,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SMTP_SETTINGS;
     } else if (isSelfRegistrationLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SELF_REGISTRATION;
+    } else if (isPasskeyLocation) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.PASSKEY;
     } else if (isSso || isSsoTeasing) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SSO;
     } else if (rbac) {
@@ -353,6 +356,7 @@ export const AdministrationWorkspaceMenuTypes = {
   ACCOUNT_RECOVERY: "ACCOUNT-RECOVERY", // Account Recovery administration menu selected
   SMTP_SETTINGS: "SMTP-SETTINGS", // Smtp settings administration menu selected
   SELF_REGISTRATION: "SELF-REGISTRATION", // Self registration settings administration menu selected
+  PASSKEY: "PASSKEY", // Passkey login administration menu selected
   SSO: "SSO", // SSO administration menu selected
   RBAC: "RBAC", // RBAC administration menu selected
   USER_PASSPHRASE_POLICIES: "USER-PASSPHRASE-POLICIES", // User Passphrase Policies administration menu selected
@@ -416,6 +420,7 @@ const ADMIN_URL_REGEXP = {
   accountRecoveryTeasing: /^\/app\/administration\/account-recovery-teasing\/?$/,
   smtpSettings: /^\/app\/administration\/smtp-settings\/?$/,
   selfRegistration: /^\/app\/administration\/self-registration\/?$/,
+  passkey: /^\/app\/administration\/passkey\/?$/,
   sso: /^\/app\/administration\/sso\/?$/,
   ssoTeasing: /^\/app\/administration\/sso-teasing\/?$/,
   rbac: /^\/app\/administration\/rbacs\/?$/,

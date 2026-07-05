@@ -24,6 +24,7 @@ export const RESOURCE_TYPE_V5_TOTP_SLUG = "v5-totp-standalone";
 export const RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG = "v5-custom-fields";
 export const RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG = "v5-note";
 export const RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG = "v5-pin-code";
+export const RESOURCE_TYPE_V5_PASSKEY_SLUG = "v5-passkey";
 
 // Plaintext secret schema for slug: "password-string"
 export const RESOURCE_TYPE_PASSWORD_STRING_LEGACY_DEFINITION_SCHEMA = {
@@ -301,6 +302,86 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
   },
 };
 
+/*
+ * An array of passkeys that can live inside any v5 resource secret (alongside password/totp).
+ * Mirrors the API SlugDefinition::$passkeysSecretPropertySchemaV5 — the client rebuilds resource
+ * type definitions from this file (ResourceTypeEntity.marshall), so the server-side definition
+ * alone is not enough: any property missing here is stripped from the secret on (de)serialization.
+ */
+const RESOURCE_TYPE_V5_PASSKEYS_SECRET_PROPERTY_SCHEMA = {
+  type: "array",
+  maxItems: 64,
+  items: {
+    type: "object",
+    required: ["credential_id", "rp_id", "private_key", "algorithm"],
+    properties: {
+      id: {
+        type: "string",
+        format: "uuid",
+      },
+      credential_id: {
+        type: "string",
+        maxLength: 1024,
+      },
+      rp_id: {
+        type: "string",
+        maxLength: 253,
+      },
+      user_handle: {
+        type: "string",
+        maxLength: 1024,
+        nullable: true,
+      },
+      user_name: {
+        type: "string",
+        maxLength: 255,
+        nullable: true,
+      },
+      user_display_name: {
+        type: "string",
+        maxLength: 255,
+        nullable: true,
+      },
+      private_key: {
+        type: "string",
+        maxLength: 4096,
+      },
+      public_key: {
+        type: "string",
+        maxLength: 4096,
+        nullable: true,
+      },
+      algorithm: {
+        type: "number",
+      },
+      counter: {
+        type: "number",
+        minimum: 0,
+        nullable: true,
+      },
+      discoverable: {
+        type: "boolean",
+        nullable: true,
+      },
+      label: {
+        type: "string",
+        maxLength: 255,
+        nullable: true,
+      },
+      created: {
+        type: "string",
+        maxLength: 64,
+        nullable: true,
+      },
+      deleted_at: {
+        type: "string",
+        maxLength: 64,
+        nullable: true,
+      },
+    },
+  },
+};
+
 // Plaintext secret schema for slug: "v5-default"
 const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
   resource: {
@@ -371,6 +452,7 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
         nullable: true,
       },
       custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.secret.properties.custom_fields,
+      passkeys: RESOURCE_TYPE_V5_PASSKEYS_SECRET_PROPERTY_SCHEMA,
     },
   },
 };
@@ -502,6 +584,7 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
       },
       totp: RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA.secret.properties.totp,
       custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.secret.properties.custom_fields,
+      passkeys: RESOURCE_TYPE_V5_PASSKEYS_SECRET_PROPERTY_SCHEMA,
     },
   },
 };
@@ -706,6 +789,123 @@ const RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_DEFINITION_SCHEMA = {
   },
 };
 
+// Plaintext secret schema for slug: "v5-passkey"
+const RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA = {
+  resource: {
+    type: "object",
+    required: ["name"],
+    properties: {
+      name: {
+        type: "string",
+        maxLength: 255,
+      },
+      username: {
+        type: "string",
+        maxLength: 255,
+        nullable: true,
+      },
+      uris: {
+        type: "array",
+        items: {
+          type: "string",
+          maxLength: 1024,
+          nullable: true,
+        },
+        maxItems: 32,
+      },
+      description: {
+        type: "string",
+        maxLength: 10000,
+        nullable: true,
+      },
+      icon: {
+        type: "object",
+        required: [],
+        properties: {
+          type: {
+            type: "string",
+            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+          },
+          value: {
+            type: "number",
+            minimum: 0,
+            nullable: true,
+          },
+          background_color: {
+            type: "string",
+            nullable: true,
+          },
+        },
+      },
+    },
+  },
+  secret: {
+    type: "object",
+    required: ["object_type", "passkey"],
+    properties: {
+      object_type: {
+        type: "string",
+        enum: ["PASSBOLT_SECRET_DATA"],
+      },
+      passkey: {
+        type: "object",
+        required: ["credential_id", "rp_id", "private_key", "algorithm"],
+        properties: {
+          credential_id: {
+            type: "string",
+            maxLength: 1024,
+          },
+          rp_id: {
+            type: "string",
+            maxLength: 253,
+          },
+          user_handle: {
+            type: "string",
+            maxLength: 1024,
+            nullable: true,
+          },
+          user_name: {
+            type: "string",
+            maxLength: 255,
+            nullable: true,
+          },
+          user_display_name: {
+            type: "string",
+            maxLength: 255,
+            nullable: true,
+          },
+          private_key: {
+            type: "string",
+            maxLength: 4096,
+          },
+          public_key: {
+            type: "string",
+            maxLength: 4096,
+            nullable: true,
+          },
+          algorithm: {
+            type: "number",
+          },
+          counter: {
+            type: "number",
+            minimum: 0,
+            nullable: true,
+          },
+          discoverable: {
+            type: "boolean",
+            nullable: true,
+          },
+          created: {
+            type: "string",
+            maxLength: 64,
+            nullable: true,
+          },
+        },
+      },
+    },
+  },
+};
+
 export const V4_TO_V5_RESOURCE_TYPE_MAPPING = {
   [RESOURCE_TYPE_PASSWORD_STRING_SLUG]: RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   [RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG]: RESOURCE_TYPE_V5_DEFAULT_SLUG,
@@ -727,6 +927,7 @@ class ResourceTypeSchemasDefinition {
       [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG]: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_DEFINITION_SCHEMA,
+      [RESOURCE_TYPE_V5_PASSKEY_SLUG]: RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA,
     };
   }
 }

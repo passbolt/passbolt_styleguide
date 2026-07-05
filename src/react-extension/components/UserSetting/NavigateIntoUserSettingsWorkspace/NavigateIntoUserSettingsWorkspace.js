@@ -21,6 +21,8 @@ import { Trans, withTranslation } from "react-i18next";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import AttentionSVG from "../../../../img/svg/attention.svg";
+import { isWebAuthnSupported } from "../../../../shared/services/webauthn/webAuthnCeremonyService";
+import { withPasskey } from "../../../contexts/Authentication/PasskeyContext";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
@@ -191,6 +193,42 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </li>
           )}
+          {isWebAuthnSupported() && this.props.passkeyContext.isOrgEnabled() && (
+            <li>
+              <div className={`row ${isSelected("passkey") ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      className="link no-border"
+                      type="button"
+                      onClick={this.props.navigationContext.onGoToUserSettingsPasskeyRequested}
+                    >
+                      <span>
+                        <Trans>Passkey</Trans>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          )}
+          <li>
+            <div className={`row ${isSelected("passkey-pin") ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button
+                    className="link no-border"
+                    type="button"
+                    onClick={this.props.navigationContext.onGoToUserSettingsPasskeyPinRequested}
+                  >
+                    <span>
+                      <Trans>Passkey PIN</Trans>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
           {this.canIUseAccountRecoveryCapability && (
             <li>
               <div className={`row ${isSelected("account-recovery") ? "selected" : ""}`}>
@@ -263,8 +301,11 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   hasPendingAccountRecoveryChoice: PropTypes.bool,
   hasPendingMfaChoice: PropTypes.bool,
   rbacContext: PropTypes.any, // The role based access control context
+  passkeyContext: PropTypes.object, // The passkey context (organization toggle)
 };
 
 export default withAppContext(
-  withRbac(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace)))),
+  withPasskey(
+    withRbac(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace)))),
+  ),
 );

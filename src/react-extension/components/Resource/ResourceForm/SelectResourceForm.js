@@ -31,6 +31,7 @@ import LinkSVG from "../../../../img/svg/link.svg";
 import PaintBrushSVG from "../../../../img/svg/paintbrush.svg";
 import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
+import FingerprintSVG from "../../../../img/svg/fingerprint.svg";
 import { ResourceEditCreateFormEnumerationTypes } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -198,6 +199,14 @@ class SelectResourceForm extends Component {
    */
   get isResourceHasPinCode() {
     return this.resource?.secret?.pin_code != null;
+  }
+
+  /**
+   * Is resource has passkeys (excluding soft-deleted ones)
+   * @returns {boolean}
+   */
+  get isResourceHasPasskeys() {
+    return Boolean(this.resource?.secret?.passkeys?.some((passkey) => !passkey.deleted_at));
   }
 
   /**
@@ -593,6 +602,24 @@ class SelectResourceForm extends Component {
                       <DeleteSVG />
                     </button>
                   )}
+                </div>
+              )}
+              {this.isResourceHasPasskeys && (
+                <div
+                  className={`section-content ${ResourceEditCreateFormEnumerationTypes.PASSKEYS === this.selectedForm ? "selected" : ""}`}
+                >
+                  <button
+                    type="button"
+                    className="no-border"
+                    id="secret-passkeys-tab"
+                    disabled={this.props.disabled}
+                    onClick={(event) => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.PASSKEYS)}
+                  >
+                    <FingerprintSVG />
+                    <span className="ellipsis">
+                      <Trans>Passkeys</Trans>
+                    </span>
+                  </button>
                 </div>
               )}
             </>

@@ -62,6 +62,29 @@ class MFAService {
   }
 
   /**
+   * Retrieve the current user's registered WebAuthn security keys.
+   *
+   * @returns {Promise<*>} Response body ({credentials: [...]})
+   * @public
+   */
+  async findWebauthnCredentials() {
+    this.initClient("setup/webauthn");
+    return (await this.apiClient.findAll()).body;
+  }
+
+  /**
+   * Remove one of the current user's registered WebAuthn security keys.
+   *
+   * @param {string} credentialId The base64url credential id
+   * @returns {Promise<*>} Response body
+   * @public
+   */
+  async removeWebauthnCredential(credentialId) {
+    this.initClient("setup/webauthn");
+    return (await this.apiClient.delete(credentialId)).body;
+  }
+
+  /**
    * Initializes the API client with the specified resource name.
    * @param {string} [path='settings'] - The resource name to use for the API client.
    * @returns {void}

@@ -24,6 +24,7 @@ import CustomFieldsCollection from "../customField/customFieldsCollection";
 import CustomFieldEntity from "../customField/customFieldEntity";
 import { defaultCustomField } from "../customField/customFieldEntity.test.data";
 import { defaultCustomFieldsCollection } from "../customField/customFieldsCollection.test.data";
+import PasskeysCollection from "../passkey/passkeysCollection";
 
 describe("SecretDataV5DefaultEntity", () => {
   describe("::getSchema", () => {
@@ -77,9 +78,12 @@ describe("SecretDataV5DefaultEntity", () => {
   });
 
   describe("::associations", () => {
-    it("associations should have custom_fields", () => {
+    it("associations should have custom_fields and passkeys", () => {
       expect.assertions(1);
-      expect(SecretDataV5DefaultEntity.associations).toStrictEqual({ custom_fields: CustomFieldsCollection });
+      expect(SecretDataV5DefaultEntity.associations).toStrictEqual({
+        custom_fields: CustomFieldsCollection,
+        passkeys: PasskeysCollection,
+      });
     });
   });
 

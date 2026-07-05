@@ -26,6 +26,7 @@ import CustomFieldsCollection from "../customField/customFieldsCollection";
 import { defaultCustomField } from "../customField/customFieldEntity.test.data";
 import CustomFieldEntity from "../customField/customFieldEntity";
 import { defaultCustomFieldsCollection } from "../customField/customFieldsCollection.test.data";
+import PasskeysCollection from "../passkey/passkeysCollection";
 
 describe("SecretDataV5DefaultTotpEntity", () => {
   describe("::getSchema", () => {
@@ -75,11 +76,12 @@ describe("SecretDataV5DefaultTotpEntity", () => {
   });
 
   describe("::associations", () => {
-    it("associations should have totp and custom_fields", () => {
+    it("associations should have totp, custom_fields and passkeys", () => {
       expect.assertions(1);
       expect(SecretDataV5DefaultTotpEntity.associations).toStrictEqual({
         totp: TotpEntity,
         custom_fields: CustomFieldsCollection,
+        passkeys: PasskeysCollection,
       });
     });
   });
