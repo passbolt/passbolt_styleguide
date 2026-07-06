@@ -62,6 +62,16 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
+   * Returns the list of subscription warning messages (e.g. expired key, users limit reached)
+   * @returns {Array<string>}
+   */
+  get subscriptionWarnings() {
+    return [...this._page.container.querySelectorAll(".subscription-warning")].map((warning) =>
+      warning.textContent.trim(),
+    );
+  }
+
+  /**
    * Returns the subscription actions container
    */
   get subscriptionActions() {
@@ -72,14 +82,14 @@ export default class DisplaySubscriptionKeyPage {
    * Returns the renew button
    */
   get renewKeyButton() {
-    return this._page.container.querySelector(".subscription-actions button.secondary");
+    return this._page.container.querySelector(".subscription-actions button:not(.primary)");
   }
 
   /**
    * Returns the "Downgrade to Community" button
    */
   get downgradeToCommunityButton() {
-    return this._page.container.querySelector(".subscription-editions .edition button.secondary");
+    return this._page.container.querySelector(".subscription-editions .edition button:not(.primary)");
   }
 
   /**

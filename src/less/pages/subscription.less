@@ -2,6 +2,10 @@
 .page.administration .app .panel.main .main-page .subscription-key-teasing {
   .main-content {
     padding-bottom: 0;
+
+    .title {
+      border-top: 1px solid var(--Workspace-Dividers);
+    }
   }
 
   .subscription-key-teasing-info {
@@ -20,6 +24,8 @@
   .subscription-information {
     display: flex;
     flex-direction: column;
+width: 100%;
+  box-sizing: border-box;
     gap: 1.6rem;
 
     h4.subscription-information-subtitle {
@@ -30,6 +36,9 @@
     .information {
       display: flex;
       gap: 1.6rem;
+&.container {
+    justify-content: space-between;
+  }
     }
 
     .information-label,
@@ -43,8 +52,6 @@
       text-overflow: ellipsis;
 
       .edition {
-        font-weight: bolder;
-
         .subtitle {
           margin-left: 1rem;
 
@@ -79,9 +86,29 @@
     }
   }
 
+  .subscription-warning {
+    display: flex;
+    gap: 1.2rem;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 0.8rem 1.2rem;
+
+    border-radius: var(--Section-border-radius);
+    background-color: var(--Healthcheck-Healthcheck-Warning);
+  }
+
   .subscription-actions {
     display: flex;
     gap: 1.6rem;
+    justify-content: flex-end;
+    width: 100%;
+
+    button.primary, .button.primary {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
   }
 
   .subscription-editions {
@@ -89,8 +116,6 @@
 
     display: flex;
     gap: 3.2rem;
-
-    margin-top: 1.6rem;
 
     .edition {
       flex: 1;
@@ -100,45 +125,76 @@
       flex-direction: column;
       gap: 1.6rem;
 
-      padding: 1.6rem;
+      min-width: 0;
+
+      padding: 0 1.6rem 1.6rem 1.6rem;
 
       transition: border-color 0.5s;
-      background-color: @input-radio-list-background;
 
       border-radius: var(--Section-border-radius);
-      border: 1px solid var(--States-Active-Highlight);
+      border: 1px solid var(--Action-button-Action-button-border);
       /* To avoid flickering when hovering */
       margin: 1px;
 
       &.current-edition,
       &:hover {
-        border: 2px solid var(--Palette-Contrast-2);
+        border: 2px solid var(--Primary-button-Primary-button-background);
         margin: 0;
+        background-color: var(--Action-button-Action-button-background);
       }
 
-      &.current-edition {
-        border-radius: var(--Section-border-radius) 0 var(--Section-border-radius) var(--Section-border-radius);
-      }
+      .title {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.8rem;
 
-      .current-edition-indicator {
-        position: absolute;
-        right: -2px;
-        /* Border's width is 2px */
-        transform: translate(0, calc(-100% - 1.6rem));
-        padding: 0.8rem;
+        width: 100%;
 
-        font-size: 12px;
-        color: var(--Text-and-icons-Main-text-reversed);
-        background-color: var(--Palette-Contrast-2);
+        border-top: none;
+        border-bottom: 0.1rem solid var(--Workspace-Dividers);
 
-        border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
-      }
+        h3 {
+          font-size: 1.6rem;
+        }
 
-      h3 {
-        border-bottom: 0.1rem solid var(--Text-and-icons-Secondary-text);
+        .community-title {
+          height: 5.6rem; // 16*2 padding + 24 line height
+          overflow-y: hidden; // Hide "Free forever" when there is no room left
 
+          & > * {
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          h3 {
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+
+        .current-edition-indicator {
+          flex-shrink: 0;
+
+          /* Border's width is 2px */
+          top: -2px;
+          right: -2px;
+          margin-right: calc(-1.6rem + -2px);
+
+          padding: 0.8rem;
+
+          font-size: 12px;
+          font-weight: 700;
+          white-space: nowrap;
+          color: var(--Primary-button-Primary-button-text);
+          background-color: var(--Primary-button-Primary-button-background);
+
+          border-radius: 0 var(--Section-border-radius) 0 var(--Section-border-radius);
+        }
+        
         .subtitle {
-          font-size: 1.5rem;
+          font-size: 1.4rem;
           font-weight: normal;
 
           margin-left: 1rem;
@@ -149,7 +205,7 @@
 
       .subtitle {
         font-weight: bolder;
-        font-size: 16px;
+        font-size: 1.5rem;
       }
 
       .features {
@@ -157,14 +213,32 @@
         flex-direction: column;
         gap: 1.6rem;
 
-        ul {
-          padding: 0 3.2rem;
+        ul > li {
+          font-size: 1.5rem;
+          list-style: none;
+          margin-bottom: 0.8rem;
 
-          li {
-            list-style-type: "✓\00a0";
-            margin-bottom: 0.8rem;
+          &::before {
+            content: "";
+
+            display: inline-block;
+
+            height: 1.6rem;
+            width: 1.6rem;
+
+            vertical-align: middle;
+            margin-right: 0.8rem;
+
+            mask: url('@{images}/controls/check_tick.svg') no-repeat center / contain;
+            -webkit-mask: url('@{images}/controls/check_tick.svg') no-repeat center / contain;
+
+            background-color: var(--Palette-Contrast-3);
           }
         }
+      }
+
+      .subscription-actions {
+        justify-content: start;
       }
     }
   }

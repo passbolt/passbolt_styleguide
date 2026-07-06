@@ -28,8 +28,10 @@ import SubscriptionKeyServiceWorkerService from "../../../../shared/services/api
 import { createSafePortal } from "../../../../shared/utils/portals";
 import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
 
-import EmailSVG from "../../../../img/svg/email.svg";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
+
+import EmailSVG from "../../../../img/svg/email.svg";
+import TriangleAlertSVG from "../../../../img/svg/triangle_alert.svg";
 
 class DisplaySubscriptionKey extends React.Component {
   /**
@@ -58,8 +60,8 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   async componentDidMount() {
-    // We don't try to get the subscription key in the community edition
-    if (!this.props.context.siteSettings.isCommunityEdition) {
+    // We don't try to get the subscription key in the community edition except with a legacy API (< v5.13.0)
+    if (!this.props.context.siteSettings.isCommunityEdition || !this.hasEditionPlugin()) {
       // There's no need to await for this promise, we let it run in the background
       this.props.adminSubscriptionContext.findSubscriptionKey();
     }
@@ -246,35 +248,28 @@ class DisplaySubscriptionKey extends React.Component {
         {!isProcessing && (
           <div className="subscription-key main-column">
             <div className="main-content">
+              <h1>
+                <Trans>Subscription</Trans>
+              </h1>
               <h3 className="title">
                 <Trans>Details</Trans>
               </h3>
-              <div className="feedback-card">
-                <div className="subscription-information">
-                  {!this.props.context.siteSettings.isCommunityEdition &&
-                    !this.props.adminSubscriptionContext.getSubscription().data && (
-                      <>
-                        <h4 className="subscription-information-subtitle">
-                          <Trans>Your subscription key is either missing or not valid.</Trans>
-                        </h4>
-                        <p>
-                          <Trans>Sorry your subscription is either missing or not readable.</Trans>
-                          <br />
-                          <Trans>Update the subscription key and try again.</Trans>{" "}
-                          <Trans>If this does not work get in touch with support.</Trans>
-                        </p>
-                      </>
-                    )}
-                  {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() && (
-                    <h4 className="subscription-information-subtitle">
-                      <Trans>Your subscription key is going to expire.</Trans>
-                    </h4>
+              <div className="subscription-information">
+                {!this.props.context.siteSettings.isCommunityEdition &&
+                  !this.props.adminSubscriptionContext.getSubscription().data && (
+                    <>
+                      <h4 className="subscription-information-subtitle">
+                        <Trans>Your subscription key is either missing or not valid.</Trans>
+                      </h4>
+                      <p>
+                        <Trans>Sorry your subscription is either missing or not readable.</Trans>
+                        <br />
+                        <Trans>Update the subscription key and try again.</Trans>{" "}
+                        <Trans>If this does not work get in touch with support.</Trans>
+                      </p>
+                    </>
                   )}
-                  {!this.props.context.siteSettings.isCommunityEdition && this.hasInvalidSubscription() && (
-                    <h4 className="subscription-information-subtitle">
-                      <Trans>Your subscription key is not valid.</Trans>
-                    </h4>
-                  )}
+                <div className="information container">
                   <div className="information">
                     <div className="information-label">
                       <span className="edition label">
@@ -288,17 +283,51 @@ class DisplaySubscriptionKey extends React.Component {
                       </span>
                       {!this.props.context.siteSettings.isCommunityEdition && (
                         <>
-                          <span className="customer-id label">
-                            <Trans>Customer id:</Trans>
-                          </span>
-                          <span className="subscription-id label">
-                            <Trans>Subscription id:</Trans>
-                          </span>
                           <span className="email label">
                             <Trans>Email:</Trans>
                           </span>
                           <span className="users label">
                             <Trans>Users limit:</Trans>
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    <div className="information-value">
+                      <span className="edition value">
+                        {!this.props.context.siteSettings.isCommunityEdition && <Trans>Pro Edition</Trans>}
+                        {this.props.context.siteSettings.isCommunityEdition && (
+                          <>
+                            <Trans>Community Edition</Trans>
+                            <span className="subtitle">
+                              <Trans>(Free forever)</Trans>
+                            </span>
+                          </>
+                        )}
+                      </span>
+                      <span className="server-version value">{this.props.context.siteSettings.version}</span>
+                      <span className="client-version value">{this.props.context.extensionVersion}</span>
+                      {!this.props.context.siteSettings.isCommunityEdition && (
+                        <>
+                          <span className="email value">{subscription.email}</span>
+                          <span className={`users value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>
+                            {subscription.users}{" "}
+                            <span className="secondary-information">
+                              (<Trans>currently:</Trans> {this.state.activeUsers})
+                            </span>
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="information">
+                    <div className="information-label">
+                      {!this.props.context.siteSettings.isCommunityEdition && (
+                        <>
+                          <span className="customer-id label">
+                            <Trans>Customer id:</Trans>
+                          </span>
+                          <span className="subscription-id label">
+                            <Trans>Subscription id:</Trans>
                           </span>
                           <span className="created label">
                             <Trans>Valid from:</Trans>
@@ -310,30 +339,10 @@ class DisplaySubscriptionKey extends React.Component {
                       )}
                     </div>
                     <div className="information-value">
-                      <span className="edition value">
-                        {!this.props.context.siteSettings.isCommunityEdition && <Trans>Pro</Trans>}
-                        {this.props.context.siteSettings.isCommunityEdition && (
-                          <>
-                            <Trans>Community</Trans>
-                            <span className="subtitle">
-                              <Trans>(Free forever)</Trans>
-                            </span>
-                          </>
-                        )}
-                      </span>
-                      <span className="server-version value">{this.props.context.siteSettings.version}</span>
-                      <span className="client-version value">{this.props.context.extensionVersion}</span>
                       {!this.props.context.siteSettings.isCommunityEdition && (
                         <>
                           <span className="customer-id value">{subscription.customerId}</span>
                           <span className="subscription-id value">{subscription.subscriptionId}</span>
-                          <span className="email value">{subscription.email}</span>
-                          <span className={`users value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>
-                            {subscription.users}{" "}
-                            <span className="secondary-information">
-                              (<Trans>currently:</Trans> {this.state.activeUsers})
-                            </span>
-                          </span>
                           <span className="created value">{this.formatDate(subscription.created)}</span>
                           <span
                             className={`expiry value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}
@@ -351,17 +360,33 @@ class DisplaySubscriptionKey extends React.Component {
                   </div>
                 </div>
               </div>
+              {!this.props.context.siteSettings.isCommunityEdition && (
+                <>
+                  {this.hasSubscriptionKeyExpired() && (
+                    <div className="subscription-warning">
+                      <TriangleAlertSVG />
+                      <Trans>Your subscription key is expired.</Trans>
+                    </div>
+                  )}
+                  {this.hasLimitUsersExceeded() && (
+                    <div className="subscription-warning">
+                      <TriangleAlertSVG />
+                      <Trans>Your users limit has been reached.</Trans>
+                    </div>
+                  )}
+                </>
+              )}
               <div className="subscription-actions">
                 {!this.props.context.siteSettings.isCommunityEdition && (
                   <>
-                    <button className="button primary form" type="button" onClick={this.handleUpdateKey}>
-                      <Trans>Update key</Trans>
-                    </button>
                     {(this.shouldShowDowngradeSection() || this.hasLimitUsersExceeded()) && (
-                      <button className="button secondary" type="button" onClick={this.handleRenewKey}>
-                        <Trans>Renew key</Trans>
+                      <button className="button" type="button" onClick={this.handleRenewKey}>
+                        <Trans>Renew subscription key</Trans>
                       </button>
                     )}
+                    <button className="button primary form" type="button" onClick={this.handleUpdateKey}>
+                      <Trans>Update subscription key</Trans>
+                    </button>
                   </>
                 )}
                 {this.props.context.siteSettings.isCommunityEdition && (
@@ -372,24 +397,30 @@ class DisplaySubscriptionKey extends React.Component {
                   </>
                 )}
               </div>
-              <h3>
+              <h3 className="title">
                 <Trans>Plans</Trans>
               </h3>
               <div className="subscription-editions">
                 <div
                   className={`edition ${this.props.context.siteSettings.isCommunityEdition ? "current-edition" : ""}`}
                 >
-                  {this.props.context.siteSettings.isCommunityEdition && (
-                    <div className="current-edition-indicator">
-                      <Trans>Current plan</Trans>
+                  <div className="title">
+                    <div className="community-title">
+                      <h3>
+                        <Trans>Community Edition</Trans>
+                      </h3>
+                      <span className="subtitle">
+                        <Trans>(Free forever)</Trans>
+                      </span>
                     </div>
-                  )}
-                  <h3>
-                    <Trans>Community</Trans>
-                    <span className="subtitle">
-                      <Trans>(Free forever)</Trans>
-                    </span>
-                  </h3>
+                    {this.props.context.siteSettings.isCommunityEdition && (
+                      <div className="current-edition-indicator-wrapper">
+                        <div className="current-edition-indicator">
+                          <Trans>Current plan</Trans>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <div className="features">
                     <span className="subtitle">
                       <Trans>Features included:</Trans>
@@ -432,7 +463,7 @@ class DisplaySubscriptionKey extends React.Component {
                   </div>
                   {this.shouldShowDowngradeSection() && (
                     <div>
-                      <button className="button secondary" type="button" onClick={this.handleDowngradeClick}>
+                      <button className="button" type="button" onClick={this.handleDowngradeClick}>
                         <Trans>Downgrade to Community</Trans>
                       </button>
                     </div>
@@ -441,21 +472,25 @@ class DisplaySubscriptionKey extends React.Component {
                 <div
                   className={`edition ${!this.props.context.siteSettings.isCommunityEdition ? "current-edition" : ""}`}
                 >
-                  {!this.props.context.siteSettings.isCommunityEdition && (
-                    <div className="current-edition-indicator">
-                      <Trans>Current plan</Trans>
-                    </div>
-                  )}
-                  <h3>
-                    <Trans>Pro</Trans>
-                  </h3>
+                  <div className="title">
+                    <h3>
+                      <Trans>Pro Edition</Trans>
+                    </h3>
+                    {!this.props.context.siteSettings.isCommunityEdition && (
+                      <div className="current-edition-indicator-wrapper">
+                        <div className="current-edition-indicator">
+                          <Trans>Current plan</Trans>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <div className="features">
                     <span className="subtitle">
                       <Trans>Features include everything in Community, plus:</Trans>
                     </span>
                     <ul>
                       <li>
-                        <Trans>Tags management</Trans>
+                        <Trans>Account recovery (Escrow)</Trans>
                       </li>
                       <li>
                         <Trans>LDAP provisioning (AD / OpenLDAP)</Trans>
@@ -464,10 +499,10 @@ class DisplaySubscriptionKey extends React.Component {
                         <Trans>Single Sign On (SSO) with Microsoft, Google & OpenID</Trans>
                       </li>
                       <li>
-                        <Trans>Account recovery (Escrow)</Trans>
+                        <Trans>Activity log (audit changes)</Trans>
                       </li>
                       <li>
-                        <Trans>Activity log (audit changes)</Trans>
+                        <Trans>Tags management</Trans>
                       </li>
                       <li>
                         <Trans>VM appliance</Trans>
