@@ -184,7 +184,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseOffline() {
-    return this.canIUse("offline");
+    return this.canIUse("offlineMode");
   }
 
   /**
