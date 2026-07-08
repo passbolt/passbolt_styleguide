@@ -23,16 +23,16 @@ class OfflineSettingsEntity extends EntityV2 {
   static getSchema() {
     return {
       type: "object",
-      required: ["session_duration", "maximum_retention_period"],
+      required: ["max_session_duration", "data_retention_period"],
       properties: {
         id: {
           type: "string",
           format: "uuid",
         },
-        session_duration: {
+        max_session_duration: {
           type: "number",
         },
-        maximum_retention_period: {
+        data_retention_period: {
           type: "number",
         },
         created: {
@@ -86,7 +86,7 @@ class OfflineSettingsEntity extends EntityV2 {
    * @returns {string|null}
    */
   get sessionDuration() {
-    return this._props.session_duration || null;
+    return this._props.max_session_duration || null;
   }
 
   /**
@@ -95,7 +95,7 @@ class OfflineSettingsEntity extends EntityV2 {
    * @returns {(string|null)}
    */
   get maximumRetentionPeriod() {
-    return this._props.maximum_retention_period || null;
+    return this._props.data_retention_period || null;
   }
 
   /**

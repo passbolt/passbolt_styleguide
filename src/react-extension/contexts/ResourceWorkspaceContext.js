@@ -818,7 +818,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   get canUseOfflineMode() {
     return (
-      this.props.context.siteSettings.canIUse("offline") &&
+      this.props.context.siteSettings.canIUse("offlineMode") &&
       this.props.rbacContext.canIUseAction(actions.OFFLINE_MODE_FEATURE)
     );
   }
