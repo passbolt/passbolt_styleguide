@@ -47,6 +47,17 @@ describe("DisplaySubscriptionKeyPage", () => {
   const props = defaultProps(); // The props to pass
 
   describe("As AD I can see the subscription", () => {
+    it("As AD in PRO mode the subscription key should be fetched on mount", async () => {
+      expect.assertions(1);
+
+      const proProps = defaultProps();
+      const getSubscriptionKey = jest.spyOn(proProps.context, "onGetSubscriptionKeyRequested");
+      page = new DisplaySubscriptionKeyPage(proProps.context, proProps);
+      await screen.findByText("Details");
+
+      expect(getSubscriptionKey).toHaveBeenCalledTimes(1);
+    });
+
     it("As AD I should see all details about the subscription", async () => {
       page = new DisplaySubscriptionKeyPage(props.context, props);
       await screen.findByText("Details");
@@ -345,6 +356,18 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       expect(page.currentEditionCard).toBe(page.proCard);
       expect(page.edition).toBe("Pro");
+    });
+
+    it("As CE AD the subscription key should not be fetched on mount", async () => {
+      expect.assertions(1);
+
+      const ceProps = defaultProps();
+      const getSubscriptionKey = jest.spyOn(ceProps.context, "onGetSubscriptionKeyRequested");
+      jest.spyOn(ceProps.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
+      page = new DisplaySubscriptionKeyPage(ceProps.context, ceProps);
+      await screen.findByText("Details");
+
+      expect(getSubscriptionKey).not.toHaveBeenCalled();
     });
   });
 

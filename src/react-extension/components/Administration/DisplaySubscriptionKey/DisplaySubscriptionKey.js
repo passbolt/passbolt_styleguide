@@ -62,8 +62,11 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   async componentDidMount() {
-    // There's no need to await for this promise, we let it run in the background
-    this.props.adminSubscriptionContext.findSubscriptionKey();
+    // We don't try to get the subscription key in the community edition
+    if (!this.props.context.siteSettings.isCommunityEdition) {
+      // There's no need to await for this promise, we let it run in the background
+      this.props.adminSubscriptionContext.findSubscriptionKey();
+    }
 
     const activeUsers = await this.props.adminSubscriptionContext.getActiveUsers();
     this.setState({ activeUsers });
