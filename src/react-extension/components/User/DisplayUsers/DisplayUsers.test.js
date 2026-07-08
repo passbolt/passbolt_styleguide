@@ -187,9 +187,26 @@ describe("Display Users", () => {
     });
   });
 
-  describe("As LU, I should not see suspended, mfa and account recovery column for users", () => {
-    it("As LU, I should see 6 column", async () => {
+  describe("As LU, I should not see suspended, mfa, account recovery and last logged in column for users", () => {
+    it("As LU, I should see 5 column", async () => {
       const props = defaultProps({ rbacContext: denyRbacContext(), context: defaultUserAppContext() });
+      await act(async () => {
+        page = new DisplayUsersPage(props);
+      });
+      expect(page.columnCount).toStrictEqual(5);
+      // The first column is the checkbox
+      expect(page.column(2).name).toStrictEqual("Name");
+      expect(page.column(3).name).toStrictEqual("Username");
+      expect(page.column(4).name).toStrictEqual("Role");
+      expect(page.column(5).name).toStrictEqual("Modified");
+    });
+  });
+
+  describe("As LU having account recovery view allowed, I should not see suspended, mfa and last logged in column for users", () => {
+    beforeEach(() => {});
+
+    it("As LU, I should see 6 column", async () => {
+      const props = defaultProps({ context: defaultUserAppContext() });
       await act(async () => {
         page = new DisplayUsersPage(props);
       });
@@ -199,26 +216,22 @@ describe("Display Users", () => {
       expect(page.column(3).name).toStrictEqual("Username");
       expect(page.column(4).name).toStrictEqual("Role");
       expect(page.column(5).name).toStrictEqual("Modified");
-      expect(page.column(6).name).toStrictEqual("Last logged in");
+      expect(page.column(6).name).toStrictEqual("Account recovery");
     });
   });
 
-  describe("As LU having account recovery view allowed, I should not see suspended, mfa column for users", () => {
-    beforeEach(() => {});
-
-    it("As LU, I should see 6 column", async () => {
-      const props = defaultProps({ context: defaultUserAppContext() });
+  describe("As an administrator, I should see the last logged in column for users", () => {
+    it("As an administrator, I should see the last logged in column", async () => {
+      // defaultProps uses an administrator app context by default.
       await act(async () => {
-        page = new DisplayUsersPage(props);
+        page = new DisplayUsersPage(defaultProps());
       });
-      expect(page.columnCount).toStrictEqual(7);
-      // The first column is the checkbox
-      expect(page.column(2).name).toStrictEqual("Name");
-      expect(page.column(3).name).toStrictEqual("Username");
-      expect(page.column(4).name).toStrictEqual("Role");
-      expect(page.column(5).name).toStrictEqual("Modified");
-      expect(page.column(6).name).toStrictEqual("Last logged in");
-      expect(page.column(7).name).toStrictEqual("Account recovery");
+      // Skip the first column (checkbox) which has no header label.
+      const columnNames = [];
+      for (let index = 2; index <= page.columnCount; index++) {
+        columnNames.push(page.column(index).name);
+      }
+      expect(columnNames).toContain("Last logged in");
     });
   });
 
