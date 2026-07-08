@@ -105,6 +105,9 @@ class GroupPermissionItem extends Component {
   }
 
   render() {
+    //@todo: to remove, it's a quick & dirty fix to make sure the count is displayed. Later on the groups need to be full loaded and not rely on that `user_count`
+    const groupMembersCount = this.props.membersCount ? this.props.membersCount : this.props.group.user_count;
+
     const isInputDisabled = this.props.disabled;
     return (
       <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
@@ -130,7 +133,7 @@ class GroupPermissionItem extends Component {
           <div className="aro-details">
             <span className="ellipsis">
               {this.props.membersCount != null
-                ? this.translate("Group with {{count}} member", { count: this.props.membersCount })
+                ? this.translate("Group with {{count}} member", { count: groupMembersCount })
                 : this.translate("Group")}
             </span>
           </div>
