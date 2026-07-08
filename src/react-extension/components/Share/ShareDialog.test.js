@@ -69,7 +69,7 @@ describe("As Lu I should see the share dialog", () => {
       const requestResourcesMockImpl = (path) => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({ shareDialogProps });
-      props = defaultProps();
+      props = defaultProps({ isPermissionConfirmationMode: false });
       await act(() => (page = new ShareDialogPage(context, props)));
     });
 
@@ -314,7 +314,7 @@ describe("As Lu I should see the share dialog", () => {
       const requestResourcesMockImpl = (path) => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({ shareDialogProps });
-      props = defaultProps();
+      props = defaultProps({ isPermissionConfirmationMode: false });
       await act(() => (page = new ShareDialogPage(context, props)));
     });
 
@@ -409,7 +409,7 @@ describe("As Lu I should see the share dialog", () => {
       const requestResourcesMockImpl = (path) => mockResultsFolders[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({ shareDialogProps });
-      props = defaultProps();
+      props = defaultProps({ isPermissionConfirmationMode: false });
       await act(() => (page = new ShareDialogPage(context, props)));
     });
 
@@ -527,7 +527,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
    * from a shared parent folder. The operator is the logged-in user (so the controlled-mode submit
    * logic exercises its operator-skip path); a second user has read access.
    */
-  function buildControlledModeProps() {
+  function buildControlledModeProps(data = {}) {
     // Local defaultAppContext for these tests doesn't seed `loggedInUser`; set it to the snapshot's
     // owner so the controlled-mode submit logic exercises its operator-skip path.
     const operatorId = context.userSettings.id;
@@ -565,6 +565,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       initialGroups: new GroupsCollection([]),
       initialUsers: new UsersCollection([operatorUser, readerUser]),
       onConfirm: jest.fn(),
+      ...data,
     };
   }
 
@@ -796,6 +797,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     // skips the subtitle entirely.
     expect.assertions(2);
     const props = buildControlledModeProps();
+    props.isPermissionConfirmationMode = false;
     const previousShareDialogProps = context.shareDialogProps;
     context.shareDialogProps = { foldersIds: [uuidv4()] };
     mockContextRequest(jest.fn());

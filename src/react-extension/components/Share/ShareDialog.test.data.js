@@ -52,12 +52,13 @@ export function defaultAppContext(appContext) {
  * Default props
  * @returns {{resource: {id: string, name: string}}}
  */
-export function defaultProps() {
+export function defaultProps(data = {}) {
   return {
     onClose: jest.fn(),
     dialogContext: {
       open: jest.fn(),
     },
+    ...data,
   };
 }
 

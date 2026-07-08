@@ -582,6 +582,9 @@ class ShareDialog extends Component {
     if (this.state.loading) {
       return this.translate("Loading...");
     }
+    if (this.props.isPermissionConfirmationMode) {
+      return this.translate("Confirm permissions");
+    }
     if (this.isControlledMode()) {
       return this.translate("Share");
     }
@@ -847,6 +850,7 @@ class ShareDialog extends Component {
 
 ShareDialog.defaultProps = {
   listMinSize: 4,
+  isPermissionConfirmationMode: true,
 };
 
 ShareDialog.propTypes = {
@@ -856,6 +860,7 @@ ShareDialog.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   listMinSize: PropTypes.number, // The minimum size to be renderered in the permission list
+  isPermissionConfirmationMode: PropTypes.bool, // Is the dialog used to confirm permissions
   initialResources: PropTypes.array, // Controlled mode: the ACOs to seed the dialog with instead of fetching from the API, each as { id, metadata, permission, permissions: PermissionsCollection }
   acoType: PropTypes.string, // Controlled mode: the ACO type of the seeded entries (PermissionEntity.ACO_RESOURCE, default, or ACO_FOLDER)
   initialGroups: PropTypes.object, // Controlled mode: GroupsCollection providing the groups referenced by the resources' permissions

@@ -102,6 +102,7 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
       initialUsers: users,
       onConfirm: this.handleShareDialogConfirm,
       onClose: this.handleShareDialogClose,
+      isPermissionConfirmationMode: false,
     });
     this.setState({ status: RESOURCE_SHARE_FLOW_STATUS.SHARE_DIALOG_OPEN });
   }
