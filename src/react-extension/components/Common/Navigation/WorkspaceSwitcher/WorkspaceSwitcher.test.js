@@ -44,13 +44,13 @@ describe("WorkspaceSwitcher", () => {
       expect(page.exists()).toBe(true);
     });
 
-    it("As LU I should not see the workspace switcher when I am neither admin nor can access the user workspace", () => {
+    it("As LU I should see the workspace switcher when I am neither admin nor can access the user workspace", () => {
       expect.assertions(1);
 
       const props = defaultProps({ isUserAdmin: false, isUserWorkspaceVisible: false });
       const page = new WorkspaceSwitcherPage(props);
 
-      expect(page.exists()).toBe(false);
+      expect(page.exists()).toBe(true);
     });
 
     it("As LU I should not see the menu until I open the dropdown", () => {
@@ -130,6 +130,16 @@ describe("WorkspaceSwitcher", () => {
       await page.open();
 
       expect(page.organisationSettingsButton).toBeNull();
+    });
+
+    it("As LU I should not see the manage users & groups entry when I cannot access the user workspace", async () => {
+      expect.assertions(1);
+
+      const props = defaultProps({ isUserWorkspaceVisible: false });
+      const page = new WorkspaceSwitcherPage(props);
+      await page.open();
+
+      expect(page.usersButton).toBeNull();
     });
   });
 });

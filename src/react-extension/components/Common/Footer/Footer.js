@@ -18,7 +18,7 @@ import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Tooltip from "../Tooltip/Tooltip";
 
-const CREDITS_URL = "https://www.passbolt.com/credits";
+const CREDITS_URL = "https://www.passbolt.com/terms";
 const UNSAFE_URL = "https://www.passbolt.com/docs/hosting/faq/why-I-see-unsafe-mode-banner/";
 
 /**
@@ -97,7 +97,7 @@ class Footer extends Component {
    */
   get isCloud() {
     const currentURL = new URL(this.props.context.siteSettings.url);
-    return currentURL.protocol === "https:" && currentURL.hostname.match(/cloud.passbolt.com$/);
+    return currentURL.protocol === "https:" && Boolean(currentURL.hostname.match(/cloud.passbolt.com$/));
   }
 
   /**
@@ -119,29 +119,21 @@ class Footer extends Component {
             <>
               {this.props.context.siteSettings.isCommunityEdition && (
                 <li>
-                  <p>
-                    <Trans>
-                      <strong>Community Edition</strong> (free)
-                    </Trans>
-                  </p>
+                  <Trans>
+                    Community Edition<span className="edition-suffix">&nbsp;(free)</span>
+                  </Trans>
                 </li>
               )}
               {!this.props.context.siteSettings.isCommunityEdition && (
                 <li>
-                  <Trans>
-                    <strong>Pro Edition</strong>
-                  </Trans>
+                  <Trans>Pro Edition</Trans>
                 </li>
               )}
             </>
           )}
           {this.isCloud && (
             <li>
-              <p>
-                <Trans>
-                  <strong>Cloud Edition</strong>
-                </Trans>
-              </p>
+              <Trans>Cloud</Trans>
             </li>
           )}
           <li>

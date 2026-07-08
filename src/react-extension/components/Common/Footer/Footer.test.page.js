@@ -46,11 +46,20 @@ export default class FooterPage {
   }
 
   /**
-   * Returns the edition label (the only <strong> in the footer)
+   * Returns the edition <li> element
+   * @returns {HTMLElement|null}
+   */
+  get editionListItem() {
+    const items = [...this._page.container.querySelectorAll(".footer-links li")];
+    return items.find((li) => !li.classList.contains("error-message") && !li.querySelector("a")) ?? null;
+  }
+
+  /**
+   * Returns the edition label (without the "(free)" suffix)
    * @returns {string|undefined}
    */
   get editionLabel() {
-    return this._page.container.querySelector(".footer-links strong")?.textContent;
+    return this.editionText?.replace(/\s*\(.*\)$/, "");
   }
 
   /**
@@ -58,7 +67,7 @@ export default class FooterPage {
    * @returns {string|undefined}
    */
   get editionText() {
-    return this._page.container.querySelector(".footer-links strong")?.closest("li")?.textContent;
+    return this.editionListItem?.textContent;
   }
 
   /**

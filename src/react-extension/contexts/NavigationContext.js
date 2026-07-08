@@ -556,7 +556,7 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToTermsRequested() {
-    await this.onGoToNewTab("https://www.passbolt.com/credits");
+    await this.onGoToNewTab("https://www.passbolt.com/terms");
   }
 
   /*

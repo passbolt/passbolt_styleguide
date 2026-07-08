@@ -53,13 +53,13 @@ describe("Footer", () => {
       expect(page.editionText).toContain("(free)");
     });
 
-    it("As LU I should see the Cloud Edition label on a passbolt cloud instance", () => {
+    it("As LU I should see the Cloud label on a passbolt cloud instance", () => {
       expect.assertions(1);
 
       const props = cloudProps();
       const page = new FooterPage(props.context, props);
 
-      expect(page.editionLabel).toBe("Cloud Edition");
+      expect(page.editionLabel).toBe("Cloud");
     });
   });
 
@@ -129,7 +129,7 @@ describe("Footer", () => {
       const page = new FooterPage(props.context, props);
 
       expect(page.creditsLink).not.toBeNull();
-      expect(page.creditsLink.getAttribute("href")).toBe("https://www.passbolt.com/credits");
+      expect(page.creditsLink.getAttribute("href")).toBe("https://www.passbolt.com/terms");
       expect(page.creditsLink.getAttribute("target")).toBe("_blank");
     });
   });

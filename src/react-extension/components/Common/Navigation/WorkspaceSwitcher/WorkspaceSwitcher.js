@@ -35,10 +35,6 @@ export const WORKSPACE_ENUM = {
 
 class WorkspaceSwitcher extends React.PureComponent {
   render() {
-    if (!this.props.isUserAdmin && !this.props.isUserWorkspaceVisible) {
-      return null;
-    }
-
     return (
       <div id="workspace-switcher">
         <Dropdown>
@@ -60,18 +56,20 @@ class WorkspaceSwitcher extends React.PureComponent {
                 </button>
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem>
-              <button
-                type="button"
-                className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.USER_AND_GROUPS ? "active" : ""}`}
-                onClick={this.props.navigationContext.onGoToUsersRequested}
-              >
-                <UsersSVG />
-                <span>
-                  <Trans>Manage Users & Groups</Trans>
-                </span>
-              </button>
-            </DropdownMenuItem>
+            {this.props.isUserWorkspaceVisible && (
+              <DropdownMenuItem>
+                <button
+                  type="button"
+                  className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.USER_AND_GROUPS ? "active" : ""}`}
+                  onClick={this.props.navigationContext.onGoToUsersRequested}
+                >
+                  <UsersSVG />
+                  <span>
+                    <Trans>Manage Users & Groups</Trans>
+                  </span>
+                </button>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem>
               <button type="button" className="no-border" onClick={this.props.navigationContext.onGoToHelpRequested}>
                 <HelpSVG />
