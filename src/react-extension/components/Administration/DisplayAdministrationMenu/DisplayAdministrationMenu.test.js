@@ -775,7 +775,7 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.OFFLINE },
       }); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag === "offline");
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag === "offlineMode");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       await page.gotoOfflineSettings();
@@ -789,7 +789,7 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.OFFLINE },
       }); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag !== "offline");
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag !== "offlineMode");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.offlineSettings).toBeNull();

@@ -16,8 +16,8 @@ import { v4 as uuid } from "uuid";
 
 export const defaultOfflineSettingsDto = (data = {}) => {
   const defaultData = {
-    session_duration: 3600,
-    maximum_retention_period: 86400,
+    max_session_duration: 3600,
+    data_retention_period: 86400,
   };
   return Object.assign(defaultData, data);
 };

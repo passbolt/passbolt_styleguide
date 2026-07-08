@@ -573,7 +573,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   canUseOffline() {
     return (
-      this.props.context.siteSettings.canIUse("offline") &&
+      this.props.context.siteSettings.canIUse("offlineMode") &&
       this.props.rbacContext.canIUseAction(actions.MARK_RESOURCE_OFFLINE_AVAILABLE)
     );
   }

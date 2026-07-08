@@ -41,8 +41,8 @@ const MAXIMUM_RETENTION_PERIOD_OPTIONS = [
 ];
 
 const DEFAULT_OFFLINE_SETTINGS = {
-  session_duration: SESSION_DURATION_OPTIONS[0].value,
-  maximum_retention_period: MAXIMUM_RETENTION_PERIOD_OPTIONS[0].value,
+  max_session_duration: SESSION_DURATION_OPTIONS[0].value,
+  data_retention_period: MAXIMUM_RETENTION_PERIOD_OPTIONS[0].value,
 };
 
 class DisplayOfflineAdministration extends Component {
@@ -136,8 +136,10 @@ class DisplayOfflineAdministration extends Component {
    * @return {EntityValidationError|null}
    */
   validateForm() {
-    // eslint-disable-next-line no-unused-vars
-    memoize((formSettingsDto) => this.formSettings?.validate());
+    if (!this.formSettings) {
+      return null;
+    }
+    return this.formSettings.validate();
   }
 
   /**
@@ -294,8 +296,8 @@ class DisplayOfflineAdministration extends Component {
                     <Select
                       id="offline-settings-session-duration"
                       items={SESSION_DURATION_OPTIONS}
-                      name="session_duration"
-                      value={this.state.settings.session_duration}
+                      name="max_session_duration"
+                      value={this.state.settings.max_session_duration}
                       onChange={this.handleInputChange}
                       disabled={this.hasAllInputDisabled()}
                     />
@@ -305,7 +307,7 @@ class DisplayOfflineAdministration extends Component {
                         their passphrase to view cached secrets.
                       </Trans>
                     </p>
-                    {errors?.hasError("session_duration") && (
+                    {errors?.hasError("max_session_duration") && (
                       <div id="session-duration-error" className="error-message">
                         <Trans>The session duration is invalid.</Trans>
                       </div>
@@ -318,8 +320,8 @@ class DisplayOfflineAdministration extends Component {
                     <Select
                       id="offline-settings-maximum-retention-period"
                       items={MAXIMUM_RETENTION_PERIOD_OPTIONS}
-                      name="maximum_retention_period"
-                      value={this.state.settings.maximum_retention_period}
+                      name="data_retention_period"
+                      value={this.state.settings.data_retention_period}
                       onChange={this.handleInputChange}
                       disabled={this.hasAllInputDisabled()}
                     />
@@ -329,7 +331,7 @@ class DisplayOfflineAdministration extends Component {
                         automatically cleared to prevent unauthorised access.
                       </Trans>
                     </p>
-                    {errors?.hasError("maximum_retention_period") && (
+                    {errors?.hasError("data_retention_period") && (
                       <div id="maximum-retention-period-error" className="error-message">
                         <Trans>The maximum data retention period is invalid.</Trans>
                       </div>
