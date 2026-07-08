@@ -22,7 +22,7 @@ describe("OfflineSettingsEntity", () => {
       EntitySchema.validateSchema(OfflineSettingsEntity.ENTITY_NAME, OfflineSettingsEntity.getSchema());
     });
 
-    it("validates session_duration property", () => {
+    it("validates max_session_duration property", () => {
       const successScenarios = [assertEntityProperty.SCENARIO_INTEGER, assertEntityProperty.SCENARIO_FLOAT];
       const failingScenarios = [
         assertEntityProperty.SCENARIO_STRING,
@@ -33,15 +33,15 @@ describe("OfflineSettingsEntity", () => {
 
       assertEntityProperty.assert(
         OfflineSettingsEntity,
-        "session_duration",
+        "max_session_duration",
         successScenarios,
         failingScenarios,
         "type",
       );
-      assertEntityProperty.required(OfflineSettingsEntity, "session_duration");
+      assertEntityProperty.required(OfflineSettingsEntity, "max_session_duration");
     });
 
-    it("validates maximum_retention_period property", () => {
+    it("validates data_retention_period property", () => {
       const successScenarios = [assertEntityProperty.SCENARIO_INTEGER, assertEntityProperty.SCENARIO_FLOAT];
       const failingScenarios = [
         assertEntityProperty.SCENARIO_STRING,
@@ -52,12 +52,12 @@ describe("OfflineSettingsEntity", () => {
 
       assertEntityProperty.assert(
         OfflineSettingsEntity,
-        "maximum_retention_period",
+        "data_retention_period",
         successScenarios,
         failingScenarios,
         "type",
       );
-      assertEntityProperty.required(OfflineSettingsEntity, "maximum_retention_period");
+      assertEntityProperty.required(OfflineSettingsEntity, "data_retention_period");
     });
 
     it("validates created property", () => {
@@ -94,8 +94,8 @@ describe("OfflineSettingsEntity", () => {
 
       expect(entity.toDto()).toStrictEqual(dto);
       expect(entity.id).toStrictEqual(dto.id);
-      expect(entity.sessionDuration).toStrictEqual(dto.session_duration);
-      expect(entity.maximumRetentionPeriod).toStrictEqual(dto.maximum_retention_period);
+      expect(entity.sessionDuration).toStrictEqual(dto.max_session_duration);
+      expect(entity.maximumRetentionPeriod).toStrictEqual(dto.data_retention_period);
     });
 
     it("should build an entity with given parameters", () => {
@@ -106,8 +106,8 @@ describe("OfflineSettingsEntity", () => {
 
       expect(entity.toDto()).toStrictEqual(dto);
       expect(entity.id).toStrictEqual(dto.id);
-      expect(entity.sessionDuration).toStrictEqual(dto.session_duration);
-      expect(entity.maximumRetentionPeriod).toStrictEqual(dto.maximum_retention_period);
+      expect(entity.sessionDuration).toStrictEqual(dto.max_session_duration);
+      expect(entity.maximumRetentionPeriod).toStrictEqual(dto.data_retention_period);
       expect(entity.created).toStrictEqual(dto.created);
       expect(entity.modified).toStrictEqual(dto.modified);
       expect(entity.createdBy).toStrictEqual(dto.created_by);
@@ -124,17 +124,17 @@ describe("OfflineSettingsEntity", () => {
       expect(entity.modifiedBy).toBeNull();
     });
 
-    it("should throw if session_duration is missing", () => {
+    it("should throw if max_session_duration is missing", () => {
       expect.assertions(1);
       const dto = defaultOfflineSettingsDto();
-      delete dto.session_duration;
+      delete dto.max_session_duration;
       expect(() => new OfflineSettingsEntity(dto)).toThrow();
     });
 
-    it("should throw if maximum_retention_period is missing", () => {
+    it("should throw if data_retention_period is missing", () => {
       expect.assertions(1);
       const dto = defaultOfflineSettingsDto();
-      delete dto.maximum_retention_period;
+      delete dto.data_retention_period;
       expect(() => new OfflineSettingsEntity(dto)).toThrow();
     });
   });

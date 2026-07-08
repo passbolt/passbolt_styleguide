@@ -18,10 +18,7 @@ import OfflineModeSettingsServiceWorkerService, {
   OFFLINE_DELETE_SETTINGS_EVENT,
 } from "./offlineModeSettingsServiceWorkerService";
 import { v4 as uuidv4 } from "uuid";
-import {
-  defaultOfflineSettingsDto,
-  defaultOfflineSettingsDtoFromApi,
-} from "../../../models/entity/offline/offlineSettingsEntity.test.data";
+import { defaultOfflineSettingsDtoFromApi } from "../../../models/entity/offline/offlineSettingsEntity.test.data";
 
 describe("OfflineModeSettingsServiceWorkerService", () => {
   let portMock, service;
@@ -61,14 +58,18 @@ describe("OfflineModeSettingsServiceWorkerService", () => {
   });
 
   describe("saveSettings", () => {
-    it("should save offline settings", async () => {
-      const settingsDto = defaultOfflineSettingsDto();
+    it("should save offline settings, sending only the editable fields", async () => {
+      // Use a settings dto that also carries read-only audit fields (id, created, ...).
+      const settingsDto = defaultOfflineSettingsDtoFromApi();
       const formSettings = new OfflineSettingsEntity(settingsDto);
       portMock.request.mockResolvedValue(settingsDto);
 
       const result = await service.saveSettings(formSettings);
 
-      expect(portMock.request).toHaveBeenCalledWith(OFFLINE_SAVE_SETTINGS_EVENT, formSettings.toDto());
+      expect(portMock.request).toHaveBeenCalledWith(OFFLINE_SAVE_SETTINGS_EVENT, {
+        max_session_duration: settingsDto.max_session_duration,
+        data_retention_period: settingsDto.data_retention_period,
+      });
       expect(result).toBeInstanceOf(OfflineSettingsEntity);
       expect(result.toDto()).toEqual(settingsDto);
     });

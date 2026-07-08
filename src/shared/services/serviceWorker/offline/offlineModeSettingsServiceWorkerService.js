@@ -52,7 +52,15 @@ class OfflineModeSettingsServiceWorkerService {
     if (!(formSettings instanceof OfflineSettingsEntity)) {
       throw new TypeError("The 'settings' property should be of type 'OfflineSettingsEntity'.");
     }
-    const savedSettingsDto = await this.port.request(OFFLINE_SAVE_SETTINGS_EVENT, formSettings.toDto());
+    // Only send the editable settings. The entity may also carry read-only audit fields
+    // (id, created, created_by, modified, modified_by) once it has been loaded/saved once,
+    // and those must not be part of the write payload.
+    const settingsDto = formSettings.toDto();
+    const payload = {
+      max_session_duration: settingsDto.max_session_duration,
+      data_retention_period: settingsDto.data_retention_period,
+    };
+    const savedSettingsDto = await this.port.request(OFFLINE_SAVE_SETTINGS_EVENT, payload);
     return new OfflineSettingsEntity(savedSettingsDto);
   }
 

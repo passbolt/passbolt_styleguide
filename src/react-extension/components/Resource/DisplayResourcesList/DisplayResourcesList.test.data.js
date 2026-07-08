@@ -137,7 +137,7 @@ export function propsWithFilteredResourcesAndPinCodeColumnVisible(data = {}) {
 export function propsWithFilteredResourcesAndOfflineEnabled(data = {}) {
   const baseContext = defaultUserAppContext();
   const baseCanIUse = baseContext.siteSettings.canIUse.bind(baseContext.siteSettings);
-  baseContext.siteSettings.canIUse = (name) => (name === "offline" ? true : baseCanIUse(name));
+  baseContext.siteSettings.canIUse = (name) => (name === "offlineMode" ? true : baseCanIUse(name));
 
   const resources = [
     defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "available-offline" }) }, { withOffline: true }),
