@@ -305,7 +305,7 @@ class DisplayRbacAdministration extends React.Component {
    * @returns {boolean}
    */
   get canIUseOfflineMode() {
-    return this.props.context.siteSettings.canIUse("offline");
+    return this.props.context.siteSettings.canIUse("offlineMode");
   }
 
   /**
