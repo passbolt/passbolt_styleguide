@@ -1484,6 +1484,7 @@
   "The new organization recovery key should not be a formerly used organization recovery key.": "The new organization recovery key should not be a formerly used organization recovery key.",
   "The new SSO provider: {{ssoProviderName}}": "The new SSO provider: {{ssoProviderName}}",
   "The OAuth2 authentication endpoint.": "The OAuth2 authentication endpoint.",
+  "The OpenId configuration path is required.": "The OpenId configuration path is required.",
   "The OpenId configuration relative path from the given login url.": "The OpenId configuration relative path from the given login url.",
   "The OpenId scope.": "The OpenId scope.",
   "The operation failed with the following error:": "The operation failed with the following error:",
