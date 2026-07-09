@@ -403,6 +403,7 @@ export const AdministrationWorkspaceFeatureFlag = {
   [AdministrationWorkspaceMenuTypes.SCIM]: "scim", // Allow  types flag
   [AdministrationWorkspaceMenuTypes.SECRET_HISTORY]: "secretRevisions", // Allow secret revisions flag
   [AdministrationWorkspaceMenuTypes.CE_DOWNGRADE]: "ee", // Downgrade to Community Edition feature flag
+  [AdministrationWorkspaceMenuTypes.OFFLINE]: "offlineMode", // Offline mode administration feature flag
 };
 
 /**

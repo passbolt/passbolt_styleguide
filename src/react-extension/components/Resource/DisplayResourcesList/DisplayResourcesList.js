@@ -417,7 +417,7 @@ class DisplayResourcesList extends React.Component {
   get canUseOffline() {
     return (
       this.props.context.siteSettings.canIUse("offlineMode") &&
-      this.props.rbacContext.canIUseAction(actions.OFFLINE_MODE_FEATURE)
+      this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_VIEW)
     );
   }
 

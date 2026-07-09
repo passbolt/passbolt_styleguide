@@ -256,7 +256,7 @@ class AdministrationHomePage extends React.PureComponent {
         title: this.props.t("Offline mode"),
         description: this.props.t("Allow users to access resources when the API is not reachable."),
         redirectTo: this.props.navigationContext.onGoToAdministrationOfflineRequested,
-        flag: null,
+        flag: AdministrationWorkspaceMenuTypes.OFFLINE,
       },
       {
         icon: <InternationalSVG />,
