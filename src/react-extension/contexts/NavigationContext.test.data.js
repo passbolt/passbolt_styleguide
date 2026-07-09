@@ -39,6 +39,7 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationHealthcheckRequested: jest.fn(),
     onGoToUsersRequested: jest.fn(),
     onGoToHelpRequested: jest.fn(),
+    onGoToTermsRequested: jest.fn(),
     onGoToUserSettingsProfileRequested: jest.fn(),
     onGoToUserSettingsPassphraseRequested: jest.fn(),
     onGoToUserSettingsSecurityTokenRequested: jest.fn(),

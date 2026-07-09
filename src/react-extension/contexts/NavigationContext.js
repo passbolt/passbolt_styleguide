@@ -40,6 +40,8 @@ export const NavigationContext = React.createContext({
   onGoToPasswordsRequested: () => {}, // Whenever the user wants to navigate to the passwords workspace
   // Users
   onGoToUsersRequested: () => {}, // Whenever the user wants to navigate to the users workspace
+  // Terms & Credits
+  onGoToTermsRequested: () => {}, // Whenever the user wants to navigate to the terms & credits page
   // Help
   onGoToHelpRequested: () => {}, // Whenever the user wants to navigate to the help passbolt documentation
   // User settings
@@ -120,6 +122,8 @@ class NavigationContextProvider extends React.Component {
       onGoToUsersRequested: this.onGoToUsersRequested.bind(this), // Whenever the user wants to navigate to the users workspace
       // Help
       onGoToHelpRequested: this.onGoToHelpRequested.bind(this), // Whenever the user wants to navigate to the help passbolt documentation
+      // Terms & Credits
+      onGoToTermsRequested: this.onGoToTermsRequested.bind(this), // Whenever the user wants to navigate to the terms & credits documentation
       // User settings
       onGoToUserSettingsProfileRequested: this.onGoToUserSettingsProfileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace profile section.
       onGoToUserSettingsPassphraseRequested: this.onGoToUserSettingsPassphraseRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace pasphrase section.
@@ -539,6 +543,20 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToHelpRequested() {
     await this.onGoToNewTab("https://www.passbolt.com/docs/");
+  }
+
+  /*
+   * =============================================================
+   *  Terms & Credits navigation
+   * =============================================================
+   */
+
+  /**
+   * Whenever the user wants to navigate to the passbolt terms and credits documentation.
+   * @returns {Promise<void>}
+   */
+  async onGoToTermsRequested() {
+    await this.onGoToNewTab("https://www.passbolt.com/terms");
   }
 
   /*
