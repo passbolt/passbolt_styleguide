@@ -252,20 +252,6 @@ class DisplaySubscriptionKey extends React.Component {
                 <Trans>Details</Trans>
               </h3>
               <div className="subscription-information">
-                {!this.props.context.siteSettings.isCommunityEdition &&
-                  !this.props.adminSubscriptionContext.getSubscription().data && (
-                    <>
-                      <h4 className="subscription-information-subtitle">
-                        <Trans>Your subscription key is either missing or not valid.</Trans>
-                      </h4>
-                      <p>
-                        <Trans>Sorry your subscription is either missing or not readable.</Trans>
-                        <br />
-                        <Trans>Update the subscription key and try again.</Trans>{" "}
-                        <Trans>If this does not work get in touch with support.</Trans>
-                      </p>
-                    </>
-                  )}
                 <div className="information container">
                   <div className="information">
                     <div className="information-label">
@@ -360,15 +346,13 @@ class DisplaySubscriptionKey extends React.Component {
               {!this.props.context.siteSettings.isCommunityEdition && (
                 <>
                   {!this.props.context.siteSettings.isCommunityEdition && (
-                    <>
-                      <div className="subscription-actions">
-                        {this.hasSubscriptionKeyExpired() && (
-                          <div className="subscription-warning">
-                            <TriangleAlertSVG />
-                            <Trans>Your subscription key is expired.</Trans>
-                          </div>
-                        )}
-                      </div>
+                    <div className="subscription-actions">
+                      {this.hasSubscriptionKeyExpired() && (
+                        <div className="subscription-warning">
+                          <TriangleAlertSVG />
+                          <Trans>Your subscription key is expired.</Trans>
+                        </div>
+                      )}
                       {this.hasLimitUsersExceeded() && (
                         <div className="subscription-warning">
                           <TriangleAlertSVG />
@@ -378,10 +362,10 @@ class DisplaySubscriptionKey extends React.Component {
                       {this.hasInvalidSubscription() && (
                         <div className="subscription-warning">
                           <TriangleAlertSVG />
-                          <Trans>Your subscription key is not valid.</Trans>
+                          <Trans>Your subscription key is either missing or not valid.</Trans>
                         </div>
                       )}
-                    </>
+                    </div>
                   )}
                 </>
               )}

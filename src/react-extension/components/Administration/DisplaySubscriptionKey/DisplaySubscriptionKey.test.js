@@ -139,7 +139,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       page = new DisplaySubscriptionKeyPage(props.context, props);
       await screen.findByText("Details");
 
-      expect(page.subscriptionWarnings).toContain("Your subscription key is not valid.");
+      expect(page.subscriptionWarnings).toContain("Your subscription key is either missing or not valid.");
     });
 
     it("As AD I should be able to identify if the key is missing", async () => {
