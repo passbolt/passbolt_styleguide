@@ -130,6 +130,18 @@ describe("DisplaySubscriptionKeyPage", () => {
       );
     });
 
+    it("As AD I should see a warning when the subscription key is missing or unreadable", async () => {
+      expect.assertions(1);
+
+      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementationOnce(() => {
+        throw new PassboltApiFetchError("missing key", {});
+      });
+      page = new DisplaySubscriptionKeyPage(props.context, props);
+      await screen.findByText("Details");
+
+      expect(page.subscriptionWarnings).toContain("Your subscription key is not valid.");
+    });
+
     it("As AD I should be able to identify if the key is missing", async () => {
       expect.assertions(3);
       const ceProps = defaultProps();
@@ -262,6 +274,36 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.plansTitle).toBe("Plans");
       expect(page.communityCard).not.toBeNull();
       expect(page.proCard).not.toBeNull();
+    });
+
+    it("As AD I should see the up to date list of features on the Community and Pro plan cards", async () => {
+      expect.assertions(2);
+      page = new DisplaySubscriptionKeyPage(props.context, props);
+      await screen.findByText("Details");
+
+      expect(page.communityFeatures).toEqual([
+        "Open source under AGPLV3 license",
+        "Passwords management & sharing",
+        "Private and shared folders",
+        "Users and groups management",
+        "Secret key authentication (2FA)",
+        "Additional factor authentication (3-step verification)",
+        "Open API",
+        "Role Based Access Control",
+        "Password expiry",
+        "Secret history",
+        "Community support",
+      ]);
+      expect(page.proFeatures).toEqual([
+        "Account recovery (Escrow)",
+        "Users provisioning (AD / OpenLDAP / SCIM)",
+        "Single Sign On (SSO) with Microsoft, Google and more",
+        "Activity log (audit changes)",
+        "Additional policies",
+        "Tags management",
+        "VM appliance",
+        "Next business day support",
+      ]);
     });
 
     it("As CE AD I should see the Upload subscription key button", async () => {

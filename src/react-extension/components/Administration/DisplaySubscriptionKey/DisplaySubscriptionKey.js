@@ -210,10 +210,7 @@ class DisplaySubscriptionKey extends React.Component {
    */
   hasInvalidSubscription() {
     return (
-      !this.props.context.siteSettings.isCommunityEdition &&
-      (!this.props.adminSubscriptionContext.getSubscription().data ||
-        this.hasLimitUsersExceeded() ||
-        this.hasSubscriptionKeyExpired())
+      !this.props.context.siteSettings.isCommunityEdition && !this.props.adminSubscriptionContext.getSubscription().data
     );
   }
 
@@ -251,7 +248,7 @@ class DisplaySubscriptionKey extends React.Component {
               <h1>
                 <Trans>Subscription</Trans>
               </h1>
-              <h3 className="title">
+              <h3>
                 <Trans>Details</Trans>
               </h3>
               <div className="subscription-information">
@@ -362,17 +359,29 @@ class DisplaySubscriptionKey extends React.Component {
               </div>
               {!this.props.context.siteSettings.isCommunityEdition && (
                 <>
-                  {this.hasSubscriptionKeyExpired() && (
-                    <div className="subscription-warning">
-                      <TriangleAlertSVG />
-                      <Trans>Your subscription key is expired.</Trans>
-                    </div>
-                  )}
-                  {this.hasLimitUsersExceeded() && (
-                    <div className="subscription-warning">
-                      <TriangleAlertSVG />
-                      <Trans>Your users limit has been reached.</Trans>
-                    </div>
+                  {!this.props.context.siteSettings.isCommunityEdition && (
+                    <>
+                      <div className="subscription-actions">
+                        {this.hasSubscriptionKeyExpired() && (
+                          <div className="subscription-warning">
+                            <TriangleAlertSVG />
+                            <Trans>Your subscription key is expired.</Trans>
+                          </div>
+                        )}
+                      </div>
+                      {this.hasLimitUsersExceeded() && (
+                        <div className="subscription-warning">
+                          <TriangleAlertSVG />
+                          <Trans>Your users limit has been reached.</Trans>
+                        </div>
+                      )}
+                      {this.hasInvalidSubscription() && (
+                        <div className="subscription-warning">
+                          <TriangleAlertSVG />
+                          <Trans>Your subscription key is not valid.</Trans>
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -404,65 +413,67 @@ class DisplaySubscriptionKey extends React.Component {
                 <div
                   className={`edition ${this.props.context.siteSettings.isCommunityEdition ? "current-edition" : ""}`}
                 >
-                  <div className="title">
-                    <div className="community-title">
-                      <h3>
-                        <Trans>Community Edition</Trans>
-                      </h3>
-                      <span className="subtitle">
-                        <Trans>(Free forever)</Trans>
-                      </span>
-                    </div>
-                    {this.props.context.siteSettings.isCommunityEdition && (
-                      <div className="current-edition-indicator-wrapper">
-                        <div className="current-edition-indicator">
-                          <Trans>Current plan</Trans>
-                        </div>
+                  <div className="content">
+                    <div className="title">
+                      <div className="community-title">
+                        <h3>
+                          <Trans>Community Edition</Trans>
+                        </h3>
+                        <span className="subtitle">
+                          <Trans>(Free forever)</Trans>
+                        </span>
                       </div>
-                    )}
-                  </div>
-                  <div className="features">
-                    <span className="subtitle">
-                      <Trans>Features included:</Trans>
-                    </span>
-                    <ul>
-                      <li>
-                        <Trans>Open source under AGPLV3 license</Trans>
-                      </li>
-                      <li>
-                        <Trans>Passwords management & sharing</Trans>
-                      </li>
-                      <li>
-                        <Trans>Private and shared folders</Trans>
-                      </li>
-                      <li>
-                        <Trans>Users and groups management</Trans>
-                      </li>
-                      <li>
-                        <Trans>Secret key authentication (2FA)</Trans>
-                      </li>
-                      <li>
-                        <Trans>Additional factor authentication (3-step verification)</Trans>
-                      </li>
-                      <li>
-                        <Trans>Browser extensions & CLI</Trans>
-                      </li>
-                      <li>
-                        <Trans>Open API</Trans>
-                      </li>
-                      <li>
-                        <Trans>Role Based Access Control</Trans>
-                      </li>
-                      <li>
-                        <Trans>Password expiry</Trans>
-                      </li>
-                      <li>
-                        <Trans>Community support</Trans>
-                      </li>
-                    </ul>
+                      {this.props.context.siteSettings.isCommunityEdition && (
+                        <div className="current-edition-indicator-wrapper">
+                          <div className="current-edition-indicator">
+                            <Trans>Current plan</Trans>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="features">
+                      <span className="subtitle">
+                        <Trans>Features included:</Trans>
+                      </span>
+                      <ul>
+                        <li>
+                          <Trans>Open source under AGPLV3 license</Trans>
+                        </li>
+                        <li>
+                          <Trans>Passwords management & sharing</Trans>
+                        </li>
+                        <li>
+                          <Trans>Private and shared folders</Trans>
+                        </li>
+                        <li>
+                          <Trans>Users and groups management</Trans>
+                        </li>
+                        <li>
+                          <Trans>Secret key authentication (2FA)</Trans>
+                        </li>
+                        <li>
+                          <Trans>Additional factor authentication (3-step verification)</Trans>
+                        </li>
+                        <li>
+                          <Trans>Open API</Trans>
+                        </li>
+                        <li>
+                          <Trans>Role Based Access Control</Trans>
+                        </li>
+                        <li>
+                          <Trans>Password expiry</Trans>
+                        </li>
+                        <li>
+                          <Trans>Secret history</Trans>
+                        </li>
+                        <li>
+                          <Trans>Community support</Trans>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                   {this.shouldShowDowngradeSection() && (
-                    <div>
+                    <div className="subscription-actions">
                       <button className="button" type="button" onClick={this.handleDowngradeClick}>
                         <Trans>Downgrade to Community</Trans>
                       </button>
@@ -472,75 +483,80 @@ class DisplaySubscriptionKey extends React.Component {
                 <div
                   className={`edition ${!this.props.context.siteSettings.isCommunityEdition ? "current-edition" : ""}`}
                 >
-                  <div className="title">
-                    <h3>
-                      <Trans>Pro Edition</Trans>
-                    </h3>
-                    {!this.props.context.siteSettings.isCommunityEdition && (
-                      <div className="current-edition-indicator-wrapper">
-                        <div className="current-edition-indicator">
-                          <Trans>Current plan</Trans>
+                  <div className="content">
+                    <div className="title">
+                      <h3>
+                        <Trans>Pro Edition</Trans>
+                      </h3>
+                      {!this.props.context.siteSettings.isCommunityEdition && (
+                        <div className="current-edition-indicator-wrapper">
+                          <div className="current-edition-indicator">
+                            <Trans>Current plan</Trans>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="features">
-                    <span className="subtitle">
-                      <Trans>Features include everything in Community, plus:</Trans>
-                    </span>
-                    <ul>
-                      <li>
-                        <Trans>Account recovery (Escrow)</Trans>
-                      </li>
-                      <li>
-                        <Trans>LDAP provisioning (AD / OpenLDAP)</Trans>
-                      </li>
-                      <li>
-                        <Trans>Single Sign On (SSO) with Microsoft, Google & OpenID</Trans>
-                      </li>
-                      <li>
-                        <Trans>Activity log (audit changes)</Trans>
-                      </li>
-                      <li>
-                        <Trans>Tags management</Trans>
-                      </li>
-                      <li>
-                        <Trans>VM appliance</Trans>
-                      </li>
-                      <li>
-                        <Trans>Next business day support</Trans>
-                      </li>
-                    </ul>
-                    <div>
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
-                      >
-                        <Trans>See pricing page</Trans>
-                      </a>
+                      )}
                     </div>
-                    {this.props.context.siteSettings.isCommunityEdition && (
-                      <div className="subscription-actions">
+                    <div className="features">
+                      <span className="subtitle">
+                        <Trans>Features include everything in Community, plus:</Trans>
+                      </span>
+                      <ul>
+                        <li>
+                          <Trans>Account recovery (Escrow)</Trans>
+                        </li>
+                        <li>
+                          <Trans>Users provisioning (AD / OpenLDAP / SCIM)</Trans>
+                        </li>
+                        <li>
+                          <Trans>Single Sign On (SSO) with Microsoft, Google and more</Trans>
+                        </li>
+                        <li>
+                          <Trans>Activity log (audit changes)</Trans>
+                        </li>
+                        <li>
+                          <Trans>Additional policies</Trans>
+                        </li>
+                        <li>
+                          <Trans>Tags management</Trans>
+                        </li>
+                        <li>
+                          <Trans>VM appliance</Trans>
+                        </li>
+                        <li>
+                          <Trans>Next business day support</Trans>
+                        </li>
+                      </ul>
+                      <div>
                         <a
-                          className="button primary"
                           target="_blank"
                           rel="noopener noreferrer"
                           href="https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
                         >
-                          <Trans>Buy now</Trans>
-                        </a>
-                        <a
-                          className="button"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href="https://www.passbolt.com/contact/pro/free-trial?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
-                        >
-                          <Trans>Start a free trial</Trans>
+                          <Trans>See pricing page</Trans>
                         </a>
                       </div>
-                    )}
+                    </div>
                   </div>
+                  {this.props.context.siteSettings.isCommunityEdition && (
+                    <div className="subscription-actions">
+                      <a
+                        className="button primary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
+                      >
+                        <Trans>Buy now</Trans>
+                      </a>
+                      <a
+                        className="button"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://www.passbolt.com/contact/pro/free-trial?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
+                      >
+                        <Trans>Start a free trial</Trans>
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

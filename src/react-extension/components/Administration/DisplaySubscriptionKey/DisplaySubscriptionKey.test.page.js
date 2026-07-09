@@ -144,6 +144,22 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
+   * Returns the list of feature texts displayed on the Community Edition card
+   * @returns {Array<string>}
+   */
+  get communityFeatures() {
+    return [...this.communityCard.querySelectorAll(".features li")].map((li) => li.textContent.trim());
+  }
+
+  /**
+   * Returns the list of feature texts displayed on the Pro Edition card
+   * @returns {Array<string>}
+   */
+  get proFeatures() {
+    return [...this.proCard.querySelectorAll(".features li")].map((li) => li.textContent.trim());
+  }
+
+  /**
    * Returns the current edition card
    */
   get currentEditionCard() {
