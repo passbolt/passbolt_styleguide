@@ -187,6 +187,13 @@ export default class AdministrationWorkspaceContextPage {
   }
 
   /**
+   * Go to the downgrade to Community Edition route
+   */
+  async goToCeDowngrade() {
+    await this.goToLink(".ce-downgrade");
+  }
+
+  /**
    * on save enabled
    */
   onSaveEnabled() {
@@ -272,6 +279,9 @@ export default class AdministrationWorkspaceContextPage {
           </NavLink>
           <NavLink to={{ pathname: "/app/administration/healthcheck" }}>
             <a className="healthcheck"></a>
+          </NavLink>
+          <NavLink to={{ pathname: "/app/administration/ce-downgrade" }}>
+            <a className="ce-downgrade"></a>
           </NavLink>
         </Router>
       </AppContext.Provider>,

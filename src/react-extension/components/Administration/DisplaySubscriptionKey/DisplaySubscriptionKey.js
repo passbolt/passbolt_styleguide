@@ -18,7 +18,6 @@ import { Trans, withTranslation } from "react-i18next";
 
 import { withDialog } from "../../../contexts/DialogContext";
 import { withNavigationContext } from "../../../contexts/NavigationContext";
-import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import { withAdministrationWorkspace } from "../../../contexts/AdministrationWorkspaceContext";
 import { withAdminSubscription } from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
@@ -28,9 +27,6 @@ import SubscriptionKeyServiceWorkerService from "../../../../shared/services/api
 
 import { createSafePortal } from "../../../../shared/utils/portals";
 import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
-
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import ConfirmDowngradeSubscriptionDialog from "../ConfirmDowngradeSubscriptionDialog/ConfirmDowngradeSubscriptionDialog";
 
 import EmailSVG from "../../../../img/svg/email.svg";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
@@ -86,7 +82,7 @@ class DisplaySubscriptionKey extends React.Component {
   bindCallbacks() {
     this.handleRenewKey = this.handleRenewKey.bind(this);
     this.handleUpdateKey = this.handleUpdateKey.bind(this);
-    this.handleDowngradeClick = this.handleOpenDowngradeDialog.bind(this);
+    this.handleDowngradeClick = this.handleDowngradeClick.bind(this);
     this.handleAddSubscriptionKey = this.handleAddSubscriptionKey.bind(this);
     this.handleSaveSubscriptionKey = this.handleSaveSubscriptionKey.bind(this);
   }
@@ -112,34 +108,10 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   /**
-   * Open the downgrade confirmation dialog
+   * Navigate to the downgrade to Community Edition page
    */
-  handleOpenDowngradeDialog() {
-    const dialogKey = this.props.dialogContext.open(ConfirmDowngradeSubscriptionDialog, {
-      onClose: () => this.props.dialogContext.close(dialogKey),
-      onSubmit: () => this.handleDowngrade(dialogKey),
-    });
-  }
-
-  /**
-   * Perform the downgrade
-   * @param {string} dialogKey The dialog identifier
-   * @returns {Promise<void>}
-   */
-  async handleDowngrade(dialogKey) {
-    try {
-      await this.subscriptionKeyService.deleteOrganizationSubscriptionKey();
-      await this.props.actionFeedbackContext.displaySuccess(
-        this.translate("Subscription has been removed successfully. The instance is now on Community Edition."),
-      );
-      this.props.dialogContext.close(dialogKey);
-    } catch (error) {
-      if (error?.name === "UserAbortsOperationError") {
-        return;
-      }
-
-      this.props.dialogContext.open(NotifyError, { error });
-    }
+  handleDowngradeClick() {
+    this.props.navigationContext.onGoToAdministrationDowngradeToCeRequested();
   }
 
   /**
@@ -562,8 +534,6 @@ class DisplaySubscriptionKey extends React.Component {
 
 export default withAppContext(
   withNavigationContext(
-    withAdminSubscription(
-      withAdministrationWorkspace(withDialog(withActionFeedback(withTranslation("common")(DisplaySubscriptionKey)))),
-    ),
+    withAdminSubscription(withAdministrationWorkspace(withDialog(withTranslation("common")(DisplaySubscriptionKey)))),
   ),
 );

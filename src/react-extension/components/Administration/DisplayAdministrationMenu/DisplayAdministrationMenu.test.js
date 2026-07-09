@@ -96,6 +96,18 @@ describe("As AD I can see the administration menu", () => {
     expect(props.navigationContext.onGoToAdministrationSubscriptionRequested).toHaveBeenCalled();
   });
 
+  it("As AD on the downgrade to Community Edition page the Subscription menu should remain selected", async () => {
+    expect.assertions(2);
+
+    const props = defaultProps({
+      administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.CE_DOWNGRADE },
+    });
+    page = new DisplayAdministrationMenuPage(context, props);
+
+    expect(page.exists()).toBe(true);
+    expect(page.menuSelected).toBe("Subscription");
+  });
+
   it("As AD I should be able to go to internationalisation", async () => {
     expect.assertions(3);
     const props = defaultProps({

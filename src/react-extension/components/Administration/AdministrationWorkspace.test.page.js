@@ -176,6 +176,13 @@ export default class AdministrationWorkspacePage {
   }
 
   /**
+   * Returns true if the downgrade to Community Edition is selected
+   */
+  get isDowngradeToCeSelected() {
+    return Boolean(this._page.container.querySelector(".ce-downgrade-details"));
+  }
+
+  /**
    * Returns true if the password expiry area is visible
    */
   get isAllowedContentTypesSelected() {

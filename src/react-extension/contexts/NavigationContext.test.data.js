@@ -28,6 +28,7 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationUsersDirectoryRequested: jest.fn(),
     onGoToAdministrationEmailNotificationsRequested: jest.fn(),
     onGoToAdministrationSubscriptionRequested: jest.fn(),
+    onGoToAdministrationDowngradeToCeRequested: jest.fn(),
     onGoToAdministrationInternationalizationRequested: jest.fn(),
     onGoToAdministrationAccountRecoveryRequested: jest.fn(),
     onGoToAdministrationSmtpSettingsRequested: jest.fn(),
