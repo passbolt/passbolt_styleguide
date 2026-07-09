@@ -42,7 +42,7 @@ import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataT
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import ActionAbortedMissingMetadataKeysPage from "./components/ActionAbortedMissingMetadataKeysPage/ActionAbortedMissingMetadataKeysPage";
 import RbacServiceWorkerService from "../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
-import OnlineSessionEntity from "../shared/models/entity/session/onlineSessionEntity";
+import UserActiveSessionEntity from "../shared/models/entity/session/userActiveSessionEntity";
 import OfflineSettingsLocalStorageContextProvider from "../shared/context/offline/OfflineSettingsLocalStorageContext";
 
 const SEARCH_VISIBLE_ROUTES = [
@@ -292,7 +292,7 @@ class ExtQuickAccess extends React.Component {
    */
   async checkAuthStatus() {
     const activeSession = await this.state.port.request("passbolt.auth.check-status");
-    const activeSessionEntity = new OnlineSessionEntity(activeSession);
+    const activeSessionEntity = new UserActiveSessionEntity(activeSession);
     if (!activeSessionEntity.isMfaAuthenticated) {
       await this.redirectToMfaAuthentication();
       return;
