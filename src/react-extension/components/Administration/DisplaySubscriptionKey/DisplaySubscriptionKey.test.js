@@ -372,15 +372,15 @@ describe("DisplaySubscriptionKeyPage", () => {
   });
 
   describe("As AD when the edition plugin is not present", () => {
-    it("As AD in PRO mode the subscription actions should not be rendered", async () => {
+    it("As AD in PRO mode the subscription actions should be rendered", async () => {
       expect.assertions(2);
 
       const noPluginProps = propsWithoutEditionPlugin();
       page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
       await screen.findByText("Details");
 
-      expect(page.subscriptionActions).toBeNull();
-      expect(page.toolbarActionsUpdateButton).toBeNull();
+      expect(page.subscriptionActions).not.toBeNull();
+      expect(page.toolbarActionsUpdateButton.textContent.trim()).toBe("Update key");
     });
 
     it("As AD with an expiring subscription the Renew and Downgrade to Community buttons should not be rendered", async () => {
@@ -396,15 +396,32 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.downgradeToCommunityButton).toBeNull();
     });
 
-    it("As CE AD the Upload subscription key button should not be rendered", async () => {
-      expect.assertions(1);
+    it("As CE AD the Upload subscription key button should be rendered", async () => {
+      expect.assertions(2);
 
       const noPluginProps = propsWithoutEditionPlugin();
       jest.spyOn(noPluginProps.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
       page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
       await screen.findByText("Details");
 
-      expect(page.toolbarActionsUpdateButton).toBeNull();
+      expect(page.toolbarActionsUpdateButton).not.toBeNull();
+      expect(page.toolbarActionsUpdateButton.textContent.trim()).toBe("Upload subscription key");
+    });
+
+    it("As CE AD clicking Upload subscription key should fallback to the legacy update flow", async () => {
+      expect.assertions(2);
+
+      const noPluginProps = propsWithoutEditionPlugin();
+      jest.spyOn(noPluginProps.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
+      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
+      await screen.findByText("Details");
+
+      await page.updateKey();
+
+      expect(noPluginProps.dialogContext.open).toHaveBeenCalledWith(EditSubscriptionKey);
+      expect(noPluginProps.context.setContext).toHaveBeenCalledWith({
+        editSubscriptionKey: { key: mockSubscription.data },
+      });
     });
 
     it("As AD the Details and Plans sections should still be rendered", async () => {
