@@ -45,6 +45,9 @@ import { v4 as uuidv4 } from "uuid";
 import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
 
 beforeEach(() => {
   jest.resetModules();
@@ -80,6 +83,30 @@ describe("See Workspace Menu", () => {
       expect.assertions(2);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.editMenu).not.toBeNull();
+    });
+
+    it("As LU clicking edit should start the edit-resource permission workflow with the selected resource", async () => {
+      expect.assertions(2);
+      expect(page.displayMenu.editMenu).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.editMenu);
+
+      expect(propsOneResourceOwned.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
+        resource: propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0],
+      });
+    });
+
+    it("As LU clicking share should start the share-resource permission workflow with the selected resources", async () => {
+      expect.assertions(2);
+      expect(page.displayMenu.shareMenu).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.shareMenu);
+
+      expect(propsOneResourceOwned.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.SHARE_RESOURCE,
+        resources: propsOneResourceOwned.resourceWorkspaceContext.selectedResources,
+      });
     });
 
     it("As LU I can start to display a resource secret history via the workspace more menu", () => {
@@ -247,6 +274,7 @@ describe("See Workspace Menu", () => {
       expect.assertions(3);
       const context = defaultAppContext(); // The applicative context
       jest.spyOn(context.siteSettings, "canIUse").mockImplementation((plugin) => plugin !== "previewPassword");
+      context.siteSettings._props.passbolt.plugins.previewPassword.enabled = false;
 
       const propsOneResourceOwned = defaultPropsOneResourceOwned({ context: context }); // The props to pass
       const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);

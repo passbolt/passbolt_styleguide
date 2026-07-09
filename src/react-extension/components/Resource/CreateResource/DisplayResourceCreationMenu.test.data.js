@@ -16,6 +16,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultWorkflowContext } from "../../../contexts/WorkflowContext.test.data";
 import {
   resourceTypesCollectionDto,
   resourceTypesV4CollectionDto,
@@ -60,6 +61,7 @@ export const defaultProps = (data = {}) => ({
   dialogContext: {
     open: jest.fn(),
   },
+  workflowContext: defaultWorkflowContext(data?.workflowContext),
 });
 
 /**

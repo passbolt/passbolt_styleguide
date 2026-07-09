@@ -472,11 +472,19 @@ class EditResource extends Component {
   }
 
   /**
-   * Save the resource
+   * Save the resource.
+   * When operated by a workflow handler (`onSubmit` provided), hand the validated form entity to
+   * it and close: the workflow owns the API call, the success notification, and any permission
+   * review/sharing. Otherwise fall back to the standalone behavior (update + success).
    * @param {ResourceFormEntity} resource
    * @returns {Promise<void>}
    */
   async save(resource) {
+    if (this.props.onSubmit) {
+      await this.props.onSubmit(resource);
+      this.handleClose();
+      return;
+    }
     await this.updateResource(resource);
     await this.handleSaveSuccess();
   }
@@ -759,6 +767,7 @@ EditResource.propTypes = {
   context: PropTypes.any, // The application context
   resource: PropTypes.object, // The resource to edit
   onClose: PropTypes.func,
+  onSubmit: PropTypes.func, // Optional: when provided (workflow mode), receives the validated ResourceFormEntity instead of saving directly
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   dialogContext: PropTypes.object, // The dialog context
   passwordExpiryContext: PropTypes.object, // The password expiry context

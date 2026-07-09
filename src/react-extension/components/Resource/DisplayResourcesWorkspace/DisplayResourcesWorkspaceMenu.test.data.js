@@ -29,6 +29,7 @@ import {
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultWorkflowContext } from "../../../contexts/WorkflowContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
@@ -64,6 +65,7 @@ const defaultProps = (data = {}) => ({
   rbacContext: defaultAdministratorRbacContext(),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   dialogContext: defaultDialogContext(),
+  workflowContext: defaultWorkflowContext(),
   clipboardContext: defaultClipboardContext(),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   secretRevisionsSettings: new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto()),
