@@ -61,7 +61,7 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Details");
-      expect(page.edition).toBe("Pro");
+      expect(page.edition).toBe("Pro Edition");
       expect(page.serverVersion).toBe("3.5.0");
       expect(page.customerId).toBe(mockSubscription.customer_id);
       expect(page.subscriptionId).toBe(mockSubscription.subscription_id);
@@ -86,13 +86,13 @@ describe("DisplaySubscriptionKeyPage", () => {
       // Wait until the text is found (This will ensure the state has been updated)
       await screen.findByText("Details");
 
-      expect(page.subscriptionDetailsTitle).toBe("Your subscription key is not valid.");
       expect(page.customerId).toBe(mockSubscriptionUsersExceeded.customer_id);
       expect(page.subscriptionId).toBe(mockSubscriptionUsersExceeded.subscription_id);
       expect(page.email).toBe(mockSubscriptionUsersExceeded.email);
       await waitFor(() => {
         expect(page.users).toBe(`${mockSubscriptionUsersExceeded.users} (currently: ${mockUsers.length})`);
       });
+      expect(page.subscriptionWarnings).toContain("Your users limit has been reached.");
       expect(page.created).toBe(`${formatDate(mockSubscriptionUsersExceeded.created)}`);
       expect(page.expiry).toBe(
         `${formatDate(mockSubscriptionUsersExceeded.expiry)} (expired ${DateTime.fromISO(mockSubscriptionUsersExceeded.expiry).toRelative()})`,
@@ -112,7 +112,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       // Wait until the text is found (This will ensure the state has been updated)
       await screen.findByText("Details");
 
-      expect(page.subscriptionDetailsTitle).toBe("Your subscription key is not valid.");
+      expect(page.subscriptionWarnings).toContain("Your subscription key is expired.");
       expect(page.customerId).toBe(mockSubscriptionExpired.customer_id);
       expect(page.subscriptionId).toBe(mockSubscriptionExpired.subscription_id);
       expect(page.email).toBe(mockSubscriptionExpired.email);
@@ -128,6 +128,18 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(
         `https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${mockSubscriptionExpired.subscription_id}&customer_id=${mockSubscriptionExpired.customer_id}`,
       );
+    });
+
+    it("As AD I should see a warning when the subscription key is missing or unreadable", async () => {
+      expect.assertions(1);
+
+      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementationOnce(() => {
+        throw new PassboltApiFetchError("missing key", {});
+      });
+      page = new DisplaySubscriptionKeyPage(props.context, props);
+      await screen.findByText("Details");
+
+      expect(page.subscriptionWarnings).toContain("Your subscription key is either missing or not valid.");
     });
 
     it("As AD I should be able to identify if the key is missing", async () => {
@@ -212,7 +224,7 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       expect(page.downgradeToCommunityButton).not.toBeNull();
       expect(page.downgradeToCommunityButton.textContent.trim()).toBe("Downgrade to Community");
-      expect(page.renewKeyButton.textContent.trim()).toBe("Renew key");
+      expect(page.renewKeyButton.textContent.trim()).toBe("Renew subscription key");
     });
 
     it("As AD the Downgrade button should be visible when the subscription key is expired", async () => {
@@ -264,6 +276,36 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.proCard).not.toBeNull();
     });
 
+    it("As AD I should see the up to date list of features on the Community and Pro plan cards", async () => {
+      expect.assertions(2);
+      page = new DisplaySubscriptionKeyPage(props.context, props);
+      await screen.findByText("Details");
+
+      expect(page.communityFeatures).toEqual([
+        "Open source under AGPLV3 license",
+        "Passwords management & sharing",
+        "Private and shared folders",
+        "Users and groups management",
+        "Secret key authentication (2FA)",
+        "Additional factor authentication (3-step verification)",
+        "Open API",
+        "Role Based Access Control",
+        "Password expiry",
+        "Secret history",
+        "Community support",
+      ]);
+      expect(page.proFeatures).toEqual([
+        "Account recovery (Escrow)",
+        "Users provisioning (AD / OpenLDAP / SCIM)",
+        "Single Sign On (SSO) with Microsoft, Google and more",
+        "Activity log (audit changes)",
+        "Additional policies",
+        "Tags management",
+        "VM appliance",
+        "Next business day support",
+      ]);
+    });
+
     it("As CE AD I should see the Upload subscription key button", async () => {
       page = new DisplaySubscriptionKeyPage(ceProps.context, ceProps);
       await screen.findByText("Details");
@@ -295,7 +337,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       await screen.findByText("Details");
 
       expect(page.currentEditionCard).toBe(page.proCard);
-      expect(page.edition).toBe("Pro");
+      expect(page.edition).toBe("Pro Edition");
     });
 
     it("As CE AD the subscription key should not be fetched on mount", async () => {
@@ -320,7 +362,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       await screen.findByText("Details");
 
       expect(page.subscriptionActions).not.toBeNull();
-      expect(page.toolbarActionsUpdateButton.textContent.trim()).toBe("Update key");
+      expect(page.toolbarActionsUpdateButton.textContent.trim()).toBe("Update subscription key");
     });
 
     it("As AD with an expiring subscription the Renew and Downgrade buttons should not be rendered", async () => {
