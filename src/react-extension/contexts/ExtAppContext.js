@@ -15,7 +15,7 @@
 import React from "react";
 import AppContext from "../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import SiteSettings from "../../shared/lib/Settings/SiteSettings";
+import SiteSettingsEntity from "../../shared/models/entity/siteSettings/siteSettingsEntity";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
@@ -202,11 +202,11 @@ class ExtAppContextProvider extends React.Component {
 
   /**
    * Get the list of site settings from background page and set it in the state
-   * Using SiteSettings
+   * Using SiteSettingsEntity
    */
   async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.organization-settings.get");
-    const siteSettings = new SiteSettings(settings);
+    const settings = await this.props.port.request("passbolt.site-settings.get-or-find");
+    const siteSettings = new SiteSettingsEntity(settings);
     this.setState({ siteSettings });
   }
 

@@ -13,7 +13,9 @@
  */
 
 import { defaultUserRbacContext, denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultWorkflowContext } from "../../../contexts/WorkflowContext.test.data";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import {
@@ -47,6 +49,7 @@ export function defaultProps(data = {}) {
     left: 10,
     top: 10,
     dialogContext: defaultDialogContext(),
+    workflowContext: defaultWorkflowContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({ policy_override: true }),
@@ -120,5 +123,16 @@ export function propsDenyUIActions() {
   return {
     ...defaultProps(),
     rbacContext: denyRbacContext(),
+  };
+}
+
+/**
+ * Props with the preview secret capability denied by rbac
+ * @returns {object}
+ */
+export function propsDenySecretsPreview() {
+  return {
+    ...defaultProps(),
+    rbacContext: { canIUseAction: (action) => action !== uiActions.SECRETS_PREVIEW },
   };
 }

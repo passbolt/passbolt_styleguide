@@ -58,7 +58,7 @@ describe("OAuth2SsoProviderForm", () => {
       url: "url is not a valid URL",
       client_id: "client_id should not be empty",
       client_secret: "client_secret should not be empty",
-      openid_configuration_path: "openid_configuration_path should not be empty",
+      openid_configuration_path: "The OpenId configuration path is required.",
       scope: "scope should not be empty",
     };
 
@@ -67,7 +67,7 @@ describe("OAuth2SsoProviderForm", () => {
 
       const errors = new EntityValidationError();
       Object.keys(rawErrors).forEach((key) => {
-        errors.addError(key, "format", rawErrors[key]);
+        errors.addError(key, "minLength", rawErrors[key]);
       });
 
       const props = defaultOAuth2Props();

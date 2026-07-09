@@ -1,7 +1,3 @@
-# v5.13.1
+# v5.14.0
 
-### Fixed
-PB-52478 Remove subscription CTA when edition plugin is not enabled
-
-### Maintenance
-PB-52428 Update subscription links
+Version bump beofre code freeze for the v5.14.0

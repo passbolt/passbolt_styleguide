@@ -72,6 +72,14 @@ export class ResourceTypesLocalStorageContextProvider extends React.Component {
   }
 
   /**
+   * Get the storage key.
+   * @returns {string}
+   */
+  get storageKey() {
+    return `resource_types-${this.props.context.account?.id}`;
+  }
+
+  /**
    * Handles update of the resource types in the local storage.
    */
   handleStorageChange(changes) {
@@ -110,13 +118,13 @@ export class ResourceTypesLocalStorageContextProvider extends React.Component {
    * @private
    */
   async loadLocalStorage() {
-    const storageData = await this.props.context.storage.local.get(["resourceTypes"]);
-    if (!storageData.resourceTypes) {
+    const storageData = await this.props.context.storage.local.get([this.storageKey]);
+    if (!storageData[this.storageKey]) {
       this.updateLocalStorage();
       return;
     }
 
-    this.set(storageData.resourceTypes);
+    this.set(storageData[this.storageKey]);
   }
 
   /**
