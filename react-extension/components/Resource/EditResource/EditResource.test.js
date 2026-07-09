@@ -341,6 +341,28 @@ describe("See the Create Resource", () => {
         expect(props.onClose).toHaveBeenCalled();
       });
 
+      it("As LU operated by a workflow (onSubmit provided) I should delegate the save and not call passbolt.resources.update", async () => {
+        expect.assertions(3);
+
+        const onSubmit = jest.fn();
+        const props = defaultProps({ onSubmit });
+        mockContextRequest(props.context, () => ({ object_type: SECRET_DATA_OBJECT_TYPE, password: "RN9n8XuECN3" }));
+        let page;
+        await act(async () => (page = new EditResourcePage(props)));
+
+        jest.spyOn(props.context.port, "request");
+        await page.click(page.saveButton);
+
+        // The workflow owns the API call: EditResource hands it the form entity and closes.
+        expect(onSubmit).toHaveBeenCalledTimes(1);
+        expect(props.context.port.request).not.toHaveBeenCalledWith(
+          "passbolt.resources.update",
+          expect.anything(),
+          expect.anything(),
+        );
+        expect(props.onClose).toHaveBeenCalled();
+      });
+
       it("As a signed-in user I should be able to delete secret with a resource type mutation", async () => {
         expect.assertions(3);
 

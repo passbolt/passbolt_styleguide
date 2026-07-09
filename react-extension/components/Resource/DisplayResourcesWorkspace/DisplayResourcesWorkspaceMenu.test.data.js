@@ -29,6 +29,7 @@ import {
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultWorkflowContext } from "../../../contexts/WorkflowContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
@@ -37,7 +38,6 @@ import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity
 import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
-import { defaultOfflineItemDto } from "../../../../shared/models/entity/offline/offlineItemEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -65,6 +65,7 @@ const defaultProps = (data = {}) => ({
   rbacContext: defaultAdministratorRbacContext(),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   dialogContext: defaultDialogContext(),
+  workflowContext: defaultWorkflowContext(),
   clipboardContext: defaultClipboardContext(),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   secretRevisionsSettings: new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto()),
@@ -122,19 +123,6 @@ export const defaultPropsOneTotpResourceOwned = (data = {}) =>
   defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources: [resourcesMock[3]],
-      lockDisplayDetail: true,
-    }),
-    ...data,
-  });
-
-/**
- * Default props one selected resource already available offline
- * @returns {{resourceWorkspaceContext}}
- */
-export const defaultPropsOneResourceOfflineAvailable = (data = {}) =>
-  defaultProps({
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      selectedResources: [defaultResourceDto({ name: "offline-resource", offline: defaultOfflineItemDto() })],
       lockDisplayDetail: true,
     }),
     ...data,

@@ -38,6 +38,24 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return [
           <Breadcrumb key="bread-2" name={this.translate("Home")} onClick={this.onLastBreadcrumbClick.bind(this)} />,
         ];
+      case AdministrationWorkspaceMenuTypes.CE_DOWNGRADE:
+        return [
+          <Breadcrumb
+            key="bread-home"
+            name={this.translate("Home")}
+            onClick={this.props.navigationContext.onGoToAdministrationRequested}
+          />,
+          <Breadcrumb
+            key="bread-subscription"
+            name={this.translate("Subscription")}
+            onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}
+          />,
+          <Breadcrumb
+            key="bread-2"
+            name={this.getLastBreadcrumbItemName()}
+            onClick={this.onLastBreadcrumbClick.bind(this)}
+          />,
+        ];
       default:
         return [
           <Breadcrumb
@@ -104,8 +122,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("SCIM");
       case AdministrationWorkspaceMenuTypes.SECRET_HISTORY:
         return this.translate("Secret history");
-      case AdministrationWorkspaceMenuTypes.OFFLINE:
-        return this.translate("Offline mode");
+      case AdministrationWorkspaceMenuTypes.CE_DOWNGRADE:
+        return this.translate("Downgrade");
       default:
         return "";
     }

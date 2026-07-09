@@ -24,6 +24,7 @@ import DropdownMenuItem from "../../Dropdown/DropdownMenuItem";
 import { withNavigationContext } from "../../../../contexts/NavigationContext";
 import CogSVG from "../../../../../img/svg/cog.svg";
 import HelpSVG from "../../../../../img/svg/help.svg";
+import ScaleSVG from "../../../../../img/svg/scale.svg";
 
 export const WORKSPACE_ENUM = {
   RESOURCE: "RESOURCE",
@@ -34,10 +35,6 @@ export const WORKSPACE_ENUM = {
 
 class WorkspaceSwitcher extends React.PureComponent {
   render() {
-    if (!this.props.isUserAdmin && !this.props.isUserWorkspaceVisible) {
-      return null;
-    }
-
     return (
       <div id="workspace-switcher">
         <Dropdown>
@@ -59,23 +56,33 @@ class WorkspaceSwitcher extends React.PureComponent {
                 </button>
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem>
-              <button
-                type="button"
-                className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.USER_AND_GROUPS ? "active" : ""}`}
-                onClick={this.props.navigationContext.onGoToUsersRequested}
-              >
-                <UsersSVG />
-                <span>
-                  <Trans>Manage Users & Groups</Trans>
-                </span>
-              </button>
-            </DropdownMenuItem>
+            {this.props.isUserWorkspaceVisible && (
+              <DropdownMenuItem>
+                <button
+                  type="button"
+                  className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.USER_AND_GROUPS ? "active" : ""}`}
+                  onClick={this.props.navigationContext.onGoToUsersRequested}
+                >
+                  <UsersSVG />
+                  <span>
+                    <Trans>Manage Users & Groups</Trans>
+                  </span>
+                </button>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem>
               <button type="button" className="no-border" onClick={this.props.navigationContext.onGoToHelpRequested}>
                 <HelpSVG />
                 <span>
                   <Trans>Help</Trans>
+                </span>
+              </button>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <button type="button" className="no-border" onClick={this.props.navigationContext.onGoToTermsRequested}>
+                <ScaleSVG />
+                <span>
+                  <Trans>Terms & Credits</Trans>
                 </span>
               </button>
             </DropdownMenuItem>

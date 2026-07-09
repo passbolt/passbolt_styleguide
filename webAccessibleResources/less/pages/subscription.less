@@ -1,7 +1,23 @@
 .page.administration .app .panel.main .main-page .subscription-key,
 .page.administration .app .panel.main .main-page .subscription-key-teasing {
   .main-content {
-    padding-bottom: 0;
+    padding: 0 !important;
+
+    & > * {
+      padding-left: 1.6rem !important;
+      padding-right: 1.6rem !important;
+      margin-bottom: 0.8rem;
+    }
+
+    h1 {
+      padding: 1.6rem;
+      margin: 0 !important;
+    }
+
+    h3 {
+      margin-bottom: 0.8rem !important;
+      border-top: 0.1rem solid var(--Workspace-Dividers);
+    }
   }
 
   .subscription-key-teasing-info {
@@ -20,6 +36,8 @@
   .subscription-information {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
     gap: 1.6rem;
 
     h4.subscription-information-subtitle {
@@ -30,6 +48,7 @@
     .information {
       display: flex;
       gap: 1.6rem;
+      flex: 1;
     }
 
     .information-label,
@@ -43,8 +62,6 @@
       text-overflow: ellipsis;
 
       .edition {
-        font-weight: bolder;
-
         .subtitle {
           margin-left: 1rem;
 
@@ -79,66 +96,132 @@
     }
   }
 
+  .subscription-warning {
+    flex: 0 0 100%;
+    display: flex;
+    gap: 1.2rem;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 0.8rem 1.2rem;
+
+    border-radius: var(--Section-border-radius);
+    background-color: var(--Healthcheck-Healthcheck-Warning);
+  }
+
   .subscription-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.6rem;
+    justify-content: flex-end;
+
+    box-sizing: border-box;
+    width: 100%;
+
+    button.primary, .button.primary {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
   }
 
   .subscription-editions {
+    box-sizing: border-box;
+
     width: 100%;
 
     display: flex;
-    gap: 3.2rem;
-
-    margin-top: 1.6rem;
+    gap: 1.6rem;
 
     .edition {
-      flex: 1;
-
       display: flex;
-      position: relative;
+      flex: 1;
       flex-direction: column;
-      gap: 1.6rem;
+      justify-content: space-between;
+      
+      position: relative;
 
-      padding: 1.6rem;
+      min-width: 0;
 
       transition: border-color 0.5s;
-      background-color: @input-radio-list-background;
 
       border-radius: var(--Section-border-radius);
-      border: 1px solid var(--States-Active-Highlight);
+      border: 1px solid var(--Action-button-Action-button-border);
       /* To avoid flickering when hovering */
       margin: 1px;
 
       &.current-edition,
       &:hover {
-        border: 2px solid var(--Palette-Contrast-2);
+        border: 2px solid var(--Primary-button-Primary-button-background);
         margin: 0;
+        background-color: var(--Action-button-Action-button-background);
       }
 
-      &.current-edition {
-        border-radius: var(--Section-border-radius) 0 var(--Section-border-radius) var(--Section-border-radius);
+      .content {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        gap: 1.6rem;
+
+        & > * {
+          padding-left: 1.6rem;
+          padding-right: 1.6rem;
+        }
       }
 
-      .current-edition-indicator {
-        position: absolute;
-        right: -2px;
-        /* Border's width is 2px */
-        transform: translate(0, calc(-100% - 1.6rem));
-        padding: 0.8rem;
+      .title {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.8rem;
 
-        font-size: 12px;
-        color: var(--Text-and-icons-Main-text-reversed);
-        background-color: var(--Palette-Contrast-2);
+        max-width: 100%;
 
-        border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
-      }
+        border-top: none;
+        border-bottom: 0.1rem solid var(--Workspace-Dividers);
 
-      h3 {
-        border-bottom: 0.1rem solid var(--Text-and-icons-Secondary-text);
+        h3 {
+          font-size: 1.6rem;
+          margin-bottom: 0 !important;
+        }
+
+        .community-title {
+          height: 5.6rem; // 16*2 padding + 24 line height
+          overflow-y: hidden; // Hide "Free forever" when there is no room left
+
+          & > * {
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          h3 {
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+
+        .current-edition-indicator {
+          flex-shrink: 0;
+
+          /* Border's width is 2px */
+          top: -2px;
+          right: -2px;
+          margin-right: calc(-1.6rem + -2px);
+
+          padding: 0.8rem;
+
+          font-size: 12px;
+          font-weight: 700;
+          white-space: nowrap;
+          color: var(--Primary-button-Primary-button-text);
+          background-color: var(--Primary-button-Primary-button-background);
+
+          border-radius: 0 var(--Section-border-radius) 0 var(--Section-border-radius);
+        }
 
         .subtitle {
-          font-size: 1.5rem;
+          font-size: 1.4rem;
           font-weight: normal;
 
           margin-left: 1rem;
@@ -149,7 +232,7 @@
 
       .subtitle {
         font-weight: bolder;
-        font-size: 16px;
+        font-size: 1.5rem;
       }
 
       .features {
@@ -157,14 +240,34 @@
         flex-direction: column;
         gap: 1.6rem;
 
-        ul {
-          padding: 0 3.2rem;
+        ul > li {
+          font-size: 1.5rem;
+          list-style: none;
+          margin-bottom: 0.8rem;
 
-          li {
-            list-style-type: "✓\00a0";
-            margin-bottom: 0.8rem;
+          &::before {
+            content: "";
+
+            display: inline-block;
+
+            height: 1.6rem;
+            width: 1.6rem;
+
+            vertical-align: middle;
+            margin-right: 0.8rem;
+
+            mask: url('@{images}/controls/check_tick.svg') no-repeat center / contain;
+            -webkit-mask: url('@{images}/controls/check_tick.svg') no-repeat center / contain;
+
+            background-color: var(--Palette-Contrast-3);
           }
         }
+      }
+
+      .subscription-actions {
+        justify-content: start;
+        margin: 1.6rem 0;
+        padding: 0 1.6rem;
       }
     }
   }

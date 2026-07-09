@@ -17,7 +17,4 @@ export const actions = {
   ACCOUNT_RECOVERY_REQUEST_VIEW: "AccountRecoveryRequestsView.view",
   ACCOUNT_RECOVERY_REQUEST_INDEX: "AccountRecoveryRequestsIndex.index",
   ACCOUNT_RECOVERY_RESPONSE_CREATE: "AccountRecoveryResponsesCreate.post",
-  OFFLINE_MODE_FEATURE: "OfflineMode.index",
-  ALLOW_OFFLINE_RESOURCES_ACCESS: "OfflineMode.accessOffline",
-  MARK_RESOURCE_OFFLINE_AVAILABLE: "OfflineMode.markOffline",
 };

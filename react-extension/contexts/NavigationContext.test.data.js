@@ -28,6 +28,7 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationUsersDirectoryRequested: jest.fn(),
     onGoToAdministrationEmailNotificationsRequested: jest.fn(),
     onGoToAdministrationSubscriptionRequested: jest.fn(),
+    onGoToAdministrationDowngradeToCeRequested: jest.fn(),
     onGoToAdministrationInternationalizationRequested: jest.fn(),
     onGoToAdministrationAccountRecoveryRequested: jest.fn(),
     onGoToAdministrationSmtpSettingsRequested: jest.fn(),
@@ -39,6 +40,7 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationHealthcheckRequested: jest.fn(),
     onGoToUsersRequested: jest.fn(),
     onGoToHelpRequested: jest.fn(),
+    onGoToTermsRequested: jest.fn(),
     onGoToUserSettingsProfileRequested: jest.fn(),
     onGoToUserSettingsPassphraseRequested: jest.fn(),
     onGoToUserSettingsSecurityTokenRequested: jest.fn(),
@@ -64,7 +66,6 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
     onGoToAdministrationContentTypesEncryptedMetadataRequested: jest.fn(),
     onGoToAdministrationMetadataGettingStartedRequested: jest.fn(),
-    onGoToAdministrationOfflineRequested: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }

@@ -38,9 +38,6 @@ export function defaultProps() {
         },
       },
     },
-    dialogContext: {
-      open: jest.fn(),
-    },
   };
 }
 

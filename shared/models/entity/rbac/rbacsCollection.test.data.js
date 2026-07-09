@@ -41,9 +41,6 @@ export const defaultSettingsRbacsCollectionData = [
   defaultRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW }) }),
   defaultRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX }) }),
   defaultRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE }) }),
-  defaultRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_MODE_FEATURE }) }),
-  defaultRbacWithActionData({ action: defaultActionData({ name: actions.ALLOW_OFFLINE_RESOURCES_ACCESS }) }),
-  defaultRbacWithActionData({ action: defaultActionData({ name: actions.MARK_RESOURCE_OFFLINE_AVAILABLE }) }),
 ];
 
 export const userSettingsRbacsCollectionData = () =>
@@ -67,9 +64,6 @@ export const settingsRbacsCollectionData = () => [
   denyRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW }) }),
   denyRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX }) }),
   denyRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE }) }),
-  denyRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_MODE_FEATURE }) }),
-  denyRbacWithActionData({ action: defaultActionData({ name: actions.ALLOW_OFFLINE_RESOURCES_ACCESS }) }),
-  denyRbacWithActionData({ action: defaultActionData({ name: actions.MARK_RESOURCE_OFFLINE_AVAILABLE }) }),
 ];
 
 export const settingsRbacsCollectionFromRoleCollectionData = (rolesCollectionDto) => {
@@ -138,18 +132,6 @@ export const settingsRbacsCollectionFromRoleCollectionData = (rolesCollectionDto
       denyRbacWithActionData({
         role_id: roleId,
         action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE }),
-      }),
-      denyRbacWithActionData({
-        role_id: roleId,
-        action: defaultActionData({ name: actions.OFFLINE_MODE_FEATURE }),
-      }),
-      denyRbacWithActionData({
-        role_id: roleId,
-        action: defaultActionData({ name: actions.ALLOW_OFFLINE_RESOURCES_ACCESS }),
-      }),
-      denyRbacWithActionData({
-        role_id: roleId,
-        action: defaultActionData({ name: actions.MARK_RESOURCE_OFFLINE_AVAILABLE }),
       }),
     ]);
   }
