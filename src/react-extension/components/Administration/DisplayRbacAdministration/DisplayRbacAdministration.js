@@ -513,8 +513,8 @@ class DisplayRbacAdministration extends React.Component {
                       <>
                         <DisplayRbacSection label={this.props.t("Offline Mode")} level={1} rolesCount={rolesCount}>
                           <DisplayRbacItem
-                            label={this.props.t("Access to offline capability (Global feature setting)")}
-                            actionName={actions.OFFLINE_MODE_FEATURE}
+                            label={this.props.t("Can view offline items")}
+                            actionName={actions.OFFLINE_ITEMS_VIEW}
                             level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
@@ -522,8 +522,8 @@ class DisplayRbacAdministration extends React.Component {
                             onChange={this.updateRbacControlFunction}
                           />
                           <DisplayRbacItem
-                            label={this.props.t("Allow offline availability (Permission)")}
-                            actionName={actions.ALLOW_OFFLINE_RESOURCES_ACCESS}
+                            label={this.props.t("Can mark items as available offline")}
+                            actionName={actions.OFFLINE_ITEMS_ADD}
                             level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
@@ -531,8 +531,8 @@ class DisplayRbacAdministration extends React.Component {
                             onChange={this.updateRbacControlFunction}
                           />
                           <DisplayRbacItem
-                            label={this.props.t("Make available offline (Secret)")}
-                            actionName={actions.MARK_RESOURCE_OFFLINE_AVAILABLE}
+                            label={this.props.t("Can remove offline availability")}
+                            actionName={actions.OFFLINE_ITEMS_DELETE}
                             level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}

@@ -23,8 +23,8 @@ describe("actions", () => {
     expect(actions["ACCOUNT_RECOVERY_REQUEST_VIEW"]).toEqual("AccountRecoveryRequestsView.view");
     expect(actions["ACCOUNT_RECOVERY_REQUEST_INDEX"]).toEqual("AccountRecoveryRequestsIndex.index");
     expect(actions["ACCOUNT_RECOVERY_RESPONSE_CREATE"]).toEqual("AccountRecoveryResponsesCreate.post");
-    expect(actions["OFFLINE_MODE_FEATURE"]).toEqual("OfflineMode.index");
-    expect(actions["ALLOW_OFFLINE_RESOURCES_ACCESS"]).toEqual("OfflineMode.accessOffline");
-    expect(actions["MARK_RESOURCE_OFFLINE_AVAILABLE"]).toEqual("OfflineMode.markOffline");
+    expect(actions["OFFLINE_ITEMS_VIEW"]).toEqual("OfflineItemsView.view");
+    expect(actions["OFFLINE_ITEMS_ADD"]).toEqual("OfflineItemsAdd.add");
+    expect(actions["OFFLINE_ITEMS_DELETE"]).toEqual("OfflineItemsDelete.delete");
   });
 });
