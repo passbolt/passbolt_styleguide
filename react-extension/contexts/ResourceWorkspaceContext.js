@@ -26,6 +26,7 @@ import ColumnsResourceSettingCollection from "../../shared/models/entity/resourc
 import { withPasswordExpiry } from "./PasswordExpirySettingsContext";
 import { withRbac } from "../../shared/context/Rbac/RbacContext";
 import { uiActions } from "../../shared/services/rbacs/uiActionEnumeration";
+import { actions } from "../../shared/services/rbacs/actionEnumeration";
 import { ColumnModelTypes } from "../../shared/models/column/ColumnModel";
 import getPropValue from "../lib/Object/getPropValue";
 import { withTranslation } from "react-i18next";
@@ -812,6 +813,17 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Check if the user can use the offline mode feature.
+   * @returns {boolean}
+   */
+  get canUseOfflineMode() {
+    return (
+      this.props.context.siteSettings.canIUse("offlineMode") &&
+      this.props.rbacContext.canIUseAction(actions.OFFLINE_MODE_FEATURE)
+    );
+  }
+
+  /**
    * Populate the context with initial data such as resources and folders
    */
   populate() {
@@ -875,6 +887,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
       [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.searchBySharedWithMe.bind(this),
       [ResourceWorkspaceFilterTypes.EXPIRED]: this.searchByExpired.bind(this),
+      [ResourceWorkspaceFilterTypes.OFFLINE]: this.searchByOffline.bind(this),
       [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
       [ResourceWorkspaceFilterTypes.NONE]: () => {
         /* No search */
@@ -1015,6 +1028,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   searchByItemsIOwn(filter) {
     const filteredResources = this.resources.filter((resource) => resource.permission.type === 15);
+    this.sort(filteredResources);
+    this.setState({ filter, filteredResources });
+  }
+
+  /**
+   * Search for resources the current user marked offline available
+   * @param {object} filter The filter
+   */
+  searchByOffline(filter) {
+    const filteredResources = this.resources.filter((resource) => resource.offline !== undefined);
     this.sort(filteredResources);
     this.setState({ filter, filteredResources });
   }
@@ -1316,6 +1339,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     if (!this.canUseFolders) {
       columnsResourceSetting.removeById(ColumnModelTypes.LOCATION);
     }
+    if (!this.canUseOfflineMode) {
+      columnsResourceSetting.removeById(ColumnModelTypes.OFFLINE_MODE);
+    }
     const sorter = gridUserSettingEntity?.sorter || this.defaultSorter;
     const rowsSetting = gridUserSettingEntity?.rowsSetting;
     // process the search after the grid setting is loaded
@@ -1456,6 +1482,7 @@ export const ResourceWorkspaceFilterTypes = {
   FAVORITE: "FILTER-BY-FAVORITE", // Favorite resources
   SHARED_WITH_ME: "FILTER-BY-SHARED-WITH-ME", // Resources shared with the current user (who is not the owner)
   EXPIRED: "FILTER-BY-EXPIRED", // Resources recently modified
+  OFFLINE: "FILTER-BY-OFFLINE", // Resources marked as available offline
 };
 
 /**

@@ -301,6 +301,14 @@ class DisplayRbacAdministration extends React.Component {
   }
 
   /**
+   * Is the user allowed to use Offline Mode.
+   * @returns {boolean}
+   */
+  get canIUseOfflineMode() {
+    return this.props.context.siteSettings.canIUse("offlineMode");
+  }
+
+  /**
    * Check if the component is ready to display its rows.
    * @returns {boolean}
    */
@@ -492,6 +500,39 @@ class DisplayRbacAdministration extends React.Component {
                           <DisplayRbacItem
                             label={this.props.t("Account recovery request review")}
                             actionName={actions.ACCOUNT_RECOVERY_RESPONSE_CREATE}
+                            level={2}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={customizableRoles}
+                            onChange={this.updateRbacControlFunction}
+                          />
+                        </DisplayRbacSection>
+                      </>
+                    )}
+                    {this.canIUseOfflineMode && (
+                      <>
+                        <DisplayRbacSection label={this.props.t("Offline Mode")} level={1} rolesCount={rolesCount}>
+                          <DisplayRbacItem
+                            label={this.props.t("Access to offline capability (Global feature setting)")}
+                            actionName={actions.OFFLINE_MODE_FEATURE}
+                            level={2}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={customizableRoles}
+                            onChange={this.updateRbacControlFunction}
+                          />
+                          <DisplayRbacItem
+                            label={this.props.t("Allow offline availability (Permission)")}
+                            actionName={actions.ALLOW_OFFLINE_RESOURCES_ACCESS}
+                            level={2}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={customizableRoles}
+                            onChange={this.updateRbacControlFunction}
+                          />
+                          <DisplayRbacItem
+                            label={this.props.t("Make available offline (Secret)")}
+                            actionName={actions.MARK_RESOURCE_OFFLINE_AVAILABLE}
                             level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}

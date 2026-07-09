@@ -26,31 +26,6 @@ export const domElementLoginWithNameAttributeUsername = `
 </div>`;
 
 /**
- * Create a login form (username + password) wrapped inside a dialog element.
- * @type {string}
- */
-export const domDialogLoginWithUsernamePassword = `
-<dialog open>
-  <div>
-    <input type="text" name="username"/>
-    <input type="password"/>
-  </div>
-</dialog>`;
-
-/**
- * Create a page with an empty dialog and a login form located outside of it
- * @type {string}
- */
-export const domDialogWithoutInputAndLoginInBody = `
-<dialog open>
-  <div>No login fields here</div>
-</dialog>
-<div>
-  <input type="text" name="username"/>
-  <input type="password"/>
-</div>`;
-
-/**
  * Create a login form with multiple usernames and passwords in DOM
  * @type {string}
  */

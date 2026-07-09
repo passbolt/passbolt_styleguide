@@ -45,6 +45,7 @@ import CalendarIcon from "../../../../img/svg/calendar.svg";
 import TotpIcon from "../../../../img/svg/totp.svg";
 import GoIcon from "../../../../img/svg/go.svg";
 import HistoryIcon from "../../../../img/svg/history.svg";
+import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
@@ -53,6 +54,8 @@ import Logger from "../../../../shared/utils/logger";
 import { withSecretRevisionsSettings } from "../../../../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import DisplayResourceSecretHistory from "../../SecretHistory/DisplayResourceSecretHistory";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
+import OfflineModeServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeServiceWorkerService";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -61,6 +64,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.offlineModeServiceWorkerService = new OfflineModeServiceWorkerService(props.context.port);
     this.bindCallbacks();
   }
 
@@ -80,6 +84,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     this.handleSetExpiryDateClick = this.handleSetExpiryDateClick.bind(this);
     this.handleMarkAsExpiredClick = this.handleMarkAsExpiredClick.bind(this);
     this.handleSecretHistoryClickEvent = this.handleSecretHistoryClickEvent.bind(this);
+    this.handleOfflineClickEvent = this.handleOfflineClickEvent.bind(this);
   }
 
   /**
@@ -332,6 +337,34 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * Handle the click on the offline menu item to mark or remove the resource from offline availability.
+   * @returns {Promise<void>}
+   */
+  async handleOfflineClickEvent() {
+    const isAvailableOffline = Boolean(this.resource.offline);
+    try {
+      if (isAvailableOffline) {
+        await this.offlineModeServiceWorkerService.unmarkItem(this.resource.id);
+        await this.props.actionFeedbackContext.displaySuccess(
+          this.translate("The resource is no longer available offline."),
+        );
+      } else {
+        await this.offlineModeServiceWorkerService.markResource(this.resource.id);
+        await this.props.actionFeedbackContext.displaySuccess(
+          this.translate("The resource has been made available offline."),
+        );
+      }
+    } catch (error) {
+      Logger.error(error);
+      await this.props.actionFeedbackContext.displayError(
+        this.translate("Unable to update the offline availability of the resource."),
+      );
+    } finally {
+      this.props.hide();
+    }
+  }
+
+  /**
    * Display action aborted
    */
   displayActionAborted() {
@@ -474,6 +507,17 @@ class DisplayResourcesListContextualMenu extends React.Component {
   get canUseSecretHistory() {
     const isFeatureEnabled = this.props.context.siteSettings.canIUse("secretRevisions");
     return isFeatureEnabled && this.props.secretRevisionsSettings?.isFeatureEnabled && this.canPreviewSecret;
+  }
+
+  /**
+   * Can use offline availability
+   * @return {boolean}
+   */
+  get canUseOffline() {
+    return (
+      this.props.context.siteSettings.canIUse("offlineMode") &&
+      this.props.rbacContext.canIUseAction(actions.MARK_RESOURCE_OFFLINE_AVAILABLE)
+    );
   }
 
   /**
@@ -703,6 +747,31 @@ class DisplayResourcesListContextualMenu extends React.Component {
                     <HistoryIcon />
                     <span>
                       <Trans>Secret history</Trans>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+        )}
+        {this.canUseOffline && (
+          <li key="option-offline-availability" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button
+                    type="button"
+                    id="offline-availability"
+                    className="link no-border"
+                    onClick={this.handleOfflineClickEvent}
+                  >
+                    <OfflineModeSVG />
+                    <span>
+                      {this.resource.offline ? (
+                        <Trans>Remove offline availability</Trans>
+                      ) : (
+                        <Trans>Make available offline</Trans>
+                      )}
                     </span>
                   </button>
                 </div>

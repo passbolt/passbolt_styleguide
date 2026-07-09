@@ -31,6 +31,9 @@ jest.mock("./DisplayPasswordPoliciesAdministration/DisplayPasswordPoliciesAdmini
 jest.mock("./DisplaySecretHistoryAdministration/DisplaySecretHistoryAdministration", () => () => (
   <span className="secret-history-details"></span>
 ));
+jest.mock("./DisplayOfflineAdministration/DisplayOfflineAdministration", () => () => (
+  <span className="offline-details"></span>
+));
 jest.mock("./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration", () => () => (
   <span className="user-directory-details"></span>
 ));
@@ -128,6 +131,7 @@ const scenarios = [
   { selectedMenu: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED, field: "isGetStartedMetadataSelected" },
   { selectedMenu: AdministrationWorkspaceMenuTypes.SCIM, field: "isScimSelected" },
   { selectedMenu: AdministrationWorkspaceMenuTypes.SECRET_HISTORY, field: "isSecretHistorySelected" },
+  { selectedMenu: AdministrationWorkspaceMenuTypes.OFFLINE, field: "isOfflineSelected" },
 ];
 
 const ceScenarios = [

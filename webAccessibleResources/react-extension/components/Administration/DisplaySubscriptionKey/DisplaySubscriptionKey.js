@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.13.0
  */
-
 import React from "react";
 import { DateTime } from "luxon";
 import { Trans, withTranslation } from "react-i18next";
@@ -163,14 +162,6 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   /**
-   * Has edition plugin
-   * @returns {boolean}
-   */
-  hasEditionPlugin() {
-    return this.props.context.siteSettings.canIUse("edition");
-  }
-
-  /**
    * Has subscription key expired
    * @returns {boolean}
    */
@@ -195,7 +186,6 @@ class DisplaySubscriptionKey extends React.Component {
    */
   shouldShowDowngradeSection() {
     return (
-      this.hasEditionPlugin() &&
       !this.props.context.siteSettings.isCommunityEdition &&
       (this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire())
     );
@@ -371,29 +361,27 @@ class DisplaySubscriptionKey extends React.Component {
                   </div>
                 </div>
               </div>
-              {this.hasEditionPlugin() && (
-                <div className="subscription-actions">
-                  {!this.props.context.siteSettings.isCommunityEdition && (
-                    <>
-                      <button className="button primary form" type="button" onClick={this.handleUpdateKey}>
-                        <Trans>Update key</Trans>
+              <div className="subscription-actions">
+                {!this.props.context.siteSettings.isCommunityEdition && (
+                  <>
+                    <button className="button primary form" type="button" onClick={this.handleUpdateKey}>
+                      <Trans>Update key</Trans>
+                    </button>
+                    {(this.shouldShowDowngradeSection() || this.hasLimitUsersExceeded()) && (
+                      <button className="button secondary" type="button" onClick={this.handleRenewKey}>
+                        <Trans>Renew key</Trans>
                       </button>
-                      {(this.shouldShowDowngradeSection() || this.hasLimitUsersExceeded()) && (
-                        <button className="button secondary" type="button" onClick={this.handleRenewKey}>
-                          <Trans>Renew key</Trans>
-                        </button>
-                      )}
-                    </>
-                  )}
-                  {this.props.context.siteSettings.isCommunityEdition && (
-                    <>
-                      <button className="button primary form" type="button" onClick={this.handleAddSubscriptionKey}>
-                        <Trans>Upload subscription key</Trans>
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
+                    )}
+                  </>
+                )}
+                {this.props.context.siteSettings.isCommunityEdition && (
+                  <>
+                    <button className="button primary form" type="button" onClick={this.handleAddSubscriptionKey}>
+                      <Trans>Upload subscription key</Trans>
+                    </button>
+                  </>
+                )}
+              </div>
               <h3>
                 <Trans>Plans</Trans>
               </h3>
@@ -499,11 +487,7 @@ class DisplaySubscriptionKey extends React.Component {
                       </li>
                     </ul>
                     <div>
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
-                      >
+                      <a target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/pricing/pro">
                         <Trans>See pricing page</Trans>
                       </a>
                     </div>
@@ -513,7 +497,7 @@ class DisplaySubscriptionKey extends React.Component {
                           className="button primary"
                           target="_blank"
                           rel="noopener noreferrer"
-                          href="https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
+                          href="https://www.passbolt.com/pricing/pro"
                         >
                           <Trans>Buy now</Trans>
                         </a>
@@ -521,7 +505,7 @@ class DisplaySubscriptionKey extends React.Component {
                           className="button"
                           target="_blank"
                           rel="noopener noreferrer"
-                          href="https://www.passbolt.com/contact/pro/free-trial?utm_campaign=21060976-CE%20to%20Pro&utm_source=product"
+                          href="https://www.passbolt.com/contact/pro/free-trial"
                         >
                           <Trans>Start a free trial</Trans>
                         </a>

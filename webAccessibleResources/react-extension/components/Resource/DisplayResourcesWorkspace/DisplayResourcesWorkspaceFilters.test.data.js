@@ -16,6 +16,10 @@ import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspac
 import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+import {
+  defaultAdministratorRbacContext,
+  denyRbacContext,
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Default app context.
@@ -36,6 +40,8 @@ export function defaultAppContext(data = {}) {
  */
 export function defaultProps(data = {}) {
   return {
+    context: defaultAppContext(),
+    rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     history: {
@@ -43,6 +49,18 @@ export function defaultProps(data = {}) {
     },
     ...data,
   };
+}
+
+/**
+ * Props with offline feature disabled (rbac denied).
+ * @param {object} data Override the default props.
+ * @returns {object}
+ */
+export function propsWithOfflineDisabled(data = {}) {
+  return defaultProps({
+    rbacContext: denyRbacContext(),
+    ...data,
+  });
 }
 
 /**
@@ -96,6 +114,20 @@ export function propsFilterByExpired(data = {}) {
   return defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filter: { type: ResourceWorkspaceFilterTypes.EXPIRED },
+    }),
+    ...data,
+  });
+}
+
+/**
+ * Props filter by offline.
+ * @param {object} data Override the default props.
+ * @returns {object}
+ */
+export function propsFilterByOffline(data = {}) {
+  return defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filter: { type: ResourceWorkspaceFilterTypes.OFFLINE },
     }),
     ...data,
   });
