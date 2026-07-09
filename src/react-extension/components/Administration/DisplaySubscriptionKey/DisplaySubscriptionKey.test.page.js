@@ -62,6 +62,13 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
+   * Returns the subscription actions container
+   */
+  get subscriptionActions() {
+    return this._page.container.querySelector(".subscription-actions");
+  }
+
+  /**
    * Returns the renew button
    */
   get renewKeyButton() {

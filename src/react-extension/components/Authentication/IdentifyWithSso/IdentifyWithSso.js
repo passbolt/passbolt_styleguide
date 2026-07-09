@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
 import IdentifyViaSsoService from "../../../../shared/services/sso/IdentifyViaSsoService";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import sanitizeUrl from "../../../lib/Sanitize/sanitizeUrl";
 
 class IdentifyWithSso extends Component {
   /**
@@ -63,7 +64,7 @@ class IdentifyWithSso extends Component {
   }
 
   /**
-   * Handles the `beforeunload` event to ensure ^popup is closed and event listener is removed.
+   * Handles the `beforeunload` event to ensure popup is closed and event listener is removed.
    */
   handleBeforeUnload() {
     this.identifyViaSsoService.stopProcess();
@@ -105,11 +106,16 @@ class IdentifyWithSso extends Component {
    * @param {string} recoverUrl the URL to redirect to
    */
   handleSsoAuthSuccess(recoverUrl) {
+    const sanitizedUrl = sanitizeUrl(recoverUrl);
+    if (!sanitizedUrl) {
+      throw new Error("The redirection URL is invalid. It must use a valid http or https protocol.");
+    }
+
     const currentWindowUrl = new URL(window.location.href);
-    const urlToRedirectTo = new URL(recoverUrl);
+    const urlToRedirectTo = new URL(sanitizedUrl);
 
     if (currentWindowUrl.origin !== urlToRedirectTo.origin) {
-      throw new Error("The redirection URL is invalid. It must happen within the same origin has the current window");
+      throw new Error("The redirection URL is invalid. It must happen within the same origin as the current window");
     }
 
     window.location.href = urlToRedirectTo.toString();
