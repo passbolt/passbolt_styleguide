@@ -344,7 +344,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     const isAvailableOffline = Boolean(this.resource.offline);
     try {
       if (isAvailableOffline) {
-        await this.offlineModeServiceWorkerService.unmarkItem(this.resource.id);
+        await this.offlineModeServiceWorkerService.unmarkItem(this.resource.offline.id);
         await this.props.actionFeedbackContext.displaySuccess(
           this.translate("The resource is no longer available offline."),
         );
