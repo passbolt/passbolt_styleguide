@@ -12,13 +12,16 @@
  * @since         5.13.0
  */
 
+import { USER_ACTIVE_SESSION_ONLINE } from "./userActiveSessionEntity";
+
 /**
- * Build minimal online session.
+ * Build minimal user active session.
  * @param {object} [data={}] Data to override
  * @returns {object}
  */
-export const minimalOnlineSessionDto = (data = {}) => ({
+export const minimalUserActiveSessionDto = (data = {}) => ({
   is_authenticated: true,
+  type: USER_ACTIVE_SESSION_ONLINE,
   ...data,
 });
 
@@ -27,9 +30,12 @@ export const minimalOnlineSessionDto = (data = {}) => ({
  * @param {object} [data={}] Data to override
  * @returns {object}
  */
-export const defaultOnlineSessionDto = (data = {}) => ({
+export const defaultUserActiveSessionDto = (data = {}) => ({
   is_authenticated: true,
   is_mfa_authenticated: true,
-  last_online_logged_in: "2025-08-04T18:59:11+00:00",
+  is_server_reachable: true,
+  type: USER_ACTIVE_SESSION_ONLINE,
+  last_logged_in: "2025-08-04T18:58:11+00:00",
+  last_seen_online: "2025-08-04T18:59:11+00:00",
   ...data,
 });
