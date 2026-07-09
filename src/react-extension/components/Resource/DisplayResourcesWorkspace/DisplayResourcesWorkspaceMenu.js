@@ -144,7 +144,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     const isAvailableOffline = Boolean(resource.offline);
     try {
       if (isAvailableOffline) {
-        await this.offlineModeServiceWorkerService.unmarkItem(resource.id);
+        await this.offlineModeServiceWorkerService.unmarkItem(resource.offline.id);
         await this.props.actionFeedbackContext.displaySuccess(
           this.translate("The resource is no longer available offline."),
         );
