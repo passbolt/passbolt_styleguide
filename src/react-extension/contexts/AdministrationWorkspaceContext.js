@@ -398,6 +398,7 @@ export const AdministrationWorkspaceFeatureFlag = {
   [AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED]: "metadata", // Allow  types flag
   [AdministrationWorkspaceMenuTypes.SCIM]: "scim", // Allow  types flag
   [AdministrationWorkspaceMenuTypes.SECRET_HISTORY]: "secretRevisions", // Allow secret revisions flag
+  [AdministrationWorkspaceMenuTypes.OFFLINE]: "offlineMode", // Offline mode administration feature flag
 };
 
 /**
