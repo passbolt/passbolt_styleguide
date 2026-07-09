@@ -27,6 +27,7 @@ export const NavigationContext = React.createContext({
   onGoToAdministrationUsersDirectoryRequested: () => {}, // Whenever the users wants to navigate to the administration workspace users directory
   onGoToAdministrationEmailNotificationsRequested: () => {}, // Whenever the users wants to navigate to the administration workspace email notifications
   onGoToAdministrationSubscriptionRequested: () => {}, // Whenever the users wants to navigate to the administration workspace subscription
+  onGoToAdministrationDowngradeToCeRequested: () => {}, // Whenever the users wants to navigate to the administration workspace downgrade to Community Edition
   onGoToAdministrationInternationalizationRequested: () => {}, // Whenever the users wants to navigate to the administration workspace internationalization
   onGoToAdministrationAccountRecoveryRequested: () => {}, // Whenever the users wants to navigate to the administration workspace account recovery
   onGoToAdministrationSmtpSettingsRequested: () => {}, // Whenever the users wants to navigate to the administration workspace SMTP settings
@@ -96,6 +97,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationUsersDirectoryRequested: this.onGoToAdministrationUsersDirectoryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace users directory
       onGoToAdministrationEmailNotificationsRequested: this.onGoToAdministrationEmailNotificationsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace email notifications
       onGoToAdministrationSubscriptionRequested: this.onGoToAdministrationSubscriptionRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
+      onGoToAdministrationDowngradeToCeRequested: this.onGoToAdministrationDowngradeToCeRequested.bind(this), // Whenever the user wants to navigate to the administration workspace downgrade to Community Edition
       onGoToAdministrationInternationalizationRequested:
         this.onGoToAdministrationInternationalizationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       onGoToAdministrationAccountRecoveryRequested: this.onGoToAdministrationAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace account recovery
@@ -285,6 +287,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationSubscriptionRequested() {
     await this.goTo("browser-extension", "/app/administration/subscription");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace downgrade to Community Edition.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationDowngradeToCeRequested() {
+    await this.goTo("browser-extension", "/app/administration/ce-downgrade");
   }
 
   /**

@@ -34,9 +34,6 @@ import { screen, waitFor } from "@testing-library/react";
 import { DateTime } from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
-import ConfirmDowngradeSubscriptionDialog from "../ConfirmDowngradeSubscriptionDialog/ConfirmDowngradeSubscriptionDialog";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import { DOWNGRADE_SUBSCRIPTION_KEY } from "../../../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -202,13 +199,13 @@ describe("DisplaySubscriptionKeyPage", () => {
   });
 
   describe("As AD with an expiring or expired subscription I can downgrade to CE", () => {
-    it("As AD the Downgrade to Community button should not render when the subscription is valid", async () => {
+    it("As AD the Downgrade button should not render when the subscription is valid", async () => {
       page = new DisplaySubscriptionKeyPage(props.context, props);
       await screen.findByText("Details");
       expect(page.downgradeToCommunityButton).toBeNull();
     });
 
-    it("As AD the Downgrade to Community button should be visible when the subscription key is expiring", async () => {
+    it("As AD the Downgrade button should be visible when the subscription key is expiring", async () => {
       const sectionProps = goingToExpireProps();
       page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
       await screen.findByText("Details");
@@ -218,7 +215,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.renewKeyButton.textContent.trim()).toBe("Renew key");
     });
 
-    it("As AD the Downgrade to Community button should be visible when the subscription key is expired", async () => {
+    it("As AD the Downgrade button should be visible when the subscription key is expired", async () => {
       const sectionProps = expiredProps();
       page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
       await screen.findByText("Details");
@@ -226,73 +223,16 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.downgradeToCommunityButton).not.toBeNull();
     });
 
-    it("As AD clicking Downgrade to Community should open ConfirmDowngradeSubscriptionDialog with onSubmit and onClose", async () => {
+    it("As AD clicking Downgrade button should navigate to the downgrade to Community Edition page", async () => {
+      expect.assertions(1);
+
       const sectionProps = goingToExpireProps();
       page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
       await screen.findByText("Details");
 
       await page.clickDowngradeToCommunity();
 
-      expect(sectionProps.dialogContext.open).toHaveBeenCalledTimes(1);
-      const [dialogComponent, dialogProps] = sectionProps.dialogContext.open.mock.calls[0];
-      expect(dialogComponent).toBe(ConfirmDowngradeSubscriptionDialog);
-      expect(typeof dialogProps.onSubmit).toBe("function");
-      expect(typeof dialogProps.onClose).toBe("function");
-    });
-
-    it("As AD the captured onSubmit should dispatch passbolt.subscription.downgrade, show a success toast and close the dialog", async () => {
-      const sectionProps = goingToExpireProps();
-      const dialogKey = "dialog-key-test";
-      sectionProps.dialogContext.open = jest.fn().mockReturnValue(dialogKey);
-      const mockDowngrade = jest.fn().mockResolvedValue(undefined);
-      sectionProps.context.port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDowngrade);
-
-      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
-      await screen.findByText("Details");
-
-      await page.clickDowngradeToCommunity();
-      const { onSubmit } = sectionProps.dialogContext.open.mock.calls[0][1];
-      await onSubmit();
-
-      expect(mockDowngrade).toHaveBeenCalledTimes(1);
-      expect(sectionProps.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "Subscription has been removed successfully. The instance is now on Community Edition.",
-      );
-      expect(sectionProps.dialogContext.close).toHaveBeenCalledWith(dialogKey);
-    });
-
-    it("As AD on UserAbortsOperationError no success toast or NotifyError is shown and the dialog stays open", async () => {
-      const sectionProps = goingToExpireProps();
-      const mockDowngrade = jest.fn().mockRejectedValue({ name: "UserAbortsOperationError" });
-      sectionProps.context.port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDowngrade);
-
-      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
-      await screen.findByText("Details");
-
-      await page.clickDowngradeToCommunity();
-      const { onSubmit } = sectionProps.dialogContext.open.mock.calls[0][1];
-      await onSubmit();
-
-      expect(sectionProps.actionFeedbackContext.displaySuccess).not.toHaveBeenCalled();
-      expect(sectionProps.dialogContext.close).not.toHaveBeenCalled();
-      expect(sectionProps.dialogContext.open).toHaveBeenCalledTimes(1);
-    });
-
-    it("As AD on an unexpected error a NotifyError dialog should be opened", async () => {
-      const sectionProps = goingToExpireProps();
-      const error = new Error("boom");
-      const mockDowngrade = jest.fn().mockRejectedValue(error);
-      sectionProps.context.port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDowngrade);
-
-      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
-      await screen.findByText("Details");
-
-      await page.clickDowngradeToCommunity();
-      const { onSubmit } = sectionProps.dialogContext.open.mock.calls[0][1];
-      await onSubmit();
-
-      expect(sectionProps.dialogContext.open).toHaveBeenCalledTimes(2);
-      expect(sectionProps.dialogContext.open).toHaveBeenLastCalledWith(NotifyError, { error });
+      expect(sectionProps.navigationContext.onGoToAdministrationDowngradeToCeRequested).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -383,7 +323,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.toolbarActionsUpdateButton.textContent.trim()).toBe("Update key");
     });
 
-    it("As AD with an expiring subscription the Renew and Downgrade to Community buttons should not be rendered", async () => {
+    it("As AD with an expiring subscription the Renew and Downgrade buttons should not be rendered", async () => {
       expect.assertions(2);
 
       const noPluginProps = propsWithoutEditionPlugin({

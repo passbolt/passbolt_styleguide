@@ -77,4 +77,13 @@ describe("As AD I can see a Breadcrumb", () => {
       expect(page.item(2)).toBe(scenario.expectedBreadcrumb);
     });
   });
+
+  it("As AD on the downgrade page I should see a Home > Subscription > Downgrade breadcrumb", () => {
+    const props = defaultProps(AdministrationWorkspaceMenuTypes.CE_DOWNGRADE); // The props to pass
+    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
+    expect(page.count).toBe(3);
+    expect(page.item(1)).toBe("Home");
+    expect(page.item(2)).toBe("Subscription");
+    expect(page.item(3)).toBe("Downgrade");
+  });
 });
