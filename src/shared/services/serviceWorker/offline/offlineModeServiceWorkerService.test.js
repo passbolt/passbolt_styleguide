@@ -56,16 +56,16 @@ describe("OfflineModeServiceWorkerService", () => {
     it("should unmark offline item", async () => {
       expect.assertions(1);
       portMock.request.mockResolvedValue(null);
-      const id = uuidv4();
+      const offlineItemId = uuidv4();
 
-      await service.unmarkItem(id);
+      await service.unmarkItem(offlineItemId);
 
-      expect(portMock.request).toHaveBeenCalledWith(OFFLINE_UNMARK_ITEM_OFFLINE_EVENT, id);
+      expect(portMock.request).toHaveBeenCalledWith(OFFLINE_UNMARK_ITEM_OFFLINE_EVENT, offlineItemId);
     });
 
-    it("should throw an error if the id is not a valid uuid", async () => {
+    it("should throw an error if the offline item id is not a valid uuid", async () => {
       expect.assertions(2);
-      expect(() => service.unmarkItem("not-a-uuid")).rejects.toThrow("The given id should be a valid UUID");
+      expect(() => service.unmarkItem("not-a-uuid")).rejects.toThrow("The given offlineItemId should be a valid UUID");
       expect(portMock.request).not.toHaveBeenCalled();
     });
   });
