@@ -41,14 +41,15 @@ class OfflineModeServiceWorkerService {
 
   /**
    * Unmark an item available offline.
-   * @param {string} id The Offline item id.
+   * @param {string} offlineItemId The offline item id (offline_items row id), used to delete the item on the API
+   *   and to resolve the resource whose offline OPFS entries should be dropped.
    * @return {Promise<null>}
    */
-  async unmarkItem(id) {
-    if (!isValidUuid(id)) {
-      throw new Error("The given id should be a valid UUID");
+  async unmarkItem(offlineItemId) {
+    if (!isValidUuid(offlineItemId)) {
+      throw new Error("The given offlineItemId should be a valid UUID");
     }
-    return await this.port.request(OFFLINE_UNMARK_ITEM_OFFLINE_EVENT, id);
+    return await this.port.request(OFFLINE_UNMARK_ITEM_OFFLINE_EVENT, offlineItemId);
   }
 }
 export default OfflineModeServiceWorkerService;
