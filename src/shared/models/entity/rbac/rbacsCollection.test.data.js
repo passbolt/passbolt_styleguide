@@ -41,9 +41,9 @@ export const defaultSettingsRbacsCollectionData = [
   defaultRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW }) }),
   defaultRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX }) }),
   defaultRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE }) }),
-  defaultRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_MODE_FEATURE }) }),
-  defaultRbacWithActionData({ action: defaultActionData({ name: actions.ALLOW_OFFLINE_RESOURCES_ACCESS }) }),
-  defaultRbacWithActionData({ action: defaultActionData({ name: actions.MARK_RESOURCE_OFFLINE_AVAILABLE }) }),
+  defaultRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_ITEMS_VIEW }) }),
+  defaultRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_ITEMS_DELETE }) }),
+  defaultRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_ITEMS_ADD }) }),
 ];
 
 export const userSettingsRbacsCollectionData = () =>
@@ -67,9 +67,9 @@ export const settingsRbacsCollectionData = () => [
   denyRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW }) }),
   denyRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX }) }),
   denyRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE }) }),
-  denyRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_MODE_FEATURE }) }),
-  denyRbacWithActionData({ action: defaultActionData({ name: actions.ALLOW_OFFLINE_RESOURCES_ACCESS }) }),
-  denyRbacWithActionData({ action: defaultActionData({ name: actions.MARK_RESOURCE_OFFLINE_AVAILABLE }) }),
+  denyRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_ITEMS_VIEW }) }),
+  denyRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_ITEMS_DELETE }) }),
+  denyRbacWithActionData({ action: defaultActionData({ name: actions.OFFLINE_ITEMS_ADD }) }),
 ];
 
 export const settingsRbacsCollectionFromRoleCollectionData = (rolesCollectionDto) => {
@@ -141,15 +141,15 @@ export const settingsRbacsCollectionFromRoleCollectionData = (rolesCollectionDto
       }),
       denyRbacWithActionData({
         role_id: roleId,
-        action: defaultActionData({ name: actions.OFFLINE_MODE_FEATURE }),
+        action: defaultActionData({ name: actions.OFFLINE_ITEMS_VIEW }),
       }),
       denyRbacWithActionData({
         role_id: roleId,
-        action: defaultActionData({ name: actions.ALLOW_OFFLINE_RESOURCES_ACCESS }),
+        action: defaultActionData({ name: actions.OFFLINE_ITEMS_DELETE }),
       }),
       denyRbacWithActionData({
         role_id: roleId,
-        action: defaultActionData({ name: actions.MARK_RESOURCE_OFFLINE_AVAILABLE }),
+        action: defaultActionData({ name: actions.OFFLINE_ITEMS_ADD }),
       }),
     ]);
   }
