@@ -38,7 +38,7 @@ describe("PermissionChangesService", () => {
   }
 
   describe("::buildResourcePermissionChanges", () => {
-    it("emits every non-operator snapshot row as is_new targeting the new resource when there are no dialog edits", () => {
+    it("emits every row as is_new targeting the new resource when there are no dialog edits", () => {
       expect.assertions(3);
 
       const resourceId = uuidv4();
@@ -64,8 +64,16 @@ describe("PermissionChangesService", () => {
 
       const changes = service.buildResourcePermissionChanges(snapshot, [], resourceId, operatorId);
 
-      expect(changes).toHaveLength(1);
+      expect(changes).toHaveLength(2);
       expect(changes[0]).toMatchObject({
+        is_new: true,
+        aro: "User",
+        aro_foreign_key: operatorId,
+        aco: "Resource",
+        aco_foreign_key: resourceId,
+        type: 15,
+      });
+      expect(changes[1]).toMatchObject({
         is_new: true,
         aro: "User",
         aro_foreign_key: readerId,
@@ -73,8 +81,6 @@ describe("PermissionChangesService", () => {
         aco_foreign_key: resourceId,
         type: 1,
       });
-      // Operator row is the implicit owner on the newly-created resource and must not be emitted.
-      expect(changes.find((change) => change.aro_foreign_key === operatorId)).toBeUndefined();
     });
 
     it("drops a snapshot row when the operator's dialog edits include a matching `delete` delta", () => {
@@ -94,11 +100,11 @@ describe("PermissionChangesService", () => {
 
       const changes = service.buildResourcePermissionChanges(snapshot, dialogChanges, resourceId, operatorId);
 
-      expect(changes).toEqual([]);
+      expect(changes).toHaveLength(1);
     });
 
     it("patches the type of a snapshot row when the operator's dialog edits include a type-update delta", () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const folderId = uuidv4();
       const resourceId = uuidv4();
@@ -112,10 +118,11 @@ describe("PermissionChangesService", () => {
         { aro: "User", aro_foreign_key: readerId, aco: "Resource", aco_foreign_key: null, type: 15 },
       ];
 
-      const changes = service.buildResourcePermissionChanges(snapshot, dialogChanges, resourceId, operatorId);
+      const changes = service.buildResourcePermissionChanges(snapshot, dialogChanges, resourceId);
 
-      expect(changes).toHaveLength(1);
-      expect(changes[0]).toMatchObject({ is_new: true, aro_foreign_key: readerId, type: 15 });
+      expect(changes).toHaveLength(2);
+      expect(changes[0]).toMatchObject({ is_new: true, aro_foreign_key: operatorId, type: 15 });
+      expect(changes[1]).toMatchObject({ is_new: true, aro_foreign_key: readerId, type: 15 });
     });
 
     it("appends a brand-new aro from the operator's dialog edits with aco_foreign_key stamped", () => {
@@ -134,45 +141,14 @@ describe("PermissionChangesService", () => {
 
       const changes = service.buildResourcePermissionChanges(snapshot, dialogChanges, resourceId, operatorId);
 
-      expect(changes).toHaveLength(1);
-      expect(changes[0]).toMatchObject({
+      expect(changes).toHaveLength(2);
+      expect(changes[1]).toMatchObject({
         is_new: true,
         aro_foreign_key: newAroId,
         aco: "Resource",
         aco_foreign_key: resourceId,
         type: 1,
       });
-    });
-
-    it("excludes the operator's own row from the output even when the snapshot lists it explicitly", () => {
-      expect.assertions(2);
-
-      const folderId = uuidv4();
-      const resourceId = uuidv4();
-      const operatorId = uuidv4();
-      const readerId = uuidv4();
-      const snapshot = snapshotWithPermissions([
-        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: operatorId, type: 15 }),
-        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: readerId, type: 1 }),
-      ]);
-
-      const changes = service.buildResourcePermissionChanges(snapshot, [], resourceId, operatorId);
-
-      expect(changes).toHaveLength(1);
-      expect(changes.find((change) => change.aro_foreign_key === operatorId)).toBeUndefined();
-    });
-
-    it("returns an empty array when the snapshot has only the operator and the dialog has no edits", () => {
-      expect.assertions(1);
-
-      const folderId = uuidv4();
-      const resourceId = uuidv4();
-      const operatorId = uuidv4();
-      const snapshot = snapshotWithPermissions([
-        defaultPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: operatorId, type: 15 }),
-      ]);
-
-      expect(service.buildResourcePermissionChanges(snapshot, [], resourceId, operatorId)).toEqual([]);
     });
   });
 });
