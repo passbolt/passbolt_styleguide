@@ -23,8 +23,6 @@ import ClipboardServiceWorkerService from "../../../shared/services/serviceWorke
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
 
 const Z_INDEX_MAX = 2147483647;
-const HOST_MOUNT_MAX_RETRIES = 3;
-const HOST_MOUNT_RETRY_DELAY = 100;
 
 /**
  * Manages the in-form web integration including call-to-action and menu
@@ -55,10 +53,9 @@ class InFormManager {
   }
 
   /**
-   * Create the shadow host and shadow root and insert it into the given container.
-   * @param {HTMLElement} container The element the host is appended to.
+   * Create the shadow host and shadow root and insert in the body
    */
-  createAndInsertShadowRootWithHost(container = document.body) {
+  createAndInsertShadowRootWithHost() {
     this.host = document.createElement("div");
     /*
      * Remove all style the component could have inherited from its environment.
@@ -69,7 +66,7 @@ class InFormManager {
      */
     this.host.setAttribute(
       "style",
-      `all: initial; position: fixed !important; display: block !important; z-index: ${Z_INDEX_MAX} !important; top: 0; left: 0;`,
+      `all: initial; position: fixed !important; display: block !important; z-index: ${Z_INDEX_MAX} !important`,
     );
     // Block any setter and getter property style, however it can be bypassed with setAttribute.
     Object.defineProperty(this.host, "style", {
@@ -91,9 +88,8 @@ class InFormManager {
       },
       true,
     ); // Capture phase
-
-    // Insert the host in the provided container
-    container.appendChild(this.host);
+    // Insert the host in the body
+    document.body.appendChild(this.host);
   }
 
   /**
@@ -114,6 +110,7 @@ class InFormManager {
     }
 
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
+    this.createAndInsertShadowRootWithHost();
     this.findAndSetAuthenticationFields();
     this.handleDomChange();
     this.handleInformCallToActionRepositionEvent();
@@ -213,26 +210,6 @@ class InFormManager {
   }
 
   /**
-   * Returns the element the shadow root host should be mounted into for the given input fields.
-   * @param {...HTMLElement[]} fieldsArrays One or more arrays of input fields.
-   * @return {HTMLElement} The dialog containing one of the fields (if any), or document.body.
-   */
-  getContainerElement(...fieldsArrays) {
-    const fields = fieldsArrays.flat();
-
-    for (const field of fields) {
-      const dialog = DomUtils.getContainingDialog(field);
-
-      // We need to check if the dialog is in the current document to ensure we can use it as a mount point
-      if (dialog?.ownerDocument === document) {
-        return dialog;
-      }
-    }
-
-    return document.body;
-  }
-
-  /**
    * Find authentication callToActionFields in the document and set them as object properties
    */
   findAndSetInputFields() {
@@ -244,15 +221,6 @@ class InFormManager {
     const newUsernameFields = InFormCallToActionField.findAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
     const newPasswordFields = InFormCallToActionField.findAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
     const newOTPFields = InFormCallToActionField.findAll(InFormFieldSelector.OTP_FIELD_SELECTOR);
-
-    const container = this.getContainerElement(newUsernameFields, newPasswordFields, newOTPFields);
-
-    // Ensure the host exists and move it to the correct mount target if needed.
-    if (!this.host) {
-      this.createAndInsertShadowRootWithHost(container);
-    } else if (this.host.parentNode !== container) {
-      container.appendChild(this.host);
-    }
 
     /**
      * A function factory to map a field to an existing field or create a new one
@@ -346,63 +314,21 @@ class InFormManager {
   }
 
   /**
-   * Checks if the host is mounted at an expected location (body/dialog)
-   * @returns {boolean}
-   */
-  isHostInValidLocation() {
-    const parent = this.host?.parentNode;
-
-    const belongsToDocument = parent?.ownerDocument === document;
-    const isConnected = parent?.isConnected ?? false;
-    const isInBody = parent === document.body;
-    const isInDialog = parent?.nodeName === "DIALOG";
-
-    return belongsToDocument && isConnected && (isInBody || isInDialog);
-  }
-
-  /**
-   * Remount the host up to 3 times if it is moved out of the DOM
-   * If the host keeps being moved out, it is destroyed.
-   * @param {number} attempt Remount counter.
-   */
-  retryMountHost(attempt = 1) {
-    console.warn(`The host has been moved out of the DOM, retrying... (${attempt}/${HOST_MOUNT_MAX_RETRIES})`);
-
-    // Remount the host
-    this.findAndSetAuthenticationFields();
-    this.handleInformCallToActionClickEvent();
-
-    // Wait N milliseconds before checking again
-    setTimeout(() => {
-      if (!this.isHostInValidLocation()) {
-        if (attempt < HOST_MOUNT_MAX_RETRIES) {
-          // If there are still attempts left, retry
-          this.retryMountHost(attempt + 1);
-        } else {
-          // Otherwise, destroy the host
-          console.debug("Someone has moved the host of the shadow root");
-          this.destroy();
-        }
-      }
-    }, HOST_MOUNT_RETRY_DELAY * attempt);
-  }
-
-  /**
    * Whenever the DOM changes
    */
   handleDomChange() {
     const updateAuthenticationFields = () => {
-      /**
-       * The only way to prevent an attacker trying to move the host into another parent element and add opacity.
-       * The host must be either in the body or inside a dialog. Anything else is considered tampering: we try to
-       * re-mount the host a few times before giving up and destroying it.
+      /*
+       * The only way to prevent an attacker trying to move the host into another parent element and add opacity
+       * If the host is not in the body anymore destroy
        */
-      if (this.isHostInValidLocation()) {
-        this.findAndSetAuthenticationFields();
-        this.handleInformCallToActionClickEvent();
-      } else {
-        this.retryMountHost();
+      if (this.host.parentNode !== document.body) {
+        console.debug("Someone has moved the host of the shadow root");
+        this.destroy();
+        return;
       }
+      this.findAndSetAuthenticationFields();
+      this.handleInformCallToActionClickEvent();
     };
 
     // Use requestIdleCallback when available to schedule work during browser idle periods,

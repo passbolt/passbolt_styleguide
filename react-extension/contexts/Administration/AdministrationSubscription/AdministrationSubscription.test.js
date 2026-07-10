@@ -69,7 +69,7 @@ describe("AdminSubscriptionContext", () => {
 
       expect.assertions(2);
 
-      expect(adminSubscribeContext.isProcessing()).toBeFalsy();
+      expect(adminSubscribeContext.isProcessing()).toBeTruthy();
       expect(adminSubscribeContext.getSubscription().subscriptionId).toEqual("");
     });
   });

@@ -57,11 +57,6 @@ class CardItem extends React.PureComponent {
             </span>
             {this.props.proTeasing && <FrameSVG />}
           </span>
-          {this.props.warningText && (
-            <span className="warning-text" title={this.props.warningText}>
-              {this.props.warningText}
-            </span>
-          )}
           {this.props.description && (
             <span className="info" title={this.props.description}>
               {this.props.description}
@@ -81,7 +76,6 @@ CardItem.defaultProps = {
 CardItem.propTypes = {
   icon: PropTypes.object.isRequired, // the icon to be displayed
   title: PropTypes.string.isRequired, // the main title of the card
-  warningText: PropTypes.string, // the warning text highlighted between the title and the description
   description: PropTypes.string, // the description or subtitle of the card
   isBeta: PropTypes.bool.isRequired, // should the card display a "beta" pill
   isNew: PropTypes.bool, /// should the card display a "new" pill

@@ -35,6 +35,10 @@ class UserPermissionItem extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    if (!Number.isInteger(props.permissionType)) {
+      throw new TypeError(this.translate("Invalid permission type for share permission item."));
+    }
+    this.state.permissionType = props.permissionType;
     this.bindEventHandlers();
   }
 
@@ -44,6 +48,7 @@ class UserPermissionItem extends Component {
   get defaultState() {
     return {
       tooltipFingerprintMessage: null,
+      permissionType: this.props.permissionType,
     };
   }
 
@@ -178,7 +183,7 @@ class UserPermissionItem extends Component {
             name="permissionSelect"
             className={`permission inline${isInputDisabled ? " disabled" : ""}`}
             items={this.permissions}
-            value={this.props.permissionType.toString()}
+            value={this.state.permissionType.toString()}
             disabled={isInputDisabled}
             onChange={this.handleUpdate}
             direction="bottom"

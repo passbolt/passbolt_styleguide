@@ -37,16 +37,6 @@ export const WithoutDescription = {
   },
 };
 
-export const WithWarningText = {
-  args: {
-    icon: <KeySVG />,
-    title: "Card item",
-    warningText: "This is a warning text",
-    description: "This is an example of a card with a warning text",
-    onClick: () => console.log("It clicked!"),
-  },
-};
-
 export const isBeta = {
   args: {
     icon: <KeySVG />,

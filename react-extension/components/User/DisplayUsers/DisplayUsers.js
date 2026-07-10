@@ -160,14 +160,12 @@ class DisplayUsers extends React.Component {
         headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Modified") } },
       }),
     );
-    if (this.hasLastLoggedInColumn) {
-      this.defaultColumns.push(
-        new ColumnUserLastLoggedInModel({
-          cellRenderer: { component: CellDate, props: { locale: this.props.context.locale, t: this.props.t } },
-          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Last logged in") } },
-        }),
-      );
-    }
+    this.defaultColumns.push(
+      new ColumnUserLastLoggedInModel({
+        cellRenderer: { component: CellDate, props: { locale: this.props.context.locale, t: this.props.t } },
+        headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Last logged in") } },
+      }),
+    );
     if (this.hasMfaColumn) {
       this.defaultColumns.push(
         new ColumnUserMfaModel({
@@ -415,14 +413,6 @@ class DisplayUsers extends React.Component {
         this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW)) ||
       (this.props.context.siteSettings.canIUse("metadata") && this.isLoggedInUserAdmin)
     );
-  }
-
-  /**
-   * Returns true if the logged in user is an admin.
-   * @returns {boolean}
-   */
-  get hasLastLoggedInColumn() {
-    return this.isLoggedInUserAdmin;
   }
 
   /**

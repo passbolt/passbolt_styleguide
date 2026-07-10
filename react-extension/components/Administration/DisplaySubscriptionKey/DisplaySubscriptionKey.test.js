@@ -22,18 +22,18 @@ import {
   goingToExpireProps,
   mockSubscription,
   mockSubscriptionExpired,
-  mockSubscriptionGoingToExpire,
   mockSubscriptionUsersExceeded,
   mockUsers,
-  propsWithoutEditionPlugin,
 } from "./DisplaySubscriptionKey.test.data";
 import DisplaySubscriptionKeyPage from "./DisplaySubscriptionKey.test.page";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import SubscriptionEntity from "../../../../shared/models/entity/subscription/subscriptionEntity";
 import { screen, waitFor } from "@testing-library/react";
 import { DateTime } from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
+import ConfirmDowngradeSubscriptionDialog from "../ConfirmDowngradeSubscriptionDialog/ConfirmDowngradeSubscriptionDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import { DOWNGRADE_SUBSCRIPTION_KEY } from "../../../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -44,24 +44,13 @@ describe("DisplaySubscriptionKeyPage", () => {
   const props = defaultProps(); // The props to pass
 
   describe("As AD I can see the subscription", () => {
-    it("As AD in PRO mode the subscription key should be fetched on mount", async () => {
-      expect.assertions(1);
-
-      const proProps = defaultProps();
-      const getSubscriptionKey = jest.spyOn(proProps.context, "onGetSubscriptionKeyRequested");
-      page = new DisplaySubscriptionKeyPage(proProps.context, proProps);
-      await screen.findByText("Details");
-
-      expect(getSubscriptionKey).toHaveBeenCalledTimes(1);
-    });
-
     it("As AD I should see all details about the subscription", async () => {
       page = new DisplaySubscriptionKeyPage(props.context, props);
       await screen.findByText("Details");
 
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Details");
-      expect(page.edition).toBe("Pro Edition");
+      expect(page.edition).toBe("Pro");
       expect(page.serverVersion).toBe("3.5.0");
       expect(page.customerId).toBe(mockSubscription.customer_id);
       expect(page.subscriptionId).toBe(mockSubscription.subscription_id);
@@ -86,13 +75,13 @@ describe("DisplaySubscriptionKeyPage", () => {
       // Wait until the text is found (This will ensure the state has been updated)
       await screen.findByText("Details");
 
+      expect(page.subscriptionDetailsTitle).toBe("Your subscription key is not valid.");
       expect(page.customerId).toBe(mockSubscriptionUsersExceeded.customer_id);
       expect(page.subscriptionId).toBe(mockSubscriptionUsersExceeded.subscription_id);
       expect(page.email).toBe(mockSubscriptionUsersExceeded.email);
       await waitFor(() => {
         expect(page.users).toBe(`${mockSubscriptionUsersExceeded.users} (currently: ${mockUsers.length})`);
       });
-      expect(page.subscriptionWarnings).toContain("Your users limit has been reached.");
       expect(page.created).toBe(`${formatDate(mockSubscriptionUsersExceeded.created)}`);
       expect(page.expiry).toBe(
         `${formatDate(mockSubscriptionUsersExceeded.expiry)} (expired ${DateTime.fromISO(mockSubscriptionUsersExceeded.expiry).toRelative()})`,
@@ -112,7 +101,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       // Wait until the text is found (This will ensure the state has been updated)
       await screen.findByText("Details");
 
-      expect(page.subscriptionWarnings).toContain("Your subscription key is expired.");
+      expect(page.subscriptionDetailsTitle).toBe("Your subscription key is not valid.");
       expect(page.customerId).toBe(mockSubscriptionExpired.customer_id);
       expect(page.subscriptionId).toBe(mockSubscriptionExpired.subscription_id);
       expect(page.email).toBe(mockSubscriptionExpired.email);
@@ -128,18 +117,6 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(
         `https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${mockSubscriptionExpired.subscription_id}&customer_id=${mockSubscriptionExpired.customer_id}`,
       );
-    });
-
-    it("As AD I should see a warning when the subscription key is missing or unreadable", async () => {
-      expect.assertions(1);
-
-      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementationOnce(() => {
-        throw new PassboltApiFetchError("missing key", {});
-      });
-      page = new DisplaySubscriptionKeyPage(props.context, props);
-      await screen.findByText("Details");
-
-      expect(page.subscriptionWarnings).toContain("Your subscription key is either missing or not valid.");
     });
 
     it("As AD I should be able to identify if the key is missing", async () => {
@@ -211,23 +188,23 @@ describe("DisplaySubscriptionKeyPage", () => {
   });
 
   describe("As AD with an expiring or expired subscription I can downgrade to CE", () => {
-    it("As AD the Downgrade button should not render when the subscription is valid", async () => {
+    it("As AD the Downgrade to Community button should not render when the subscription is valid", async () => {
       page = new DisplaySubscriptionKeyPage(props.context, props);
       await screen.findByText("Details");
       expect(page.downgradeToCommunityButton).toBeNull();
     });
 
-    it("As AD the Downgrade button should be visible when the subscription key is expiring", async () => {
+    it("As AD the Downgrade to Community button should be visible when the subscription key is expiring", async () => {
       const sectionProps = goingToExpireProps();
       page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
       await screen.findByText("Details");
 
       expect(page.downgradeToCommunityButton).not.toBeNull();
       expect(page.downgradeToCommunityButton.textContent.trim()).toBe("Downgrade to Community");
-      expect(page.renewKeyButton.textContent.trim()).toBe("Renew subscription key");
+      expect(page.renewKeyButton.textContent.trim()).toBe("Renew key");
     });
 
-    it("As AD the Downgrade button should be visible when the subscription key is expired", async () => {
+    it("As AD the Downgrade to Community button should be visible when the subscription key is expired", async () => {
       const sectionProps = expiredProps();
       page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
       await screen.findByText("Details");
@@ -235,16 +212,73 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.downgradeToCommunityButton).not.toBeNull();
     });
 
-    it("As AD clicking Downgrade button should navigate to the downgrade to Community Edition page", async () => {
-      expect.assertions(1);
-
+    it("As AD clicking Downgrade to Community should open ConfirmDowngradeSubscriptionDialog with onSubmit and onClose", async () => {
       const sectionProps = goingToExpireProps();
       page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
       await screen.findByText("Details");
 
       await page.clickDowngradeToCommunity();
 
-      expect(sectionProps.navigationContext.onGoToAdministrationDowngradeToCeRequested).toHaveBeenCalledTimes(1);
+      expect(sectionProps.dialogContext.open).toHaveBeenCalledTimes(1);
+      const [dialogComponent, dialogProps] = sectionProps.dialogContext.open.mock.calls[0];
+      expect(dialogComponent).toBe(ConfirmDowngradeSubscriptionDialog);
+      expect(typeof dialogProps.onSubmit).toBe("function");
+      expect(typeof dialogProps.onClose).toBe("function");
+    });
+
+    it("As AD the captured onSubmit should dispatch passbolt.subscription.downgrade, show a success toast and close the dialog", async () => {
+      const sectionProps = goingToExpireProps();
+      const dialogKey = "dialog-key-test";
+      sectionProps.dialogContext.open = jest.fn().mockReturnValue(dialogKey);
+      const mockDowngrade = jest.fn().mockResolvedValue(undefined);
+      sectionProps.context.port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDowngrade);
+
+      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
+      await screen.findByText("Details");
+
+      await page.clickDowngradeToCommunity();
+      const { onSubmit } = sectionProps.dialogContext.open.mock.calls[0][1];
+      await onSubmit();
+
+      expect(mockDowngrade).toHaveBeenCalledTimes(1);
+      expect(sectionProps.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
+        "Subscription has been removed successfully. The instance is now on Community Edition.",
+      );
+      expect(sectionProps.dialogContext.close).toHaveBeenCalledWith(dialogKey);
+    });
+
+    it("As AD on UserAbortsOperationError no success toast or NotifyError is shown and the dialog stays open", async () => {
+      const sectionProps = goingToExpireProps();
+      const mockDowngrade = jest.fn().mockRejectedValue({ name: "UserAbortsOperationError" });
+      sectionProps.context.port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDowngrade);
+
+      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
+      await screen.findByText("Details");
+
+      await page.clickDowngradeToCommunity();
+      const { onSubmit } = sectionProps.dialogContext.open.mock.calls[0][1];
+      await onSubmit();
+
+      expect(sectionProps.actionFeedbackContext.displaySuccess).not.toHaveBeenCalled();
+      expect(sectionProps.dialogContext.close).not.toHaveBeenCalled();
+      expect(sectionProps.dialogContext.open).toHaveBeenCalledTimes(1);
+    });
+
+    it("As AD on an unexpected error a NotifyError dialog should be opened", async () => {
+      const sectionProps = goingToExpireProps();
+      const error = new Error("boom");
+      const mockDowngrade = jest.fn().mockRejectedValue(error);
+      sectionProps.context.port.addRequestListener(DOWNGRADE_SUBSCRIPTION_KEY, mockDowngrade);
+
+      page = new DisplaySubscriptionKeyPage(sectionProps.context, sectionProps);
+      await screen.findByText("Details");
+
+      await page.clickDowngradeToCommunity();
+      const { onSubmit } = sectionProps.dialogContext.open.mock.calls[0][1];
+      await onSubmit();
+
+      expect(sectionProps.dialogContext.open).toHaveBeenCalledTimes(2);
+      expect(sectionProps.dialogContext.open).toHaveBeenLastCalledWith(NotifyError, { error });
     });
   });
 
@@ -276,36 +310,6 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.proCard).not.toBeNull();
     });
 
-    it("As AD I should see the up to date list of features on the Community and Pro plan cards", async () => {
-      expect.assertions(2);
-      page = new DisplaySubscriptionKeyPage(props.context, props);
-      await screen.findByText("Details");
-
-      expect(page.communityFeatures).toEqual([
-        "Open source under AGPLV3 license",
-        "Passwords management & sharing",
-        "Private and shared folders",
-        "Users and groups management",
-        "Secret key authentication (2FA)",
-        "Additional factor authentication (3-step verification)",
-        "Open API",
-        "Role Based Access Control",
-        "Password expiry",
-        "Secret history",
-        "Community support",
-      ]);
-      expect(page.proFeatures).toEqual([
-        "Account recovery (Escrow)",
-        "Users provisioning (AD / OpenLDAP / SCIM)",
-        "Single Sign On (SSO) with Microsoft, Google and more",
-        "Activity log (audit changes)",
-        "Additional policies",
-        "Tags management",
-        "VM appliance",
-        "Next business day support",
-      ]);
-    });
-
     it("As CE AD I should see the Upload subscription key button", async () => {
       page = new DisplaySubscriptionKeyPage(ceProps.context, ceProps);
       await screen.findByText("Details");
@@ -319,17 +323,11 @@ describe("DisplaySubscriptionKeyPage", () => {
       await screen.findByText("Details");
 
       expect(page.buyNowLink).not.toBeNull();
-      expect(page.buyNowLink.getAttribute("href")).toBe(
-        "https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
-      );
+      expect(page.buyNowLink.getAttribute("href")).toBe("https://www.passbolt.com/pricing/pro");
       expect(page.startTrialLink).not.toBeNull();
-      expect(page.startTrialLink.getAttribute("href")).toBe(
-        "https://www.passbolt.com/contact/pro/free-trial?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
-      );
+      expect(page.startTrialLink.getAttribute("href")).toBe("https://www.passbolt.com/contact/pro/free-trial");
       expect(page.seePricingLink).not.toBeNull();
-      expect(page.seePricingLink.getAttribute("href")).toBe(
-        "https://www.passbolt.com/pricing/pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product",
-      );
+      expect(page.seePricingLink.getAttribute("href")).toBe("https://www.passbolt.com/pricing/pro");
     });
 
     it("As AD with a valid subscription the Pro edition card should be badged as the current plan", async () => {
@@ -337,85 +335,7 @@ describe("DisplaySubscriptionKeyPage", () => {
       await screen.findByText("Details");
 
       expect(page.currentEditionCard).toBe(page.proCard);
-      expect(page.edition).toBe("Pro Edition");
-    });
-
-    it("As CE AD the subscription key should not be fetched on mount", async () => {
-      expect.assertions(1);
-
-      const ceProps = defaultProps();
-      const getSubscriptionKey = jest.spyOn(ceProps.context, "onGetSubscriptionKeyRequested");
-      jest.spyOn(ceProps.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
-      page = new DisplaySubscriptionKeyPage(ceProps.context, ceProps);
-      await screen.findByText("Details");
-
-      expect(getSubscriptionKey).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("As AD when the edition plugin is not present", () => {
-    it("As AD in PRO mode the subscription actions should be rendered", async () => {
-      expect.assertions(2);
-
-      const noPluginProps = propsWithoutEditionPlugin();
-      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
-      await screen.findByText("Details");
-
-      expect(page.subscriptionActions).not.toBeNull();
-      expect(page.toolbarActionsUpdateButton.textContent.trim()).toBe("Update subscription key");
-    });
-
-    it("As AD with an expiring subscription the Renew and Downgrade buttons should not be rendered", async () => {
-      expect.assertions(2);
-
-      const noPluginProps = propsWithoutEditionPlugin({
-        context: { onGetSubscriptionKeyRequested: () => new SubscriptionEntity(mockSubscriptionGoingToExpire) },
-      });
-      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
-      await screen.findByText("Details");
-
-      expect(page.renewKeyButton).toBeNull();
-      expect(page.downgradeToCommunityButton).toBeNull();
-    });
-
-    it("As CE AD the Upload subscription key button should be rendered", async () => {
-      expect.assertions(2);
-
-      const noPluginProps = propsWithoutEditionPlugin();
-      jest.spyOn(noPluginProps.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
-      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
-      await screen.findByText("Details");
-
-      expect(page.toolbarActionsUpdateButton).not.toBeNull();
-      expect(page.toolbarActionsUpdateButton.textContent.trim()).toBe("Upload subscription key");
-    });
-
-    it("As CE AD clicking Upload subscription key should fallback to the legacy update flow", async () => {
-      expect.assertions(2);
-
-      const noPluginProps = propsWithoutEditionPlugin();
-      jest.spyOn(noPluginProps.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
-      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
-      await screen.findByText("Details");
-
-      await page.updateKey();
-
-      expect(noPluginProps.dialogContext.open).toHaveBeenCalledWith(EditSubscriptionKey);
-      expect(noPluginProps.context.setContext).toHaveBeenCalledWith({
-        editSubscriptionKey: { key: mockSubscription.data },
-      });
-    });
-
-    it("As AD the Details and Plans sections should still be rendered", async () => {
-      expect.assertions(3);
-
-      const noPluginProps = propsWithoutEditionPlugin();
-      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
-      await screen.findByText("Details");
-
-      expect(page.title).toBe("Details");
-      expect(page.plansTitle).toBe("Plans");
-      expect(page.proCard).not.toBeNull();
+      expect(page.edition).toBe("Pro");
     });
   });
 });

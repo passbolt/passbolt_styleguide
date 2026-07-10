@@ -202,13 +202,7 @@ class InFormCallToActionField {
       x = x + leftBody + width - 25;
       y = y + topBody + Math.floor(height / 2) - 9; // Calculate the middle position of the input, 9 is the half of the iframe height
     }
-
-    /*
-     * The iframe position is fixed inside the shadow root host so we need to subtract its coordinates to have the position relative
-     * to the host and not to the viewport.
-     */
-    const { top: hostTop, left: hostLeft } = this.shadowRoot?.host?.getBoundingClientRect() ?? { top: 0, left: 0 };
-    return { top: y - hostTop, left: x - hostLeft };
+    return { top: y, left: x };
   }
 
   /**

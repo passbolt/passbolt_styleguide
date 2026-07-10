@@ -19,12 +19,9 @@ import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/Crea
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import RenameResourceFolder from "../../ResourceFolder/RenameResourceFolder/RenameResourceFolder";
 import DeleteResourceFolder from "../../ResourceFolder/DeleteResourceFolder/DeleteResourceFolder";
+import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
 import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
-import { withWorkflow } from "../../../contexts/WorkflowContext";
-import HandlePermissionWorkflow, {
-  PERMISSION_WORKFLOW_OPERATION,
-} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
 import { Trans, withTranslation } from "react-i18next";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
@@ -95,10 +92,9 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
     if (this.canShare()) {
       const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
       if (!userHasMissingKeys) {
-        this.props.workflowContext.start(HandlePermissionWorkflow, {
-          operation: PERMISSION_WORKFLOW_OPERATION.SHARE_FOLDER,
-          folder: this.props.folder,
-        });
+        const foldersIds = [this.props.folder.id];
+        this.props.context.setContext({ shareDialogProps: { foldersIds } });
+        this.props.dialogContext.open(ShareDialog);
       } else {
         this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
       }
@@ -294,13 +290,8 @@ FilterResourcesByFoldersItemContextualMenu.propTypes = {
   className: PropTypes.string, // Class name to add
   dialogContext: PropTypes.any,
   resourceWorkspaceContext: PropTypes.any, // Resource workspace context
-  workflowContext: PropTypes.any, // the permission workflow context
 };
 
 export default withAppContext(
-  withRbac(
-    withResourceWorkspace(
-      withDialog(withWorkflow(withTranslation("common")(FilterResourcesByFoldersItemContextualMenu))),
-    ),
-  ),
+  withRbac(withResourceWorkspace(withDialog(withTranslation("common")(FilterResourcesByFoldersItemContextualMenu)))),
 );

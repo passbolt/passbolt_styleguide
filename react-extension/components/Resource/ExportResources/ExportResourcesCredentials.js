@@ -155,7 +155,7 @@ class ExportResourcesCredentials extends Component {
       resources_ids: resourcesIds,
       options: options,
     };
-    return await this.props.context.port.request("passbolt.export-resources.export-to-file", exportDto);
+    await this.props.context.port.request("passbolt.export-resources.export-to-file", exportDto);
   }
 
   /**
@@ -184,19 +184,12 @@ class ExportResourcesCredentials extends Component {
 
   /**
    * Whenever the export has been performed succesfully
-   * @param {{customFieldsConflicts: Array}} result The export result
    */
-  async onExportSuccess(result) {
+  async onExportSuccess() {
     await this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds: null, foldersIds: null });
     await this.props.actionFeedbackContext.displaySuccess(
       this.translate("The passwords have been exported successfully"),
     );
-    const customFieldsConflicts = result?.customFieldsConflicts;
-    if (customFieldsConflicts?.length > 0) {
-      console.warn(
-        `${customFieldsConflicts.length} custom field was renamed to avoid conflicting with a reserved KeePass field."`,
-      );
-    }
     this.close();
   }
 

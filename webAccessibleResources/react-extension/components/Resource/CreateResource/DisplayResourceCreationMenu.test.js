@@ -12,9 +12,7 @@
  * @since         5.0.0
  */
 import DisplayResourceCreationMenuPage from "./DisplayResourceCreationMenu.test.page";
-import HandlePermissionWorkflow, {
-  PERMISSION_WORKFLOW_OPERATION,
-} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
+import CreateResource from "./CreateResource";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import { waitFor } from "@testing-library/dom";
@@ -265,51 +263,31 @@ describe("See the Display Resource Creation Menu", () => {
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
       let resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
-        resourceType,
-        folderParentId,
-      });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //click on totp v5
       page.clickOn(page.displayedContentTypes[1]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
-        resourceType,
-        folderParentId,
-      });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //click on note v5
       page.clickOn(page.displayedContentTypes[2]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
-        resourceType,
-        folderParentId,
-      });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //click on custom fields v5
       page.clickOn(page.displayedContentTypes[3]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
-        resourceType,
-        folderParentId,
-      });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //click on pin code v5
       page.clickOn(page.displayedContentTypes[4]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
-        resourceType,
-        folderParentId,
-      });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //switch tab
       page.clickOn(page.legacyCleartextMetadataTab);
@@ -319,23 +297,15 @@ describe("See the Display Resource Creation Menu", () => {
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
-        resourceType,
-        folderParentId,
-      });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
       //click on totp v4
       page.clickOn(page.displayedContentTypes[1]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
-        resourceType,
-        folderParentId,
-      });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, { resourceType, folderParentId });
 
-      expect(props.workflowContext.start).toHaveBeenCalledTimes(7);
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(7);
       expect(props.onClose).toHaveBeenCalledTimes(7);
     });
 
@@ -435,13 +405,12 @@ describe("See the Display Resource Creation Menu", () => {
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
       const resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {
         resourceType: resourceType,
         folderParentId: folder.id,
       });
 
-      expect(props.workflowContext.start).toHaveBeenCalledTimes(1);
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
       expect(props.onClose).toHaveBeenCalledTimes(1);
     });
   });

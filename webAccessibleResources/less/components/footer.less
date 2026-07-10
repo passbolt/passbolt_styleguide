@@ -4,30 +4,25 @@
 .footer {
   grid-area: footer;
   display: flex;
-  min-height: 3.6rem;
+  height: 3.6rem;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
   box-sizing: border-box;
   border-top: .1rem solid var(--Workspace-Dividers);
   min-width: 0;
-  padding: 1.6rem 0;
 
   .footer-links {
     display: flex;
     padding: 0 1.6rem;
     justify-content: flex-end;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1.6rem;
     flex: 1 0 0;
     min-width: 0;
 
     li {
       display: flex;
-
-      .edition-suffix {
-        font-weight: 300;
-      }
 
       &.error-message a {
         color: var(--Field-Error);
@@ -57,17 +52,7 @@
       .tooltip {
         .tooltip-text {
           display: none;
-          text-align: right;
-
-          hr {
-            margin: 0.4rem -0.8rem;
-            border: 0;
-            border-top: 0.1rem;
-            border-color: var(--Tool-tip-Tool-tip-divider);
-            border-style: solid;
-          }
         }
-
         &:hover {
           .tooltip-text {
             display: flex;

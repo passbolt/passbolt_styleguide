@@ -57,7 +57,7 @@ import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministration
 import DisplayScimSettingsAdministration from "./DisplayScimSettingsAdministration/DisplayScimSettingsAdministration.js";
 import DisplayScimAdministrationTeasing from "./DisplayScimAdministrationTeasing/DisplayScimAdministrationTeasing.js";
 import DisplaySecretHistoryAdministration from "./DisplaySecretHistoryAdministration/DisplaySecretHistoryAdministration";
-import DowngradeToCe from "./DowngradeToCe/DowngradeToCe";
+import DisplayOfflineAdministration from "./DisplayOfflineAdministration/DisplayOfflineAdministration";
 import ManageAnnouncements from "../Announcement/ManageAnnouncements/ManageAnnouncements";
 
 class AdministrationWorkspace extends Component {
@@ -315,12 +315,12 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
-   * If downgrade to Community Edition is selected
+   * If offline mode is selected
    * @returns {boolean}
    */
-  isDowngradeToCeSelected() {
+  isOfflineSelected() {
     return (
-      AdministrationWorkspaceMenuTypes.CE_DOWNGRADE === this.props.administrationWorkspaceContext.selectedAdministration
+      AdministrationWorkspaceMenuTypes.OFFLINE === this.props.administrationWorkspaceContext.selectedAdministration
     );
   }
 
@@ -467,7 +467,7 @@ class AdministrationWorkspace extends Component {
                         <DisplayScimSettingsAdministration />
                       ))}
                     {this.isSecretHistorySelected() && <DisplaySecretHistoryAdministration />}
-                    {this.isDowngradeToCeSelected() && <DowngradeToCe />}
+                    {this.isOfflineSelected() && <DisplayOfflineAdministration />}
                   </div>
                 </div>
                 <Switch>

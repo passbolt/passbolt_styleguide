@@ -18,7 +18,7 @@ import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Tooltip from "../Tooltip/Tooltip";
 
-const CREDITS_URL = "https://www.passbolt.com/terms";
+const CREDITS_URL = "https://www.passbolt.com/credits";
 const UNSAFE_URL = "https://www.passbolt.com/docs/hosting/faq/why-I-see-unsafe-mode-banner/";
 
 /**
@@ -58,26 +58,16 @@ class Footer extends Component {
    * i.e. SERVER_VERSION / BROWSER_EXTENSION_VERSION
    */
   get versions() {
-    const clientVersion = this.props.context.extensionVersion;
+    const versions = [];
     const serverVersion = this.props.context.siteSettings.version;
+    if (serverVersion) {
+      versions.push(`${this.props.t("Server")} ${serverVersion}`);
+    }
+    if (this.props.context.extensionVersion) {
+      versions.push(`${this.props.t("Client")} ${this.props.context.extensionVersion}`);
+    }
 
-    return (
-      <div>
-        {clientVersion && (
-          <div>
-            {this.props.t("Client")} {clientVersion}
-          </div>
-        )}
-        {serverVersion && (
-          <>
-            {clientVersion && <hr />}
-            <div>
-              {this.props.t("Server")} {serverVersion}
-            </div>
-          </>
-        )}
-      </div>
-    );
+    return versions.join(" / ");
   }
 
   /**
@@ -90,14 +80,6 @@ class Footer extends Component {
     const debug = this.props.context.siteSettings.debug;
     const isHttpMode = this.props.context.siteSettings.url.startsWith("http://");
     return debug || isHttpMode;
-  }
-
-  /**
-   * Returns true if the application is served on Passbolt's cloud
-   */
-  get isCloud() {
-    const currentURL = new URL(this.props.context.siteSettings.url);
-    return currentURL.protocol === "https:" && Boolean(currentURL.hostname.match(/cloud.passbolt.com$/));
   }
 
   /**
@@ -115,30 +97,28 @@ class Footer extends Component {
               </a>
             </li>
           )}
-          {!this.isCloud && (
-            <>
-              {this.props.context.siteSettings.isCommunityEdition && (
-                <li>
-                  <Trans>
-                    Community Edition<span className="edition-suffix">&nbsp;(free)</span>
-                  </Trans>
-                </li>
-              )}
-              {!this.props.context.siteSettings.isCommunityEdition && (
-                <li>
-                  <Trans>Pro Edition</Trans>
-                </li>
-              )}
-            </>
-          )}
-          {this.isCloud && (
+          {this.termsUrl && (
             <li>
-              <Trans>Cloud</Trans>
+              <a href={this.termsUrl} target="_blank" rel="noopener noreferrer">
+                <Trans>Terms</Trans>
+              </a>
+            </li>
+          )}
+          {this.privacyUrl && (
+            <li>
+              <a href={this.privacyUrl} target="_blank" rel="noopener noreferrer">
+                <Trans>Privacy</Trans>
+              </a>
             </li>
           )}
           <li>
+            <a href={this.creditsUrl} target="_blank" rel="noopener noreferrer">
+              <Trans>Credits</Trans>
+            </a>
+          </li>
+          <li>
             {this.versions && (
-              <Tooltip message={this.versions} direction="top-left">
+              <Tooltip message={this.versions} direction="left">
                 <a
                   className="button button-transparent inline"
                   href={this.creditsUrl}

@@ -58,4 +58,7 @@ export const defaultUserActionControlResolution = {
   [actions.ACCOUNT_RECOVERY_REQUEST_VIEW]: controlFunctionResolutions[controlFunctions.DENY],
   [actions.ACCOUNT_RECOVERY_REQUEST_INDEX]: controlFunctionResolutions[controlFunctions.DENY],
   [actions.ACCOUNT_RECOVERY_RESPONSE_CREATE]: controlFunctionResolutions[controlFunctions.DENY],
+  [actions.OFFLINE_ITEMS_VIEW]: controlFunctionResolutions[controlFunctions.DENY],
+  [actions.OFFLINE_ITEMS_ADD]: controlFunctionResolutions[controlFunctions.DENY],
+  [actions.OFFLINE_ITEMS_DELETE]: controlFunctionResolutions[controlFunctions.DENY],
 };

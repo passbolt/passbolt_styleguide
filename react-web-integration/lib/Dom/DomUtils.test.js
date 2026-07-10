@@ -61,49 +61,6 @@ describe("DomUtils", () => {
     });
   });
 
-  describe("DomUtils::getContainingDialog", () => {
-    it("Should return the closest ancestor dialog of an element contained inside a dialog", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = `
-        <dialog>
-          <form>
-            <div><input type="text" name="username"/></div>
-          </form>
-        </dialog>`;
-
-      const dialog = document.querySelector("dialog");
-      const input = document.querySelector("input");
-
-      expect(DOMUtils.getContainingDialog(input)).toBe(dialog);
-    });
-
-    it("Should return null for an element that is not contained inside any dialog", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = `<div><input type="text" name="username"/></div>`;
-      const input = document.querySelector("input");
-
-      expect(DOMUtils.getContainingDialog(input)).toBeNull();
-    });
-
-    it("Should return null for an element that only contains a dialog as a descendant", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = `<div id="container"><dialog></dialog></div>`;
-      const container = document.getElementById("container");
-
-      expect(DOMUtils.getContainingDialog(container)).toBeNull();
-    });
-
-    it("Should return null when no element is provided", () => {
-      expect.assertions(2);
-
-      expect(DOMUtils.getContainingDialog(null)).toBeNull();
-      expect(DOMUtils.getContainingDialog(undefined)).toBeNull();
-    });
-  });
-
   describe("DomUtils::_calculateCellSize", () => {
     describe.each([
       { scenario: "1 for 0", value: 0, result: 1 },

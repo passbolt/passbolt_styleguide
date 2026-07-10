@@ -68,6 +68,7 @@ const SsoProviders = [
     id: "oauth2",
     name: "OpenID",
     hiddenIfDisabled: true,
+    disabledForRecover: true,
     icon: (
       <svg width="65" height="60" viewBox="0 0 65 60" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -93,6 +94,7 @@ const SsoProviders = [
     id: "adfs",
     name: "AD FS",
     hiddenIfDisabled: true,
+    disabledForRecover: true,
     icon: (
       <svg width="65" height="64" viewBox="0 0 65 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path

@@ -176,10 +176,10 @@ export default class AdministrationWorkspacePage {
   }
 
   /**
-   * Returns true if the downgrade to Community Edition is selected
+   * Returns true if the offline mode is selected
    */
-  get isDowngradeToCeSelected() {
-    return Boolean(this._page.container.querySelector(".ce-downgrade-details"));
+  get isOfflineSelected() {
+    return Boolean(this._page.container.querySelector(".offline-details"));
   }
 
   /**

@@ -22,6 +22,7 @@ import { AdministrationWorkspaceMenuTypes } from "./AdministrationWorkspaceConte
 import { defaultAppContext } from "./ExtAppContext.test.data";
 import { waitFor } from "@testing-library/dom";
 import { waitForTrue } from "../../../test/utils/waitFor";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -217,62 +218,6 @@ describe("Administration Workspace Context", () => {
       expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.SUBSCRIPTION);
     });
 
-    it("should set selectedAdministration to Downgrade to CE when route is /app/administration/ce-downgrade and user has permission", async () => {
-      expect.assertions(1);
-
-      const props = defaultProps({
-        location: {
-          pathname: "/app/administration/ce-downgrade",
-          key: "unique-key",
-        },
-        rbacContext: {
-          canIUseAction: () => true,
-        },
-        context: {
-          ...context,
-          siteSettings: {
-            canIUse: () => true,
-            isCommunityEdition: false,
-          },
-        },
-      });
-
-      const page = new AdministrationWorkspaceContextPage(context, props);
-
-      await waitFor(() => {});
-      await page.goToCeDowngrade();
-
-      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.CE_DOWNGRADE);
-    });
-
-    it("should set selectedAdministration to 404 not found when route is /app/administration/ce-downgrade on a Community Edition", async () => {
-      expect.assertions(1);
-
-      const props = defaultProps({
-        location: {
-          pathname: "/app/administration/ce-downgrade",
-          key: "unique-key",
-        },
-        rbacContext: {
-          canIUseAction: () => true,
-        },
-        context: {
-          ...context,
-          siteSettings: {
-            canIUse: () => false,
-            isCommunityEdition: true,
-          },
-        },
-      });
-
-      const page = new AdministrationWorkspaceContextPage(context, props);
-
-      await waitFor(() => {});
-      await page.goToCeDowngrade();
-
-      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND);
-    });
-
     it("should set selectedAdministration to Password Policy when route is /app/administration/password-policies-teasing and user has permission", async () => {
       const props = defaultProps({
         location: {
@@ -367,6 +312,31 @@ describe("Administration Workspace Context", () => {
       await waitFor(() => {});
       await page.goToAccountRecoverySettings();
       expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY);
+    });
+
+    it("should set selectedAdministration to Offline when route is /app/administration/offline and user has permission", async () => {
+      const props = defaultProps({
+        location: {
+          pathname: "/app/administration/offline",
+          key: "unique-key",
+        },
+        rbacContext: {
+          canIUseAction: () => true,
+        },
+        context: {
+          ...context,
+          siteSettings: {
+            canIUse: () => true,
+            isCommunityEdition: true,
+          },
+        },
+      });
+
+      let page;
+      await act(async () => (page = new AdministrationWorkspaceContextPage(context, props)));
+
+      await page.goToOffline();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.OFFLINE);
     });
 
     it("should set selectedAdministration to SSO when route is /app/administration/sso-teasing and user has permission", async () => {

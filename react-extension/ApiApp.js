@@ -96,7 +96,7 @@ class ApiApp extends Component {
                                       "/app/administration/user-passphrase-policies-teasing",
                                       "/app/administration/scim-teasing",
                                       "/app/administration/secret-history",
-                                      "/app/administration/ce-downgrade",
+                                      "/app/administration/offline",
                                     ]}
                                   />
                                   <Route path="/app/administration">

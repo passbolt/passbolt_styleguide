@@ -177,15 +177,6 @@ class DomUtils {
   }
 
   /**
-   * Returns the closest ancestor dialog element of the given element, if any.
-   * @param {HTMLElement} element
-   * @return {HTMLDialogElement | null} The containing dialog, or null when not inside one.
-   */
-  static getContainingDialog(element) {
-    return element?.closest("dialog") ?? null;
-  }
-
-  /**
    * Calculate cell size according to a width or height of a frame
    * Function to produce the result: f(x)=10⋅(1−e−a⋅x)+c function for rapid growth followed by a limit at 10
    * x = value

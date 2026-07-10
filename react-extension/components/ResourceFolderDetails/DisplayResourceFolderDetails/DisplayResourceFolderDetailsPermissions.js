@@ -17,6 +17,8 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import ShareDialog from "../../Share/ShareDialog";
 import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import { Trans, withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
@@ -50,6 +52,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handlePermissionsEditClickEvent = this.handlePermissionsEditClickEvent.bind(this);
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
   }
 
@@ -95,6 +98,15 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
       this.fetch();
     }
     this.setState({ open });
+  }
+
+  /**
+   * Handle when the user edits the folder permissions.
+   */
+  handlePermissionsEditClickEvent() {
+    const foldersIds = [this.folder.id];
+    this.props.context.setContext({ shareDialogProps: { foldersIds } });
+    this.props.dialogContext.open(ShareDialog);
   }
 
   /**
@@ -200,9 +212,10 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
 DisplayResourceFolderDetailsPermissions.propTypes = {
   context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.object,
+  dialogContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(
-  withResourceWorkspace(withTranslation("common")(DisplayResourceFolderDetailsPermissions)),
+  withDialog(withResourceWorkspace(withTranslation("common")(DisplayResourceFolderDetailsPermissions))),
 );

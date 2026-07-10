@@ -27,8 +27,8 @@ export const getContextWithUnauthenticatedUser = (data) => {
   };
 
   context.port.addRequestListener("passbolt.in-form-cta.check-status", () => ({
-    is_authenticated: false,
-    is_mfa_authenticated: true,
+    isAuthenticated: false,
+    isMfaRequired: false,
   }));
 
   return context;
@@ -44,8 +44,8 @@ export const getContextWithAuthenticatedUser = () => {
   });
 
   context.port.addRequestListener("passbolt.in-form-cta.check-status", () => ({
-    is_authenticated: true,
-    is_mfa_authenticated: true,
+    isAuthenticated: true,
+    isMfaRequired: false,
   }));
 
   return context;

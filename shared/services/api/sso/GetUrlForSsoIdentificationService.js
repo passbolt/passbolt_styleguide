@@ -12,20 +12,16 @@
  * @since         3.11.0
  */
 
-import AdfsSsoSettingsEntity from "../../../models/entity/ssoSettings/AdfsSsoSettingsEntity";
 import { ApiClient } from "../../../lib/apiClient/apiClient";
 import AzureSsoSettingsEntity from "../../../models/entity/ssoSettings/AzureSsoSettingsEntity";
 import GoogleSsoSettingsEntity from "../../../models/entity/ssoSettings/GoogleSsoSettingsEntity";
 import PingOneSsoSettingsEntity from "../../../models/entity/ssoSettings/PingOneSsoSettingsEntity";
-import OAuth2SsoSettingsEntity from "../../../models/entity/ssoSettings/OAuth2SsoSettingsEntity";
 
 const SSO_LOGIN_SUPPORTED_URLS = {
   [AzureSsoSettingsEntity.PROVIDER_ID]: AzureSsoSettingsEntity.SUPPORTED_URLS,
   [GoogleSsoSettingsEntity.PROVIDER_ID]: GoogleSsoSettingsEntity.SUPPORTED_URLS,
   [PingOneSsoSettingsEntity.PROVIDER_ID]: PingOneSsoSettingsEntity.SUPPORTED_URLS,
 };
-
-const SSO_PROVIDER_WITHOUT_STATIC_URLS = [OAuth2SsoSettingsEntity.PROVIDER_ID, AdfsSsoSettingsEntity.PROVIDER_ID];
 
 /**
  * Handles query to the API to get an SSO login URL to identify the current user
@@ -52,11 +48,6 @@ class GetUrlForSsoIdentificationService {
     const url = new URL(response.body.url);
 
     const supportedUrls = SSO_LOGIN_SUPPORTED_URLS[providerId];
-
-    if (SSO_PROVIDER_WITHOUT_STATIC_URLS.includes(providerId)) {
-      // in that case (ADFS or OIDC), we cannot verify the returned URL, only the protocols as URLs are not static.
-      return url;
-    }
 
     if (!supportedUrls) {
       throw new Error("The url should be part of the list of supported single sign-on urls.");

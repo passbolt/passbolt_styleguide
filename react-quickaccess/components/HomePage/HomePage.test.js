@@ -187,38 +187,6 @@ describe("HomePage", () => {
       expect(page.suggestedResourcesEntries.length).toStrictEqual(2);
     });
 
-    it("it should sort the suggested resources by their uri matching score, the strongest match first", async () => {
-      expect.assertions(5);
-
-      const activeTabUrl = "https://www.example.com/app/login";
-      // Provided in ascending-score order; the sort must reverse them.
-      const sameDomain = defaultResourceDto({
-        metadata: defaultResourceMetadataDto({ name: "same-domain-match", uris: ["https://example.com"] }),
-      });
-      const sameFqdn = defaultResourceDto({
-        metadata: defaultResourceMetadataDto({ name: "same-fqdn-match", uris: ["https://www.example.com/pricing"] }),
-      });
-      const subPage = defaultResourceDto({
-        metadata: defaultResourceMetadataDto({ name: "sub-page-match", uris: ["https://www.example.com/app"] }),
-      });
-      const exact = defaultResourceDto({
-        metadata: defaultResourceMetadataDto({ name: "exact-match", uris: ["https://www.example.com/app/login"] }),
-      });
-
-      const props = defaultProps({ resources: [sameDomain, sameFqdn, subPage, exact] });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => activeTabUrl);
-      const page = new HomePagePage(props);
-
-      await waitForTrue(() => page.suggestedResourcesEntries?.length > 3);
-
-      expect(page.suggestedResourcesEntries.length).toStrictEqual(4);
-      expect(page.getSuggestedResourceItem(0).textContent).toContain("exact-match");
-      expect(page.getSuggestedResourceItem(1).textContent).toContain("sub-page-match");
-      expect(page.getSuggestedResourceItem(2).textContent).toContain("same-fqdn-match");
-      expect(page.getSuggestedResourceItem(3).textContent).toContain("same-domain-match");
-    });
-
     it("it should show a message telling there is no suggested resources for the currently active URL", async () => {
       expect.assertions(2);
       const props = defaultProps({

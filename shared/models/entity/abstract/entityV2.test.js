@@ -578,10 +578,8 @@ describe("EntityV2", () => {
 
     it("does not return difference on non scalar properties.", () => {
       expect.assertions(5);
-      const entity1 = new TestEntityV2(defaultTestEntityV2Dto({ number: 1.1, integer: 1 }));
-      const entity2 = new TestEntityV2(
-        defaultTestEntityV2Dto({ number: 2.2, integer: 2, boolean: !entity1.get("boolean") }),
-      );
+      const entity1 = new TestEntityV2(defaultTestEntityV2Dto());
+      const entity2 = new TestEntityV2(defaultTestEntityV2Dto({ boolean: !entity1.get("boolean") }));
       const diff = entity1.diffProps(entity2);
       expect(Object.keys(diff).length).toEqual(4);
       expect(diff.id).toEqual(entity2.id);

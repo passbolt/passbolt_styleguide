@@ -27,7 +27,6 @@ export const NavigationContext = React.createContext({
   onGoToAdministrationUsersDirectoryRequested: () => {}, // Whenever the users wants to navigate to the administration workspace users directory
   onGoToAdministrationEmailNotificationsRequested: () => {}, // Whenever the users wants to navigate to the administration workspace email notifications
   onGoToAdministrationSubscriptionRequested: () => {}, // Whenever the users wants to navigate to the administration workspace subscription
-  onGoToAdministrationDowngradeToCeRequested: () => {}, // Whenever the users wants to navigate to the administration workspace downgrade to Community Edition
   onGoToAdministrationInternationalizationRequested: () => {}, // Whenever the users wants to navigate to the administration workspace internationalization
   onGoToAdministrationAccountRecoveryRequested: () => {}, // Whenever the users wants to navigate to the administration workspace account recovery
   onGoToAdministrationSmtpSettingsRequested: () => {}, // Whenever the users wants to navigate to the administration workspace SMTP settings
@@ -41,8 +40,6 @@ export const NavigationContext = React.createContext({
   onGoToPasswordsRequested: () => {}, // Whenever the user wants to navigate to the passwords workspace
   // Users
   onGoToUsersRequested: () => {}, // Whenever the user wants to navigate to the users workspace
-  // Terms & Credits
-  onGoToTermsRequested: () => {}, // Whenever the user wants to navigate to the terms & credits page
   // Help
   onGoToHelpRequested: () => {}, // Whenever the user wants to navigate to the help passbolt documentation
   // User settings
@@ -69,6 +66,7 @@ export const NavigationContext = React.createContext({
   onGoToAdministrationUsersDirectoryRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace Users Directory.
   onGoToAdministrationScimRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace SCIM.
   onGoToAdministrationScimRequested: () => {}, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
+  onGoToAdministrationOfflineRequested: () => {}, // Whenever the user wants to navigate to the administration workspace offline mode settings.
 });
 
 /**
@@ -97,7 +95,6 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationUsersDirectoryRequested: this.onGoToAdministrationUsersDirectoryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace users directory
       onGoToAdministrationEmailNotificationsRequested: this.onGoToAdministrationEmailNotificationsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace email notifications
       onGoToAdministrationSubscriptionRequested: this.onGoToAdministrationSubscriptionRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
-      onGoToAdministrationDowngradeToCeRequested: this.onGoToAdministrationDowngradeToCeRequested.bind(this), // Whenever the user wants to navigate to the administration workspace downgrade to Community Edition
       onGoToAdministrationInternationalizationRequested:
         this.onGoToAdministrationInternationalizationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       onGoToAdministrationAccountRecoveryRequested: this.onGoToAdministrationAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace account recovery
@@ -124,8 +121,6 @@ class NavigationContextProvider extends React.Component {
       onGoToUsersRequested: this.onGoToUsersRequested.bind(this), // Whenever the user wants to navigate to the users workspace
       // Help
       onGoToHelpRequested: this.onGoToHelpRequested.bind(this), // Whenever the user wants to navigate to the help passbolt documentation
-      // Terms & Credits
-      onGoToTermsRequested: this.onGoToTermsRequested.bind(this), // Whenever the user wants to navigate to the terms & credits documentation
       // User settings
       onGoToUserSettingsProfileRequested: this.onGoToUserSettingsProfileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace profile section.
       onGoToUserSettingsPassphraseRequested: this.onGoToUserSettingsPassphraseRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace pasphrase section.
@@ -153,6 +148,7 @@ class NavigationContextProvider extends React.Component {
         this.onGoToAdministrationUsersDirectoryRequestedTeasing.bind(this),
       onGoToAdministrationScimRequestedTeasing: this.onGoToAdministrationScimRequestedTeasing.bind(this),
       onGoToAdministrationScimRequested: this.onGoToAdministrationScimRequested.bind(this), // Whenever the user wants to navigate to the administration SCIM section.
+      onGoToAdministrationOfflineRequested: this.onGoToAdministrationOfflineRequested.bind(this), // Whenever the user wants to navigate to the administration offline mode section.
     };
   }
 
@@ -242,6 +238,14 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the user wants to navigate to the administration workspace offline mode settings.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationOfflineRequested() {
+    await this.goTo("browser-extension", "/app/administration/offline");
+  }
+
+  /**
    * Whenever the user wants to navigate to the administration workspace selft registration.
    * @returns {Promise<void>}
    */
@@ -287,14 +291,6 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationSubscriptionRequested() {
     await this.goTo("browser-extension", "/app/administration/subscription");
-  }
-
-  /**
-   * Whenever the user wants to navigate to the administration workspace downgrade to Community Edition.
-   * @returns {Promise<void>}
-   */
-  async onGoToAdministrationDowngradeToCeRequested() {
-    await this.goTo("browser-extension", "/app/administration/ce-downgrade");
   }
 
   /**
@@ -553,20 +549,6 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToHelpRequested() {
     await this.onGoToNewTab("https://www.passbolt.com/docs/");
-  }
-
-  /*
-   * =============================================================
-   *  Terms & Credits navigation
-   * =============================================================
-   */
-
-  /**
-   * Whenever the user wants to navigate to the passbolt terms and credits documentation.
-   * @returns {Promise<void>}
-   */
-  async onGoToTermsRequested() {
-    await this.onGoToNewTab("https://www.passbolt.com/terms");
   }
 
   /*

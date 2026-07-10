@@ -61,14 +61,6 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
-   * Return the warning text element
-   * @returns {{select: select}}
-   */
-  get warningText() {
-    return this._page.container.querySelector("button .warning-text") || null;
-  }
-
-  /**
    * Return the page object of the title header
    * @returns {{select: select}}
    */

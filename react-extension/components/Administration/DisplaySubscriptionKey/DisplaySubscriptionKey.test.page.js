@@ -62,34 +62,17 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
-   * Returns the list of subscription warning messages (e.g. expired key, users limit reached)
-   * @returns {Array<string>}
-   */
-  get subscriptionWarnings() {
-    return [...this._page.container.querySelectorAll(".subscription-warning")].map((warning) =>
-      warning.textContent.trim(),
-    );
-  }
-
-  /**
-   * Returns the subscription actions container
-   */
-  get subscriptionActions() {
-    return this._page.container.querySelector(".subscription-actions");
-  }
-
-  /**
    * Returns the renew button
    */
   get renewKeyButton() {
-    return this._page.container.querySelector(".subscription-actions button:not(.primary)");
+    return this._page.container.querySelector(".subscription-actions button.secondary");
   }
 
   /**
    * Returns the "Downgrade to Community" button
    */
   get downgradeToCommunityButton() {
-    return this._page.container.querySelector(".subscription-editions .edition button:not(.primary)");
+    return this._page.container.querySelector(".subscription-editions .edition button.secondary");
   }
 
   /**
@@ -141,22 +124,6 @@ export default class DisplaySubscriptionKeyPage {
    */
   get proCard() {
     return this._page.container.querySelector(".subscription-editions .edition:last-child");
-  }
-
-  /**
-   * Returns the list of feature texts displayed on the Community Edition card
-   * @returns {Array<string>}
-   */
-  get communityFeatures() {
-    return [...this.communityCard.querySelectorAll(".features li")].map((li) => li.textContent.trim());
-  }
-
-  /**
-   * Returns the list of feature texts displayed on the Pro Edition card
-   * @returns {Array<string>}
-   */
-  get proFeatures() {
-    return [...this.proCard.querySelectorAll(".features li")].map((li) => li.textContent.trim());
   }
 
   /**

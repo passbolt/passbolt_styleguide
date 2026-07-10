@@ -68,6 +68,7 @@ describe("As AD I can see a Breadcrumb", () => {
     { menuType: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED, expectedBreadcrumb: "Getting started" },
     { menuType: AdministrationWorkspaceMenuTypes.SCIM, expectedBreadcrumb: "SCIM" },
     { menuType: AdministrationWorkspaceMenuTypes.SECRET_HISTORY, expectedBreadcrumb: "Secret history" },
+    { menuType: AdministrationWorkspaceMenuTypes.OFFLINE, expectedBreadcrumb: "Offline mode" },
   ])("As AD I should see a breadcrumb for each menu", (scenario) => {
     it(`for: ${scenario.menuType}`, () => {
       const props = defaultProps(scenario.menuType); // The props to pass
@@ -76,14 +77,5 @@ describe("As AD I can see a Breadcrumb", () => {
       expect(page.item(1)).toBe("Home");
       expect(page.item(2)).toBe(scenario.expectedBreadcrumb);
     });
-  });
-
-  it("As AD on the downgrade page I should see a Home > Subscription > Downgrade breadcrumb", () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.CE_DOWNGRADE); // The props to pass
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Home");
-    expect(page.item(2)).toBe("Subscription");
-    expect(page.item(3)).toBe("Downgrade");
   });
 });

@@ -17,8 +17,6 @@
  */
 import ShareDialogPage from "./ShareDialog.test.page";
 import {
-  addedGroupWithMembersFixture,
-  controlledModeWithGroupProps,
   defaultAppContext,
   defaultProps,
   mockResultsFolders,
@@ -32,12 +30,6 @@ import NotifyError from "../Common/Error/NotifyError/NotifyError";
 import { waitForTrue } from "../../../../test/utils/waitFor";
 import UserAbortsOperationError from "../../lib/Error/UserAbortsOperationError";
 import { act } from "react";
-import PermissionsCollection from "../../../shared/models/entity/permission/permissionsCollection";
-import GroupsCollection from "../../../shared/models/entity/group/groupsCollection";
-import UsersCollection from "../../../shared/models/entity/user/usersCollection";
-import { defaultPermissionDto } from "../../../shared/models/entity/permission/permissionEntity.test.data";
-import { defaultUserDto } from "../../../shared/models/entity/user/userEntity.test.data";
-import { v4 as uuidv4 } from "uuid";
 
 beforeAll(() => {
   global.scrollTo = jest.fn();
@@ -69,7 +61,7 @@ describe("As Lu I should see the share dialog", () => {
       const requestResourcesMockImpl = (path) => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({ shareDialogProps });
-      props = defaultProps({ isPermissionConfirmationMode: false });
+      props = defaultProps();
       await act(() => (page = new ShareDialogPage(context, props)));
     });
 
@@ -168,14 +160,6 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.count).toBe(11);
       await page.selectRemovePermission(1);
       expect(page.count).toBe(10);
-    });
-
-    it("As LU in legacy mode I should not see any group members toggle", async () => {
-      expect.assertions(2);
-      await waitForTrue(() => page.count !== 3);
-      // The fixture contains group permissions, but the members toggle is a controlled-mode feature.
-      expect(page.count).toBe(11);
-      expect(page.groupToggleCount).toBe(0);
     });
 
     it("As LU I should see a processing feedback while submitting the form", async () => {
@@ -314,7 +298,7 @@ describe("As Lu I should see the share dialog", () => {
       const requestResourcesMockImpl = (path) => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({ shareDialogProps });
-      props = defaultProps({ isPermissionConfirmationMode: false });
+      props = defaultProps();
       await act(() => (page = new ShareDialogPage(context, props)));
     });
 
@@ -409,7 +393,7 @@ describe("As Lu I should see the share dialog", () => {
       const requestResourcesMockImpl = (path) => mockResultsFolders[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({ shareDialogProps });
-      props = defaultProps({ isPermissionConfirmationMode: false });
+      props = defaultProps();
       await act(() => (page = new ShareDialogPage(context, props)));
     });
 
@@ -513,364 +497,6 @@ describe("As Lu I should see the share dialog", () => {
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
         error: new Error("Multi resource and folder share is not implemented."),
       });
-    });
-  });
-});
-
-describe("As LU running ShareDialog in controlled mode (workflow-driven)", () => {
-  let page;
-  const context = defaultAppContext();
-  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
-
-  /**
-   * Build a self-consistent triplet of {permissions, groups, users} simulating a snapshot captured
-   * from a shared parent folder. The operator is the logged-in user (so the controlled-mode submit
-   * logic exercises its operator-skip path); a second user has read access.
-   */
-  function buildControlledModeProps(data = {}) {
-    // Local defaultAppContext for these tests doesn't seed `loggedInUser`; set it to the snapshot's
-    // owner so the controlled-mode submit logic exercises its operator-skip path.
-    const operatorId = context.userSettings.id;
-    context.loggedInUser = { id: operatorId };
-    const operatorUser = defaultUserDto({ id: operatorId, username: "operator@passbolt.com" });
-    const readerId = uuidv4();
-    const readerUser = defaultUserDto({ id: readerId, username: "reader@passbolt.com" });
-    const folderId = uuidv4();
-    const permissionsDto = [
-      defaultPermissionDto({
-        aco: "Folder",
-        aco_foreign_key: folderId,
-        aro: "User",
-        aro_foreign_key: operatorId,
-        type: 15,
-      }),
-      defaultPermissionDto({
-        aco: "Folder",
-        aco_foreign_key: folderId,
-        aro: "User",
-        aro_foreign_key: readerId,
-        type: 1,
-      }),
-    ];
-    return {
-      ...defaultProps(),
-      initialResources: [
-        {
-          id: null,
-          metadata: { name: "" },
-          permission: { type: 15 },
-          permissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
-        },
-      ],
-      initialGroups: new GroupsCollection([]),
-      initialUsers: new UsersCollection([operatorUser, readerUser]),
-      onConfirm: jest.fn(),
-      ...data,
-    };
-  }
-
-  it("As LU I should not see the dialog fetch resource permissions when controlled-mode props are provided", async () => {
-    expect.assertions(2);
-    const props = buildControlledModeProps();
-    mockContextRequest(jest.fn());
-
-    await act(() => (page = new ShareDialogPage(context, props)));
-
-    expect(context.port.request).not.toHaveBeenCalledWith(
-      "passbolt.resources.find-all-by-ids-for-display-permissions",
-      expect.anything(),
-    );
-    expect(page.count).toBe(2);
-  });
-
-  it("As LU I should see the snapshot's permissions rendered in the order they were captured", async () => {
-    expect.assertions(2);
-    const props = buildControlledModeProps();
-    mockContextRequest(jest.fn());
-
-    await act(() => (page = new ShareDialogPage(context, props)));
-
-    // Both rendered rows match the synthetic AROs we provided via initialUsers.
-    expect(page.aroDetails(1)).toEqual(expect.stringContaining("@passbolt.com"));
-    expect(page.aroDetails(2)).toEqual(expect.stringContaining("@passbolt.com"));
-  });
-
-  it("As LU I should see the Save button enabled as soon as the dialog opens so I can confirm the snapshot as-is", async () => {
-    expect.assertions(1);
-    const props = buildControlledModeProps();
-    mockContextRequest(jest.fn());
-
-    await act(() => (page = new ShareDialogPage(context, props)));
-
-    expect(page.saveButton.hasAttribute("disabled")).toBe(false);
-  });
-
-  it("As LU confirming the dialog as-is I should see onConfirm called with an empty delta (backend already inherits parent perms)", async () => {
-    expect.assertions(3);
-    const props = buildControlledModeProps();
-    mockContextRequest(jest.fn());
-
-    await act(() => (page = new ShareDialogPage(context, props)));
-    // No edits — click Save. The backend already inherits the parent folder's permissions on
-    // resource creation, so confirming as-is emits an empty delta and the workflow skips the
-    // share-save call entirely.
-    await act(() => page.savePermissions());
-
-    expect(props.onConfirm).toHaveBeenCalledTimes(1);
-    expect(props.onConfirm.mock.calls[0][0]).toEqual([]);
-    expect(context.port.request).not.toHaveBeenCalledWith(
-      "passbolt.share.resources.save",
-      expect.anything(),
-      expect.anything(),
-    );
-  });
-
-  it("As LU removing a row before confirming I should see a delete delta emitted for that row", async () => {
-    expect.assertions(3);
-    const props = buildControlledModeProps();
-    mockContextRequest(jest.fn());
-
-    await act(() => (page = new ShareDialogPage(context, props)));
-    // Remove the reader (row 2) and confirm. The delta carries `delete: true` so the workflow
-    // can revoke the inherited reader permission on the freshly-created resource.
-    await page.selectRemovePermission(2);
-    await act(() => page.savePermissions());
-
-    expect(props.onConfirm).toHaveBeenCalledTimes(1);
-    const changes = props.onConfirm.mock.calls[0][0];
-    expect(changes).toHaveLength(1);
-    expect(changes[0]).toMatchObject({ delete: true, aco: "Resource" });
-  });
-
-  it("As LU sharing a folder (acoType Folder) I should see the emitted deltas target the folder", async () => {
-    expect.assertions(2);
-    // Folder mode: the seeded entry is the folder itself; its edits must be emitted as Folder deltas
-    // so the workflow saves them via the folder-share path.
-    const props = { ...buildControlledModeProps(), acoType: "Folder" };
-    mockContextRequest(jest.fn());
-
-    await act(() => (page = new ShareDialogPage(context, props)));
-    await page.selectRemovePermission(2);
-    await act(() => page.savePermissions());
-
-    const changes = props.onConfirm.mock.calls[0][0];
-    expect(changes).toHaveLength(1);
-    expect(changes[0]).toMatchObject({ delete: true, aco: "Folder" });
-  });
-
-  it("As LU adding a recipient to a folder (acoType Folder) I should see the new permission emitted as a Folder delta", async () => {
-    expect.assertions(2);
-    // Regression: a newly added recipient on a folder share used to be emitted with `aco: "Resource"`
-    // (ShareChanges tags new permissions from the ACO bucket type). The folder-share save then
-    // received an empty delta and silently did nothing. The seeded folder must live in the folder
-    // bucket so additions are emitted as Folder deltas.
-    const props = { ...buildControlledModeProps(), acoType: "Folder" };
-    const newUserId = uuidv4();
-    const newUser = defaultUserDto({ id: newUserId, username: "newcomer@passbolt.com" });
-    mockContextRequest((request) => {
-      switch (request) {
-        case "passbolt.keyring.get-public-key-info-by-user":
-          return { fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6" };
-        case "passbolt.share.search-aros":
-          return [newUser];
-      }
-    });
-
-    await act(() => (page = new ShareDialogPage(context, props)));
-    await page.searchName("newcomer");
-    await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
-    await page.selectUserOrGroup(1);
-    await act(() => page.savePermissions());
-
-    const changes = props.onConfirm.mock.calls[0][0];
-    expect(changes).toHaveLength(1);
-    expect(changes[0]).toMatchObject({ is_new: true, aco: "Folder", aro_foreign_key: newUserId });
-  });
-
-  describe("Seeded with initialResources (share)", () => {
-    /**
-     * Build controlled-mode props seeded with two resources (share mode). The operator owns both;
-     * a reader has read access to both. Each resource carries its own single-ACO permission set.
-     */
-    function buildInitialResourcesProps() {
-      const operatorId = context.userSettings.id;
-      context.loggedInUser = { id: operatorId };
-      const operatorUser = defaultUserDto({ id: operatorId, username: "operator@passbolt.com" });
-      const readerId = uuidv4();
-      const readerUser = defaultUserDto({ id: readerId, username: "reader@passbolt.com" });
-      const buildResource = (name) => {
-        const resourceId = uuidv4();
-        return {
-          id: resourceId,
-          metadata: { name },
-          permission: { type: 15 },
-          permissions: new PermissionsCollection(
-            [
-              defaultPermissionDto({
-                aco: "Resource",
-                aco_foreign_key: resourceId,
-                aro: "User",
-                aro_foreign_key: operatorId,
-                type: 15,
-              }),
-              defaultPermissionDto({
-                aco: "Resource",
-                aco_foreign_key: resourceId,
-                aro: "User",
-                aro_foreign_key: readerId,
-                type: 1,
-              }),
-            ],
-            { assertAtLeastOneOwner: false },
-          ),
-        };
-      };
-      return {
-        ...defaultProps(),
-        initialResources: [buildResource("RA"), buildResource("RB")],
-        initialGroups: new GroupsCollection([]),
-        initialUsers: new UsersCollection([operatorUser, readerUser]),
-        onConfirm: jest.fn(),
-      };
-    }
-
-    it("As LU I should see the recipients aggregated across the resources without fetching from the API", async () => {
-      expect.assertions(2);
-      const props = buildInitialResourcesProps();
-      mockContextRequest(jest.fn());
-
-      await act(() => (page = new ShareDialogPage(context, props)));
-
-      expect(context.port.request).not.toHaveBeenCalledWith(
-        "passbolt.resources.find-all-by-ids-for-display-permissions",
-        expect.anything(),
-      );
-      // Operator + reader, aggregated across the two resources.
-      expect(page.count).toBe(2);
-    });
-
-    it("As LU sharing several resources I should see their names listed in the title tooltip", async () => {
-      expect.assertions(1);
-      const props = buildInitialResourcesProps();
-      mockContextRequest(jest.fn());
-
-      await act(() => (page = new ShareDialogPage(context, props)));
-
-      // Regression: controlled-mode ACOs expose only `metadata.name`, so the tooltip must not
-      // resolve to bare commas.
-      expect(page.titleTooltip).toBe("RA, RB");
-    });
-  });
-
-  describe("Read-only mode", () => {
-    it("As LU with update-but-not-owner access I should not see the autocomplete to add people or groups", async () => {
-      expect.assertions(2);
-      const props = { ...buildControlledModeProps(), readOnly: true };
-      mockContextRequest(jest.fn());
-
-      await act(() => (page = new ShareDialogPage(context, props)));
-
-      // The permissions are still rendered for review, but the add-people autocomplete is hidden.
-      expect(page.count).toBe(2);
-      expect(page.shareNameInput).toBeNull();
-    });
-
-    it("As LU in read-only mode I should still be able to confirm the set as-is (empty delta)", async () => {
-      expect.assertions(3);
-      const props = { ...buildControlledModeProps(), readOnly: true };
-      mockContextRequest(jest.fn());
-
-      await act(() => (page = new ShareDialogPage(context, props)));
-
-      expect(page.saveButton.hasAttribute("disabled")).toBe(false);
-      await act(() => page.savePermissions());
-
-      expect(props.onConfirm).toHaveBeenCalledTimes(1);
-      expect(props.onConfirm.mock.calls[0][0]).toEqual([]);
-    });
-  });
-
-  it("As LU I should open the dialog without crashing even when a stale single-folder share selection lingers in the context", async () => {
-    // Regression: controlled mode never populates `this.folders`, but a leftover
-    // `shareDialogProps.foldersIds` of length 1 from a previous folder share used to make
-    // `getSubtitle()` dereference the empty `this.folders[0]` and throw. The controlled-mode guard
-    // skips the subtitle entirely.
-    expect.assertions(2);
-    const props = buildControlledModeProps();
-    props.isPermissionConfirmationMode = false;
-    const previousShareDialogProps = context.shareDialogProps;
-    context.shareDialogProps = { foldersIds: [uuidv4()] };
-    mockContextRequest(jest.fn());
-
-    try {
-      await act(() => (page = new ShareDialogPage(context, props)));
-
-      expect(page.title).toBe("Share");
-      expect(page.count).toBe(2);
-    } finally {
-      context.shareDialogProps = previousShareDialogProps;
-    }
-  });
-
-  describe("Group members expansion", () => {
-    // Permissions are sorted by aro name: user "Ada Lovelace" (row 1), group "Developer" (row 2).
-    it("As LU I should see a members toggle on group rows but not on user rows", async () => {
-      expect.assertions(3);
-      const props = controlledModeWithGroupProps();
-      mockContextRequest(jest.fn());
-
-      await act(() => (page = new ShareDialogPage(context, props)));
-
-      expect(page.count).toBe(2);
-      expect(page.groupVisibilityToggle(1)).toBeNull();
-      expect(page.groupVisibilityToggle(2)).not.toBeNull();
-    });
-
-    it("As LU expanding a group I should see its members, and collapsing should hide them", async () => {
-      expect.assertions(4);
-      const props = controlledModeWithGroupProps();
-      mockContextRequest(jest.fn());
-
-      await act(() => (page = new ShareDialogPage(context, props)));
-
-      expect(page.groupMemberCount).toBe(0);
-      await page.toggleGroupMemberVisibility(2);
-      expect(page.groupMemberCount).toBe(2);
-      // Member rows are display-only: no permission select nor delete button.
-      expect(page.groupMember(1).querySelector(".select")).toBeNull();
-      await page.toggleGroupMemberVisibility(2);
-      expect(page.groupMemberCount).toBe(0);
-    });
-
-    it("As LU expanding a group I added during the session I should see its members fetched on demand", async () => {
-      expect.assertions(3);
-      const props = controlledModeWithGroupProps();
-      const addedGroup = addedGroupWithMembersFixture();
-      const requestBextMockImpl = (request) => {
-        switch (request) {
-          case "passbolt.share.search-aros":
-            return [addedGroup.searchResult];
-          case "passbolt.groups_users.get-by-group-id":
-            return addedGroup.groupsUsers;
-          case "passbolt.users.get-by-ids":
-            return addedGroup.members;
-        }
-      };
-      mockContextRequest(requestBextMockImpl);
-
-      await act(() => (page = new ShareDialogPage(context, props)));
-
-      // Add a group that is not part of the controlled-mode initial collections via the autocomplete.
-      await page.searchName("market");
-      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
-      await page.selectUserOrGroup(1);
-      expect(page.count).toBe(3);
-
-      // Expanding it fetches its members on demand (they are not pre-loaded) and displays them.
-      expect(page.groupMemberCount).toBe(0);
-      await act(() => page.toggleGroupMemberVisibility(3));
-      await waitForTrue(() => page.groupMemberCount === 2);
-      expect(page.groupMemberCount).toBe(2);
     });
   });
 });

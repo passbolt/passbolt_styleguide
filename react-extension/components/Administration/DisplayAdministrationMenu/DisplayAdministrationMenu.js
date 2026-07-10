@@ -180,6 +180,14 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the offline plugin
+   * @returns {boolean}
+   */
+  get canIUseOffline() {
+    return this.canIUse("offlineMode");
+  }
+
+  /**
    * Can I use the User Passphrase Policies plugin
    * @returns {boolean}
    */
@@ -250,6 +258,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleSubmenuClick = this.handleSubmenuClick.bind(this);
     this.handleMetadataGettingStartedClick = this.handleMetadataGettingStartedClick.bind(this);
     this.handleScimClick = this.handleScimClick.bind(this);
+    this.handleOfflineClick = this.handleOfflineClick.bind(this);
   }
 
   /**
@@ -427,6 +436,13 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Handle when the user click on the offline mode settings menu
+   */
+  handleOfflineClick() {
+    this.props.navigationContext.onGoToAdministrationOfflineRequested();
+  }
+
+  /**
    * Handle when the user click on the migrate metadata key settings menu
    */
   handleMigrateMetadataClick() {
@@ -518,8 +534,8 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isSubscriptionSelected() {
-    return [AdministrationWorkspaceMenuTypes.SUBSCRIPTION, AdministrationWorkspaceMenuTypes.CE_DOWNGRADE].includes(
-      this.props.administrationWorkspaceContext.selectedAdministration,
+    return (
+      AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration
     );
   }
 
@@ -676,6 +692,16 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isScimSelected() {
     return AdministrationWorkspaceMenuTypes.SCIM === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If offline mode menu is selected
+   * @returns {boolean}
+   */
+  isOfflineSelected() {
+    return (
+      AdministrationWorkspaceMenuTypes.OFFLINE === this.props.administrationWorkspaceContext.selectedAdministration
+    );
   }
 
   /**
@@ -1235,6 +1261,21 @@ class DisplayAdministrationMenu extends React.Component {
                         <button className="link no-border" type="button" onClick={this.handleRbacsClick}>
                           <span>
                             <Trans>Role-Based Access Control</Trans>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              )}
+              {this.canIUseOffline && (
+                <li id="offline_menu">
+                  <div className={`row ${this.isOfflineSelected() ? "selected" : ""}`}>
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button className="link no-border" type="button" onClick={this.handleOfflineClick}>
+                          <span>
+                            <Trans>Offline mode</Trans>
                           </span>
                         </button>
                       </div>

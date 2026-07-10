@@ -96,18 +96,6 @@ describe("As AD I can see the administration menu", () => {
     expect(props.navigationContext.onGoToAdministrationSubscriptionRequested).toHaveBeenCalled();
   });
 
-  it("As AD on the downgrade to Community Edition page the Subscription menu should remain selected", async () => {
-    expect.assertions(2);
-
-    const props = defaultProps({
-      administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.CE_DOWNGRADE },
-    });
-    page = new DisplayAdministrationMenuPage(context, props);
-
-    expect(page.exists()).toBe(true);
-    expect(page.menuSelected).toBe("Subscription");
-  });
-
   it("As AD I should be able to go to internationalisation", async () => {
     expect.assertions(3);
     const props = defaultProps({
@@ -778,6 +766,33 @@ describe("As AD I can see the administration menu", () => {
       expect(props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing).toHaveBeenCalled();
       await waitFor(() => {});
       expect(page.proTeasingIcon("password_policy_menu")).not.toBeNull();
+    });
+  });
+
+  describe("As a signed-in administrator on the administration workspace, I can see the offline mode option in the left-side bar", () => {
+    it("If the feature flag is true, the menu should be visible", async () => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.OFFLINE },
+      }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag === "offlineMode");
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.gotoOfflineSettings();
+      expect(page.offlineSettings).toBeTruthy();
+      expect(page.menuSelected).toBe("Offline mode");
+      expect(props.navigationContext.onGoToAdministrationOfflineRequested).toHaveBeenCalled();
+    });
+
+    it("If the feature flag is false, the menu should not be visible", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.OFFLINE },
+      }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag !== "offlineMode");
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.offlineSettings).toBeNull();
     });
   });
 
