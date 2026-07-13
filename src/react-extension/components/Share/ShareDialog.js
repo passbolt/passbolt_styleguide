@@ -335,7 +335,7 @@ class ShareDialog extends Component {
 
     // TODO restore to original permission if any
     const permission = this.shareChanges.addAroPermissions(aro);
-    permission.updated = true;
+    permission.updated = this.shareChanges.hasChanges(aro.id);
     const permissions = this.state.permissions;
     permissions.push(permission);
     this.setState({ permissions: permissions }, () => {
