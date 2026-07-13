@@ -727,6 +727,7 @@ class ShareDialog extends Component {
           onToggleGroupMemberVisibility={this.handleToggleGroupMemberVisibility}
           shouldDisplayGroupMembers={this.state.expandedGroupIds.includes(permission.aro.id)}
           canDisplayGroupMembers={this.isControlledMode()}
+          isReadOnly={this.props.readOnly}
         />
       );
     }
@@ -742,6 +743,7 @@ class ShareDialog extends Component {
         disabled={this.hasAllInputDisabled() || this.isReadOnly()}
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
+        isReadOnly={this.props.readOnly}
       />
     );
   }
