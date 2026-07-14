@@ -231,7 +231,7 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Closes the currently opened create resource dialog.
+   * Closes the currently opened edit resource dialog.
    */
   closeEditResourceDialog() {
     this.pendingResourceSecret = null;
@@ -239,7 +239,7 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Sets the callback for when the create resource dialog needs to get the focus back.
+   * Sets the callback for when the edit resource dialog needs to get the focus back.
    * It's necessary for when the operator cancels the "share" process.
    * @param {function} listener
    */
