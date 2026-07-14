@@ -87,7 +87,7 @@ class ShareDialog extends Component {
     this.props.initialChanges?.forEach((change) => {
       const permission = permissionsMap.get(change.aroForeignKey);
       if (permission) {
-        this.shareChanges.makrPermissionHasChanged(permission);
+        this.shareChanges.markPermissionHasChanged(permission);
       }
     });
 

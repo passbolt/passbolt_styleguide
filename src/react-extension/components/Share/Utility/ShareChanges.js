@@ -207,12 +207,12 @@ export default class ShareChanges {
   }
 
   /**
-   * Used to initialised the ShareChanges list with already "changed" permissions.
+   * Used to initialise the ShareChanges list with already "changed" permissions.
    * For example when creating a new shared resource, the permissions must be shown as "new"
    * instead of "already existing".
    * @param {PermissionEntity} permission
    */
-  makrPermissionHasChanged(permission) {
+  markPermissionHasChanged(permission) {
     const permissionChange = this._buildChange(permission.permissions[0].aco, permission.aro, permission.type);
     this._changes.push(permissionChange);
     permission.updated = true;
