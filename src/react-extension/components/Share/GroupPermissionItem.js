@@ -157,9 +157,11 @@ class GroupPermissionItem extends Component {
           />
         </div>
 
-        <div className="actions">
-          <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
-        </div>
+        {!this.props.isReadOnly && (
+          <div className="actions">
+            <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
+          </div>
+        )}
       </li>
     );
   }
@@ -183,6 +185,7 @@ GroupPermissionItem.propTypes = {
   shouldDisplayGroupMembers: PropTypes.bool,
   canDisplayGroupMembers: PropTypes.bool,
   permissionType: PropTypes.number,
+  isReadOnly: PropTypes.bool,
   t: PropTypes.func, // The translation function
 };
 
