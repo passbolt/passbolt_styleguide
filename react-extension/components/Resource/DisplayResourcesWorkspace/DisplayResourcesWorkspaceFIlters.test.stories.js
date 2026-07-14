@@ -16,7 +16,6 @@ import {
   defaultProps,
   propsFilterByExpired,
   propsFilterByFavorite,
-  propsFilterByOffline,
   propsFilterByPrivate,
   propsFilterByShared,
 } from "./DisplayResourcesWorkspaceFilters.test.data";
@@ -64,8 +63,4 @@ export const FilterByPrivate = {
 
 export const FilterByExpired = {
   args: propsFilterByExpired(),
-};
-
-export const FilterByOffline = {
-  args: propsFilterByOffline(),
 };

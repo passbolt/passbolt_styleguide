@@ -13,10 +13,21 @@
  */
 
 import { ApiClient } from "../../../lib/apiClient/apiClient";
+import { UUID_REGEXP } from "../../../utils/assertions";
 
 const SSO_RECOVER_START_CASES = {
   DEFAULT: "default",
 };
+
+// UUID_REGEXP is anchored with ^…$; strip the anchors to reuse it as a path segment sub-pattern.
+const UUID_PATTERN = UUID_REGEXP.source.slice(1, -1);
+
+/**
+ * Expected shape of the recover URL pathname: `…/setup/(recover|start)/<uuid>/<uuid>` with an
+ * optional trailing slash. Not anchored at the start so installations under a base path match.
+ * @type {RegExp}
+ */
+const RECOVER_URL_PATHNAME_REGEX = new RegExp(`(?:^|/)setup/(?:recover|start)/${UUID_PATTERN}/${UUID_PATTERN}/?$`, "i");
 
 /**
  * Handles query to the API to get a recover URL
@@ -35,9 +46,10 @@ class GetRecoverUrlService {
 
   /**
    * Request the API to get a recover URL consuming the given token.
-   * @param {string} ssoToken the token found after a sucessful SSO login
+   * @param {string} ssoToken the token found after a successful SSO login
    * @returns {Promise<URL>}
    * @throws Error if the response URL to redirect to is not on the same origin of the instance
+   * @throws Error if the response URL pathname does not match the expected recover or start shape
    */
   async getRecoverUrl(ssoToken) {
     const dto = {
@@ -49,6 +61,10 @@ class GetRecoverUrlService {
 
     if (url.origin !== this.expectedUrl.origin) {
       throw new Error("The url should be from the same origin.");
+    }
+
+    if (!RECOVER_URL_PATHNAME_REGEX.test(url.pathname)) {
+      throw new Error("The url should point to a valid recover or start page.");
     }
 
     return url;

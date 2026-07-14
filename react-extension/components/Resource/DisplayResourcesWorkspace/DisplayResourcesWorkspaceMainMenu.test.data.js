@@ -23,6 +23,7 @@ import {
   resourceWorkspaceContextWithSelectedFolderIOwn,
 } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultWorkflowContext } from "../../../contexts/WorkflowContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
@@ -41,6 +42,7 @@ export function defaultProps(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     dialogContext: defaultDialogContext(),
+    workflowContext: defaultWorkflowContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
@@ -59,6 +61,7 @@ export function defaultPropsFolderOwned(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderIOwn(),
     dialogContext: defaultDialogContext(),
+    workflowContext: defaultWorkflowContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
@@ -77,6 +80,7 @@ export function defaultPropsFolderNotOwned(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderICanRead(),
     dialogContext: defaultDialogContext(),
+    workflowContext: defaultWorkflowContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),

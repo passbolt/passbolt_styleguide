@@ -21,13 +21,18 @@ import FormCancelButton from "../Common/Inputs/FormSubmitButton/FormCancelButton
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
 import Autocomplete from "../Common/Inputs/Autocomplete/Autocomplete";
 import ShareChanges from "./Utility/ShareChanges";
-import SharePermissionItem from "./SharePermissionItem";
+import UserPermissionItem from "./UserPermissionItem";
+import GroupPermissionItem from "./GroupPermissionItem";
+import GroupUserPermissionItem from "./GroupUserPermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { withDialog } from "../../contexts/DialogContext";
 import { withActionFeedback } from "../../contexts/ActionFeedbackContext";
 import { withResourceWorkspace } from "../../contexts/ResourceWorkspaceContext";
 import { Trans, withTranslation } from "react-i18next";
+import PermissionEntity from "../../../shared/models/entity/permission/permissionEntity";
+import GroupServiceWorkerService from "../../../shared/services/serviceWorker/group/groupServiceWorkerService";
+import UserServiceWorkerService from "../../../shared/services/serviceWorker/user/userServiceWorkerService";
 
 class ShareDialog extends Component {
   /**
@@ -46,26 +51,120 @@ class ShareDialog extends Component {
 
   /**
    * ComponentDidMount
-   * Invoked immediately after component is inserted into the tree
+   * Invoked immediately after component is inserted into the tree.
+   *
+   * Controlled mode: when `initialResources` is provided (alongside `initialGroups`,
+   * `initialUsers`, and an `onConfirm` callback) the dialog seeds itself from those
+   * collections instead of fetching via the port. Used by the HandlePermissionWorkflow flows
+   * to review a permission set before applying it.
+   *
    * @return {void}
    */
   async componentDidMount() {
-    if (this.props.context.shareDialogProps.resourcesIds) {
-      await this.findResourcesDetails();
-    }
-    if (this.props.context.shareDialogProps.foldersIds) {
-      this.folders = await this.props.context.port.request(
-        "passbolt.share.get-folders",
-        this.props.context.shareDialogProps.foldersIds,
-      );
+    if (this.isControlledMode()) {
+      const controlledAcos = this.buildControlledResources();
+      if (this.props.acoType === PermissionEntity.ACO_FOLDER) {
+        this.folders = controlledAcos;
+      } else {
+        this.resources = controlledAcos;
+      }
+    } else {
+      if (this.props.context.shareDialogProps.resourcesIds) {
+        await this.findResourcesDetails();
+      }
+      if (this.props.context.shareDialogProps.foldersIds) {
+        this.folders = await this.props.context.port.request(
+          "passbolt.share.get-folders",
+          this.props.context.shareDialogProps.foldersIds,
+        );
+      }
     }
 
     this.shareChanges = new ShareChanges(this.resources, this.folders);
     const permissions = this.shareChanges.aggregatePermissionsByAro();
+
+    const permissionsMap = new Map(permissions.map((p) => [p.aro.id, p]));
+    this.props.initialChanges?.forEach((change) => {
+      const permission = permissionsMap.get(change.aroForeignKey);
+      if (permission) {
+        this.shareChanges.markPermissionHasChanged(permission);
+      }
+    });
+
     this.setState({ loading: false, name: "", permissions: permissions }, () => {
       // scroll at the top of the permission list
       this.permissionListRef.current.scrollTo(0);
     });
+  }
+
+  /**
+   * True when the dialog is operated by the workflow handler with controlled-mode props.
+   * @returns {boolean}
+   */
+  isControlledMode() {
+    return Boolean(this.props.initialResources);
+  }
+
+  /**
+   * True when the dialog is displayed read-only: the operator can review the permission set and
+   * confirm it as-is but cannot change it. Used by the edit workflow when the operator has update
+   * but not owner permission on the resource. Only meaningful in controlled mode.
+   * @returns {boolean}
+   */
+  isReadOnly() {
+    return Boolean(this.props.readOnly);
+  }
+
+  /**
+   * Build the resource DTOs the dialog renders in controlled mode so ShareChanges + ReactList work
+   * without touching the server: one entry per resource provided in `initialResources`, each seeded
+   * with its id, metadata, the operator's own permission, and its permission set. Create/edit pass a
+   * single synthetic resource whose id is null (the resource does not exist yet); share passes the
+   * real resources. The user/group lookup maps are built once and shared across resources.
+   * @returns {Array<object>}
+   */
+  buildControlledResources() {
+    const groupsById = {};
+    this.props.initialGroups?.items.forEach((group) => {
+      groupsById[group.id] = group.toDto();
+    });
+    const usersById = {};
+    this.props.initialUsers?.items.forEach((user) => {
+      usersById[user.id] = user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS);
+    });
+
+    return this.props.initialResources.map((resource) => this.buildControlledResource(resource, groupsById, usersById));
+  }
+
+  /**
+   * Build a single controlled-mode resource DTO, embedding the referenced user/group from the
+   * provided lookup maps so ShareChanges can render and track edits. The resource id (null for a
+   * not-yet-created resource, the real id when sharing an existing one) is stamped as each
+   * permission's `aco_foreign_key`.
+   * @param {{id: (string|null), metadata: object, permission: object, permissions: PermissionsCollection}} resource
+   * @param {object} groupsById The referenced groups keyed by id.
+   * @param {object} usersById The referenced users keyed by id.
+   * @returns {object}
+   */
+  buildControlledResource(resource, groupsById, usersById) {
+    const mappedPermissions = resource.permissions.items.map((permission) => {
+      const dto = permission.toDto();
+      dto.aco = this.props.acoType ?? PermissionEntity.ACO_RESOURCE;
+      dto.aco_foreign_key = resource.id;
+      if (dto.aro === PermissionEntity.ARO_USER) {
+        dto.user = usersById[dto.aro_foreign_key];
+      } else if (dto.aro === PermissionEntity.ARO_GROUP) {
+        dto.group = groupsById[dto.aro_foreign_key];
+      }
+      return dto;
+    });
+
+    return {
+      id: resource.id,
+      metadata: { name: resource.metadata?.name ?? "" },
+      permission: { type: resource.permission?.type ?? PermissionEntity.PERMISSION_OWNER },
+      permissions: mappedPermissions,
+    };
   }
 
   /**
@@ -80,6 +179,13 @@ class ShareDialog extends Component {
 
       // permission list
       permissions: null,
+
+      // ids of the groups whose members are currently expanded (controlled mode only)
+      expandedGroupIds: [],
+
+      // members fetched on demand for groups added during the dialog session (not in initialGroups),
+      // keyed by group id: { [groupId]: Array<userDto> }
+      fetchedGroupMembers: {},
 
       // autocomplete
       autocompleteOpen: false,
@@ -101,8 +207,8 @@ class ShareDialog extends Component {
 
     this.handlePermissionUpdate = this.handlePermissionUpdate.bind(this);
     this.handlePermissionDelete = this.handlePermissionDelete.bind(this);
+    this.handleToggleGroupMemberVisibility = this.handleToggleGroupMemberVisibility.bind(this);
 
-    this.renderItem = this.renderItem.bind(this);
     this.renderContainer = this.renderContainer.bind(this);
   }
 
@@ -180,8 +286,16 @@ class ShareDialog extends Component {
 
   /**
    * Handle save operation success.
+   *
+   * In controlled mode the workspace refresh (`onResourceShared`) and the success toast are
+   * the workflow handler's responsibility — the underlying resource doesn't even exist yet
+   * when this dialog closes — so we only close.
    */
   async handleSaveSuccess() {
+    if (this.isControlledMode()) {
+      this.props.onClose();
+      return;
+    }
     await this.props.actionFeedbackContext.displaySuccess(
       this.translate("The permissions have been changed successfully."),
     );
@@ -221,7 +335,7 @@ class ShareDialog extends Component {
 
     // TODO restore to original permission if any
     const permission = this.shareChanges.addAroPermissions(aro);
-    permission.updated = true;
+    permission.updated = this.shareChanges.hasChanges(aro.id);
     const permissions = this.state.permissions;
     permissions.push(permission);
     this.setState({ permissions: permissions }, () => {
@@ -261,10 +375,109 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Save the permissions
+   * Toggle the visibility of a group's members in the permission list.
+   * Only relevant in controlled mode, where the members can be resolved from the initial collections.
+   * @param {string} groupId The group identifier
+   */
+  handleToggleGroupMemberVisibility(groupId) {
+    const expandedGroupIds = new Set(this.state.expandedGroupIds);
+    if (expandedGroupIds.has(groupId)) {
+      expandedGroupIds.delete(groupId);
+    } else {
+      expandedGroupIds.add(groupId);
+      // Groups added during the dialog session are not in initialGroups and carry no members yet;
+      // fetch them lazily the first time they are expanded. Members render once the fetch resolves.
+      const isInitialGroup = this.props.initialGroups?.items.some((item) => item.id === groupId);
+      if (!isInitialGroup && !this.state.fetchedGroupMembers[groupId]) {
+        this.fetchGroupMembers(groupId);
+      }
+    }
+    this.setState({ expandedGroupIds: [...expandedGroupIds] });
+  }
+
+  /**
+   * Fetch the member users of a group that was added during the dialog session and cache their DTOs
+   * in the state, keyed by group id. The members are resolved from the service-worker local-storage
+   * cache (falling back to the API). A failure leaves the group with no displayed members rather than
+   * interrupting the dialog with an error popup.
+   * @param {string} groupId The group identifier
+   * @returns {Promise<void>}
+   */
+  async fetchGroupMembers(groupId) {
+    try {
+      const groupServiceWorkerService = new GroupServiceWorkerService(this.props.context.port);
+      const userServiceWorkerService = new UserServiceWorkerService(this.props.context.port);
+      const groupsUsers = await groupServiceWorkerService.getGroupsUsersByGroupId(groupId);
+      const memberUserIds = groupsUsers.items.map((groupUser) => groupUser.userId);
+      const users = await userServiceWorkerService.getByIds(memberUserIds);
+      const members = users.items.map((user) => user.toDto(users.entityClass?.ALL_CONTAIN_OPTIONS));
+      this.setState({
+        fetchedGroupMembers: { ...this.state.fetchedGroupMembers, [groupId]: members },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * Resolve the member users of a group from the controlled-mode initial collections.
+   * The group entity carries its memberships (groups_users), each referencing a user by id that is
+   * looked up in the initial users collection. Members not present in the initial users collection
+   * (i.e. without a direct permission) cannot be resolved and are omitted.
+   * @param {string} groupId The group identifier
+   * @returns {Array<object>} The member users DTOs
+   */
+  getGroupMembers(groupId) {
+    // Groups added during the dialog session have their members fetched on demand and cached.
+    if (this.state.fetchedGroupMembers[groupId]) {
+      return this.state.fetchedGroupMembers[groupId];
+    }
+    const group = this.props.initialGroups?.items.find((item) => item.id === groupId);
+    const groupsUsers = group?.groupsUsers?.items || [];
+    return groupsUsers
+      .map((groupUser) => this.props.initialUsers?.items.find((user) => user.id === groupUser.userId))
+      .filter(Boolean)
+      .map((user) => user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS));
+  }
+
+  /**
+   * Derive the flat list of rows to display from the permission list.
+   * Each permission becomes either a "user" or a "group" row. When a group is expanded (controlled
+   * mode), its member users are appended as "group-user" rows right after the group row.
+   * @returns {Array<{kind: string, permission?: object, user?: object, groupId?: string}>}
+   */
+  getDisplayedPermissions() {
+    const displayedPermissions = [];
+    this.state.permissions.forEach((permission) => {
+      const isGroup = !permission.aro.profile;
+      if (!isGroup) {
+        displayedPermissions.push({ kind: "user", permission });
+        return;
+      }
+      displayedPermissions.push({ kind: "group", permission });
+      if (this.isControlledMode() && this.state.expandedGroupIds.includes(permission.aro.id)) {
+        this.getGroupMembers(permission.aro.id).forEach((user) => {
+          displayedPermissions.push({ kind: "group-user", user, groupId: permission.aro.id });
+        });
+      }
+    });
+    return displayedPermissions;
+  }
+
+  /**
+   * Save the permissions. In controlled mode the dialog hands the deltas to `onConfirm` instead
+   * of calling the server, so the workflow owns the create-then-share sequence.
    * @returns {Promise<void>}
    */
   async shareSave() {
+    if (this.isControlledMode()) {
+      const changes =
+        this.props.acoType === PermissionEntity.ACO_FOLDER
+          ? this.shareChanges.getFoldersChanges()
+          : this.shareChanges.getResourcesChanges();
+      await this.props.onConfirm(changes);
+      return;
+    }
     if (this.props.context.shareDialogProps.resourcesIds && this.props.context.shareDialogProps.foldersIds) {
       throw new Error(this.translate("Multi resource and folder share is not implemented."));
     }
@@ -325,8 +538,8 @@ class ShareDialog extends Component {
    */
   isAboutItems() {
     return (
-      this.props.context.shareDialogProps.resourcesIds &&
-      this.props.context.shareDialogProps.foldersIds &&
+      this.props.context.shareDialogProps?.resourcesIds &&
+      this.props.context.shareDialogProps?.foldersIds &&
       this.props.context.shareDialogProps.resourcesIds.length &&
       this.props.context.shareDialogProps.foldersIds.length
     );
@@ -338,7 +551,7 @@ class ShareDialog extends Component {
    */
   isAboutResources() {
     return (
-      this.props.context.shareDialogProps.resourcesIds && this.props.context.shareDialogProps.resourcesIds.length > 1
+      this.props.context.shareDialogProps?.resourcesIds && this.props.context.shareDialogProps.resourcesIds.length > 1
     );
   }
 
@@ -347,7 +560,7 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   isAboutFolders() {
-    return this.props.context.shareDialogProps.foldersIds && this.props.context.shareDialogProps.foldersIds.length > 1;
+    return this.props.context.shareDialogProps?.foldersIds && this.props.context.shareDialogProps.foldersIds.length > 1;
   }
 
   /**
@@ -356,7 +569,7 @@ class ShareDialog extends Component {
    */
   isAboutAFolder() {
     return (
-      this.props.context.shareDialogProps.foldersIds && this.props.context.shareDialogProps.foldersIds.length === 1
+      this.props.context.shareDialogProps?.foldersIds && this.props.context.shareDialogProps.foldersIds.length === 1
     );
   }
 
@@ -366,7 +579,7 @@ class ShareDialog extends Component {
    */
   isAboutAResource() {
     return (
-      this.props.context.shareDialogProps.resourcesIds && this.props.context.shareDialogProps.resourcesIds.length === 1
+      this.props.context.shareDialogProps?.resourcesIds && this.props.context.shareDialogProps.resourcesIds.length === 1
     );
   }
 
@@ -377,6 +590,12 @@ class ShareDialog extends Component {
   getTitle() {
     if (this.state.loading) {
       return this.translate("Loading...");
+    }
+    if (this.props.isPermissionConfirmationMode) {
+      return this.translate("Confirm permissions");
+    }
+    if (this.isControlledMode()) {
+      return this.translate("Share");
     }
     if (this.isAboutItems()) {
       return this.translate("Share {{count}} items", {
@@ -408,7 +627,7 @@ class ShareDialog extends Component {
    * @returns {string}
    */
   getSubtitle() {
-    if (this.state.loading) {
+    if (this.state.loading || this.isControlledMode()) {
       return;
     }
     if (this.isAboutAResource()) {
@@ -432,7 +651,12 @@ class ShareDialog extends Component {
     if (!acos || !acos.length || acos.length === 1) {
       return "";
     }
-    return acos.map((aco) => (aco.permission.aco === "Resource" ? aco.metadata.name : aco.name)).join(", ");
+    // `metadata.name` covers resources (and controlled-mode ACOs, which expose no top-level name);
+    // folders fall back to `aco.name`. Empty names are dropped so the result is never bare commas.
+    return acos
+      .map((aco) => aco.metadata?.name ?? aco.name)
+      .filter(Boolean)
+      .join(", ");
   }
 
   /**
@@ -453,33 +677,73 @@ class ShareDialog extends Component {
 
   /**
    * Return true if submit button should be disabled
-   * True if there is no owner, if all input should be disabled, if there is no change since the start
+   * True if there is no owner, if all input should be disabled, if there is no change since the start.
+   * Controlled mode drops the `!hasChanges()` gate so the operator can confirm the inherited
+   * permissions as-is (empty deltas — the workflow then skips the share call entirely).
    * @returns {boolean}
    */
   hasSubmitDisabled() {
-    return this.hasNoOwner() || this.hasAllInputDisabled() || !this.hasChanges();
+    if (this.hasNoOwner() || this.hasAllInputDisabled()) {
+      return true;
+    }
+    if (this.isControlledMode()) {
+      return false;
+    }
+    return !this.hasChanges();
   }
 
   /**
    * Use to render a single item of the share permission list
    * @param {integer} index of the item in the source list
+   * @param {Array<object>} displayedPermissions the flat list of rows being rendered
    * @returns {JSX.Element}
    */
-  renderItem(index) {
-    const permission = this.state.permissions[index];
-    const sharePermissionItemKey = permission.aro.id;
+  renderItem(index, displayedPermissions) {
+    const item = displayedPermissions[index];
+
+    if (item.kind === "group-user") {
+      return <GroupUserPermissionItem key={`${item.groupId}-${item.user.id}`} user={item.user} />;
+    }
+
+    const permission = item.permission;
+    const permissionType = parseInt(permission.type, 10);
+    if (isNaN(permissionType)) {
+      throw new TypeError(this.translate("Invalid permission type for share permission item."));
+    }
+
+    if (item.kind === "group") {
+      return (
+        <GroupPermissionItem
+          id={permission.aro.id}
+          key={permission.aro.id}
+          group={permission.aro}
+          membersCount={this.isControlledMode() ? this.getGroupMembers(permission.aro.id).length : null}
+          permissionType={permissionType}
+          variesDetails={permission.variesDetails}
+          updated={permission.updated}
+          disabled={this.hasAllInputDisabled() || this.isReadOnly()}
+          onUpdate={this.handlePermissionUpdate}
+          onDelete={this.handlePermissionDelete}
+          onToggleGroupMemberVisibility={this.handleToggleGroupMemberVisibility}
+          shouldDisplayGroupMembers={this.state.expandedGroupIds.includes(permission.aro.id)}
+          canDisplayGroupMembers={this.isControlledMode()}
+          isReadOnly={this.props.readOnly}
+        />
+      );
+    }
+
     return (
-      <SharePermissionItem
+      <UserPermissionItem
         id={permission.aro.id}
-        key={sharePermissionItemKey}
-        aro={permission.aro}
-        permissionType={permission.type}
+        key={permission.aro.id}
+        user={permission.aro}
+        permissionType={permissionType}
         variesDetails={permission.variesDetails}
         updated={permission.updated}
-        disabled={this.hasAllInputDisabled()}
+        disabled={this.hasAllInputDisabled() || this.isReadOnly()}
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
-        canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
+        isReadOnly={this.props.readOnly}
       />
     );
   }
@@ -519,6 +783,8 @@ class ShareDialog extends Component {
    * @returns {*}
    */
   render() {
+    // Computed once per render so ReactList's length and itemRenderer read the same list.
+    const displayedPermissions = this.state.loading ? [] : this.getDisplayedPermissions();
     return (
       <DialogWrapper
         className="share-dialog"
@@ -540,38 +806,40 @@ class ShareDialog extends Component {
               )}
               {!this.state.loading && (
                 <ReactList
-                  itemRenderer={this.renderItem}
+                  itemRenderer={(index) => this.renderItem(index, displayedPermissions)}
                   itemsRenderer={this.renderContainer}
-                  length={this.state.permissions.length}
+                  length={displayedPermissions.length}
                   minSize={this.props.listMinSize}
-                  type={this.state.permissions.length < 4 ? "simple" : "uniform"}
+                  type={displayedPermissions.length < 4 ? "simple" : "uniform"}
                   ref={this.permissionListRef}
                   usePosition={true}
                   threshold={30}
                 ></ReactList>
               )}
             </div>
-            <div className="permission-add">
-              <Autocomplete
-                id="share-name-input"
-                name="name"
-                label={this.translate("Share with people or groups")}
-                placeholder={this.translate("Start typing a user or group name")}
-                searchCallback={this.fetchAutocompleteItems}
-                onSelect={this.handleAutocompleteSelect}
-                onOpen={this.handleAutocompleteOpen}
-                onClose={this.handleAutocompleteClose}
-                disabled={this.hasAllInputDisabled()}
-                baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
-              />
-            </div>
-            {this.hasNoOwner() && (
+            {!this.isReadOnly() && (
+              <div className="permission-add">
+                <Autocomplete
+                  id="share-name-input"
+                  name="name"
+                  label={this.translate("Share with people or groups")}
+                  placeholder={this.translate("Start typing a user or group name")}
+                  searchCallback={this.fetchAutocompleteItems}
+                  onSelect={this.handleAutocompleteSelect}
+                  onOpen={this.handleAutocompleteOpen}
+                  onClose={this.handleAutocompleteClose}
+                  disabled={this.hasAllInputDisabled()}
+                  baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                  canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
+                />
+              </div>
+            )}
+            {!this.isReadOnly() && this.hasNoOwner() && (
               <div className="message error">
                 <Trans>Please make sure there is at least one owner.</Trans>
               </div>
             )}
-            {this.hasChanges() && !this.hasNoOwner() && (
+            {!this.isReadOnly() && this.hasChanges() && !this.hasNoOwner() && (
               <div className="message warning">
                 <Trans>Click save to apply your pending changes.</Trans>
               </div>
@@ -593,6 +861,8 @@ class ShareDialog extends Component {
 
 ShareDialog.defaultProps = {
   listMinSize: 4,
+  isPermissionConfirmationMode: true,
+  initialChanges: [],
 };
 
 ShareDialog.propTypes = {
@@ -602,6 +872,14 @@ ShareDialog.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   listMinSize: PropTypes.number, // The minimum size to be renderered in the permission list
+  isPermissionConfirmationMode: PropTypes.bool, // Is the dialog used to confirm permissions
+  initialResources: PropTypes.array, // Controlled mode: the ACOs to seed the dialog with instead of fetching from the API, each as { id, metadata, permission, permissions: PermissionsCollection }
+  initialChanges: PropTypes.array, // Set of permission to mark them as "modified" in the initial list
+  acoType: PropTypes.string, // Controlled mode: the ACO type of the seeded entries (PermissionEntity.ACO_RESOURCE, default, or ACO_FOLDER)
+  initialGroups: PropTypes.object, // Controlled mode: GroupsCollection providing the groups referenced by the resources' permissions
+  initialUsers: PropTypes.object, // Controlled mode: UsersCollection providing the users referenced by the resources' permissions
+  onConfirm: PropTypes.func, // Controlled mode: callback invoked with the operator-confirmed permission changes instead of saving via the port
+  readOnly: PropTypes.bool, // Controlled mode: display the permission set read-only (review/confirm only, no edits)
   t: PropTypes.func, // The translation function
 };
 

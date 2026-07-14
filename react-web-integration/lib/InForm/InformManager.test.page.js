@@ -121,6 +121,35 @@ export default class InformManagerPage {
     return InFormManager.shadowRoot.querySelectorAll("iframe").length;
   }
 
+  /**
+   * Returns the shadow root host element
+   */
+  get host() {
+    return InFormManager.host;
+  }
+
+  /**
+   * Returns the call-to-action iframe (first iframe)
+   */
+  get callToActionIframe() {
+    return InFormManager.shadowRoot.querySelectorAll("iframe")[0];
+  }
+
+  /**
+   * Returns the in-form menu iframe (inserted after the CTA iframe)
+   */
+  get menuIframe() {
+    return InFormManager.shadowRoot.querySelectorAll("iframe")[1];
+  }
+
+  /**
+   * Opens the in-form menu for the last clicked call-to-action
+   */
+  async openInFormMenu() {
+    await port.emit("passbolt.in-form-menu.open");
+    await waitFor(() => {});
+  }
+
   /** Blur on the username element */
   async blurOnUsername() {
     fireEvent.blur(this.username);

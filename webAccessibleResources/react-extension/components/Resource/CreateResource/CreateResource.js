@@ -38,10 +38,7 @@ import ConfirmCreateEdit, {
 } from "../ConfirmCreateEdit/ConfirmCreateEdit";
 import { withDialog } from "../../../contexts/DialogContext";
 import { SecretGenerator } from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import { withRouter } from "react-router-dom";
-import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import { RESOURCE_TYPE_PASSWORD_STRING_SLUG } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -89,6 +86,7 @@ class CreateResource extends Component {
     this.rejectCreationConfirmation = this.rejectCreationConfirmation.bind(this);
     this.consumePasswordEntropyError = this.consumePasswordEntropyError.bind(this);
     this.save = this.save.bind(this);
+    this.props.setFocusBackListener(this.handleFocusBack.bind(this));
   }
 
   /**
@@ -405,37 +403,14 @@ class CreateResource extends Component {
   }
 
   /**
-   * Save the resource
+   * Hand the validated resource form entity to the workflow handler via `onSubmit`, then close
+   * the dialog. The workflow owns the API call, the success notification, and the post-create
+   * navigation; this component only validates and yields.
    * @param {ResourceFormEntity} resource
    * @returns {Promise<void>}
    */
   async save(resource) {
-    const createdResource = await this.createResource(resource);
-    await this.handleSaveSuccess(createdResource);
-  }
-
-  /**
-   * Create the resource
-   * @param {ResourceFormEntity} resource
-   * @returns {Promise<Object>} returns the newly created resource
-   */
-  createResource(resource) {
-    const resourceDto = resource.toResourceDto();
-    const resourceType = this.props.resourceTypes.getFirstById(resource.resourceTypeId);
-    const isV4PasswordString = resourceType.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
-    const secretDto = isV4PasswordString ? resource.toSecretDto().password : resource.toSecretDto();
-    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
-  }
-
-  /**
-   * Handle save operation success.
-   * @param {object} createdResource
-   * @returns {Promise<void>}
-   */
-  async handleSaveSuccess(createdResource) {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been added successfully"));
-    this.props.history.push(`/app/passwords/view/${createdResource.id}`);
-    this.handleClose();
+    await this.props.onSubmit(resource);
   }
 
   /*
@@ -524,6 +499,15 @@ class CreateResource extends Component {
       resource: this.resourceFormEntity.toDto(),
       resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE,
       resourceType,
+    });
+  }
+
+  /**
+   * Triggered when the dialog should have the focus back.
+   */
+  handleFocusBack() {
+    this.setState({
+      isProcessing: false,
     });
   }
 
@@ -629,24 +613,20 @@ class CreateResource extends Component {
 
 CreateResource.propTypes = {
   context: PropTypes.any, // The application context
-  history: PropTypes.object, // Router history
   folderParentId: PropTypes.string, // The folder parent id
-  onClose: PropTypes.func, // Whenever the component must be closed
+  onClose: PropTypes.func.isRequired, // Whenever the component must be closed
+  onSubmit: PropTypes.func.isRequired, // Callback invoked with the validated ResourceFormEntity
   dialogContext: PropTypes.object, // The dialog context
   passwordExpiryContext: PropTypes.object, // The password expiry context
   passwordPoliciesContext: PropTypes.object, // The password policy context
-  actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourceType: PropTypes.instanceOf(ResourceTypeEntity).isRequired, // The resource types entity
+  setFocusBackListener: PropTypes.func, // Event handler for handling focusing back on this dialog
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(
-  withAppContext(
-    withPasswordPolicies(
-      withPasswordExpiry(
-        withResourceTypesLocalStorage(withActionFeedback(withDialog(withTranslation("common")(CreateResource)))),
-      ),
-    ),
+export default withAppContext(
+  withPasswordPolicies(
+    withPasswordExpiry(withResourceTypesLocalStorage(withDialog(withTranslation("common")(CreateResource)))),
   ),
 );

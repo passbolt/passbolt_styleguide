@@ -55,6 +55,37 @@ describe("Card Item", () => {
     expect(page.description).toBeNull();
   });
 
+  it("should display the warning text if provided", () => {
+    expect.assertions(1);
+
+    const props = {
+      icon: <svg id="icon"></svg>,
+      title: "test",
+      warningText: "This is the warning text",
+      description: "This is the description",
+      onClick: jest.fn(),
+    };
+
+    const page = new CardItemPage(props);
+
+    expect(page.warningText.textContent).toStrictEqual(props.warningText);
+  });
+
+  it("should not display the warning text if not provided", () => {
+    expect.assertions(1);
+
+    const props = {
+      icon: <svg id="icon"></svg>,
+      title: "test",
+      description: "This is the description",
+      onClick: jest.fn(),
+    };
+
+    const page = new CardItemPage(props);
+
+    expect(page.warningText).toBeNull();
+  });
+
   it("should display the card Pro teasing icon if proTeasing is true", async () => {
     expect.assertions(1);
 

@@ -187,11 +187,10 @@ export default class AdministrationWorkspaceContextPage {
   }
 
   /**
-   * Go to the offline mode route
+   * Go to the downgrade to Community Edition route
    */
-  async goToOffline() {
-    this.setup(this.context, this.props);
-    await this.goToLink(".offline");
+  async goToCeDowngrade() {
+    await this.goToLink(".ce-downgrade");
   }
 
   /**
@@ -281,8 +280,8 @@ export default class AdministrationWorkspaceContextPage {
           <NavLink to={{ pathname: "/app/administration/healthcheck" }}>
             <a className="healthcheck"></a>
           </NavLink>
-          <NavLink to={{ pathname: "/app/administration/offline" }}>
-            <a className="offline"></a>
+          <NavLink to={{ pathname: "/app/administration/ce-downgrade" }}>
+            <a className="ce-downgrade"></a>
           </NavLink>
         </Router>
       </AppContext.Provider>,

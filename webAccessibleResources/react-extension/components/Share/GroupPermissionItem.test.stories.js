@@ -50,6 +50,10 @@ export const Opened = {
   args: defaultOwnerProps({ shouldDisplayGroupMembers: true }),
 };
 
+export const WithoutMembersToggle = {
+  args: defaultOwnerProps({ canDisplayGroupMembers: false }),
+};
+
 export const Varies = {
   args: defaultVariesProps(),
 };

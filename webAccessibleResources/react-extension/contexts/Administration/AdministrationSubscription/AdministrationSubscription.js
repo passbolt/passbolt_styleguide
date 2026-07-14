@@ -49,7 +49,7 @@ export class AdminSubscriptionContextProvider extends React.Component {
   get defaultState() {
     return {
       subscription: new SubscriptionModel(), // Change done to the subscription object
-      processing: true, // Context is processing data
+      processing: false, // Context is processing data
       getSubscription: this.getSubscription.bind(this), // Returns settings for UI changes
       findSubscriptionKey: this.findSubscriptionKey.bind(this), // Find the subscription key
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled

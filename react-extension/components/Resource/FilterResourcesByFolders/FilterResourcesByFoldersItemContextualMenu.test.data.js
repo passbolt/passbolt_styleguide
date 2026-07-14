@@ -19,6 +19,7 @@ import {
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultWorkflowContext } from "../../../contexts/WorkflowContext.test.data";
 import {
   defaultFolderDto,
   folderWithReadPermissionDto,
@@ -36,6 +37,7 @@ export function defaultProps(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     dialogContext: defaultDialogContext(),
+    workflowContext: defaultWorkflowContext(),
     folder: defaultFolderDto(),
     hide: jest.fn(),
     left: 0,

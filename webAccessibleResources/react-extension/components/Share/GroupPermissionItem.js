@@ -30,21 +30,7 @@ class GroupPermissionItem extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
-    if (!Number.isInteger(props.permissionType)) {
-      throw new TypeError(this.translate("Invalid permission type for share permission item."));
-    }
-    this.state.permissionType = props.permissionType;
     this.bindEventHandlers();
-  }
-
-  /**
-   * Returns the component default state
-   */
-  get defaultState() {
-    return {
-      permissionType: this.props.permissionType,
-    };
   }
 
   /**
@@ -64,6 +50,9 @@ class GroupPermissionItem extends Component {
     let className = "row";
     if (this.props.updated) {
       className += " permission-updated";
+    }
+    if (this.props.canDisplayGroupMembers) {
+      className += " has-caret";
     }
     return className;
   }
@@ -116,20 +105,25 @@ class GroupPermissionItem extends Component {
   }
 
   render() {
+    //@todo: to remove, it's a quick & dirty fix to make sure the count is displayed. Later on the groups need to be full loaded and not rely on that `user_count`
+    const groupMembersCount = this.props.membersCount ? this.props.membersCount : this.props.group.user_count;
+
     const isInputDisabled = this.props.disabled;
     return (
       <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
-        <button
-          type="button"
-          className="link no-border group-visibility-toggle"
-          onClick={this.handleToggleGroupMemberVisibility}
-        >
-          {this.props.shouldDisplayGroupMembers ? (
-            <CaretDownSVG className="baseline svg-icon" />
-          ) : (
-            <CaretRightSVG className="baseline svg-icon" />
-          )}
-        </button>
+        {this.props.canDisplayGroupMembers && (
+          <button
+            type="button"
+            className="link no-border group-visibility-toggle"
+            onClick={this.handleToggleGroupMemberVisibility}
+          >
+            {this.props.shouldDisplayGroupMembers ? (
+              <CaretDownSVG className="baseline svg-icon" />
+            ) : (
+              <CaretRightSVG className="baseline svg-icon" />
+            )}
+          </button>
+        )}
         <GroupAvatar group={this.props.group} />
 
         <div className="aro">
@@ -137,7 +131,11 @@ class GroupPermissionItem extends Component {
             <span className="ellipsis">{this.props.group.name}</span>
           </div>
           <div className="aro-details">
-            <span className="ellipsis">{"Group"}</span>
+            <span className="ellipsis">
+              {this.props.membersCount != null
+                ? this.translate("Group with {{count}} member", { count: groupMembersCount })
+                : this.translate("Group")}
+            </span>
           </div>
         </div>
 
@@ -152,16 +150,18 @@ class GroupPermissionItem extends Component {
             name="permissionSelect"
             className={`permission inline${isInputDisabled ? " disabled" : ""}`}
             items={this.permissions}
-            value={this.state.permissionType.toString()}
+            value={this.props.permissionType.toString()}
             disabled={isInputDisabled}
             onChange={this.handleUpdate}
             direction="bottom"
           />
         </div>
 
-        <div className="actions">
-          <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
-        </div>
+        {!this.props.isReadOnly && (
+          <div className="actions">
+            <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
+          </div>
+        )}
       </li>
     );
   }
@@ -169,11 +169,13 @@ class GroupPermissionItem extends Component {
 
 GroupPermissionItem.defaultProps = {
   shouldDisplayGroupMembers: false,
+  canDisplayGroupMembers: false,
 };
 
 GroupPermissionItem.propTypes = {
   id: PropTypes.string, // uuid
   group: PropTypes.object, // {id: <uuid>, name: <string>}
+  membersCount: PropTypes.number, // The group member count (controlled mode only), null otherwise
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
   updated: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -181,7 +183,9 @@ GroupPermissionItem.propTypes = {
   onDelete: PropTypes.func,
   onToggleGroupMemberVisibility: PropTypes.func,
   shouldDisplayGroupMembers: PropTypes.bool,
+  canDisplayGroupMembers: PropTypes.bool,
   permissionType: PropTypes.number,
+  isReadOnly: PropTypes.bool,
   t: PropTypes.func, // The translation function
 };
 

@@ -13,8 +13,13 @@
  */
 
 import PermissionsCollection from "../../../models/entity/permission/permissionsCollection";
+import { isValidUuid } from "../../../utils/assertions";
 
 export const PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY = "passbolt.permissions.find-aco-permissions-for-display";
+export const SHARE_RESOURCES_SAVE = "passbolt.share.resources.save";
+export const SHARE_FOLDERS_SAVE = "passbolt.share.folders.save";
+export const RESOURCES_CREATE = "passbolt.resources.create";
+export const RESOURCES_UPDATE = "passbolt.resources.update";
 
 export default class PermissionServiceWorkerService {
   /**
@@ -34,5 +39,58 @@ export default class PermissionServiceWorkerService {
   async findPermissions(acoId, acoType) {
     const dtos = await this.port.request(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, acoId, acoType);
     return new PermissionsCollection(dtos, { assertAtLeastOneOwner: false });
+  }
+
+  /**
+   * Save the permission changes for the given resources.
+   * @param {Array<string>} resourcesIds The UUIDs of the resources to update the permissions for.
+   * @param {Array<object>} permissionChangesDto The permission changes to apply.
+   * @returns {Promise<*>}
+   * @throws {Error} If resourcesIds is not a non-empty array of UUIDs.
+   */
+  async saveResourcesPermissions(resourcesIds, permissionChangesDto) {
+    if (!Array.isArray(resourcesIds) || resourcesIds.length === 0) {
+      throw new Error("The given resourcesIds should be a non-empty array.");
+    }
+    if (!resourcesIds.every((resourceId) => isValidUuid(resourceId))) {
+      throw new Error("The given resourcesIds should only contain valid UUIDs.");
+    }
+    return this.port.request(SHARE_RESOURCES_SAVE, resourcesIds, permissionChangesDto);
+  }
+
+  /**
+   * Save the permission changes for the given folder.
+   * @param {string} folderId The UUID of the folder to update the permissions for.
+   * @param {Array<object>} permissionChangesDto The permission changes to apply.
+   * @returns {Promise<*>}
+   * @throws {Error} If folderId is not a valid UUID.
+   */
+  async saveFoldersPermissions(folderId, permissionChangesDto) {
+    if (!isValidUuid(folderId)) {
+      throw new Error("The given folderId should be a valid UUID.");
+    }
+    return this.port.request(SHARE_FOLDERS_SAVE, folderId, permissionChangesDto);
+  }
+
+  /**
+   * Create a resource, optionally sharing it with the given recipients in the same orchestrated call.
+   * @param {object} resourceDto The resource DTO to create.
+   * @param {object|string} secretDto The secret DTO to encrypt for the resource.
+   * @param {Array<object>} [permissionChanges] The operator-confirmed permission changes to apply.
+   * @returns {Promise<*>}
+   */
+  async createResource(resourceDto, secretDto, permissionChanges) {
+    return this.port.request(RESOURCES_CREATE, resourceDto, secretDto, permissionChanges);
+  }
+
+  /**
+   * Update a resource, optionally re-sharing it with the given recipients in the same orchestrated call.
+   * @param {object} resourceDto The resource DTO to update.
+   * @param {object|string} secretDto The secret DTO to encrypt for the resource.
+   * @param {Array<object>} [permissionChanges] The operator-confirmed permission changes to apply.
+   * @returns {Promise<*>}
+   */
+  async updateResource(resourceDto, secretDto, permissionChanges) {
+    return this.port.request(RESOURCES_UPDATE, resourceDto, secretDto, permissionChanges);
   }
 }

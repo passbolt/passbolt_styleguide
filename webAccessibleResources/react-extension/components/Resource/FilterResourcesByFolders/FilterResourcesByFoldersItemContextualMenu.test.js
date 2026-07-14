@@ -23,7 +23,9 @@ import {
 } from "./FilterResourcesByFoldersItemContextualMenu.test.data";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import RenameResourceFolder from "../../ResourceFolder/RenameResourceFolder/RenameResourceFolder";
-import ShareDialog from "../../Share/ShareDialog";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
 import ExportResources from "../ExportResources/ExportResources";
 import DeleteResourceFolder from "../../ResourceFolder/DeleteResourceFolder/DeleteResourceFolder";
 import FilterResourcesByFoldersItemContextualMenuPage from "./FilterResourcesByFoldersItemContextualMenu.test.page";
@@ -75,7 +77,10 @@ describe("FilterResourcesByFoldersItemContextualMenu", () => {
       const props = defaultProps(); // The props to pass
       const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
       await page.filterResourcesByFoldersItemContextualMenu.shareFolder();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ShareDialog);
+      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.SHARE_FOLDER,
+        folder: props.folder,
+      });
       expect(props.hide).toHaveBeenCalled();
     });
 
@@ -110,7 +115,10 @@ describe("FilterResourcesByFoldersItemContextualMenu", () => {
       const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
 
       await page.filterResourcesByFoldersItemContextualMenu.shareFolder();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ShareDialog);
+      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.SHARE_FOLDER,
+        folder: props.folder,
+      });
       expect(props.hide).toHaveBeenCalled();
     });
 

@@ -91,6 +91,7 @@ class EditResource extends Component {
     this.rejectEditionConfirmation = this.rejectEditionConfirmation.bind(this);
     this.consumePasswordEntropyError = this.consumePasswordEntropyError.bind(this);
     this.save = this.save.bind(this);
+    this.props.setFocusBackListener(this.handleFocusBack.bind(this));
   }
 
   /**
@@ -472,53 +473,26 @@ class EditResource extends Component {
   }
 
   /**
-   * Save the resource
+   * Save the resource.
+   * When operated by a workflow handler (`onSubmit` provided), hand the validated form entity to
+   * it and close: the workflow owns the API call, the success notification, and any permission
+   * review/sharing. Otherwise fall back to the standalone behavior (update + success).
    * @param {ResourceFormEntity} resource
    * @returns {Promise<void>}
    */
   async save(resource) {
-    await this.updateResource(resource);
-    await this.handleSaveSuccess();
-  }
-
-  /*
-   * =============================================================
-   *  Update resource
-   * =============================================================
-   */
-  /**
-   * Update the resource
-   * @param {ResourceFormEntity} resource
-   * @returns {Promise<void>}
-   */
-  async updateResource(resource) {
     const isSecretChanged = resource.secret.areSecretsDifferent(this.state.originalSecret);
-    if (this.props.resource.resource_type_id === resource.resourceTypeId) {
-      if (!isSecretChanged) {
-        await this.props.context.port.request("passbolt.resources.update", resource.toResourceDto(), null);
-        return;
-      }
-    }
-
     if (isSecretChanged && this.shouldUpdateExpirationDate()) {
       resource.set("expired", this.getResourceExpirationDate());
     }
 
-    const resourceDto = resource.toResourceDto();
-    const resourceType = this.props.resourceTypes.getFirstById(resource.resourceTypeId);
-    const secretDto = resourceType.isPasswordString() ? resource.toSecretDto().password : resource.toSecretDto();
+    let secretDto = null;
+    if (isSecretChanged || this.props.resource.resource_type_id !== resource.resourceTypeId) {
+      const resourceType = this.props.resourceTypes.getFirstById(resource.resourceTypeId);
+      secretDto = resourceType.isPasswordString() ? resource.toSecretDto().password : resource.toSecretDto();
+    }
 
-    await this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
-  }
-
-  /**
-   * Handle save operation success.
-   * @returns {Promise<void>}
-   */
-  async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been updated successfully"));
-    this.props.resourceWorkspaceContext.onResourceEdited();
-    this.handleClose();
+    await this.props.onSubmit(resource, secretDto);
   }
 
   /*
@@ -607,6 +581,15 @@ class EditResource extends Component {
       resource: this.resourceFormEntity.toDto(),
       resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE,
       resourceType,
+    });
+  }
+
+  /**
+   * Triggered when the dialog should have the focus back.
+   */
+  handleFocusBack() {
+    this.setState({
+      isProcessing: false,
     });
   }
 
@@ -759,6 +742,7 @@ EditResource.propTypes = {
   context: PropTypes.any, // The application context
   resource: PropTypes.object, // The resource to edit
   onClose: PropTypes.func,
+  onSubmit: PropTypes.func, // Optional: when provided (workflow mode), receives the validated ResourceFormEntity instead of saving directly
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   dialogContext: PropTypes.object, // The dialog context
   passwordExpiryContext: PropTypes.object, // The password expiry context
@@ -766,6 +750,7 @@ EditResource.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
+  setFocusBackListener: PropTypes.func, // Event handler for handling focusing back on this dialog
   t: PropTypes.func, // The translation function
 };
 

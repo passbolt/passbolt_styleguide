@@ -84,6 +84,20 @@ describe("GroupPermissionItem", () => {
     });
   });
 
+  describe("Group members visibility toggle", () => {
+    it("displays the toggle when canDisplayGroupMembers is true", () => {
+      expect.assertions(1);
+      const page = new GroupPermissionItemPage(defaultOwnerProps({ canDisplayGroupMembers: true }));
+      expect(page.groupVisibilityToggle).not.toBeNull();
+    });
+
+    it("hides the toggle when canDisplayGroupMembers is false", () => {
+      expect.assertions(1);
+      const page = new GroupPermissionItemPage(defaultOwnerProps({ canDisplayGroupMembers: false }));
+      expect(page.groupVisibilityToggle).toBeNull();
+    });
+  });
+
   describe("States", () => {
     it("adds the permission-updated CSS class when updated is true", () => {
       expect.assertions(1);
