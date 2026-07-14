@@ -64,6 +64,7 @@ function dialogPropsFor(dialogContext, DialogComponent) {
 }
 
 const fakeResourceFormEntity = { toResourceDto: () => ({}), toSecretDto: () => ({}) };
+const fakeSecretDto = { object_type: "PASSBOLT_SECRET_DATA" };
 
 /**
  * Mount the flow and wait until the EditResource dialog is open.
@@ -110,7 +111,7 @@ describe("ResourceEditFlow", () => {
 
       // Submit the form: ShareDialog must follow because the resource is shared.
       const editProps = dialogPropsFor(props.dialogContext, EditResource);
-      await act(() => editProps.onSubmit(fakeResourceFormEntity));
+      await act(() => editProps.onSubmit(fakeResourceFormEntity, fakeSecretDto));
       await waitFor(() => {
         if (page._instance.state.status !== RESOURCE_EDIT_FLOW_STATUS.SHARE_DIALOG_OPEN) {
           throw new Error("ShareDialog not yet opened");
@@ -168,7 +169,7 @@ describe("ResourceEditFlow", () => {
 
       const page = await mountUntilEditOpen(props);
       const editProps = dialogPropsFor(props.dialogContext, EditResource);
-      await act(() => editProps.onSubmit(fakeResourceFormEntity));
+      await act(() => editProps.onSubmit(fakeResourceFormEntity, fakeSecretDto));
       await waitFor(() => {
         if (page._instance.state.status !== RESOURCE_EDIT_FLOW_STATUS.SHARE_DIALOG_OPEN) {
           throw new Error("ShareDialog not yet opened");
@@ -214,7 +215,7 @@ describe("ResourceEditFlow", () => {
 
       const page = await mountUntilEditOpen(props);
       const editProps = dialogPropsFor(props.dialogContext, EditResource);
-      await act(() => editProps.onSubmit(fakeResourceFormEntity));
+      await act(() => editProps.onSubmit(fakeResourceFormEntity, fakeSecretDto));
       await waitFor(() => {
         if (page._instance.state.status !== RESOURCE_EDIT_FLOW_STATUS.SHARE_DIALOG_OPEN) {
           throw new Error("ShareDialog not yet opened");
@@ -255,7 +256,7 @@ describe("ResourceEditFlow", () => {
       jest
         .spyOn(props.context.port, "request")
         .mockImplementation((event) => (event === "passbolt.resources.update" ? { id: props.resource.id } : undefined));
-      await act(() => editProps.onSubmit(fakeResourceFormEntity));
+      await act(() => editProps.onSubmit(fakeResourceFormEntity, fakeSecretDto));
 
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.resources.update",
@@ -292,8 +293,8 @@ describe("ResourceEditFlow", () => {
       );
     });
 
-    it("As LU cancelling ShareDialog should terminate the workflow without updating the resource", async () => {
-      expect.assertions(2);
+    it("As LU cancelling ShareDialog should return to the edit dialog without updating the resource", async () => {
+      expect.assertions(3);
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
       wireSnapshotListeners(props.context.port, {
@@ -305,7 +306,10 @@ describe("ResourceEditFlow", () => {
 
       const page = await mountUntilEditOpen(props);
       const editProps = dialogPropsFor(props.dialogContext, EditResource);
-      await act(() => editProps.onSubmit(fakeResourceFormEntity));
+      // The edit dialog registers a focus-back listener the flow calls to refocus it on share cancel.
+      const focusBackListener = jest.fn();
+      editProps.setFocusBackListener(focusBackListener);
+      await act(() => editProps.onSubmit(fakeResourceFormEntity, fakeSecretDto));
       await waitFor(() => {
         if (page._instance.state.status !== RESOURCE_EDIT_FLOW_STATUS.SHARE_DIALOG_OPEN) {
           throw new Error("ShareDialog not yet opened");
@@ -316,7 +320,9 @@ describe("ResourceEditFlow", () => {
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
       shareProps.onClose();
 
-      expect(props.onStop).toHaveBeenCalledTimes(1);
+      // Cancelling the share step returns to the edit dialog: the workflow is not terminated.
+      expect(focusBackListener).toHaveBeenCalledTimes(1);
+      expect(props.onStop).not.toHaveBeenCalled();
       expect(props.context.port.request).not.toHaveBeenCalledWith(
         "passbolt.resources.update",
         expect.anything(),
