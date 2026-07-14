@@ -122,6 +122,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
           permissions: this.state.snapshot.permissions,
         },
       ],
+      initialChanges: this.state.snapshot.permissions.items,
       initialGroups: this.state.snapshot.groups,
       initialUsers: this.state.snapshot.users,
       onConfirm: this.handleShareDialogConfirm,

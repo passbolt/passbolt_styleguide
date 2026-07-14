@@ -82,6 +82,15 @@ class ShareDialog extends Component {
 
     this.shareChanges = new ShareChanges(this.resources, this.folders);
     const permissions = this.shareChanges.aggregatePermissionsByAro();
+
+    const permissionsMap = new Map(permissions.map((p) => [p.aro.id, p]));
+    this.props.initialChanges?.forEach((change) => {
+      const permission = permissionsMap.get(change.aroForeignKey);
+      if (permission) {
+        this.shareChanges.markPermissionHasChanged(permission);
+      }
+    });
+
     this.setState({ loading: false, name: "", permissions: permissions }, () => {
       // scroll at the top of the permission list
       this.permissionListRef.current.scrollTo(0);
@@ -851,6 +860,7 @@ class ShareDialog extends Component {
 ShareDialog.defaultProps = {
   listMinSize: 4,
   isPermissionConfirmationMode: true,
+  initialChanges: [],
 };
 
 ShareDialog.propTypes = {
@@ -862,6 +872,7 @@ ShareDialog.propTypes = {
   listMinSize: PropTypes.number, // The minimum size to be renderered in the permission list
   isPermissionConfirmationMode: PropTypes.bool, // Is the dialog used to confirm permissions
   initialResources: PropTypes.array, // Controlled mode: the ACOs to seed the dialog with instead of fetching from the API, each as { id, metadata, permission, permissions: PermissionsCollection }
+  initialChanges: PropTypes.array, // Set of permission to mark them as "modified" in the initial list
   acoType: PropTypes.string, // Controlled mode: the ACO type of the seeded entries (PermissionEntity.ACO_RESOURCE, default, or ACO_FOLDER)
   initialGroups: PropTypes.object, // Controlled mode: GroupsCollection providing the groups referenced by the resources' permissions
   initialUsers: PropTypes.object, // Controlled mode: UsersCollection providing the users referenced by the resources' permissions
