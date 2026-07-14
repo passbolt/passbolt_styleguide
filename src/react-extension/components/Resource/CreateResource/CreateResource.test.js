@@ -1288,11 +1288,11 @@ describe("See the Create Resource", () => {
       });
       resolveSubmit();
       await waitFor(() => {
-        if (!props.onClose.mock.calls.length) {
+        if (!props.onSubmit.mock.calls.length) {
           throw new Error("onClose not yet invoked");
         }
       });
-      expect(props.onClose).toHaveBeenCalledTimes(1);
+      expect(props.onSubmit).toHaveBeenCalledTimes(1);
     });
   });
 });
