@@ -61,10 +61,12 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
     this.formSubmitted = false;
     this.shareConfirmed = false;
     this.pendingResourceFormEntity = null;
+    this.createResourceDialogFocusBackListener = null;
     this.handleCreateResourceSubmit = this.handleCreateResourceSubmit.bind(this);
     this.handleCreateResourceClose = this.handleCreateResourceClose.bind(this);
     this.handleShareDialogConfirm = this.handleShareDialogConfirm.bind(this);
     this.handleShareDialogClose = this.handleShareDialogClose.bind(this);
+    this.setFocusBackListener = this.setFocusBackListener.bind(this);
   }
 
   /**
@@ -74,6 +76,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   get defaultState() {
     return {
       status: RESOURCE_CREATION_FLOW_STATUS.INITIALIZING,
+      createResourceDialogId: null,
       snapshot: null,
     };
   }
@@ -100,13 +103,17 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
    * Open the CreateResource dialog and transition to the CREATE_RESOURCE_OPEN state.
    */
   openCreateResourceDialog() {
-    this.props.dialogContext.open(CreateResource, {
+    const createResourceDialogId = this.props.dialogContext.open(CreateResource, {
       resourceType: this.props.resourceType,
       folderParentId: this.props.folderParentId,
       onSubmit: this.handleCreateResourceSubmit,
       onClose: this.handleCreateResourceClose,
+      setFocusBackListener: this.setFocusBackListener,
     });
-    this.setState({ status: RESOURCE_CREATION_FLOW_STATUS.CREATE_RESOURCE_OPEN });
+    this.setState({
+      status: RESOURCE_CREATION_FLOW_STATUS.CREATE_RESOURCE_OPEN,
+      createResourceDialogId: createResourceDialogId,
+    });
   }
 
   /**
@@ -151,6 +158,8 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
         this.props.t("The resource has been added successfully"),
         `/app/passwords/view/${created.id}`,
       );
+      this.closeCreateResourceDialog();
+      this.terminate();
     } catch (error) {
       this.handleError(error);
     }
@@ -162,9 +171,6 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
    * dialog or API call); ignore it. Otherwise it's a cancellation: terminate.
    */
   handleCreateResourceClose() {
-    if (this.formSubmitted) {
-      return;
-    }
     this.terminate();
   }
 
@@ -203,6 +209,8 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
         this.props.t("The resource has been added successfully"),
         `/app/passwords/view/${created.id}`,
       );
+      this.closeCreateResourceDialog();
+      this.terminate();
     } catch (error) {
       this.handleError(error);
     }
@@ -217,7 +225,23 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
     if (this.shareConfirmed) {
       return;
     }
-    this.terminate();
+    this.createResourceDialogFocusBackListener?.();
+  }
+
+  /**
+   * Closes the currently opened create resource dialog.
+   */
+  closeCreateResourceDialog() {
+    this.props.dialogContext.close(this.state.createResourceDialogId);
+  }
+
+  /**
+   * Sets the callback for when the create resource dialog needs to get the focus back.
+   * It's necessary for when the operator cancels the "share" process.
+   * @param {function} listener
+   */
+  setFocusBackListener(listener) {
+    this.createResourceDialogFocusBackListener = listener;
   }
 
   /**

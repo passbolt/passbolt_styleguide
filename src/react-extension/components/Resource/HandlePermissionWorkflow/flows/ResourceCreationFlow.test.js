@@ -343,7 +343,7 @@ describe("ResourceCreationFlow", () => {
       );
     });
 
-    it("As LU cancelling ShareDialog should terminate the workflow without creating the resource", async () => {
+    it("As LU cancelling ShareDialog should go back to the resource creation dialog without creating the resource", async () => {
       expect.assertions(2);
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
@@ -382,7 +382,7 @@ describe("ResourceCreationFlow", () => {
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
       shareProps.onClose();
 
-      expect(props.onStop).toHaveBeenCalledTimes(1);
+      expect(props.onStop).not.toHaveBeenCalled();
       expect(props.context.port.request).not.toHaveBeenCalledWith(
         "passbolt.resources.create",
         expect.anything(),
