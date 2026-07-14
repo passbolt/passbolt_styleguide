@@ -165,9 +165,10 @@ describe("ResourceCreationFlow", () => {
       // the operator's autocomplete addition; the operator's own row is excluded.
       const createCall = props.context.port.request.mock.calls.find(([event]) => event === "passbolt.resources.create");
       const createPermissionsArg = createCall[3];
-      expect(createPermissionsArg).toHaveLength(2);
+      expect(createPermissionsArg).toHaveLength(3);
       expect(createPermissionsArg).toEqual(
         expect.arrayContaining([
+          expect.objectContaining({ is_new: true, aro_foreign_key: operatorId, type: 15 }),
           expect.objectContaining({ is_new: true, aro_foreign_key: readerId, type: 1 }),
           expect.objectContaining({ is_new: true, aro_foreign_key: newAroId, type: 1 }),
         ]),

@@ -196,7 +196,6 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
         // exist yet. The extension stamps real ids server-side as part of its create-then-share
         // orchestration, so passing null here is fine.
         null,
-        this.props.context.loggedInUser.id,
       );
       const created = await this.createResource(this.pendingResourceFormEntity, finalChanges);
       await this.finalizeSuccess(
