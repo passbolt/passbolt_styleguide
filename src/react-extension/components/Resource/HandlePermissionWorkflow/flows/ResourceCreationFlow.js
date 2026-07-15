@@ -256,7 +256,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   createResource(resourceFormEntity, permissionChanges) {
     const resourceDto = resourceFormEntity.toResourceDto();
     const resourceType = resourceFormEntity.resourceTypeId
-      ? this.props.context.resourceTypesCollection?.getFirstById(resourceFormEntity.resourceTypeId)
+      ? resourceFormEntity.resourceTypes?.getFirstById(resourceFormEntity.resourceTypeId)
       : null;
     const isV4PasswordString = resourceType?.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
     const secretDto = isV4PasswordString ? resourceFormEntity.toSecretDto().password : resourceFormEntity.toSecretDto();

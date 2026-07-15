@@ -1,4 +1,4 @@
-# v5.14.2
+# v5.14.3
 
 Fixes:
-- quickaccess first load at opening
+- Creation of a password-string resource
