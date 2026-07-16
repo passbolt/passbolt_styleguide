@@ -1,0 +1,122 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         5.15.0
+ */
+
+import ShadowRootCacheService from "./ShadowRootCacheService";
+import ShadowRootCollectorService from "./ShadowRootCollectorService";
+
+describe("ShadowRootCacheService", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    ShadowRootCacheService._shadowRootsCache = new WeakMap();
+    document.body.innerHTML = "";
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  describe("ShadowRootCacheService::getCachedShadowRoots", () => {
+    it("should collect and cache the shadow roots when there is no cache entry", () => {
+      expect.assertions(3);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      const collectSpy = jest.spyOn(ShadowRootCollectorService, "collectShadowRoots").mockReturnValue([shadowRoot]);
+
+      const result = ShadowRootCacheService.getCachedShadowRoots(document);
+
+      expect(result).toEqual([shadowRoot]);
+      expect(collectSpy).toHaveBeenCalledWith(document);
+      expect(ShadowRootCacheService._shadowRootsCache.get(document)).toBe(result);
+    });
+
+    it("should return the cached shadow roots", () => {
+      expect.assertions(3);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      const collectSpy = jest.spyOn(ShadowRootCollectorService, "collectShadowRoots").mockReturnValue([shadowRoot]);
+
+      const first = ShadowRootCacheService.getCachedShadowRoots(document);
+      const second = ShadowRootCacheService.getCachedShadowRoots(document);
+
+      expect(first).toEqual([shadowRoot]);
+      expect(second).toBe(first);
+      expect(collectSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("should cache empty results", () => {
+      expect.assertions(2);
+
+      const collectSpy = jest.spyOn(ShadowRootCollectorService, "collectShadowRoots").mockReturnValue([]);
+
+      ShadowRootCacheService.getCachedShadowRoots(document);
+      const result = ShadowRootCacheService.getCachedShadowRoots(document);
+
+      expect(result).toEqual([]);
+      expect(collectSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("ShadowRootCacheService::peekCache", () => {
+    it("should return undefined for an element that was never cached", () => {
+      expect.assertions(1);
+
+      const host = document.createElement("div");
+      expect(ShadowRootCacheService.peekCache(host)).toBeUndefined();
+    });
+
+    it("should return the cached shadow roots for a cached element", () => {
+      expect.assertions(1);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      ShadowRootCacheService._shadowRootsCache.set(document, [shadowRoot]);
+
+      expect(ShadowRootCacheService.peekCache(document)).toEqual([shadowRoot]);
+    });
+  });
+
+  describe("ShadowRootCacheService::setCache", () => {
+    it("should directly set the cache", () => {
+      expect.assertions(1);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      ShadowRootCacheService.setCache(document, [shadowRoot]);
+
+      expect(ShadowRootCacheService._shadowRootsCache.get(document)).toEqual([shadowRoot]);
+    });
+  });
+
+  describe("ShadowRootCacheService::invalidate", () => {
+    it("should delete the cache entry for an element", () => {
+      expect.assertions(3);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+
+      expect(ShadowRootCacheService._shadowRootsCache.get(document)).toBeUndefined();
+
+      ShadowRootCacheService._shadowRootsCache.set(document, [shadowRoot]);
+
+      expect(ShadowRootCacheService._shadowRootsCache.get(document)).toEqual([shadowRoot]);
+
+      ShadowRootCacheService.invalidate(document);
+
+      expect(ShadowRootCacheService._shadowRootsCache.get(document)).toBeUndefined();
+    });
+  });
+});
