@@ -291,9 +291,9 @@ class ExtQuickAccess extends React.Component {
    * @returns {Promise<boolean>}
    */
   async checkAuthStatus() {
-    const activeSession = await this.state.port.request("passbolt.auth.check-status");
+    const activeSession = await this.state.port.request("passbolt.auth.find-and-update-active-session");
     const activeSessionEntity = new UserActiveSessionEntity(activeSession);
-    if (!activeSessionEntity.isMfaAuthenticated) {
+    if (activeSessionEntity.isMfaRequired) {
       await this.redirectToMfaAuthentication();
       return;
     }
