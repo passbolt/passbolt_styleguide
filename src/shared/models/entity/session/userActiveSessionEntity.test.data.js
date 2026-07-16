@@ -32,7 +32,7 @@ export const minimalUserActiveSessionDto = (data = {}) => ({
  */
 export const defaultUserActiveSessionDto = (data = {}) => ({
   is_authenticated: true,
-  is_mfa_authenticated: true,
+  is_mfa_required: false,
   is_server_reachable: true,
   type: USER_ACTIVE_SESSION_ONLINE,
   last_logged_in: "2025-08-04T18:58:11+00:00",
