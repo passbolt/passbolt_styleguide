@@ -1037,7 +1037,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param {object} filter The filter
    */
   searchByOffline(filter) {
-    const filteredResources = this.resources.filter((resource) => resource.offline !== undefined);
+    const filteredResources = this.resources.filter((resource) => resource.offline != null);
     this.sort(filteredResources);
     this.setState({ filter, filteredResources });
   }
