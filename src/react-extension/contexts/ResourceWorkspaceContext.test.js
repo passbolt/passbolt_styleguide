@@ -218,8 +218,9 @@ describe("Resource Workspace Context", () => {
       expect.assertions(2);
       const offlineResource = defaultResourceDto({}, { withOffline: true });
       const onlineResource = defaultResourceDto();
+      const notMarkedOfflineResource = defaultResourceDto({ offline: null });
       const customContext = defaultAppContext({
-        resources: [offlineResource, onlineResource],
+        resources: [offlineResource, onlineResource, notMarkedOfflineResource],
       });
       const customPage = new ResourceWorkspaceContextPage(customContext, defaultProps());
       await customPage.goToOffline();
