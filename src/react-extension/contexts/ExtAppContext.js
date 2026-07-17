@@ -106,12 +106,6 @@ class ExtAppContextProvider extends React.Component {
         resourcesIds: [],
       },
 
-      // share dialog
-      shareDialogProps: {
-        foldersIds: null,
-        resourcesIds: null,
-      },
-
       // user dialog
       editUserDialogProps: {
         id: null, // The id of the current user to edit
