@@ -103,8 +103,8 @@ describe("FolderShareFlow", () => {
     expect(shareProps.acoType).toStrictEqual(PermissionEntity.ACO_FOLDER);
     // The single dialog sets and validates at once: editable, not read-only.
     expect(shareProps.readOnly).toBeUndefined();
-    expect(shareProps.initialResources).toHaveLength(1);
-    expect(shareProps.initialResources[0].id).toStrictEqual(folderId);
+    expect(shareProps.initialFolders).toHaveLength(1);
+    expect(shareProps.initialFolders[0].id).toStrictEqual(folderId);
   });
 
   it("As LU confirming the folder permissions should save them (extension propagates to content) without a second dialog", async () => {

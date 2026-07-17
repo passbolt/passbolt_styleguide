@@ -140,6 +140,7 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
       readOnly: this.isShareReadOnly,
       onConfirm: this.handleShareDialogConfirm,
       onClose: this.handleShareDialogClose,
+      ensureOperatorIsOwner: !this.isShareReadOnly,
     });
     this.setState({ status: RESOURCE_EDIT_FLOW_STATUS.SHARE_DIALOG_OPEN });
   }
@@ -190,9 +191,10 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    * read-only mode the deltas are empty, so the resource is simply re-encrypted for its existing
    * recipients.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
+   * @param {boolean} isPersonal true if the resource must be marked as personal
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(permissionChanges) {
+  async handleShareDialogConfirm(permissionChanges, _, isPersonal) {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForResourceEdition(
@@ -205,7 +207,12 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
           ),
         );
       }
-      await this.updateResource(this.pendingResourceFormEntity, this.pendingResourceSecret, permissionChanges);
+      await this.updateResource(
+        this.pendingResourceFormEntity,
+        this.pendingResourceSecret,
+        permissionChanges,
+        isPersonal,
+      );
       await this.finalizeSuccess(
         this.props.t("The resource has been updated successfully"),
         `/app/passwords/view/${this.props.resource.id}`,
@@ -252,11 +259,14 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    * `permissionChanges` is non-empty the extension re-encrypts the secret and runs the share
    * orchestration in the same call (single passphrase prompt, single progress dialog).
    * @param {ResourceFormEntity} resourceFormEntity
+   * @param {Object|null} secretDto the updated secret is any
    * @param {Array<object>} [permissionChanges] Operator-confirmed permission changes.
+   * @param {boolean} [isPersonal=true] must be true when the resource is actually personal
    * @returns {Promise<Object>} The updated resource DTO.
    */
-  updateResource(resourceFormEntity, secretDto, permissionChanges) {
+  updateResource(resourceFormEntity, secretDto, permissionChanges, isPersonal = true) {
     const resourceDto = resourceFormEntity.toResourceDto();
+    resourceDto.personal = isPersonal;
     return this.permissionServiceWorkerService.updateResource(resourceDto, secretDto, permissionChanges);
   }
 }

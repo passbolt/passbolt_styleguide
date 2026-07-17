@@ -28,7 +28,6 @@ export function defaultProps(data = {}) {
     onUpdate: jest.fn(),
     onDelete: jest.fn(),
     onToggleGroupMemberVisibility: jest.fn(),
-    canDisplayGroupMembers: true,
     ...data,
   };
 }
