@@ -20,8 +20,8 @@ import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
 import EditResource from "../../EditResource/EditResource";
 import ShareDialog from "../../../Share/ShareDialog";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
-import { RESOURCE_TYPE_PASSWORD_STRING_SLUG } from "../../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import { AbstractPermissionFlow, PERMISSION_FLOW_STATUS } from "./AbstractPermissionFlow";
+import { withResourceWorkspace } from "../../../../contexts/ResourceWorkspaceContext";
 
 /**
  * Status values driving the resource-edition flow state machine.
@@ -61,10 +61,13 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
     this.formSubmitted = false;
     this.shareConfirmed = false;
     this.pendingResourceFormEntity = null;
+    this.pendingResourceSecret = null;
+    this.editResourceDialogFocusBackListener = null;
     this.handleEditResourceSubmit = this.handleEditResourceSubmit.bind(this);
     this.handleEditResourceClose = this.handleEditResourceClose.bind(this);
     this.handleShareDialogConfirm = this.handleShareDialogConfirm.bind(this);
     this.handleShareDialogClose = this.handleShareDialogClose.bind(this);
+    this.setFocusBackListener = this.setFocusBackListener.bind(this);
   }
 
   /**
@@ -74,6 +77,7 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
   get defaultState() {
     return {
       status: RESOURCE_EDIT_FLOW_STATUS.INITIALIZING,
+      editResourceDialogId: null,
       snapshot: null,
     };
   }
@@ -108,12 +112,13 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    * Open the EditResource dialog and transition to the EDIT_RESOURCE_OPEN state.
    */
   openEditResourceDialog() {
-    this.props.dialogContext.open(EditResource, {
+    const editResourceDialogId = this.props.dialogContext.open(EditResource, {
       resource: this.props.resource,
       onSubmit: this.handleEditResourceSubmit,
       onClose: this.handleEditResourceClose,
+      setFocusBackListener: this.setFocusBackListener,
     });
-    this.setState({ status: RESOURCE_EDIT_FLOW_STATUS.EDIT_RESOURCE_OPEN });
+    this.setState({ status: RESOURCE_EDIT_FLOW_STATUS.EDIT_RESOURCE_OPEN, editResourceDialogId: editResourceDialogId });
   }
 
   /**
@@ -135,6 +140,7 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
       readOnly: this.isShareReadOnly,
       onConfirm: this.handleShareDialogConfirm,
       onClose: this.handleShareDialogClose,
+      ensureOperatorIsOwner: !this.isShareReadOnly,
     });
     this.setState({ status: RESOURCE_EDIT_FLOW_STATUS.SHARE_DIALOG_OPEN });
   }
@@ -146,19 +152,22 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    * @param {ResourceFormEntity} resourceFormEntity The validated form entity.
    * @returns {Promise<void>}
    */
-  async handleEditResourceSubmit(resourceFormEntity) {
+  async handleEditResourceSubmit(resourceFormEntity, secretDto) {
     this.formSubmitted = true;
     this.pendingResourceFormEntity = resourceFormEntity;
+    this.pendingResourceSecret = secretDto;
     try {
       if (this.isShared(this.state.snapshot)) {
         this.openShareDialog();
         return;
       }
-      await this.updateResource(resourceFormEntity);
+      await this.updateResource(resourceFormEntity, secretDto);
       await this.finalizeSuccess(
         this.props.t("The resource has been updated successfully"),
         `/app/passwords/view/${this.props.resource.id}`,
       );
+      this.closeEditResourceDialog();
+      this.terminate();
     } catch (error) {
       this.handleError(error);
     }
@@ -170,9 +179,6 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    * or API call); ignore it. Otherwise it's a cancellation: terminate.
    */
   handleEditResourceClose() {
-    if (this.formSubmitted) {
-      return;
-    }
     this.terminate();
   }
 
@@ -185,9 +191,10 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    * read-only mode the deltas are empty, so the resource is simply re-encrypted for its existing
    * recipients.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
+   * @param {boolean} isPersonal true if the resource must be marked as personal
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(permissionChanges) {
+  async handleShareDialogConfirm(permissionChanges, _, isPersonal) {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForResourceEdition(
@@ -200,11 +207,19 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
           ),
         );
       }
-      await this.updateResource(this.pendingResourceFormEntity, permissionChanges);
+      await this.updateResource(
+        this.pendingResourceFormEntity,
+        this.pendingResourceSecret,
+        permissionChanges,
+        isPersonal,
+      );
       await this.finalizeSuccess(
         this.props.t("The resource has been updated successfully"),
         `/app/passwords/view/${this.props.resource.id}`,
       );
+      this.closeEditResourceDialog();
+      this.terminate();
+      this.props.resourceWorkspaceContext.onResourceEdited();
     } catch (error) {
       this.handleError(error);
     }
@@ -219,7 +234,24 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
     if (this.shareConfirmed) {
       return;
     }
-    this.terminate();
+    this.editResourceDialogFocusBackListener?.();
+  }
+
+  /**
+   * Closes the currently opened edit resource dialog.
+   */
+  closeEditResourceDialog() {
+    this.pendingResourceSecret = null;
+    this.props.dialogContext.close(this.state.editResourceDialogId);
+  }
+
+  /**
+   * Sets the callback for when the edit resource dialog needs to get the focus back.
+   * It's necessary for when the operator cancels the "share" process.
+   * @param {function} listener
+   */
+  setFocusBackListener(listener) {
+    this.editResourceDialogFocusBackListener = listener;
   }
 
   /**
@@ -227,16 +259,14 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    * `permissionChanges` is non-empty the extension re-encrypts the secret and runs the share
    * orchestration in the same call (single passphrase prompt, single progress dialog).
    * @param {ResourceFormEntity} resourceFormEntity
+   * @param {Object|null} secretDto the updated secret is any
    * @param {Array<object>} [permissionChanges] Operator-confirmed permission changes.
+   * @param {boolean} [isPersonal=true] must be true when the resource is actually personal
    * @returns {Promise<Object>} The updated resource DTO.
    */
-  updateResource(resourceFormEntity, permissionChanges) {
+  updateResource(resourceFormEntity, secretDto, permissionChanges, isPersonal = true) {
     const resourceDto = resourceFormEntity.toResourceDto();
-    const resourceType = resourceFormEntity.resourceTypeId
-      ? this.props.context.resourceTypesCollection?.getFirstById(resourceFormEntity.resourceTypeId)
-      : null;
-    const isV4PasswordString = resourceType?.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
-    const secretDto = isV4PasswordString ? resourceFormEntity.toSecretDto().password : resourceFormEntity.toSecretDto();
+    resourceDto.personal = isPersonal;
     return this.permissionServiceWorkerService.updateResource(resourceDto, secretDto, permissionChanges);
   }
 }
@@ -244,6 +274,9 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
 ResourceEditFlow.propTypes = {
   ...AbstractPermissionFlow.propTypes,
   resource: PropTypes.object.isRequired, // the resource DTO being edited (carries the operator's own permission)
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
 };
 
-export default withAppContext(withDialog(withActionFeedback(withRouter(withTranslation("common")(ResourceEditFlow)))));
+export default withAppContext(
+  withDialog(withActionFeedback(withRouter(withResourceWorkspace(withTranslation("common")(ResourceEditFlow))))),
+);

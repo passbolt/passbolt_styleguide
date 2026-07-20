@@ -1,3 +1,8 @@
-# v5.14.0
+# v5.14.4
 
-Version bump beofre code freeze for the v5.14.0
+Fixes:
+- Edit mode in PCD
+    - Ensures the operator remains owner
+    - Ensures the operator in updated mode can submit the form
+    - Invert HTTP request to avoid information leak
+- Fixes resource creation, resource update and folder creation redirections

@@ -66,6 +66,8 @@ export function defaultProps(data = {}) {
     onClose: jest.fn(),
     dialogContext: defaultDialogContext(),
     clipboardContext: defaultClipboardContext(),
+    setFocusBackListener: jest.fn(),
+    onSubmit: jest.fn(),
   };
 
   return Object.assign(defaultData, data);

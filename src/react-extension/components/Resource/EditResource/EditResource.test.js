@@ -282,7 +282,7 @@ describe("See the Create Resource", () => {
       });
 
       it("As a signed-in user I should be able to delete secret custom fields without a resource type mutation", async () => {
-        expect.assertions(6);
+        expect.assertions(5);
 
         const props = defaultProps();
         mockContextRequest(props.context, () => ({
@@ -330,19 +330,12 @@ describe("See the Create Resource", () => {
         };
 
         // expectations
-        expect(props.context.port.request).toHaveBeenCalledWith(
-          "passbolt.resources.update",
-          resourceDtoExpected,
-          secretDtoExpected,
-        );
-        expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-          "The resource has been updated successfully",
-        );
-        expect(props.onClose).toHaveBeenCalled();
+        expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+        expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
       });
 
       it("As LU operated by a workflow (onSubmit provided) I should delegate the save and not call passbolt.resources.update", async () => {
-        expect.assertions(3);
+        expect.assertions(2);
 
         const onSubmit = jest.fn();
         const props = defaultProps({ onSubmit });
@@ -355,12 +348,7 @@ describe("See the Create Resource", () => {
 
         // The workflow owns the API call: EditResource hands it the form entity and closes.
         expect(onSubmit).toHaveBeenCalledTimes(1);
-        expect(props.context.port.request).not.toHaveBeenCalledWith(
-          "passbolt.resources.update",
-          expect.anything(),
-          expect.anything(),
-        );
-        expect(props.onClose).toHaveBeenCalled();
+        expect(props.onSubmit).not.toHaveBeenCalledWith(expect.anything(), expect.anything());
       });
 
       it("As a signed-in user I should be able to delete secret with a resource type mutation", async () => {
@@ -1351,7 +1339,7 @@ describe("See the Create Resource", () => {
 
         const error = new Error("unexpected error");
         jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
-        jest.spyOn(props.context.port, "request").mockImplementation(() => {
+        props.onSubmit.mockImplementation(() => {
           throw error;
         });
 
@@ -1466,7 +1454,7 @@ describe("See the Create Resource", () => {
 
         const error = new Error("unexpected error");
         jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
-        jest.spyOn(props.context.port, "request").mockImplementation(() => {
+        props.onSubmit.mockImplementation(() => {
           throw error;
         });
 
@@ -1554,7 +1542,7 @@ describe("See the Create Resource", () => {
 
   describe("should save a secret to a resource", () => {
     it("As a signed-in user I should be able to save a resource v5 default", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const expirationPeriod = 15;
       const passwordExpirySettings = overridenPasswordExpirySettingsEntityDto({
         default_expiry_period: expirationPeriod,
@@ -1607,19 +1595,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v5 default with no expiry update", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const expirationPeriod = 15;
       const passwordExpirySettings = overridenPasswordExpirySettingsEntityDto({
         default_expiry_period: expirationPeriod,
@@ -1673,19 +1654,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v5 default with totp empty", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps({
         resource: defaultResourceDto({
           resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
@@ -1732,19 +1706,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v5 default with totp and custom fields", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps();
       mockContextRequest(props.context, () => ({ password: "password" }));
       let page;
@@ -1778,12 +1745,10 @@ describe("See the Create Resource", () => {
       await page.click(page.addUri);
       await page.fillInput(page.getAdditionalUri(1), "https://www.passbolt.com/docs");
 
-      const customFields = {};
-      mockContextRequest(
-        props.context,
-        jest.fn(async (message, arg1) => Object.assign(customFields, arg1.metadata.custom_fields)),
-      );
       await page.click(page.saveButton);
+
+      const resourceDto = props.onSubmit.mock.calls[0][0].toResourceDto();
+      const customFields = resourceDto.metadata.custom_fields;
 
       const resourceDtoExpected = {
         id: props.resource.id,
@@ -1832,19 +1797,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v5 default with totp with password null", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps();
       mockContextRequest(props.context, () => ({ object_type: SECRET_DATA_OBJECT_TYPE, password: "password" }));
       let page;
@@ -1892,19 +1850,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v5 totp after password, custom fields and note deleted", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps();
       mockContextRequest(props.context, () => ({
         object_type: SECRET_DATA_OBJECT_TYPE,
@@ -1954,19 +1905,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v5 standalone custom fields", async () => {
-      expect.assertions(4);
+      expect.assertions(3);
       const props = defaultCustomFieldsProps();
       mockContextRequest(props.context, () => ({
         object_type: SECRET_DATA_OBJECT_TYPE,
@@ -1986,12 +1930,10 @@ describe("See the Create Resource", () => {
 
       await page.fillInput(page.name, "v5 standalone custom fields");
 
-      const customFields = {};
-      mockContextRequest(
-        props.context,
-        jest.fn(async (message, arg1) => Object.assign(customFields, arg1.metadata.custom_fields)),
-      );
       await page.click(page.saveButton);
+
+      const resourceDto = props.onSubmit.mock.calls[0][0].toResourceDto();
+      const customFields = resourceDto.metadata.custom_fields;
 
       const resourceDtoExpected = {
         id: props.resource.id,
@@ -2037,19 +1979,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v4 default with password deleted", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps({
         resource: defaultResourceDto({
           metadata: defaultResourceMetadataDto({
@@ -2096,19 +2031,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v4 default totp with password deleted", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps({
         resource: defaultResourceDto({
           metadata: defaultResourceMetadataDto({
@@ -2161,19 +2089,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v4 default totp", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps({
         resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING }),
       });
@@ -2215,19 +2136,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to upgrade and save a resource v4 default to v5 default", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps({
         resource: defaultResourceDto({
           metadata: defaultResourceMetadataDto({
@@ -2269,19 +2183,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v4 default without changing secret, only resource type", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps({
         resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING }),
       });
@@ -2319,19 +2226,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v4 totp after password and note deleted", async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const props = defaultProps({
         resource: defaultResourceDto({
           metadata: defaultResourceMetadataDto({
@@ -2377,19 +2277,12 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As a signed-in user I should be able to save a resource v4 password and note after standalone totp deleted", async () => {
-      expect.assertions(4);
+      expect.assertions(3);
       const props = defaultProps({
         resource: defaultResourceDto({
           metadata: defaultResourceMetadataDto({ resource_type_id: TEST_RESOURCE_TYPE_TOTP, description: null }),
@@ -2439,15 +2332,8 @@ describe("See the Create Resource", () => {
       };
 
       // expectations
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        resourceDtoExpected,
-        secretDtoExpected,
-      );
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
-        "The resource has been updated successfully",
-      );
-      expect(props.onClose).toHaveBeenCalled();
+      expect(props.onSubmit.mock.calls[0][0].toResourceDto()).toStrictEqual(resourceDtoExpected);
+      expect(props.onSubmit.mock.calls[0][1]).toStrictEqual(secretDtoExpected);
     });
 
     it("As LU I should see an error dialog if the submit operation fails for an unexpected reason", async () => {
@@ -2462,7 +2348,7 @@ describe("See the Create Resource", () => {
       await act(async () => (page = new EditResourcePage(props)));
 
       const error = new PassboltApiFetchError("Jest simulate API error.");
-      jest.spyOn(props.context.port, "request").mockImplementation(() => {
+      props.onSubmit.mockImplementation(() => {
         throw error;
       });
       jest.spyOn(props.dialogContext, "open").mockImplementationOnce(jest.fn);
