@@ -14,10 +14,12 @@
 
 import ShadowRootCacheService from "./ShadowRootCacheService";
 import ShadowRootCollectorService from "./ShadowRootCollectorService";
+import ShadowMutationObserverService from "./ShadowMutationObserverService";
 
 describe("ShadowRootCacheService", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(ShadowMutationObserverService, "observeShadowRootChanges").mockImplementation();
 
     ShadowRootCacheService._shadowRootsCache = new WeakMap();
     document.body.innerHTML = "";
@@ -29,7 +31,7 @@ describe("ShadowRootCacheService", () => {
 
   describe("ShadowRootCacheService::getCachedShadowRoots", () => {
     it("should collect and cache the shadow roots when there is no cache entry", () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
@@ -40,6 +42,7 @@ describe("ShadowRootCacheService", () => {
       expect(result).toEqual([shadowRoot]);
       expect(collectSpy).toHaveBeenCalledWith(document);
       expect(ShadowRootCacheService._shadowRootsCache.get(document)).toBe(result);
+      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledWith(document);
     });
 
     it("should return the cached shadow roots", () => {
@@ -56,6 +59,7 @@ describe("ShadowRootCacheService", () => {
       expect(first[0]).toBe(shadowRoot);
       expect(second).toBe(first);
       expect(collectSpy).toHaveBeenCalledTimes(1);
+      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledTimes(1);
     });
 
     it("should cache empty results", () => {

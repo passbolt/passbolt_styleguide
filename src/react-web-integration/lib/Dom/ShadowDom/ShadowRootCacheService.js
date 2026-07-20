@@ -13,6 +13,7 @@
  */
 
 import ShadowRootCollectorService from "./ShadowRootCollectorService";
+import ShadowMutationObserverService from "./ShadowMutationObserverService";
 
 class ShadowRootCacheService {
   /**
@@ -36,6 +37,7 @@ class ShadowRootCacheService {
     if (!shadowRoots) {
       shadowRoots = ShadowRootCollectorService.collectShadowRoots(element);
       ShadowRootCacheService._shadowRootsCache.set(element, shadowRoots);
+      ShadowMutationObserverService.observeShadowRootChanges(element);
     }
 
     return shadowRoots;
