@@ -22,6 +22,9 @@ const port = mockPort(storage);
 port.addRequestListener("passbolt.resources.find-all-by-ids-for-display-permissions", () => resources);
 
 const context = defaultAppContext({
+  shareDialogProps: {
+    resourcesIds: resources.map((resource) => resource.id),
+  },
   port: port,
 });
 

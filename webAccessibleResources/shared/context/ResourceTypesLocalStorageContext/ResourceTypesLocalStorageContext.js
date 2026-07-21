@@ -83,8 +83,8 @@ export class ResourceTypesLocalStorageContextProvider extends React.Component {
    * Handles update of the resource types in the local storage.
    */
   handleStorageChange(changes) {
-    if (changes[this.storageKey] && changes[this.storageKey].newValue) {
-      this.set(changes[this.storageKey].newValue);
+    if (changes.resourceTypes) {
+      this.set(changes.resourceTypes.newValue);
     }
   }
 

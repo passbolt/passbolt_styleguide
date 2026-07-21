@@ -86,7 +86,6 @@ class CreateResource extends Component {
     this.rejectCreationConfirmation = this.rejectCreationConfirmation.bind(this);
     this.consumePasswordEntropyError = this.consumePasswordEntropyError.bind(this);
     this.save = this.save.bind(this);
-    this.props.setFocusBackListener(this.handleFocusBack.bind(this));
   }
 
   /**
@@ -411,6 +410,7 @@ class CreateResource extends Component {
    */
   async save(resource) {
     await this.props.onSubmit(resource);
+    this.handleClose();
   }
 
   /*
@@ -499,15 +499,6 @@ class CreateResource extends Component {
       resource: this.resourceFormEntity.toDto(),
       resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE,
       resourceType,
-    });
-  }
-
-  /**
-   * Triggered when the dialog should have the focus back.
-   */
-  handleFocusBack() {
-    this.setState({
-      isProcessing: false,
     });
   }
 
@@ -621,7 +612,6 @@ CreateResource.propTypes = {
   passwordPoliciesContext: PropTypes.object, // The password policy context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourceType: PropTypes.instanceOf(ResourceTypeEntity).isRequired, // The resource types entity
-  setFocusBackListener: PropTypes.func, // Event handler for handling focusing back on this dialog
   t: PropTypes.func, // The translation function
 };
 

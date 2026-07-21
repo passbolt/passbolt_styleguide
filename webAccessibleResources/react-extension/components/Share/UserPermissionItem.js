@@ -185,11 +185,9 @@ class UserPermissionItem extends Component {
           />
         </div>
 
-        {!this.props.isReadOnly && (
-          <div className="actions">
-            <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
-          </div>
-        )}
+        <div className="actions">
+          <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
+        </div>
       </li>
     );
   }
@@ -205,7 +203,6 @@ UserPermissionItem.propTypes = {
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   permissionType: PropTypes.number,
-  isReadOnly: PropTypes.bool,
   t: PropTypes.func, // The translation function
 };
 

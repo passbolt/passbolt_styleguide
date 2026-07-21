@@ -97,10 +97,10 @@ export class FolderShareFlow extends AbstractPermissionFlow {
    */
   openShareDialog() {
     this.props.dialogContext.open(ShareDialog, {
-      initialFolders: [
+      initialResources: [
         {
           id: this.folderId,
-          metadata: { name: this.props.folder.name ?? "" },
+          metadata: { name: this.props.folder.metadata?.name ?? this.props.folder.name ?? "" },
           permission: this.props.folder.permission,
           permissions: this.state.folderSnapshot.permissions,
         },
@@ -110,7 +110,6 @@ export class FolderShareFlow extends AbstractPermissionFlow {
       initialUsers: this.state.folderSnapshot.users,
       onConfirm: this.handleShareDialogConfirm,
       onClose: this.handleShareDialogClose,
-      isPermissionConfirmationMode: false,
     });
     this.setState({ status: FOLDER_SHARE_FLOW_STATUS.SHARE_DIALOG_OPEN });
   }
@@ -121,10 +120,9 @@ export class FolderShareFlow extends AbstractPermissionFlow {
    * the operator confirmed the existing permissions as-is: nothing is sent. The extension re-derives
    * the propagation to the folder's content.
    * @param {Array<object>} folderPermissionChanges The DTO-shape folder permission changes.
-   * @param {boolean} canOperatorRead true if the operator can still read the modified folder
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(folderPermissionChanges, canOperatorRead) {
+  async handleShareDialogConfirm(folderPermissionChanges) {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForFolderShare(this.folderId);
@@ -138,8 +136,10 @@ export class FolderShareFlow extends AbstractPermissionFlow {
       if (folderPermissionChanges.length) {
         await this.permissionServiceWorkerService.saveFoldersPermissions(this.folderId, folderPermissionChanges);
       }
-      const redirectUrl = canOperatorRead ? `/app/folders/view/${this.folderId}` : `/app/passwords/`;
-      await this.finalizeSuccess(this.props.t("The permissions have been changed successfully."), redirectUrl);
+      await this.finalizeSuccess(
+        this.props.t("The permissions have been changed successfully."),
+        `/app/folders/view/${this.folderId}`,
+      );
     } catch (error) {
       this.handleError(error);
     }

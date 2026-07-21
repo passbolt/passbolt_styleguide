@@ -102,11 +102,16 @@ class DisplaySubscriptionKey extends React.Component {
    * Open the EditSubscriptionKey dialog to upload a new subscription key (CE to PRO upgrade).
    */
   handleAddSubscriptionKey() {
-    this.props.dialogContext.open(EditSubscriptionKey, {
-      title: this.props.t("New subscription key"),
-      onSave: this.handleSaveSubscriptionKey,
-      warning: this.translate("You and your team will be disconnected at the end of the process."),
-    });
+    if (this.hasEditionPlugin()) {
+      this.props.dialogContext.open(EditSubscriptionKey, {
+        title: this.props.t("New subscription key"),
+        onSave: this.handleSaveSubscriptionKey,
+        warning: this.translate("You and your team will be disconnected at the end of the process."),
+      });
+    } else {
+      // Backward compatibility with API < v5.13.0
+      this.handleUpdateKey();
+    }
   }
 
   /**
@@ -377,7 +382,7 @@ class DisplaySubscriptionKey extends React.Component {
                     </button>
                   </>
                 )}
-                {this.props.context.siteSettings.isCommunityEdition && this.hasEditionPlugin() && (
+                {this.props.context.siteSettings.isCommunityEdition && (
                   <>
                     <button className="button primary form" type="button" onClick={this.handleAddSubscriptionKey}>
                       <Trans>Upload subscription key</Trans>

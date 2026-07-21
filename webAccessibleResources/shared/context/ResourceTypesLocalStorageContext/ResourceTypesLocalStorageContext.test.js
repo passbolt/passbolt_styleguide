@@ -80,7 +80,7 @@ describe("ResourceTypesLocalStorageContext", () => {
       const expectedResourceTypes = resourceTypesCollectionDto();
 
       contextProvider.handleStorageChange({
-        [contextProvider.storageKey]: {
+        resourceTypes: {
           newValue: expectedResourceTypes,
         },
       });
@@ -112,7 +112,7 @@ describe("ResourceTypesLocalStorageContext", () => {
       const expectedResourceTypes = resourceTypesCollectionDto();
 
       contextProvider.handleStorageChange({
-        [contextProvider.storageKey]: {
+        resourceTypes: {
           newValue: expectedResourceTypes,
         },
       });
@@ -127,7 +127,7 @@ describe("ResourceTypesLocalStorageContext", () => {
       mockComponentSetState(contextProvider);
 
       contextProvider.handleStorageChange({
-        [contextProvider.storageKey]: {
+        resourceTypes: {
           newValue: [],
         },
       });

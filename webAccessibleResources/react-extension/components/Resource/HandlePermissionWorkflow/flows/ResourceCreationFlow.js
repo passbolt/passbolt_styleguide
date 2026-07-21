@@ -61,12 +61,10 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
     this.formSubmitted = false;
     this.shareConfirmed = false;
     this.pendingResourceFormEntity = null;
-    this.createResourceDialogFocusBackListener = null;
     this.handleCreateResourceSubmit = this.handleCreateResourceSubmit.bind(this);
     this.handleCreateResourceClose = this.handleCreateResourceClose.bind(this);
     this.handleShareDialogConfirm = this.handleShareDialogConfirm.bind(this);
     this.handleShareDialogClose = this.handleShareDialogClose.bind(this);
-    this.setFocusBackListener = this.setFocusBackListener.bind(this);
   }
 
   /**
@@ -76,7 +74,6 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   get defaultState() {
     return {
       status: RESOURCE_CREATION_FLOW_STATUS.INITIALIZING,
-      createResourceDialogId: null,
       snapshot: null,
     };
   }
@@ -103,17 +100,13 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
    * Open the CreateResource dialog and transition to the CREATE_RESOURCE_OPEN state.
    */
   openCreateResourceDialog() {
-    const createResourceDialogId = this.props.dialogContext.open(CreateResource, {
+    this.props.dialogContext.open(CreateResource, {
       resourceType: this.props.resourceType,
       folderParentId: this.props.folderParentId,
       onSubmit: this.handleCreateResourceSubmit,
       onClose: this.handleCreateResourceClose,
-      setFocusBackListener: this.setFocusBackListener,
     });
-    this.setState({
-      status: RESOURCE_CREATION_FLOW_STATUS.CREATE_RESOURCE_OPEN,
-      createResourceDialogId: createResourceDialogId,
-    });
+    this.setState({ status: RESOURCE_CREATION_FLOW_STATUS.CREATE_RESOURCE_OPEN });
   }
 
   /**
@@ -129,7 +122,6 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
           permissions: this.state.snapshot.permissions,
         },
       ],
-      initialChanges: this.state.snapshot.permissions.items,
       initialGroups: this.state.snapshot.groups,
       initialUsers: this.state.snapshot.users,
       onConfirm: this.handleShareDialogConfirm,
@@ -158,8 +150,6 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
         this.props.t("The resource has been added successfully"),
         `/app/passwords/view/${created.id}`,
       );
-      this.closeCreateResourceDialog();
-      this.terminate();
     } catch (error) {
       this.handleError(error);
     }
@@ -171,6 +161,9 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
    * dialog or API call); ignore it. Otherwise it's a cancellation: terminate.
    */
   handleCreateResourceClose() {
+    if (this.formSubmitted) {
+      return;
+    }
     this.terminate();
   }
 
@@ -181,10 +174,9 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
    * delegate the operator-only create + share orchestration to the extension via a single
    * `passbolt.resources.create` call carrying both the secret and the permission changes.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
-   * @param {boolean} canOperatorRead true if the operator can still read the modified resource
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(permissionChanges, canOperatorRead) {
+  async handleShareDialogConfirm(permissionChanges) {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForResourceCreation(
@@ -204,12 +196,13 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
         // exist yet. The extension stamps real ids server-side as part of its create-then-share
         // orchestration, so passing null here is fine.
         null,
+        this.props.context.loggedInUser.id,
       );
       const created = await this.createResource(this.pendingResourceFormEntity, finalChanges);
-      const redirectUrl = canOperatorRead ? `/app/passwords/view/${created.id}` : `/app/passwords/`;
-      await this.finalizeSuccess(this.props.t("The resource has been added successfully"), redirectUrl);
-      this.closeCreateResourceDialog();
-      this.terminate();
+      await this.finalizeSuccess(
+        this.props.t("The resource has been added successfully"),
+        `/app/passwords/view/${created.id}`,
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -224,23 +217,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
     if (this.shareConfirmed) {
       return;
     }
-    this.createResourceDialogFocusBackListener?.();
-  }
-
-  /**
-   * Closes the currently opened create resource dialog.
-   */
-  closeCreateResourceDialog() {
-    this.props.dialogContext.close(this.state.createResourceDialogId);
-  }
-
-  /**
-   * Sets the callback for when the create resource dialog needs to get the focus back.
-   * It's necessary for when the operator cancels the "share" process.
-   * @param {function} listener
-   */
-  setFocusBackListener(listener) {
-    this.createResourceDialogFocusBackListener = listener;
+    this.terminate();
   }
 
   /**
@@ -255,7 +232,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   createResource(resourceFormEntity, permissionChanges) {
     const resourceDto = resourceFormEntity.toResourceDto();
     const resourceType = resourceFormEntity.resourceTypeId
-      ? resourceFormEntity.resourceTypes?.getFirstById(resourceFormEntity.resourceTypeId)
+      ? this.props.context.resourceTypesCollection?.getFirstById(resourceFormEntity.resourceTypeId)
       : null;
     const isV4PasswordString = resourceType?.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
     const secretDto = isV4PasswordString ? resourceFormEntity.toSecretDto().password : resourceFormEntity.toSecretDto();

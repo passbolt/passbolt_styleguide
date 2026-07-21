@@ -378,6 +378,34 @@ describe("DisplaySubscriptionKeyPage", () => {
       expect(page.downgradeToCommunityButton).toBeNull();
     });
 
+    it("As CE AD the Upload subscription key button should be rendered", async () => {
+      expect.assertions(2);
+
+      const noPluginProps = propsWithoutEditionPlugin();
+      jest.spyOn(noPluginProps.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
+      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
+      await screen.findByText("Details");
+
+      expect(page.toolbarActionsUpdateButton).not.toBeNull();
+      expect(page.toolbarActionsUpdateButton.textContent.trim()).toBe("Upload subscription key");
+    });
+
+    it("As CE AD clicking Upload subscription key should fallback to the legacy update flow", async () => {
+      expect.assertions(2);
+
+      const noPluginProps = propsWithoutEditionPlugin();
+      jest.spyOn(noPluginProps.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
+      page = new DisplaySubscriptionKeyPage(noPluginProps.context, noPluginProps);
+      await screen.findByText("Details");
+
+      await page.updateKey();
+
+      expect(noPluginProps.dialogContext.open).toHaveBeenCalledWith(EditSubscriptionKey);
+      expect(noPluginProps.context.setContext).toHaveBeenCalledWith({
+        editSubscriptionKey: { key: mockSubscription.data },
+      });
+    });
+
     it("As AD the Details and Plans sections should still be rendered", async () => {
       expect.assertions(3);
 

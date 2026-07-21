@@ -165,10 +165,9 @@ describe("ResourceCreationFlow", () => {
       // the operator's autocomplete addition; the operator's own row is excluded.
       const createCall = props.context.port.request.mock.calls.find(([event]) => event === "passbolt.resources.create");
       const createPermissionsArg = createCall[3];
-      expect(createPermissionsArg).toHaveLength(3);
+      expect(createPermissionsArg).toHaveLength(2);
       expect(createPermissionsArg).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ is_new: true, aro_foreign_key: operatorId, type: 15 }),
           expect.objectContaining({ is_new: true, aro_foreign_key: readerId, type: 1 }),
           expect.objectContaining({ is_new: true, aro_foreign_key: newAroId, type: 1 }),
         ]),
@@ -343,7 +342,7 @@ describe("ResourceCreationFlow", () => {
       );
     });
 
-    it("As LU cancelling ShareDialog should go back to the resource creation dialog without creating the resource", async () => {
+    it("As LU cancelling ShareDialog should terminate the workflow without creating the resource", async () => {
       expect.assertions(2);
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
@@ -382,7 +381,7 @@ describe("ResourceCreationFlow", () => {
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
       shareProps.onClose();
 
-      expect(props.onStop).not.toHaveBeenCalled();
+      expect(props.onStop).toHaveBeenCalledTimes(1);
       expect(props.context.port.request).not.toHaveBeenCalledWith(
         "passbolt.resources.create",
         expect.anything(),

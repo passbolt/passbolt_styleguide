@@ -113,10 +113,9 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
    * dialog emits deltas already targeting the real resources, so they are saved as-is. An empty
    * delta set means the operator confirmed the existing permissions as-is: nothing is sent.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
-   * @param {boolean} canOperatorRead true if the operator can still read the modified resource
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(permissionChanges, canOperatorRead) {
+  async handleShareDialogConfirm(permissionChanges) {
     this.shareConfirmed = true;
     try {
       const currentSnapshots = await this.permissionSnapshotService.buildSnapshotForResourcesShare(this.resourcesIds);
@@ -131,8 +130,10 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
       if (permissionChanges.length) {
         await this.permissionServiceWorkerService.saveResourcesPermissions(this.resourcesIds, permissionChanges);
       }
-      const redirectUrl = canOperatorRead ? `/app/passwords/view/${this.resourcesIds[0]}` : `/app/passwords/`;
-      await this.finalizeSuccess(this.props.t("The permissions have been changed successfully."), redirectUrl);
+      await this.finalizeSuccess(
+        this.props.t("The permissions have been changed successfully."),
+        `/app/passwords/view/${this.resourcesIds[0]}`,
+      );
     } catch (error) {
       this.handleError(error);
     }

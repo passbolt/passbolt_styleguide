@@ -66,6 +66,7 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
     onGoToAdministrationContentTypesEncryptedMetadataRequested: jest.fn(),
     onGoToAdministrationMetadataGettingStartedRequested: jest.fn(),
+    onGoToAdministrationOfflineRequested: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }

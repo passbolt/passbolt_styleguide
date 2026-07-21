@@ -38,6 +38,7 @@ class ColumnsResourceSettingCollection extends ColumnsSettingCollection {
       { id: "expired", label: "Expiry", position: 10, show: true },
       { id: "modified", label: "Modified", position: 11, show: true },
       { id: "location", label: "Location", position: 12, show: true },
+      { id: "offline_mode", label: "Offline Mode", position: 13, show: false },
     ]);
   }
 }

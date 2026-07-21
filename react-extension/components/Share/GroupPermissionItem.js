@@ -47,9 +47,12 @@ class GroupPermissionItem extends Component {
    * @returns {string}
    */
   getClassName() {
-    let className = "row has-caret";
+    let className = "row";
     if (this.props.updated) {
       className += " permission-updated";
+    }
+    if (this.props.canDisplayGroupMembers) {
+      className += " has-caret";
     }
     return className;
   }
@@ -108,17 +111,19 @@ class GroupPermissionItem extends Component {
     const isInputDisabled = this.props.disabled;
     return (
       <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
-        <button
-          type="button"
-          className="link no-border group-visibility-toggle"
-          onClick={this.handleToggleGroupMemberVisibility}
-        >
-          {this.props.shouldDisplayGroupMembers ? (
-            <CaretDownSVG className="baseline svg-icon" />
-          ) : (
-            <CaretRightSVG className="baseline svg-icon" />
-          )}
-        </button>
+        {this.props.canDisplayGroupMembers && (
+          <button
+            type="button"
+            className="link no-border group-visibility-toggle"
+            onClick={this.handleToggleGroupMemberVisibility}
+          >
+            {this.props.shouldDisplayGroupMembers ? (
+              <CaretDownSVG className="baseline svg-icon" />
+            ) : (
+              <CaretRightSVG className="baseline svg-icon" />
+            )}
+          </button>
+        )}
         <GroupAvatar group={this.props.group} />
 
         <div className="aro">
@@ -152,11 +157,9 @@ class GroupPermissionItem extends Component {
           />
         </div>
 
-        {!this.props.isReadOnly && (
-          <div className="actions">
-            <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
-          </div>
-        )}
+        <div className="actions">
+          <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
+        </div>
       </li>
     );
   }
@@ -164,6 +167,7 @@ class GroupPermissionItem extends Component {
 
 GroupPermissionItem.defaultProps = {
   shouldDisplayGroupMembers: false,
+  canDisplayGroupMembers: false,
 };
 
 GroupPermissionItem.propTypes = {
@@ -177,8 +181,8 @@ GroupPermissionItem.propTypes = {
   onDelete: PropTypes.func,
   onToggleGroupMemberVisibility: PropTypes.func,
   shouldDisplayGroupMembers: PropTypes.bool,
+  canDisplayGroupMembers: PropTypes.bool,
   permissionType: PropTypes.number,
-  isReadOnly: PropTypes.bool,
   t: PropTypes.func, // The translation function
 };
 
