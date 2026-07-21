@@ -108,10 +108,10 @@ class AskInFormMenuDisplay extends React.Component {
    * Check the user authentication status
    */
   async checkAuthenticationStatus() {
-    const activeSession = await this.props.context.port.request("passbolt.in-form-cta.check-status");
-    const activeSessionEntity = new UserActiveSessionEntity(activeSession);
+    const activeSessionDto = await this.props.context.port.request("passbolt.in-form-cta.get-or-find-active-session");
+    const activeSessionEntity = new UserActiveSessionEntity(activeSessionDto);
 
-    const isActive = activeSessionEntity.isAuthenticated && activeSessionEntity.isMfaAuthenticated;
+    const isActive = activeSessionEntity.isAuthenticated && !activeSessionEntity.isMfaRequired;
 
     const suggestedResourcesCount = isActive
       ? await this.props.context.port.request("passbolt.in-form-cta.suggested-resources", this.props.context.fieldType)

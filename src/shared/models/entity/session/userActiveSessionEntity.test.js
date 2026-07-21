@@ -31,9 +31,9 @@ describe("UserActiveSession", () => {
       assertEntityProperty.required(UserActiveSessionEntity, "is_authenticated");
     });
 
-    it("validates is_mfa_authenticated property", () => {
-      assertEntityProperty.boolean(UserActiveSessionEntity, "is_mfa_authenticated");
-      assertEntityProperty.notRequired(UserActiveSessionEntity, "is_mfa_authenticated");
+    it("validates is_mfa_required property", () => {
+      assertEntityProperty.boolean(UserActiveSessionEntity, "is_mfa_required");
+      assertEntityProperty.notRequired(UserActiveSessionEntity, "is_mfa_required");
     });
 
     it("validates is_server_reachable property", () => {
@@ -78,7 +78,7 @@ describe("UserActiveSession", () => {
       const entity = new UserActiveSessionEntity(dto);
 
       expect(entity._props.is_authenticated).toStrictEqual(dto.is_authenticated);
-      expect(entity._props.is_mfa_authenticated).toStrictEqual(dto.is_mfa_authenticated);
+      expect(entity._props.is_mfa_required).toStrictEqual(dto.is_mfa_required);
       expect(entity._props.is_server_reachable).toStrictEqual(dto.is_server_reachable);
       expect(entity._props.type).toStrictEqual(dto.type);
       expect(entity._props.last_logged_in).toStrictEqual(dto.last_logged_in);
@@ -104,21 +104,21 @@ describe("UserActiveSession", () => {
     });
   });
 
-  describe("::isMfaAuthenticated", () => {
-    it("get is_mfa_authenticated property value", () => {
+  describe("::isMfaRequired", () => {
+    it("get is_mfa_required property value", () => {
       expect.assertions(2);
       let entity = new UserActiveSessionEntity(defaultUserActiveSessionDto());
-      expect(entity.isMfaAuthenticated).toBeTruthy();
-      entity = new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_mfa_authenticated: false }));
-      expect(entity.isMfaAuthenticated).toBeFalsy();
+      expect(entity.isMfaRequired).toBeFalsy();
+      entity = new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_mfa_required: true }));
+      expect(entity.isMfaRequired).toBeTruthy();
     });
 
-    it("set is_mfa_authenticated property value", () => {
+    it("set is_mfa_required property value", () => {
       expect.assertions(2);
       let entity = new UserActiveSessionEntity(defaultUserActiveSessionDto());
-      expect(entity.isMfaAuthenticated).toBeTruthy();
-      entity.isMfaAuthenticated = false;
-      expect(entity.isMfaAuthenticated).toBeFalsy();
+      expect(entity.isMfaRequired).toBeFalsy();
+      entity.isMfaRequired = true;
+      expect(entity.isMfaRequired).toBeTruthy();
     });
   });
 
@@ -189,6 +189,34 @@ describe("UserActiveSession", () => {
       const entity = new UserActiveSessionEntity(defaultUserActiveSessionDto());
       entity.lastSeenOnline = last_seen_online;
       expect(entity.lastSeenOnline).toStrictEqual(last_seen_online);
+    });
+  });
+
+  describe("::isSessionOnline", () => {
+    it("should return true if online", () => {
+      expect.assertions(1);
+      const entity = new UserActiveSessionEntity(defaultUserActiveSessionDto());
+      expect(entity.isSessionOnline).toBeTruthy();
+    });
+
+    it("should return false if not online", () => {
+      expect.assertions(1);
+      const entity = new UserActiveSessionEntity(defaultUserActiveSessionDto({ type: USER_ACTIVE_SESSION_OFFLINE }));
+      expect(entity.isSessionOnline).toBeFalsy();
+    });
+  });
+
+  describe("::isSessionOffline", () => {
+    it("should return true if offline", () => {
+      expect.assertions(1);
+      const entity = new UserActiveSessionEntity(defaultUserActiveSessionDto({ type: USER_ACTIVE_SESSION_OFFLINE }));
+      expect(entity.isSessionOffline).toBeTruthy();
+    });
+
+    it("should return false if not offline", () => {
+      expect.assertions(1);
+      const entity = new UserActiveSessionEntity(defaultUserActiveSessionDto());
+      expect(entity.isSessionOffline).toBeFalsy();
     });
   });
 });

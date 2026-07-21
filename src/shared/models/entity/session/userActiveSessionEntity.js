@@ -33,7 +33,7 @@ class UserActiveSessionEntity extends EntityV2 {
           type: "boolean",
           format: "uuid",
         },
-        is_mfa_authenticated: {
+        is_mfa_required: {
           type: "boolean",
           format: "uuid",
         },
@@ -75,8 +75,8 @@ class UserActiveSessionEntity extends EntityV2 {
    * Get the is mfa authenticated
    * @returns {boolean}
    */
-  get isMfaAuthenticated() {
-    return this._props.is_mfa_authenticated;
+  get isMfaRequired() {
+    return this._props.is_mfa_required;
   }
 
   /**
@@ -111,6 +111,22 @@ class UserActiveSessionEntity extends EntityV2 {
     return this._props.last_seen_online;
   }
 
+  /**
+   * Get is session online
+   * @return {boolean}
+   */
+  get isSessionOnline() {
+    return this._props.type === USER_ACTIVE_SESSION_ONLINE;
+  }
+
+  /**
+   * Get is session offline
+   * @return {boolean}
+   */
+  get isSessionOffline() {
+    return this._props.type === USER_ACTIVE_SESSION_OFFLINE;
+  }
+
   /*
    * ==================================================
    * Dynamic properties setters
@@ -128,15 +144,11 @@ class UserActiveSessionEntity extends EntityV2 {
 
   /**
    * Set the is mfa authenticated
-   * @param {boolean} isMfaAuthenticated
+   * @param {boolean} isMfaRequired
    */
-  set isMfaAuthenticated(isMfaAuthenticated) {
-    EntitySchema.validateProp(
-      "is_mfa_authenticated",
-      isMfaAuthenticated,
-      this.cachedSchema.properties.is_mfa_authenticated,
-    );
-    this._props.is_mfa_authenticated = isMfaAuthenticated;
+  set isMfaRequired(isMfaRequired) {
+    EntitySchema.validateProp("is_mfa_required", isMfaRequired, this.cachedSchema.properties.is_mfa_required);
+    this._props.is_mfa_required = isMfaRequired;
   }
 
   /**
