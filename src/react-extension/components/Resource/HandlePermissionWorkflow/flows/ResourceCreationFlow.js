@@ -82,21 +82,10 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Component did mount: build the snapshot (when applicable) and open the resource-creation form.
-   * @returns {Promise<void>}
+   * Component did mount: open the resource-creation form.
    */
-  async componentDidMount() {
-    try {
-      if (this.props.folderParentId) {
-        const snapshot = await this.permissionSnapshotService.buildSnapshotForResourceCreation(
-          this.props.folderParentId,
-        );
-        this.setState({ snapshot });
-      }
-      this.openCreateResourceDialog();
-    } catch (error) {
-      this.handleError(error);
-    }
+  componentDidMount() {
+    this.openCreateResourceDialog();
   }
 
   /**
@@ -140,8 +129,10 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
 
   /**
    * Handle the operator's submission of the resource-creation form.
-   * If the parent folder is shared, dispatches ShareDialog so the operator confirms the permission
-   * set first. Otherwise creates the resource immediately.
+   * Captures the parent folder's permission snapshot (when there is one) now that the operator has
+   * committed, so the fetch runs while the form dialog's submit button spins. If the parent folder is
+   * shared, dispatches ShareDialog so the operator confirms the permission set first. Otherwise
+   * creates the resource immediately.
    * @param {ResourceFormEntity} resourceFormEntity The validated form entity.
    * @returns {Promise<void>}
    */
@@ -149,8 +140,11 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
     this.formSubmitted = true;
     this.pendingResourceFormEntity = resourceFormEntity;
     try {
-      if (this.isShared(this.state.snapshot)) {
-        this.openShareDialog();
+      const snapshot = this.props.folderParentId
+        ? await this.permissionSnapshotService.buildSnapshotForResourceCreation(this.props.folderParentId)
+        : null;
+      if (this.isShared(snapshot)) {
+        this.setState({ snapshot }, () => this.openShareDialog());
         return;
       }
       const created = await this.createResource(resourceFormEntity);

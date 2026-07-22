@@ -390,6 +390,16 @@ describe("ResourceCreationFlow", () => {
       let page;
       await act(() => (page = new ResourceCreationFlowTestPage(props)));
       await waitFor(() => {
+        if (page._instance.state.status !== RESOURCE_CREATION_FLOW_STATUS.CREATE_RESOURCE_OPEN) {
+          throw new Error("CreateResource not yet opened");
+        }
+      });
+
+      // The snapshot is built on submit, so the keyring-sync failure surfaces there.
+      const createProps = dialogPropsFor(props.dialogContext, CreateResource);
+      const fakeResourceFormEntity = { toResourceDto: () => ({}), toSecretDto: () => ({}) };
+      await act(() => createProps.onSubmit(fakeResourceFormEntity));
+      await waitFor(() => {
         if (page._instance.state.status !== RESOURCE_CREATION_FLOW_STATUS.ERROR) {
           throw new Error("Workflow not yet in error state");
         }

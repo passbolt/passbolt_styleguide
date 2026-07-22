@@ -95,17 +95,10 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Component did mount: build the snapshot from the resource and open the edition form.
-   * @returns {Promise<void>}
+   * Component did mount: open the edition form.
    */
-  async componentDidMount() {
-    try {
-      const snapshot = await this.permissionSnapshotService.buildSnapshotForResourceEdition(this.props.resource.id);
-      this.setState({ snapshot });
-      this.openEditResourceDialog();
-    } catch (error) {
-      this.handleError(error);
-    }
+  componentDidMount() {
+    this.openEditResourceDialog();
   }
 
   /**
@@ -147,8 +140,10 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
 
   /**
    * Handle the operator's submission of the resource-edition form.
-   * If the resource is shared, dispatches ShareDialog so the operator confirms the recipient set
-   * first (the secret is re-encrypted for them). Otherwise updates the resource immediately.
+   * Captures the resource's permission snapshot now that the operator has committed, so the fetch
+   * runs while the form dialog's submit button spins. If the resource is shared, dispatches
+   * ShareDialog so the operator confirms the recipient set first (the secret is re-encrypted for
+   * them). Otherwise updates the resource immediately.
    * @param {ResourceFormEntity} resourceFormEntity The validated form entity.
    * @returns {Promise<void>}
    */
@@ -157,8 +152,9 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
     this.pendingResourceFormEntity = resourceFormEntity;
     this.pendingResourceSecret = secretDto;
     try {
-      if (this.isShared(this.state.snapshot)) {
-        this.openShareDialog();
+      const snapshot = await this.permissionSnapshotService.buildSnapshotForResourceEdition(this.props.resource.id);
+      if (this.isShared(snapshot)) {
+        this.setState({ snapshot }, () => this.openShareDialog());
         return;
       }
       await this.updateResource(resourceFormEntity, secretDto);
