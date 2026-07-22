@@ -1,8 +1,8 @@
-# v5.14.4
+# v5.14.5
 
 Fixes:
-- Edit mode in PCD
-    - Ensures the operator remains owner
-    - Ensures the operator in updated mode can submit the form
-    - Invert HTTP request to avoid information leak
-- Fixes resource creation, resource update and folder creation redirections
+- PCD:
+    - initial data loading trigger
+    - group information loading
+- Workflow:
+    - ensures only 1 workflow of a given type can be started
