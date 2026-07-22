@@ -92,16 +92,9 @@ describe("ResourceEditFlow", () => {
         ],
       });
 
-      // Spy before mounting: the snapshot is built during componentDidMount.
+      // Spy before submitting: the snapshot is built when the operator submits the form.
       jest.spyOn(props.context.port, "request");
       const page = await mountUntilEditOpen(props);
-
-      // The snapshot must be built from the resource itself (ACO_RESOURCE), not a parent folder.
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
-        props.resource.id,
-        PermissionEntity.ACO_RESOURCE,
-      );
 
       // Submit the form: ShareDialog must follow because the resource is shared.
       const editProps = dialogPropsFor(props.dialogContext, EditResource);
@@ -111,6 +104,13 @@ describe("ResourceEditFlow", () => {
           throw new Error("ShareDialog not yet opened");
         }
       });
+
+      // The snapshot must be built from the resource itself (ACO_RESOURCE), not a parent folder.
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
+        props.resource.id,
+        PermissionEntity.ACO_RESOURCE,
+      );
 
       // Owner → the dialog is editable (not read-only), seeded from the snapshot.
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
@@ -324,8 +324,11 @@ describe("ResourceEditFlow", () => {
         throw new Error("Keyring sync failed");
       });
 
-      let page;
-      await act(() => (page = new ResourceEditFlowTestPage(props)));
+      const page = await mountUntilEditOpen(props);
+
+      // The snapshot is built on submit, so the keyring-sync failure surfaces there.
+      const editProps = dialogPropsFor(props.dialogContext, EditResource);
+      await act(() => editProps.onSubmit(fakeResourceFormEntity, fakeSecretDto));
       await waitFor(() => {
         if (page._instance.state.status !== RESOURCE_EDIT_FLOW_STATUS.ERROR) {
           throw new Error("Workflow not yet in error state");
