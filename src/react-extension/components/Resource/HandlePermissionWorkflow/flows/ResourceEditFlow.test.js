@@ -24,21 +24,19 @@ import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
 import { KEYRING_SYNC_EVENT } from "../../../../../shared/services/serviceWorker/keyring/keyringServiceWorkerService";
 import { PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY } from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
-import { GROUPS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
-import { USERS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/user/userServiceWorkerService";
+import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
 /**
- * Wire the four port events the snapshot service relies on.
+ * Wire the three port events the snapshot service relies on.
  */
-function wireSnapshotListeners(port, { permissions = [], groups = [], users = [] } = {}) {
+function wireSnapshotListeners(port, { permissions = [], groups = [] } = {}) {
   port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
   port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => permissions);
-  port.addRequestListener(GROUPS_GET_BY_IDS, () => groups);
-  port.addRequestListener(USERS_GET_BY_IDS, () => users);
+  port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => groups);
 }
 
 /**
@@ -91,10 +89,6 @@ describe("ResourceEditFlow", () => {
         permissions: [
           resourcePermissionDto(operatorId, props.resource.id),
           resourcePermissionDto(readerId, props.resource.id, PermissionEntity.PERMISSION_READ),
-        ],
-        users: [
-          { id: operatorId, username: "operator@passbolt.com" },
-          { id: readerId, username: "reader@passbolt.com" },
         ],
       });
 
@@ -161,11 +155,7 @@ describe("ResourceEditFlow", () => {
         findCallCount += 1;
         return findCallCount === 1 ? initialPermissionsDto : driftedPermissionsDto;
       });
-      props.context.port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
-      props.context.port.addRequestListener(USERS_GET_BY_IDS, () => [
-        { id: operatorId, username: "operator@passbolt.com" },
-        { id: uuidv4(), username: "reader@passbolt.com" },
-      ]);
+      props.context.port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
 
       const page = await mountUntilEditOpen(props);
       const editProps = dialogPropsFor(props.dialogContext, EditResource);
@@ -207,10 +197,6 @@ describe("ResourceEditFlow", () => {
           resourcePermissionDto(ownerId, props.resource.id),
           resourcePermissionDto(operatorId, props.resource.id, PermissionEntity.PERMISSION_UPDATE),
         ],
-        users: [
-          { id: ownerId, username: "owner@passbolt.com" },
-          { id: operatorId, username: "operator@passbolt.com" },
-        ],
       });
 
       const page = await mountUntilEditOpen(props);
@@ -248,7 +234,6 @@ describe("ResourceEditFlow", () => {
       const operatorId = props.context.loggedInUser.id;
       wireSnapshotListeners(props.context.port, {
         permissions: [resourcePermissionDto(operatorId, props.resource.id)],
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       await mountUntilEditOpen(props);
@@ -276,7 +261,6 @@ describe("ResourceEditFlow", () => {
       const operatorId = props.context.loggedInUser.id;
       wireSnapshotListeners(props.context.port, {
         permissions: [resourcePermissionDto(operatorId, props.resource.id)],
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       await mountUntilEditOpen(props);

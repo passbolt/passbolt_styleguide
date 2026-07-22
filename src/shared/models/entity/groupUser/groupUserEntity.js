@@ -13,10 +13,24 @@
  */
 import Validator from "validator";
 import EntityV2 from "../abstract/entityV2";
+import UserEntity from "../user/userEntity";
 
 const ENTITY_NAME = "GroupUser";
 
 class GroupUserEntity extends EntityV2 {
+  /**
+   * @inheritDoc
+   */
+  constructor(dto, options = {}) {
+    super(dto, options);
+
+    // Association
+    if (this._props.user) {
+      this._user = new UserEntity(this._props.user, { ...options, clone: false });
+      delete this._props.user;
+    }
+  }
+
   /**
    * Get groupUser entity schema
    * @returns {Object} schema
@@ -46,20 +60,44 @@ class GroupUserEntity extends EntityV2 {
           format: "date-time",
         },
         /*
-         * NO ASSOCIATIONS
-         * users or groups are omitted
-         * to avoid circular dependencies
+         * Associated models
+         * The user schema is declared as a generic object to break the infinite schema recursion
+         * UserEntity -> GroupsUsersCollection -> GroupUserEntity -> UserEntity. The user is fully
+         * validated by the UserEntity constructor when the association is built.
          */
+        user: {
+          type: "object",
+        },
       },
     };
   }
 
   /**
    * Return a DTO ready to be sent to API
+   * @param {object} [contain] optional for example {user: {profile: true}}
    * @returns {Object}
    */
-  toDto() {
-    return Object.assign({}, this._props);
+  toDto(contain) {
+    const result = Object.assign({}, this._props);
+    if (!contain) {
+      return result;
+    }
+    if (this._user && contain.user) {
+      if (contain.user === true) {
+        result.user = this._user.toDto();
+      } else {
+        result.user = this._user.toDto(contain.user);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Customizes JSON stringification behavior
+   * @returns {*}
+   */
+  toJSON() {
+    return this.toDto(GroupUserEntity.ALL_CONTAIN_OPTIONS);
   }
 
   /*
@@ -107,6 +145,14 @@ class GroupUserEntity extends EntityV2 {
     return this._props.created || null;
   }
 
+  /**
+   * Get the group user associated user
+   * @returns {(UserEntity|null)} user
+   */
+  get user() {
+    return this._user || null;
+  }
+
   /*
    * ==================================================
    * Dynamic properties setters
@@ -144,7 +190,7 @@ class GroupUserEntity extends EntityV2 {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {};
+    return { user: UserEntity.ALL_CONTAIN_OPTIONS };
   }
 }
 

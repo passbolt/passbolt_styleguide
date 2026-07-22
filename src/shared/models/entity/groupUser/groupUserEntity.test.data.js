@@ -45,3 +45,8 @@ export function groupsWithoutOwnership(data = {}) {
 
   return Object.assign(groupsUsers, data);
 }
+
+export const defaultGroupUserWithUserDto = (data = {}) => {
+  const user = defaultUserDto({}, { withGpgkey: true });
+  return defaultGroupUser({ user_id: user.id, user, ...data });
+};
