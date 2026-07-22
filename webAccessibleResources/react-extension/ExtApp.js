@@ -248,7 +248,6 @@ class ExtApp extends Component {
                                                   "/app/administration/user-provisionning/scim",
                                                   "/app/administration/secret-history",
                                                   "/app/administration/ce-downgrade",
-                                                  "/app/administration/offline",
                                                 ]}
                                               >
                                                 <AdministrationWorkspaceContextProvider>

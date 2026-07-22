@@ -22,7 +22,6 @@ import { AdministrationWorkspaceMenuTypes } from "./AdministrationWorkspaceConte
 import { defaultAppContext } from "./ExtAppContext.test.data";
 import { waitFor } from "@testing-library/dom";
 import { waitForTrue } from "../../../test/utils/waitFor";
-import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -368,31 +367,6 @@ describe("Administration Workspace Context", () => {
       await waitFor(() => {});
       await page.goToAccountRecoverySettings();
       expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY);
-    });
-
-    it("should set selectedAdministration to Offline when route is /app/administration/offline and user has permission", async () => {
-      const props = defaultProps({
-        location: {
-          pathname: "/app/administration/offline",
-          key: "unique-key",
-        },
-        rbacContext: {
-          canIUseAction: () => true,
-        },
-        context: {
-          ...context,
-          siteSettings: {
-            canIUse: () => true,
-            isCommunityEdition: true,
-          },
-        },
-      });
-
-      let page;
-      await act(async () => (page = new AdministrationWorkspaceContextPage(context, props)));
-
-      await page.goToOffline();
-      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.OFFLINE);
     });
 
     it("should set selectedAdministration to SSO when route is /app/administration/sso-teasing and user has permission", async () => {

@@ -13,7 +13,6 @@
  */
 
 import MockPort from "../../../react-extension/test/mock/MockPort";
-import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
  * Context with an unanthenticated user
@@ -27,12 +26,10 @@ export const getContextWithUnauthenticatedUser = (data) => {
     ...data,
   };
 
-  context.port.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () =>
-    defaultUserActiveSessionDto({
-      is_authenticated: false,
-      is_mfa_required: false,
-    }),
-  );
+  context.port.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+    is_authenticated: false,
+    is_mfa_authenticated: true,
+  }));
 
   return context;
 };
@@ -46,12 +43,10 @@ export const getContextWithAuthenticatedUser = () => {
     fieldType: "username",
   });
 
-  context.port.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () =>
-    defaultUserActiveSessionDto({
-      is_authenticated: true,
-      is_mfa_required: false,
-    }),
-  );
+  context.port.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+    is_authenticated: true,
+    is_mfa_authenticated: true,
+  }));
 
   return context;
 };

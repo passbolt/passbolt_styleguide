@@ -42,8 +42,7 @@ import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataT
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import ActionAbortedMissingMetadataKeysPage from "./components/ActionAbortedMissingMetadataKeysPage/ActionAbortedMissingMetadataKeysPage";
 import RbacServiceWorkerService from "../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
-import UserActiveSessionEntity from "../shared/models/entity/session/userActiveSessionEntity";
-import OfflineSettingsLocalStorageContextProvider from "../shared/context/offline/OfflineSettingsLocalStorageContext";
+import OnlineSessionEntity from "../shared/models/entity/session/onlineSessionEntity";
 
 const SEARCH_VISIBLE_ROUTES = [
   "/webAccessibleResources/quickaccess/home",
@@ -291,9 +290,9 @@ class ExtQuickAccess extends React.Component {
    * @returns {Promise<boolean>}
    */
   async checkAuthStatus() {
-    const activeSession = await this.state.port.request("passbolt.auth.find-and-update-active-session");
-    const activeSessionEntity = new UserActiveSessionEntity(activeSession);
-    if (activeSessionEntity.isMfaRequired) {
+    const activeSession = await this.state.port.request("passbolt.auth.check-status");
+    const activeSessionEntity = new OnlineSessionEntity(activeSession);
+    if (!activeSessionEntity.isMfaAuthenticated) {
       await this.redirectToMfaAuthentication();
       return;
     }
@@ -499,95 +498,93 @@ class ExtQuickAccess extends React.Component {
                           <ResourceLocalStorageProvider>
                             <MetadataTypesSettingsLocalStorageContextProvider>
                               <MetadataKeysSettingsLocalStorageContextProvider>
-                                <OfflineSettingsLocalStorageContextProvider>
-                                  <PasswordPoliciesContext>
-                                    <PrepareResourceContextProvider>
-                                      <PasswordExpirySettingsContextProvider>
-                                        <AnimatedSwitch>
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/resources/group"
-                                            component={FilterResourcesByGroupPage}
-                                          />
-                                          <PrivateRoute
-                                            path="/webAccessibleResources/quickaccess/resources/group/:id"
-                                            component={FilterResourcesByGroupPage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/resources/tag"
-                                            component={FilterResourcesByTagPage}
-                                          />
-                                          <PrivateRoute
-                                            path="/webAccessibleResources/quickaccess/resources/tag/:id"
-                                            component={FilterResourcesByTagPage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/resources/favorite"
-                                            component={FilterResourcesByFavoritePage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/resources/owned-by-me"
-                                            component={FilterResourcesByItemsIOwnPage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/resources/recently-modified"
-                                            component={FilterResourcesByRecentlyModifiedPage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/resources/shared-with-me"
-                                            component={FilterResourcesBySharedWithMePage}
-                                          />
-                                          <PrivateRoute
-                                            path="/webAccessibleResources/quickaccess/resources/create"
-                                            component={ResourceCreatePage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/resources/confirm-create"
-                                            component={ConfirmCreatePage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/resources/autosave"
-                                            component={SaveResource}
-                                          />
-                                          <PrivateRoute
-                                            path="/webAccessibleResources/quickaccess/resources/view/:id"
-                                            component={ResourceViewPage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/more-filters"
-                                            component={MoreFiltersPage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/setup-extension-in-progress"
-                                            component={SetupExtensionInProgress}
-                                          />
-                                          <PrivateRoute
-                                            path="/webAccessibleResources/quickaccess/resources/generate-password"
-                                            component={GeneratePasswordPage}
-                                          />
-                                          <PrivateRoute
-                                            path="/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys"
-                                            component={ActionAbortedMissingMetadataKeysPage}
-                                          />
-                                          <PrivateRoute
-                                            exact
-                                            path="/webAccessibleResources/quickaccess/home"
-                                            component={HomePage}
-                                          />
-                                        </AnimatedSwitch>
-                                      </PasswordExpirySettingsContextProvider>
-                                    </PrepareResourceContextProvider>
-                                  </PasswordPoliciesContext>
-                                </OfflineSettingsLocalStorageContextProvider>
+                                <PasswordPoliciesContext>
+                                  <PrepareResourceContextProvider>
+                                    <PasswordExpirySettingsContextProvider>
+                                      <AnimatedSwitch>
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/group"
+                                          component={FilterResourcesByGroupPage}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/group/:id"
+                                          component={FilterResourcesByGroupPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/tag"
+                                          component={FilterResourcesByTagPage}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/tag/:id"
+                                          component={FilterResourcesByTagPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/favorite"
+                                          component={FilterResourcesByFavoritePage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/owned-by-me"
+                                          component={FilterResourcesByItemsIOwnPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/recently-modified"
+                                          component={FilterResourcesByRecentlyModifiedPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/shared-with-me"
+                                          component={FilterResourcesBySharedWithMePage}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/create"
+                                          component={ResourceCreatePage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/confirm-create"
+                                          component={ConfirmCreatePage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/autosave"
+                                          component={SaveResource}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/view/:id"
+                                          component={ResourceViewPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/more-filters"
+                                          component={MoreFiltersPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/setup-extension-in-progress"
+                                          component={SetupExtensionInProgress}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/generate-password"
+                                          component={GeneratePasswordPage}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys"
+                                          component={ActionAbortedMissingMetadataKeysPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/home"
+                                          component={HomePage}
+                                        />
+                                      </AnimatedSwitch>
+                                    </PasswordExpirySettingsContextProvider>
+                                  </PrepareResourceContextProvider>
+                                </PasswordPoliciesContext>
                               </MetadataKeysSettingsLocalStorageContextProvider>
                             </MetadataTypesSettingsLocalStorageContextProvider>
                           </ResourceLocalStorageProvider>

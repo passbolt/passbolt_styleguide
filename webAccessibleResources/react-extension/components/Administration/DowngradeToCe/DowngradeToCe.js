@@ -41,7 +41,7 @@ import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import SSOSVG from "../../../../img/svg/sso.svg";
 import TagsSVG from "../../../../img/svg/tags.svg";
 
-export const LEARN_MORE_URL = "https://www.passbolt.com/docs";
+export const LEARN_MORE_URL = "https://www.passbolt.com/docs/hosting/manage-plan/downgrade";
 
 class DowngradeToCe extends React.Component {
   /**

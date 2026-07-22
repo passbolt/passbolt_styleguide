@@ -19,7 +19,6 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
 import PropTypes from "prop-types";
 import { defaultAppContext } from "../../../react-extension/contexts/ExtAppContext.test.data";
 import { createRoot } from "react-dom/client";
-import { USER_ACTIVE_SESSION_ONLINE } from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 export default {
   title: "Components/WebIntegration/AskInFormMenuDisplay",
@@ -74,10 +73,9 @@ const parameters = {
 };
 
 const inactiveMockedPort = new MockPort();
-inactiveMockedPort.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () => ({
+inactiveMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
   is_authenticated: false,
-  is_mfa_required: false,
-  type: USER_ACTIVE_SESSION_ONLINE,
+  is_mfa_authenticated: true,
 }));
 export const Inactive = Template.bind({});
 Inactive.args = {
@@ -86,10 +84,9 @@ Inactive.args = {
 Inactive.parameters = parameters;
 
 const activeWithNoSuggestionMockedPort = new MockPort();
-activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () => ({
+activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
   is_authenticated: true,
-  is_mfa_required: false,
-  type: USER_ACTIVE_SESSION_ONLINE,
+  is_mfa_authenticated: true,
 }));
 activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 0);
 export const ActiveWithNoSuggestion = Template.bind({});
@@ -99,10 +96,9 @@ ActiveWithNoSuggestion.args = {
 ActiveWithNoSuggestion.parameters = parameters;
 
 const activeWithOneSuggestionMockedPort = new MockPort();
-activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () => ({
+activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
   is_authenticated: true,
-  is_mfa_required: false,
-  type: USER_ACTIVE_SESSION_ONLINE,
+  is_mfa_authenticated: true,
 }));
 activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 1);
 export const ActiveWithOneSuggestion = Template.bind({});

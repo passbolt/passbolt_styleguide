@@ -54,7 +54,6 @@ import DeleteSVG from "../../../../img/svg/delete.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
-import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
 import SecretHistorySVG from "../../../../img/svg/history.svg";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
@@ -64,8 +63,6 @@ import Logger from "../../../../shared/utils/logger";
 import { withSecretRevisionsSettings } from "../../../../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import DisplayResourceSecretHistory from "../../SecretHistory/DisplayResourceSecretHistory";
-import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
-import OfflineModeServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeServiceWorkerService";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -77,7 +74,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.offlineModeServiceWorkerService = new OfflineModeServiceWorkerService(props.context.port);
     this.bindCallbacks();
   }
 
@@ -98,7 +94,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleSetExpiryDateClickEvent = this.handleSetExpiryDateClickEvent.bind(this);
     this.handleClearSelectionClick = this.handleClearSelectionClick.bind(this);
     this.handleSecretHistoryClick = this.handleSecretHistoryClick.bind(this);
-    this.handleOfflineClickEvent = this.handleOfflineClickEvent.bind(this);
   }
 
   /**
@@ -135,33 +130,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleSecretHistoryClick() {
     this.props.dialogContext.open(DisplayResourceSecretHistory, { resource: this.selectedResources[0] });
-  }
-
-  /**
-   * Handle the click on the offline menu item to mark or remove the resource from offline availability.
-   * @returns {Promise<void>}
-   */
-  async handleOfflineClickEvent() {
-    const resource = this.selectedResources[0];
-    const isAvailableOffline = Boolean(resource.offline);
-    try {
-      if (isAvailableOffline) {
-        await this.offlineModeServiceWorkerService.unmarkItem(resource.offline.id);
-        await this.props.actionFeedbackContext.displaySuccess(
-          this.translate("The resource is no longer available offline."),
-        );
-      } else {
-        await this.offlineModeServiceWorkerService.markResource(resource.id);
-        await this.props.actionFeedbackContext.displaySuccess(
-          this.translate("The resource has been made available offline."),
-        );
-      }
-    } catch (error) {
-      Logger.error(error);
-      await this.props.actionFeedbackContext.displayError(
-        this.translate("Unable to update the offline availability of the resource."),
-      );
-    }
   }
 
   /**
@@ -514,12 +482,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   hasMoreActionAllowed() {
-    return (
-      this.canExport() ||
-      (this.canOverridePasswordExpiry() && this.canUpdate()) ||
-      this.canViewSecretHistory() ||
-      this.canUseOffline()
-    );
+    return this.canExport() || (this.canOverridePasswordExpiry() && this.canUpdate()) || this.canViewSecretHistory();
   }
 
   /**
@@ -574,17 +537,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * Can mark resource offline
-   * @return {boolean}
-   */
-  canUseOffline() {
-    return (
-      this.props.context.siteSettings.canIUse("offlineMode") &&
-      this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_ADD)
-    );
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -617,7 +569,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     // Copy menu
     const canCopySecret = this.canCopySecrets() && this.canCopyPassword();
     const canCopyTotp = this.canUseTotp() && this.canCopyTotp();
-    const canMarkOrRemoveOfflineAccess = hasOneResourceSelected && this.canUseOffline();
 
     return (
       <div className="actions" ref={this.props.actionsButtonRef}>
@@ -806,25 +757,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                           <SecretHistorySVG />
                           <span>
                             <Trans>Secret history</Trans>
-                          </span>
-                        </button>
-                      </DropdownMenuItem>
-                    )}
-                    {canMarkOrRemoveOfflineAccess && (
-                      <DropdownMenuItem>
-                        <button
-                          id="offline_mark_unmark_option"
-                          type="button"
-                          className="no-border"
-                          onClick={this.handleOfflineClickEvent}
-                        >
-                          <OfflineModeSVG />
-                          <span>
-                            {this.selectedResources[0].offline ? (
-                              <Trans>Remove offline availability</Trans>
-                            ) : (
-                              <Trans>Make available offline</Trans>
-                            )}
                           </span>
                         </button>
                       </DropdownMenuItem>

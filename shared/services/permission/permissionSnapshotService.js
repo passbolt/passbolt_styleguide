@@ -14,12 +14,13 @@
 import KeyringServiceWorkerService from "../serviceWorker/keyring/keyringServiceWorkerService";
 import PermissionServiceWorkerService from "../serviceWorker/permission/permissionServiceWorkerService";
 import GroupServiceWorkerService from "../serviceWorker/group/groupServiceWorkerService";
-import UserServiceWorkerService from "../serviceWorker/user/userServiceWorkerService";
 import PermissionEntity from "../../models/entity/permission/permissionEntity";
+import UserEntity from "../../models/entity/user/userEntity";
+import GroupsCollection from "../../models/entity/group/groupsCollection";
 import PermissionSnapshotEntity from "../../models/entity/permission/permissionSnapshotEntity";
 
 /**
- * Higher-level orchestrator that composes the keyring, permission, group, and user service-worker
+ * Higher-level orchestrator that composes the keyring, permission, and group service-worker
  * services to build an immutable permission snapshot. The snapshot is used by the permission-review
  * workflow to guarantee that the permission set displayed to the operator is exactly the one applied
  * when secrets are encrypted and shared.
@@ -32,7 +33,6 @@ export default class PermissionSnapshotService {
     this.keyringServiceWorkerService = new KeyringServiceWorkerService(port);
     this.permissionServiceWorkerService = new PermissionServiceWorkerService(port);
     this.groupServiceWorkerService = new GroupServiceWorkerService(port);
-    this.userServiceWorkerService = new UserServiceWorkerService(port);
   }
 
   /**
@@ -121,7 +121,10 @@ export default class PermissionSnapshotService {
   }
 
   /**
-   * Resolve the groups and users referenced by a permission set and assemble the immutable snapshot.
+   * Resolve the groups referenced by a permission set and assemble the immutable snapshot.
+   * The snapshot user list is derived from the member users embedded in the groups, deduplicated
+   * by user id, so the dialog can list a group's members when expanded. Directly-permissioned
+   * users are not resolved separately: their display data travels embedded in the permissions.
    * @param {PermissionsCollection} permissions The permission set to capture.
    * @returns {Promise<PermissionSnapshotEntity>}
    * @private
@@ -130,25 +133,22 @@ export default class PermissionSnapshotService {
     const groupIds = permissions.items
       .filter((permission) => permission.aro === PermissionEntity.ARO_GROUP)
       .map((permission) => permission.aroForeignKey);
-    // The groups carry their memberships (groups_users); their member users are resolved alongside
-    // the directly-permissioned users so the dialog can list a group's members when expanded.
-    const groups = await this.groupServiceWorkerService.getByIds(groupIds);
-    const memberUserIds = groups.items.flatMap((group) =>
-      (group.groupsUsers?.items ?? []).map((groupUser) => groupUser.userId),
-    );
-    const userIds = [
-      ...new Set([
-        ...permissions.items
-          .filter((permission) => permission.aro === PermissionEntity.ARO_USER)
-          .map((permission) => permission.aroForeignKey),
-        ...memberUserIds,
-      ]),
-    ];
-    const users = await this.userServiceWorkerService.getByIds(userIds);
+    // No group permissions: skip the round-trip to the service worker entirely.
+    const groups = groupIds.length
+      ? await this.groupServiceWorkerService.findByIdsForShare(groupIds)
+      : new GroupsCollection([]);
+    const usersById = new Map();
+    for (const group of groups.items) {
+      for (const groupUser of group.groupsUsers?.items ?? []) {
+        if (groupUser.user && !usersById.has(groupUser.user.id)) {
+          usersById.set(groupUser.user.id, groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
+        }
+      }
+    }
     return new PermissionSnapshotEntity({
       permissions: permissions.toDto(),
       groups: groups.toDto(),
-      users: users.toDto(),
+      users: [...usersById.values()],
       created: new Date().toISOString(),
     });
   }

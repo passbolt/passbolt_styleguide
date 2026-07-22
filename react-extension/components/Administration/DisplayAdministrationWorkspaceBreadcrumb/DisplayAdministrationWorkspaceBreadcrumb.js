@@ -124,8 +124,6 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Secret history");
       case AdministrationWorkspaceMenuTypes.CE_DOWNGRADE:
         return this.translate("Downgrade");
-      case AdministrationWorkspaceMenuTypes.OFFLINE:
-        return this.translate("Offline mode");
       default:
         return "";
     }

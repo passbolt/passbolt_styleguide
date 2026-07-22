@@ -198,7 +198,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const scim = ADMIN_URL_REGEXP.scim.test(location);
     const secretHistory = ADMIN_URL_REGEXP.secretHistory.test(location);
     const ceDowngrade = ADMIN_URL_REGEXP.ceDowngrade.test(location);
-    const offline = ADMIN_URL_REGEXP.offline.test(location);
 
     const isMfaPolicyLocationTeasing = ADMIN_URL_REGEXP.mfaPolicyTeasing.test(location);
     const isPasswordPoliciesLocationTeasing = ADMIN_URL_REGEXP.passwordPoliciesTeasing.test(location);
@@ -258,8 +257,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SECRET_HISTORY;
     } else if (ceDowngrade) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.CE_DOWNGRADE;
-    } else if (offline) {
-      selectedAdministration = AdministrationWorkspaceMenuTypes.OFFLINE;
     }
 
     // let's check if the current URL is actually supported
@@ -374,7 +371,6 @@ export const AdministrationWorkspaceMenuTypes = {
   SCIM: "SCIM", // SCIM menu selected
   SECRET_HISTORY: "SECRET_HISTORY", // Secret history menu selected
   CE_DOWNGRADE: "DOWNGRADE-TO-CE", // Downgrade to Community Edition menu selected
-  OFFLINE: "OFFLINE", // Offline mode menu selected
 };
 
 /**
@@ -403,7 +399,6 @@ export const AdministrationWorkspaceFeatureFlag = {
   [AdministrationWorkspaceMenuTypes.SCIM]: "scim", // Allow  types flag
   [AdministrationWorkspaceMenuTypes.SECRET_HISTORY]: "secretRevisions", // Allow secret revisions flag
   [AdministrationWorkspaceMenuTypes.CE_DOWNGRADE]: "ee", // Downgrade to Community Edition feature flag
-  [AdministrationWorkspaceMenuTypes.OFFLINE]: "offlineMode", // Offline mode administration feature flag
 };
 
 /**
@@ -442,7 +437,6 @@ const ADMIN_URL_REGEXP = {
   scimTeasing: /^\/app\/administration\/scim-teasing\/?$/,
   secretHistory: /^\/app\/administration\/secret-history\/?$/,
   ceDowngrade: /^\/app\/administration\/ce-downgrade\/?$/,
-  offline: /^\/app\/administration\/offline\/?$/,
 };
 
 /**

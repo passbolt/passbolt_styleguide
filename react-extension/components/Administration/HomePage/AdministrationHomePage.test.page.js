@@ -190,13 +190,6 @@ export default class AdministrationHomePagePage {
   }
 
   /**
-   * Returns the offline mode settings.
-   */
-  get offlineSettings() {
-    return this._page.container.querySelector('button.card span.title[title="Offline mode"]');
-  }
-
-  /**
    * Return the pro teasing icon element
    * @returns {{select: select}}
    */
@@ -271,11 +264,6 @@ export default class AdministrationHomePagePage {
   /** Click on the secret history settings element */
   async goToSecretHistorySettings() {
     await this.click(this.secretHistorySettings);
-  }
-
-  /** Click on the offline mode settings element */
-  async goToOfflineSettings() {
-    await this.click(this.offlineSettings);
   }
 
   /** Click on the SSO settings element */

@@ -149,14 +149,6 @@ class DisplayMenuPageObject {
   }
 
   /**
-   * Returns the offline availability menu element of the more workspace menu
-   * @returns {HTMLElement}
-   */
-  get dropdownMenuOffline() {
-    return this._container.querySelector("#offline_mark_unmark_option");
-  }
-
-  /**
    * Returns the permalink menu elements of password workspace menu
    * @returns {HTMLElement}
    */

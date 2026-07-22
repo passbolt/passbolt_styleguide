@@ -957,10 +957,10 @@ export function controlledModeWithGroupProps(data = {}) {
  * Build the artifacts simulating a group added through the autocomplete during the dialog session.
  * Such a group is not part of the controlled-mode initial collections, so its members must be fetched
  * on demand when it is expanded. Returns the search result the autocomplete receives (no members,
- * just a user_count), the group's memberships, and the member user DTOs — to be returned respectively
- * by the `passbolt.share.search-aros`, `passbolt.groups_users.get-by-group-id`, and
- * `passbolt.users.get-by-ids` port mocks.
- * @returns {{searchResult: object, groupsUsers: Array<object>, members: Array<object>}}
+ * just a user_count) and the full group — its memberships carrying their embedded user — as fetched
+ * for share; to be returned respectively by the `passbolt.share.search-aros` and
+ * `passbolt.groups.find-by-ids-for-share` port mocks.
+ * @returns {{searchResult: object, group: object, members: Array<object>}}
  */
 export function addedGroupWithMembersFixture() {
   const groupId = uuidv4();
@@ -975,10 +975,243 @@ export function addedGroupWithMembersFixture() {
 
   return {
     searchResult: { id: groupId, name: "Marketing", user_count: 2 },
-    groupsUsers: [
-      defaultGroupUser({ user_id: memberUserC.id, group_id: groupId, is_admin: true }),
-      defaultGroupUser({ user_id: memberUserD.id, group_id: groupId, is_admin: false }),
-    ],
+    group: defaultGroupDto({
+      id: groupId,
+      name: "Marketing",
+      groups_users: [
+        defaultGroupUser({ user_id: memberUserC.id, group_id: groupId, user: memberUserC, is_admin: true }),
+        defaultGroupUser({ user_id: memberUserD.id, group_id: groupId, user: memberUserD, is_admin: false }),
+      ],
+    }),
     members: [memberUserC, memberUserD],
+  };
+}
+
+/**
+ * Build controlled-mode props sharing the given resources. An owner (Ada) owns every resource and a
+ * reader (Betty) has read access to every resource, so the list always keeps at least one owner.
+ * The confirmation mode is disabled so the dialog exposes its "Share …" title.
+ * @param {Array<string>} names The names of the resources to share
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function resourcesShareProps(names, data = {}) {
+  const owner = defaultUserDto({
+    username: "ada@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Ada", last_name: "Lovelace" }),
+  });
+  const reader = defaultUserDto({
+    username: "betty@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Betty", last_name: "Holberton" }),
+  });
+  const buildResource = (name) => {
+    const resourceId = uuidv4();
+    return {
+      id: resourceId,
+      metadata: { name },
+      permission: { type: 15 },
+      permissions: new PermissionsCollection(
+        [
+          defaultPermissionDto({
+            aco: "Resource",
+            aco_foreign_key: resourceId,
+            aro: "User",
+            aro_foreign_key: owner.id,
+            type: 15,
+          }),
+          defaultPermissionDto({
+            aco: "Resource",
+            aco_foreign_key: resourceId,
+            aro: "User",
+            aro_foreign_key: reader.id,
+            type: 1,
+          }),
+        ],
+        { assertAtLeastOneOwner: false },
+      ),
+    };
+  };
+  return {
+    ...defaultProps(),
+    isPermissionConfirmationMode: false,
+    initialResources: names.map(buildResource),
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([owner, reader]),
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build controlled-mode props sharing a single folder owned by an owner (Ada).
+ * The confirmation mode is disabled so the dialog exposes its "Share folder" title.
+ * @param {string} name The folder name
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function folderShareProps(name, data = {}) {
+  const owner = defaultUserDto({ username: "ada@passbolt.com" });
+  const folderId = uuidv4();
+  return {
+    ...defaultProps(),
+    isPermissionConfirmationMode: false,
+    acoType: "Folder",
+    initialFolders: [
+      {
+        id: folderId,
+        metadata: { name },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection(
+          [
+            defaultPermissionDto({
+              aco: "Folder",
+              aco_foreign_key: folderId,
+              aro: "User",
+              aro_foreign_key: owner.id,
+              type: 15,
+            }),
+          ],
+          { assertAtLeastOneOwner: false },
+        ),
+      },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([owner]),
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build controlled-mode props simulating a snapshot captured from a shared parent folder: a single
+ * synthetic ACO (not yet created, id null) with an owner and a reader. When `data.acoType` is
+ * "Folder" the ACO is provided via `initialFolders`, otherwise via `initialResources`.
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function controlledModeProps(data = {}) {
+  const ownerUser = defaultUserDto({ username: "operator@passbolt.com" });
+  const readerUser = defaultUserDto({ username: "reader@passbolt.com" });
+  const acoId = uuidv4();
+  const permissionsDto = [
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: acoId,
+      aro: "User",
+      aro_foreign_key: ownerUser.id,
+      type: 15,
+    }),
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: acoId,
+      aro: "User",
+      aro_foreign_key: readerUser.id,
+      type: 1,
+    }),
+  ];
+  const aco = {
+    id: null,
+    metadata: { name: "" },
+    permission: { type: 15 },
+    permissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+  };
+  const acoProps = data.acoType === "Folder" ? { initialFolders: [aco] } : { initialResources: [aco] };
+  return {
+    ...defaultProps(),
+    ...acoProps,
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([ownerUser, readerUser]),
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build controlled-mode props seeded with two resources (RA, RB). An owner owns both; a reader has
+ * read access to both. Each resource carries its own single-ACO permission set.
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function twoResourcesShareProps(data = {}) {
+  const ownerUser = defaultUserDto({ username: "operator@passbolt.com" });
+  const readerUser = defaultUserDto({ username: "reader@passbolt.com" });
+  const buildResource = (name) => {
+    const resourceId = uuidv4();
+    return {
+      id: resourceId,
+      metadata: { name },
+      permission: { type: 15 },
+      permissions: new PermissionsCollection(
+        [
+          defaultPermissionDto({
+            aco: "Resource",
+            aco_foreign_key: resourceId,
+            aro: "User",
+            aro_foreign_key: ownerUser.id,
+            type: 15,
+          }),
+          defaultPermissionDto({
+            aco: "Resource",
+            aco_foreign_key: resourceId,
+            aro: "User",
+            aro_foreign_key: readerUser.id,
+            type: 1,
+          }),
+        ],
+        { assertAtLeastOneOwner: false },
+      ),
+    };
+  };
+  return {
+    ...defaultProps(),
+    initialResources: [buildResource("RA"), buildResource("RB")],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([ownerUser, readerUser]),
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build controlled-mode props where the direct users travel embedded in the permissions only
+ * (initialUsers is empty), as produced by the group-member-derived snapshot.
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function controlledModeEmbeddedUsersProps(data = {}) {
+  const ownerUser = defaultUserDto({ username: "operator@passbolt.com" });
+  const readerUser = defaultUserDto({ username: "reader@passbolt.com" });
+  const acoId = uuidv4();
+  const permissionsDto = [
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: acoId,
+      aro: "User",
+      aro_foreign_key: ownerUser.id,
+      type: 15,
+      user: ownerUser,
+    }),
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: acoId,
+      aro: "User",
+      aro_foreign_key: readerUser.id,
+      type: 1,
+      user: readerUser,
+    }),
+  ];
+  const aco = {
+    id: null,
+    metadata: { name: "" },
+    permission: { type: 15 },
+    permissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+  };
+  return {
+    ...defaultProps(),
+    initialResources: [aco],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([]),
+    onConfirm: jest.fn(),
+    ...data,
   };
 }

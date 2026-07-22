@@ -69,7 +69,6 @@ export const NavigationContext = React.createContext({
   onGoToAdministrationUsersDirectoryRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace Users Directory.
   onGoToAdministrationScimRequestedTeasing: () => {}, // Whenever the CE Admin wants to navigate to the administration workspace SCIM.
   onGoToAdministrationScimRequested: () => {}, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
-  onGoToAdministrationOfflineRequested: () => {}, // Whenever the user wants to navigate to the administration workspace offline mode settings.
 });
 
 /**
@@ -154,7 +153,6 @@ class NavigationContextProvider extends React.Component {
         this.onGoToAdministrationUsersDirectoryRequestedTeasing.bind(this),
       onGoToAdministrationScimRequestedTeasing: this.onGoToAdministrationScimRequestedTeasing.bind(this),
       onGoToAdministrationScimRequested: this.onGoToAdministrationScimRequested.bind(this), // Whenever the user wants to navigate to the administration SCIM section.
-      onGoToAdministrationOfflineRequested: this.onGoToAdministrationOfflineRequested.bind(this), // Whenever the user wants to navigate to the administration offline mode section.
     };
   }
 
@@ -241,14 +239,6 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationSecretHistoryRequested() {
     await this.goTo("browser-extension", "/app/administration/secret-history");
-  }
-
-  /**
-   * Whenever the user wants to navigate to the administration workspace offline mode settings.
-   * @returns {Promise<void>}
-   */
-  async onGoToAdministrationOfflineRequested() {
-    await this.goTo("browser-extension", "/app/administration/offline");
   }
 
   /**

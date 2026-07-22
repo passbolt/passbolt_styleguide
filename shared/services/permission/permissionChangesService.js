@@ -27,15 +27,11 @@ export default class PermissionChangesService {
    * @param {PermissionSnapshotEntity} snapshot The snapshot shown in ShareDialog.
    * @param {Array<object>} dialogChanges Deltas as `ShareChanges.getResourcesChanges()` emits them.
    * @param {string} resourceId Id of the freshly-created resource.
-   * @param {string} operatorId Id of the logged-in user (excluded from output).
    * @returns {Array<object>} `is_new`-flagged permission DTOs in the shape `share.resources.save` accepts.
    */
-  buildResourcePermissionChanges(snapshot, dialogChanges, resourceId, operatorId) {
+  buildResourcePermissionChanges(snapshot, dialogChanges, resourceId) {
     const finalByAroId = new Map();
     for (const permission of snapshot.permissions.items) {
-      if (permission.aroForeignKey === operatorId) {
-        continue;
-      }
       finalByAroId.set(permission.aroForeignKey, {
         is_new: true,
         aro: permission.aro,

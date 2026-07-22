@@ -267,16 +267,6 @@ export const defaultProSiteSettings = (siteSettings) => {
   return Object.assign(defaultData, siteSettings);
 };
 
-export const offlinePluginEnabledSiteSettings = (siteSettings) => {
-  const defaultData = defaultCeSiteSettings();
-  defaultData.passbolt.plugins.offlineMode = {
-    version: "1.0.0",
-    enabled: true,
-  };
-
-  return Object.assign(defaultData, siteSettings);
-};
-
 export const customEmailValidationProSiteSettings = (siteSettings) => {
   const defaultData = defaultProSiteSettings();
   defaultData.passbolt.email = {
