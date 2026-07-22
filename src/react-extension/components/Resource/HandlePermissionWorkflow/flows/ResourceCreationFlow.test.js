@@ -23,27 +23,24 @@ import ShareDialog from "../../../Share/ShareDialog";
 import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 import { KEYRING_SYNC_EVENT } from "../../../../../shared/services/serviceWorker/keyring/keyringServiceWorkerService";
 import { PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY } from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
-import { GROUPS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
-import { USERS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/user/userServiceWorkerService";
+import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
 /**
- * Wire the four port events the snapshot service relies on. Returns the listener stubs so the
+ * Wire the three port events the snapshot service relies on. Returns the listener stubs so the
  * test can override one (e.g. throw an error) before mounting the workflow.
  * @param {object} port The MockPort from defaultAppContext.
  * @param {object} options
  * @param {Array} [options.permissions] The permissions DTO array returned by findPermissions.
  * @param {Array} [options.groups]
- * @param {Array} [options.users]
  */
-function wireSnapshotListeners(port, { permissions = [], groups = [], users = [] } = {}) {
+function wireSnapshotListeners(port, { permissions = [], groups = [] } = {}) {
   port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
   port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => permissions);
-  port.addRequestListener(GROUPS_GET_BY_IDS, () => groups);
-  port.addRequestListener(USERS_GET_BY_IDS, () => users);
+  port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => groups);
 }
 
 /**
@@ -86,10 +83,6 @@ describe("ResourceCreationFlow", () => {
             aro_foreign_key: readerId,
             type: 1,
           },
-        ],
-        users: [
-          { id: operatorId, username: "operator@passbolt.com" },
-          { id: readerId, username: "reader@passbolt.com" },
         ],
       });
 
@@ -210,11 +203,7 @@ describe("ResourceCreationFlow", () => {
         permissionsFindCallCount += 1;
         return permissionsFindCallCount === 1 ? initialPermissionsDto : driftedPermissionsDto;
       });
-      props.context.port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
-      props.context.port.addRequestListener(USERS_GET_BY_IDS, () => [
-        { id: operatorId, username: "operator@passbolt.com" },
-        { id: uuidv4(), username: "reader@passbolt.com" },
-      ]);
+      props.context.port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
 
       let page;
       await act(() => (page = new ResourceCreationFlowTestPage(props)));
@@ -261,7 +250,6 @@ describe("ResourceCreationFlow", () => {
       const operatorId = props.context.loggedInUser.id;
       wireSnapshotListeners(props.context.port, {
         permissions: [operatorOwnerPermissionDto(operatorId, props.folderParentId)],
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       let page;

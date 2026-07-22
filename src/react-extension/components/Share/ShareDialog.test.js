@@ -18,6 +18,7 @@
 import ShareDialogPage from "./ShareDialog.test.page";
 import {
   addedGroupWithMembersFixture,
+  controlledModeEmbeddedUsersProps,
   controlledModeProps,
   controlledModeWithGroupProps,
   defaultAppContext,
@@ -256,6 +257,17 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     expect(page.aroDetails(2)).toEqual(expect.stringContaining("@passbolt.com"));
   });
 
+  it("As LU I should see directly-permissioned users rendered from the permission-embedded user when absent from initialUsers", async () => {
+    expect.assertions(2);
+    const props = controlledModeEmbeddedUsersProps();
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+
+    expect(page.aroDetails(1)).toEqual(expect.stringContaining("@passbolt.com"));
+    expect(page.aroDetails(2)).toEqual(expect.stringContaining("@passbolt.com"));
+  });
+
   it("As LU I should see the Save button enabled as soon as the dialog opens so I can confirm the snapshot as-is", async () => {
     expect.assertions(1);
     const props = controlledModeProps();
@@ -443,10 +455,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
         switch (request) {
           case "passbolt.share.search-aros":
             return [addedGroup.searchResult];
-          case "passbolt.groups_users.get-by-group-id":
-            return addedGroup.groupsUsers;
-          case "passbolt.users.get-by-ids":
-            return addedGroup.members;
+          case "passbolt.groups.find-by-ids-for-share":
+            return [addedGroup.group];
         }
       };
       mockContextRequest(requestBextMockImpl);

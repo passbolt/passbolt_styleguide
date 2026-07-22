@@ -26,8 +26,7 @@ import {
   PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
   SHARE_FOLDERS_SAVE,
 } from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
-import { GROUPS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
-import { USERS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/user/userServiceWorkerService";
+import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -49,13 +48,12 @@ function permissionDto(aco, acoForeignKey, aroForeignKey, type = PermissionEntit
 
 /**
  * Wire the folder-snapshot port events. `folderPermissions` answers the folder permission fetch;
- * groups/users resolve to empty by default.
+ * groups resolve to empty by default.
  */
 function wireSnapshotListeners(port, { folderPermissions = [] } = {}) {
   port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
   port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => folderPermissions);
-  port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
-  port.addRequestListener(USERS_GET_BY_IDS, () => []);
+  port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
 }
 
 /**
@@ -173,8 +171,7 @@ describe("FolderShareFlow", () => {
       folderFindCount += 1;
       return folderFindCount === 1 ? initialFolderPermissions : driftedFolderPermissions;
     });
-    props.context.port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
-    props.context.port.addRequestListener(USERS_GET_BY_IDS, () => []);
+    props.context.port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
 
     await mountUntilShareOpen(props);
 

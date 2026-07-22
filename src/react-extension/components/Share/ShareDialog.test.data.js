@@ -957,10 +957,10 @@ export function controlledModeWithGroupProps(data = {}) {
  * Build the artifacts simulating a group added through the autocomplete during the dialog session.
  * Such a group is not part of the controlled-mode initial collections, so its members must be fetched
  * on demand when it is expanded. Returns the search result the autocomplete receives (no members,
- * just a user_count), the group's memberships, and the member user DTOs — to be returned respectively
- * by the `passbolt.share.search-aros`, `passbolt.groups_users.get-by-group-id`, and
- * `passbolt.users.get-by-ids` port mocks.
- * @returns {{searchResult: object, groupsUsers: Array<object>, members: Array<object>}}
+ * just a user_count) and the full group — its memberships carrying their embedded user — as fetched
+ * for share; to be returned respectively by the `passbolt.share.search-aros` and
+ * `passbolt.groups.find-by-ids-for-share` port mocks.
+ * @returns {{searchResult: object, group: object, members: Array<object>}}
  */
 export function addedGroupWithMembersFixture() {
   const groupId = uuidv4();
@@ -975,10 +975,14 @@ export function addedGroupWithMembersFixture() {
 
   return {
     searchResult: { id: groupId, name: "Marketing", user_count: 2 },
-    groupsUsers: [
-      defaultGroupUser({ user_id: memberUserC.id, group_id: groupId, is_admin: true }),
-      defaultGroupUser({ user_id: memberUserD.id, group_id: groupId, is_admin: false }),
-    ],
+    group: defaultGroupDto({
+      id: groupId,
+      name: "Marketing",
+      groups_users: [
+        defaultGroupUser({ user_id: memberUserC.id, group_id: groupId, user: memberUserC, is_admin: true }),
+        defaultGroupUser({ user_id: memberUserD.id, group_id: groupId, user: memberUserD, is_admin: false }),
+      ],
+    }),
     members: [memberUserC, memberUserD],
   };
 }
@@ -1163,6 +1167,50 @@ export function twoResourcesShareProps(data = {}) {
     initialResources: [buildResource("RA"), buildResource("RB")],
     initialGroups: new GroupsCollection([]),
     initialUsers: new UsersCollection([ownerUser, readerUser]),
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build controlled-mode props where the direct users travel embedded in the permissions only
+ * (initialUsers is empty), as produced by the group-member-derived snapshot.
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function controlledModeEmbeddedUsersProps(data = {}) {
+  const ownerUser = defaultUserDto({ username: "operator@passbolt.com" });
+  const readerUser = defaultUserDto({ username: "reader@passbolt.com" });
+  const acoId = uuidv4();
+  const permissionsDto = [
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: acoId,
+      aro: "User",
+      aro_foreign_key: ownerUser.id,
+      type: 15,
+      user: ownerUser,
+    }),
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: acoId,
+      aro: "User",
+      aro_foreign_key: readerUser.id,
+      type: 1,
+      user: readerUser,
+    }),
+  ];
+  const aco = {
+    id: null,
+    metadata: { name: "" },
+    permission: { type: 15 },
+    permissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+  };
+  return {
+    ...defaultProps(),
+    initialResources: [aco],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([]),
     onConfirm: jest.fn(),
     ...data,
   };
