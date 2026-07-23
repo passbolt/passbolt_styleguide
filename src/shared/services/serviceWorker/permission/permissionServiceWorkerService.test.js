@@ -14,6 +14,7 @@
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import PermissionServiceWorkerService, {
   PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
+  PERMISSIONS_FIND_BY_IDS_FOR_SHARE,
   RESOURCES_CREATE,
   RESOURCES_UPDATE,
   SHARE_FOLDERS_SAVE,
@@ -61,6 +62,26 @@ describe("PermissionServiceWorkerService", () => {
       expect(port.request).toHaveBeenCalledWith(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, acoId, acoType);
       expect(result).toBeInstanceOf(PermissionsCollection);
       expect(result.length).toStrictEqual(dtos.length);
+    });
+  });
+
+  describe("::findByIdsForShare", () => {
+    it("should call the right service worker event with the given resources ids and return the resource DTOs", async () => {
+      expect.assertions(3);
+
+      const resourcesIds = [crypto.randomUUID(), crypto.randomUUID()];
+      const resourcesDtos = resourcesIds.map((id) => ({ id, permissions: [] }));
+
+      const port = new MockPort();
+      port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, () => resourcesDtos);
+      jest.spyOn(port, "request");
+
+      const service = new PermissionServiceWorkerService(port);
+      const result = await service.findByIdsForShare(resourcesIds);
+
+      expect(port.request).toHaveBeenCalledTimes(1);
+      expect(port.request).toHaveBeenCalledWith(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, resourcesIds);
+      expect(result).toStrictEqual(resourcesDtos);
     });
   });
 
