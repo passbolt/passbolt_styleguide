@@ -1,8 +1,9 @@
-# v5.14.5
+# v5.14.6
 
 Fixes:
 - PCD:
-    - initial data loading trigger
-    - group information loading
-- Workflow:
-    - ensures only 1 workflow of a given type can be started
+    - reorganize the way snapshots are build
+- User role:
+    - fix a bug on user role detection
+- UI:
+    - fix a string that should not be translated
