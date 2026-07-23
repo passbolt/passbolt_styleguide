@@ -44,9 +44,16 @@ import MockPort from "../../react-extension/test/mock/MockPort";
 import AutofillPage from "./Autofill.test.page";
 import { FAIL_STRING_SCENARIOS } from "../../../test/assert/assertEntityProperty";
 import { TotpCodeGeneratorService } from "../../shared/services/otp/TotpCodeGeneratorService";
+import ShadowRootCacheService from "../lib/Dom/ShadowDom/ShadowRootCacheService";
+import ShadowMutationObserverService from "../lib/Dom/ShadowDom/ShadowMutationObserverService";
 
 beforeEach(() => {
   jest.clearAllMocks();
+  jest.spyOn(ShadowMutationObserverService, "observeShadowRootChanges").mockImplementation();
+
+  ShadowRootCacheService._shadowRootsCache = new WeakMap();
+  ShadowMutationObserverService._shadowRootsObservers = new WeakMap();
+  ShadowMutationObserverService._shadowMutationSubscribers = new Set();
 
   Object.defineProperty(window, "port", {
     writable: true,
@@ -88,6 +95,58 @@ describe("Autofill::fillForm", () => {
         expect(UserEventsService.autofill).toHaveBeenCalledTimes(2);
         expect(UserEventsService.autofill).toHaveBeenCalledWith(page.username, formData.username);
         expect(UserEventsService.autofill).toHaveBeenCalledWith(page.password, formData.secret);
+
+        expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+      });
+    });
+
+    describe("With a password element inside a shadow dom", () => {
+      it("Should autofill the username outside the shadow root", () => {
+        expect.assertions(4);
+
+        document.body.innerHTML = "<div id='login-container'><input type='text' name='username'/></div>";
+        const container = document.getElementById("login-container");
+        const usernameField = container.querySelector("input");
+        const host = document.createElement("div");
+        const shadowRoot = host.attachShadow({ mode: "open" });
+        const passwordField = document.createElement("input");
+        passwordField.type = "password";
+        shadowRoot.appendChild(passwordField);
+        container.appendChild(host);
+
+        const page = new AutofillPage();
+        page.fillForm(formData);
+
+        expect(UserEventsService.autofill).toHaveBeenCalledTimes(2);
+        expect(UserEventsService.autofill).toHaveBeenCalledWith(usernameField, formData.username);
+        expect(UserEventsService.autofill).toHaveBeenCalledWith(passwordField, formData.secret);
+
+        expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+      });
+
+      it("Should autofill the username inside the shadow root", () => {
+        expect.assertions(4);
+
+        document.body.innerHTML = "";
+        const host = document.createElement("div");
+        const shadowRoot = host.attachShadow({ mode: "open" });
+        const wrapper = document.createElement("div");
+        const usernameField = document.createElement("input");
+        usernameField.type = "text";
+        usernameField.name = "username";
+        const passwordField = document.createElement("input");
+        passwordField.type = "password";
+        wrapper.appendChild(usernameField);
+        wrapper.appendChild(passwordField);
+        shadowRoot.appendChild(wrapper);
+        document.body.appendChild(host);
+
+        const page = new AutofillPage();
+        page.fillForm(formData);
+
+        expect(UserEventsService.autofill).toHaveBeenCalledTimes(2);
+        expect(UserEventsService.autofill).toHaveBeenCalledWith(usernameField, formData.username);
+        expect(UserEventsService.autofill).toHaveBeenCalledWith(passwordField, formData.secret);
 
         expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
       });
