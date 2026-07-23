@@ -33,6 +33,14 @@ import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import EmailSVG from "../../../../img/svg/email.svg";
 import TriangleAlertSVG from "../../../../img/svg/triangle_alert.svg";
 
+// Those values should NOT be translated
+export const CLOUD = "Cloud";
+export const PRO_EDITION = "Pro Edition";
+export const COMMUNITY_EDITION = "Community Edition";
+export const COMMUNITY_EDITION_SHORT = "Community";
+
+const edition = COMMUNITY_EDITION_SHORT;
+
 class DisplaySubscriptionKey extends React.Component {
   /**
    * Constructor
@@ -272,10 +280,10 @@ class DisplaySubscriptionKey extends React.Component {
                     </div>
                     <div className="information-value">
                       <span className="edition value">
-                        {!this.props.context.siteSettings.isCommunityEdition && <Trans>Pro Edition</Trans>}
+                        {!this.props.context.siteSettings.isCommunityEdition && PRO_EDITION}
                         {this.props.context.siteSettings.isCommunityEdition && (
                           <>
-                            <Trans>Community Edition</Trans>
+                            {COMMUNITY_EDITION}
                             <span className="subtitle">
                               <Trans>(Free forever)</Trans>
                             </span>
@@ -395,9 +403,7 @@ class DisplaySubscriptionKey extends React.Component {
                   <div className="content">
                     <div className="title">
                       <div className="community-title">
-                        <h3>
-                          <Trans>Community Edition</Trans>
-                        </h3>
+                        <h3>{COMMUNITY_EDITION}</h3>
                         <span className="subtitle">
                           <Trans>(Free forever)</Trans>
                         </span>
@@ -454,7 +460,7 @@ class DisplaySubscriptionKey extends React.Component {
                   {this.shouldShowDowngradeSection() && (
                     <div className="subscription-actions">
                       <button className="button" type="button" onClick={this.handleDowngradeClick}>
-                        <Trans>Downgrade to Community</Trans>
+                        <Trans>Downgrade to {{ edition }}</Trans>
                       </button>
                     </div>
                   )}
@@ -464,9 +470,7 @@ class DisplaySubscriptionKey extends React.Component {
                 >
                   <div className="content">
                     <div className="title">
-                      <h3>
-                        <Trans>Pro Edition</Trans>
-                      </h3>
+                      <h3>{PRO_EDITION}</h3>
                       {!this.props.context.siteSettings.isCommunityEdition && (
                         <div className="current-edition-indicator-wrapper">
                           <div className="current-edition-indicator">
