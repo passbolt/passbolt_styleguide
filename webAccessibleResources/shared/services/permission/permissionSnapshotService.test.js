@@ -17,7 +17,10 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
 import PermissionSnapshotService from "./permissionSnapshotService";
 import PermissionSnapshotEntity from "../../models/entity/permission/permissionSnapshotEntity";
 import { KEYRING_SYNC_EVENT } from "../serviceWorker/keyring/keyringServiceWorkerService";
-import { PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY } from "../serviceWorker/permission/permissionServiceWorkerService";
+import {
+  PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
+  PERMISSIONS_FIND_BY_IDS_FOR_SHARE,
+} from "../serviceWorker/permission/permissionServiceWorkerService";
 import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../serviceWorker/group/groupServiceWorkerService";
 import { defaultPermissionDto } from "../../models/entity/permission/permissionEntity.test.data";
 import { defaultGroupDto } from "../../models/entity/group/groupEntity.test.data";
@@ -215,20 +218,25 @@ describe("PermissionSnapshotService", () => {
   });
 
   describe("::buildSnapshotForResourcesShare", () => {
-    it("returns one PermissionSnapshotEntity per resource, each built from the resource itself", async () => {
+    it("returns one PermissionSnapshotEntity per resource, aligned with the given ids, from a single batched permission fetch", async () => {
       expect.assertions(4);
 
       const resourcesIds = [uuidv4(), uuidv4()];
       port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
-      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, (acoId) => [
-        defaultPermissionDto({
-          aco: "Resource",
-          aco_foreign_key: acoId,
-          aro: "User",
-          aro_foreign_key: uuidv4(),
-          type: 15,
-        }),
-      ]);
+      port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, (ids) =>
+        ids.map((id) => ({
+          id,
+          permissions: [
+            defaultPermissionDto({
+              aco: "Resource",
+              aco_foreign_key: id,
+              aro: "User",
+              aro_foreign_key: uuidv4(),
+              type: 15,
+            }),
+          ],
+        })),
+      );
       port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
       jest.spyOn(port, "request");
 
@@ -236,25 +244,18 @@ describe("PermissionSnapshotService", () => {
 
       expect(snapshots).toHaveLength(2);
       expect(snapshots[0]).toBeInstanceOf(PermissionSnapshotEntity);
-      // Each snapshot is captured from its own resource (ACO_RESOURCE).
-      expect(port.request).toHaveBeenCalledWith(
-        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
-        resourcesIds[0],
-        "Resource",
-      );
-      expect(port.request).toHaveBeenCalledWith(
-        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
-        resourcesIds[1],
-        "Resource",
-      );
+      // A single batched request covers the whole selection.
+      expect(port.request).toHaveBeenCalledWith(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, resourcesIds);
+      // Each snapshot is captured from its own resource, in the given order.
+      expect(snapshots.map((snapshot) => snapshot.permissions.toDto()[0].aco_foreign_key)).toStrictEqual(resourcesIds);
     });
 
-    it("synchronises the keyring only once for the whole selection, before any permission fetch", async () => {
+    it("synchronises the keyring only once and fetches all permissions in a single batched request, before the group fetch", async () => {
       expect.assertions(3);
 
       const resourcesIds = [uuidv4(), uuidv4(), uuidv4()];
       port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
-      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => []);
+      port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, (ids) => ids.map((id) => ({ id, permissions: [] })));
       port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
       jest.spyOn(port, "request");
 
@@ -263,11 +264,65 @@ describe("PermissionSnapshotService", () => {
       const events = port.request.mock.calls.map(([event]) => event);
       // The keyring is synced once, not once per resource.
       expect(events.filter((event) => event === KEYRING_SYNC_EVENT)).toHaveLength(1);
-      // ...while each resource still gets its own permission fetch.
-      expect(events.filter((event) => event === PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY)).toHaveLength(3);
-      // The single keyring sync happens before any permission fetch.
-      expect(events.indexOf(KEYRING_SYNC_EVENT)).toBeLessThan(
-        events.indexOf(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY),
+      // A single batched permission fetch covers the whole selection, regardless of its size.
+      expect(events.filter((event) => event === PERMISSIONS_FIND_BY_IDS_FOR_SHARE)).toHaveLength(1);
+      // The single keyring sync happens before the permission fetch.
+      expect(events.indexOf(KEYRING_SYNC_EVENT)).toBeLessThan(events.indexOf(PERMISSIONS_FIND_BY_IDS_FOR_SHARE));
+    });
+
+    it("resolves the groups referenced across the selection in a single deduplicated request and scopes each snapshot to its own groups and members", async () => {
+      expect.assertions(5);
+
+      const resourcesIds = [uuidv4(), uuidv4()];
+      const groupId = uuidv4();
+      const member = defaultUserDto({ username: "member@passbolt.com" });
+      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, (ids) =>
+        ids.map((id) => ({
+          id,
+          permissions: [
+            defaultPermissionDto({
+              aco: "Resource",
+              aco_foreign_key: id,
+              aro: "Group",
+              aro_foreign_key: groupId,
+              type: 15,
+            }),
+          ],
+        })),
+      );
+      port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => [
+        defaultGroupDto({
+          id: groupId,
+          name: "Group 0",
+          groups_users: [defaultGroupUser({ group_id: groupId, user_id: member.id, user: member })],
+        }),
+      ]);
+      jest.spyOn(port, "request");
+
+      const snapshots = await service.buildSnapshotForResourcesShare(resourcesIds);
+
+      const events = port.request.mock.calls.map(([event]) => event);
+      // Both resources reference the same group, resolved in one deduplicated request.
+      expect(events.filter((event) => event === GROUPS_FIND_BY_IDS_FOR_SHARE)).toHaveLength(1);
+      expect(port.request).toHaveBeenCalledWith(GROUPS_FIND_BY_IDS_FOR_SHARE, [groupId]);
+      // Each snapshot is scoped to the group it references and its members.
+      expect(snapshots[0].groups.toDto().map((group) => group.id)).toStrictEqual([groupId]);
+      expect(snapshots[1].groups.toDto().map((group) => group.id)).toStrictEqual([groupId]);
+      expect(snapshots[0].users.toDto()).toStrictEqual([member]);
+    });
+
+    it("throws when the batched fetch does not return the permissions of every selected resource", async () => {
+      expect.assertions(1);
+
+      const resourcesIds = [uuidv4(), uuidv4()];
+      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      // Only the first resource is returned by the batched fetch.
+      port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, () => [{ id: resourcesIds[0], permissions: [] }]);
+      port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
+
+      await expect(service.buildSnapshotForResourcesShare(resourcesIds)).rejects.toThrow(
+        `The permissions of the resource ${resourcesIds[1]} could not be retrieved.`,
       );
     });
 

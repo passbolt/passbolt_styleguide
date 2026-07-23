@@ -17,6 +17,11 @@ import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Tooltip from "../Tooltip/Tooltip";
+import {
+  CLOUD,
+  COMMUNITY_EDITION,
+  PRO_EDITION,
+} from "../../Administration/DisplaySubscriptionKey/DisplaySubscriptionKey";
 
 const CREDITS_URL = "https://www.passbolt.com/terms";
 const UNSAFE_URL = "https://www.passbolt.com/docs/hosting/faq/why-I-see-unsafe-mode-banner/";
@@ -119,23 +124,16 @@ class Footer extends Component {
             <>
               {this.props.context.siteSettings.isCommunityEdition && (
                 <li>
-                  <Trans>
-                    Community Edition<span className="edition-suffix">&nbsp;(free)</span>
-                  </Trans>
+                  {COMMUNITY_EDITION}
+                  <span className="edition-suffix">
+                    <Trans>&nbsp;(free)</Trans>
+                  </span>
                 </li>
               )}
-              {!this.props.context.siteSettings.isCommunityEdition && (
-                <li>
-                  <Trans>Pro Edition</Trans>
-                </li>
-              )}
+              {!this.props.context.siteSettings.isCommunityEdition && <li>{PRO_EDITION}</li>}
             </>
           )}
-          {this.isCloud && (
-            <li>
-              <Trans>Cloud</Trans>
-            </li>
-          )}
+          {this.isCloud && <li>{CLOUD}</li>}
           <li>
             {this.versions && (
               <Tooltip message={this.versions} direction="top-left">

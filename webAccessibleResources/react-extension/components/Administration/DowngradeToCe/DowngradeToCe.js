@@ -40,7 +40,9 @@ import ScrollTextSVG from "../../../../img/svg/scroll_text.svg";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import SSOSVG from "../../../../img/svg/sso.svg";
 import TagsSVG from "../../../../img/svg/tags.svg";
+import { COMMUNITY_EDITION } from "../DisplaySubscriptionKey/DisplaySubscriptionKey";
 
+const edition = COMMUNITY_EDITION;
 export const LEARN_MORE_URL = "https://www.passbolt.com/docs/hosting/manage-plan/downgrade";
 
 class DowngradeToCe extends React.Component {
@@ -225,7 +227,9 @@ class DowngradeToCe extends React.Component {
       try {
         await this.subscriptionKeyService.deleteOrganizationSubscriptionKey();
         await this.props.actionFeedbackContext.displaySuccess(
-          this.translate("Subscription has been removed successfully. The instance is now on Community Edition."),
+          this.translate("Subscription has been removed successfully. The instance is now on {{edition}}.", {
+            edition,
+          }),
         );
         this.props.navigationContext.onGoToAdministrationSubscriptionRequested();
       } catch (error) {
@@ -252,7 +256,7 @@ class DowngradeToCe extends React.Component {
         <div className="ce-downgrade main-column">
           <div className="main-content">
             <h3>
-              <Trans>Downgrade to Community Edition</Trans>
+              <Trans>Downgrade to {{ edition }}</Trans>
             </h3>
             <p className="description">
               <Trans>

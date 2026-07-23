@@ -16,6 +16,7 @@ import PermissionsCollection from "../../../models/entity/permission/permissions
 import { isValidUuid } from "../../../utils/assertions";
 
 export const PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY = "passbolt.permissions.find-aco-permissions-for-display";
+export const PERMISSIONS_FIND_BY_IDS_FOR_SHARE = "passbolt.permissions.find-by-ids-for-share";
 export const SHARE_RESOURCES_SAVE = "passbolt.share.resources.save";
 export const SHARE_FOLDERS_SAVE = "passbolt.share.folders.save";
 export const RESOURCES_CREATE = "passbolt.resources.create";
@@ -39,6 +40,15 @@ export default class PermissionServiceWorkerService {
   async findPermissions(acoId, acoType) {
     const dtos = await this.port.request(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, acoId, acoType);
     return new PermissionsCollection(dtos, { assertAtLeastOneOwner: false });
+  }
+
+  /**
+   * Find the permissions of the given resources, tailored for the share process, in a single request.
+   * @param {Array<string>} resourcesIds The ids of the resources to retrieve the permissions for.
+   * @returns {Promise<Array<object>>} The resource DTOs, each carrying its `id` and `permissions`.
+   */
+  async findByIdsForShare(resourcesIds) {
+    return this.port.request(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, resourcesIds);
   }
 
   /**
