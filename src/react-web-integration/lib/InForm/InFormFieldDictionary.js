@@ -17,22 +17,3 @@
  * @type {string}
  */
 export const SHADOW_RESCAN_FIELD_SELECTOR = "input, form, [autocomplete]";
-
-/**
- * Attributes to watch for mutation.
- * @type {Array<string>}
- */
-export const FIELD_ATTRIBUTES_TO_WATCH = [
-  "type",
-  "name",
-  "id",
-  "autocomplete",
-  "hidden",
-  "disabled",
-  "readonly",
-  "placeholder",
-  "aria-hidden",
-  "role",
-  "style",
-  "class",
-];

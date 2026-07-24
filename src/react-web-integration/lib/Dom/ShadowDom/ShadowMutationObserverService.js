@@ -14,8 +14,7 @@
 
 import ShadowRootCollectorService from "./ShadowRootCollectorService";
 import ShadowRootCacheService from "./ShadowRootCacheService";
-
-const OBSERVE_OPTIONS = { childList: true, subtree: true };
+import { OBSERVE_OPTIONS } from "./ShadowDomDictionary";
 
 class ShadowMutationObserverService {
   /**
@@ -125,6 +124,19 @@ class ShadowMutationObserverService {
 
     observer.observe(root, OBSERVE_OPTIONS);
     ShadowMutationObserverService._shadowRootsObservers.set(root, observer);
+  }
+
+  /**
+   * Disconnect and delete the observer installed on `root`, if any.
+   * @param {Document|ShadowRoot|Element} root The observed root to stop observing.
+   */
+  static disconnectObserver(root) {
+    const observer = ShadowMutationObserverService._shadowRootsObservers.get(root);
+
+    if (observer) {
+      observer.disconnect();
+      ShadowMutationObserverService._shadowRootsObservers.delete(root);
+    }
   }
 }
 

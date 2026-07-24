@@ -202,13 +202,37 @@ describe("ShadowMutationObserverService", () => {
 
       ShadowMutationObserverService.observeShadowRootChanges(root);
 
-      expect(observeMock).toHaveBeenCalledWith(root, { childList: true, subtree: true });
+      expect(observeMock).toHaveBeenCalledWith(
+        root,
+        expect.objectContaining({
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: expect.any(Array),
+        }),
+      );
 
       const mutations = [{ addedNodes: [], removedNodes: [] }];
       capturedCallback(mutations);
 
       expect(applySpy).toHaveBeenCalledWith(root, mutations);
       expect(notifySpy).toHaveBeenCalledWith(root, mutations, true);
+    });
+
+    it("should install an observer that watches the attributes", () => {
+      expect.assertions(2);
+
+      const observeMock = jest.fn();
+      jest
+        .spyOn(window, "MutationObserver")
+        .mockImplementation(() => ({ observe: observeMock, disconnect: jest.fn() }));
+      const root = document.createElement("div");
+
+      ShadowMutationObserverService.observeShadowRootChanges(root);
+
+      const [, options] = observeMock.mock.calls[0];
+      expect(options.attributes).toBe(true);
+      expect(options.attributeFilter).toContain("type");
     });
 
     it("should install at most one observer per root", () => {
@@ -223,6 +247,32 @@ describe("ShadowMutationObserverService", () => {
       ShadowMutationObserverService.observeShadowRootChanges(root);
 
       expect(observerSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("ShadowMutationObserverService::disconnectObserver", () => {
+    it("should disconnect and forget the observer of a root", () => {
+      expect.assertions(2);
+
+      const disconnectMock = jest.fn();
+      jest
+        .spyOn(window, "MutationObserver")
+        .mockImplementation(() => ({ observe: jest.fn(), disconnect: disconnectMock }));
+      const root = document.createElement("div");
+
+      ShadowMutationObserverService.observeShadowRootChanges(root);
+      ShadowMutationObserverService.disconnectObserver(root);
+
+      expect(disconnectMock).toHaveBeenCalledTimes(1);
+      expect(ShadowMutationObserverService._shadowRootsObservers.has(root)).toBe(false);
+    });
+
+    it("should do nothing for a root that is not observed", () => {
+      expect.assertions(1);
+
+      const root = document.createElement("div");
+
+      expect(() => ShadowMutationObserverService.disconnectObserver(root)).not.toThrow();
     });
   });
 });
