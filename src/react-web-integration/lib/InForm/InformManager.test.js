@@ -89,11 +89,19 @@ import {
 import InformManagerPage from "./InformManager.test.page";
 import InFormManager from "./InFormManager";
 import DomUtils from "../Dom/DomUtils";
+import ShadowRootCacheService from "../Dom/ShadowDom/ShadowRootCacheService";
+import ShadowMutationObserverService from "../Dom/ShadowDom/ShadowMutationObserverService";
 import { act } from "react";
 import { waitFor } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
+
+  // Reset the shadow services' module-private state so the per-document observer/cache installed
+  // by the manager does not leak between tests (document is the same object across the file).
+  ShadowRootCacheService._shadowRootsCache = new WeakMap();
+  ShadowMutationObserverService._shadowRootsObservers = new WeakMap();
+  ShadowMutationObserverService._shadowMutationSubscribers = new Set();
 });
 
 describe("InformManager", () => {
@@ -1731,7 +1739,7 @@ describe("InformManager", () => {
       expect.assertions(2);
 
       document.body.innerHTML = domElementLoginWithNameAttributeUsername;
-      const retryMountHostSpy = jest.spyOn(InFormManager, "retryMountHost").mockImplementationOnce(() => {});
+      const retryMountHostSpy = jest.spyOn(InFormManager, "retryMountHost").mockImplementation(() => {});
 
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
@@ -1741,9 +1749,22 @@ describe("InformManager", () => {
       const otherElement = document.createElement("div");
       document.body.append(otherElement);
       otherElement.appendChild(informManager.host);
-      await informManager.focusOnUsername();
 
-      expect(retryMountHostSpy).toHaveBeenCalledTimes(1);
+      // The document observer catches the moved host; the re-scan is debounced, so wait for it.
+      await waitFor(
+        () => {
+          if (!retryMountHostSpy.mock.calls.length) {
+            throw new Error("retryMountHost has not been called yet");
+          }
+        },
+        { timeout: 2000 },
+      );
+
+      expect(retryMountHostSpy).toHaveBeenCalled();
+
+      // Restore now: the suite clears (not restores) mocks between tests, so the persistent
+      // implementation would otherwise leak into the retryMountHost tests below.
+      retryMountHostSpy.mockRestore();
     });
 
     describe("InFormManager::retryMountHost", () => {
@@ -1833,6 +1854,107 @@ describe("InformManager", () => {
       });
 
       expect(InFormManager.host.parentNode).toBe(dialog);
+    });
+  });
+
+  describe("InFormManager::onShadowMutation", () => {
+    it("should ignore the mutations of its own call-to-action shadow root", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+
+      InFormManager.onShadowMutation(InFormManager.shadowRoot, [], true);
+
+      expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
+    });
+
+    it("should trigger the re-scan unconditionally for a document-scope mutation", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+
+      InFormManager.onShadowMutation(document, [], false);
+
+      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+    });
+
+    it("should trigger the re-scan for a shadow-scope mutation only when it is relevant", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      const otherShadowRoot = document.createElement("div").attachShadow({ mode: "open" });
+
+      InFormManager.onShadowMutation(otherShadowRoot, [], false);
+      expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
+
+      InFormManager.onShadowMutation(otherShadowRoot, [], true);
+      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("InFormManager::_mutationsAffectAuthenticationFields", () => {
+    it("should return true when a relevant field is added or removed", async () => {
+      expect.assertions(2);
+
+      await act(async () => new InformManagerPage());
+      const input = document.createElement("input");
+      const wrapper = document.createElement("div");
+      wrapper.appendChild(document.createElement("input"));
+
+      expect(
+        InFormManager._mutationsAffectAuthenticationFields([
+          { type: "childList", addedNodes: [input], removedNodes: [] },
+        ]),
+      ).toBe(true);
+      expect(
+        InFormManager._mutationsAffectAuthenticationFields([
+          { type: "childList", addedNodes: [wrapper], removedNodes: [] },
+        ]),
+      ).toBe(true);
+    });
+
+    it("should return false for irrelevant childList mutations and non-childList records", async () => {
+      expect.assertions(2);
+
+      await act(async () => new InformManagerPage());
+      const div = document.createElement("div");
+
+      expect(
+        InFormManager._mutationsAffectAuthenticationFields([
+          { type: "childList", addedNodes: [div], removedNodes: [] },
+        ]),
+      ).toBe(false);
+      expect(
+        InFormManager._mutationsAffectAuthenticationFields([
+          { type: "attributes", target: document.createElement("input") },
+        ]),
+      ).toBe(false);
+    });
+  });
+
+  describe("InFormManager::_attributeMutationAffectsField", () => {
+    it("should return true when a watched attribute changes on a field element", async () => {
+      expect.assertions(1);
+
+      await act(async () => new InformManagerPage());
+      const input = document.createElement("input");
+
+      expect(InFormManager._attributeMutationAffectsField([{ type: "attributes", target: input }])).toBe(true);
+    });
+
+    it("should return false for an attribute mutation on a non-field element", async () => {
+      expect.assertions(1);
+
+      await act(async () => new InformManagerPage());
+      const div = document.createElement("div");
+
+      expect(InFormManager._attributeMutationAffectsField([{ type: "attributes", target: div }])).toBe(false);
     });
   });
 

@@ -159,10 +159,11 @@ describe("InFormCallToActionField", () => {
       expect.assertions(2);
 
       const callToActionField = buildCallToActionField();
+
+      expect(callToActionField.viewableRect).not.toBeNull();
+
       const rect = { top: 10, left: 20, width: 300, height: 40 };
       jest.spyOn(callToActionField.field, "getBoundingClientRect").mockReturnValue(rect);
-
-      expect(callToActionField.viewableRect).toBeNull();
 
       callToActionField.cacheViewableRect();
 
