@@ -154,6 +154,22 @@ describe("InFormCallToActionField", () => {
     });
   });
 
+  describe("InFormCallToActionField::cacheViewableRect", () => {
+    it("should cache the rectangle coordinates of the field", () => {
+      expect.assertions(2);
+
+      const callToActionField = buildCallToActionField();
+      const rect = { top: 10, left: 20, width: 300, height: 40 };
+      jest.spyOn(callToActionField.field, "getBoundingClientRect").mockReturnValue(rect);
+
+      expect(callToActionField.viewableRect).toBeNull();
+
+      callToActionField.cacheViewableRect();
+
+      expect(callToActionField.viewableRect).toBe(rect);
+    });
+  });
+
   describe("InFormCallToActionField::onClick", () => {
     it("should store the callback to call on click", () => {
       expect.assertions(1);

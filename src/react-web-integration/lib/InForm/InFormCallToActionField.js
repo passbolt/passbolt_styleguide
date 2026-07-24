@@ -94,11 +94,14 @@ class InFormCallToActionField {
     this.callToActionClickCallback = null;
     /** The shadow root **/
     this.shadowRoot = shadowRoot;
+    /** Rectangle coordinates of the field */
+    this.viewableRect = null;
 
     this.bindCallbacks();
     this.handleInsertionEvent();
     this.handleRemoveEvent();
     this.handleScrollEvent();
+    this.cacheViewableRect();
   }
 
   /**
@@ -110,6 +113,13 @@ class InFormCallToActionField {
     this.removeInFormCallToAction = this.removeInFormCallToAction.bind(this);
     this.removeIframe = this.removeIframe.bind(this);
     this.destroy = this.destroy.bind(this);
+  }
+
+  /**
+   * Cache the field's viewport rect, measured once at discovery.
+   */
+  cacheViewableRect() {
+    this.viewableRect = this.field.getBoundingClientRect();
   }
 
   /**
