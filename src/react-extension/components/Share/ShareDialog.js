@@ -31,8 +31,8 @@ import { withActionFeedback } from "../../contexts/ActionFeedbackContext";
 import { withResourceWorkspace } from "../../contexts/ResourceWorkspaceContext";
 import { Trans, withTranslation } from "react-i18next";
 import PermissionEntity from "../../../shared/models/entity/permission/permissionEntity";
+import UserEntity from "../../../shared/models/entity/user/userEntity";
 import GroupServiceWorkerService from "../../../shared/services/serviceWorker/group/groupServiceWorkerService";
-import UserServiceWorkerService from "../../../shared/services/serviceWorker/user/userServiceWorkerService";
 
 class ShareDialog extends Component {
   /**
@@ -115,9 +115,9 @@ class ShareDialog extends Component {
 
   /**
    * Build a single controlled-mode resource DTO, embedding the referenced user/group from the
-   * provided lookup maps so ShareChanges can render and track edits. The resource id (null for a
-   * not-yet-created resource, the real id when sharing an existing one) is stamped as each
-   * permission's `aco_foreign_key`.
+   * provided lookup maps — falling back to the aro embedded in the permission itself, since
+   * directly-permissioned users are not part of `initialUsers` — so ShareChanges can render and
+   * track edits.
    * @param {{id: (string|null), metadata: object, permission: object, permissions: PermissionsCollection}} resource
    * @param {object} groupsById The referenced groups keyed by id.
    * @param {object} usersById The referenced users keyed by id.
@@ -125,13 +125,13 @@ class ShareDialog extends Component {
    */
   buildControlledResource(resource, groupsById, usersById) {
     const mappedPermissions = resource.permissions.items.map((permission) => {
-      const dto = permission.toDto();
+      const dto = permission.toDto(PermissionEntity.ALL_CONTAIN_OPTIONS);
       dto.aco = this.props.acoType ?? PermissionEntity.ACO_RESOURCE;
       dto.aco_foreign_key = resource.id;
       if (dto.aro === PermissionEntity.ARO_USER) {
-        dto.user = usersById[dto.aro_foreign_key];
+        dto.user = usersById[dto.aro_foreign_key] ?? dto.user;
       } else if (dto.aro === PermissionEntity.ARO_GROUP) {
-        dto.group = groupsById[dto.aro_foreign_key];
+        dto.group = groupsById[dto.aro_foreign_key] ?? dto.group;
       }
       return dto;
     });
@@ -363,17 +363,20 @@ class ShareDialog extends Component {
     this.setState({ isFetchingGroupMembers: true }, async () => {
       try {
         const groupServiceWorkerService = new GroupServiceWorkerService(this.props.context.port);
-        const userServiceWorkerService = new UserServiceWorkerService(this.props.context.port);
-        const groupsUsers = await groupServiceWorkerService.getGroupsUsersByGroupId(groupId);
-        const memberUserIds = groupsUsers.items.map((groupUser) => groupUser.userId);
-        const users = await userServiceWorkerService.getByIds(memberUserIds);
-        const members = users.items.map((user) => user.toDto(users.entityClass?.ALL_CONTAIN_OPTIONS));
+        // The share fetch embeds the members (groups_users with their user), so a single call
+        // resolves both the membership and the user display data.
+        const groups = await groupServiceWorkerService.findByIdsForShare([groupId]);
+        const group = groups.items.find((item) => item.id === groupId);
+        const members = (group?.groupsUsers?.items ?? [])
+          .filter((groupUser) => groupUser.user)
+          .map((groupUser) => groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
         this.setState({
           fetchedGroupMembers: { ...this.state.fetchedGroupMembers, [groupId]: members },
           isFetchingGroupMembers: false,
         });
       } catch (error) {
         console.error(error);
+        this.setState({ isFetchingGroupMembers: false });
       }
     });
   }

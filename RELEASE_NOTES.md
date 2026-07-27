@@ -1,8 +1,9 @@
-# v5.14.4
+# v5.14.6
 
 Fixes:
-- Edit mode in PCD
-    - Ensures the operator remains owner
-    - Ensures the operator in updated mode can submit the form
-    - Invert HTTP request to avoid information leak
-- Fixes resource creation, resource update and folder creation redirections
+- PCD:
+    - reorganize the way snapshots are build
+- User role:
+    - fix a bug on user role detection
+- UI:
+    - fix a string that should not be translated

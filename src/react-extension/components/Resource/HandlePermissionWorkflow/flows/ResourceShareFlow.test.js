@@ -23,11 +23,10 @@ import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
 import { KEYRING_SYNC_EVENT } from "../../../../../shared/services/serviceWorker/keyring/keyringServiceWorkerService";
 import {
-  PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
+  PERMISSIONS_FIND_BY_IDS_FOR_SHARE,
   SHARE_RESOURCES_SAVE,
 } from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
-import { GROUPS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
-import { USERS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/user/userServiceWorkerService";
+import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 import { defaultGroupDto } from "../../../../../shared/models/entity/group/groupEntity.test.data";
 import { defaultGroupUser } from "../../../../../shared/models/entity/groupUser/groupUserEntity.test.data";
 import { defaultUserDto } from "../../../../../shared/models/entity/user/userEntity.test.data";
@@ -52,16 +51,14 @@ function resourcePermissionDto(aroForeignKey, resourceId, type = PermissionEntit
 
 /**
  * Wire the snapshot port events. `permissionsByResourceId` maps a resource id to its permission DTOs;
- * the find event answers per requested resource id.
+ * the batched find event answers with one resource DTO (id + permissions) per requested id.
  */
-function wireSnapshotListeners(port, { permissionsByResourceId = {}, users = [] } = {}) {
+function wireSnapshotListeners(port, { permissionsByResourceId = {} } = {}) {
   port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
-  port.addRequestListener(
-    PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
-    (acoId) => permissionsByResourceId[acoId] ?? [],
+  port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, (resourcesIds) =>
+    resourcesIds.map((id) => ({ id, permissions: permissionsByResourceId[id] ?? [] })),
   );
-  port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
-  port.addRequestListener(USERS_GET_BY_IDS, () => users);
+  port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
 }
 
 /**
@@ -95,18 +92,13 @@ describe("ResourceShareFlow", () => {
       const resourceId = props.resources[0].id;
       wireSnapshotListeners(props.context.port, {
         permissionsByResourceId: { [resourceId]: [resourcePermissionDto(operatorId, resourceId)] },
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       jest.spyOn(props.context.port, "request");
       await mountUntilShareOpen(props);
 
-      // The snapshot is built from the resource itself (ACO_RESOURCE).
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
-        resourceId,
-        PermissionEntity.ACO_RESOURCE,
-      );
+      // The snapshot is built from the resource's own permissions, fetched in a single batched request.
+      expect(props.context.port.request).toHaveBeenCalledWith(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, [resourceId]);
 
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
       // Controlled via initialResources, editable (no read-only).
@@ -122,7 +114,6 @@ describe("ResourceShareFlow", () => {
       const resourceId = props.resources[0].id;
       wireSnapshotListeners(props.context.port, {
         permissionsByResourceId: { [resourceId]: [resourcePermissionDto(operatorId, resourceId)] },
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       await mountUntilShareOpen(props);
@@ -147,7 +138,6 @@ describe("ResourceShareFlow", () => {
       const resourceId = props.resources[0].id;
       wireSnapshotListeners(props.context.port, {
         permissionsByResourceId: { [resourceId]: [resourcePermissionDto(operatorId, resourceId)] },
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       await mountUntilShareOpen(props);
@@ -177,14 +167,12 @@ describe("ResourceShareFlow", () => {
       ];
       let findCallCount = 0;
       props.context.port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
-      props.context.port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => {
+      props.context.port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, (resourcesIds) => {
         findCallCount += 1;
-        return findCallCount === 1 ? initialPermissionsDto : driftedPermissionsDto;
+        const permissions = findCallCount === 1 ? initialPermissionsDto : driftedPermissionsDto;
+        return resourcesIds.map((id) => ({ id, permissions }));
       });
-      props.context.port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
-      props.context.port.addRequestListener(USERS_GET_BY_IDS, () => [
-        { id: operatorId, username: "operator@passbolt.com" },
-      ]);
+      props.context.port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
 
       await mountUntilShareOpen(props);
 
@@ -224,7 +212,6 @@ describe("ResourceShareFlow", () => {
       const resourceId = props.resources[0].id;
       wireSnapshotListeners(props.context.port, {
         permissionsByResourceId: { [resourceId]: [resourcePermissionDto(operatorId, resourceId)] },
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       await mountUntilShareOpen(props);
@@ -244,27 +231,33 @@ describe("ResourceShareFlow", () => {
 
   describe("As LU sharing a resource shared with a group", () => {
     it("As LU I should see the group members preserved in the dialog (not 'Group with 0 member')", async () => {
-      expect.assertions(2);
+      expect.assertions(3);
       const props = defaultProps();
-      const resourceId = props.resources[0].id;
       const operatorId = props.context.loggedInUser.id;
       const groupId = uuidv4();
       const memberId = uuidv4();
       const group = defaultGroupDto({
         id: groupId,
         name: "Developer",
-        groups_users: [defaultGroupUser({ user_id: memberId, group_id: groupId })],
+        groups_users: [
+          defaultGroupUser({
+            user_id: memberId,
+            group_id: groupId,
+            user: defaultUserDto({ id: memberId, username: "member@passbolt.com" }),
+          }),
+        ],
       });
       props.context.port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
-      props.context.port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => [
-        resourcePermissionDto(operatorId, resourceId),
-        { id: uuidv4(), aco: "Resource", aco_foreign_key: resourceId, aro: "Group", aro_foreign_key: groupId, type: 7 },
-      ]);
-      props.context.port.addRequestListener(GROUPS_GET_BY_IDS, () => [group]);
-      props.context.port.addRequestListener(USERS_GET_BY_IDS, () => [
-        { id: operatorId, username: "operator@passbolt.com" },
-        defaultUserDto({ id: memberId, username: "member@passbolt.com" }),
-      ]);
+      props.context.port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, (resourcesIds) =>
+        resourcesIds.map((id) => ({
+          id,
+          permissions: [
+            resourcePermissionDto(operatorId, id),
+            { id: uuidv4(), aco: "Resource", aco_foreign_key: id, aro: "Group", aro_foreign_key: groupId, type: 7 },
+          ],
+        })),
+      );
+      props.context.port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => [group]);
 
       await mountUntilShareOpen(props);
 
@@ -273,6 +266,7 @@ describe("ResourceShareFlow", () => {
       expect(sharedGroup).toBeTruthy();
       // Regression: the merge used to drop groups_users, so the dialog showed "Group with 0 member".
       expect(sharedGroup.groupsUsers.items).toHaveLength(1);
+      expect(shareProps.initialUsers.items.map((user) => user.id)).toStrictEqual([memberId]);
     });
   });
 
@@ -287,26 +281,24 @@ describe("ResourceShareFlow", () => {
           [resources[0].id]: [resourcePermissionDto(operatorId, resources[0].id)],
           [resources[1].id]: [resourcePermissionDto(operatorId, resources[1].id)],
         },
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       jest.spyOn(props.context.port, "request");
       await mountUntilShareOpen(props);
 
-      // A snapshot is built for each resource.
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
+      // A single batched request covers the whole selection.
+      expect(props.context.port.request).toHaveBeenCalledWith(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, [
         resources[0].id,
-        PermissionEntity.ACO_RESOURCE,
-      );
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
         resources[1].id,
-        PermissionEntity.ACO_RESOURCE,
-      );
+      ]);
 
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
       expect(shareProps.initialResources).toHaveLength(2);
+      // A snapshot is seeded for each selected resource.
+      expect(shareProps.initialResources.map((resource) => resource.id)).toStrictEqual([
+        resources[0].id,
+        resources[1].id,
+      ]);
       // It does not fall back to the uncontrolled (context-seeded) path.
       expect(props.context.setContext).not.toHaveBeenCalled();
     });
@@ -321,7 +313,6 @@ describe("ResourceShareFlow", () => {
           [resources[0].id]: [resourcePermissionDto(operatorId, resources[0].id)],
           [resources[1].id]: [resourcePermissionDto(operatorId, resources[1].id)],
         },
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       await mountUntilShareOpen(props);

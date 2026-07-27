@@ -14,12 +14,14 @@
 import KeyringServiceWorkerService from "../serviceWorker/keyring/keyringServiceWorkerService";
 import PermissionServiceWorkerService from "../serviceWorker/permission/permissionServiceWorkerService";
 import GroupServiceWorkerService from "../serviceWorker/group/groupServiceWorkerService";
-import UserServiceWorkerService from "../serviceWorker/user/userServiceWorkerService";
 import PermissionEntity from "../../models/entity/permission/permissionEntity";
+import PermissionsCollection from "../../models/entity/permission/permissionsCollection";
+import UserEntity from "../../models/entity/user/userEntity";
+import GroupEntity from "../../models/entity/group/groupEntity";
 import PermissionSnapshotEntity from "../../models/entity/permission/permissionSnapshotEntity";
 
 /**
- * Higher-level orchestrator that composes the keyring, permission, group, and user service-worker
+ * Higher-level orchestrator that composes the keyring, permission, and group service-worker
  * services to build an immutable permission snapshot. The snapshot is used by the permission-review
  * workflow to guarantee that the permission set displayed to the operator is exactly the one applied
  * when secrets are encrypted and shared.
@@ -32,7 +34,6 @@ export default class PermissionSnapshotService {
     this.keyringServiceWorkerService = new KeyringServiceWorkerService(port);
     this.permissionServiceWorkerService = new PermissionServiceWorkerService(port);
     this.groupServiceWorkerService = new GroupServiceWorkerService(port);
-    this.userServiceWorkerService = new UserServiceWorkerService(port);
   }
 
   /**
@@ -73,10 +74,9 @@ export default class PermissionSnapshotService {
 
   /**
    * Build the permission snapshots shown to the operator while sharing a selection of resources.
-   * Each resource is captured independently (a snapshot's permission set targets a single ACO), so
-   * this returns one snapshot per resource, aligned with the given ids. A single-resource share is
-   * simply a selection of one. The keyring is synchronised once for the whole selection rather than
-   * per resource.
+   * Returns one snapshot per resource, aligned with the given ids (a snapshot targets a single ACO).
+   * The keyring is synchronised, the permissions fetched, and the referenced groups resolved once for
+   * the whole selection, keeping the number of requests constant regardless of its size.
    * @param {Array<string>} resourcesIds The ids of the resources being shared.
    * @returns {Promise<Array<PermissionSnapshotEntity>>}
    */
@@ -85,11 +85,39 @@ export default class PermissionSnapshotService {
       return [];
     }
     await this.keyringServiceWorkerService.synchroniseKeyring();
-    return Promise.all(
-      resourcesIds.map((resourceId) =>
-        this._buildSnapshotForSynchronisedKeyring(resourceId, PermissionEntity.ACO_RESOURCE),
-      ),
-    );
+
+    const resourcesDtos = await this.permissionServiceWorkerService.findByIdsForShare(resourcesIds);
+    const permissionsById = new Map();
+    for (const resourceDto of resourcesDtos) {
+      permissionsById.set(
+        resourceDto.id,
+        new PermissionsCollection(resourceDto.permissions ?? [], { assertAtLeastOneOwner: false }),
+      );
+    }
+
+    // Fail loudly if the batch did not return every selected resource.
+    const missingResourceId = resourcesIds.find((resourceId) => !permissionsById.has(resourceId));
+    if (missingResourceId) {
+      throw new Error(`The permissions of the resource ${missingResourceId} could not be retrieved.`);
+    }
+
+    // Resolve every referenced group across the selection in a single deduplicated request.
+    const allGroupIds = [...permissionsById.values()].flatMap((permissions) => this._referencedGroupIds(permissions));
+    const groupsById = new Map();
+    if (allGroupIds.length) {
+      const groups = await this.groupServiceWorkerService.findByIdsForShare([...new Set(allGroupIds)]);
+      for (const group of groups.items) {
+        groupsById.set(group.id, group);
+      }
+    }
+
+    return resourcesIds.map((resourceId) => {
+      const permissions = permissionsById.get(resourceId);
+      const groups = this._referencedGroupIds(permissions)
+        .map((groupId) => groupsById.get(groupId))
+        .filter(Boolean);
+      return this._toSnapshot(permissions, groups);
+    });
   }
 
   /**
@@ -103,52 +131,50 @@ export default class PermissionSnapshotService {
    */
   async _buildSnapshot(acoId, acoType) {
     await this.keyringServiceWorkerService.synchroniseKeyring();
-    return this._buildSnapshotForSynchronisedKeyring(acoId, acoType);
-  }
-
-  /**
-   * Build an immutable permission snapshot for an ACO together with every group and user
-   * referenced by its permissions, assuming the keyring has already been synchronised by the
-   * caller.
-   * @param {string} acoId The id of the ACO (folder for creation, resource for edition).
-   * @param {string} acoType The ACO type (PermissionEntity.ACO_FOLDER or ACO_RESOURCE).
-   * @returns {Promise<PermissionSnapshotEntity>}
-   * @private
-   */
-  async _buildSnapshotForSynchronisedKeyring(acoId, acoType) {
     const permissions = await this.permissionServiceWorkerService.findPermissions(acoId, acoType);
-    return this._buildSnapshotFromPermissions(permissions);
+    const groupIds = this._referencedGroupIds(permissions);
+    // No group permissions: skip the round-trip to the service worker entirely.
+    let groups = [];
+    if (groupIds.length) {
+      groups = (await this.groupServiceWorkerService.findByIdsForShare(groupIds)).items;
+    }
+    return this._toSnapshot(permissions, groups);
   }
 
   /**
-   * Resolve the groups and users referenced by a permission set and assemble the immutable snapshot.
-   * @param {PermissionsCollection} permissions The permission set to capture.
-   * @returns {Promise<PermissionSnapshotEntity>}
+   * Extract the ids of the groups referenced by a permission set.
+   * @param {PermissionsCollection} permissions The permission set to inspect.
+   * @returns {Array<string>}
    * @private
    */
-  async _buildSnapshotFromPermissions(permissions) {
-    const groupIds = permissions.items
+  _referencedGroupIds(permissions) {
+    return permissions.items
       .filter((permission) => permission.aro === PermissionEntity.ARO_GROUP)
       .map((permission) => permission.aroForeignKey);
-    // The groups carry their memberships (groups_users); their member users are resolved alongside
-    // the directly-permissioned users so the dialog can list a group's members when expanded.
-    const groups = await this.groupServiceWorkerService.getByIds(groupIds);
-    const memberUserIds = groups.items.flatMap((group) =>
-      (group.groupsUsers?.items ?? []).map((groupUser) => groupUser.userId),
-    );
-    const userIds = [
-      ...new Set([
-        ...permissions.items
-          .filter((permission) => permission.aro === PermissionEntity.ARO_USER)
-          .map((permission) => permission.aroForeignKey),
-        ...memberUserIds,
-      ]),
-    ];
-    const users = await this.userServiceWorkerService.getByIds(userIds);
+  }
+
+  /**
+   * Assemble the immutable snapshot from a permission set and the groups it references. The user
+   * list is derived from those groups' members (deduplicated); directly-permissioned users are not
+   * resolved separately, their data travels in the permissions.
+   * @param {PermissionsCollection} permissions The permission set to capture.
+   * @param {Array<GroupEntity>} groups The groups referenced by the permission set.
+   * @returns {PermissionSnapshotEntity}
+   * @private
+   */
+  _toSnapshot(permissions, groups) {
+    const usersById = new Map();
+    for (const group of groups) {
+      for (const groupUser of group.groupsUsers?.items ?? []) {
+        if (groupUser.user && !usersById.has(groupUser.user.id)) {
+          usersById.set(groupUser.user.id, groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
+        }
+      }
+    }
     return new PermissionSnapshotEntity({
       permissions: permissions.toDto(),
-      groups: groups.toDto(),
-      users: users.toDto(),
+      groups: groups.map((group) => group.toDto(GroupEntity.ALL_CONTAIN_OPTIONS)),
+      users: [...usersById.values()],
       created: new Date().toISOString(),
     });
   }

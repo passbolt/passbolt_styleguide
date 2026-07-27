@@ -24,21 +24,19 @@ import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
 import { KEYRING_SYNC_EVENT } from "../../../../../shared/services/serviceWorker/keyring/keyringServiceWorkerService";
 import { PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY } from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
-import { GROUPS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
-import { USERS_GET_BY_IDS } from "../../../../../shared/services/serviceWorker/user/userServiceWorkerService";
+import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
 /**
- * Wire the four port events the snapshot service relies on.
+ * Wire the three port events the snapshot service relies on.
  */
-function wireSnapshotListeners(port, { permissions = [], groups = [], users = [] } = {}) {
+function wireSnapshotListeners(port, { permissions = [], groups = [] } = {}) {
   port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
   port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => permissions);
-  port.addRequestListener(GROUPS_GET_BY_IDS, () => groups);
-  port.addRequestListener(USERS_GET_BY_IDS, () => users);
+  port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => groups);
 }
 
 /**
@@ -92,22 +90,11 @@ describe("ResourceEditFlow", () => {
           resourcePermissionDto(operatorId, props.resource.id),
           resourcePermissionDto(readerId, props.resource.id, PermissionEntity.PERMISSION_READ),
         ],
-        users: [
-          { id: operatorId, username: "operator@passbolt.com" },
-          { id: readerId, username: "reader@passbolt.com" },
-        ],
       });
 
-      // Spy before mounting: the snapshot is built during componentDidMount.
+      // Spy before submitting: the snapshot is built when the operator submits the form.
       jest.spyOn(props.context.port, "request");
       const page = await mountUntilEditOpen(props);
-
-      // The snapshot must be built from the resource itself (ACO_RESOURCE), not a parent folder.
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
-        props.resource.id,
-        PermissionEntity.ACO_RESOURCE,
-      );
 
       // Submit the form: ShareDialog must follow because the resource is shared.
       const editProps = dialogPropsFor(props.dialogContext, EditResource);
@@ -117,6 +104,13 @@ describe("ResourceEditFlow", () => {
           throw new Error("ShareDialog not yet opened");
         }
       });
+
+      // The snapshot must be built from the resource itself (ACO_RESOURCE), not a parent folder.
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY,
+        props.resource.id,
+        PermissionEntity.ACO_RESOURCE,
+      );
 
       // Owner → the dialog is editable (not read-only), seeded from the snapshot.
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
@@ -161,11 +155,7 @@ describe("ResourceEditFlow", () => {
         findCallCount += 1;
         return findCallCount === 1 ? initialPermissionsDto : driftedPermissionsDto;
       });
-      props.context.port.addRequestListener(GROUPS_GET_BY_IDS, () => []);
-      props.context.port.addRequestListener(USERS_GET_BY_IDS, () => [
-        { id: operatorId, username: "operator@passbolt.com" },
-        { id: uuidv4(), username: "reader@passbolt.com" },
-      ]);
+      props.context.port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
 
       const page = await mountUntilEditOpen(props);
       const editProps = dialogPropsFor(props.dialogContext, EditResource);
@@ -207,10 +197,6 @@ describe("ResourceEditFlow", () => {
           resourcePermissionDto(ownerId, props.resource.id),
           resourcePermissionDto(operatorId, props.resource.id, PermissionEntity.PERMISSION_UPDATE),
         ],
-        users: [
-          { id: ownerId, username: "owner@passbolt.com" },
-          { id: operatorId, username: "operator@passbolt.com" },
-        ],
       });
 
       const page = await mountUntilEditOpen(props);
@@ -248,7 +234,6 @@ describe("ResourceEditFlow", () => {
       const operatorId = props.context.loggedInUser.id;
       wireSnapshotListeners(props.context.port, {
         permissions: [resourcePermissionDto(operatorId, props.resource.id)],
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       await mountUntilEditOpen(props);
@@ -276,7 +261,6 @@ describe("ResourceEditFlow", () => {
       const operatorId = props.context.loggedInUser.id;
       wireSnapshotListeners(props.context.port, {
         permissions: [resourcePermissionDto(operatorId, props.resource.id)],
-        users: [{ id: operatorId, username: "operator@passbolt.com" }],
       });
 
       await mountUntilEditOpen(props);
@@ -340,8 +324,11 @@ describe("ResourceEditFlow", () => {
         throw new Error("Keyring sync failed");
       });
 
-      let page;
-      await act(() => (page = new ResourceEditFlowTestPage(props)));
+      const page = await mountUntilEditOpen(props);
+
+      // The snapshot is built on submit, so the keyring-sync failure surfaces there.
+      const editProps = dialogPropsFor(props.dialogContext, EditResource);
+      await act(() => editProps.onSubmit(fakeResourceFormEntity, fakeSecretDto));
       await waitFor(() => {
         if (page._instance.state.status !== RESOURCE_EDIT_FLOW_STATUS.ERROR) {
           throw new Error("Workflow not yet in error state");
