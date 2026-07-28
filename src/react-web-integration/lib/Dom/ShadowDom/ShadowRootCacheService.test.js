@@ -43,7 +43,7 @@ describe("ShadowRootCacheService", () => {
     });
 
     it("should return the cached shadow roots", () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
@@ -52,7 +52,8 @@ describe("ShadowRootCacheService", () => {
       const first = ShadowRootCacheService.getCachedShadowRoots(document);
       const second = ShadowRootCacheService.getCachedShadowRoots(document);
 
-      expect(first).toEqual([shadowRoot]);
+      expect(first.length).toEqual(1);
+      expect(first[0]).toBe(shadowRoot);
       expect(second).toBe(first);
       expect(collectSpy).toHaveBeenCalledTimes(1);
     });
@@ -79,31 +80,36 @@ describe("ShadowRootCacheService", () => {
     });
 
     it("should return the cached shadow roots for a cached element", () => {
-      expect.assertions(1);
+      expect.assertions(3);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
       ShadowRootCacheService._shadowRootsCache.set(document, [shadowRoot]);
 
+      const cache = ShadowRootCacheService.peekCache(document);
+      expect(cache.length).toEqual(1);
+      expect(cache[0]).toBe(shadowRoot);
       expect(ShadowRootCacheService.peekCache(document)).toEqual([shadowRoot]);
     });
   });
 
   describe("ShadowRootCacheService::setCache", () => {
     it("should directly set the cache", () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
       ShadowRootCacheService.setCache(document, [shadowRoot]);
 
-      expect(ShadowRootCacheService._shadowRootsCache.get(document)).toEqual([shadowRoot]);
+      const cache = ShadowRootCacheService._shadowRootsCache.get(document);
+      expect(cache.length).toEqual(1);
+      expect(cache[0]).toBe(shadowRoot);
     });
   });
 
   describe("ShadowRootCacheService::invalidate", () => {
     it("should delete the cache entry for an element", () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
@@ -111,8 +117,9 @@ describe("ShadowRootCacheService", () => {
       expect(ShadowRootCacheService._shadowRootsCache.get(document)).toBeUndefined();
 
       ShadowRootCacheService._shadowRootsCache.set(document, [shadowRoot]);
-
-      expect(ShadowRootCacheService._shadowRootsCache.get(document)).toEqual([shadowRoot]);
+      const cache = ShadowRootCacheService._shadowRootsCache.get(document);
+      expect(cache.length).toEqual(1);
+      expect(cache[0]).toBe(shadowRoot);
 
       ShadowRootCacheService.invalidate(document);
 

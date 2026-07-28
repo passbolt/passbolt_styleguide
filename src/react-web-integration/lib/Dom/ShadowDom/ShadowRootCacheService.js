@@ -16,7 +16,8 @@ import ShadowRootCollectorService from "./ShadowRootCollectorService";
 
 class ShadowRootCacheService {
   /**
-   * We use a WeakMap to store the shadow roots of a given root. This allows us to avoid memory leaks.
+   * We use a WeakMap to store the shadow roots of a given root.
+   * This allows us to reduce the impact on the performance.
    * It is not intended to be mutated outside of this class.
    * @private
    * @type {WeakMap<Document|ShadowRoot|Element, ShadowRoot[]>}
