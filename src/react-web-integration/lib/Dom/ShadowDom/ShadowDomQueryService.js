@@ -17,6 +17,20 @@ import { MAX_PIERCE_DEPTH } from "./ShadowDomDictionary";
 
 class ShadowDomQueryService {
   /**
+   * Check if the node is an element.
+   * @param {Node} node The node to check
+   * @returns {boolean} true if the node is an element
+   */
+  static isElement = (node) => node?.nodeType === Node.ELEMENT_NODE;
+
+  /**
+   * Check if the node is a shadow root.
+   * @param {Node} node The node to check
+   * @returns {boolean} true if the node is a shadow root
+   */
+  static isShadowRoot = (node) => node?.nodeType === Node.DOCUMENT_FRAGMENT_NODE && node.host !== null;
+
+  /**
    * querySelectorAll recursive call applied to all the shadow roots of the page, based on ShadowRootCacheService.
    * @param {Document|ShadowRoot|Element} root The root to query from.
    * @param {string} selector The selector to match elements against.
@@ -46,7 +60,7 @@ class ShadowDomQueryService {
     // Iterate through the DOM tree upwards until we find a match or reach the top
     do {
       parent = parent instanceof ShadowRoot ? parent.host : parent?.parentNode;
-    } while (parent && (parent.nodeType !== Node.ELEMENT_NODE || !parent.matches(selector)));
+    } while (parent && (!ShadowDomQueryService.isElement(parent) || !parent.matches(selector)));
 
     // If `parent` is not defined, then we reached the top of the DOM tree without finding a match
     // So we look downwards if the option is set
@@ -73,25 +87,19 @@ class ShadowDomQueryService {
    * @return {Document|Element|null} The parent element
    */
   static shadowPiercingParentElement(element) {
-    let parent = null;
-
     if (element.assignedSlot) {
       // Web component
-      parent = element.assignedSlot;
-    } else if (element.parentElement) {
-      // Standard DOM
-      parent = element.parentElement;
-    } else {
-      // Shadow DOM
-      parent = ShadowDomQueryService.scopeRoot(element);
-      if (parent instanceof ShadowRoot) {
-        parent = parent.host;
-      } else if (parent instanceof Document) {
-        parent = null;
-      }
+      return element.assignedSlot;
     }
 
-    return parent;
+    if (element.parentElement) {
+      // Standard DOM
+      return element.parentElement;
+    }
+
+    // Shadow DOM
+    const root = ShadowDomQueryService.scopeRoot(element);
+    return ShadowDomQueryService.isShadowRoot(root) ? root.host : null;
   }
 
   /**
@@ -104,19 +112,14 @@ class ShadowDomQueryService {
     const ancestors = new Set();
 
     let current = element;
-    if (current?.nodeType === Node.ELEMENT_NODE) {
+    if (ShadowDomQueryService.isElement(current)) {
       let depth = 0;
 
       do {
         depth++;
         ancestors.add(current);
         current = ShadowDomQueryService.shadowPiercingParentElement(current);
-      } while (
-        current &&
-        current.nodeType === Node.ELEMENT_NODE &&
-        !ancestors.has(current) &&
-        depth < MAX_PIERCE_DEPTH
-      );
+      } while (ShadowDomQueryService.isElement(current) && !ancestors.has(current) && depth < MAX_PIERCE_DEPTH);
     }
 
     return Array.from(ancestors);

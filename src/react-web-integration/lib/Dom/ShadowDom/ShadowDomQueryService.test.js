@@ -33,6 +33,43 @@ describe("ShadowDomQueryService", () => {
     delete browser.dom;
   });
 
+  describe("ShadowDomQueryService::isElement", () => {
+    it("should return true for an element", () => {
+      expect.assertions(1);
+
+      expect(ShadowDomQueryService.isElement(document.createElement("div"))).toBe(true);
+    });
+
+    it("should return false for non-element nodes and nullish values", () => {
+      expect.assertions(4);
+
+      const shadowRoot = document.createElement("div").attachShadow({ mode: "open" });
+
+      expect(ShadowDomQueryService.isElement(document.createTextNode("hello"))).toBe(false);
+      expect(ShadowDomQueryService.isElement(document)).toBe(false);
+      expect(ShadowDomQueryService.isElement(shadowRoot)).toBe(false);
+      expect(ShadowDomQueryService.isElement(null)).toBe(false);
+    });
+  });
+
+  describe("ShadowDomQueryService::isShadowRoot", () => {
+    it("should return true for a shadow root", () => {
+      expect.assertions(1);
+
+      const shadowRoot = document.createElement("div").attachShadow({ mode: "open" });
+
+      expect(ShadowDomQueryService.isShadowRoot(shadowRoot)).toBe(true);
+    });
+
+    it("should return false for an element, the document and nullish values", () => {
+      expect.assertions(3);
+
+      expect(ShadowDomQueryService.isShadowRoot(document.createElement("div"))).toBe(false);
+      expect(ShadowDomQueryService.isShadowRoot(document)).toBe(false);
+      expect(ShadowDomQueryService.isShadowRoot(null)).toBe(false);
+    });
+  });
+
   describe("ShadowDomQueryService::querySelectorAllDeep", () => {
     it("should return the matching elements of the DOM", () => {
       expect.assertions(1);
