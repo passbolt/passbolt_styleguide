@@ -16,16 +16,6 @@ import ShadowRootResolverService from "./ShadowRootResolverService";
 import { IGNORED_SUBTREES } from "./ShadowDomDictionary";
 
 class ShadowRootCollectorService {
-  // Flag raised when a shadow dom is detected
-  static pageContainsShadowDom = false;
-
-  /**
-   * Raise the shadow dom detected flag
-   */
-  static markPageContainsShadowDom() {
-    ShadowRootCollectorService.pageContainsShadowDom = true;
-  }
-
   /**
    * Find the shadow roots contained in `element` and its descendants
    *
@@ -60,10 +50,6 @@ class ShadowRootCollectorService {
           seen.add(shadowRoot);
           shadowRoots.push(shadowRoot);
         }
-      }
-
-      if (shadowRoots.length > 0) {
-        ShadowRootCollectorService.markPageContainsShadowDom();
       }
     }
 

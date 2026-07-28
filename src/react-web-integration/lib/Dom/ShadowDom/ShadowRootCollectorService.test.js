@@ -19,41 +19,25 @@ describe("ShadowRootCollectorService", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    ShadowRootCollectorService.pageContainsShadowDom = false;
-
     // Need to reset the DOM between each test as we use `appendChild` in the tests
     document.body.innerHTML = "";
   });
 
-  describe("ShadowRootCollectorService::markPageContainsShadowDom", () => {
-    it("should raise the pageContainsShadowDom flag", () => {
-      expect.assertions(2);
-
-      expect(ShadowRootCollectorService.pageContainsShadowDom).toBe(false);
-
-      ShadowRootCollectorService.markPageContainsShadowDom();
-
-      expect(ShadowRootCollectorService.pageContainsShadowDom).toBe(true);
-    });
-  });
-
   describe("ShadowRootCollectorService::collectShadowRoots", () => {
     it("should return an empty array and leave the latch untouched on a shadow-less page", () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       document.body.innerHTML = "<div><input type='text'/></div>";
 
       expect(ShadowRootCollectorService.collectShadowRoots(document)).toEqual([]);
-      expect(ShadowRootCollectorService.pageContainsShadowDom).toBe(false);
     });
 
     it("should collect open shadow roots under the document and raise the latch", () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       const { shadowRoot } = appendShadowHost();
 
       expect(ShadowRootCollectorService.collectShadowRoots(document)).toEqual([shadowRoot]);
-      expect(ShadowRootCollectorService.pageContainsShadowDom).toBe(true);
     });
 
     it("should not descend into ignored subtrees", () => {

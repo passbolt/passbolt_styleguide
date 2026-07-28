@@ -51,22 +51,15 @@ class ShadowDomQueryService {
    * Check if an ancestor (including shadow roots) of `element` matches the given selector.
    * @param {Element} element The element from which to start the search.
    * @param {string} selector The selector.
-   * @param {{matchDescendants?: boolean}} options matchDescendants: also search downwards (including shadow roots)
    * @return {boolean}
    */
-  static hasAncestorMatchingDeep(element, selector, options = { matchDescendants: false }) {
+  static hasAncestorMatchingDeep(element, selector) {
     let parent = element;
 
     // Iterate through the DOM tree upwards until we find a match or reach the top
     do {
       parent = parent instanceof ShadowRoot ? parent.host : parent?.parentNode;
     } while (parent && (!ShadowDomQueryService.isElement(parent) || !parent.matches(selector)));
-
-    // If `parent` is not defined, then we reached the top of the DOM tree without finding a match
-    // So we look downwards if the option is set
-    if (!parent && options.matchDescendants) {
-      parent = ShadowDomQueryService.querySelectorAllDeep(element, selector).length > 0;
-    }
 
     return Boolean(parent);
   }

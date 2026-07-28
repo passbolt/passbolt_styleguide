@@ -189,28 +189,6 @@ describe("ShadowDomQueryService", () => {
 
       expect(ShadowDomQueryService.hasAncestorMatchingDeep(input, "form")).toBe(false);
     });
-
-    it("should match a child when the matchDescendants option is set", () => {
-      expect.assertions(1);
-
-      const container = document.createElement("div");
-      document.body.appendChild(container);
-      const host = document.createElement("div");
-      const shadowRoot = host.attachShadow({ mode: "open" });
-      shadowRoot.appendChild(document.createElement("input"));
-      container.appendChild(host);
-
-      expect(ShadowDomQueryService.hasAncestorMatchingDeep(container, "input", { matchDescendants: true })).toBe(true);
-    });
-
-    it("should ignore descendants when the matchDescendants option is not set", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<div id='container'><input type='text'/></div>";
-      const container = document.getElementById("container");
-
-      expect(ShadowDomQueryService.hasAncestorMatchingDeep(container, "input")).toBe(false);
-    });
   });
 
   describe("ShadowDomQueryService::scopeRoot", () => {
