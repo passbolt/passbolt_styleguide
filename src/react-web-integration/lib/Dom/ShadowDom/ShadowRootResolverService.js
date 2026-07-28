@@ -32,7 +32,7 @@ class ShadowRootResolverService {
       const tag = element.nodeName;
 
       // We only consider elements that are likely to have a shadow root
-      if (SHADOW_ROOT_CANDIDATE_NODE_NAMES.has(tag) || tag.includes("-")) {
+      if (SHADOW_ROOT_CANDIDATE_NODE_NAMES.has(tag) || (element instanceof HTMLElement && tag.includes("-"))) {
         try {
           if (browser?.dom?.openOrClosedShadowRoot) {
             shadowRoot = browser.dom.openOrClosedShadowRoot(element);
