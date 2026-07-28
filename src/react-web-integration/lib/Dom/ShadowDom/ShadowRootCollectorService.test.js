@@ -13,6 +13,7 @@
  */
 
 import ShadowRootCollectorService from "./ShadowRootCollectorService";
+import { appendShadowHost } from "./ShadowRootCollectorService.test.data";
 
 describe("ShadowRootCollectorService", () => {
   beforeEach(() => {
@@ -49,9 +50,7 @@ describe("ShadowRootCollectorService", () => {
     it("should collect open shadow roots under the document and raise the latch", () => {
       expect.assertions(2);
 
-      const host = document.createElement("div");
-      const shadowRoot = host.attachShadow({ mode: "open" });
-      document.body.appendChild(host);
+      const { shadowRoot } = appendShadowHost();
 
       expect(ShadowRootCollectorService.collectShadowRoots(document)).toEqual([shadowRoot]);
       expect(ShadowRootCollectorService.pageContainsShadowDom).toBe(true);
@@ -61,9 +60,7 @@ describe("ShadowRootCollectorService", () => {
       expect.assertions(1);
 
       const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      const host = document.createElement("div");
-      host.attachShadow({ mode: "open" });
-      svg.appendChild(host);
+      appendShadowHost(svg);
       document.body.appendChild(svg);
 
       expect(ShadowRootCollectorService.collectShadowRoots(document)).toEqual([]);
@@ -73,9 +70,7 @@ describe("ShadowRootCollectorService", () => {
       expect.assertions(1);
 
       const container = document.createElement("section");
-      const host = document.createElement("div");
-      const shadowRoot = host.attachShadow({ mode: "open" });
-      container.appendChild(host);
+      const { shadowRoot } = appendShadowHost(container);
       document.body.appendChild(container);
 
       expect(ShadowRootCollectorService.collectShadowRoots(container)).toEqual([shadowRoot]);
@@ -84,9 +79,7 @@ describe("ShadowRootCollectorService", () => {
     it("should resolve the shadow root of the node itself", () => {
       expect.assertions(1);
 
-      const host = document.createElement("div");
-      const shadowRoot = host.attachShadow({ mode: "open" });
-      document.body.appendChild(host);
+      const { host, shadowRoot } = appendShadowHost();
 
       expect(ShadowRootCollectorService.collectShadowRoots(host)).toEqual([shadowRoot]);
     });
@@ -94,12 +87,8 @@ describe("ShadowRootCollectorService", () => {
     it("should not return shadow roots already present in the seen set", () => {
       expect.assertions(2);
 
-      const first = document.createElement("div");
-      const firstRoot = first.attachShadow({ mode: "open" });
-      document.body.appendChild(first);
-      const second = document.createElement("div");
-      const secondRoot = second.attachShadow({ mode: "open" });
-      document.body.appendChild(second);
+      const { shadowRoot: firstRoot } = appendShadowHost();
+      const { shadowRoot: secondRoot } = appendShadowHost();
 
       const seen = new Set([firstRoot]);
       const result = ShadowRootCollectorService.collectShadowRoots(document, seen);
