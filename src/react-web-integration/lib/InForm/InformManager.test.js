@@ -91,6 +91,7 @@ import InFormManager from "./InFormManager";
 import DomUtils from "../Dom/DomUtils";
 import ShadowRootCacheService from "../Dom/ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../Dom/ShadowDom/ShadowMutationObserverService";
+import ShadowDomFocusHealerService from "../Dom/ShadowDom/ShadowDomFocusHealerService";
 import { act } from "react";
 import { waitFor } from "@testing-library/react";
 
@@ -1895,6 +1896,42 @@ describe("InformManager", () => {
 
       InFormManager.onShadowMutation(otherShadowRoot, [], true);
       expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("Focus healer integration", () => {
+    it("should discover a field within a shadow dom attached after the initial scan", async () => {
+      expect.hasAssertions();
+
+      document.body.innerHTML = "";
+      const host = document.createElement("div");
+      document.body.appendChild(host);
+
+      ShadowDomFocusHealerService.installFocusinHealer();
+
+      let page;
+      await act(async () => (page = new InformManagerPage()));
+
+      // Later, a shadow root is attached
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      const input = document.createElement("input");
+      input.type = "text";
+      input.name = "username";
+      shadowRoot.appendChild(input);
+
+      expect(page.username).toBeUndefined();
+
+      // Simulate a focus on the field
+      ShadowDomFocusHealerService._focusinHandler({
+        composedPath: () => [input, shadowRoot, host, document.body, document],
+      });
+
+      await waitFor(() => expect(InFormManager.callToActionFields.length).toBeGreaterThan(0), { timeout: 3000 });
+
+      expect(page.username).toBe(input);
+
+      await page.focusOnUsername();
+      expect(page.iframesLength).toBe(1);
     });
   });
 

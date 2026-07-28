@@ -13,6 +13,8 @@
  */
 
 import ShadowRootCacheService from "./ShadowRootCacheService";
+import ShadowMutationObserverService from "./ShadowMutationObserverService";
+import ShadowDomQueryService from "./ShadowDomQueryService";
 
 class ShadowDomFocusHealerService {
   /**
@@ -33,18 +35,25 @@ class ShadowDomFocusHealerService {
 
     ShadowDomFocusHealerService._focusinHandler = (event) => {
       const path = event.composedPath();
-      if (path[0].tagName === "INPUT") {
+      const [target] = path;
+
+      if (target.tagName === "INPUT") {
         let invalidated = false;
 
         for (const node of path) {
           if (node instanceof ShadowRoot) {
-            ShadowRootCacheService.invalidate(node);
-            invalidated = true;
+            const parentScope = ShadowDomQueryService.scopeRoot(node.host);
+            const cachedParentRoots = ShadowRootCacheService.peekCache(parentScope);
+            const isKnown = cachedParentRoots?.includes(node) ?? false;
+            if (!isKnown) {
+              ShadowRootCacheService.invalidate(parentScope);
+              invalidated = true;
+            }
           }
         }
 
         if (invalidated) {
-          ShadowRootCacheService.invalidate(document);
+          ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true);
         }
       }
     };
