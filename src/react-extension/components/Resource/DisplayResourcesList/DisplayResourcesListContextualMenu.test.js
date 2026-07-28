@@ -533,6 +533,14 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.offlineAvailabilityItem.textContent).toBe("Make available offline");
     });
 
+    it("As LU I should not see the offline availability item when offline mode is disabled at the org level", () => {
+      expect.assertions(1);
+      const props = defaultProps({ offlineSettings: null });
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).toBeNull();
+    });
+
     it("As LU I should see the 'Remove offline availability' item when the resource is already available offline", () => {
       expect.assertions(2);
       const props = defaultProps({

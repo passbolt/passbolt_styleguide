@@ -27,6 +27,7 @@ import sanitizeUrl, { urlProtocols } from "../../../lib/Sanitize/sanitizeUrl";
 import { Trans, withTranslation } from "react-i18next";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { withOfflineSettingsLocalStorage } from "../../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import { withProgress } from "../../../contexts/ProgressContext";
 import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
@@ -522,6 +523,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
   get canUseOffline() {
     return (
       this.props.context.siteSettings.canIUse("offlineMode") &&
+      Boolean(this.props.offlineSettings) &&
       this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_ADD)
     );
   }
@@ -809,6 +811,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
 DisplayResourcesListContextualMenu.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
+  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
@@ -830,13 +833,15 @@ export default withAppContext(
   withMetadataKeysSettingsLocalStorage(
     withClipboard(
       withRbac(
-        withResourceWorkspace(
-          withResourceTypesLocalStorage(
-            withPasswordExpiry(
-              withSecretRevisionsSettings(
-                withDialog(
-                  withWorkflow(
-                    withProgress(withActionFeedback(withTranslation("common")(DisplayResourcesListContextualMenu))),
+        withOfflineSettingsLocalStorage(
+          withResourceWorkspace(
+            withResourceTypesLocalStorage(
+              withPasswordExpiry(
+                withSecretRevisionsSettings(
+                  withDialog(
+                    withWorkflow(
+                      withProgress(withActionFeedback(withTranslation("common")(DisplayResourcesListContextualMenu))),
+                    ),
                   ),
                 ),
               ),

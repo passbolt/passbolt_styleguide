@@ -24,6 +24,7 @@ import { Trans, withTranslation } from "react-i18next";
 import { withDrag } from "../../../contexts/DragContext";
 import DisplayDragResource from "./DisplayDragResource";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { withOfflineSettingsLocalStorage } from "../../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
 import GridTable from "../../../../shared/components/Table/GridTable";
@@ -417,6 +418,7 @@ class DisplayResourcesList extends React.Component {
   get canUseOffline() {
     return (
       this.props.context.siteSettings.canIUse("offlineMode") &&
+      Boolean(this.props.offlineSettings) &&
       this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_VIEW)
     );
   }
@@ -1324,6 +1326,7 @@ class DisplayResourcesList extends React.Component {
 DisplayResourcesList.propTypes = {
   context: PropTypes.any, // The app context
   rbacContext: PropTypes.any, // The role based access control context
+  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
   resourceWorkspaceContext: PropTypes.any,
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
@@ -1339,11 +1342,13 @@ export default withAppContext(
   withClipboard(
     withRouter(
       withRbac(
-        withActionFeedback(
-          withContextualMenu(
-            withResourceWorkspace(
-              withResourceTypesLocalStorage(
-                withPasswordExpiry(withDrag(withProgress(withTranslation("common")(DisplayResourcesList)))),
+        withOfflineSettingsLocalStorage(
+          withActionFeedback(
+            withContextualMenu(
+              withResourceWorkspace(
+                withResourceTypesLocalStorage(
+                  withPasswordExpiry(withDrag(withProgress(withTranslation("common")(DisplayResourcesList)))),
+                ),
               ),
             ),
           ),
