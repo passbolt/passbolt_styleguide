@@ -33,6 +33,7 @@ import { withRouter } from "react-router-dom";
 import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { withOfflineSettingsLocalStorage } from "../../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
 
 /**
@@ -68,6 +69,7 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
   get canUseOfflineMode() {
     return (
       this.props.context.siteSettings.canIUse("offlineMode") &&
+      Boolean(this.props.offlineSettings) &&
       this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_VIEW)
     );
   }
@@ -301,6 +303,7 @@ DisplayResourcesWorkspaceFilters.propTypes = {
   actionsFilterRef: PropTypes.object, // The forwarded ref of the filters buttons container
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
+  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
   passwordExpiryContext: PropTypes.object, // the password expiry context
   history: PropTypes.object, // The history property
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
@@ -309,6 +312,10 @@ DisplayResourcesWorkspaceFilters.propTypes = {
 
 export default withRouter(
   withAppContext(
-    withRbac(withPasswordExpiry(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceFilters)))),
+    withRbac(
+      withOfflineSettingsLocalStorage(
+        withPasswordExpiry(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceFilters))),
+      ),
+    ),
   ),
 );

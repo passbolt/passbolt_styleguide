@@ -25,6 +25,7 @@ import GridResourceUserSettingServiceWorkerService from "../../shared/services/s
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 import { withPasswordExpiry } from "./PasswordExpirySettingsContext";
 import { withRbac } from "../../shared/context/Rbac/RbacContext";
+import { withOfflineSettingsLocalStorage } from "../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import { uiActions } from "../../shared/services/rbacs/uiActionEnumeration";
 import { actions } from "../../shared/services/rbacs/actionEnumeration";
 import { ColumnModelTypes } from "../../shared/models/column/ColumnModel";
@@ -819,6 +820,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   get canUseOfflineMode() {
     return (
       this.props.context.siteSettings.canIUse("offlineMode") &&
+      Boolean(this.props.offlineSettings) &&
       this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_VIEW)
     );
   }
@@ -1436,14 +1438,17 @@ ResourceWorkspaceContextProvider.propTypes = {
   actionFeedbackContext: PropTypes.object,
   passwordExpiryContext: PropTypes.object, // the password expiry contexts
   rbacContext: PropTypes.any, // The role based access control context
+  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
   loadingContext: PropTypes.object, // The loading context
   t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(
   withRbac(
-    withPasswordExpiry(
-      withLoading(withActionFeedback(withRouter(withTranslation("common")(ResourceWorkspaceContextProvider)))),
+    withOfflineSettingsLocalStorage(
+      withPasswordExpiry(
+        withLoading(withActionFeedback(withRouter(withTranslation("common")(ResourceWorkspaceContextProvider)))),
+      ),
     ),
   ),
 );

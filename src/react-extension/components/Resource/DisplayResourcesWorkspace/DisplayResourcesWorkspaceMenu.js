@@ -26,6 +26,7 @@ import { withWorkflow } from "../../../contexts/WorkflowContext";
 import ExportResources from "../ExportResources/ExportResources";
 import { Trans, withTranslation } from "react-i18next";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { withOfflineSettingsLocalStorage } from "../../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import { withProgress } from "../../../contexts/ProgressContext";
 import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
@@ -580,6 +581,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   canUseOffline() {
     return (
       this.props.context.siteSettings.canIUse("offlineMode") &&
+      Boolean(this.props.offlineSettings) &&
       this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_ADD)
     );
   }
@@ -853,6 +855,7 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   actionsButtonRef: PropTypes.object, // The forwarded ref of the buttons container
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
+  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   workflowContext: PropTypes.any, // the permission workflow context
@@ -870,14 +873,16 @@ export default withAppContext(
   withMetadataKeysSettingsLocalStorage(
     withClipboard(
       withRbac(
-        withDialog(
-          withWorkflow(
-            withProgress(
-              withPasswordExpiry(
-                withSecretRevisionsSettings(
-                  withResourceWorkspace(
-                    withResourceTypesLocalStorage(
-                      withActionFeedback(withTranslation("common")(DisplayResourcesWorkspaceMenu)),
+        withOfflineSettingsLocalStorage(
+          withDialog(
+            withWorkflow(
+              withProgress(
+                withPasswordExpiry(
+                  withSecretRevisionsSettings(
+                    withResourceWorkspace(
+                      withResourceTypesLocalStorage(
+                        withActionFeedback(withTranslation("common")(DisplayResourcesWorkspaceMenu)),
+                      ),
                     ),
                   ),
                 ),

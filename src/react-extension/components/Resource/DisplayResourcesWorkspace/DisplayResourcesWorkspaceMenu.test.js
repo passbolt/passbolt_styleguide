@@ -667,6 +667,16 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.dropdownMenuOffline.textContent).toBe("Remove offline availability");
     });
 
+    it("As LU I should not see the offline availability item when offline mode is disabled at the org level", () => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceOwned({ offlineSettings: null });
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).toBeNull();
+    });
+
     it("As LU I should not see the offline availability item when multiple resources are selected", () => {
       expect.assertions(2);
       const props = defaultPropsMultipleResourceUpdateRights();

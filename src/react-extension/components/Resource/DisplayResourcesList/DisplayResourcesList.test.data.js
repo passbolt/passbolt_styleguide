@@ -36,6 +36,8 @@ import {
   TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import OfflineSettingsEntity from "../../../../shared/models/entity/offline/offlineSettingsEntity";
+import { defaultOfflineSettingsDto } from "../../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
 import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
@@ -48,6 +50,7 @@ export function defaultProps(data = {}) {
   return {
     context: defaultUserAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
+    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     contextualMenuContext: defaultContextualMenuContext(),
@@ -148,6 +151,7 @@ export function propsWithFilteredResourcesAndOfflineEnabled(data = {}) {
 
   return defaultProps({
     context: baseContext,
+    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filteredResources: resources,
       columnsResourceSetting: new ColumnsResourceSettingCollection([
