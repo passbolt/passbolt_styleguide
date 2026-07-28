@@ -184,6 +184,27 @@ describe("InFormCallToActionField", () => {
     });
   });
 
+  describe("InFormCallToActionField::handleInsertionEvent", () => {
+    it("should insert the CTA immediately when the field is already focused inside a shadow dom", () => {
+      expect.assertions(2);
+
+      const fieldHost = document.createElement("div");
+      const fieldRoot = fieldHost.attachShadow({ mode: "open" });
+      const field = document.createElement("input");
+      fieldRoot.appendChild(field);
+      document.body.appendChild(fieldHost);
+
+      field.focus();
+      expect(document.activeElement).toBe(fieldHost);
+
+      const insertSpy = jest.spyOn(InFormCallToActionField.prototype, "insertInformCallToActionIframe");
+
+      new InFormCallToActionField(field, "username", fieldRoot);
+
+      expect(insertSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe("InFormCallToActionField::insertInformCallToActionIframe", () => {
     it("should not create a second iframe when one is already inserted", async () => {
       expect.assertions(1);

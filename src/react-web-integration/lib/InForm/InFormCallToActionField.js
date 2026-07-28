@@ -136,7 +136,11 @@ class InFormCallToActionField {
    * Whenever the call-to-action must be inserted
    */
   handleInsertionEvent() {
-    if (document.activeElement === this.field) {
+    const fieldRoot = ShadowDomQueryService.scopeRoot(this.field);
+    if (
+      this.field === document.activeElement ||
+      (fieldRoot instanceof ShadowRoot && fieldRoot.host === document.activeElement)
+    ) {
       this.insertInformCallToActionIframe();
     }
     this.field.addEventListener("mouseover", this.insertInformCallToActionIframe);
