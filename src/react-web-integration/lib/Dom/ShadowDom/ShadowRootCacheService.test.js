@@ -129,5 +129,17 @@ describe("ShadowRootCacheService", () => {
 
       expect(ShadowRootCacheService._shadowRootsCache.get(document)).toBeUndefined();
     });
+
+    it("should disconnect the observer of the element", () => {
+      expect.assertions(2);
+
+      const observer = { disconnect: jest.fn() };
+      ShadowMutationObserverService._shadowRootsObservers.set(document, observer);
+
+      ShadowRootCacheService.invalidate(document);
+
+      expect(observer.disconnect).toHaveBeenCalledTimes(1);
+      expect(ShadowMutationObserverService._shadowRootsObservers.get(document)).toBeUndefined();
+    });
   });
 });

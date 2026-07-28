@@ -66,6 +66,7 @@ class ShadowRootCacheService {
    * @param {Document|ShadowRoot|Element} element
    */
   static invalidate(element) {
+    ShadowMutationObserverService.disconnectObserver(element);
     ShadowRootCacheService._shadowRootsCache.delete(element);
   }
 }
