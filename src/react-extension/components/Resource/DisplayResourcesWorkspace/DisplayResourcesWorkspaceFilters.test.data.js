@@ -20,6 +20,8 @@ import {
   defaultAdministratorRbacContext,
   denyRbacContext,
 } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import OfflineSettingsEntity from "../../../../shared/models/entity/offline/offlineSettingsEntity";
+import { defaultOfflineSettingsDto } from "../../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
 
 /**
  * Default app context.
@@ -42,6 +44,7 @@ export function defaultProps(data = {}) {
   return {
     context: defaultAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
+    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     history: {

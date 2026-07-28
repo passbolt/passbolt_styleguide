@@ -38,6 +38,8 @@ import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity
 import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
+import OfflineSettingsEntity from "../../../../shared/models/entity/offline/offlineSettingsEntity";
+import { defaultOfflineSettingsDto } from "../../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
 import { defaultOfflineItemDto } from "../../../../shared/models/entity/offline/offlineItemEntity.test.data";
 
 /**
@@ -64,6 +66,7 @@ export const defaultAppContext = (appContext = {}) => {
 const defaultProps = (data = {}) => ({
   context: defaultAppContext(),
   rbacContext: defaultAdministratorRbacContext(),
+  offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   dialogContext: defaultDialogContext(),
   workflowContext: defaultWorkflowContext(),

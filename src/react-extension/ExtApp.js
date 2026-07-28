@@ -73,6 +73,7 @@ import AdministrationEncryptedMetadataGettingStartedContextProvider from "./cont
 import GettingStartedWithEncryptedMetadataServiceWorkerService from "../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
 import { ResizableSidebarContextProvider } from "./contexts/ResizeSidebar/ResizeSidebarContext";
 import SecretRevisionsSettingsContextProvider from "../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
+import OfflineSettingsLocalStorageContextProvider from "../shared/context/offline/OfflineSettingsLocalStorageContext";
 import RoleContextProvider from "./contexts/RoleContext";
 import ExportPoliciesSettingsContextProvider from "./contexts/ExportPoliciesSettingsContext";
 
@@ -156,30 +157,32 @@ class ExtApp extends Component {
                                               >
                                                 <PasswordExpirySettingsContextProvider>
                                                   <ExportPoliciesSettingsContextProvider>
-                                                    <ResourceWorkspaceContextProvider>
-                                                      <MetadataTypesSettingsLocalStorageContextProvider>
-                                                        <MetadataKeysSettingsLocalStorageContextProvider>
-                                                          <ResourceTypesLocalStorageContextProvider>
-                                                            <SecretRevisionsSettingsContextProvider>
-                                                              <ResourcePasswordGeneratorContextProvider>
-                                                                <ManageDialogs />
-                                                                <ManageWorkflows />
-                                                                <ManageContextualMenu />
-                                                                <DragContextProvider>
-                                                                  <ResizableSidebarContextProvider>
-                                                                    <div id="container" className="page password">
-                                                                      <div id="app" className="app" tabIndex="1000">
-                                                                        <DisplayResourcesWorkspace />
+                                                    <OfflineSettingsLocalStorageContextProvider>
+                                                      <ResourceWorkspaceContextProvider>
+                                                        <MetadataTypesSettingsLocalStorageContextProvider>
+                                                          <MetadataKeysSettingsLocalStorageContextProvider>
+                                                            <ResourceTypesLocalStorageContextProvider>
+                                                              <SecretRevisionsSettingsContextProvider>
+                                                                <ResourcePasswordGeneratorContextProvider>
+                                                                  <ManageDialogs />
+                                                                  <ManageWorkflows />
+                                                                  <ManageContextualMenu />
+                                                                  <DragContextProvider>
+                                                                    <ResizableSidebarContextProvider>
+                                                                      <div id="container" className="page password">
+                                                                        <div id="app" className="app" tabIndex="1000">
+                                                                          <DisplayResourcesWorkspace />
+                                                                        </div>
                                                                       </div>
-                                                                    </div>
-                                                                  </ResizableSidebarContextProvider>
-                                                                </DragContextProvider>
-                                                              </ResourcePasswordGeneratorContextProvider>
-                                                            </SecretRevisionsSettingsContextProvider>
-                                                          </ResourceTypesLocalStorageContextProvider>
-                                                        </MetadataKeysSettingsLocalStorageContextProvider>
-                                                      </MetadataTypesSettingsLocalStorageContextProvider>
-                                                    </ResourceWorkspaceContextProvider>
+                                                                    </ResizableSidebarContextProvider>
+                                                                  </DragContextProvider>
+                                                                </ResourcePasswordGeneratorContextProvider>
+                                                              </SecretRevisionsSettingsContextProvider>
+                                                            </ResourceTypesLocalStorageContextProvider>
+                                                          </MetadataKeysSettingsLocalStorageContextProvider>
+                                                        </MetadataTypesSettingsLocalStorageContextProvider>
+                                                      </ResourceWorkspaceContextProvider>
+                                                    </OfflineSettingsLocalStorageContextProvider>
                                                   </ExportPoliciesSettingsContextProvider>
                                                 </PasswordExpirySettingsContextProvider>
                                               </Route>
