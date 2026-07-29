@@ -521,9 +521,12 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @return {boolean}
    */
   get canUseOffline() {
+    const resourceType = this.props.resourceTypes.getFirstById(this.resource.resource_type_id);
+
     return (
       this.props.context.siteSettings.canIUse("offlineMode") &&
       Boolean(this.props.offlineSettings) &&
+      resourceType?.isV5() &&
       this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_ADD)
     );
   }

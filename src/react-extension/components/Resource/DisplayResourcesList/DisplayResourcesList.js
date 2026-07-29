@@ -269,7 +269,7 @@ class DisplayResourcesList extends React.Component {
       this.defaultColumns.push(
         new ColumnOfflineModel({
           cellRenderer: { component: CellOffline },
-          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Offline Mode") } },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Available Offline") } },
         }),
       );
     }
@@ -363,6 +363,7 @@ class DisplayResourcesList extends React.Component {
     const hasRowsSettingChanged =
       nextProps.resourceWorkspaceContext.rowsSetting?.height !==
       this.props.resourceWorkspaceContext.rowsSetting?.height;
+    const hasOfflineSettingsChanged = nextProps.offlineSettings !== this.props.offlineSettings;
     const mustHidePreviewPassword =
       hasFilteredResourcesChanged ||
       hasSingleSelectedResourceChanged ||
@@ -381,7 +382,8 @@ class DisplayResourcesList extends React.Component {
       hasColumnsResourceViewChange ||
       hasResourcePreviewSecretChange ||
       hasColumnOrderChanged ||
-      hasRowsSettingChanged
+      hasRowsSettingChanged ||
+      hasOfflineSettingsChanged
     );
   }
 

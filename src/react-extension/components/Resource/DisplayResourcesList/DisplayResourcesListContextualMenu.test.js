@@ -524,27 +524,24 @@ describe("DisplayResourcesListContextualMenu", () => {
   });
 
   describe("As LU I should be able to mark a resource available offline or remove it", () => {
-    it("As LU I should see the 'Make available offline' item when the resource is not yet available offline", () => {
+    it("As LU I should see the 'Make available offline' item when a v5 resource is not yet available offline", () => {
       expect.assertions(2);
-      const props = defaultProps();
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+      });
       const page = new DisplayResourcesListContextualMenuPage(props);
 
       expect(page.offlineAvailabilityItem).not.toBeNull();
       expect(page.offlineAvailabilityItem.textContent).toBe("Make available offline");
     });
 
-    it("As LU I should not see the offline availability item when offline mode is disabled at the org level", () => {
-      expect.assertions(1);
-      const props = defaultProps({ offlineSettings: null });
-      const page = new DisplayResourcesListContextualMenuPage(props);
-
-      expect(page.offlineAvailabilityItem).toBeNull();
-    });
-
-    it("As LU I should see the 'Remove offline availability' item when the resource is already available offline", () => {
+    it("As LU I should see the 'Remove offline availability' item when a v5 resource is already available offline", () => {
       expect.assertions(2);
       const props = defaultProps({
-        resource: defaultResourceDto({ offline: defaultOfflineItemDto() }),
+        resource: defaultResourceDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          offline: defaultOfflineItemDto(),
+        }),
       });
       const page = new DisplayResourcesListContextualMenuPage(props);
 
@@ -552,9 +549,20 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.offlineAvailabilityItem.textContent).toBe("Remove offline availability");
     });
 
-    it("As LU I can mark a resource as available offline", async () => {
-      expect.assertions(2);
+    it("As LU I should not see the offline availability item for a v4 resource", () => {
+      expect.assertions(1);
+      // defaultResourceDto defaults to a v4 resource type (password and description).
       const props = defaultProps();
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).toBeNull();
+    });
+
+    it("As LU I can mark a v5 resource as available offline", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+      });
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
       jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
       const page = new DisplayResourcesListContextualMenuPage(props);
@@ -567,10 +575,13 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it("As LU I can remove offline availability from a resource already available offline", async () => {
+    it("As LU I can remove offline availability from a v5 resource already available offline", async () => {
       expect.assertions(2);
       const props = defaultProps({
-        resource: defaultResourceDto({ offline: defaultOfflineItemDto() }),
+        resource: defaultResourceDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          offline: defaultOfflineItemDto(),
+        }),
       });
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
       jest.spyOn(OfflineModeServiceWorkerService.prototype, "unmarkItem").mockResolvedValue();
@@ -586,7 +597,9 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it("As LU I should see an error notification if the offline update fails", async () => {
       expect.assertions(2);
-      const props = defaultProps();
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+      });
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {
         jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
         throw new Error("offline failure");
