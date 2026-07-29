@@ -4,6 +4,9 @@ import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import LogoSVG from "../../../img/svg/logo.svg";
 import PowerSVG from "../../../img/svg/power.svg";
+import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withRouter } from "react-router-dom";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 class Header extends React.Component {
   constructor(props) {
@@ -24,8 +27,8 @@ class Header extends React.Component {
   }
 
   async handleLogoutClick() {
-    this.props.context.port.request("passbolt.auth.logout", false);
-    this.props.logoutSuccessCallback();
+    await this.props.context.port.request("passbolt.auth.logout", false);
+    this.props.history.push("/webAccessibleResources/quickaccess/login");
   }
 
   render() {
@@ -41,7 +44,7 @@ class Header extends React.Component {
             <LogoSVG role="img" width="10rem" height="1.8rem" />
           </a>
         </div>
-        {this.props.context.isAuthenticated && (
+        {this.props.activeSession?.isAuthenticated && (
           <span>
             <a
               role="button"
@@ -63,8 +66,9 @@ class Header extends React.Component {
 
 Header.propTypes = {
   context: PropTypes.any, // The application context
-  logoutSuccessCallback: PropTypes.func,
+  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The application active session
+  history: PropTypes.any, // The history
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation("common")(Header));
+export default withActiveSessionLocalStorage(withAppContext(withRouter(withTranslation("common")(Header))));

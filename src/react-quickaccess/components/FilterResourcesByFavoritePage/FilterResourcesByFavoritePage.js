@@ -52,7 +52,6 @@ class FilterResourcesByFavoritePage extends React.Component {
    * Invoked immediately after component is inserted into the tree
    */
   componentDidMount() {
-    this.props.context.focusSearch();
     if (this.props.context.searchHistory[this.props.location.pathname]) {
       this.props.context.updateSearch(this.props.context.searchHistory[this.props.location.pathname]);
     }

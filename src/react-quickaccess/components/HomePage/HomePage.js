@@ -91,7 +91,6 @@ class HomePage extends React.Component {
     // Reset the search and any search history.
     this.props.context.searchHistory = [];
     this.props.context.updateSearch("");
-    this.props.context.focusSearch();
 
     this.loadActiveTabUrl();
   }
@@ -111,7 +110,7 @@ class HomePage extends React.Component {
     try {
       const activeTabUrl = await this.props.context.port.request(
         "passbolt.active-tab.get-url",
-        this.props.context.getOpenerTabId(),
+        this.props.context.openerTabId,
       );
       this.setState({ activeTabUrl });
     } catch (error) {
@@ -168,7 +167,7 @@ class HomePage extends React.Component {
       await this.props.context.port.request(
         "passbolt.quickaccess.use-resource-on-current-tab",
         resource.id,
-        this.props.context.getOpenerTabId(),
+        this.props.context.openerTabId,
       );
       await this.props.context.closeWindow();
     } catch (error) {
