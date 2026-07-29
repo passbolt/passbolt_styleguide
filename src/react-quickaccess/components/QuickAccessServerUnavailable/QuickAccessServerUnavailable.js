@@ -16,6 +16,8 @@ import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { withRouter } from "react-router-dom";
 import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
+import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 class QuickAccessServerUnavailable extends Component {
   constructor(props) {
@@ -25,11 +27,11 @@ class QuickAccessServerUnavailable extends Component {
 
   async handleSignOutLocallyClick() {
     await this.props.context.port.request("passbolt.auth.local-logout");
-    this.props.logoutSuccessCallback?.();
+    this.props.history.push("/webAccessibleResources/quickaccess.html");
   }
 
   render() {
-    const isAuthenticated = Boolean(this.props.context.isAuthenticated);
+    const isAuthenticated = this.props.activeSession.isAuthenticated;
     return (
       <div className="quickaccess-server-unavailable">
         <div className="form-container">
@@ -52,7 +54,9 @@ QuickAccessServerUnavailable.propTypes = {
   history: PropTypes.any, // The router history
   location: PropTypes.any, // The router location
   context: PropTypes.any, // The application context
-  logoutSuccessCallback: PropTypes.func, // The callback invoked after a successful local sign out
+  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withRouter(withTranslation("common")(QuickAccessServerUnavailable)));
+export default withActiveSessionLocalStorage(
+  withAppContext(withRouter(withTranslation("common")(QuickAccessServerUnavailable))),
+);

@@ -19,6 +19,9 @@ import MockStorage from "../../react-extension/test/mock/MockStorage";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../react-extension/test/fixture/Settings/userSettings";
 import { defaultUserDto } from "../../shared/models/entity/user/userEntity.test.data";
+import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
+import UserActiveSessionEntity from "../../shared/models/entity/session/userActiveSessionEntity";
+import { defaultUserActiveSessionDto } from "../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -37,14 +40,18 @@ export function defaultAppContext(data = {}) {
     loggedInUser: defaultUserDto(),
     users: [],
     resources: [],
-    focusSearch: jest.fn(),
     updateSearch: jest.fn(),
-    getOpenerTabId: () => 1,
+    openerTabId: 1,
     search: "",
     searchHistory: {},
     closeWindow: jest.fn(),
-    setWindowBlurBehaviour: () => {},
-    shouldCloseAtWindowBlur: true,
+    setWindowBlurBehaviour: () => jest.fn(),
+    shouldCloseAtWindowBlur: false,
+    rbacs: new RbacsCollection([]),
+    loginSuccessCallback: jest.fn(),
+    mfaRequiredCallback: jest.fn(),
+    bootstrapFeature: "",
+    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_authenticated: false })),
     ...data,
   };
 }

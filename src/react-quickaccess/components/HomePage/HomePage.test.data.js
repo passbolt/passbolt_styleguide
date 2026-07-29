@@ -39,7 +39,7 @@ export function defaultProps(data = {}) {
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     resources: null,
-    getOpenerTabId: () => 1,
+    openerTabId: 1,
     ...data,
   };
 }

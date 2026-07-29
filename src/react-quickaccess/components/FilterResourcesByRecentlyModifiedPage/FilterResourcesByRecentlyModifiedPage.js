@@ -29,7 +29,6 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
   }
 
   componentDidMount() {
-    this.props.context.focusSearch();
     if (this.props.context.searchHistory[this.props.location.pathname]) {
       this.props.context.updateSearch(this.props.context.searchHistory[this.props.location.pathname]);
     }

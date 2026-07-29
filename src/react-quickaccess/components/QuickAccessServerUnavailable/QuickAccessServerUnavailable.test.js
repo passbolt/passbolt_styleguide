@@ -45,6 +45,7 @@ describe("QuickAccessServerUnavailable", () => {
     expect.assertions(3);
     const props = defaultProps();
     jest.spyOn(props.context.port, "request").mockImplementation(() => Promise.resolve());
+    jest.spyOn(props.history, "push");
     let page;
     await act(async () => (page = new QuickAccessServerUnavailablePage(props)));
 
@@ -52,7 +53,7 @@ describe("QuickAccessServerUnavailable", () => {
 
     expect(props.context.port.request).toHaveBeenCalledTimes(1);
     expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth.local-logout");
-    expect(props.logoutSuccessCallback).toHaveBeenCalledTimes(1);
+    expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess.html");
   });
 
   it("As a signed-out user I do not see the sign out locally button", async () => {

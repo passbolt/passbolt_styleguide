@@ -36,7 +36,6 @@ import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWor
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
 import HandleSubscriptionAnnouncement from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
 import ExtAppContextProvider from "./contexts/ExtAppContext";
-
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import UserSettingsContextProvider from "./contexts/UserSettingsContext";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";

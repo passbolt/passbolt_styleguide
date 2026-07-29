@@ -115,7 +115,7 @@ describe("HomePage", () => {
           defaultResourceDto(),
         ],
       });
-      props.context.getOpenerTabId = () => 1;
+      props.context.openerTabId = 1;
       props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "http://www.apache.org/");
       const page = new HomePagePage(props);
 
@@ -144,7 +144,7 @@ describe("HomePage", () => {
           defaultResourceDto(),
         ],
       });
-      props.context.getOpenerTabId = () => 1;
+      props.context.openerTabId = 1;
       props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "http://www.apache.org/");
       const page = new HomePagePage(props);
 
@@ -178,7 +178,7 @@ describe("HomePage", () => {
           defaultResourceDto(),
         ],
       });
-      props.context.getOpenerTabId = () => 1;
+      props.context.openerTabId = 1;
       props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "http://www.apache.org/");
       const page = new HomePagePage(props);
 
@@ -206,7 +206,7 @@ describe("HomePage", () => {
       });
 
       const props = defaultProps({ resources: [sameDomain, sameFqdn, subPage, exact] });
-      props.context.getOpenerTabId = () => 1;
+      props.context.openerTabId = 1;
       props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => activeTabUrl);
       const page = new HomePagePage(props);
 
@@ -224,7 +224,7 @@ describe("HomePage", () => {
       const props = defaultProps({
         resources: [defaultResourceDto(), defaultResourceDto()],
       });
-      props.context.getOpenerTabId = () => 1;
+      props.context.openerTabId = 1;
       props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
       const page = new HomePagePage(props);
 
@@ -242,7 +242,7 @@ describe("HomePage", () => {
           defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "other" }) }),
         ],
       });
-      props.context.getOpenerTabId = () => 1;
+      props.context.openerTabId = 1;
       props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
 
       //triggers a search on the available resources
@@ -263,7 +263,7 @@ describe("HomePage", () => {
       const props = defaultProps({
         resources: [defaultResourceDto(), defaultResourceDto()],
       });
-      props.context.getOpenerTabId = () => 1;
+      props.context.openerTabId = 1;
       props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
 
       //triggers a search on the available resources
@@ -286,7 +286,7 @@ describe("HomePage", () => {
       const suggestedResource = defaultResourceDto({ metadata: { name: "apache", uris: ["http://www.apache.org"] } });
 
       const props = defaultProps({ resources: [suggestedResource] });
-      props.context.getOpenerTabId = () => expectedOpenerTabId;
+      props.context.openerTabId = expectedOpenerTabId;
       props.context.port.addRequestListener(
         "passbolt.active-tab.get-url",
         async () => suggestedResource.metadata.uris[0],
@@ -315,7 +315,7 @@ describe("HomePage", () => {
       const searchedResource = defaultResourceDto({ metadata: { name: "apache", uris: ["http://www.apache.org"] } });
 
       const props = defaultProps({ resources: [searchedResource] });
-      props.context.getOpenerTabId = () => expectedOpenerTabId;
+      props.context.openerTabId = expectedOpenerTabId;
       props.context.search = "apache";
       props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
       props.history = createMemoryHistory();
@@ -341,7 +341,7 @@ describe("HomePage", () => {
       const suggestedResource = defaultResourceDto({ metadata: { name: "apache", uris: ["http://www.apache.org"] } });
 
       const props = defaultProps({ resources: [suggestedResource] });
-      props.context.getOpenerTabId = () => expectedOpenerTabId;
+      props.context.openerTabId = expectedOpenerTabId;
       props.context.port.addRequestListener(
         "passbolt.active-tab.get-url",
         async () => suggestedResource.metadata.uris[0],
@@ -377,7 +377,7 @@ describe("HomePage", () => {
       expectedError.name = "UserAbortsOperationError";
 
       const props = defaultProps({ resources: [suggestedResource] });
-      props.context.getOpenerTabId = () => expectedOpenerTabId;
+      props.context.openerTabId = expectedOpenerTabId;
       props.context.port.addRequestListener(
         "passbolt.active-tab.get-url",
         async () => suggestedResource.metadata.uris[0],
