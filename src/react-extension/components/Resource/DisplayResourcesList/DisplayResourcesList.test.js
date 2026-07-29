@@ -658,7 +658,7 @@ describe("Display Resources", () => {
       const page = new DisplayResourcesListPage(props);
       await screen.findByText("apache");
       const columnNames = Array.from({ length: page.columnsCount }, (_, index) => page.columns(index + 1).name);
-      expect(columnNames).not.toContain("Offline Mode");
+      expect(columnNames).not.toContain("Available Offline");
     });
 
     it("As LU, I should see the offline mode column when the offline capability is enabled and allowed by RBAC", async () => {
@@ -667,9 +667,9 @@ describe("Display Resources", () => {
       const page = new DisplayResourcesListPage(props);
       await screen.findByText("available-offline");
       const columnNames = Array.from({ length: page.columnsCount }, (_, index) => page.columns(index + 1).name);
-      expect(columnNames).toContain("Offline Mode");
-      expect(page.resource(1).offlineMode).toBe("Available offline");
-      expect(page.resource(2).offlineMode).toBe("Not available offline");
+      expect(columnNames).toContain("Available Offline");
+      expect(page.resource(1).offlineMode).toBe("Yes");
+      expect(page.resource(2).offlineMode).toBe("No");
     });
 
     it("As LU, I should not see the offline mode column when offline is enabled but denied by RBAC", async () => {
@@ -678,7 +678,7 @@ describe("Display Resources", () => {
       const page = new DisplayResourcesListPage(props);
       await screen.findByText("available-offline");
       const columnNames = Array.from({ length: page.columnsCount }, (_, index) => page.columns(index + 1).name);
-      expect(columnNames).not.toContain("Offline Mode");
+      expect(columnNames).not.toContain("Available Offline");
     });
   });
 

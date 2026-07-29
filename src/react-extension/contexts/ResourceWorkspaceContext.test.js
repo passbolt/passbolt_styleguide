@@ -350,7 +350,7 @@ describe("Resource Workspace Context", () => {
         { id: "expired", label: "Expiry", position: 10, show: true },
         { id: "modified", label: "Modified", position: 11, show: true },
         { id: "location", label: "Location", position: 12, show: true },
-        { id: "offline_mode", label: "Offline Mode", position: 13, show: false },
+        { id: "offline_mode", label: "Available Offline", position: 13, show: false },
       ];
       expect(page.columnsResourceSetting.items.length).toStrictEqual(13);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(defaultColumnsSetting);
@@ -371,7 +371,7 @@ describe("Resource Workspace Context", () => {
         { id: "expired", label: "Expiry", position: 10, show: true },
         { id: "modified", label: "Modified", position: 11, show: true },
         { id: "location", label: "Location", position: 12, show: true },
-        { id: "offline_mode", label: "Offline Mode", position: 13, show: false },
+        { id: "offline_mode", label: "Available Offline", position: 13, show: false },
       ];
       const sorter = {
         propertyName: "name",
@@ -433,7 +433,7 @@ describe("Resource Workspace Context", () => {
         { id: "expired", label: "Expiry", position: 10, show: true },
         { id: "modified", label: "Modified", position: 5, width: 250, show: true },
         { id: "location", label: "Location", position: 12, show: true },
-        { id: "offline_mode", label: "Offline Mode", position: 13, show: false },
+        { id: "offline_mode", label: "Available Offline", position: 13, show: false },
       ];
       await page.goToAllItems();
       page.onChangeColumnView("name", false);

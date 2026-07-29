@@ -165,7 +165,7 @@ export function propsWithFilteredResourcesAndOfflineEnabled(data = {}) {
         { id: "expired", label: "Expiry", position: 8, show: true },
         { id: "modified", label: "Modified", position: 9, show: true },
         { id: "location", label: "Location", position: 10, show: true },
-        { id: "offline_mode", label: "Offline Mode", position: 11, show: true },
+        { id: "offline_mode", label: "Available Offline", position: 11, show: true },
       ]),
     }),
     ...data,

@@ -14,13 +14,29 @@
 import React, { Component, memo } from "react";
 import PropTypes from "prop-types";
 import { Trans } from "react-i18next";
+import GreenDot from "../../../img/svg/offline_dot_green.svg";
+import RedDot from "../../../img/svg/offline_dot_red.svg";
 
 /**
  * This component represents a table cell for displaying if resources are offline available or not
  */
 class CellOffline extends Component {
   render() {
-    return <span>{this.props.value ? <Trans>Available offline</Trans> : <Trans>Not available offline</Trans>}</span>;
+    return (
+      <div className="cell-offline">
+        {this.props.value ? (
+          <>
+            <GreenDot className="available-offline" />
+            <Trans>Yes</Trans>
+          </>
+        ) : (
+          <>
+            <RedDot className="unavailable-offline" />
+            <Trans>No</Trans>
+          </>
+        )}
+      </div>
+    );
   }
 }
 
