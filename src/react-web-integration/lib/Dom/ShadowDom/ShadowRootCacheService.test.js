@@ -46,7 +46,7 @@ describe("ShadowRootCacheService", () => {
     });
 
     it("should return the cached shadow roots", () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
