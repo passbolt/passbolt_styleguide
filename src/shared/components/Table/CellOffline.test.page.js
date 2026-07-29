@@ -38,7 +38,7 @@ export default class CellOfflineTestPage {
    * @return {HTMLElement|null}
    */
   get container() {
-    return this._page.container.querySelector("span");
+    return this._page.container.querySelector("div");
   }
 
   /**

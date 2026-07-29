@@ -26,66 +26,66 @@ beforeEach(() => {
 
 describe("CellOffline", () => {
   describe("As a user I can see whether a resource is available offline", () => {
-    it("should render 'Available offline' when the resource has an offline item", () => {
+    it("should render 'Yes' when the resource has an offline item", () => {
       expect.assertions(2);
       const props = propsWithOfflineAvailable();
       const page = new CellOfflineTestPage(props);
 
       expect(page.container).not.toBeNull();
-      expect(page.label).toBe("Available offline");
+      expect(page.label).toBe("Yes");
     });
 
-    it("should render 'Not available offline' when the resource has no offline item", () => {
+    it("should render 'No' when the resource has no offline item", () => {
       expect.assertions(2);
       const props = propsWithOfflineNotAvailable();
       const page = new CellOfflineTestPage(props);
 
       expect(page.container).not.toBeNull();
-      expect(page.label).toBe("Not available offline");
+      expect(page.label).toBe("No");
     });
 
-    it("should render 'Not available offline' by default when the resource has no offline property", () => {
+    it("should render 'No' by default when the resource has no offline property", () => {
       expect.assertions(2);
       const props = defaultProps();
       const page = new CellOfflineTestPage(props);
 
       expect(page.container).not.toBeNull();
-      expect(page.label).toBe("Not available offline");
+      expect(page.label).toBe("No");
     });
 
-    it("should render 'Not available offline' when value is undefined", () => {
+    it("should render 'No' when value is undefined", () => {
       expect.assertions(2);
       const props = propsWithNoValue();
       const page = new CellOfflineTestPage(props);
 
       expect(page.container).not.toBeNull();
-      expect(page.label).toBe("Not available offline");
+      expect(page.label).toBe("No");
     });
   });
 
   describe("As a user I can see the offline label update when props change", () => {
-    it("should update from 'Not available offline' to 'Available offline' when offline item is added", () => {
+    it("should update from 'No' to 'Yes' when offline item is added", () => {
       expect.assertions(2);
       const props = propsWithOfflineNotAvailable();
       const page = new CellOfflineTestPage(props);
 
-      expect(page.label).toBe("Not available offline");
+      expect(page.label).toBe("No");
 
       page.rerender(propsWithOfflineAvailable());
 
-      expect(page.label).toBe("Available offline");
+      expect(page.label).toBe("Yes");
     });
 
-    it("should update from 'Available offline' to 'Not available offline' when offline item is removed", () => {
+    it("should update from 'Yes' to 'No' when offline item is removed", () => {
       expect.assertions(2);
       const props = propsWithOfflineAvailable();
       const page = new CellOfflineTestPage(props);
 
-      expect(page.label).toBe("Available offline");
+      expect(page.label).toBe("Yes");
 
       page.rerender(propsWithOfflineNotAvailable());
 
-      expect(page.label).toBe("Not available offline");
+      expect(page.label).toBe("No");
     });
   });
 });

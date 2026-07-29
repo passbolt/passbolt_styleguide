@@ -146,6 +146,25 @@ export const defaultPropsOneResourceOfflineAvailable = (data = {}) =>
   });
 
 /**
+ * Default props one selected v5 resource already available offline
+ * @returns {{resourceWorkspaceContext}}
+ */
+export const defaultPropsOneResourceV5OfflineAvailable = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [
+        defaultResourceDto({
+          name: "offline-resource",
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          offline: defaultOfflineItemDto(),
+        }),
+      ],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
+
+/**
  * Default props one selected totp resource owned
  * @returns {{resourceWorkspaceContext}}
  */

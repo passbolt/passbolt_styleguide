@@ -136,7 +136,7 @@ export default class DisplayResourcesListPage {
         return element.querySelector(".cell-location button").textContent;
       },
       get offlineMode() {
-        return element.querySelector(".cell-offline_mode span").textContent;
+        return element.querySelector(".cell-offline_mode div").textContent;
       },
       async selectFavorite() {
         const favorite = element.querySelector(".cell-favorite button");

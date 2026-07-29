@@ -26,7 +26,7 @@ import {
   defaultPropsMultipleResourceAllExpired,
   defaultPropsMultipleResourceSomeExpired,
   defaultPropsOneResourceNotOwned,
-  defaultPropsOneResourceOfflineAvailable,
+  defaultPropsOneResourceV5OfflineAvailable,
   defaultPropsOneResourceOwned,
   defaultPropsOneResourceV5Private,
   defaultPropsOneResourceV5Shared,
@@ -645,9 +645,9 @@ describe("See Workspace Menu", () => {
   });
 
   describe("As LU I should be able to mark a selected resource available offline or remove it", () => {
-    it("As LU I should see the 'Make available offline' item when one resource not yet available offline is selected", () => {
+    it("As LU I should see the 'Make available offline' item when one v5 resource not yet available offline is selected", () => {
       expect.assertions(3);
-      const props = defaultPropsOneResourceOwned();
+      const props = defaultPropsOneResourceV5Shared();
       const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
 
       expect(page.displayMenu.moreMenu).not.toBeNull();
@@ -656,9 +656,9 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.dropdownMenuOffline.textContent).toBe("Make available offline");
     });
 
-    it("As LU I should see the 'Remove offline availability' item when one resource already available offline is selected", () => {
+    it("As LU I should see the 'Remove offline availability' item when one v5 resource already available offline is selected", () => {
       expect.assertions(3);
-      const props = defaultPropsOneResourceOfflineAvailable();
+      const props = defaultPropsOneResourceV5OfflineAvailable();
       const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
 
       expect(page.displayMenu.moreMenu).not.toBeNull();
@@ -667,9 +667,10 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.dropdownMenuOffline.textContent).toBe("Remove offline availability");
     });
 
-    it("As LU I should not see the offline availability item when offline mode is disabled at the org level", () => {
+    it("As LU I should not see the offline availability item when a v4 resource is selected", () => {
       expect.assertions(2);
-      const props = defaultPropsOneResourceOwned({ offlineSettings: null });
+      // defaultPropsOneResourceOwned selects a v4 resource (password and description).
+      const props = defaultPropsOneResourceOwned();
       const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
 
       expect(page.displayMenu.moreMenu).not.toBeNull();
@@ -687,9 +688,9 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.dropdownMenuOffline).toBeNull();
     });
 
-    it("As LU I can mark the selected resource as available offline", async () => {
+    it("As LU I can mark the selected v5 resource as available offline", async () => {
       expect.assertions(2);
-      const props = defaultPropsOneResourceOwned();
+      const props = defaultPropsOneResourceV5Shared();
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
       jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
       const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
@@ -704,9 +705,9 @@ describe("See Workspace Menu", () => {
       );
     });
 
-    it("As LU I can remove the selected resource from offline availability", async () => {
+    it("As LU I can remove the selected v5 resource from offline availability", async () => {
       expect.assertions(2);
-      const props = defaultPropsOneResourceOfflineAvailable();
+      const props = defaultPropsOneResourceV5OfflineAvailable();
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
       jest.spyOn(OfflineModeServiceWorkerService.prototype, "unmarkItem").mockResolvedValue();
       const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
@@ -723,7 +724,7 @@ describe("See Workspace Menu", () => {
 
     it("As LU I should see an error notification if the offline update fails", async () => {
       expect.assertions(2);
-      const props = defaultPropsOneResourceOwned();
+      const props = defaultPropsOneResourceV5Shared();
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {
         throw new Error("offline failure");
       });
