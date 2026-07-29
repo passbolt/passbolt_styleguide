@@ -82,10 +82,7 @@ class ExtInForm extends React.Component {
   render() {
     return (
       <AppContext.Provider value={this.state}>
-        <TranslationProvider
-          loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json"
-          locale={this.state.locale}
-        >
+        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
           <ResourceTypesLocalStorageContextProvider>
             <MetadataTypesSettingsLocalStorageContextProvider>
               <MetadataKeysSettingsLocalStorageContextProvider>

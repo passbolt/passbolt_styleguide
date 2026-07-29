@@ -465,14 +465,10 @@ class ResourceViewPage extends React.Component {
       await this.props.context.port.request(
         "passbolt.quickaccess.use-resource-on-current-tab",
         this.state.resource.id,
-        this.props.context.getOpenerTabId(),
+        this.props.context.openerTabId,
       );
 
-      if (this.props.context.getDetached()) {
-        await this.props.context.port.request("passbolt.active-tab.close");
-      } else {
-        await this.props.context.closeWindow();
-      }
+      this.props.context.closeWindow();
     } catch (error) {
       if (error && error.name === "UserAbortsOperationError") {
         this.setState({ usingOnThisTab: false });

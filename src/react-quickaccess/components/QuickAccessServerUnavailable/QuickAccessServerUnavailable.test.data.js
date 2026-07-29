@@ -14,6 +14,8 @@
 
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { createMemoryHistory } from "history";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
  * Default props.
@@ -22,9 +24,9 @@ import { createMemoryHistory } from "history";
  */
 export function defaultProps(data = {}) {
   return {
-    context: defaultAppContext({ isAuthenticated: true, ...(data.context || {}) }),
+    context: defaultAppContext(),
     history: createMemoryHistory({ initialEntries: ["/"], initialIndex: 0 }),
-    logoutSuccessCallback: jest.fn(),
+    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
     ...data,
   };
 }
@@ -36,7 +38,8 @@ export function defaultProps(data = {}) {
  */
 export function unauthenticatedProps(data = {}) {
   return defaultProps({
-    context: defaultAppContext({ isAuthenticated: false, ...(data.context || {}) }),
+    context: defaultAppContext(),
+    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_authenticated: false })),
     ...data,
   });
 }
