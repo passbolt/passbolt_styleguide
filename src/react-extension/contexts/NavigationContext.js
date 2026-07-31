@@ -17,6 +17,55 @@ import { withAppContext } from "../../shared/context/AppContext/AppContext";
 import { withRouter } from "react-router-dom";
 
 /**
+ * List of the pathnames the application is allowed to navigate to.
+ */
+const ALLOWED_PATHNAMES = [
+  "/app/administration",
+  "/app/administration/mfa",
+  "/app/administration/mfa-policy",
+  "/app/administration/password-policies",
+  "/app/administration/secret-history",
+  "/app/administration/self-registration",
+  "/app/administration/users-directory",
+  "/app/administration/healthcheck",
+  "/app/administration/email-notification",
+  "/app/administration/smtp-settings",
+  "/app/administration/subscription",
+  "/app/administration/ce-downgrade",
+  "/app/administration/internationalization",
+  "/app/administration/account-recovery",
+  "/app/administration/sso",
+  "/app/administration/rbacs",
+  "/app/administration/content-types/metadata-getting-started",
+  "/app/administration/user-provisionning/scim",
+  "/app/administration/user-passphrase-policies",
+  "/app/administration/password-expiry",
+  "/app/administration/content-types/metadata",
+  "/app/administration/content-types/metadata-key",
+  "/app/administration/migrate-metadata",
+  "/app/administration/allow-content-types",
+  "/app/administration/subscription-teasing",
+  "/app/administration/password-policies-teasing",
+  "/app/administration/user-passphrase-policies-teasing",
+  "/app/administration/account-recovery-teasing",
+  "/app/administration/sso-teasing",
+  "/app/administration/mfa-policy-teasing",
+  "/app/administration/users-directory-teasing",
+  "/app/administration/scim-teasing",
+  "/app/passwords",
+  "/app/users",
+  "/app/settings/profile",
+  "/app/settings/passphrase",
+  "/app/settings/security-token",
+  "/app/settings/theme",
+  "/app/settings/mfa",
+  "/app/settings/keys",
+  "/app/settings/mobile",
+  "/app/settings/desktop",
+  "/app/settings/account-recovery",
+];
+
+/**
  * Context related to application navigation.
  */
 export const NavigationContext = React.createContext({
@@ -55,7 +104,8 @@ export const NavigationContext = React.createContext({
   onGoToUserSettingsMobileRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mobile section.
   onGoToUserSettingsDesktopRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace desktop section.
   onGoToUserSettingsAccountRecoveryRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mobile section.
-  onGoToNewTab: () => {}, // Whenever the user want to navigate to a new url.
+  onGoToSubscriptionUpdateQuantityRequested: () => {}, // Whenever the user wants to navigate to the subscription update quantity page.
+  onGoToSubscriptionRenewRequested: () => {}, // Whenever the user wants to navigate to the subscription renew page.
   onGoToAdministrationRbacsRequested: () => {}, // Whenever the user wants to navigate to the administration workspace rbacs section.
   onGoToAdministrationMigrateMetadataRequested: () => {}, // Whenever the user wants to navigate to the administration workspace migrate metadata section.
   onGoToAdministrationAllowContentTypesRequested: () => {}, // Whenever the user wants to navigate to the administration workspace allow content types section.
@@ -74,7 +124,7 @@ export const NavigationContext = React.createContext({
 /**
  * The navigation context provider provider
  */
-class NavigationContextProvider extends React.Component {
+export class NavigationContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -89,8 +139,6 @@ class NavigationContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      // Common
-      onGoToNewTab: this.onGoToNewTab.bind(this), //
       // Administration
       onGoToAdministrationRequested: this.onGoToAdministrationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace
       onGoToAdministrationMfaRequested: this.onGoToAdministrationMfaRequested.bind(this), // Whenever the user wants to navigate to the administration workspace mfa
@@ -136,6 +184,8 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsMobileRequested: this.onGoToUserSettingsMobileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsDesktopRequested: this.onGoToUserSettingsDesktopRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
+      onGoToSubscriptionUpdateQuantityRequested: this.onGoToSubscriptionUpdateQuantityRequested.bind(this), // Whenever the user wants to navigate to the subscription update quantity page.
+      onGoToSubscriptionRenewRequested: this.onGoToSubscriptionRenewRequested.bind(this), // Whenever the user wants to navigate to the subscription renew page.
       onGoToAdministrationRbacsRequested: this.onGoToAdministrationRbacsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace rbacs section.
       onGoToAdministrationMetadataGettingStartedRequested:
         this.onGoToAdministrationMetadataGettingStartedRequested.bind(this), // Whenever the user wants to navigate to the administration meadata getting started workspace section.
@@ -163,6 +213,10 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async goTo(appName, pathname) {
+    if (!ALLOWED_PATHNAMES.includes(pathname)) {
+      throw new Error("The pathname is not part of the allowed list of pathnames.");
+    }
+
     if (appName === this.props.context.name) {
       await this.props.history.push({ pathname });
       return;
@@ -185,14 +239,6 @@ class NavigationContextProvider extends React.Component {
 
     const url = `${trustedDomain}${pathname}`;
     window.open(url, "_parent", "noopener,noreferrer");
-  }
-
-  /**
-   * Open new tab.
-   * @param {string} url The url to go too
-   */
-  onGoToNewTab(url) {
-    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   /*
@@ -552,7 +598,7 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToHelpRequested() {
-    await this.onGoToNewTab("https://www.passbolt.com/docs/");
+    window.open("https://www.passbolt.com/docs/", "_blank", "noopener,noreferrer");
   }
 
   /*
@@ -566,7 +612,35 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToTermsRequested() {
-    await this.onGoToNewTab("https://www.passbolt.com/terms");
+    window.open("https://www.passbolt.com/terms", "_blank", "noopener,noreferrer");
+  }
+
+  /*
+   * =============================================================
+   *  Subscription navigation
+   * =============================================================
+   */
+
+  /**
+   * Whenever the user wants to navigate to the subscription update quantity page.
+   * @param {string} subscriptionId The subscription identifier
+   * @param {string} customerId The customer identifier
+   * @returns {Promise<void>}
+   */
+  async onGoToSubscriptionUpdateQuantityRequested(subscriptionId, customerId) {
+    const url = `https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${encodeURIComponent(subscriptionId)}&customer_id=${encodeURIComponent(customerId)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the subscription renew page.
+   * @param {string} subscriptionId The subscription identifier
+   * @param {string} customerId The customer identifier
+   * @returns {Promise<void>}
+   */
+  async onGoToSubscriptionRenewRequested(subscriptionId, customerId) {
+    const url = `https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${encodeURIComponent(subscriptionId)}&customer_id=${encodeURIComponent(customerId)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   /*
@@ -613,19 +687,6 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToUserSettingsMfaRequested() {
     await this.goTo("browser-extension", "/app/settings/mfa");
-  }
-
-  /**
-   * Whenever the user wants to navigate to the users settings workspace mfa duo setup.
-   * @returns {Promise<void>}
-   */
-  async onGoToUserSettingsDuoSetupRequested() {
-    //Application to point
-    let app = "api";
-    if (window.chrome?.webview) {
-      app = "browser-extension";
-    }
-    await this.goTo(app, "/app/settings/mfa");
   }
 
   /**

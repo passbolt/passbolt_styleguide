@@ -130,12 +130,14 @@ class DisplaySubscriptionKey extends React.Component {
   handleRenewKey() {
     const subscription = this.props.adminSubscriptionContext.getSubscription();
     if (this.hasLimitUsersExceeded()) {
-      this.props.navigationContext.onGoToNewTab(
-        `https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${subscription.subscriptionId}&customer_id=${subscription.customerId}`,
+      this.props.navigationContext.onGoToSubscriptionUpdateQuantityRequested(
+        subscription.subscriptionId,
+        subscription.customerId,
       );
     } else if (this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire()) {
-      this.props.navigationContext.onGoToNewTab(
-        `https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${subscription.subscriptionId}&customer_id=${subscription.customerId}`,
+      this.props.navigationContext.onGoToSubscriptionRenewRequested(
+        subscription.subscriptionId,
+        subscription.customerId,
       );
     }
   }
