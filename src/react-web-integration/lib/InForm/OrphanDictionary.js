@@ -32,3 +32,9 @@ export const FORM_LIKE_CONTAINERS = `form, ${CUSTOM_FORM_CONTAINERS}`;
  * @type {string}
  */
 export const BUTTON_LIKE_ELEMENTS = "button, [role='button']";
+
+/**
+ * Selector matching button-like inputs.
+ * @type {Set<"submit"|"reset"|"button"|"image">}
+ */
+export const BUTTON_LIKE_INPUT_TYPES = new Set(["submit", "reset", "button", "image"]);
