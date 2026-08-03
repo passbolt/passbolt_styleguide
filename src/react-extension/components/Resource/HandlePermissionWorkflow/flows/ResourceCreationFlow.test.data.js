@@ -12,11 +12,11 @@
  * @since         5.13.0
  */
 
-import { v4 as uuidv4 } from "uuid";
 import { defaultDialogContext } from "../../../../contexts/DialogContext.test.data";
 import { defaultAppContext } from "../../../../contexts/ExtAppContext.test.data";
 import ResourceTypeEntity from "../../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import { resourceTypePasswordAndDescriptionDto } from "../../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { defaultFolderDto } from "../../../../../shared/models/entity/folder/folderEntity.test.data";
 
 /**
  * Default props for the ResourceCreationFlow component.
@@ -25,7 +25,7 @@ import { resourceTypePasswordAndDescriptionDto } from "../../../../../shared/mod
  */
 export function defaultProps(props = {}) {
   const _props = {
-    folderParentId: uuidv4(),
+    folderParent: defaultFolderDto(),
     resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()),
     context: defaultAppContext(props?.context),
     dialogContext: defaultDialogContext(props?.dialogContext),
