@@ -41,6 +41,7 @@ import ActiveSessionLocalStorageContextProvider from "../shared/context/ActiveSe
 import ExtQuickAccessContextProvider from "./contexts/ExtQuickAccessContext";
 import HandleBootstrapRoute from "./components/HandleBootstrapRoute/HandleBootstrapRoute";
 import QuickAccessServerUnavailable from "./components/QuickAccessServerUnavailable/QuickAccessServerUnavailable";
+import QuickAccessOfflineFooter from "./components/Offline/QuickAccessOfflineFooter";
 
 const SEARCH_VISIBLE_ROUTES = [
   "/webAccessibleResources/quickaccess/home",
@@ -234,57 +235,57 @@ class ExtQuickAccess extends React.Component {
             bootstrapFeature={this.props.bootstrapFeature}
           >
             <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-              <Router initialEntries={[`/webAccessibleResources/quickaccess.html`]}>
-                <Header />
-                <ManageQuickAccessMode />
-                <Switch>
-                  {/* The initial route the quickaccess panel is loaded on is a triage url. */}
-                  <Route
-                    exact
-                    path={"/webAccessibleResources/quickaccess.html"}
-                    render={() => <HandleBootstrapRoute bootstrapFeature={this.props.bootstrapFeature} />}
-                  />
-                  {/* The route when the user is not authenticated */}
-                  <Route
-                    exact
-                    path="/webAccessibleResources/quickaccess/login"
-                    render={() => (
-                      <SsoContextProvider>
-                        <LoginPage />
-                      </SsoContextProvider>
-                    )}
-                  />
-                  {/* The route when the user is authenticated online but server is not reachable */}
-                  <Route
-                    exact
-                    path="/webAccessibleResources/quickaccess/server-not-reachable"
-                    component={QuickAccessServerUnavailable}
-                  />
-                  {/* Any other authenticated routes. */}
-                  <Route path="/">
-                    {this.state.passphraseRequired && (
-                      <PassphraseDialog
-                        requestId={this.state.passphraseRequestId}
-                        onComplete={this.handlePassphraseDialogCompleted}
-                      />
-                    )}
-                    {this.state.confirmMetadataKeyRequired && (
-                      <ConfirmMetadataKeyDialog
-                        requestId={this.state.confirmMetadataKeyRequestId}
-                        metadataKey={this.state.confirmMetadataKeyMetadataKey}
-                        metadataTrustedKey={this.state.confirmMetadataKeyMetadataTrustedKey}
-                        onComplete={this.handleConfirmMetadataKeyDialogCompleted}
-                      />
-                    )}
-                    <div
-                      className={`${this.state.passphraseRequired || this.state.confirmMetadataKeyRequired ? "visually-hidden" : ""}`}
-                    >
-                      <Route path={SEARCH_VISIBLE_ROUTES} render={() => <Search />} />
-                      <ResourceTypesLocalStorageContextProvider>
-                        <ResourceLocalStorageProvider>
-                          <MetadataTypesSettingsLocalStorageContextProvider>
-                            <MetadataKeysSettingsLocalStorageContextProvider>
-                              <OfflineSettingsLocalStorageContextProvider>
+              <OfflineSettingsLocalStorageContextProvider>
+                <Router initialEntries={[`/webAccessibleResources/quickaccess.html`]}>
+                  <Header />
+                  <ManageQuickAccessMode />
+                  <Switch>
+                    {/* The initial route the quickaccess panel is loaded on is a triage url. */}
+                    <Route
+                      exact
+                      path={"/webAccessibleResources/quickaccess.html"}
+                      render={() => <HandleBootstrapRoute bootstrapFeature={this.props.bootstrapFeature} />}
+                    />
+                    {/* The route when the user is not authenticated */}
+                    <Route
+                      exact
+                      path="/webAccessibleResources/quickaccess/login"
+                      render={() => (
+                        <SsoContextProvider>
+                          <LoginPage />
+                        </SsoContextProvider>
+                      )}
+                    />
+                    {/* The route when the server is not reachable (offline). */}
+                    <Route
+                      exact
+                      path="/webAccessibleResources/quickaccess/server-not-reachable"
+                      component={QuickAccessServerUnavailable}
+                    />
+                    {/* Any other authenticated routes. */}
+                    <Route path="/">
+                      {this.state.passphraseRequired && (
+                        <PassphraseDialog
+                          requestId={this.state.passphraseRequestId}
+                          onComplete={this.handlePassphraseDialogCompleted}
+                        />
+                      )}
+                      {this.state.confirmMetadataKeyRequired && (
+                        <ConfirmMetadataKeyDialog
+                          requestId={this.state.confirmMetadataKeyRequestId}
+                          metadataKey={this.state.confirmMetadataKeyMetadataKey}
+                          metadataTrustedKey={this.state.confirmMetadataKeyMetadataTrustedKey}
+                          onComplete={this.handleConfirmMetadataKeyDialogCompleted}
+                        />
+                      )}
+                      <div
+                        className={`${this.state.passphraseRequired || this.state.confirmMetadataKeyRequired ? "visually-hidden" : ""}`}
+                      >
+                        <Route path={SEARCH_VISIBLE_ROUTES} render={() => <Search />} />
+                        <ResourceTypesLocalStorageContextProvider>
+                          <ResourceLocalStorageProvider>
+                            <MetadataTypesSettingsLocalStorageContextProvider>
+                              <MetadataKeysSettingsLocalStorageContextProvider>
                                 <PasswordPoliciesContext>
                                   <PrepareResourceContextProvider>
                                     <PasswordExpirySettingsContextProvider>
@@ -372,15 +373,16 @@ class ExtQuickAccess extends React.Component {
                                     </PasswordExpirySettingsContextProvider>
                                   </PrepareResourceContextProvider>
                                 </PasswordPoliciesContext>
-                              </OfflineSettingsLocalStorageContextProvider>
-                            </MetadataKeysSettingsLocalStorageContextProvider>
-                          </MetadataTypesSettingsLocalStorageContextProvider>
-                        </ResourceLocalStorageProvider>
-                      </ResourceTypesLocalStorageContextProvider>
-                    </div>
-                  </Route>
-                </Switch>
-              </Router>
+                              </MetadataKeysSettingsLocalStorageContextProvider>
+                            </MetadataTypesSettingsLocalStorageContextProvider>
+                          </ResourceLocalStorageProvider>
+                        </ResourceTypesLocalStorageContextProvider>
+                      </div>
+                    </Route>
+                  </Switch>
+                  <QuickAccessOfflineFooter />
+                </Router>
+              </OfflineSettingsLocalStorageContextProvider>
             </TranslationProvider>
           </ExtQuickAccessContextProvider>
         </ActiveSessionLocalStorageContextProvider>

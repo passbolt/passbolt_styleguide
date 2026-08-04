@@ -17,7 +17,9 @@
  */
 import { defaultProps } from "./HandleBootstrapRoute.test.data";
 import HandleBootstrapRoutePage from "./HandleBootstrapRoute.test.page";
-import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import UserActiveSessionEntity, {
+  USER_ACTIVE_SESSION_OFFLINE,
+} from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 import { BOOTSTRAP_FEATURE } from "../../ExtQuickAccess";
 
@@ -46,7 +48,7 @@ describe("HandleBootstrapRoute", () => {
       expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/login");
     });
 
-    it("As LU I should be redirected to server not reachable page", () => {
+    it("As LU with an authenticated online session that lost the network I should be redirected to the server not reachable page", () => {
       expect.assertions(1);
       const props = defaultProps({
         activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_server_reachable: false })),
@@ -54,6 +56,44 @@ describe("HandleBootstrapRoute", () => {
       new HandleBootstrapRoutePage(props);
 
       expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/server-not-reachable");
+    });
+
+    it("As Anonymous user with no session and an unreachable server I should be redirected to the server not reachable page", () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        activeSession: new UserActiveSessionEntity(
+          defaultUserActiveSessionDto({ is_authenticated: false, is_server_reachable: false }),
+        ),
+      });
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/server-not-reachable");
+    });
+
+    it("As LU with an authenticated offline session and a reachable server I should stay signed in", () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        activeSession: new UserActiveSessionEntity(
+          defaultUserActiveSessionDto({ type: USER_ACTIVE_SESSION_OFFLINE, is_server_reachable: true }),
+        ),
+        bootstrapFeature: null,
+      });
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/home");
+    });
+
+    it("As LU with an authenticated offline session and an unreachable server I should stay signed in", () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        activeSession: new UserActiveSessionEntity(
+          defaultUserActiveSessionDto({ type: USER_ACTIVE_SESSION_OFFLINE, is_server_reachable: false }),
+        ),
+        bootstrapFeature: null,
+      });
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/home");
     });
 
     it("As LU I should be redirected to new credential page", () => {
