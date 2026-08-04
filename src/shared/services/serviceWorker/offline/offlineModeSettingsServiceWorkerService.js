@@ -42,6 +42,19 @@ class OfflineModeSettingsServiceWorkerService {
   }
 
   /**
+   * Get or find the offline settings from the local storage.
+   * @returns {Promise<OfflineSettingsEntity|null>}
+   */
+  async getOrFindSettings() {
+    const settingsDto = await this.port.request(OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT);
+    if (settingsDto) {
+      return new OfflineSettingsEntity(settingsDto);
+    }
+
+    return null;
+  }
+
+  /**
    * Save the Offline settings.
    * @param {ScimSettingsEntity} formSettings The Offline settings to save.
    * @return {Promise<ScimSettingsEntity>}

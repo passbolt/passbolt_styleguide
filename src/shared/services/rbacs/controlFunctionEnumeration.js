@@ -45,6 +45,7 @@ export const controlFunctionResolutions = {
  */
 export const defaultAdminActionControlResolution = {
   [uiActions.FOLDERS_USE]: controlFunctionResolutions[controlFunctions.ALLOW], // Default example, to be removed when the placeholder won't be necessary anymore to explain the dat structure
+  [actions.OFFLINE_ITEMS_VIEW]: controlFunctionResolutions[controlFunctions.ALLOW],
 };
 
 /**
@@ -58,7 +59,7 @@ export const defaultUserActionControlResolution = {
   [actions.ACCOUNT_RECOVERY_REQUEST_VIEW]: controlFunctionResolutions[controlFunctions.DENY],
   [actions.ACCOUNT_RECOVERY_REQUEST_INDEX]: controlFunctionResolutions[controlFunctions.DENY],
   [actions.ACCOUNT_RECOVERY_RESPONSE_CREATE]: controlFunctionResolutions[controlFunctions.DENY],
-  [actions.OFFLINE_ITEMS_VIEW]: controlFunctionResolutions[controlFunctions.DENY],
-  [actions.OFFLINE_ITEMS_ADD]: controlFunctionResolutions[controlFunctions.DENY],
-  [actions.OFFLINE_ITEMS_DELETE]: controlFunctionResolutions[controlFunctions.DENY],
+  [actions.OFFLINE_ITEMS_VIEW]: controlFunctionResolutions[controlFunctions.ALLOW],
+  [actions.OFFLINE_ITEMS_ADD]: controlFunctionResolutions[controlFunctions.ALLOW],
+  [actions.OFFLINE_ITEMS_DELETE]: controlFunctionResolutions[controlFunctions.ALLOW],
 };

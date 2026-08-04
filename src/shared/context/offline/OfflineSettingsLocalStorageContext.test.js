@@ -20,10 +20,6 @@ import {
   defaultOfflineSettingsDto,
   defaultOfflineSettingsDtoFromApi,
 } from "../../models/entity/offline/offlineSettingsEntity.test.data";
-import {
-  OFFLINE_FIND_SETTINGS_EVENT,
-  OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT,
-} from "../../services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
 import OfflineSettingsEntity from "../../models/entity/offline/offlineSettingsEntity";
 
 beforeEach(() => {
@@ -135,6 +131,9 @@ describe("OfflineSettingsLocalStorageContext", () => {
 
       const props = defaultProps();
       const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
+      jest
+        .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
+        .mockImplementation(() => new Promise(() => {}));
 
       props.context.storage.local.set({ [contextProvider.storageKey]: null });
 
@@ -182,40 +181,40 @@ describe("OfflineSettingsLocalStorageContext", () => {
 
   describe("::loadLocalStorage", () => {
     it("should find the offline settings from the local storage and set the context state with it.", async () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
       const offlineSettings = defaultOfflineSettingsDto();
 
       const props = defaultProps();
       const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
-
-      props.context.storage.local.set({ [contextProvider.storageKey]: offlineSettings });
       mockComponentSetState(contextProvider);
+
+      const spyOnGetOrFind = jest.spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings");
+
+      await props.context.storage.local.set({ [contextProvider.storageKey]: offlineSettings });
 
       await contextProvider.loadLocalStorage();
 
       expect(contextProvider.state.offlineSettings.toDto()).toStrictEqual(offlineSettings);
+      expect(spyOnGetOrFind).not.toHaveBeenCalled();
     });
 
     it("should call for updating the local storage if there is no offline settings in the local storage.", async () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       const props = defaultProps();
       const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
-
-      props.context.storage.local.set({ [contextProvider.storageKey]: null });
-      props.context.port.addRequestListener(OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT, async () =>
-        defaultOfflineSettingsDtoFromApi(),
-      );
-
-      const spyOnRequest = jest.spyOn(props.context.port, "request");
-
       mockComponentSetState(contextProvider);
+
+      const spyOnGetOrFind = jest
+        .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
+        .mockImplementation(async () => defaultOfflineSettingsDtoFromApi());
+
+      await props.context.storage.local.set({ [contextProvider.storageKey]: null });
 
       await contextProvider.loadLocalStorage();
 
-      expect(spyOnRequest).toHaveBeenCalledTimes(1);
-      expect(spyOnRequest).toHaveBeenCalledWith(OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT);
+      expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -225,83 +224,77 @@ describe("OfflineSettingsLocalStorageContext", () => {
 
       const props = defaultProps();
       const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
+      mockComponentSetState(contextProvider);
 
       const expectedOfflineSettings = defaultOfflineSettingsDtoFromApi();
-      props.context.storage.local.set({ [contextProvider.storageKey]: null });
-      props.context.port.addRequestListener(
-        OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT,
-        async () => expectedOfflineSettings,
-      );
-
-      const spyOnRequest = jest.spyOn(props.context.port, "request");
-
-      mockComponentSetState(contextProvider);
+      const spyOnGetOrFind = jest
+        .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
+        .mockImplementation(async () => expectedOfflineSettings);
 
       await contextProvider.updateLocalStorage();
 
-      expect(spyOnRequest).toHaveBeenCalledTimes(1);
-      expect(spyOnRequest).toHaveBeenCalledWith(OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT);
-      expect(contextProvider.state.offlineSettings.toDto()).toStrictEqual(expectedOfflineSettings);
+      expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
+      expect(contextProvider.state.offlineSettings.toDto()).toStrictEqual(
+        new OfflineSettingsEntity(expectedOfflineSettings).toDto(),
+      );
+      expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
     });
 
     it("should not call the service worker twice if a pending promise is running.", async () => {
       expect.assertions(4);
 
       const props = defaultProps();
-      let resolveUpdateLocalStoragePromise;
-      const spyOnRequest = jest
-        .spyOn(props.context.port, "request")
-        .mockImplementation(() => new Promise((resolve) => (resolveUpdateLocalStoragePromise = resolve)));
-
       const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      contextProvider.updateLocalStorage();
+      let resolveGetOrFindSettings;
+      const spyOnGetOrFind = jest
+        .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
+        .mockImplementation(() => new Promise((resolve) => (resolveGetOrFindSettings = resolve)));
 
-      expect(spyOnRequest).toHaveBeenCalledTimes(1);
-      expect(spyOnRequest).toHaveBeenCalledWith(OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT);
+      const firstUpdate = contextProvider.updateLocalStorage();
+      expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
 
-      contextProvider.updateLocalStorage();
+      const secondUpdate = contextProvider.updateLocalStorage();
+      expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
 
-      expect(spyOnRequest).toHaveBeenCalledTimes(1);
+      resolveGetOrFindSettings(defaultOfflineSettingsDtoFromApi());
+      await Promise.all([firstUpdate, secondUpdate]);
 
-      await resolveUpdateLocalStoragePromise();
+      expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
 
-      contextProvider.updateLocalStorage();
+      const thirdUpdate = contextProvider.updateLocalStorage();
+      expect(spyOnGetOrFind).toHaveBeenCalledTimes(2);
 
-      expect(spyOnRequest).toHaveBeenCalledTimes(2);
-
-      await resolveUpdateLocalStoragePromise();
+      resolveGetOrFindSettings(defaultOfflineSettingsDtoFromApi());
+      await thirdUpdate;
     });
 
     it("should call the service worker again if the promise has been resolved.", async () => {
       expect.assertions(5);
 
       const props = defaultProps();
-      props.context.port.addRequestListener(OFFLINE_FIND_SETTINGS_EVENT, async () =>
-        defaultOfflineSettingsDtoFromApi(),
-      );
-
-      const spyOnRequest = jest.spyOn(props.context.port, "request");
-
       const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      contextProvider.updateLocalStorage();
+      const spyOnGetOrFind = jest
+        .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
+        .mockImplementation(async () => defaultOfflineSettingsDtoFromApi());
+
+      const firstUpdate = contextProvider.updateLocalStorage();
       expect(contextProvider.runningLocalStorageUpdatePromise).not.toBeNull();
+      expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
 
-      expect(spyOnRequest).toHaveBeenCalledTimes(1);
       contextProvider.updateLocalStorage();
-      expect(spyOnRequest).toHaveBeenCalledTimes(1);
+      expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
 
-      await contextProvider.runningLocalStorageUpdatePromise;
+      await firstUpdate;
 
       // promise should be reinit now;
       expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
 
-      contextProvider.updateLocalStorage();
-
-      expect(spyOnRequest).toHaveBeenCalledTimes(2);
+      await contextProvider.updateLocalStorage();
+      expect(spyOnGetOrFind).toHaveBeenCalledTimes(2);
     });
   });
 });
