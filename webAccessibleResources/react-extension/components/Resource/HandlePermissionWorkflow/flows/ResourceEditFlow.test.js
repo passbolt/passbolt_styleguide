@@ -247,7 +247,7 @@ describe("ResourceEditFlow", () => {
         "passbolt.resources.update",
         expect.anything(),
         expect.anything(),
-        undefined,
+        null,
       );
       expect(props.dialogContext.open).not.toHaveBeenCalledWith(ShareDialog, expect.anything());
       expect(props.onStop).toHaveBeenCalled();

@@ -121,7 +121,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     this.props.workflowContext.start(HandlePermissionWorkflow, {
       operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
       resourceType,
-      folderParentId: this.folderIdSelected,
+      folderParent: this.folderSelected,
     });
   }
 
@@ -187,7 +187,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Handle other click event
    */
   handleMenuCreateOtherClickEvent() {
-    this.props.dialogContext.open(DisplayResourceCreationMenu, { folderParentId: this.folderIdSelected });
+    this.props.dialogContext.open(DisplayResourceCreationMenu, { folderParentId: this.folderSelected?.id });
   }
 
   /**
@@ -201,7 +201,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Open create password dialog
    */
   openFolderCreateDialog() {
-    this.props.dialogContext.open(CreateResourceFolder, { folderParentId: this.folderIdSelected });
+    this.props.dialogContext.open(CreateResourceFolder, { folderParentId: this.folderSelected?.id });
   }
 
   /**
@@ -215,14 +215,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       return filter.payload.folder;
     }
     return null;
-  }
-
-  /**
-   * the folder id selected
-   * @returns {*}
-   */
-  get folderIdSelected() {
-    return this.folderSelected && this.folderSelected.id;
   }
 
   /**

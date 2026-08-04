@@ -112,7 +112,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: null,
+        folderParent: null,
       });
     });
 
@@ -133,7 +133,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: null,
+        folderParent: null,
       });
     });
 
@@ -152,7 +152,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id,
+        folderParent: props.resourceWorkspaceContext.filter.payload.folder,
       });
     });
 
@@ -247,7 +247,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newFolderMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newFolderMenu);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder, { folderParentId: null });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder, { folderParentId: undefined });
     });
 
     it("As LU I can create folder if I have selected a folder I am allowed to create in", async () => {
@@ -314,7 +314,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: null,
+        folderParent: null,
       });
     });
 
@@ -335,7 +335,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: null,
+        folderParent: null,
       });
     });
 
@@ -354,7 +354,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id,
+        folderParent: props.resourceWorkspaceContext.filter.payload.folder,
       });
     });
 
@@ -404,7 +404,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: null,
+        folderParent: null,
       });
     });
 
@@ -425,7 +425,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id,
+        folderParent: props.resourceWorkspaceContext.filter.payload.folder,
       });
     });
 
@@ -479,7 +479,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: null,
+        folderParent: null,
       });
     });
 
@@ -504,7 +504,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id,
+        folderParent: props.resourceWorkspaceContext.filter.payload.folder,
       });
     });
 
@@ -585,7 +585,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: null,
+        folderParent: null,
       });
     });
 
@@ -606,7 +606,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceTypeExpected,
-        folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id,
+        folderParent: props.resourceWorkspaceContext.filter.payload.folder,
       });
     });
 
@@ -654,7 +654,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newOtherMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newOtherMenu);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(DisplayResourceCreationMenu, { folderParentId: null });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(DisplayResourceCreationMenu, { folderParentId: undefined });
     });
 
     it("As LU I cannot see other menu if I have not resource type v5 and v4 allowed", async () => {

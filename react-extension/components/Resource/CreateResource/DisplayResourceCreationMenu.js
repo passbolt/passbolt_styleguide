@@ -99,12 +99,12 @@ class DisplayResourceCreationMenu extends Component {
       }
     }
 
-    const folderParentId = this.folderSelected?.id || null;
+    const folderParent = this.folderSelected || null;
 
     this.props.workflowContext.start(HandlePermissionWorkflow, {
       operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
       resourceType,
-      folderParentId,
+      folderParent,
     });
   }
 

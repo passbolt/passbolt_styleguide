@@ -94,7 +94,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   openCreateResourceDialog() {
     const createResourceDialogId = this.props.dialogContext.open(CreateResource, {
       resourceType: this.props.resourceType,
-      folderParentId: this.props.folderParentId,
+      folderParentId: this.props.folderParent?.id || null,
       onSubmit: this.handleCreateResourceSubmit,
       onClose: this.handleCreateResourceClose,
       setFocusBackListener: this.setFocusBackListener,
@@ -123,6 +123,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
       initialUsers: this.state.snapshot.users,
       onConfirm: this.handleShareDialogConfirm,
       onClose: this.handleShareDialogClose,
+      readOnly: this.isShareReadOnly,
     });
     this.setState({ status: RESOURCE_CREATION_FLOW_STATUS.SHARE_DIALOG_OPEN });
   }
@@ -140,8 +141,8 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
     this.formSubmitted = true;
     this.pendingResourceFormEntity = resourceFormEntity;
     try {
-      const snapshot = this.props.folderParentId
-        ? await this.permissionSnapshotService.buildSnapshotForResourceCreation(this.props.folderParentId)
+      const snapshot = this.props.folderParent?.id
+        ? await this.permissionSnapshotService.buildSnapshotForResourceCreation(this.props.folderParent.id)
         : null;
       if (this.isShared(snapshot)) {
         this.setState({ snapshot }, () => this.openShareDialog());
@@ -182,7 +183,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForResourceCreation(
-        this.props.folderParentId,
+        this.props.folderParent.id,
       );
       if (!this.state.snapshot.equals(currentSnapshot)) {
         throw new Error(
@@ -207,6 +208,15 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
     } catch (error) {
       this.handleError(error);
     }
+  }
+
+  /**
+   * Whether the ShareDialog must be displayed read-only for this creation.
+   * Triggered when the operator has update but not owner permission on the parent folder.
+   * @returns {boolean}
+   */
+  get isShareReadOnly() {
+    return this.props.folderParent?.permission?.type !== PermissionEntity.PERMISSION_OWNER;
   }
 
   /**
@@ -260,7 +270,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
 ResourceCreationFlow.propTypes = {
   ...AbstractPermissionFlow.propTypes,
   resourceType: PropTypes.instanceOf(ResourceTypeEntity).isRequired,
-  folderParentId: PropTypes.string,
+  folderParent: PropTypes.object,
 };
 
 export default withAppContext(

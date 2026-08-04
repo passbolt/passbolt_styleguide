@@ -125,6 +125,46 @@ describe("SiteSettingsEntity", () => {
       expect(entity.canIUse("does-not-exist")).toBe(false);
       expect(entity.isPluginEnabled("does-not-exist")).toBe(false);
     });
+
+    it("returns true when the enabled flag is the string 'true'", () => {
+      expect.assertions(2);
+      // Old API versions did not cast the env value to a boolean, so it may arrive as a string.
+      const dto = defaultProSiteSettings();
+      dto.passbolt.plugins.tags.enabled = "true";
+      const entity = new SiteSettingsEntity(dto);
+      expect(entity.canIUse("tags")).toBe(true);
+      expect(entity.isPluginEnabled("tags")).toBe(true);
+    });
+
+    it("returns false when the enabled flag is the string 'false'", () => {
+      expect.assertions(2);
+      const dto = defaultProSiteSettings();
+      dto.passbolt.plugins.tags.enabled = "false";
+      const entity = new SiteSettingsEntity(dto);
+      expect(entity.canIUse("tags")).toBe(false);
+      expect(entity.isPluginEnabled("tags")).toBe(false);
+    });
+
+    it("returns false when the enabled flag is any other non-true value", () => {
+      expect.assertions(4);
+      // Only a missing flag, boolean `true`, or the string "true" enables a capability.
+      const nonTrueValues = [null, 0, 1, "yes"];
+      nonTrueValues.forEach((value) => {
+        const dto = defaultProSiteSettings();
+        dto.passbolt.plugins.tags.enabled = value;
+        const entity = new SiteSettingsEntity(dto);
+        expect(entity.canIUse("tags")).toBe(false);
+      });
+    });
+
+    it("returns false when the plugin entry is not an object", () => {
+      expect.assertions(2);
+      const dto = defaultProSiteSettings();
+      dto.passbolt.plugins.tags = true;
+      const entity = new SiteSettingsEntity(dto);
+      expect(entity.canIUse("tags")).toBe(false);
+      expect(entity.isPluginEnabled("tags")).toBe(false);
+    });
   });
 
   describe("::isFeatureBeta", () => {

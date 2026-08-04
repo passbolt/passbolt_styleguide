@@ -109,7 +109,13 @@ class SiteSettingsEntity extends EntityV2 {
    */
   /**
    * Check if a plugin / capability is enabled.
-   * A plugin entry without an explicit `enabled` flag is treated as enabled.
+   *
+   * For now each capability is represented by a plugin.
+   * A capability is then considered as enabled when:
+   * - The plugin settings exist but the enabled flag is missing (old API version);
+   * - The plugin settings exist and the flag is set to true (boolean) or "true" (old
+   *   API versions that did not cast the env value to a boolean).
+   * In any other case the capability is considered as disabled.
    * @param {string} name The plugin name.
    * @returns {boolean}
    */
@@ -118,7 +124,7 @@ class SiteSettingsEntity extends EntityV2 {
     if (!plugin || typeof plugin !== "object") {
       return false;
     }
-    return plugin.enabled !== false;
+    return plugin.enabled === undefined || plugin.enabled === true || plugin.enabled === "true";
   }
 
   /**

@@ -259,7 +259,7 @@ describe("See the Display Resource Creation Menu", () => {
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
 
-      const folderParentId = null;
+      const folderParent = null;
 
       //click on password v5
       page.clickOn(page.displayedContentTypes[0]);
@@ -268,7 +268,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType,
-        folderParentId,
+        folderParent,
       });
 
       //click on totp v5
@@ -278,7 +278,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType,
-        folderParentId,
+        folderParent,
       });
 
       //click on note v5
@@ -288,7 +288,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType,
-        folderParentId,
+        folderParent,
       });
 
       //click on custom fields v5
@@ -298,7 +298,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType,
-        folderParentId,
+        folderParent,
       });
 
       //click on pin code v5
@@ -308,7 +308,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType,
-        folderParentId,
+        folderParent,
       });
 
       //switch tab
@@ -322,7 +322,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType,
-        folderParentId,
+        folderParent,
       });
 
       //click on totp v4
@@ -332,7 +332,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType,
-        folderParentId,
+        folderParent,
       });
 
       expect(props.workflowContext.start).toHaveBeenCalledTimes(7);
@@ -438,7 +438,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
         operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
         resourceType: resourceType,
-        folderParentId: folder.id,
+        folderParent: folder,
       });
 
       expect(props.workflowContext.start).toHaveBeenCalledTimes(1);
