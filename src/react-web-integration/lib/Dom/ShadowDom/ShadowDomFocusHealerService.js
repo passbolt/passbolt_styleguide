@@ -41,7 +41,7 @@ class ShadowDomFocusHealerService {
         let invalidated = false;
 
         for (const node of path) {
-          if (node instanceof ShadowRoot) {
+          if (ShadowDomQueryService.isShadowRoot(node)) {
             const parentScope = ShadowDomQueryService.scopeRoot(node.host);
             const cachedParentRoots = ShadowRootCacheService.peekCache(parentScope);
             const isKnown = cachedParentRoots?.includes(node) ?? false;

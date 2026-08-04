@@ -92,6 +92,28 @@ describe("ShadowDomFocusHealerService", () => {
       expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
     });
 
+    it("should invalidate the parent scope when the shadow root in the path is not an instance of ShadowRoot (cross-realm/isolated world)", () => {
+      // In a content script's isolated world, nodes returned by composedPath() are not
+      // necessarily `instanceof ShadowRoot`. The healer must rely on duck-typing, not `instanceof`.
+      expect.assertions(3);
+
+      const host = document.createElement("div");
+      const input = document.createElement("input");
+      document.body.appendChild(host);
+      // A shadow-root-like node that duck-types as a shadow root but is NOT `instanceof ShadowRoot`.
+      const crossRealmShadowRoot = { nodeType: Node.DOCUMENT_FRAGMENT_NODE, host };
+      expect(crossRealmShadowRoot instanceof ShadowRoot).toBe(false);
+
+      ShadowDomFocusHealerService.installFocusinHealer();
+
+      ShadowDomFocusHealerService._focusinHandler({
+        composedPath: () => [input, crossRealmShadowRoot, host, document.body, document],
+      });
+
+      expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(document);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
+    });
+
     it("should invalidate the parent scopes of late-attached nested roots", () => {
       expect.assertions(4);
 
