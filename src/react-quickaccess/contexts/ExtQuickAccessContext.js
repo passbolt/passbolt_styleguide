@@ -20,6 +20,9 @@ import UserSettings from "../../shared/lib/Settings/UserSettings";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
 import RbacServiceWorkerService from "../../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
+import OfflineModeSettingsServiceWorkerService from "../../shared/services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
+import CanUse from "../../shared/services/rbacs/canUseService";
+import { actions } from "../../shared/services/rbacs/actionEnumeration";
 import SpinnerSVG from "../../img/svg/spinner.svg";
 import { withActiveSessionLocalStorage } from "../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../shared/models/entity/session/userActiveSessionEntity";
@@ -39,6 +42,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
     this.bindCallbacks();
     this.state = this.getDefaultState(props);
     this.rbacServiceWorkerService = new RbacServiceWorkerService(props.port);
+    this.offlineModeSettingsServiceWorkerService = new OfflineModeSettingsServiceWorkerService(props.port);
   }
 
   /**
@@ -63,8 +67,9 @@ export class ExtQuickAccessContextProvider extends React.Component {
           await this.redirectToMfaAuthentication();
           return;
         }
-        this.getLoggedInUser(siteSettings);
+        await this.getLoggedInUser(siteSettings);
       }
+      await this.resolveCanUseOfflineMode(siteSettings);
       await this.getLocale();
     } catch (e) {
       this.setState({
@@ -100,6 +105,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
       loggedInUser: null,
       account: props.account, // The account
       rbacs: null, // The role based access control
+      canUseOfflineMode: null, // Whether the user can use the offline mode (null until resolved)
       hasError: false,
       errorMessage: "",
       locale: "en-UK", // To avoid any weird blink, launch the quickaccess with a default english locale
@@ -213,6 +219,38 @@ export class ExtQuickAccessContextProvider extends React.Component {
     this.setState({ loggedInUser, rbacs });
   }
 
+  /**
+   * Resolve whether the current user can use the offline mode and set the flag in the state.
+   *
+   * Offline mode is available iff the offline settings are cached (offline mode configured for the org)
+   * and the user's role can view offline items (RBAC). The user + rbacs are read locally only to
+   * compute the flag; the logged-in user is deliberately NOT exposed on the context while unauthenticated
+   * (offline settings + rbac local storages are retained on logout for offline-eligible users). Failures
+   * (e.g. a non-eligible user with flushed caches) leave the flag false.
+   * @param {SiteSettingsEntity} siteSettings
+   * @returns {Promise<void>}
+   */
+  async resolveCanUseOfflineMode(siteSettings) {
+    try {
+      if (!siteSettings.canIUse("offlineMode")) {
+        this.setState({ canUseOfflineMode: false });
+        return;
+      }
+      const offlineSettings = await this.offlineModeSettingsServiceWorkerService.getOrFindSettings();
+      if (!offlineSettings) {
+        this.setState({ canUseOfflineMode: false });
+        return;
+      }
+      const user = await this.state.port.request("passbolt.users.find-logged-in-user");
+      const rbacsDto = siteSettings.canIUse("rbacs") ? await this.rbacServiceWorkerService.findMe() : [];
+      const rbacs = new RbacsCollection(rbacsDto);
+      this.setState({ canUseOfflineMode: CanUse.canRoleUseAction(user, rbacs, actions.OFFLINE_ITEMS_VIEW) });
+    } catch (error) {
+      console.error(error);
+      this.setState({ canUseOfflineMode: false });
+    }
+  }
+
   async getSiteSettings() {
     const siteSettingsDto = await this.state.port.request(
       "passbolt.site-settings.get-or-find",
@@ -243,7 +281,8 @@ export class ExtQuickAccessContextProvider extends React.Component {
       this.props.activeSession?.isAuthenticated !== null &&
       this.state.userSettings !== null &&
       this.state.siteSettings != null &&
-      this.state.locale !== null
+      this.state.locale !== null &&
+      this.state.canUseOfflineMode !== null
     );
   }
 

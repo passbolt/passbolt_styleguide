@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withAppContext } from "../AppContext/AppContext";
 import OfflineSettingsEntity from "../../models/entity/offline/offlineSettingsEntity";
-import { OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT } from "../../services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
+import OfflineModeSettingsServiceWorkerService from "../../services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
 
 export const OfflineSettingsLocalStorageContext = React.createContext({
   get: () => {}, // Get the offline settings from the local storage and/or init them if not the case already
@@ -28,6 +28,12 @@ export const OfflineSettingsLocalStorageContext = React.createContext({
  */
 export class OfflineSettingsLocalStorageContextProvider extends React.Component {
   /**
+   * The Offline settings service.
+   * @type {OfflineModeSettingsServiceWorkerService}
+   */
+  offlineModeSettingsServiceWorkerService = null;
+
+  /**
    * Default constructor
    * @param props The component props
    */
@@ -35,6 +41,7 @@ export class OfflineSettingsLocalStorageContextProvider extends React.Component 
     super(props);
     this.state = this.defaultState;
     this.runningLocalStorageUpdatePromise = null;
+    this.offlineModeSettingsServiceWorker = new OfflineModeSettingsServiceWorkerService();
     this.initEventHandlers();
   }
 
@@ -134,9 +141,8 @@ export class OfflineSettingsLocalStorageContextProvider extends React.Component 
    */
   async updateLocalStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
-      this.runningLocalStorageUpdatePromise = this.props.context.port.request(
-        OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT,
-      );
+      this.runningLocalStorageUpdatePromise = this.offlineModeSettingsServiceWorker.getOrFindSettings();
+
       const offlineSettings = await this.runningLocalStorageUpdatePromise;
       if (offlineSettings) {
         this.set(offlineSettings);
