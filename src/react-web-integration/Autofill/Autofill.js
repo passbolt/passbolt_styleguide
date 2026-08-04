@@ -270,8 +270,13 @@ const getOTPElement = function () {
  */
 const getUsernameElementBasedOnPasswordElement = function (formData, referenceElement) {
   if (referenceElement) {
-    // Try to find the username element in the reference
-    const elements = referenceElement.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+    // Try to find the username element in the reference.
+    // Use a shadow-piercing deep query so a username field nested in a sibling/child web component
+    // (shadow DOM) is found while climbing up from the password element (e.g. Descope/Vaadin forms).
+    const elements = ShadowDomQueryService.querySelectorAllDeep(
+      referenceElement,
+      InFormFieldSelector.USERNAME_FIELD_SELECTOR,
+    );
 
     // No input fields found in the reference element so we search in the parent.
     if (elements.length === 0) {
@@ -304,7 +309,12 @@ const getUsernameElement = function (formData, fallbackUsernameElement) {
   let usernameElement = null;
 
   // The username field can be an input field of type email or text.
-  const elements = fallbackUsernameElement.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+  // Use a shadow-piercing deep query so fields nested in web components (shadow DOM) are found too,
+  // consistently with how the password and OTP elements are searched (InFormCallToActionField.findAll).
+  const elements = ShadowDomQueryService.querySelectorAllDeep(
+    fallbackUsernameElement,
+    InFormFieldSelector.USERNAME_FIELD_SELECTOR,
+  );
 
   // When username element found, extract it from an array of dom elements.
   if (elements.length) {

@@ -150,6 +150,41 @@ describe("Autofill::fillForm", () => {
 
         expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
       });
+
+      it("Should autofill the username nested in a shadow root separate from the password", () => {
+        // Descope/Vaadin: username and password live in distinct web components (separate shadow roots)
+        // under a common container. Climbing up from the password element to locate the username must
+        // pierce the sibling shadow root, otherwise only the password gets filled.
+        expect.assertions(4);
+
+        document.body.innerHTML = "<div id='login-container'></div>";
+        const container = document.getElementById("login-container");
+
+        const usernameHost = document.createElement("div");
+        const usernameShadow = usernameHost.attachShadow({ mode: "open" });
+        const usernameField = document.createElement("input");
+        usernameField.type = "email";
+        usernameField.name = "email";
+        usernameField.setAttribute("autocomplete", "username");
+        usernameShadow.appendChild(usernameField);
+
+        const passwordHost = document.createElement("div");
+        const passwordShadow = passwordHost.attachShadow({ mode: "open" });
+        const passwordField = document.createElement("input");
+        passwordField.type = "password";
+        passwordShadow.appendChild(passwordField);
+
+        container.appendChild(usernameHost);
+        container.appendChild(passwordHost);
+
+        const page = new AutofillPage();
+        page.fillForm(formData);
+
+        expect(UserEventsService.autofill).toHaveBeenCalledTimes(2);
+        expect(UserEventsService.autofill).toHaveBeenCalledWith(usernameField, formData.username);
+        expect(UserEventsService.autofill).toHaveBeenCalledWith(passwordField, formData.secret);
+        expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+      });
     });
 
     describe("With password element only", () => {
@@ -178,6 +213,30 @@ describe("Autofill::fillForm", () => {
         expect(UserEventsService.autofill).toHaveBeenCalledTimes(1);
         expect(UserEventsService.autofill).toHaveBeenCalledWith(page.username, formData.username);
 
+        expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+      });
+
+      it("Should autofill username nested in a shadow root when no password element exists", () => {
+        // Reproduces the Descope/Vaadin single-step (email only) form: the username input lives inside a
+        // web component's shadow DOM and there is no password field. The document-level username search
+        // must pierce the shadow DOM to find it.
+        expect.assertions(3);
+
+        document.body.innerHTML = "";
+        const host = document.createElement("div");
+        const shadowRoot = host.attachShadow({ mode: "open" });
+        const usernameField = document.createElement("input");
+        usernameField.type = "email";
+        usernameField.name = "email";
+        usernameField.setAttribute("autocomplete", "username");
+        shadowRoot.appendChild(usernameField);
+        document.body.appendChild(host);
+
+        const page = new AutofillPage();
+        page.fillForm(formData);
+
+        expect(UserEventsService.autofill).toHaveBeenCalledTimes(1);
+        expect(UserEventsService.autofill).toHaveBeenCalledWith(usernameField, formData.username);
         expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
       });
     });
