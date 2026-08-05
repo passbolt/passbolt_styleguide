@@ -29,15 +29,15 @@ describe("ShadowRootCacheService", () => {
     jest.restoreAllMocks();
   });
 
-  describe("ShadowRootCacheService::getCachedShadowRoots", () => {
-    it("should collect and cache the shadow roots when there is no cache entry", () => {
+  describe("ShadowRootCacheService::initCachedShadowRoots", () => {
+    it("should collect, cache and observe the shadow roots", () => {
       expect.assertions(4);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
       const collectSpy = jest.spyOn(ShadowRootCollectorService, "collectShadowRoots").mockReturnValue([shadowRoot]);
 
-      const result = ShadowRootCacheService.getCachedShadowRoots(document);
+      const result = ShadowRootCacheService.initCachedShadowRoots(document);
 
       expect(result).toEqual([shadowRoot]);
       expect(collectSpy).toHaveBeenCalledWith(document);
@@ -45,8 +45,65 @@ describe("ShadowRootCacheService", () => {
       expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledWith(document);
     });
 
-    it("should return the cached shadow roots", () => {
-      expect.assertions(5);
+    it("should overwrite an already existing cache entry", () => {
+      expect.assertions(2);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      const oldShadowRoots = [];
+      ShadowRootCacheService._shadowRootsCache.set(document, oldShadowRoots);
+      jest.spyOn(ShadowRootCollectorService, "collectShadowRoots").mockReturnValue([shadowRoot]);
+
+      const result = ShadowRootCacheService.initCachedShadowRoots(document);
+
+      expect(result).toEqual([shadowRoot]);
+      expect(ShadowRootCacheService._shadowRootsCache.get(document)).not.toBe(oldShadowRoots);
+    });
+
+    it("should cache empty results", () => {
+      expect.assertions(2);
+
+      jest.spyOn(ShadowRootCollectorService, "collectShadowRoots").mockReturnValue([]);
+
+      const result = ShadowRootCacheService.initCachedShadowRoots(document);
+
+      expect(result).toEqual([]);
+      expect(ShadowRootCacheService._shadowRootsCache.get(document)).toBe(result);
+    });
+  });
+
+  describe("ShadowRootCacheService::getCachedShadowRoots", () => {
+    it("should initialize the cache when there is no cache entry", () => {
+      expect.assertions(3);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      const initSpy = jest.spyOn(ShadowRootCacheService, "initCachedShadowRoots").mockReturnValue([shadowRoot]);
+
+      const result = ShadowRootCacheService.getCachedShadowRoots(document);
+
+      expect(result).toEqual([shadowRoot]);
+      expect(initSpy).toHaveBeenCalledTimes(1);
+      expect(initSpy).toHaveBeenCalledWith(document);
+    });
+
+    it("should return the cached shadow roots without initializing the cache again", () => {
+      expect.assertions(3);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      ShadowRootCacheService._shadowRootsCache.set(document, [shadowRoot]);
+      const initSpy = jest.spyOn(ShadowRootCacheService, "initCachedShadowRoots");
+
+      const result = ShadowRootCacheService.getCachedShadowRoots(document);
+
+      expect(result.length).toEqual(1);
+      expect(result[0]).toBe(shadowRoot);
+      expect(initSpy).not.toHaveBeenCalled();
+    });
+
+    it("should collect the shadow roots only once for a given element", () => {
+      expect.assertions(3);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
@@ -55,14 +112,12 @@ describe("ShadowRootCacheService", () => {
       const first = ShadowRootCacheService.getCachedShadowRoots(document);
       const second = ShadowRootCacheService.getCachedShadowRoots(document);
 
-      expect(first.length).toEqual(1);
-      expect(first[0]).toBe(shadowRoot);
       expect(second).toBe(first);
       expect(collectSpy).toHaveBeenCalledTimes(1);
       expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledTimes(1);
     });
 
-    it("should cache empty results", () => {
+    it("should return the cached empty results without collecting again", () => {
       expect.assertions(2);
 
       const collectSpy = jest.spyOn(ShadowRootCollectorService, "collectShadowRoots").mockReturnValue([]);

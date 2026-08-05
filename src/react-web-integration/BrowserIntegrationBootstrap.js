@@ -16,7 +16,6 @@ import { QuickAccessEvent } from "./Events/Quickaccess/QuickAccessEvent";
 import { AuthLogin } from "./AuthLogin/AuthLogin";
 import InFormManager from "./lib/InForm/InFormManager";
 import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
-import ShadowDomFocusHealerService from "./lib/Dom/ShadowDom/ShadowDomFocusHealerService";
 
 /**
  * Bootstrap the browser integration with browsed pages.
@@ -28,7 +27,6 @@ async function init() {
 
   const siteSettings = await getSiteSettings();
   if (siteSettings?.canIUse("inFormIntegration")) {
-    ShadowDomFocusHealerService.installFocusinHealer();
     InFormManager.initialize();
   }
 }

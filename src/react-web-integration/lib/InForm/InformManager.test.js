@@ -1900,14 +1900,23 @@ describe("InformManager", () => {
   });
 
   describe("Focus healer integration", () => {
+    it("should install the focusin healer on initialization", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "";
+      jest.spyOn(ShadowDomFocusHealerService, "installFocusinHealer");
+
+      await act(async () => new InformManagerPage());
+
+      expect(ShadowDomFocusHealerService.installFocusinHealer).toHaveBeenCalledTimes(1);
+    });
+
     it("should discover a field within a shadow dom attached after the initial scan", async () => {
       expect.hasAssertions();
 
       document.body.innerHTML = "";
       const host = document.createElement("div");
       document.body.appendChild(host);
-
-      ShadowDomFocusHealerService.installFocusinHealer();
 
       let page;
       await act(async () => (page = new InformManagerPage()));

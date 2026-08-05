@@ -14,7 +14,6 @@
 
 import { BrowserIntegrationBootstrap } from "./BrowserIntegrationBootstrap";
 import InFormManager from "./lib/InForm/InFormManager";
-import ShadowDomFocusHealerService from "./lib/Dom/ShadowDom/ShadowDomFocusHealerService";
 import { QuickAccessEvent } from "./Events/Quickaccess/QuickAccessEvent";
 import { AuthLogin } from "./AuthLogin/AuthLogin";
 import { anonymousSiteSettings } from "../shared/models/entity/siteSettings/siteSettingsEntity.test.data";
@@ -32,7 +31,6 @@ describe("BrowserIntegrationBootstrap", () => {
     jest.spyOn(AuthLogin, "legacyAuthLogin").mockImplementation();
     jest.spyOn(QuickAccessEvent, "fillForm").mockImplementation();
     jest.spyOn(InFormManager, "initialize").mockImplementation();
-    jest.spyOn(ShadowDomFocusHealerService, "installFocusinHealer").mockImplementation();
   });
 
   describe("BrowserIntegrationBootstrap::init", () => {
@@ -50,8 +48,8 @@ describe("BrowserIntegrationBootstrap", () => {
       expect(QuickAccessEvent.fillForm).toHaveBeenCalledTimes(1);
     });
 
-    it("should install the focusin healer when the in-form integration is enabled", async () => {
-      expect.assertions(2);
+    it("should initialize the InForm manager when the in-form integration is enabled", async () => {
+      expect.assertions(1);
 
       window.port.addRequestListener(
         "passbolt.site-settings.get-or-find",
@@ -60,12 +58,11 @@ describe("BrowserIntegrationBootstrap", () => {
 
       await BrowserIntegrationBootstrap.init();
 
-      expect(ShadowDomFocusHealerService.installFocusinHealer).toHaveBeenCalledTimes(1);
       expect(InFormManager.initialize).toHaveBeenCalledTimes(1);
     });
 
-    it("should not install the focusin healer nor initialize the InForm manager when the in-form integration is disabled", async () => {
-      expect.assertions(2);
+    it("should not initialize the InForm manager when the in-form integration is disabled", async () => {
+      expect.assertions(1);
 
       const siteSettingsDto = anonymousSiteSettings();
       siteSettingsDto.passbolt.plugins.inFormIntegration.enabled = false;
@@ -76,12 +73,11 @@ describe("BrowserIntegrationBootstrap", () => {
 
       await BrowserIntegrationBootstrap.init();
 
-      expect(ShadowDomFocusHealerService.installFocusinHealer).not.toHaveBeenCalled();
       expect(InFormManager.initialize).not.toHaveBeenCalled();
     });
 
-    it("should not install the focusin healer nor initialize the InForm manager when the site settings cannot be retrieved", async () => {
-      expect.assertions(2);
+    it("should not initialize the InForm manager when the site settings cannot be retrieved", async () => {
+      expect.assertions(1);
 
       window.port.addRequestListener(
         "passbolt.site-settings.get-or-find",
@@ -92,7 +88,6 @@ describe("BrowserIntegrationBootstrap", () => {
 
       await BrowserIntegrationBootstrap.init();
 
-      expect(ShadowDomFocusHealerService.installFocusinHealer).not.toHaveBeenCalled();
       expect(InFormManager.initialize).not.toHaveBeenCalled();
     });
   });

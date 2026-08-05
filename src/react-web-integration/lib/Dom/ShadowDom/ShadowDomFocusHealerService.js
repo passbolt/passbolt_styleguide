@@ -27,6 +27,8 @@ class ShadowDomFocusHealerService {
   /**
    * Install a global 'focusin' listener to detect focus events on elements inside potential undetected shadow roots.
    * If the listener is already installed, nothing happens.
+   * Shadow roots can be undetected if they are created after the page load.
+   * @see https://github.com/WICG/webcomponents/issues/390
    */
   static installFocusinHealer() {
     if (ShadowDomFocusHealerService._focusinHandler) {

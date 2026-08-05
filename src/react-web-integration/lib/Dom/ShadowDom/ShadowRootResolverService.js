@@ -31,7 +31,9 @@ class ShadowRootResolverService {
     if (!shadowRoot) {
       const tag = element.nodeName;
 
-      // We only consider elements that are likely to have a shadow root
+      // We only consider elements that are likely to have a shadow root.
+      // Those elements are either elements that are known or custom elements (including a dash [`-`] character)
+      // @see https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow#elements_you_can_attach_a_shadow_to
       if (SHADOW_ROOT_CANDIDATE_NODE_NAMES.has(tag) || (element instanceof HTMLElement && tag.includes("-"))) {
         try {
           if (browser?.dom?.openOrClosedShadowRoot) {

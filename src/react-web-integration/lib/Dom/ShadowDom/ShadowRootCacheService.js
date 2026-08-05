@@ -26,18 +26,31 @@ class ShadowRootCacheService {
   static _shadowRootsCache = new WeakMap();
 
   /**
-   * Return the shadow roots under `element`
+   * Find the shadow roots under `element` and put them in the cache
+   * @param {Document|ShadowRoot|Element} element
+   * @return {Array<ShadowRoot>}
+   */
+  static initCachedShadowRoots(element) {
+    const shadowRoots = ShadowRootCollectorService.collectShadowRoots(element);
+    ShadowRootCacheService._shadowRootsCache.set(element, shadowRoots);
+
+    // Initialize the mutation observer on the element
+    ShadowMutationObserverService.observeShadowRootChanges(element);
+
+    return shadowRoots;
+  }
+
+  /**
+   * Return the shadow roots under `element`.
    * If the values were already computed, return the cached value.
    * @param {Document|ShadowRoot|Element} element
    * @return {Array<ShadowRoot>}
    */
   static getCachedShadowRoots(element) {
-    let shadowRoots = ShadowRootCacheService._shadowRootsCache.get(element);
+    let shadowRoots = ShadowRootCacheService.peekCache(element);
 
     if (!shadowRoots) {
-      shadowRoots = ShadowRootCollectorService.collectShadowRoots(element);
-      ShadowRootCacheService._shadowRootsCache.set(element, shadowRoots);
-      ShadowMutationObserverService.observeShadowRootChanges(element);
+      shadowRoots = ShadowRootCacheService.initCachedShadowRoots(element);
     }
 
     return shadowRoots;
