@@ -27,6 +27,7 @@ import {
   defaultPropsMultipleResourceSomeExpired,
   defaultPropsOneResourceNotOwned,
   defaultPropsOneResourceV5OfflineAvailable,
+  defaultPropsOneResourceV5OfResourceType,
   defaultPropsOneResourceOwned,
   defaultPropsOneResourceV5Private,
   defaultPropsOneResourceV5Shared,
@@ -50,6 +51,15 @@ import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration
 import HandlePermissionWorkflow, {
   PERMISSION_WORKFLOW_OPERATION,
 } from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
+import {
+  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
+  TEST_RESOURCE_TYPE_V5_DEFAULT,
+  TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+  TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+  TEST_RESOURCE_TYPE_V5_TOTP,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -740,6 +750,51 @@ describe("See Workspace Menu", () => {
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(
         "Unable to update the offline availability of the resource.",
       );
+    });
+
+    it.each([
+      { scenario: "password and description", resourceTypeId: TEST_RESOURCE_TYPE_V5_DEFAULT },
+      { scenario: "password string", resourceTypeId: TEST_RESOURCE_TYPE_V5_PASSWORD_STRING },
+      { scenario: "password and totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP },
+      { scenario: "standalone totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_TOTP },
+    ])(
+      "As LU I should see the offline availability item when one v5 $scenario resource is selected",
+      ({ resourceTypeId }) => {
+        expect.assertions(1);
+        const props = defaultPropsOneResourceV5OfResourceType(resourceTypeId);
+        const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+        page.displayMenu.clickOnMoreMenu();
+
+        expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+      },
+    );
+
+    it.each([
+      { scenario: "custom fields", resourceTypeId: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS },
+      { scenario: "standalone note", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE },
+      { scenario: "standalone pin code", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE },
+    ])(
+      "As LU I should not see the offline availability item when one v5 $scenario resource is selected, it is neither a password nor a totp",
+      ({ resourceTypeId }) => {
+        expect.assertions(1);
+        const props = defaultPropsOneResourceV5OfResourceType(resourceTypeId);
+        const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+        page.displayMenu.clickOnMoreMenu();
+
+        expect(page.displayMenu.dropdownMenuOffline).toBeNull();
+      },
+    );
+
+    it("As LU I should not see the offline availability item when the selected resource type is unknown", () => {
+      expect.assertions(1);
+      const props = defaultPropsOneResourceV5OfResourceType(uuidv4());
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+
+      expect(page.displayMenu.dropdownMenuOffline).toBeNull();
     });
   });
 });

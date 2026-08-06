@@ -165,6 +165,21 @@ export const defaultPropsOneResourceV5OfflineAvailable = (data = {}) =>
   });
 
 /**
+ * Default props one selected v5 resource of the given resource type
+ * @param {string} resourceTypeId
+ * @param {object} [data = {}]
+ * @returns {{resourceWorkspaceContext}}
+ */
+export const defaultPropsOneResourceV5OfResourceType = (resourceTypeId, data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [defaultResourceDto({ resource_type_id: resourceTypeId })],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
+
+/**
  * Default props one selected totp resource owned
  * @returns {{resourceWorkspaceContext}}
  */
