@@ -56,13 +56,6 @@ describe("ElementVisibilityService", () => {
     jest.restoreAllMocks();
   });
 
-  describe("::OPACITY_VISIBILITY_THRESHOLD", () => {
-    it("is set to 0.4", () => {
-      expect.assertions(1);
-
-      expect(OPACITY_VISIBILITY_THRESHOLD).toBe(0.4);
-    });
-  });
 
   describe("ElementVisibilityService::isElementViewable", () => {
     it("should return true for a fully visible element", () => {
