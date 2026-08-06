@@ -20,7 +20,7 @@ export const defaultProps = (data = {}) => ({
 
 export const defaultOfflineSettingsStorageContext = (data = {}) => ({
   get: jest.fn(),
-  offlineSettings: null,
-  updateLocalStorage: jest.fn(),
+  offlineSettings: undefined,
+  getOrFind: jest.fn(),
   ...data,
 });
