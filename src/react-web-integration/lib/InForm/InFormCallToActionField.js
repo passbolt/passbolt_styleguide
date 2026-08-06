@@ -15,8 +15,8 @@
 import { v4 as uuidv4 } from "uuid";
 import DomUtils from "../Dom/DomUtils";
 import browser from "webextension-polyfill";
-import ShadowRootCacheService from "../Dom/ShadowDom/ShadowRootCacheService";
-import ShadowDomQueryService from "../Dom/ShadowDom/ShadowDomQueryService";
+import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
+import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
 
 /**

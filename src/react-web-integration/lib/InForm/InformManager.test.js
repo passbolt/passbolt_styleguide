@@ -89,9 +89,9 @@ import {
 import InformManagerPage from "./InformManager.test.page";
 import InFormManager from "./InFormManager";
 import DomUtils from "../Dom/DomUtils";
-import ShadowRootCacheService from "../Dom/ShadowDom/ShadowRootCacheService";
-import ShadowMutationObserverService from "../Dom/ShadowDom/ShadowMutationObserverService";
-import ShadowDomFocusHealerService from "../Dom/ShadowDom/ShadowDomFocusHealerService";
+import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
+import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
+import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
 import { act } from "react";
 import { waitFor } from "@testing-library/react";
 

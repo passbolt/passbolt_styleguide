@@ -18,13 +18,13 @@ import InFormMenuField from "./InformMenuField";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
 import { SHADOW_RESCAN_FIELD_SELECTOR } from "./InFormFieldDictionary";
-import ShadowMutationObserverService from "../Dom/ShadowDom/ShadowMutationObserverService";
+import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
 import DomUtils from "../Dom/DomUtils";
 import debounce from "debounce-promise";
 import UserEventsService from "../User/UserEventsService";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
-import ShadowDomFocusHealerService from "../Dom/ShadowDom/ShadowDomFocusHealerService";
+import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
 
 const Z_INDEX_MAX = 2147483647;
 const HOST_MOUNT_MAX_RETRIES = 3;

@@ -12,7 +12,7 @@
  * @since         5.15.0
  */
 
-import ShadowDomQueryService from "../Dom/ShadowDom/ShadowDomQueryService";
+import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
 
 class InFormFieldGeometryService {
   /**

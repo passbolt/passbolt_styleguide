@@ -44,8 +44,8 @@ import MockPort from "../../react-extension/test/mock/MockPort";
 import AutofillPage from "./Autofill.test.page";
 import { FAIL_STRING_SCENARIOS } from "../../../test/assert/assertEntityProperty";
 import { TotpCodeGeneratorService } from "../../shared/services/otp/TotpCodeGeneratorService";
-import ShadowRootCacheService from "../lib/Dom/ShadowDom/ShadowRootCacheService";
-import ShadowMutationObserverService from "../lib/Dom/ShadowDom/ShadowMutationObserverService";
+import ShadowRootCacheService from "../services/ShadowDom/ShadowRootCacheService";
+import ShadowMutationObserverService from "../services/ShadowDom/ShadowMutationObserverService";
 
 beforeEach(() => {
   jest.clearAllMocks();

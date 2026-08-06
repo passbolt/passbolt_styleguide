@@ -14,8 +14,8 @@
 
 import InFormCallToActionField from "./InFormCallToActionField";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
-import ShadowRootCacheService from "../Dom/ShadowDom/ShadowRootCacheService";
-import ShadowMutationObserverService from "../Dom/ShadowDom/ShadowMutationObserverService";
+import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
+import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
 import DomUtils from "../Dom/DomUtils";
 import { initializeWindow } from "./InformManager.test.data";
 

@@ -14,7 +14,7 @@
 import UserEventsService from "../lib/User/UserEventsService";
 import InFormFieldSelector from "../lib/InForm/InFormFieldSelector";
 import InFormCallToActionField from "../lib/InForm/InFormCallToActionField";
-import ShadowDomQueryService from "../lib/Dom/ShadowDom/ShadowDomQueryService";
+import ShadowDomQueryService from "../services/ShadowDom/ShadowDomQueryService";
 import { TotpCodeGeneratorService } from "../../shared/services/otp/TotpCodeGeneratorService";
 
 /**
