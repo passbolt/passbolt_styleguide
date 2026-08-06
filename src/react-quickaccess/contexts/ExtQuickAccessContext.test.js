@@ -19,8 +19,6 @@ import { BOOTSTRAP_FEATURE } from "../ExtQuickAccess";
 import { defaultUserDto, defaultAdminUserDto } from "../../shared/models/entity/user/userEntity.test.data";
 import { RBAC_FIND_ME } from "../../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
 import SiteSettingsEntity from "../../shared/models/entity/siteSettings/siteSettingsEntity";
-import { defaultOfflineSettingsDto } from "../../shared/models/entity/offline/offlineSettingsEntity.test.data";
-import { OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT } from "../../shared/services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
 import UserActiveSessionEntity from "../../shared/models/entity/session/userActiveSessionEntity";
 import { defaultUserActiveSessionDto } from "../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
@@ -119,8 +117,6 @@ describe("ExtQuickAccess Context", () => {
       expect.assertions(1);
       jest.spyOn(context.state.port, "request").mockImplementation((event) => {
         switch (event) {
-          case OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT:
-            return Promise.resolve(defaultOfflineSettingsDto());
           case "passbolt.users.find-logged-in-user":
             return Promise.resolve(defaultAdminUserDto());
           case RBAC_FIND_ME:
@@ -139,9 +135,6 @@ describe("ExtQuickAccess Context", () => {
       expect.assertions(1);
       jest.spyOn(console, "error").mockImplementation(() => {});
       jest.spyOn(context.state.port, "request").mockImplementation((event) => {
-        if (event === OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT) {
-          return Promise.resolve(defaultOfflineSettingsDto());
-        }
         if (event === "passbolt.users.find-logged-in-user") {
           return Promise.reject(new Error());
         }
