@@ -70,6 +70,7 @@ export function defaultAppContext(appContext = {}, isCommunityEdition = false) {
     setContext: jest.fn(),
     foldersMapById: [],
     getHierarchyFolderCache: jest.fn(() => []),
+    resources: [],
   };
   return Object.assign(defaultAppContext, appContext);
 }
