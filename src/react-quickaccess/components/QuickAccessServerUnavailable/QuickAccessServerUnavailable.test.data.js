@@ -18,7 +18,7 @@ import UserActiveSessionEntity from "../../../shared/models/entity/session/userA
 import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
- * Default props.
+ * Default props: a signed-in user who cannot use the offline mode.
  * @param {object} data Override the default props.
  * @returns {object}
  */
@@ -26,9 +26,21 @@ export function defaultProps(data = {}) {
   return {
     context: defaultAppContext(),
     history: createMemoryHistory({ initialEntries: ["/"], initialIndex: 0 }),
-    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
+    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_server_reachable: false })),
     ...data,
   };
+}
+
+/**
+ * Props with a signed-in user who can use the offline mode.
+ * @param {object} data Override the default props.
+ * @returns {object}
+ */
+export function offlineModeAvailableProps(data = {}) {
+  return defaultProps({
+    context: defaultAppContext({ canUseOfflineMode: true }),
+    ...data,
+  });
 }
 
 /**
@@ -39,7 +51,9 @@ export function defaultProps(data = {}) {
 export function unauthenticatedProps(data = {}) {
   return defaultProps({
     context: defaultAppContext(),
-    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_authenticated: false })),
+    activeSession: new UserActiveSessionEntity(
+      defaultUserActiveSessionDto({ is_authenticated: false, is_server_reachable: false }),
+    ),
     ...data,
   });
 }

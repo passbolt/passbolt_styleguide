@@ -15,6 +15,7 @@
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 import { BOOTSTRAP_FEATURE } from "../../ExtQuickAccess";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
 
 /**
  * Default props
@@ -22,6 +23,7 @@ import { BOOTSTRAP_FEATURE } from "../../ExtQuickAccess";
  */
 export function defaultProps(props = {}) {
   const defaultProps = {
+    context: defaultAppContext(),
     activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
     history: {
       push: jest.fn(),
@@ -29,4 +31,20 @@ export function defaultProps(props = {}) {
     bootstrapFeature: BOOTSTRAP_FEATURE.AUTOSAVE_CREDENTIALS,
   };
   return Object.assign(defaultProps, props);
+}
+
+/**
+ * Props with the given active session and offline mode capability.
+ * @param {object} activeSessionDto The active session dto.
+ * @param {boolean} canUseOfflineMode Whether the user can use the offline mode.
+ * @param {object} props Override the default props.
+ * @returns {object}
+ */
+export function propsWithOfflineModeCapability(activeSessionDto, canUseOfflineMode, props = {}) {
+  return defaultProps({
+    context: defaultAppContext({ canUseOfflineMode }),
+    activeSession: new UserActiveSessionEntity(activeSessionDto),
+    bootstrapFeature: null,
+    ...props,
+  });
 }

@@ -15,7 +15,7 @@
 /**
  * Unit tests on SessionExpired in regard of specifications
  */
-import { defaultProps } from "./HandleBootstrapRoute.test.data";
+import { defaultProps, propsWithOfflineModeCapability } from "./HandleBootstrapRoute.test.data";
 import HandleBootstrapRoutePage from "./HandleBootstrapRoute.test.page";
 import UserActiveSessionEntity, {
   USER_ACTIVE_SESSION_OFFLINE,
@@ -68,6 +68,58 @@ describe("HandleBootstrapRoute", () => {
       new HandleBootstrapRoutePage(props);
 
       expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/server-not-reachable");
+    });
+
+    it("As a signed-out user who can use the offline mode with an unreachable server I should be redirected to the offline login page", () => {
+      expect.assertions(1);
+      const props = propsWithOfflineModeCapability(
+        defaultUserActiveSessionDto({ is_authenticated: false, is_server_reachable: false }),
+        true,
+      );
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/login-offline");
+    });
+
+    it("As a signed-out user who cannot use the offline mode with an unreachable server I should be redirected to the server not reachable page", () => {
+      expect.assertions(1);
+      const props = propsWithOfflineModeCapability(
+        defaultUserActiveSessionDto({ is_authenticated: false, is_server_reachable: false }),
+        false,
+      );
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/server-not-reachable");
+    });
+
+    it("As a signed-out user who can use the offline mode with a reachable server I should be redirected to the online login page", () => {
+      expect.assertions(1);
+      const props = propsWithOfflineModeCapability(
+        defaultUserActiveSessionDto({ is_authenticated: false, is_server_reachable: true }),
+        true,
+      );
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/login");
+    });
+
+    it("As LU with an authenticated online session that lost the network and who can use the offline mode I should be redirected to the server not reachable page", () => {
+      expect.assertions(1);
+      const props = propsWithOfflineModeCapability(defaultUserActiveSessionDto({ is_server_reachable: false }), true);
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/server-not-reachable");
+    });
+
+    it("As LU with an authenticated offline session and an unreachable server I should stay signed in even if the offline mode capability is not resolved yet", () => {
+      expect.assertions(1);
+      const props = propsWithOfflineModeCapability(
+        defaultUserActiveSessionDto({ type: USER_ACTIVE_SESSION_OFFLINE, is_server_reachable: false }),
+        null,
+      );
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/home");
     });
 
     it("As LU with an authenticated offline session and a reachable server I should stay signed in", () => {

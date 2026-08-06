@@ -48,10 +48,18 @@ export function defaultAppContext(data = {}) {
     setWindowBlurBehaviour: () => jest.fn(),
     shouldCloseAtWindowBlur: false,
     rbacs: new RbacsCollection([]),
-    loginSuccessCallback: jest.fn(),
+    canUseOfflineMode: false,
+    // authentication transitions
+    loginOnlineSuccessCallBack: jest.fn(),
+    loginOfflineSuccessCallBack: jest.fn(),
     mfaRequiredCallback: jest.fn(),
     bootstrapFeature: "",
     activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_authenticated: false })),
+    activeSessionLocalStorageContext: {
+      get: jest.fn(),
+      activeSession: null,
+      updateLocalStorage: jest.fn(),
+    },
     ...data,
   };
 }

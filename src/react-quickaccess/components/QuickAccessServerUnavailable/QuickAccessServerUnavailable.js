@@ -23,15 +23,33 @@ class QuickAccessServerUnavailable extends Component {
   constructor(props) {
     super(props);
     this.handleSignOutLocallyClick = this.handleSignOutLocallyClick.bind(this);
+    this.handleUseOfflineModeClick = this.handleUseOfflineModeClick.bind(this);
   }
 
+  /**
+   * Sign out locally: run the local logout (no server call) and close the quickaccess.
+   * @returns {Promise<void>}
+   */
   async handleSignOutLocallyClick() {
-    await this.props.context.port.request("passbolt.auth.local-logout");
-    this.props.history.push("/webAccessibleResources/quickaccess.html");
+    await await this.props.context.port.request("passbolt.auth.local-logout");
+    await this.props.context.closeWindow();
+  }
+
+  /**
+   * Switch to offline mode: go to the offline login page.
+   */
+  handleUseOfflineModeClick() {
+    this.props.history.push("/webAccessibleResources/quickaccess/login-offline");
   }
 
   render() {
+    /*
+     * Only a signed-in user has anything to do here. A signed-out user who can use the offline mode is
+     * routed to the offline sign-in page by the triage route and never reaches this screen; one who cannot
+     * has no action left to offer only the message is rendered.
+     */
     const isAuthenticated = this.props.activeSession.isAuthenticated;
+    const canUseOfflineMode = this.props.context.canUseOfflineMode;
     return (
       <div className="quickaccess-server-unavailable">
         <div className="form-container">
@@ -39,13 +57,34 @@ class QuickAccessServerUnavailable extends Component {
             <Trans>Unable to reach the server, you are not connected to the network.</Trans>
           </p>
         </div>
-        {isAuthenticated && (
-          <div className="submit-wrapper">
-            <button type="button" className="button primary big full-width" onClick={this.handleSignOutLocallyClick}>
-              <Trans>Sign out locally</Trans>
-            </button>
-          </div>
-        )}
+        {isAuthenticated && this.renderAuthenticatedActions(canUseOfflineMode)}
+      </div>
+    );
+  }
+
+  /**
+   * Render the actions for an authenticated user whose session went offline.
+   * @param {boolean} canUseOfflineMode Whether the user can use the offline mode.
+   * @returns {JSX.Element}
+   */
+  renderAuthenticatedActions(canUseOfflineMode) {
+    if (canUseOfflineMode) {
+      return (
+        <div className="submit-wrapper">
+          <button type="button" className="button primary big full-width" onClick={this.handleUseOfflineModeClick}>
+            <Trans>Use offline mode</Trans>
+          </button>
+          <a className="sign-out-locally-link" role="button" onClick={this.handleSignOutLocallyClick}>
+            <Trans>Sign out locally</Trans>
+          </a>
+        </div>
+      );
+    }
+    return (
+      <div className="submit-wrapper">
+        <button type="button" className="button primary big full-width" onClick={this.handleSignOutLocallyClick}>
+          <Trans>Sign out locally</Trans>
+        </button>
       </div>
     );
   }

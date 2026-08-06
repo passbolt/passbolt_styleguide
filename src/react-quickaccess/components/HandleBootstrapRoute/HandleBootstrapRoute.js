@@ -16,6 +16,7 @@ import { BOOTSTRAP_FEATURE } from "../../ExtQuickAccess";
 import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { withRouter } from "react-router-dom";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 
 /**
  * This component takes care of redirect the user.
@@ -27,6 +28,7 @@ class HandleBootstrapRoute extends React.Component {
    */
   getBootstrapRoute() {
     const activeSession = this.props.activeSession;
+    const canUseOfflineMode = this.props.context.canUseOfflineMode;
 
     /*
      * An authenticated offline session should persist: the user stays in the app whether or not the server
@@ -34,6 +36,16 @@ class HandleBootstrapRoute extends React.Component {
      */
     if (activeSession.isAuthenticated && activeSession.isSessionOffline) {
       return "/webAccessibleResources/quickaccess/home";
+    }
+
+    /*
+     * A signed-out user who can use offline mode and has no reachable server is taken straight to the
+     * offline login page: the server unavailable screen below would have nothing to offer them but that
+     * same destination. Kept ahead of the reachability check, and conditioned on it, so a signed-out user
+     * whose server is reachable still gets the online login page.
+     */
+    if (!activeSession.isAuthenticated && !activeSession.isServerReachable && canUseOfflineMode) {
+      return "/webAccessibleResources/quickaccess/login-offline";
     }
 
     /*
@@ -79,9 +91,10 @@ class HandleBootstrapRoute extends React.Component {
 }
 
 HandleBootstrapRoute.propTypes = {
+  context: PropTypes.any, // The application context
   activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   history: PropTypes.object, // The history
   bootstrapFeature: PropTypes.string, // The bootstrap feature
 };
 
-export default withRouter(withActiveSessionLocalStorage(HandleBootstrapRoute));
+export default withRouter(withAppContext(withActiveSessionLocalStorage(HandleBootstrapRoute)));

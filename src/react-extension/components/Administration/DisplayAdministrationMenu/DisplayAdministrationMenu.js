@@ -1276,8 +1276,8 @@ class DisplayAdministrationMenu extends React.Component {
                         <button className="link no-border" type="button" onClick={this.handleOfflineClick}>
                           <span>
                             <Trans>Offline mode</Trans>
-                            {this.isBeta("offlineMode") && <span className="chips beta">beta</span>}
                           </span>
+                          {this.isBeta("offlineMode") && <span className="chips beta">beta</span>}
                         </button>
                       </div>
                     </div>
