@@ -590,6 +590,20 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * To check if the resource is a Password or TOTP resource
+   *
+   * This method is to add a conditional check for Offline Mode Phase 1
+   * where the option to mark/unmark a resource as available offline is
+   * only for passwords or TOTP
+   *
+   * @return {boolean}
+   */
+  isPasswordOrTotp() {
+    const resourceType = this.props.resourceTypes?.getFirstById(this.selectedResources[0]?.resource_type_id);
+    return resourceType?.hasPassword() || resourceType?.hasTotp();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -622,7 +636,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     // Copy menu
     const canCopySecret = this.canCopySecrets() && this.canCopyPassword();
     const canCopyTotp = this.canUseTotp() && this.canCopyTotp();
-    const canMarkOrRemoveOfflineAccess = hasOneResourceSelected && this.canUseOffline();
+    const canMarkOrRemoveOfflineAccess = hasOneResourceSelected && this.canUseOffline() && this.isPasswordOrTotp();
 
     return (
       <div className="actions" ref={this.props.actionsButtonRef}>

@@ -532,6 +532,20 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * To check if the resource is a Password or TOTP resource
+   *
+   * This method is to add a conditional check for Offline Mode Phase 1
+   * where the option to mark/unmark a resource as available offline is
+   * only for passwords or TOTP
+   *
+   * @return {boolean}
+   */
+  get isPasswordOrTotp() {
+    const resourceType = this.props.resourceTypes?.getFirstById(this.resource.resource_type_id);
+    return resourceType?.hasPassword() || resourceType?.hasTotp();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -765,7 +779,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </li>
         )}
-        {this.canUseOffline && (
+        {this.canUseOffline && this.isPasswordOrTotp && (
           <li key="option-offline-availability" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">

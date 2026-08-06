@@ -40,7 +40,15 @@ import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {
+  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
+  TEST_RESOURCE_TYPE_V5_DEFAULT,
+  TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+  TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+  TEST_RESOURCE_TYPE_V5_TOTP,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
@@ -613,6 +621,48 @@ describe("DisplayResourcesListContextualMenu", () => {
         "Unable to update the offline availability of the resource.",
       );
       expect(props.hide).toHaveBeenCalled();
+    });
+
+    it.each([
+      { scenario: "password and description", resourceTypeId: TEST_RESOURCE_TYPE_V5_DEFAULT },
+      { scenario: "password string", resourceTypeId: TEST_RESOURCE_TYPE_V5_PASSWORD_STRING },
+      { scenario: "password and totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP },
+      { scenario: "standalone totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_TOTP },
+    ])("As LU I should see the offline availability item for a v5 $scenario resource", ({ resourceTypeId }) => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: resourceTypeId }),
+      });
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).not.toBeNull();
+    });
+
+    it.each([
+      { scenario: "custom fields", resourceTypeId: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS },
+      { scenario: "standalone note", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE },
+      { scenario: "standalone pin code", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE },
+    ])(
+      "As LU I should not see the offline availability item for a v5 $scenario resource, it is neither a password nor a totp",
+      ({ resourceTypeId }) => {
+        expect.assertions(1);
+        const props = defaultProps({
+          resource: defaultResourceDto({ resource_type_id: resourceTypeId }),
+        });
+        const page = new DisplayResourcesListContextualMenuPage(props);
+
+        expect(page.offlineAvailabilityItem).toBeNull();
+      },
+    );
+
+    it("As LU I should not see the offline availability item if the resource type is unknown", () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: uuidv4() }),
+      });
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).toBeNull();
     });
   });
 });
