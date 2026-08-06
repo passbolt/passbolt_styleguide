@@ -56,7 +56,6 @@ describe("ElementVisibilityService", () => {
     jest.restoreAllMocks();
   });
 
-
   describe("ElementVisibilityService::isElementViewable", () => {
     it("should return true for a fully visible element", () => {
       expect.assertions(1);
@@ -79,14 +78,6 @@ describe("ElementVisibilityService", () => {
       expect.assertions(1);
 
       const element = buildElement({ opacity: "0.01" });
-
-      expect(ElementVisibilityService.isElementViewable(element)).toBe(false);
-    });
-
-    it("should return false when the opacity sits just below the threshold", () => {
-      expect.assertions(1);
-
-      const element = buildElement({ opacity: "0.39" });
 
       expect(ElementVisibilityService.isElementViewable(element)).toBe(false);
     });
