@@ -149,6 +149,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
         return;
       }
       const created = await this.createResource(resourceFormEntity);
+      await this.waitForResourceInGrid(created);
       await this.finalizeSuccess(
         this.props.t("The resource has been added successfully"),
         `/app/passwords/view/${created.id}`,
@@ -158,6 +159,25 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
     } catch (error) {
       this.handleError(error);
     }
+  }
+
+  async waitForResourceInGrid(created) {
+    return new Promise((resolve, reject) => {
+      const startTime = Date.now();
+      const interval = setInterval(() => {
+        if (this.props.context.resources.find((resource) => created.id === resource.id)) {
+          clearInterval(interval);
+          resolve();
+          return;
+        }
+
+        const currentTime = Date.now();
+        if (currentTime >= startTime + 3_000) {
+          clearInterval(interval);
+          reject();
+        }
+      }, 50);
+    });
   }
 
   /**
@@ -201,6 +221,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
         null,
       );
       const created = await this.createResource(this.pendingResourceFormEntity, finalChanges);
+      await this.waitForResourceInGrid(created);
       const redirectUrl = canOperatorRead ? `/app/passwords/view/${created.id}` : `/app/passwords/`;
       await this.finalizeSuccess(this.props.t("The resource has been added successfully"), redirectUrl);
       this.closeCreateResourceDialog();
