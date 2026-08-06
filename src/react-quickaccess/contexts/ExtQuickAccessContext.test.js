@@ -63,7 +63,7 @@ describe("ExtQuickAccess Context", () => {
       jest.spyOn(extQuickAccessContext.state.port, "request").mockImplementationOnce(() => []);
 
       // process
-      await extQuickAccessContext.loginSuccessCallback();
+      await extQuickAccessContext.loginOnlineSuccessCallBack();
       // expectations
       expect(extQuickAccessContext.state.port.request).toHaveBeenCalledTimes(3);
       expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith("passbolt.site-settings.get-or-find", true);
@@ -71,14 +71,37 @@ describe("ExtQuickAccess Context", () => {
       expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith(RBAC_FIND_ME);
     });
 
-    it("As LU I should be able to login with bootstrap feature login", () => {
+    it("As LU I should be able to login with bootstrap feature login", async () => {
       expect.assertions(1);
       extQuickAccessContext.props.bootstrapFeature = BOOTSTRAP_FEATURE.LOGIN;
       jest.spyOn(window, "close");
       // process
-      extQuickAccessContext.loginSuccessCallback();
+      await extQuickAccessContext.loginOnlineSuccessCallBack();
       // expectations
       expect(window.close).toHaveBeenCalledTimes(1);
+    });
+
+    it("As LU I should be able to login offline", async () => {
+      expect.assertions(2);
+      jest.spyOn(extQuickAccessContext.state.port, "request").mockImplementationOnce(() => siteSettingsFixture);
+      jest.spyOn(extQuickAccessContext.state.port, "request").mockImplementationOnce(() => defaultUserDto());
+      jest.spyOn(extQuickAccessContext.state.port, "request").mockImplementationOnce(() => []);
+      // process
+      await extQuickAccessContext.loginOfflineSuccessCallBack();
+      expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith("passbolt.site-settings.get-or-find", true);
+      expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith("passbolt.users.find-logged-in-user");
+    });
+
+    it("As LU I should be able to login offline with bootstrap feature login", async () => {
+      expect.assertions(2);
+      extQuickAccessContext.props.bootstrapFeature = BOOTSTRAP_FEATURE.LOGIN;
+      jest.spyOn(window, "close");
+      jest.spyOn(extQuickAccessContext.state.port, "request").mockImplementation(() => siteSettingsFixture);
+      // process
+      await extQuickAccessContext.loginOfflineSuccessCallBack();
+      // expectations
+      expect(window.close).toHaveBeenCalledTimes(1);
+      expect(extQuickAccessContext.state.port.request).not.toHaveBeenCalled();
     });
 
     it("As LU I should be redirected to mfa page is it's required", async () => {
@@ -104,16 +127,22 @@ describe("ExtQuickAccess Context", () => {
 
     const siteSettings = () => new SiteSettingsEntity(siteSettingsFixture);
 
-    it("sets canUseOfflineMode to false when offline mode is not configured (no offline settings cached)", async () => {
-      expect.assertions(1);
-      jest.spyOn(context.state.port, "request").mockImplementation(() => Promise.resolve(undefined));
+    const siteSettingsWithoutOfflineMode = () => {
+      const settings = JSON.parse(JSON.stringify(siteSettingsFixture));
+      settings.passbolt.plugins.offlineMode.enabled = false;
+      return new SiteSettingsEntity(settings);
+    };
 
-      await context.resolveCanUseOfflineMode(siteSettings());
+    it("sets canUseOfflineMode to false when offline mode is not enabled on the organisation", async () => {
+      expect.assertions(1);
+      jest.spyOn(context.state.port, "request").mockImplementation(() => Promise.resolve());
+
+      await context.resolveCanUseOfflineMode(siteSettingsWithoutOfflineMode());
 
       expect(context.state.canUseOfflineMode).toBe(false);
     });
 
-    it("sets canUseOfflineMode to true for an eligible user when offline mode is configured", async () => {
+    it("sets canUseOfflineMode to true for an eligible user when offline mode is enabled", async () => {
       expect.assertions(1);
       jest.spyOn(context.state.port, "request").mockImplementation((event) => {
         switch (event) {
@@ -129,6 +158,20 @@ describe("ExtQuickAccess Context", () => {
       await context.resolveCanUseOfflineMode(siteSettings());
 
       expect(context.state.canUseOfflineMode).toBe(true);
+    });
+
+    it("sets canUseOfflineMode to false when there is no logged-in user available locally", async () => {
+      expect.assertions(1);
+      jest.spyOn(context.state.port, "request").mockImplementation((event) => {
+        if (event === "passbolt.users.find-logged-in-user") {
+          return Promise.resolve(null);
+        }
+        return Promise.resolve();
+      });
+
+      await context.resolveCanUseOfflineMode(siteSettings());
+
+      expect(context.state.canUseOfflineMode).toBe(false);
     });
 
     it("sets canUseOfflineMode to false when the capability resolution fails", async () => {

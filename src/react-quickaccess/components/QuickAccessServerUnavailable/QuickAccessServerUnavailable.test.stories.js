@@ -17,7 +17,11 @@ import { MemoryRouter, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import QuickAccessServerUnavailable from "./QuickAccessServerUnavailable";
 import AppContext from "../../../shared/context/AppContext/AppContext";
-import { defaultProps, unauthenticatedProps } from "./QuickAccessServerUnavailable.test.data";
+import {
+  defaultProps,
+  offlineModeAvailableProps,
+  unauthenticatedProps,
+} from "./QuickAccessServerUnavailable.test.data";
 
 export default {
   title: "Components/QuickAccess/QuickAccessServerUnavailable",
@@ -49,6 +53,10 @@ const parameters = {
 export const SignedIn = Template.bind({});
 SignedIn.args = defaultProps();
 SignedIn.parameters = parameters;
+
+export const SignedInWithOfflineMode = Template.bind({});
+SignedInWithOfflineMode.args = offlineModeAvailableProps();
+SignedInWithOfflineMode.parameters = parameters;
 
 export const SignedOut = Template.bind({});
 SignedOut.args = unauthenticatedProps();

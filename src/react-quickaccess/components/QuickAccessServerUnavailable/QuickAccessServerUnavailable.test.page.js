@@ -12,7 +12,8 @@
  * @since        5.13.0
  */
 
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
@@ -35,6 +36,8 @@ export default class QuickAccessServerUnavailablePage {
         </Router>
       </MockTranslationProvider>,
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -54,11 +57,22 @@ export default class QuickAccessServerUnavailablePage {
   }
 
   /**
-   * Returns the sign out locally button element
+   * Returns the primary action button element. It is the sign out locally button when the user cannot
+   * use the offline mode, the use offline mode button otherwise.
    * @returns {Element|null}
    */
-  get signOutLocallyButton() {
+  get primaryButton() {
     return this._page.container.querySelector('.quickaccess-server-unavailable .submit-wrapper button[type="button"]');
+  }
+
+  /**
+   * Returns the sign out locally link element, offered as a secondary action alongside the offline mode.
+   * @returns {Element|null}
+   */
+  get signOutLocallyLink() {
+    return this._page.container.querySelector(
+      ".quickaccess-server-unavailable .submit-wrapper a.sign-out-locally-link",
+    );
   }
 
   /**
@@ -70,11 +84,18 @@ export default class QuickAccessServerUnavailablePage {
   }
 
   /**
-   * Simulates a click on the sign out locally button
+   * Simulates a click on the primary action button
    * @returns {Promise<void>}
    */
-  async clickSignOutLocally() {
-    fireEvent.click(this.signOutLocallyButton, { button: 0 });
-    await waitFor(() => {});
+  async clickPrimaryButton() {
+    await this.user.click(this.primaryButton);
+  }
+
+  /**
+   * Simulates a click on the sign out locally link
+   * @returns {Promise<void>}
+   */
+  async clickSignOutLocallyLink() {
+    await this.user.click(this.signOutLocallyLink);
   }
 }
