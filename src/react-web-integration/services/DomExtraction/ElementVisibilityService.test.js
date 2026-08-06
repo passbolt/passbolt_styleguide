@@ -168,10 +168,10 @@ describe("ElementVisibilityService", () => {
       expect(ElementVisibilityService.isElementViewable(element)).toBe(true);
     });
 
-    it.each(["none"])("should return false via the legacy fallback when display is %s", (display) => {
+    it("should return false via the legacy fallback when display is none", () => {
       expect.assertions(1);
 
-      const element = buildElement({ checkVisibility: "absent", display });
+      const element = buildElement({ checkVisibility: "absent", display: "none" });
 
       expect(ElementVisibilityService.isElementViewable(element)).toBe(false);
     });
