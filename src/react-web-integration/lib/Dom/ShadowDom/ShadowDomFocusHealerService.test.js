@@ -18,6 +18,7 @@ import ShadowMutationObserverService from "./ShadowMutationObserverService";
 
 describe("ShadowDomFocusHealerService", () => {
   beforeEach(() => {
+    jest.restoreAllMocks();
     jest.clearAllMocks();
 
     jest.spyOn(document, "addEventListener").mockImplementation();
@@ -48,32 +49,54 @@ describe("ShadowDomFocusHealerService", () => {
 
       expect(document.addEventListener).toHaveBeenCalledTimes(1);
     });
+  });
 
-    it("should not invalidate any cache nor signal a re-scan when the focused element is not a field", () => {
+  describe("ShadowDomFocusHealerService::focusHandler", () => {
+    let focusHandler;
+
+    beforeEach(() => {
+      ShadowDomFocusHealerService.installFocusinHealer();
+      focusHandler = ShadowDomFocusHealerService._focusinHandler;
+    });
+
+    it("should not invalidate any cache nor trigger a rescan when the focused element is not a field", () => {
       expect.assertions(2);
 
       const div = document.createElement("div");
-      ShadowDomFocusHealerService.installFocusinHealer();
 
-      ShadowDomFocusHealerService._focusinHandler({ composedPath: () => [div, document.body, document] });
+      focusHandler({ composedPath: () => [div, document.body, document] });
 
       expect(ShadowRootCacheService.invalidate).not.toHaveBeenCalled();
       expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).not.toHaveBeenCalled();
     });
 
-    it("should not invalidate any cache nor signal a re-scan when the focused field is outside a shadow dom", () => {
+    it("should not invalidate any cache nor trigger a rescan when the focused element is not a field inside a shadow dom", () => {
+      expect.assertions(2);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      const div = document.createElement("div");
+      shadowRoot.appendChild(div);
+      document.body.appendChild(host);
+
+      focusHandler({ composedPath: () => [div, shadowRoot, host, document.body, document] });
+
+      expect(ShadowRootCacheService.invalidate).not.toHaveBeenCalled();
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).not.toHaveBeenCalled();
+    });
+
+    it("should not invalidate any cache nor trigger a rescan when the focused field is outside a shadow dom", () => {
       expect.assertions(2);
 
       const input = document.createElement("input");
-      ShadowDomFocusHealerService.installFocusinHealer();
 
-      ShadowDomFocusHealerService._focusinHandler({ composedPath: () => [input, document.body, document] });
+      focusHandler({ composedPath: () => [input, document.body, document] });
 
       expect(ShadowRootCacheService.invalidate).not.toHaveBeenCalled();
       expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).not.toHaveBeenCalled();
     });
 
-    it("should invalidate the parent scope and signal a re-scan when the focused field is inside a shadow dom", () => {
+    it("should invalidate the parent scope and trigger a rescan when the focused field is inside a shadow dom", () => {
       expect.assertions(3);
 
       const host = document.createElement("div");
@@ -81,11 +104,8 @@ describe("ShadowDomFocusHealerService", () => {
       const input = document.createElement("input");
       shadowRoot.appendChild(input);
       document.body.appendChild(host);
-      ShadowDomFocusHealerService.installFocusinHealer();
 
-      ShadowDomFocusHealerService._focusinHandler({
-        composedPath: () => [input, shadowRoot, host, document.body, document],
-      });
+      focusHandler({ composedPath: () => [input, shadowRoot, host, document.body, document] });
 
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledTimes(1);
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(document);
@@ -104,18 +124,14 @@ describe("ShadowDomFocusHealerService", () => {
       const crossRealmShadowRoot = { nodeType: Node.DOCUMENT_FRAGMENT_NODE, host };
       expect(crossRealmShadowRoot instanceof ShadowRoot).toBe(false);
 
-      ShadowDomFocusHealerService.installFocusinHealer();
-
-      ShadowDomFocusHealerService._focusinHandler({
-        composedPath: () => [input, crossRealmShadowRoot, host, document.body, document],
-      });
+      focusHandler({ composedPath: () => [input, crossRealmShadowRoot, host, document.body, document] });
 
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(document);
       expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
     });
 
     it("should invalidate the parent scopes of late-attached nested roots", () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
       const outerHost = document.createElement("div");
       const outerRoot = outerHost.attachShadow({ mode: "open" });
@@ -125,15 +141,15 @@ describe("ShadowDomFocusHealerService", () => {
       outerRoot.appendChild(innerHost);
       const input = document.createElement("input");
       innerRoot.appendChild(input);
-      ShadowDomFocusHealerService.installFocusinHealer();
 
-      ShadowDomFocusHealerService._focusinHandler({
+      focusHandler({
         composedPath: () => [input, innerRoot, innerHost, outerRoot, outerHost, document.body, document],
       });
 
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledTimes(2);
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(outerRoot);
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(document);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledTimes(1);
       expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
     });
 
@@ -147,14 +163,57 @@ describe("ShadowDomFocusHealerService", () => {
       document.body.appendChild(host);
 
       jest.spyOn(ShadowRootCacheService, "peekCache").mockReturnValue([shadowRoot]);
-      ShadowDomFocusHealerService.installFocusinHealer();
 
-      ShadowDomFocusHealerService._focusinHandler({
-        composedPath: () => [input, shadowRoot, host, document.body, document],
-      });
+      focusHandler({ composedPath: () => [input, shadowRoot, host, document.body, document] });
 
       expect(ShadowRootCacheService.invalidate).not.toHaveBeenCalled();
       expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).not.toHaveBeenCalled();
+    });
+
+    it("should invalidate the parent scope when its cache is populated but does not know the focused shadow root", () => {
+      expect.assertions(2);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      const input = document.createElement("input");
+      shadowRoot.appendChild(input);
+      document.body.appendChild(host);
+      const knownHost = document.createElement("div");
+      const knownShadowRoot = knownHost.attachShadow({ mode: "open" });
+      document.body.appendChild(knownHost);
+
+      jest.spyOn(ShadowRootCacheService, "peekCache").mockReturnValue([knownShadowRoot]);
+
+      focusHandler({ composedPath: () => [input, shadowRoot, host, document.body, document] });
+
+      expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(document);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
+    });
+
+    it("should invalidate only the scope of the unknown root when its parent root is already known", () => {
+      expect.assertions(3);
+
+      const outerHost = document.createElement("div");
+      const outerRoot = outerHost.attachShadow({ mode: "open" });
+      document.body.appendChild(outerHost);
+      const innerHost = document.createElement("div");
+      const innerRoot = innerHost.attachShadow({ mode: "open" });
+      outerRoot.appendChild(innerHost);
+      const input = document.createElement("input");
+      innerRoot.appendChild(input);
+
+      // The document knows about the outer root, but the outer root does not know about the inner one yet.
+      jest
+        .spyOn(ShadowRootCacheService, "peekCache")
+        .mockImplementation((element) => (element === document ? [outerRoot] : undefined));
+
+      focusHandler({
+        composedPath: () => [input, innerRoot, innerHost, outerRoot, outerHost, document.body, document],
+      });
+
+      expect(ShadowRootCacheService.invalidate).toHaveBeenCalledTimes(1);
+      expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(outerRoot);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
     });
   });
 });

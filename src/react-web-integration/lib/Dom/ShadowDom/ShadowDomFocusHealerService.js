@@ -16,6 +16,35 @@ import ShadowRootCacheService from "./ShadowRootCacheService";
 import ShadowMutationObserverService from "./ShadowMutationObserverService";
 import ShadowDomQueryService from "./ShadowDomQueryService";
 
+/**
+ * The handler triggered when an element is focused to detect focus events on elements inside potentially undetected shadow roots.
+ * @param {FocusEvent} event
+ */
+const focusHandler = (event) => {
+  const path = event.composedPath();
+  const [target] = path;
+
+  if (target.tagName === "INPUT") {
+    let invalidated = false;
+
+    for (const node of path) {
+      if (ShadowDomQueryService.isShadowRoot(node)) {
+        const parentScope = ShadowDomQueryService.scopeRoot(node.host);
+        const cachedParentRoots = ShadowRootCacheService.peekCache(parentScope);
+        const isKnown = cachedParentRoots?.includes(node) ?? false;
+        if (!isKnown) {
+          ShadowRootCacheService.invalidate(parentScope);
+          invalidated = true;
+        }
+      }
+    }
+
+    if (invalidated) {
+      ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true);
+    }
+  }
+};
+
 class ShadowDomFocusHealerService {
   /**
    * The registered handler, if any.
@@ -25,7 +54,7 @@ class ShadowDomFocusHealerService {
   static _focusinHandler = null;
 
   /**
-   * Install a global 'focusin' listener to detect focus events on elements inside potential undetected shadow roots.
+   * Install a global 'focusin' listener to detect focus events on elements inside potentially undetected shadow roots.
    * If the listener is already installed, nothing happens.
    * Shadow roots can be undetected if they are created after the page load.
    * @see https://github.com/WICG/webcomponents/issues/390
@@ -35,32 +64,8 @@ class ShadowDomFocusHealerService {
       return;
     }
 
-    ShadowDomFocusHealerService._focusinHandler = (event) => {
-      const path = event.composedPath();
-      const [target] = path;
-
-      if (target.tagName === "INPUT") {
-        let invalidated = false;
-
-        for (const node of path) {
-          if (ShadowDomQueryService.isShadowRoot(node)) {
-            const parentScope = ShadowDomQueryService.scopeRoot(node.host);
-            const cachedParentRoots = ShadowRootCacheService.peekCache(parentScope);
-            const isKnown = cachedParentRoots?.includes(node) ?? false;
-            if (!isKnown) {
-              ShadowRootCacheService.invalidate(parentScope);
-              invalidated = true;
-            }
-          }
-        }
-
-        if (invalidated) {
-          ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true);
-        }
-      }
-    };
-
-    document.addEventListener("focusin", ShadowDomFocusHealerService._focusinHandler, { capture: true });
+    ShadowDomFocusHealerService._focusinHandler = focusHandler;
+    document.addEventListener("focusin", focusHandler, { capture: true });
   }
 }
 
