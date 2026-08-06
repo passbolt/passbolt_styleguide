@@ -42,6 +42,7 @@ import ExtQuickAccessContextProvider from "./contexts/ExtQuickAccessContext";
 import HandleBootstrapRoute from "./components/HandleBootstrapRoute/HandleBootstrapRoute";
 import QuickAccessServerUnavailable from "./components/QuickAccessServerUnavailable/QuickAccessServerUnavailable";
 import QuickAccessOfflineFooter from "./components/Offline/QuickAccessOfflineFooter";
+import OfflineLoginPage from "./components/Offline/OfflineLoginPage";
 
 const SEARCH_VISIBLE_ROUTES = [
   "/webAccessibleResources/quickaccess/home",
@@ -255,6 +256,12 @@ class ExtQuickAccess extends React.Component {
                           <LoginPage />
                         </SsoContextProvider>
                       )}
+                    />
+                    {/* The route to sign in when the server is not reachable (offline mode). */}
+                    <Route
+                      exact
+                      path="/webAccessibleResources/quickaccess/login-offline"
+                      render={() => <OfflineLoginPage />}
                     />
                     {/* The route when the server is not reachable (offline). */}
                     <Route

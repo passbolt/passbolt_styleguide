@@ -15,7 +15,8 @@ class Header extends React.Component {
   }
 
   initEventHandlers() {
-    this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    this.handleOfflineLogoutClick = this.handleOfflineLogoutClick.bind(this);
+    this.handleOnlineLogoutClick = this.handleOnlineLogoutClick.bind(this);
   }
 
   /**
@@ -26,9 +27,32 @@ class Header extends React.Component {
     return this.props.t;
   }
 
-  async handleLogoutClick() {
+  /**
+   * Sign out of an offline session. There is no server session to destroy, so the sign-out is local, and
+   * the destination is the triage route: it is the only one that can tell an offline sign-in page from a
+   * server unavailable screen once the session is signed out.
+   * @returns {Promise<void>}
+   */
+  async handleOfflineLogoutClick() {
+    await this.props.context.port.request("passbolt.auth.local-logout");
+    this.props.history.push("/webAccessibleResources/quickaccess.html");
+  }
+
+  /**
+   * Sign out of an online session: the server session is destroyed and the user lands on the login page.
+   * @returns {Promise<void>}
+   */
+  async handleOnlineLogoutClick() {
     await this.props.context.port.request("passbolt.auth.logout", false);
     this.props.history.push("/webAccessibleResources/quickaccess/login");
+  }
+
+  /**
+   * The sign-out handler matching the current session type.
+   * @returns {function(): Promise<void>}
+   */
+  get logoutHandler() {
+    return this.props.activeSession?.isSessionOffline ? this.handleOfflineLogoutClick : this.handleOnlineLogoutClick;
   }
 
   render() {
@@ -49,7 +73,7 @@ class Header extends React.Component {
             <a
               role="button"
               className={`option-link button button-transparent`}
-              onClick={this.handleLogoutClick}
+              onClick={this.logoutHandler}
               title={this.translate("sign out")}
             >
               <span className="visually-hidden">

@@ -84,7 +84,8 @@ export class ExtQuickAccessContextProvider extends React.Component {
     this.updateSearch = this.updateSearch.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.closeWindow = this.closeWindow.bind(this);
-    this.loginSuccessCallback = this.loginSuccessCallback.bind(this);
+    this.loginOnlineSuccessCallBack = this.loginOnlineSuccessCallBack.bind(this);
+    this.loginOfflineSuccessCallBack = this.loginOfflineSuccessCallBack.bind(this);
     this.redirectToMfaAuthentication = this.redirectToMfaAuthentication.bind(this);
     this.setWindowBlurBehaviour = this.setWindowBlurBehaviour.bind(this);
   }
@@ -116,8 +117,9 @@ export class ExtQuickAccessContextProvider extends React.Component {
       shouldCloseAtWindowBlur: true, // when true the quickaccess in detached mode should close when losing focus
       setWindowBlurBehaviour: this.setWindowBlurBehaviour, // set the detached mode blur behaviour
       closeWindow: this.closeWindow,
-      // login success callback
-      loginSuccessCallback: this.loginSuccessCallback,
+      // authentication transitions
+      loginOnlineSuccessCallBack: this.loginOnlineSuccessCallBack,
+      loginOfflineSuccessCallBack: this.loginOfflineSuccessCallBack,
       // login mfa required callback
       mfaRequiredCallback: this.redirectToMfaAuthentication,
     };
@@ -184,20 +186,52 @@ export class ExtQuickAccessContextProvider extends React.Component {
     await this.closeWindow();
   }
 
+  /*
+   * =============================================================
+   *  Authentication transitions
+   *
+   *  Each transition settles the state the routed components read: the active
+   *  session drives both the triage route and the private routes and returns. Navigation is
+   *  left to the caller: this provider sits outside the router and has no history.
+   * =============================================================
+   */
+
   /**
-   * Login success callback
-   * If bootstrap equals login then close the window
-   * Else Update the site settings and logged-in user
+   * Complete an online sign-in.
    * @return {Promise<void>}
    */
-  async loginSuccessCallback() {
+  async loginOnlineSuccessCallBack() {
+    await this.finalizeLogin();
+  }
+
+  /**
+   * Complete an offline sign-in.
+   * @return {Promise<void>}
+   */
+  async loginOfflineSuccessCallBack() {
+    await this.finalizeLogin();
+  }
+
+  /**
+   * Shared for all of the sign-in transitions.
+   *
+   * The active session is refreshed before anything else: the background has just written it, and the
+   * storage change event that mirrors it into the context is not ordered against the caller's navigation.
+   * Reading it here makes the refresh awaited, so the private route the caller navigates to no longer
+   * sees the signed-out session and bounces back to the login page.
+   * @return {Promise<void>}
+   * @private
+   */
+  async finalizeLogin() {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.LOGIN) {
       await this.closeWindow();
       return;
     }
 
     const siteSettings = await this.getSiteSettings();
-    this.getLoggedInUser(siteSettings);
+    if (siteSettings) {
+      await this.getLoggedInUser(siteSettings);
+    }
   }
 
   /*
@@ -241,7 +275,9 @@ export class ExtQuickAccessContextProvider extends React.Component {
       }
       const rbacsDto = siteSettings.canIUse("rbacs") ? await this.rbacServiceWorkerService.findMe() : [];
       const rbacs = new RbacsCollection(rbacsDto);
-      this.setState({ canUseOfflineMode: CanUse.canRoleUseAction(user, rbacs, actions.OFFLINE_ITEMS_VIEW) });
+      this.setState({
+        canUseOfflineMode: CanUse.canRoleUseAction(user, rbacs, actions.OFFLINE_ITEMS_VIEW),
+      });
     } catch (error) {
       console.error(error);
       this.setState({ canUseOfflineMode: false });

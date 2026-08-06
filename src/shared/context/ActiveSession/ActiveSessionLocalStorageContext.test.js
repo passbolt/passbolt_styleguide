@@ -132,6 +132,15 @@ describe("ActiveSessionLocalStorageContext", () => {
 
       props.storage.local.set({ [contextProvider.storageKey]: null });
 
+      /*
+       * Hold the service worker call pending: the blocking promise is reset as soon as the update settles,
+       * so letting the mocked port resolve on its own would make the assertion below race the resolution.
+       */
+      let resolveUpdateLocalStoragePromise;
+      jest
+        .spyOn(contextProvider.activeSessionServiceWorkerService, "findAndUpdateAuthenticationStatus")
+        .mockImplementation(() => new Promise((resolve) => (resolveUpdateLocalStoragePromise = resolve)));
+
       mockComponentSetState(contextProvider);
 
       expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
@@ -140,6 +149,9 @@ describe("ActiveSessionLocalStorageContext", () => {
 
       expect(result).toBeNull();
       expect(contextProvider.runningLocalStorageUpdatePromise).not.toBeNull();
+
+      // Let the held update settle so no pending work outlives the test.
+      await act(async () => resolveUpdateLocalStoragePromise(null));
     });
   });
 
