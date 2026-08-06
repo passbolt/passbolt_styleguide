@@ -38,8 +38,8 @@ describe("OfflineSettingsLocalStorageContext", () => {
       expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
       expect(contextProvider.state).toMatchObject({
         get: expect.any(Function),
-        offlineSettings: null,
-        updateLocalStorage: expect.any(Function),
+        offlineSettings: undefined,
+        getOrFind: expect.any(Function),
       });
     });
   });
@@ -91,6 +91,23 @@ describe("OfflineSettingsLocalStorageContext", () => {
       });
 
       expect(contextProvider.state.offlineSettings.toDto()).toStrictEqual(expectedOfflineSettings);
+    });
+
+    it("should update the current state with the changed offline settings flushed", () => {
+      expect.assertions(1);
+
+      const props = defaultProps();
+      const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      // Simulate a browser.storage.local.remove, newValue is undefined, oldValue is defined
+      contextProvider.handleStorageChange({
+        [contextProvider.storageKey]: {
+          oldValue: {},
+        },
+      });
+
+      expect(contextProvider.state.offlineSettings).toBeNull();
     });
 
     it("should ignore storage change event that are not related to offline settings", () => {
@@ -157,7 +174,7 @@ describe("OfflineSettingsLocalStorageContext", () => {
       const contextProvider = new OfflineSettingsLocalStorageContextProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
-      expect(contextProvider.state.offlineSettings).toBeNull();
+      expect(contextProvider.state.offlineSettings).toBeUndefined();
       contextProvider.set(offlineSettings);
 
       expect(contextProvider.state.offlineSettings.toDto()).toStrictEqual(offlineSettings);
@@ -172,53 +189,14 @@ describe("OfflineSettingsLocalStorageContext", () => {
       const contextProvider = new OfflineSettingsLocalStorageContextProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
-      expect(contextProvider.state.offlineSettings).toBeNull();
+      expect(contextProvider.state.offlineSettings).toBeUndefined();
       contextProvider.set(offlineSettingsEntity);
 
       expect(contextProvider.state.offlineSettings.toDto()).toStrictEqual(offlineSettingsEntity.toDto());
     });
   });
 
-  describe("::loadLocalStorage", () => {
-    it("should find the offline settings from the local storage and set the context state with it.", async () => {
-      expect.assertions(2);
-
-      const offlineSettings = defaultOfflineSettingsDto();
-
-      const props = defaultProps();
-      const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
-      mockComponentSetState(contextProvider);
-
-      const spyOnGetOrFind = jest.spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings");
-
-      await props.context.storage.local.set({ [contextProvider.storageKey]: offlineSettings });
-
-      await contextProvider.loadLocalStorage();
-
-      expect(contextProvider.state.offlineSettings.toDto()).toStrictEqual(offlineSettings);
-      expect(spyOnGetOrFind).not.toHaveBeenCalled();
-    });
-
-    it("should call for updating the local storage if there is no offline settings in the local storage.", async () => {
-      expect.assertions(1);
-
-      const props = defaultProps();
-      const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
-      mockComponentSetState(contextProvider);
-
-      const spyOnGetOrFind = jest
-        .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
-        .mockImplementation(async () => defaultOfflineSettingsDtoFromApi());
-
-      await props.context.storage.local.set({ [contextProvider.storageKey]: null });
-
-      await contextProvider.loadLocalStorage();
-
-      expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe("::updateLocalStorage", () => {
+  describe("::getOrFind", () => {
     it("should call the service worker with the right event to trigger the local storage update.", async () => {
       expect.assertions(3);
 
@@ -231,12 +209,32 @@ describe("OfflineSettingsLocalStorageContext", () => {
         .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
         .mockImplementation(async () => expectedOfflineSettings);
 
-      await contextProvider.updateLocalStorage();
+      await contextProvider.getOrFind();
 
       expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
       expect(contextProvider.state.offlineSettings.toDto()).toStrictEqual(
         new OfflineSettingsEntity(expectedOfflineSettings).toDto(),
       );
+      expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
+    });
+
+    it("should do nothing if the service worker throw an error.", async () => {
+      expect.assertions(3);
+
+      const props = defaultProps();
+      const contextProvider = new OfflineSettingsLocalStorageContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      const spyOnGetOrFind = jest
+        .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
+        .mockImplementation(async () => {
+          throw new Error("Error occurred.");
+        });
+
+      await contextProvider.getOrFind();
+
+      expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
+      expect(contextProvider.state.offlineSettings).toBeUndefined();
       expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
     });
 
@@ -252,10 +250,10 @@ describe("OfflineSettingsLocalStorageContext", () => {
         .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
         .mockImplementation(() => new Promise((resolve) => (resolveGetOrFindSettings = resolve)));
 
-      const firstUpdate = contextProvider.updateLocalStorage();
+      const firstUpdate = contextProvider.getOrFind();
       expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
 
-      const secondUpdate = contextProvider.updateLocalStorage();
+      const secondUpdate = contextProvider.getOrFind();
       expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
 
       resolveGetOrFindSettings(defaultOfflineSettingsDtoFromApi());
@@ -263,7 +261,7 @@ describe("OfflineSettingsLocalStorageContext", () => {
 
       expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
 
-      const thirdUpdate = contextProvider.updateLocalStorage();
+      const thirdUpdate = contextProvider.getOrFind();
       expect(spyOnGetOrFind).toHaveBeenCalledTimes(2);
 
       resolveGetOrFindSettings(defaultOfflineSettingsDtoFromApi());
@@ -281,11 +279,11 @@ describe("OfflineSettingsLocalStorageContext", () => {
         .spyOn(contextProvider.offlineModeSettingsServiceWorker, "getOrFindSettings")
         .mockImplementation(async () => defaultOfflineSettingsDtoFromApi());
 
-      const firstUpdate = contextProvider.updateLocalStorage();
+      const firstUpdate = contextProvider.getOrFind();
       expect(contextProvider.runningLocalStorageUpdatePromise).not.toBeNull();
       expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
 
-      contextProvider.updateLocalStorage();
+      contextProvider.getOrFind();
       expect(spyOnGetOrFind).toHaveBeenCalledTimes(1);
 
       await firstUpdate;
@@ -293,7 +291,7 @@ describe("OfflineSettingsLocalStorageContext", () => {
       // promise should be reinit now;
       expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
 
-      await contextProvider.updateLocalStorage();
+      await contextProvider.getOrFind();
       expect(spyOnGetOrFind).toHaveBeenCalledTimes(2);
     });
   });

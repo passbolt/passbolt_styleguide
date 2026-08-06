@@ -20,19 +20,13 @@ import OfflineModeSettingsServiceWorkerService from "../../services/serviceWorke
 export const OfflineSettingsLocalStorageContext = React.createContext({
   get: () => {}, // Get the offline settings from the local storage and/or init them if not the case already
   offlineSettings: null, // the current offline settings loaded from the local storage
-  updateLocalStorage: () => {}, // triggers an update of the local storage
+  getOrFind: () => {}, // triggers an update of the local storage
 });
 
 /**
  * The offline settings local storage context provider
  */
 export class OfflineSettingsLocalStorageContextProvider extends React.Component {
-  /**
-   * The Offline settings service.
-   * @type {OfflineModeSettingsServiceWorkerService}
-   */
-  offlineModeSettingsServiceWorkerService = null;
-
   /**
    * Default constructor
    * @param props The component props
@@ -41,7 +35,7 @@ export class OfflineSettingsLocalStorageContextProvider extends React.Component 
     super(props);
     this.state = this.defaultState;
     this.runningLocalStorageUpdatePromise = null;
-    this.offlineModeSettingsServiceWorker = new OfflineModeSettingsServiceWorkerService();
+    this.offlineModeSettingsServiceWorker = new OfflineModeSettingsServiceWorkerService(props.context.port);
     this.initEventHandlers();
   }
 
@@ -52,8 +46,8 @@ export class OfflineSettingsLocalStorageContextProvider extends React.Component 
   get defaultState() {
     return {
       get: this.get.bind(this), // Get the offline settings from the local storage and/or init them if not the case already
-      offlineSettings: null, // the current offline settings loaded from the local storage
-      updateLocalStorage: this.updateLocalStorage.bind(this), // triggers an update of the local storage
+      offlineSettings: undefined, // the current offline settings loaded from the local storage
+      getOrFind: this.getOrFind.bind(this), // triggers an update of the local storage
     };
   }
 
@@ -83,7 +77,7 @@ export class OfflineSettingsLocalStorageContextProvider extends React.Component 
    * Handles update of the offline settings in the local storage.
    */
   handleStorageChange(changes) {
-    if (changes[this.storageKey] && changes[this.storageKey].newValue) {
+    if (changes[this.storageKey]) {
       this.set(changes[this.storageKey].newValue);
     }
   }
@@ -94,7 +88,7 @@ export class OfflineSettingsLocalStorageContextProvider extends React.Component 
    * @private
    */
   set(offlineSettings) {
-    const offlineSettingsEntity = new OfflineSettingsEntity(offlineSettings);
+    const offlineSettingsEntity = offlineSettings == null ? null : new OfflineSettingsEntity(offlineSettings);
     this.setState({ offlineSettings: offlineSettingsEntity });
   }
 
@@ -103,8 +97,8 @@ export class OfflineSettingsLocalStorageContextProvider extends React.Component 
    * @returns {OfflineSettingsEntity|null}
    */
   get() {
-    if (this.state.offlineSettings === null) {
-      this.loadLocalStorage();
+    if (this.state.offlineSettings === undefined) {
+      this.getOrFind();
       return null;
     }
 
@@ -120,34 +114,20 @@ export class OfflineSettingsLocalStorageContextProvider extends React.Component 
   }
 
   /**
-   * Load the offline settings from the local storage if it is available.
-   * If the local storage is not yet initialised, then it asks for its initialisation.
-   * @returns {Promise<void>}
-   * @private
-   */
-  async loadLocalStorage() {
-    const storageData = await this.props.context.storage.local.get([this.storageKey]);
-    if (!storageData[this.storageKey]) {
-      this.updateLocalStorage();
-      return;
-    }
-
-    this.set(storageData[this.storageKey]);
-  }
-
-  /**
-   * Forces the update of the offline settings in the local storage.
+   * Get or find the offline settings from Bext.
    * @return {Promise<void>}
    */
-  async updateLocalStorage() {
+  async getOrFind() {
     if (this.runningLocalStorageUpdatePromise === null) {
-      this.runningLocalStorageUpdatePromise = this.offlineModeSettingsServiceWorker.getOrFindSettings();
-
-      const offlineSettings = await this.runningLocalStorageUpdatePromise;
-      if (offlineSettings) {
+      try {
+        this.runningLocalStorageUpdatePromise = this.offlineModeSettingsServiceWorker.getOrFindSettings();
+        const offlineSettings = await this.runningLocalStorageUpdatePromise;
         this.set(offlineSettings);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.runningLocalStorageUpdatePromise = null;
       }
-      this.runningLocalStorageUpdatePromise = null;
     } else {
       await this.runningLocalStorageUpdatePromise;
     }
