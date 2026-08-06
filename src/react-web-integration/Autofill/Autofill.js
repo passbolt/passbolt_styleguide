@@ -14,6 +14,7 @@
 import UserEventsService from "../lib/User/UserEventsService";
 import InFormFieldSelector from "../lib/InForm/InFormFieldSelector";
 import InFormCallToActionField from "../lib/InForm/InFormCallToActionField";
+import ShadowDomQueryService from "../services/ShadowDom/ShadowDomQueryService";
 import { TotpCodeGeneratorService } from "../../shared/services/otp/TotpCodeGeneratorService";
 
 /**
@@ -44,7 +45,7 @@ const fillForm = function (formData) {
      * Get username element by using `password's` parent element as reference
      */
     if (passwordElement !== null) {
-      usernameElement = getUsernameElementBasedOnPasswordElement(formData, passwordElement.parentElement);
+      usernameElement = getUsernameElementBasedOnPasswordElement(formData, passwordElement);
       // If username element exists, fill username
       if (usernameElement !== null) {
         UserEventsService.autofill(usernameElement, formData.username);
@@ -268,41 +269,35 @@ const getOTPElement = function () {
  * @return {HTMLInputElement}
  */
 const getUsernameElementBasedOnPasswordElement = function (formData, referenceElement) {
-  // No parent element found.
-  if (referenceElement || "") {
-    const parentElement = referenceElement.parentElement;
-    if (!parentElement) {
-      return null;
+  if (referenceElement) {
+    // Try to find the username element in the reference.
+    // Use a shadow-piercing deep query so a username field nested in a sibling/child web component
+    // (shadow DOM) is found while climbing up from the password element (e.g. Descope/Vaadin forms).
+    const elements = ShadowDomQueryService.querySelectorAllDeep(
+      referenceElement,
+      InFormFieldSelector.USERNAME_FIELD_SELECTOR,
+    );
+
+    // No input fields found in the reference element so we search in the parent.
+    if (elements.length === 0) {
+      const parent = ShadowDomQueryService.shadowPiercingParentElement(referenceElement);
+      if (parent) {
+        return getUsernameElementBasedOnPasswordElement(formData, parent);
+      } else {
+        /*
+         * If no username/email element found on the page ansd htere is no parent, the login form could be served by an iframe.
+         * Search the username/email element in the page iframes. By instance reddit.com signup page serves its login
+         * form in an iframe.
+         */
+        return getInputElementFromIframe("username", formData);
+      }
     }
+
+    // Extract the username element from the array of plausible dom elements
+    return extractUsernameElementWithFallback(elements);
   }
 
-  let usernameElement = null;
-
-  // The username field can be an input field of type email or text.
-  const elements = referenceElement.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
-
-  /*
-   * No input fields found in the reference element.
-   * Search in the parent.
-   */
-  if (!elements.length) {
-    return getUsernameElementBasedOnPasswordElement(formData, referenceElement.parentElement);
-  } else {
-    // When username element found, extract it from an array of dom elements.
-    usernameElement = extractUsernameElementWithFallback(elements);
-  }
-
-  /*
-   * If no username/email element found on the page, the login form could be served by an iframe.
-   * Search the username/email element in the page iframes. By instance reddit.com signup page serves its login
-   * form in an iframe.
-   */
-  if (!usernameElement) {
-    usernameElement = getInputElementFromIframe("username", formData);
-  }
-
-  // A username element has been found.
-  return usernameElement;
+  return null;
 };
 
 /**
@@ -314,7 +309,12 @@ const getUsernameElement = function (formData, fallbackUsernameElement) {
   let usernameElement = null;
 
   // The username field can be an input field of type email or text.
-  const elements = fallbackUsernameElement.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+  // Use a shadow-piercing deep query so fields nested in web components (shadow DOM) are found too,
+  // consistently with how the password and OTP elements are searched (InFormCallToActionField.findAll).
+  const elements = ShadowDomQueryService.querySelectorAllDeep(
+    fallbackUsernameElement,
+    InFormFieldSelector.USERNAME_FIELD_SELECTOR,
+  );
 
   // When username element found, extract it from an array of dom elements.
   if (elements.length) {
