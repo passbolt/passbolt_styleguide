@@ -126,6 +126,16 @@ export default class HomePagePage {
   }
 
   /**
+   * Returns the Groups filter entry, whatever its position in the browse entries
+   * @returns {HTMLElement|null}
+   */
+  get groupsFilterEntry() {
+    return this._page.container.querySelector(
+      '.filter-entry a[href="/webAccessibleResources/quickaccess/resources/group"]',
+    );
+  }
+
+  /**
    * Returns the tag filter entry
    * @returns {HTMLElement}
    */

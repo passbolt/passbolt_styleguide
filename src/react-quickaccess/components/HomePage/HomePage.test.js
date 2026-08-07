@@ -35,6 +35,8 @@ import { defaultUserDto } from "../../../shared/models/entity/user/userEntity.te
 import { v4 as uuidv4 } from "uuid";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import { offlineUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -66,6 +68,17 @@ describe("HomePage", () => {
       expect(page.browseListTitle).toStrictEqual("Browse");
       expect(page.filtersSection?.textContent).toStrictEqual("Filters");
       expect(page.groupsSection?.textContent).toStrictEqual("Groups");
+    });
+
+    it("As LU I cannot see the quickaccess groups section if the session is offline", () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        activeSession: new UserActiveSessionEntity(offlineUserActiveSessionDto()),
+      });
+      const page = new HomePagePage(props);
+
+      expect(page.filtersSection?.textContent).toStrictEqual("Filters");
+      expect(page.groupsFilterEntry).toBeNull();
     });
 
     it("As LU I can see the quickaccess tag section if enabled by API flags", () => {
@@ -470,6 +483,15 @@ describe("HomePage", () => {
     it("should not display the button if metadata type settings default is v4 and only v5 resource types is available", () => {
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypesV5CollectionDto());
       const props = defaultProps({ resourceTypes: resourceTypesCollection });
+      const page = new HomePagePage(props);
+      expect(page.createButton).toBeNull();
+    });
+
+    it("should not display the create button if the session is offline", () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        activeSession: new UserActiveSessionEntity(offlineUserActiveSessionDto()),
+      });
       const page = new HomePagePage(props);
       expect(page.createButton).toBeNull();
     });
