@@ -12,7 +12,7 @@
  * @since         5.13.0
  */
 
-import { USER_ACTIVE_SESSION_ONLINE } from "./userActiveSessionEntity";
+import { USER_ACTIVE_SESSION_OFFLINE, USER_ACTIVE_SESSION_ONLINE } from "./userActiveSessionEntity";
 
 /**
  * Build minimal user active session.
@@ -39,3 +39,15 @@ export const defaultUserActiveSessionDto = (data = {}) => ({
   last_seen_online: "2025-08-04T18:59:11+00:00",
   ...data,
 });
+
+/**
+ * Build default offline session.
+ * @param {object} [data={}] Data to override
+ * @returns {object}
+ */
+export const offlineUserActiveSessionDto = (data = {}) =>
+  defaultUserActiveSessionDto({
+    is_server_reachable: false,
+    type: USER_ACTIVE_SESSION_OFFLINE,
+    ...data,
+  });
