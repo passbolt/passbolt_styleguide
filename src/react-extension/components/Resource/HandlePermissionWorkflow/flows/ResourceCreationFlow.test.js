@@ -74,11 +74,11 @@ describe("ResourceCreationFlow", () => {
       const readerId = uuidv4();
       wireSnapshotListeners(props.context.port, {
         permissions: [
-          operatorOwnerPermissionDto(operatorId, props.folderParentId),
+          operatorOwnerPermissionDto(operatorId, props.folderParent.id),
           {
             id: uuidv4(),
             aco: "Folder",
-            aco_foreign_key: props.folderParentId,
+            aco_foreign_key: props.folderParent.id,
             aro: "User",
             aro_foreign_key: readerId,
             type: 1,
@@ -99,7 +99,7 @@ describe("ResourceCreationFlow", () => {
         CreateResource,
         expect.objectContaining({
           resourceType: props.resourceType,
-          folderParentId: props.folderParentId,
+          folderParentId: props.folderParent.id,
         }),
       );
 
@@ -174,11 +174,11 @@ describe("ResourceCreationFlow", () => {
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
       const initialPermissionsDto = [
-        operatorOwnerPermissionDto(operatorId, props.folderParentId),
+        operatorOwnerPermissionDto(operatorId, props.folderParent.id),
         {
           id: uuidv4(),
           aco: "Folder",
-          aco_foreign_key: props.folderParentId,
+          aco_foreign_key: props.folderParent.id,
           aro: "User",
           aro_foreign_key: uuidv4(),
           type: 1,
@@ -191,7 +191,7 @@ describe("ResourceCreationFlow", () => {
         {
           id: uuidv4(),
           aco: "Folder",
-          aco_foreign_key: props.folderParentId,
+          aco_foreign_key: props.folderParent.id,
           aro: "User",
           aro_foreign_key: uuidv4(),
           type: 1,
@@ -249,7 +249,7 @@ describe("ResourceCreationFlow", () => {
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
       wireSnapshotListeners(props.context.port, {
-        permissions: [operatorOwnerPermissionDto(operatorId, props.folderParentId)],
+        permissions: [operatorOwnerPermissionDto(operatorId, props.folderParent.id)],
       });
 
       let page;
@@ -309,7 +309,7 @@ describe("ResourceCreationFlow", () => {
   describe("As LU cancelling a dialog mid-workflow", () => {
     it("As LU cancelling CreateResource should terminate the workflow without any API call", async () => {
       expect.assertions(2);
-      const props = defaultProps({ folderParentId: null });
+      const props = defaultProps({ folderParent: null });
 
       let page;
       await act(() => (page = new ResourceCreationFlowTestPage(props)));
@@ -337,11 +337,11 @@ describe("ResourceCreationFlow", () => {
       const operatorId = props.context.loggedInUser.id;
       wireSnapshotListeners(props.context.port, {
         permissions: [
-          operatorOwnerPermissionDto(operatorId, props.folderParentId),
+          operatorOwnerPermissionDto(operatorId, props.folderParent.id),
           {
             id: uuidv4(),
             aco: "Folder",
-            aco_foreign_key: props.folderParentId,
+            aco_foreign_key: props.folderParent.id,
             aro: "User",
             aro_foreign_key: uuidv4(),
             type: 1,

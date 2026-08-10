@@ -1,9 +1,4 @@
-# v5.14.6
+# v5.14.8
 
 Fixes:
-- PCD:
-    - reorganize the way snapshots are build
-- User role:
-    - fix a bug on user role detection
-- UI:
-    - fix a string that should not be translated
+- delays redirection after creating a resource to ensure the resource workspace grid contains the created resource

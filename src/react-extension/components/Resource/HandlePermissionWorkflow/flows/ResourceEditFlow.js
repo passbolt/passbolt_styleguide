@@ -145,19 +145,22 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    * ShareDialog so the operator confirms the recipient set first (the secret is re-encrypted for
    * them). Otherwise updates the resource immediately.
    * @param {ResourceFormEntity} resourceFormEntity The validated form entity.
+   * @param {object|null} secretDto
    * @returns {Promise<void>}
    */
   async handleEditResourceSubmit(resourceFormEntity, secretDto) {
     this.formSubmitted = true;
     this.pendingResourceFormEntity = resourceFormEntity;
     this.pendingResourceSecret = secretDto;
+    const isSecretUpdated = Boolean(secretDto);
     try {
       const snapshot = await this.permissionSnapshotService.buildSnapshotForResourceEdition(this.props.resource.id);
-      if (this.isShared(snapshot)) {
+      const isShared = this.isShared(snapshot);
+      if (isSecretUpdated && isShared) {
         this.setState({ snapshot }, () => this.openShareDialog());
         return;
       }
-      await this.updateResource(resourceFormEntity, secretDto);
+      await this.updateResource(resourceFormEntity, secretDto, null, !isShared);
       await this.finalizeSuccess(
         this.props.t("The resource has been updated successfully"),
         `/app/passwords/view/${this.props.resource.id}`,
