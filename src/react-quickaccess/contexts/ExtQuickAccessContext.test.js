@@ -19,6 +19,8 @@ import { BOOTSTRAP_FEATURE } from "../ExtQuickAccess";
 import { defaultUserDto, defaultAdminUserDto } from "../../shared/models/entity/user/userEntity.test.data";
 import { RBAC_FIND_ME } from "../../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
 import SiteSettingsEntity from "../../shared/models/entity/siteSettings/siteSettingsEntity";
+import { defaultOfflineSettingsDto } from "../../shared/models/entity/offline/offlineSettingsEntity.test.data";
+import { OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT } from "../../shared/services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
 import UserActiveSessionEntity from "../../shared/models/entity/session/userActiveSessionEntity";
 import { defaultUserActiveSessionDto } from "../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
@@ -66,7 +68,7 @@ describe("ExtQuickAccess Context", () => {
       await extQuickAccessContext.loginOnlineSuccessCallBack();
       // expectations
       expect(extQuickAccessContext.state.port.request).toHaveBeenCalledTimes(3);
-      expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith("passbolt.site-settings.get-or-find", true);
+      expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith("passbolt.site-settings.get-or-find");
       expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith("passbolt.users.find-logged-in-user");
       expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith(RBAC_FIND_ME);
     });
@@ -88,7 +90,7 @@ describe("ExtQuickAccess Context", () => {
       jest.spyOn(extQuickAccessContext.state.port, "request").mockImplementationOnce(() => []);
       // process
       await extQuickAccessContext.loginOfflineSuccessCallBack();
-      expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith("passbolt.site-settings.get-or-find", true);
+      expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith("passbolt.site-settings.get-or-find");
       expect(extQuickAccessContext.state.port.request).toHaveBeenCalledWith("passbolt.users.find-logged-in-user");
     });
 
@@ -133,27 +135,52 @@ describe("ExtQuickAccess Context", () => {
       return new SiteSettingsEntity(settings);
     };
 
-    it("sets canUseOfflineMode to false when offline mode is not enabled on the organisation", async () => {
+    /**
+     * Mock the service worker reads behind the capability, each overridable per test.
+     * @param {object} [overrides={}] Keyed by port event.
+     * @returns {void}
+     */
+    const mockPort = (overrides = {}) => {
+      const responses = {
+        [OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT]: defaultOfflineSettingsDto(),
+        "passbolt.users.find-logged-in-user": defaultAdminUserDto(),
+        [RBAC_FIND_ME]: [],
+        ...overrides,
+      };
+      jest.spyOn(context.state.port, "request").mockImplementation((event) => {
+        const response = responses[event];
+        return response instanceof Error ? Promise.reject(response) : Promise.resolve(response);
+      });
+    };
+
+    it("sets canUseOfflineMode to false when the offline mode plugin is disabled", async () => {
       expect.assertions(1);
-      jest.spyOn(context.state.port, "request").mockImplementation(() => Promise.resolve());
+      mockPort();
 
       await context.resolveCanUseOfflineMode(siteSettingsWithoutOfflineMode());
 
       expect(context.state.canUseOfflineMode).toBe(false);
     });
 
+    it("sets canUseOfflineMode to false when the organisation has no offline settings", async () => {
+      /*
+       * `canIUse("offlineMode")` only reports the plugin feature flag; disabling offline mode at the org
+       * level makes the API serve no offline settings instead. Without this gate an offline-eligible user
+       * whose offline session merely expired still reaches the offline login page, because that path
+       * retains the user and rbac storages rather than flushing them the way a logout does.
+       */
+      expect.assertions(2);
+      mockPort({ [OFFLINE_GET_OR_FIND_OFFLINE_SETTINGS_EVENT]: null });
+
+      await context.resolveCanUseOfflineMode(siteSettings());
+
+      expect(context.state.canUseOfflineMode).toBe(false);
+      expect(context.state.offlineSettings).toBeNull();
+    });
+
     it("sets canUseOfflineMode to true for an eligible user when offline mode is enabled", async () => {
       expect.assertions(1);
-      jest.spyOn(context.state.port, "request").mockImplementation((event) => {
-        switch (event) {
-          case "passbolt.users.find-logged-in-user":
-            return Promise.resolve(defaultAdminUserDto());
-          case RBAC_FIND_ME:
-            return Promise.resolve([]);
-          default:
-            return Promise.resolve();
-        }
-      });
+      mockPort();
 
       await context.resolveCanUseOfflineMode(siteSettings());
 
@@ -162,12 +189,8 @@ describe("ExtQuickAccess Context", () => {
 
     it("sets canUseOfflineMode to false when there is no logged-in user available locally", async () => {
       expect.assertions(1);
-      jest.spyOn(context.state.port, "request").mockImplementation((event) => {
-        if (event === "passbolt.users.find-logged-in-user") {
-          return Promise.resolve(null);
-        }
-        return Promise.resolve();
-      });
+      // Offline settings resolve, so the user lookup is the branch under test.
+      mockPort({ "passbolt.users.find-logged-in-user": null });
 
       await context.resolveCanUseOfflineMode(siteSettings());
 
@@ -177,12 +200,7 @@ describe("ExtQuickAccess Context", () => {
     it("sets canUseOfflineMode to false when the capability resolution fails", async () => {
       expect.assertions(1);
       jest.spyOn(console, "error").mockImplementation(() => {});
-      jest.spyOn(context.state.port, "request").mockImplementation((event) => {
-        if (event === "passbolt.users.find-logged-in-user") {
-          return Promise.reject(new Error());
-        }
-        return Promise.resolve();
-      });
+      mockPort({ "passbolt.users.find-logged-in-user": new Error() });
 
       await context.resolveCanUseOfflineMode(siteSettings());
 
