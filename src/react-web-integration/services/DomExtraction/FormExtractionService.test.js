@@ -107,6 +107,7 @@ describe("FormExtractionService", () => {
 
       jest.spyOn(ElementVisibilityService, "isElementViewable").mockReturnValue(true);
       const inputs = Array.from({ length: 60 }, () => "<input type='text'/>").join("");
+      // eslint-disable-next-line no-unsanitized/property
       document.body.innerHTML = `<form>${inputs}</form>`;
 
       expect(FormExtractionService.aggregateForms()).toEqual([]);
