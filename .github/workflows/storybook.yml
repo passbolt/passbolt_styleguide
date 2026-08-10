@@ -21,7 +21,7 @@ jobs:
           npm run build
           npm run dev:storybook:build
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8
+        uses: JamesIves/github-pages-deploy-action@15e065fb23ebc7c5bf8ceca5f90b3ffc553cbb25
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
