@@ -518,8 +518,8 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isSubscriptionSelected() {
-    return (
-      AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration
+    return [AdministrationWorkspaceMenuTypes.SUBSCRIPTION, AdministrationWorkspaceMenuTypes.CE_DOWNGRADE].includes(
+      this.props.administrationWorkspaceContext.selectedAdministration,
     );
   }
 

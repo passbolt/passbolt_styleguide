@@ -27,7 +27,7 @@
     transform: translate3d(0, 0, 0);
     max-width: 24rem;
     width: max-content;
-    padding: .4rem .8rem;
+    padding: .4rem 1.6rem;
     background: var(--Tool-tip-Tool-tip-background);
     color: var(--Tool-tip-Tool-tip-text);
     border-radius: var(--Menu-radius);
@@ -53,6 +53,16 @@
       margin: 0 0 1rem 0;
       &::after {
         left: 50%;
+        top: 100%;
+        border-top-color: var(--Tool-tip-Tool-tip-background);
+      }
+    }
+    &.top-left {
+      right: 0;
+      bottom: 100%;
+      margin: 0 0 1rem 0;
+      &::after {
+        left: calc(100% - 1.5rem);
         top: 100%;
         border-top-color: var(--Tool-tip-Tool-tip-background);
       }

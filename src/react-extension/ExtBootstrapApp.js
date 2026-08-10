@@ -108,6 +108,7 @@ class ExtBootstrapApp extends Component {
                   "/app/account-recovery/requests/review/:accountRecoveryRequestId",
                   "/app/administration",
                   "/app/administration/subscription",
+                  "/app/administration/ce-downgrade",
                   "/app/administration/account-recovery",
                   "/app/administration/sso",
                   "/app/administration/secret-history",

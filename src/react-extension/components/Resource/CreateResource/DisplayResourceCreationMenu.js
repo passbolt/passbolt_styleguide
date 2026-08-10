@@ -40,7 +40,10 @@ import {
   RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
-import CreateResource from "./CreateResource";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
@@ -96,9 +99,13 @@ class DisplayResourceCreationMenu extends Component {
       }
     }
 
-    const folderParentId = this.folderSelected?.id || null;
+    const folderParent = this.folderSelected || null;
 
-    this.props.dialogContext.open(CreateResource, { resourceType, folderParentId });
+    this.props.workflowContext.start(HandlePermissionWorkflow, {
+      operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
+      resourceType,
+      folderParent,
+    });
   }
 
   /**
@@ -408,6 +415,7 @@ DisplayResourceCreationMenu.propTypes = {
   context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   dialogContext: PropTypes.object, // The dialog context
+  workflowContext: PropTypes.any, // The workflow context (used to start HandlePermissionWorkflow)
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
@@ -417,10 +425,12 @@ DisplayResourceCreationMenu.propTypes = {
 };
 
 export default withAppContext(
-  withResourceWorkspace(
-    withMetadataTypesSettingsLocalStorage(
-      withMetadataKeysSettingsLocalStorage(
-        withResourceTypesLocalStorage(withDialog(withTranslation("common")(DisplayResourceCreationMenu))),
+  withWorkflow(
+    withResourceWorkspace(
+      withMetadataTypesSettingsLocalStorage(
+        withMetadataKeysSettingsLocalStorage(
+          withResourceTypesLocalStorage(withDialog(withTranslation("common")(DisplayResourceCreationMenu))),
+        ),
       ),
     ),
   ),

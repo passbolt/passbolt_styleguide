@@ -12,11 +12,9 @@
  * @since         5.7.0
  */
 import GroupsCollection from "../../../models/entity/group/groupsCollection";
-import GroupsUsersCollection from "../../../models/entity/groupUser/groupsUsersCollection";
 
 export const GROUPS_FIND_MY_GROUPS = "passbolt.groups.find-my-groups";
-export const GROUPS_GET_BY_IDS = "passbolt.groups.get-by-ids";
-export const GROUPS_USERS_GET_BY_GROUP_ID = "passbolt.groups_users.get-by-group-id";
+export const GROUPS_FIND_BY_IDS_FOR_SHARE = "passbolt.groups.find-by-ids-for-share";
 
 export default class GroupServiceWorkerService {
   /**
@@ -37,24 +35,14 @@ export default class GroupServiceWorkerService {
   }
 
   /**
-   * Get the groups matching the given ids. The list comes from the service-worker local-storage cache
-   * when initialised, otherwise it is fetched from the API.
+   * Find the groups matching the given ids, with their member users embedded (user with profile and
+   * gpgkey). The list is always fetched fresh from the API so the share/permission-review workflow
+   * validates against current group data, never a cache.
    * @param {Array<string>} groupIds The ids of the groups to retrieve.
    * @returns {Promise<GroupsCollection>}
    */
-  async getByIds(groupIds) {
-    const groupsDto = await this.port.request(GROUPS_GET_BY_IDS, groupIds);
+  async findByIdsForShare(groupIds) {
+    const groupsDto = await this.port.request(GROUPS_FIND_BY_IDS_FOR_SHARE, groupIds);
     return new GroupsCollection(groupsDto);
-  }
-
-  /**
-   * Get the members of the group matching the given id. The list comes from the service-worker
-   * local-storage cache when initialised, otherwise it is fetched from the API.
-   * @param {string} groupId The id of the group whose members are requested.
-   * @returns {Promise<GroupsUsersCollection>}
-   */
-  async getGroupsUsersByGroupId(groupId) {
-    const groupsUsersDto = await this.port.request(GROUPS_USERS_GET_BY_GROUP_ID, groupId);
-    return new GroupsUsersCollection(groupsUsersDto);
   }
 }

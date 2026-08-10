@@ -36,6 +36,12 @@ describe("GroupPermissionItem", () => {
       const page = new GroupPermissionItemPage(defaultOwnerProps());
       expect(page.details).toBe("Group");
     });
+
+    it("displays the toggle", () => {
+      expect.assertions(1);
+      const page = new GroupPermissionItemPage(defaultOwnerProps());
+      expect(page.groupVisibilityToggle).not.toBeNull();
+    });
   });
 
   describe("Permission types", () => {

@@ -49,7 +49,10 @@ import CircleEllipsisSVG from "../../../../img/svg/circle_ellipsis.svg";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
-import CreateResource from "../CreateResource/CreateResource";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
 import NoteSVG from "../../../../img/svg/notes.svg";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
@@ -108,11 +111,18 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
-   * Open create resource dialog
+   * Start the resource-creation workflow for the given resource type.
+   * The workflow takes a permission snapshot of the parent folder (when any), shows the
+   * scope-confirmation step for shared parents, and then orchestrates the create + share
+   * calls in the spec-mandated safe order.
    * @param {ResourceTypeEntity} resourceType The resource type
    */
   openCreateDialog(resourceType) {
-    this.props.dialogContext.open(CreateResource, { folderParentId: this.folderIdSelected, resourceType });
+    this.props.workflowContext.start(HandlePermissionWorkflow, {
+      operation: PERMISSION_WORKFLOW_OPERATION.CREATE_RESOURCE,
+      resourceType,
+      folderParent: this.folderSelected,
+    });
   }
 
   /**
@@ -177,7 +187,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Handle other click event
    */
   handleMenuCreateOtherClickEvent() {
-    this.props.dialogContext.open(DisplayResourceCreationMenu, { folderParentId: this.folderIdSelected });
+    this.props.dialogContext.open(DisplayResourceCreationMenu, { folderParentId: this.folderSelected?.id });
   }
 
   /**
@@ -191,7 +201,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Open create password dialog
    */
   openFolderCreateDialog() {
-    this.props.dialogContext.open(CreateResourceFolder, { folderParentId: this.folderIdSelected });
+    this.props.dialogContext.open(CreateResourceFolder, { folderParentId: this.folderSelected?.id });
   }
 
   /**
@@ -205,14 +215,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       return filter.payload.folder;
     }
     return null;
-  }
-
-  /**
-   * the folder id selected
-   * @returns {*}
-   */
-  get folderIdSelected() {
-    return this.folderSelected && this.folderSelected.id;
   }
 
   /**
@@ -523,6 +525,7 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
   dialogContext: PropTypes.any, // the dialog context
+  workflowContext: PropTypes.any, // the workflow context (used to start HandlePermissionWorkflow)
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
@@ -531,12 +534,14 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
 };
 
 export default withAppContext(
-  withRbac(
-    withDialog(
-      withMetadataTypesSettingsLocalStorage(
-        withMetadataKeysSettingsLocalStorage(
-          withResourceTypesLocalStorage(
-            withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu)),
+  withWorkflow(
+    withRbac(
+      withDialog(
+        withMetadataTypesSettingsLocalStorage(
+          withMetadataKeysSettingsLocalStorage(
+            withResourceTypesLocalStorage(
+              withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu)),
+            ),
           ),
         ),
       ),

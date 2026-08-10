@@ -12,18 +12,24 @@
  * @since         5.13.0
  */
 
-import MockPort from "../../../test/mock/MockPort";
+/**
+ * Build minimal online session.
+ * @param {object} [data={}] Data to override
+ * @returns {object}
+ */
+export const minimalOnlineSessionDto = (data = {}) => ({
+  is_authenticated: true,
+  ...data,
+});
 
-export function defaultProps(overrides = {}) {
-  return {
-    context: {
-      port: new MockPort(),
-    },
-    dialogContext: {
-      open: jest.fn(),
-    },
-    onClose: jest.fn(),
-    onSubmit: jest.fn().mockResolvedValue(undefined),
-    ...overrides,
-  };
-}
+/**
+ * Build default online session.
+ * @param {object} [data={}] Data to override
+ * @returns {object}
+ */
+export const defaultOnlineSessionDto = (data = {}) => ({
+  is_authenticated: true,
+  is_mfa_authenticated: true,
+  last_online_logged_in: "2025-08-04T18:59:11+00:00",
+  ...data,
+});

@@ -131,8 +131,15 @@ class InFormMenuField {
       x = x + leftBody + width - 367; // (-370 width of the iframe + 10 to adjust with the shadow) (-7 adjustment of the call to action menu (18-25))
       y = y + topBody + height; // Calculate the bottom position of the input
     }
-    // If x is negative force zero
-    return { top: y, left: x < 0 ? 0 : x };
+
+    /*
+     * The iframe position is fixed inside the shadow root host so we need to subtract its coordinates to have the position relative
+     * to the host and not to the viewport.
+     */
+    const { top: hostTop, left: hostLeft } = this.shadowRoot?.host?.getBoundingClientRect() ?? { top: 0, left: 0 };
+
+    // We prevent negative values
+    return { top: Math.max(0, y - hostTop), left: Math.max(0, x - hostLeft) };
   }
 
   /**

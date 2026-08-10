@@ -14,13 +14,13 @@
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import GroupsCollection from "../../../models/entity/group/groupsCollection";
-import GroupsUsersCollection from "../../../models/entity/groupUser/groupsUsersCollection";
 import { defaultGroupDto } from "../../../models/entity/group/groupEntity.test.data";
 import { defaultGroupsDtos } from "../../../models/entity/group/groupsCollection.test.data";
+import { defaultUserDto } from "../../../models/entity/user/userEntity.test.data";
+import { defaultGroupUser } from "../../../models/entity/groupUser/groupUserEntity.test.data";
 import GroupServiceWorkerService, {
   GROUPS_FIND_MY_GROUPS,
-  GROUPS_GET_BY_IDS,
-  GROUPS_USERS_GET_BY_GROUP_ID,
+  GROUPS_FIND_BY_IDS_FOR_SHARE,
 } from "./groupServiceWorkerService";
 
 beforeEach(() => {
@@ -52,39 +52,25 @@ describe("GroupServiceWorkerService", () => {
     });
   });
 
-  describe("::getByIds", () => {
-    it("requests the service worker with the expected event and returns a GroupsCollection.", async () => {
+  describe("::findByIdsForShare", () => {
+    it("requests the service worker with the expected event, preserves member users, and returns a GroupsCollection.", async () => {
       expect.assertions(4);
 
-      const groupsDto = defaultGroupsDtos(3);
+      const member = defaultUserDto({ username: "member@passbolt.com" }, { withGpgkey: true });
+      const groupsDto = [
+        defaultGroupDto({ groups_users: [defaultGroupUser({ user_id: member.id, user: member })] }),
+        ...defaultGroupsDtos(2),
+      ];
       const requestedIds = groupsDto.map((group) => group.id);
-      port.addRequestListener(GROUPS_GET_BY_IDS, () => groupsDto);
+      port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => groupsDto);
       jest.spyOn(port, "request");
 
-      const result = await service.getByIds(requestedIds);
+      const result = await service.findByIdsForShare(requestedIds);
 
       expect(port.request).toHaveBeenCalledTimes(1);
-      expect(port.request).toHaveBeenCalledWith(GROUPS_GET_BY_IDS, requestedIds);
+      expect(port.request).toHaveBeenCalledWith(GROUPS_FIND_BY_IDS_FOR_SHARE, requestedIds);
       expect(result).toBeInstanceOf(GroupsCollection);
       expect(result.toDto()).toStrictEqual(groupsDto);
-    });
-  });
-
-  describe("::getGroupsUsersByGroupId", () => {
-    it("requests the service worker with the expected event and returns a GroupsUsersCollection.", async () => {
-      expect.assertions(4);
-
-      const groupDto = defaultGroupDto({}, { withGroupsUsers: 3 });
-      const groupsUsersDto = groupDto.groups_users;
-      port.addRequestListener(GROUPS_USERS_GET_BY_GROUP_ID, () => groupsUsersDto);
-      jest.spyOn(port, "request");
-
-      const result = await service.getGroupsUsersByGroupId(groupDto.id);
-
-      expect(port.request).toHaveBeenCalledTimes(1);
-      expect(port.request).toHaveBeenCalledWith(GROUPS_USERS_GET_BY_GROUP_ID, groupDto.id);
-      expect(result).toBeInstanceOf(GroupsUsersCollection);
-      expect(result.toDto()).toStrictEqual(groupsUsersDto);
     });
   });
 });

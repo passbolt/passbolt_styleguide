@@ -1,7 +1,4 @@
-# v5.13.1
+# v5.14.8
 
-### Fixed
-PB-52478 Remove subscription CTA when edition plugin is not enabled
-
-### Maintenance
-PB-52428 Update subscription links
+Fixes:
+- delays redirection after creating a resource to ensure the resource workspace grid contains the created resource

@@ -18,6 +18,7 @@
 import "../../../../../test/mocks/mockClipboard";
 import {
   defaultProps,
+  propsDenySecretsPreview,
   propsDenyUIActions,
   propsResourceExpired,
   propsResourceStandaloneTotp,
@@ -27,8 +28,9 @@ import {
 } from "./DisplayResourcesListContextualMenu.test.data";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
-import EditResource from "../EditResource/EditResource";
-import ShareDialog from "../../Share/ShareDialog";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
 import DisplayResourcesListContextualMenuPage from "./DisplayResourcesListContextualMenu.test.page";
 import {
   plaintextSecretPasswordDescriptionTotpDto,
@@ -143,13 +145,19 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it("As LU I can start to edit a resource", async () => {
       await page.edit();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource, { resource: props.resource });
+      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
+        resource: props.resource,
+      });
       expect(props.hide).toHaveBeenCalled();
     });
 
     it("As LU I can start to share a resource", async () => {
       await page.share();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ShareDialog);
+      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.SHARE_RESOURCE,
+        resources: [props.resource],
+      });
       expect(props.hide).toHaveBeenCalled();
     });
 
@@ -428,6 +436,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
   describe("As LU I should not see secret history feature items", () => {
     it("when the feature flag is disabled", () => {
+      expect.assertions(1);
       const props = propsResourceWithUpdatePermission();
       props.secretRevisionsSettings = SecretRevisionsSettingsEntity.createFromDefault();
       jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((plugin) => plugin !== "secretRevisions");
@@ -436,8 +445,24 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
 
     it("when the feature flag is enabled but the settings are set to disabled", () => {
+      expect.assertions(1);
       const props = propsResourceWithUpdatePermission();
       props.secretRevisionsSettings = SecretRevisionsSettingsEntity.createFromDefault();
+      page = new DisplayResourcesListContextualMenuPage(props);
+      expect(page.secretHistoryItem).toBeNull();
+    });
+
+    it("when the preview secret capability is denied by rbac", () => {
+      expect.assertions(1);
+      const props = propsDenySecretsPreview();
+      page = new DisplayResourcesListContextualMenuPage(props);
+      expect(page.secretHistoryItem).toBeNull();
+    });
+
+    it("when the preview password site setting is disabled", () => {
+      expect.assertions(1);
+      const props = propsResourceWithUpdatePermission();
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((plugin) => plugin !== "previewPassword");
       page = new DisplayResourcesListContextualMenuPage(props);
       expect(page.secretHistoryItem).toBeNull();
     });
