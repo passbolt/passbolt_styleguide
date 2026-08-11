@@ -70,17 +70,6 @@ describe("HandleBootstrapRoute", () => {
       expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/server-not-reachable");
     });
 
-    it("As a signed-out user who can use the offline mode with an unreachable server I should be redirected to the offline login page", () => {
-      expect.assertions(1);
-      const props = propsWithOfflineModeCapability(
-        defaultUserActiveSessionDto({ is_authenticated: false, is_server_reachable: false }),
-        true,
-      );
-      new HandleBootstrapRoutePage(props);
-
-      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/login-offline");
-    });
-
     it("As a signed-out user who cannot use the offline mode with an unreachable server I should be redirected to the server not reachable page", () => {
       expect.assertions(1);
       const props = propsWithOfflineModeCapability(

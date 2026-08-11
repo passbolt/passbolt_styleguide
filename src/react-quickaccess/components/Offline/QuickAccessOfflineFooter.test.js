@@ -12,7 +12,6 @@
  * @since         6.0.0
  */
 import {
-  mockCanUseOfflineMode,
   offlineSessionLoggedOutServerReachableProps,
   offlineSessionServerReachableProps,
   offlineSessionServerUnreachableProps,
@@ -23,15 +22,16 @@ import {
 import QuickAccessOfflineFooterPage from "./QuickAccessOfflineFooter.test.page";
 import { act } from "react";
 import { formatDateTimeAgo } from "../../../shared/utils/dateUtils";
+import { createMemoryHistory } from "history";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("QuickAccessOfflineFooter", () => {
-  it("does not render when the user cannot use offline mode", async () => {
+  it("does not render on the server-unavailable screen (online session, server unreachable)", async () => {
     expect.assertions(1);
-    const props = mockCanUseOfflineMode(offlineSessionServerUnreachableProps(), false);
+    const props = onlineSessionServerUnreachableProps();
     let page;
     await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
 
@@ -40,7 +40,7 @@ describe("QuickAccessOfflineFooter", () => {
 
   it("does not render for an online session while the server is reachable", async () => {
     expect.assertions(1);
-    const props = mockCanUseOfflineMode(onlineSessionServerReachableProps(), true);
+    const props = onlineSessionServerReachableProps();
     let page;
     await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
 
@@ -49,16 +49,36 @@ describe("QuickAccessOfflineFooter", () => {
 
   it("does not render for a logged-out offline session with a reachable server (after going back online)", async () => {
     expect.assertions(1);
-    const props = mockCanUseOfflineMode(offlineSessionLoggedOutServerReachableProps(), true);
+    const props = offlineSessionLoggedOutServerReachableProps();
     let page;
     await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
 
     expect(page.exists()).toBeFalsy();
   });
 
+  it("render when the user is offline and authenticated", async () => {
+    expect.assertions(1);
+    const props = offlineSessionServerUnreachableProps();
+    let page;
+    await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
+
+    expect(page.exists()).toBeTruthy();
+  });
+
+  it("render when the location is offline login page", async () => {
+    expect.assertions(1);
+    const props = offlineSessionLoggedOutServerReachableProps({
+      history: createMemoryHistory({ initialEntries: ["/webAccessibleResources/quickaccess/login-offline"] }),
+    });
+    let page;
+    await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
+
+    expect(page.exists()).toBeTruthy();
+  });
+
   it("renders 'service available' and the go back online link in an offline session with a reachable server", async () => {
     expect.assertions(5);
-    const props = mockCanUseOfflineMode(offlineSessionServerReachableProps(), true);
+    const props = offlineSessionServerReachableProps();
     let page;
     await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
 
@@ -71,7 +91,7 @@ describe("QuickAccessOfflineFooter", () => {
 
   it("renders 'service unavailable' and the last sync value in an offline session while the server is unreachable", async () => {
     expect.assertions(5);
-    const props = mockCanUseOfflineMode(offlineSessionServerUnreachableProps(), true);
+    const props = offlineSessionServerUnreachableProps();
     let page;
     await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
 
@@ -85,26 +105,16 @@ describe("QuickAccessOfflineFooter", () => {
 
   it("renders 'Last sync: Not available' when no last-seen-online date is available", async () => {
     expect.assertions(1);
-    const props = mockCanUseOfflineMode(offlineSessionServerUnreachableWithoutLastSyncProps(), true);
+    const props = offlineSessionServerUnreachableWithoutLastSyncProps();
     let page;
     await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
 
     expect(page.lastSyncLabel.textContent).toStrictEqual("Last sync: Not available");
   });
 
-  it("renders on the server-unavailable screen (online session, server unreachable)", async () => {
-    expect.assertions(2);
-    const props = mockCanUseOfflineMode(onlineSessionServerUnreachableProps(), true);
-    let page;
-    await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
-
-    expect(page.exists()).toBeTruthy();
-    expect(page.serverStatus.textContent).toStrictEqual("service unavailable");
-  });
-
   it("when I click go back online it triggers a local logout and routes to the online login page", async () => {
     expect.assertions(2);
-    const props = mockCanUseOfflineMode(offlineSessionServerReachableProps(), true);
+    const props = offlineSessionServerReachableProps();
     jest.spyOn(props.context.port, "request").mockImplementation(() => Promise.resolve());
     jest.spyOn(props.history, "push");
     let page;

@@ -40,23 +40,26 @@ class QuickAccessOfflineFooter extends React.Component {
     this.props.history.push("/webAccessibleResources/quickaccess/login");
   }
 
+  /**
+   * Should display offline footer
+   * - If location is offline login page
+   * - If session is offline and authenticated
+   * @return {boolean}
+   */
+  get shouldDisplayOfflineFooter() {
+    return (
+      this.props.location.pathname === "/webAccessibleResources/quickaccess/login-offline" ||
+      (this.props.activeSession.isSessionOffline && this.props.activeSession.isAuthenticated)
+    );
+  }
+
   render() {
-    const activeSession = this.props.activeSession;
-    /*
-     * Show the footer only while offline mode is actually in effect: the server is unreachable (the
-     * server-unavailable screen), or the user is in an authenticated offline session. Requiring
-     * authentication for the offline-session branch hides the footer once the user goes back online (the
-     * offline session is logged out but its type stays "offline" until re-authentication online).
-     */
-    const isRelevant =
-      activeSession &&
-      (!activeSession.isServerReachable || (activeSession.isSessionOffline && activeSession.isAuthenticated));
-    if (!this.props.context.canUseOfflineMode || !isRelevant) {
+    if (!this.shouldDisplayOfflineFooter) {
       return null;
     }
-    const isServerReachable = activeSession.isServerReachable;
+    const isServerReachable = this.props.activeSession.isServerReachable;
     const lastSync =
-      formatDateTimeAgo(activeSession.lastSeenOnline, this.props.t, this.props.context.locale) ||
+      formatDateTimeAgo(this.props.activeSession.lastSeenOnline, this.props.t, this.props.context.locale) ||
       this.props.t("Not available");
     return (
       <div className={`quickaccess-offline-footer ${isServerReachable ? "server-available" : "server-unavailable"}`}>
@@ -87,6 +90,7 @@ QuickAccessOfflineFooter.propTypes = {
   context: PropTypes.any, // The application context
   activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   history: PropTypes.object, // The router history
+  location: PropTypes.object, // The router location
   t: PropTypes.func, // The translation function
 };
 

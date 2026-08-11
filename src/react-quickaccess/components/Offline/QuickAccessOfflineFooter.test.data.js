@@ -112,14 +112,3 @@ export function onlineSessionServerUnreachableProps(data = {}) {
 export function onlineSessionServerReachableProps(data = {}) {
   return buildProps(defaultUserActiveSessionDto({ type: USER_ACTIVE_SESSION_ONLINE, is_server_reachable: true }), data);
 }
-
-/**
- * Set the "can use offline mode" capability on the application context.
- * @param {object} props The props holding the application context.
- * @param {boolean} canUseOfflineMode The capability.
- * @returns {object} The props.
- */
-export function mockCanUseOfflineMode(props, canUseOfflineMode) {
-  props.context.canUseOfflineMode = canUseOfflineMode;
-  return props;
-}
