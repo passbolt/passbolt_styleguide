@@ -29,7 +29,7 @@ import {
  * Finds the best label for a form field (and its ARIA state) by trying several sources in order of
  * reliability, keeping the first non-empty one and recording which source it came from.
  */
-class LabelScraper {
+class LabelScraperService {
   /**
    * Elect the field's label and capture its ARIA state, writing both back onto the payload.
    * @param {FieldScraping} fieldScraping The per-field payload: reads `element` (and `inputDescription.placeholder`),
@@ -42,8 +42,8 @@ class LabelScraper {
       return fieldScraping;
     }
 
-    fieldScraping.label = LabelScraper._electLabel(fieldScraping);
-    fieldScraping.ariaState = LabelScraper._ariaState(element);
+    fieldScraping.label = LabelScraperService._electLabel(fieldScraping);
+    fieldScraping.ariaState = LabelScraperService._ariaState(element);
 
     return fieldScraping;
   }
@@ -58,7 +58,7 @@ class LabelScraper {
    */
   static _electLabel(fieldScraping) {
     for (const tier of LABEL_TIERS) {
-      const text = LabelScraper._clean(LabelScraper[tier](fieldScraping));
+      const text = LabelScraperService._clean(LabelScraperService[tier](fieldScraping));
       if (text) {
         return { text, source: tier };
       }
@@ -94,8 +94,8 @@ class LabelScraper {
     // Explicit `for=` association, resolved within the field's own root so the lookup never leaks
     // across a shadow boundary (nor onto the live document for a detached field). `.labels` is often
     // empty here, hence the fallback.
-    const root = LabelScraper._root(element);
-    const forLabel = LabelScraper._labelForField(root, element);
+    const root = LabelScraperService._root(element);
+    const forLabel = LabelScraperService._labelForField(root, element);
     if (forLabel) {
       const text = PageScraperHelpers.textWithoutFields(forLabel);
       if (LabelScraper._hasText(text)) {
@@ -126,7 +126,7 @@ class LabelScraper {
       if (!value) {
         continue;
       }
-      const match = root.querySelector(`label[for="${LabelScraper._cssEscape(value)}"]`);
+      const match = root.querySelector(`label[for="${LabelScraperService._cssEscape(value)}"]`);
       if (match) {
         return match;
       }
@@ -149,7 +149,7 @@ class LabelScraper {
 
     while (sibling) {
       if (ShadowDomQueryService.isElement(sibling)) {
-        if (LabelScraper._isBoundary(sibling)) {
+        if (LabelScraperService._isBoundary(sibling)) {
           break;
         }
         if (!LABEL_SKIP_TAGS.includes(sibling.nodeName)) {
@@ -207,7 +207,7 @@ class LabelScraper {
 
     const labelledBy = element.getAttribute("aria-labelledby");
     if (labelledBy) {
-      return LabelScraper._resolveIdRefs(element, labelledBy);
+      return LabelScraperService._resolveIdRefs(element, labelledBy);
     }
 
     return "";
@@ -251,10 +251,12 @@ class LabelScraper {
     const describedBy = element.getAttribute("aria-describedby");
 
     return {
-      describedBy: describedBy ? LabelScraper._clean(LabelScraper._resolveIdRefs(element, describedBy)) : "",
-      hidden: LabelScraper._ariaBoolean(element, "aria-hidden"),
-      disabled: LabelScraper._ariaBoolean(element, "aria-disabled"),
-      hasPopup: LabelScraper._ariaToken(element, "aria-haspopup"),
+      describedBy: describedBy
+        ? LabelScraperService._clean(LabelScraperService._resolveIdRefs(element, describedBy))
+        : "",
+      hidden: LabelScraperService._ariaBoolean(element, "aria-hidden"),
+      disabled: LabelScraperService._ariaBoolean(element, "aria-disabled"),
+      hasPopup: LabelScraperService._ariaToken(element, "aria-haspopup"),
     };
   }
 
@@ -267,13 +269,13 @@ class LabelScraper {
    * @returns {string} The concatenated target text, or "".
    */
   static _resolveIdRefs(element, idRefs) {
-    const root = LabelScraper._root(element);
+    const root = LabelScraperService._root(element);
 
     return idRefs
       .split(/\s+/)
       .filter(Boolean)
       .map((id) => {
-        const target = LabelScraper._byId(root, id);
+        const target = LabelScraperService._byId(root, id);
         return target ? PageScraperHelpers.textWithoutFields(target) : "";
       })
       .join(" ");
@@ -291,7 +293,7 @@ class LabelScraper {
       return root.getElementById(id);
     }
 
-    return root.querySelector(`#${LabelScraper._cssEscape(id)}`);
+    return root.querySelector(`#${LabelScraperService._cssEscape(id)}`);
   }
 
   /**
@@ -332,6 +334,16 @@ class LabelScraper {
    * {@link ShadowDomQueryService.scopeRoot}: for a detached field that helper falls back to the live
    * `document`, which would resolve a `for=` / `aria-labelledby` against an unrelated element elsewhere
    * on the page. `getRootNode()` keeps a detached field scoped to its own subtree, so nothing leaks in.
+   * @private
+   * @param {Element} element The field element.
+   * @returns {Node} The field's root node (Document, ShadowRoot, DocumentFragment, or the field itself).
+   */
+  static _root(element) {
+    return element.getRootNode();
+  }
+
+  /**
+   * Normalise scraped text and cap it at {@link MAX_SCRAPED_STRING_LENGTH}.
    * @private
    * @param {Element} element The field element.
    * @returns {Node} The field's root node (Document, ShadowRoot, DocumentFragment, or the field itself).
@@ -390,4 +402,4 @@ class LabelScraper {
   }
 }
 
-export default LabelScraper;
+export default LabelScraperService;

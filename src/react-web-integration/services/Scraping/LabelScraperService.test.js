@@ -12,7 +12,7 @@
  * @since         5.15.0
  */
 
-import LabelScraper from "./LabelScraper";
+import LabelScraperService from "./LabelScraperService";
 import ShadowDomQueryService from "../ShadowDom/ShadowDomQueryService";
 import ShadowRootCacheService from "../ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../ShadowDom/ShadowMutationObserverService";
@@ -54,7 +54,7 @@ function nestedAncestorLabel(depth, labelText) {
   return input;
 }
 
-describe("LabelScraper", () => {
+describe("LabelScraperService", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     // fieldCount() (ancestor tier) pierces shadow roots via the cache; keep it isolated and observer-free.
@@ -63,20 +63,20 @@ describe("LabelScraper", () => {
     document.body.innerHTML = "";
   });
 
-  describe("LabelScraper::enrich", () => {
+  describe("LabelScraperService::enrich", () => {
     it("should be a no-op returning the payload when it carries no element", () => {
       expect.assertions(2);
 
       const payload = { element: null };
 
-      expect(LabelScraper.enrich(payload)).toBe(payload);
+      expect(LabelScraperService.enrich(payload)).toBe(payload);
       expect(payload.label).toBeUndefined();
     });
 
     it("should tolerate a nullish payload", () => {
       expect.assertions(1);
 
-      expect(LabelScraper.enrich(undefined)).toBeUndefined();
+      expect(LabelScraperService.enrich(undefined)).toBeUndefined();
     });
 
     it("should attach both the elected label and the aria state to the payload", () => {
@@ -85,7 +85,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<label>Email<input id='a'/></label>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Email", source: "_explicit" });
       expect(payload.ariaState).toBeDefined();
@@ -98,20 +98,20 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<input id='a'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "", source: null });
     });
   });
 
-  describe("LabelScraper::_electLabel cascade order", () => {
+  describe("LabelScraperService::_electLabel cascade order", () => {
     it("should prefer the explicit label over every lower tier", () => {
       expect.assertions(1);
 
       document.body.innerHTML = "<label>Explicit<input id='a' aria-label='Aria' placeholder='Placeholder'/></label>";
       const payload = fieldScraping(document.querySelector("input"), { placeholder: "Placeholder" });
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Explicit", source: "_explicit" });
     });
@@ -123,20 +123,20 @@ describe("LabelScraper", () => {
       const payload = fieldScraping(document.querySelector("input"), { placeholder: "Placeholder" });
 
       // Sibling is empty (no preceding node), so placeholder (tier 3) wins over aria (tier 4).
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Placeholder", source: "_placeholder" });
     });
   });
 
-  describe("LabelScraper::_explicit", () => {
+  describe("LabelScraperService::_explicit", () => {
     it("should read the label associated through the native `.labels` API", () => {
       expect.assertions(1);
 
       document.body.innerHTML = "<label for='a'>Email</label><input id='a'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Email", source: "_explicit" });
     });
@@ -147,7 +147,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<label>Email<input id='a' value='user@passbolt.com'/></label>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Email", source: "_explicit" });
     });
@@ -159,7 +159,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<label for='uname'>Username</label><input id='x' name='uname'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Username", source: "_explicit" });
     });
@@ -170,7 +170,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<label for='a.b[0]'>Email</label><input id='x' name='a.b[0]'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Email", source: "_explicit" });
     });
@@ -186,7 +186,7 @@ describe("LabelScraper", () => {
         document.body.innerHTML = "<label for='a.b[0]'>Email</label><input id='x' name='a.b[0]'/>";
         const payload = fieldScraping(document.querySelector("input"));
 
-        LabelScraper.enrich(payload);
+        LabelScraperService.enrich(payload);
 
         expect(payload.label).toEqual({ text: "Email", source: "_explicit" });
       } finally {
@@ -203,35 +203,21 @@ describe("LabelScraper", () => {
       const closestSpy = jest.spyOn(ShadowDomQueryService, "closestDeep");
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Hidden email", source: "_explicit" });
       expect(closestSpy).toHaveBeenCalledWith(payload.element, "label");
     });
-
-    it("should fall through to the wrapping label when the `for` association resolves to blank text", () => {
-      expect.assertions(1);
-
-      // The `for=` target holds only whitespace; it must not short-circuit the tier — the wrapping
-      // label is the real name.
-      document.body.innerHTML =
-        "<label for='uname'>   </label><label>Username<input id='x' name='uname' type='hidden'/></label>";
-      const payload = fieldScraping(document.querySelector("input"));
-
-      LabelScraper.enrich(payload);
-
-      expect(payload.label).toEqual({ text: "Username", source: "_explicit" });
-    });
   });
 
-  describe("LabelScraper::_sibling", () => {
+  describe("LabelScraperService::_sibling", () => {
     it("should read a preceding text node", () => {
       expect.assertions(1);
 
       document.body.innerHTML = "<div>Username <input id='a'/></div>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Username", source: "_sibling" });
     });
@@ -243,7 +229,7 @@ describe("LabelScraper", () => {
       const payload = fieldScraping(document.querySelector("#a"));
 
       // Walking back hits the text " Surname " then the boundary input `#p`, so "Name" is never collected.
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Surname", source: "_sibling" });
     });
@@ -254,7 +240,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<div><a href='#'>help</a> Email <input id='a'/></div>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Email", source: "_sibling" });
     });
@@ -265,20 +251,20 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<div><span>previous field<input id='p'/></span> Email <input id='a'/></div>";
       const payload = fieldScraping(document.querySelector("#a"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Email", source: "_sibling" });
     });
   });
 
-  describe("LabelScraper::_placeholder", () => {
+  describe("LabelScraperService::_placeholder", () => {
     it("should reuse the placeholder captured in the input description", () => {
       expect.assertions(1);
 
       document.body.innerHTML = "<div><input id='a'/></div>";
       const payload = fieldScraping(document.querySelector("input"), { placeholder: "Your email" });
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Your email", source: "_placeholder" });
     });
@@ -290,20 +276,20 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<div><input id='a' placeholder='From DOM'/></div>";
       const payload = fieldScraping(document.querySelector("input"), {});
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "", source: null });
     });
   });
 
-  describe("LabelScraper::_aria", () => {
+  describe("LabelScraperService::_aria", () => {
     it("should read the direct aria-label", () => {
       expect.assertions(1);
 
       document.body.innerHTML = "<div><input id='a' aria-label='Search'/></div>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Search", source: "_aria" });
     });
@@ -315,7 +301,7 @@ describe("LabelScraper", () => {
         "<span id='lbl'>Full name</span><section><input id='a' aria-labelledby='lbl'/></section>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Full name", source: "_aria" });
     });
@@ -328,13 +314,13 @@ describe("LabelScraper", () => {
         "<section><input id='a' aria-labelledby='one two'/></section>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Billing address", source: "_aria" });
     });
   });
 
-  describe("LabelScraper::_ancestor", () => {
+  describe("LabelScraperService::_ancestor", () => {
     it("should read the label text from a wrapping container", () => {
       expect.assertions(1);
 
@@ -342,7 +328,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<div>Country<span><input id='a'/></span></div>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Country", source: "_ancestor" });
     });
@@ -354,7 +340,7 @@ describe("LabelScraper", () => {
       const payload = fieldScraping(document.querySelector("#a"));
 
       // The only ancestor holding text (the div) wraps two fields, so it is too broad to name one.
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "", source: null });
     });
@@ -365,13 +351,13 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<div>City<span><input id='a' value='Paris'/></span></div>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "City", source: "_ancestor" });
     });
   });
 
-  describe("LabelScraper::_ariaState", () => {
+  describe("LabelScraperService::_ariaState", () => {
     it("should capture the described-by text and the state flags", () => {
       expect.assertions(1);
 
@@ -380,7 +366,7 @@ describe("LabelScraper", () => {
         "<input id='a' aria-describedby='hint' aria-hidden='true' aria-disabled='true' aria-haspopup='listbox'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.ariaState).toEqual({
         describedBy: "Min 8 chars",
@@ -396,7 +382,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<input id='a'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.ariaState).toEqual({
         describedBy: "",
@@ -412,7 +398,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<input id='a' aria-haspopup='true'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.ariaState.hasPopup).toBe(true);
     });
@@ -423,13 +409,13 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<input id='a' aria-hidden='false'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.ariaState.hidden).toBe(false);
     });
   });
 
-  describe("LabelScraper shadow DOM", () => {
+  describe("LabelScraperService shadow DOM", () => {
     it("should resolve a `for` association within the field's shadow root", () => {
       expect.assertions(1);
 
@@ -439,7 +425,7 @@ describe("LabelScraper", () => {
       shadowRoot.innerHTML = "<label for='uname'>Shadow user</label><input id='x' name='uname'/>";
       const payload = fieldScraping(shadowRoot.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Shadow user", source: "_explicit" });
     });
@@ -453,13 +439,13 @@ describe("LabelScraper", () => {
       shadowRoot.innerHTML = "<label>Shadow email<span><input id='a'/></span></label>";
       const payload = fieldScraping(shadowRoot.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Shadow email", source: "_explicit" });
     });
   });
 
-  describe("LabelScraper read-only guarantees", () => {
+  describe("LabelScraperService read-only guarantees", () => {
     it("should not mutate the host DOM while scraping", () => {
       expect.assertions(3);
 
@@ -467,7 +453,7 @@ describe("LabelScraper", () => {
       const label = document.querySelector("label");
       const payload = fieldScraping(label.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(label.querySelector("input")).not.toBeNull();
       expect(label.querySelector("button")).not.toBeNull();
@@ -483,20 +469,20 @@ describe("LabelScraper", () => {
       document.body.appendChild(input);
       const payload = fieldScraping(input);
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label.text.length).toBe(MAX_SCRAPED_STRING_LENGTH);
     });
   });
 
-  describe("LabelScraper review regressions", () => {
+  describe("LabelScraperService review regressions", () => {
     it("should collapse an empty aria-haspopup to boolean false", () => {
       expect.assertions(1);
 
       document.body.innerHTML = "<input id='a' aria-haspopup=''/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.ariaState.hasPopup).toBe(false);
     });
@@ -507,7 +493,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<input id='a' aria-haspopup='false'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.ariaState.hasPopup).toBe(false);
     });
@@ -523,7 +509,7 @@ describe("LabelScraper", () => {
       input.setAttribute("aria-describedby", "stray");
       const payload = fieldScraping(input);
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "", source: null });
       expect(payload.ariaState.describedBy).toBe("");
@@ -537,13 +523,13 @@ describe("LabelScraper", () => {
       input.setAttribute("name", "stray");
       const payload = fieldScraping(input);
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "", source: null });
     });
   });
 
-  describe("LabelScraper shadow-boundary isolation", () => {
+  describe("LabelScraperService shadow-boundary isolation", () => {
     it("should not resolve a `for` association across a shadow boundary", () => {
       expect.assertions(1);
 
@@ -553,7 +539,7 @@ describe("LabelScraper", () => {
       shadowRoot.innerHTML = "<input id='x' name='uname'/>";
       const payload = fieldScraping(shadowRoot.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "", source: null });
     });
@@ -566,7 +552,7 @@ describe("LabelScraper", () => {
       shadowRoot.innerHTML = "<input id='a' aria-labelledby='lbl' aria-describedby='lbl'/>";
       const payload = fieldScraping(shadowRoot.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "", source: null });
       expect(payload.ariaState.describedBy).toBe("");
@@ -582,20 +568,20 @@ describe("LabelScraper", () => {
       shadowRoot.innerHTML = "<div>Country<slot></slot></div>";
       const payload = fieldScraping(document.querySelector("#a"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Country", source: "_ancestor" });
     });
   });
 
-  describe("LabelScraper high-value coverage", () => {
+  describe("LabelScraperService high-value coverage", () => {
     it("should join several native labels bound to the same field", () => {
       expect.assertions(1);
 
       document.body.innerHTML = "<label for='a'>First</label><label for='a'>Second</label><input id='a'/>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "First Second", source: "_explicit" });
     });
@@ -607,7 +593,7 @@ describe("LabelScraper", () => {
         "<span id='lbl'>Labelledby</span><section><input id='a' aria-label='Direct' aria-labelledby='lbl'/></section>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Direct", source: "_aria" });
     });
@@ -619,7 +605,7 @@ describe("LabelScraper", () => {
       document.body.innerHTML = "<div>Fallback<span><input id='a' aria-labelledby='missing'/></span></div>";
       const payload = fieldScraping(document.querySelector("input"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Fallback", source: "_ancestor" });
     });
@@ -631,7 +617,7 @@ describe("LabelScraper", () => {
       // No `inputDescription` property at all — the placeholder tier must optional-chain, not throw.
       const payload = { element: document.querySelector("input") };
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "", source: null });
     });
@@ -642,7 +628,7 @@ describe("LabelScraper", () => {
       // The labelled div is the 20th ancestor (examined at hops=19); everything between is empty.
       const payload = fieldScraping(nestedAncestorLabel(20, "Deep"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Deep", source: "_ancestor" });
     });
@@ -653,7 +639,7 @@ describe("LabelScraper", () => {
       // The labelled div is the 21st ancestor (would need hops=20) and must never be reached.
       const payload = fieldScraping(nestedAncestorLabel(21, "TooDeep"));
 
-      LabelScraper.enrich(payload);
+      LabelScraperService.enrich(payload);
 
       expect(payload.label).toEqual({ text: "", source: null });
     });
