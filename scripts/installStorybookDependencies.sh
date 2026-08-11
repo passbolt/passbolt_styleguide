@@ -9,7 +9,6 @@ npm install \
     @storybook/addon-docs@8.6.15 \
     @storybook/theming@8.6.15 \
     @storybook/addon-webpack5-compiler-swc@1.0.5 \
-    @storybook/storybook-deployer@2.8.16 \
     @storybook/test-runner@0.19.1 \
     @storybook/test@8.6.15 \
     --no-save
