@@ -25,31 +25,53 @@ import {
 
 /**
  * Reconstructs "pseudo-forms" from orphan fields (inputs with no form-like ancestor), for pages that
- * do not wrap their credentials in a form. Strictly read-only: the sole side effect is pushing thin
+ * do not wrap their credentials in a form. Strictly read-only: the sole side effect is pushing
  * form records into the shared `formElements` array.
+ *
+ * Each record it appends carries its own fields directly — `{ containerElement, fields:
+ * [{ fieldElement }], isPseudoForm: true }` — sourced from the orphan fields that seeded the cluster.
+ * There is no later re-scan phase: fields are discovered once upstream, clustered here, and emitted on
+ * the record as-is. This is both cheaper (no per-container re-query) and more precise than a re-scan,
+ * which would also sweep up non-orphan inputs (fields belonging to real forms) inside the container.
  * @see OrphanDictionary for the selectors and tuning constants driving the pipeline.
  */
 class OrphanFieldsExtractionService {
   /**
-   * Reconstruct pseudo-forms from orphan fields and
-   * push them into the shared `formElements` array.
-   * @param {Array<{element: Element, viewableRect: DOMRect}>} fields The discovered fields (cached rect).
-   * @param {Array<{containerElement: Element, fields: Array, isPseudoForm: boolean}>} formElements The
-   *   shared form records array, mutated in place.
+   * Reconstruct pseudo-forms from orphan fields and push them into the shared `formElements` array.
+   *
+   * Runs the read-only 4-phase pipeline over the discovered fields:
+   *   1. Collection  — keep only orphan fields (no form-like ancestor), reusing their cached rect.
+   *   2. Clustering  — group orphan fields by visual proximity (transitive).
+   *   3. Derivation  — resolve each cluster to a single container element (LCA widened to an action surface).
+   *   4. Validation  — keep only containers that qualify as a pseudo-form.
+   *
+   * @param {Array<{element: Element, viewableRect: DOMRect}>} discoveredFields The discovered fields (cached rect).
+   * @param {Array<{containerElement: Element, fields: Array<{fieldElement: Element}>, isPseudoForm: boolean}>}
+   *   formElements The shared form records array, mutated in place (real forms already present, pseudo-forms appended).
    * @returns {Array} The same `formElements` array.
    */
-  static aggregatePseudoForms(fields, formElements) {
-    const orphanFields = OrphanFieldsExtractionService.collectOrphanFields(fields);
+  static aggregatePseudoForms(discoveredFields, formElements) {
+    // Phase 1 — Collection. Bail out early (no layout work) when the page has no orphan field.
+    const orphanFields = OrphanFieldsExtractionService.collectOrphanFields(discoveredFields);
     if (orphanFields.length === 0) {
       return formElements;
     }
 
+    // Phase 2 & 3 — Clustering then container derivation.
     const clusters = OrphanFieldsExtractionService.clusterByProximity(orphanFields);
     const containers = OrphanFieldsExtractionService.deriveContainers(clusters);
 
+    // Phase 4 — Validation. Append one record per valid pseudo-form, carrying its own fields: the orphan
+    // fields that seeded the cluster, mapped to the `{ fieldElement }` shape the scraper consumes. There
+    // is no later re-scan — emitting the seeds here is both cheaper and more precise than re-querying the
+    // widened container, which would also pull in non-orphan inputs belonging to real forms.
     for (const container of containers) {
       if (OrphanFieldsExtractionService.isValidPseudoForm(container)) {
-        formElements.push({ containerElement: container.element, fields: [], isPseudoForm: true });
+        formElements.push({
+          containerElement: container.element,
+          fields: container.fields.map(({ element }) => ({ fieldElement: element })),
+          isPseudoForm: true,
+        });
       }
     }
 
@@ -61,10 +83,10 @@ class OrphanFieldsExtractionService {
    * @param {Array<{element: Element, viewableRect: DOMRect}>} fields The discovered fields.
    * @returns {Array<{element: Element, rect: DOMRect}>} The orphan fields with their cached rect.
    */
-  static collectOrphanFields(fields) {
+  static collectOrphanFields(fields = []) {
     const orphanFields = [];
 
-    for (const field of fields ?? []) {
+    for (const field of fields) {
       const element = field?.element;
       const rect = field?.viewableRect;
 
@@ -110,38 +132,30 @@ class OrphanFieldsExtractionService {
    * @returns {Array<Array<{element: Element, rect: DOMRect}>>} The clusters of orphan fields.
    */
   static clusterByProximity(orphanFields) {
-    const parents = orphanFields.map((_, index) => index);
+    const clusters = [];
 
-    const find = (index) => {
-      let root = index;
-      while (parents[root] !== root) {
-        parents[root] = parents[parents[root]];
-        root = parents[root];
+    for (const orphanField of orphanFields) {
+      // A field can bridge several clusters at once, so gather every cluster it touches (no short-circuit),
+      // then fold them all into one — this is what preserves transitivity (A~B, B~C ⇒ one cluster).
+      const neighbouringClusters = clusters.filter((cluster) =>
+        cluster.some((field) => OrphanFieldsExtractionService.areRectsWithinMargin(field.rect, orphanField.rect)),
+      );
+
+      if (neighbouringClusters.length === 0) {
+        clusters.push([orphanField]);
+        continue;
       }
-      return root;
-    };
 
-    const union = (a, b) => {
-      parents[find(a)] = find(b);
-    };
-
-    for (let i = 0; i < orphanFields.length; i++) {
-      for (let j = i + 1; j < orphanFields.length; j++) {
-        if (OrphanFieldsExtractionService.areRectsWithinMargin(orphanFields[i].rect, orphanFields[j].rect)) {
-          union(i, j);
-        }
+      // Absorb the field and every other touched cluster into the first one, then drop the emptied clusters.
+      const [target, ...clustersToMerge] = neighbouringClusters;
+      target.push(orphanField);
+      for (const cluster of clustersToMerge) {
+        target.push(...cluster);
+        clusters.splice(clusters.indexOf(cluster), 1);
       }
     }
 
-    const clustersByRoot = new Map();
-    orphanFields.forEach((orphanField, index) => {
-      const root = find(index);
-      const cluster = clustersByRoot.get(root) ?? [];
-      cluster.push(orphanField);
-      clustersByRoot.set(root, cluster);
-    });
-
-    return Array.from(clustersByRoot.values());
+    return clusters;
   }
 
   /**
@@ -283,26 +297,16 @@ class OrphanFieldsExtractionService {
     const merged = Array.from(byElement.values());
 
     // Keep a container only when no other derived container is nested inside it (favor the inner one).
+    // Elements are unique here (merged by element above) and the `other !== container` guard rules out
+    // self-comparison, so `piercingAncestors` — which includes the element itself — never false-positives.
     return merged.filter(
       (container) =>
         !merged.some(
           (other) =>
-            other !== container && OrphanFieldsExtractionService.isPiercingAncestor(container.element, other.element),
+            other !== container &&
+            ShadowDomQueryService.piercingAncestors(other.element).includes(container.element),
         ),
     );
-  }
-
-  /**
-   * Whether `ancestor` is a shadow-piercing ancestor of `descendant`.
-   * @param {Element} ancestor The candidate ancestor.
-   * @param {Element} descendant The candidate descendant.
-   * @returns {boolean} true when `ancestor` sits above `descendant`.
-   */
-  static isPiercingAncestor(ancestor, descendant) {
-    if (ancestor === descendant) {
-      return false;
-    }
-    return ShadowDomQueryService.piercingAncestors(descendant).includes(ancestor);
   }
 
   /**
