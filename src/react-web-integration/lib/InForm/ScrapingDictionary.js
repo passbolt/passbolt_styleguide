@@ -63,6 +63,23 @@ export const SCRAPED_ATTRS = [
 ];
 
 /**
+ * Attributes tokenized into a field's qualification keyword set (see `ScrapingCacheService.keywords`).
+ * Structural metadata only — a field's value/text is never read, so there is nothing sensitive to redact.
+ * @type {ReadonlyArray<string>}
+ */
+export const QUALIFICATION_TOKEN_ATTRS = [
+  "id",
+  "name",
+  "class",
+  "placeholder",
+  "aria-label",
+  "autocomplete",
+  "data-form-type",
+  "title",
+  "type",
+];
+
+/**
  * Selector matching the form controls eligible for scraping.
  * @type {string}
  */
