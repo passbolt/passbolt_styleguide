@@ -15,6 +15,7 @@
 import { v4 as uuidv4 } from "uuid";
 import DomUtils from "../Dom/DomUtils";
 import browser from "webextension-polyfill";
+import { IN_FORM_IGNORE_ATTRIBUTE } from "./InFormFieldSelector";
 
 /**
  * An InFormCallToActionField is represented by a DOM element identified as an username field and to which
@@ -39,7 +40,21 @@ class InFormCallToActionField {
 
     const iframesFields = InFormCallToActionField.findAllInIframes(selector);
     const shadowDomFields = InFormCallToActionField.findAllInShadowDom(selector);
-    return domFields.concat(iframesFields).concat(shadowDomFields);
+    return domFields
+      .concat(iframesFields)
+      .concat(shadowDomFields)
+      .filter((field) => !InFormCallToActionField.isOptedOut(field));
+  }
+
+  /**
+   * Whether a field has opted out of the in-form integration, either directly or through one of its
+   * ancestors carrying the `data-passbolt-ignore` attribute. Websites can use it to prevent passbolt
+   * from attaching to a specific field, form or section.
+   * @param {Element} field The DOM element
+   * @return {boolean}
+   */
+  static isOptedOut(field) {
+    return field.closest(`[${IN_FORM_IGNORE_ATTRIBUTE}]`) !== null;
   }
 
   /**

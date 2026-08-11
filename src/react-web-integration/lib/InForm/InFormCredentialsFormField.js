@@ -29,7 +29,7 @@ class InFormCredentialsFormField {
   static findAll() {
     const domFields = Array.from(document.querySelectorAll("form"));
     const iframesFields = InFormCallToActionField.findAllInIframes();
-    return domFields.concat(iframesFields);
+    return domFields.concat(iframesFields).filter((field) => !InFormCallToActionField.isOptedOut(field));
   }
 
   /**

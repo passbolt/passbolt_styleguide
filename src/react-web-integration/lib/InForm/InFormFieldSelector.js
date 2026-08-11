@@ -15,6 +15,17 @@
 import { UsernameFieldSelectorException } from "./InFormFieldSelectorException";
 
 /**
+ * Attribute a website can set on a field - or on any of its ancestors - to opt it out of the
+ * passbolt in-form integration (call-to-action icon, in-form menu and auto-save).
+ *
+ * This mirrors the opt-out attributes offered by other password managers, e.g.
+ * 1Password (`data-1p-ignore`), Bitwarden (`data-bwignore`) and LastPass (`data-lpignore`).
+ *
+ * @type {string}
+ */
+export const IN_FORM_IGNORE_ATTRIBUTE = "data-passbolt-ignore";
+
+/**
  * All the possible in-form fields DOM selectors
  */
 export default {
