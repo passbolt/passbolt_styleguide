@@ -14,50 +14,40 @@
 
 import React from "react";
 import { MemoryRouter, Route } from "react-router-dom";
-import PropTypes from "prop-types";
 import QuickAccessServerUnavailable from "./QuickAccessServerUnavailable";
-import AppContext from "../../../shared/context/AppContext/AppContext";
-import {
-  defaultProps,
-  offlineModeAvailableProps,
-  unauthenticatedProps,
-} from "./QuickAccessServerUnavailable.test.data";
+import { defaultProps, unauthenticatedProps } from "./QuickAccessServerUnavailable.test.data";
 
 export default {
   title: "Components/QuickAccess/QuickAccessServerUnavailable",
   component: QuickAccessServerUnavailable,
+  decorators: [
+    (Story, { args }) => (
+      <div className="container quickaccess">
+        <MemoryRouter initialEntries={["/"]}>
+          <Route
+            component={(routerProps) => (
+              <div className="container quickaccess">
+                <Story {...args} {...args} {...routerProps} />
+              </div>
+            )}
+          />
+        </MemoryRouter>
+      </div>
+    ),
+  ],
+  parameters: {
+    css: "ext_quickaccess",
+  },
 };
 
-const Template = ({ context, ...args }) => (
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={["/"]}>
-      <Route
-        component={(routerProps) => (
-          <div className="container quickaccess">
-            <QuickAccessServerUnavailable {...args} {...routerProps} />
-          </div>
-        )}
-      />
-    </MemoryRouter>
-  </AppContext.Provider>
-);
-
-Template.propTypes = {
-  context: PropTypes.object,
+export const SignedIn = {
+  args: defaultProps(),
 };
 
-const parameters = {
-  css: "ext_quickaccess",
+export const SignedInWithoutOfflineAccess = {
+  args: defaultProps({ offlineSettings: null }),
 };
 
-export const SignedIn = Template.bind({});
-SignedIn.args = defaultProps();
-SignedIn.parameters = parameters;
-
-export const SignedInWithOfflineMode = Template.bind({});
-SignedInWithOfflineMode.args = offlineModeAvailableProps();
-SignedInWithOfflineMode.parameters = parameters;
-
-export const SignedOut = Template.bind({});
-SignedOut.args = unauthenticatedProps();
-SignedOut.parameters = parameters;
+export const SignedOut = {
+  args: unauthenticatedProps(),
+};

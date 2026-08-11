@@ -15,19 +15,16 @@
 import React from "react";
 import AppContext from "../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import SiteSettingsEntity from "../../shared/models/entity/siteSettings/siteSettingsEntity";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
 import RbacServiceWorkerService from "../../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
-import OfflineModeSettingsServiceWorkerService from "../../shared/services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
-import CanUse from "../../shared/services/rbacs/canUseService";
-import { actions } from "../../shared/services/rbacs/actionEnumeration";
 import SpinnerSVG from "../../img/svg/spinner.svg";
 import { withActiveSessionLocalStorage } from "../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../shared/models/entity/session/userActiveSessionEntity";
 import { BOOTSTRAP_FEATURE } from "../ExtQuickAccess";
 import LogoSVG from "../../img/svg/logo.svg";
+import SiteSettingsServiceWorkerService from "../../shared/services/serviceWorker/siteSettings/siteSettingsServiceWorkerService";
 
 /**
  * The ExtApp context provider
@@ -42,7 +39,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
     this.bindCallbacks();
     this.state = this.getDefaultState(props);
     this.rbacServiceWorkerService = new RbacServiceWorkerService(props.port);
-    this.offlineModeSettingsServiceWorkerService = new OfflineModeSettingsServiceWorkerService(props.port);
+    this.siteSettingsServiceWorkerService = new SiteSettingsServiceWorkerService(props.port);
   }
 
   /**
@@ -59,24 +56,57 @@ export class ExtQuickAccessContextProvider extends React.Component {
   async initialize() {
     try {
       await this.checkPluginIsConfigured();
+      this.getUserSettings();
+      this.getLocale();
       await this.props.activeSessionLocalStorageContext.updateLocalStorage();
-      await this.getUserSettings();
-      const siteSettings = await this.getSiteSettings();
-      if (this.props.activeSession.isAuthenticated) {
-        if (this.props.activeSession.isMfaRequired) {
-          await this.redirectToMfaAuthentication();
-          return;
-        }
-        await this.getLoggedInUser(siteSettings);
+      const siteSettings = this.props.activeSession.isServerReachable
+        ? await this.findAndUpdateSiteSettings()
+        : await this.getOrFindSiteSettings();
+      if (this.props.activeSession.isSessionOnline) {
+        this.loadOnlineData(siteSettings);
+      } else if (this.props.activeSession.isSessionOffline) {
+        this.loadOfflineData(siteSettings);
       }
-      await this.resolveCanUseOfflineMode(siteSettings);
-      await this.getLocale();
     } catch (e) {
       this.setState({
         hasError: true,
         errorMessage: e.message,
       });
     }
+  }
+
+  /**
+   * Load online data
+   * - Find and update site settings
+   * - If authenticated
+   *  - If Mfa is required redirect to the MFA screen and close the quick-access
+   *  - Get or find rbacs
+   *  - Get logged-in user
+   * @param {SiteSettingsEntity} siteSettings
+   * @return {Promise<void>}
+   */
+  async loadOnlineData(siteSettings) {
+    if (this.props.activeSession.isAuthenticated) {
+      if (this.props.activeSession.isMfaRequired) {
+        await this.redirectToMfaAuthentication();
+        return;
+      }
+      this.getLoggedInUser();
+      this.getOrFindRbacs(siteSettings);
+    }
+  }
+
+  /**
+   * Load offline data
+   * - Get or find site settings
+   * - Get or find rbacs
+   * - Get logged-in user
+   * @param {SiteSettingsEntity} siteSettings
+   * @return {Promise<void>}
+   */
+  async loadOfflineData(siteSettings) {
+    this.getLoggedInUser();
+    this.getOrFindRbacs(siteSettings);
   }
 
   /**
@@ -102,12 +132,15 @@ export class ExtQuickAccessContextProvider extends React.Component {
       storage: props.storage,
       port: props.port,
       userSettings: null,
-      siteSettings: null,
-      loggedInUser: null,
+      /*
+        Important:
+        Using undefined value help to know if context is ready for offline flow
+        - if data from local storage are empty, the context should be ready even if the data is null
+       */
+      siteSettings: undefined,
+      loggedInUser: undefined,
       account: props.account, // The account
       rbacs: null, // The role based access control
-      canUseOfflineMode: null, // Whether the user can use the offline mode (null until resolved)
-      offlineSettings: null, // The org offline settings, read by the offline login page to cap the session duration
       hasError: false,
       errorMessage: "",
       locale: "en-UK", // To avoid any weird blink, launch the quickaccess with a default english locale
@@ -204,7 +237,16 @@ export class ExtQuickAccessContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async loginOnlineSuccessCallBack() {
-    await this.finalizeLogin();
+    if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.LOGIN) {
+      await this.closeWindow();
+      return;
+    }
+
+    const siteSettings = await this.findAndUpdateSiteSettings();
+    if (siteSettings) {
+      await this.getLoggedInUser();
+      await this.getOrFindRbacs(siteSettings);
+    }
   }
 
   /**
@@ -212,28 +254,9 @@ export class ExtQuickAccessContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async loginOfflineSuccessCallBack() {
-    await this.finalizeLogin();
-  }
-
-  /**
-   * Shared for all of the sign-in transitions.
-   *
-   * The active session is refreshed before anything else: the background has just written it, and the
-   * storage change event that mirrors it into the context is not ordered against the caller's navigation.
-   * Reading it here makes the refresh awaited, so the private route the caller navigates to no longer
-   * sees the signed-out session and bounces back to the login page.
-   * @return {Promise<void>}
-   * @private
-   */
-  async finalizeLogin() {
+    await this.state.port.request("passbolt.offline.resources-update-local-storage");
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.LOGIN) {
       await this.closeWindow();
-      return;
-    }
-
-    const siteSettings = await this.getSiteSettings();
-    if (siteSettings) {
-      await this.getLoggedInUser(siteSettings);
     }
   }
 
@@ -244,77 +267,46 @@ export class ExtQuickAccessContextProvider extends React.Component {
    */
   /**
    * Get the current user info from background page and set it in the state
-   * @param {SiteSettingsEntity|null} siteSettings null when offline with nothing cached.
    */
-  async getLoggedInUser(siteSettings) {
-    const canIUseRbac = Boolean(siteSettings?.canIUse("rbacs"));
+  async getLoggedInUser() {
     const loggedInUser = await this.state.port.request("passbolt.users.find-logged-in-user");
-    const rbacsDto = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : [];
-    const rbacs = new RbacsCollection(rbacsDto);
-    this.setState({ loggedInUser, rbacs });
+    this.setState({ loggedInUser });
   }
 
   /**
-   * Resolve whether the current user can use the offline mode and set the flag in the state.
-   *
-   * Offline mode is available if the offline settings are cached (offline mode configured for the org)
-   * and the user's role can view offline items (RBAC). The user + rbacs are read locally only to
-   * compute the flag; the logged-in user is deliberately NOT exposed on the context while unauthenticated
-   * (offline settings + rbac local storages are retained on logout for offline-eligible users). Failures
-   * (e.g. a non-eligible user with flushed caches) leave the flag false.
-   * @param {SiteSettingsEntity|null} siteSettings null when offline with nothing cached, which
-   * means nothing was retained for this user and there is no offline eligibility to resolve.
-   * @returns {Promise<void>}
+   * Get or find RBACs and set it in the state
+   * @param {SiteSettingsEntity} siteSettings
    */
-  async resolveCanUseOfflineMode(siteSettings) {
-    try {
-      if (!siteSettings?.canIUse("offlineMode")) {
-        this.setState({ canUseOfflineMode: false, offlineSettings: null });
-        return;
-      }
-      /*
-       * If the administrator disables the offline mode at the org level but we  user and rbacs info
-       * for the admin are only flushed on logout. Reading offline settings here is therefore the
-       * only signal that reflects the administrator's setting - without it an offline-eligible user whose
-       * offline session simply expired still lands on the offline login page, because that path
-       * deliberately retains the user and rbac storages rather than flushing them like a logout does.
-       */
-      const offlineSettings = await this.offlineModeSettingsServiceWorkerService.getOrFindSettings();
-      if (!offlineSettings) {
-        this.setState({ canUseOfflineMode: false, offlineSettings: null });
-        return;
-      }
-      const user = await this.state.port.request("passbolt.users.find-logged-in-user");
-      if (!user) {
-        this.setState({ canUseOfflineMode: false, offlineSettings: null });
-        return;
-      }
-      const rbacsDto = siteSettings.canIUse("rbacs") ? await this.rbacServiceWorkerService.findMe() : [];
-      const rbacs = new RbacsCollection(rbacsDto);
-      this.setState({
-        canUseOfflineMode: CanUse.canRoleUseAction(user, rbacs, actions.OFFLINE_ITEMS_VIEW),
-        offlineSettings,
-      });
-    } catch (error) {
-      console.error(error);
-      this.setState({ canUseOfflineMode: false, offlineSettings: null });
-    }
+  async getOrFindRbacs(siteSettings) {
+    const canIUseRbac = siteSettings?.canIUse("rbacs");
+    const rbacsCollection = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : new RbacsCollection([]);
+    this.setState({ rbacs: rbacsCollection });
   }
 
   /**
-   * Get the site settings from the background page and set them in the state.
-   *
-   * With the server up we refresh from the
-   * API, and with it down we ask for the caches only.
-   * @returns {Promise<SiteSettingsEntity|null>} null when offline with nothing cached.
+   * Get or find site settings
+   * @return {Promise<SiteSettingsEntity>}
    */
-  async getSiteSettings() {
-    const siteSettingsDto = await this.state.port.request("passbolt.site-settings.get-or-find");
-    const siteSettings = siteSettingsDto ? new SiteSettingsEntity(siteSettingsDto) : null;
+  async getOrFindSiteSettings() {
+    const siteSettings = await this.siteSettingsServiceWorkerService.getOrFind();
     this.setState({ siteSettings });
     return siteSettings;
   }
 
+  /**
+   * Find and update site settings
+   * @return {Promise<SiteSettingsEntity>}
+   */
+  async findAndUpdateSiteSettings() {
+    const siteSettings = await this.siteSettingsServiceWorkerService.findAndUpdate();
+    this.setState({ siteSettings });
+    return siteSettings;
+  }
+
+  /**
+   * Get the locale
+   * @return {Promise<void>}
+   */
   async getLocale() {
     const { locale } = await this.state.port.request("passbolt.locale.get");
     this.setState({ locale });
@@ -330,13 +322,25 @@ export class ExtQuickAccessContextProvider extends React.Component {
     this.setState({ userSettings });
   }
 
+  /**
+   * Is offline data loaded
+   * @return {boolean}
+   */
+  get isOfflineDataLoaded() {
+    return this.state.loggedInUser !== undefined && this.state.rbacs != null;
+  }
+
+  /**
+   * Is context data ready
+   * @return {boolean}
+   */
   isReady() {
     return (
       this.props.activeSession?.isAuthenticated !== null &&
       this.state.userSettings !== null &&
-      this.state.siteSettings != null &&
+      this.state.siteSettings !== undefined &&
       this.state.locale !== null &&
-      this.state.canUseOfflineMode !== null
+      (this.props.activeSession.isSessionOnline || this.isOfflineDataLoaded)
     );
   }
 

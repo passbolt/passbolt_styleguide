@@ -48,11 +48,16 @@ class Header extends React.Component {
   }
 
   /**
-   * The sign-out handler matching the current session type.
+   * The sign-out handler matching the current session type according to the server status if it is reachable or not.
+   * - Online session with server reachable => online logout
+   * - Online session with server not reachable => offline logout
+   * - Offline session => offline logout
    * @returns {function(): Promise<void>}
    */
   get logoutHandler() {
-    return this.props.activeSession?.isSessionOffline ? this.handleOfflineLogoutClick : this.handleOnlineLogoutClick;
+    return this.props.activeSession?.isSessionOnline && this.props.activeSession?.isServerReachable
+      ? this.handleOnlineLogoutClick
+      : this.handleOfflineLogoutClick;
   }
 
   render() {

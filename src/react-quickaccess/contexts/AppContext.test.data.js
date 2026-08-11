@@ -37,7 +37,7 @@ export function defaultAppContext(data = {}) {
     siteSettings: siteSettings,
     port: new MockPort(),
     storage: new MockStorage(),
-    loggedInUser: defaultUserDto(),
+    loggedInUser: defaultUserDto({}, { withRole: true }),
     users: [],
     resources: [],
     updateSearch: jest.fn(),
