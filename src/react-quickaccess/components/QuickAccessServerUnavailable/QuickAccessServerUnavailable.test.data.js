@@ -16,6 +16,8 @@ import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { createMemoryHistory } from "history";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
+import OfflineSettingsEntity from "../../../shared/models/entity/offline/offlineSettingsEntity";
+import { defaultOfflineSettingsDto } from "../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
 
 /**
  * Default props: a signed-in user who cannot use the offline mode.
@@ -27,20 +29,9 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(),
     history: createMemoryHistory({ initialEntries: ["/"], initialIndex: 0 }),
     activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_server_reachable: false })),
+    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
     ...data,
   };
-}
-
-/**
- * Props with a signed-in user who can use the offline mode.
- * @param {object} data Override the default props.
- * @returns {object}
- */
-export function offlineModeAvailableProps(data = {}) {
-  return defaultProps({
-    context: defaultAppContext({ canUseOfflineMode: true }),
-    ...data,
-  });
 }
 
 /**

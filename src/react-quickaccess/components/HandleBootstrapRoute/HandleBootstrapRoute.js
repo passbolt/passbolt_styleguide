@@ -28,8 +28,6 @@ class HandleBootstrapRoute extends React.Component {
    */
   getBootstrapRoute() {
     const activeSession = this.props.activeSession;
-    const canUseOfflineMode = this.props.context.canUseOfflineMode;
-
     /*
      * An authenticated offline session should persist: the user stays in the app whether or not the server
      * is reachable.
@@ -37,17 +35,6 @@ class HandleBootstrapRoute extends React.Component {
     if (activeSession.isAuthenticated && activeSession.isSessionOffline) {
       return "/webAccessibleResources/quickaccess/home";
     }
-
-    /*
-     * A signed-out user who can use offline mode and has no reachable server is taken straight to the
-     * offline login page: the server unavailable screen below would have nothing to offer them but that
-     * same destination. Kept ahead of the reachability check, and conditioned on it, so a signed-out user
-     * whose server is reachable still gets the online login page.
-     */
-    if (!activeSession.isAuthenticated && !activeSession.isServerReachable && canUseOfflineMode) {
-      return "/webAccessibleResources/quickaccess/login-offline";
-    }
-
     /*
      * Server not reachable. This covers an authenticated online session that lost the network as well
      * as an unauthenticated user with no reachable server: both land on the server unavailable screen,
@@ -62,14 +49,14 @@ class HandleBootstrapRoute extends React.Component {
       return "/webAccessibleResources/quickaccess/login";
     }
 
-    return this.getAuthenticatedRoute();
+    return this.getOnlineAuthenticatedRoute();
   }
 
   /**
-   * Get the route for an authenticated user, based on the requested bootstrap feature.
+   * Get the route for an online authenticated user, based on the requested bootstrap feature.
    * @returns {string}
    */
-  getAuthenticatedRoute() {
+  getOnlineAuthenticatedRoute() {
     switch (this.props.bootstrapFeature) {
       case BOOTSTRAP_FEATURE.CREATE_NEW_CREDENTIALS:
       case BOOTSTRAP_FEATURE.SAVE_CREDENTIALS:

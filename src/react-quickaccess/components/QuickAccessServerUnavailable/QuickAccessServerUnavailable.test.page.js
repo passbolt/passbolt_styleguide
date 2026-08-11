@@ -66,16 +66,6 @@ export default class QuickAccessServerUnavailablePage {
   }
 
   /**
-   * Returns the sign out locally link element, offered as a secondary action alongside the offline mode.
-   * @returns {Element|null}
-   */
-  get signOutLocallyLink() {
-    return this._page.container.querySelector(
-      ".quickaccess-server-unavailable .submit-wrapper a.sign-out-locally-link",
-    );
-  }
-
-  /**
    * Returns true if the page object exists in the container
    * @returns {boolean}
    */
@@ -89,13 +79,5 @@ export default class QuickAccessServerUnavailablePage {
    */
   async clickPrimaryButton() {
     await this.user.click(this.primaryButton);
-  }
-
-  /**
-   * Simulates a click on the sign out locally link
-   * @returns {Promise<void>}
-   */
-  async clickSignOutLocallyLink() {
-    await this.user.click(this.signOutLocallyLink);
   }
 }
