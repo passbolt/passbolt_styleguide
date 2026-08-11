@@ -13,6 +13,7 @@
  */
 
 import LabelScraper from "./LabelScraper";
+import ShadowDomQueryService from "../ShadowDom/ShadowDomQueryService";
 import ShadowRootCacheService from "../ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../ShadowDom/ShadowMutationObserverService";
 import { MAX_SCRAPED_STRING_LENGTH } from "../../lib/InForm/ScrapingDictionary";
@@ -25,6 +26,32 @@ import { MAX_SCRAPED_STRING_LENGTH } from "../../lib/InForm/ScrapingDictionary";
  */
 function fieldScraping(element, inputDescription = {}) {
   return { element, inputDescription };
+}
+
+/**
+ * Append to document.body a chain of `depth` nested <div>s whose OUTERMOST div carries `labelText` as
+ * leading text and whose innermost holds a fresh <input>. The labelled outer div is the input's
+ * `depth`-th ancestor (immediate parent = hop 0), so `depth` sets the hop distance to the label.
+ * @param {number} depth The number of nested divs.
+ * @param {string} labelText The text carried by the outermost div.
+ * @returns {HTMLInputElement} The nested input.
+ */
+function nestedAncestorLabel(depth, labelText) {
+  const outer = document.createElement("div");
+  outer.append(labelText);
+
+  let current = outer;
+  for (let i = 1; i < depth; i++) {
+    const div = document.createElement("div");
+    current.appendChild(div);
+    current = div;
+  }
+
+  const input = document.createElement("input");
+  current.appendChild(input);
+  document.body.appendChild(outer);
+
+  return input;
 }
 
 describe("LabelScraper", () => {
@@ -146,6 +173,54 @@ describe("LabelScraper", () => {
       LabelScraper.enrich(payload);
 
       expect(payload.label).toEqual({ text: "Email", source: "_explicit" });
+    });
+
+    it("should escape a `for` value via the polyfill when CSS.escape is unavailable", () => {
+      expect.assertions(1);
+
+      // jsdom always ships CSS.escape; drop it to exercise the backslash-escaping polyfill branch.
+      const originalCss = globalThis.CSS;
+      globalThis.CSS = undefined;
+
+      try {
+        document.body.innerHTML = "<label for='a.b[0]'>Email</label><input id='x' name='a.b[0]'/>";
+        const payload = fieldScraping(document.querySelector("input"));
+
+        LabelScraper.enrich(payload);
+
+        expect(payload.label).toEqual({ text: "Email", source: "_explicit" });
+      } finally {
+        globalThis.CSS = originalCss;
+      }
+    });
+
+    it("should read a wrapping label found by climbing when native `.labels` is unavailable", () => {
+      expect.assertions(2);
+
+      // A hidden field exposes no usable `.labels` and has no `for=`, so the wrapping label is only
+      // reachable through the shadow-piercing closestDeep climb.
+      document.body.innerHTML = "<label>Hidden email<input id='a' type='hidden'/></label>";
+      const closestSpy = jest.spyOn(ShadowDomQueryService, "closestDeep");
+      const payload = fieldScraping(document.querySelector("input"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "Hidden email", source: "_explicit" });
+      expect(closestSpy).toHaveBeenCalledWith(payload.element, "label");
+    });
+
+    it("should fall through to the wrapping label when the `for` association resolves to blank text", () => {
+      expect.assertions(1);
+
+      // The `for=` target holds only whitespace; it must not short-circuit the tier — the wrapping
+      // label is the real name.
+      document.body.innerHTML =
+        "<label for='uname'>   </label><label>Username<input id='x' name='uname' type='hidden'/></label>";
+      const payload = fieldScraping(document.querySelector("input"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "Username", source: "_explicit" });
     });
   });
 
@@ -411,6 +486,176 @@ describe("LabelScraper", () => {
       LabelScraper.enrich(payload);
 
       expect(payload.label.text.length).toBe(MAX_SCRAPED_STRING_LENGTH);
+    });
+  });
+
+  describe("LabelScraper review regressions", () => {
+    it("should collapse an empty aria-haspopup to boolean false", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<input id='a' aria-haspopup=''/>";
+      const payload = fieldScraping(document.querySelector("input"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.ariaState.hasPopup).toBe(false);
+    });
+
+    it("should collapse aria-haspopup='false' to boolean false", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<input id='a' aria-haspopup='false'/>";
+      const payload = fieldScraping(document.querySelector("input"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.ariaState.hasPopup).toBe(false);
+    });
+
+    it("should not resolve a detached field's aria-labelledby against the live document", () => {
+      expect.assertions(2);
+
+      // The id lives in the live document but the field is detached: getRootNode() keeps the lookup
+      // scoped to the field's own (empty) subtree, so the stray id must not leak in.
+      document.body.innerHTML = "<span id='stray'>Leaked</span>";
+      const input = document.createElement("input");
+      input.setAttribute("aria-labelledby", "stray");
+      input.setAttribute("aria-describedby", "stray");
+      const payload = fieldScraping(input);
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "", source: null });
+      expect(payload.ariaState.describedBy).toBe("");
+    });
+
+    it("should not resolve a detached field's `for` association against the live document", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<label for='stray'>Leaked</label>";
+      const input = document.createElement("input");
+      input.setAttribute("name", "stray");
+      const payload = fieldScraping(input);
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "", source: null });
+    });
+  });
+
+  describe("LabelScraper shadow-boundary isolation", () => {
+    it("should not resolve a `for` association across a shadow boundary", () => {
+      expect.assertions(1);
+
+      // A light-DOM `<label for>` must never name a field living in a shadow root.
+      document.body.innerHTML = "<label for='uname'>Light label</label><div></div>";
+      const shadowRoot = document.querySelector("div").attachShadow({ mode: "open" });
+      shadowRoot.innerHTML = "<input id='x' name='uname'/>";
+      const payload = fieldScraping(shadowRoot.querySelector("input"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "", source: null });
+    });
+
+    it("should not resolve aria-labelledby / aria-describedby across a shadow boundary", () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = "<span id='lbl'>Light</span><div></div>";
+      const shadowRoot = document.querySelector("div").attachShadow({ mode: "open" });
+      shadowRoot.innerHTML = "<input id='a' aria-labelledby='lbl' aria-describedby='lbl'/>";
+      const payload = fieldScraping(shadowRoot.querySelector("input"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "", source: null });
+      expect(payload.ariaState.describedBy).toBe("");
+    });
+
+    it("should elect an ancestor label reached through a slot (assignedSlot climb)", () => {
+      expect.assertions(1);
+
+      // A light-DOM field projected into a web component: the ancestor climb must pierce the slot into
+      // the shadow container that names it.
+      document.body.innerHTML = "<div id='host'><input id='a'/></div>";
+      const shadowRoot = document.querySelector("#host").attachShadow({ mode: "open" });
+      shadowRoot.innerHTML = "<div>Country<slot></slot></div>";
+      const payload = fieldScraping(document.querySelector("#a"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "Country", source: "_ancestor" });
+    });
+  });
+
+  describe("LabelScraper high-value coverage", () => {
+    it("should join several native labels bound to the same field", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<label for='a'>First</label><label for='a'>Second</label><input id='a'/>";
+      const payload = fieldScraping(document.querySelector("input"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "First Second", source: "_explicit" });
+    });
+
+    it("should prefer aria-label over aria-labelledby", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML =
+        "<span id='lbl'>Labelledby</span><section><input id='a' aria-label='Direct' aria-labelledby='lbl'/></section>";
+      const payload = fieldScraping(document.querySelector("input"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "Direct", source: "_aria" });
+    });
+
+    it("should fall through the cascade when aria-labelledby only references missing ids", () => {
+      expect.assertions(1);
+
+      // The dangling ref must yield "" and let the ancestor tier win, not halt the cascade on an empty label.
+      document.body.innerHTML = "<div>Fallback<span><input id='a' aria-labelledby='missing'/></span></div>";
+      const payload = fieldScraping(document.querySelector("input"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "Fallback", source: "_ancestor" });
+    });
+
+    it("should tolerate a payload with no input description at the placeholder tier", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<div><input id='a'/></div>";
+      // No `inputDescription` property at all — the placeholder tier must optional-chain, not throw.
+      const payload = { element: document.querySelector("input") };
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "", source: null });
+    });
+
+    it("should elect a qualifying ancestor sitting at the last examined hop", () => {
+      expect.assertions(1);
+
+      // The labelled div is the 20th ancestor (examined at hops=19); everything between is empty.
+      const payload = fieldScraping(nestedAncestorLabel(20, "Deep"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "Deep", source: "_ancestor" });
+    });
+
+    it("should not elect a qualifying ancestor one hop past the cap", () => {
+      expect.assertions(1);
+
+      // The labelled div is the 21st ancestor (would need hops=20) and must never be reached.
+      const payload = fieldScraping(nestedAncestorLabel(21, "TooDeep"));
+
+      LabelScraper.enrich(payload);
+
+      expect(payload.label).toEqual({ text: "", source: null });
     });
   });
 });

@@ -303,8 +303,7 @@ class OrphanFieldsExtractionService {
       (container) =>
         !merged.some(
           (other) =>
-            other !== container &&
-            ShadowDomQueryService.piercingAncestors(other.element).includes(container.element),
+            other !== container && ShadowDomQueryService.piercingAncestors(other.element).includes(container.element),
         ),
     );
   }

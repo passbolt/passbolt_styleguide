@@ -81,6 +81,12 @@ export const LABEL_BOUNDARY_TAGS = ["INPUT", "TEXTAREA", "SELECT", "BUTTON"];
 export const LABEL_SKIP_TAGS = ["A", "OPTION", "OPTGROUP", "SCRIPT", "STYLE"];
 
 /**
+ * Field attributes a `<label for>` can point at, tried in order when resolving an explicit label.
+ * @type {ReadonlyArray<string>}
+ */
+export const LABEL_FOR_ATTRS = ["id", "name"];
+
+/**
  * Ancestor tags that can legitimately host a field's label text.
  * @type {ReadonlyArray<string>}
  */

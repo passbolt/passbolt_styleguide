@@ -20,50 +20,20 @@ import {
   LABEL_BOUNDARY_TAGS,
   LABEL_SKIP_TAGS,
   LABEL_ANCESTOR_TAGS,
+  LABEL_FOR_ATTRS,
   MAX_LABEL_ANCESTOR_HOPS,
   MAX_SCRAPED_STRING_LENGTH,
 } from "../../lib/InForm/ScrapingDictionary";
 
 /**
- * The (partial) per-field scraping payload this scraper reads from and writes back to. The whole
- * {@link FieldScraping} shape is owned by the field scraper (a later WP); {@link LabelScraper} only
- * touches the slice below and never inspects the rest.
- * @typedef {object} FieldScraping
- * @property {Element} element The live field element the label is elected for (read-only, never mutated).
- * @property {{placeholder?: string}} [inputDescription] Attributes captured in the Phase 1 scrape; the
- *   `placeholder` is reused by the placeholder tier so the DOM is not read twice.
- * @property {{text: string, source: ?string}} [label] Written by {@link LabelScraper.enrich}: the elected
- *   label text and the tier that produced it (a {@link LABEL_TIERS} entry, or `null` when none matched).
- * @property {AriaState} [ariaState] Written by {@link LabelScraper.enrich}: the field's ARIA state.
- */
-
-/**
- * The accessibility state captured alongside the label.
- * @typedef {object} AriaState
- * @property {string} describedBy Resolved text of the `aria-describedby` targets (empty when none).
- * @property {boolean} hidden Whether `aria-hidden` is asserted true.
- * @property {boolean} disabled Whether `aria-disabled` is asserted true.
- * @property {boolean|string} hasPopup The `aria-haspopup` value: `false` when absent/"false", `true` for
- *   "true", otherwise the raw token ("menu", "listbox", "dialog"…).
- */
-
-/**
- * Elects exactly one human label per scraped field and captures its ARIA state.
- *
- * A field's label has no single reliable source — it can live in a `<label for>`, a wrapping `<label>`,
- * a preceding sibling, a `placeholder`, an ARIA attribute, or an ancestor wrapper — and these vary by
- * site and break across shadow boundaries. {@link enrich} runs a confidence-ordered cascade
- * ({@link LABEL_TIERS}) and the first source that yields non-empty text wins; the winning tier is kept
- * as a confidence signal for downstream qualification/matching.
- *
- * Strictly read-only with respect to the host page: it clones subtrees (via {@link PageScraperHelpers})
- * before stripping nested controls and only ever mutates the {@link FieldScraping} object it is given.
- * Shadow boundaries are respected during root-scoped lookups and safely pierced during upward climbs.
+ * Finds the best label for a form field (and its ARIA state) by trying several sources in order of
+ * reliability, keeping the first non-empty one and recording which source it came from.
  */
 class LabelScraper {
   /**
    * Elect the field's label and capture its ARIA state, writing both back onto the payload.
-   * @param {FieldScraping} fieldScraping The per-field payload to enrich in place.
+   * @param {FieldScraping} fieldScraping The per-field payload: reads `element` (and `inputDescription.placeholder`),
+   *   writes `label` ({text, source}) and `ariaState`.
    * @returns {FieldScraping} The same payload, for call-site chaining.
    */
   static enrich(fieldScraping) {
@@ -108,26 +78,33 @@ class LabelScraper {
   static _explicit(fieldScraping) {
     const element = fieldScraping.element;
 
-    // Native association. `.labels` covers both `for=` and wrapping labels in the light DOM.
+    // Native association. `.labels` covers both `for=` and wrapping labels in the light DOM. Guarded
+    // (like every non-final source below) so an empty native `<label>` falls through to the next
+    // source rather than short-circuiting the tier with whitespace.
     const nativeLabels = element.labels;
     if (nativeLabels && nativeLabels.length > 0) {
       const text = Array.from(nativeLabels)
         .map((label) => PageScraperHelpers.textWithoutFields(label))
         .join(" ");
-      if (TextNormalizer.normalize(text)) {
+      if (LabelScraper._hasText(text)) {
         return text;
       }
     }
 
-    // Explicit `for=` association, resolved within the field's root (Document or ShadowRoot) so the
-    // lookup never leaks across a shadow boundary. `.labels` is often empty here, hence the fallback.
-    const root = ShadowDomQueryService.scopeRoot(element);
+    // Explicit `for=` association, resolved within the field's own root so the lookup never leaks
+    // across a shadow boundary (nor onto the live document for a detached field). `.labels` is often
+    // empty here, hence the fallback.
+    const root = LabelScraper._root(element);
     const forLabel = LabelScraper._labelForField(root, element);
     if (forLabel) {
-      return PageScraperHelpers.textWithoutFields(forLabel);
+      const text = PageScraperHelpers.textWithoutFields(forLabel);
+      if (LabelScraper._hasText(text)) {
+        return text;
+      }
     }
 
-    // Wrapping `<label>` ancestor, piercing shadow boundaries on the way up.
+    // Wrapping `<label>` ancestor, piercing shadow boundaries on the way up. Final source: no
+    // emptiness guard needed since `_clean` blanks a whitespace result and the cascade moves on.
     const wrappingLabel = ShadowDomQueryService.closestDeep(element, "label");
     if (wrappingLabel) {
       return PageScraperHelpers.textWithoutFields(wrappingLabel);
@@ -144,7 +121,7 @@ class LabelScraper {
    * @returns {?Element} The matching label, or `null`.
    */
   static _labelForField(root, element) {
-    for (const attr of ["id", "name"]) {
+    for (const attr of LABEL_FOR_ATTRS) {
       const value = element.getAttribute(attr);
       if (!value) {
         continue;
@@ -224,7 +201,7 @@ class LabelScraper {
     const element = fieldScraping.element;
 
     const ariaLabel = element.getAttribute("aria-label");
-    if (TextNormalizer.normalize(ariaLabel)) {
+    if (LabelScraper._hasText(ariaLabel)) {
       return ariaLabel;
     }
 
@@ -251,8 +228,8 @@ class LabelScraper {
     while (ShadowDomQueryService.isElement(current) && hops < MAX_LABEL_ANCESTOR_HOPS) {
       // Density gate: reject an ancestor wrapping more than the field itself (1:1 label-to-field).
       if (LABEL_ANCESTOR_TAGS.includes(current.nodeName) && PageScraperHelpers.fieldCount(current) <= 1) {
-        const text = TextNormalizer.normalize(PageScraperHelpers.textWithoutFields(current));
-        if (text) {
+        const text = PageScraperHelpers.textWithoutFields(current);
+        if (LabelScraper._hasText(text)) {
           return text;
         }
       }
@@ -268,7 +245,7 @@ class LabelScraper {
    * haspopup flags.
    * @private
    * @param {Element} element The field element.
-   * @returns {AriaState} The captured state.
+   * @returns {{describedBy: string, hidden: boolean, disabled: boolean, hasPopup: boolean|string}} The captured state.
    */
   static _ariaState(element) {
     const describedBy = element.getAttribute("aria-describedby");
@@ -290,7 +267,7 @@ class LabelScraper {
    * @returns {string} The concatenated target text, or "".
    */
   static _resolveIdRefs(element, idRefs) {
-    const root = ShadowDomQueryService.scopeRoot(element);
+    const root = LabelScraper._root(element);
 
     return idRefs
       .split(/\s+/)
@@ -338,7 +315,9 @@ class LabelScraper {
    */
   static _ariaToken(element, attr) {
     const value = element.getAttribute(attr);
-    if (value === null || value === "false") {
+    // An absent, empty (`aria-haspopup` / `aria-haspopup=""`) or "false" token all mean "no popup" per
+    // WAI-ARIA, so they collapse to the boolean `false` rather than leaking an empty string downstream.
+    if (value === null || value === "" || value === "false") {
       return false;
     }
     if (value === "true") {
@@ -349,13 +328,50 @@ class LabelScraper {
   }
 
   /**
-   * Normalise scraped text and cap it at {@link MAX_SCRAPED_STRING_LENGTH}.
+   * The field's own root, used to scope `for=` and IDREF lookups. Deliberately not
+   * {@link ShadowDomQueryService.scopeRoot}: for a detached field that helper falls back to the live
+   * `document`, which would resolve a `for=` / `aria-labelledby` against an unrelated element elsewhere
+   * on the page. `getRootNode()` keeps a detached field scoped to its own subtree, so nothing leaks in.
+   * @private
+   * @param {Element} element The field element.
+   * @returns {Node} The field's root node (Document, ShadowRoot, DocumentFragment, or the field itself).
+   */
+  static _root(element) {
+    return element.getRootNode();
+  }
+
+  /**
+   * Whether raw scraped text carries anything beyond control/whitespace characters. Used by the tiers
+   * for intra-tier fallthrough: it lets a whitespace-only candidate (an empty native `<label>`, a
+   * blank `aria-label`, a `for=` target with no text) skip to the tier's next source instead of
+   * short-circuiting it. Kept distinct from {@link LabelScraper._clean}, which owns the final
+   * normalisation of the value that leaves the scraper — tiers themselves return raw text.
+   * @private
+   * @param {*} text The raw candidate text (null-safe).
+   * @returns {boolean} true when normalisation leaves non-empty text.
+   */
+  static _hasText(text) {
+    return TextNormalizer.normalize(text) !== "";
+  }
+
+  /**
+   * Normalise scraped text and cap it at {@link MAX_SCRAPED_STRING_LENGTH}. The single normalisation
+   * boundary of the scraper: applied once per outward-facing value — the elected label in
+   * {@link LabelScraper._electLabel} and the `describedBy` state in {@link LabelScraper._ariaState} —
+   * never inside a tier, so the tiers stay free to return raw text.
    * @private
    * @param {*} text The raw text (null-safe).
    * @returns {string} The cleaned, length-capped text.
    */
   static _clean(text) {
-    return TextNormalizer.normalize(text).slice(0, MAX_SCRAPED_STRING_LENGTH);
+    const normalized = TextNormalizer.normalize(text);
+    if (normalized.length <= MAX_SCRAPED_STRING_LENGTH) {
+      return normalized;
+    }
+
+    // Cap on code points, not UTF-16 code units, so an astral character (emoji, rare CJK…) straddling
+    // the limit is never split into a lone, invalid surrogate at the tail of the label.
+    return Array.from(normalized).slice(0, MAX_SCRAPED_STRING_LENGTH).join("");
   }
 
   /**
