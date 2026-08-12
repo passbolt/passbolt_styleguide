@@ -13,21 +13,27 @@ const Template = (args) => (
   </MemoryRouter>
 );
 
-export const Initial = Template.bind({});
-Initial.args = {
-  progressContext: {
-    progressDialogProps: {},
+export const Initial = {
+  render: Template,
+
+  args: {
+    progressContext: {
+      progressDialogProps: {},
+    },
   },
 };
 
-export const ProgressMessage = Template.bind({});
-ProgressMessage.args = {
-  progressContext: {
-    progressDialogProps: {
-      title: "Title",
-      goals: 100,
-      completed: 50,
-      message: "message",
+export const ProgressMessage = {
+  render: Template,
+
+  args: {
+    progressContext: {
+      progressDialogProps: {
+        title: "Title",
+        goals: 100,
+        completed: 50,
+        message: "message",
+      },
     },
   },
 };

@@ -37,10 +37,14 @@ const defaultParameters = {
   css: "ext_authentication",
 };
 
-export const Setup = Template.bind({});
-Setup.args = defaultProps({ displayAs: ImportGpgKeyVariations.SETUP });
-Setup.parameters = defaultParameters;
+export const Setup = {
+  render: Template,
+  args: defaultProps({ displayAs: ImportGpgKeyVariations.SETUP }),
+  parameters: defaultParameters,
+};
 
-export const Recover = Template.bind({});
-Recover.args = defaultProps({ displayAs: ImportGpgKeyVariations.RECOVER });
-Recover.parameters = defaultParameters;
+export const Recover = {
+  render: Template,
+  args: defaultProps({ displayAs: ImportGpgKeyVariations.RECOVER }),
+  parameters: defaultParameters,
+};

@@ -32,7 +32,6 @@ import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
 
 export default {
   title: "Foundations/Button",
-  component: "Button",
 };
 
 export const PrimaryButton = {

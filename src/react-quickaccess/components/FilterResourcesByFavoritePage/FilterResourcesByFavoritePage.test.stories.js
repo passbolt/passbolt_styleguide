@@ -32,14 +32,20 @@ const parameters = {
   css: "ext_quickaccess",
 };
 
-export const InitialLoad = Template.bind({});
-InitialLoad.args = defaultProps();
-InitialLoad.parameters = parameters;
+export const InitialLoad = {
+  render: Template,
+  args: defaultProps(),
+  parameters: parameters,
+};
 
-export const NoFavoriteResource = Template.bind({});
-NoFavoriteResource.args = noResourcesProps();
-NoFavoriteResource.parameters = parameters;
+export const NoFavoriteResource = {
+  render: Template,
+  args: noResourcesProps(),
+  parameters: parameters,
+};
 
-export const FavoriteResources = Template.bind({});
-FavoriteResources.args = withFilteredResourcesProps();
-FavoriteResources.parameters = parameters;
+export const FavoriteResources = {
+  render: Template,
+  args: withFilteredResourcesProps(),
+  parameters: parameters,
+};

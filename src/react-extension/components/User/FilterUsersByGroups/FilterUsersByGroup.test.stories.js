@@ -27,16 +27,21 @@ const Template = (args) => (
   </AppContext.Provider>
 );
 
-export const Initial = Template.bind({});
+export const Initial = {
+  render: Template,
+};
 
-export const SelectedGroup = Template.bind({});
-SelectedGroup.args = {
-  userWorkspaceContext: {
-    filter: {
-      type: UserWorkspaceFilterTypes.GROUP,
-      payload: {
-        group: {
-          id: 1,
+export const SelectedGroup = {
+  render: Template,
+
+  args: {
+    userWorkspaceContext: {
+      filter: {
+        type: UserWorkspaceFilterTypes.GROUP,
+        payload: {
+          group: {
+            id: 1,
+          },
         },
       },
     },

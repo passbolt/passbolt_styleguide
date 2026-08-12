@@ -15,7 +15,6 @@ import React from "react";
 
 export default {
   title: "Foundations/Checkbox",
-  component: "Checkbox",
 };
 
 export const DefaultCheckbox = () => (

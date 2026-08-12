@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React from "react";
 import LoadingBar from "./LoadingBar";
 
 export default {
@@ -19,10 +18,9 @@ export default {
   component: LoadingBar,
 };
 
-const Template = (args) => <LoadingBar {...args} />;
-
-export const Initial = Template.bind({});
-Initial.args = {
-  progress: 50,
-  onProgressCompleted: jest.fn(),
+export const Initial = {
+  args: {
+    progress: 50,
+    onProgressCompleted: jest.fn(),
+  },
 };

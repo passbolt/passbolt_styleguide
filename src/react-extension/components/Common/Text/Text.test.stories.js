@@ -15,7 +15,6 @@ import React from "react";
 
 export default {
   title: "Foundations/Text",
-  component: "Text",
 };
 
 export const DefaultText = {

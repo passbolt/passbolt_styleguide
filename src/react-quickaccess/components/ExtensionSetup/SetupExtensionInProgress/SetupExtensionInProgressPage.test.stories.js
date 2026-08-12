@@ -21,9 +21,11 @@ const Template = () => (
   </MemoryRouter>
 );
 
-export const Initial = Template.bind({});
-Initial.args = {};
+export const Initial = {
+  render: Template,
+  args: {},
 
-Initial.parameters = {
-  css: "ext_quickaccess",
+  parameters: {
+    css: "ext_quickaccess",
+  },
 };

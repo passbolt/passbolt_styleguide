@@ -41,26 +41,38 @@ const parameters = {
   css: "ext_quickaccess",
 };
 
-export const ResourceView = Template.bind({});
-ResourceView.args = defaultProps();
-ResourceView.parameters = parameters;
+export const ResourceView = {
+  render: Template,
+  args: defaultProps(),
+  parameters: parameters,
+};
 
-export const AllApiFlagDisabled = Template.bind({});
-AllApiFlagDisabled.args = disabledApiFlagsProps();
-AllApiFlagDisabled.parameters = parameters;
+export const AllApiFlagDisabled = {
+  render: Template,
+  args: disabledApiFlagsProps(),
+  parameters: parameters,
+};
 
-export const AllRbacsDenied = Template.bind({});
-AllRbacsDenied.args = deniedRbacProps();
-AllRbacsDenied.parameters = parameters;
+export const AllRbacsDenied = {
+  render: Template,
+  args: deniedRbacProps(),
+  parameters: parameters,
+};
 
-export const TotpResourceView = Template.bind({});
-TotpResourceView.args = totpResourceProps();
-TotpResourceView.parameters = parameters;
+export const TotpResourceView = {
+  render: Template,
+  args: totpResourceProps(),
+  parameters: parameters,
+};
 
-export const StandaloneTotpResourceView = Template.bind({});
-StandaloneTotpResourceView.args = standaloneTotpResourceProps();
-StandaloneTotpResourceView.parameters = parameters;
+export const StandaloneTotpResourceView = {
+  render: Template,
+  args: standaloneTotpResourceProps(),
+  parameters: parameters,
+};
 
-export const ResourceMultipleUrisView = Template.bind({});
-ResourceMultipleUrisView.args = multipleUrisResourceProps();
-ResourceMultipleUrisView.parameters = parameters;
+export const ResourceMultipleUrisView = {
+  render: Template,
+  args: multipleUrisResourceProps(),
+  parameters: parameters,
+};

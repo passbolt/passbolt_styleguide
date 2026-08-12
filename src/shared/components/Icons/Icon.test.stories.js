@@ -179,7 +179,6 @@ import QrCodeSVG from "../../../img/svg/qr_code.svg";
 
 export default {
   title: "Foundations/Icon",
-  component: "Icon",
 };
 
 const iconsSVGs = [

@@ -30,42 +30,54 @@ Template.propTypes = {
   ssoContext: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultAppContext(),
-  ssoContext: disabledSsoContext(),
-  loginSuccessCallback: () => {},
-  mfaRequiredCallback: () => {},
-  canRememberMe: true,
-};
-Initial.parameters = {
-  css: "ext_quickaccess",
+export const Initial = {
+  render: Template,
+
+  args: {
+    context: defaultAppContext(),
+    ssoContext: disabledSsoContext(),
+    loginSuccessCallback: () => {},
+    mfaRequiredCallback: () => {},
+    canRememberMe: true,
+  },
+
+  parameters: {
+    css: "ext_quickaccess",
+  },
 };
 
-export const WithSsoAvailable = Template.bind({});
-WithSsoAvailable.args = {
-  context: defaultAppContext(),
-  ssoContext: defaultSsoContext(),
-  loginSuccessCallback: () => {},
-  mfaRequiredCallback: () => {},
-  canRememberMe: true,
-};
-WithSsoAvailable.parameters = {
-  css: "ext_quickaccess",
+export const WithSsoAvailable = {
+  render: Template,
+
+  args: {
+    context: defaultAppContext(),
+    ssoContext: defaultSsoContext(),
+    loginSuccessCallback: () => {},
+    mfaRequiredCallback: () => {},
+    canRememberMe: true,
+  },
+
+  parameters: {
+    css: "ext_quickaccess",
+  },
 };
 
-export const WithSsoLoginError = Template.bind({});
-WithSsoLoginError.args = {
-  context: defaultAppContext(),
-  ssoContext: defaultSsoContext({
-    runSignInProcess: () => {
-      throw new Error("Unable to decrypt the private key's with the given passphrase");
-    },
-  }),
-  loginSuccessCallback: () => {},
-  mfaRequiredCallback: () => {},
-  canRememberMe: true,
-};
-WithSsoLoginError.parameters = {
-  css: "ext_quickaccess",
+export const WithSsoLoginError = {
+  render: Template,
+
+  args: {
+    context: defaultAppContext(),
+    ssoContext: defaultSsoContext({
+      runSignInProcess: () => {
+        throw new Error("Unable to decrypt the private key's with the given passphrase");
+      },
+    }),
+    loginSuccessCallback: () => {},
+    mfaRequiredCallback: () => {},
+    canRememberMe: true,
+  },
+
+  parameters: {
+    css: "ext_quickaccess",
+  },
 };

@@ -37,5 +37,7 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
+export const Initial = {
+  render: Template,
+  args: defaultProps(),
+};

@@ -17,10 +17,12 @@ import Totp from "./Totp";
 
 export default {
   title: "Foundations/Password",
-  component: "Totp",
+  component: Totp,
 };
 
 const Template = (args) => <Totp {...args} />;
 
-export const DefaultTotp = Template.bind({});
-DefaultTotp.args = defaultProps();
+export const DefaultTotp = {
+  render: Template,
+  args: defaultProps(),
+};
