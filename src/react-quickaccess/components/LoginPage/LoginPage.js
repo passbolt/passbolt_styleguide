@@ -247,9 +247,9 @@ class LoginPage extends React.Component {
                   {this.state.processing && <SpinnerSVG />}
                 </button>
                 {this.state.isSsoAvailable && (
-                  <a className="show-sso-form-button" onClick={this.handleSwitchToSso}>
+                  <button type="button" className="link show-sso-form-button" onClick={this.handleSwitchToSso}>
                     <Trans>Sign in with Single Sign-On.</Trans>
-                  </a>
+                  </button>
                 )}
               </div>
             </form>
@@ -258,18 +258,23 @@ class LoginPage extends React.Component {
             <>
               <div className="form-actions sso-login-form">
                 {this.isSsoLocalKitPresent && (
-                  <a
-                    className={`button sso-login-button ${this.state.processing ? "disabled" : ""} ${ssoProviderData.id}`}
+                  <button
+                    type="button"
+                    className={`sso-login-button ${this.state.processing ? "disabled" : ""} ${ssoProviderData.id}`}
                     onClick={this.handleSignInWithSso}
                     disabled={this.state.processing}
                   >
                     <span className="provider-logo">{ssoProviderData.icon}</span>
                     {this.props.t(`Sign in with {{providerName}}`, { providerName: ssoProviderData.name })}
-                  </a>
+                  </button>
                 )}
-                <a className="show-passphrase-form-button" onClick={this.handleSwitchToPassphrase}>
+                <button
+                  type="button"
+                  className="link show-passphrase-form-button"
+                  onClick={this.handleSwitchToPassphrase}
+                >
                   <Trans>Sign in with my passphrase.</Trans>
-                </a>
+                </button>
                 {this.state.ssoError && (
                   <div className="error-message">
                     <Trans>An error occured during the sign-in via SSO.</Trans>

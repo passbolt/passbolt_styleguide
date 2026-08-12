@@ -2,7 +2,7 @@ import React from "react";
 import { MemoryRouter, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import LoginPage from "./LoginPage";
-import { defaultSsoContext } from "./LoginPage.test.data";
+import { defaultSsoContext, disabledSsoContext } from "./LoginPage.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 
@@ -33,7 +33,7 @@ Template.propTypes = {
 export const Initial = Template.bind({});
 Initial.args = {
   context: defaultAppContext(),
-  ssoContext: defaultSsoContext({ hasUserAnSsoKit: () => false }),
+  ssoContext: disabledSsoContext(),
   loginSuccessCallback: () => {},
   mfaRequiredCallback: () => {},
   canRememberMe: true,
