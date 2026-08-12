@@ -92,6 +92,7 @@ import DomUtils from "../Dom/DomUtils";
 import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
 import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
+import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
 import { act } from "react";
 import { waitFor } from "@testing-library/react";
 
@@ -113,6 +114,9 @@ describe("InformManager", () => {
     jest.clearAllMocks();
     // Force to true as Jest do not provide opacity value
     jest.spyOn(InFormManager, "isPageNotVisible").mockImplementation(() => false);
+    jest
+      .spyOn(ElementVisibilityService, "isElementViewable")
+      .mockImplementation((element) => !(parseFloat(getComputedStyle(element).opacity) < 0.4));
     Element.prototype.getAnimations = () => [];
     /** Mock create element to add a content window property in the iframe due to jest issue with iframe in shadow dom **/
     const div = document.createElement("div");

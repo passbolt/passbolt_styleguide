@@ -25,6 +25,8 @@ import UserEventsService from "../User/UserEventsService";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
 import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
+import FormExtractionService from "../../services/DomExtraction/FormExtractionService";
+import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
 
 const Z_INDEX_MAX = 2147483647;
 const HOST_MOUNT_MAX_RETRIES = 3;
@@ -172,21 +174,9 @@ class InFormManager {
    * @param element
    */
   destroyIfElementNotVisible(element) {
-    if (this.isElementNotVisible(element)) {
+    if (!ElementVisibilityService.isElementViewable(element)) {
       this.destroy();
     }
-  }
-
-  /**
-   * Is element not visible
-   * @param element
-   * @return {boolean}
-   */
-  isElementNotVisible(element) {
-    const visibilityOptions = {
-      visibilityProperty: true,
-    };
-    return getComputedStyle(element).opacity < 0.4 || !element.checkVisibility(visibilityOptions);
   }
 
   /**
@@ -211,7 +201,10 @@ class InFormManager {
    * @return {boolean}
    */
   isPageNotVisible() {
-    return this.isElementNotVisible(document.documentElement) || this.isElementNotVisible(document.body);
+    return (
+      !ElementVisibilityService.isElementViewable(document.documentElement) ||
+      !ElementVisibilityService.isElementViewable(document.body)
+    );
   }
 
   /**
@@ -316,25 +309,25 @@ class InFormManager {
    */
   findAndSetCredentialsFormFields() {
     /**
-     * We find the form DOM formFields.
+     * We find the form containers in the DOM.
      * If it was previously found, we reuse the same InformFormField, otherwise we create one
      */
-    const newCredentialsFormFields = InFormCredentialsFormField.findAll();
+    const formElements = FormExtractionService.aggregateForms();
 
-    if (newCredentialsFormFields.length > 0) {
-      this.credentialsFormFields = this._materialize(newCredentialsFormFields);
+    if (formElements.length > 0) {
+      this.credentialsFormFields = this._materialize(formElements);
     } else {
       this.credentialsFormFields = [];
     }
   }
 
   /**
-   * Map each container to an InFormCredentialsFormField instance.
-   * @param {HTMLElement[]} newCredentialsFormFields The discovered form containers.
+   * Map each form container to an InFormCredentialsFormField instance.
+   * @param {Array<{ containerElement: Element, fields: Array, isPseudoForm: boolean }>} formElements The discovered form containers.
    * @return {InFormCredentialsFormField[]}
    * @private
    */
-  _materialize(newCredentialsFormFields) {
+  _materialize(formElements) {
     // Get all fields, filtered by their types
     const { usernameCtaFields, passwordCtaFields } = this.callToActionFields.reduce(
       (acc, ctaField) => {
@@ -348,15 +341,23 @@ class InFormManager {
       { usernameCtaFields: [], passwordCtaFields: [] },
     );
 
-    const next = newCredentialsFormFields.map((newField) => {
-      const existingField = this.credentialsFormFields.find(({ field: formField }) => formField === newField);
+    const next = formElements.map((formElement) => {
+      const existingField = this.credentialsFormFields.find(({ field }) => field === formElement.containerElement);
 
       if (!existingField) {
-        // We try to find username and password fields contained in the new form field
-        const usernameField = usernameCtaFields.find((ctaField) => newField.contains(ctaField.field));
-        const passwordField = passwordCtaFields.find((ctaField) => newField.contains(ctaField.field));
+        // We try to find username and password fields contained in the new form container
+        const usernameField = usernameCtaFields.find((ctaField) =>
+          formElement.containerElement.contains(ctaField.field),
+        );
+        const passwordField = passwordCtaFields.find((ctaField) =>
+          formElement.containerElement.contains(ctaField.field),
+        );
 
-        return new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
+        return new InFormCredentialsFormField(formElement.containerElement, {
+          usernameField: usernameField?.field,
+          passwordField: passwordField?.field,
+          isPseudoForm: formElement.isPseudoForm,
+        });
       }
 
       return existingField;
