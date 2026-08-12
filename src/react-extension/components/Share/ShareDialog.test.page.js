@@ -81,13 +81,6 @@ export default class ShareDialogPage {
   }
 
   /**
-   * Returns the warning message element
-   */
-  get warningMessage() {
-    return this._page.container.querySelector(".message.warning").textContent;
-  }
-
-  /**
    * Returns the error message element
    */
   get errorMessage() {

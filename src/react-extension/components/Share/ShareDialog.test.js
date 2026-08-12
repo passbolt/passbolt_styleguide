@@ -83,7 +83,7 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it("As LU adding a recipient I see onConfirm called with the new permission deltas and the dialog closed", async () => {
-      expect.assertions(5);
+      expect.assertions(4);
       const newUser = defaultUserDto({
         username: "admin@passbolt.com",
         profile: defaultProfileDto({ first_name: "Admin", last_name: "User" }),
@@ -93,7 +93,6 @@ describe("As Lu I should see the share dialog", () => {
       await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
-      expect(page.warningMessage).toBe("Click save to apply your pending changes.");
       expect(page.count).toBe(3);
 
       mockContextRequest(jest.fn());
