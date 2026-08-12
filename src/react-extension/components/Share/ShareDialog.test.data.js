@@ -1188,7 +1188,8 @@ export function controlledModeProps(data = {}) {
  */
 export function twoResourcesShareProps(data = {}) {
   // The reader's permission type per resource: keep [1, 1] uniform, use e.g. [1, 7] for a varying reader.
-  const { readerPermissionTypes = [1, 1], ...propsData } = data;
+  // The resource names can be overridden, e.g. to seed them unsorted.
+  const { readerPermissionTypes = [1, 1], resourceNames = ["RA", "RB"], ...propsData } = data;
   const ownerUser = defaultUserDto({ username: "operator@passbolt.com" });
   const readerUser = defaultUserDto({ username: "reader@passbolt.com" });
   const buildResource = (name, readerPermissionType) => {
@@ -1220,7 +1221,7 @@ export function twoResourcesShareProps(data = {}) {
   };
   return {
     ...defaultProps(),
-    initialResources: [buildResource("RA", readerPermissionTypes[0]), buildResource("RB", readerPermissionTypes[1])],
+    initialResources: resourceNames.map((name, index) => buildResource(name, readerPermissionTypes[index])),
     initialGroups: new GroupsCollection([]),
     initialUsers: new UsersCollection([ownerUser, readerUser]),
     onConfirm: jest.fn(),

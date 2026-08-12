@@ -47,10 +47,16 @@ export default class ShareDialogPage {
   }
 
   /**
-   * Returns the title info tooltip text, or null when no tooltip is rendered
+   * Returns the text of every item listed in the title info tooltip, or null when no tooltip is
+   * rendered
+   * @returns {null|Array<string>}
    */
-  get titleTooltip() {
-    return this._page.container.querySelector(".dialog-title-wrapper .tooltip-text")?.textContent ?? null;
+  get titleTooltipItems() {
+    const tooltip = this._page.container.querySelector(".dialog-title-wrapper .tooltip-text");
+    if (!tooltip) {
+      return null;
+    }
+    return Array.from(tooltip.querySelectorAll(".share-details-item")).map((item) => item.textContent);
   }
 
   /**

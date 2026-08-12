@@ -34,7 +34,7 @@ describe("ShareVariesDetails", () => {
    * @returns {Array<string>}
    */
   const lines = (container) =>
-    Array.from(container.querySelectorAll(".share-varies-details > span")).map((line) => line.textContent);
+    Array.from(container.querySelectorAll(".share-details-list > span")).map((line) => line.textContent);
 
   it("renders the count and one line per item with its permission level", () => {
     expect.assertions(1);
@@ -90,9 +90,9 @@ describe("ShareVariesDetails", () => {
   it("splits a line into a truncatable name and a permission label kept intact", () => {
     expect.assertions(2);
     const { container } = renderComponent({ 0: [], 1: ["a-very-long-resource-name"], 7: [], 15: [] });
-    const line = container.querySelector(".share-varies-details .varies-detail");
+    const line = container.querySelector(".share-details-list .share-details-item");
 
     expect(line.querySelector(".ellipsis").textContent).toEqual("• a-very-long-resource-name");
-    expect(line.querySelector(".varies-detail-permission").textContent).toEqual("(Can read)");
+    expect(line.querySelector(".share-details-item-detail").textContent).toEqual("(Can read)");
   });
 });

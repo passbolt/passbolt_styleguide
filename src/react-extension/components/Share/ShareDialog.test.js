@@ -521,16 +521,16 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       expect(page.count).toBe(2);
     });
 
-    it("As LU sharing several resources I should see their names listed in the title tooltip", async () => {
+    it("As LU sharing several resources I should see their names listed sorted in the title tooltip", async () => {
       expect.assertions(1);
-      const props = twoResourcesShareProps();
+      const props = twoResourcesShareProps({ resourceNames: ["RB", "RA"] });
       mockContextRequest(jest.fn());
 
       await act(() => (page = new ShareDialogPage(context, props)));
 
       // Regression: controlled-mode ACOs expose only `metadata.name`, so the tooltip must not
-      // resolve to bare commas.
-      expect(page.titleTooltip).toBe("RA, RB");
+      // resolve to blank lines.
+      expect(page.titleTooltipItems).toEqual(["• RA", "• RB"]);
     });
   });
 
