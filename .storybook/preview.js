@@ -42,11 +42,10 @@ function withStylesheet(Story, context) {
   );
 };
 
-export const globalTypes = {
+const globalTypes = {
   locale: {
     name: 'Locale',
     description: 'Internationalization locale',
-    defaultValue: 'en-GB',
     toolbar: {
       icon: 'globe',
       items: [
@@ -74,7 +73,6 @@ export const globalTypes = {
   themes: {
     name: 'Theme',
     description: 'Theme switcher',
-    defaultValue: 'default',
     toolbar: {
       icon: 'photo',
       items: [
@@ -88,7 +86,12 @@ export const globalTypes = {
   }
 }
 
-export const parameters = {
+const initialGlobals = {
+  locale: 'en-GB',
+  themes: 'default',
+};
+
+const parameters = {
   options: {
     storySort: {
       order: [
@@ -108,4 +111,6 @@ export const parameters = {
   }
 };
 
-export const decorators = [withAppContextProvider, withLocalProvider, withStylesheet];
+const decorators = [withAppContextProvider, withLocalProvider, withStylesheet];
+
+export default {decorators, parameters, globalTypes, initialGlobals};

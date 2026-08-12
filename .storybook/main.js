@@ -6,16 +6,13 @@ const config = {
     "../src/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)",
   ],
+
   addons: [
     "@storybook/addon-links",
-    {
-      name: "@storybook/addon-essentials",
-      options: {
-        backgrounds: false,
-      },
-    },
+    "@storybook/addon-docs",
     "@storybook/addon-webpack5-compiler-swc",
   ],
+
   core: {
     disableTelemetry: true,
   },
@@ -29,14 +26,19 @@ const config = {
 
   framework: {
     name: "@storybook/react-webpack5",
-    options: { fastRefresh: true },
   },
+
   webpackFinal: async (config) => {
-    const fileLoaderRule = config.module?.rules?.find((rule) => {
-      if (rule instanceof Object && "test" in rule) {
-        return rule.test?.toString().includes("svg");
-      }
-    });
+    // Find Storybook's built-in asset rule handling SVG files by behavior (its test regexp
+    // matches ".svg"), so the lookup survives internal renames across Storybook versions.
+    const fileLoaderRule = config.module?.rules?.find(
+      (rule) => rule instanceof Object && rule.test instanceof RegExp && rule.test.test(".svg"),
+    );
+    if (!fileLoaderRule) {
+      throw new Error(
+        "Storybook's built-in SVG file loader rule was not found: the @svgr/webpack override in .storybook/main.js must be updated for this Storybook version.",
+      );
+    }
 
     config.module?.rules?.push(
       // Reapply the existing rule, but only for svg imports ending in ?url
@@ -87,6 +89,10 @@ const config = {
 
     return config;
   },
+
+  features: {
+    backgrounds: false
+  }
 };
 
 export default config;
