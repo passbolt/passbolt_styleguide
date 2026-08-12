@@ -48,6 +48,21 @@ class ShadowDomQueryService {
   }
 
   /**
+   * Check if `node` is `ancestor` or one of its descendants, through shadow dom boundaries.
+   * @param {Document|ShadowRoot|Element} ancestor The containing candidate.
+   * @param {Node} node The node to look for.
+   * @return {boolean} true if `ancestor` contains `node`.
+   */
+  static containsDeep(ancestor, node) {
+    if (ancestor === node || ancestor.contains(node)) {
+      return true;
+    }
+
+    const shadowRoots = ShadowRootCacheService.getCachedShadowRoots(ancestor);
+    return shadowRoots.some((shadowRoot) => ShadowDomQueryService.containsDeep(shadowRoot, node));
+  }
+
+  /**
    * Check if an ancestor (including shadow roots) of `element` matches the given selector.
    * @param {Element} element The element from which to start the search.
    * @param {string} selector The selector.

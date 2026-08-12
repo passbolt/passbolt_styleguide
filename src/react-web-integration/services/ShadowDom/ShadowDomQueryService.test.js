@@ -136,6 +136,87 @@ describe("ShadowDomQueryService", () => {
     });
   });
 
+  describe("ShadowDomQueryService::containsDeep", () => {
+    it("should return true when the node is the ancestor itself", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<form></form>";
+      const form = document.querySelector("form");
+
+      expect(ShadowDomQueryService.containsDeep(form, form)).toBe(true);
+    });
+
+    it("should return true for a child of the ancestor", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<form><div><input type='text'/></div></form>";
+      const form = document.querySelector("form");
+      const input = document.querySelector("input");
+
+      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(true);
+    });
+
+    it("should return true for a node inside a shadow root of the ancestor", () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = "<form></form>";
+      const form = document.querySelector("form");
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      const input = document.createElement("input");
+      shadowRoot.appendChild(input);
+      form.appendChild(host);
+
+      expect(form.contains(input)).toBe(false);
+      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(true);
+    });
+
+    it("should return true for a node inside nested shadow roots of the ancestor", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<form></form>";
+      const form = document.querySelector("form");
+      const outerHost = document.createElement("div");
+      const outerRoot = outerHost.attachShadow({ mode: "open" });
+      form.appendChild(outerHost);
+      const innerHost = document.createElement("div");
+      const innerRoot = innerHost.attachShadow({ mode: "open" });
+      outerRoot.appendChild(innerHost);
+      const input = document.createElement("input");
+      innerRoot.appendChild(input);
+
+      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(true);
+    });
+
+    it("should return false for a node outside the ancestor", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<form></form><div><input type='text'/></div>";
+      const form = document.querySelector("form");
+      const input = document.querySelector("input");
+
+      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(false);
+    });
+
+    it("should return false for a node inside a shadow root that is not under the ancestor", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<form></form>";
+      const form = document.querySelector("form");
+      const host = document.createElement("div");
+      host.attachShadow({ mode: "open" });
+      form.appendChild(host);
+
+      const otherHost = document.createElement("div");
+      const otherRoot = otherHost.attachShadow({ mode: "open" });
+      const input = document.createElement("input");
+      otherRoot.appendChild(input);
+      document.body.appendChild(otherHost);
+
+      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(false);
+    });
+  });
+
   describe("ShadowDomQueryService::hasAncestorMatchingDeep", () => {
     it("should return true when an ancestor of the element matches", () => {
       expect.assertions(1);
