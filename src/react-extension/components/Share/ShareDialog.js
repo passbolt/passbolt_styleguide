@@ -833,7 +833,7 @@ class ShareDialog extends Component {
     const hasNoOwner = !isReadOnly && this.hasNoOwner();
     return (
       <DialogWrapper
-        className="share-dialog"
+        className={`share-dialog${isReadOnly ? " read-only" : ""}`}
         title={this.getTitle()}
         subtitle={this.getSubtitle()}
         tooltip={this.getTooltip()}

@@ -610,6 +610,19 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       expect(props.onConfirm).toHaveBeenCalledTimes(1);
       expect(props.onConfirm.mock.calls[0][0]).toEqual([]);
     });
+
+    it("As LU in read-only mode I see the dialog flagged read-only, the styles fade the select carets on it", async () => {
+      expect.assertions(2);
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, { ...controlledModeProps(), readOnly: true })));
+
+      expect(page.dialogWrapper.classList.contains("read-only")).toBe(true);
+
+      await act(() => (page = new ShareDialogPage(context, controlledModeProps())));
+
+      expect(page.dialogWrapper.classList.contains("read-only")).toBe(false);
+    });
   });
 
   describe("Group members expansion", () => {

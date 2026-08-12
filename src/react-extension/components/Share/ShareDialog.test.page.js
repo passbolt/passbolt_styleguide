@@ -66,6 +66,13 @@ export default class ShareDialogPage {
   get form() {
     return this._page.container.querySelector(".share-form");
   }
+
+  /**
+   * Returns the dialog wrapper element, carrying the mode classes the styles hook onto
+   */
+  get dialogWrapper() {
+    return this._page.container.querySelector(".share-dialog");
+  }
   /**
    * Returns the dialog close element
    */
