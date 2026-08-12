@@ -40,7 +40,7 @@ describe("ShareVariesDetails", () => {
     expect.assertions(1);
     const { container } = renderComponent({ 0: [], 1: ["cakephp"], 7: ["apache"], 15: [] });
 
-    expect(lines(container)).toEqual(["2 permissions vary:", "• apache (Can edit)", "• cakephp (Can read)"]);
+    expect(lines(container)).toEqual(["2 permissions vary:", "• apache(Can edit)", "• cakephp(Can read)"]);
   });
 
   it("renders the items the recipient has no permission on under no access", () => {
@@ -49,9 +49,9 @@ describe("ShareVariesDetails", () => {
 
     expect(lines(container)).toEqual([
       "3 permissions vary:",
-      "• apache (Can read)",
-      "• nginx (No access)",
-      "• redis (Is owner)",
+      "• apache(Can read)",
+      "• nginx(No access)",
+      "• redis(Is owner)",
     ]);
   });
 
@@ -59,7 +59,7 @@ describe("ShareVariesDetails", () => {
     expect.assertions(1);
     const { container } = renderComponent({ 0: [], 1: ["zulu"], 7: ["alpha"], 15: [] });
 
-    expect(lines(container)).toEqual(["2 permissions vary:", "• alpha (Can edit)", "• zulu (Can read)"]);
+    expect(lines(container)).toEqual(["2 permissions vary:", "• alpha(Can edit)", "• zulu(Can read)"]);
   });
 
   it("truncates the lines at three items and warns that there are more", () => {
@@ -68,9 +68,9 @@ describe("ShareVariesDetails", () => {
 
     expect(lines(container)).toEqual([
       "5 permissions vary:",
-      "• alpha (Can read)",
-      "• bravo (Can edit)",
-      "• charlie (Is owner)",
+      "• alpha(Can read)",
+      "• bravo(Can edit)",
+      "• charlie(Is owner)",
       "and more...",
     ]);
   });
@@ -81,9 +81,18 @@ describe("ShareVariesDetails", () => {
 
     expect(lines(container)).toEqual([
       "3 permissions vary:",
-      "• alpha (Can read)",
-      "• bravo (Can read)",
-      "• charlie (Can edit)",
+      "• alpha(Can read)",
+      "• bravo(Can read)",
+      "• charlie(Can edit)",
     ]);
+  });
+
+  it("splits a line into a truncatable name and a permission label kept intact", () => {
+    expect.assertions(2);
+    const { container } = renderComponent({ 0: [], 1: ["a-very-long-resource-name"], 7: [], 15: [] });
+    const line = container.querySelector(".share-varies-details .varies-detail");
+
+    expect(line.querySelector(".ellipsis").textContent).toEqual("• a-very-long-resource-name");
+    expect(line.querySelector(".varies-detail-permission").textContent).toEqual("(Can read)");
   });
 });

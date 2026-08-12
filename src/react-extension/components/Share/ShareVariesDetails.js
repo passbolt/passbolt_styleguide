@@ -50,8 +50,11 @@ class ShareVariesDetails extends Component {
       <span className="share-varies-details">
         <span>{this.props.t("{{count}} permissions vary:", { count: details.length })}</span>
         {displayedDetails.map((detail, index) => (
-          <span key={`${index}-${detail.name}`}>
-            • <strong>{detail.name}</strong> ({this.permissionLabels[detail.type]})
+          <span className="varies-detail" key={`${index}-${detail.name}`}>
+            <span className="ellipsis">
+              • <strong>{detail.name}</strong>
+            </span>
+            <span className="varies-detail-permission">({this.permissionLabels[detail.type]})</span>
           </span>
         ))}
         {details.length > displayedDetails.length && (
