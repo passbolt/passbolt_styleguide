@@ -8,7 +8,6 @@ const config = {
   ],
 
   addons: [
-    "@storybook/addon-links",
     "@storybook/addon-docs",
     "@storybook/addon-webpack5-compiler-swc",
   ],
