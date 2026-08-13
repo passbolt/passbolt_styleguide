@@ -52,6 +52,7 @@ const ALLOWED_PATHNAMES = [
   "/app/administration/mfa-policy-teasing",
   "/app/administration/users-directory-teasing",
   "/app/administration/scim-teasing",
+  "/app/administration/offline",
   "/app/passwords",
   "/app/users",
   "/app/settings/profile",
