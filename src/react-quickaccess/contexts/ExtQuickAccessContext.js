@@ -56,9 +56,9 @@ export class ExtQuickAccessContextProvider extends React.Component {
   async initialize() {
     try {
       await this.checkPluginIsConfigured();
-      this.getUserSettings();
-      this.getLocale();
       await this.props.activeSessionLocalStorageContext.updateLocalStorage();
+      await this.getUserSettings();
+      await this.getLocale();
       const siteSettings = this.props.activeSession.isServerReachable
         ? await this.findAndUpdateSiteSettings()
         : await this.getOrFindSiteSettings();
