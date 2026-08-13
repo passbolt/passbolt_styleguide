@@ -85,7 +85,7 @@ class HomePage extends React.Component {
      * than ongoing resource management — The local storage should be updated only the first time the application
      * is open.
      */
-    if (!HomePage.isInitialised) {
+    if (!HomePage.isInitialised && this.props.activeSession.isSessionOnline) {
       this.props.resourcesLocalStorageContext.updateLocalStorage();
       HomePage.isInitialised = true;
     }
