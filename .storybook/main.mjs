@@ -2,8 +2,6 @@
 const config = {
   stories: [
     "./stories/**/*.mdx",
-    "./stories/**/*.stories.@(js|jsx|ts|tsx)",
-    "../src/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)",
   ],
 
@@ -14,6 +12,8 @@ const config = {
 
   core: {
     disableTelemetry: true,
+    // Hide the "Learn what's new in Storybook" notification in this shared styleguide.
+    disableWhatsNewNotifications: true,
   },
 
   staticDirs: ["../src", { from: "../src", to: "/webAccessibleResources" }, { from: "../build/css", to: "/css" }],
@@ -35,7 +35,7 @@ const config = {
     );
     if (!fileLoaderRule) {
       throw new Error(
-        "Storybook's built-in SVG file loader rule was not found: the @svgr/webpack override in .storybook/main.js must be updated for this Storybook version.",
+        "Storybook's built-in SVG file loader rule was not found: the @svgr/webpack override in .storybook/main.mjs must be updated for this Storybook version.",
       );
     }
 
@@ -90,7 +90,11 @@ const config = {
   },
 
   features: {
-    backgrounds: false
+    backgrounds: false,
+    // The onboarding checklist targets first-time Storybook setups; hide its
+    // "Get started" sidebar widget and "Guide" menu entry in this shared styleguide.
+    sidebarOnboardingChecklist: false,
+    menuOnboardingChecklist: false
   }
 };
 
