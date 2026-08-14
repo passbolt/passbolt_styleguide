@@ -57,21 +57,19 @@ describe("FormExtractionService", () => {
     });
 
     it("should return a skeleton for a form with a viewable text field", () => {
-      expect.assertions(6);
+      expect.assertions(4);
 
       jest.spyOn(ElementVisibilityService, "isElementViewable").mockReturnValue(true);
       document.body.innerHTML = "<form><input type='text'/></form>";
       const form = document.querySelector("form");
-      const input = document.querySelector("input");
 
       const result = FormExtractionService.aggregateForms();
 
       expect(result.length).toEqual(1);
       expect(result[0].containerElement).toBe(form);
       expect(result[0].isPseudoForm).toBe(false);
-      expect(result[0].fields.length).toEqual(1);
-      expect(result[0].fields[0].element).toBe(input);
-      expect(result[0].fields[0].isViewable).toBe(true);
+      // aggregateForms emits a skeleton; fields[] is populated downstream by FieldAggregatorService.
+      expect(result[0].fields).toEqual([]);
     });
 
     it("should keep the custom wrapper when a form is nested inside of it", () => {

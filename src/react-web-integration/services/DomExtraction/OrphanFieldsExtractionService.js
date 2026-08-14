@@ -67,9 +67,13 @@ class OrphanFieldsExtractionService {
     // widened container, which would also pull in non-orphan inputs belonging to real forms.
     for (const container of containers) {
       if (OrphanFieldsExtractionService.isValidPseudoForm(container)) {
+        // Emit a container skeleton (fields:[]). Fields are populated uniformly by
+        // FieldAggregatorService — a TEXT_FIELDS re-scan of the container — NOT from the CTA cluster
+        // seeds, so orphan inputs the classifier missed (e.g. a login field with no type/name) are
+        // still captured.
         formElements.push({
           containerElement: container.element,
-          fields: container.fields.map(({ element }) => ({ fieldElement: element })),
+          fields: [],
           isPseudoForm: true,
         });
       }

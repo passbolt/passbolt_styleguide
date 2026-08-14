@@ -1774,16 +1774,18 @@ describe("InformManager", () => {
 
     describe("InFormManager::retryMountHost", () => {
       let destroySpy;
-      let findAndSetAuthenticationFieldsSpy;
+      let ensureHostMountedSpy;
 
       beforeEach(() => {
         jest.useFakeTimers();
         destroySpy = jest.spyOn(InFormManager, "destroy");
-        findAndSetAuthenticationFieldsSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields");
+        // Spy only (real impl by default). The remount is now driven by ensureHostMounted, not by the
+        // classification (findAndSetAuthenticationFields) — that is the security/extraction decoupling.
+        ensureHostMountedSpy = jest.spyOn(InFormManager, "ensureHostMounted");
       });
 
       afterEach(() => {
-        findAndSetAuthenticationFieldsSpy.mockRestore();
+        ensureHostMountedSpy.mockRestore();
         destroySpy.mockRestore();
       });
 
@@ -1802,7 +1804,7 @@ describe("InformManager", () => {
         const otherElement = document.createElement("div");
         document.body.append(otherElement);
         otherElement.appendChild(informManager.host);
-        findAndSetAuthenticationFieldsSpy.mockImplementation(() => {});
+        ensureHostMountedSpy.mockImplementation(() => {});
 
         InFormManager.retryMountHost();
 
@@ -1817,7 +1819,7 @@ describe("InformManager", () => {
         let informManager;
         await act(async () => (informManager = new InformManagerPage()));
 
-        // Move the host into another element; the real findAndSetAuthenticationFields moves it back.
+        // Move the host into another element; the real ensureHostMounted moves it back.
         const otherElement = document.createElement("div");
         document.body.append(otherElement);
         otherElement.appendChild(informManager.host);
@@ -1826,6 +1828,82 @@ describe("InformManager", () => {
         jest.advanceTimersByTime(100);
 
         expect(destroySpy).not.toHaveBeenCalled();
+        expect(informManager.host.parentNode).toBe(document.body);
+      });
+
+      it("As LU it remounts the host WITHOUT triggering the classification/extraction (security ≠ extraction)", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        await act(async () => new InformManagerPage());
+
+        // Neutralize the actual remount so the retry setTimeout stays inert; we only assert what is called.
+        ensureHostMountedSpy.mockImplementation(() => {});
+        const scanSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields");
+        const credentialsSpy = jest.spyOn(InFormManager, "findAndSetCredentialsFormFields");
+
+        InFormManager.retryMountHost();
+
+        expect(scanSpy).not.toHaveBeenCalled();
+        expect(credentialsSpy).not.toHaveBeenCalled();
+
+        scanSpy.mockRestore();
+        credentialsSpy.mockRestore();
+      });
+    });
+
+    describe("InFormManager::_ensureHostIntegrity", () => {
+      it("should return true and NOT remount when the host is at a valid location", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        await act(async () => new InformManagerPage());
+        jest.spyOn(InFormManager, "isHostInValidLocation").mockReturnValue(true);
+        const retrySpy = jest.spyOn(InFormManager, "retryMountHost").mockImplementation(() => {});
+
+        const result = InFormManager._ensureHostIntegrity();
+
+        expect(result).toBe(true);
+        expect(retrySpy).not.toHaveBeenCalled();
+
+        InFormManager.isHostInValidLocation.mockRestore();
+        retrySpy.mockRestore();
+      });
+
+      it("should return false and remount when the host has been moved (anti-tampering)", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        await act(async () => new InformManagerPage());
+        jest.spyOn(InFormManager, "isHostInValidLocation").mockReturnValue(false);
+        const retrySpy = jest.spyOn(InFormManager, "retryMountHost").mockImplementation(() => {});
+
+        const result = InFormManager._ensureHostIntegrity();
+
+        expect(result).toBe(false);
+        expect(retrySpy).toHaveBeenCalledTimes(1);
+
+        InFormManager.isHostInValidLocation.mockRestore();
+        retrySpy.mockRestore();
+      });
+    });
+
+    describe("InFormManager::ensureHostMounted", () => {
+      it("should move the host back to the given container when it has drifted", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        let informManager;
+        await act(async () => (informManager = new InformManagerPage()));
+
+        // Move the host out; ensureHostMounted with the default container (body) puts it back.
+        const otherElement = document.createElement("div");
+        document.body.append(otherElement);
+        otherElement.appendChild(informManager.host);
+        expect(informManager.host.parentNode).toBe(otherElement);
+
+        InFormManager.ensureHostMounted(document.body);
+
         expect(informManager.host.parentNode).toBe(document.body);
       });
     });
@@ -1900,6 +1978,61 @@ describe("InformManager", () => {
 
       InFormManager.onShadowMutation(otherShadowRoot, [], true);
       expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+    });
+
+    it("should NOT queue an expensive field scan for a non-relevant document mutation (only the host check)", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
+
+      // A childList mutation adding a plain <div> (no field) — irrelevant.
+      const div = document.createElement("div");
+      InFormManager.onShadowMutation(document, [{ type: "childList", addedNodes: [div], removedNodes: [] }], false);
+
+      // The debounce is still scheduled (host-tampering check must run on every document batch)...
+      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+      // ...but no expensive extraction is queued for an unrelated mutation.
+      expect(InFormManager._pendingFieldScan).toBe(false);
+    });
+
+    it("should queue an expensive field scan for a relevant document mutation", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
+
+      // A childList mutation adding an <input> (matches the field selector) — relevant.
+      const input = document.createElement("input");
+      InFormManager.onShadowMutation(document, [{ type: "childList", addedNodes: [input], removedNodes: [] }], false);
+
+      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+      expect(InFormManager._pendingFieldScan).toBe(true);
+    });
+
+    it("should queue a field scan when a pre-rendered login modal is revealed via its wrapper (visibility attribute)", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
+
+      // mydealz-style reveal: the login form pre-exists in the DOM, hidden; opening the modal only
+      // toggles `style` on its wrapper — no childList mutation, no mutation on the fields themselves.
+      const modalWrapper = document.createElement("div");
+      modalWrapper.appendChild(document.createElement("input"));
+      InFormManager.onShadowMutation(
+        document,
+        [{ type: "attributes", attributeName: "style", target: modalWrapper }],
+        false,
+      );
+
+      expect(InFormManager._pendingFieldScan).toBe(true);
     });
   });
 
@@ -2005,6 +2138,35 @@ describe("InformManager", () => {
       const div = document.createElement("div");
 
       expect(InFormManager._attributeMutationAffectsField([{ type: "attributes", target: div }])).toBe(false);
+    });
+
+    it("should return true when a visibility attribute changes on a container holding a field (pre-rendered modal reveal)", async () => {
+      expect.assertions(2);
+
+      await act(async () => new InformManagerPage());
+      const wrapper = document.createElement("div");
+      wrapper.appendChild(document.createElement("input"));
+
+      // v-show style reveal: display toggled via `style` on the wrapper, the input itself gets no mutation.
+      expect(
+        InFormManager._attributeMutationAffectsField([{ type: "attributes", attributeName: "style", target: wrapper }]),
+      ).toBe(true);
+      expect(
+        InFormManager._attributeMutationAffectsField([{ type: "attributes", attributeName: "class", target: wrapper }]),
+      ).toBe(true);
+    });
+
+    it("should return false when a non-visibility attribute changes on a container holding a field", async () => {
+      expect.assertions(1);
+
+      await act(async () => new InformManagerPage());
+      const wrapper = document.createElement("div");
+      wrapper.appendChild(document.createElement("input"));
+
+      // Identity attributes only matter ON the field itself, not on a container — no needless re-scan.
+      expect(
+        InFormManager._attributeMutationAffectsField([{ type: "attributes", attributeName: "name", target: wrapper }]),
+      ).toBe(false);
     });
   });
 

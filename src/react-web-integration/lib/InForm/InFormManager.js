@@ -17,7 +17,11 @@ import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
-import { SHADOW_RESCAN_FIELD_SELECTOR } from "./InFormFieldDictionary";
+import {
+  SHADOW_RESCAN_FIELD_SELECTOR,
+  FIELD_ATTRIBUTES_TO_WATCH,
+  CONTAINER_VISIBILITY_ATTRIBUTES,
+} from "./InFormFieldDictionary";
 import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
 import DomUtils from "../Dom/DomUtils";
 import debounce from "debounce-promise";
@@ -26,6 +30,9 @@ import ClipboardServiceWorkerService from "../../../shared/services/serviceWorke
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
 import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
 import FormExtractionService from "../../services/DomExtraction/FormExtractionService";
+import OrphanFieldsExtractionService from "../../services/DomExtraction/OrphanFieldsExtractionService";
+import FieldAggregatorService from "../../services/DomExtraction/FieldAggregatorService";
+import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
 import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
 
 const Z_INDEX_MAX = 2147483647;
@@ -48,6 +55,12 @@ class InFormManager {
     this.credentialsFormFields = [];
     /** Debounced re-scan of auth fields */
     this.updateAuthenticationFieldsDebounce = null;
+    /**
+     * Latches when a mutation batch actually touched a credential-relevant node/attribute. Gates the
+     * expensive extraction inside the debounced callback: DOM churn from dynamic pages (feeds/ads)
+     * then triggers only the cheap host-tampering check, never a full re-scan.
+     */
+    this._pendingFieldScan = false;
     /** Unsubscribe from the shadow dom mutations */
     this._unsubscribeShadowMutations = null;
 
@@ -124,6 +137,17 @@ class InFormManager {
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
 
     ShadowDomFocusHealerService.installFocusinHealer();
+
+    /*
+     * Configure the shadow observer to also watch field-relevance attributes BEFORE the first shadow
+     * walk (findAndSetAuthenticationFields) installs the observers. The service stays field-agnostic;
+     * the attribute filter is owned here on the InForm side.
+     */
+    ShadowMutationObserverService.configureObserveOptions({
+      attributes: true,
+      attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
+      attributeOldValue: true,
+    });
 
     this.findAndSetAuthenticationFields();
     this.handleDomChange();
@@ -236,6 +260,24 @@ class InFormManager {
   }
 
   /**
+   * Ensure the shadow host exists and is mounted at the correct target: create it on first call,
+   * otherwise move it back to `container` if it drifted.
+   *
+   * Security-relevant: this is also the sole remount action of the anti-tampering path
+   * ({@link retryMountHost} / {@link _ensureHostIntegrity}), so it must NOT depend on a field re-scan.
+   * The target defaults to the container of the currently known CTA fields (falling back to
+   * document.body via {@link getContainerElement}), so a remount never needs to re-detect fields.
+   * @param {HTMLElement} [container] The element the host should be mounted into.
+   */
+  ensureHostMounted(container = this.getContainerElement(this.callToActionFields.map(({ field }) => field))) {
+    if (!this.host) {
+      this.createAndInsertShadowRootWithHost(container);
+    } else if (this.host.parentNode !== container) {
+      container.appendChild(this.host);
+    }
+  }
+
+  /**
    * Find authentication callToActionFields in the document and set them as object properties
    */
   findAndSetInputFields() {
@@ -250,12 +292,9 @@ class InFormManager {
 
     const container = this.getContainerElement(newUsernameFields, newPasswordFields, newOTPFields);
 
-    // Ensure the host exists and move it to the correct mount target if needed.
-    if (!this.host) {
-      this.createAndInsertShadowRootWithHost(container);
-    } else if (this.host.parentNode !== container) {
-      container.appendChild(this.host);
-    }
+    // Ensure the host exists and sits at the correct mount target (delegated — same action the
+    // anti-tampering remount reuses).
+    this.ensureHostMounted(container);
 
     /**
      * A function factory to map a field to an existing field or create a new one
@@ -264,13 +303,7 @@ class InFormManager {
      */
     const mapField = (fieldType) => (field) => {
       const existingField = this.callToActionFields.find(({ field: ctaField }) => ctaField === field);
-
-      if (existingField) {
-        existingField.cacheViewableRect();
-        return existingField;
-      }
-
-      return new InFormCallToActionField(field, fieldType, this.shadowRoot);
+      return existingField ?? new InFormCallToActionField(field, fieldType, this.shadowRoot);
     };
 
     let newCTAFields = [
@@ -284,6 +317,10 @@ class InFormManager {
     } else {
       this.clean();
     }
+
+    // Cache each field's viewport rect once (single field-layer measurement). The orphan pipeline
+    // recycles it for spatial clustering instead of re-measuring layout.
+    newCTAFields.forEach((cta) => cta.cacheViewableRect());
 
     this.callToActionFields = newCTAFields;
   }
@@ -305,72 +342,76 @@ class InFormManager {
   }
 
   /**
-   * Find authentication formFields in the document and set them as object properties
+   * Find credentials form containers (real <form>/custom-forms AND orphan pseudo-forms) and set them
+   * as object properties. Thin orchestrator: discover → delegate orphan recovery → materialize.
    */
   findAndSetCredentialsFormFields() {
-    /**
-     * We find the form containers in the DOM.
-     * If it was previously found, we reuse the same InformFormField, otherwise we create one
-     */
-    const formElements = FormExtractionService.aggregateForms();
+    const previous = this.credentialsFormFields ?? [];
 
-    if (formElements.length > 0) {
-      this.credentialsFormFields = this._materialize(formElements);
-    } else {
-      this.credentialsFormFields = [];
-    }
+    // Process 1 — explicit containers → skeletons { containerElement, fields:[], isPseudoForm:false }.
+    let formElements = FormExtractionService.aggregateForms();
+
+    // Process 2 — orphan chain: append pseudo-form skeletons (isPseudoForm:true) in place, seeded from
+    // the credential CTA fields (recycling their cached viewable rect). No-op on the dominant case
+    // (real <form> / no orphan credential field).
+    const discoveredFields = this.callToActionFields.map((cta) => ({
+      element: cta.field,
+      viewableRect: cta.viewableRect,
+    }));
+    OrphanFieldsExtractionService.aggregatePseudoForms(discoveredFields, formElements);
+
+    // Field population — fills each container's fields[] uniformly (TEXT_FIELDS re-scan, independent of
+    // the CTA classifier) + nested-ownership annotation, and purges containers left with no field.
+    formElements = FieldAggregatorService.aggregateFields(formElements);
+
+    // Materialization: records → InFormCredentialsFormField instances (reused per container).
+    this.credentialsFormFields = this._materialize(formElements, previous);
   }
 
   /**
-   * Map each form container to an InFormCredentialsFormField instance.
-   * @param {Array<{ containerElement: Element, fields: Array, isPseudoForm: boolean }>} formElements The discovered form containers.
+   * Map each container record to an InFormCredentialsFormField instance, reusing existing instances
+   * per container (preserves identity/CTA across re-scans) and deriving the credential slots by
+   * attaching the typed CTA fields to the container (shadow-piercing). Destroys the instances that are
+   * no longer reported (removes the stale CTA — no leak on SPA churn).
+   * @param {Array<{ containerElement: Element, isPseudoForm: boolean }>} formElements The discovered containers.
+   * @param {InFormCredentialsFormField[]} previous The instances from the previous scan.
    * @return {InFormCredentialsFormField[]}
    * @private
    */
-  _materialize(formElements) {
-    // Get all fields, filtered by their types
-    const { usernameCtaFields, passwordCtaFields } = this.callToActionFields.reduce(
-      (acc, ctaField) => {
-        if (ctaField.fieldType === "username") {
-          acc.usernameCtaFields.push(ctaField);
-        } else if (ctaField.fieldType === "password") {
-          acc.passwordCtaFields.push(ctaField);
-        }
-        return acc;
-      },
-      { usernameCtaFields: [], passwordCtaFields: [] },
-    );
-
-    const next = formElements.map((formElement) => {
-      const existingField = this.credentialsFormFields.find(({ field }) => field === formElement.containerElement);
-
-      if (!existingField) {
-        // We try to find username and password fields contained in the new form container
-        const usernameField = usernameCtaFields.find((ctaField) =>
-          formElement.containerElement.contains(ctaField.field),
-        );
-        const passwordField = passwordCtaFields.find((ctaField) =>
-          formElement.containerElement.contains(ctaField.field),
-        );
-
-        return new InFormCredentialsFormField(formElement.containerElement, {
-          usernameField: usernameField?.field,
-          passwordField: passwordField?.field,
-          isPseudoForm: formElement.isPseudoForm,
-        });
+  _materialize(formElements, previous) {
+    const next = formElements.map((record) => {
+      // Reuse per container: preserves identity (and the attached CTA) between re-scans.
+      const existing = previous.find(({ field }) => field === record.containerElement);
+      if (existing) {
+        return existing;
       }
 
-      return existingField;
+      // Attach the typed CTA fields to the record container (shadow-piercing). The spatial cluster
+      // already decided who goes together → intra-container pairing is trivial (a 2nd password of the
+      // same container is a confirm/repeat).
+      const ctasIn = (type) =>
+        this.callToActionFields
+          .filter(
+            (cta) => cta.fieldType === type && ShadowDomQueryService.containsDeep(record.containerElement, cta.field),
+          )
+          .map((cta) => cta.field);
+
+      const [passwordField, ...confirmPasswordFields] = ctasIn("password");
+      const [usernameField] = ctasIn("username");
+      const [otpField] = ctasIn("otp");
+
+      return new InFormCredentialsFormField(record.containerElement, {
+        usernameField,
+        passwordField,
+        isPseudoForm: record.isPseudoForm,
+        otpField,
+        confirmPasswordFields,
+      });
     });
 
-    // Destroy the instances that no longer exist
-    this.credentialsFormFields.filter((instance) => !next.includes(instance)).forEach((instance) => instance.destroy());
+    // Destroy instances no longer reported (removes the stale CTA — no leak on SPA churn).
+    previous.filter((instance) => !next.includes(instance)).forEach((instance) => instance.destroy());
 
-    for (let field of this.credentialsFormFields) {
-      if (!next.includes(field)) {
-        field.destroy();
-      }
-    }
     return next;
   }
 
@@ -398,6 +439,20 @@ class InFormManager {
   }
 
   /**
+   * Security domain (anti-tampering): verify our host is still at a valid location and remount it if
+   * it has been moved. Runs on every DOM batch, independently of any field change. Returns whether the
+   * host is usable right now (false while a remount/destroy is in flight → the caller must not extract).
+   * @returns {boolean}
+   */
+  _ensureHostIntegrity() {
+    if (this.isHostInValidLocation()) {
+      return true;
+    }
+    this.retryMountHost();
+    return false;
+  }
+
+  /**
    * Remount the host up to 3 times if it is moved out of the DOM
    * If the host keeps being moved out, it is destroyed.
    * @param {number} attempt Remount counter.
@@ -405,8 +460,10 @@ class InFormManager {
   retryMountHost(attempt = 1) {
     console.warn(`The host has been moved out of the DOM, retrying... (${attempt}/${HOST_MOUNT_MAX_RETRIES})`);
 
-    // Remount the host
-    this.findAndSetAuthenticationFields();
+    // Remount the host only (security). The remount must NOT drag the expensive classification: if the
+    // same batch also changed a field, the field-relevance gate has latched _pendingFieldScan and the
+    // extraction runs on the follow-up tick. We only re-attach the CTA click handlers here.
+    this.ensureHostMounted();
     this.handleInformCallToActionClickEvent();
 
     // Wait N milliseconds before checking again
@@ -429,17 +486,27 @@ class InFormManager {
    */
   handleDomChange() {
     const updateAuthenticationFields = () => {
-      /**
-       * The only way to prevent an attacker trying to move the host into another parent element and add opacity.
-       * The host must be either in the body or inside a dialog. Anything else is considered tampering: we try to
-       * re-mount the host a few times before giving up and destroying it.
+      /*
+       * Security domain first, on EVERY batch: the host must be either in the body or inside a dialog.
+       * Anything else is considered tampering — remount a few times, then destroy. Cheap, and never
+       * gated. While a remount/destroy is in flight the host is not usable, so we skip extraction.
        */
-      if (this.isHostInValidLocation()) {
-        this.findAndSetAuthenticationFields();
-        this.handleInformCallToActionClickEvent();
-      } else {
-        this.retryMountHost();
+      if (!this._ensureHostIntegrity()) {
+        return;
       }
+
+      /*
+       * Extraction/classification domain: only pay for the expensive re-classification (full DOM/shadow
+       * traversal + layout) when the batch that scheduled us actually changed the credential field set.
+       * Otherwise we would recompute an identical result on every unrelated mutation (dynamic pages
+       * churn the DOM continuously).
+       */
+      if (!this._pendingFieldScan) {
+        return;
+      }
+      this._pendingFieldScan = false;
+      this.findAndSetAuthenticationFields();
+      this.handleInformCallToActionClickEvent();
     };
 
     // Use requestIdleCallback when available to schedule work during browser idle periods,
@@ -485,20 +552,26 @@ class InFormManager {
       return;
     }
 
-    /*
-     * If the mutation is on the document, always re-scan.
-     */
-    if (root.nodeType === Node.DOCUMENT_NODE) {
-      this.updateAuthenticationFieldsDebounce();
-    } else if (
+    // Does this batch actually touch a credential-relevant node or attribute?
+    const affectsFields =
       shadowRootsChanged ||
       this._mutationsAffectAuthenticationFields(mutations) ||
-      this._attributeMutationAffectsField(mutations)
-    ) {
-      /*
-       * Otherwise, if the mutation is on a shadow root, re-scan only when the change is relevant.
-       */
+      this._attributeMutationAffectsField(mutations);
 
+    if (root.nodeType === Node.DOCUMENT_NODE) {
+      /*
+       * Document scope: always schedule — the debounced callback runs the cheap host-tampering check
+       * on every batch. Latch whether this batch also warrants the expensive extraction, so unrelated
+       * light-DOM churn no longer forces a full re-scan.
+       */
+      this._pendingFieldScan = this._pendingFieldScan || affectsFields;
+      this.updateAuthenticationFieldsDebounce();
+    } else if (affectsFields) {
+      /*
+       * Shadow-root scope: schedule only when the change is relevant (a field appeared/disappeared or
+       * a field attribute changed).
+       */
+      this._pendingFieldScan = true;
       this.updateAuthenticationFieldsDebounce();
     }
   }
@@ -523,18 +596,30 @@ class InFormManager {
   }
 
   /**
-   * Filter on attributes mutations and target.
+   * Filter on attributes mutations and target. Two signals:
+   * 1. A watched attribute changed on a field element itself.
+   * 2. A visibility-affecting attribute (style/class/hidden/aria-hidden) changed on a CONTAINER
+   *    holding a field — this is how pre-rendered login modals are revealed (display toggled on the
+   *    wrapper): the fields themselves receive no mutation, so containment is the only signal.
    * @param {MutationRecord[]} mutations
-   * @return {boolean} true if the mutation affects an attribute's field
+   * @return {boolean} true if the mutation may affect the credential field set
    * @private
    */
   _attributeMutationAffectsField(mutations) {
-    return mutations.some(
-      (mutation) =>
-        mutation.type === "attributes" &&
-        mutation.target?.nodeType === Node.ELEMENT_NODE &&
-        mutation.target.matches(SHADOW_RESCAN_FIELD_SELECTOR),
-    );
+    return mutations.some((mutation) => {
+      if (mutation.type !== "attributes" || mutation.target?.nodeType !== Node.ELEMENT_NODE) {
+        return false;
+      }
+
+      if (mutation.target.matches(SHADOW_RESCAN_FIELD_SELECTOR)) {
+        return true;
+      }
+
+      return (
+        CONTAINER_VISIBILITY_ATTRIBUTES.includes(mutation.attributeName) &&
+        Boolean(mutation.target.querySelector(SHADOW_RESCAN_FIELD_SELECTOR))
+      );
+    });
   }
 
   /**

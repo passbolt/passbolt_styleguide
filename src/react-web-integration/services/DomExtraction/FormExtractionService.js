@@ -49,7 +49,8 @@ class FormExtractionService {
 
         const hasViewableFields = fields.some((field) => field.isViewable);
         if (hasViewableFields && fields.length < MAX_FIELDS_PER_CONTAINER) {
-          formElements.push(FormExtractionService._toSkeleton(candidate, fields));
+          // Emit a container skeleton; fields[] is populated uniformly by FieldAggregatorService.
+          formElements.push(FormExtractionService._toSkeleton(candidate));
         }
       }
     }

@@ -14,7 +14,6 @@
 
 import ShadowRootCollectorService from "./ShadowRootCollectorService";
 import ShadowRootCacheService from "./ShadowRootCacheService";
-import { OBSERVE_OPTIONS } from "./ShadowDomDictionary";
 
 class ShadowMutationObserverService {
   /**
@@ -32,6 +31,30 @@ class ShadowMutationObserverService {
    * @type {Set<Function>}
    */
   static _shadowMutationSubscribers = new Set();
+
+  /**
+   * Options passed to every installed MutationObserver. `childList`/`subtree` are always on (shadow
+   * topology + node add/remove); the service is field-agnostic — a consumer (InForm) injects its own
+   * attribute filter via {@link configureObserveOptions}.
+   * @private
+   * @type {MutationObserverInit}
+   */
+  static _observeOptions = { childList: true, subtree: true };
+
+  /**
+   * Configure the attribute-watching part of the observe options. `childList`/`subtree` stay forced
+   * on. Call BEFORE the first observer is installed so the filter applies to every root.
+   * @param {{attributes?: boolean, attributeFilter?: string[], attributeOldValue?: boolean}} [options]
+   */
+  static configureObserveOptions({ attributes = false, attributeFilter, attributeOldValue = false } = {}) {
+    ShadowMutationObserverService._observeOptions = {
+      childList: true,
+      subtree: true,
+      attributes,
+      attributeFilter,
+      attributeOldValue,
+    };
+  }
 
   /**
    * Update the cache for `root` according to the given mutations.
@@ -128,7 +151,7 @@ class ShadowMutationObserverService {
       ShadowMutationObserverService.notifyShadowMutationSubscribers(root, mutations, shadowRootsChanged);
     });
 
-    observer.observe(root, OBSERVE_OPTIONS);
+    observer.observe(root, ShadowMutationObserverService._observeOptions);
     ShadowMutationObserverService._shadowRootsObservers.set(root, observer);
   }
 

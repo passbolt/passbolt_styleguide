@@ -576,8 +576,8 @@ describe("OrphanFieldsExtractionService", () => {
       expect(result).toBe(formElements);
       expect(formElements).toHaveLength(1);
       expect(formElements[0].containerElement).toBe(wrapper);
-      // The record carries its own fields (the cluster seeds), mapped to the scraper's `{ fieldElement }` shape.
-      expect(formElements[0].fields).toEqual([{ fieldElement: input1 }, { fieldElement: input2 }]);
+      // The record is a skeleton (fields:[]); fields are populated downstream by FieldAggregatorService.
+      expect(formElements[0].fields).toEqual([]);
       expect(formElements[0].isPseudoForm).toBe(true);
     });
 
@@ -644,8 +644,8 @@ describe("OrphanFieldsExtractionService", () => {
 
       expect(formElements).toHaveLength(1);
       expect(formElements[0].containerElement).toBe(grandparent);
-      // The merged record carries the fields of both clusters.
-      expect(formElements[0].fields).toEqual([{ fieldElement: inputA }, { fieldElement: inputB }]);
+      // Both clusters dedupe into a single skeleton record; fields are populated by FieldAggregatorService.
+      expect(formElements[0].fields).toEqual([]);
     });
 
     it("should discard a blob container exceeding the density cap", () => {
