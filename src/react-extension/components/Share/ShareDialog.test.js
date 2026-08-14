@@ -523,7 +523,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     });
 
     it("As LU sharing several resources I should see their names listed sorted in the title tooltip", async () => {
-      expect.assertions(1);
+      expect.assertions(2);
       const props = twoResourcesShareProps({ resourceNames: ["RB", "RA"] });
       mockContextRequest(jest.fn());
 
@@ -531,6 +531,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
       // Regression: controlled-mode ACOs expose only `metadata.name`, so the tooltip must not
       // resolve to blank lines.
+      expect(page.titleTooltipHeader).toBe("2 items selected:");
       expect(page.titleTooltipItems).toEqual(["• RA", "• RB"]);
     });
   });

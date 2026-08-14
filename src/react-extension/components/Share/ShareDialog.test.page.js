@@ -60,6 +60,18 @@ export default class ShareDialogPage {
   }
 
   /**
+   * Returns the text of the title info tooltip header, or null when no tooltip is rendered
+   * @returns {null|string}
+   */
+  get titleTooltipHeader() {
+    // `:first-child` matters, the "and more..." line is a class less span as well.
+    const header = this._page.container.querySelector(
+      ".dialog-title-wrapper .tooltip-text .share-details-list > span:not(.share-details-item):first-child",
+    );
+    return header?.textContent ?? null;
+  }
+
+  /**
    * Returns the dialog subtitle
    */
   get subtitle() {

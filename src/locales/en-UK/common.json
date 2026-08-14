@@ -22,6 +22,8 @@
   "{{count}} group will be synchronized._other": "{{count}} groups will be synchronized.",
   "{{count}} items_one": "{{count}} item",
   "{{count}} items_other": "{{count}} items",
+  "{{count}} items selected:_one": "{{count}} item selected:",
+  "{{count}} items selected:_other": "{{count}} items selected:",
   "{{count}} password is going to be exported._one": "{{count}} password is going to be exported.",
   "{{count}} password is going to be exported._other": "{{count}} passwords are going to be exported.",
   "{{count}} permissions vary:_one": "{{count}} permission varies:",

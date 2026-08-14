@@ -16,3 +16,9 @@
     }
   }
 }
+
+// The dialog title tooltip carries the same list as the varies tooltip, so it hugs its content with
+// the padding of .tooltip-portal-text rather than the wider default of .tooltip-text.
+.tooltip .tooltip-text:has(.share-details-list) {
+  padding: .4rem .8rem;
+}

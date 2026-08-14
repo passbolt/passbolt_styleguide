@@ -637,7 +637,9 @@ class ShareDialog extends Component {
       .filter(Boolean)
       .sort((name, otherName) => name.localeCompare(otherName))
       .map((name) => ({ name }));
-    return items.length ? <ShareDetailsList items={items} /> : null;
+    return items.length ? (
+      <ShareDetailsList header={this.translate("{{count}} items selected:", { count: items.length })} items={items} />
+    ) : null;
   }
 
   /**
