@@ -15,7 +15,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
+import SharePermissionRevertButton from "./SharePermissionRevertButton";
 import ShareVariesDetails from "./ShareVariesDetails";
+import ShareChanges from "./Utility/ShareChanges";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import { withTranslation } from "react-i18next";
@@ -24,7 +26,7 @@ import { getUserFormattedName, isUserSuspended } from "../../../shared/utils/use
 import TooltipPortal from "../Common/Tooltip/TooltipPortal";
 import TooltipMessageFingerprintLoading from "../Common/Tooltip/TooltipMessageFingerprintLoading";
 import Fingerprint from "../Common/Fingerprint/Fingerprint";
-import AttentionSVG from "../../../img/svg/attention.svg";
+import InfoSVG from "../../../img/svg/info.svg";
 import FingerprintSVG from "../../../img/svg/fingerprint.svg";
 
 class UserPermissionItem extends Component {
@@ -53,6 +55,7 @@ class UserPermissionItem extends Component {
   bindEventHandlers() {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleRevert = this.handleRevert.bind(this);
     this.onTooltipFingerprintMouseHover = this.onTooltipFingerprintMouseHover.bind(this);
   }
 
@@ -84,18 +87,39 @@ class UserPermissionItem extends Component {
   }
 
   /**
-   * Returns the CSS class name for the list item, reflecting updated and suspended states.
+   * Returns the CSS class name for the list item, reflecting the suspended and removed states.
    * @returns {string}
    */
   getClassName() {
     let className = "row";
-    if (this.props.updated) {
-      className += " permission-updated";
-    }
     if (this.isUserSuspended) {
       className += " suspended";
     }
+    if (this.isRemoved) {
+      className += " permission-removed";
+    }
     return className;
+  }
+
+  /**
+   * Returns true when the permission is pending deletion.
+   * @returns {boolean}
+   */
+  get isRemoved() {
+    return this.props.changeStatus === ShareChanges.CHANGE_STATUS_REMOVED;
+  }
+
+  /**
+   * Returns the translated label of the pending change status.
+   * @returns {string}
+   */
+  get changeStatusLabel() {
+    const labels = {
+      [ShareChanges.CHANGE_STATUS_ADDED]: this.translate("added"),
+      [ShareChanges.CHANGE_STATUS_MODIFIED]: this.translate("modified"),
+      [ShareChanges.CHANGE_STATUS_REMOVED]: this.translate("removed"),
+    };
+    return labels[this.props.changeStatus];
   }
 
   /**
@@ -115,7 +139,24 @@ class UserPermissionItem extends Component {
   }
 
   /**
+   * Handle revert of this permission entry pending deletion.
+   */
+  handleRevert() {
+    this.props.onRevert(this.props.id);
+  }
+
+  /**
+   * Returns true when the permission varies across the shared items.
+   * @returns {boolean}
+   */
+  get isVarying() {
+    return this.props.permissionType === -1;
+  }
+
+  /**
    * Get the permissions
+   * The varies option is only selectable while the permission still varies: once resolved to a
+   * concrete level, the mixed state cannot be staged again.
    * @returns {[{label: string, value: string}]}
    */
   get permissions() {
@@ -124,7 +165,7 @@ class UserPermissionItem extends Component {
       { value: "7", label: this.translate("can update") },
       { value: "15", label: this.translate("is owner") },
     ];
-    if (this.props.variesDetails) {
+    if (this.isVarying) {
       permissions.push({ value: "-1", label: this.translate("varies") });
     }
     return permissions;
@@ -147,7 +188,7 @@ class UserPermissionItem extends Component {
   }
 
   render() {
-    const isInputDisabled = this.props.disabled;
+    const isInputDisabled = this.props.disabled || this.isRemoved;
     return (
       <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
         <UserAvatar user={this.props.user} baseUrl={this.props.context.userSettings.getTrustedDomain()} />
@@ -167,10 +208,14 @@ class UserPermissionItem extends Component {
           </div>
         </div>
 
-        {this.props.variesDetails && (
+        {this.props.variesDetails && this.isVarying && (
           <TooltipPortal message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
-            <AttentionSVG className="attention-required" />
+            <InfoSVG className="varies-icon" />
           </TooltipPortal>
+        )}
+
+        {this.props.changeStatus && (
+          <span className={`chips ${this.props.changeStatus}`}>{this.changeStatusLabel}</span>
         )}
 
         <div className="rights">
@@ -187,7 +232,11 @@ class UserPermissionItem extends Component {
 
         {!this.props.isReadOnly && (
           <div className="actions">
-            <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
+            {this.isRemoved ? (
+              <SharePermissionRevertButton onRevert={this.handleRevert} disabled={this.props.disabled} />
+            ) : (
+              <SharePermissionDeleteButton onClose={this.handleDelete} disabled={isInputDisabled} />
+            )}
           </div>
         )}
       </li>
@@ -200,10 +249,11 @@ UserPermissionItem.propTypes = {
   id: PropTypes.string, // uuid
   user: PropTypes.object, // {id: <uuid>, username: <string>, profile: <object>, ...etc}
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
-  updated: PropTypes.bool,
+  changeStatus: PropTypes.string, // A ShareChanges.CHANGE_STATUS_* value, null when unchanged
   disabled: PropTypes.bool,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
+  onRevert: PropTypes.func,
   permissionType: PropTypes.number,
   isReadOnly: PropTypes.bool,
   t: PropTypes.func, // The translation function
