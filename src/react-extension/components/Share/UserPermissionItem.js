@@ -208,7 +208,7 @@ class UserPermissionItem extends Component {
           </div>
         </div>
 
-        {this.props.variesDetails && this.isVarying && (
+        {this.props.variesDetails && this.isVarying && !this.isRemoved && (
           <TooltipPortal message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
             <InfoSVG className="varies-icon" />
           </TooltipPortal>

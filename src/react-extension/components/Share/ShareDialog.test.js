@@ -575,10 +575,10 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       expect(page.variesIcon(2)).toBeNull();
     });
 
-    it("As LU removing a varying recipient I still see its varies breakdown icon, before and after reverting", async () => {
+    it("As LU removing a varying recipient I no longer see its varies breakdown icon, until I revert", async () => {
       expect.assertions(2);
       await page.selectRemovePermission(2);
-      expect(page.variesIcon(2)).not.toBeNull();
+      expect(page.variesIcon(2)).toBeNull();
 
       await page.selectRevertPermission(2);
       expect(page.variesIcon(2)).not.toBeNull();
