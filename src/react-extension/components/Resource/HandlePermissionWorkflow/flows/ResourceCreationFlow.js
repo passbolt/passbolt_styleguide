@@ -221,8 +221,13 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
         null,
       );
       const created = await this.createResource(this.pendingResourceFormEntity, finalChanges);
-      await this.waitForResourceInGrid(created);
-      const redirectUrl = canOperatorRead ? `/app/passwords/view/${created.id}` : `/app/passwords/`;
+
+      let redirectUrl = "/app/passwords/";
+      if (canOperatorRead) {
+        await this.waitForResourceInGrid(created);
+        redirectUrl = `/app/passwords/view/${created.id}`;
+      }
+
       await this.finalizeSuccess(this.props.t("The resource has been added successfully"), redirectUrl);
       this.closeCreateResourceDialog();
       this.terminate();
