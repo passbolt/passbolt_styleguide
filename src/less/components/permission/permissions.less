@@ -110,6 +110,7 @@
 
             /* aro summary */
             .avatar {
+                flex: none;
                 float: left;
 
                 img,
@@ -118,9 +119,13 @@
                     height: 4.2rem;
                 }
             }
+            // The only flexible item of the row. Every sibling is pinned, so the recipient name and
+            // username absorb the whole horizontal pressure and ellipsise instead of the row
+            // overflowing and clipping its trailing action.
             .aro {
                 flex: 1 1 auto;
                 width: 30%;
+                min-width: 0; // important to keep the container size for ellipsis
                 float: left;
                 padding: 0 1rem 0 1.6rem;
                 .aro-name {
@@ -138,11 +143,12 @@
                 }
                 .ellipsis {
                     display:inline-block;
-                    max-width:90%;
+                    max-width:100%;
                 }
             }
 
             .tooltip-portal {
+                flex: none;
                 margin: 0 .8rem;
                 line-height: 1.6rem;
 
@@ -183,9 +189,12 @@
 
             .rights {
                 float: left;
-                flex: 0 1 auto;
+                flex: none;
             }
 
+            .actions {
+                flex: none;
+            }
 
             .remove-item,
             .revert-item {
