@@ -15,6 +15,10 @@ const READ = 1;
 // const UPDATE = 7;
 const ADMIN = 15;
 
+const CHANGE_STATUS_ADDED = "added";
+const CHANGE_STATUS_MODIFIED = "modified";
+const CHANGE_STATUS_REMOVED = "removed";
+
 export default class ShareChanges {
   /**
    * Constructor
@@ -53,6 +57,28 @@ export default class ShareChanges {
       });
     });
     this._changes = [];
+    this._initiallyNewAroIds = new Set();
+  }
+
+  /**
+   * @returns {string} Status of an aro granted its permissions during the session.
+   */
+  static get CHANGE_STATUS_ADDED() {
+    return CHANGE_STATUS_ADDED;
+  }
+
+  /**
+   * @returns {string} Status of an aro with pending changes to its original permissions.
+   */
+  static get CHANGE_STATUS_MODIFIED() {
+    return CHANGE_STATUS_MODIFIED;
+  }
+
+  /**
+   * @returns {string} Status of an aro whose permissions are pending deletion.
+   */
+  static get CHANGE_STATUS_REMOVED() {
+    return CHANGE_STATUS_REMOVED;
   }
 
   // new
@@ -158,6 +184,49 @@ export default class ShareChanges {
   }
 
   /**
+   * Derive the pending change status of an aro.
+   * @param {string} aroId The aro identifier
+   * @returns {string|null} A ShareChanges.CHANGE_STATUS_* value, or null when unchanged.
+   */
+  getAroChangeStatus(aroId) {
+    if (this._initiallyNewAroIds.has(aroId)) {
+      /*
+       * An aro marked as initially new, typically while creating a resource, has no real original
+       * permission to diff against: it always displays as added, whatever its pending changes,
+       * including a pending deletion. The dialog handles deletion of such an aro by dropping its
+       * row entirely rather than freezing it on a "removed" state; see ShareDialog.handlePermissionDelete.
+       */
+      return CHANGE_STATUS_ADDED;
+    }
+    const changes = this._changes.filter((change) => change.aro_foreign_key === aroId);
+    if (!changes.length) {
+      return null;
+    }
+    if (changes.every((change) => change.delete)) {
+      return CHANGE_STATUS_REMOVED;
+    }
+    /*
+     * An aro missing a permission on some acos stages only new permissions when aligned on a
+     * single type: the original permissions, not the shape of the changes, discriminate a
+     * modified aro from an added one.
+     */
+    if (!this._hasOriginalPermissions(aroId)) {
+      return CHANGE_STATUS_ADDED;
+    }
+    return CHANGE_STATUS_MODIFIED;
+  }
+
+  /**
+   * Check if an aro had a permission on any of the acos when the dialog opened.
+   * @param {string} aroId The aro identifier
+   * @returns {boolean}
+   * @private
+   */
+  _hasOriginalPermissions(aroId) {
+    return this._permissions.some((permission) => permission.aro_foreign_key === aroId);
+  }
+
+  /**
    * Add new permission for a given aro
    * @return {object} The mapped permission
    *
@@ -215,7 +284,7 @@ export default class ShareChanges {
   markPermissionHasChanged(permission) {
     const permissionChange = this._buildChange(permission.permissions[0].aco, permission.aro, permission.type);
     this._changes.push(permissionChange);
-    permission.updated = true;
+    this._initiallyNewAroIds.add(permission.aro.id);
   }
 
   /**
@@ -232,7 +301,32 @@ export default class ShareChanges {
         this._changes.push(permissionChange);
       }
     });
-    delete this._aros[aroId];
+  }
+
+  /**
+   * Undo every pending change of an aro, restoring it to its original state.
+   * The original permissions are never mutated, removing the aro's changes is the restore.
+   * The initially new markers survive by design, such an aro falls back to the added status.
+   * @param {string} aroId The aro to revert the changes for
+   */
+  revertAroPermissions(aroId) {
+    this._removeAroChanges(aroId);
+  }
+
+  /**
+   * Get the aggregated permission type an aro had when the dialog opened.
+   * @param {string} aroId The aro identifier
+   * @returns {int|null} 1|7|15, -1 when it varies across the acos, null when the aro had none.
+   */
+  getOriginalAroPermissionType(aroId) {
+    const originals = this._permissions.filter((permission) => permission.aro_foreign_key === aroId);
+    if (!originals.length) {
+      return null;
+    }
+    if (originals.length !== this._acos.length) {
+      return -1;
+    }
+    return originals.every((permission) => permission.type === originals[0].type) ? originals[0].type : -1;
   }
 
   /**

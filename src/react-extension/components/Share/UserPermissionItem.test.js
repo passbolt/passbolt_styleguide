@@ -95,10 +95,47 @@ describe("UserPermissionItem", () => {
       expect(page.name).toContain("(suspended)");
     });
 
-    it("adds the permission-updated CSS class when updated is true", () => {
+    it("shows a change status chip when changeStatus is set", () => {
+      expect.assertions(2);
+      const page = new UserPermissionItemPage(defaultOwnerProps({ changeStatus: "modified" }));
+      expect(page.changeChip.textContent).toBe("modified");
+      expect(page.changeChip.classList.contains("modified")).toBe(true);
+    });
+
+    it("shows no change status chip when changeStatus is not set", () => {
       expect.assertions(1);
-      const page = new UserPermissionItemPage(defaultOwnerProps({ updated: true }));
-      expect(page.isUpdated).toBe(true);
+      const page = new UserPermissionItemPage(defaultOwnerProps());
+      expect(page.changeChip).toBeNull();
+    });
+
+    it("renders the removed state when changeStatus is removed", () => {
+      expect.assertions(4);
+      const page = new UserPermissionItemPage(defaultOwnerProps({ changeStatus: "removed" }));
+      expect(page.isRemoved).toBe(true);
+      expect(page.isPermissionSelectDisabled).toBe(true);
+      expect(page.revertButton).not.toBeNull();
+      expect(page.deleteButton).toBeNull();
+    });
+
+    it("calls onRevert with the permission id when the revert button is clicked", async () => {
+      expect.assertions(1);
+      const props = defaultOwnerProps({ changeStatus: "removed" });
+      const page = new UserPermissionItemPage(props);
+      await page.clickRevert();
+      expect(props.onRevert).toHaveBeenCalledWith("some-uuid");
+    });
+
+    it("hides the revert button in read-only mode", () => {
+      expect.assertions(1);
+      const page = new UserPermissionItemPage(defaultOwnerProps({ changeStatus: "removed", isReadOnly: true }));
+      expect(page.revertButton).toBeNull();
+    });
+
+    it("renders the suspended and removed states together on a single row", () => {
+      expect.assertions(2);
+      const page = new UserPermissionItemPage(defaultSuspendedUserProps({ changeStatus: "removed" }));
+      expect(page.isSuspended).toBe(true);
+      expect(page.isRemoved).toBe(true);
     });
 
     it("disables the select and delete button when disabled is true", () => {
@@ -110,11 +147,23 @@ describe("UserPermissionItem", () => {
   });
 
   describe("Varies details", () => {
-    it("shows 'varies' in the select and an attention icon when variesDetails is set", () => {
+    it("shows 'varies' in the select and an info icon when variesDetails is set", () => {
       expect.assertions(2);
       const page = new UserPermissionItemPage(defaultVariesProps());
       expect(page.permissionSelectValue).toBe("varies");
-      expect(page.attentionIcon).not.toBeNull();
+      expect(page.variesIcon).not.toBeNull();
+    });
+
+    it("does not offer the varies option once resolved to a concrete level", async () => {
+      expect.assertions(1);
+      const page = new UserPermissionItemPage(defaultVariesProps({ permissionType: 15 }));
+      expect(await page.getPermissionSelectOptions()).toEqual(["can read", "can update"]);
+    });
+
+    it("hides the varies info icon once resolved to a concrete level", () => {
+      expect.assertions(1);
+      const page = new UserPermissionItemPage(defaultVariesProps({ permissionType: 15 }));
+      expect(page.variesIcon).toBeNull();
     });
   });
 

@@ -1043,6 +1043,60 @@ export function resourcesShareProps(names, data = {}) {
 }
 
 /**
+ * Build controlled-mode props for a single resource owned by the operator, shared with a reader.
+ * Returns the props along with the operator and reader user dtos so the tests can identify them,
+ * e.g. as the logged-in user for the operator checks.
+ * @param {object} data Props to override
+ * @returns {{props: object, operator: object, reader: object}}
+ */
+export function operatorResourceShareProps(data = {}) {
+  const operator = defaultUserDto({
+    username: "ada@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Ada", last_name: "Lovelace" }),
+  });
+  const reader = defaultUserDto({
+    username: "betty@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Betty", last_name: "Holberton" }),
+  });
+  const resourceId = uuidv4();
+  const props = {
+    ...defaultProps(),
+    isPermissionConfirmationMode: false,
+    initialResources: [
+      {
+        id: resourceId,
+        metadata: { name: "apache" },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection(
+          [
+            defaultPermissionDto({
+              aco: "Resource",
+              aco_foreign_key: resourceId,
+              aro: "User",
+              aro_foreign_key: operator.id,
+              type: 15,
+            }),
+            defaultPermissionDto({
+              aco: "Resource",
+              aco_foreign_key: resourceId,
+              aro: "User",
+              aro_foreign_key: reader.id,
+              type: 1,
+            }),
+          ],
+          { assertAtLeastOneOwner: false },
+        ),
+      },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([operator, reader]),
+    onConfirm: jest.fn(),
+    ...data,
+  };
+  return { props, operator, reader };
+}
+
+/**
  * Build controlled-mode props sharing a single folder owned by an owner (Ada).
  * The confirmation mode is disabled so the dialog exposes its "Share folder" title.
  * @param {string} name The folder name
@@ -1133,9 +1187,11 @@ export function controlledModeProps(data = {}) {
  * @returns {object}
  */
 export function twoResourcesShareProps(data = {}) {
+  // The reader's permission type per resource: keep [1, 1] uniform, use e.g. [1, 7] for a varying reader.
+  const { readerPermissionTypes = [1, 1], ...propsData } = data;
   const ownerUser = defaultUserDto({ username: "operator@passbolt.com" });
   const readerUser = defaultUserDto({ username: "reader@passbolt.com" });
-  const buildResource = (name) => {
+  const buildResource = (name, readerPermissionType) => {
     const resourceId = uuidv4();
     return {
       id: resourceId,
@@ -1155,7 +1211,7 @@ export function twoResourcesShareProps(data = {}) {
             aco_foreign_key: resourceId,
             aro: "User",
             aro_foreign_key: readerUser.id,
-            type: 1,
+            type: readerPermissionType,
           }),
         ],
         { assertAtLeastOneOwner: false },
@@ -1164,11 +1220,11 @@ export function twoResourcesShareProps(data = {}) {
   };
   return {
     ...defaultProps(),
-    initialResources: [buildResource("RA"), buildResource("RB")],
+    initialResources: [buildResource("RA", readerPermissionTypes[0]), buildResource("RB", readerPermissionTypes[1])],
     initialGroups: new GroupsCollection([]),
     initialUsers: new UsersCollection([ownerUser, readerUser]),
     onConfirm: jest.fn(),
-    ...data,
+    ...propsData,
   };
 }
 

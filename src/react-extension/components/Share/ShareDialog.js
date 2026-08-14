@@ -186,6 +186,7 @@ class ShareDialog extends Component {
 
     this.handlePermissionUpdate = this.handlePermissionUpdate.bind(this);
     this.handlePermissionDelete = this.handlePermissionDelete.bind(this);
+    this.handlePermissionRevert = this.handlePermissionRevert.bind(this);
     this.handleToggleGroupMemberVisibility = this.handleToggleGroupMemberVisibility.bind(this);
 
     this.renderContainer = this.renderContainer.bind(this);
@@ -296,9 +297,7 @@ class ShareDialog extends Component {
       this.fetchGroupMembers(aro.id);
     }
 
-    // TODO restore to original permission if any
     const permission = this.shareChanges.addAroPermissions(aro);
-    permission.updated = this.shareChanges.hasChanges(aro.id);
     const permissions = this.state.permissions;
     permissions.push(permission);
     this.setState({ permissions: permissions }, () => {
@@ -309,7 +308,7 @@ class ShareDialog extends Component {
 
   /**
    * What happens when the user changes a permission for a group or user
-   * e.g. highlight if it's different than original, update permission list in the state
+   * e.g. update permission list in the state, the change status chip derives at render
    *
    * @param {string} aroId The aro to update the permissions for
    * @param {int} type like create, owner, etc.
@@ -319,7 +318,6 @@ class ShareDialog extends Component {
     const newPermissions = this.state.permissions.map((permission) => {
       if (permission.aro.id === aroId) {
         permission.type = type;
-        permission.updated = this.shareChanges.hasChanges(aroId);
       }
       return permission;
     });
@@ -328,12 +326,42 @@ class ShareDialog extends Component {
 
   /**
    * What happens when the user delete a user or group from permission list
-   * e.g. delete permission from the shareChanges and update the state
+   * e.g. delete permission from the shareChanges. A recipient granted its permissions during the
+   * session disappears from the list, an original recipient stays displayed as pending deletion.
    * @param {string} aroId uuid
    */
   handlePermissionDelete(aroId) {
     this.shareChanges.deleteAroPermissions(aroId);
-    const newPermissions = this.state.permissions.filter((permission) => permission.aro.id !== aroId);
+    if (this.shareChanges.getAroChangeStatus(aroId) !== ShareChanges.CHANGE_STATUS_REMOVED) {
+      // The deletion staged no change, there is nothing to display as pending deletion.
+      const newPermissions = this.state.permissions.filter((permission) => permission.aro.id !== aroId);
+      this.setState({ permissions: newPermissions });
+      return;
+    }
+    this.resetPermissionRowToOriginalType(aroId);
+  }
+
+  /**
+   * What happens when the user reverts a permission pending deletion
+   * e.g. clear the recipient's staged changes and restore its row to the original permission.
+   * @param {string} aroId uuid
+   */
+  handlePermissionRevert(aroId) {
+    this.shareChanges.revertAroPermissions(aroId);
+    this.resetPermissionRowToOriginalType(aroId);
+  }
+
+  /**
+   * Reset the permission row of an aro to its original permission type.
+   * @param {string} aroId uuid
+   */
+  resetPermissionRowToOriginalType(aroId) {
+    const newPermissions = this.state.permissions.map((permission) => {
+      if (permission.aro.id === aroId) {
+        permission.type = this.shareChanges.getOriginalAroPermissionType(aroId);
+      }
+      return permission;
+    });
     this.setState({ permissions: newPermissions });
   }
 
@@ -447,8 +475,20 @@ class ShareDialog extends Component {
     }
 
     const changes = this.shareChanges.getResourcesChanges();
-    const isPersonal = this.state.permissions.length === 1 && Boolean(this.state.permissions[0].aro.profile);
+    const effectivePermissions = this.getEffectivePermissions();
+    const isPersonal = effectivePermissions.length === 1 && Boolean(effectivePermissions[0].aro.profile);
     await this.props.onConfirm(changes, this.canOperatorRead(), isPersonal);
+  }
+
+  /**
+   * Get the permission rows that will still stand once the pending changes are applied.
+   * The rows pending deletion stay displayed but must not weigh in the operator checks.
+   * @returns {Array<object>}
+   */
+  getEffectivePermissions() {
+    return (this.state.permissions ?? []).filter(
+      (permission) => this.shareChanges.getAroChangeStatus(permission.aro.id) !== ShareChanges.CHANGE_STATUS_REMOVED,
+    );
   }
 
   /**
@@ -633,7 +673,13 @@ class ShareDialog extends Component {
     const item = displayedPermissions[index];
 
     if (item.kind === "group-user") {
-      return <GroupUserPermissionItem key={`${item.groupId}-${item.user.id}`} user={item.user} />;
+      return (
+        <GroupUserPermissionItem
+          key={`${item.groupId}-${item.user.id}`}
+          user={item.user}
+          isRemoved={this.shareChanges.getAroChangeStatus(item.groupId) === ShareChanges.CHANGE_STATUS_REMOVED}
+        />
+      );
     }
 
     const permission = item.permission;
@@ -651,10 +697,11 @@ class ShareDialog extends Component {
           membersCount={this.getGroupMembers(permission.aro.id).length}
           permissionType={permissionType}
           variesDetails={permission.variesDetails}
-          updated={permission.updated}
+          changeStatus={this.shareChanges.getAroChangeStatus(permission.aro.id)}
           disabled={this.hasAllInputDisabled() || this.isReadOnly()}
           onUpdate={this.handlePermissionUpdate}
           onDelete={this.handlePermissionDelete}
+          onRevert={this.handlePermissionRevert}
           onToggleGroupMemberVisibility={this.handleToggleGroupMemberVisibility}
           shouldDisplayGroupMembers={this.state.expandedGroupIds.includes(permission.aro.id)}
           isReadOnly={this.props.readOnly}
@@ -669,10 +716,11 @@ class ShareDialog extends Component {
         user={permission.aro}
         permissionType={permissionType}
         variesDetails={permission.variesDetails}
-        updated={permission.updated}
+        changeStatus={this.shareChanges.getAroChangeStatus(permission.aro.id)}
         disabled={this.hasAllInputDisabled() || this.isReadOnly()}
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
+        onRevert={this.handlePermissionRevert}
         isReadOnly={this.props.readOnly}
       />
     );
@@ -706,12 +754,13 @@ class ShareDialog extends Component {
       return false;
     }
 
-    if (!this.state.permissions?.length) {
+    const permissions = this.getEffectivePermissions();
+    if (!permissions.length) {
       return true;
     }
 
     const operatorId = this.props.context.loggedInUser?.id;
-    const operatorOwnerPermission = this.state.permissions.find((p) => {
+    const operatorOwnerPermission = permissions.find((p) => {
       // no need to check non owner permission
       if (p.type !== PermissionEntity.PERMISSION_OWNER) {
         return false;
@@ -739,12 +788,13 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   canOperatorRead() {
-    if (!this.state.permissions?.length) {
+    const permissions = this.getEffectivePermissions();
+    if (!permissions.length) {
       return false;
     }
 
     const operatorId = this.props.context.loggedInUser?.id;
-    const operatorPermission = this.state.permissions.find((p) => {
+    const operatorPermission = permissions.find((p) => {
       //we are dealing with a direct user permission here
       if (p.aro.profile) {
         if (operatorId === p.aro.id) {
@@ -890,7 +940,7 @@ ShareDialog.propTypes = {
   isPermissionConfirmationMode: PropTypes.bool, // Is the dialog used to confirm permissions
   initialResources: PropTypes.array, // the ACO resources to seed the dialog with instead of fetching from the API, each as { id, metadata, permission, permissions: PermissionsCollection }
   initialFolders: PropTypes.array, // the ACO folders to see the dialog with
-  initialChanges: PropTypes.array, // Set of permission to mark them as "modified" in the initial list
+  initialChanges: PropTypes.array, // Set of permission to mark them as "added" in the initial list
   acoType: PropTypes.string, // the ACO type of the seeded entries (PermissionEntity.ACO_RESOURCE, default, or ACO_FOLDER)
   initialGroups: PropTypes.object, // GroupsCollection providing the groups referenced by the resources' permissions
   initialUsers: PropTypes.object, // UsersCollection providing the users referenced by the resources' permissions

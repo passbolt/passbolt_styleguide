@@ -77,11 +77,19 @@ class GroupUserPermissionItem extends Component {
   }
 
   /**
-   * Returns the CSS class name for the list item, reflecting the suspended state.
+   * Returns the CSS class name for the list item, reflecting the suspended state and the removed
+   * state of the group the member belongs to.
    * @returns {string}
    */
   getClassName() {
-    return `row group-user-item${this.isUserSuspended ? " suspended" : ""}`;
+    let className = "row group-user-item";
+    if (this.isUserSuspended) {
+      className += " suspended";
+    }
+    if (this.props.isRemoved) {
+      className += " permission-removed";
+    }
+    return className;
   }
 
   /**
@@ -127,6 +135,7 @@ class GroupUserPermissionItem extends Component {
 GroupUserPermissionItem.propTypes = {
   context: PropTypes.any, // The application context
   user: PropTypes.object, // {id: <uuid>, username: <string>, profile: <object>, ...etc}
+  isRemoved: PropTypes.bool, // True when the group the member belongs to is pending deletion
   t: PropTypes.func, // The translation function
 };
 

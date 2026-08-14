@@ -23,6 +23,7 @@ import {
   controlledModeWithGroupProps,
   defaultAppContext,
   folderShareProps,
+  operatorResourceShareProps,
   resourcesShareProps,
   twoResourcesShareProps,
 } from "./ShareDialog.test.data";
@@ -109,11 +110,112 @@ describe("As Lu I should see the share dialog", () => {
       expect(props.onClose).toHaveBeenCalled();
     });
 
-    it("As LU I can remove a permission", async () => {
-      expect.assertions(2);
-      expect(page.count).toBe(2);
+    it("As LU removing a recipient I see its row pending deletion and the delete deltas emitted on save", async () => {
+      expect.assertions(6);
       await page.selectRemovePermission(2);
-      expect(page.count).toBe(1);
+
+      expect(page.count).toBe(2);
+      expect(page.changeChip(2).textContent).toBe("removed");
+      expect(page.selectRights(2).className).toContain("disabled");
+      expect(page.revertAro(2)).not.toBeNull();
+
+      mockContextRequest(jest.fn());
+      await page.savePermissions();
+      const changes = props.onConfirm.mock.calls[0][0];
+      // One delete delta per shared resource.
+      expect(changes).toHaveLength(3);
+      expect(changes.every((change) => change.delete === true)).toBe(true);
+    });
+
+    it("As LU reverting a removed recipient I see its row restored and no delta emitted", async () => {
+      expect.assertions(5);
+      await page.selectRemovePermission(2);
+      expect(page.changeChip(2).textContent).toBe("removed");
+
+      await page.selectRevertPermission(2);
+      expect(page.changeChip(2)).toBeNull();
+      expect(page.revertAro(2)).toBeNull();
+      expect(page.removeAro(2)).not.toBeNull();
+
+      mockContextRequest(jest.fn());
+      await page.savePermissions();
+      expect(props.onConfirm.mock.calls[0][0]).toEqual([]);
+    });
+
+    it("As LU removing a modified recipient I see its row frozen back on its original permission", async () => {
+      expect.assertions(2);
+      await page.selectRightsOption(2, "is owner");
+      expect(page.selectRights(2).textContent).toBe("is owner");
+
+      await page.selectRemovePermission(2);
+      expect(page.selectRights(2).textContent).toBe("can read");
+    });
+
+    it("As LU removing a recipient added during the session I see its row disappear entirely", async () => {
+      expect.assertions(2);
+      const newUser = defaultUserDto({
+        username: "admin@passbolt.com",
+        profile: defaultProfileDto({ first_name: "Admin", last_name: "User" }),
+      });
+      mockSearchReturns(newUser);
+      await page.searchName("admin");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      expect(page.count).toBe(3);
+
+      await page.selectRemovePermission(3);
+      expect(page.count).toBe(2);
+    });
+
+    it("As LU I cannot re-add a removed recipient through the autocomplete, revert is the only path", async () => {
+      expect.assertions(3);
+      await page.selectRemovePermission(2);
+      // The removed recipient stays in the list, the autocomplete filters it out of the suggestions.
+      const removedUser = defaultUserDto({ id: page.rowId(2), username: "betty@passbolt.com" });
+      mockSearchReturns(removedUser);
+      await page.searchName("betty");
+
+      expect(page.userOrGroupAutocomplete(1)).toBeUndefined();
+      expect(page.count).toBe(2);
+      expect(page.changeChip(2).textContent).toBe("removed");
+    });
+
+    it("As LU removing the sole owner I see the no-owner error and submit disabled until reverted", async () => {
+      expect.assertions(4);
+      await page.selectRemovePermission(1);
+      expect(page.errorMessage).toBe("Please make sure there is at least one owner.");
+      expect(page.saveButton.getAttribute("disabled")).not.toBeNull();
+
+      await page.selectRevertPermission(1);
+      expect(page.hasErrorMessage).toBe(false);
+      expect(page.saveButton.hasAttribute("disabled")).toBe(false);
+    });
+
+    it("As LU I see a modified chip on a changed permission, cleared when set back to its original value", async () => {
+      expect.assertions(3);
+      expect(page.changeChip(1)).toBeNull();
+
+      // Demote the owner (row 1) to read.
+      await page.selectRightsOption(1, "can read");
+      expect(page.changeChip(1).textContent).toBe("modified");
+
+      // Promote back to owner, the original value.
+      await page.selectRightsOption(1, "is owner");
+      expect(page.changeChip(1)).toBeNull();
+    });
+
+    it("As LU I see an added chip on a recipient granted a permission during the session", async () => {
+      expect.assertions(1);
+      const newUser = defaultUserDto({
+        username: "admin@passbolt.com",
+        profile: defaultProfileDto({ first_name: "Admin", last_name: "User" }),
+      });
+      mockSearchReturns(newUser);
+      await page.searchName("admin");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+
+      expect(page.changeChip(3).textContent).toBe("added");
     });
 
     it("As LU I should see a processing feedback while submitting the form", async () => {
@@ -268,6 +370,50 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     expect(page.aroDetails(2)).toEqual(expect.stringContaining("@passbolt.com"));
   });
 
+  it("As LU creating a resource I should see every initial permission flagged as added", async () => {
+    expect.assertions(3);
+    const props = controlledModeProps();
+    // The creation flow passes the snapshot permissions as initial changes to show them all as new.
+    props.initialChanges = props.initialResources[0].permissions.items;
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+
+    expect(page.count).toBe(2);
+    expect(page.changeChip(1).textContent).toBe("added");
+    expect(page.changeChip(2).textContent).toBe("added");
+  });
+
+  it("As LU creating a resource removing my own initially-added row I see it disappear entirely", async () => {
+    expect.assertions(3);
+    const props = controlledModeProps();
+    props.initialChanges = props.initialResources[0].permissions.items;
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+    await page.selectRemovePermission(1);
+
+    // The row was never a stored permission: it disappears rather than being marked as removed.
+    expect(page.count).toBe(1);
+    expect(page.changeChip(1).textContent).toBe("added");
+    expect(page.revertAro(1)).toBeNull();
+  });
+
+  it("As LU creating a resource removing another recipient's initially-added row I see it disappear entirely", async () => {
+    expect.assertions(3);
+    const props = controlledModeProps();
+    props.initialChanges = props.initialResources[0].permissions.items;
+    mockContextRequest(jest.fn());
+
+    await act(() => (page = new ShareDialogPage(context, props)));
+    await page.selectRemovePermission(2);
+
+    // Same treatment for a recipient's row: it disappears, no removed chip, no revert button.
+    expect(page.count).toBe(1);
+    expect(page.changeChip(1).textContent).toBe("added");
+    expect(page.revertAro(1)).toBeNull();
+  });
+
   it("As LU I should see the Save button enabled as soon as the dialog opens so I can confirm the snapshot as-is", async () => {
     expect.assertions(1);
     const props = controlledModeProps();
@@ -389,6 +535,56 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     });
   });
 
+  describe("Sharing resources where a recipient's permission varies", () => {
+    beforeEach(async () => {
+      mockContextRequest(jest.fn());
+      const props = twoResourcesShareProps({ readerPermissionTypes: [1, 7] });
+      await act(() => (page = new ShareDialogPage(context, props)));
+    });
+
+    it("As LU resolving a varying permission I can no longer restore the mixed state, varies is not offered anymore", async () => {
+      expect.assertions(4);
+      expect(page.selectRights(2).textContent).toBe("varies");
+
+      await page.selectRightsOption(2, "is owner");
+
+      expect(page.selectRights(2).textContent).toBe("is owner");
+      expect(page.changeChip(2).textContent).toBe("modified");
+      expect(page.selectRightsItemByLabel(2, "varies")).toBeUndefined();
+    });
+
+    it("As LU removing a varying recipient I see its row frozen on varies and restorable to the mixed state", async () => {
+      expect.assertions(4);
+      await page.selectRemovePermission(2);
+      expect(page.selectRights(2).textContent).toBe("varies");
+      expect(page.changeChip(2).textContent).toBe("removed");
+
+      await page.selectRevertPermission(2);
+      expect(page.selectRights(2).textContent).toBe("varies");
+      expect(page.changeChip(2)).toBeNull();
+    });
+
+    it("As LU resolving a varying permission I no longer see its varies breakdown icon", async () => {
+      expect.assertions(3);
+      // The uniform operator row never carries the icon, only the varying reader row does.
+      expect(page.variesIcon(1)).toBeNull();
+      expect(page.variesIcon(2)).not.toBeNull();
+
+      await page.selectRightsOption(2, "is owner");
+
+      expect(page.variesIcon(2)).toBeNull();
+    });
+
+    it("As LU removing a varying recipient I still see its varies breakdown icon, before and after reverting", async () => {
+      expect.assertions(2);
+      await page.selectRemovePermission(2);
+      expect(page.variesIcon(2)).not.toBeNull();
+
+      await page.selectRevertPermission(2);
+      expect(page.variesIcon(2)).not.toBeNull();
+    });
+  });
+
   describe("Read-only mode", () => {
     it("As LU with update-but-not-owner access I should not see the autocomplete to add people or groups", async () => {
       expect.assertions(2);
@@ -429,6 +625,22 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       expect(page.count).toBe(2);
       expect(page.groupVisibilityToggle(1)).toBeNull();
       expect(page.groupVisibilityToggle(2)).not.toBeNull();
+    });
+
+    it("As LU I can still expand the members of a group pending deletion, faded like its row", async () => {
+      expect.assertions(4);
+      const props = controlledModeWithGroupProps();
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      await page.selectRemovePermission(2);
+      expect(page.changeChip(2).textContent).toBe("removed");
+      await page.toggleGroupMemberVisibility(2);
+      expect(page.groupMemberCount).toBe(2);
+      // The members carry the removed state of their group so they fade along with its row.
+      expect(page.groupMember(1).classList.contains("permission-removed")).toBe(true);
+      expect(page.groupMember(2).classList.contains("permission-removed")).toBe(true);
     });
 
     it("As LU expanding a group I should see its members, and collapsing should hide them", async () => {
@@ -474,6 +686,45 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       await act(() => page.toggleGroupMemberVisibility(3));
       await waitForTrue(() => page.groupMemberCount === 2);
       expect(page.groupMemberCount).toBe(2);
+    });
+  });
+
+  describe("Operator checks with rows pending deletion", () => {
+    it("As LU removing my own owner permission I see the ownership error until reverted", async () => {
+      expect.assertions(3);
+      const { props, operator } = operatorResourceShareProps({ ensureOperatorIsOwner: true });
+      const operatorContext = defaultAppContext({ loggedInUser: operator });
+      jest.spyOn(operatorContext.port, "request").mockImplementation(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(operatorContext, props)));
+      expect(page.hasErrorMessage).toBe(false);
+
+      // Rows are sorted by first name: Ada the operator (row 1), Betty the reader (row 2).
+      await page.selectRemovePermission(1);
+      expect(page.errorMessage).toBe("Please make sure you are still owner.");
+
+      await page.selectRevertPermission(1);
+      expect(page.hasErrorMessage).toBe(false);
+    });
+
+    it("As LU confirming with my own row pending deletion the operator flags derive from the surviving rows", async () => {
+      expect.assertions(3);
+      const { props, operator } = operatorResourceShareProps();
+      const operatorContext = defaultAppContext({ loggedInUser: operator });
+      jest.spyOn(operatorContext.port, "request").mockImplementation(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(operatorContext, props)));
+
+      // Promote the reader so the resource keeps an owner, then remove the operator's own row.
+      await page.selectRightsOption(2, "is owner");
+      await page.selectRemovePermission(1);
+      await act(() => page.savePermissions());
+
+      expect(props.onConfirm).toHaveBeenCalledTimes(1);
+      // The operator can no longer read: its own permission is pending deletion.
+      expect(props.onConfirm.mock.calls[0][1]).toBe(false);
+      // A single user row survives: the share is personal.
+      expect(props.onConfirm.mock.calls[0][2]).toBe(true);
     });
   });
 });
