@@ -649,10 +649,18 @@ class ShareDialog extends Component {
   }
 
   /**
+   * Return true if the permission list have changed since the start
+   * @returns {null|boolean}
+   */
+  hasChanges() {
+    return this.shareChanges && this.shareChanges.getChanges().length > 0;
+  }
+
+  /**
    * Return true if submit button should be disabled
    * True if there is no owner, if the operator ownership requirement is not met or if all input
    * should be disabled. An unchanged permission list does not disable the submit button: the
-   * operator must be able to confirm the inherited permissions as-is (empty deltas — the workflow
+   * operator must be able to confirm the inherited permissions as-is (empty deltas, the workflow
    * then skips the share call entirely).
    * @returns {boolean}
    */
@@ -894,6 +902,11 @@ class ShareDialog extends Component {
                 {!operatorOwnershipIsInvalid && hasNoOwner && (
                   <div className="message error">
                     <Trans>Please make sure there is at least one owner.</Trans>
+                  </div>
+                )}
+                {this.hasChanges() && !hasNoOwner && !operatorOwnershipIsInvalid && (
+                  <div className="message warning">
+                    <Trans>Click save to apply your pending changes.</Trans>
                   </div>
                 )}
               </>
