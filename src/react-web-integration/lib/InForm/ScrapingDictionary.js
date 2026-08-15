@@ -19,6 +19,12 @@
 export const MAX_SCRAPED_STRING_LENGTH = 1024;
 
 /**
+ * Maximum number of characters kept from a single scraped form attribute before truncation.
+ * @type {number}
+ */
+export const MAX_FORM_ATTR_LENGTH = 256;
+
+/**
  * Attributes carrying autocomplete hints, in decreasing standardisation order.
  * @type {ReadonlyArray<string>}
  */
