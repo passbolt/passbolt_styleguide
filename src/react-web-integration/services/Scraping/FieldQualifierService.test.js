@@ -172,6 +172,15 @@ describe("FieldQualifierService", () => {
       expect(FieldQualifierService.isUsername(payload(element), element)).toBe(false);
     });
 
+    it("should reject a non-candidate type even when its autoComplete is whitelisted", () => {
+      expect.assertions(1);
+
+      // The candidate-type gate precedes the autoComplete fast-pass: a whitelisted hint cannot rescue it.
+      const element = input({ type: "number", autocomplete: "username" });
+
+      expect(FieldQualifierService.isUsername(payload(element), element)).toBe(false);
+    });
+
     it("should qualify a candidate type tel with a username keyword", () => {
       expect.assertions(1);
 
@@ -385,6 +394,25 @@ describe("FieldQualifierService", () => {
       expect(FieldQualifierService.qualifyLogin(pageScraping)).toEqual({
         passwordFieldId: "field_1",
         usernameFieldId: "field_0",
+      });
+    });
+
+    it("should default usernameFieldId to null when every username candidate is stale", () => {
+      expect.assertions(1);
+
+      const password = input({ type: "password" });
+      const pageScraping = {
+        // Both username-looking fields resolve to null; only the lone password survives.
+        fields: [
+          { fieldId: "field_stale_a", type: "email", autoComplete: "username" },
+          { fieldId: "field_stale_b", type: "text", autoComplete: "username" },
+          payload(password),
+        ],
+      };
+
+      expect(FieldQualifierService.qualifyLogin(pageScraping)).toEqual({
+        passwordFieldId: "field_0",
+        usernameFieldId: null,
       });
     });
 
