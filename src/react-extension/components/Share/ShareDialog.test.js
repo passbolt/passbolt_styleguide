@@ -23,6 +23,7 @@ import {
   controlledModeWithGroupProps,
   defaultAppContext,
   folderShareProps,
+  initialGroupForShareFixture,
   operatorResourceShareProps,
   resourcesShareProps,
   twoResourcesShareProps,
@@ -34,6 +35,7 @@ import { waitForTrue } from "../../../../test/utils/waitFor";
 import { act } from "react";
 import { defaultUserDto } from "../../../shared/models/entity/user/userEntity.test.data";
 import { defaultProfileDto } from "../../../shared/models/entity/profile/ProfileEntity.test.data";
+import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 import { v4 as uuidv4 } from "uuid";
 
 beforeAll(() => {
@@ -644,13 +646,15 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     it("As LU I can still expand the members of a group pending deletion, faded like its row", async () => {
       expect.assertions(4);
       const props = controlledModeWithGroupProps();
-      mockContextRequest(jest.fn());
+      const groupForShare = initialGroupForShareFixture(props);
+      mockContextRequest((request) => (request === GROUPS_FIND_BY_IDS_FOR_SHARE ? [groupForShare] : undefined));
 
       await act(() => (page = new ShareDialogPage(context, props)));
 
       await page.selectRemovePermission(2);
       expect(page.changeChip(2).textContent).toBe("removed");
-      await page.toggleGroupMemberVisibility(2);
+      await act(() => page.toggleGroupMemberVisibility(2));
+      await waitForTrue(() => page.groupMemberCount === 2);
       expect(page.groupMemberCount).toBe(2);
       // The members carry the removed state of their group so they fade along with its row.
       expect(page.groupMember(1).classList.contains("permission-removed")).toBe(true);
@@ -660,17 +664,76 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     it("As LU expanding a group I should see its members, and collapsing should hide them", async () => {
       expect.assertions(4);
       const props = controlledModeWithGroupProps();
-      mockContextRequest(jest.fn());
+      const groupForShare = initialGroupForShareFixture(props);
+      mockContextRequest((request) => (request === GROUPS_FIND_BY_IDS_FOR_SHARE ? [groupForShare] : undefined));
 
       await act(() => (page = new ShareDialogPage(context, props)));
 
       expect(page.groupMemberCount).toBe(0);
-      await page.toggleGroupMemberVisibility(2);
+      await act(() => page.toggleGroupMemberVisibility(2));
+      await waitForTrue(() => page.groupMemberCount === 2);
       expect(page.groupMemberCount).toBe(2);
       // Member rows are display-only: no permission select nor delete button.
       expect(page.groupMember(1).querySelector(".select")).toBeNull();
-      await page.toggleGroupMemberVisibility(2);
+      await act(() => page.toggleGroupMemberVisibility(2));
       expect(page.groupMemberCount).toBe(0);
+    });
+
+    it("As LU expanding a group refetches its members so I see the membership it has now", async () => {
+      expect.assertions(3);
+      const props = controlledModeWithGroupProps();
+      const joiningMember = defaultUserDto({
+        username: "grace@passbolt.com",
+        profile: defaultProfileDto({ first_name: "Grace", last_name: "Hopper" }),
+      });
+      let groupForShare = initialGroupForShareFixture(props);
+      mockContextRequest((request) => (request === GROUPS_FIND_BY_IDS_FOR_SHARE ? [groupForShare] : undefined));
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      await act(() => page.toggleGroupMemberVisibility(2));
+      await waitForTrue(() => page.groupMemberCount === 2);
+      expect(page.groupMemberCount).toBe(2);
+
+      // Grace replaces both members while the dialog is open.
+      groupForShare = initialGroupForShareFixture(props, [joiningMember]);
+
+      await act(() => page.toggleGroupMemberVisibility(2)); // collapse
+      await act(() => page.toggleGroupMemberVisibility(2)); // expand again
+      await waitForTrue(() => page.groupMemberCount === 1);
+      // The second expansion displays the refetched membership, not the one the first resolved.
+      expect(page.groupMemberCount).toBe(1);
+      expect(page.groupMember(1).textContent).toContain("Grace Hopper");
+    });
+
+    it("As LU adding a group I belong to I am recognised as owner through it without expanding it", async () => {
+      expect.assertions(2);
+      const { props, operator } = operatorResourceShareProps({ ensureOperatorIsOwner: true });
+      const operatorContext = defaultAppContext({ loggedInUser: operator });
+      const addedGroup = addedGroupWithMembersFixture([operator]);
+      jest.spyOn(operatorContext.port, "request").mockImplementation((request) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return [addedGroup.searchResult];
+          case GROUPS_FIND_BY_IDS_FOR_SHARE:
+            return [addedGroup.group];
+        }
+      });
+
+      await act(() => (page = new ShareDialogPage(operatorContext, props)));
+
+      // Removing its own owner row leaves the operator without ownership.
+      await page.selectRemovePermission(1);
+      expect(page.errorMessage).toBe("Please make sure you are still owner.");
+
+      // The members are fetched when the group is added, so ownership resolves through the group
+      // even though its row is never expanded.
+      await page.searchName("market");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      await page.selectRightsOption(3, "is owner");
+      await waitForTrue(() => page.hasErrorMessage === false);
+      expect(page.hasErrorMessage).toBe(false);
     });
 
     it("As LU expanding a group I added during the session I should see its members fetched on demand", async () => {
@@ -681,7 +744,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
         switch (request) {
           case "passbolt.share.search-aros":
             return [addedGroup.searchResult];
-          case "passbolt.groups.find-by-ids-for-share":
+          case GROUPS_FIND_BY_IDS_FOR_SHARE:
             return [addedGroup.group];
         }
       };
@@ -700,6 +763,54 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       await act(() => page.toggleGroupMemberVisibility(3));
       await waitForTrue(() => page.groupMemberCount === 2);
       expect(page.groupMemberCount).toBe(2);
+    });
+
+    it("As LU removing a group I added and adding it back I should see the member that joined meanwhile", async () => {
+      expect.assertions(4);
+      const props = controlledModeWithGroupProps();
+      const joiningMember = defaultUserDto({
+        username: "grace@passbolt.com",
+        profile: defaultProfileDto({ first_name: "Grace", last_name: "Hopper" }),
+      });
+      const addedGroup = addedGroupWithMembersFixture();
+      const grownGroup = addedGroupWithMembersFixture([...addedGroup.members, joiningMember]);
+      let currentGroup = addedGroup;
+      mockContextRequest((request) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return [currentGroup.searchResult];
+          case GROUPS_FIND_BY_IDS_FOR_SHARE:
+            return [currentGroup.group];
+        }
+      });
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      // Add the group and expand it: two members.
+      await page.searchName("market");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      await act(() => page.toggleGroupMemberVisibility(3));
+      await waitForTrue(() => page.groupMemberCount === 2);
+      expect(page.groupMemberCount).toBe(2);
+
+      // Removing a group added during the session drops its row entirely, freeing it for a re-add.
+      await page.selectRemovePermission(3);
+      expect(page.count).toBe(2);
+
+      // Somebody joins the group while the dialog is still open.
+      currentGroup = grownGroup;
+
+      // Adding it back must fetch again rather than reuse what the first add resolved.
+      await page.searchName("market");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      // The row comes back collapsed and shows the count the search returned, never the previous one.
+      expect(page.groupMemberCount).toBe(0);
+      await waitForTrue(() => page.aroDetails(3).includes("3"));
+      await act(() => page.toggleGroupMemberVisibility(3));
+      await waitForTrue(() => page.groupMemberCount === 3);
+      expect(page.groupMemberCount).toBe(3);
     });
   });
 
