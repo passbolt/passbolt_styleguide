@@ -160,7 +160,7 @@ describe("FormScraper", () => {
       );
     });
 
-    it("should leave fieldTypes as an empty map for the PageScraper to populate", () => {
+    it("should leave fieldTypes as an empty map for the PageScraperService to populate", () => {
       expect.assertions(1);
 
       document.body.innerHTML = "<form></form>";

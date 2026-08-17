@@ -12,6 +12,8 @@
  * @since         5.15.0
  */
 
+import { SCRAPED_ATTRS } from "../../lib/InForm/ScrapingDictionary";
+
 /**
  * HTML elements that may host a shadow root according to the HTML specs.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow#elements_you_can_attach_a_shadow_to
@@ -53,21 +55,14 @@ export const MAX_PIERCE_DEPTH = 100;
 
 /**
  * Attributes to watch for changes in the DOM.
+ *
+ * Derived from `SCRAPED_ATTRS` (the single source of truth for what the scraper reads) so it stays a
+ * superset by construction: a `MutationObserver` only emits attribute records for names in this
+ * `attributeFilter`, so any scraped attribute missing here would silently leave a stale cache (see
+ * `PageScraperService._onMutation`). `hidden` and `style` are the only extra visibility-only signals, watched
+ * for `InFormManager` and never scraped.
  */
-const FIELD_ATTRIBUTES_TO_WATCH = [
-  "type",
-  "name",
-  "id",
-  "autocomplete",
-  "hidden",
-  "disabled",
-  "readonly",
-  "placeholder",
-  "aria-hidden",
-  "role",
-  "style",
-  "class",
-];
+const FIELD_ATTRIBUTES_TO_WATCH = [...SCRAPED_ATTRS, "hidden", "style"];
 
 /**
  * MutationObserver options.
@@ -79,4 +74,8 @@ export const OBSERVE_OPTIONS = {
   attributes: true,
   attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
   attributeOldValue: false,
+  // Watched so an in-place text rewrite of a label / heading / button (which re-elects the label of the
+  // fields it describes) still emits a record; `PageScraperService._onMutation` scopes the resulting
+  // invalidation to the enclosing form, so unrelated page text does not trigger needless re-scrapes.
+  characterData: true,
 };

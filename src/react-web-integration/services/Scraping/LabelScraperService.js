@@ -86,7 +86,7 @@ class LabelScraperService {
       const text = Array.from(nativeLabels)
         .map((label) => PageScraperHelpers.textWithoutFields(label))
         .join(" ");
-      if (LabelScraper._hasText(text)) {
+      if (LabelScraperService._hasText(text)) {
         return text;
       }
     }
@@ -98,7 +98,7 @@ class LabelScraperService {
     const forLabel = LabelScraperService._labelForField(root, element);
     if (forLabel) {
       const text = PageScraperHelpers.textWithoutFields(forLabel);
-      if (LabelScraper._hasText(text)) {
+      if (LabelScraperService._hasText(text)) {
         return text;
       }
     }
@@ -201,7 +201,7 @@ class LabelScraperService {
     const element = fieldScraping.element;
 
     const ariaLabel = element.getAttribute("aria-label");
-    if (LabelScraper._hasText(ariaLabel)) {
+    if (LabelScraperService._hasText(ariaLabel)) {
       return ariaLabel;
     }
 
@@ -229,7 +229,7 @@ class LabelScraperService {
       // Density gate: reject an ancestor wrapping more than the field itself (1:1 label-to-field).
       if (LABEL_ANCESTOR_TAGS.includes(current.nodeName) && PageScraperHelpers.fieldCount(current) <= 1) {
         const text = PageScraperHelpers.textWithoutFields(current);
-        if (LabelScraper._hasText(text)) {
+        if (LabelScraperService._hasText(text)) {
           return text;
         }
       }
@@ -343,20 +343,10 @@ class LabelScraperService {
   }
 
   /**
-   * Normalise scraped text and cap it at {@link MAX_SCRAPED_STRING_LENGTH}.
-   * @private
-   * @param {Element} element The field element.
-   * @returns {Node} The field's root node (Document, ShadowRoot, DocumentFragment, or the field itself).
-   */
-  static _root(element) {
-    return element.getRootNode();
-  }
-
-  /**
    * Whether raw scraped text carries anything beyond control/whitespace characters. Used by the tiers
    * for intra-tier fallthrough: it lets a whitespace-only candidate (an empty native `<label>`, a
    * blank `aria-label`, a `for=` target with no text) skip to the tier's next source instead of
-   * short-circuiting it. Kept distinct from {@link LabelScraper._clean}, which owns the final
+   * short-circuiting it. Kept distinct from {@link LabelScraperService._clean}, which owns the final
    * normalisation of the value that leaves the scraper — tiers themselves return raw text.
    * @private
    * @param {*} text The raw candidate text (null-safe).
@@ -369,7 +359,7 @@ class LabelScraperService {
   /**
    * Normalise scraped text and cap it at {@link MAX_SCRAPED_STRING_LENGTH}. The single normalisation
    * boundary of the scraper: applied once per outward-facing value — the elected label in
-   * {@link LabelScraper._electLabel} and the `describedBy` state in {@link LabelScraper._ariaState} —
+   * {@link LabelScraperService._electLabel} and the `describedBy` state in {@link LabelScraperService._ariaState} —
    * never inside a tier, so the tiers stay free to return raw text.
    * @private
    * @param {*} text The raw text (null-safe).

@@ -26,7 +26,7 @@ import { PSEUDO_FORM_ACTION_SELECTOR } from "../../lib/InForm/OrphanDictionary";
  * Builds a {@link FormScraping} record for a container (real `<form>` or pseudo-form LCA container),
  * capturing the form-level signals that disambiguate a field: attributes, resolved action URL,
  * surrounding section headings and action-button text. Read-only and shadow-aware. `fieldTypes` is left
- * empty for the PageScraper to fill.
+ * empty for the PageScraperService to fill.
  */
 class FormScraper {
   /**
