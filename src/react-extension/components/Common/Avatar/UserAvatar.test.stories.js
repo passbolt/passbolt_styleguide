@@ -49,5 +49,7 @@ const Template = (args) => (
   </div>
 );
 
-export const Initial = Template.bind({});
-Initial.args = defaultProps({ baseUrl: process.env.ORIGIN_URL });
+export const Initial = {
+  render: Template,
+  args: defaultProps({ baseUrl: process.env.ORIGIN_URL }),
+};

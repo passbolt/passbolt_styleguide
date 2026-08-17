@@ -41,23 +41,35 @@ const logoutCallback = () => {
   console.log("Trigger log out");
 };
 
-export const Setup = Template.bind({});
-Setup.args = {
-  onLogoutButtonClick: logoutCallback,
-  displayAs: DisplayAlreadyLoggedInErrorVariations.SETUP,
-};
-Setup.parameters = defaultParameters;
+export const Setup = {
+  render: Template,
 
-export const Recover = Template.bind({});
-Recover.args = {
-  onLogoutButtonClick: logoutCallback,
-  displayAs: DisplayAlreadyLoggedInErrorVariations.RECOVER,
-};
-Recover.parameters = defaultParameters;
+  args: {
+    onLogoutButtonClick: logoutCallback,
+    displayAs: DisplayAlreadyLoggedInErrorVariations.SETUP,
+  },
 
-export const AccountRecovery = Template.bind({});
-AccountRecovery.args = {
-  onLogoutButtonClick: logoutCallback,
-  displayAs: DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY,
+  parameters: defaultParameters,
 };
-AccountRecovery.parameters = defaultParameters;
+
+export const Recover = {
+  render: Template,
+
+  args: {
+    onLogoutButtonClick: logoutCallback,
+    displayAs: DisplayAlreadyLoggedInErrorVariations.RECOVER,
+  },
+
+  parameters: defaultParameters,
+};
+
+export const AccountRecovery = {
+  render: Template,
+
+  args: {
+    onLogoutButtonClick: logoutCallback,
+    displayAs: DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY,
+  },
+
+  parameters: defaultParameters,
+};

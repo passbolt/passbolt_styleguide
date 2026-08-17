@@ -23,10 +23,11 @@ export function defaultProps(data = {}) {
     id: "some-uuid",
     group: defaultGroupDto({ name: "Developer" }),
     permissionType: 15,
-    updated: false,
+    changeStatus: null,
     disabled: false,
     onUpdate: jest.fn(),
     onDelete: jest.fn(),
+    onRevert: jest.fn(),
     onToggleGroupMemberVisibility: jest.fn(),
     ...data,
   };

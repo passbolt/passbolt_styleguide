@@ -30,7 +30,7 @@ export default {
       </AdminUserDirectoryContextProvider>
     ),
   ],
-  parmeters: {
+  parameters: {
     css: "api_main",
   },
 };

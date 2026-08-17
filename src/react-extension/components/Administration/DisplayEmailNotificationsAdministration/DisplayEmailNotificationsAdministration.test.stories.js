@@ -72,18 +72,26 @@ const Template = (args) => (
   </AdminEmailNotificationContextProvider>
 );
 
-export const AllNotifications = Template.bind({});
-AllNotifications.args = defaultProps();
-AllNotifications.decorators = decorators;
+export const AllNotifications = {
+  render: Template,
+  args: defaultProps(),
+  decorators: decorators,
+};
 
-export const BothSourcesExist = Template.bind({});
-BothSourcesExist.args = defaultProps();
-BothSourcesExist.decorators = decorators;
+export const BothSourcesExist = {
+  render: Template,
+  args: defaultProps(),
+  decorators: decorators,
+};
 
-export const OnlyFileSettingExist = Template.bind({});
-OnlyFileSettingExist.args = defaultProps();
-OnlyFileSettingExist.decorators = decorators;
+export const OnlyFileSettingExist = {
+  render: Template,
+  args: defaultProps(),
+  decorators: decorators,
+};
 
-export const AllNotificationsForCE = Template.bind({});
-AllNotificationsForCE.args = defaultPropsCE();
-AllNotificationsForCE.decorators = decorators;
+export const AllNotificationsForCE = {
+  render: Template,
+  args: defaultPropsCE(),
+  decorators: decorators,
+};

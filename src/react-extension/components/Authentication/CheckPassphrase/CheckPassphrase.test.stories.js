@@ -38,14 +38,20 @@ const defaultParameters = {
   css: "ext_authentication",
 };
 
-export const Setup = Template.bind({});
-Setup.args = defaultProps();
-Setup.parameters = defaultParameters;
+export const Setup = {
+  render: Template,
+  args: defaultProps(),
+  parameters: defaultParameters,
+};
 
-export const SetupWithRememberMe = Template.bind({});
-SetupWithRememberMe.args = defaultProps({ canRememberMe: true });
-SetupWithRememberMe.parameters = defaultParameters;
+export const SetupWithRememberMe = {
+  render: Template,
+  args: defaultProps({ canRememberMe: true }),
+  parameters: defaultParameters,
+};
 
-export const Recover = Template.bind({});
-Recover.args = defaultProps({ displayAs: CheckPassphraseVariations.RECOVER });
-Recover.parameters = defaultParameters;
+export const Recover = {
+  render: Template,
+  args: defaultProps({ displayAs: CheckPassphraseVariations.RECOVER }),
+  parameters: defaultParameters,
+};

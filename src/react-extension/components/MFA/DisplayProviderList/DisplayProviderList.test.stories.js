@@ -35,11 +35,17 @@ const Template = (args) => (
   </MfaContextProvider>
 );
 
-export const Default = Template.bind({});
-Default.args = propsWithMfaProviders();
+export const Default = {
+  render: Template,
+  args: propsWithMfaProviders(),
+};
 
-export const WithoutMfaProvidersAllowed = Template.bind({});
-WithoutMfaProvidersAllowed.args = propsWithoutMfaProviders();
+export const WithoutMfaProvidersAllowed = {
+  render: Template,
+  args: propsWithoutMfaProviders(),
+};
 
-export const NotHttps = Template.bind({});
-NotHttps.args = defaultProps();
+export const NotHttps = {
+  render: Template,
+  args: defaultProps(),
+};

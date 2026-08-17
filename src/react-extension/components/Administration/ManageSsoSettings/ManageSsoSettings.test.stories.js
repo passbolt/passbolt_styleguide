@@ -52,18 +52,28 @@ const Template = (args) => (
   </AppContext.Provider>
 );
 
-export const Default = Template.bind({});
-Default.args = defaultProps();
+export const Default = {
+  render: Template,
+  args: defaultProps(),
+};
+
 Default.args.context.port.addRequestListener("passbolt.sso.get-current", disabledSso);
 
-export const Azure = Template.bind({});
-Azure.args = defaultProps();
+export const Azure = {
+  render: Template,
+  args: defaultProps(),
+};
+
 Azure.args.context.port.addRequestListener("passbolt.sso.get-current", azureConfiguredSso);
 
-export const ErrorFromTheServer = Template.bind({});
 const props = defaultProps();
 delete props.dialogContext; //making sure that this prop is not overriden and avoid a bug where the dialog doesn't display
-ErrorFromTheServer.args = props;
+
+export const ErrorFromTheServer = {
+  render: Template,
+  args: props,
+};
+
 ErrorFromTheServer.args.context.port.addRequestListener("passbolt.sso.get-current", () => {
   throw new Error("Something went wrong");
 });

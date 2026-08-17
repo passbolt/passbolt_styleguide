@@ -58,6 +58,14 @@ export const Disabled = {
   args: defaultOwnerProps({ disabled: true }),
 };
 
-export const Updated = {
-  args: defaultOwnerProps({ updated: true }),
+export const Added = {
+  args: defaultOwnerProps({ changeStatus: "added" }),
+};
+
+export const Modified = {
+  args: defaultOwnerProps({ changeStatus: "modified" }),
+};
+
+export const Removed = {
+  args: defaultOwnerProps({ changeStatus: "removed" }),
 };

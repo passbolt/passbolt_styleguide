@@ -62,6 +62,18 @@ describe("GroupUserPermissionItem", () => {
       expect(page.isSuspended).toBe(true);
       expect(page.name).toContain("(suspended)");
     });
+
+    it("adds the permission-removed CSS class when the group is pending deletion", () => {
+      expect.assertions(1);
+      const page = new GroupUserPermissionItemPage(defaultProps({ isRemoved: true }));
+      expect(page.isRemoved).toBe(true);
+    });
+
+    it("adds no permission-removed CSS class when the group is not pending deletion", () => {
+      expect.assertions(1);
+      const page = new GroupUserPermissionItemPage(defaultProps());
+      expect(page.isRemoved).toBe(false);
+    });
   });
 
   describe("Fingerprint tooltip", () => {

@@ -42,12 +42,15 @@ const Template = (args) => (
   </AppContext.Provider>
 );
 
-export const Default = Template.bind({});
-Default.args = {
-  onClose: () => {
-    console.log("onClose call");
-  },
-  handleDownloadAgain: () => {
-    console.log("handleDownloadAgain call");
+export const Default = {
+  render: Template,
+
+  args: {
+    onClose: () => {
+      console.log("onClose call");
+    },
+    handleDownloadAgain: () => {
+      console.log("handleDownloadAgain call");
+    },
   },
 };

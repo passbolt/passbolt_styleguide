@@ -35,29 +35,35 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultContext(),
-  userWorkspaceContext: {
-    details: {
-      user: {
-        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+export const Initial = {
+  render: Template,
+
+  args: {
+    context: defaultContext(),
+    userWorkspaceContext: {
+      details: {
+        user: {
+          id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+        },
       },
     },
   },
 };
 
-export const InvalidKey = Template.bind({});
-InvalidKey.args = {
-  context: defaultContext({
-    port: {
-      request: () => mockInvalidGpgKey,
-    },
-  }),
-  userWorkspaceContext: {
-    details: {
-      user: {
-        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+export const InvalidKey = {
+  render: Template,
+
+  args: {
+    context: defaultContext({
+      port: {
+        request: () => mockInvalidGpgKey,
+      },
+    }),
+    userWorkspaceContext: {
+      details: {
+        user: {
+          id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+        },
       },
     },
   },

@@ -129,11 +129,11 @@ an isolated way.
 Besides, we develop any new component by first testing it against Storybook and hence avoiding
 the whole application reload.
 
-To get started with storybook, first install its dependencies. As long as storybook has not migrated completely
-to webpack 4, the dependencies will need to be installed manually.
+The Storybook dependencies are installed with the regular `npm install`. Storybook serves the compiled theme CSS
+from `build/css`, so build the styleguide first:
 
 ```
-npm run dev:storybook:install
+npm run build
 ```
 
 To run Storybook, you just need to run the following command:
@@ -148,9 +148,12 @@ Building the related static website is possible as well using the following comm
 npm run dev:storybook:build
 ```
 
-Executing the stories locally to ensure no regression was introduced can be done as following:
+Executing the stories locally to ensure no regression was introduced can be done as following. The story tests
+run in a Playwright-driven browser; install it once beforehand (this is what `dev:storybook:install` does, it is
+not needed for the other Storybook commands):
 
 ```
+npm run dev:storybook:install
 npm run test:storybook
 ```
 

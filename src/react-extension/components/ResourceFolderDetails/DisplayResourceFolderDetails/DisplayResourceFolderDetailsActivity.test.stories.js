@@ -56,11 +56,14 @@ const Template = (args) => (
   </AppContext.Provider>
 );
 
-export const Initial = Template.bind({});
-Initial.args = {
-  resourceWorkspaceContext: {
-    details: {
-      folder: defaultFolderDto(),
+export const Initial = {
+  render: Template,
+
+  args: {
+    resourceWorkspaceContext: {
+      details: {
+        folder: defaultFolderDto(),
+      },
     },
   },
 };
