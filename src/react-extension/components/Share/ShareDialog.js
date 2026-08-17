@@ -161,14 +161,15 @@ class ShareDialog extends Component {
       // ids of the groups whose members are currently expanded (controlled mode only)
       expandedGroupIds: [],
 
-      // members fetched on demand for groups added during the dialog session (not in initialGroups),
-      // keyed by group id: { [groupId]: Array<userDto> }
+      // members fetched on demand when a group is added or expanded, keyed by group id:
+      // { [groupId]: Array<userDto> }
       fetchedGroupMembers: {},
 
       // autocomplete
       autocompleteOpen: false,
 
-      isFetchingGroupMembers: false,
+      // ids of the groups whose members are currently being fetched
+      fetchingGroupIds: [],
     };
   }
 
@@ -238,7 +239,7 @@ class ShareDialog extends Component {
       return;
     }
 
-    if (this.state.isFetchingGroupMembers) {
+    if (this.state.fetchingGroupIds.length) {
       return;
     }
 
@@ -294,17 +295,31 @@ class ShareDialog extends Component {
       return;
     }
 
-    if (!aro.profile && !this.hasFetchedGroupMembers(aro.id)) {
+    if (!aro.profile) {
       this.fetchGroupMembers(aro.id);
     }
 
     const permission = this.shareChanges.addAroPermissions(aro);
     const permissions = this.state.permissions;
     permissions.push(permission);
-    this.setState({ permissions: permissions }, () => {
-      // scroll at the bottom of the permission list
-      this.permissionListRef.current.scrollTo(this.state.permissions.length - 1);
-    });
+    this.setState(
+      (state) => {
+        // A group removed and added back during the session must come back as a brand new row: drop what
+        // a previous add fetched for it, and the expanded state it was left in, so it displays the
+        // membership the refetch is about to return instead of the one captured earlier.
+        const fetchedGroupMembers = { ...state.fetchedGroupMembers };
+        delete fetchedGroupMembers[aro.id];
+        return {
+          permissions: permissions,
+          fetchedGroupMembers: fetchedGroupMembers,
+          expandedGroupIds: state.expandedGroupIds.filter((groupId) => groupId !== aro.id),
+        };
+      },
+      () => {
+        // scroll at the bottom of the permission list
+        this.permissionListRef.current.scrollTo(this.state.permissions.length - 1);
+      },
+    );
   }
 
   /**
@@ -368,7 +383,8 @@ class ShareDialog extends Component {
 
   /**
    * Toggle the visibility of a group's members in the permission list.
-   * Only relevant in controlled mode, where the members can be resolved from the initial collections.
+   * Expanding refetches the members so the displayed membership is the one the group has now, not the
+   * one captured when the dialog opened.
    * @param {string} groupId The group identifier
    */
   handleToggleGroupMemberVisibility(groupId) {
@@ -377,19 +393,23 @@ class ShareDialog extends Component {
       expandedGroupIds.delete(groupId);
     } else {
       expandedGroupIds.add(groupId);
+      this.fetchGroupMembers(groupId);
     }
     this.setState({ expandedGroupIds: [...expandedGroupIds] });
   }
 
   /**
-   * Fetch the member users of a group that was added during the dialog session and cache their DTOs
-   * in the state, keyed by group id. The members are resolved from the service-worker local-storage
-   * cache (falling back to the API). A failure leaves the group with no displayed members rather than
-   * interrupting the dialog with an error popup.
+   * Fetch the member users of a group from the API and store their DTOs in the state, keyed by group id.
+   * Called every time a group is added or expanded, so the stored members are never reused across
+   * expansions. A fetch already in flight for the same group is not duplicated. A failure leaves the
+   * group with the members it had rather than interrupting the dialog with an error popup.
    * @param {string} groupId The group identifier
    */
   fetchGroupMembers(groupId) {
-    this.setState({ isFetchingGroupMembers: true }, async () => {
+    if (this.state.fetchingGroupIds.includes(groupId)) {
+      return;
+    }
+    this.setState({ fetchingGroupIds: [...this.state.fetchingGroupIds, groupId] }, async () => {
       try {
         const groupServiceWorkerService = new GroupServiceWorkerService(this.props.context.port);
         // The share fetch embeds the members (groups_users with their user), so a single call
@@ -399,38 +419,31 @@ class ShareDialog extends Component {
         const members = (group?.groupsUsers?.items ?? [])
           .filter((groupUser) => groupUser.user)
           .map((groupUser) => groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
-        this.setState({
-          fetchedGroupMembers: { ...this.state.fetchedGroupMembers, [groupId]: members },
-          isFetchingGroupMembers: false,
-        });
+        this.setState((state) => ({
+          fetchedGroupMembers: { ...state.fetchedGroupMembers, [groupId]: members },
+        }));
       } catch (error) {
         console.error(error);
-        this.setState({ isFetchingGroupMembers: false });
+      } finally {
+        this.setState((state) => ({
+          fetchingGroupIds: state.fetchingGroupIds.filter((id) => id !== groupId),
+        }));
       }
     });
   }
 
   /**
-   * Returns true if the given group has already its members fetched
-   * @param {string} groupId
-   * @returns {boolean}
-   */
-  hasFetchedGroupMembers(groupId) {
-    return Boolean(this.state.fetchedGroupMembers[groupId]);
-  }
-
-  /**
-   * Resolve the member users of a group from the controlled-mode initial collections.
-   * The group entity carries its memberships (groups_users), each referencing a user by id that is
-   * looked up in the initial users collection. Members not present in the initial users collection
-   * (i.e. without a direct permission) cannot be resolved and are omitted.
+   * Resolve the member users of a group, from the last fetch when there is one, otherwise from the
+   * controlled-mode initial collections. The group entity carries its memberships (groups_users), each
+   * referencing a user by id that is looked up in the initial users collection. Members not present in
+   * the initial users collection (i.e. without a direct permission) cannot be resolved and are omitted.
    * @param {string} groupId The group identifier
    * @returns {Array<object>} The member users DTOs
    */
   getGroupMembers(groupId) {
-    // Groups added during the dialog session have their members fetched on demand and cached.
-    if (this.hasFetchedGroupMembers(groupId)) {
-      return this.state.fetchedGroupMembers[groupId];
+    const fetchedGroupMembers = this.state.fetchedGroupMembers[groupId];
+    if (fetchedGroupMembers) {
+      return fetchedGroupMembers;
     }
     const group = this.props.initialGroups?.items.find((item) => item.id === groupId);
     const groupsUsers = group?.groupsUsers?.items || [];

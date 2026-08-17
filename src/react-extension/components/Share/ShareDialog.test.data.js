@@ -22,6 +22,7 @@ import { defaultGroupDto } from "../../../shared/models/entity/group/groupEntity
 import { defaultGroupUser } from "../../../shared/models/entity/groupUser/groupUserEntity.test.data";
 import PermissionsCollection from "../../../shared/models/entity/permission/permissionsCollection";
 import GroupsCollection from "../../../shared/models/entity/group/groupsCollection";
+import GroupEntity from "../../../shared/models/entity/group/groupEntity";
 import UsersCollection from "../../../shared/models/entity/user/usersCollection";
 import { v4 as uuidv4 } from "uuid";
 
@@ -914,8 +915,8 @@ export function controlledModeWithGroupProps(data = {}) {
     id: groupId,
     name: "Developer",
     groups_users: [
-      defaultGroupUser({ user_id: memberUserA.id, group_id: groupId, is_admin: true }),
-      defaultGroupUser({ user_id: memberUserB.id, group_id: groupId, is_admin: false }),
+      defaultGroupUser({ user_id: memberUserA.id, group_id: groupId, user: memberUserA, is_admin: true }),
+      defaultGroupUser({ user_id: memberUserB.id, group_id: groupId, user: memberUserB, is_admin: false }),
     ],
   });
 
@@ -954,36 +955,62 @@ export function controlledModeWithGroupProps(data = {}) {
 }
 
 /**
+ * Build the `passbolt.groups.find-by-ids-for-share` response for the group of the controlled-mode initial
+ * collections. Pass `members` to simulate a membership that changed since the dialog opened.
+ * @param {object} props The controlled-mode props holding the group.
+ * @param {Array<object>} [members] The member users to embed, defaults to the group's own members.
+ * @returns {object}
+ */
+export function initialGroupForShareFixture(props, members = null) {
+  const groupDto = props.initialGroups.items[0].toDto(GroupEntity.ALL_CONTAIN_OPTIONS);
+  if (!members) {
+    return groupDto;
+  }
+  return {
+    ...groupDto,
+    groups_users: members.map((user) => defaultGroupUser({ user_id: user.id, group_id: groupDto.id, user: user })),
+  };
+}
+
+// Identity of the group `addedGroupWithMembersFixture` describes, stable so its membership can vary.
+const ADDED_GROUP_ID = "e2b5a0f4-3d7c-4f1b-9a2e-6c8d1f0b3a75";
+
+/**
  * Build the artifacts simulating a group added through the autocomplete during the dialog session.
  * Such a group is not part of the controlled-mode initial collections, so its members must be fetched
  * on demand when it is expanded. Returns the search result the autocomplete receives (no members,
  * just a user_count) and the full group — its memberships carrying their embedded user — as fetched
  * for share; to be returned respectively by the `passbolt.share.search-aros` and
  * `passbolt.groups.find-by-ids-for-share` port mocks.
+ *
+ * The group identity is stable across calls, so calling this twice with different members describes the
+ * same group before and after somebody joined it.
+ * @param {Array<object>} [members] The member users to embed, defaults to two arbitrary users.
  * @returns {{searchResult: object, group: object, members: Array<object>}}
  */
-export function addedGroupWithMembersFixture() {
-  const groupId = uuidv4();
-  const memberUserC = defaultUserDto({
-    username: "nancy@passbolt.com",
-    profile: defaultProfileDto({ first_name: "Nancy", last_name: "Leveson" }),
-  });
-  const memberUserD = defaultUserDto({
-    username: "thelma@passbolt.com",
-    profile: defaultProfileDto({ first_name: "Thelma", last_name: "Estrin" }),
-  });
+export function addedGroupWithMembersFixture(members = null) {
+  const groupId = ADDED_GROUP_ID;
+  const groupMembers = members ?? [
+    defaultUserDto({
+      username: "nancy@passbolt.com",
+      profile: defaultProfileDto({ first_name: "Nancy", last_name: "Leveson" }),
+    }),
+    defaultUserDto({
+      username: "thelma@passbolt.com",
+      profile: defaultProfileDto({ first_name: "Thelma", last_name: "Estrin" }),
+    }),
+  ];
 
   return {
-    searchResult: { id: groupId, name: "Marketing", user_count: 2 },
+    searchResult: { id: groupId, name: "Marketing", user_count: groupMembers.length },
     group: defaultGroupDto({
       id: groupId,
       name: "Marketing",
-      groups_users: [
-        defaultGroupUser({ user_id: memberUserC.id, group_id: groupId, user: memberUserC, is_admin: true }),
-        defaultGroupUser({ user_id: memberUserD.id, group_id: groupId, user: memberUserD, is_admin: false }),
-      ],
+      groups_users: groupMembers.map((user, index) =>
+        defaultGroupUser({ user_id: user.id, group_id: groupId, user: user, is_admin: index === 0 }),
+      ),
     }),
-    members: [memberUserC, memberUserD],
+    members: groupMembers,
   };
 }
 
