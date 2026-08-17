@@ -51,7 +51,7 @@
     "jest-junit": "^16.0.0",
     "jest-useragent-mock": "^0.1.1",
     "jest-webextension-mock": "^4.1.1",
-    "less": "^4.6.4",
+    "less": "^4.9.0",
     "less-loader": "^12.3.2",
     "lockfile-lint": "^4.14.1",
     "prettier": "3.6.2",
