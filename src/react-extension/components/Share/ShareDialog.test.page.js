@@ -47,10 +47,28 @@ export default class ShareDialogPage {
   }
 
   /**
-   * Returns the title info tooltip text, or null when no tooltip is rendered
+   * Returns the text of every item listed in the title info tooltip, or null when no tooltip is
+   * rendered
+   * @returns {null|Array<string>}
    */
-  get titleTooltip() {
-    return this._page.container.querySelector(".dialog-title-wrapper .tooltip-text")?.textContent ?? null;
+  get titleTooltipItems() {
+    const tooltip = this._page.container.querySelector(".dialog-title-wrapper .tooltip-text");
+    if (!tooltip) {
+      return null;
+    }
+    return Array.from(tooltip.querySelectorAll(".share-details-item")).map((item) => item.textContent);
+  }
+
+  /**
+   * Returns the text of the title info tooltip header, or null when no tooltip is rendered
+   * @returns {null|string}
+   */
+  get titleTooltipHeader() {
+    // `:first-child` matters, the "and more..." line is a class less span as well.
+    const header = this._page.container.querySelector(
+      ".dialog-title-wrapper .tooltip-text .share-details-list > span:not(.share-details-item):first-child",
+    );
+    return header?.textContent ?? null;
   }
 
   /**
@@ -65,6 +83,13 @@ export default class ShareDialogPage {
    */
   get form() {
     return this._page.container.querySelector(".share-form");
+  }
+
+  /**
+   * Returns the dialog wrapper element, carrying the mode classes the styles hook onto
+   */
+  get dialogWrapper() {
+    return this._page.container.querySelector(".share-dialog");
   }
   /**
    * Returns the dialog close element

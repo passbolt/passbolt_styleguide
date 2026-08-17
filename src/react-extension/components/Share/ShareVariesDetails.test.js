@@ -34,13 +34,13 @@ describe("ShareVariesDetails", () => {
    * @returns {Array<string>}
    */
   const lines = (container) =>
-    Array.from(container.querySelectorAll(".share-varies-details > span")).map((line) => line.textContent);
+    Array.from(container.querySelectorAll(".share-details-list > span")).map((line) => line.textContent);
 
   it("renders the count and one line per item with its permission level", () => {
     expect.assertions(1);
     const { container } = renderComponent({ 0: [], 1: ["cakephp"], 7: ["apache"], 15: [] });
 
-    expect(lines(container)).toEqual(["2 permissions vary:", "• apache (Can edit)", "• cakephp (Can read)"]);
+    expect(lines(container)).toEqual(["2 permissions vary:", "• apache(Can edit)", "• cakephp(Can read)"]);
   });
 
   it("renders the items the recipient has no permission on under no access", () => {
@@ -49,9 +49,9 @@ describe("ShareVariesDetails", () => {
 
     expect(lines(container)).toEqual([
       "3 permissions vary:",
-      "• apache (Can read)",
-      "• nginx (No access)",
-      "• redis (Is owner)",
+      "• apache(Can read)",
+      "• nginx(No access)",
+      "• redis(Is owner)",
     ]);
   });
 
@@ -59,7 +59,7 @@ describe("ShareVariesDetails", () => {
     expect.assertions(1);
     const { container } = renderComponent({ 0: [], 1: ["zulu"], 7: ["alpha"], 15: [] });
 
-    expect(lines(container)).toEqual(["2 permissions vary:", "• alpha (Can edit)", "• zulu (Can read)"]);
+    expect(lines(container)).toEqual(["2 permissions vary:", "• alpha(Can edit)", "• zulu(Can read)"]);
   });
 
   it("truncates the lines at three items and warns that there are more", () => {
@@ -68,9 +68,9 @@ describe("ShareVariesDetails", () => {
 
     expect(lines(container)).toEqual([
       "5 permissions vary:",
-      "• alpha (Can read)",
-      "• bravo (Can edit)",
-      "• charlie (Is owner)",
+      "• alpha(Can read)",
+      "• bravo(Can edit)",
+      "• charlie(Is owner)",
       "and more...",
     ]);
   });
@@ -81,9 +81,18 @@ describe("ShareVariesDetails", () => {
 
     expect(lines(container)).toEqual([
       "3 permissions vary:",
-      "• alpha (Can read)",
-      "• bravo (Can read)",
-      "• charlie (Can edit)",
+      "• alpha(Can read)",
+      "• bravo(Can read)",
+      "• charlie(Can edit)",
     ]);
+  });
+
+  it("splits a line into a truncatable name and a permission label kept intact", () => {
+    expect.assertions(2);
+    const { container } = renderComponent({ 0: [], 1: ["a-very-long-resource-name"], 7: [], 15: [] });
+    const line = container.querySelector(".share-details-list .share-details-item");
+
+    expect(line.querySelector(".ellipsis").textContent).toEqual("• a-very-long-resource-name");
+    expect(line.querySelector(".share-details-item-detail").textContent).toEqual("(Can read)");
   });
 });

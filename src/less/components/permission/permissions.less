@@ -271,16 +271,18 @@
             }
         }
 
+        // The whole .aro is faded rather than its leaves so the fingerprint tooltip sitting next to
+        // the recipient name dims along with it.
         li.suspended {
-            .avatar, .aro .aro-name .ellipsis, .aro-details, .permission_changes {
+            .avatar, .aro {
                 opacity: 0.5;
             }
         }
 
-        // Fade the same leaf elements as li.suspended so a suspended and removed row dims only once.
+        // Fade the same elements as li.suspended so a suspended and removed row dims only once.
         // The change status chip and the revert action keep their full opacity.
         li.permission-removed {
-            .avatar, .aro .aro-name .ellipsis, .aro-details, .rights, > .tooltip-portal {
+            .avatar, .aro, .rights, > .tooltip-portal {
                 opacity: 0.5;
             }
         }
@@ -304,6 +306,19 @@
             .selected-value {
                 padding: .4rem 1.6rem;
             }
+
+            // A disabled select keeps its label readable, the row fade is the only thing that dims
+            // it. Without this the base .selected-value.disabled fade would compound with it.
+            .selected-value.disabled {
+                opacity: 1;
+            }
         }
     }
+}
+
+// Read-only mode fades no row, so the caret alone signals the selects are not interactive. Scoped to
+// that mode on purpose: elsewhere a disabled select sits on a faded row, and a second fade here
+// would compound down to 0.125.
+.share-dialog.read-only .permissions .selected-value.disabled svg {
+    opacity: 0.25;
 }

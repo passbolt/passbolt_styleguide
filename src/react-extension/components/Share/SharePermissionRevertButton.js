@@ -14,7 +14,7 @@
 import React, { Component } from "react";
 import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import RevertSVG from "../../../img/svg/revert.svg";
+import RevertSVG from "../../../img/svg/undo-2.svg";
 
 class SharePermissionRevertButton extends Component {
   handleRevertClick() {

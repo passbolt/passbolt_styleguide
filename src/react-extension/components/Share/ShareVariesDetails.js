@@ -13,7 +13,8 @@
  */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Trans, withTranslation } from "react-i18next";
+import { withTranslation } from "react-i18next";
+import ShareDetailsList from "./ShareDetailsList";
 
 /**
  * Tooltip body listing the permission the recipient has on each of the shared items.
@@ -45,26 +46,14 @@ class ShareVariesDetails extends Component {
 
   render() {
     const details = this.details;
-    const displayedDetails = details.slice(0, ShareVariesDetails.DISPLAY_LIMIT);
     return (
-      <span className="share-varies-details">
-        <span>{this.props.t("{{count}} permissions vary:", { count: details.length })}</span>
-        {displayedDetails.map((detail, index) => (
-          <span key={`${index}-${detail.name}`}>
-            • <strong>{detail.name}</strong> ({this.permissionLabels[detail.type]})
-          </span>
-        ))}
-        {details.length > displayedDetails.length && (
-          <span>
-            <Trans>and more...</Trans>
-          </span>
-        )}
-      </span>
+      <ShareDetailsList
+        header={this.props.t("{{count}} permissions vary:", { count: details.length })}
+        items={details.map(({ name, type }) => ({ name, detail: this.permissionLabels[type] }))}
+      />
     );
   }
 }
-
-ShareVariesDetails.DISPLAY_LIMIT = 3;
 
 ShareVariesDetails.propTypes = {
   variesDetails: PropTypes.object, // {type: [item1, ...itemN]} The item names grouped per permission type

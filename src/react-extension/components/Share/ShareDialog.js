@@ -25,6 +25,7 @@ import UserPermissionItem from "./UserPermissionItem";
 import GroupPermissionItem from "./GroupPermissionItem";
 import GroupUserPermissionItem from "./GroupUserPermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
+import ShareDetailsList from "./ShareDetailsList";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { withDialog } from "../../contexts/DialogContext";
 import { withActionFeedback } from "../../contexts/ActionFeedbackContext";
@@ -617,23 +618,28 @@ class ShareDialog extends Component {
 
   /**
    * Return the dialog title tooltip content (multi-share details)
-   * or false in case of single resource share
-   * @returns {false|string} tool
+   * or null in case of single resource share
+   * @returns {null|JSX.Element}
    */
   getTooltip() {
     if (!this.shareChanges) {
-      return "";
+      return null;
     }
     const acos = this.shareChanges.getAcos();
-    if (!acos || !acos.length || acos.length === 1) {
-      return "";
+    if (!acos || acos.length <= 1) {
+      return null;
     }
     // `metadata.name` covers resources (and controlled-mode ACOs, which expose no top-level name);
-    // folders fall back to `aco.name`. Empty names are dropped so the result is never bare commas.
-    return acos
+    // folders fall back to `aco.name`. Empty names are dropped so the list never shows blank lines.
+    // Sorted by name so that the truncation always drops the same items.
+    const items = acos
       .map((aco) => aco.metadata?.name ?? aco.name)
       .filter(Boolean)
-      .join(", ");
+      .sort((name, otherName) => name.localeCompare(otherName))
+      .map((name) => ({ name }));
+    return items.length ? (
+      <ShareDetailsList header={this.translate("{{count}} items selected:", { count: items.length })} items={items} />
+    ) : null;
   }
 
   /**
@@ -654,9 +660,10 @@ class ShareDialog extends Component {
 
   /**
    * Return true if submit button should be disabled
-   * True if there is no owner, if all input should be disabled, if there is no change since the start.
-   * Controlled mode drops the `!hasChanges()` gate so the operator can confirm the inherited
-   * permissions as-is (empty deltas — the workflow then skips the share call entirely).
+   * True if there is no owner, if the operator ownership requirement is not met or if all input
+   * should be disabled. An unchanged permission list does not disable the submit button: the
+   * operator must be able to confirm the inherited permissions as-is (empty deltas, the workflow
+   * then skips the share call entirely).
    * @returns {boolean}
    */
   hasSubmitDisabled() {
@@ -840,7 +847,7 @@ class ShareDialog extends Component {
     const hasNoOwner = !isReadOnly && this.hasNoOwner();
     return (
       <DialogWrapper
-        className="share-dialog"
+        className={`share-dialog${isReadOnly ? " read-only" : ""}`}
         title={this.getTitle()}
         subtitle={this.getSubtitle()}
         tooltip={this.getTooltip()}

@@ -522,16 +522,17 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       expect(page.count).toBe(2);
     });
 
-    it("As LU sharing several resources I should see their names listed in the title tooltip", async () => {
-      expect.assertions(1);
-      const props = twoResourcesShareProps();
+    it("As LU sharing several resources I should see their names listed sorted in the title tooltip", async () => {
+      expect.assertions(2);
+      const props = twoResourcesShareProps({ resourceNames: ["RB", "RA"] });
       mockContextRequest(jest.fn());
 
       await act(() => (page = new ShareDialogPage(context, props)));
 
       // Regression: controlled-mode ACOs expose only `metadata.name`, so the tooltip must not
-      // resolve to bare commas.
-      expect(page.titleTooltip).toBe("RA, RB");
+      // resolve to blank lines.
+      expect(page.titleTooltipHeader).toBe("2 items selected:");
+      expect(page.titleTooltipItems).toEqual(["• RA", "• RB"]);
     });
   });
 
@@ -575,10 +576,10 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       expect(page.variesIcon(2)).toBeNull();
     });
 
-    it("As LU removing a varying recipient I still see its varies breakdown icon, before and after reverting", async () => {
+    it("As LU removing a varying recipient I no longer see its varies breakdown icon, until I revert", async () => {
       expect.assertions(2);
       await page.selectRemovePermission(2);
-      expect(page.variesIcon(2)).not.toBeNull();
+      expect(page.variesIcon(2)).toBeNull();
 
       await page.selectRevertPermission(2);
       expect(page.variesIcon(2)).not.toBeNull();
@@ -610,6 +611,19 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
       expect(props.onConfirm).toHaveBeenCalledTimes(1);
       expect(props.onConfirm.mock.calls[0][0]).toEqual([]);
+    });
+
+    it("As LU in read-only mode I see the dialog flagged read-only, the styles fade the select carets on it", async () => {
+      expect.assertions(2);
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, { ...controlledModeProps(), readOnly: true })));
+
+      expect(page.dialogWrapper.classList.contains("read-only")).toBe(true);
+
+      await act(() => (page = new ShareDialogPage(context, controlledModeProps())));
+
+      expect(page.dialogWrapper.classList.contains("read-only")).toBe(false);
     });
   });
 

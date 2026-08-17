@@ -165,6 +165,13 @@ describe("UserPermissionItem", () => {
       const page = new UserPermissionItemPage(defaultVariesProps({ permissionType: 15 }));
       expect(page.variesIcon).toBeNull();
     });
+
+    it("hides the varies info icon when the permission is pending deletion", () => {
+      expect.assertions(2);
+      const page = new UserPermissionItemPage(defaultVariesProps({ changeStatus: "removed" }));
+      expect(page.changeChip.textContent).toBe("removed");
+      expect(page.variesIcon).toBeNull();
+    });
   });
 
   describe("Fingerprint tooltip", () => {
