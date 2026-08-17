@@ -1,12 +1,13 @@
 import React from 'react';
+import {fn} from 'storybook/test';
 import AppContext from '../src/shared/context/AppContext/AppContext';
 import MockTranslationProvider from "../src/react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
 // Mock jest.fn to be able to use jest test data mock in storybook.
-// The benefit is too be able to keep consistent any changes on the Component props in order to keep the storybook stable.
-window.jest = {
-  fn: arg => () => arg
-};
+// The benefit is to be able to keep consistent any changes on the Component props in order to keep the storybook stable.
+// Storybook's fn() is a jest-compatible spy: implementations passed to jest.fn(impl) are actually invoked,
+// and the mock API (mockImplementation, mock.calls, ...) is available.
+window.jest = {fn};
 
 const withLocalProvider = (Story, context) =>
   <MockTranslationProvider language={context.globals.locale}>
@@ -42,11 +43,10 @@ function withStylesheet(Story, context) {
   );
 };
 
-export const globalTypes = {
+const globalTypes = {
   locale: {
     name: 'Locale',
     description: 'Internationalization locale',
-    defaultValue: 'en-GB',
     toolbar: {
       icon: 'globe',
       items: [
@@ -74,7 +74,6 @@ export const globalTypes = {
   themes: {
     name: 'Theme',
     description: 'Theme switcher',
-    defaultValue: 'default',
     toolbar: {
       icon: 'photo',
       items: [
@@ -88,7 +87,12 @@ export const globalTypes = {
   }
 }
 
-export const parameters = {
+const initialGlobals = {
+  locale: 'en-GB',
+  themes: 'default',
+};
+
+const parameters = {
   options: {
     storySort: {
       order: [
@@ -108,4 +112,6 @@ export const parameters = {
   }
 };
 
-export const decorators = [withAppContextProvider, withLocalProvider, withStylesheet];
+const decorators = [withAppContextProvider, withLocalProvider, withStylesheet];
+
+export default {decorators, parameters, globalTypes, initialGlobals};

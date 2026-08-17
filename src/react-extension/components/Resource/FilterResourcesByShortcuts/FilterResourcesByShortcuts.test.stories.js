@@ -20,4 +20,6 @@ const Template = (args) => (
   </AppContext.Provider>
 );
 
-export const Initial = Template.bind({});
+export const Initial = {
+  render: Template,
+};

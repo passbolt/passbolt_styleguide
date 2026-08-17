@@ -7,8 +7,8 @@ import { defaultAppContext } from "../../contexts/AppContext.test.data";
 
 export function defaultSsoContext(ssoContext) {
   const defaultSsoContext = {
-    loadSsoConfiguration: () => "azure",
-    getProvider: () => "azure",
+    loadSsoConfiguration: jest.fn(() => "azure"),
+    getProvider: jest.fn(() => "azure"),
     runSignInProcess: jest.fn(() => Promise.resolve()),
   };
   return Object.assign(defaultSsoContext, ssoContext || {});
@@ -25,7 +25,9 @@ export function defaultPropsWithSsoEnabled(data = {}) {
 }
 
 export function disabledSsoContext(ssoContext) {
-  return defaultSsoContext(Object.assign({ loadSsoConfiguration: () => null, getProvider: () => null }, ssoContext));
+  return defaultSsoContext(
+    Object.assign({ loadSsoConfiguration: jest.fn(() => null), getProvider: jest.fn(() => null) }, ssoContext),
+  );
 }
 
 export function defaultPropsWithSsoDisabled(data = {}) {

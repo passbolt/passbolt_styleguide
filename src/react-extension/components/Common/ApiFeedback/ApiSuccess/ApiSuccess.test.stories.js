@@ -12,7 +12,6 @@
  * @since         3.10.0
  */
 
-import React from "react";
 import ApiSuccess from "./ApiSuccess";
 
 export default {
@@ -20,14 +19,14 @@ export default {
   component: ApiSuccess,
 };
 
-const Template = (args) => <ApiSuccess {...args} />;
-
 const parameters = {
   css: "api_main",
 };
 
-export const SuccessFeedback = Template.bind({});
-SuccessFeedback.args = {
-  message: "You successfully authenticated.",
+export const SuccessFeedback = {
+  args: {
+    message: "You successfully authenticated.",
+  },
+
+  parameters: parameters,
 };
-SuccessFeedback.parameters = parameters;

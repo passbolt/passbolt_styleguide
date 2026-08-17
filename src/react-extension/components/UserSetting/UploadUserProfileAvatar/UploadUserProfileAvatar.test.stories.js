@@ -59,8 +59,11 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: context,
-  onClose: () => {},
+export const Initial = {
+  render: Template,
+
+  args: {
+    context: context,
+    onClose: () => {},
+  },
 };

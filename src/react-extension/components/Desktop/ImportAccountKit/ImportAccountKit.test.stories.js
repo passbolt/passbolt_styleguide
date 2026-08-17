@@ -33,5 +33,8 @@ const Template = () => (
 const defaultParameters = {
   css: "ext_authentication",
 };
-export const Default = Template.bind({});
-Default.parameters = defaultParameters;
+
+export const Default = {
+  render: Template,
+  parameters: defaultParameters,
+};

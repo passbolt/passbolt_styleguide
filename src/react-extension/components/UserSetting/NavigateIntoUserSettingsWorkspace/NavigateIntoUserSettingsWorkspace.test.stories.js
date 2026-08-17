@@ -24,13 +24,19 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  ...defaultProps(),
+export const Initial = {
+  render: Template,
+
+  args: {
+    ...defaultProps(),
+  },
 };
 
-export const PendingAccountRecovery = Template.bind({});
-PendingAccountRecovery.args = {
-  ...defaultProps(),
-  hasPendingAccountRecoveryChoice: true,
+export const PendingAccountRecovery = {
+  render: Template,
+
+  args: {
+    ...defaultProps(),
+    hasPendingAccountRecoveryChoice: true,
+  },
 };
