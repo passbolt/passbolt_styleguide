@@ -343,8 +343,8 @@ class ShareDialog extends Component {
   }
 
   /**
-   * What happens when the user reverts a permission pending deletion
-   * e.g. clear the recipient's staged changes and restore its row to the original permission.
+   * Revert a permission pending deletion: clear the recipient's staged changes and restore its
+   * row to the original permission.
    * @param {string} aroId uuid
    */
   handlePermissionRevert(aroId) {
