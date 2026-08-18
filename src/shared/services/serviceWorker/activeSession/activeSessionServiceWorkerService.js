@@ -13,7 +13,7 @@
  */
 import UserActiveSessionEntity from "../../../models/entity/session/userActiveSessionEntity";
 
-export const AUTH_FIND_AND_UPDATE_ACTIVE_SESSION_EVENT = "passbolt.auth.find-and-update-active-session";
+export const AUTH_FIND_AND_UPDATE_ACTIVE_SESSION_EVENT = "passbolt.auth.find-and-update-authentication-status";
 
 class ActiveSessionServiceWorkerService {
   /**
