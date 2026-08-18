@@ -39,8 +39,11 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultAdministratorAppContext(),
-  ...defaultProps(),
+export const Initial = {
+  render: Template,
+
+  args: {
+    context: defaultAdministratorAppContext(),
+    ...defaultProps(),
+  },
 };

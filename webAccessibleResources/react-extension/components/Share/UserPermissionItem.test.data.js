@@ -59,10 +59,11 @@ export function defaultProps(data = {}) {
       }),
     }),
     permissionType: 15,
-    updated: false,
+    changeStatus: null,
     disabled: false,
     onUpdate: jest.fn(),
     onDelete: jest.fn(),
+    onRevert: jest.fn(),
     ...data,
   };
 }

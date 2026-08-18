@@ -82,44 +82,72 @@ const Template = (args) => (
   </div>
 );
 
-export const OnUsernameFieldWithEmptyValue = Template.bind({});
-export const OnUsernameFieldWithValue = Template.bind({});
-export const OnPasswordFieldWithoutSuggestion = Template.bind({});
-export const OnPasswordFieldWithEmptyValue = Template.bind({});
-export const OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies = Template.bind({});
-export const OnPasswordFieldWithValue = Template.bind({});
-
-OnUsernameFieldWithEmptyValue.args = defaultProps({
-  context: defaultAppContext({ port: mockPortUsernameEmpty }),
-});
-OnUsernameFieldWithValue.args = defaultProps({
-  context: defaultAppContext({ port: mockPortUsernameFilled }),
-});
-OnPasswordFieldWithoutSuggestion.args = defaultProps({
-  context: defaultAppContext({
-    port: mockPortPasswordNoSuggestion,
-  }),
-});
-OnPasswordFieldWithEmptyValue.args = defaultProps({
-  context: defaultAppContext({
-    port: mockPortPasswordEmpty,
-  }),
-});
-OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies.args = defaultProps({
-  context: defaultAppContext({
-    port: mockPortPasswordEmptyWitCustomPasswordPolicies,
-  }),
-});
-OnPasswordFieldWithValue.args = defaultProps({
-  context: defaultAppContext({
-    port: mockPortPasswordFilled,
-  }),
-});
-
 const inFormMenuCss = { css: "ext_in_form_menu" };
-OnUsernameFieldWithEmptyValue.parameters = inFormMenuCss;
-OnUsernameFieldWithValue.parameters = inFormMenuCss;
-OnPasswordFieldWithoutSuggestion.parameters = inFormMenuCss;
-OnPasswordFieldWithEmptyValue.parameters = inFormMenuCss;
-OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies.parameters = inFormMenuCss;
-OnPasswordFieldWithValue.parameters = inFormMenuCss;
+
+export const OnUsernameFieldWithEmptyValue = {
+  render: Template,
+
+  args: defaultProps({
+    context: defaultAppContext({ port: mockPortUsernameEmpty }),
+  }),
+
+  parameters: inFormMenuCss,
+};
+
+export const OnUsernameFieldWithValue = {
+  render: Template,
+
+  args: defaultProps({
+    context: defaultAppContext({ port: mockPortUsernameFilled }),
+  }),
+
+  parameters: inFormMenuCss,
+};
+
+export const OnPasswordFieldWithoutSuggestion = {
+  render: Template,
+
+  args: defaultProps({
+    context: defaultAppContext({
+      port: mockPortPasswordNoSuggestion,
+    }),
+  }),
+
+  parameters: inFormMenuCss,
+};
+
+export const OnPasswordFieldWithEmptyValue = {
+  render: Template,
+
+  args: defaultProps({
+    context: defaultAppContext({
+      port: mockPortPasswordEmpty,
+    }),
+  }),
+
+  parameters: inFormMenuCss,
+};
+
+export const OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies = {
+  render: Template,
+
+  args: defaultProps({
+    context: defaultAppContext({
+      port: mockPortPasswordEmptyWitCustomPasswordPolicies,
+    }),
+  }),
+
+  parameters: inFormMenuCss,
+};
+
+export const OnPasswordFieldWithValue = {
+  render: Template,
+
+  args: defaultProps({
+    context: defaultAppContext({
+      port: mockPortPasswordFilled,
+    }),
+  }),
+
+  parameters: inFormMenuCss,
+};

@@ -406,7 +406,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         return { type: ResourceWorkspaceFilterTypes.ALL };
       }
     } else if (this.resources !== null && this.props.location.pathname.includes("passwords")) {
-      const isExpiredResourceLocation = this.props.match.params?.filterType === ResourceWorkspaceFilterTypes.EXPIRED;
+      const isExpiredResourceLocation = this.props.match.params?.filterType === "expired";
       if (isExpiredResourceLocation) {
         return { type: ResourceWorkspaceFilterTypes.EXPIRED };
       } else if (this.props.match.params.selectedResourceId) {

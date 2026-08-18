@@ -1,0 +1,24 @@
+/*
+	Share tooltips: the item list shown in the share dialog title and varies tooltips.
+*/
+.share-details-list {
+  display: flex;
+  flex-direction: column;
+
+  // The item name absorbs the horizontal pressure and ellipsises, so the trailing detail stays
+  // fully readable whatever the length of its translation.
+  .share-details-item {
+    display: flex;
+    gap: .4rem;
+
+    .share-details-item-detail {
+      flex: none;
+    }
+  }
+}
+
+// The dialog title tooltip carries the same list as the varies tooltip, so it hugs its content with
+// the padding of .tooltip-portal-text rather than the wider default of .tooltip-text.
+.tooltip .tooltip-text:has(.share-details-list) {
+  padding: .4rem .8rem;
+}

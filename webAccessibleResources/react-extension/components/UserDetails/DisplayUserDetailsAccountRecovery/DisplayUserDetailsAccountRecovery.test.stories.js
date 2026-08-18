@@ -48,8 +48,11 @@ const contextWithLoadingRequest = {
     port: {},
   },
 };
-export const Loading = Template.bind({});
-Loading.args = defaultProps(contextWithLoadingRequest);
+
+export const Loading = {
+  render: Template,
+  args: defaultProps(contextWithLoadingRequest),
+};
 
 const contextWithNoAccountRecoveryRequest = {
   context: {
@@ -58,8 +61,11 @@ const contextWithNoAccountRecoveryRequest = {
     },
   },
 };
-export const NoAccountRecovery = Template.bind({});
-NoAccountRecovery.args = defaultProps(contextWithNoAccountRecoveryRequest);
+
+export const NoAccountRecovery = {
+  render: Template,
+  args: defaultProps(contextWithNoAccountRecoveryRequest),
+};
 
 const contextWithPreviousApproved = {
   context: {
@@ -68,8 +74,11 @@ const contextWithPreviousApproved = {
     },
   },
 };
-export const AccountRecoveryApproved = Template.bind({});
-AccountRecoveryApproved.args = defaultProps(contextWithPreviousApproved);
+
+export const AccountRecoveryApproved = {
+  render: Template,
+  args: defaultProps(contextWithPreviousApproved),
+};
 
 const contextWithPreviousRejected = {
   context: {
@@ -78,8 +87,11 @@ const contextWithPreviousRejected = {
     },
   },
 };
-export const AccountRecoveryRejected = Template.bind({});
-AccountRecoveryRejected.args = defaultProps(contextWithPreviousRejected);
+
+export const AccountRecoveryRejected = {
+  render: Template,
+  args: defaultProps(contextWithPreviousRejected),
+};
 
 const contextWithPreviousApprovedAndPending = {
   context: {
@@ -96,8 +108,11 @@ const contextWithPreviousApprovedAndPending = {
     },
   },
 };
-export const AccountRecoveryApprovedWithPending = Template.bind({});
-AccountRecoveryApprovedWithPending.args = defaultProps(contextWithPreviousApprovedAndPending);
+
+export const AccountRecoveryApprovedWithPending = {
+  render: Template,
+  args: defaultProps(contextWithPreviousApprovedAndPending),
+};
 
 const contextWithPreviousRejectedAndPending = {
   context: {
@@ -114,8 +129,11 @@ const contextWithPreviousRejectedAndPending = {
     },
   },
 };
-export const AccountRecoveryRejectedWithPending = Template.bind({});
-AccountRecoveryRejectedWithPending.args = defaultProps(contextWithPreviousRejectedAndPending);
+
+export const AccountRecoveryRejectedWithPending = {
+  render: Template,
+  args: defaultProps(contextWithPreviousRejectedAndPending),
+};
 
 const contextWithOnePending = {
   context: {
@@ -132,8 +150,11 @@ const contextWithOnePending = {
     },
   },
 };
-export const AccountRecoveryWithOneRequestPending = Template.bind({});
-AccountRecoveryWithOneRequestPending.args = defaultProps(contextWithOnePending);
+
+export const AccountRecoveryWithOneRequestPending = {
+  render: Template,
+  args: defaultProps(contextWithOnePending),
+};
 
 const contextWithOneRequest = {
   context: {
@@ -142,5 +163,8 @@ const contextWithOneRequest = {
     },
   },
 };
-export const AccountRecoveryWithOneRequest = Template.bind({});
-AccountRecoveryWithOneRequest.args = defaultProps(contextWithOneRequest);
+
+export const AccountRecoveryWithOneRequest = {
+  render: Template,
+  args: defaultProps(contextWithOneRequest),
+};

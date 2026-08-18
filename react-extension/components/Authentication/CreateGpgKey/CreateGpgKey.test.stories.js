@@ -37,12 +37,18 @@ const defaultParameters = {
   css: "ext_authentication",
 };
 
-export const Setup = Template.bind({});
-Setup.args = defaultProps({ displayAs: CreateGpgKeyVariation.SETUP });
-Setup.parameters = defaultParameters;
+export const Setup = {
+  render: Template,
+  args: defaultProps({ displayAs: CreateGpgKeyVariation.SETUP }),
+  parameters: defaultParameters,
+};
 
-export const GenerateAccountRecoveryGpgKey = Template.bind({});
-GenerateAccountRecoveryGpgKey.args = defaultProps({
-  displayAs: CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY,
-});
-GenerateAccountRecoveryGpgKey.parameters = defaultParameters;
+export const GenerateAccountRecoveryGpgKey = {
+  render: Template,
+
+  args: defaultProps({
+    displayAs: CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY,
+  }),
+
+  parameters: defaultParameters,
+};

@@ -35,5 +35,7 @@ const Template = (args) => (
   </MfaContextProvider>
 );
 
-export const Default = Template.bind({});
-Default.args = defaultProps();
+export const Default = {
+  render: Template,
+  args: defaultProps(),
+};

@@ -72,10 +72,24 @@ export default class GroupPermissionItemPage {
   }
 
   /**
-   * Returns true if the item has the permission-updated CSS class
+   * Returns the change status chip element (present when changeStatus is set)
    */
-  get isUpdated() {
-    return Boolean(this._page.container.querySelector("li.permission-updated"));
+  get changeChip() {
+    return this._page.container.querySelector(".chips");
+  }
+
+  /**
+   * Returns the revert button element (present when the permission is removed)
+   */
+  get revertButton() {
+    return this._page.container.querySelector(".revert-item");
+  }
+
+  /**
+   * Returns true if the item has the permission-removed CSS class
+   */
+  get isRemoved() {
+    return Boolean(this._page.container.querySelector("li.permission-removed"));
   }
 
   /**
@@ -86,10 +100,10 @@ export default class GroupPermissionItemPage {
   }
 
   /**
-   * Returns the attention icon element (present when variesDetails is set)
+   * Returns the varies info icon element (present when variesDetails is set)
    */
-  get attentionIcon() {
-    return this._page.container.querySelector(".attention-required");
+  get variesIcon() {
+    return this._page.container.querySelector(".varies-icon");
   }
 
   /**
@@ -114,10 +128,28 @@ export default class GroupPermissionItemPage {
   }
 
   /**
+   * Click the revert button
+   */
+  async clickRevert() {
+    await this.user.click(this.revertButton);
+  }
+
+  /**
    * Click the group member visibility toggle button
    */
   async clickGroupVisibilityToggle() {
     await this.user.click(this.groupVisibilityToggle);
+  }
+
+  /**
+   * Open the permission select and return the labels of the offered options.
+   * The select excludes its current value from the rendered options.
+   * @returns {Promise<Array<string>>}
+   */
+  async getPermissionSelectOptions() {
+    await this.user.click(this.permissionSelect);
+    const options = this._page.container.querySelectorAll(".option");
+    return Array.from(options).map((option) => option.textContent.trim());
   }
 
   /**

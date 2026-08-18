@@ -15,7 +15,6 @@ import React from "react";
 
 export default {
   title: "Foundations/Toggle",
-  component: "Toggle",
 };
 
 export const Default = {

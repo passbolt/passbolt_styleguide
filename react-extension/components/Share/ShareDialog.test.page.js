@@ -47,10 +47,28 @@ export default class ShareDialogPage {
   }
 
   /**
-   * Returns the title info tooltip text, or null when no tooltip is rendered
+   * Returns the text of every item listed in the title info tooltip, or null when no tooltip is
+   * rendered
+   * @returns {null|Array<string>}
    */
-  get titleTooltip() {
-    return this._page.container.querySelector(".dialog-title-wrapper .tooltip-text")?.textContent ?? null;
+  get titleTooltipItems() {
+    const tooltip = this._page.container.querySelector(".dialog-title-wrapper .tooltip-text");
+    if (!tooltip) {
+      return null;
+    }
+    return Array.from(tooltip.querySelectorAll(".share-details-item")).map((item) => item.textContent);
+  }
+
+  /**
+   * Returns the text of the title info tooltip header, or null when no tooltip is rendered
+   * @returns {null|string}
+   */
+  get titleTooltipHeader() {
+    // `:first-child` matters, the "and more..." line is a class less span as well.
+    const header = this._page.container.querySelector(
+      ".dialog-title-wrapper .tooltip-text .share-details-list > span:not(.share-details-item):first-child",
+    );
+    return header?.textContent ?? null;
   }
 
   /**
@@ -65,6 +83,13 @@ export default class ShareDialogPage {
    */
   get form() {
     return this._page.container.querySelector(".share-form");
+  }
+
+  /**
+   * Returns the dialog wrapper element, carrying the mode classes the styles hook onto
+   */
+  get dialogWrapper() {
+    return this._page.container.querySelector(".share-dialog");
   }
   /**
    * Returns the dialog close element
@@ -92,6 +117,13 @@ export default class ShareDialogPage {
    */
   get errorMessage() {
     return this._page.container.querySelector(".error.message").textContent;
+  }
+
+  /**
+   * Returns true when an error message is displayed
+   */
+  get hasErrorMessage() {
+    return Boolean(this._page.container.querySelector(".error.message"));
   }
 
   /**
@@ -148,11 +180,56 @@ export default class ShareDialogPage {
   }
 
   /**
+   * Returns the select rights option element matching the given label for the 'index' row.
+   * The select excludes its current value from the options, target options by label.
+   * @param index the display of the permission row
+   * @param label the option label, e.g. "can read", "is owner"
+   */
+  selectRightsItemByLabel(index, label) {
+    const options = this._page.container
+      .querySelectorAll(".permissions .row")
+      [index - 1].querySelectorAll(".select .option");
+    return Array.from(options).find((option) => option.textContent === label);
+  }
+
+  /**
+   * Returns the change status chip for the 'index' row
+   * @param index the display of the permission row
+   */
+  changeChip(index) {
+    return this._page.container.querySelectorAll(".permissions .row")[index - 1].querySelector(".chips");
+  }
+
+  /**
+   * Returns the varies info icon for the 'index' row (present while the permission varies)
+   * @param index the display of the permission row
+   */
+  variesIcon(index) {
+    return this._page.container.querySelectorAll(".permissions .row")[index - 1].querySelector(".varies-icon");
+  }
+
+  /**
    * Returns the close button to remove user for the 'index' one
    * @param index the display close button to remove user
    */
   removeAro(index) {
     return this._page.container.querySelectorAll(".permissions .row")[index - 1].querySelector(".remove-item");
+  }
+
+  /**
+   * Returns the revert button for the 'index' row
+   * @param index the display of the permission row
+   */
+  revertAro(index) {
+    return this._page.container.querySelectorAll(".permissions .row")[index - 1].querySelector(".revert-item");
+  }
+
+  /**
+   * Returns the aro id of the 'index' row, extracted from the row element id
+   * @param index the display of the permission row
+   */
+  rowId(index) {
+    return this._page.container.querySelectorAll(".permissions .row")[index - 1].id.replace("permission-item-", "");
   }
 
   /**
@@ -248,6 +325,12 @@ export default class ShareDialogPage {
     await this.click(this.selectFirstItem(index));
   }
 
+  /** Select the rights option with the given label for the index row */
+  async selectRightsOption(index, label) {
+    await this.click(this.selectRights(index));
+    await this.click(this.selectRightsItemByLabel(index, label));
+  }
+
   /** Save permissions */
   async savePermissions() {
     await this.click(this.saveButton);
@@ -261,5 +344,10 @@ export default class ShareDialogPage {
   /**remove permission*/
   async selectRemovePermission(index) {
     await this.click(this.removeAro(index));
+  }
+
+  /**revert a permission pending deletion*/
+  async selectRevertPermission(index) {
+    await this.click(this.revertAro(index));
   }
 }

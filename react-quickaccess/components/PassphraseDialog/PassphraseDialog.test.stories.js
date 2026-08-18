@@ -33,14 +33,18 @@ const parameters = {
   css: "ext_quickaccess",
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultAppContext(),
-  requestId: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-  classname: "",
-  onComplete: () => {},
+export const Initial = {
+  render: Template,
+
+  args: {
+    context: defaultAppContext(),
+    requestId: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    classname: "",
+    onComplete: () => {},
+  },
+
+  parameters: parameters,
 };
-Initial.parameters = parameters;
 
 const mockedPort = new MockPort();
 mockedPort.addRequestListener("passbolt.keyring.private.checkpassphrase", () => {
@@ -50,11 +54,16 @@ mockedPort.addRequestListener("passbolt.keyring.private.checkpassphrase", () => 
 const contextRequestError = {
   port: mockedPort,
 };
-export const ErrorPassphrase = Template.bind({});
-ErrorPassphrase.args = {
-  context: defaultAppContext(contextRequestError),
-  requestId: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-  classname: "",
-  onComplete: () => {},
+
+export const ErrorPassphrase = {
+  render: Template,
+
+  args: {
+    context: defaultAppContext(contextRequestError),
+    requestId: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    classname: "",
+    onComplete: () => {},
+  },
+
+  parameters: parameters,
 };
-ErrorPassphrase.parameters = parameters;

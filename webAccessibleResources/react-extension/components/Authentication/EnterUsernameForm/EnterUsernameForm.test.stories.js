@@ -33,16 +33,22 @@ const Template = (args) => (
   </div>
 );
 
-export const Initial = Template.bind({});
-Initial.parameters = {
-  css: "ext_authentication",
+export const Initial = {
+  render: Template,
+
+  parameters: {
+    css: "ext_authentication",
+  },
 };
 
-export const WithSsoRecoverEnabled = Template.bind({});
-WithSsoRecoverEnabled.parameters = {
-  css: "ext_authentication",
-};
+export const WithSsoRecoverEnabled = {
+  render: Template,
 
-WithSsoRecoverEnabled.args = {
-  isSsoRecoverEnabled: true,
+  parameters: {
+    css: "ext_authentication",
+  },
+
+  args: {
+    isSsoRecoverEnabled: true,
+  },
 };

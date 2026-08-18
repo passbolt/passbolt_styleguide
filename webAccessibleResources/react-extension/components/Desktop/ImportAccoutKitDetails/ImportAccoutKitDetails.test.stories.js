@@ -43,6 +43,8 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const Default = Template.bind({});
-Default.parameters = defaultParameters;
-Default.args = defaultContextProps();
+export const Default = {
+  render: Template,
+  parameters: defaultParameters,
+  args: defaultContextProps(),
+};

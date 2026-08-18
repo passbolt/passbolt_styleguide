@@ -15,7 +15,6 @@ import React from "react";
 
 export default {
   title: "Foundations/RadioButton",
-  component: "RadioButton",
 };
 
 export const DefaultRadioButton = {

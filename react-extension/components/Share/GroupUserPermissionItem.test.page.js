@@ -61,6 +61,13 @@ export default class GroupUserPermissionItemPage {
   }
 
   /**
+   * Returns true if the item has the permission-removed CSS class
+   */
+  get isRemoved() {
+    return Boolean(this._page.container.querySelector("li.permission-removed"));
+  }
+
+  /**
    * Returns the fingerprint tooltip trigger element inside the aro-name
    */
   get fingerprintIcon() {

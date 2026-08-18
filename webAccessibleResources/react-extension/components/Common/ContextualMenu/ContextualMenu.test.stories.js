@@ -24,7 +24,7 @@ import OwnedByMeIcon from "../../../../img/svg/owned_by_me.svg";
 
 export default {
   title: "Components/Common/ContextualMenu",
-  component: "ContextualMenu",
+  component: ContextualMenuWrapper,
 };
 
 const Template = () => (
@@ -130,4 +130,6 @@ const Template = () => (
   </ContextualMenuWrapper>
 );
 
-export const Default = Template.bind({});
+export const Default = {
+  render: Template,
+};

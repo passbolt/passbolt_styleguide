@@ -39,3 +39,7 @@ export const Default = {
 export const Suspended = {
   args: defaultSuspendedUserProps(),
 };
+
+export const Removed = {
+  args: defaultProps({ isRemoved: true }),
+};

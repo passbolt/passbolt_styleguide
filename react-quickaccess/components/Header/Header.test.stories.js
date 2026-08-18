@@ -28,12 +28,15 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultAppContext(),
-  logoutSuccessCallback: () => {},
-};
+export const Initial = {
+  render: Template,
 
-Initial.parameters = {
-  css: "ext_quickaccess",
+  args: {
+    context: defaultAppContext(),
+    logoutSuccessCallback: () => {},
+  },
+
+  parameters: {
+    css: "ext_quickaccess",
+  },
 };

@@ -52,7 +52,7 @@ import DropdownMenu from "./DropdownMenu";
 
 export default {
   title: "Foundations/DropdownButton",
-  component: "DropdownButton",
+  component: DropdownButton,
 };
 
 export const DropdownCreate = {

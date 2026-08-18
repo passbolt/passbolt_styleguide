@@ -22,7 +22,7 @@ export default {
       </AppContext.Provider>
     ),
   ],
-  parmeters: {
+  parameters: {
     css: "ext_quickaccess",
   },
 };

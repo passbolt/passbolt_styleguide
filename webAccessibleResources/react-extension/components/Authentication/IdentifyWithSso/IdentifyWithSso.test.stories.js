@@ -31,19 +31,22 @@ const Template = (args) => (
   </div>
 );
 
-export const Initial = Template.bind({});
-Initial.parameters = {
-  css: "ext_authentication",
-};
+export const Initial = {
+  render: Template,
 
-Initial.args = {
-  context: {
-    getApiClientOptions: () => ({
-      getBaseUrl: () => self.location.origin,
-      setResourceName: () => {},
-      getResourceName: () => "sso-recover",
-    }),
-    trustedDomain: self.location.origin,
+  parameters: {
+    css: "ext_authentication",
   },
-  ssoProvider: SsoProviders.find((provider) => provider.id === "azure"),
+
+  args: {
+    context: {
+      getApiClientOptions: () => ({
+        getBaseUrl: () => self.location.origin,
+        setResourceName: () => {},
+        getResourceName: () => "sso-recover",
+      }),
+      trustedDomain: self.location.origin,
+    },
+    ssoProvider: SsoProviders.find((provider) => provider.id === "azure"),
+  },
 };

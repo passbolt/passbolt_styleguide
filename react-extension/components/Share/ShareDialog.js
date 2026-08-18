@@ -25,6 +25,7 @@ import UserPermissionItem from "./UserPermissionItem";
 import GroupPermissionItem from "./GroupPermissionItem";
 import GroupUserPermissionItem from "./GroupUserPermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
+import ShareDetailsList from "./ShareDetailsList";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { withDialog } from "../../contexts/DialogContext";
 import { withActionFeedback } from "../../contexts/ActionFeedbackContext";
@@ -160,14 +161,15 @@ class ShareDialog extends Component {
       // ids of the groups whose members are currently expanded (controlled mode only)
       expandedGroupIds: [],
 
-      // members fetched on demand for groups added during the dialog session (not in initialGroups),
-      // keyed by group id: { [groupId]: Array<userDto> }
+      // members fetched on demand when a group is added or expanded, keyed by group id:
+      // { [groupId]: Array<userDto> }
       fetchedGroupMembers: {},
 
       // autocomplete
       autocompleteOpen: false,
 
-      isFetchingGroupMembers: false,
+      // ids of the groups whose members are currently being fetched
+      fetchingGroupIds: [],
     };
   }
 
@@ -186,6 +188,7 @@ class ShareDialog extends Component {
 
     this.handlePermissionUpdate = this.handlePermissionUpdate.bind(this);
     this.handlePermissionDelete = this.handlePermissionDelete.bind(this);
+    this.handlePermissionRevert = this.handlePermissionRevert.bind(this);
     this.handleToggleGroupMemberVisibility = this.handleToggleGroupMemberVisibility.bind(this);
 
     this.renderContainer = this.renderContainer.bind(this);
@@ -236,7 +239,7 @@ class ShareDialog extends Component {
       return;
     }
 
-    if (this.state.isFetchingGroupMembers) {
+    if (this.state.fetchingGroupIds.length) {
       return;
     }
 
@@ -292,24 +295,36 @@ class ShareDialog extends Component {
       return;
     }
 
-    if (!aro.profile && !this.hasFetchedGroupMembers(aro.id)) {
+    if (!aro.profile) {
       this.fetchGroupMembers(aro.id);
     }
 
-    // TODO restore to original permission if any
     const permission = this.shareChanges.addAroPermissions(aro);
-    permission.updated = this.shareChanges.hasChanges(aro.id);
     const permissions = this.state.permissions;
     permissions.push(permission);
-    this.setState({ permissions: permissions }, () => {
-      // scroll at the bottom of the permission list
-      this.permissionListRef.current.scrollTo(this.state.permissions.length - 1);
-    });
+    this.setState(
+      (state) => {
+        // A group removed and added back during the session must come back as a brand new row: drop what
+        // a previous add fetched for it, and the expanded state it was left in, so it displays the
+        // membership the refetch is about to return instead of the one captured earlier.
+        const fetchedGroupMembers = { ...state.fetchedGroupMembers };
+        delete fetchedGroupMembers[aro.id];
+        return {
+          permissions: permissions,
+          fetchedGroupMembers: fetchedGroupMembers,
+          expandedGroupIds: state.expandedGroupIds.filter((groupId) => groupId !== aro.id),
+        };
+      },
+      () => {
+        // scroll at the bottom of the permission list
+        this.permissionListRef.current.scrollTo(this.state.permissions.length - 1);
+      },
+    );
   }
 
   /**
    * What happens when the user changes a permission for a group or user
-   * e.g. highlight if it's different than original, update permission list in the state
+   * e.g. update permission list in the state, the change status chip derives at render
    *
    * @param {string} aroId The aro to update the permissions for
    * @param {int} type like create, owner, etc.
@@ -319,7 +334,6 @@ class ShareDialog extends Component {
     const newPermissions = this.state.permissions.map((permission) => {
       if (permission.aro.id === aroId) {
         permission.type = type;
-        permission.updated = this.shareChanges.hasChanges(aroId);
       }
       return permission;
     });
@@ -328,18 +342,49 @@ class ShareDialog extends Component {
 
   /**
    * What happens when the user delete a user or group from permission list
-   * e.g. delete permission from the shareChanges and update the state
+   * e.g. delete permission from the shareChanges. A recipient granted its permissions during the
+   * session disappears from the list, an original recipient stays displayed as pending deletion.
    * @param {string} aroId uuid
    */
   handlePermissionDelete(aroId) {
     this.shareChanges.deleteAroPermissions(aroId);
-    const newPermissions = this.state.permissions.filter((permission) => permission.aro.id !== aroId);
+    if (this.shareChanges.getAroChangeStatus(aroId) !== ShareChanges.CHANGE_STATUS_REMOVED) {
+      // The deletion staged no change, there is nothing to display as pending deletion.
+      const newPermissions = this.state.permissions.filter((permission) => permission.aro.id !== aroId);
+      this.setState({ permissions: newPermissions });
+      return;
+    }
+    this.resetPermissionRowToOriginalType(aroId);
+  }
+
+  /**
+   * Revert a permission pending deletion: clear the recipient's staged changes and restore its
+   * row to the original permission.
+   * @param {string} aroId uuid
+   */
+  handlePermissionRevert(aroId) {
+    this.shareChanges.revertAroPermissions(aroId);
+    this.resetPermissionRowToOriginalType(aroId);
+  }
+
+  /**
+   * Reset the permission row of an aro to its original permission type.
+   * @param {string} aroId uuid
+   */
+  resetPermissionRowToOriginalType(aroId) {
+    const newPermissions = this.state.permissions.map((permission) => {
+      if (permission.aro.id === aroId) {
+        permission.type = this.shareChanges.getOriginalAroPermissionType(aroId);
+      }
+      return permission;
+    });
     this.setState({ permissions: newPermissions });
   }
 
   /**
    * Toggle the visibility of a group's members in the permission list.
-   * Only relevant in controlled mode, where the members can be resolved from the initial collections.
+   * Expanding refetches the members so the displayed membership is the one the group has now, not the
+   * one captured when the dialog opened.
    * @param {string} groupId The group identifier
    */
   handleToggleGroupMemberVisibility(groupId) {
@@ -348,19 +393,23 @@ class ShareDialog extends Component {
       expandedGroupIds.delete(groupId);
     } else {
       expandedGroupIds.add(groupId);
+      this.fetchGroupMembers(groupId);
     }
     this.setState({ expandedGroupIds: [...expandedGroupIds] });
   }
 
   /**
-   * Fetch the member users of a group that was added during the dialog session and cache their DTOs
-   * in the state, keyed by group id. The members are resolved from the service-worker local-storage
-   * cache (falling back to the API). A failure leaves the group with no displayed members rather than
-   * interrupting the dialog with an error popup.
+   * Fetch the member users of a group from the API and store their DTOs in the state, keyed by group id.
+   * Called every time a group is added or expanded, so the stored members are never reused across
+   * expansions. A fetch already in flight for the same group is not duplicated. A failure leaves the
+   * group with the members it had rather than interrupting the dialog with an error popup.
    * @param {string} groupId The group identifier
    */
   fetchGroupMembers(groupId) {
-    this.setState({ isFetchingGroupMembers: true }, async () => {
+    if (this.state.fetchingGroupIds.includes(groupId)) {
+      return;
+    }
+    this.setState({ fetchingGroupIds: [...this.state.fetchingGroupIds, groupId] }, async () => {
       try {
         const groupServiceWorkerService = new GroupServiceWorkerService(this.props.context.port);
         // The share fetch embeds the members (groups_users with their user), so a single call
@@ -370,38 +419,31 @@ class ShareDialog extends Component {
         const members = (group?.groupsUsers?.items ?? [])
           .filter((groupUser) => groupUser.user)
           .map((groupUser) => groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
-        this.setState({
-          fetchedGroupMembers: { ...this.state.fetchedGroupMembers, [groupId]: members },
-          isFetchingGroupMembers: false,
-        });
+        this.setState((state) => ({
+          fetchedGroupMembers: { ...state.fetchedGroupMembers, [groupId]: members },
+        }));
       } catch (error) {
         console.error(error);
-        this.setState({ isFetchingGroupMembers: false });
+      } finally {
+        this.setState((state) => ({
+          fetchingGroupIds: state.fetchingGroupIds.filter((id) => id !== groupId),
+        }));
       }
     });
   }
 
   /**
-   * Returns true if the given group has already its members fetched
-   * @param {string} groupId
-   * @returns {boolean}
-   */
-  hasFetchedGroupMembers(groupId) {
-    return Boolean(this.state.fetchedGroupMembers[groupId]);
-  }
-
-  /**
-   * Resolve the member users of a group from the controlled-mode initial collections.
-   * The group entity carries its memberships (groups_users), each referencing a user by id that is
-   * looked up in the initial users collection. Members not present in the initial users collection
-   * (i.e. without a direct permission) cannot be resolved and are omitted.
+   * Resolve the member users of a group, from the last fetch when there is one, otherwise from the
+   * controlled-mode initial collections. The group entity carries its memberships (groups_users), each
+   * referencing a user by id that is looked up in the initial users collection. Members not present in
+   * the initial users collection (i.e. without a direct permission) cannot be resolved and are omitted.
    * @param {string} groupId The group identifier
    * @returns {Array<object>} The member users DTOs
    */
   getGroupMembers(groupId) {
-    // Groups added during the dialog session have their members fetched on demand and cached.
-    if (this.hasFetchedGroupMembers(groupId)) {
-      return this.state.fetchedGroupMembers[groupId];
+    const fetchedGroupMembers = this.state.fetchedGroupMembers[groupId];
+    if (fetchedGroupMembers) {
+      return fetchedGroupMembers;
     }
     const group = this.props.initialGroups?.items.find((item) => item.id === groupId);
     const groupsUsers = group?.groupsUsers?.items || [];
@@ -447,8 +489,20 @@ class ShareDialog extends Component {
     }
 
     const changes = this.shareChanges.getResourcesChanges();
-    const isPersonal = this.state.permissions.length === 1 && Boolean(this.state.permissions[0].aro.profile);
+    const effectivePermissions = this.getEffectivePermissions();
+    const isPersonal = effectivePermissions.length === 1 && Boolean(effectivePermissions[0].aro.profile);
     await this.props.onConfirm(changes, this.canOperatorRead(), isPersonal);
+  }
+
+  /**
+   * Get the permission rows that will still stand once the pending changes are applied.
+   * The rows pending deletion stay displayed but must not weigh in the operator checks.
+   * @returns {Array<object>}
+   */
+  getEffectivePermissions() {
+    return (this.state.permissions ?? []).filter(
+      (permission) => this.shareChanges.getAroChangeStatus(permission.aro.id) !== ShareChanges.CHANGE_STATUS_REMOVED,
+    );
   }
 
   /**
@@ -577,23 +631,28 @@ class ShareDialog extends Component {
 
   /**
    * Return the dialog title tooltip content (multi-share details)
-   * or false in case of single resource share
-   * @returns {false|string} tool
+   * or null in case of single resource share
+   * @returns {null|JSX.Element}
    */
   getTooltip() {
     if (!this.shareChanges) {
-      return "";
+      return null;
     }
     const acos = this.shareChanges.getAcos();
-    if (!acos || !acos.length || acos.length === 1) {
-      return "";
+    if (!acos || acos.length <= 1) {
+      return null;
     }
     // `metadata.name` covers resources (and controlled-mode ACOs, which expose no top-level name);
-    // folders fall back to `aco.name`. Empty names are dropped so the result is never bare commas.
-    return acos
+    // folders fall back to `aco.name`. Empty names are dropped so the list never shows blank lines.
+    // Sorted by name so that the truncation always drops the same items.
+    const items = acos
       .map((aco) => aco.metadata?.name ?? aco.name)
       .filter(Boolean)
-      .join(", ");
+      .sort((name, otherName) => name.localeCompare(otherName))
+      .map((name) => ({ name }));
+    return items.length ? (
+      <ShareDetailsList header={this.translate("{{count}} items selected:", { count: items.length })} items={items} />
+    ) : null;
   }
 
   /**
@@ -614,9 +673,10 @@ class ShareDialog extends Component {
 
   /**
    * Return true if submit button should be disabled
-   * True if there is no owner, if all input should be disabled, if there is no change since the start.
-   * Controlled mode drops the `!hasChanges()` gate so the operator can confirm the inherited
-   * permissions as-is (empty deltas — the workflow then skips the share call entirely).
+   * True if there is no owner, if the operator ownership requirement is not met or if all input
+   * should be disabled. An unchanged permission list does not disable the submit button: the
+   * operator must be able to confirm the inherited permissions as-is (empty deltas, the workflow
+   * then skips the share call entirely).
    * @returns {boolean}
    */
   hasSubmitDisabled() {
@@ -633,7 +693,13 @@ class ShareDialog extends Component {
     const item = displayedPermissions[index];
 
     if (item.kind === "group-user") {
-      return <GroupUserPermissionItem key={`${item.groupId}-${item.user.id}`} user={item.user} />;
+      return (
+        <GroupUserPermissionItem
+          key={`${item.groupId}-${item.user.id}`}
+          user={item.user}
+          isRemoved={this.shareChanges.getAroChangeStatus(item.groupId) === ShareChanges.CHANGE_STATUS_REMOVED}
+        />
+      );
     }
 
     const permission = item.permission;
@@ -651,10 +717,11 @@ class ShareDialog extends Component {
           membersCount={this.getGroupMembers(permission.aro.id).length}
           permissionType={permissionType}
           variesDetails={permission.variesDetails}
-          updated={permission.updated}
+          changeStatus={this.shareChanges.getAroChangeStatus(permission.aro.id)}
           disabled={this.hasAllInputDisabled() || this.isReadOnly()}
           onUpdate={this.handlePermissionUpdate}
           onDelete={this.handlePermissionDelete}
+          onRevert={this.handlePermissionRevert}
           onToggleGroupMemberVisibility={this.handleToggleGroupMemberVisibility}
           shouldDisplayGroupMembers={this.state.expandedGroupIds.includes(permission.aro.id)}
           isReadOnly={this.props.readOnly}
@@ -669,10 +736,11 @@ class ShareDialog extends Component {
         user={permission.aro}
         permissionType={permissionType}
         variesDetails={permission.variesDetails}
-        updated={permission.updated}
+        changeStatus={this.shareChanges.getAroChangeStatus(permission.aro.id)}
         disabled={this.hasAllInputDisabled() || this.isReadOnly()}
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
+        onRevert={this.handlePermissionRevert}
         isReadOnly={this.props.readOnly}
       />
     );
@@ -706,12 +774,13 @@ class ShareDialog extends Component {
       return false;
     }
 
-    if (!this.state.permissions?.length) {
+    const permissions = this.getEffectivePermissions();
+    if (!permissions.length) {
       return true;
     }
 
     const operatorId = this.props.context.loggedInUser?.id;
-    const operatorOwnerPermission = this.state.permissions.find((p) => {
+    const operatorOwnerPermission = permissions.find((p) => {
       // no need to check non owner permission
       if (p.type !== PermissionEntity.PERMISSION_OWNER) {
         return false;
@@ -739,12 +808,13 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   canOperatorRead() {
-    if (!this.state.permissions?.length) {
+    const permissions = this.getEffectivePermissions();
+    if (!permissions.length) {
       return false;
     }
 
     const operatorId = this.props.context.loggedInUser?.id;
-    const operatorPermission = this.state.permissions.find((p) => {
+    const operatorPermission = permissions.find((p) => {
       //we are dealing with a direct user permission here
       if (p.aro.profile) {
         if (operatorId === p.aro.id) {
@@ -790,7 +860,7 @@ class ShareDialog extends Component {
     const hasNoOwner = !isReadOnly && this.hasNoOwner();
     return (
       <DialogWrapper
-        className="share-dialog"
+        className={`share-dialog${isReadOnly ? " read-only" : ""}`}
         title={this.getTitle()}
         subtitle={this.getSubtitle()}
         tooltip={this.getTooltip()}
@@ -890,7 +960,7 @@ ShareDialog.propTypes = {
   isPermissionConfirmationMode: PropTypes.bool, // Is the dialog used to confirm permissions
   initialResources: PropTypes.array, // the ACO resources to seed the dialog with instead of fetching from the API, each as { id, metadata, permission, permissions: PermissionsCollection }
   initialFolders: PropTypes.array, // the ACO folders to see the dialog with
-  initialChanges: PropTypes.array, // Set of permission to mark them as "modified" in the initial list
+  initialChanges: PropTypes.array, // Set of permission to mark them as "added" in the initial list
   acoType: PropTypes.string, // the ACO type of the seeded entries (PermissionEntity.ACO_RESOURCE, default, or ACO_FOLDER)
   initialGroups: PropTypes.object, // GroupsCollection providing the groups referenced by the resources' permissions
   initialUsers: PropTypes.object, // UsersCollection providing the users referenced by the resources' permissions

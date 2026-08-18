@@ -36,25 +36,34 @@ const Template = (args) => (
   </MockTranslationProvider>
 );
 
-export const OptOut = Template.bind({});
-OptOut.args = defaultProps({
-  organizationPolicy: optOutOrganizationPolicy({
-    creator: defaultAccountRecoveryPolicyCreator({ ...users.ada }),
-  }),
-});
+export const OptOut = {
+  render: Template,
 
-export const OptIn = Template.bind({});
-OptIn.args = defaultProps({
-  organizationPolicy: optOutOrganizationPolicy({
-    policy: "opt-in",
-    creator: defaultAccountRecoveryPolicyCreator({ disabled: new Date().toISOString() }),
+  args: defaultProps({
+    organizationPolicy: optOutOrganizationPolicy({
+      creator: defaultAccountRecoveryPolicyCreator({ ...users.ada }),
+    }),
   }),
-});
+};
 
-export const Mandatory = Template.bind({});
-Mandatory.args = defaultProps({
-  organizationPolicy: optOutOrganizationPolicy({
-    policy: "mandatory",
-    creator: defaultAccountRecoveryPolicyCreator({ deleted: true }),
+export const OptIn = {
+  render: Template,
+
+  args: defaultProps({
+    organizationPolicy: optOutOrganizationPolicy({
+      policy: "opt-in",
+      creator: defaultAccountRecoveryPolicyCreator({ disabled: new Date().toISOString() }),
+    }),
   }),
-});
+};
+
+export const Mandatory = {
+  render: Template,
+
+  args: defaultProps({
+    organizationPolicy: optOutOrganizationPolicy({
+      policy: "mandatory",
+      creator: defaultAccountRecoveryPolicyCreator({ deleted: true }),
+    }),
+  }),
+};

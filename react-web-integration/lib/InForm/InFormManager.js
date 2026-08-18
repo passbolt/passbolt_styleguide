@@ -16,11 +16,15 @@ import InFormCallToActionField from "./InFormCallToActionField";
 import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
+import InFormFieldGeometryService from "./InFormFieldGeometryService";
+import { SHADOW_RESCAN_FIELD_SELECTOR } from "./InFormFieldDictionary";
+import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
 import DomUtils from "../Dom/DomUtils";
 import debounce from "debounce-promise";
 import UserEventsService from "../User/UserEventsService";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
+import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
 
 const Z_INDEX_MAX = 2147483647;
 const HOST_MOUNT_MAX_RETRIES = 3;
@@ -40,8 +44,10 @@ class InFormManager {
     this.menuField = null;
     /** In-form form fields in the target page*/
     this.credentialsFormFields = [];
-    /** Mutation observers to detect any change on the DOM */
-    this.mutationObserver = null;
+    /** Debounced re-scan of auth fields */
+    this.updateAuthenticationFieldsDebounce = null;
+    /** Unsubscribe from the shadow dom mutations */
+    this._unsubscribeShadowMutations = null;
 
     /** The shadow root with the host **/
     this.host = null;
@@ -114,6 +120,9 @@ class InFormManager {
     }
 
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
+
+    ShadowDomFocusHealerService.installFocusinHealer();
+
     this.findAndSetAuthenticationFields();
     this.handleDomChange();
     this.handleInformCallToActionRepositionEvent();
@@ -139,6 +148,7 @@ class InFormManager {
     this.clean = this.clean.bind(this);
     this.destroy = this.destroy.bind(this);
     this.handleClipboardChange = this.handleClipboardChange.bind(this);
+    this.onShadowMutation = this.onShadowMutation.bind(this);
   }
 
   /**
@@ -261,7 +271,13 @@ class InFormManager {
      */
     const mapField = (fieldType) => (field) => {
       const existingField = this.callToActionFields.find(({ field: ctaField }) => ctaField === field);
-      return existingField ?? new InFormCallToActionField(field, fieldType, this.shadowRoot);
+
+      if (existingField) {
+        existingField.cacheViewableRect();
+        return existingField;
+      }
+
+      return new InFormCallToActionField(field, fieldType, this.shadowRoot);
     };
 
     let newCTAFields = [
@@ -306,35 +322,55 @@ class InFormManager {
     const newCredentialsFormFields = InFormCredentialsFormField.findAll();
 
     if (newCredentialsFormFields.length > 0) {
-      // Get all fields filtered by their types
-      const { usernameCtaFields, passwordCtaFields } = this.callToActionFields.reduce(
-        (acc, ctaField) => {
-          if (ctaField.fieldType === "username") {
-            acc.usernameCtaFields.push(ctaField);
-          } else if (ctaField.fieldType === "password") {
-            acc.passwordCtaFields.push(ctaField);
-          }
-          return acc;
-        },
-        { usernameCtaFields: [], passwordCtaFields: [] },
-      );
-
-      this.credentialsFormFields = newCredentialsFormFields.map((newField) => {
-        const existingField = this.credentialsFormFields.find(({ field: formField }) => formField === newField);
-
-        if (!existingField) {
-          // We try to find username and password fields contained in the new form field
-          const usernameField = usernameCtaFields.find((ctaField) => newField.contains(ctaField.field));
-          const passwordField = passwordCtaFields.find((ctaField) => newField.contains(ctaField.field));
-
-          return new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
-        }
-
-        return existingField;
-      });
+      this.credentialsFormFields = this._materialize(newCredentialsFormFields);
     } else {
       this.credentialsFormFields = [];
     }
+  }
+
+  /**
+   * Map each container to an InFormCredentialsFormField instance.
+   * @param {HTMLElement[]} newCredentialsFormFields The discovered form containers.
+   * @return {InFormCredentialsFormField[]}
+   * @private
+   */
+  _materialize(newCredentialsFormFields) {
+    // Get all fields, filtered by their types
+    const { usernameCtaFields, passwordCtaFields } = this.callToActionFields.reduce(
+      (acc, ctaField) => {
+        if (ctaField.fieldType === "username") {
+          acc.usernameCtaFields.push(ctaField);
+        } else if (ctaField.fieldType === "password") {
+          acc.passwordCtaFields.push(ctaField);
+        }
+        return acc;
+      },
+      { usernameCtaFields: [], passwordCtaFields: [] },
+    );
+
+    const next = newCredentialsFormFields.map((newField) => {
+      const existingField = this.credentialsFormFields.find(({ field: formField }) => formField === newField);
+
+      if (!existingField) {
+        // We try to find username and password fields contained in the new form field
+        const usernameField = usernameCtaFields.find((ctaField) => newField.contains(ctaField.field));
+        const passwordField = passwordCtaFields.find((ctaField) => newField.contains(ctaField.field));
+
+        return new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
+      }
+
+      return existingField;
+    });
+
+    // Destroy the instances that no longer exist
+    this.credentialsFormFields.filter((instance) => !next.includes(instance)).forEach((instance) => instance.destroy());
+
+    for (let field of this.credentialsFormFields) {
+      if (!next.includes(field)) {
+        field.destroy();
+      }
+    }
+    return next;
   }
 
   /**
@@ -411,7 +447,7 @@ class InFormManager {
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
     // If requestIdleCallback is not available as in the case of Safari, fall back to a
     // simple debounce to avoid too many requests.
-    const updateAuthenticationFieldsDebounce = window.requestIdleCallback
+    this.updateAuthenticationFieldsDebounce = window.requestIdleCallback
       ? debounce(
           () => {
             requestIdleCallback(
@@ -433,9 +469,71 @@ class InFormManager {
         });
 
     // Search again for authentication callToActionFields to attach when the DOM changes
-    // The mutation observer does not detect mutation in a closed shadow dom
-    this.mutationObserver = new MutationObserver(updateAuthenticationFieldsDebounce);
-    this.mutationObserver.observe(document.body, { subtree: true, childList: true });
+    this._unsubscribeShadowMutations = ShadowMutationObserverService.subscribeToShadowMutations(this.onShadowMutation);
+  }
+
+  /**
+   * When there is a detected mutation.
+   * @param {Document|ShadowRoot|Element} root The observed node.
+   * @param {MutationRecord[]} mutations The list of mutations.
+   * @param {boolean} shadowRootsChanged Whether the mutation includes a change in the shadowRoots.
+   */
+  onShadowMutation(root, mutations, shadowRootsChanged) {
+    // Never scan our own CTA shadow root
+    if (root === this.shadowRoot) {
+      return;
+    }
+
+    /*
+     * If the mutation is on the document, always re-scan.
+     */
+    if (root.nodeType === Node.DOCUMENT_NODE) {
+      this.updateAuthenticationFieldsDebounce();
+    } else if (
+      shadowRootsChanged ||
+      this._mutationsAffectAuthenticationFields(mutations) ||
+      this._attributeMutationAffectsField(mutations)
+    ) {
+      /*
+       * Otherwise, if the mutation is on a shadow root, re-scan only when the change is relevant.
+       */
+
+      this.updateAuthenticationFieldsDebounce();
+    }
+  }
+
+  /**
+   * Filter on childList mutations and target.
+   * If the mutation target is a field or contains a field, return true.
+   * @param {MutationRecord[]} mutations
+   * @return {boolean} true if the mutation affects a field
+   * @private
+   */
+  _mutationsAffectAuthenticationFields(mutations) {
+    return mutations.some(
+      (mutation) =>
+        mutation.type === "childList" &&
+        [...mutation.addedNodes, ...mutation.removedNodes].some(
+          (node) =>
+            node.nodeType === Node.ELEMENT_NODE &&
+            (node.matches(SHADOW_RESCAN_FIELD_SELECTOR) || node.querySelector(SHADOW_RESCAN_FIELD_SELECTOR)),
+        ),
+    );
+  }
+
+  /**
+   * Filter on attributes mutations and target.
+   * @param {MutationRecord[]} mutations
+   * @return {boolean} true if the mutation affects an attribute's field
+   * @private
+   */
+  _attributeMutationAffectsField(mutations) {
+    return mutations.some(
+      (mutation) =>
+        mutation.type === "attributes" &&
+        mutation.target?.nodeType === Node.ELEMENT_NODE &&
+        mutation.target.matches(SHADOW_RESCAN_FIELD_SELECTOR),
+    );
   }
 
   /**
@@ -524,7 +622,7 @@ class InFormManager {
           const usernameFields = this.callToActionFields.filter(
             (callToActionField) => callToActionField.fieldType === "username",
           );
-          const usernameField = DomUtils.getFieldWithLowestCommonAncestor(
+          const usernameField = InFormFieldGeometryService.getFieldWithLowestCommonAncestor(
             this.lastCallToActionFieldClicked.field,
             usernameFields,
           );
@@ -539,7 +637,7 @@ class InFormManager {
           const passwordFields = this.callToActionFields.filter(
             (callToActionField) => callToActionField.fieldType === "password",
           );
-          const passwordField = DomUtils.getFieldWithLowestCommonAncestor(
+          const passwordField = InFormFieldGeometryService.getFieldWithLowestCommonAncestor(
             this.lastCallToActionFieldClicked.field,
             passwordFields,
           );
@@ -656,7 +754,8 @@ class InFormManager {
    * Remove all event, observer and iframe
    */
   destroy() {
-    this.mutationObserver.disconnect();
+    this._unsubscribeShadowMutations?.();
+    ShadowMutationObserverService.disconnectObserver(document);
     this.hostMutationObserver.disconnect();
     this.htmlMutationObserver.disconnect();
     this.bodyMutationObserver.disconnect();

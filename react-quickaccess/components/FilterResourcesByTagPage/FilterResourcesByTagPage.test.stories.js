@@ -48,14 +48,20 @@ const parameters = {
   css: "ext_quickaccess",
 };
 
-export const InitialLoad = Template.bind({});
-InitialLoad.args = defaultProps();
-InitialLoad.parameters = parameters;
+export const InitialLoad = {
+  render: Template,
+  args: defaultProps(),
+  parameters: parameters,
+};
 
-export const NoTags = Template.bind({});
-NoTags.args = noTagsProps();
-NoTags.parameters = parameters;
+export const NoTags = {
+  render: Template,
+  args: noTagsProps(),
+  parameters: parameters,
+};
 
-export const TagsResourcesMatched = Template.bind({});
-TagsResourcesMatched.args = withFilteredResourcesProps();
-TagsResourcesMatched.parameters = parameters;
+export const TagsResourcesMatched = {
+  render: Template,
+  args: withFilteredResourcesProps(),
+  parameters: parameters,
+};

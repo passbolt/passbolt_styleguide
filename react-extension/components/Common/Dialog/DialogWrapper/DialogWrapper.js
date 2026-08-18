@@ -108,7 +108,7 @@ DialogWrapper.propTypes = {
   className: PropTypes.string,
   title: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node, PropTypes.string]),
   subtitle: PropTypes.string,
-  tooltip: PropTypes.string,
+  tooltip: PropTypes.node,
   disabled: PropTypes.bool,
   onClose: PropTypes.func,
 };

@@ -77,11 +77,16 @@ inactiveMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () =>
   is_authenticated: false,
   is_mfa_authenticated: true,
 }));
-export const Inactive = Template.bind({});
-Inactive.args = {
-  context: defaultAppContext({ port: inactiveMockedPort }),
+
+export const Inactive = {
+  render: Template,
+
+  args: {
+    context: defaultAppContext({ port: inactiveMockedPort }),
+  },
+
+  parameters: parameters,
 };
-Inactive.parameters = parameters;
 
 const activeWithNoSuggestionMockedPort = new MockPort();
 activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
@@ -89,11 +94,16 @@ activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check-
   is_mfa_authenticated: true,
 }));
 activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 0);
-export const ActiveWithNoSuggestion = Template.bind({});
-ActiveWithNoSuggestion.args = {
-  context: defaultAppContext({ port: activeWithNoSuggestionMockedPort }),
+
+export const ActiveWithNoSuggestion = {
+  render: Template,
+
+  args: {
+    context: defaultAppContext({ port: activeWithNoSuggestionMockedPort }),
+  },
+
+  parameters: parameters,
 };
-ActiveWithNoSuggestion.parameters = parameters;
 
 const activeWithOneSuggestionMockedPort = new MockPort();
 activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
@@ -101,8 +111,13 @@ activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check
   is_mfa_authenticated: true,
 }));
 activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 1);
-export const ActiveWithOneSuggestion = Template.bind({});
-ActiveWithOneSuggestion.args = {
-  context: defaultAppContext({ port: activeWithOneSuggestionMockedPort }),
+
+export const ActiveWithOneSuggestion = {
+  render: Template,
+
+  args: {
+    context: defaultAppContext({ port: activeWithOneSuggestionMockedPort }),
+  },
+
+  parameters: parameters,
 };
-ActiveWithOneSuggestion.parameters = parameters;

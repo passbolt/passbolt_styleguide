@@ -44,13 +44,16 @@ const Template = (args) => (
   </TranslationProvider>
 );
 
-export const Initial = Template.bind({});
-Initial.args = {
-  resourceWorkspaceContext: {
-    details: {
-      resource: {
-        metadata: {
-          name: "resource",
+export const Initial = {
+  render: Template,
+
+  args: {
+    resourceWorkspaceContext: {
+      details: {
+        resource: {
+          metadata: {
+            name: "resource",
+          },
         },
       },
     },

@@ -41,12 +41,18 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultContext,
+export const Initial = {
+  render: Template,
+
+  args: {
+    context: defaultContext,
+  },
 };
 
-export const Loading = Template.bind({});
-Loading.args = {
-  context: emptyTag,
+export const Loading = {
+  render: Template,
+
+  args: {
+    context: emptyTag,
+  },
 };

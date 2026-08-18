@@ -40,11 +40,17 @@ const defaultParameters = {
   css: "ext_authentication",
 };
 
-export const PleaseWait = Template.bind({});
-PleaseWait.parameters = defaultParameters;
-
-export const RequestAccountRecovery = Template.bind({});
-RequestAccountRecovery.args = {
-  title: "Requesting administrator approval. Please wait.",
+export const PleaseWait = {
+  render: Template,
+  parameters: defaultParameters,
 };
-RequestAccountRecovery.parameters = defaultParameters;
+
+export const RequestAccountRecovery = {
+  render: Template,
+
+  args: {
+    title: "Requesting administrator approval. Please wait.",
+  },
+
+  parameters: defaultParameters,
+};

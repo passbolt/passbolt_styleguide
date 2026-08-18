@@ -134,10 +134,13 @@ const Template = (args) => (
   </AppContext.Provider>
 );
 
-export const Initial = Template.bind({});
-Initial.args = {
-  resource: {
-    id: "f302754f-f290-42a6-9ea3-7049c6d4dbe3",
+export const Initial = {
+  render: Template,
+
+  args: {
+    resource: {
+      id: "f302754f-f290-42a6-9ea3-7049c6d4dbe3",
+    },
+    onFetch: () => {},
   },
-  onFetch: () => {},
 };

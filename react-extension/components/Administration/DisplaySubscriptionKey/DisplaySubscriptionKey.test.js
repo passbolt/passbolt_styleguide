@@ -99,8 +99,9 @@ describe("DisplaySubscriptionKeyPage", () => {
       );
 
       await page.goToRenewKey();
-      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(
-        `https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${mockSubscriptionUsersExceeded.subscription_id}&customer_id=${mockSubscriptionUsersExceeded.customer_id}`,
+      expect(props.navigationContext.onGoToSubscriptionUpdateQuantityRequested).toHaveBeenCalledWith(
+        mockSubscriptionUsersExceeded.subscription_id,
+        mockSubscriptionUsersExceeded.customer_id,
       );
     });
 
@@ -125,8 +126,9 @@ describe("DisplaySubscriptionKeyPage", () => {
       );
 
       await page.goToRenewKey();
-      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(
-        `https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${mockSubscriptionExpired.subscription_id}&customer_id=${mockSubscriptionExpired.customer_id}`,
+      expect(props.navigationContext.onGoToSubscriptionRenewRequested).toHaveBeenCalledWith(
+        mockSubscriptionExpired.subscription_id,
+        mockSubscriptionExpired.customer_id,
       );
     });
 

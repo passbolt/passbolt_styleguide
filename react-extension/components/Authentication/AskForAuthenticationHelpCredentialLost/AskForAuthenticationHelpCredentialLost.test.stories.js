@@ -34,8 +34,11 @@ const Template = (args) => (
   </div>
 );
 
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
-Initial.parameters = {
-  css: "ext_authentication",
+export const Initial = {
+  render: Template,
+  args: defaultProps(),
+
+  parameters: {
+    css: "ext_authentication",
+  },
 };

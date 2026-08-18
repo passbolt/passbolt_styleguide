@@ -36,46 +36,62 @@ const defaultParameters = {
   css: "ext_authentication",
 };
 
-export const Firefox = Template.bind({});
-Firefox.loaders = [
-  async () => {
-    Object.defineProperty(window, "navigator", {
-      value: { userAgent: "Firefox" },
-      writable: true,
-    });
-  },
-];
-Firefox.parameters = defaultParameters;
+export const Firefox = {
+  render: Template,
 
-export const Chrome = Template.bind({});
-Chrome.loaders = [
-  async () => {
-    Object.defineProperty(window, "navigator", {
-      value: { userAgent: "Chrome" },
-      writable: true,
-    });
-  },
-];
-Chrome.parameters = defaultParameters;
+  loaders: [
+    async () => {
+      Object.defineProperty(window, "navigator", {
+        value: { userAgent: "Firefox" },
+        writable: true,
+      });
+    },
+  ],
 
-export const Edge = Template.bind({});
-Edge.loaders = [
-  async () => {
-    Object.defineProperty(window, "navigator", {
-      value: { userAgent: "Edge" },
-      writable: true,
-    });
-  },
-];
-Edge.parameters = defaultParameters;
+  parameters: defaultParameters,
+};
 
-export const UnsupportedBrowser = Template.bind({});
-UnsupportedBrowser.loaders = [
-  async () => {
-    Object.defineProperty(window, "navigator", {
-      value: { userAgent: "Unsupported Browser" },
-      writable: true,
-    });
-  },
-];
-UnsupportedBrowser.parameters = defaultParameters;
+export const Chrome = {
+  render: Template,
+
+  loaders: [
+    async () => {
+      Object.defineProperty(window, "navigator", {
+        value: { userAgent: "Chrome" },
+        writable: true,
+      });
+    },
+  ],
+
+  parameters: defaultParameters,
+};
+
+export const Edge = {
+  render: Template,
+
+  loaders: [
+    async () => {
+      Object.defineProperty(window, "navigator", {
+        value: { userAgent: "Edge" },
+        writable: true,
+      });
+    },
+  ],
+
+  parameters: defaultParameters,
+};
+
+export const UnsupportedBrowser = {
+  render: Template,
+
+  loaders: [
+    async () => {
+      Object.defineProperty(window, "navigator", {
+        value: { userAgent: "Unsupported Browser" },
+        writable: true,
+      });
+    },
+  ],
+
+  parameters: defaultParameters,
+};

@@ -47,26 +47,38 @@ const defaultParameters = {
   css: "ext_authentication",
 };
 
-export const MandatoryWithLink = Template.bind({});
-MandatoryWithLink.args = mandatoryPolicyPropsWithImportedKey();
-MandatoryWithLink.parameters = defaultParameters;
+export const MandatoryWithLink = {
+  render: Template,
+  args: mandatoryPolicyPropsWithImportedKey(),
+  parameters: defaultParameters,
+};
 
-export const OptOutWithLink = Template.bind({});
-OptOutWithLink.args = optOutPolicyPropsWithImportedKey();
-OptOutWithLink.parameters = defaultParameters;
+export const OptOutWithLink = {
+  render: Template,
+  args: optOutPolicyPropsWithImportedKey(),
+  parameters: defaultParameters,
+};
 
-export const OptInWithLink = Template.bind({});
-OptInWithLink.args = optInPolicyPropsWithImportedKey();
-OptInWithLink.parameters = defaultParameters;
+export const OptInWithLink = {
+  render: Template,
+  args: optInPolicyPropsWithImportedKey(),
+  parameters: defaultParameters,
+};
 
-export const Mandatory = Template.bind({});
-Mandatory.args = mandatoryPolicyProps();
-Mandatory.parameters = defaultParameters;
+export const Mandatory = {
+  render: Template,
+  args: mandatoryPolicyProps(),
+  parameters: defaultParameters,
+};
 
-export const OptOut = Template.bind({});
-OptOut.args = optOutPolicyProps();
-OptOut.parameters = defaultParameters;
+export const OptOut = {
+  render: Template,
+  args: optOutPolicyProps(),
+  parameters: defaultParameters,
+};
 
-export const OptIn = Template.bind({});
-OptIn.args = optInPolicyProps();
-OptIn.parameters = defaultParameters;
+export const OptIn = {
+  render: Template,
+  args: optInPolicyProps(),
+  parameters: defaultParameters,
+};

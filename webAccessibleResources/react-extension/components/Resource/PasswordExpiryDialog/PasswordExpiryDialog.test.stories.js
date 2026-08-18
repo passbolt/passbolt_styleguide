@@ -1,4 +1,3 @@
-import React from "react";
 import PasswordExpiryDialog from "./PasswordExpiryDialog";
 
 export default {
@@ -6,9 +5,8 @@ export default {
   component: PasswordExpiryDialog,
 };
 
-const Template = (args) => <PasswordExpiryDialog {...args} />;
-
-export const Initial = Template.bind();
-Initial.args = {
-  resources: [],
+export const Initial = {
+  args: {
+    resources: [],
+  },
 };
