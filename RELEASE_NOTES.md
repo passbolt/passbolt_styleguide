@@ -1,4 +1,3 @@
-# v5.14.8
+# v5.15.0-alpha.1
 
-Fixes:
-- delays redirection after creating a resource to ensure the resource workspace grid contains the created resource
+Version bump for the v5.15.0-alpha.1
