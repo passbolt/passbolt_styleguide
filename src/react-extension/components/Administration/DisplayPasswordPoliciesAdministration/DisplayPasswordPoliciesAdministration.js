@@ -220,7 +220,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
             </h3>
             <form className="form">
               <h4>
-                <Trans>Password generator default settings</Trans>
+                <Trans>Password Generator Default Settings</Trans>
               </h4>
               <p>
                 <Trans>You can modify the default settings of the passwords generator.</Trans>

@@ -70,14 +70,14 @@ export default class AdministrationHomePagePage {
    * Returns the user directory menu
    */
   get userDirectory() {
-    return this._page.container.querySelector('button.card span.title[title="Users directory"]');
+    return this._page.container.querySelector('button.card span.title[title="Users Directory"]');
   }
 
   /**
    * Returns the email notifications menu
    */
   get emailNotifications() {
-    return this._page.container.querySelector('button.card span.title[title="Email notifications"]');
+    return this._page.container.querySelector('button.card span.title[title="Email Notifications"]');
   }
 
   /**
@@ -105,21 +105,21 @@ export default class AdministrationHomePagePage {
    * Returns the account recovery menu
    */
   get accountRecovery() {
-    return this._page.container.querySelector('button.card span.title[title="Account recovery"]');
+    return this._page.container.querySelector('button.card span.title[title="Account Recovery"]');
   }
 
   /**
    * Returns the account recovery menu
    */
   get smtpSettings() {
-    return this._page.container.querySelector('button.card span.title[title="Email server"]');
+    return this._page.container.querySelector('button.card span.title[title="Email Server"]');
   }
 
   /**
    * Returns the self registration menu
    */
   get selfRegistration() {
-    return this._page.container.querySelector('button.card span.title[title="Self registration"]');
+    return this._page.container.querySelector('button.card span.title[title="Self Registration"]');
   }
 
   /**
@@ -133,49 +133,49 @@ export default class AdministrationHomePagePage {
    * Returns the User Passphrase Policies menu
    */
   get userPassphrasePolicies() {
-    return this._page.container.querySelector('button.card span.title[title="User passphrase policies"]');
+    return this._page.container.querySelector('button.card span.title[title="User Passphrase Policies"]');
   }
 
   /**
    * Returns the Password Expiry menu
    */
   get passwordExpirySettings() {
-    return this._page.container.querySelector('button.card span.title[title="Password expiry"]');
+    return this._page.container.querySelector('button.card span.title[title="Password Expiry"]');
   }
 
   /**
    * Returns the Password Policy menu
    */
   get passwordPolicySettings() {
-    return this._page.container.querySelector('button.card span.title[title="Password policy"]');
+    return this._page.container.querySelector('button.card span.title[title="Password Policy"]');
   }
 
   /**
    * Returns the Content Types Encrypted Metadata.
    */
   get contentTypesEncryptedMetadata() {
-    return this._page.container.querySelector('button.card span.title[title="Encrypted metadata"]');
+    return this._page.container.querySelector('button.card span.title[title="Encrypted Metadata"]');
   }
 
   /**
    * Returns the Content Types Encrypted Metadata.
    */
   get contentTypesMetadataKey() {
-    return this._page.container.querySelector('button.card span.title[title="Metadata key"]');
+    return this._page.container.querySelector('button.card span.title[title="Metadata Key"]');
   }
 
   /**
    * Returns the Content Types Encrypted Metadata.
    */
   get migrateMetadata() {
-    return this._page.container.querySelector('button.card span.title[title="Migrate metadata"]');
+    return this._page.container.querySelector('button.card span.title[title="Migrate Metadata"]');
   }
 
   /**
    * Returns the Metadata Getting Started Settings.
    */
   get metadataGettingStartedSettings() {
-    return this._page.container.querySelector('button.card span.title[title="Getting started"]');
+    return this._page.container.querySelector('button.card span.title[title="Getting Started"]');
   }
 
   get scimSettings() {
@@ -186,7 +186,7 @@ export default class AdministrationHomePagePage {
    * Returns the secret history settings.
    */
   get secretHistorySettings() {
-    return this._page.container.querySelector('button.card span.title[title="Secret history"]');
+    return this._page.container.querySelector('button.card span.title[title="Secret History"]');
   }
 
   /**
