@@ -133,11 +133,16 @@ export class MetadataTypesSettingsLocalStorageContextProvider extends React.Comp
    */
   async updateLocalStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
-      this.runningLocalStorageUpdatePromise = this.props.context.port.request(
-        "passbolt.metadata.get-or-find-metadata-types-settings",
-      );
-      await this.runningLocalStorageUpdatePromise;
-      this.runningLocalStorageUpdatePromise = null;
+      try {
+        this.runningLocalStorageUpdatePromise = this.props.context.port.request(
+          "passbolt.metadata.get-or-find-metadata-types-settings",
+        );
+        await this.runningLocalStorageUpdatePromise;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.runningLocalStorageUpdatePromise = null;
+      }
     } else {
       await this.runningLocalStorageUpdatePromise;
     }
