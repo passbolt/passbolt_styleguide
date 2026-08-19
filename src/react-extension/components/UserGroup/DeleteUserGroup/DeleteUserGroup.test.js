@@ -21,9 +21,14 @@ import { fireEvent, waitFor } from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import { defaultAppContext, defaultProps, mockGroup } from "./DeleteUserGroup.test.data";
 import DeleteUserGroupPage from "./DeleteUserGroup.test.page";
+import GroupServiceWorkerService from "../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 beforeEach(() => {
   jest.resetModules();
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
 });
 
 describe("See Delete Group Dialog", () => {
@@ -71,13 +76,11 @@ describe("See Delete Group Dialog", () => {
 
     it("As AD I should see a toaster message after deleting a group", async () => {
       const submitButton = page.displayDeleteGroupDialog.saveButton;
-      // Mock the request function to make it the expected result
-      const requestMockImpl = jest.fn((message, data) => data);
-      mockContextRequest(context, requestMockImpl);
+      jest.spyOn(GroupServiceWorkerService.prototype, "delete").mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.displayDeleteGroupDialog.click(submitButton);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.groups.delete", group.id);
+      expect(GroupServiceWorkerService.prototype.delete).toHaveBeenCalledWith(group.id);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
@@ -135,7 +138,7 @@ describe("See Delete Group Dialog", () => {
       await page.displayDeleteGroupDialog.click(submitButton);
 
       // Throw general error message
-      expect(page.displayDeleteGroupDialog.errorDialog).not.toBeNull();
+      await waitFor(() => expect(page.displayDeleteGroupDialog.errorDialog).not.toBeNull());
       expect(page.displayDeleteGroupDialog.errorDialogMessage).not.toBeNull();
     });
 
