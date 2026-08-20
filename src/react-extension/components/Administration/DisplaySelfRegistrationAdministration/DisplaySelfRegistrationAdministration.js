@@ -317,7 +317,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
                     className={`input ${this.hasWarnings() && "warning"} ${isSubmitted && errors.size > 0 && "error"}`}
                   >
                     <label id="enabled-label">
-                      <Trans>Email domain safe list</Trans>
+                      <Trans>Email Domain Safe List</Trans>
                     </label>
                   </div>
                   <p className="description" id="enabled-description">

@@ -91,7 +91,7 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
       case AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY:
         return this.translate("Account Recovery");
       case AdministrationWorkspaceMenuTypes.SMTP_SETTINGS:
-        return this.translate("Email server");
+        return this.translate("Email Server");
       case AdministrationWorkspaceMenuTypes.SELF_REGISTRATION:
         return this.translate("Self Registration");
       case AdministrationWorkspaceMenuTypes.SSO:
@@ -109,19 +109,19 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
       case AdministrationWorkspaceMenuTypes.HEALTHCHECK:
         return this.translate("Passbolt API Status");
       case AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA:
-        return this.translate("Encrypted metadata");
+        return this.translate("Encrypted Metadata");
       case AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY:
-        return this.translate("Metadata key");
+        return this.translate("Metadata Key");
       case AdministrationWorkspaceMenuTypes.MIGRATE_METADATA:
-        return this.translate("Migrate metadata");
+        return this.translate("Migrate Metadata");
       case AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES:
-        return this.translate("Allow content types");
+        return this.translate("Allow Content Types");
       case AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED:
-        return this.translate("Getting started");
+        return this.translate("Getting Started");
       case AdministrationWorkspaceMenuTypes.SCIM:
         return this.translate("SCIM");
       case AdministrationWorkspaceMenuTypes.SECRET_HISTORY:
-        return this.translate("Secret history");
+        return this.translate("Secret History");
       case AdministrationWorkspaceMenuTypes.CE_DOWNGRADE:
         return this.translate("Downgrade");
       default:

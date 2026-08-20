@@ -374,7 +374,7 @@ class AdministrationWorkspace extends Component {
                         <ArrowLeftSVG />
                       </button>
                       <span className="title administration">
-                        <Trans>Organisation settings</Trans>
+                        <Trans>Organisation Settings</Trans>
                       </span>
                     </div>
                   </div>

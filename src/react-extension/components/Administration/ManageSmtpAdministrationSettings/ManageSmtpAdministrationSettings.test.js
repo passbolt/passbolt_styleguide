@@ -52,7 +52,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       await act(() => (page = new ManageSmtpAdministrationSettingsPage(defaultProps())));
 
       expect(page.exists()).toBeTruthy();
-      expect(page.title.textContent).toBe("Email server");
+      expect(page.title.textContent).toBe("Email Server");
       expect(page.providerButtons).toBeTruthy();
       expect(page.providerButtons.length).toBe(SmtpProviders.length);
     });
