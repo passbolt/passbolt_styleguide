@@ -201,7 +201,7 @@ class DeleteUserGroupWithConflicts extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
-    this.props.context.setContext({ deleteUserWithConflictsDialogProps: null });
+    this.props.context.setContext({ deleteGroupWithConflictsDialogProps: null });
   }
 
   /**
@@ -254,7 +254,7 @@ class DeleteUserGroupWithConflicts extends Component {
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The group has been deleted successfully"));
       this.props.onClose();
-      this.props.context.setContext({ deleteUserWithConflictsDialogProps: null });
+      this.props.context.setContext({ deleteGroupWithConflictsDialogProps: null });
     } catch (error) {
       this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.

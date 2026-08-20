@@ -76,7 +76,7 @@ describe("See Delete Group Dialog", () => {
 
     it("As AD I should see a toaster message after deleting a group", async () => {
       const submitButton = page.displayDeleteGroupDialog.saveButton;
-      jest.spyOn(GroupServiceWorkerService.prototype, "delete").mockImplementation(jest.fn());
+      jest.spyOn(GroupServiceWorkerService.prototype, "delete").mockResolvedValue(undefined);
       jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.displayDeleteGroupDialog.click(submitButton);
