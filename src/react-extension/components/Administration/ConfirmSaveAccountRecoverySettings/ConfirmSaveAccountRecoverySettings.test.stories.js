@@ -32,14 +32,22 @@ const Template = (args) => (
   </MemoryRouter>
 );
 
-export const Disabled = Template.bind({});
-Disabled.args = disabledPolicyProps();
+export const Disabled = {
+  render: Template,
+  args: disabledPolicyProps(),
+};
 
-export const MandatoryWithOrganizationKey = Template.bind({});
-MandatoryWithOrganizationKey.args = mandatoryPolicyPropsWithOrganisationKey();
+export const MandatoryWithOrganizationKey = {
+  render: Template,
+  args: mandatoryPolicyPropsWithOrganisationKey(),
+};
 
-export const OptInWithOrganizationKey = Template.bind({});
-OptInWithOrganizationKey.args = optInPolicyPropsWithOrganisationKey();
+export const OptInWithOrganizationKey = {
+  render: Template,
+  args: optInPolicyPropsWithOrganisationKey(),
+};
 
-export const OptOutWithOrganizationKey = Template.bind({});
-OptOutWithOrganizationKey.args = optOutPolicyPropsWithOrganisationKey();
+export const OptOutWithOrganizationKey = {
+  render: Template,
+  args: optOutPolicyPropsWithOrganisationKey(),
+};

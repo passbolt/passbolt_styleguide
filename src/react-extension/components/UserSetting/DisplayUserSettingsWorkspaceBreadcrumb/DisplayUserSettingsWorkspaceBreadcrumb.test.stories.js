@@ -53,4 +53,6 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
+export const Initial = {
+  render: Template,
+};

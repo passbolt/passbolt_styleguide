@@ -1,4 +1,6 @@
-# v5.14.8
+# v5.15.0
 
-Fixes:
-- delays redirection after creating a resource to ensure the resource workspace grid contains the created resource
+Provides:
+- different security fixes by updating dependencies
+- autofill improvement in shadow doms
+- PCD redesign

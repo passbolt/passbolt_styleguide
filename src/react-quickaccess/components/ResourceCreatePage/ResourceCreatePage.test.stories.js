@@ -33,15 +33,20 @@ const parameters = {
   css: "ext_quickaccess",
 };
 
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
-Initial.parameters = parameters;
+export const Initial = {
+  render: Template,
+  args: defaultProps(),
+  parameters: parameters,
+};
 
 const contextMock = {
   port: {
     request: (path) => mockResults[path],
   },
 };
-export const CreateResourceFromTab = Template.bind({});
-CreateResourceFromTab.args = defaultProps({ context: defaultAppContext(contextMock) });
-CreateResourceFromTab.parameters = parameters;
+
+export const CreateResourceFromTab = {
+  render: Template,
+  args: defaultProps({ context: defaultAppContext(contextMock) }),
+  parameters: parameters,
+};

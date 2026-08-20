@@ -52,22 +52,32 @@ const parameters = {
   css: "ext_quickaccess",
 };
 
-export const Initial = Template.bind({});
-Initial.args = loadingProps();
-Initial.parameters = parameters;
+export const Initial = {
+  render: Template,
+  args: loadingProps(),
+  parameters: parameters,
+};
 
-export const NoResource = Template.bind({});
-NoResource.args = noResourcesProps();
-NoResource.parameters = parameters;
+export const NoResource = {
+  render: Template,
+  args: noResourcesProps(),
+  parameters: parameters,
+};
 
-export const NoFoundResource = Template.bind({});
-NoFoundResource.args = searchNoResultProps();
-NoFoundResource.parameters = parameters;
+export const NoFoundResource = {
+  render: Template,
+  args: searchNoResultProps(),
+  parameters: parameters,
+};
 
-export const SearchResources = Template.bind({});
-SearchResources.args = searchWithResultProps();
-SearchResources.parameters = parameters;
+export const SearchResources = {
+  render: Template,
+  args: searchWithResultProps(),
+  parameters: parameters,
+};
 
-export const SuggestedResources = Template.bind({});
-SuggestedResources.args = suggestedResourcesProps();
-SuggestedResources.parameters = parameters;
+export const SuggestedResources = {
+  render: Template,
+  args: suggestedResourcesProps(),
+  parameters: parameters,
+};

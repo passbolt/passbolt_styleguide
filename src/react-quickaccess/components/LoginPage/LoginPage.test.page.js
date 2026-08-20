@@ -92,7 +92,7 @@ export default class LoginPageTest {
    * @returns {HTMLElement}
    */
   get switchToPassphraseFormButton() {
-    return this.select("a.show-passphrase-form-button");
+    return this.select("button.show-passphrase-form-button");
   }
 
   /**
@@ -100,7 +100,7 @@ export default class LoginPageTest {
    * @returns {HTMLElement}
    */
   get switchToSsoFormButton() {
-    return this.select("a.show-sso-form-button");
+    return this.select("button.show-sso-form-button");
   }
 
   /**

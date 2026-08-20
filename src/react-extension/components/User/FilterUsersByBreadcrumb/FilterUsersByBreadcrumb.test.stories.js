@@ -24,50 +24,68 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const AllFilter = Template.bind({});
-AllFilter.args = {
-  userWorkspaceContext: {
-    filter: { type: UserWorkspaceFilterTypes.ALL },
-    filteredUsers: [{}, {}, {}],
+export const AllFilter = {
+  render: Template,
+
+  args: {
+    userWorkspaceContext: {
+      filter: { type: UserWorkspaceFilterTypes.ALL },
+      filteredUsers: [{}, {}, {}],
+    },
   },
 };
 
-export const RecentlyModifiedFilter = Template.bind({});
-RecentlyModifiedFilter.args = {
-  userWorkspaceContext: {
-    filter: { type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED },
-    filteredUsers: [{}, {}],
+export const RecentlyModifiedFilter = {
+  render: Template,
+
+  args: {
+    userWorkspaceContext: {
+      filter: { type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED },
+      filteredUsers: [{}, {}],
+    },
   },
 };
 
-export const TextFilter = Template.bind({});
-TextFilter.args = {
-  userWorkspaceContext: {
-    filter: { type: UserWorkspaceFilterTypes.TEXT, payload: "Ada" },
-    filteredUsers: [{}],
+export const TextFilter = {
+  render: Template,
+
+  args: {
+    userWorkspaceContext: {
+      filter: { type: UserWorkspaceFilterTypes.TEXT, payload: "Ada" },
+      filteredUsers: [{}],
+    },
   },
 };
 
-export const GroupFilter = Template.bind({});
-GroupFilter.args = {
-  userWorkspaceContext: {
-    filter: { type: UserWorkspaceFilterTypes.GROUP, payload: { group: { name: "My super group" } } },
-    filteredUsers: [],
+export const GroupFilter = {
+  render: Template,
+
+  args: {
+    userWorkspaceContext: {
+      filter: { type: UserWorkspaceFilterTypes.GROUP, payload: { group: { name: "My super group" } } },
+      filteredUsers: [],
+    },
   },
 };
 
-export const AttentionRequiredRequestsFilter = Template.bind({});
-AttentionRequiredRequestsFilter.args = {
-  userWorkspaceContext: {
-    filter: { type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST },
-    filteredUsers: [{}, {}],
+export const AttentionRequiredRequestsFilter = {
+  render: Template,
+
+  args: {
+    userWorkspaceContext: {
+      filter: { type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST },
+      filteredUsers: [{}, {}],
+    },
   },
 };
 
-export const MissingMetadataKeyFilter = Template.bind({});
-MissingMetadataKeyFilter.args = {
-  userWorkspaceContext: {
-    filter: { type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY },
-    filteredUsers: [{}, {}, {}],
+export const MissingMetadataKeyFilter = {
+  render: Template,
+
+  args: {
+    userWorkspaceContext: {
+      filter: { type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY },
+      filteredUsers: [{}, {}, {}],
+    },
   },
 };

@@ -91,10 +91,42 @@ describe("GroupPermissionItem", () => {
   });
 
   describe("States", () => {
-    it("adds the permission-updated CSS class when updated is true", () => {
+    it("shows a change status chip when changeStatus is set", () => {
+      expect.assertions(2);
+      const page = new GroupPermissionItemPage(defaultOwnerProps({ changeStatus: "added" }));
+      expect(page.changeChip.textContent).toBe("added");
+      expect(page.changeChip.classList.contains("added")).toBe(true);
+    });
+
+    it("shows no change status chip when changeStatus is not set", () => {
       expect.assertions(1);
-      const page = new GroupPermissionItemPage(defaultOwnerProps({ updated: true }));
-      expect(page.isUpdated).toBe(true);
+      const page = new GroupPermissionItemPage(defaultOwnerProps());
+      expect(page.changeChip).toBeNull();
+    });
+
+    it("renders the removed state when changeStatus is removed", () => {
+      expect.assertions(5);
+      const page = new GroupPermissionItemPage(defaultOwnerProps({ changeStatus: "removed" }));
+      expect(page.isRemoved).toBe(true);
+      expect(page.isPermissionSelectDisabled).toBe(true);
+      expect(page.revertButton).not.toBeNull();
+      expect(page.deleteButton).toBeNull();
+      // The group members can still be expanded on a removed row.
+      expect(page.groupVisibilityToggle).not.toBeNull();
+    });
+
+    it("calls onRevert with the permission id when the revert button is clicked", async () => {
+      expect.assertions(1);
+      const props = defaultOwnerProps({ changeStatus: "removed" });
+      const page = new GroupPermissionItemPage(props);
+      await page.clickRevert();
+      expect(props.onRevert).toHaveBeenCalledWith("some-uuid");
+    });
+
+    it("hides the revert button in read-only mode", () => {
+      expect.assertions(1);
+      const page = new GroupPermissionItemPage(defaultOwnerProps({ changeStatus: "removed", isReadOnly: true }));
+      expect(page.revertButton).toBeNull();
     });
 
     it("disables the select and delete button when disabled is true", () => {
@@ -106,11 +138,30 @@ describe("GroupPermissionItem", () => {
   });
 
   describe("Varies details", () => {
-    it("shows 'varies' in the select and an attention icon when variesDetails is set", () => {
+    it("shows 'varies' in the select and an info icon when variesDetails is set", () => {
       expect.assertions(2);
       const page = new GroupPermissionItemPage(defaultVariesProps());
       expect(page.permissionSelectValue).toBe("varies");
-      expect(page.attentionIcon).not.toBeNull();
+      expect(page.variesIcon).not.toBeNull();
+    });
+
+    it("does not offer the varies option once resolved to a concrete level", async () => {
+      expect.assertions(1);
+      const page = new GroupPermissionItemPage(defaultVariesProps({ permissionType: 15 }));
+      expect(await page.getPermissionSelectOptions()).toEqual(["can read", "can update"]);
+    });
+
+    it("hides the varies info icon once resolved to a concrete level", () => {
+      expect.assertions(1);
+      const page = new GroupPermissionItemPage(defaultVariesProps({ permissionType: 15 }));
+      expect(page.variesIcon).toBeNull();
+    });
+
+    it("hides the varies info icon when the permission is pending deletion", () => {
+      expect.assertions(2);
+      const page = new GroupPermissionItemPage(defaultVariesProps({ changeStatus: "removed" }));
+      expect(page.changeChip.textContent).toBe("removed");
+      expect(page.variesIcon).toBeNull();
     });
   });
 });

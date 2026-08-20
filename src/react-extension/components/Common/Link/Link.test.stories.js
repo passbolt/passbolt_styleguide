@@ -15,7 +15,6 @@ import React from "react";
 
 export default {
   title: "Foundations/Link",
-  component: "Link",
 };
 
 const Template = () => (
@@ -38,4 +37,6 @@ const Template = () => (
     </div>
   </div>
 );
-export const Default = Template.bind({});
+export const Default = {
+  render: Template,
+};

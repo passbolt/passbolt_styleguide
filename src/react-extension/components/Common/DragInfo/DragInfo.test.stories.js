@@ -16,7 +16,6 @@ import CircleXSVG from "../../../../img/svg/circle_x.svg";
 
 export default {
   title: "Foundations/DragInfo",
-  component: "DragInfo",
 };
 
 const Template = () => (
@@ -66,4 +65,6 @@ const Template = () => (
     </div>
   </div>
 );
-export const Default = Template.bind({});
+export const Default = {
+  render: Template,
+};

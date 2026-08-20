@@ -31,22 +31,28 @@ const Template = (args) => (
   </MockTranslationProvider>
 );
 
-export const Mandatory = Template.bind({});
-Mandatory.args = {
-  context: {
-    port: new MockPort(),
-    locale: "en-US",
+export const Mandatory = {
+  render: Template,
+
+  args: {
+    context: {
+      port: new MockPort(),
+      locale: "en-US",
+    },
+    policy: "mandatory",
+    onClose: () => {},
   },
-  policy: "mandatory",
-  onClose: () => {},
 };
 
-export const OptOut = Template.bind({});
-OptOut.args = {
-  context: {
-    port: new MockPort(),
-    locale: "en-US",
+export const OptOut = {
+  render: Template,
+
+  args: {
+    context: {
+      port: new MockPort(),
+      locale: "en-US",
+    },
+    policy: "opt-out",
+    onClose: () => {},
   },
-  policy: "opt-out",
-  onClose: () => {},
 };

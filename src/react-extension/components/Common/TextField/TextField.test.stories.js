@@ -16,7 +16,6 @@ import LockSVG from "../../../../img/svg/lock.svg";
 
 export default {
   title: "Foundations/TextField",
-  component: "TextField",
 };
 
 export const DefaultTextFields = {

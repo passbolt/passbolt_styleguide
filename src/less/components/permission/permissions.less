@@ -103,12 +103,14 @@
             align-items: center;
             overflow: hidden;
 
+            // Only used by the EditUserGroup dialog, the share dialog displays change status chips instead.
             &.permission-updated {
                 background: var(--Notifications-Alert-background);
             }
 
             /* aro summary */
             .avatar {
+                flex: none;
                 float: left;
 
                 img,
@@ -117,9 +119,13 @@
                     height: 4.2rem;
                 }
             }
+            // The only flexible item of the row. Every sibling is pinned, so the recipient name and
+            // username absorb the whole horizontal pressure and ellipsise instead of the row
+            // overflowing and clipping its trailing action.
             .aro {
                 flex: 1 1 auto;
                 width: 30%;
+                min-width: 0; // important to keep the container size for ellipsis
                 float: left;
                 padding: 0 1rem 0 1.6rem;
                 .aro-name {
@@ -137,11 +143,12 @@
                 }
                 .ellipsis {
                     display:inline-block;
-                    max-width:90%;
+                    max-width:100%;
                 }
             }
 
             .tooltip-portal {
+                flex: none;
                 margin: 0 .8rem;
                 line-height: 1.6rem;
 
@@ -151,13 +158,46 @@
                 }
             }
 
-            .rights {
-                float: left;
-                flex: 0 1 auto;
+            // Pending change status chip. Sized and coloured after the design: a 2.6rem pill whose
+            // label is optically centred by the bottom padding. The chips defaults are overridden on
+            // purpose, they target the smaller inline beta/new pills.
+            .chips {
+                box-sizing: border-box;
+                flex: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 2.6rem;
+                margin-top: 0;
+                margin-right: .8rem;
+                padding: 0 .8rem .2rem;
+                font-size: 1.2rem;
+                color: var(--Text-and-icons-Main-text);
+
+                &.added {
+                    background: var(--Palette-Success);
+                }
+
+                &.modified {
+                    background: var(--Palette-Info);
+                }
+
+                &.removed {
+                    background: var(--Palette-Error);
+                }
             }
 
+            .rights {
+                float: left;
+                flex: none;
+            }
 
-            .remove-item {
+            .actions {
+                flex: none;
+            }
+
+            .remove-item,
+            .revert-item {
               margin-left: .8rem;
             }
 
@@ -231,10 +271,54 @@
             }
         }
 
+        // The whole .aro is faded rather than its leaves so the fingerprint tooltip sitting next to
+        // the recipient name dims along with it.
         li.suspended {
-            .avatar, .aro .aro-name .ellipsis, .aro-details, .permission_changes {
+            .avatar, .aro {
+                opacity: 0.5;
+            }
+        }
+
+        // Fade the same elements as li.suspended so a suspended and removed row dims only once.
+        // The change status chip and the revert action keep their full opacity.
+        li.permission-removed {
+            .avatar, .aro, .rights, > .tooltip-portal {
                 opacity: 0.5;
             }
         }
     }
+}
+
+// Share dialog row metrics, kept out of the shared .permissions block on purpose: the edit and
+// create group dialogs reuse the same markup and keep the roomier padding and the standard 3rem
+// inline select.
+.share-dialog .dialog .permissions .row {
+    padding-top: .8rem;
+    padding-bottom: .8rem;
+
+    .select-container.permission.inline {
+        height: 2.6rem;
+
+        .select {
+            font-size: 1.3rem;
+            line-height: 1.8rem;
+
+            .selected-value {
+                padding: .4rem 1.6rem;
+            }
+
+            // A disabled select keeps its label readable, the row fade is the only thing that dims
+            // it. Without this the base .selected-value.disabled fade would compound with it.
+            .selected-value.disabled {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+// Read-only mode fades no row, so the caret alone signals the selects are not interactive. Scoped to
+// that mode on purpose: elsewhere a disabled select sits on a faded row, and a second fade here
+// would compound down to 0.125.
+.share-dialog.read-only .permissions .selected-value.disabled svg {
+    opacity: 0.25;
 }

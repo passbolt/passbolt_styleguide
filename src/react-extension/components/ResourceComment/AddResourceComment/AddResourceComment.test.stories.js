@@ -36,11 +36,14 @@ const Template = (args) => (
   </AppContext.Provider>
 );
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: context,
-  resource: {
-    id: "test",
+export const Initial = {
+  render: Template,
+
+  args: {
+    context: context,
+    resource: {
+      id: "test",
+    },
+    onAdd: () => {},
   },
-  onAdd: () => {},
 };

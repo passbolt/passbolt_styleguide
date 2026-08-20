@@ -50,14 +50,20 @@ const parameters = {
   css: "ext_quickaccess",
 };
 
-export const InitialLoad = Template.bind({});
-InitialLoad.args = defaultProps();
-InitialLoad.parameters = parameters;
+export const InitialLoad = {
+  render: Template,
+  args: defaultProps(),
+  parameters: parameters,
+};
 
-export const NoOwnedResources = Template.bind({});
-NoOwnedResources.args = noFilteredResourcesProps();
-NoOwnedResources.parameters = parameters;
+export const NoOwnedResources = {
+  render: Template,
+  args: noFilteredResourcesProps(),
+  parameters: parameters,
+};
 
-export const OwnedResources = Template.bind({});
-OwnedResources.args = withFilteredResourcesProps();
-OwnedResources.parameters = parameters;
+export const OwnedResources = {
+  render: Template,
+  args: withFilteredResourcesProps(),
+  parameters: parameters,
+};

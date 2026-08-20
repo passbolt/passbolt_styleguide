@@ -14,7 +14,7 @@
 
 import { v4 as uuidv4 } from "uuid";
 import browser from "webextension-polyfill";
-import DomUtils from "../Dom/DomUtils";
+import InFormFieldGeometryService from "./InFormFieldGeometryService";
 
 /**
  * An InFormMenuField is represented by a DOM element identified as a menu field
@@ -196,7 +196,7 @@ class InFormMenuField {
    */
   handleScrollEvent() {
     // Remove the in form menu
-    this.scrollableFieldParent = DomUtils.getScrollParent(this.field);
+    this.scrollableFieldParent = InFormFieldGeometryService.getScrollParent(this.field);
     this.scrollableFieldParent.addEventListener("scroll", this.removeIframe);
   }
 

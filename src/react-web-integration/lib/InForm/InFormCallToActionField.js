@@ -15,6 +15,9 @@
 import { v4 as uuidv4 } from "uuid";
 import DomUtils from "../Dom/DomUtils";
 import browser from "webextension-polyfill";
+import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
+import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
+import InFormFieldGeometryService from "./InFormFieldGeometryService";
 
 /**
  * An InFormCallToActionField is represented by a DOM element identified as an username field and to which
@@ -47,9 +50,9 @@ class InFormCallToActionField {
    * @return {*}
    */
   static findAllInIframes(selector) {
-    const iframes = DomUtils.getAccessibleAndSameDomainIframes();
-    const queryMapper = (iframe) => Array.from(iframe.contentDocument.querySelectorAll(selector));
-    return iframes.map(queryMapper).flat();
+    return DomUtils.getAccessibleAndSameDomainIframes().flatMap((iframe) =>
+      Array.from(iframe.contentDocument.querySelectorAll(selector)),
+    );
   }
 
   /**
@@ -57,9 +60,13 @@ class InFormCallToActionField {
    * @return {*}
    */
   static findAllInShadowDom(selector) {
-    const shadowDomDocuments = DomUtils.getShadowDomDocuments();
-    const queryMapper = (shadowDom) => Array.from(shadowDom.querySelectorAll(selector));
-    return shadowDomDocuments.map(queryMapper).flat();
+    const matches = [];
+
+    for (const shadowRoot of ShadowRootCacheService.getCachedShadowRoots(document)) {
+      matches.push(...ShadowDomQueryService.querySelectorAllDeep(shadowRoot, selector));
+    }
+
+    return matches;
   }
 
   /**
@@ -87,11 +94,14 @@ class InFormCallToActionField {
     this.callToActionClickCallback = null;
     /** The shadow root **/
     this.shadowRoot = shadowRoot;
+    /** Rectangle coordinates of the field */
+    this.viewableRect = null;
 
     this.bindCallbacks();
     this.handleInsertionEvent();
     this.handleRemoveEvent();
     this.handleScrollEvent();
+    this.cacheViewableRect();
   }
 
   /**
@@ -103,6 +113,13 @@ class InFormCallToActionField {
     this.removeInFormCallToAction = this.removeInFormCallToAction.bind(this);
     this.removeIframe = this.removeIframe.bind(this);
     this.destroy = this.destroy.bind(this);
+  }
+
+  /**
+   * Cache the field's viewport rect, measured once at discovery.
+   */
+  cacheViewableRect() {
+    this.viewableRect = this.field.getBoundingClientRect();
   }
 
   /**
@@ -119,7 +136,11 @@ class InFormCallToActionField {
    * Whenever the call-to-action must be inserted
    */
   handleInsertionEvent() {
-    if (document.activeElement === this.field) {
+    const fieldRoot = ShadowDomQueryService.scopeRoot(this.field);
+    if (
+      this.field === document.activeElement ||
+      (fieldRoot instanceof ShadowRoot && fieldRoot.host === document.activeElement)
+    ) {
       this.insertInformCallToActionIframe();
     }
     this.field.addEventListener("mouseover", this.insertInformCallToActionIframe);
@@ -169,46 +190,7 @@ class InFormCallToActionField {
    * @return {{top: number, left: number}}
    */
   calculateFieldPosition() {
-    let x = 0;
-    let y = 0;
-    let currentElement = this.field;
-    let hasScroll = false;
-    const isInIframe = this.field.ownerDocument !== document;
-    const { top, left, height, width } = this.field.getBoundingClientRect();
-    // If the field is in iframe get the top and left of the iframe else get the top and the left of the body
-    const { top: topBody, left: leftBody } = isInIframe
-      ? this.field.ownerDocument.defaultView.frameElement.getBoundingClientRect()
-      : document.documentElement.getBoundingClientRect();
-
-    /*
-     * We loop to calculate the cumulated position of the field
-     * from its ancestors and itself differential offset / scroll position
-     */
-    while (currentElement && !isNaN(currentElement.offsetLeft) && !isNaN(currentElement.offsetTop)) {
-      hasScroll = hasScroll || currentElement.scrollLeft + currentElement.scrollTop > 0;
-      x += currentElement.offsetLeft - currentElement.scrollLeft;
-      y += currentElement.offsetTop - currentElement.scrollTop;
-      currentElement = currentElement.offsetParent;
-    }
-    /*
-     * If there is no scroll and not in iframe on the page, we use the getBoundingClientRect to have the position of the field
-     * this avoid a position issue if there is a transform style in css
-     */
-    if (!hasScroll && !isInIframe) {
-      x = left + width - 25;
-      y = top + Math.floor(height / 2) - 9;
-    } else {
-      // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical alignment )
-      x = x + leftBody + width - 25;
-      y = y + topBody + Math.floor(height / 2) - 9; // Calculate the middle position of the input, 9 is the half of the iframe height
-    }
-
-    /*
-     * The iframe position is fixed inside the shadow root host so we need to subtract its coordinates to have the position relative
-     * to the host and not to the viewport.
-     */
-    const { top: hostTop, left: hostLeft } = this.shadowRoot?.host?.getBoundingClientRect() ?? { top: 0, left: 0 };
-    return { top: y - hostTop, left: x - hostLeft };
+    return InFormFieldGeometryService.calculateFieldPosition(this.field, this.shadowRoot);
   }
 
   /**
@@ -292,7 +274,7 @@ class InFormCallToActionField {
    */
   handleScrollEvent() {
     // Remove the call-to-action
-    this.scrollableFieldParent = DomUtils.getScrollParent(this.field);
+    this.scrollableFieldParent = InFormFieldGeometryService.getScrollParent(this.field);
     this.scrollableFieldParent.addEventListener("scroll", this.removeIframe);
   }
 

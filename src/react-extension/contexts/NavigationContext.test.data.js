@@ -19,7 +19,6 @@
  */
 export function defaultNavigationContext(context = {}) {
   const defaultContext = {
-    onGoToNewTab: jest.fn(),
     onGoToPasswordsRequested: jest.fn(),
     // Administration
     onGoToAdministrationRequested: jest.fn(),
@@ -41,6 +40,8 @@ export function defaultNavigationContext(context = {}) {
     onGoToUsersRequested: jest.fn(),
     onGoToHelpRequested: jest.fn(),
     onGoToTermsRequested: jest.fn(),
+    onGoToSubscriptionUpdateQuantityRequested: jest.fn(),
+    onGoToSubscriptionRenewRequested: jest.fn(),
     onGoToUserSettingsProfileRequested: jest.fn(),
     onGoToUserSettingsPassphraseRequested: jest.fn(),
     onGoToUserSettingsSecurityTokenRequested: jest.fn(),

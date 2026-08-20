@@ -24,17 +24,15 @@ export function defaultPropsWithSsoEnabled(data = {}) {
   return Object.assign({}, { context, ssoContext }, data);
 }
 
+export function disabledSsoContext(ssoContext) {
+  return defaultSsoContext(
+    Object.assign({ loadSsoConfiguration: jest.fn(() => null), getProvider: jest.fn(() => null) }, ssoContext),
+  );
+}
+
 export function defaultPropsWithSsoDisabled(data = {}) {
   const context = defaultAppContext(data.context);
-
-  const ssoContext = Object.assign(
-    defaultSsoContext(),
-    {
-      loadSsoConfiguration: jest.fn(() => null),
-      getProvider: jest.fn(() => null),
-    },
-    data.ssoContext,
-  );
+  const ssoContext = disabledSsoContext(data.ssoContext);
 
   delete data.context;
   delete data.ssoContext;

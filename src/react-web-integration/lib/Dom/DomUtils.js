@@ -42,24 +42,6 @@ class DomUtils {
   }
 
   /**
-   * Returns accessible shadow dom documents in the page
-   * @return {Array<Document>} iframe document
-   */
-  static getShadowDomDocuments() {
-    const filterByShadowRoot = (element) => (element.shadowRoot ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP);
-    const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, filterByShadowRoot);
-    const shadowDomDocuments = [];
-    while (treeWalker.nextNode()) {
-      const shadowDom =
-        browser.dom?.openOrClosedShadowRoot(treeWalker.currentNode) || treeWalker.currentNode.shadowRoot;
-      if (shadowDom) {
-        shadowDomDocuments.push(shadowDom);
-      }
-    }
-    return shadowDomDocuments;
-  }
-
-  /**
    * Check the requested document, top document and an iframe form is initiated from same domain.
    *
    * @param {string} requestedUrl The requested document url
@@ -78,54 +60,6 @@ class DomUtils {
 
     // Requested document and top/iframe document origin is same
     return requestedOrigin === documentOrigin;
-  }
-
-  /**
-   * Returns the first scrollable parent of the given node
-   * @param node A Dom node
-   */
-  static getScrollParent(node) {
-    const style = (node, prop) => getComputedStyle(node, null).getPropertyValue(prop);
-
-    const isScrollable = (node) =>
-      style(node, "overflow")
-        ?.split(" ")
-        .every((overflow) => overflow === "auto" || overflow === "scroll");
-
-    const scrollParent = (node) => {
-      // if node or node = document.body or node type is element node (ex: for iframe node type = document)
-      if (!node || node === document.body || node.nodeType !== Node.ELEMENT_NODE) {
-        return window;
-      } else if (isScrollable(node)) {
-        return node;
-      } else {
-        return scrollParent(node.parentNode);
-      }
-    };
-    return scrollParent(node);
-  }
-
-  /**
-   * Get the inFormCalToActionField with the lowest common ancestor of the callToActionClickedField
-   * @param {HTMLElement} callToActionClickedField
-   * @param {Array<InFormCallToActionField>} fields
-   * @returns {null|InFormCallToActionField}
-   */
-  static getFieldWithLowestCommonAncestor(callToActionClickedField, fields) {
-    if (fields.length === 0) {
-      return null;
-    } else if (fields.length === 1) {
-      return fields[0];
-    } else {
-      let parent = callToActionClickedField;
-      let field;
-      // We loop to find the field with the lowest common ancestors
-      while (parent && !field) {
-        parent = parent.offsetParent || parent.parentElement;
-        field = fields.find((callToActionField) => parent.contains(callToActionField.field));
-      }
-      return field;
-    }
   }
 
   /**

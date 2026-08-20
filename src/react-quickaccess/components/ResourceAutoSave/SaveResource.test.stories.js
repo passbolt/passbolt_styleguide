@@ -36,12 +36,18 @@ const parameters = {
 };
 const initialAppContext = defaultAppContext();
 mockExtensionCall(initialAppContext);
-export const Initial = Template.bind({});
-Initial.args = defaultProps({ context: initialAppContext });
-Initial.parameters = parameters;
+
+export const Initial = {
+  render: Template,
+  args: defaultProps({ context: initialAppContext }),
+  parameters: parameters,
+};
 
 const appContextWithTabInfo = defaultAppContext();
 mockExtensionCallWithTabInfo(appContextWithTabInfo);
-export const SaveResourceFromTab = Template.bind({});
-SaveResourceFromTab.args = defaultProps({ context: appContextWithTabInfo });
-SaveResourceFromTab.parameters = parameters;
+
+export const SaveResourceFromTab = {
+  render: Template,
+  args: defaultProps({ context: appContextWithTabInfo }),
+  parameters: parameters,
+};

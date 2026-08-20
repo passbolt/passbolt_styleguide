@@ -38,35 +38,48 @@ const defaultParameters = {
   css: "ext_authentication",
 };
 
-export const Initial = Template.bind({});
-Initial.args = defaultProps({
-  displayAs: LoginVariations.SIGN_IN,
-  onSignIn: async () => {
-    console.log("onSignIn called");
-  },
-});
-Initial.parameters = defaultParameters;
+export const Initial = {
+  render: Template,
 
-export const CompleteRecovery = Template.bind({});
-CompleteRecovery.args = defaultPropsWithAccount({
-  displayAs: LoginVariations.ACCOUNT_RECOVERY,
-  onSignIn: async () => {
-    console.log("onSignIn called");
-  },
-});
-CompleteRecovery.parameters = defaultParameters;
+  args: defaultProps({
+    displayAs: LoginVariations.SIGN_IN,
+    onSignIn: async () => {
+      console.log("onSignIn called");
+    },
+  }),
+
+  parameters: defaultParameters,
+};
+
+export const CompleteRecovery = {
+  render: Template,
+
+  args: defaultPropsWithAccount({
+    displayAs: LoginVariations.ACCOUNT_RECOVERY,
+    onSignIn: async () => {
+      console.log("onSignIn called");
+    },
+  }),
+
+  parameters: defaultParameters,
+};
 
 const passwordError = new Error("Wrong passphrase");
 passwordError.name = "InvalidMasterPasswordError";
-export const LoginWithSsoEnabled = Template.bind({});
-LoginWithSsoEnabled.args = defaultPropsWithAccount({
-  displayAs: LoginVariations.SIGN_IN,
-  isSsoAvailable: true,
-  onCheckPassphrase: () => {
-    throw passwordError;
-  },
-  onSignIn: async () => {
-    console.log("onSignIn called");
-  },
-});
-LoginWithSsoEnabled.parameters = defaultParameters;
+
+export const LoginWithSsoEnabled = {
+  render: Template,
+
+  args: defaultPropsWithAccount({
+    displayAs: LoginVariations.SIGN_IN,
+    isSsoAvailable: true,
+    onCheckPassphrase: () => {
+      throw passwordError;
+    },
+    onSignIn: async () => {
+      console.log("onSignIn called");
+    },
+  }),
+
+  parameters: defaultParameters,
+};

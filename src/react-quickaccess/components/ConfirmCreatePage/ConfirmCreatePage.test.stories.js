@@ -37,20 +37,28 @@ const parameters = {
   css: "ext_quickaccess",
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  state: {
-    rule: ConfirmCreatePageRuleVariations.IN_DICTIONARY,
-    resourceName: "Resource Name",
-  },
-};
-Initial.parameters = parameters;
+export const Initial = {
+  render: Template,
 
-export const VeryWeakEntropy = Template.bind({});
-VeryWeakEntropy.args = {
-  state: {
-    rule: ConfirmCreatePageRuleVariations.MINIMUM_ENTROPY,
-    resourceName: "Resource Name",
+  args: {
+    state: {
+      rule: ConfirmCreatePageRuleVariations.IN_DICTIONARY,
+      resourceName: "Resource Name",
+    },
   },
+
+  parameters: parameters,
 };
-VeryWeakEntropy.parameters = parameters;
+
+export const VeryWeakEntropy = {
+  render: Template,
+
+  args: {
+    state: {
+      rule: ConfirmCreatePageRuleVariations.MINIMUM_ENTROPY,
+      resourceName: "Resource Name",
+    },
+  },
+
+  parameters: parameters,
+};

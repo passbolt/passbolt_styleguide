@@ -32,16 +32,21 @@ const Template = (args) => (
   </AppContext.Provider>
 );
 
-export const Initial = Template.bind({});
+export const Initial = {
+  render: Template,
+};
 
-export const SelectedGroup = Template.bind({});
-SelectedGroup.args = {
-  resourceWorkspaceContext: {
-    filter: {
-      type: ResourceWorkspaceFilterTypes.GROUP,
-      payload: {
-        group: {
-          id: 1,
+export const SelectedGroup = {
+  render: Template,
+
+  args: {
+    resourceWorkspaceContext: {
+      filter: {
+        type: ResourceWorkspaceFilterTypes.GROUP,
+        payload: {
+          group: {
+            id: 1,
+          },
         },
       },
     },
