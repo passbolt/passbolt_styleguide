@@ -485,3 +485,24 @@ export const AUTOCOMPLETE_ROLE = Object.freeze({
 export const AUTOCOMPLETE_NON_TYPE = Object.freeze(
   new Set(["on", "off", "shipping", "billing", "home", "work", "mobile", "fax", "pager"]),
 );
+
+/**
+ * The Dashlane SAWF `data-form-type` vocabulary. Fixed, single-language, exact-matched tokens —
+ * distinct from the fuzzy multilingual keyword lists above.
+ * @type {Readonly<Object<string, string>>}
+ */
+export const SawfToken = Object.freeze({
+  OTP: "otp",
+  USERNAME: "username",
+  EMAIL: "email",
+  SECONDARY: "secondary",
+  PASSWORD: "password",
+  CONFIRMATION: "confirmation",
+  NEW: "new",
+  LOGIN: "login",
+  REGISTER: "register",
+  CHANGE_PASSWORD: "change_password",
+  ACTION: "action",
+  STEP: "step",
+  FINAL: "final",
+});
