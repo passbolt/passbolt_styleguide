@@ -12,6 +12,8 @@
  * @since         5.15.0
  */
 
+import { FieldRole } from "./Taxonomy";
+
 export const Keywords = Object.freeze({
   // --- Identification & credentials ---
 
@@ -402,8 +404,37 @@ export const Keywords = Object.freeze({
   ],
 });
 
-// Short/ambiguous tokens: EXACT SEGMENT match only (never substring) — hand-curated
-// (anti false-positive: new ⊄ newsletter, pin ⊄ shipping, otp ⊄ notpassword).
+/**
+ * Short/ambiguous tokens: EXACT SEGMENT match only (never substring) — hand-curated
+ * (anti false-positive: new ⊄ newsletter, pin ⊄ shipping, otp ⊄ notpassword).
+ * NB: digit-glued tokens like "2fa" are deliberately NOT here — normalization splits "2FA" into
+ * "2 fa" at the digit→uppercase boundary, so an exact segment could never match; they rely on
+ * substring recall instead (its distinctive digit makes false positives negligible).
+ * @type {ReadonlySet<string>}
+ */
 export const SHORT_AMBIGUOUS = Object.freeze(
-  new Set(["otp", "code", "pin", "id", "go", "mail", "user", "new", "old", "mdp", "2fa", "mfa"]),
+  new Set(["otp", "code", "pin", "id", "go", "mail", "user", "new", "old", "mdp", "mfa"]),
+);
+
+/**
+ * HTML `autocomplete` tokens that map to a concrete field role. The matcher scans tokens
+ * right-to-left, so the last significant token — the most specific one — wins.
+ * @type {Readonly<Object<string, string>>}
+ */
+export const AUTOCOMPLETE_ROLE = Object.freeze({
+  username: FieldRole.USERNAME,
+  email: FieldRole.EMAIL,
+  "current-password": FieldRole.CURRENT_PASSWORD,
+  "new-password": FieldRole.NEW_PASSWORD,
+  "one-time-code": FieldRole.TOTP,
+});
+
+/**
+ * Autocomplete tokens that never name a concrete field type: the "on"/"off" switches and the
+ * WHATWG grouping/contact modifiers. Together with the `section-*` prefix, these are what
+ * autocompleteDeclaresType() ignores when deciding whether the author declared a real type.
+ * @type {ReadonlySet<string>}
+ */
+export const AUTOCOMPLETE_NON_TYPE = Object.freeze(
+  new Set(["on", "off", "shipping", "billing", "home", "work", "mobile", "fax", "pager"]),
 );
