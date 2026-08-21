@@ -111,7 +111,7 @@ class AskInFormMenuDisplay extends React.Component {
     const activeSessionDto = await this.props.context.port.request("passbolt.in-form-cta.get-or-find-active-session");
     const activeSessionEntity = new UserActiveSessionEntity(activeSessionDto);
 
-    const isActive = activeSessionEntity.isAuthenticated && !activeSessionEntity.isMfaRequired;
+    const isActive = this.isSessionUsable(activeSessionEntity);
 
     const suggestedResourcesCount = isActive
       ? await this.props.context.port.request("passbolt.in-form-cta.suggested-resources", this.props.context.fieldType)
@@ -124,6 +124,22 @@ class AskInFormMenuDisplay extends React.Component {
         suggestedResourcesCount,
       },
     });
+  }
+
+  /**
+   * Returns true if the passbolt actions can be performed with the given session.
+   * An offline session stays usable while the server is unreachable. An online session
+   * that lost the network does not: its actions all go through the API, and its authentication and mfa
+   * statuses are stale until the server answers again.
+   * @param {UserActiveSessionEntity} activeSession The active session
+   * @returns {boolean}
+   */
+  isSessionUsable(activeSession) {
+    if (!activeSession.isAuthenticated || activeSession.isMfaRequired) {
+      return false;
+    }
+
+    return activeSession.isSessionOffline || activeSession.isServerReachable;
   }
 
   /**
