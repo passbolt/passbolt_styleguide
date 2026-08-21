@@ -341,7 +341,12 @@ export const Keywords = Object.freeze({
     "antiga",
     "alterar", // pt
   ],
-  LOGIN_HEADING: [
+  // Dedicated heading / button-text lists, kept apart from the field-attribute lists above.
+  // HEADING_CHANGE_PASSWORD uses compound tokens (changepassword…) so generic field words like
+  // "change"/"update" cannot false-match free text. HEADING_SIGNUP holds registration terms only.
+  // HEADING_EXCLUDE holds non-credential markers (newsletter/search/contact…) that veto the form to
+  // OTHER — they mean "not a login/signup form", never "signup".
+  HEADING_LOGIN: [
     "signin",
     "login",
     "logon", // en
@@ -355,25 +360,60 @@ export const Keywords = Object.freeze({
     "accedi",
     "entrar", // de / es / it / pt
   ],
-  NONLOGIN_HEADING: [
-    "register",
+  HEADING_SIGNUP: [
     "signup",
+    "register",
+    "registration",
     "createaccount",
+    "createanaccount",
+    "newaccount", // en
+    "inscription",
+    "creeruncompte",
+    "sinscrire", // fr
+    "registrieren",
+    "kontoerstellen", // de
+    "registrarse",
+    "crearcuenta", // es
+    "registrati", // it
+    "criarconta", // pt
+  ],
+  HEADING_EXCLUDE: [
     "newsletter",
     "subscribe",
     "unsubscribe",
     "mailinglist",
     "contact",
     "search", // en
-    "inscription",
-    "creeruncompte",
     "abonnement",
     "sabonner",
-    "recherche", // fr
-    "registrieren",
+    "recherche",
+    "contacter", // fr
     "abonnieren",
-    "registrarse",
-    "suscribirse", // de / es
+    "kontakt",
+    "suche", // de
+    "suscribirse",
+    "contacto",
+    "buscar", // es
+    "ricerca",
+    "contatti", // it
+    "pesquisar",
+    "contato", // pt
+  ],
+  HEADING_CHANGE_PASSWORD: [
+    "changepassword",
+    "changeyourpassword",
+    "updatepassword",
+    "resetpassword", // en
+    "changermotdepasse",
+    "modifiermotdepasse",
+    "reinitialisermotdepasse", // fr
+    "passwortandern",
+    "passwortzurucksetzen", // de
+    "cambiarcontrasena",
+    "restablecercontrasena",
+    "cambiapassword",
+    "alterarsenha",
+    "redefinirsenha", // es / it / pt
   ],
 
   // Submit buttons — for auto-save
