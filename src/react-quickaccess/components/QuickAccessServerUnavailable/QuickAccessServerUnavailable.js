@@ -58,7 +58,11 @@ class QuickAccessServerUnavailable extends Component {
   /**
    * Switch to offline mode: go to the offline login page.
    */
-  handleUseOfflineModeClick() {
+  async handleUseOfflineModeClick() {
+    // Sign-out locally if the user is still authenticated online
+    if (this.hasOnlineSession) {
+      await this.props.context.port.request("passbolt.auth.local-logout");
+    }
     this.props.history.push("/webAccessibleResources/quickaccess/login-offline");
   }
 
