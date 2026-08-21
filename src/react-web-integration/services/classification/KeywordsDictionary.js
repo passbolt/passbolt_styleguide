@@ -417,6 +417,13 @@ export const SHORT_AMBIGUOUS = Object.freeze(
 );
 
 /**
+ * Standard HTML `autocomplete` token for one-time codes (WHATWG). Single source shared by
+ * AUTOCOMPLETE_ROLE and the OTP feature detection.
+ * @type {string}
+ */
+export const AUTOCOMPLETE_OTP_TOKEN = "one-time-code";
+
+/**
  * HTML `autocomplete` tokens that map to a concrete field role. The matcher scans tokens
  * right-to-left, so the last significant token — the most specific one — wins.
  * @type {Readonly<Object<string, string>>}
@@ -426,7 +433,7 @@ export const AUTOCOMPLETE_ROLE = Object.freeze({
   email: FieldRole.EMAIL,
   "current-password": FieldRole.CURRENT_PASSWORD,
   "new-password": FieldRole.NEW_PASSWORD,
-  "one-time-code": FieldRole.TOTP,
+  [AUTOCOMPLETE_OTP_TOKEN]: FieldRole.TOTP,
 });
 
 /**
