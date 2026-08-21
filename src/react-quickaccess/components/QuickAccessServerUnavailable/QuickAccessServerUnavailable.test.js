@@ -98,14 +98,16 @@ describe("QuickAccessServerUnavailable", () => {
   });
 
   it("As a user with an online session who can use the offline mode when I click switch to offline mode I am routed to the offline login page", async () => {
-    expect.assertions(1);
+    expect.assertions(2);
     const props = defaultProps();
     jest.spyOn(props.history, "push");
+    jest.spyOn(props.context.port, "request").mockImplementationOnce(jest.fn());
     let page;
     await act(async () => (page = new QuickAccessServerUnavailablePage(props)));
 
     await page.clickPrimaryButton();
 
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth.local-logout");
     expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/login-offline");
   });
 
