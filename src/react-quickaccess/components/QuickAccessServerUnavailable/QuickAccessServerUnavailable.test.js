@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        5.13.0
  */
-import { defaultProps, unauthenticatedProps } from "./QuickAccessServerUnavailable.test.data";
+import { defaultProps, offlineSessionProps, unauthenticatedProps } from "./QuickAccessServerUnavailable.test.data";
 import QuickAccessServerUnavailablePage from "./QuickAccessServerUnavailable.test.page";
 import { act } from "react";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
@@ -87,17 +87,17 @@ describe("QuickAccessServerUnavailable", () => {
     expect(page.primaryButton).toBeNull();
   });
 
-  it("As a signed-in user who can use the offline mode I see the use offline mode primary button", async () => {
+  it("As a user with an online session who can use the offline mode I see the switch to offline mode primary button", async () => {
     expect.assertions(2);
     const props = defaultProps();
     let page;
     await act(async () => (page = new QuickAccessServerUnavailablePage(props)));
 
     expect(page.primaryButton).toBeTruthy();
-    expect(page.primaryButton.textContent).toStrictEqual("Use offline mode");
+    expect(page.primaryButton.textContent).toStrictEqual("Switch to offline mode");
   });
 
-  it("As a signed-in user who can use the offline mode when I click use offline mode I am routed to the offline login page", async () => {
+  it("As a user with an online session who can use the offline mode when I click switch to offline mode I am routed to the offline login page", async () => {
     expect.assertions(1);
     const props = defaultProps();
     jest.spyOn(props.history, "push");
@@ -107,6 +107,26 @@ describe("QuickAccessServerUnavailable", () => {
     await page.clickPrimaryButton();
 
     expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/login-offline");
+  });
+
+  it("As a user whose session is not online I see the use offline mode primary button", async () => {
+    expect.assertions(2);
+    const props = offlineSessionProps();
+    let page;
+    await act(async () => (page = new QuickAccessServerUnavailablePage(props)));
+
+    expect(page.primaryButton).toBeTruthy();
+    expect(page.primaryButton.textContent).toStrictEqual("Use offline mode");
+  });
+
+  it("As a signed-out user who can use the offline mode I see the use offline mode primary button", async () => {
+    expect.assertions(2);
+    const props = unauthenticatedProps();
+    let page;
+    await act(async () => (page = new QuickAccessServerUnavailablePage(props)));
+
+    expect(page.primaryButton).toBeTruthy();
+    expect(page.primaryButton.textContent).toStrictEqual("Use offline mode");
   });
 
   it("As a signed-out user I do not see any action", async () => {

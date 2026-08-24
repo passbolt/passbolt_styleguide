@@ -15,12 +15,15 @@
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { createMemoryHistory } from "history";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
-import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
+import {
+  defaultUserActiveSessionDto,
+  offlineUserActiveSessionDto,
+} from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 import OfflineSettingsEntity from "../../../shared/models/entity/offline/offlineSettingsEntity";
 import { defaultOfflineSettingsDto } from "../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
 
 /**
- * Default props: a signed-in user who cannot use the offline mode.
+ * Default props: a user signed-in with an online session which lost the server.
  * @param {object} data Override the default props.
  * @returns {object}
  */
@@ -45,6 +48,18 @@ export function unauthenticatedProps(data = {}) {
     activeSession: new UserActiveSessionEntity(
       defaultUserActiveSessionDto({ is_authenticated: false, is_server_reachable: false }),
     ),
+    ...data,
+  });
+}
+
+/**
+ * Props with an offline session already opened.
+ * @param {object} data Override the default props.
+ * @returns {object}
+ */
+export function offlineSessionProps(data = {}) {
+  return defaultProps({
+    activeSession: new UserActiveSessionEntity(offlineUserActiveSessionDto()),
     ...data,
   });
 }
