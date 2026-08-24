@@ -91,4 +91,33 @@ describe("ShadowRootCollectorService", () => {
       expect(ShadowRootCollectorService.collectShadowRoots(script)).toEqual([]);
     });
   });
+
+  describe("ShadowRootCollectorService::getHost", () => {
+    it("should capture the host of every collected root from the element resolved from, never from shadowRoot.host", () => {
+      // Regression PB-54190: consumers must be able to find a cached root's host without reading
+      // `shadowRoot.host`, which crashes Firefox once the host is torn down. The host is recorded here from
+      // the element we resolved *from*, so it is available even for a root whose `.host` would throw.
+      expect.assertions(2);
+
+      const { host, shadowRoot } = appendShadowHost();
+      Object.defineProperty(shadowRoot, "host", {
+        get() {
+          throw new Error("SIGSEGV: ShadowRoot::Host() null dereference");
+        },
+      });
+
+      const collected = ShadowRootCollectorService.collectShadowRoots(document);
+
+      expect(collected).toContain(shadowRoot);
+      expect(ShadowRootCollectorService.getHost(shadowRoot)).toBe(host);
+    });
+
+    it("should return undefined for a root that was never collected", () => {
+      expect.assertions(1);
+
+      const { shadowRoot } = appendShadowHost();
+
+      expect(ShadowRootCollectorService.getHost(shadowRoot)).toBeUndefined();
+    });
+  });
 });
