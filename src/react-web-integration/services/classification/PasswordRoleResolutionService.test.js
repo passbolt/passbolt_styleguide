@@ -14,26 +14,7 @@
 
 import PasswordRoleResolutionService from "./PasswordRoleResolutionService";
 import { FieldRole, FormRole } from "./Taxonomy";
-
-/**
- * Build a scope entry (a field with its Phase-1 role).
- * @param {string} id The field id.
- * @param {string} role The Phase-1 FieldRole.
- * @param {object} [attributes] The field DOM attributes (name/id keyword text).
- * @returns {{field: object, role: string}} The entry.
- */
-function entry(id, role, attributes = {}) {
-  return { field: { fieldId: id, attributes, label: {}, inputDescription: {} }, role };
-}
-
-/**
- * Build a form context with sensible defaults.
- * @param {object} [overrides] The context overrides.
- * @returns {{formIsSignup: boolean, formIsChange: boolean, declaredFormRole: string}} The context.
- */
-function ctx(overrides = {}) {
-  return { formIsSignup: false, formIsChange: false, declaredFormRole: FormRole.OTHER, ...overrides };
-}
+import { defaultEntry, defaultContext } from "./PasswordRoleResolutionService.test.data";
 
 describe("PasswordRoleResolutionService", () => {
   describe("PasswordRoleResolutionService::resolve", () => {
@@ -41,9 +22,9 @@ describe("PasswordRoleResolutionService", () => {
       it("should keep a declared PASSWORD_CONFIRMATION as PASSWORD_CONFIRMATION", () => {
         expect.assertions(1);
 
-        const entries = [entry("p1", FieldRole.PASSWORD_CONFIRMATION)];
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD_CONFIRMATION)];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.PASSWORD_CONFIRMATION);
       });
@@ -51,9 +32,9 @@ describe("PasswordRoleResolutionService", () => {
       it("should keep a single declared NEW_PASSWORD as NEW_PASSWORD", () => {
         expect.assertions(1);
 
-        const entries = [entry("p1", FieldRole.NEW_PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.NEW_PASSWORD)];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
       });
@@ -61,9 +42,9 @@ describe("PasswordRoleResolutionService", () => {
       it("should demote the second declared NEW_PASSWORD to PASSWORD_CONFIRMATION positionally", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.NEW_PASSWORD), entry("p2", FieldRole.NEW_PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.NEW_PASSWORD), defaultEntry("p2", FieldRole.NEW_PASSWORD)];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.PASSWORD_CONFIRMATION);
@@ -72,9 +53,9 @@ describe("PasswordRoleResolutionService", () => {
       it("should keep a declared CURRENT_PASSWORD as CURRENT_PASSWORD", () => {
         expect.assertions(1);
 
-        const entries = [entry("p1", FieldRole.CURRENT_PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.CURRENT_PASSWORD)];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
       });
@@ -83,13 +64,13 @@ describe("PasswordRoleResolutionService", () => {
         expect.assertions(4);
 
         const entries = [
-          entry("u1", FieldRole.USERNAME),
-          entry("e1", FieldRole.EMAIL),
-          entry("o1", FieldRole.OTHER),
-          entry("c1", FieldRole.CURRENT_PASSWORD),
+          defaultEntry("u1", FieldRole.USERNAME),
+          defaultEntry("e1", FieldRole.EMAIL),
+          defaultEntry("o1", FieldRole.OTHER),
+          defaultEntry("c1", FieldRole.CURRENT_PASSWORD),
         ];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.has("u1")).toBe(false);
         expect(resolved.has("e1")).toBe(false);
@@ -102,9 +83,9 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve the bare password to CURRENT_PASSWORD when a NEW_PASSWORD is already declared", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.NEW_PASSWORD), entry("p2", FieldRole.PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.NEW_PASSWORD), defaultEntry("p2", FieldRole.PASSWORD)];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.CURRENT_PASSWORD);
@@ -113,9 +94,12 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to CURRENT_PASSWORD when the declared form role is LOGIN", () => {
         expect.assertions(1);
 
-        const entries = [entry("p1", FieldRole.PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD)];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx({ declaredFormRole: FormRole.LOGIN }));
+        const resolved = PasswordRoleResolutionService.resolve(
+          entries,
+          defaultContext({ declaredFormRole: FormRole.LOGIN }),
+        );
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
       });
@@ -123,11 +107,11 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to NEW_PASSWORD when the declared form role is CHANGE_PASSWORD", () => {
         expect.assertions(1);
 
-        const entries = [entry("p1", FieldRole.PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD)];
 
         const resolved = PasswordRoleResolutionService.resolve(
           entries,
-          ctx({ declaredFormRole: FormRole.CHANGE_PASSWORD }),
+          defaultContext({ declaredFormRole: FormRole.CHANGE_PASSWORD }),
         );
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
@@ -136,9 +120,12 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to NEW_PASSWORD when the declared form role is SIGNUP", () => {
         expect.assertions(1);
 
-        const entries = [entry("p1", FieldRole.PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD)];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx({ declaredFormRole: FormRole.SIGNUP }));
+        const resolved = PasswordRoleResolutionService.resolve(
+          entries,
+          defaultContext({ declaredFormRole: FormRole.SIGNUP }),
+        );
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
       });
@@ -146,9 +133,9 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to NEW_PASSWORD when no role is declared and formIsSignup is true", () => {
         expect.assertions(1);
 
-        const entries = [entry("p1", FieldRole.PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD)];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx({ formIsSignup: true }));
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext({ formIsSignup: true }));
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
       });
@@ -156,9 +143,9 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to NEW_PASSWORD when no marker is set but the field carries a creation keyword", () => {
         expect.assertions(1);
 
-        const entries = [entry("p1", FieldRole.PASSWORD, { name: "new" })];
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD, { name: "new" })];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
       });
@@ -166,9 +153,9 @@ describe("PasswordRoleResolutionService", () => {
       it("should default to CURRENT_PASSWORD when no marker, no keyword and formIsSignup is false", () => {
         expect.assertions(1);
 
-        const entries = [entry("p1", FieldRole.PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD)];
 
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
       });
@@ -178,8 +165,11 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to current + new when the declared form role is login", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD), entry("p2", FieldRole.PASSWORD)];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx({ declaredFormRole: FormRole.LOGIN }));
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD), defaultEntry("p2", FieldRole.PASSWORD)];
+        const resolved = PasswordRoleResolutionService.resolve(
+          entries,
+          defaultContext({ declaredFormRole: FormRole.LOGIN }),
+        );
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.NEW_PASSWORD);
@@ -188,8 +178,11 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to new + confirmation when the declared form role is signup", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD), entry("p2", FieldRole.PASSWORD)];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx({ declaredFormRole: FormRole.SIGNUP }));
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD), defaultEntry("p2", FieldRole.PASSWORD)];
+        const resolved = PasswordRoleResolutionService.resolve(
+          entries,
+          defaultContext({ declaredFormRole: FormRole.SIGNUP }),
+        );
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.PASSWORD_CONFIRMATION);
@@ -198,8 +191,8 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to new + confirmation when the form is signup by context", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD), entry("p2", FieldRole.PASSWORD)];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx({ formIsSignup: true }));
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD), defaultEntry("p2", FieldRole.PASSWORD)];
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext({ formIsSignup: true }));
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.PASSWORD_CONFIRMATION);
@@ -208,8 +201,11 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to new + confirmation when a creation keyword is present on either field", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD), entry("p2", FieldRole.PASSWORD, { name: "confirmPassword" })];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const entries = [
+          defaultEntry("p1", FieldRole.PASSWORD),
+          defaultEntry("p2", FieldRole.PASSWORD, { name: "confirmPassword" }),
+        ];
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.PASSWORD_CONFIRMATION);
@@ -218,10 +214,10 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to current + new when the declared form role is change-password", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD), entry("p2", FieldRole.PASSWORD)];
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD), defaultEntry("p2", FieldRole.PASSWORD)];
         const resolved = PasswordRoleResolutionService.resolve(
           entries,
-          ctx({ declaredFormRole: FormRole.CHANGE_PASSWORD }),
+          defaultContext({ declaredFormRole: FormRole.CHANGE_PASSWORD }),
         );
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
@@ -231,8 +227,8 @@ describe("PasswordRoleResolutionService", () => {
       it("should resolve to current + new when the form is change by context", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD), entry("p2", FieldRole.PASSWORD)];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx({ formIsChange: true }));
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD), defaultEntry("p2", FieldRole.PASSWORD)];
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext({ formIsChange: true }));
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.NEW_PASSWORD);
@@ -241,8 +237,8 @@ describe("PasswordRoleResolutionService", () => {
       it("should default to new + confirmation when no marker is present", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD), entry("p2", FieldRole.PASSWORD)];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const entries = [defaultEntry("p1", FieldRole.PASSWORD), defaultEntry("p2", FieldRole.PASSWORD)];
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.PASSWORD_CONFIRMATION);
@@ -251,10 +247,13 @@ describe("PasswordRoleResolutionService", () => {
       it("should prefer the declared login role over a change context and a creation keyword", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD, { name: "newPassword" }), entry("p2", FieldRole.PASSWORD)];
+        const entries = [
+          defaultEntry("p1", FieldRole.PASSWORD, { name: "newPassword" }),
+          defaultEntry("p2", FieldRole.PASSWORD),
+        ];
         const resolved = PasswordRoleResolutionService.resolve(
           entries,
-          ctx({ declaredFormRole: FormRole.LOGIN, formIsChange: true }),
+          defaultContext({ declaredFormRole: FormRole.LOGIN, formIsChange: true }),
         );
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
@@ -267,11 +266,11 @@ describe("PasswordRoleResolutionService", () => {
         expect.assertions(3);
 
         const entries = [
-          entry("p1", FieldRole.PASSWORD),
-          entry("p2", FieldRole.PASSWORD),
-          entry("p3", FieldRole.PASSWORD),
+          defaultEntry("p1", FieldRole.PASSWORD),
+          defaultEntry("p2", FieldRole.PASSWORD),
+          defaultEntry("p3", FieldRole.PASSWORD),
         ];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.NEW_PASSWORD);
@@ -282,12 +281,12 @@ describe("PasswordRoleResolutionService", () => {
         expect.assertions(4);
 
         const entries = [
-          entry("p1", FieldRole.PASSWORD),
-          entry("p2", FieldRole.PASSWORD),
-          entry("p3", FieldRole.PASSWORD),
-          entry("p4", FieldRole.PASSWORD),
+          defaultEntry("p1", FieldRole.PASSWORD),
+          defaultEntry("p2", FieldRole.PASSWORD),
+          defaultEntry("p3", FieldRole.PASSWORD),
+          defaultEntry("p4", FieldRole.PASSWORD),
         ];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx());
+        const resolved = PasswordRoleResolutionService.resolve(entries, defaultContext());
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.NEW_PASSWORD);
@@ -300,8 +299,14 @@ describe("PasswordRoleResolutionService", () => {
       it("should flip the first field from new to current on a signup form when it carries an update keyword", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD, { name: "currentPassword" }), entry("p2", FieldRole.PASSWORD)];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx({ declaredFormRole: FormRole.SIGNUP }));
+        const entries = [
+          defaultEntry("p1", FieldRole.PASSWORD, { name: "currentPassword" }),
+          defaultEntry("p2", FieldRole.PASSWORD),
+        ];
+        const resolved = PasswordRoleResolutionService.resolve(
+          entries,
+          defaultContext({ declaredFormRole: FormRole.SIGNUP }),
+        );
 
         expect(resolved.get("p1")).toBe(FieldRole.CURRENT_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.PASSWORD_CONFIRMATION);
@@ -310,8 +315,14 @@ describe("PasswordRoleResolutionService", () => {
       it("should not flip a field resolved to password confirmation even when it carries an update keyword", () => {
         expect.assertions(2);
 
-        const entries = [entry("p1", FieldRole.PASSWORD), entry("p2", FieldRole.PASSWORD, { name: "changePassword" })];
-        const resolved = PasswordRoleResolutionService.resolve(entries, ctx({ declaredFormRole: FormRole.SIGNUP }));
+        const entries = [
+          defaultEntry("p1", FieldRole.PASSWORD),
+          defaultEntry("p2", FieldRole.PASSWORD, { name: "changePassword" }),
+        ];
+        const resolved = PasswordRoleResolutionService.resolve(
+          entries,
+          defaultContext({ declaredFormRole: FormRole.SIGNUP }),
+        );
 
         expect(resolved.get("p1")).toBe(FieldRole.NEW_PASSWORD);
         expect(resolved.get("p2")).toBe(FieldRole.PASSWORD_CONFIRMATION);

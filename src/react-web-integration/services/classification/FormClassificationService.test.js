@@ -14,20 +14,7 @@
 
 import FormClassificationService from "./FormClassificationService";
 import { FieldRole, FormRole } from "./Taxonomy";
-
-/**
- * Build a classification scope from a list of field roles and optional form headings.
- * @param {object} [options] The scope options.
- * @param {string[]} [options.roles] One FieldRole per field.
- * @param {string[]} [options.headings] The form ancestor headings.
- * @param {string} [options.buttonText] The form submit button text.
- * @returns {{roles: Map<string, string>, form: object, fields: object[]}} The scope.
- */
-function scope({ roles = [], headings = [], buttonText = "" } = {}) {
-  const fields = roles.map((role, index) => ({ fieldId: `f${index}` }));
-  const roleMap = new Map(fields.map((field, index) => [field.fieldId, roles[index]]));
-  return { roles: roleMap, fields, form: { ancestorHeadings: headings, buttonText } };
-}
+import { defaultScope } from "./FormClassificationService.test.data";
 
 describe("FormClassificationService", () => {
   describe("FormClassificationService::classify", () => {
@@ -35,7 +22,9 @@ describe("FormClassificationService", () => {
       expect.assertions(1);
 
       expect(
-        FormClassificationService.classify(scope({ roles: [FieldRole.CURRENT_PASSWORD, FieldRole.NEW_PASSWORD] })),
+        FormClassificationService.classify(
+          defaultScope({ roles: [FieldRole.CURRENT_PASSWORD, FieldRole.NEW_PASSWORD] }),
+        ),
       ).toBe(FormRole.CHANGE_PASSWORD);
     });
 
@@ -43,7 +32,9 @@ describe("FormClassificationService", () => {
       expect.assertions(1);
 
       expect(
-        FormClassificationService.classify(scope({ roles: [FieldRole.PASSWORD], buttonText: "Change password" })),
+        FormClassificationService.classify(
+          defaultScope({ roles: [FieldRole.PASSWORD], buttonText: "Change password" }),
+        ),
       ).toBe(FormRole.CHANGE_PASSWORD);
     });
 
@@ -51,7 +42,9 @@ describe("FormClassificationService", () => {
       expect.assertions(1);
 
       expect(
-        FormClassificationService.classify(scope({ roles: [FieldRole.PASSWORD], headings: ["Update password"] })),
+        FormClassificationService.classify(
+          defaultScope({ roles: [FieldRole.PASSWORD], headings: ["Update password"] }),
+        ),
       ).toBe(FormRole.CHANGE_PASSWORD);
     });
 
@@ -60,7 +53,7 @@ describe("FormClassificationService", () => {
 
       expect(
         FormClassificationService.classify(
-          scope({ roles: [FieldRole.CURRENT_PASSWORD, FieldRole.NEW_PASSWORD], buttonText: "Register" }),
+          defaultScope({ roles: [FieldRole.CURRENT_PASSWORD, FieldRole.NEW_PASSWORD], buttonText: "Register" }),
         ),
       ).toBe(FormRole.CHANGE_PASSWORD);
     });
@@ -68,23 +61,23 @@ describe("FormClassificationService", () => {
     it("should classify as signup for a new password without a current one", () => {
       expect.assertions(1);
 
-      expect(FormClassificationService.classify(scope({ roles: [FieldRole.USERNAME, FieldRole.NEW_PASSWORD] }))).toBe(
-        FormRole.SIGNUP,
-      );
+      expect(
+        FormClassificationService.classify(defaultScope({ roles: [FieldRole.USERNAME, FieldRole.NEW_PASSWORD] })),
+      ).toBe(FormRole.SIGNUP);
     });
 
     it("should classify as signup when two or more passwords are present", () => {
       expect.assertions(1);
 
-      expect(FormClassificationService.classify(scope({ roles: [FieldRole.PASSWORD, FieldRole.PASSWORD] }))).toBe(
-        FormRole.SIGNUP,
-      );
+      expect(
+        FormClassificationService.classify(defaultScope({ roles: [FieldRole.PASSWORD, FieldRole.PASSWORD] })),
+      ).toBe(FormRole.SIGNUP);
     });
 
     it("should classify as signup when two or more username/email fields are present", () => {
       expect.assertions(1);
 
-      expect(FormClassificationService.classify(scope({ roles: [FieldRole.USERNAME, FieldRole.EMAIL] }))).toBe(
+      expect(FormClassificationService.classify(defaultScope({ roles: [FieldRole.USERNAME, FieldRole.EMAIL] }))).toBe(
         FormRole.SIGNUP,
       );
     });
@@ -94,7 +87,7 @@ describe("FormClassificationService", () => {
 
       expect(
         FormClassificationService.classify(
-          scope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD], buttonText: "Register" }),
+          defaultScope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD], buttonText: "Register" }),
         ),
       ).toBe(FormRole.SIGNUP);
     });
@@ -103,7 +96,9 @@ describe("FormClassificationService", () => {
       expect.assertions(1);
 
       expect(
-        FormClassificationService.classify(scope({ roles: [FieldRole.PASSWORD, FieldRole.PASSWORD_CONFIRMATION] })),
+        FormClassificationService.classify(
+          defaultScope({ roles: [FieldRole.PASSWORD, FieldRole.PASSWORD_CONFIRMATION] }),
+        ),
       ).toBe(FormRole.SIGNUP);
     });
 
@@ -112,7 +107,7 @@ describe("FormClassificationService", () => {
 
       expect(
         FormClassificationService.classify(
-          scope({ roles: [FieldRole.PASSWORD, FieldRole.PASSWORD], buttonText: "Sign in" }),
+          defaultScope({ roles: [FieldRole.PASSWORD, FieldRole.PASSWORD], buttonText: "Sign in" }),
         ),
       ).toBe(FormRole.SIGNUP);
     });
@@ -122,7 +117,7 @@ describe("FormClassificationService", () => {
 
       expect(
         FormClassificationService.classify(
-          scope({ roles: [FieldRole.USERNAME, FieldRole.EMAIL], buttonText: "Sign in" }),
+          defaultScope({ roles: [FieldRole.USERNAME, FieldRole.EMAIL], buttonText: "Sign in" }),
         ),
       ).toBe(FormRole.SIGNUP);
     });
@@ -132,7 +127,7 @@ describe("FormClassificationService", () => {
 
       expect(
         FormClassificationService.classify(
-          scope({ roles: [FieldRole.USERNAME, FieldRole.NEW_PASSWORD], buttonText: "Sign in" }),
+          defaultScope({ roles: [FieldRole.USERNAME, FieldRole.NEW_PASSWORD], buttonText: "Sign in" }),
         ),
       ).toBe(FormRole.LOGIN);
     });
@@ -140,15 +135,17 @@ describe("FormClassificationService", () => {
     it("should classify as login for a single password with a username", () => {
       expect.assertions(1);
 
-      expect(FormClassificationService.classify(scope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD] }))).toBe(
-        FormRole.LOGIN,
-      );
+      expect(
+        FormClassificationService.classify(defaultScope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD] })),
+      ).toBe(FormRole.LOGIN);
     });
 
     it("should classify as login on a login heading with no password field", () => {
       expect.assertions(1);
 
-      expect(FormClassificationService.classify(scope({ roles: [], buttonText: "Sign in" }))).toBe(FormRole.LOGIN);
+      expect(FormClassificationService.classify(defaultScope({ roles: [], buttonText: "Sign in" }))).toBe(
+        FormRole.LOGIN,
+      );
     });
 
     it("should not let generic words trigger change-password on a login form", () => {
@@ -156,10 +153,10 @@ describe("FormClassificationService", () => {
 
       const login = [FieldRole.USERNAME, FieldRole.PASSWORD];
 
-      expect(FormClassificationService.classify(scope({ roles: login, headings: ["Change language"] }))).toBe(
+      expect(FormClassificationService.classify(defaultScope({ roles: login, headings: ["Change language"] }))).toBe(
         FormRole.LOGIN,
       );
-      expect(FormClassificationService.classify(scope({ roles: login, headings: ["normal times"] }))).toBe(
+      expect(FormClassificationService.classify(defaultScope({ roles: login, headings: ["normal times"] }))).toBe(
         FormRole.LOGIN,
       );
     });
@@ -167,7 +164,7 @@ describe("FormClassificationService", () => {
     it("should classify as other for a lone username with no password or heading", () => {
       expect.assertions(1);
 
-      expect(FormClassificationService.classify(scope({ roles: [FieldRole.USERNAME] }))).toBe(FormRole.OTHER);
+      expect(FormClassificationService.classify(defaultScope({ roles: [FieldRole.USERNAME] }))).toBe(FormRole.OTHER);
     });
 
     it("should ignore a field whose id is absent from the roles map", () => {
@@ -185,13 +182,13 @@ describe("FormClassificationService", () => {
     it("should classify as other for an empty scope", () => {
       expect.assertions(1);
 
-      expect(FormClassificationService.classify(scope())).toBe(FormRole.OTHER);
+      expect(FormClassificationService.classify(defaultScope())).toBe(FormRole.OTHER);
     });
 
     it("should veto to other when a login heading coexists with an exclude heading", () => {
       expect.assertions(1);
 
-      expect(FormClassificationService.classify(scope({ roles: [], headings: ["Sign in", "Contact us"] }))).toBe(
+      expect(FormClassificationService.classify(defaultScope({ roles: [], headings: ["Sign in", "Contact us"] }))).toBe(
         FormRole.OTHER,
       );
     });
@@ -199,7 +196,9 @@ describe("FormClassificationService", () => {
     it("should classify as signup on a signup heading with no fields", () => {
       expect.assertions(1);
 
-      expect(FormClassificationService.classify(scope({ roles: [], buttonText: "Register" }))).toBe(FormRole.SIGNUP);
+      expect(FormClassificationService.classify(defaultScope({ roles: [], buttonText: "Register" }))).toBe(
+        FormRole.SIGNUP,
+      );
     });
 
     it("should ignore totp and other fields when counting credentials", () => {
@@ -207,7 +206,7 @@ describe("FormClassificationService", () => {
 
       expect(
         FormClassificationService.classify(
-          scope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD, FieldRole.TOTP, FieldRole.OTHER] }),
+          defaultScope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD, FieldRole.TOTP, FieldRole.OTHER] }),
         ),
       ).toBe(FormRole.LOGIN);
     });
@@ -229,7 +228,7 @@ describe("FormClassificationService", () => {
       it("should classify a login heading as login", () => {
         expect.assertions(1);
 
-        expect(FormClassificationService.classify(scope({ roles: [], buttonText: login }))).toBe(FormRole.LOGIN);
+        expect(FormClassificationService.classify(defaultScope({ roles: [], buttonText: login }))).toBe(FormRole.LOGIN);
       });
 
       it("should classify a signup heading as signup even on a login-shaped form", () => {
@@ -237,7 +236,7 @@ describe("FormClassificationService", () => {
 
         expect(
           FormClassificationService.classify(
-            scope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD], buttonText: signup }),
+            defaultScope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD], buttonText: signup }),
           ),
         ).toBe(FormRole.SIGNUP);
       });
@@ -245,9 +244,9 @@ describe("FormClassificationService", () => {
       it("should classify a change-password heading as change-password", () => {
         expect.assertions(1);
 
-        expect(FormClassificationService.classify(scope({ roles: [FieldRole.PASSWORD], buttonText: change }))).toBe(
-          FormRole.CHANGE_PASSWORD,
-        );
+        expect(
+          FormClassificationService.classify(defaultScope({ roles: [FieldRole.PASSWORD], buttonText: change })),
+        ).toBe(FormRole.CHANGE_PASSWORD);
       });
 
       it("should veto a login-shaped form to other on an exclude heading", () => {
@@ -255,7 +254,7 @@ describe("FormClassificationService", () => {
 
         expect(
           FormClassificationService.classify(
-            scope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD], buttonText: exclude }),
+            defaultScope({ roles: [FieldRole.USERNAME, FieldRole.PASSWORD], buttonText: exclude }),
           ),
         ).toBe(FormRole.OTHER);
       });

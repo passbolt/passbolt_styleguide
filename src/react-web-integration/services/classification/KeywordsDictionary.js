@@ -506,3 +506,21 @@ export const SawfToken = Object.freeze({
   STEP: "step",
   FINAL: "final",
 });
+
+/**
+ * Input types a single-character OTP box may carry (keyboard-enterable, `""` for non-input controls).
+ * @type {ReadonlyArray<string>}
+ */
+export const OTP_BOX_INPUT_TYPES = Object.freeze(["text", "tel", "number", "password", ""]);
+
+/**
+ * Minimum number of single-character boxes for a run to be a plausible one-time code.
+ * @type {number}
+ */
+export const MIN_OTP_SEGMENTS = 4;
+
+/**
+ * Maximum number of single-character boxes for a run to be a plausible one-time code.
+ * @type {number}
+ */
+export const MAX_OTP_SEGMENTS = 8;

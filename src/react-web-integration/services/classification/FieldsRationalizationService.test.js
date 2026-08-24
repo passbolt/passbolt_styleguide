@@ -14,23 +14,7 @@
 
 import FieldsRationalizationService from "./FieldsRationalizationService";
 import { FieldRole, FormRole } from "./Taxonomy";
-
-/**
- * Build a rationalization scope from a form role and an ordered (DOM order) list of field specs.
- * @param {string} formRole The FormRole.
- * @param {Array<{id: string, role: string, type?: string, tagName?: string, byDeclared?: boolean}>} specs The ordered field specs.
- * @returns {{formRole: string, fields: object[], roles: Map<string, string>}} The scope.
- */
-function scope(formRole, specs) {
-  const fields = specs.map((spec) => ({
-    fieldId: spec.id,
-    type: spec.type ?? "text",
-    tagName: spec.tagName ?? "INPUT",
-    _byDeclared: spec.byDeclared ?? false,
-  }));
-  const roles = new Map(specs.map((spec) => [spec.id, spec.role]));
-  return { formRole, fields, roles };
-}
+import { defaultScope } from "./FieldsRationalizationService.test.data";
 
 describe("FieldsRationalizationService", () => {
   describe("FieldsRationalizationService::rescueLoginPassword", () => {
@@ -38,7 +22,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.USERNAME, type: "text" },
           { id: "password", role: FieldRole.OTHER, type: "password" },
         ]),
@@ -52,7 +36,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(1);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [{ id: "password", role: FieldRole.OTHER, type: "password" }]),
+        defaultScope(FormRole.OTHER, [{ id: "password", role: FieldRole.OTHER, type: "password" }]),
       );
 
       expect(roles.get("password")).toBe(FieldRole.OTHER);
@@ -62,7 +46,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.USERNAME, type: "text" },
           { id: "currentPassword", role: FieldRole.CURRENT_PASSWORD, type: "password" },
           { id: "extraPassword", role: FieldRole.OTHER, type: "password" },
@@ -77,7 +61,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.USERNAME, type: "text" },
           { id: "genericPassword", role: FieldRole.PASSWORD, type: "password" },
           { id: "extraPassword", role: FieldRole.OTHER, type: "password" },
@@ -94,7 +78,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.USERNAME, type: "text" },
           { id: "password1", role: FieldRole.OTHER, type: "password" },
           { id: "password2", role: FieldRole.OTHER, type: "password" },
@@ -111,7 +95,7 @@ describe("FieldsRationalizationService", () => {
       // rescueLoginPassword runs before enforceLoginConsistency and only checks type=password, so it
       // overrides the declared new-password (its _byDeclared guard never gets a chance).
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.USERNAME, type: "text" },
           { id: "newPassword", role: FieldRole.NEW_PASSWORD, type: "password", byDeclared: true },
         ]),
@@ -126,7 +110,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.OTHER, type: "text" },
           { id: "password", role: FieldRole.CURRENT_PASSWORD, type: "password" },
         ]),
@@ -140,7 +124,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "email", role: FieldRole.OTHER, type: "email" },
           { id: "password", role: FieldRole.CURRENT_PASSWORD, type: "password" },
         ]),
@@ -154,7 +138,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(3);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.OTHER, type: "text" },
           { id: "otp", role: FieldRole.TOTP, type: "text" },
           { id: "password", role: FieldRole.CURRENT_PASSWORD, type: "password" },
@@ -170,7 +154,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(3);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.OTHER, type: "text" },
           { id: "submitButton", role: FieldRole.OTHER, type: "text", tagName: "BUTTON" },
           { id: "password", role: FieldRole.CURRENT_PASSWORD, type: "password" },
@@ -186,7 +170,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.USERNAME, type: "text" },
           { id: "unrelatedField", role: FieldRole.OTHER, type: "text" },
           { id: "password", role: FieldRole.CURRENT_PASSWORD, type: "password" },
@@ -201,7 +185,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(1);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [
+        defaultScope(FormRole.OTHER, [
           { id: "unrelatedField", role: FieldRole.OTHER, type: "text" },
           { id: "password", role: FieldRole.PASSWORD, type: "password" },
         ]),
@@ -214,7 +198,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(1);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "unrelatedField", role: FieldRole.OTHER, type: "checkbox" },
           { id: "password", role: FieldRole.CURRENT_PASSWORD, type: "password" },
         ]),
@@ -227,7 +211,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(1);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [{ id: "password", role: FieldRole.CURRENT_PASSWORD, type: "password" }]),
+        defaultScope(FormRole.LOGIN, [{ id: "password", role: FieldRole.CURRENT_PASSWORD, type: "password" }]),
       );
 
       expect(roles.get("password")).toBe(FieldRole.CURRENT_PASSWORD);
@@ -237,7 +221,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "unrelatedField", role: FieldRole.OTHER, type: "text" },
           { id: "username", role: FieldRole.OTHER, type: "text" },
           { id: "password", role: FieldRole.CURRENT_PASSWORD, type: "password" },
@@ -254,7 +238,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [
+        defaultScope(FormRole.OTHER, [
           { id: "username1", role: FieldRole.USERNAME },
           { id: "username2", role: FieldRole.USERNAME },
         ]),
@@ -268,7 +252,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(3);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [
+        defaultScope(FormRole.OTHER, [
           { id: "username1", role: FieldRole.USERNAME },
           { id: "username2", role: FieldRole.USERNAME },
           { id: "username3", role: FieldRole.USERNAME },
@@ -284,7 +268,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(1);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [{ id: "username", role: FieldRole.USERNAME }]),
+        defaultScope(FormRole.OTHER, [{ id: "username", role: FieldRole.USERNAME }]),
       );
 
       expect(roles.get("username")).toBe(FieldRole.USERNAME);
@@ -294,7 +278,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [
+        defaultScope(FormRole.OTHER, [
           { id: "currentPassword1", role: FieldRole.CURRENT_PASSWORD, type: "password" },
           { id: "currentPassword2", role: FieldRole.CURRENT_PASSWORD, type: "password" },
         ]),
@@ -310,7 +294,9 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(1);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [{ id: "confirmPassword", role: FieldRole.PASSWORD_CONFIRMATION, type: "password" }]),
+        defaultScope(FormRole.OTHER, [
+          { id: "confirmPassword", role: FieldRole.PASSWORD_CONFIRMATION, type: "password" },
+        ]),
       );
 
       expect(roles.get("confirmPassword")).toBe(FieldRole.CURRENT_PASSWORD);
@@ -320,7 +306,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [
+        defaultScope(FormRole.OTHER, [
           { id: "newPassword", role: FieldRole.NEW_PASSWORD, type: "password" },
           { id: "confirmPassword", role: FieldRole.PASSWORD_CONFIRMATION, type: "password" },
         ]),
@@ -339,7 +325,7 @@ describe("FieldsRationalizationService", () => {
       // fixOrphanConfirmation inert, so enforceLoginConsistency rewrites the inferred confirmation to
       // current — which the final CURRENT_PASSWORD dedupe then demotes to other.
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "currentPassword", role: FieldRole.CURRENT_PASSWORD, type: "password", byDeclared: false },
           { id: "newPassword", role: FieldRole.NEW_PASSWORD, type: "password", byDeclared: true },
           { id: "confirmPassword", role: FieldRole.PASSWORD_CONFIRMATION, type: "password", byDeclared: false },
@@ -355,7 +341,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.SIGNUP, [
+        defaultScope(FormRole.SIGNUP, [
           { id: "username", role: FieldRole.USERNAME },
           { id: "newPassword", role: FieldRole.NEW_PASSWORD, type: "password", byDeclared: false },
         ]),
@@ -369,7 +355,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [
+        defaultScope(FormRole.OTHER, [
           { id: "newPassword", role: FieldRole.NEW_PASSWORD, type: "password", byDeclared: false },
           { id: "confirmPassword", role: FieldRole.PASSWORD_CONFIRMATION, type: "password", byDeclared: false },
         ]),
@@ -385,7 +371,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [
+        defaultScope(FormRole.OTHER, [
           { id: "username", role: FieldRole.USERNAME },
           { id: "genericPassword", role: FieldRole.PASSWORD, type: "password", byDeclared: false },
         ]),
@@ -399,7 +385,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.SIGNUP, [
+        defaultScope(FormRole.SIGNUP, [
           { id: "username", role: FieldRole.USERNAME },
           { id: "newPassword", role: FieldRole.NEW_PASSWORD, type: "password", byDeclared: true },
           { id: "genericPassword", role: FieldRole.PASSWORD, type: "password", byDeclared: false },
@@ -416,7 +402,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.USERNAME },
           { id: "currentPassword", role: FieldRole.CURRENT_PASSWORD, type: "password", byDeclared: false },
           { id: "newPassword", role: FieldRole.NEW_PASSWORD, type: "password", byDeclared: false },
@@ -431,7 +417,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(2);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.OTHER, [
+        defaultScope(FormRole.OTHER, [
           { id: "password1", role: FieldRole.PASSWORD, type: "password", byDeclared: false },
           { id: "password2", role: FieldRole.PASSWORD, type: "password", byDeclared: false },
         ]),
@@ -445,7 +431,7 @@ describe("FieldsRationalizationService", () => {
       expect.assertions(3);
 
       const roles = FieldsRationalizationService.rationalize(
-        scope(FormRole.LOGIN, [
+        defaultScope(FormRole.LOGIN, [
           { id: "username", role: FieldRole.USERNAME },
           { id: "currentPassword", role: FieldRole.CURRENT_PASSWORD, type: "password", byDeclared: false },
           { id: "newPassword", role: FieldRole.NEW_PASSWORD, type: "password", byDeclared: true },
@@ -460,7 +446,7 @@ describe("FieldsRationalizationService", () => {
     it("should return an empty map for an empty scope without throwing", () => {
       expect.assertions(1);
 
-      const roles = FieldsRationalizationService.rationalize(scope(FormRole.LOGIN, []));
+      const roles = FieldsRationalizationService.rationalize(defaultScope(FormRole.LOGIN, []));
 
       expect(roles.size).toBe(0);
     });
