@@ -18,13 +18,26 @@ import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { withOfflineSettingsLocalStorage } from "../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import OfflineSettingsEntity from "../../../shared/models/entity/offline/offlineSettingsEntity";
+import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import CanUse from "../../../shared/services/rbacs/canUseService";
 import { actions } from "../../../shared/services/rbacs/actionEnumeration";
+import WifiOffSVG from "../../../img/svg/wifi_off.svg";
 
 class QuickAccessServerUnavailable extends Component {
   constructor(props) {
     super(props);
     this.handleUseOfflineModeClick = this.handleUseOfflineModeClick.bind(this);
+  }
+
+  /**
+   * Is an online authenticated session already present, i.e. a signed-in user which just lost the server.
+   * @returns {boolean}
+   */
+  get hasOnlineSession() {
+    const activeSession = this.props.activeSession;
+
+    return Boolean(activeSession?.isAuthenticated && activeSession?.isSessionOnline);
   }
 
   get canIUseOfflineMode() {
@@ -53,14 +66,19 @@ class QuickAccessServerUnavailable extends Component {
     return (
       <div className="quickaccess-server-unavailable">
         <div className="form-container">
-          <p>
-            <Trans>Unable to reach the server, you are not connected to the network.</Trans>
+          <p className="server-unavailable-message">
+            <WifiOffSVG className="svg-icon" />
+            <span>
+              <Trans>
+                <strong>Unable to reach the server</strong>, you are not connected to the network.
+              </Trans>
+            </span>
           </p>
         </div>
         {this.canIUseOfflineMode && (
           <div className="submit-wrapper">
             <button type="button" className="button primary big full-width" onClick={this.handleUseOfflineModeClick}>
-              <Trans>Use offline mode</Trans>
+              {this.hasOnlineSession ? <Trans>Switch to offline mode</Trans> : <Trans>Use offline mode</Trans>}
             </button>
           </div>
         )}
@@ -72,9 +90,14 @@ QuickAccessServerUnavailable.propTypes = {
   history: PropTypes.any, // The router history
   location: PropTypes.any, // The router location
   context: PropTypes.any, // The application context
-  offlineSettings: PropTypes.instanceOf(OfflineSettingsEntity), // The user active session
+  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
+  offlineSettings: PropTypes.instanceOf(OfflineSettingsEntity), // The organisation offline settings
   t: PropTypes.func, // The translation function
 };
 export default withAppContext(
-  withRouter(withOfflineSettingsLocalStorage(withTranslation("common")(QuickAccessServerUnavailable))),
+  withRouter(
+    withActiveSessionLocalStorage(
+      withOfflineSettingsLocalStorage(withTranslation("common")(QuickAccessServerUnavailable)),
+    ),
+  ),
 );
