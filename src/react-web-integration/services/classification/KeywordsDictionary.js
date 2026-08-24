@@ -524,3 +524,18 @@ export const MIN_OTP_SEGMENTS = 4;
  * @type {number}
  */
 export const MAX_OTP_SEGMENTS = 8;
+
+/**
+ * Upper bound on the number of fields classified per page (bounds work on adversarial/huge DOMs).
+ * @type {number}
+ */
+export const MAX_CLASSIFIED_FIELDS = 200;
+
+/**
+ * Input types that can never hold a credential — hard-excluded before the classification ladder.
+ * Only the impossible is listed; unusual-but-plausible types (number/url/search) still run the ladder.
+ * @type {ReadonlySet<string>}
+ */
+export const NON_CREDENTIAL_INPUT_TYPES = Object.freeze(
+  new Set(["checkbox", "radio", "submit", "reset", "button", "image", "file", "range", "color", "hidden"]),
+);
