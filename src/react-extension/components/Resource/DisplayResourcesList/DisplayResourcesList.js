@@ -144,6 +144,7 @@ class DisplayResourcesList extends React.Component {
    * Init the grid columns.
    */
   initColumns() {
+    this.defaultColumns = [];
     this.defaultColumns.push(
       new ColumnCheckboxModel({
         cellRenderer: { component: CellCheckbox, props: { onClick: this.handleCheckboxWrapperClick } },
@@ -337,8 +338,20 @@ class DisplayResourcesList extends React.Component {
     const hasColumnsSettingsChanged =
       prevProps.resourceWorkspaceContext.columnsResourceSetting !==
       this.props.resourceWorkspaceContext.columnsResourceSetting;
+    /*
+     * The resource types and the offline settings are loaded asynchronously from the local storage, they can
+     * therefore not be available yet when the columns are initialized on mount. Initialize the columns again
+     * as soon as they are, otherwise the columns relying on them (pin code, available offline) are missing.
+     */
+    const hasResourceTypesChanged = prevProps.resourceTypes !== this.props.resourceTypes;
+    const hasOfflineSettingsChanged = prevProps.offlineSettings !== this.props.offlineSettings;
+    if (hasResourceTypesChanged || hasOfflineSettingsChanged) {
+      this.initColumns();
+    }
 
-    if (hasColumnsSettingsChanged || hasColumnsResourceViewChange) {
+    const mustMergeAndSortColumns =
+      hasColumnsSettingsChanged || hasColumnsResourceViewChange || hasResourceTypesChanged || hasOfflineSettingsChanged;
+    if (mustMergeAndSortColumns && this.columnsResourceSetting !== null) {
       this.mergeAndSortColumns();
     }
   }
@@ -370,6 +383,7 @@ class DisplayResourcesList extends React.Component {
       nextProps.resourceWorkspaceContext.rowsSetting?.height !==
       this.props.resourceWorkspaceContext.rowsSetting?.height;
     const hasOfflineSettingsChanged = nextProps.offlineSettings !== this.props.offlineSettings;
+    const hasResourceTypesChanged = nextProps.resourceTypes !== this.props.resourceTypes;
     const mustHidePreviewPassword =
       hasFilteredResourcesChanged ||
       hasSingleSelectedResourceChanged ||
@@ -389,7 +403,8 @@ class DisplayResourcesList extends React.Component {
       hasResourcePreviewSecretChange ||
       hasColumnOrderChanged ||
       hasRowsSettingChanged ||
-      hasOfflineSettingsChanged
+      hasOfflineSettingsChanged ||
+      hasResourceTypesChanged
     );
   }
 
