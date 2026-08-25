@@ -19,10 +19,6 @@ import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { withOfflineSettingsLocalStorage } from "../../../shared/context/offline/OfflineSettingsLocalStorageContext";
-import { SESSION_DURATION_OPTIONS } from "../../../react-extension/components/Administration/DisplayOfflineAdministration/OfflineSettingsEnum";
-import Select from "../../../react-extension/components/Common/Select/Select";
-
-const DEFAULT_SESSION_DURATION = SESSION_DURATION_OPTIONS[0].value;
 
 /**
  * The offline login page. A mirror of the online LoginPage: local passphrase check only,
@@ -45,7 +41,6 @@ class OfflineLoginPage extends React.Component {
     return {
       error: "",
       processing: false,
-      sessionDuration: DEFAULT_SESSION_DURATION,
     };
   }
 
@@ -81,7 +76,8 @@ class OfflineLoginPage extends React.Component {
 
   async login() {
     let passphrase = this.passphraseInputRef.current.value;
-    await this.props.context.port.request("passbolt.auth.login-offline", passphrase, this.state.sessionDuration);
+    const max_session_duration = this.props.offlineSettings?.sessionDuration || 300;
+    await this.props.context.port.request("passbolt.auth.login-offline", passphrase, max_session_duration);
     passphrase = null;
     this.passphraseInputRef.current.value = null;
     await this.handleLoginSuccess();
@@ -99,19 +95,10 @@ class OfflineLoginPage extends React.Component {
    */
   handleInputChange(event) {
     const target = event.target;
-    const value = target.name === "sessionDuration" ? parseInt(target.value, 10) : target.value;
+    const value = target.value;
     this.setState({
       [target.name]: value,
     });
-  }
-
-  /**
-   * Populate the session duration dropdown.
-   * @returns a subset of SESSION_DURATION_OPTIONS capped with admin max session duration
-   */
-  getAvailableSessionOptions() {
-    const max_session_duration = this.props.offlineSettings?.sessionDuration || 300;
-    return SESSION_DURATION_OPTIONS.filter((option) => option.value <= max_session_duration);
   }
 
   render() {
@@ -151,20 +138,6 @@ class OfflineLoginPage extends React.Component {
                   />
                 </div>
                 {this.state.error && <div className="error-message">{this.state.error}</div>}
-              </div>
-              <div className="input select">
-                <label htmlFor="session-duration">
-                  <Trans>Remember until signed out</Trans>
-                </label>
-
-                <Select
-                  items={this.getAvailableSessionOptions()}
-                  id="default-session-duration-select"
-                  name="sessionDuration"
-                  value={this.state.sessionDuration}
-                  onChange={this.handleInputChange}
-                  disabled={this.state.processing}
-                />
               </div>
             </div>
             <div className="submit-wrapper">

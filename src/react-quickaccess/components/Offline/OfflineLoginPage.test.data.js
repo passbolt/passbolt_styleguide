@@ -30,28 +30,3 @@ export function defaultProps(data = {}) {
     ...data,
   };
 }
-
-/**
- * Props with the offline settings capping the session duration to the given maximum.
- * @param {number} maxSessionDuration The administrator maximum session duration, in seconds.
- * @param {object} data Override the default props.
- * @returns {object}
- */
-export function propsWithMaxSessionDuration(maxSessionDuration, data = {}) {
-  return defaultProps({
-    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto({ max_session_duration: maxSessionDuration })),
-    ...data,
-  });
-}
-
-/**
- * Props without any cached offline settings.
- * @param {object} data Override the default props.
- * @returns {object}
- */
-export function propsWithoutOfflineSettings(data = {}) {
-  return defaultProps({
-    offlineSettings: null,
-    ...data,
-  });
-}
