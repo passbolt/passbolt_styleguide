@@ -134,21 +134,6 @@ export default class OfflineLoginPageTestPage {
   }
 
   /**
-   * Select the session duration matching the given label
-   * @param {string} optionLabel The visible label of the option to pick
-   * @returns {Promise<void>}
-   */
-  async selectSessionDuration(optionLabel) {
-    fireEvent.click(this.sessionDurationSelect.querySelector(".selected-value"), { button: 0 });
-    await waitFor(() => {});
-    const option = Array.from(this.sessionDurationSelect.querySelectorAll(".select-items ul.items li.option")).find(
-      (item) => item.textContent === optionLabel,
-    );
-    fireEvent.click(option, { button: 0 });
-    await waitFor(() => {});
-  }
-
-  /**
    * Simulates a click on the sign in offline button. The click is awaited until the sign in settled,
    * successfully or not.
    * @returns {Promise<void>}
