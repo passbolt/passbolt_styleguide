@@ -21,15 +21,18 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { withDialog } from "../../../contexts/DialogContext";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import OfflineModeSettingsServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
-import OfflineSettingsEntity from "../../../../shared/models/entity/offline/offlineSettingsEntity";
+import OfflineSettingsEntity, {
+  DATA_RETENTION_PERIOD_ALLOWED,
+  SESSION_DURATION_ALLOWED,
+} from "../../../../shared/models/entity/offline/offlineSettingsEntity";
 import Select from "../../Common/Select/Select";
 import { createSafePortal } from "../../../../shared/utils/portals";
 import DisplayOfflineAdministrationHelp from "./DisplayOfflineAdministrationHelp";
-import { MAXIMUM_RETENTION_PERIOD_OPTIONS, SESSION_DURATION_OPTIONS } from "./OfflineSettingsEnum";
+import { formatSecondsDuration } from "../../../../shared/utils/dateUtils";
 
 const DEFAULT_OFFLINE_SETTINGS = {
-  max_session_duration: SESSION_DURATION_OPTIONS[0].value,
-  data_retention_period: MAXIMUM_RETENTION_PERIOD_OPTIONS[0].value,
+  max_session_duration: SESSION_DURATION_ALLOWED[0],
+  data_retention_period: DATA_RETENTION_PERIOD_ALLOWED[0],
 };
 
 class DisplayOfflineAdministration extends Component {
@@ -240,6 +243,28 @@ class DisplayOfflineAdministration extends Component {
   }
 
   /**
+   * Get session duration options
+   * @return {{value: *, label: *}[]}
+   */
+  get sessionDurationOptions() {
+    return SESSION_DURATION_ALLOWED.map((value) => ({
+      value,
+      label: formatSecondsDuration(value, this.props.context.locale),
+    }));
+  }
+
+  /**
+   * Get data retention period options
+   * @return {{value: *, label: *}[]}
+   */
+  get dataRetentionPeriodOptions() {
+    return DATA_RETENTION_PERIOD_ALLOWED.map((value) => ({
+      value,
+      label: this.props.t("{{count}} day", { count: value }),
+    }));
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -282,7 +307,7 @@ class DisplayOfflineAdministration extends Component {
                     </label>
                     <Select
                       id="offline-settings-session-duration"
-                      items={SESSION_DURATION_OPTIONS}
+                      items={this.sessionDurationOptions}
                       name="max_session_duration"
                       value={this.state.settings.max_session_duration}
                       onChange={this.handleInputChange}
@@ -306,7 +331,7 @@ class DisplayOfflineAdministration extends Component {
                     </label>
                     <Select
                       id="offline-settings-maximum-retention-period"
-                      items={MAXIMUM_RETENTION_PERIOD_OPTIONS}
+                      items={this.dataRetentionPeriodOptions}
                       name="data_retention_period"
                       value={this.state.settings.data_retention_period}
                       onChange={this.handleInputChange}
