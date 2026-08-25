@@ -1,6 +1,4 @@
-# v5.15.0
+# v5.15.1
 
 Provides:
-- different security fixes by updating dependencies
-- autofill improvement in shadow doms
-- PCD redesign
+- Fix NullPointerException Gecko bug on host 
