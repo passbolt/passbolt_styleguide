@@ -13,17 +13,20 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
-import { formatDateTimeAgo } from "../../../shared/utils/dateUtils";
+import WifiOffSVG from "../../../img/svg/wifi_off.svg";
+import WifiOnSVG from "../../../img/svg/wifi_on.svg";
+import CaretRightSVG from "../../../img/svg/caret_right.svg";
 
 /**
  * Footer reflecting the server status whenever offline mode is usable: while in an offline session, or
- * on the server-unavailable screen. When the server is reachable again it offers to go online, otherwise
- * it shows the service is unavailable. It never redirects on its own (the offline session is sticky).
+ * on the server-unavailable screen. When the server is reachable again it offers to switch to online mode,
+ * otherwise it only states the offline mode. It never redirects on its own (the offline session is sticky).
+ * Its caret expands the offline mode details.
  */
 class QuickAccessOfflineFooter extends React.Component {
   constructor(props) {
@@ -32,7 +35,16 @@ class QuickAccessOfflineFooter extends React.Component {
   }
 
   /**
-   * Go online: run the local logout and route to the online login page to re-authenticate.
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
+   * Switch to online mode: there is no server session to destroy, so the sign-out is local, then route to
+   * the online login page to re-authenticate.
    * @returns {Promise<void>}
    */
   async handleGoOnlineClick() {
@@ -44,9 +56,13 @@ class QuickAccessOfflineFooter extends React.Component {
    * Should display offline footer
    * - If location is offline login page
    * - If session is offline and authenticated
+   * - Unless the offline mode details, i.e. the expanded footer, are already displayed
    * @return {boolean}
    */
   get shouldDisplayOfflineFooter() {
+    if (this.props.location.pathname === "/webAccessibleResources/quickaccess/offline-footer-details") {
+      return false;
+    }
     return (
       this.props.location.pathname === "/webAccessibleResources/quickaccess/login-offline" ||
       (this.props.activeSession.isSessionOffline && this.props.activeSession.isAuthenticated)
@@ -58,29 +74,33 @@ class QuickAccessOfflineFooter extends React.Component {
       return null;
     }
     const isServerReachable = this.props.activeSession.isServerReachable;
-    const lastSync =
-      formatDateTimeAgo(this.props.activeSession.lastSeenOnline, this.props.t, this.props.context.locale) ||
-      this.props.t("Not available");
     return (
       <div className={`quickaccess-offline-footer ${isServerReachable ? "server-available" : "server-unavailable"}`}>
-        <span className="server-status-indicator" />
-        <span className="server-status-label">
-          <span className="offline-prefix">
-            <Trans>Offline</Trans>:
-          </span>{" "}
-          <span className="server-status">
-            {isServerReachable ? <Trans>service available</Trans> : <Trans>service unavailable</Trans>}
-          </span>
-        </span>
         {isServerReachable ? (
-          <button className="link go-online-link" type="button" onClick={this.handleGoOnlineClick}>
-            <Trans>Go back online</Trans>
-          </button>
+          <>
+            <WifiOnSVG className="online-mode-icon" />
+            <button className="link go-online-link" type="button" onClick={this.handleGoOnlineClick}>
+              <Trans>Switch to online mode</Trans>
+            </button>
+          </>
         ) : (
-          <span className="last-sync-label">
-            <Trans>Last sync: {{ lastSync }}</Trans>
-          </span>
+          <>
+            <WifiOffSVG className="offline-mode-icon" />
+            <span className="offline-mode-label">
+              <Trans>Offline mode</Trans>
+            </span>
+          </>
         )}
+        <Link
+          to="/webAccessibleResources/quickaccess/offline-footer-details"
+          className="offline-mode-details-link button button-transparent"
+          title={this.translate("Offline mode details")}
+        >
+          <CaretRightSVG />
+          <span className="visually-hidden">
+            <Trans>Offline mode details</Trans>
+          </span>
+        </Link>
       </div>
     );
   }

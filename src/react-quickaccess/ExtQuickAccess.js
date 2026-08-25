@@ -43,6 +43,7 @@ import HandleBootstrapRoute from "./components/HandleBootstrapRoute/HandleBootst
 import QuickAccessServerUnavailable from "./components/QuickAccessServerUnavailable/QuickAccessServerUnavailable";
 import QuickAccessOfflineFooter from "./components/Offline/QuickAccessOfflineFooter";
 import OfflineLoginPage from "./components/Offline/OfflineLoginPage";
+import OfflineFooterDetailsPage from "./components/Offline/OfflineFooterDetailsPage";
 
 const SEARCH_VISIBLE_ROUTES = [
   "/webAccessibleResources/quickaccess/home",
@@ -262,6 +263,12 @@ class ExtQuickAccess extends React.Component {
                       exact
                       path="/webAccessibleResources/quickaccess/login-offline"
                       render={() => <OfflineLoginPage />}
+                    />
+                    {/* The route displaying the expanded offline footer of Offline mode. */}
+                    <Route
+                      exact
+                      path="/webAccessibleResources/quickaccess/offline-footer-details"
+                      render={() => <OfflineFooterDetailsPage />}
                     />
                     {/* The route when the server is not reachable (offline). */}
                     <Route
