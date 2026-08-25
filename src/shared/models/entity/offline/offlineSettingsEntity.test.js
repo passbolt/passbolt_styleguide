@@ -19,12 +19,13 @@ import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEnt
 describe("OfflineSettingsEntity", () => {
   describe("OfflineSettingsEntity::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(OfflineSettingsEntity.ENTITY_NAME, OfflineSettingsEntity.getSchema());
+      EntitySchema.validateSchema(OfflineSettingsEntity, OfflineSettingsEntity.getSchema());
     });
 
     it("validates max_session_duration property", () => {
-      const successScenarios = [assertEntityProperty.SCENARIO_INTEGER, assertEntityProperty.SCENARIO_FLOAT];
+      const successScenarios = [assertEntityProperty.SCENARIO_INTEGER];
       const failingScenarios = [
+        assertEntityProperty.SCENARIO_FLOAT,
         assertEntityProperty.SCENARIO_STRING,
         assertEntityProperty.SCENARIO_OBJECT,
         assertEntityProperty.SCENARIO_ARRAY,
@@ -38,11 +39,17 @@ describe("OfflineSettingsEntity", () => {
         failingScenarios,
         "type",
       );
+      assertEntityProperty.enumeration(
+        OfflineSettingsEntity,
+        "max_session_duration",
+        [300, 900, 3600, 86400],
+        [400, 500, 90000],
+      );
       assertEntityProperty.required(OfflineSettingsEntity, "max_session_duration");
     });
 
     it("validates data_retention_period property", () => {
-      const successScenarios = [assertEntityProperty.SCENARIO_INTEGER, assertEntityProperty.SCENARIO_FLOAT];
+      const successScenarios = [assertEntityProperty.SCENARIO_INTEGER];
       const failingScenarios = [
         assertEntityProperty.SCENARIO_STRING,
         assertEntityProperty.SCENARIO_OBJECT,
@@ -57,6 +64,7 @@ describe("OfflineSettingsEntity", () => {
         failingScenarios,
         "type",
       );
+      assertEntityProperty.enumeration(OfflineSettingsEntity, "data_retention_period", [1, 7, 14, 30], [2, 5, 20, 100]);
       assertEntityProperty.required(OfflineSettingsEntity, "data_retention_period");
     });
 
@@ -89,7 +97,6 @@ describe("OfflineSettingsEntity", () => {
     it("should accept a minimal valid DTO", () => {
       expect.assertions(4);
       const dto = defaultOfflineSettingsDto();
-
       const entity = new OfflineSettingsEntity(dto);
 
       expect(entity.toDto()).toStrictEqual(dto);

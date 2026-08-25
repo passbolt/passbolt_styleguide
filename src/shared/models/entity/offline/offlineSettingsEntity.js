@@ -13,7 +13,10 @@
  */
 import EntityV2 from "../abstract/entityV2";
 
-const ENTITY_NAME = "OfflineSettings";
+// 5 minutes, 15 minutes, 1 hour, 1 day
+export const SESSION_DURATION_ALLOWED = Object.freeze([300, 900, 3600, 86400]);
+// 1 day, 7 days, 14 days, 30 days
+export const DATA_RETENTION_PERIOD_ALLOWED = Object.freeze([1, 7, 14, 30]);
 
 class OfflineSettingsEntity extends EntityV2 {
   /**
@@ -30,10 +33,12 @@ class OfflineSettingsEntity extends EntityV2 {
           format: "uuid",
         },
         max_session_duration: {
-          type: "number",
+          type: "integer",
+          enum: SESSION_DURATION_ALLOWED,
         },
         data_retention_period: {
-          type: "number",
+          type: "integer",
+          enum: DATA_RETENTION_PERIOD_ALLOWED,
         },
         max_items: {
           type: "integer",
@@ -71,19 +76,6 @@ class OfflineSettingsEntity extends EntityV2 {
 
   /*
    * ==================================================
-   * Static properties getters
-   * ==================================================
-   */
-  /**
-   * OfflineSettingsEntity.ENTITY_NAME
-   * @returns {string}
-   */
-  static get ENTITY_NAME() {
-    return ENTITY_NAME;
-  }
-
-  /*
-   * ==================================================
    * Dynamic properties getters
    * ==================================================
    */
@@ -97,7 +89,7 @@ class OfflineSettingsEntity extends EntityV2 {
 
   /**
    * Get the session duration
-   * @returns {string|null}
+   * @returns {integer|null}
    */
   get sessionDuration() {
     return this._props.max_session_duration || null;
@@ -106,7 +98,7 @@ class OfflineSettingsEntity extends EntityV2 {
   /**
    * Get the maximum offline data retention period after which
    * it will be considered stale and flushed
-   * @returns {(string|null)}
+   * @returns {(integer|null)}
    */
   get maximumRetentionPeriod() {
     return this._props.data_retention_period || null;

@@ -579,7 +579,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   canUseOffline() {
-    const resourceType = this.props.resourceTypes.getFirstById(this.selectedResources[0]?.resource_type_id);
+    const resourceType = this.props.resourceTypes?.getFirstById(this.selectedResources[0]?.resource_type_id);
 
     return (
       resourceType?.isV5() &&
