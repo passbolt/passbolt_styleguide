@@ -15,13 +15,11 @@ import {
   offlineSessionLoggedOutServerReachableProps,
   offlineSessionServerReachableProps,
   offlineSessionServerUnreachableProps,
-  offlineSessionServerUnreachableWithoutLastSyncProps,
   onlineSessionServerReachableProps,
   onlineSessionServerUnreachableProps,
 } from "./QuickAccessOfflineFooter.test.data";
 import QuickAccessOfflineFooterPage from "./QuickAccessOfflineFooter.test.page";
 import { act } from "react";
-import { formatDateTimeAgo } from "../../../shared/utils/dateUtils";
 import { createMemoryHistory } from "history";
 
 beforeEach(() => {
@@ -76,43 +74,44 @@ describe("QuickAccessOfflineFooter", () => {
     expect(page.exists()).toBeTruthy();
   });
 
-  it("renders 'service available' and the go back online link in an offline session with a reachable server", async () => {
-    expect.assertions(5);
-    const props = offlineSessionServerReachableProps();
+  it("does not render while the offline mode details are displayed", async () => {
+    expect.assertions(1);
+    const props = offlineSessionServerUnreachableProps({
+      history: createMemoryHistory({ initialEntries: ["/webAccessibleResources/quickaccess/offline-footer-details"] }),
+    });
     let page;
     await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
 
-    expect(page.exists()).toBeTruthy();
-    expect(page.isServerAvailable).toBeTruthy();
-    expect(page.serverStatus.textContent).toStrictEqual("service available");
-    expect(page.goOnlineLink).toBeTruthy();
-    expect(page.lastSyncLabel).toBeNull();
+    expect(page.exists()).toBeFalsy();
   });
 
-  it("renders 'service unavailable' and the last sync value in an offline session while the server is unreachable", async () => {
+  it("renders the wifi off icon and the 'Offline mode' label while the server is unreachable", async () => {
     expect.assertions(5);
     const props = offlineSessionServerUnreachableProps();
     let page;
     await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
 
-    const expectedLastSync = formatDateTimeAgo(props.activeSession.lastSeenOnline, (key) => key, props.context.locale);
-    expect(page.exists()).toBeTruthy();
     expect(page.isServerUnavailable).toBeTruthy();
-    expect(page.serverStatus.textContent).toStrictEqual("service unavailable");
-    expect(page.lastSyncLabel.textContent).toStrictEqual(`Last sync: ${expectedLastSync}`);
+    expect(page.offlineModeIcon).not.toBeNull();
+    expect(page.offlineModeLabel.textContent).toStrictEqual("Offline mode");
     expect(page.goOnlineLink).toBeNull();
+    expect(page.offlineModeDetailsLink).not.toBeNull();
   });
 
-  it("renders 'Last sync: Not available' when no last-seen-online date is available", async () => {
-    expect.assertions(1);
-    const props = offlineSessionServerUnreachableWithoutLastSyncProps();
+  it("renders the wifi on icon and the 'Switch to online mode' link while the server is reachable", async () => {
+    expect.assertions(5);
+    const props = offlineSessionServerReachableProps();
     let page;
     await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
 
-    expect(page.lastSyncLabel.textContent).toStrictEqual("Last sync: Not available");
+    expect(page.isServerAvailable).toBeTruthy();
+    expect(page.onlineModeIcon).not.toBeNull();
+    expect(page.goOnlineLink.textContent).toStrictEqual("Switch to online mode");
+    expect(page.offlineModeLabel).toBeNull();
+    expect(page.offlineModeDetailsLink).not.toBeNull();
   });
 
-  it("when I click go back online it triggers a local logout and routes to the online login page", async () => {
+  it("when I click switch to online mode it triggers a local logout and routes to the online login page", async () => {
     expect.assertions(2);
     const props = offlineSessionServerReachableProps();
     jest.spyOn(props.context.port, "request").mockImplementation(() => Promise.resolve());
@@ -124,5 +123,16 @@ describe("QuickAccessOfflineFooter", () => {
 
     expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth.local-logout");
     expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/login");
+  });
+
+  it("when I click the accordion caret it routes to the offline mode details", async () => {
+    expect.assertions(1);
+    const props = offlineSessionServerUnreachableProps();
+    let page;
+    await act(async () => (page = new QuickAccessOfflineFooterPage(props)));
+
+    await page.clickOfflineModeDetails();
+
+    expect(props.history.location.pathname).toStrictEqual("/webAccessibleResources/quickaccess/offline-footer-details");
   });
 });

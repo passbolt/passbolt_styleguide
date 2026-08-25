@@ -12,7 +12,8 @@
  * @since         6.0.0
  */
 
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
@@ -35,6 +36,8 @@ export default class QuickAccessOfflineFooterPage {
         </Router>
       </MockTranslationProvider>,
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -46,23 +49,31 @@ export default class QuickAccessOfflineFooterPage {
   }
 
   /**
-   * Returns the "Offline:" prefix element
+   * Returns the wifi off icon element
    * @returns {Element|null}
    */
-  get offlinePrefix() {
-    return this._page.container.querySelector(".server-status-label .offline-prefix");
+  get offlineModeIcon() {
+    return this._page.container.querySelector(".offline-mode-icon");
   }
 
   /**
-   * Returns the server status element ("service available" / "service unavailable")
+   * Returns the wifi on icon element
    * @returns {Element|null}
    */
-  get serverStatus() {
-    return this._page.container.querySelector(".server-status-label .server-status");
+  get onlineModeIcon() {
+    return this._page.container.querySelector(".online-mode-icon");
   }
 
   /**
-   * Returns the "Go back online" link element
+   * Returns the "Offline mode" label element
+   * @returns {Element|null}
+   */
+  get offlineModeLabel() {
+    return this._page.container.querySelector(".offline-mode-label");
+  }
+
+  /**
+   * Returns the "Switch to online mode" link element
    * @returns {Element|null}
    */
   get goOnlineLink() {
@@ -70,11 +81,11 @@ export default class QuickAccessOfflineFooterPage {
   }
 
   /**
-   * Returns the "last sync" label element
+   * Returns the offline mode details link element, i.e. the accordion caret
    * @returns {Element|null}
    */
-  get lastSyncLabel() {
-    return this._page.container.querySelector(".last-sync-label");
+  get offlineModeDetailsLink() {
+    return this._page.container.querySelector(".offline-mode-details-link");
   }
 
   /**
@@ -102,11 +113,18 @@ export default class QuickAccessOfflineFooterPage {
   }
 
   /**
-   * Simulates a click on the "Go back online" link
+   * Simulates a click on the "Switch to online mode" link
    * @returns {Promise<void>}
    */
   async clickGoOnline() {
-    fireEvent.click(this.goOnlineLink, { button: 0 });
-    await waitFor(() => {});
+    await this.user.click(this.goOnlineLink);
+  }
+
+  /**
+   * Simulates a click on the offline mode details caret
+   * @returns {Promise<void>}
+   */
+  async clickOfflineModeDetails() {
+    await this.user.click(this.offlineModeDetailsLink);
   }
 }

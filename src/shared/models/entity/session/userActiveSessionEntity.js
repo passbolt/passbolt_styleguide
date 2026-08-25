@@ -96,7 +96,7 @@ class UserActiveSessionEntity extends EntityV2 {
   }
 
   /**
-   * Get the last online logged in date
+   * Get the last logged in date, whether the sign-in was online or offline
    * @returns {string}
    */
   get lastLoggedIn() {

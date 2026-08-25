@@ -18,10 +18,7 @@ import UserActiveSessionEntity, {
   USER_ACTIVE_SESSION_OFFLINE,
   USER_ACTIVE_SESSION_ONLINE,
 } from "../../../shared/models/entity/session/userActiveSessionEntity";
-import {
-  defaultUserActiveSessionDto,
-  minimalUserActiveSessionDto,
-} from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
+import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
  * Build the props with the given active session.
@@ -58,19 +55,6 @@ export function offlineSessionServerReachableProps(data = {}) {
 export function offlineSessionServerUnreachableProps(data = {}) {
   return buildProps(
     defaultUserActiveSessionDto({ type: USER_ACTIVE_SESSION_OFFLINE, is_server_reachable: false }),
-    data,
-  );
-}
-
-/**
- * Props with an offline session while the server is unreachable and no last-seen-online date is
- * available (the session never synced online). The last sync label must read "Not available".
- * @param {object} data Override the default props.
- * @returns {object}
- */
-export function offlineSessionServerUnreachableWithoutLastSyncProps(data = {}) {
-  return buildProps(
-    minimalUserActiveSessionDto({ type: USER_ACTIVE_SESSION_OFFLINE, is_server_reachable: false }),
     data,
   );
 }
