@@ -588,7 +588,7 @@ class FilterResourcesByFolders extends React.Component {
               pageSize={30}
               minSize={30}
               type="uniform"
-              usePosition={true}
+              getListStyle={({ x, y }) => ({ position: "relative", top: y, left: x })}
               ref={this.folderTreeRef}
             ></ReactList>
           )}
