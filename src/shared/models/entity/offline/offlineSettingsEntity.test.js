@@ -12,7 +12,7 @@
  * @since         5.13.0
  */
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
-import OfflineSettingsEntity from "./offlineSettingsEntity";
+import OfflineSettingsEntity, { COMMUNITY_EDITION_OFFLINE_SETTINGS } from "./offlineSettingsEntity";
 import { defaultOfflineSettingsDto, defaultOfflineSettingsDtoFromApi } from "./offlineSettingsEntity.test.data";
 import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
 
@@ -90,6 +90,16 @@ describe("OfflineSettingsEntity", () => {
       assertEntityProperty.string(OfflineSettingsEntity, "modified_by");
       assertEntityProperty.uuid(OfflineSettingsEntity, "modified_by");
       assertEntityProperty.notRequired(OfflineSettingsEntity, "modified_by");
+    });
+  });
+
+  describe("OfflineSettingsEntity::COMMUNITY_EDITION_OFFLINE_SETTINGS", () => {
+    it("should be pinned to 5 minutes and 7 days, and pass the entity validation", () => {
+      expect.assertions(2);
+      const entity = new OfflineSettingsEntity(COMMUNITY_EDITION_OFFLINE_SETTINGS);
+
+      expect(entity.sessionDuration).toStrictEqual(300);
+      expect(entity.maximumRetentionPeriod).toStrictEqual(7);
     });
   });
 

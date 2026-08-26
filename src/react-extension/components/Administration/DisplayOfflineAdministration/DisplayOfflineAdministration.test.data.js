@@ -14,6 +14,8 @@
 import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
 import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import { defaultCeSiteSettings } from "../../../../shared/models/entity/siteSettings/siteSettingsEntity.test.data";
 
 /**
  * Default props.
@@ -26,3 +28,16 @@ export const defaultProps = (props = {}) => ({
   actionFeedbackContext: defaultActionFeedbackContext(),
   ...props,
 });
+
+/**
+ * Props of an administrator running the community edition, which cannot tune the offline settings.
+ * @param {Object} props The props to override
+ * @returns {object}
+ */
+export const communityEditionProps = (props = {}) =>
+  defaultProps({
+    context: defaultAdministratorAppContext({
+      siteSettings: new SiteSettingsEntity(defaultCeSiteSettings()),
+    }),
+    ...props,
+  });
