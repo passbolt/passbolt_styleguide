@@ -98,6 +98,34 @@ export default class DisplayOfflineAdministrationPage {
   }
 
   /**
+   * Returns the label of the value currently selected in the given select element.
+   * @param {HTMLElement} selectElement The select container
+   * @returns {string}
+   */
+  selectedValueOf(selectElement) {
+    return selectElement.querySelector(".selected-value .value").textContent;
+  }
+
+  /**
+   * Returns true if the given select element is disabled.
+   * @param {HTMLElement} selectElement The select container
+   * @returns {boolean}
+   */
+  isDisabled(selectElement) {
+    return selectElement.querySelector(".selected-value.disabled") !== null;
+  }
+
+  /**
+   * Returns the labels of the options the given select element offers. The select filters the
+   * selected value out of its list, so these are the values the user could switch to.
+   * @param {HTMLElement} selectElement The select container
+   * @returns {string[]}
+   */
+  optionsOf(selectElement) {
+    return [...selectElement.querySelectorAll(".items li")].map((option) => option.textContent);
+  }
+
+  /**
    * Returns the session duration error element
    * @returns {HTMLElement}
    */

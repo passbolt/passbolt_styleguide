@@ -14,7 +14,7 @@
 
 import { act } from "react";
 import DisplayOfflineAdministration from "./DisplayOfflineAdministration.test.page";
-import { defaultProps } from "./DisplayOfflineAdministration.test.data";
+import { communityEditionProps, defaultProps } from "./DisplayOfflineAdministration.test.data";
 import { defaultOfflineSettingsDtoFromApi } from "../../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
@@ -66,6 +66,97 @@ describe("DisplayOfflineAdministration", () => {
 
       expect(page.titleToggle.checked).toBe(false);
       expect(page.sessionDurationSelect).toBeNull();
+    });
+  });
+
+  describe("As a signed-in administrator of a pro instance I can edit the offline settings", () => {
+    it("offers every allowed session duration and data retention period", async () => {
+      expect.assertions(4);
+      const props = defaultProps();
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => null);
+
+      let page;
+      await act(async () => {
+        page = new DisplayOfflineAdministration(props);
+      });
+      await page.clickOnFeature();
+
+      expect(page.isDisabled(page.sessionDurationSelect)).toBe(false);
+      expect(page.isDisabled(page.maximumRetentionPeriodSelect)).toBe(false);
+      // The select filters the selected value out of its list, hence the first option missing.
+      expect(page.optionsOf(page.sessionDurationSelect)).toEqual(["15 minutes", "1 hour", "1 day"]);
+      expect(page.optionsOf(page.maximumRetentionPeriodSelect)).toEqual(["7 day", "14 day", "30 day"]);
+    });
+
+    it("can change the session duration and the data retention period", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => null);
+
+      let page;
+      await act(async () => {
+        page = new DisplayOfflineAdministration(props);
+      });
+      await page.clickOnFeature();
+      await page.setSessionDuration("1 hour");
+      await page.setMaximumRetentionPeriod("30 day");
+
+      expect(page.selectedValueOf(page.sessionDurationSelect)).toBe("1 hour");
+      expect(page.selectedValueOf(page.maximumRetentionPeriodSelect)).toBe("30 day");
+    });
+  });
+
+  describe("As a signed-in administrator of a community edition instance I cannot edit the offline settings", () => {
+    it("pins the settings to 5 minutes and 7 days when enabling the feature", async () => {
+      expect.assertions(2);
+      const props = communityEditionProps();
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => null);
+
+      let page;
+      await act(async () => {
+        page = new DisplayOfflineAdministration(props);
+      });
+      await page.clickOnFeature();
+
+      expect(page.selectedValueOf(page.sessionDurationSelect)).toBe("5 minutes");
+      expect(page.selectedValueOf(page.maximumRetentionPeriodSelect)).toBe("7 day");
+    });
+
+    it("disables both inputs and offers no other value than the one in use", async () => {
+      expect.assertions(4);
+      const props = communityEditionProps();
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultOfflineSettingsDtoFromApi());
+
+      let page;
+      await act(async () => {
+        page = new DisplayOfflineAdministration(props);
+      });
+
+      expect(page.isDisabled(page.sessionDurationSelect)).toBe(true);
+      expect(page.isDisabled(page.maximumRetentionPeriodSelect)).toBe(true);
+      expect(page.optionsOf(page.sessionDurationSelect)).toEqual([]);
+      expect(page.optionsOf(page.maximumRetentionPeriodSelect)).toEqual([]);
+    });
+
+    it("saves the pinned settings when enabling the feature", async () => {
+      expect.assertions(1);
+      const props = communityEditionProps();
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => null);
+      jest
+        .spyOn(props.context.port, "request")
+        .mockImplementationOnce((message, dto) => defaultOfflineSettingsDtoFromApi(dto));
+
+      let page;
+      await act(async () => {
+        page = new DisplayOfflineAdministration(props);
+      });
+      await page.clickOnFeature();
+      await page.save();
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.offline.save-settings", {
+        max_session_duration: 300,
+        data_retention_period: 7,
+      });
     });
   });
 

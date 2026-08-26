@@ -18,6 +18,17 @@ export const SESSION_DURATION_ALLOWED = Object.freeze([300, 900, 3600, 86400]);
 // 1 day, 7 days, 14 days, 30 days
 export const DATA_RETENTION_PERIOD_ALLOWED = Object.freeze([1, 7, 14, 30]);
 
+/*
+ * Tuning the offline policy is a pro capability. The community edition is pinned to 5 minutes of
+ * session duration and 7 days of data retention: the administration screen renders both controls
+ * disabled and offers no other value than the one in use. Both values have to stay members of the
+ * enums above, otherwise the entity rejects the settings the community edition itself saves.
+ */
+export const COMMUNITY_EDITION_OFFLINE_SETTINGS = Object.freeze({
+  max_session_duration: 300,
+  data_retention_period: 7,
+});
+
 class OfflineSettingsEntity extends EntityV2 {
   /**
    * Get OfflineSettingsEntity schema

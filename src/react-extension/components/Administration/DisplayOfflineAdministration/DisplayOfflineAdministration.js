@@ -22,6 +22,7 @@ import { withDialog } from "../../../contexts/DialogContext";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import OfflineModeSettingsServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeSettingsServiceWorkerService";
 import OfflineSettingsEntity, {
+  COMMUNITY_EDITION_OFFLINE_SETTINGS,
   DATA_RETENTION_PERIOD_ALLOWED,
   SESSION_DURATION_ALLOWED,
 } from "../../../../shared/models/entity/offline/offlineSettingsEntity";
@@ -114,10 +115,19 @@ class DisplayOfflineAdministration extends Component {
   }
 
   /**
+   * Returns true if the running edition is the community edition, which cannot edit the settings.
+   * @returns {boolean}
+   */
+  get isCommunityEdition() {
+    return Boolean(this.props.context.siteSettings?.isCommunityEdition);
+  }
+
+  /**
    * Set the form with default settings.
    */
   setDefaultSettings() {
-    this.formSettings = new OfflineSettingsEntity(DEFAULT_OFFLINE_SETTINGS, { validate: false });
+    const defaultSettings = this.isCommunityEdition ? COMMUNITY_EDITION_OFFLINE_SETTINGS : DEFAULT_OFFLINE_SETTINGS;
+    this.formSettings = new OfflineSettingsEntity(defaultSettings, { validate: false });
     this.setState({ settings: this.formSettings.toDto() });
   }
 
@@ -176,11 +186,12 @@ class DisplayOfflineAdministration extends Component {
   }
 
   /**
-   * Should input be disabled? True if state is loading or processing
+   * Should input be disabled? True if state is loading or processing, or if the edition cannot edit
+   * the settings.
    * @returns {boolean}
    */
   hasAllInputDisabled() {
-    return this.state.isProcessing;
+    return this.state.isProcessing || this.isCommunityEdition;
   }
 
   /**
@@ -247,7 +258,10 @@ class DisplayOfflineAdministration extends Component {
    * @return {{value: *, label: *}[]}
    */
   get sessionDurationOptions() {
-    return SESSION_DURATION_ALLOWED.map((value) => ({
+    const allowedValues = this.isCommunityEdition
+      ? [this.state.settings.max_session_duration]
+      : SESSION_DURATION_ALLOWED;
+    return allowedValues.map((value) => ({
       value,
       label: formatSecondsDuration(value, this.props.context.locale),
     }));
@@ -258,7 +272,10 @@ class DisplayOfflineAdministration extends Component {
    * @return {{value: *, label: *}[]}
    */
   get dataRetentionPeriodOptions() {
-    return DATA_RETENTION_PERIOD_ALLOWED.map((value) => ({
+    const allowedValues = this.isCommunityEdition
+      ? [this.state.settings.data_retention_period]
+      : DATA_RETENTION_PERIOD_ALLOWED;
+    return allowedValues.map((value) => ({
       value,
       label: this.props.t("{{count}} day", { count: value }),
     }));
