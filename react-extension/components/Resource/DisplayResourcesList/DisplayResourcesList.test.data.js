@@ -262,3 +262,37 @@ export function propsWithNoResourcesForFilter(type, data = {}) {
     ...data,
   });
 }
+
+/**
+ * Stress test: a large resources grid rendered through GridTable/ReactList
+ * Aims to validate the react-list upstream migration under load
+ *
+ */
+const stressCount = 2000;
+
+export const stressResources = Array.from({ length: stressCount }, (_, i) => {
+  const id = `id-${i}`;
+  return defaultResourceDto({
+    id,
+    metadata: defaultResourceMetadataDto({
+      id,
+      name: `Resource ${String(i)}`,
+      username: `user${i}@passbolt.com`,
+    }),
+  });
+});
+
+/**
+ * Props with stress test resources and explicit ALL filter.
+ */
+export function propsWithStressFilteredResources(data = {}) {
+  return defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filteredResources: stressResources,
+      filter: {
+        type: ResourceWorkspaceFilterTypes.ALL,
+      },
+    }),
+    ...data,
+  });
+}

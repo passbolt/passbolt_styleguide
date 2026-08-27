@@ -5,7 +5,7 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import { DragContext } from "../../../contexts/DragContext";
 import { ContextualMenuContext } from "../../../contexts/ContextualMenuContext";
 import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
-import { defaultProps } from "./FilterResourcesByFolders.test.data";
+import { defaultProps, stressGroupProps } from "./FilterResourcesByFolders.test.data";
 
 export default {
   title: "Components/Resource/FilterResourcesByFolders",
@@ -30,5 +30,10 @@ export default {
 export const Default = {
   args: {
     ...defaultProps(),
+  },
+};
+export const StressWithLargeFoldersTree = {
+  args: {
+    ...stressGroupProps(),
   },
 };

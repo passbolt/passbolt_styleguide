@@ -18,7 +18,7 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
 import { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
 import DisplayResourcesListDetails from "./DisplayResourcesListDetails";
-import { defaultProps } from "./DisplayResourcesListDetails.test.data";
+import { defaultProps, stressSelectionProps } from "./DisplayResourcesListDetails.test.data";
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -62,6 +62,12 @@ port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({ descript
 export const Default = {
   args: {
     ...defaultProps({ context: { port } }),
+    storage: storage,
+  },
+};
+export const StressWithLargeSelection = {
+  args: {
+    ...stressSelectionProps(port),
     storage: storage,
   },
 };
