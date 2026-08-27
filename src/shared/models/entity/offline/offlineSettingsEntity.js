@@ -23,7 +23,7 @@ class OfflineSettingsEntity extends EntityV2 {
   static getSchema() {
     return {
       type: "object",
-      required: ["max_session_duration", "data_retention_period"],
+      required: ["max_session_duration", "data_retention_period", "max_items"],
       properties: {
         id: {
           type: "string",
@@ -34,6 +34,11 @@ class OfflineSettingsEntity extends EntityV2 {
         },
         data_retention_period: {
           type: "number",
+        },
+        max_items: {
+          type: "integer",
+          minimum: 1000,
+          maximum: 1000,
         },
         created: {
           type: "string",
@@ -53,6 +58,15 @@ class OfflineSettingsEntity extends EntityV2 {
         },
       },
     };
+  }
+
+  /**
+   * @inheritDoc
+   */
+  marshall() {
+    if (this._props.max_items == null) {
+      this._props.max_items = 1000;
+    }
   }
 
   /*

@@ -135,6 +135,7 @@ class DisplayResourcesList extends React.Component {
     this.isPasswordResources = this.isPasswordResources.bind(this);
     this.isTotpResources = this.isTotpResources.bind(this);
     this.isPinCodeResources = this.isPinCodeResources.bind(this);
+    this.isOfflineResourceSupported = this.isOfflineResourceSupported.bind(this);
     this.handleLocationClick = this.handleLocationClick.bind(this);
     this.handleTagClick = this.handleTagClick.bind(this);
   }
@@ -268,7 +269,12 @@ class DisplayResourcesList extends React.Component {
     if (this.canUseOffline) {
       this.defaultColumns.push(
         new ColumnOfflineModel({
-          cellRenderer: { component: CellOffline },
+          cellRenderer: {
+            component: CellOffline,
+            props: {
+              isSupported: this.isOfflineResourceSupported,
+            },
+          },
           headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Available Offline") } },
         }),
       );
@@ -1108,6 +1114,19 @@ class DisplayResourcesList extends React.Component {
    */
   isPinCodeResources(resource) {
     return this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.hasPinCode();
+  }
+
+  /**
+   * Is offline resource supported
+   * @param resource
+   * @return {boolean}
+   */
+  isOfflineResourceSupported(resource) {
+    const resourceType = this.props.resourceTypes?.getFirstById(resource.resource_type_id);
+    if (!resourceType) {
+      return false;
+    }
+    return resourceType.hasPassword() || resourceType.hasTotp();
   }
 
   /**
