@@ -885,7 +885,7 @@ class ShareDialog extends Component {
                   minSize={this.props.listMinSize}
                   type={displayedPermissions.length < 4 ? "simple" : "uniform"}
                   ref={this.permissionListRef}
-                  usePosition={true}
+                  getListStyle={({ x, y }) => ({ position: "relative", top: y, left: x })}
                   threshold={30}
                 ></ReactList>
               )}
