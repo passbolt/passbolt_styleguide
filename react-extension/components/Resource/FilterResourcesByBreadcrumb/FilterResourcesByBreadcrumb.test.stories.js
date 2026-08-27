@@ -118,6 +118,16 @@ export const ExpiredFilter = {
   render: Template,
 };
 
+export const OfflineFilter = {
+  args: {
+    resourceWorkspaceContext: {
+      filter: { type: ResourceWorkspaceFilterTypes.OFFLINE },
+      filteredResources: [{}, {}, {}],
+    },
+  },
+  render: Template,
+};
+
 export const FilterWithNullResources = {
   args: {
     resourceWorkspaceContext: {

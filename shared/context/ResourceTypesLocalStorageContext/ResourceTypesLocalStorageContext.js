@@ -19,7 +19,7 @@ import ResourceTypesCollection from "../../models/entity/resourceType/resourceTy
 export const ResourceTypesLocalStorageContext = React.createContext({
   get: () => {}, // Get the resource types from the local storage and/or init them if not the case already
   resourceTypes: null, // the current resource types loaded from the local storage
-  updateLocalStorage: () => {}, // triggers an update of the local storage
+  getOrFind: () => {}, // triggers an update of the local storage
 });
 
 /**
@@ -45,7 +45,7 @@ export class ResourceTypesLocalStorageContextProvider extends React.Component {
     return {
       get: this.get.bind(this), // Get the resource types from the local storage and/or init them if not the case already
       resourceTypes: null, // the current resource types loaded from the local storage
-      updateLocalStorage: this.updateLocalStorage.bind(this), // triggers an update of the local storage
+      getOrFind: this.getOrFind.bind(this), // triggers an update of the local storage
     };
   }
 
@@ -104,7 +104,7 @@ export class ResourceTypesLocalStorageContextProvider extends React.Component {
    */
   get() {
     if (this.state.resourceTypes === null) {
-      this.loadLocalStorage();
+      this.getOrFind();
       return null;
     }
 
@@ -112,30 +112,24 @@ export class ResourceTypesLocalStorageContextProvider extends React.Component {
   }
 
   /**
-   * Load the resource types from the local storage if it is available.
-   * If the local storage is not yet initialised, then it asks for its initialisation.
-   * @returns {Promise<void>}
-   * @private
-   */
-  async loadLocalStorage() {
-    const storageData = await this.props.context.storage.local.get([this.storageKey]);
-    if (!storageData[this.storageKey]) {
-      this.updateLocalStorage();
-      return;
-    }
-
-    this.set(storageData[this.storageKey]);
-  }
-
-  /**
-   * Forces the update of the resource types in the local storage.
+   * Get or find the resource types from Bext.
    * @return {Promise<void>}
    */
-  async updateLocalStorage() {
+  async getOrFind() {
     if (this.runningLocalStorageUpdatePromise === null) {
-      this.runningLocalStorageUpdatePromise = this.props.context.port.request("passbolt.resource-type.get-or-find-all");
-      await this.runningLocalStorageUpdatePromise;
-      this.runningLocalStorageUpdatePromise = null;
+      try {
+        this.runningLocalStorageUpdatePromise = this.props.context.port.request(
+          "passbolt.resource-type.get-or-find-all",
+        );
+        const data = await this.runningLocalStorageUpdatePromise;
+        if (data) {
+          this.set(data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.runningLocalStorageUpdatePromise = null;
+      }
     } else {
       await this.runningLocalStorageUpdatePromise;
     }

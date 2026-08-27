@@ -26,6 +26,8 @@ import {
   defaultPropsMultipleResourceAllExpired,
   defaultPropsMultipleResourceSomeExpired,
   defaultPropsOneResourceNotOwned,
+  defaultPropsOneResourceV5OfflineAvailable,
+  defaultPropsOneResourceV5OfResourceType,
   defaultPropsOneResourceOwned,
   defaultPropsOneResourceV5Private,
   defaultPropsOneResourceV5Shared,
@@ -44,10 +46,20 @@ import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity
 import { v4 as uuidv4 } from "uuid";
 import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import OfflineModeServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeServiceWorkerService";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import HandlePermissionWorkflow, {
   PERMISSION_WORKFLOW_OPERATION,
 } from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
+import {
+  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
+  TEST_RESOURCE_TYPE_V5_DEFAULT,
+  TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+  TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+  TEST_RESOURCE_TYPE_V5_TOTP,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -639,6 +651,150 @@ describe("See Workspace Menu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.shareMenu);
 
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+    });
+  });
+
+  describe("As LU I should be able to mark a selected resource available offline or remove it", () => {
+    it("As LU I should see the 'Make available offline' item when one v5 resource not yet available offline is selected", () => {
+      expect.assertions(3);
+      const props = defaultPropsOneResourceV5Shared();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+      expect(page.displayMenu.dropdownMenuOffline.textContent).toBe("Make available offline");
+    });
+
+    it("As LU I should see the 'Remove offline availability' item when one v5 resource already available offline is selected", () => {
+      expect.assertions(3);
+      const props = defaultPropsOneResourceV5OfflineAvailable();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+      expect(page.displayMenu.dropdownMenuOffline.textContent).toBe("Remove offline availability");
+    });
+
+    it("As LU I should not see the offline availability item when a v4 resource is selected", () => {
+      expect.assertions(2);
+      // defaultPropsOneResourceOwned selects a v4 resource (password and description).
+      const props = defaultPropsOneResourceOwned();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).toBeNull();
+    });
+
+    it("As LU I should not see the offline availability item when multiple resources are selected", () => {
+      expect.assertions(2);
+      const props = defaultPropsMultipleResourceUpdateRights();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).toBeNull();
+    });
+
+    it("As LU I can mark the selected v5 resource as available offline", async () => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceV5Shared();
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuOffline);
+
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource has been made available offline.",
+      );
+    });
+
+    it("As LU I can remove the selected v5 resource from offline availability", async () => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceV5OfflineAvailable();
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "unmarkItem").mockResolvedValue();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuOffline);
+
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource is no longer available offline.",
+      );
+    });
+
+    it("As LU I should see an error notification if the offline update fails", async () => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceV5Shared();
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {
+        throw new Error("offline failure");
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displayError").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuOffline);
+
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(
+        "Unable to update the offline availability of the resource.",
+      );
+    });
+
+    it.each([
+      { scenario: "password and description", resourceTypeId: TEST_RESOURCE_TYPE_V5_DEFAULT },
+      { scenario: "password string", resourceTypeId: TEST_RESOURCE_TYPE_V5_PASSWORD_STRING },
+      { scenario: "password and totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP },
+      { scenario: "standalone totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_TOTP },
+    ])(
+      "As LU I should see the offline availability item when one v5 $scenario resource is selected",
+      ({ resourceTypeId }) => {
+        expect.assertions(1);
+        const props = defaultPropsOneResourceV5OfResourceType(resourceTypeId);
+        const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+        page.displayMenu.clickOnMoreMenu();
+
+        expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
+      },
+    );
+
+    it.each([
+      { scenario: "custom fields", resourceTypeId: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS },
+      { scenario: "standalone note", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE },
+      { scenario: "standalone pin code", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE },
+    ])(
+      "As LU I should not see the offline availability item when one v5 $scenario resource is selected, it is neither a password nor a totp",
+      ({ resourceTypeId }) => {
+        expect.assertions(1);
+        const props = defaultPropsOneResourceV5OfResourceType(resourceTypeId);
+        const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+        page.displayMenu.clickOnMoreMenu();
+
+        expect(page.displayMenu.dropdownMenuOffline).toBeNull();
+      },
+    );
+
+    it("As LU I should not see the offline availability item when the selected resource type is unknown", () => {
+      expect.assertions(1);
+      const props = defaultPropsOneResourceV5OfResourceType(uuidv4());
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      page.displayMenu.clickOnMoreMenu();
+
+      expect(page.displayMenu.dropdownMenuOffline).toBeNull();
     });
   });
 });

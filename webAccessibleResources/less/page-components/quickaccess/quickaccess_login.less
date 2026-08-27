@@ -1,4 +1,4 @@
-.login-form {
+.login-form, .quickaccess-server-unavailable {
     .form-container {
         margin: 1.6rem;
     }
@@ -14,5 +14,108 @@
         gap: 2.4rem;
         margin: 3.2rem 0;
         padding: 0 1.6rem;
+    }
+}
+
+.quickaccess-server-unavailable {
+    p.server-unavailable-message {
+        display: flex;
+        gap: 16px;
+        align-self: stretch;
+
+    }
+    .submit-wrapper {
+        background: var(--Quick-Access-Panel-background);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+
+        .sign-out-locally-link {
+            cursor: pointer;
+        }
+    }
+}
+
+.quickaccess-offline-login {
+    .input.select {
+        label {
+            margin-bottom: 1.2rem;
+        }
+        select {
+            width: 100%;
+        }
+    }
+}
+
+.quickaccess-offline-footer {
+    display: flex;
+    padding: 1.6rem;
+    background: var(--Quick-Access-Header-and-footer-background);
+    align-items: center;
+    align-self: stretch;
+    gap: 0.8rem;
+
+    .offline-mode-icon,
+    .online-mode-icon {
+        --icon-color: var(--Text-and-icons-Main-text);
+        flex-shrink: 0;
+    }
+
+    .offline-mode-label,
+    .go-online-link {
+        font-family: "Open Sans";
+        font-size: 1.4rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        color: var(--Text-and-icons-Main-text);
+    }
+
+    .go-online-link {
+        cursor: pointer;
+    }
+
+    .offline-mode-details-link {
+        margin-left: auto;
+        padding: 0;
+        width: .8rem;
+        height: .8rem;
+        flex-shrink: 0;
+
+        svg {
+            width: .8rem;
+            height: .8rem;
+        }
+    }
+}
+
+.quickaccess-offline-footer-details {
+    .back-link {
+        border-bottom: .1rem solid var(--Workspace-Dividers);
+    }
+    .properties {
+        padding: 0 1.6rem 1.6rem;
+
+        .property {
+            display: flex;
+            align-items: baseline;
+            gap: .4rem;
+            padding: .4rem 0;
+
+            .property-name {
+                font-family: "Open Sans";
+                font-size: 1.4rem;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                color: var(--Text-and-icons-Secondary-text);
+            }
+
+            .property-value {
+                .ellipsis();
+                color: var(--Text-and-icons-Main-text);
+            }
+        }
     }
 }

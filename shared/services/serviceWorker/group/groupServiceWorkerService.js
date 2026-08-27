@@ -12,9 +12,11 @@
  * @since         5.7.0
  */
 import GroupsCollection from "../../../models/entity/group/groupsCollection";
+import { assertUuid } from "../../../utils/assertions";
 
 export const GROUPS_FIND_MY_GROUPS = "passbolt.groups.find-my-groups";
 export const GROUPS_FIND_BY_IDS_FOR_SHARE = "passbolt.groups.find-by-ids-for-share";
+export const GROUPS_DELETE = "passbolt.groups.delete";
 
 export default class GroupServiceWorkerService {
   /**
@@ -44,5 +46,16 @@ export default class GroupServiceWorkerService {
   async findByIdsForShare(groupIds) {
     const groupsDto = await this.port.request(GROUPS_FIND_BY_IDS_FOR_SHARE, groupIds);
     return new GroupsCollection(groupsDto);
+  }
+
+  /**
+   * Delete a group, optionally transferring the ownership of the shared items it owns.
+   * @param {string} groupId The id of the group to delete.
+   * @param {object} [groupDeleteTransfer] The ownership transfer dto ({owners: [{id, aco_foreign_key}]}), if any.
+   * @returns {Promise<void>}
+   */
+  async delete(groupId, groupDeleteTransfer) {
+    assertUuid(groupId, "The given groupId should be a valid UUID");
+    await this.port.request(GROUPS_DELETE, groupId, groupDeleteTransfer);
   }
 }

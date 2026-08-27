@@ -27,7 +27,7 @@ describe("DisplayAdministrationMetadataGettingStarted", () => {
 
   it("should display the title and description", () => {
     expect.assertions(2);
-    expect(page.title).toBe("Getting started");
+    expect(page.title).toBe("Getting Started");
     expect(page.description).toBe(
       "Some of the latest features such as the new resource types require the encrypted metadata feature to be enabled.Here you can choose to enable it or do it later when ready. We recommend making a backup before, just in case.",
     );

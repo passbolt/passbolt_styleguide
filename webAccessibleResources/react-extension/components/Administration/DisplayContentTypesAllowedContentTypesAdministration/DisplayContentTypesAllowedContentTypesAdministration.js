@@ -291,13 +291,13 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
               <h3 className="title">
                 <label>
-                  <Trans>Allow content types</Trans>
+                  <Trans>Allow Content Types</Trans>
                 </label>
               </h3>
               {this.state.settings.has_v5_resource_types && (
                 <>
                   <h4 className="no-border">
-                    <Trans>Encrypted metadata</Trans>
+                    <Trans>Encrypted Metadata</Trans>
                   </h4>
                   <p className="description">
                     <Trans>
@@ -612,7 +612,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
               {this.state.settings.has_v4_resource_types && (
                 <>
                   <h4 className={`${!this.state.settings.has_password_v5 && "no-border"}`}>
-                    <Trans>Legacy cleartext metadata</Trans>
+                    <Trans>Legacy Cleartext Metadata</Trans>
                   </h4>
                   <p className="description">
                     <Trans>

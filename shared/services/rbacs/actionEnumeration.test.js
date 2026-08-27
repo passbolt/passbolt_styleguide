@@ -16,12 +16,15 @@ import { actions } from "./actionEnumeration";
 
 describe("actions", () => {
   it("should have the expected action keys", () => {
-    expect.assertions(5);
+    expect.assertions(8);
 
-    expect(Object.keys(actions).length).toEqual(4);
+    expect(Object.keys(actions).length).toEqual(7);
     expect(actions["GROUPS_ADD"]).toEqual("GroupsAdd.addPost");
     expect(actions["ACCOUNT_RECOVERY_REQUEST_VIEW"]).toEqual("AccountRecoveryRequestsView.view");
     expect(actions["ACCOUNT_RECOVERY_REQUEST_INDEX"]).toEqual("AccountRecoveryRequestsIndex.index");
     expect(actions["ACCOUNT_RECOVERY_RESPONSE_CREATE"]).toEqual("AccountRecoveryResponsesCreate.post");
+    expect(actions["OFFLINE_ITEMS_VIEW"]).toEqual("OfflineItemsView.view");
+    expect(actions["OFFLINE_ITEMS_ADD"]).toEqual("OfflineItemsAdd.add");
+    expect(actions["OFFLINE_ITEMS_DELETE"]).toEqual("OfflineItemsDelete.delete");
   });
 });

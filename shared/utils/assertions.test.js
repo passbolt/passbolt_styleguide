@@ -12,9 +12,33 @@
  * @since         5.13.0
  */
 import each from "jest-each";
-import { assertNumber } from "./assertions";
+import { v4 as uuid } from "uuid";
+import { assertNumber, assertUuid } from "./assertions";
 
 describe("Assertions", () => {
+  describe("Assertions::assertUuid", () => {
+    it("Should not throw an error if the parameter is valid", () => {
+      expect.assertions(1);
+
+      expect(() => assertUuid(uuid())).not.toThrow();
+    });
+
+    it("Should throw an error if the parameter is not valid", () => {
+      const scenarios = [
+        {},
+        "",
+        false,
+        12,
+        "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", // looks like a UUID but, it's not
+      ];
+
+      expect.assertions(scenarios.length);
+      for (let i = 0; i < scenarios.length; i++) {
+        expect(() => assertUuid(scenarios[i])).toThrow();
+      }
+    });
+  });
+
   describe("Assertions::assertNumber", () => {
     each([
       { scenario: "Positive number", value: 42 },

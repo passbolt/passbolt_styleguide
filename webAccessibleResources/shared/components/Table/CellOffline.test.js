@@ -1,0 +1,101 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         5.13.0
+ */
+
+import CellOfflineTestPage from "./CellOffline.test.page";
+import {
+  defaultProps,
+  propsWithOfflineAvailable,
+  propsWithOfflineNotAvailable,
+  propsWithNoValue,
+  propsWithNotSupported,
+} from "./CellOffline.test.data";
+
+beforeEach(() => {
+  jest.resetModules();
+});
+
+describe("CellOffline", () => {
+  describe("As a user I can see whether a resource is available offline", () => {
+    it("should render 'Yes' when the resource has an offline item", () => {
+      expect.assertions(2);
+      const props = propsWithOfflineAvailable();
+      const page = new CellOfflineTestPage(props);
+
+      expect(page.container).not.toBeNull();
+      expect(page.label).toBe("Yes");
+    });
+
+    it("should render 'No' when the resource has no offline item", () => {
+      expect.assertions(2);
+      const props = propsWithOfflineNotAvailable();
+      const page = new CellOfflineTestPage(props);
+
+      expect(page.container).not.toBeNull();
+      expect(page.label).toBe("No");
+    });
+
+    it("should render 'No' by default when the resource has no offline property", () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      const page = new CellOfflineTestPage(props);
+
+      expect(page.container).not.toBeNull();
+      expect(page.label).toBe("No");
+    });
+
+    it("should render 'No' when value is undefined", () => {
+      expect.assertions(2);
+      const props = propsWithNoValue();
+      const page = new CellOfflineTestPage(props);
+
+      expect(page.container).not.toBeNull();
+      expect(page.label).toBe("No");
+    });
+
+    it("should render 'Not supported' when value is not supported", () => {
+      expect.assertions(2);
+      const props = propsWithNotSupported();
+      const page = new CellOfflineTestPage(props);
+
+      expect(page.container).not.toBeNull();
+      expect(page.label).toBe("Not supported");
+    });
+  });
+
+  describe("As a user I can see the offline label update when props change", () => {
+    it("should update from 'No' to 'Yes' when offline item is added", () => {
+      expect.assertions(2);
+      const props = propsWithOfflineNotAvailable();
+      const page = new CellOfflineTestPage(props);
+
+      expect(page.label).toBe("No");
+
+      page.rerender(propsWithOfflineAvailable());
+
+      expect(page.label).toBe("Yes");
+    });
+
+    it("should update from 'Yes' to 'No' when offline item is removed", () => {
+      expect.assertions(2);
+      const props = propsWithOfflineAvailable();
+      const page = new CellOfflineTestPage(props);
+
+      expect(page.label).toBe("Yes");
+
+      page.rerender(propsWithOfflineNotAvailable());
+
+      expect(page.label).toBe("No");
+    });
+  });
+});

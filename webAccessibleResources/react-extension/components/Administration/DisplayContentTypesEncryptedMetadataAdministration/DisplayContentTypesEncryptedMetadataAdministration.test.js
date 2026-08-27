@@ -41,7 +41,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       let page;
       await act(() => (page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props)));
 
-      expect(page.title.textContent).toBe("Encrypted metadata");
+      expect(page.title.textContent).toBe("Encrypted Metadata");
       expect(page.allowCreationOfV5ResourcesInput.checked).toBe(false);
       expect(page.allowCreationOfV5ResourcesError).toBeNull();
       expect(page.allowCreationOfV5ResourcesWarning).toBeNull();

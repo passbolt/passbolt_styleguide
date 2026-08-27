@@ -919,11 +919,6 @@ class ShareDialog extends Component {
                     <Trans>Please make sure there is at least one owner.</Trans>
                   </div>
                 )}
-                {this.hasChanges() && !hasNoOwner && !operatorOwnershipIsInvalid && (
-                  <div className="message warning">
-                    <Trans>Click save to apply your pending changes.</Trans>
-                  </div>
-                )}
               </>
             )}
           </div>

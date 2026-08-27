@@ -13,7 +13,7 @@
  */
 
 import { DateTime } from "luxon";
-import { formatDateForApi, formatDateTimeAgo, formatExpirationDateTimeAgo } from "./dateUtils";
+import { formatDateForApi, formatDateTimeAgo, formatExpirationDateTimeAgo, formatSecondsDuration } from "./dateUtils";
 
 describe("dateUtils", () => {
   beforeEach(() => {
@@ -138,6 +138,54 @@ describe("dateUtils", () => {
 
       expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({ locale: language });
       expect(spyOnDateTimeToRelative).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("::formatSecondsDuration", () => {
+    const language = "en-GB";
+
+    describe.each([
+      { seconds: 60, expected: "1 minute" },
+      { seconds: 300, expected: "5 minutes" },
+      { seconds: 900, expected: "15 minutes" },
+      { seconds: 3600, expected: "1 hour" },
+      { seconds: 86400, expected: "1 day" },
+      { seconds: 604800, expected: "7 days" },
+      { seconds: 2592000, expected: "30 days" },
+    ])("should format the duration with the unit of the offline settings", ({ seconds, expected }) => {
+      it(`with: ${seconds}`, () => {
+        expect.assertions(1);
+        expect(formatSecondsDuration(seconds, language)).toStrictEqual(expected);
+      });
+    });
+
+    describe.each([
+      { scenario: "keeping only the largest unit of a duration in days", seconds: 816000, expected: "9 days" },
+      { scenario: "keeping only the largest unit of a duration in hours", seconds: 5400, expected: "1 hour" },
+      { scenario: "keeping only the largest unit of a duration in minutes", seconds: 90, expected: "1 minute" },
+      { scenario: "truncating the remainder instead of rounding it up", seconds: 3599, expected: "59 minutes" },
+      { scenario: "keeping the seconds of a duration shorter than a minute", seconds: 45, expected: "45 seconds" },
+      { scenario: "rounding a duration shorter than a second up to a second", seconds: 0.4, expected: "1 second" },
+    ])("should format the duration", ({ scenario, seconds, expected }) => {
+      it(`${scenario}`, () => {
+        expect.assertions(1);
+        expect(formatSecondsDuration(seconds, language)).toStrictEqual(expected);
+      });
+    });
+
+    describe.each([0, -300, null, undefined])(
+      "should return null if the duration is not a positive one",
+      (scenario) => {
+        it(`with: ${scenario}`, () => {
+          expect.assertions(1);
+          expect(formatSecondsDuration(scenario, language)).toBeNull();
+        });
+      },
+    );
+
+    it("should format the duration in the given locale", () => {
+      expect.assertions(1);
+      expect(formatSecondsDuration(604800, "fr-FR")).toContain("jours");
     });
   });
 

@@ -238,7 +238,7 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
               <h3 className="title">
                 <label>
-                  <Trans>Encrypted metadata</Trans>
+                  <Trans>Encrypted Metadata</Trans>
                 </label>
               </h3>
               <p className="description">
@@ -247,7 +247,7 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
               </p>
 
               <h4>
-                <Trans>Supported metadata types</Trans>
+                <Trans>Supported Metadata Types</Trans>
               </h4>
               <p className="description">
                 <Trans>Define which metadata types are enabled for this instance.</Trans>
@@ -339,7 +339,7 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
               </div>
 
               <h4>
-                <Trans>Default metadata type</Trans>
+                <Trans>Default Metadata Type</Trans>
               </h4>
               <p className="description">
                 <Trans>Define which metadata type is used by default.</Trans>
@@ -424,7 +424,7 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                 </div>
               </div>
               <h4 className="no-border">
-                <Trans>Self served migration</Trans>
+                <Trans>Self Served Migration</Trans>
               </h4>
               <div className="input toggle-switch form-element">
                 <input

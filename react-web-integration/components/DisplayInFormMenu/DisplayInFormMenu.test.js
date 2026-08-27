@@ -17,7 +17,9 @@
  */
 
 import DisplayInFormMenuTestPage from "./DisplayInformMenu.test.page";
-import { defaultProps, defaultPropsWithMissingMetadataKey } from "./DisplayInformMenu.test.data";
+import { defaultProps, defaultPropsWithMissingMetadataKey, offlineSessionProps } from "./DisplayInformMenu.test.data";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 import {
   defaultResourceDto,
   resourceStandaloneTotpDto,
@@ -47,7 +49,11 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "username", inputValue: "", suggestedResources: resources };
+      const configuration = {
+        inputType: "username",
+        inputValue: "",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -60,7 +66,11 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "username", inputValue: "test@passbolt.com", suggestedResources: resources };
+      const configuration = {
+        inputType: "username",
+        inputValue: "test@passbolt.com",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -73,7 +83,11 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "password", inputValue: "", suggestedResources: resources };
+      const configuration = {
+        inputType: "password",
+        inputValue: "",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -86,7 +100,11 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "password", inputValue: "thisisapassword", suggestedResources: resources };
+      const configuration = {
+        inputType: "password",
+        inputValue: "thisisapassword",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -99,7 +117,11 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [resourceWithTotpDto(), resourceStandaloneTotpDto()];
-      const configuration = { inputType: "otp", inputValue: "", suggestedResources: resources };
+      const configuration = {
+        inputType: "otp",
+        inputValue: "",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -112,7 +134,11 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultProps();
       const resources = [resourceWithTotpDto(), resourceStandaloneTotpDto()];
-      const configuration = { inputType: "otp", inputValue: "123456", suggestedResources: resources };
+      const configuration = {
+        inputType: "otp",
+        inputValue: "123456",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -127,7 +153,11 @@ describe("See the Inform Menu", () => {
         metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
       });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "username", inputValue: "", suggestedResources: resources };
+      const configuration = {
+        inputType: "username",
+        inputValue: "",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -140,7 +170,11 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultProps({ metadataTypeSettings: null });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "username", inputValue: "", suggestedResources: resources };
+      const configuration = {
+        inputType: "username",
+        inputValue: "",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -153,7 +187,11 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultPropsWithMissingMetadataKey();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "username", inputValue: "", suggestedResources: resources };
+      const configuration = {
+        inputType: "username",
+        inputValue: "",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -168,7 +206,11 @@ describe("See the Inform Menu", () => {
       const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
       const props = defaultProps({ metadataTypeSettings, resourceTypes });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "username", inputValue: "test@passbolt.com", suggestedResources: resources };
+      const configuration = {
+        inputType: "username",
+        inputValue: "test@passbolt.com",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -182,7 +224,11 @@ describe("See the Inform Menu", () => {
       const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
       const props = defaultProps({ resourceTypes });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "password", inputValue: "", suggestedResources: resources };
+      const configuration = {
+        inputType: "password",
+        inputValue: "",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -195,7 +241,11 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultProps({ metadataTypeSettings: null });
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "password", inputValue: "thisisapassword", suggestedResources: resources };
+      const configuration = {
+        inputType: "password",
+        inputValue: "thisisapassword",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
@@ -208,12 +258,91 @@ describe("See the Inform Menu", () => {
       expect.assertions(1);
       const props = defaultPropsWithMissingMetadataKey();
       const resources = [defaultResourceDto(), defaultResourceDto()];
-      const configuration = { inputType: "password", inputValue: "thisisapassword", suggestedResources: resources };
+      const configuration = {
+        inputType: "password",
+        inputValue: "thisisapassword",
+        suggestedResources: resources,
+      };
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
       await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
+      expect(page.informMenuItems.length).toBe(3);
+    });
+  });
+  describe("As a user in an offline session I should not see the menu items requiring the API", () => {
+    it("I should only see the suggested resources and the browse credentials menu item for an empty username", async () => {
+      expect.assertions(1);
+      const props = offlineSessionProps();
+      const resources = [defaultResourceDto(), defaultResourceDto()];
+      const configuration = {
+        inputType: "username",
+        inputValue: "",
+        suggestedResources: resources,
+      };
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
+
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
+
+      // 2 suggested resources + browse credentials, no create credential
+      expect(page.informMenuItems.length).toBe(3);
+    });
+
+    it("I should only see the suggested resources and the browse credentials menu item for a filled username", async () => {
+      expect.assertions(1);
+      const props = offlineSessionProps();
+      const resources = [defaultResourceDto(), defaultResourceDto()];
+      const configuration = {
+        inputType: "username",
+        inputValue: "test@passbolt.com",
+        suggestedResources: resources,
+      };
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
+
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
+
+      // 2 suggested resources + browse credentials, no save as new credential
+      expect(page.informMenuItems.length).toBe(3);
+    });
+
+    it("I should not see the generate password nor the create credential menu items for an empty password", async () => {
+      expect.assertions(1);
+      const props = offlineSessionProps();
+      const resources = [defaultResourceDto(), defaultResourceDto()];
+      const configuration = {
+        inputType: "password",
+        inputValue: "",
+        suggestedResources: resources,
+      };
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
+
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
+
+      // 2 suggested resources + browse credentials, no generate password and no create credential
+      expect(page.informMenuItems.length).toBe(3);
+    });
+
+    it("I should not see the menu items requiring the API in an online session whose server is not reachable", async () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_server_reachable: false })),
+      });
+      const resources = [defaultResourceDto(), defaultResourceDto()];
+      const configuration = {
+        inputType: "password",
+        inputValue: "",
+        suggestedResources: resources,
+      };
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
+
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
+
+      // 2 suggested resources + browse credentials, no generate password and no create credential
       expect(page.informMenuItems.length).toBe(3);
     });
   });
