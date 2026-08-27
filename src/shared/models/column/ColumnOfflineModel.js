@@ -30,7 +30,8 @@ class ColumnOfflineModel extends ColumnModel {
     columnDto.minWidth = 160;
     columnDto.resizable = true;
     columnDto.draggable = true;
-    columnDto.sortable = true;
+    columnDto.sortable = false;
+    columnDto.getValue = (value) => value;
     super(columnDto);
   }
 }

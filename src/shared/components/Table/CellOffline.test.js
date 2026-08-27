@@ -18,6 +18,7 @@ import {
   propsWithOfflineAvailable,
   propsWithOfflineNotAvailable,
   propsWithNoValue,
+  propsWithNotSupported,
 } from "./CellOffline.test.data";
 
 beforeEach(() => {
@@ -60,6 +61,15 @@ describe("CellOffline", () => {
 
       expect(page.container).not.toBeNull();
       expect(page.label).toBe("No");
+    });
+
+    it("should render 'Not supported' when value is not supported", () => {
+      expect.assertions(2);
+      const props = propsWithNotSupported();
+      const page = new CellOfflineTestPage(props);
+
+      expect(page.container).not.toBeNull();
+      expect(page.label).toBe("Not supported");
     });
   });
 

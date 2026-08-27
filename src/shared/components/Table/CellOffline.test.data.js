@@ -21,6 +21,8 @@ import { defaultOfflineItemDto } from "../../models/entity/offline/offlineItemEn
  */
 export function defaultProps(props = {}) {
   return {
+    value: {},
+    isSupported: () => true,
     ...props,
   };
 }
@@ -32,7 +34,10 @@ export function defaultProps(props = {}) {
  */
 export function propsWithOfflineAvailable(props = {}) {
   return defaultProps({
-    value: defaultOfflineItemDto(),
+    value: {
+      offline: defaultOfflineItemDto(),
+    },
+    isSupported: () => true,
     ...props,
   });
 }
@@ -44,7 +49,10 @@ export function propsWithOfflineAvailable(props = {}) {
  */
 export function propsWithOfflineNotAvailable(props = {}) {
   return defaultProps({
-    value: null,
+    value: {
+      offline: null,
+    },
+    isSupported: () => true,
     ...props,
   });
 }
@@ -56,7 +64,25 @@ export function propsWithOfflineNotAvailable(props = {}) {
  */
 export function propsWithNoValue(props = {}) {
   return {
-    value: undefined,
+    value: {
+      offline: undefined,
+    },
+    isSupported: () => true,
+    ...props,
+  };
+}
+
+/**
+ * Returns props with offline not supported.
+ * @param {object} props Props to override
+ * @returns {object}
+ */
+export function propsWithNotSupported(props = {}) {
+  return {
+    value: {
+      offline: undefined,
+    },
+    isSupported: () => false,
     ...props,
   };
 }

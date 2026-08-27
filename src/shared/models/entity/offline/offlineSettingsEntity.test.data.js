@@ -18,6 +18,7 @@ export const defaultOfflineSettingsDto = (data = {}) => {
   const defaultData = {
     max_session_duration: 3600,
     data_retention_period: 86400,
+    max_items: 1000,
   };
   return Object.assign(defaultData, data);
 };

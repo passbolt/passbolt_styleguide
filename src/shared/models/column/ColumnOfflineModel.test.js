@@ -28,7 +28,7 @@ describe("ColumnOfflineModel", () => {
       expect(model.minWidth).toBe(160);
       expect(model.resizable).toBe(true);
       expect(model.draggable).toBe(true);
-      expect(model.sortable).toBe(true);
+      expect(model.sortable).toBe(false);
     });
 
     it("should accept custom width", () => {
@@ -61,7 +61,7 @@ describe("ColumnOfflineModel", () => {
       expect.assertions(1);
       const model = new ColumnOfflineModel({ sortable: true });
 
-      expect(model.sortable).toBe(true);
+      expect(model.sortable).toBe(false);
     });
 
     it("should be resizable", () => {

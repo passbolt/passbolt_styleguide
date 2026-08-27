@@ -15,6 +15,7 @@
 import { render } from "@testing-library/react";
 import React from "react";
 import CellOffline from "./CellOffline";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
 export default class CellOfflineTestPage {
   /**
@@ -22,7 +23,11 @@ export default class CellOfflineTestPage {
    * @param {object} props Props to attach
    */
   constructor(props) {
-    this._page = render(<CellOffline {...props} />);
+    this._page = render(
+      <MockTranslationProvider>
+        <CellOffline {...props} />
+      </MockTranslationProvider>,
+    );
   }
 
   /**
@@ -30,7 +35,11 @@ export default class CellOfflineTestPage {
    * @param {object} props New props
    */
   rerender(props) {
-    this._page.rerender(<CellOffline {...props} />);
+    this._page.rerender(
+      <MockTranslationProvider>
+        <CellOffline {...props} />
+      </MockTranslationProvider>,
+    );
   }
 
   /**
