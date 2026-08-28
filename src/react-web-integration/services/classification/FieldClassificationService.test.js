@@ -175,12 +175,40 @@ describe("FieldClassificationService", () => {
         });
       });
 
-      it("should decide a declared-but-unmapped autocomplete type as OTHER at the AUTOCOMPLETE tier", () => {
+      it("should not stop on an unmapped autocomplete type and fall through the cascade", () => {
         expect.assertions(1);
 
+        // A valid-but-unmapped token (`tel`) is not one we handle: it must not decide here. With no other
+        // signal the field falls through to OTHER at the NONE tier (rather than OTHER at AUTOCOMPLETE).
         expect(FieldClassificationService.classify(defaultField({ autoComplete: "tel" }))).toStrictEqual({
           role: FieldRole.OTHER,
+          tier: Tier.NONE,
+        });
+      });
+
+      it("should classify the non-spec 'password' autocomplete token as PASSWORD at the AUTOCOMPLETE tier", () => {
+        expect.assertions(1);
+
+        // `autocomplete="password"` is invalid per WHATWG (current-/new-password are the valid ones) but
+        // widespread; it must not stop the cascade at OTHER — it resolves to the generic PASSWORD role.
+        expect(
+          FieldClassificationService.classify(defaultField({ type: "password", autoComplete: "password" })),
+        ).toStrictEqual({
+          role: FieldRole.PASSWORD,
           tier: Tier.AUTOCOMPLETE,
+        });
+      });
+
+      it("should not let an invalid autocomplete token block the cascade, falling through to the input type", () => {
+        expect.assertions(1);
+
+        // An unknown/typo token is not an authoritative declaration: it must be ignored so a type=password
+        // field is still classified PASSWORD at the INPUT_TYPE tier instead of being locked to OTHER.
+        expect(
+          FieldClassificationService.classify(defaultField({ type: "password", autoComplete: "pwd" })),
+        ).toStrictEqual({
+          role: FieldRole.PASSWORD,
+          tier: Tier.INPUT_TYPE,
         });
       });
     });

@@ -12,7 +12,7 @@
  * @since         5.15.0
  */
 
-import { SHORT_AMBIGUOUS, AUTOCOMPLETE_ROLE, AUTOCOMPLETE_NON_TYPE } from "./KeywordsDictionary";
+import { SHORT_AMBIGUOUS, AUTOCOMPLETE_ROLE } from "./KeywordsDictionary";
 
 /**
  * Lowest common denominator of the classification cascade: a stateless, value-free, DOM-free matching
@@ -62,18 +62,6 @@ class KeywordMatchingService {
       }
     }
     return null;
-  }
-
-  /**
-   * Whether the `autocomplete` attribute explicitly names a concrete field type — i.e. it carries at
-   * least one token that is neither a `section-*` prefix nor a member of {@link AUTOCOMPLETE_NON_TYPE}.
-   * Used as an author-declared cascade stop.
-   * @param {string} autoComplete The raw autocomplete attribute (null-safe).
-   * @returns {boolean} Whether a concrete type is declared.
-   */
-  static autocompleteDeclaresType(autoComplete) {
-    const tokens = (autoComplete || "").toLowerCase().split(/\s+/).filter(Boolean);
-    return tokens.some((t) => !t.startsWith("section-") && !AUTOCOMPLETE_NON_TYPE.has(t));
   }
 }
 

@@ -140,8 +140,9 @@ class FieldClassificationService {
   }
 
   /**
-   * Tier 2 — autocomplete. A mapped token gives its role; a declared-but-unmapped concrete type gives
-   * OTHER; "off"/"on" and group modifiers do not decide.
+   * Tier 2 — autocomplete. Only a token we actually map ({@link AUTOCOMPLETE_ROLE}) decides here; anything
+   * else — an unmapped valid type (`tel`, `cc-number`…), an invalid token, or "off"/"on"/group modifiers —
+   * does not stop the cascade and lets the next tier infer the role.
    * @param {FieldScraping} field The field.
    * @param {{acRole: (string|null)}} signals The signals.
    * @returns {({role: string, tier: number}|null)} An autocomplete decision, or null to continue.
@@ -149,9 +150,6 @@ class FieldClassificationService {
   static declaredByAutocomplete(field, { acRole }) {
     if (acRole) {
       return { role: acRole, tier: Tier.AUTOCOMPLETE };
-    }
-    if (KeywordMatchingService.autocompleteDeclaresType(field.autoComplete)) {
-      return { role: FieldRole.OTHER, tier: Tier.AUTOCOMPLETE };
     }
     return null;
   }

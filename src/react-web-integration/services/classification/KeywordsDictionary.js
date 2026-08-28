@@ -474,17 +474,14 @@ export const AUTOCOMPLETE_ROLE = Object.freeze({
   "current-password": FieldRole.CURRENT_PASSWORD,
   "new-password": FieldRole.NEW_PASSWORD,
   [AUTOCOMPLETE_OTP_TOKEN]: FieldRole.TOTP,
+  /*
+   * Not a valid WHATWG token (the spec ones are current-/new-password), but a widespread author error:
+   * `autocomplete="password"` clearly means "this is the password field". Map it to the generic PASSWORD
+   * role — the same outcome as the `type="password"` fallback — and let the downstream password-role
+   * resolution disambiguate current vs new from the form context.
+   */
+  password: FieldRole.PASSWORD,
 });
-
-/**
- * Autocomplete tokens that never name a concrete field type: the "on"/"off" switches and the
- * WHATWG grouping/contact modifiers. Together with the `section-*` prefix, these are what
- * autocompleteDeclaresType() ignores when deciding whether the author declared a real type.
- * @type {ReadonlySet<string>}
- */
-export const AUTOCOMPLETE_NON_TYPE = Object.freeze(
-  new Set(["on", "off", "shipping", "billing", "home", "work", "mobile", "fax", "pager"]),
-);
 
 /**
  * The Dashlane SAWF `data-form-type` vocabulary. Fixed, single-language, exact-matched tokens —

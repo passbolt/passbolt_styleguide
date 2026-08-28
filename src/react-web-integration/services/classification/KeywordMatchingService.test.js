@@ -148,44 +148,18 @@ describe("KeywordMatchingService", () => {
       expect(KeywordMatchingService.roleFromAutocomplete("name")).toBeNull();
     });
 
+    it("should map the non-spec but widespread 'password' token to the generic PASSWORD role", () => {
+      expect.assertions(1);
+
+      expect(KeywordMatchingService.roleFromAutocomplete("password")).toBe(FieldRole.PASSWORD);
+    });
+
     it("should return null on empty/null/undefined input without throwing", () => {
       expect.assertions(3);
 
       expect(KeywordMatchingService.roleFromAutocomplete("")).toBeNull();
       expect(KeywordMatchingService.roleFromAutocomplete(null)).toBeNull();
       expect(KeywordMatchingService.roleFromAutocomplete(undefined)).toBeNull();
-    });
-  });
-
-  describe("KeywordMatchingService::autocompleteDeclaresType", () => {
-    it("should report a concrete field type when the author names one", () => {
-      expect.assertions(2);
-
-      expect(KeywordMatchingService.autocompleteDeclaresType("username")).toBe(true);
-      expect(KeywordMatchingService.autocompleteDeclaresType("section-blue shipping email")).toBe(true);
-    });
-
-    it("should ignore section-* prefixes", () => {
-      expect.assertions(1);
-
-      expect(KeywordMatchingService.autocompleteDeclaresType("section-foo")).toBe(false);
-    });
-
-    it("should ignore AUTOCOMPLETE_NON_TYPE grouping/switch tokens", () => {
-      expect.assertions(4);
-
-      expect(KeywordMatchingService.autocompleteDeclaresType("off")).toBe(false);
-      expect(KeywordMatchingService.autocompleteDeclaresType("on")).toBe(false);
-      expect(KeywordMatchingService.autocompleteDeclaresType("shipping")).toBe(false);
-      expect(KeywordMatchingService.autocompleteDeclaresType("section-blue shipping")).toBe(false);
-    });
-
-    it("should return false on empty/null/undefined input without throwing", () => {
-      expect.assertions(3);
-
-      expect(KeywordMatchingService.autocompleteDeclaresType("")).toBe(false);
-      expect(KeywordMatchingService.autocompleteDeclaresType(null)).toBe(false);
-      expect(KeywordMatchingService.autocompleteDeclaresType(undefined)).toBe(false);
     });
   });
 });
