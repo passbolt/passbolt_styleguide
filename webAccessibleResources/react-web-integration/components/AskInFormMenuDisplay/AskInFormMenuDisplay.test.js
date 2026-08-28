@@ -25,10 +25,6 @@ import {
   getContextWithUnauthenticatedUser,
   getContextWithUnauthenticatedUserAndAppOverlaid,
 } from "./AskInFormMenuDisplay.test.data";
-import {
-  defaultUserActiveSessionDto,
-  offlineUserActiveSessionDto,
-} from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -187,40 +183,6 @@ describe("AskInFormMenuDisplay", () => {
 
       expect(page.isActive).toBe(true);
       expect(page.iconCount).toBe("3");
-    });
-  });
-
-  describe("As a user whose session cannot perform the passbolt actions", () => {
-    it("I should see an active icon in an offline session, whether or not the server is reachable", async () => {
-      const context = getContextWithUnauthenticatedUser();
-      context.port.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () =>
-        offlineUserActiveSessionDto(),
-      );
-      context.port.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 2);
-      jest.spyOn(context.port, "request");
-
-      const page = new AskInFormMenuDisplayTestPage(context);
-
-      await waitFor(() => expect(page.isActive).toBe(true));
-
-      expect(page.iconCount).toBe("2");
-    });
-
-    it("I should see a grey icon in an online session whose server is not reachable", async () => {
-      const context = getContextWithUnauthenticatedUser();
-      context.port.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () =>
-        defaultUserActiveSessionDto({ is_authenticated: true, is_server_reachable: false }),
-      );
-      context.port.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 2);
-      jest.spyOn(context.port, "request");
-
-      const page = new AskInFormMenuDisplayTestPage(context);
-
-      await waitFor(() => expect(context.port.request).toHaveBeenCalledTimes(1));
-
-      expect(page.isActive).toBe(false);
-      // The suggested resources are not requested for a session that cannot perform the actions.
-      expect(context.port.request).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -148,12 +148,6 @@ const scenarios = [
     proRedirect: "onGoToAdministrationSecretHistoryRequested",
     clickMethod: "goToSecretHistorySettings",
   },
-  {
-    field: "offlineSettings",
-    title: "Offline mode",
-    proRedirect: "onGoToAdministrationOfflineRequested",
-    clickMethod: "goToOfflineSettings",
-  },
 ];
 
 /**

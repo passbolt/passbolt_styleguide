@@ -20,8 +20,6 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
-import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
-import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 /**
  * Default component props
  * @param props
@@ -30,7 +28,6 @@ import { defaultUserActiveSessionDto } from "../../../shared/models/entity/sessi
 export const defaultProps = (data = {}) => ({
   context: defaultAppContext(data.context),
   resources: [defaultResourceDto({}, { withTags: true })],
-  activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
@@ -45,7 +42,6 @@ export const defaultProps = (data = {}) => ({
 export const noResourcesProps = (data = {}) => ({
   context: defaultAppContext(data.context),
   resources: null,
-  activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
@@ -60,7 +56,6 @@ export const noResourcesProps = (data = {}) => ({
 export const noTagsProps = (data = {}) => ({
   context: defaultAppContext(data.context),
   resources: [],
-  activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
@@ -98,7 +93,6 @@ export const withFilteredResourcesProps = (data = {}) => {
   return {
     context: defaultAppContext(data.context),
     resources: [resource1, resource2],
-    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),

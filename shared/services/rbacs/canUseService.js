@@ -24,19 +24,16 @@ export default class CanUse {
    * @returns {boolean}
    */
   static canRoleUseAction(user, rbacs, actionName) {
-    // gaurd against canUseOfflineService calls from Browser extension that can't access window
-    if (typeof window !== "undefined") {
-      // Desktop action should always be driven by rbac if defined
-      if (window.chrome?.webview) {
-        const rbac = rbacs.findRbacByActionName(actionName);
-        if (rbac) {
-          // Prior we check if the desktop app has defined rbac limitation
-          // if not we do not need to go further
-          const rbacControlFunction = GetControlFunctionService.getByRbac(rbac);
-          return rbacControlFunction.execute(user);
-        }
-        // If no rbac defined for desktop, fall through to normal role-based logic
+    // Desktop action should always be driven by rbac if defined
+    if (window.chrome?.webview) {
+      const rbac = rbacs.findRbacByActionName(actionName);
+      if (rbac) {
+        // Prior we check if the desktop app has defined rbac limitation
+        // if not we do not need to go further
+        const rbacControlFunction = GetControlFunctionService.getByRbac(rbac);
+        return rbacControlFunction.execute(user);
       }
+      // If no rbac defined for desktop, fall through to normal role-based logic
     }
 
     const role = new RoleEntity(user.role);

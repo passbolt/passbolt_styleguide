@@ -96,10 +96,10 @@ class LoginPage extends React.Component {
   async handleLoginSuccess() {
     const isMfaRequired = await this.props.context.port.request("passbolt.auth.is-mfa-required");
     if (!isMfaRequired) {
-      await this.props.context.loginOnlineSuccessCallBack();
+      await this.props.loginSuccessCallback();
       this.props.history.push("/webAccessibleResources/quickaccess/home");
     } else {
-      await this.props.context.mfaRequiredCallback();
+      await this.props.mfaRequiredCallback();
     }
   }
 
@@ -156,15 +156,6 @@ class LoginPage extends React.Component {
       //rollback the current window blur behaviour option
       this.props.context.setWindowBlurBehaviour(currentWindowBlurState);
     }
-  }
-
-  /**
-   * Can the user use the remember until I logout option
-   * @return {boolean}
-   */
-  get canRememberMe() {
-    const options = this.props.context.siteSettings?.getRememberMeOptions();
-    return options != null && typeof options[-1] !== "undefined";
   }
 
   /**
@@ -229,7 +220,7 @@ class LoginPage extends React.Component {
                   </div>
                   {this.state.error && <div className="error-message">{this.state.error}</div>}
                 </div>
-                {this.canRememberMe && (
+                {this.props.canRememberMe && (
                   <div className="input checkbox">
                     <input
                       type="checkbox"
@@ -303,6 +294,9 @@ class LoginPage extends React.Component {
 LoginPage.propTypes = {
   context: PropTypes.any, // The application context
   ssoContext: PropTypes.object, // The SSO context
+  canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
+  loginSuccessCallback: PropTypes.func,
+  mfaRequiredCallback: PropTypes.func,
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
   location: PropTypes.object,

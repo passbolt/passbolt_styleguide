@@ -34,8 +34,6 @@ import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadat
 import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
-import OfflineSettingsEntity from "../../../../shared/models/entity/offline/offlineSettingsEntity";
-import { defaultOfflineSettingsDto } from "../../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -46,7 +44,6 @@ export function defaultProps(data = {}) {
   return {
     context: defaultUserAppContext(),
     rbacContext: defaultUserRbacContext(),
-    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
     resource: defaultResourceDto(),
     hide: jest.fn(),
     left: 10,

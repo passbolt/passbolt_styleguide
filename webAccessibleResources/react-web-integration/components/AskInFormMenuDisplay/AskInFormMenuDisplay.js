@@ -23,7 +23,7 @@ import IconBadge4SVG from "../../../img/logo/icon-badge-4.svg";
 import IconBadge5SVG from "../../../img/logo/icon-badge-5.svg";
 import IconBadge5PlusSVG from "../../../img/logo/icon-badge-5+.svg";
 import Logger from "../../../shared/utils/logger";
-import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import OnlineSessionEntity from "../../../shared/models/entity/session/onlineSessionEntity";
 /**
  * This component is a call-to-action integrated into a target web page which includes
  * an identified authentication form. When some Passbolt actions are available, the performed call-to-action
@@ -108,10 +108,10 @@ class AskInFormMenuDisplay extends React.Component {
    * Check the user authentication status
    */
   async checkAuthenticationStatus() {
-    const activeSessionDto = await this.props.context.port.request("passbolt.in-form-cta.get-or-find-active-session");
-    const activeSessionEntity = new UserActiveSessionEntity(activeSessionDto);
+    const activeSession = await this.props.context.port.request("passbolt.in-form-cta.check-status");
+    const activeSessionEntity = new OnlineSessionEntity(activeSession);
 
-    const isActive = this.isSessionUsable(activeSessionEntity);
+    const isActive = activeSessionEntity.isAuthenticated && activeSessionEntity.isMfaAuthenticated;
 
     const suggestedResourcesCount = isActive
       ? await this.props.context.port.request("passbolt.in-form-cta.suggested-resources", this.props.context.fieldType)
@@ -124,22 +124,6 @@ class AskInFormMenuDisplay extends React.Component {
         suggestedResourcesCount,
       },
     });
-  }
-
-  /**
-   * Returns true if the passbolt actions can be performed with the given session.
-   * An offline session stays usable while the server is unreachable. An online session
-   * that lost the network does not: its actions all go through the API, and its authentication and mfa
-   * statuses are stale until the server answers again.
-   * @param {UserActiveSessionEntity} activeSession The active session
-   * @returns {boolean}
-   */
-  isSessionUsable(activeSession) {
-    if (!activeSession.isAuthenticated || activeSession.isMfaRequired) {
-      return false;
-    }
-
-    return activeSession.isSessionOffline || activeSession.isServerReachable;
   }
 
   /**

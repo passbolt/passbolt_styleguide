@@ -19,8 +19,6 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
-import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
-import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
  * Default component props
@@ -30,7 +28,6 @@ import { defaultUserActiveSessionDto } from "../../../shared/models/entity/sessi
 export const defaultProps = (data = {}) => ({
   context: defaultAppContext(),
   resources: null,
-  activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
@@ -45,7 +42,6 @@ export const defaultProps = (data = {}) => ({
 export const noFilteredResourcesProps = (data = {}) => ({
   context: defaultAppContext(),
   resources: [],
-  activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
@@ -83,7 +79,6 @@ export const withFilteredResourcesProps = (data = {}) => ({
       { withFavorite: true },
     ),
   ],
-  activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),

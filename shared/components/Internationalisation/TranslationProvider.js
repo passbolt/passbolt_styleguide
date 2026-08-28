@@ -16,7 +16,6 @@ import { I18nextProvider } from "react-i18next";
 import HttpApi from "i18next-http-backend";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withAppContext } from "../../context/AppContext/AppContext";
 
 /**
  * The locales default url.
@@ -48,7 +47,7 @@ class TranslationProvider extends Component {
    * @return {void}
    */
   componentDidMount() {
-    if (this.props.context.locale) {
+    if (this.props.locale) {
       this.initI18next();
     }
   }
@@ -64,7 +63,7 @@ class TranslationProvider extends Component {
    * Check if the locale has changed and update
    */
   async handleLocaleChange(prevProps) {
-    if (this.props.context.locale !== prevProps?.context.locale) {
+    if (this.props.locale !== prevProps?.locale) {
       this.initI18next();
     }
   }
@@ -79,7 +78,7 @@ class TranslationProvider extends Component {
       // I18next plugin used to load the translations json over http.
       .use(HttpApi)
       // init i18next, once done store the i18next instance in the state.
-      .init(this.i18nextOptions, () => this.setState({ i18next, locale: this.props.context.locale }));
+      .init(this.i18nextOptions, () => this.setState({ i18next, locale: this.props.locale }));
   }
 
   /**
@@ -89,7 +88,7 @@ class TranslationProvider extends Component {
    */
   get i18nextOptions() {
     return {
-      lng: this.props.context.locale,
+      lng: this.props.locale,
       load: "currentOnly",
       react: {
         useSuspense: false,
@@ -141,7 +140,7 @@ class TranslationProvider extends Component {
    * @returns {string[]}
    */
   get supportedLocales() {
-    const locales = [this.props.context.locale];
+    const locales = [this.props.locale];
 
     if (locales.includes("en-UK")) {
       locales.push("en-GB"); //Need to add the locale to support i18next fallback as en-UK is not supported
@@ -168,11 +167,11 @@ class TranslationProvider extends Component {
 TranslationProvider.propTypes = {
   loadingPath: PropTypes.any, // The way to load translations files
   children: PropTypes.any, // The children components
-  context: PropTypes.any, // The App context
+  locale: PropTypes.string, // The locale to use. i.e. en-UK
 };
 
 TranslationProvider.defaultProps = {
   loadingPath: DEFAULT_LOCALE_URL,
 };
 
-export default withAppContext(TranslationProvider);
+export default TranslationProvider;

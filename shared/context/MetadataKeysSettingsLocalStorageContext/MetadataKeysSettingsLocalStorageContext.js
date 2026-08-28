@@ -133,16 +133,11 @@ export class MetadataKeysSettingsLocalStorageContextProvider extends React.Compo
    */
   async updateLocalStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
-      try {
-        this.runningLocalStorageUpdatePromise = this.props.context.port.request(
-          "passbolt.metadata.get-or-find-metadata-keys-settings",
-        );
-        await this.runningLocalStorageUpdatePromise;
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.runningLocalStorageUpdatePromise = null;
-      }
+      this.runningLocalStorageUpdatePromise = this.props.context.port.request(
+        "passbolt.metadata.get-or-find-metadata-keys-settings",
+      );
+      await this.runningLocalStorageUpdatePromise;
+      this.runningLocalStorageUpdatePromise = null;
     } else {
       await this.runningLocalStorageUpdatePromise;
     }

@@ -22,7 +22,6 @@ import ResourceTypesLocalStorageContextProvider from "../shared/context/Resource
 import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import AccountEntity from "../shared/models/entity/account/accountEntity";
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
-import ActiveSessionLocalStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 
 /**
  * Entry point of the in-form menu
@@ -78,42 +77,28 @@ class ExtInForm extends React.Component {
   }
 
   /**
-   * Returns true if the component is ready to be rendered.
-   * The active session is stored per account, it can only be read once the account is known.
-   * @returns {boolean}
-   */
-  isReady() {
-    return this.state.account !== null;
-  }
-
-  /**
    * Render the component
    */
   render() {
     return (
-      this.isReady() && (
-        <AppContext.Provider value={this.state}>
-          <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-            <ActiveSessionLocalStorageContextProvider
-              account={this.state.account}
-              port={this.props.port}
-              storage={this.props.storage}
-            >
-              <ResourceTypesLocalStorageContextProvider>
-                <MetadataTypesSettingsLocalStorageContextProvider>
-                  <MetadataKeysSettingsLocalStorageContextProvider>
-                    <PasswordPoliciesContext>
-                      <div className="web-integration">
-                        <DisplayInFormMenu />
-                      </div>
-                    </PasswordPoliciesContext>
-                  </MetadataKeysSettingsLocalStorageContextProvider>
-                </MetadataTypesSettingsLocalStorageContextProvider>
-              </ResourceTypesLocalStorageContextProvider>
-            </ActiveSessionLocalStorageContextProvider>
-          </TranslationProvider>
-        </AppContext.Provider>
-      )
+      <AppContext.Provider value={this.state}>
+        <TranslationProvider
+          loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json"
+          locale={this.state.locale}
+        >
+          <ResourceTypesLocalStorageContextProvider>
+            <MetadataTypesSettingsLocalStorageContextProvider>
+              <MetadataKeysSettingsLocalStorageContextProvider>
+                <PasswordPoliciesContext>
+                  <div className="web-integration">
+                    <DisplayInFormMenu />
+                  </div>
+                </PasswordPoliciesContext>
+              </MetadataKeysSettingsLocalStorageContextProvider>
+            </MetadataTypesSettingsLocalStorageContextProvider>
+          </ResourceTypesLocalStorageContextProvider>
+        </TranslationProvider>
+      </AppContext.Provider>
     );
   }
 }

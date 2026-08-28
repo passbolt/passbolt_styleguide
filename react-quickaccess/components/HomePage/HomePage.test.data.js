@@ -24,8 +24,6 @@ import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
-import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
-import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
  * Default component props.
@@ -37,12 +35,11 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
     resourcesLocalStorageContext: defaultResourceLocalStorageContext(),
-    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     resources: null,
-    openerTabId: 1,
+    getOpenerTabId: () => 1,
     ...data,
   };
 }

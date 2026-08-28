@@ -44,7 +44,6 @@ import HeartPulseSVG from "../../../../img/svg/heart_pulse.svg";
 import EmailNotificationsSVG from "../../../../img/svg/email_notifications.svg";
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
 import SecretHistorySVG from "../../../../img/svg/secret_history.svg";
-import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
 import { withAdministrationEncryptedMetadataGettingStarted } from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 
 const metadataMenuItems = [
@@ -250,13 +249,6 @@ class AdministrationHomePage extends React.PureComponent {
         description: this.props.t("Define UI level access controls for the user role."),
         redirectTo: this.props.navigationContext.onGoToAdministrationRbacsRequested,
         flag: AdministrationWorkspaceMenuTypes.RBAC,
-      },
-      {
-        icon: <OfflineModeSVG />,
-        title: this.props.t("Offline mode"),
-        description: this.props.t("Allow users to access resources when the API is not reachable."),
-        redirectTo: this.props.navigationContext.onGoToAdministrationOfflineRequested,
-        flag: AdministrationWorkspaceMenuTypes.OFFLINE,
       },
       {
         icon: <InternationalSVG />,

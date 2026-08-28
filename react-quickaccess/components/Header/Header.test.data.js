@@ -8,6 +8,7 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
+    isAuthenticated: true,
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

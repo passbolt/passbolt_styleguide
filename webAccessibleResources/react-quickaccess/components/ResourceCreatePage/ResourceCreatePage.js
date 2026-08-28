@@ -211,7 +211,7 @@ class ResourceCreatePage extends React.Component {
     try {
       const tabInfo = await this.props.context.port.request(
         "passbolt.quickaccess.prepare-resource",
-        this.props.context.openerTabId,
+        this.props.context.getOpenerTabId(),
       );
 
       if (!ignoreNames.includes(tabInfo["name"])) {

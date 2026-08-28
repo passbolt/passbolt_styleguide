@@ -26,7 +26,7 @@ export default {
 
 function getMockedPort() {
   const mockedPort = new MockPort();
-  mockedPort.addRequestListener("passbolt.site-settings.find-and-update", () => siteSettingsFixture);
+  mockedPort.addRequestListener("passbolt.site-settings.get-or-find", () => siteSettingsFixture);
   mockedPort.addRequestListener("passbolt.locale.get", () => ({
     locale: "en-UK",
     label: "English",

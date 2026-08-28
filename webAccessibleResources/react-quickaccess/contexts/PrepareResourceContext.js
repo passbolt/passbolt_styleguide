@@ -16,8 +16,6 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { withPasswordPolicies } from "../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import { withAppContext } from "../../shared/context/AppContext/AppContext";
-import { withActiveSessionLocalStorage } from "../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
-import UserActiveSessionEntity from "../../shared/models/entity/session/userActiveSessionEntity";
 
 /**
  * Context related to prepare a resource ( name, url, username, password.)
@@ -75,10 +73,8 @@ class PrepareResourceContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async resetSecretGeneratorSettings() {
-    if (this.props.activeSession.isSessionOnline) {
-      const passwordPolicies = await this.props.passwordPoliciesContext.loadPolicies();
-      this.setState({ settings: passwordPolicies });
-    }
+    const passwordPolicies = await this.props.passwordPoliciesContext.loadPolicies();
+    this.setState({ settings: passwordPolicies });
   }
 
   /**
@@ -130,12 +126,11 @@ class PrepareResourceContextProvider extends React.Component {
 PrepareResourceContextProvider.displayName = "PrepareResourceContextProvider";
 PrepareResourceContextProvider.propTypes = {
   context: PropTypes.object,
-  activeSession: PropTypes.instanceOf(UserActiveSessionEntity),
   passwordPoliciesContext: PropTypes.object, // The password settings context
   children: PropTypes.any,
 };
 
-export default withActiveSessionLocalStorage(withAppContext(withPasswordPolicies(PrepareResourceContextProvider)));
+export default withAppContext(withPasswordPolicies(PrepareResourceContextProvider));
 
 /**
  * Generate Password Context Consumer HOC

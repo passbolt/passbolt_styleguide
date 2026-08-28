@@ -4,8 +4,6 @@ import PropTypes from "prop-types";
 import Header from "./Header";
 import { defaultAppContext } from "./Header.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
-import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
-import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 export default {
   title: "Components/QuickAccess/Header",
@@ -35,7 +33,7 @@ export const Initial = {
 
   args: {
     context: defaultAppContext(),
-    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
+    logoutSuccessCallback: () => {},
   },
 
   parameters: {

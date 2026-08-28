@@ -35,7 +35,7 @@ describe("ResourceTypesLocalStorageContext", () => {
       expect(contextProvider.state).toMatchObject({
         get: expect.any(Function),
         resourceTypes: null,
-        getOrFind: expect.any(Function),
+        updateLocalStorage: expect.any(Function),
       });
     });
   });
@@ -139,6 +139,7 @@ describe("ResourceTypesLocalStorageContext", () => {
       expect.assertions(3);
 
       const props = defaultProps();
+      props.context.storage.local.set({ resourceTypes: null });
 
       const contextProvider = new ResourceTypesLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
@@ -168,11 +169,29 @@ describe("ResourceTypesLocalStorageContext", () => {
     });
   });
 
-  describe("::getOrFind", () => {
-    it("should call the service worker with the right event to trigger the local storage update.", async () => {
+  describe("::loadLocalStorage", () => {
+    it("should find the resource types from the local storage and set the context state with it.", async () => {
+      expect.assertions(1);
+
+      const resourceTypes = resourceTypesCollectionDto();
+
+      const props = defaultProps();
+      const contextProvider = new ResourceTypesLocalStorageContextProvider(props);
+
+      props.context.storage.local.set({ [contextProvider.storageKey]: resourceTypes });
+
+      mockComponentSetState(contextProvider);
+
+      await contextProvider.loadLocalStorage();
+
+      expect(contextProvider.state.resourceTypes.toDto()).toStrictEqual(resourceTypes);
+    });
+
+    it("should call for updating the local storage if there is no resource types in the local storage.", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
+      props.context.storage.local.set({ resourceTypes: null });
       props.context.port.addRequestListener("passbolt.resource-type.get-or-find-all", async () => {});
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
@@ -180,31 +199,30 @@ describe("ResourceTypesLocalStorageContext", () => {
       const contextProvider = new ResourceTypesLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      contextProvider.getOrFind();
+      await contextProvider.loadLocalStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
       expect(spyOnRequest).toHaveBeenCalledWith("passbolt.resource-type.get-or-find-all");
     });
+  });
 
-    it("should do nothing if the service worker throw an error.", async () => {
-      expect.assertions(3);
+  describe("::updateLocalStorage", () => {
+    it("should call the service worker with the right event to trigger the local storage update.", async () => {
+      expect.assertions(2);
 
       const props = defaultProps();
+      props.context.storage.local.set({ resourceTypes: null });
       props.context.port.addRequestListener("passbolt.resource-type.get-or-find-all", async () => {});
 
-      const spyOnRequest = jest
-        .spyOn(props.context.port, "request")
-        .mockImplementationOnce(() => Promise.reject(new Error("Error")));
+      const spyOnRequest = jest.spyOn(props.context.port, "request");
 
       const contextProvider = new ResourceTypesLocalStorageContextProvider(props);
-      jest.spyOn(contextProvider, "set");
       mockComponentSetState(contextProvider);
 
-      await contextProvider.getOrFind();
+      contextProvider.updateLocalStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
       expect(spyOnRequest).toHaveBeenCalledWith("passbolt.resource-type.get-or-find-all");
-      expect(contextProvider.set).not.toHaveBeenCalled();
     });
 
     it("should not call the service worker twice if a pending promise is running.", async () => {
@@ -219,18 +237,18 @@ describe("ResourceTypesLocalStorageContext", () => {
       const contextProvider = new ResourceTypesLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      contextProvider.getOrFind();
+      contextProvider.updateLocalStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
       expect(spyOnRequest).toHaveBeenCalledWith("passbolt.resource-type.get-or-find-all");
 
-      contextProvider.getOrFind();
+      contextProvider.updateLocalStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
 
       await resolveUpdadeLocalStoragePromise();
 
-      contextProvider.getOrFind();
+      contextProvider.updateLocalStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(2);
 
@@ -248,11 +266,11 @@ describe("ResourceTypesLocalStorageContext", () => {
       const contextProvider = new ResourceTypesLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      contextProvider.getOrFind();
+      contextProvider.updateLocalStorage();
       expect(contextProvider.runningLocalStorageUpdatePromise).not.toBeNull();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
-      contextProvider.getOrFind();
+      contextProvider.updateLocalStorage();
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
 
       await contextProvider.runningLocalStorageUpdatePromise;
@@ -260,7 +278,7 @@ describe("ResourceTypesLocalStorageContext", () => {
       //promise should be reinit now;
       expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
 
-      contextProvider.getOrFind();
+      contextProvider.updateLocalStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(2);
     });

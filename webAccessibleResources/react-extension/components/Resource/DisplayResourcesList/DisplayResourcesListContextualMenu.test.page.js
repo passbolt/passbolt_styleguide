@@ -136,14 +136,6 @@ export default class DisplayResourcesListContextualMenuPage {
     return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#secret-history");
   }
 
-  /**
-   * Returns the offline availability item.
-   * @return {HTMLElement}
-   */
-  get offlineAvailabilityItem() {
-    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#offline-availability");
-  }
-
   /** Click on the component */
   async click(component) {
     const leftClick = { button: 0 };
@@ -233,12 +225,5 @@ export default class DisplayResourcesListContextualMenuPage {
    */
   async displaySecretHistory() {
     await this.click(this.secretHistoryItem);
-  }
-
-  /**
-   * Click on the menu offline availability
-   */
-  async toggleOfflineAvailability() {
-    await this.click(this.offlineAvailabilityItem);
   }
 }

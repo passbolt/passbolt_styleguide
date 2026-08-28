@@ -34,8 +34,6 @@ import ResourceIcon from "../../../shared/components/Icons/ResourceIcon";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import Logger from "../../../shared/utils/logger";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
-import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 /** The maximum length of visibility of a generated password */
 const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
@@ -124,20 +122,6 @@ class DisplayInFormMenu extends React.Component {
   }
 
   /**
-   * Returns true if a credential can be created or saved from the menu.
-   * Creating or saving a credential goes through the API, it is therefore offered only to an online session
-   * with a reachable server: an offline session cannot reach the API, and an online session that lost the
-   * network would send the user to the quickaccess server unavailable screen.
-   * @returns {boolean}
-   */
-  get canCreateCredentials() {
-    const activeSession = this.props.activeSession;
-    const isSessionUsable = Boolean(activeSession?.isSessionOnline) && activeSession?.isServerReachable !== false;
-
-    return isSessionUsable && this.hasMetadataTypesSettings() && this.canCreatePassword();
-  }
-
-  /**
    * Returns true if the component has a "username" display configuration
    */
   get isUsernameConfiguration() {
@@ -208,7 +192,7 @@ class DisplayInFormMenu extends React.Component {
    */
   get filledUsernameMenuItems() {
     const usernameMenuItems = this.suggestedResourcesItems;
-    if (this.canCreateCredentials) {
+    if (this.hasMetadataTypesSettings() && this.canCreatePassword()) {
       usernameMenuItems.push(this.saveAsNewCredentialItem);
     }
     usernameMenuItems.push(this.browseCredentialsItem);
@@ -221,7 +205,7 @@ class DisplayInFormMenu extends React.Component {
    */
   get emptyUsernameMenuItems() {
     const usernameMenuItems = this.suggestedResourcesItems;
-    if (this.canCreateCredentials) {
+    if (this.hasMetadataTypesSettings() && this.canCreatePassword()) {
       usernameMenuItems.push(this.createNewCredentialItem);
     }
     usernameMenuItems.push(this.browseCredentialsItem);
@@ -234,7 +218,7 @@ class DisplayInFormMenu extends React.Component {
    */
   get filledPasswordMenuItems() {
     const passwordMenuItems = this.suggestedResourcesItems;
-    if (this.canCreateCredentials) {
+    if (this.hasMetadataTypesSettings() && this.canCreatePassword()) {
       passwordMenuItems.push(this.saveAsNewCredentialItem);
     }
     passwordMenuItems.push(this.browseCredentialsItem);
@@ -247,7 +231,7 @@ class DisplayInFormMenu extends React.Component {
    */
   get emptyPasswordMenuItems() {
     const passwordMenuItems = this.suggestedResourcesItems;
-    if (this.canCreateCredentials) {
+    if (this.hasMetadataTypesSettings() && this.canCreatePassword()) {
       passwordMenuItems.push(this.generateNewPasswordItem);
       passwordMenuItems.push(this.createNewCredentialItem);
     }
@@ -508,15 +492,12 @@ DisplayInFormMenu.propTypes = {
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   passwordPoliciesContext: PropTypes.object, // The password policy context
-  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
 };
 
 export default withAppContext(
-  withActiveSessionLocalStorage(
-    withResourceTypesLocalStorage(
-      withMetadataTypesSettingsLocalStorage(
-        withMetadataKeysSettingsLocalStorage(withPasswordPolicies(withTranslation("common")(DisplayInFormMenu))),
-      ),
+  withResourceTypesLocalStorage(
+    withMetadataTypesSettingsLocalStorage(
+      withMetadataKeysSettingsLocalStorage(withPasswordPolicies(withTranslation("common")(DisplayInFormMenu))),
     ),
   ),
 );

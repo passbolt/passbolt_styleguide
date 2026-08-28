@@ -20,8 +20,6 @@ import ShareSVG from "../../../img/svg/share.svg";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
-import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 class MoreFiltersPage extends React.Component {
   constructor(props) {
@@ -59,10 +57,6 @@ class MoreFiltersPage extends React.Component {
    * @returns {boolean}
    */
   canCreatePassword() {
-    // Creating a resource requires the server, the action is not offered while in an offline session.
-    if (!this.props.activeSession?.isSessionOnline) {
-      return false;
-    }
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
       return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
@@ -176,17 +170,14 @@ MoreFiltersPage.propTypes = {
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
-  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   t: PropTypes.func, // The translation function
 };
 
-export default withActiveSessionLocalStorage(
-  withRouter(
-    withAppContext(
-      withResourceTypesLocalStorage(
-        withMetadataTypesSettingsLocalStorage(
-          withMetadataKeysSettingsLocalStorage(withTranslation("common")(MoreFiltersPage)),
-        ),
+export default withRouter(
+  withAppContext(
+    withResourceTypesLocalStorage(
+      withMetadataTypesSettingsLocalStorage(
+        withMetadataKeysSettingsLocalStorage(withTranslation("common")(MoreFiltersPage)),
       ),
     ),
   ),

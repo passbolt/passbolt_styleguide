@@ -180,14 +180,6 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
-   * Can I use the offline plugin
-   * @returns {boolean}
-   */
-  get canIUseOffline() {
-    return this.canIUse("offlineMode");
-  }
-
-  /**
    * Can I use the User Passphrase Policies plugin
    * @returns {boolean}
    */
@@ -258,7 +250,6 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleSubmenuClick = this.handleSubmenuClick.bind(this);
     this.handleMetadataGettingStartedClick = this.handleMetadataGettingStartedClick.bind(this);
     this.handleScimClick = this.handleScimClick.bind(this);
-    this.handleOfflineClick = this.handleOfflineClick.bind(this);
   }
 
   /**
@@ -433,13 +424,6 @@ class DisplayAdministrationMenu extends React.Component {
     this.isCommunityEdition()
       ? this.props.navigationContext.onGoToAdministrationScimRequestedTeasing()
       : this.props.navigationContext.onGoToAdministrationScimRequested();
-  }
-
-  /**
-   * Handle when the user click on the offline mode settings menu
-   */
-  handleOfflineClick() {
-    this.props.navigationContext.onGoToAdministrationOfflineRequested();
   }
 
   /**
@@ -692,16 +676,6 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isScimSelected() {
     return AdministrationWorkspaceMenuTypes.SCIM === this.props.administrationWorkspaceContext.selectedAdministration;
-  }
-
-  /**
-   * If offline mode menu is selected
-   * @returns {boolean}
-   */
-  isOfflineSelected() {
-    return (
-      AdministrationWorkspaceMenuTypes.OFFLINE === this.props.administrationWorkspaceContext.selectedAdministration
-    );
   }
 
   /**
@@ -1262,22 +1236,6 @@ class DisplayAdministrationMenu extends React.Component {
                           <span>
                             <Trans>Role-Based Access Control</Trans>
                           </span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              )}
-              {this.canIUseOffline && (
-                <li id="offline_menu">
-                  <div className={`row ${this.isOfflineSelected() ? "selected" : ""}`}>
-                    <div className="main-cell-wrapper">
-                      <div className="main-cell">
-                        <button className="link no-border" type="button" onClick={this.handleOfflineClick}>
-                          <span>
-                            <Trans>Offline mode</Trans>
-                          </span>
-                          {this.isBeta("offlineMode") && <span className="chips beta">beta</span>}
                         </button>
                       </div>
                     </div>

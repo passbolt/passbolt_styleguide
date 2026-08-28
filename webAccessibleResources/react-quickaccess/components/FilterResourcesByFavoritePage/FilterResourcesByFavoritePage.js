@@ -34,8 +34,6 @@ import CloseSVG from "../../../img/svg/close.svg";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
-import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 const BROWSED_RESOURCES_LIMIT = 100;
 
@@ -54,6 +52,7 @@ class FilterResourcesByFavoritePage extends React.Component {
    * Invoked immediately after component is inserted into the tree
    */
   componentDidMount() {
+    this.props.context.focusSearch();
     if (this.props.context.searchHistory[this.props.location.pathname]) {
       this.props.context.updateSearch(this.props.context.searchHistory[this.props.location.pathname]);
     }
@@ -155,10 +154,6 @@ class FilterResourcesByFavoritePage extends React.Component {
    * @returns {boolean}
    */
   canCreatePassword() {
-    // Creating a resource requires the server, the action is not offered while in an offline session.
-    if (!this.props.activeSession?.isSessionOnline) {
-      return false;
-    }
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
       return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
@@ -301,18 +296,15 @@ FilterResourcesByFavoritePage.propTypes = {
   location: PropTypes.object,
   history: PropTypes.object,
   resources: PropTypes.array,
-  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   t: PropTypes.func, // The translation function
 };
 
-export default withActiveSessionLocalStorage(
-  withAppContext(
-    withRouter(
-      withResourceTypesLocalStorage(
-        withResourcesLocalStorage(
-          withMetadataTypesSettingsLocalStorage(
-            withMetadataKeysSettingsLocalStorage(withTranslation("common")(FilterResourcesByFavoritePage)),
-          ),
+export default withAppContext(
+  withRouter(
+    withResourceTypesLocalStorage(
+      withResourcesLocalStorage(
+        withMetadataTypesSettingsLocalStorage(
+          withMetadataKeysSettingsLocalStorage(withTranslation("common")(FilterResourcesByFavoritePage)),
         ),
       ),
     ),

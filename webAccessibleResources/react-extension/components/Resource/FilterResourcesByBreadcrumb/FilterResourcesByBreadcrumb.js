@@ -76,9 +76,6 @@ class FilterResourcesByBreadcrumb extends Component {
         const currentGroupName = (group && group.name) || this.translate("N/A");
         return [...items, this.getBreadcrumb(`${currentGroupName} ${this.translate("(group)")}`)];
       }
-      case ResourceWorkspaceFilterTypes.OFFLINE: {
-        return [...items, this.getBreadcrumb(this.translate("Offline"))];
-      }
     }
 
     return items;

@@ -17,7 +17,7 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
 import DisplayInFormMenu from "./DisplayInFormMenu";
 import { defaultPasswordPoliciesDto } from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 import { defaultAppContext } from "../../../react-extension/contexts/ExtAppContext.test.data";
-import { defaultProps, offlineSessionProps } from "./DisplayInformMenu.test.data";
+import { defaultProps } from "./DisplayInformMenu.test.data";
 
 export default {
   title: "Components/WebIntegration/InFormMenu",
@@ -75,13 +75,6 @@ initMockPort(
 
 const mockPortPasswordFilled = new MockPort();
 initMockPort(mockPortPasswordFilled, { inputType: "password", inputValue: "test" });
-
-const mockPortOfflineSession = new MockPort();
-initMockPort(mockPortOfflineSession, {
-  inputType: "password",
-  inputValue: "",
-  suggestedResources: suggestion,
-});
 
 const Template = (args) => (
   <div className="web-integration">
@@ -153,18 +146,6 @@ export const OnPasswordFieldWithValue = {
   args: defaultProps({
     context: defaultAppContext({
       port: mockPortPasswordFilled,
-    }),
-  }),
-
-  parameters: inFormMenuCss,
-};
-
-export const OnPasswordFieldInAnOfflineSession = {
-  render: Template,
-
-  args: offlineSessionProps({
-    context: defaultAppContext({
-      port: mockPortOfflineSession,
     }),
   }),
 

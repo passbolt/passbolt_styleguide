@@ -133,15 +133,6 @@ class PassphraseDialog extends React.Component {
     }
   }
 
-  /**
-   * Can the user use the remember until I logout option
-   * @return {boolean}
-   */
-  get canRememberMe() {
-    const options = this.props.context.siteSettings?.getRememberMeOptions();
-    return options != null && typeof options[-1] !== "undefined";
-  }
-
   render() {
     return (
       <div className="passphrase" onKeyDown={this.handleKeyDown}>
@@ -182,7 +173,7 @@ class PassphraseDialog extends React.Component {
                 />
                 {this.state.passphraseError && <div className="error-message">{this.state.passphraseError}</div>}
               </div>
-              {this.canRememberMe && (
+              {this.props.canRememberMe && (
                 <div className="input checkbox">
                   <input
                     type="checkbox"
@@ -230,6 +221,7 @@ class PassphraseDialog extends React.Component {
 
 PassphraseDialog.propTypes = {
   context: PropTypes.any, // The application context
+  canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   className: PropTypes.string,
   requestId: PropTypes.string,
   onComplete: PropTypes.func,
