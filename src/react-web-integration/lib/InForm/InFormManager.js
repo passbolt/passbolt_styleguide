@@ -299,9 +299,18 @@ class InFormManager {
 
     const container = this.getContainerElement(newUsernameFields, newPasswordFields, newOTPFields);
 
-    // Ensure the host exists and sits at the correct mount target (delegated — same action the
-    // anti-tampering remount reuses).
-    this.ensureHostMounted(container);
+    /*
+     * Ensure the host exists and is the LAST child of its container. Re-appending on every scan (when it is
+     * not already last) both moves it to the right mount target and keeps it painted on top: at equal
+     * z-index the last element in the DOM wins — which repairs the call-to-action being hidden behind a
+     * modal/overlay, and makes `elementFromPoint` hit the host so its click is caught. `appendChild` is
+     * idempotent when the host is already last.
+     */
+    if (!this.host) {
+      this.createAndInsertShadowRootWithHost(container);
+    } else if (this.host.parentNode !== container || container.lastChild !== this.host) {
+      container.appendChild(this.host);
+    }
 
     /**
      * A function factory to map a field to an existing field or create a new one
