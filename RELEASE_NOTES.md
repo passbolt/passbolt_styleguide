@@ -1,4 +1,3 @@
-# v5.15.1
+# v5.16.0-alpha.2
 
-Provides:
-- Fix NullPointerException Gecko bug on host 
+Version bump to v5.16.0-alpha.2
