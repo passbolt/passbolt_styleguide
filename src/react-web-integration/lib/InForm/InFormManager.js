@@ -259,7 +259,10 @@ class InFormManager {
 
     if (!this.host) {
       this.createAndInsertShadowRootWithHost(container);
-    } else if (this.host.parentNode !== container) {
+    } else if (this.host.parentNode !== container || container.lastChild !== this.host) {
+      // Re-append when the host is not the LAST child so it stays painted on top: at equal z-index the last
+      // element in the DOM wins — which repairs the call-to-action being hidden behind a modal/overlay, and
+      // makes `elementFromPoint` hit the host so its click is caught. `appendChild` is idempotent when last.
       container.appendChild(this.host);
     }
   }

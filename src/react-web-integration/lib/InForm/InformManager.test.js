@@ -1938,6 +1938,28 @@ describe("InformManager", () => {
 
       expect(InFormManager.host.parentNode).toBe(dialog);
     });
+
+    it("As LU it re-appends the host as the last child of its container so it wins at equal z-index", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      // The host mounts in the body; simulate a later-inserted overlay (e.g. a modal) becoming the last child.
+      const overlay = document.createElement("div");
+      document.body.append(overlay);
+      expect(document.body.lastChild).not.toBe(informManager.host);
+
+      // A re-scan must move the host back to the end so that, at equal z-index, it stays painted on top
+      // (repairing both the hidden call-to-action and elementFromPoint hit-testing on the modal).
+      await act(async () => {
+        InFormManager.findAndSetInputFields();
+        await waitFor(() => {});
+      });
+
+      expect(document.body.lastChild).toBe(informManager.host);
+    });
   });
 
   describe("InFormManager::onShadowMutation", () => {
