@@ -136,16 +136,9 @@ class InFormCallToActionField {
    * Whenever the call-to-action must be inserted
    */
   handleInsertionEvent() {
-    const fieldRoot = ShadowDomQueryService.scopeRoot(this.field);
-    if (
-      // Deep active element (descends through open shadow roots): matches the field even when it is nested
-      // several shadow levels deep, where `document.activeElement` only exposes the outermost host.
-      this.field === ShadowDomQueryService.deepActiveElement() ||
-      // Closed-shadow fallback: focus retargets to the host, so `document.activeElement` is the host — this
-      // lets a field discovered mid-focus insert its call-to-action right away. Duck-typed shadow-root
-      // check (not `instanceof`, which is unreliable across the content script's isolated world).
-      (ShadowDomQueryService.isShadowRoot(fieldRoot) && fieldRoot.host === document.activeElement)
-    ) {
+    // deepActiveElement descends through open shadow roots, so a field nested several shadow levels
+    // deep is matched too (document.activeElement only exposes the outermost host).
+    if (this.field === ShadowDomQueryService.deepActiveElement()) {
       this.insertInformCallToActionIframe();
     }
     this.field.addEventListener("mouseover", this.insertInformCallToActionIframe);
@@ -240,7 +233,7 @@ class InFormCallToActionField {
    */
   removeInFormCallToAction() {
     const isIframeMouseOver = this.isCallToActionMousingOver;
-    const isActiveElementAnAuthenticationField = document.activeElement === this.field;
+    const isActiveElementAnAuthenticationField = ShadowDomQueryService.deepActiveElement() === this.field;
     if (!isIframeMouseOver && !isActiveElementAnAuthenticationField) {
       this.removeIframe();
     }
@@ -252,7 +245,7 @@ class InFormCallToActionField {
    */
   removeInFormCallToActionWhenMouseOut(event) {
     const isNotCallToActionIframe = event.relatedTarget !== this.shadowRoot.host;
-    const isActiveElementAnAuthenticationField = document.activeElement === this.field;
+    const isActiveElementAnAuthenticationField = ShadowDomQueryService.deepActiveElement() === this.field;
     if (isNotCallToActionIframe && !isActiveElementAnAuthenticationField) {
       this.removeIframe();
     }
