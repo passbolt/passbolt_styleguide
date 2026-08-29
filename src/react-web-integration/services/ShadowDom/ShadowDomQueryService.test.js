@@ -272,6 +272,36 @@ describe("ShadowDomQueryService", () => {
     });
   });
 
+  describe("ShadowDomQueryService::deepActiveElement", () => {
+    it("should return document.activeElement for a focused light-DOM element", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = "<input type='text'/>";
+      const input = document.querySelector("input");
+      input.focus();
+
+      expect(ShadowDomQueryService.deepActiveElement()).toBe(input);
+    });
+
+    it("should descend through nested open shadow roots to the truly focused element", () => {
+      expect.assertions(2);
+
+      const outerHost = document.createElement("div");
+      const outerRoot = outerHost.attachShadow({ mode: "open" });
+      document.body.appendChild(outerHost);
+      const innerHost = document.createElement("div");
+      const innerRoot = innerHost.attachShadow({ mode: "open" });
+      outerRoot.appendChild(innerHost);
+      const input = document.createElement("input");
+      innerRoot.appendChild(input);
+      input.focus();
+
+      // document.activeElement only exposes the outermost host; deepActiveElement reaches the input.
+      expect(document.activeElement).toBe(outerHost);
+      expect(ShadowDomQueryService.deepActiveElement()).toBe(input);
+    });
+  });
+
   describe("ShadowDomQueryService::scopeRoot", () => {
     it("should return the document for an element in the DOM", () => {
       expect.assertions(1);

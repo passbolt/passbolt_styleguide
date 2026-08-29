@@ -80,6 +80,22 @@ class ShadowDomQueryService {
   }
 
   /**
+   * The deepest active element, descending through open shadow roots.
+   *
+   * `document.activeElement` only exposes the outermost (light-DOM) host of an element focused inside
+   * shadow DOM; when the field is nested several shadow levels deep, that host is not the field's own
+   * host. This walks down `shadowRoot.activeElement` to reach the element that truly holds focus.
+   * @return {Element|null} The deepest focused element (or `document.activeElement` when not in a shadow).
+   */
+  static deepActiveElement() {
+    let active = document?.activeElement ?? null;
+    while (active?.shadowRoot?.activeElement) {
+      active = active.shadowRoot.activeElement;
+    }
+    return active;
+  }
+
+  /**
    * Find the root of an element.
    * @param {Element} element The element to find the root of.
    * @return {ShadowRoot|Document} The ShadowRoot or the Document that contains the element.

@@ -24,24 +24,26 @@ const focusHandler = (event) => {
   const path = event.composedPath();
   const [target] = path;
 
-  if (target.tagName === "INPUT") {
-    let invalidated = false;
+  if (target.tagName !== "INPUT") {
+    return;
+  }
 
-    for (const node of path) {
-      if (ShadowDomQueryService.isShadowRoot(node)) {
-        const parentScope = ShadowDomQueryService.scopeRoot(node.host);
-        const cachedParentRoots = ShadowRootCacheService.peekCache(parentScope);
-        const isKnown = cachedParentRoots?.includes(node) ?? false;
-        if (!isKnown) {
-          ShadowRootCacheService.invalidate(parentScope);
-          invalidated = true;
-        }
+  let invalidated = false;
+
+  for (const node of path) {
+    if (ShadowDomQueryService.isShadowRoot(node)) {
+      const parentScope = ShadowDomQueryService.scopeRoot(node.host);
+      const cachedParentRoots = ShadowRootCacheService.peekCache(parentScope);
+      const isKnown = cachedParentRoots?.includes(node) ?? false;
+      if (!isKnown) {
+        ShadowRootCacheService.invalidate(parentScope);
+        invalidated = true;
       }
     }
+  }
 
-    if (invalidated) {
-      ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true);
-    }
+  if (invalidated) {
+    ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true);
   }
 };
 
