@@ -14,7 +14,7 @@
 
 import ShadowMutationObserverService from "./ShadowMutationObserverService";
 import ShadowRootCacheService from "./ShadowRootCacheService";
-import ShadowRootCollectorService from "./ShadowRootCollectorService";
+import { FIELD_ATTRIBUTES_TO_WATCH } from "../../lib/InForm/InFormFieldDictionary";
 
 describe("ShadowMutationObserverService", () => {
   beforeEach(() => {
@@ -23,8 +23,6 @@ describe("ShadowMutationObserverService", () => {
     ShadowRootCacheService._shadowRootsCache = new WeakMap();
     ShadowMutationObserverService._shadowRootsObservers = new WeakMap();
     ShadowMutationObserverService._shadowMutationSubscribers = new Set();
-    // Reset to the field-agnostic default so a configureObserveOptions() call in one test does not leak.
-    ShadowMutationObserverService._observeOptions = { childList: true, subtree: true };
 
     document.body.innerHTML = "";
   });
@@ -261,36 +259,20 @@ describe("ShadowMutationObserverService", () => {
 
       ShadowMutationObserverService.observeShadowRootChanges(root);
 
-      // Field-agnostic default: childList/subtree only, until a consumer configures an attribute filter.
-      expect(observeMock).toHaveBeenCalledWith(root, { childList: true, subtree: true });
+      // Watches the shadow topology and the InForm field-relevance attributes.
+      expect(observeMock).toHaveBeenCalledWith(root, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
+        attributeOldValue: true,
+      });
 
       const mutations = [{ addedNodes: [], removedNodes: [] }];
       capturedCallback(mutations);
 
       expect(applySpy).toHaveBeenCalledWith(root, mutations);
       expect(notifySpy).toHaveBeenCalledWith(root, mutations, true);
-    });
-
-    it("should install an observer with the configured attribute filter", () => {
-      expect.assertions(3);
-
-      const observeMock = jest.fn();
-      jest
-        .spyOn(window, "MutationObserver")
-        .mockImplementation(() => ({ observe: observeMock, disconnect: jest.fn() }));
-      const root = document.createElement("div");
-
-      ShadowMutationObserverService.configureObserveOptions({
-        attributes: true,
-        attributeFilter: ["type", "name"],
-        attributeOldValue: true,
-      });
-      ShadowMutationObserverService.observeShadowRootChanges(root);
-
-      const [, options] = observeMock.mock.calls[0];
-      expect(options.attributes).toBe(true);
-      expect(options.attributeFilter).toContain("type");
-      expect(options.attributeOldValue).toBe(true);
     });
 
     it("should install at most one observer per root", () => {
@@ -331,40 +313,6 @@ describe("ShadowMutationObserverService", () => {
       const root = document.createElement("div");
 
       expect(() => ShadowMutationObserverService.disconnectObserver(root)).not.toThrow();
-    });
-  });
-
-  describe("ShadowMutationObserverService::configureObserveOptions", () => {
-    it("should keep childList/subtree forced on and merge the attribute options", () => {
-      expect.assertions(1);
-
-      ShadowMutationObserverService.configureObserveOptions({
-        attributes: true,
-        attributeFilter: ["type", "name"],
-        attributeOldValue: true,
-      });
-
-      expect(ShadowMutationObserverService._observeOptions).toEqual({
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ["type", "name"],
-        attributeOldValue: true,
-      });
-    });
-
-    it("should default to a field-agnostic childList/subtree observer when called with no options", () => {
-      expect.assertions(1);
-
-      ShadowMutationObserverService.configureObserveOptions();
-
-      expect(ShadowMutationObserverService._observeOptions).toEqual({
-        childList: true,
-        subtree: true,
-        attributes: false,
-        attributeFilter: undefined,
-        attributeOldValue: false,
-      });
     });
   });
 });

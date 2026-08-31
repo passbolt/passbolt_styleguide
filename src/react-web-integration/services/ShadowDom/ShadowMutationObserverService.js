@@ -14,6 +14,7 @@
 
 import ShadowRootCollectorService from "./ShadowRootCollectorService";
 import ShadowRootCacheService from "./ShadowRootCacheService";
+import { FIELD_ATTRIBUTES_TO_WATCH } from "../../lib/InForm/InFormFieldDictionary";
 
 class ShadowMutationObserverService {
   /**
@@ -33,28 +34,18 @@ class ShadowMutationObserverService {
   static _shadowMutationSubscribers = new Set();
 
   /**
-   * Options passed to every installed MutationObserver. `childList`/`subtree` are always on (shadow
-   * topology + node add/remove); the service is field-agnostic — a consumer (InForm) injects its own
-   * attribute filter via {@link configureObserveOptions}.
+   * Options passed to every installed MutationObserver. `childList`/`subtree` watch the shadow
+   * topology (node add/remove); the attribute filter watches the InForm field-relevance attributes.
    * @private
    * @type {MutationObserverInit}
    */
-  static _observeOptions = { childList: true, subtree: true };
-
-  /**
-   * Configure the attribute-watching part of the observe options. `childList`/`subtree` stay forced
-   * on. Call BEFORE the first observer is installed so the filter applies to every root.
-   * @param {{attributes?: boolean, attributeFilter?: string[], attributeOldValue?: boolean}} [options]
-   */
-  static configureObserveOptions({ attributes = false, attributeFilter, attributeOldValue = false } = {}) {
-    ShadowMutationObserverService._observeOptions = {
-      childList: true,
-      subtree: true,
-      attributes,
-      attributeFilter,
-      attributeOldValue,
-    };
-  }
+  static _observeOptions = {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
+    attributeOldValue: true,
+  };
 
   /**
    * Update the cache for `root` according to the given mutations.

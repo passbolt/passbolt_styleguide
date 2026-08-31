@@ -17,11 +17,7 @@ import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
-import {
-  SHADOW_RESCAN_FIELD_SELECTOR,
-  FIELD_ATTRIBUTES_TO_WATCH,
-  CONTAINER_VISIBILITY_ATTRIBUTES,
-} from "./InFormFieldDictionary";
+import { SHADOW_RESCAN_FIELD_SELECTOR, CONTAINER_VISIBILITY_ATTRIBUTES } from "./InFormFieldDictionary";
 import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
 import DomUtils from "../Dom/DomUtils";
 import debounce from "debounce-promise";
@@ -137,17 +133,6 @@ class InFormManager {
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
 
     ShadowDomFocusHealerService.installFocusinHealer();
-
-    /*
-     * Configure the shadow observer to also watch field-relevance attributes BEFORE the first shadow
-     * walk (findAndSetAuthenticationFields) installs the observers. The service stays field-agnostic;
-     * the attribute filter is owned here on the InForm side.
-     */
-    ShadowMutationObserverService.configureObserveOptions({
-      attributes: true,
-      attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
-      attributeOldValue: true,
-    });
 
     this.findAndSetAuthenticationFields();
     this.handleDomChange();
@@ -560,20 +545,26 @@ class InFormManager {
       this._mutationsAffectAuthenticationFields(mutations) ||
       this._attributeMutationAffectsField(mutations);
 
-    if (root.nodeType === Node.DOCUMENT_NODE) {
-      /*
-       * Document scope: always schedule — the debounced callback runs the cheap host-tampering check
-       * on every batch. Latch whether this batch also warrants the expensive extraction, so unrelated
-       * light-DOM churn no longer forces a full re-scan.
-       */
-      this._pendingFieldScan = this._pendingFieldScan || affectsFields;
-      this.updateAuthenticationFieldsDebounce();
-    } else if (affectsFields) {
+    const isDocumentScope = root.nodeType === Node.DOCUMENT_NODE;
+
+    this._pendingFieldScan =
       /*
        * Shadow-root scope: schedule only when the change is relevant (a field appeared/disappeared or
        * a field attribute changed).
        */
-      this._pendingFieldScan = true;
+      affectsFields ||
+      /*
+       * Document scope: latch whether this batch also warrants the expensive extraction, so unrelated
+       * light-DOM churn no longer forces a full re-scan.
+       */
+      (isDocumentScope && this._pendingFieldScan);
+
+    /*
+     * Document scope: always schedule — the debounced callback runs the cheap host-tampering check on
+     * every batch (extraction stays gated behind _pendingFieldScan). Shadow scope: schedule only when
+     * the batch is relevant.
+     */
+    if (affectsFields || isDocumentScope) {
       this.updateAuthenticationFieldsDebounce();
     }
   }

@@ -19,9 +19,8 @@
 export const SHADOW_RESCAN_FIELD_SELECTOR = "input, form, [autocomplete]";
 
 /**
- * Field-relevance attributes InForm asks the (generic) shadow observer to watch. Owned here, on the
- * InForm side, and injected into ShadowMutationObserverService via configureObserveOptions() — the
- * observer service itself stays field-agnostic.
+ * Field-relevance attributes the shadow observer watches, in addition to the shadow topology.
+ * Consumed by ShadowMutationObserverService to build its MutationObserver options.
  * @type {ReadonlyArray<string>}
  */
 export const FIELD_ATTRIBUTES_TO_WATCH = Object.freeze([
