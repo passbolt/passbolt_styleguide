@@ -23,6 +23,7 @@ import GroupServiceWorkerService, {
   GROUPS_FIND_MY_GROUPS,
   GROUPS_FIND_BY_IDS_FOR_SHARE,
   GROUPS_DELETE,
+  GROUPS_DELETE_DRY_RUN,
 } from "./groupServiceWorkerService";
 
 beforeEach(() => {
@@ -73,6 +74,43 @@ describe("GroupServiceWorkerService", () => {
       expect(port.request).toHaveBeenCalledWith(GROUPS_FIND_BY_IDS_FOR_SHARE, requestedIds);
       expect(result).toBeInstanceOf(GroupsCollection);
       expect(result.toDto()).toStrictEqual(groupsDto);
+    });
+  });
+
+  describe("::deleteDryRun", () => {
+    it("requests the service worker with the expected event", async () => {
+      expect.assertions(2);
+
+      const groupId = uuidv4();
+      jest.spyOn(port, "request");
+
+      await service.deleteDryRun(groupId);
+
+      expect(port.request).toHaveBeenCalledTimes(1);
+      expect(port.request).toHaveBeenCalledWith(GROUPS_DELETE_DRY_RUN, groupId);
+    });
+
+    it("passes the delete dry run error through untouched", async () => {
+      expect.assertions(1);
+
+      const groupId = uuidv4();
+      const error = new Error("Need transfer");
+      error.name = "DeleteDryRunError";
+      error.errors = { resources: { sole_owner: [{ id: uuidv4() }] } };
+      port.addRequestListener(GROUPS_DELETE_DRY_RUN, () => Promise.reject(error));
+
+      const promise = service.deleteDryRun(groupId);
+
+      await expect(promise).rejects.toBe(error);
+    });
+
+    it("throws if the group id is not a valid uuid", async () => {
+      expect.assertions(2);
+
+      jest.spyOn(port, "request");
+
+      await expect(service.deleteDryRun("not-a-uuid")).rejects.toThrow("The given groupId should be a valid UUID");
+      expect(port.request).not.toHaveBeenCalled();
     });
   });
 
