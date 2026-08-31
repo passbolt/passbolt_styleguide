@@ -138,8 +138,13 @@ class InFormCallToActionField {
   handleInsertionEvent() {
     const fieldRoot = ShadowDomQueryService.scopeRoot(this.field);
     if (
-      this.field === document.activeElement ||
-      (fieldRoot instanceof ShadowRoot && fieldRoot.host === document.activeElement)
+      // Deep active element (descends through open shadow roots): matches the field even when it is nested
+      // several shadow levels deep, where `document.activeElement` only exposes the outermost host.
+      this.field === ShadowDomQueryService.deepActiveElement() ||
+      // Closed-shadow fallback: focus retargets to the host, so `document.activeElement` is the host — this
+      // lets a field discovered mid-focus insert its call-to-action right away. Duck-typed shadow-root
+      // check (not `instanceof`, which is unreliable across the content script's isolated world).
+      (ShadowDomQueryService.isShadowRoot(fieldRoot) && fieldRoot.host === document.activeElement)
     ) {
       this.insertInformCallToActionIframe();
     }

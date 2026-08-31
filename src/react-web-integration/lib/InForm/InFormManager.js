@@ -13,7 +13,6 @@
  */
 
 import InFormCallToActionField from "./InFormCallToActionField";
-import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
@@ -30,10 +29,22 @@ import OrphanFieldsExtractionService from "../../services/DomExtraction/OrphanFi
 import FieldAggregatorService from "../../services/DomExtraction/FieldAggregatorService";
 import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
 import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
+import PageClassificationService from "../../services/PageClassificationService";
+import { FieldRole } from "../../services/classification/Taxonomy";
 
 const Z_INDEX_MAX = 2147483647;
 const HOST_MOUNT_MAX_RETRIES = 3;
 const HOST_MOUNT_RETRY_DELAY = 100;
+
+// Roles carrying the account identifier, shown a username call-to-action.
+const IDENTIFIER_ROLES = [FieldRole.USERNAME, FieldRole.EMAIL];
+// Password-like roles shown a password call-to-action.
+const PASSWORD_ROLES = [
+  FieldRole.CURRENT_PASSWORD,
+  FieldRole.PASSWORD,
+  FieldRole.NEW_PASSWORD,
+  FieldRole.PASSWORD_CONFIRMATION,
+];
 
 /**
  * Manages the in-form web integration including call-to-action and menu
@@ -272,13 +283,19 @@ class InFormManager {
    */
   findAndSetInputFields() {
     /*
-     * We find the username / passwords / OTP DOM callToActionFields.
-     * If it was previously found, we reuse the same InformUsernameField, otherwise we create one
-     * Else we clean and reset callToActionFields
+     * We classify the page once, then partition the classified fields into username / password / OTP
+     * DOM elements by role.
+     * If a field was previously found, we reuse the same InformUsernameField, otherwise we create one.
+     * Else we clean and reset callToActionFields.
      */
-    const newUsernameFields = InFormCallToActionField.findAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
-    const newPasswordFields = InFormCallToActionField.findAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
-    const newOTPFields = InFormCallToActionField.findAll(InFormFieldSelector.OTP_FIELD_SELECTOR);
+    const { fields } = PageClassificationService.classifyPage();
+    const newUsernameFields = fields
+      .filter((field) => IDENTIFIER_ROLES.includes(field.role))
+      .map((field) => field.element);
+    const newPasswordFields = fields
+      .filter((field) => PASSWORD_ROLES.includes(field.role))
+      .map((field) => field.element);
+    const newOTPFields = fields.filter((field) => field.role === FieldRole.TOTP).map((field) => field.element);
 
     const container = this.getContainerElement(newUsernameFields, newPasswordFields, newOTPFields);
 
@@ -542,11 +559,26 @@ class InFormManager {
       return;
     }
 
+    /*
+     * A shadow root just became known — typically the focus healer reacting to a field being focused.
+     * Re-scan SYNCHRONOUSLY (not debounced) so the call-to-action field is created within the same focus
+     * turn and inserts itself on the field currently focused. Also latch _pendingFieldScan and schedule a
+     * debounced follow-up: on autofocus at page load the field's web component may not be hydrated yet at
+     * this synchronous pass, so a slightly later re-scan catches it and — since the field is still
+     * focused — inserts the call-to-action without requiring the user to blur and re-focus. The latch is
+     * required because the debounced callback gates extraction behind _pendingFieldScan.
+     */
+    if (shadowRootsChanged) {
+      this.findAndSetAuthenticationFields();
+      this.handleInformCallToActionClickEvent();
+      this._pendingFieldScan = true;
+      this.updateAuthenticationFieldsDebounce();
+      return;
+    }
+
     // Does this batch actually touch a credential-relevant node or attribute?
     const affectsFields =
-      shadowRootsChanged ||
-      this._mutationsAffectAuthenticationFields(mutations) ||
-      this._attributeMutationAffectsField(mutations);
+      this._mutationsAffectAuthenticationFields(mutations) || this._attributeMutationAffectsField(mutations);
 
     const isDocumentScope = root.nodeType === Node.DOCUMENT_NODE;
 

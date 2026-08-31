@@ -34,7 +34,7 @@ class FormExtractionService {
 
   /**
    * Find form containers and their fields across the DOM under `root` (defaults to the top document),
-   * including shadow DOM.
+   * including shadow DOM. A same-origin iframe's `contentDocument` can be passed to extract forms inside it.
    * @param {Document|Element} [root] The root to scan; defaults to the top document.
    * @returns {Array<{ containerElement: Element, fields: Array<{ element: Element, isViewable: boolean }>, isPseudoForm: boolean }>} The found form containers.
    */

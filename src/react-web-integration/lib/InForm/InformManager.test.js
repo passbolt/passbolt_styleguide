@@ -93,6 +93,8 @@ import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheServ
 import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
 import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
 import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
+import ScrapingIdentityService from "../../services/Scraping/ScrapingIdentityService";
+import ScrapingCacheService from "../../services/Scraping/ScrapingCacheService";
 import { act } from "react";
 import { waitFor } from "@testing-library/react";
 
@@ -104,6 +106,24 @@ beforeEach(() => {
   ShadowRootCacheService._shadowRootsCache = new WeakMap();
   ShadowMutationObserverService._shadowRootsObservers = new WeakMap();
   ShadowMutationObserverService._shadowMutationSubscribers = new Set();
+
+  // The classification pipeline registers fields by identity; reset the shared registries per test.
+  ScrapingIdentityService._idByElement = new WeakMap();
+  ScrapingIdentityService._elementById = new Map();
+  ScrapingIdentityService._seq = 0;
+  ScrapingCacheService._payloadByElement = new WeakMap();
+  ScrapingCacheService._keywordsByElement = new WeakMap();
+
+  // jsdom has no layout: drive viewability explicitly and give fields a usable rect so the pipeline
+  // (and its pseudo-form/no-<form> path) can extract and cluster fields. Defined as a plain prototype
+  // function (not a jest spy) so per-test `jest.spyOn(element, "getBoundingClientRect")` overrides in
+  // the positioning tests create their own element-level property instead of colliding on a shared mock.
+  jest.spyOn(ElementVisibilityService, "isElementViewable").mockReturnValue(true);
+  Object.defineProperty(Element.prototype, "getBoundingClientRect", {
+    configurable: true,
+    writable: true,
+    value: () => ({ x: 0, y: 0, left: 0, top: 0, right: 100, bottom: 20, width: 100, height: 20 }),
+  });
 });
 
 describe("InformManager", () => {
@@ -973,48 +993,30 @@ describe("InformManager", () => {
       expect(informManager.iframesLength).toBe(2);
     });
 
-    it("As LU I should see the inform call to action on form with class email", async () => {
-      expect.assertions(7);
-      // Set up document body
-      document.body.innerHTML = domElementLoginWithClassEmail; // The Dom
+    // The classifier intentionally ignores the `class` attribute (noise-prone: utility/framework class
+    // names). When both fields are type=text and rely solely on their class (no real type=password to
+    // anchor structural inference), nothing is detected. Real login forms expose type=password plus
+    // name/id/autocomplete, which the "no type and class ..." fixtures below still cover.
+    it("As LU I shouldn't detect fields that rely solely on their class attribute (class email)", async () => {
+      expect.assertions(3);
+      document.body.innerHTML = domElementLoginWithClassEmail;
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
       expect(informManager.iframesLength).toBe(0);
-      await informManager.focusOnUsername();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.mouseOverOnPassword();
-      expect(informManager.iframesLength).toBe(2);
-      await informManager.blurOnUsername();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.blurOnPassword();
-      expect(informManager.iframesLength).toBe(0);
-      await informManager.focusOnPassword();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.mouseOverOnUsername();
-      expect(informManager.iframesLength).toBe(2);
+      expect(informManager.usernames.length).toBe(0);
+      expect(informManager.passwords.length).toBe(0);
     });
 
-    it("As LU I should see the inform call to action on form with class create-account-input", async () => {
-      expect.assertions(7);
-      // Set up document body
-      document.body.innerHTML = domElementLoginWithClassCreateAccount; // The Dom
+    it("As LU I shouldn't detect fields that rely solely on their class attribute (class create-account-input)", async () => {
+      expect.assertions(3);
+      document.body.innerHTML = domElementLoginWithClassCreateAccount;
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
       expect(informManager.iframesLength).toBe(0);
-      await informManager.focusOnUsername();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.mouseOverOnPassword();
-      expect(informManager.iframesLength).toBe(2);
-      await informManager.blurOnUsername();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.blurOnPassword();
-      expect(informManager.iframesLength).toBe(0);
-      await informManager.focusOnPassword();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.mouseOverOnUsername();
-      expect(informManager.iframesLength).toBe(2);
+      expect(informManager.usernames.length).toBe(0);
+      expect(informManager.passwords.length).toBe(0);
     });
 
     it("As LU I should see the inform call to action on form with no type and class username", async () => {
@@ -1223,17 +1225,25 @@ describe("InformManager", () => {
     });
 
     it("As LU I should see the inform call to action on form with generic text and password", async () => {
-      expect.assertions(4);
+      // A keyword-less text field preceding a password is inferred as the username by structural
+      // analysis, so a call-to-action is attached to it as well.
+      expect.assertions(7);
       document.body.innerHTML = domGenericTextAndPassword;
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
       expect(informManager.iframesLength).toBe(0);
-      expect(informManager.usernames.length).toBe(0);
-      await informManager.focusOnPassword();
+      expect(informManager.usernames.length).toBe(1);
+      await informManager.focusOnUsername();
+      expect(informManager.iframesLength).toBe(1);
+      await informManager.mouseOverOnPassword();
+      expect(informManager.iframesLength).toBe(2);
+      await informManager.blurOnUsername();
       expect(informManager.iframesLength).toBe(1);
       await informManager.blurOnPassword();
       expect(informManager.iframesLength).toBe(0);
+      await informManager.focusOnPassword();
+      expect(informManager.iframesLength).toBe(1);
     });
 
     it("As LU I should see the inform call to action on form with two email inputs and password", async () => {
@@ -1300,8 +1310,10 @@ describe("InformManager", () => {
       expect(informManager.iframesLength).toBe(2);
     });
 
-    it("As LU I should see the inform call to action on form with OTP multi-field input", async () => {
-      expect.assertions(5);
+    it("As LU I shouldn't detect an OTP multi-field that relies solely on its class attribute", async () => {
+      // The classifier intentionally ignores the `class` attribute, so OTP inputs identified only by a
+      // class (here `time-otp`) are not detected. The aria-label variant below is the covered case.
+      expect.assertions(4);
       document.body.innerHTML = domSingleOTPMultiField;
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
@@ -1309,10 +1321,7 @@ describe("InformManager", () => {
       expect(informManager.iframesLength).toBe(0);
       expect(informManager.usernames.length).toBe(0);
       expect(informManager.passwords.length).toBe(0);
-      await informManager.focusOnOtp();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.blurOnOtp();
-      expect(informManager.iframesLength).toBe(0);
+      expect(informManager.otps.length).toBe(0);
     });
 
     it("As LU I should see the inform call to action on form with OTP multi-field with aria-label", async () => {
@@ -1444,6 +1453,15 @@ describe("InformManager", () => {
       expect.assertions(13);
       // Set up document body
       document.body.innerHTML = domElementWithMultipleLogin; // The Dom
+      // Three stacked login blocks with no <form>: give each block a distinct, separated rect so the
+      // pseudo-form extraction clusters them into three separate scopes (one username + password each)
+      // rather than merging into a single scope where the extra usernames would be rationalized away.
+      [...document.querySelectorAll("input")].forEach((input, index) => {
+        const top = Math.floor(index / 2) * 300;
+        jest
+          .spyOn(input, "getBoundingClientRect")
+          .mockReturnValue({ x: 0, y: top, top, left: 0, right: 100, bottom: top + 20, width: 100, height: 20 });
+      });
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
@@ -1559,6 +1577,14 @@ describe("InformManager", () => {
       iframe.srcdoc = domElementLoginWithIdAttributeLogin;
       document.body.appendChild(iframe);
       iframe.contentDocument.body.innerHTML = domElementLoginWithIdAttributeLogin;
+      // The iframe document is a separate realm, so the prototype rect stub set in beforeEach does not
+      // reach its inputs; give them a usable rect so the pseudo-form path discovers them (jsdom has no
+      // layout inside the iframe either).
+      [...iframe.contentDocument.querySelectorAll("input")].forEach((input) => {
+        jest
+          .spyOn(input, "getBoundingClientRect")
+          .mockReturnValue({ x: 0, y: 0, top: 0, left: 0, right: 100, bottom: 20, width: 100, height: 20 });
+      });
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
@@ -1975,31 +2001,69 @@ describe("InformManager", () => {
       expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
     });
 
-    it("should trigger the re-scan unconditionally for a document-scope mutation", async () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
-      await act(async () => new InformManagerPage());
-      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
-
-      InFormManager.onShadowMutation(document, [], false);
-
-      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
-    });
-
-    it("should trigger the re-scan for a shadow-scope mutation only when it is relevant", async () => {
+    it("should trigger the re-scan for a document-scope mutation only when it is relevant", async () => {
       expect.assertions(2);
 
       document.body.innerHTML = domElementLoginWithNameAttributeUsername;
       await act(async () => new InformManagerPage());
       InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+
+      // An irrelevant document mutation (no field added/removed, no watched attribute) must not re-scan.
+      const irrelevantNode = document.createElement("span");
+      InFormManager.onShadowMutation(
+        document,
+        [{ type: "childList", addedNodes: [irrelevantNode], removedNodes: [] }],
+        false,
+      );
+      expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
+
+      // A relevant document mutation (a field added) re-scans.
+      const fieldNode = document.createElement("input");
+      InFormManager.onShadowMutation(
+        document,
+        [{ type: "childList", addedNodes: [fieldNode], removedNodes: [] }],
+        false,
+      );
+      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+    });
+
+    it("should not re-scan for an irrelevant shadow-scope mutation", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      const findSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields");
       const otherShadowRoot = document.createElement("div").attachShadow({ mode: "open" });
 
       InFormManager.onShadowMutation(otherShadowRoot, [], false);
-      expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
 
-      InFormManager.onShadowMutation(otherShadowRoot, [], true);
+      expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
+      expect(InFormManager.findAndSetAuthenticationFields).not.toHaveBeenCalled();
+
+      // The suite clears (not restores) mocks between tests; restore so the spy does not leak below.
+      findSpy.mockRestore();
+    });
+
+    it("should re-scan synchronously and schedule a debounced follow-up when a shadow root becomes known", async () => {
+      // The focus healer signals shadowRootsChanged=true when a field is focused. The re-scan must be
+      // synchronous (so the call-to-action is attached within the same focus turn) AND also scheduled once
+      // more (debounced) to catch a web component that hydrates just after an autofocus.
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      const findSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields").mockImplementation();
+
+      InFormManager.onShadowMutation(document, [], true);
+
+      expect(InFormManager.findAndSetAuthenticationFields).toHaveBeenCalledTimes(1);
       expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+
+      // The suite clears (not restores) mocks between tests, so restore the persistent no-op now to avoid
+      // leaking it into the tests below.
+      findSpy.mockRestore();
     });
 
     it("should NOT queue an expensive field scan for a non-relevant document mutation (only the host check)", async () => {
@@ -2217,7 +2281,7 @@ describe("InformManager", () => {
 
       jest
         .spyOn(informManager.username, "getBoundingClientRect")
-        .mockReturnValue({ top: 100, left: 200, width: 300, height: 40 });
+        .mockReturnValue({ x: 200, y: 100, top: 100, left: 200, right: 500, bottom: 140, width: 300, height: 40 });
       jest.spyOn(informManager.host, "getBoundingClientRect").mockReturnValue({ top: 30, left: 40 });
 
       await informManager.focusOnUsername();
@@ -2235,7 +2299,7 @@ describe("InformManager", () => {
 
       jest
         .spyOn(informManager.username, "getBoundingClientRect")
-        .mockReturnValue({ top: 100, left: 200, width: 300, height: 40 });
+        .mockReturnValue({ x: 200, y: 100, top: 100, left: 200, right: 500, bottom: 140, width: 300, height: 40 });
       jest.spyOn(informManager.host, "getBoundingClientRect").mockReturnValue({ top: 50, left: 60 });
 
       await informManager.focusOnUsername();
@@ -2255,7 +2319,7 @@ describe("InformManager", () => {
 
       jest
         .spyOn(informManager.username, "getBoundingClientRect")
-        .mockReturnValue({ top: 10, left: 50, width: 100, height: 20 });
+        .mockReturnValue({ x: 50, y: 10, top: 10, left: 50, right: 150, bottom: 30, width: 100, height: 20 });
       jest.spyOn(informManager.host, "getBoundingClientRect").mockReturnValue({ top: 100, left: 0 });
 
       await informManager.focusOnUsername();
