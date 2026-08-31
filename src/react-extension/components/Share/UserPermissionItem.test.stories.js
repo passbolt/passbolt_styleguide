@@ -58,6 +58,15 @@ export const Varies = {
   args: defaultVariesProps(),
 };
 
+export const Attention = {
+  args: defaultVariesProps({
+    unchangeableResources: [
+      { name: "R2", type: 7 },
+      { name: "R3", type: 7 },
+    ],
+  }),
+};
+
 export const Disabled = {
   args: defaultOwnerProps({ disabled: true }),
 };

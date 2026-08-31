@@ -65,6 +65,31 @@
     }
   }
 
+  // Warning-tinted variant, used only by the attention tooltip. The plain one keeps the neutral
+  // colors above.
+  // Same background and text pairing as the .message.warning banner in messages.less, on a floating
+  // tooltip rather than an inline block, so the arrow needs a matching border-color per direction.
+  &.warning {
+    background: var(--Palette-Warning);
+    color: var(--Text-and-icons-Main-text);
+
+    &.top::after {
+      border-top-color: var(--Palette-Warning);
+    }
+
+    &.right::after {
+      border-right-color: var(--Palette-Warning);
+    }
+
+    &.bottom::after {
+      border-bottom-color: var(--Palette-Warning);
+    }
+
+    &.left::after {
+      border-left-color: var(--Palette-Warning);
+    }
+  }
+
   &.left {
     &::after {
       top: calc(50% - 5px);

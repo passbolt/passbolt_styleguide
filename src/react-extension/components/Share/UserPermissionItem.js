@@ -18,6 +18,7 @@ import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import SharePermissionRevertButton from "./SharePermissionRevertButton";
 import ShareVariesDetails from "./ShareVariesDetails";
 import ShareChanges from "./Utility/ShareChanges";
+import ShareUnchangeableDetails from "./ShareUnchangeableDetails";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import { withTranslation } from "react-i18next";
@@ -27,6 +28,7 @@ import TooltipPortal from "../Common/Tooltip/TooltipPortal";
 import TooltipMessageFingerprintLoading from "../Common/Tooltip/TooltipMessageFingerprintLoading";
 import Fingerprint from "../Common/Fingerprint/Fingerprint";
 import InfoSVG from "../../../img/svg/info.svg";
+import TriangleAlertSVG from "../../../img/svg/triangle_alert.svg";
 import FingerprintSVG from "../../../img/svg/fingerprint.svg";
 
 class UserPermissionItem extends Component {
@@ -172,6 +174,30 @@ class UserPermissionItem extends Component {
   }
 
   /**
+   * Whether the row currently shows the "varies" value. The recipient does not end up at the same
+   * level on every moved item, and the operator has not picked one for them yet.
+   * The per-item marker only shows then. A definite level is checked against the items the operator
+   * does not own instead.
+   * @returns {boolean}
+   */
+  get showsVaries() {
+    return Boolean(this.props.variesDetails) && this.props.permissionType === -1;
+  }
+
+  /**
+   * On a move, whether the row shows the attention marker, the red triangle, in place of the plain
+   * per-item one. That happens when some moved items keep their permissions because the operator
+   * does not own them.
+   * It takes priority, and its tooltip is a separate one. It lists only what cannot be applied, never
+   * the per-item breakdown, which is a different question with its own marker.
+   * Outside a move the list is always empty, so the marker never shows.
+   * @returns {boolean}
+   */
+  get showsAttention() {
+    return this.props.unchangeableResources?.length > 0;
+  }
+
+  /**
    * Returns true if the feature flag disableUser is enabled and the given user is suspended.
    * @returns {boolean}
    */
@@ -208,7 +234,19 @@ class UserPermissionItem extends Component {
           </div>
         </div>
 
-        {this.props.variesDetails && this.isVarying && !this.isRemoved && (
+        {/* Shown even when the row reads as removed: a recipient can be dropped from one item and
+            kept, untouched, on another.
+            A tooltip of its own, separate from the per-item one below. It only covers what the
+            operator's choice cannot reach. */}
+        {this.showsAttention && (
+          <TooltipPortal
+            className="warning"
+            message={<ShareUnchangeableDetails resources={this.props.unchangeableResources} />}
+          >
+            <TriangleAlertSVG className="attention-triangle" />
+          </TooltipPortal>
+        )}
+        {!this.isRemoved && !this.showsAttention && this.showsVaries && (
           <TooltipPortal message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
             <InfoSVG className="varies-icon" />
           </TooltipPortal>
@@ -250,6 +288,7 @@ UserPermissionItem.propTypes = {
   user: PropTypes.object, // {id: <uuid>, username: <string>, profile: <object>, ...etc}
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
   changeStatus: PropTypes.string, // A ShareChanges.CHANGE_STATUS_* value, null when unchanged
+  unchangeableResources: PropTypes.array, // Move: [{name, type}] the items the choice cannot reach
   disabled: PropTypes.bool,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
