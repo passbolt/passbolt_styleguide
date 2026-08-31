@@ -25,10 +25,13 @@ import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
 import FolderSVG from "../../../../img/svg/folder.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { withDialog } from "../../../contexts/DialogContext";
 import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
 import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class FilterResourcesByFoldersItem extends React.Component {
@@ -242,24 +245,21 @@ class FilterResourcesByFoldersItem extends React.Component {
   }
 
   /**
-   * Handle when the user drop content on this component.
+   * Handle when the user drops content on this component.
+   * The workflow started by the drop owns the move, error reporting included, so nothing fails here.
    * @param {ReactEvent} event The event
    */
-  async handleDropEvent() {
+  handleDropEvent() {
     // The user cannot drop the dragged content on a dragged item.
     const folderParentId = this.props.folder.id;
     const isDroppingOnDraggedItem = this.draggedItems.folders.some((item) => item.id === folderParentId);
     if (!isDroppingOnDraggedItem) {
       const folders = this.draggedItems.folders;
       const resources = this.draggedItems.resources;
-      try {
-        if (folders?.length > 0) {
-          await this.moveFolder(folders);
-        } else if (resources?.length > 0) {
-          await this.moveResource(resources);
-        }
-      } catch (error) {
-        this.handleError(error);
+      if (folders?.length > 0) {
+        this.moveFolder(folders);
+      } else if (resources?.length > 0) {
+        this.moveResource(resources);
       }
     }
 
@@ -269,11 +269,12 @@ class FilterResourcesByFoldersItem extends React.Component {
   }
 
   /**
-   * Move the folders or display action aborted if is not possible to move
+   * Move the folders or display action aborted if is not possible to move.
+   * Only the grabbed folder moves, a folder drag never carries more than one.
    * @param {Array<Object>} folders
-   * @return {Promise<void>}
+   * @return {void}
    */
-  async moveFolder(folders) {
+  moveFolder(folders) {
     // Folders to move
     const hasSomeSharedFolder = folders.some((folder) => !folder.personal);
     const isPersonalFolder = this.props.folder.personal;
@@ -281,16 +282,20 @@ class FilterResourcesByFoldersItem extends React.Component {
     if ((!isPersonalFolder || (hasSomeSharedFolder && isPersonalFolder)) && this.userHasMissingKeys) {
       this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
     } else {
-      await this.props.context.port.request("passbolt.folders.move-by-id", folders[0].id, this.props.folder.id);
+      this.props.workflowContext.start(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS,
+        folder: folders[0],
+        destinationFolderId: this.props.folder.id,
+      });
     }
   }
 
   /**
    * Move the resources or display action aborted if is not possible to move
    * @param {Array<Object>} resources
-   * @return {Promise<void>}
+   * @return {void}
    */
-  async moveResource(resources) {
+  moveResource(resources) {
     const hasSomePersonalResourceV5 = resources.some(
       (resource) => resource.personal && this.props.resourceTypes.getFirstById(resource.resource_type_id)?.isV5(),
     );
@@ -298,9 +303,11 @@ class FilterResourcesByFoldersItem extends React.Component {
     if (hasSomePersonalResourceV5 && !this.props.folder.personal && this.userHasMissingKeys) {
       this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
     } else {
-      // Resource ids to move
-      const resourceIds = resources.map((resource) => resource.id);
-      await this.props.context.port.request("passbolt.resources.move-by-ids", resourceIds, this.props.folder.id);
+      this.props.workflowContext.start(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES,
+        resources,
+        destinationFolderId: this.props.folder.id,
+      });
     }
   }
 
@@ -310,17 +317,6 @@ class FilterResourcesByFoldersItem extends React.Component {
    */
   get userHasMissingKeys() {
     return this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
-  }
-
-  /**
-   * handle error and display error dialog
-   * @param error
-   */
-  handleError(error) {
-    const errorDialogProps = {
-      error: error,
-    };
-    this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
   /**
@@ -605,6 +601,7 @@ FilterResourcesByFoldersItem.propTypes = {
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   dragContext: PropTypes.any,
   dialogContext: PropTypes.object, // The dialog context
+  workflowContext: PropTypes.any, // The workflow context
   toggleOpenFolder: PropTypes.func,
   toggleCloseFolder: PropTypes.func,
 };
@@ -612,7 +609,7 @@ FilterResourcesByFoldersItem.propTypes = {
 export default withRouter(
   withAppContext(
     withResourceTypesLocalStorage(
-      withContextualMenu(withDialog(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem)))),
+      withContextualMenu(withDialog(withWorkflow(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem))))),
     ),
   ),
 );

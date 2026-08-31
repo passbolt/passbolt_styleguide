@@ -29,6 +29,10 @@ import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 import CabinetSVG from "../../../../img/svg/cabinet.svg";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import memoize from "memoize-one";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -372,12 +376,20 @@ class FilterResourcesByFolders extends React.Component {
    * Handle when the user is dropping the content on the title.
    */
   handleDropTitle() {
-    const folders = this.props.dragContext.draggedItems.folders.map((folder) => folder.id);
-    const resources = this.props.dragContext.draggedItems.resources.map((resource) => resource.id);
+    const folders = this.props.dragContext.draggedItems.folders;
+    const resources = this.props.dragContext.draggedItems.resources;
     if (folders?.length > 0) {
-      this.props.context.port.request("passbolt.folders.move-by-id", folders[0], null);
+      this.props.workflowContext.start(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS,
+        folder: folders[0],
+        destinationFolderId: null,
+      });
     } else if (resources?.length > 0) {
-      this.props.context.port.request("passbolt.resources.move-by-ids", resources, null);
+      this.props.workflowContext.start(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES,
+        resources,
+        destinationFolderId: null,
+      });
     }
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
@@ -616,12 +628,15 @@ FilterResourcesByFolders.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any,
   dragContext: PropTypes.any,
+  workflowContext: PropTypes.any, // The workflow context
 };
 
 export default withRouter(
   withDialog(
     withContextualMenu(
-      withResourceWorkspace(withAppContext(withDrag(withTranslation("common")(FilterResourcesByFolders)))),
+      withResourceWorkspace(
+        withAppContext(withDrag(withWorkflow(withTranslation("common")(FilterResourcesByFolders)))),
+      ),
     ),
   ),
 );

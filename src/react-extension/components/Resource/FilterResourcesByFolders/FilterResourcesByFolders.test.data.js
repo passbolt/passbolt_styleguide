@@ -55,6 +55,10 @@ export function defaultProps(data = {}) {
       push: jest.fn(),
     },
     dialogContext: defaultDialogContext(),
+    workflowContext: {
+      start: jest.fn(),
+      stop: jest.fn(),
+    },
     match: {
       params: {
         filterByFolderId: foldersMock[0].id,
