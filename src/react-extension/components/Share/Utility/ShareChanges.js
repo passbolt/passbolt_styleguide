@@ -56,6 +56,11 @@ export default class ShareChanges {
         this._permissions.push(permission);
       });
     });
+    // The items the operator owns, and can therefore stage a permission change on. On a move they
+    // may own only part of the selection.
+    // What is displayed still covers every item, see aggregatePermissionsByAro. Only the staging is
+    // restricted.
+    this._stageableAcos = this._acos.filter((aco) => aco.permission?.type === ADMIN);
     this._changes = [];
     this._initiallyNewAroIds = new Set();
   }
@@ -254,12 +259,18 @@ export default class ShareChanges {
 
   /**
    * Update aro's permissions.
+   * Only stages the change on the items the operator owns, `_stageableAcos`.
+   * The permissions of an item they do not own cannot change, whatever level was picked.
    * @param {string} aroId The aro to update the permissions for
    * @param {int} type
    */
   updateAroPermissions(aroId, type) {
     this._removeAroChanges(aroId);
-    this._acos.forEach((aco) => {
+    // Selecting "varies" reverts the aro to its original per-resource permissions (no change emitted).
+    if (type === -1) {
+      return;
+    }
+    this._stageableAcos.forEach((aco) => {
       const permissionOriginal = this.getAcoAroPermission(aco, aroId);
       if (permissionOriginal) {
         if (permissionOriginal.type !== type) {
@@ -270,6 +281,55 @@ export default class ShareChanges {
       } else {
         const aro = this._aros[aroId];
         const permissionChange = this._buildChange(aco, aro, type);
+        this._changes.push(permissionChange);
+      }
+    });
+  }
+
+  /**
+   * Stage the changes taking a recipient from their current permissions to a level chosen per item.
+   *
+   * Same rules as updateAroPermissions: their pending changes are dropped first, and only the items
+   * the operator owns, `_stageableAcos`, are ever staged. The difference is that the level is given
+   * per item rather than once for all of them.
+   * The map carries one entry per item concerned, a level to end up at or null to end up with none.
+   * An item absent from the map is not concerned and is left strictly alone, so a caller can cover
+   * only part of the selection.
+   *
+   * Used to seed a move dialog, where each item has its own resulting permissions and a recipient can
+   * end up at a different level on each, while the items the move does not touch keep what they have.
+   * The row's badge is derived from what was staged, see getAroChangeStatus. A map that deletes every
+   * permission it covers therefore reads as removed, even when the recipient keeps one on an item the
+   * map left out.
+   *
+   * @param {object} aro The recipient to stage the permissions for, registered when not already known.
+   * @param {Map<string, (int|null)>} targetTypeByAcoId The level (1|7|15) per item id, or null for the
+   *   items the recipient must end up without a permission on.
+   */
+  updateAroPermissionsByAco(aro, targetTypeByAcoId) {
+    this._aros[aro.id] = aro;
+    this._removeAroChanges(aro.id);
+    this._stageableAcos.forEach((aco) => {
+      if (!targetTypeByAcoId.has(aco.id)) {
+        return;
+      }
+      const type = targetTypeByAcoId.get(aco.id);
+      const permissionOriginal = this.getAcoAroPermission(aco, aro.id);
+      if (type === null) {
+        if (permissionOriginal) {
+          const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
+          permissionChange.delete = true;
+          this._changes.push(permissionChange);
+        }
+        return;
+      }
+      if (!permissionOriginal) {
+        this._changes.push(this._buildChange(aco, aro, type));
+        return;
+      }
+      if (permissionOriginal.type !== type) {
+        const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
+        permissionChange.type = type;
         this._changes.push(permissionChange);
       }
     });
@@ -289,11 +349,12 @@ export default class ShareChanges {
 
   /**
    * Delete aro's permissions.
+   * Only stages the deletion on the items the operator owns, `_stageableAcos`. See updateAroPermissions.
    * @param {string} aroId The aro to delete the permissions for
    */
   deleteAroPermissions(aroId) {
     this._removeAroChanges(aroId);
-    this._acos.forEach((aco) => {
+    this._stageableAcos.forEach((aco) => {
       const permissionOriginal = this.getAcoAroPermission(aco, aroId);
       if (permissionOriginal) {
         const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));

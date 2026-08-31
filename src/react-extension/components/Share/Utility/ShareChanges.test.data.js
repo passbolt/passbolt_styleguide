@@ -40,6 +40,39 @@ export const carol = defaultUserDto({
 export const board = defaultGroupDto({ name: "Board" });
 
 /**
+ * Build two resources in the shape ShareDialog feeds to ShareChanges, one Ada owns and one she does
+ * not. This is what a move batch looks like when the operator owns only part of it, and a staged
+ * change must never reach the resource she does not own.
+ * - "apache", owned: Ada owner, Betty update.
+ * - "cakephp", not owned, Ada only updates it: Ada update, Carol the only owner.
+ * @returns {Array<object>}
+ */
+export function mixedOwnershipResourcesDtos() {
+  const ownedId = uuidv4();
+  const notOwnedId = uuidv4();
+  return [
+    {
+      id: ownedId,
+      metadata: { name: "apache" },
+      permission: { type: 15 },
+      permissions: [
+        ownerPermissionDto({ aco_foreign_key: ownedId, aro_foreign_key: ada.id, user: ada }),
+        updatePermissionDto({ aco_foreign_key: ownedId, aro_foreign_key: betty.id, user: betty }),
+      ],
+    },
+    {
+      id: notOwnedId,
+      metadata: { name: "cakephp" },
+      permission: { type: 7 },
+      permissions: [
+        updatePermissionDto({ aco_foreign_key: notOwnedId, aro_foreign_key: ada.id, user: ada }),
+        ownerPermissionDto({ aco_foreign_key: notOwnedId, aro_foreign_key: carol.id, user: carol }),
+      ],
+    },
+  ];
+}
+
+/**
  * Build two resources in the controlled-mode shape the ShareDialog feeds to ShareChanges, covering
  * each aggregation scenario:
  * - Ada owns both (uniform owner).

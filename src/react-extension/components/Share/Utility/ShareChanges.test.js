@@ -16,7 +16,14 @@
  * Unit tests on ShareChanges in regard of specifications
  */
 import ShareChanges from "./ShareChanges";
-import { ada, betty, board, carol, defaultSharedResourcesDtos } from "./ShareChanges.test.data";
+import {
+  ada,
+  betty,
+  board,
+  carol,
+  defaultSharedResourcesDtos,
+  mixedOwnershipResourcesDtos,
+} from "./ShareChanges.test.data";
 import {
   ownerPermissionDto,
   readFolderPermissionDto,
@@ -181,6 +188,189 @@ describe("ShareChanges", () => {
       expect(shareChanges.getChanges()).toEqual([]);
       expect(shareChanges.hasChanges(ada.id)).toBe(false);
     });
+
+    it("never stages a change on a resource the operator does not own, even when the recipient holds a different permission there", () => {
+      expect.assertions(2);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      // Ada already owns "apache", so nothing to change there. She does not own "cakephp", so her
+      // update permission on it stays as it is, even though it differs from what was asked for.
+      shareChanges.updateAroPermissions(ada.id, 15);
+
+      expect(shareChanges.getChanges()).toEqual([]);
+      expect(shareChanges.hasChanges(ada.id)).toBe(false);
+    });
+
+    it("stages a change only on the resource the operator owns, in a mixed-ownership selection", () => {
+      expect.assertions(2);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      // Betty can update the owned "apache", so making her owner there is a change that can be staged.
+      // She has nothing on the not-owned "cakephp", so granting her anything there is impossible.
+      shareChanges.updateAroPermissions(betty.id, 15);
+
+      const changes = shareChanges.getChanges();
+      expect(changes).toEqual([expect.objectContaining({ aco_foreign_key: resources[0].id, type: 15 })]);
+      expect(changes.some((change) => change.aco_foreign_key === resources[1].id)).toBe(false);
+    });
+  });
+
+  describe("::updateAroPermissionsByAco", () => {
+    it("stages the per-aco target types, without mutating the original permissions", () => {
+      expect.assertions(3);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+      const originalType = resources[0].permissions[1].type;
+
+      shareChanges.updateAroPermissionsByAco(betty, new Map([[resources[0].id, 15]]));
+
+      const changes = shareChanges.getChanges();
+      expect(changes).toEqual([expect.objectContaining({ aco_foreign_key: resources[0].id, type: 15 })]);
+      expect(changes[0].id).toBe(resources[0].permissions[1].id);
+      expect(resources[0].permissions[1].type).toBe(originalType);
+    });
+
+    it("never stages anything on an aco the operator does not own, whatever the target asks for", () => {
+      expect.assertions(2);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      shareChanges.updateAroPermissionsByAco(
+        betty,
+        new Map([
+          [resources[0].id, 15],
+          [resources[1].id, 15],
+        ]),
+      );
+
+      const changes = shareChanges.getChanges();
+      expect(changes).toEqual([expect.objectContaining({ aco_foreign_key: resources[0].id, type: 15 })]);
+      expect(changes.some((change) => change.aco_foreign_key === resources[1].id)).toBe(false);
+    });
+
+    it("stages a deletion on an owned aco the target sets to null", () => {
+      expect.assertions(2);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      shareChanges.updateAroPermissionsByAco(betty, new Map([[resources[0].id, null]]));
+
+      const changes = shareChanges.getChanges();
+      expect(changes).toEqual([expect.objectContaining({ aco_foreign_key: resources[0].id, delete: true })]);
+      expect(shareChanges.getAroChangeStatus(betty.id)).toBe(ShareChanges.CHANGE_STATUS_REMOVED);
+    });
+
+    it("leaves an aco absent from the target strictly untouched", () => {
+      expect.assertions(2);
+      const resources = defaultSharedResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      /*
+       * Only the first resource is covered. The second must keep Betty's permission even though
+       * nothing was said about it. This is a move that only changes part of the selection.
+       */
+      shareChanges.updateAroPermissionsByAco(betty, new Map([[resources[0].id, null]]));
+
+      expect(shareChanges.getChanges()).toEqual([
+        expect.objectContaining({ aco_foreign_key: resources[0].id, delete: true }),
+      ]);
+      expect(shareChanges.getChanges().some((change) => change.aco_foreign_key === resources[1].id)).toBe(false);
+    });
+
+    it("stages nothing for a recipient holding permissions only on the acos the operator does not own", () => {
+      expect.assertions(2);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      // Carol only has a permission on "cakephp", which the operator does not own.
+      shareChanges.updateAroPermissionsByAco(carol, new Map([[resources[0].id, null]]));
+
+      expect(shareChanges.getChanges()).toEqual([]);
+      expect(shareChanges.getAroChangeStatus(carol.id)).toBeNull();
+    });
+
+    it("stages nothing for an aco already at its target type", () => {
+      expect.assertions(1);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      // Betty already updates "apache".
+      shareChanges.updateAroPermissionsByAco(betty, new Map([[resources[0].id, 7]]));
+
+      expect(shareChanges.getChanges()).toEqual([]);
+    });
+
+    it("stages a new permission for a recipient that holds none, deriving the aro type", () => {
+      expect.assertions(2);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      shareChanges.updateAroPermissionsByAco(board, new Map([[resources[0].id, 1]]));
+
+      expect(shareChanges.getChanges()).toEqual([
+        expect.objectContaining({
+          is_new: true,
+          aro: "Group",
+          aro_foreign_key: board.id,
+          aco_foreign_key: resources[0].id,
+          type: 1,
+        }),
+      ]);
+      expect(shareChanges.getAroChangeStatus(board.id)).toBe(ShareChanges.CHANGE_STATUS_ADDED);
+    });
+
+    it("drops the changes previously staged for the aro before staging the target", () => {
+      expect.assertions(1);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      shareChanges.updateAroPermissions(betty.id, 15);
+      shareChanges.updateAroPermissionsByAco(betty, new Map([[resources[0].id, 1]]));
+
+      expect(shareChanges.getChanges()).toEqual([
+        expect.objectContaining({ aco_foreign_key: resources[0].id, type: 1 }),
+      ]);
+    });
+
+    it("derives the change status from the staged set, per aco", () => {
+      expect.assertions(3);
+      const resources = defaultSharedResourcesDtos();
+
+      // Keeping Betty on one resource and dropping her from the other reads as modified.
+      const modified = new ShareChanges(resources);
+      modified.updateAroPermissionsByAco(
+        betty,
+        new Map([
+          [resources[0].id, 15],
+          [resources[1].id, null],
+        ]),
+      );
+      expect(modified.getAroChangeStatus(betty.id)).toBe(ShareChanges.CHANGE_STATUS_MODIFIED);
+
+      // Dropping Betty everywhere reads as removed.
+      const removed = new ShareChanges(resources);
+      removed.updateAroPermissionsByAco(
+        betty,
+        new Map([
+          [resources[0].id, null],
+          [resources[1].id, null],
+        ]),
+      );
+      expect(removed.getAroChangeStatus(betty.id)).toBe(ShareChanges.CHANGE_STATUS_REMOVED);
+
+      // Matching what Betty already has on each resource reads as unchanged.
+      const unchanged = new ShareChanges(resources);
+      unchanged.updateAroPermissionsByAco(
+        betty,
+        new Map([
+          [resources[0].id, 7],
+          [resources[1].id, 1],
+        ]),
+      );
+      expect(unchanged.getAroChangeStatus(betty.id)).toBeNull();
+    });
   });
 
   describe("::deleteAroPermissions", () => {
@@ -224,6 +414,18 @@ describe("ShareChanges", () => {
 
       expect(shareChanges.getChanges()).toEqual([]);
       expect(shareChanges.hasChanges(dan.id)).toBe(false);
+    });
+
+    it("never stages a deletion on a resource the operator does not own", () => {
+      expect.assertions(2);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      // Carol's only permission is on the not-owned "cakephp", so nothing can be staged for her.
+      shareChanges.deleteAroPermissions(carol.id);
+
+      expect(shareChanges.getChanges()).toEqual([]);
+      expect(shareChanges.hasChanges(carol.id)).toBe(false);
     });
   });
 
@@ -405,6 +607,19 @@ describe("ShareChanges", () => {
 
       shareChanges.deleteAroPermissions(ada.id);
       shareChanges.updateAroPermissions(betty.id, 15);
+
+      expect(shareChanges.getResourcesWithNoOwner()).toEqual([]);
+    });
+
+    it("does not flag a not-owned resource whose sole owner would have been revoked by an out-of-scope deletion", () => {
+      expect.assertions(1);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+
+      // Carol is the only owner of "cakephp", which the operator does not own.
+      // Deleting her permissions stages nothing against it, see ::deleteAroPermissions, so it must
+      // not be flagged here either. Getting this wrong would disable Save for the whole dialog.
+      shareChanges.deleteAroPermissions(carol.id);
 
       expect(shareChanges.getResourcesWithNoOwner()).toEqual([]);
     });
