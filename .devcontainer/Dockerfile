@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/typescript-node:22@sha256:4f634c449931ac2aff140f9fac5825413196e631ccc0eb7afd17033144253be4
+FROM mcr.microsoft.com/devcontainers/typescript-node:22@sha256:4e884eb1501b2f5733879009f2bbd62af6354dd9b8d325c440132cb40036dab5
 
 RUN npm install -g @aikidosec/safe-chain \
  && install -d -o node -g node /home/node/.safe-chain \
