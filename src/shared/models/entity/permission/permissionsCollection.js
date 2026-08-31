@@ -358,6 +358,60 @@ class PermissionsCollection extends EntityV2Collection {
   }
 
   /**
+   * Work out the permissions an item ends up with after a move, in three steps.
+   * 1. Drop what came from the folder it is leaving. Nothing to drop at the root.
+   * 2. Add the destination folder's permissions on top. The higher of the two levels wins, so the
+   *    destination alone never lowers anybody.
+   * 3. On a move to the root, put the operator back as owner. There is no destination to grant them
+   *    back what step 1 removed, so without this they would lose the item they just moved.
+   *
+   * Used for the move dialog preview, and by the service worker for the moved item itself.
+   * It is not used for what a moved folder contains. Those items are set to the level the folder now
+   * gives, rather than keeping the higher of the two.
+   *
+   * @param {object} params
+   * @param {PermissionsCollection} params.itemPermissions The moved item's current permissions.
+   * @param {PermissionsCollection|null} params.parentPermissions The item's current parent folder permissions, or null at the root.
+   * @param {PermissionsCollection|null} params.destinationPermissions The destination folder
+   *   permissions to apply, or null when moving to the root.
+   * @param {object|PermissionEntity} [params.operatorPermission] The operator's own permission on the
+   *   moved item, a DTO or an entity. Put back as owner on a move to the root.
+   * @param {string} params.aco The moved item's ACO type (PermissionEntity.ACO_RESOURCE or ACO_FOLDER).
+   * @param {string} params.acoForeignKey The moved item id (the resulting ACO foreign key).
+   * @return {PermissionsCollection}
+   */
+  static calculateMovedPermissions({
+    itemPermissions,
+    parentPermissions,
+    destinationPermissions,
+    operatorPermission,
+    aco,
+    acoForeignKey,
+  }) {
+    const remaining = parentPermissions
+      ? PermissionsCollection.diff(itemPermissions, parentPermissions, false)
+      : new PermissionsCollection(itemPermissions.toDto(), { assertAtLeastOneOwner: false });
+    const destinationForItem = destinationPermissions
+      ? destinationPermissions.cloneForAco(aco, acoForeignKey, false)
+      : new PermissionsCollection([], { assertAtLeastOneOwner: false });
+    const movedPermissions = PermissionsCollection.sum(remaining, destinationForItem, false);
+    const operatorAroForeignKey = operatorPermission?.aro_foreign_key ?? operatorPermission?.aroForeignKey;
+    if (!destinationPermissions && operatorAroForeignKey) {
+      // addOrReplace never lowers anybody, so an operator permission already kept stays as it is.
+      movedPermissions.addOrReplace(
+        new PermissionEntity({
+          aco,
+          aco_foreign_key: acoForeignKey,
+          aro: operatorPermission.aro ?? PermissionEntity.ARO_USER,
+          aro_foreign_key: operatorAroForeignKey,
+          type: PermissionEntity.PERMISSION_OWNER,
+        }),
+      );
+    }
+    return movedPermissions;
+  }
+
+  /**
    * Sort the current collection by aro and names.
    * This method is mutatative
    */

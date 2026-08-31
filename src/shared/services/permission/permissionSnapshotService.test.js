@@ -145,7 +145,7 @@ describe("PermissionSnapshotService", () => {
       );
     });
 
-    it("derives the snapshot users from the permissioned groups members, deduplicated across groups, excluding directly-permissioned non-members", async () => {
+    it("derives the snapshot users from the permissioned groups members, deduplicated across groups, omitting a direct recipient whose data was not embedded in its permission", async () => {
       expect.assertions(3);
 
       const folderId = uuidv4();
@@ -201,6 +201,34 @@ describe("PermissionSnapshotService", () => {
 
       expect(snapshot.users.toDto()).toStrictEqual([sharedMember, soloMember]);
       expect(snapshot.users.items.find((u) => u.id === directUserId)).toBeUndefined();
+      expect(port.request).not.toHaveBeenCalledWith("passbolt.users.get-by-ids", expect.anything());
+    });
+
+    it("captures a directly-permissioned user from the data embedded in its permission, without a dedicated request", async () => {
+      expect.assertions(3);
+
+      const folderId = uuidv4();
+      const directUser = defaultUserDto({ username: "direct@passbolt.com" });
+      const permissionsDto = [
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "User",
+          aro_foreign_key: directUser.id,
+          type: 15,
+          user: directUser,
+        }),
+      ];
+      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
+      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => permissionsDto);
+      jest.spyOn(port, "request");
+
+      const snapshot = await service.buildSnapshotForResourceCreation(folderId);
+
+      // The move seeds the dialog with permissions that carry no embedded user, so a recipient
+      // granted directly can only be looked up in the snapshot's user list.
+      expect(snapshot.users.items).toHaveLength(1);
+      expect(snapshot.users.items[0].id).toStrictEqual(directUser.id);
       expect(port.request).not.toHaveBeenCalledWith("passbolt.users.get-by-ids", expect.anything());
     });
 

@@ -64,8 +64,9 @@ export default class PermissionSnapshotService {
    * Build the permission snapshot shown to the operator while sharing a folder. The permissions are
    * captured from the folder itself so the operator reviews and edits the folder's own permission
    * set before the share is propagated to its content. Also used to re-snapshot the folder for drift
-   * detection.
-   * @param {string} folderId The id of the folder being shared.
+   * detection, and by the move flows to capture the destination folder's permissions, the ones the
+   * moved items merge in, together with every group and user they reference.
+   * @param {string} folderId The id of the folder being shared, or moved into.
    * @returns {Promise<PermissionSnapshotEntity>}
    */
   async buildSnapshotForFolderShare(folderId) {
@@ -154,9 +155,12 @@ export default class PermissionSnapshotService {
   }
 
   /**
-   * Assemble the immutable snapshot from a permission set and the groups it references. The user
-   * list is derived from those groups' members (deduplicated); directly-permissioned users are not
-   * resolved separately, their data travels in the permissions.
+   * Assemble the immutable snapshot from a permission set and the groups it references.
+   * The user list holds every user the snapshot can be asked about. That is the users granted
+   * directly, whose data comes embedded in the permissions, plus the members of the groups involved.
+   * It has to be complete. A move seeds the dialog with permissions built by
+   * PermissionEntity::copyForAnotherAco, which carries no embedded user, so the user list is the only
+   * place those recipients can be looked up.
    * @param {PermissionsCollection} permissions The permission set to capture.
    * @param {Array<GroupEntity>} groups The groups referenced by the permission set.
    * @returns {PermissionSnapshotEntity}
@@ -164,6 +168,11 @@ export default class PermissionSnapshotService {
    */
   _toSnapshot(permissions, groups) {
     const usersById = new Map();
+    for (const permission of permissions.items) {
+      if (permission.user && !usersById.has(permission.user.id)) {
+        usersById.set(permission.user.id, permission.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
+      }
+    }
     for (const group of groups) {
       for (const groupUser of group.groupsUsers?.items ?? []) {
         if (groupUser.user && !usersById.has(groupUser.user.id)) {

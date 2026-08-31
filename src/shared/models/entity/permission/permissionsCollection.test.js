@@ -902,6 +902,237 @@ describe("PermissionsCollection", () => {
     });
   });
 
+  describe("::calculateMovedPermissions", () => {
+    const recipientId = crypto.randomUUID();
+    const ownerId = crypto.randomUUID();
+    const itemId = crypto.randomUUID();
+    const destinationFolderId = crypto.randomUUID();
+    const parentFolderId = crypto.randomUUID();
+
+    const resourcePermission = (aroForeignKey, type) =>
+      defaultPermissionDto({
+        aco: PermissionEntity.ACO_RESOURCE,
+        aco_foreign_key: itemId,
+        aro: PermissionEntity.ARO_USER,
+        aro_foreign_key: aroForeignKey,
+        type,
+      });
+    const folderPermission = (acoForeignKey, aroForeignKey, type) =>
+      defaultPermissionDto({
+        aco: PermissionEntity.ACO_FOLDER,
+        aco_foreign_key: acoForeignKey,
+        aro: PermissionEntity.ARO_USER,
+        aro_foreign_key: aroForeignKey,
+        type,
+      });
+    const typeForAro = (collection, aroForeignKey) =>
+      collection.items.find((permission) => permission.aroForeignKey === aroForeignKey)?.type;
+
+    it("from the root, retains the item's own permissions and merges the destination (highest-wins, no downgrade)", () => {
+      expect.assertions(2);
+      const itemPermissions = new PermissionsCollection(
+        [
+          resourcePermission(recipientId, PermissionEntity.PERMISSION_OWNER),
+          resourcePermission(ownerId, PermissionEntity.PERMISSION_OWNER),
+        ],
+        { assertAtLeastOneOwner: false },
+      );
+      const destinationPermissions = new PermissionsCollection(
+        [
+          folderPermission(destinationFolderId, recipientId, PermissionEntity.PERMISSION_READ),
+          folderPermission(destinationFolderId, ownerId, PermissionEntity.PERMISSION_OWNER),
+        ],
+        { assertAtLeastOneOwner: false },
+      );
+
+      const result = PermissionsCollection.calculateMovedPermissions({
+        itemPermissions,
+        parentPermissions: null,
+        destinationPermissions,
+        aco: PermissionEntity.ACO_RESOURCE,
+        acoForeignKey: itemId,
+      });
+
+      // The ownership granted on the item itself is kept, the destination's read does not lower it.
+      expect(typeForAro(result, recipientId)).toBe(PermissionEntity.PERMISSION_OWNER);
+      expect(typeForAro(result, ownerId)).toBe(PermissionEntity.PERMISSION_OWNER);
+    });
+
+    it("upgrades a retained direct permission to the destination's higher proposal", () => {
+      expect.assertions(1);
+      const itemPermissions = new PermissionsCollection(
+        [
+          resourcePermission(recipientId, PermissionEntity.PERMISSION_READ),
+          resourcePermission(ownerId, PermissionEntity.PERMISSION_OWNER),
+        ],
+        { assertAtLeastOneOwner: false },
+      );
+      // The folder grants the recipient nothing, so their read was granted on the item itself.
+      const parentPermissions = new PermissionsCollection(
+        [folderPermission(parentFolderId, ownerId, PermissionEntity.PERMISSION_OWNER)],
+        { assertAtLeastOneOwner: false },
+      );
+      const destinationPermissions = new PermissionsCollection(
+        [
+          folderPermission(destinationFolderId, recipientId, PermissionEntity.PERMISSION_OWNER),
+          folderPermission(destinationFolderId, ownerId, PermissionEntity.PERMISSION_OWNER),
+        ],
+        { assertAtLeastOneOwner: false },
+      );
+
+      const result = PermissionsCollection.calculateMovedPermissions({
+        itemPermissions,
+        parentPermissions,
+        destinationPermissions,
+        aco: PermissionEntity.ACO_RESOURCE,
+        acoForeignKey: itemId,
+      });
+
+      // The higher level wins either way, so the destination's owner beats the read that was kept.
+      expect(typeForAro(result, recipientId)).toBe(PermissionEntity.PERMISSION_OWNER);
+    });
+
+    it("from a folder, drops a permission inherited from the parent and applies the destination instead", () => {
+      expect.assertions(1);
+      const itemPermissions = new PermissionsCollection(
+        [
+          resourcePermission(recipientId, PermissionEntity.PERMISSION_OWNER),
+          resourcePermission(ownerId, PermissionEntity.PERMISSION_OWNER),
+        ],
+        { assertAtLeastOneOwner: false },
+      );
+      const parentPermissions = new PermissionsCollection(
+        [folderPermission(parentFolderId, recipientId, PermissionEntity.PERMISSION_OWNER)],
+        { assertAtLeastOneOwner: false },
+      );
+      const destinationPermissions = new PermissionsCollection(
+        [
+          folderPermission(destinationFolderId, recipientId, PermissionEntity.PERMISSION_READ),
+          folderPermission(destinationFolderId, ownerId, PermissionEntity.PERMISSION_OWNER),
+        ],
+        { assertAtLeastOneOwner: false },
+      );
+
+      const result = PermissionsCollection.calculateMovedPermissions({
+        itemPermissions,
+        parentPermissions,
+        destinationPermissions,
+        aco: PermissionEntity.ACO_RESOURCE,
+        acoForeignKey: itemId,
+      });
+
+      // Their ownership came from the folder and is dropped, so they end up with the destination's read.
+      expect(typeForAro(result, recipientId)).toBe(PermissionEntity.PERMISSION_READ);
+    });
+
+    it("moving to the root re-asserts the operator as owner even when the old parent granted the same level", () => {
+      expect.assertions(2);
+      const itemPermissions = new PermissionsCollection(
+        [
+          resourcePermission(ownerId, PermissionEntity.PERMISSION_OWNER),
+          resourcePermission(recipientId, PermissionEntity.PERMISSION_UPDATE),
+        ],
+        { assertAtLeastOneOwner: false },
+      );
+      const parentPermissions = new PermissionsCollection(
+        [
+          folderPermission(parentFolderId, ownerId, PermissionEntity.PERMISSION_OWNER),
+          folderPermission(parentFolderId, recipientId, PermissionEntity.PERMISSION_UPDATE),
+        ],
+        { assertAtLeastOneOwner: false },
+      );
+
+      const result = PermissionsCollection.calculateMovedPermissions({
+        itemPermissions,
+        parentPermissions,
+        destinationPermissions: null,
+        operatorPermission: { aro: PermissionEntity.ARO_USER, aro_foreign_key: ownerId },
+        aco: PermissionEntity.ACO_RESOURCE,
+        acoForeignKey: itemId,
+      });
+
+      // Both grants match the folder's, so both are dropped. The root has nothing to give back, so
+      // without putting the operator back as owner they would lose the item they just moved.
+      expect(typeForAro(result, ownerId)).toBe(PermissionEntity.PERMISSION_OWNER);
+      expect(typeForAro(result, recipientId)).toBeUndefined();
+    });
+
+    it("moving to the root upgrades the operator to owner when their dropped grant was lower", () => {
+      expect.assertions(1);
+      const itemPermissions = new PermissionsCollection(
+        [resourcePermission(ownerId, PermissionEntity.PERMISSION_UPDATE)],
+        { assertAtLeastOneOwner: false },
+      );
+      const parentPermissions = new PermissionsCollection(
+        [folderPermission(parentFolderId, ownerId, PermissionEntity.PERMISSION_OWNER)],
+        { assertAtLeastOneOwner: false },
+      );
+
+      const result = PermissionsCollection.calculateMovedPermissions({
+        itemPermissions,
+        parentPermissions,
+        destinationPermissions: null,
+        operatorPermission: { aro: PermissionEntity.ARO_USER, aro_foreign_key: ownerId },
+        aco: PermissionEntity.ACO_RESOURCE,
+        acoForeignKey: itemId,
+      });
+
+      expect(typeForAro(result, ownerId)).toBe(PermissionEntity.PERMISSION_OWNER);
+    });
+
+    it("does not re-assert the operator when a destination is supplied, its own grant covering them", () => {
+      expect.assertions(2);
+      const itemPermissions = new PermissionsCollection(
+        [resourcePermission(ownerId, PermissionEntity.PERMISSION_OWNER)],
+        { assertAtLeastOneOwner: false },
+      );
+      const parentPermissions = new PermissionsCollection(
+        [folderPermission(parentFolderId, ownerId, PermissionEntity.PERMISSION_OWNER)],
+        { assertAtLeastOneOwner: false },
+      );
+      const destinationPermissions = new PermissionsCollection(
+        [folderPermission(destinationFolderId, recipientId, PermissionEntity.PERMISSION_READ)],
+        { assertAtLeastOneOwner: false },
+      );
+
+      const result = PermissionsCollection.calculateMovedPermissions({
+        itemPermissions,
+        parentPermissions,
+        destinationPermissions,
+        operatorPermission: { aro: PermissionEntity.ARO_USER, aro_foreign_key: ownerId },
+        aco: PermissionEntity.ACO_RESOURCE,
+        acoForeignKey: itemId,
+      });
+
+      // The operator is only put back as owner on a move to the root. With a destination, it is the
+      // destination that grants them back, and one that does not carry them drops them like anyone else.
+      expect(typeForAro(result, ownerId)).toBeUndefined();
+      expect(typeForAro(result, recipientId)).toBe(PermissionEntity.PERMISSION_READ);
+    });
+
+    it("moving to the root with no destination retains the item's own permissions unchanged", () => {
+      expect.assertions(2);
+      const itemPermissions = new PermissionsCollection(
+        [
+          resourcePermission(recipientId, PermissionEntity.PERMISSION_READ),
+          resourcePermission(ownerId, PermissionEntity.PERMISSION_OWNER),
+        ],
+        { assertAtLeastOneOwner: false },
+      );
+
+      const result = PermissionsCollection.calculateMovedPermissions({
+        itemPermissions,
+        parentPermissions: null,
+        destinationPermissions: null,
+        aco: PermissionEntity.ACO_RESOURCE,
+        acoForeignKey: itemId,
+      });
+
+      expect(typeForAro(result, recipientId)).toBe(PermissionEntity.PERMISSION_READ);
+      expect(typeForAro(result, ownerId)).toBe(PermissionEntity.PERMISSION_OWNER);
+    });
+  });
+
   describe("::sort", () => {
     it("sorts the collection in-place: users before groups, each sorted by name", () => {
       expect.assertions(4);
