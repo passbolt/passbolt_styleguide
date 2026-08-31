@@ -269,7 +269,9 @@ class InFormManager {
    * document.body via {@link getContainerElement}), so a remount never needs to re-detect fields.
    * @param {HTMLElement} [container] The element the host should be mounted into.
    */
-  ensureHostMounted(container = this.getContainerElement(this.callToActionFields.map(({ field }) => field))) {
+  ensureHostMounted(newContainer) {
+    const container = newContainer ?? this.getContainerElement(this.callToActionFields.map(({ field }) => field));
+
     if (!this.host) {
       this.createAndInsertShadowRootWithHost(container);
     } else if (this.host.parentNode !== container) {
