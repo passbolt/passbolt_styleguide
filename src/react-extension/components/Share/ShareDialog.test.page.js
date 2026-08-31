@@ -127,6 +127,20 @@ export default class ShareDialogPage {
   }
 
   /**
+   * Returns the move "left unchanged" warning text, or null when it is not rendered
+   */
+  get unchangedWarning() {
+    return this._page.container.querySelector(".message.warning .unchanged-warning")?.textContent ?? null;
+  }
+
+  /**
+   * Returns the attention triangle icon rendered in the "left unchanged" warning banner, or null
+   */
+  get unchangedWarningIcon() {
+    return this._page.container.querySelector(".message.warning .attention-triangle");
+  }
+
+  /**
    * Get user or group autocomplete for the index one
    * @returns {Element}
    */
@@ -159,6 +173,114 @@ export default class ShareDialogPage {
   aroDetails(index) {
     return this._page.container.querySelectorAll(".permissions .row .aro-details")[index - 1].querySelector(".ellipsis")
       .textContent;
+  }
+
+  /**
+   * Returns how many permission rows have "varies" selected
+   */
+  get variesCount() {
+    return Array.from(this._page.container.querySelectorAll(".permissions .row .selected-value .value")).filter(
+      (value) => value.textContent.trim() === "varies",
+    ).length;
+  }
+
+  /**
+   * Returns how many attention icons, the red triangles, are rendered across the permission rows
+   */
+  get attentionIconCount() {
+    return this._page.container.querySelectorAll(".permissions .row .attention-triangle").length;
+  }
+
+  /**
+   * Returns how many plain varies icons are rendered across the permission rows
+   */
+  get variesIconCount() {
+    return this._page.container.querySelectorAll(".permissions .row .varies-icon").length;
+  }
+
+  /**
+   * Returns the permission row whose aro details (username/group label) match, or undefined.
+   * @param {string} aroDetails The aro-details text to match (e.g. a username)
+   * @returns {Element|undefined}
+   */
+  rowForAro(aroDetails) {
+    return Array.from(this._page.container.querySelectorAll(".permissions .row")).find(
+      (element) => element.querySelector(".aro-details .ellipsis")?.textContent === aroDetails,
+    );
+  }
+
+  /**
+   * Returns the permission select value for the row whose aro details (username/group label) match.
+   * @param {string} aroDetails The aro-details text to match (e.g. a username)
+   * @returns {string|null}
+   */
+  permissionValueForAro(aroDetails) {
+    return this.rowForAro(aroDetails)?.querySelector(".selected-value .value")?.textContent ?? null;
+  }
+
+  /**
+   * Returns the attention icon for the row whose aro details match, or null.
+   * @param {string} aroDetails The aro-details text to match (e.g. a username)
+   * @returns {Element|null}
+   */
+  attentionIconForAro(aroDetails) {
+    return this.rowForAro(aroDetails)?.querySelector(".attention-triangle") ?? null;
+  }
+
+  /**
+   * Returns the plain varies icon for the row whose aro details match, or null.
+   * @param {string} aroDetails The aro-details text to match (e.g. a username)
+   * @returns {Element|null}
+   */
+  variesIconForAro(aroDetails) {
+    return this.rowForAro(aroDetails)?.querySelector(".varies-icon") ?? null;
+  }
+
+  /**
+   * Returns the row's class list for the row whose aro details match, or null.
+   * @param {string} aroDetails The aro-details text to match (e.g. a username)
+   * @returns {DOMTokenList|null}
+   */
+  classListForAro(aroDetails) {
+    return this.rowForAro(aroDetails)?.classList ?? null;
+  }
+
+  /**
+   * Returns the change status chip for the row whose aro details match, or null.
+   * @param {string} aroDetails The aro-details text to match (e.g. a username)
+   * @returns {Element|null}
+   */
+  changeChipForAro(aroDetails) {
+    return this.rowForAro(aroDetails)?.querySelector(".chips") ?? null;
+  }
+
+  /**
+   * Returns the 1-based display index of the row whose aro details match, or null.
+   * Needed by removeAro and revertAro, which take an index, because rows are sorted by name.
+   * @param {string} aroDetails The aro-details text to match (e.g. a username)
+   * @returns {number|null}
+   */
+  rowIndexForAro(aroDetails) {
+    const rows = Array.from(this._page.container.querySelectorAll(".permissions .row"));
+    const index = rows.findIndex(
+      (element) => element.querySelector(".aro-details .ellipsis")?.textContent === aroDetails,
+    );
+    return index === -1 ? null : index + 1;
+  }
+
+  /**
+   * Opens the permission select for the row whose aro details match and selects the option labelled
+   * `labelText` (e.g. "can read", "is owner").
+   * @param {string} aroDetails The aro-details text to match (e.g. a username)
+   * @param {string} labelText The option label to select
+   */
+  async changePermissionForAro(aroDetails, labelText) {
+    const row = this.rowForAro(aroDetails);
+    await this.click(row.querySelector(".select .selected-value"));
+    const option = Array.from(row.querySelectorAll(".select .option")).find(
+      (element) => element.textContent.trim() === labelText,
+    );
+    await this.click(option);
   }
 
   /**

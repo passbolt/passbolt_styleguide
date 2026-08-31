@@ -4,9 +4,11 @@ import AppContext from "../../../shared/context/AppContext/AppContext";
 import {
   controlledModeWithGroupProps,
   defaultAppContext,
+  mixedOwnershipMoveProps,
   propsWithStressPermissions,
   resources,
 } from "./ShareDialog.test.data";
+import { v4 as uuidv4 } from "uuid";
 import mockStorage from "../../../../test/mocks/mockStorage";
 import mockPort from "../../../../test/mocks/mockPort";
 
@@ -49,6 +51,17 @@ export const ControlledModeWithExpandableGroup = {
   args: {
     context: defaultAppContext({ port: mockPort(mockStorage()) }),
     ...controlledModeWithGroupProps({ onClose: () => {}, onConfirm: () => {} }),
+  },
+};
+
+// A move of a batch the operator owns only part of.
+// Only a move can reach this state, everywhere else canShare() requires owning every selected item.
+// So this story is the visual reference for the attention triangle, its warning-tinted tooltip and
+// the footer banner, next to the plain "varies" row.
+export const MoveModeMixedOwnership = {
+  args: {
+    context: defaultAppContext({ port: mockPort(mockStorage()) }),
+    ...mixedOwnershipMoveProps(uuidv4(), { onClose: () => {}, onConfirm: () => {} }),
   },
 };
 

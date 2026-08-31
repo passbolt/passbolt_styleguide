@@ -957,6 +957,71 @@ export function controlledModeWithGroupProps(data = {}) {
 }
 
 /**
+ * Build props with two group permissions, so both groups can be expanded and have their member fetch
+ * running at the same time.
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function controlledModeWithTwoGroupsProps(data = {}) {
+  const folderId = uuidv4();
+  const ownerUser = defaultUserDto({
+    username: "ada@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Ada", last_name: "Lovelace" }),
+  });
+  const buildGroup = (name) => {
+    const groupId = uuidv4();
+    const member = defaultUserDto({
+      username: `${name.toLowerCase()}-member@passbolt.com`,
+      profile: defaultProfileDto({ first_name: name, last_name: "Member" }),
+    });
+    return {
+      member,
+      dto: defaultGroupDto({
+        id: groupId,
+        name,
+        groups_users: [defaultGroupUser({ user_id: member.id, group_id: groupId, user: member, is_admin: true })],
+      }),
+    };
+  };
+  const first = buildGroup("Developer");
+  const second = buildGroup("Marketing");
+  const permissionsDto = [
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: folderId,
+      aro: "User",
+      aro_foreign_key: ownerUser.id,
+      type: 15,
+    }),
+    ...[first, second].map((group) =>
+      defaultPermissionDto({
+        aco: "Folder",
+        aco_foreign_key: folderId,
+        aro: "Group",
+        aro_foreign_key: group.dto.id,
+        type: 1,
+      }),
+    ),
+  ];
+  return {
+    ...defaultProps(),
+    initialResources: [
+      {
+        id: folderId,
+        metadata: { name: "" },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection(permissionsDto, { assertAtLeastOneOwner: false }),
+      },
+    ],
+    initialGroups: new GroupsCollection([first.dto, second.dto]),
+    initialUsers: new UsersCollection([ownerUser, first.member, second.member]),
+    groupNames: [first.dto.name, second.dto.name],
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
  * Build the `passbolt.groups.find-by-ids-for-share` response for the group of the controlled-mode initial
  * collections. Pass `members` to simulate a membership that changed since the dialog opened.
  * @param {object} props The controlled-mode props holding the group.
@@ -1160,6 +1225,421 @@ export function folderShareProps(name, data = {}) {
     ],
     initialGroups: new GroupsCollection([]),
     initialUsers: new UsersCollection([owner]),
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build move props for a single folder, shaped exactly as `FolderMoveFlow` sends them.
+ * The folder travels in `initialFolders` with `acoType: "Folder"`, which is the pairing ShareDialog
+ * reads. It is seeded with the permissions it has today, plus what the move leaves it with.
+ * Folder B, owned by Ada, moves into folder A, owned by Ada and Betty, so Betty is the added recipient.
+ * @param {string} operatorId Ada's id, so the seeded owner is the operator
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function folderMoveProps(operatorId, data = {}) {
+  const ada = defaultUserDto({
+    id: operatorId,
+    username: "ada@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Ada", last_name: "Lovelace" }),
+  });
+  const betty = defaultUserDto({
+    username: "betty@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Betty", last_name: "Holberton" }),
+  });
+  const folderId = uuidv4();
+  const permission = (aroForeignKey, type) =>
+    defaultPermissionDto({
+      aco: "Folder",
+      aco_foreign_key: folderId,
+      aro: "User",
+      aro_foreign_key: aroForeignKey,
+      type,
+    });
+  const appliedPermissions = new PermissionsCollection([permission(ada.id, 15), permission(betty.id, 15)], {
+    assertAtLeastOneOwner: false,
+  });
+  return {
+    ...defaultProps(),
+    acoType: "Folder",
+    initialFolders: [
+      {
+        id: folderId,
+        metadata: { name: "B" },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection([permission(ada.id, 15)], { assertAtLeastOneOwner: false }),
+      },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([ada, betty]),
+    initialAppliedPermissions: new Map([[folderId, appliedPermissions]]),
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build move props for a batch the operator owns only part of.
+ * Ada owns R1, which Carol also owns, and can only update R2, which Betty owns. Both move into
+ * folder A, where Ada is owner and Betty can update. Only R1's permissions change, R2 is left alone.
+ * This shows the three row states at once: Ada at a definite "owner" with attention, Betty at a
+ * definite "modified" with attention, and Carol on an untouched "varies".
+ * @param {string} operatorId Ada's id, so the seeded owner is the operator
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function mixedOwnershipMoveProps(operatorId, data = {}) {
+  const ada = defaultUserDto({
+    id: operatorId,
+    username: "ada@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Ada", last_name: "Lovelace" }),
+  });
+  const betty = defaultUserDto({
+    username: "betty@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Betty", last_name: "Holberton" }),
+  });
+  const carol = defaultUserDto({
+    username: "carol@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Carol", last_name: "Shaw" }),
+  });
+  const r1Id = uuidv4();
+  const r2Id = uuidv4();
+  const permission = (acoForeignKey, aroForeignKey, type) =>
+    defaultPermissionDto({
+      aco: "Resource",
+      aco_foreign_key: acoForeignKey,
+      aro: "User",
+      aro_foreign_key: aroForeignKey,
+      type,
+    });
+  const r1PreMovePermissions = new PermissionsCollection(
+    [permission(r1Id, operatorId, 15), permission(r1Id, carol.id, 15)],
+    { assertAtLeastOneOwner: false },
+  );
+  const r2PreMovePermissions = new PermissionsCollection(
+    [permission(r2Id, operatorId, 7), permission(r2Id, betty.id, 15)],
+    { assertAtLeastOneOwner: false },
+  );
+  // What R1 ends up with: the destination merged with what R1 keeps of its own, the higher level winning.
+  const r1AppliedPermissions = new PermissionsCollection(
+    [permission(r1Id, operatorId, 15), permission(r1Id, betty.id, 7), permission(r1Id, carol.id, 15)],
+    { assertAtLeastOneOwner: false },
+  );
+  return {
+    ...defaultProps(),
+    initialResources: [
+      { id: r1Id, metadata: { name: "R1" }, permission: { type: 15 }, permissions: r1PreMovePermissions },
+      { id: r2Id, metadata: { name: "R2" }, permission: { type: 7 }, permissions: r2PreMovePermissions },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([ada, betty, carol]),
+    initialAppliedPermissions: new Map([[r1Id, r1AppliedPermissions]]),
+    unchangedAcos: [{ id: r2Id, name: "R2" }],
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build move props where a recipient ends up at different levels on two items the operator owns.
+ * Betty can read both RA and RB before the move, and the move raises her to owner on RA only.
+ * The row therefore reads "varies" while carrying a real change on RA.
+ * @param {string} operatorId The operator's id, so the seeded owner is the operator
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function variesAppliedMoveProps(operatorId, data = {}) {
+  const betty = defaultUserDto({
+    username: "betty@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Betty", last_name: "Hopper" }),
+  });
+  const raId = uuidv4();
+  const rbId = uuidv4();
+  const permission = (acoForeignKey, aroForeignKey, type) =>
+    defaultPermissionDto({
+      aco: "Resource",
+      aco_foreign_key: acoForeignKey,
+      aro: "User",
+      aro_foreign_key: aroForeignKey,
+      type,
+    });
+  const preMove = (acoForeignKey) =>
+    new PermissionsCollection([permission(acoForeignKey, operatorId, 15), permission(acoForeignKey, betty.id, 1)], {
+      assertAtLeastOneOwner: false,
+    });
+  return {
+    ...defaultProps(),
+    initialResources: [
+      { id: raId, metadata: { name: "RA" }, permission: { type: 15 }, permissions: preMove(raId) },
+      { id: rbId, metadata: { name: "RB" }, permission: { type: 15 }, permissions: preMove(rbId) },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([defaultUserDto({ id: operatorId }), betty]),
+    initialAppliedPermissions: new Map([
+      // Betty is raised to owner on RA and stays a reader on RB.
+      [
+        raId,
+        new PermissionsCollection([permission(raId, operatorId, 15), permission(raId, betty.id, 15)], {
+          assertAtLeastOneOwner: false,
+        }),
+      ],
+      [
+        rbId,
+        new PermissionsCollection([permission(rbId, operatorId, 15), permission(rbId, betty.id, 1)], {
+          assertAtLeastOneOwner: false,
+        }),
+      ],
+    ]),
+    resourceIds: { raId, rbId },
+    recipient: betty,
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build move props where the move drops a recipient from one owned item only.
+ * Betty can update both RA and RB before the move. She is kept on RB and dropped from RA, where her
+ * permission came from the folder and is not kept.
+ * @param {string} operatorId The operator's id, so the seeded owner is the operator
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function variesRemovalMoveProps(operatorId, data = {}) {
+  const betty = defaultUserDto({
+    username: "betty@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Betty", last_name: "Hopper" }),
+  });
+  const raId = uuidv4();
+  const rbId = uuidv4();
+  const permission = (acoForeignKey, aroForeignKey, type) =>
+    defaultPermissionDto({
+      aco: "Resource",
+      aco_foreign_key: acoForeignKey,
+      aro: "User",
+      aro_foreign_key: aroForeignKey,
+      type,
+    });
+  const preMove = (acoForeignKey) =>
+    new PermissionsCollection([permission(acoForeignKey, operatorId, 15), permission(acoForeignKey, betty.id, 7)], {
+      assertAtLeastOneOwner: false,
+    });
+  return {
+    ...defaultProps(),
+    initialResources: [
+      { id: raId, metadata: { name: "RA" }, permission: { type: 15 }, permissions: preMove(raId) },
+      { id: rbId, metadata: { name: "RB" }, permission: { type: 15 }, permissions: preMove(rbId) },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([defaultUserDto({ id: operatorId }), betty]),
+    initialAppliedPermissions: new Map([
+      // Betty is dropped from RA and kept, unchanged, on RB.
+      [raId, new PermissionsCollection([permission(raId, operatorId, 15)], { assertAtLeastOneOwner: false })],
+      [
+        rbId,
+        new PermissionsCollection([permission(rbId, operatorId, 15), permission(rbId, betty.id, 7)], {
+          assertAtLeastOneOwner: false,
+        }),
+      ],
+    ]),
+    resourceIds: { raId, rbId },
+    recipient: betty,
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build move props where a recipient is absent from the item the operator does not own.
+ * Carol can read the owned R1 and has nothing on R2, and the move raises her to update on R1.
+ * The row stays on "varies", she has no access on R2, while still staging the R1 change.
+ * It carries no attention marker: nothing definite was picked for her, so R2 blocks nothing.
+ * @param {string} operatorId The operator's id, so the seeded owner is the operator
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function absentFromUnownedMoveProps(operatorId, data = {}) {
+  const carol = defaultUserDto({
+    username: "carol@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Carol", last_name: "Shaw" }),
+  });
+  // The owner of the item the operator does not own, so the selection is never ownerless.
+  const dame = defaultUserDto({
+    username: "dame@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Dame", last_name: "Hopper" }),
+  });
+  const r1Id = uuidv4();
+  const r2Id = uuidv4();
+  const permission = (acoForeignKey, aroForeignKey, type) =>
+    defaultPermissionDto({
+      aco: "Resource",
+      aco_foreign_key: acoForeignKey,
+      aro: "User",
+      aro_foreign_key: aroForeignKey,
+      type,
+    });
+  return {
+    ...defaultProps(),
+    initialResources: [
+      {
+        id: r1Id,
+        metadata: { name: "R1" },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection([permission(r1Id, operatorId, 15), permission(r1Id, carol.id, 1)], {
+          assertAtLeastOneOwner: false,
+        }),
+      },
+      {
+        id: r2Id,
+        metadata: { name: "R2" },
+        permission: { type: 7 },
+        permissions: new PermissionsCollection([permission(r2Id, operatorId, 7), permission(r2Id, dame.id, 15)], {
+          assertAtLeastOneOwner: false,
+        }),
+      },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([defaultUserDto({ id: operatorId }), carol, dame]),
+    initialAppliedPermissions: new Map([
+      [
+        r1Id,
+        new PermissionsCollection([permission(r1Id, operatorId, 15), permission(r1Id, carol.id, 7)], {
+          assertAtLeastOneOwner: false,
+        }),
+      ],
+    ]),
+    unchangedAcos: [{ id: r2Id, name: "R2" }],
+    resourceIds: { r1Id, r2Id },
+    recipient: carol,
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build move props with a recipient at the same level on both the owned item and the one the operator
+ * does not own, and nothing applied on top.
+ * This is the starting point the operator then edits by hand, to check what a removal reports.
+ * @param {string} operatorId The operator's id, so the seeded owner is the operator
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function uniformRecipientMixedOwnershipProps(operatorId, data = {}) {
+  const betty = defaultUserDto({
+    username: "betty@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Betty", last_name: "Hopper" }),
+  });
+  // The owner of the item the operator does not own, so the selection is never ownerless.
+  const dame = defaultUserDto({
+    username: "dame@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Dame", last_name: "Hopper" }),
+  });
+  const r1Id = uuidv4();
+  const r2Id = uuidv4();
+  const permission = (acoForeignKey, aroForeignKey, type) =>
+    defaultPermissionDto({
+      aco: "Resource",
+      aco_foreign_key: acoForeignKey,
+      aro: "User",
+      aro_foreign_key: aroForeignKey,
+      type,
+    });
+  const bettyOnR2 = data.recipientAbsentFromUnowned ? [] : [permission(r2Id, betty.id, 1)];
+  delete data.recipientAbsentFromUnowned;
+  return {
+    ...defaultProps(),
+    initialResources: [
+      {
+        id: r1Id,
+        metadata: { name: "R1" },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection([permission(r1Id, operatorId, 15), permission(r1Id, betty.id, 1)], {
+          assertAtLeastOneOwner: false,
+        }),
+      },
+      {
+        id: r2Id,
+        metadata: { name: "R2" },
+        permission: { type: 7 },
+        permissions: new PermissionsCollection(
+          [permission(r2Id, operatorId, 7), permission(r2Id, dame.id, 15), ...bettyOnR2],
+          { assertAtLeastOneOwner: false },
+        ),
+      },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([defaultUserDto({ id: operatorId }), betty, dame]),
+    unchangedAcos: [{ id: r2Id, name: "R2" }],
+    resourceIds: { r1Id, r2Id },
+    recipient: betty,
+    onConfirm: jest.fn(),
+    ...data,
+  };
+}
+
+/**
+ * Build move props where the destination grants somebody the moved items did not have at all, at a
+ * different level on each. Dame is absent from RA and RB before the move, and ends up able to update
+ * RA and owning RB.
+ * @param {string} operatorId The operator's id, so the seeded owner is the operator
+ * @param {object} data Props to override
+ * @returns {object}
+ */
+export function variesAppliedNewRecipientMoveProps(operatorId, data = {}) {
+  const dame = defaultUserDto({
+    username: "dame@passbolt.com",
+    profile: defaultProfileDto({ first_name: "Dame", last_name: "Hopper" }),
+  });
+  const raId = uuidv4();
+  const rbId = uuidv4();
+  const permission = (acoForeignKey, aroForeignKey, type) =>
+    defaultPermissionDto({
+      aco: "Resource",
+      aco_foreign_key: acoForeignKey,
+      aro: "User",
+      aro_foreign_key: aroForeignKey,
+      type,
+    });
+  return {
+    ...defaultProps(),
+    initialResources: [
+      {
+        id: raId,
+        metadata: { name: "RA" },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection([permission(raId, operatorId, 15)], {
+          assertAtLeastOneOwner: false,
+        }),
+      },
+      {
+        id: rbId,
+        metadata: { name: "RB" },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection([permission(rbId, operatorId, 15)], {
+          assertAtLeastOneOwner: false,
+        }),
+      },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection([defaultUserDto({ id: operatorId }), dame]),
+    initialAppliedPermissions: new Map([
+      [
+        raId,
+        new PermissionsCollection([permission(raId, operatorId, 15), permission(raId, dame.id, 7)], {
+          assertAtLeastOneOwner: false,
+        }),
+      ],
+      [
+        rbId,
+        new PermissionsCollection([permission(rbId, operatorId, 15), permission(rbId, dame.id, 15)], {
+          assertAtLeastOneOwner: false,
+        }),
+      ],
+    ]),
+    resourceIds: { raId, rbId },
+    recipient: dame,
     onConfirm: jest.fn(),
     ...data,
   };
