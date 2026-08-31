@@ -29,6 +29,8 @@ import { withDialog } from "../../../contexts/DialogContext";
 import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { withWorkflow } from "../../../contexts/WorkflowContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withTranslation } from "react-i18next";
 import HandlePermissionWorkflow, {
   PERMISSION_WORKFLOW_OPERATION,
 } from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
@@ -282,7 +284,7 @@ class FilterResourcesByFoldersItem extends React.Component {
     if ((!isPersonalFolder || (hasSomeSharedFolder && isPersonalFolder)) && this.userHasMissingKeys) {
       this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
     } else {
-      this.props.workflowContext.start(HandlePermissionWorkflow, {
+      this.startPermissionWorkflow({
         operation: PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS,
         folder: folders[0],
         destinationFolderId: this.props.folder.id,
@@ -303,11 +305,27 @@ class FilterResourcesByFoldersItem extends React.Component {
     if (hasSomePersonalResourceV5 && !this.props.folder.personal && this.userHasMissingKeys) {
       this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
     } else {
-      this.props.workflowContext.start(HandlePermissionWorkflow, {
+      this.startPermissionWorkflow({
         operation: PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES,
         resources,
         destinationFolderId: this.props.folder.id,
       });
+    }
+  }
+
+  /**
+   * Start the permission workflow for a drop.
+   * When another permission operation is still running the workflow cannot start, so warn the
+   * operator. A drop that silently does nothing looks exactly like a drag that never registered.
+   * @param {object} workflowProps The props to start HandlePermissionWorkflow with.
+   * @return {void}
+   */
+  startPermissionWorkflow(workflowProps) {
+    const workflowKey = this.props.workflowContext.start(HandlePermissionWorkflow, workflowProps);
+    if (!workflowKey) {
+      this.props.actionFeedbackContext.displayWarning(
+        this.props.t("Please complete the operation in progress before starting another one."),
+      );
     }
   }
 
@@ -602,6 +620,8 @@ FilterResourcesByFoldersItem.propTypes = {
   dragContext: PropTypes.any,
   dialogContext: PropTypes.object, // The dialog context
   workflowContext: PropTypes.any, // The workflow context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  t: PropTypes.func, // The translation function
   toggleOpenFolder: PropTypes.func,
   toggleCloseFolder: PropTypes.func,
 };
@@ -609,7 +629,15 @@ FilterResourcesByFoldersItem.propTypes = {
 export default withRouter(
   withAppContext(
     withResourceTypesLocalStorage(
-      withContextualMenu(withDialog(withWorkflow(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem))))),
+      withContextualMenu(
+        withDialog(
+          withWorkflow(
+            withResourceWorkspace(
+              withDrag(withActionFeedback(withTranslation("common")(FilterResourcesByFoldersItem))),
+            ),
+          ),
+        ),
+      ),
     ),
   ),
 );

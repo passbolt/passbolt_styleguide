@@ -30,6 +30,7 @@ import CabinetSVG from "../../../../img/svg/cabinet.svg";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import memoize from "memoize-one";
 import { withWorkflow } from "../../../contexts/WorkflowContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import HandlePermissionWorkflow, {
   PERMISSION_WORKFLOW_OPERATION,
 } from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
@@ -379,13 +380,13 @@ class FilterResourcesByFolders extends React.Component {
     const folders = this.props.dragContext.draggedItems.folders;
     const resources = this.props.dragContext.draggedItems.resources;
     if (folders?.length > 0) {
-      this.props.workflowContext.start(HandlePermissionWorkflow, {
+      this.startPermissionWorkflow({
         operation: PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS,
         folder: folders[0],
         destinationFolderId: null,
       });
     } else if (resources?.length > 0) {
-      this.props.workflowContext.start(HandlePermissionWorkflow, {
+      this.startPermissionWorkflow({
         operation: PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES,
         resources,
         destinationFolderId: null,
@@ -395,6 +396,22 @@ class FilterResourcesByFolders extends React.Component {
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOverTitle = false;
     this.setState({ draggingOverTitle });
+  }
+
+  /**
+   * Start the permission workflow for a drop.
+   * When another permission operation is still running the workflow cannot start, so warn the
+   * operator. A drop that silently does nothing looks exactly like a drag that never registered.
+   * @param {object} workflowProps The props to start HandlePermissionWorkflow with.
+   * @return {void}
+   */
+  startPermissionWorkflow(workflowProps) {
+    const workflowKey = this.props.workflowContext.start(HandlePermissionWorkflow, workflowProps);
+    if (!workflowKey) {
+      this.props.actionFeedbackContext.displayWarning(
+        this.props.t("Please complete the operation in progress before starting another one."),
+      );
+    }
   }
 
   /**
@@ -629,13 +646,15 @@ FilterResourcesByFolders.propTypes = {
   dialogContext: PropTypes.any,
   dragContext: PropTypes.any,
   workflowContext: PropTypes.any, // The workflow context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
 export default withRouter(
   withDialog(
     withContextualMenu(
       withResourceWorkspace(
-        withAppContext(withDrag(withWorkflow(withTranslation("common")(FilterResourcesByFolders)))),
+        withAppContext(withDrag(withWorkflow(withActionFeedback(withTranslation("common")(FilterResourcesByFolders))))),
       ),
     ),
   ),

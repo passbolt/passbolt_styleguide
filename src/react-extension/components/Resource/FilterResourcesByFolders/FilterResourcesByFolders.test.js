@@ -153,6 +153,26 @@ describe("See Folders", () => {
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
 
+    it("As LU dropping a folder while another permission operation is running I should be told to finish it first", async () => {
+      expect.assertions(2);
+      // A permission workflow is already registered, so this request is refused.
+      props.workflowContext.start.mockReturnValue(null);
+
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(1);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
+      await page.filterResourcesByFolders.onDragOver;
+      await page.filterResourcesByFolders.onDrop;
+
+      /*
+       * Two drops in a row is normal drag and drop. A refused request that shows nothing at all
+       * looks exactly like a drag that never registered.
+       */
+      expect(props.workflowContext.start).toHaveBeenCalled();
+      expect(props.actionFeedbackContext.displayWarning).toHaveBeenCalledWith(
+        "Please complete the operation in progress before starting another one.",
+      );
+    });
+
     it("As LU I should be able to drag and drop a folder on another folder", async () => {
       expect.assertions(2);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);

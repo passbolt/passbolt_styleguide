@@ -44,10 +44,17 @@ export default class WorkflowContextProvider extends React.Component {
   get defaultState() {
     return {
       workflows: [],
+      /*
+       * Start a workflow, unless one of the same component is already running. Only one of a given
+       * kind runs at a time.
+       * Returns null when the request was refused for that reason. A caller whose trigger can fire
+       * twice in a row, a drag and drop for instance, can then tell the operator rather than appear
+       * to do nothing.
+       */
       start: (Workflow, workflowProps) => {
         const isWorkflowStarted = this.state.workflows.find((w) => w.Workflow === Workflow);
         if (isWorkflowStarted) {
-          return;
+          return null;
         }
         const workflowKey = uuidv4();
         this.setState({ workflows: [...this.state.workflows, { key: workflowKey, Workflow, workflowProps }] });
