@@ -88,6 +88,39 @@ export class AbstractPermissionFlow extends React.Component {
   }
 
   /**
+   * Whether the operator owns the given item (and may therefore change its permissions).
+   * @param {object} item A resource/folder DTO carrying the operator's own permission.
+   * @returns {boolean}
+   */
+  isOwnedItem(item) {
+    return item.permission?.type === PermissionEntity.PERMISSION_OWNER;
+  }
+
+  /**
+   * Check the destination folder's permissions have not changed since the snapshot was taken.
+   * The move flows call this before submitting. The operator confirmed a set built from that
+   * snapshot, so any difference aborts.
+   * There is nothing to check for a move to the root, and no folder id to snapshot either.
+   * @param {string|null} destinationFolderId The destination folder id, or null for the root.
+   * @param {PermissionSnapshotEntity|null} snapshot The snapshot captured when the dialog opened.
+   * @returns {Promise<void>}
+   * @throws {Error} When the destination folder's permissions changed since the snapshot.
+   */
+  async assertDestinationPermissionsUnchanged(destinationFolderId, snapshot) {
+    if (!destinationFolderId) {
+      return;
+    }
+    const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForFolderShare(destinationFolderId);
+    if (!snapshot.equals(currentSnapshot)) {
+      throw new Error(
+        this.props.t(
+          "The destination folder permissions changed during your review. Please retry the operation and verify the permissions again.",
+        ),
+      );
+    }
+  }
+
+  /**
    * Pair each ACO with the permission set captured in its snapshot, producing the controlled-mode
    * resource shape ShareDialog seeds from without a server round-trip. The ACO list and the
    * snapshot list are index-aligned.
