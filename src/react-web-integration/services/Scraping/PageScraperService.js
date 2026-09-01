@@ -295,7 +295,7 @@ class PageScraperService {
       PageScraperService._onScrape?.(payload);
     };
 
-    if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+    if (typeof window?.requestIdleCallback === "function") {
       PageScraperService._idleHandle = window.requestIdleCallback(emitScrape, { timeout: RESCRAPE_MAX_DELAY });
     } else {
       PageScraperService._idleHandle = setTimeout(emitScrape, 0);
