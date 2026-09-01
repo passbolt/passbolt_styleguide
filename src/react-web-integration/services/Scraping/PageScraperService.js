@@ -150,10 +150,17 @@ class PageScraperService {
    *
    * @param {object[]} formElements The extraction skeleton to keep scraping.
    * @param {(pageScraping: PageScraping) => void} onScrape The callback fed every fresh payload.
-   * @returns {PageScraping} The initial snapshot (also delivered to `onScrape`).
+   * @returns {?PageScraping} The initial snapshot (also delivered to `onScrape`), or `undefined` when
+   *   `onScrape` is nullish — with no callback there is nothing to deliver, so it is a no-op.
    */
   static startIncremental(formElements, onScrape) {
     PageScraperService.stop();
+
+    // Without a callback there is nothing to deliver and `_onMutation` would early-return anyway: skip
+    // the subscription entirely rather than install a dead one.
+    if (!onScrape) {
+      return;
+    }
 
     PageScraperService._lastSkeleton = formElements;
     PageScraperService._onScrape = onScrape;

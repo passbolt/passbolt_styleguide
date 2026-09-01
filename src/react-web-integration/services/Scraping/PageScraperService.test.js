@@ -396,6 +396,18 @@ describe("PageScraperService", () => {
       expect(unsubscribeA).toHaveBeenCalledTimes(1);
       expect(unsubscribeB).not.toHaveBeenCalled();
     });
+
+    it("is a no-op when onScrape is nullish: no subscription is installed and nothing is returned", () => {
+      expect.assertions(2);
+
+      const subscribeSpy = jest.spyOn(ShadowMutationObserverService, "subscribeToShadowMutations");
+      document.body.innerHTML = `<form><input type="password"/></form>`;
+
+      const result = PageScraperService.startIncremental([realForm(document.querySelector("form"))], undefined);
+
+      expect(subscribeSpy).not.toHaveBeenCalled();
+      expect(result).toBeUndefined();
+    });
   });
 
   describe("PageScraperService::_onMutation", () => {
