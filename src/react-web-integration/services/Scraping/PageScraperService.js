@@ -183,7 +183,7 @@ class PageScraperService {
       return;
     }
 
-    let relevant = shadowRootsChanged === true;
+    let relevant = Boolean(shadowRootsChanged);
 
     for (const mutation of mutations) {
       const isTopologyChange =
