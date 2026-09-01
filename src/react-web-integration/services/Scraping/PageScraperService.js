@@ -309,7 +309,7 @@ class PageScraperService {
       clearTimeout(PageScraperService._debounceHandle);
     }
     if (PageScraperService._idleHandle !== null) {
-      if (typeof window !== "undefined" && typeof window.cancelIdleCallback === "function") {
+      if (typeof window?.cancelIdleCallback === "function") {
         window.cancelIdleCallback(PageScraperService._idleHandle);
       } else {
         clearTimeout(PageScraperService._idleHandle);
