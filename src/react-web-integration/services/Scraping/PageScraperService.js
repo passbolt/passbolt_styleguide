@@ -243,9 +243,12 @@ class PageScraperService {
    * @returns {boolean} `true` if at least one scraped form's fields were invalidated.
    */
   static _invalidateFieldsAround(node) {
-    const element = ShadowDomQueryService.isElement(node) ? node : node?.parentElement;
+    let element = node;
     if (!ShadowDomQueryService.isElement(element)) {
-      return false;
+      element = node?.parentElement;
+      if (!ShadowDomQueryService.isElement(element)) {
+        return false;
+      }
     }
 
     let invalidated = false;
