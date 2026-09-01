@@ -62,11 +62,12 @@ class PageScraperService {
    * @param {object[]} [formElements] The extraction skeleton; defaults to the last one.
    * @returns {PageScraping} The finalized page payload.
    */
-  static scrape(formElements = PageScraperService._lastSkeleton ?? []) {
+  static scrape(formElements) {
+    const skeletons = formElements ?? PageScraperService._lastSkeleton ?? [];
     const forms = [];
     const fields = [];
 
-    for (const skeleton of formElements) {
+    for (const skeleton of skeletons) {
       const scraped = PageScraperService._scrapeForm(skeleton);
       if (scraped) {
         forms.push(scraped.form);
