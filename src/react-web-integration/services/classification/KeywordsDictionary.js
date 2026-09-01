@@ -229,7 +229,7 @@ export const Keywords = Object.freeze({
     "recuperacao", // de / es / pt
   ],
 
-  // Disqualifies a "password-like" field (+ OTP/2FA/recovery/search families, Bitwarden survey).
+  // Disqualifies a "password-like" field (+ OTP/2FA/recovery/search families).
   PASSWORD_EXCLUDE: [
     "forgot",
     "oublie",
