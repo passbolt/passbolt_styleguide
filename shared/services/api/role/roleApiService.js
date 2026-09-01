@@ -13,7 +13,7 @@
  */
 import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
 import AbstractService from "../abstract/abstractService";
-import { isValidUuid } from "../../../utils/assertions";
+import { assertUuid } from "../../../utils/assertions";
 import assertString from "validator/es/lib/util/assertString";
 
 const ROLES_API_SERVICE_RESOURCE_NAME = "roles";
@@ -77,14 +77,13 @@ export default class RoleApiService extends AbstractService {
    * @param {string} id The role id
    * @param {Object} roleDto The role data containing only the name
    * @returns {Promise<PassboltResponseEntity>}
-   * @throw {TypeError} if role id or dto is invalid or incomplete
+   * @throws {TypeError|Error} if role id or dto is invalid or incomplete
    */
   async update(id, roleDto) {
     if (!id) {
       throw new TypeError("Role update failed, role id is required.");
-    } else if (!isValidUuid(id)) {
-      throw new TypeError("Role update failed, role id is not a valid uuid.");
     }
+    assertUuid(id, "Role update failed, role id is not a valid uuid.");
 
     if (!roleDto || !roleDto.name) {
       throw new TypeError("Role update failed, invalid role data.");
@@ -101,12 +100,10 @@ export default class RoleApiService extends AbstractService {
    *
    * @param {string} roleId uuid
    * @returns {Promise<PassboltResponseEntity>} Response body
-   * @throws {TypeError} if roleId is not a valid uuid
+   * @throws {Error} if roleId is not a valid uuid
    */
   async delete(roleId) {
-    if (!isValidUuid(roleId)) {
-      throw new TypeError("Role deletion failed, roleId is not a valid uuid.");
-    }
+    assertUuid(roleId, "Role deletion failed, roleId is not a valid uuid.");
 
     const response = await this.apiClient.delete(roleId);
     return new PassboltResponseEntity(response);

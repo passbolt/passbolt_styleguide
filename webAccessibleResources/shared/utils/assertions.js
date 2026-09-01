@@ -40,6 +40,23 @@ export const assertUuid = (uuidString, errorMessage = "The given parameter is no
 };
 
 /**
+ * Assert that the given parameter is an array of valid UUIDs.
+ * @param {Array<string<UUID>>} data the parameter to validate
+ * @param {string} [errorMessage] the message to throw within the error if any
+ * @throws {TypeError} if the parameter is not valid
+ */
+export const assertArrayUUID = (data, errorMessage = "The given parameter is not a valid array of uuid") => {
+  try {
+    if (!Array.isArray(data)) {
+      throw new TypeError("The given parameter is not a valid array");
+    }
+    data.forEach((entry) => assertUuid(entry));
+  } catch (error) {
+    throw new TypeError(errorMessage, { cause: error });
+  }
+};
+
+/**
  * Assert that the given parameter is a valid number.
  * Note: The value has to be defined to be assessed, undefined is considered valid.
  * @param {*} value the parameter to validate
