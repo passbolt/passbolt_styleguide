@@ -376,7 +376,7 @@ export const Keywords = Object.freeze({
     "suscribirse", // de / es
   ],
 
-  // Submit buttons — for auto-save (future feature, NOT consumed now).
+  // Submit buttons — for auto-save
   SUBMIT_LOGIN: [
     "signin",
     "login",
