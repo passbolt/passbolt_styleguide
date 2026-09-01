@@ -48,15 +48,18 @@ class FormClassificationService {
     if ((has(FieldRole.CURRENT_PASSWORD) && has(FieldRole.NEW_PASSWORD)) || heading(Keywords.HEADING_CHANGE_PASSWORD)) {
       return FormRole.CHANGE_PASSWORD;
     }
-    if (
-      (has(FieldRole.NEW_PASSWORD) && !has(FieldRole.CURRENT_PASSWORD)) ||
-      passwordCount >= 2 ||
-      identifierCount >= 2 ||
-      heading(Keywords.HEADING_SIGNUP)
-    ) {
-      if (heading(Keywords.HEADING_LOGIN) && passwordCount <= 1 && identifierCount <= 1) {
+    if (has(FieldRole.NEW_PASSWORD) && !has(FieldRole.CURRENT_PASSWORD)) {
+      if (
+        heading(Keywords.HEADING_LOGIN) &&
+        !heading(Keywords.HEADING_SIGNUP) &&
+        passwordCount <= 1 &&
+        identifierCount <= 1
+      ) {
         return FormRole.LOGIN;
       }
+      return FormRole.SIGNUP;
+    }
+    if (heading(Keywords.HEADING_SIGNUP) || passwordCount >= 2 || identifierCount >= 2) {
       return FormRole.SIGNUP;
     }
     if (passwordCount === 1 || heading(Keywords.HEADING_LOGIN)) {
