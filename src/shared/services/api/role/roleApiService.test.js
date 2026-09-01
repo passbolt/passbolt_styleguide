@@ -170,7 +170,7 @@ describe("RoleApiService", () => {
       expect(fetch).not.toHaveBeenCalled();
     });
 
-    it("should throw a TypeError if id is not a valid uuid", async () => {
+    it("should throw if id is not a valid uuid", async () => {
       expect.assertions(2);
 
       await expect(() => roleApiService.update("test", null)).rejects.toThrow(
@@ -235,7 +235,7 @@ describe("RoleApiService", () => {
       expect(result).toBeInstanceOf(PassboltResponseEntity);
     });
 
-    it("should throw a TypeError if the role id is not a valid uuid", async () => {
+    it("should throw if the role id is not a valid uuid", async () => {
       expect.assertions(2);
 
       const roleId = "test";
