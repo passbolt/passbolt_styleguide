@@ -33,7 +33,7 @@ class KeywordMatchingService {
     if (!normalizedText) {
       return false;
     }
-    const concatenated = normalizedText.replace(/ /g, "");
+    const concatenated = normalizedText.replace(/\s/g, "");
     const segments = new Set(normalizedText.split(" "));
     return set.some((keyword) => {
       // normalizeForMatch emits NFD; keywords are authored precomposed (NFC), so align the needle
