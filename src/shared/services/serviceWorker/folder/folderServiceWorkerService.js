@@ -13,7 +13,8 @@
  */
 
 export const FOLDER_UPDATE_EVENT = "passbolt.folders.update";
-
+export const FOLDER_DELETE_EVENT = "passbolt.folders.delete";
+import { assertUuid } from "../../../../shared/utils/assertions";
 class FolderServiceWorkerService {
   /**
    * Constructor
@@ -29,6 +30,16 @@ class FolderServiceWorkerService {
    */
   async update(folderDto) {
     return this.port.request(FOLDER_UPDATE_EVENT, folderDto);
+  }
+  /**
+   * Delete a folder.
+   * @param {string} folderId The folder id
+   * @param {boolean} [cascade = false] Also delete the folder content (sub-folders and resources)
+   * @returns {Promise<void>}
+   */
+  async delete(folderId, cascade = false) {
+    assertUuid(folderId);
+    await this.port.request(FOLDER_DELETE_EVENT, folderId, cascade);
   }
 }
 
