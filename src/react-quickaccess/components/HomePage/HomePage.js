@@ -34,6 +34,9 @@ import {
 import DisplayResourceUrisBadge from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import CanSuggestService from "../../../shared/services/canSuggestService/canSuggestService";
 import CaretRightSVG from "../../../img/svg/caret_right.svg";
+import GoSVG from "../../../img/svg/go.svg";
+import sanitizeUrl, { urlProtocols } from "../../../react-extension/lib/Sanitize/sanitizeUrl";
+import { resourceLinkAuthorizedProtocols } from "../../../react-extension/contexts/ResourceWorkspaceContext";
 import FilterSVG from "../../../img/svg/filter.svg";
 import UsersSVG from "../../../img/svg/users.svg";
 import TagV2SVG from "../../../img/svg/tag_v2.svg";
@@ -70,6 +73,8 @@ class HomePage extends React.Component {
     return {
       activeTabUrl: null,
       usingOnThisTab: false,
+      autofillOnLaunch: false, // Whether clicking the launch action should navigate then autofill.
+      launchingResource: false, // True while a launch-with-autofill request is in progress.
     };
   }
 
@@ -94,6 +99,17 @@ class HomePage extends React.Component {
     this.props.context.focusSearch();
 
     this.loadActiveTabUrl();
+    this.loadAutofillSettings();
+
+    // Enable arrow-key navigation through the suggested/browse/filter list.
+    document.addEventListener("keydown", this.handleListKeyDown);
+  }
+
+  /**
+   * ComponentWillUnmount hook. Remove the keyboard navigation listener.
+   */
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleListKeyDown);
   }
 
   /**
@@ -101,6 +117,72 @@ class HomePage extends React.Component {
    */
   initEventHandlers() {
     this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
+    this.handleLaunchResourceClick = this.handleLaunchResourceClick.bind(this);
+    this.handleOpenResourceClick = this.handleOpenResourceClick.bind(this);
+    this.handleListKeyDown = this.handleListKeyDown.bind(this);
+  }
+
+  /**
+   * Loads the autofill on launch settings into the state.
+   * Falls back to autofill disabled (the plain open-in-new-tab behaviour) on error.
+   * @returns {Promise<void>}
+   */
+  async loadAutofillSettings() {
+    try {
+      const settings = await this.props.context.port.request("passbolt.autofill-settings.get");
+      this.setState({ autofillOnLaunch: Boolean(settings?.autofillOnLaunch) });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * Handles the click on a search-result row's launch action when autofill on launch is enabled.
+   * Asks the background to navigate to the resource URI and autofill the login form (never submits),
+   * then closes the quickaccess window.
+   *
+   * The background work (navigate, wait for the page, passphrase prompt, decrypt, fill) runs in the
+   * service worker independently of this popup, and the passphrase prompt opens its own quickaccess
+   * window. We therefore dispatch the request and close immediately rather than awaiting the full
+   * chain, awaiting would keep this popup open until navigation steals focus and tears it down,
+   * leaving the awaited response unresolved.
+   * @param {Event} event
+   * @param {Object} resource
+   * @returns {void}
+   */
+  handleLaunchResourceClick(event, resource) {
+    event.preventDefault();
+    if (this.state.launchingResource) {
+      return;
+    }
+    this.setState({ launchingResource: true });
+    // Fire-and-forget: do not await; the controller continues in the background after the popup closes.
+    this.props.context.port
+      .request("passbolt.quickaccess.launch-resource", resource.id, this.props.context.getOpenerTabId())
+      .catch((error) => console.error(error));
+    this.props.context.closeWindow();
+  }
+
+  /**
+   * Handles the click on a search-result row's launch action when autofill on launch is disabled.
+   * Opens the resource URI in a tab without decrypting or autofilling any secret. The background
+   * reuses the opener tab when it is blank (e.g. an incognito new-tab page), otherwise opens a new
+   * tab, matching the autofill-enabled behaviour. The popup is closed immediately.
+   * @param {Event} event
+   * @param {Object} resource
+   * @returns {void}
+   */
+  handleOpenResourceClick(event, resource) {
+    event.preventDefault();
+    const uri = resource.metadata?.uris?.[0];
+    if (!uri) {
+      return;
+    }
+    // Fire-and-forget: do not await; navigation continues in the background after the popup closes.
+    this.props.context.port
+      .request("passbolt.quickaccess.open-resource-uri", uri, this.props.context.getOpenerTabId())
+      .catch((error) => console.error(error));
+    this.props.context.closeWindow();
   }
 
   /**
@@ -117,6 +199,56 @@ class HomePage extends React.Component {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  /**
+   * Arrow-key navigation through the result list (suggested, browse, and filter entries).
+   * ArrowDown/ArrowUp move focus between the primary control of each row; ArrowUp from the first
+   * row returns focus to the search field. Enter activates the focused control natively, and Tab
+   * still reaches per-row actions (e.g. the launch button).
+   * @param {KeyboardEvent} event
+   */
+  handleListKeyDown(event) {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+      return;
+    }
+    const items = Array.from(
+      document.querySelectorAll(
+        ".index-list li.suggested-resource-entry > button, " +
+          ".index-list li.browse-resource-entry > a:not(.launch-resource-button), " +
+          ".index-list li.filter-entry > a",
+      ),
+    );
+    if (items.length === 0) {
+      return;
+    }
+    const currentIndex = items.indexOf(document.activeElement);
+    if (event.key === "ArrowDown") {
+      const next = currentIndex === -1 ? items[0] : items[Math.min(currentIndex + 1, items.length - 1)];
+      this.focusListItem(next);
+      event.preventDefault();
+    } else if (currentIndex > 0) {
+      this.focusListItem(items[currentIndex - 1]);
+      event.preventDefault();
+    } else if (currentIndex === 0) {
+      const searchInput = document.querySelector("input[name='search']");
+      if (searchInput) {
+        searchInput.focus();
+        event.preventDefault();
+      }
+    }
+  }
+
+  /**
+   * Focus a result-list item and scroll it into view.
+   * @param {HTMLElement} item
+   */
+  focusListItem(item) {
+    if (!item) {
+      return;
+    }
+    item.focus();
+    item.scrollIntoView?.({ block: "nearest" });
   }
 
   /**
@@ -184,6 +316,21 @@ class HomePage extends React.Component {
         });
       }
     }
+  }
+
+  /**
+   * Handles the click on a search-result row's "open in a new tab" action.
+   * Navigates a new browser tab to the resource's stored URI without decrypting
+   * or autofilling any secret. The background controller sanitises the URI.
+   * @param {Event} event
+   * @param {Object} resource
+   * @returns {Promise<void>}
+   */
+  sanitizeResourceUrl(url) {
+    return sanitizeUrl(url, {
+      whiteListedProtocols: resourceLinkAuthorizedProtocols,
+      defaultProtocol: urlProtocols.HTTPS,
+    });
   }
 
   /**
@@ -382,6 +529,33 @@ class HomePage extends React.Component {
                           </div>
                           <CaretRightSVG />
                         </Link>
+                        {this.sanitizeResourceUrl(resource.metadata.uris?.[0]) &&
+                          (this.state.autofillOnLaunch ? (
+                            <button
+                              type="button"
+                              className="launch-resource-button"
+                              disabled={this.state.launchingResource}
+                              onClick={(event) => this.handleLaunchResourceClick(event, resource)}
+                              title={this.props.t("Open and autofill")}
+                            >
+                              <GoSVG />
+                              <span className="visually-hidden">
+                                <Trans>Open and autofill</Trans>
+                              </span>
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="launch-resource-button"
+                              onClick={(event) => this.handleOpenResourceClick(event, resource)}
+                              title={this.props.t("Open in a new tab")}
+                            >
+                              <GoSVG />
+                              <span className="visually-hidden">
+                                <Trans>Open in a new tab</Trans>
+                              </span>
+                            </button>
+                          ))}
                       </li>
                     ))}
                 </React.Fragment>
