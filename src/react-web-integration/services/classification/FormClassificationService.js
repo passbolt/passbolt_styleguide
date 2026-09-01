@@ -29,7 +29,7 @@ class FormClassificationService {
    */
   static classify(scope) {
     const headings = TextNormalizer.normalizeForMatch(
-      [(scope.form?.ancestorHeadings || []).join(" "), scope.form?.buttonText].filter(Boolean).join(" "),
+      [...(scope.form?.ancestorHeadings || []), scope.form?.buttonText].filter(Boolean).join(" "),
     );
     const has = (role) => scope.fields.some((field) => scope.roles.get(field.fieldId) === role);
     const count = (role) => scope.fields.filter((field) => scope.roles.get(field.fieldId) === role).length;
