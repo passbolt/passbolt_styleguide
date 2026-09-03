@@ -13,6 +13,7 @@
  */
 
 import FormExtractionService from "./DomExtraction/FormExtractionService";
+import FieldAggregatorService from "./DomExtraction/FieldAggregatorService";
 import OrphanFieldsExtractionService from "./DomExtraction/OrphanFieldsExtractionService";
 import PageScraperService from "./Scraping/PageScraperService";
 import ScrapingIdentityService from "./Scraping/ScrapingIdentityService";
@@ -90,10 +91,13 @@ class PageClassificationService {
     const extractionStart = PageClassificationService.now();
     const skeleton = FormExtractionService.aggregateForms(root);
     OrphanFieldsExtractionService.aggregatePseudoForms(PageClassificationService.discoverFields(root), skeleton);
+    // Populate each container's fields[] uniformly (TEXT_FIELDS re-scan) and purge empty containers,
+    // mirroring the canonical extraction pipeline (see InFormManager.findAndSetCredentialsFormFields).
+    const populated = FieldAggregatorService.aggregateFields(skeleton);
     timings.extraction += PageClassificationService.now() - extractionStart;
 
     const scrapingStart = PageClassificationService.now();
-    const page = PageScraperService.scrape(skeleton);
+    const page = PageScraperService.scrape(populated);
     timings.scraping += PageClassificationService.now() - scrapingStart;
 
     const classificationStart = PageClassificationService.now();
@@ -112,7 +116,7 @@ class PageClassificationService {
    * @returns {number} The current time in milliseconds.
    */
   static now() {
-    return typeof performance !== "undefined" && typeof performance.now === "function" ? performance.now() : 0;
+    return typeof performance?.now === "function" ? performance.now() : 0;
   }
 
   /**

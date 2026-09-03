@@ -29,13 +29,15 @@ import { TEXT_FIELDS } from "../../lib/InForm/OrphanDictionary";
 class FieldAggregatorService {
   /**
    * Fillable candidates of a container: TEXT_FIELDS (text-category inputs), shadow-piercing, kept iff
-   * an HTMLElement AND visible. No buttons, no select/textarea, no contenteditable.
+   * an element AND visible. No buttons, no select/textarea, no contenteditable. The element test uses
+   * `nodeType` (not `instanceof HTMLElement`) so fields living in a same-origin iframe — a different
+   * realm whose HTMLElement is a distinct constructor — are not wrongly dropped.
    * @param {Element} containerElement The container to scan.
    * @returns {Element[]} The visible fillable fields.
    */
   static gatherCandidates(containerElement) {
     return ShadowDomQueryService.querySelectorAllDeep(containerElement, TEXT_FIELDS).filter(
-      (element) => element instanceof HTMLElement && ElementVisibilityService.isElementViewable(element),
+      (element) => ShadowDomQueryService.isElement(element) && ElementVisibilityService.isElementViewable(element),
     );
   }
 

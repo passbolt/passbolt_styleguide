@@ -33,12 +33,14 @@ class FormExtractionService {
   }
 
   /**
-   * Find form containers and their fields across the whole DOM, including shadow DOM.
+   * Find form containers and their fields across the DOM under `root` (defaults to the top document),
+   * including shadow DOM.
+   * @param {Document|Element} [root] The root to scan; defaults to the top document.
    * @returns {Array<{ containerElement: Element, fields: Array<{ element: Element, isViewable: boolean }>, isPseudoForm: boolean }>} The found form containers.
    */
-  static aggregateForms() {
+  static aggregateForms(root = document) {
     const formElements = [];
-    const candidates = ShadowDomQueryService.querySelectorAllDeep(document, FORM_LIKE_CONTAINERS);
+    const candidates = ShadowDomQueryService.querySelectorAllDeep(root, FORM_LIKE_CONTAINERS);
 
     for (const candidate of candidates) {
       if (!ShadowDomQueryService.hasAncestorMatchingDeep(candidate, CUSTOM_FORM_CONTAINERS)) {
