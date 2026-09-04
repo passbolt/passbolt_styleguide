@@ -264,6 +264,14 @@ class ResourceTypeEntity extends EntityV2 {
   }
 
   /**
+   * Can the quick acces list and display this resource type
+   * @returns {boolean}
+   */
+  isSupportedByQuickAccess() {
+    return this.hasPassword() || this.hasTotp() || this.hasPinCode();
+  }
+
+  /**
    * Is standalone pin code
    * @returns {boolean}
    */

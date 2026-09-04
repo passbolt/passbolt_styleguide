@@ -1073,6 +1073,19 @@ describe("ResourceTypeEntity", () => {
     });
   });
 
+  describe("::isSupportedByQuickAccess", () => {
+    it("password, totp and pin code types are supported", () => {
+      expect.assertions(3);
+      expect(new ResourceTypeEntity(resourceTypeV5DefaultDto()).isSupportedByQuickAccess()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5TotpDto()).isSupportedByQuickAccess()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).isSupportedByQuickAccess()).toBeTruthy();
+    });
+    it("note and custom fields types are not supported", () => {
+      expect.assertions(2);
+      expect(new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto()).isSupportedByQuickAccess()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()).isSupportedByQuickAccess()).toBeFalsy();
+    });
+  });
   describe("::isStandalonePinCode", () => {
     it("standalone pin code should be truthy", () => {
       expect.assertions(1);
