@@ -511,16 +511,16 @@ export const SawfToken = Object.freeze({
 export const OTP_BOX_INPUT_TYPES = Object.freeze(["text", "tel", "number", "password", ""]);
 
 /**
- * Minimum number of single-character boxes for a run to be a plausible one-time code.
+ * Lower bound of a plausible one-time code: single-character boxes in a run, or `maxLength` of a single `code`/`pin` field.
  * @type {number}
  */
 export const MIN_OTP_SEGMENTS = 4;
 
 /**
- * Maximum number of single-character boxes for a run to be a plausible one-time code.
+ * Upper bound of a plausible one-time code: single-character boxes in a run, or `maxLength` of a single `code`/`pin` field.
  * @type {number}
  */
-export const MAX_OTP_SEGMENTS = 8;
+export const MAX_OTP_SEGMENTS = 12;
 
 /**
  * Upper bound on the number of fields classified per page (bounds work on adversarial/huge DOMs).

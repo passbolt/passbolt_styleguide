@@ -143,7 +143,9 @@ class InFormManager {
 
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
 
-    ShadowDomFocusHealerService.installFocusinHealer();
+    ShadowDomFocusHealerService.installFocusinHealer((input) =>
+      this.callToActionFields.some(({ field }) => field === input),
+    );
 
     this.findAndSetAuthenticationFields();
     this.handleDomChange();
@@ -588,6 +590,12 @@ class InFormManager {
     // Does this batch actually touch a credential-relevant node or attribute?
     const affectsFields =
       this._mutationsAffectAuthenticationFields(mutations) || this._attributeMutationAffectsField(mutations);
+
+    // A genuine field-affecting change (field added/removed, field/container attribute) may turn a
+    // previously-ignored input into a credential — let the light-DOM focus healer retry those inputs.
+    if (affectsFields) {
+      ShadowDomFocusHealerService.resetHealAttempts();
+    }
 
     const isDocumentScope = root.nodeType === Node.DOCUMENT_NODE;
 

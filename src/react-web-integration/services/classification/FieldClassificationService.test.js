@@ -108,6 +108,66 @@ describe("FieldClassificationService", () => {
 
         expect(decision).toStrictEqual({ role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD });
       });
+
+      it("should classify an ambiguous 'code' label corroborated by a plausible maxLength as TOTP", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(
+          defaultField({
+            labelText: "Saisissez votre code de double authentification :",
+            name: "codeDA",
+            maxLength: 6,
+          }),
+        );
+
+        expect(decision).toStrictEqual({ role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
+
+      it("should classify an ambiguous 'code' label corroborated by a numeric inputMode as TOTP", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(
+          defaultField({ labelText: "Enter your code", inputMode: "numeric" }),
+        );
+
+        expect(decision).toStrictEqual({ role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
+
+      it("should classify an ambiguous 'code' label corroborated by a digit-constrained pattern as TOTP", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(
+          defaultField({ labelText: "Enter your code", pattern: "[0-9]{6}" }),
+        );
+
+        expect(decision).toStrictEqual({ role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
+
+      it("should NOT classify an ambiguous 'code' token without any structural corroboration", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ labelText: "Enter your code" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should NOT classify an ambiguous 'code' token when maxLength is outside the OTP range", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(
+          defaultField({ labelText: "Enter your code", maxLength: 20 }),
+        );
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should let a recovery keyword veto an ambiguous 'code' token even with a plausible maxLength", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ labelText: "backup code", maxLength: 6 }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
     });
 
     describe("Tier 1 — SAWF (declaredBySawf)", () => {

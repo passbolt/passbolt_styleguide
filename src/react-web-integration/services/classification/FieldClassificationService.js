@@ -15,8 +15,9 @@
 import TextNormalizer from "../../lib/InForm/TextNormalizer";
 import KeywordMatchingService from "./KeywordMatchingService";
 import SawfClassificationService from "./SawfClassificationService";
+import FieldFeatureService from "./FieldFeatureService";
 import { FieldRole, Tier } from "./Taxonomy";
-import { Keywords, NON_CREDENTIAL_INPUT_TYPES } from "./KeywordsDictionary";
+import { Keywords, NON_CREDENTIAL_INPUT_TYPES, MIN_OTP_SEGMENTS, MAX_OTP_SEGMENTS } from "./KeywordsDictionary";
 
 /**
  * A rough e-mail shape, used to detect an email field from its placeholder text.
@@ -122,7 +123,33 @@ class FieldClassificationService {
     ) {
       return { role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD };
     }
+    // An ambiguous token (`code`/`pin`) is too weak on its own. A login, promo or PIN field would
+    // false-positive. Promote to TOTP only when a structural signal corroborates: a `maxLength` in the
+    // plausible one-time-code range, or a numeric input hint (`inputMode`/`pattern`). Matches the
+    // French DSFR pattern "code de double authentification" + `maxlength=6`, which carries no strong
+    // TOTP token. Segmented boxes stay with SegmentedOtpResolutionService (maxLength 1).
+    if (
+      (KeywordMatchingService.matchesAny(strongText, Keywords.TOTP_AMBIGUOUS) ||
+        KeywordMatchingService.matchesAny(weakText, Keywords.TOTP_AMBIGUOUS)) &&
+      FieldClassificationService.corroboratesSingleOtp(field)
+    ) {
+      return { role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD };
+    }
     return null;
+  }
+
+  /**
+   * Structural corroboration for an ambiguous one-time-code token on a SINGLE field: a `maxLength`
+   * within the plausible code range ({@link MIN_OTP_SEGMENTS} to {@link MAX_OTP_SEGMENTS}, the same
+   * bounds as a segmented run), or a numeric input hint. Segmented single-character boxes (maxLength 1)
+   * are handled by SegmentedOtpResolutionService, so they never satisfy the length bound here.
+   * @param {FieldScraping} field The field.
+   * @returns {boolean} Whether a structural OTP signal corroborates the ambiguous token.
+   */
+  static corroboratesSingleOtp(field) {
+    const maxLength = field.attributes?.maxLength;
+    const plausibleLength = maxLength >= MIN_OTP_SEGMENTS && maxLength <= MAX_OTP_SEGMENTS;
+    return plausibleLength || FieldFeatureService.looksNumeric(field);
   }
 
   /**

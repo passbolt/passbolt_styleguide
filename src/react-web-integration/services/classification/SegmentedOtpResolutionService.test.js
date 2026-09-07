@@ -300,10 +300,10 @@ describe("SegmentedOtpResolutionService", () => {
         expect(currentScope.roles.has("otp3")).toBe(false);
       });
 
-      it("should not form a group for a corroborated run that is too long (9 boxes, above MAX)", () => {
+      it("should not form a group for a corroborated run that is too long (13 boxes, above MAX)", () => {
         expect.assertions(2);
 
-        const fields = Array.from({ length: 9 }, (unused, index) =>
+        const fields = Array.from({ length: 13 }, (unused, index) =>
           defaultBox(`otp${index}`, { autoComplete: "one-time-code" }),
         );
         const currentScope = defaultScope(fields);
