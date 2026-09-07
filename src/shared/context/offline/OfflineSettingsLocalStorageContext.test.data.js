@@ -11,25 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.13.0
  */
+import { defaultAppContext } from "../../../react-extension/contexts/ExtAppContext.test.data";
 
-/**
- * Build minimal online session.
- * @param {object} [data={}] Data to override
- * @returns {object}
- */
-export const minimalOnlineSessionDto = (data = {}) => ({
-  is_authenticated: true,
+export const defaultProps = (data = {}) => ({
+  context: defaultAppContext(),
   ...data,
 });
 
-/**
- * Build default online session.
- * @param {object} [data={}] Data to override
- * @returns {object}
- */
-export const defaultOnlineSessionDto = (data = {}) => ({
-  is_authenticated: true,
-  is_mfa_authenticated: true,
-  last_online_logged_in: "2025-08-04T18:59:11+00:00",
+export const defaultOfflineSettingsStorageContext = (data = {}) => ({
+  get: jest.fn(),
+  offlineSettings: undefined,
+  getOrFind: jest.fn(),
   ...data,
 });

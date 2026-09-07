@@ -68,6 +68,7 @@ describe("As AD I can see a Breadcrumb", () => {
     { menuType: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED, expectedBreadcrumb: "Getting Started" },
     { menuType: AdministrationWorkspaceMenuTypes.SCIM, expectedBreadcrumb: "SCIM" },
     { menuType: AdministrationWorkspaceMenuTypes.SECRET_HISTORY, expectedBreadcrumb: "Secret History" },
+    { menuType: AdministrationWorkspaceMenuTypes.OFFLINE, expectedBreadcrumb: "Offline Mode" },
   ])("As AD I should see a breadcrumb for each menu", (scenario) => {
     it(`for: ${scenario.menuType}`, () => {
       const props = defaultProps(scenario.menuType); // The props to pass

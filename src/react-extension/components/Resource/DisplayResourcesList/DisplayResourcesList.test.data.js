@@ -33,9 +33,12 @@ import { defaultResourceMetadataDto } from "../../../../shared/models/entity/res
 import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_TOTP,
+  TEST_RESOURCE_TYPE_V5_DEFAULT,
   TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import OfflineSettingsEntity from "../../../../shared/models/entity/offline/offlineSettingsEntity";
+import { defaultOfflineSettingsDto } from "../../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
 import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
@@ -48,6 +51,7 @@ export function defaultProps(data = {}) {
   return {
     context: defaultUserAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
+    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     contextualMenuContext: defaultContextualMenuContext(),
@@ -123,6 +127,57 @@ export function propsWithFilteredResourcesAndPinCodeColumnVisible(data = {}) {
         { id: "expired", label: "Expiry", position: 9, show: true },
         { id: "modified", label: "Modified", position: 10, show: true },
         { id: "location", label: "Location", position: 11, show: true },
+      ]),
+    }),
+    ...data,
+  });
+}
+
+/**
+ * Props with populated filtered resources and the offline column enabled.
+ * @param {object} data Override the default props.
+ * @returns {object}
+ */
+export function propsWithFilteredResourcesAndOfflineEnabled(data = {}) {
+  const baseContext = defaultUserAppContext();
+  const baseCanIUse = baseContext.siteSettings.canIUse.bind(baseContext.siteSettings);
+  baseContext.siteSettings.canIUse = (name) => (name === "offlineMode" ? true : baseCanIUse(name));
+
+  const resources = [
+    defaultResourceDto(
+      {
+        metadata: defaultResourceMetadataDto({
+          name: "available-offline",
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+        }),
+      },
+      { withOffline: true },
+    ),
+    defaultResourceDto({
+      metadata: defaultResourceMetadataDto({
+        name: "not-available-offline",
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+      }),
+    }),
+  ];
+
+  return defaultProps({
+    context: baseContext,
+    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filteredResources: resources,
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        { id: "favorite", label: "Favorite", position: 1, show: true },
+        { id: "icon", label: "Icon", position: 2, show: true },
+        { id: "name", label: "Name", position: 3, show: true },
+        { id: "username", label: "Username", position: 4, show: true },
+        { id: "password", label: "Password", position: 5, show: true },
+        { id: "totp", label: "TOTP", position: 6, show: true },
+        { id: "uri", label: "URI", position: 7, show: true },
+        { id: "expired", label: "Expiry", position: 8, show: true },
+        { id: "modified", label: "Modified", position: 9, show: true },
+        { id: "location", label: "Location", position: 10, show: true },
+        { id: "offline_mode", label: "Available Offline", position: 11, show: true },
       ]),
     }),
     ...data,

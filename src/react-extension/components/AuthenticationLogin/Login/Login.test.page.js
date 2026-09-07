@@ -159,13 +159,4 @@ export default class LoginPage {
     fireEvent.click(this.secondaryActionLink, leftClick);
     await waitFor(inProgressFn);
   }
-
-  /**
-   * Click on the secondary action link.
-   */
-  async clickOnSsoLogin(inProgressFn = () => {}) {
-    const leftClick = { button: 0 };
-    fireEvent.click(this.azureLoginButton, leftClick);
-    await waitFor(inProgressFn);
-  }
 }
