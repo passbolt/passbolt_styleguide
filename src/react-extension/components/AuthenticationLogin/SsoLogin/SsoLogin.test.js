@@ -19,6 +19,8 @@ import SsoLoginPage from "./SsoLogin.test.page";
 import { defaultProps } from "./SsoLogin.test.data";
 import { waitFor } from "@testing-library/dom";
 import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
+import UserActiveSessionEntity from "../../../../shared/models/entity/session/userActiveSessionEntity";
+import { offlineUserActiveSessionDto } from "../../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -76,6 +78,41 @@ describe("SsoLogin", () => {
 
       await page.clickOnSsoLogin();
 
+      expect(props.onSsoSignIn).toHaveBeenCalledTimes(1);
+
+      await page.clickSecondaryActionLink();
+
+      expect(props.switchToPassphraseLogin).not.toHaveBeenCalled();
+
+      await signInPromiseResolver();
+    });
+
+    it("As an offline authenticated user I can use the SSO login feature to sign in to Passbolt and logout offline", async () => {
+      expect.assertions(4);
+
+      const ssoProvider = SsoProviders.find((provider) => provider.id === "azure");
+      let signInPromiseResolver = null;
+      const props = defaultProps({
+        onSsoSignIn: jest.fn().mockImplementation(
+          () =>
+            new Promise((resolve) => {
+              signInPromiseResolver = resolve;
+            }),
+        ),
+        switchToPassphraseLogin: jest.fn(),
+        ssoProvider,
+        activeSession: new UserActiveSessionEntity(offlineUserActiveSessionDto()),
+      });
+      jest.spyOn(props.context.port, "request").mockImplementation(jest.fn());
+
+      const page = new SsoLoginPage(props);
+      await waitFor(() => {});
+
+      expect(page.azureLoginButton).toBeTruthy();
+
+      await page.clickOnSsoLogin();
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth.offline-logout");
       expect(props.onSsoSignIn).toHaveBeenCalledTimes(1);
 
       await page.clickSecondaryActionLink();

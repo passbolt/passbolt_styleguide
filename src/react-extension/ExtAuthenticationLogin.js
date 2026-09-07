@@ -24,6 +24,8 @@ import Footer from "./components/Common/Footer/Footer";
 import OrchestrateLoginBoxFooter from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxFooter";
 import SsoContextProvider from "./contexts/SsoContext";
 import LogoSVG from "../img/svg/logo.svg";
+import ActiveSessionLocalStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import AccountEntity from "../shared/models/entity/account/accountEntity";
 
 /**
  * The login application served by the browser extension.
@@ -43,6 +45,7 @@ class ExtAuthenticationLogin extends Component {
     await this.initializeUserSettings();
     await this.getSiteSettings();
     await this.getExtensionVersion();
+    this.getAccount();
     this.initLocale();
   }
 
@@ -73,7 +76,7 @@ class ExtAuthenticationLogin extends Component {
   }
 
   isReady() {
-    return this.state.siteSettings !== null && this.state.locale !== null;
+    return this.state.siteSettings !== null && this.state.locale !== null && this.state.account !== null;
   }
 
   /**
@@ -91,7 +94,7 @@ class ExtAuthenticationLogin extends Component {
    * Using SiteSettingsEntity
    */
   async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.site-settings.get-or-find");
+    const settings = await this.props.port.request("passbolt.site-settings.find-and-update");
     const siteSettings = new SiteSettingsEntity(settings);
     this.setState({ siteSettings });
   }
@@ -113,6 +116,16 @@ class ExtAuthenticationLogin extends Component {
   }
 
   /**
+   * Get the account
+   * @returns {Promise<void>}
+   */
+  async getAccount() {
+    const accountDto = await this.props.port.request("passbolt.account.get");
+    const account = new AccountEntity(accountDto);
+    this.setState({ account });
+  }
+
+  /**
    * Whenever the update of the locale is requested
    */
   async onUpdateLocaleRequested() {
@@ -125,34 +138,40 @@ class ExtAuthenticationLogin extends Component {
    */
   render() {
     return (
-      <AppContext.Provider value={this.state}>
-        {this.isReady() && (
-          <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-            <Router>
-              <SsoContextProvider>
-                <AuthenticationLoginContextProvider>
-                  <div id="container" className="container page login">
-                    <div className="content">
-                      <div className="header">
-                        <div className="logo-svg">
-                          <LogoSVG role="img" width="20rem" height="3.5rem" />
+      this.isReady() && (
+        <ActiveSessionLocalStorageContextProvider
+          account={this.state.account}
+          port={this.props.port}
+          storage={this.props.storage}
+        >
+          <AppContext.Provider value={this.state}>
+            <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+              <Router>
+                <SsoContextProvider>
+                  <AuthenticationLoginContextProvider>
+                    <div id="container" className="container page login">
+                      <div className="content">
+                        <div className="header">
+                          <div className="logo-svg">
+                            <LogoSVG role="img" width="20rem" height="3.5rem" />
+                          </div>
+                        </div>
+                        <div className="login-form">
+                          <OrchestrateLoginBoxMain />
+                        </div>
+                        <div className="login-box-footer">
+                          <OrchestrateLoginBoxFooter />
                         </div>
                       </div>
-                      <div className="login-form">
-                        <OrchestrateLoginBoxMain />
-                      </div>
-                      <div className="login-box-footer">
-                        <OrchestrateLoginBoxFooter />
-                      </div>
+                      <Footer />
                     </div>
-                    <Footer />
-                  </div>
-                </AuthenticationLoginContextProvider>
-              </SsoContextProvider>
-            </Router>
-          </TranslationProvider>
-        )}
-      </AppContext.Provider>
+                  </AuthenticationLoginContextProvider>
+                </SsoContextProvider>
+              </Router>
+            </TranslationProvider>
+          </AppContext.Provider>
+        </ActiveSessionLocalStorageContextProvider>
+      )
     );
   }
 }
