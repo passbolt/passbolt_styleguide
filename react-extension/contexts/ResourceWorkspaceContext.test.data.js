@@ -18,6 +18,10 @@ import ColumnsResourceSettingCollection from "../../shared/models/entity/resourc
 import { defaultUserAppContext } from "./ExtAppContext.test.data";
 import { defaultPasswordExpirySettingsContext } from "./PasswordExpirySettingsContext.test.data";
 import { defaultUserRbacContext } from "../../shared/context/Rbac/RbacContext.test.data";
+import OfflineSettingsEntity from "../../shared/models/entity/offline/offlineSettingsEntity";
+import { defaultOfflineSettingsDto } from "../../shared/models/entity/offline/offlineSettingsEntity.test.data";
+import ResourceTypesCollection from "../../shared/models/entity/resourceType/resourceTypesCollection";
+import { resourceTypesCollectionDto } from "../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {
   readPermissionDto,
   updatePermissionDto,
@@ -73,11 +77,16 @@ export function defaultAppContext(appContext) {
 
 /**
  * Default props
+ * @param {object} data Override the default props.
+ * @returns {object}
  */
-export function defaultProps() {
+export function defaultProps(data = {}) {
   return {
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     rbacContext: defaultUserRbacContext(),
+    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    ...data,
   };
 }
 

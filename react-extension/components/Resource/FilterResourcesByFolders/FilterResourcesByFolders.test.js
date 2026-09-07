@@ -28,6 +28,8 @@ import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissin
 import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
 import { v4 as uuidv4 } from "uuid";
 import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultFolderDto } from "../../../../shared/models/entity/folder/folderEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -424,6 +426,102 @@ describe("See Folders", () => {
 
     it("I should see the loading message “Retrieving folders", async () => {
       expect(page.filterResourcesByFolders.isLoading()).toBeTruthy();
+    });
+  });
+
+  describe("As LU I collapse a folder containing a branch several levels deep", () => {
+    const rootFolder = defaultFolderDto({ id: uuidv4(), name: "A root", folder_parent_id: null });
+    const level1Folder = defaultFolderDto({ id: uuidv4(), name: "B level 1", folder_parent_id: rootFolder.id });
+    const level2Folder = defaultFolderDto({ id: uuidv4(), name: "C level 2", folder_parent_id: level1Folder.id });
+    const level3Folder = defaultFolderDto({ id: uuidv4(), name: "D level 3", folder_parent_id: level2Folder.id });
+    // The deepest folders are deliberately listed before their parents.
+    const folders = [rootFolder, level3Folder, level2Folder, level1Folder];
+
+    /**
+     * Mimic the hierarchy cache of the app context: the list of the ancestors of a folder, root first.
+     * @param {array<object>} folders The folders
+     * @returns {function(string): array<object>}
+     */
+    const hierarchyFolderCache = (folders) => (folderId) => {
+      const hierarchy = [];
+      let folder = folders.find((folder) => folder.id === folderId);
+      while (folder?.folder_parent_id) {
+        const parentFolder = folders.find((candidate) => candidate.id === folder.folder_parent_id);
+        if (!parentFolder) {
+          break;
+        }
+        hierarchy.unshift(parentFolder);
+        folder = parentFolder;
+      }
+      return hierarchy;
+    };
+
+    const propsWithFolders = (folders) =>
+      defaultProps({
+        context: defaultAppContext({
+          folders,
+          foldersMapById: folders.reduce((result, folder) => {
+            result[folder.id] = folder;
+            return result;
+          }, {}),
+          getHierarchyFolderCache: hierarchyFolderCache(folders),
+        }),
+        match: { params: {} },
+        dragContext: {
+          dragging: false,
+          draggedItems: { folders: [], resources: [] },
+          onDragStart: jest.fn(),
+          onDragEnd: jest.fn(),
+        },
+      });
+
+    beforeEach(() => {
+      page = new FilterResourcesByFoldersPage(propsWithFolders(folders));
+    });
+
+    it("As LU I should not see the deepest folders at the top of the tree after closing the top folder", async () => {
+      expect.assertions(5);
+      expect(page.filterResourcesByFoldersItem.count).toBe(1);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1); // open A root
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2); // open B level 1
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3); // open C level 2
+      expect(page.filterResourcesByFoldersItem.count).toBe(4);
+      expect(page.filterResourcesByFoldersItem.name(4)).toBe("D level 3");
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1); // close A root
+      expect(page.filterResourcesByFoldersItem.count).toBe(1);
+      expect(page.filterResourcesByFoldersItem.name(1)).toBe("A root");
+    });
+
+    it("As LU I should see the branch fully collapsed when I open the top folder again", async () => {
+      expect.assertions(4);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1); // open A root
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2); // open B level 1
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3); // open C level 2
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1); // close A root
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1); // open A root again
+      expect(page.filterResourcesByFoldersItem.count).toBe(2);
+      expect(page.filterResourcesByFoldersItem.name(2)).toBe("B level 1");
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2); // open B level 1 again
+      // C level 2 was closed with its parent: its own child must not be displayed yet.
+      expect(page.filterResourcesByFoldersItem.count).toBe(3);
+      expect(page.filterResourcesByFoldersItem.name(3)).toBe("C level 2");
+    });
+
+    it("As LU I should not see the children of a folder moved under a closed folder at the top of the tree", async () => {
+      expect.assertions(4);
+      const otherRootFolder = defaultFolderDto({ id: uuidv4(), name: "Z root", folder_parent_id: null });
+      const foldersBeforeMove = [rootFolder, otherRootFolder, level1Folder, level2Folder];
+      page = new FilterResourcesByFoldersPage(propsWithFolders(foldersBeforeMove));
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1); // open A root
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2); // open B level 1
+      expect(page.filterResourcesByFoldersItem.count).toBe(4);
+      // B level 1 is moved under the closed Z root while it is still opened.
+      const movedLevel1Folder = { ...level1Folder, folder_parent_id: otherRootFolder.id };
+      const foldersAfterMove = [rootFolder, otherRootFolder, movedLevel1Folder, level2Folder];
+      page.rerender(propsWithFolders(foldersAfterMove));
+      expect(page.filterResourcesByFoldersItem.count).toBe(2);
+      expect(page.filterResourcesByFoldersItem.name(1)).toBe("A root");
+      expect(page.filterResourcesByFoldersItem.name(2)).toBe("Z root");
     });
   });
 });

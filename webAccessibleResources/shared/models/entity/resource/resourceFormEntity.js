@@ -44,6 +44,7 @@ import ResourceMetadataEntity from "./metadata/resourceMetadataEntity";
 import { CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH } from "../customField/customFieldEntity";
 import SecretDataV5StandaloneNoteEntity from "../secretData/secretDataV5StandaloneNoteEntity";
 import SecretDataV5StandalonePinCodeEntity from "../secretData/secretDataV5StandalonePinCodeEntity";
+import OfflineItemEntity from "../offline/offlineItemEntity";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -55,12 +56,13 @@ class ResourceFormEntity extends EntityV2 {
 
   /**
    *  @inheritDoc
-   * @returns {{metadata: ResourceMetadataEntity, secret: SecretDataEntity}}
+   * @returns {{metadata: ResourceMetadataEntity, secret: SecretDataEntity, offline: OfflineItemEntity}}
    */
   static get associations() {
     return {
       metadata: ResourceMetadataEntity,
       secret: SecretDataEntity,
+      offline: OfflineItemEntity,
     };
   }
 
@@ -106,6 +108,10 @@ class ResourceFormEntity extends EntityV2 {
             SecretDataV5StandaloneCustomFieldsCollection.getSchema(),
             SecretDataV5StandalonePinCodeEntity.getSchema(),
           ],
+        },
+        offline: {
+          ...OfflineItemEntity.getSchema(),
+          nullable: true,
         },
       },
     };
@@ -403,6 +409,14 @@ class ResourceFormEntity extends EntityV2 {
     return this._secret;
   }
 
+  /**
+   * Get resource form offline
+   * @returns {OfflineItemEntity} offline
+   */
+  get offline() {
+    return this._offline;
+  }
+
   /*
    * ==================================================
    * Serialization
@@ -419,6 +433,9 @@ class ResourceFormEntity extends EntityV2 {
     }
     if (this._secret) {
       result.secret = this.secret.toDto();
+    }
+    if (this._offline) {
+      result.offline = this.offline.toDto();
     }
 
     return result;
@@ -438,6 +455,11 @@ class ResourceFormEntity extends EntityV2 {
         result.metadata.custom_fields = this.secret._customFields.toMetadataDto();
       }
     }
+
+    if (this._offline) {
+      result.offline = this.offline.toDto();
+    }
+
     return result;
   }
 

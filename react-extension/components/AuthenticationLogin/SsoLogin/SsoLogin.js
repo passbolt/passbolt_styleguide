@@ -16,6 +16,8 @@ import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withActiveSessionLocalStorage } from "../../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import UserActiveSessionEntity from "../../../../shared/models/entity/session/userActiveSessionEntity";
 
 /**
  * This component allows the user to log in with his account
@@ -103,6 +105,9 @@ class SsoLogin extends Component {
     event.preventDefault();
     this.setState({ processing: true });
 
+    if (this.props.activeSession?.isAuthenticated && this.props.activeSession?.isSessionOffline) {
+      await this.props.context.port.request("passbolt.auth.offline-logout");
+    }
     await this.props.onSsoSignIn();
 
     this.setState({ processing: false });
@@ -153,6 +158,7 @@ SsoLogin.propTypes = {
   onSsoSignIn: PropTypes.func, // Callback to trigger whenever the user wants to sign-in using SSO
   switchToPassphraseLogin: PropTypes.func, // Callback to trigger whenever the user wants to proceed with passphrase
   ssoProvider: PropTypes.object, // The SSO provider if any
+  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation("common")(SsoLogin));
+export default withActiveSessionLocalStorage(withAppContext(withTranslation("common")(SsoLogin)));
