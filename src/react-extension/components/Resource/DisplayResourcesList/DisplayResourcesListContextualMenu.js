@@ -528,12 +528,9 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @return {boolean}
    */
   get canUseOffline() {
-    const resourceType = this.props.resourceTypes.getFirstById(this.resource.resource_type_id);
-
     return (
       this.props.context.siteSettings.canIUse("offlineMode") &&
       Boolean(this.props.offlineSettings) &&
-      resourceType?.isV5() &&
       this.props.rbacContext.canIUseAction(
         this.resource.offline ? actions.OFFLINE_ITEMS_DELETE : actions.OFFLINE_ITEMS_ADD,
       )
@@ -541,17 +538,17 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
-   * To check if the resource is a Password or TOTP resource
+   * To check if the resource is supported by offline mode
    *
-   * This method is to add a conditional check for Offline Mode Phase 1
+   * This method is to add a conditional check for Offline Mode
    * where the option to mark/unmark a resource as available offline is
-   * only for passwords or TOTP
+   * only resources supported by offline mode
    *
    * @return {boolean}
    */
-  get isPasswordOrTotp() {
+  get isOfflineSupportedType() {
     const resourceType = this.props.resourceTypes?.getFirstById(this.resource.resource_type_id);
-    return resourceType?.hasPassword() || resourceType?.hasTotp();
+    return resourceType?.isSupportedByOfflineMode();
   }
 
   /**
@@ -788,7 +785,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </li>
         )}
-        {this.canUseOffline && this.isPasswordOrTotp && (
+        {this.canUseOffline && this.isOfflineSupportedType && (
           <li key="option-offline-availability" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
