@@ -96,7 +96,7 @@
   },
   "overrides": {
     "uuid": "^14.0.0",
-    "js-yaml": "^4.2.0"
+    "js-yaml": "^4.3.2"
   },
   "scripts": {
     "build": "webpack",
