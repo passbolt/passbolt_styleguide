@@ -272,6 +272,14 @@ class ResourceTypeEntity extends EntityV2 {
   }
 
   /**
+   * Can the resource be available in offline mode
+   * @returns {boolean}
+   */
+  isSupportedByOfflineMode() {
+    return this.isV5() && (this.hasPassword() || this.hasTotp() || this.hasPinCode());
+  }
+
+  /**
    * Is standalone pin code
    * @returns {boolean}
    */
