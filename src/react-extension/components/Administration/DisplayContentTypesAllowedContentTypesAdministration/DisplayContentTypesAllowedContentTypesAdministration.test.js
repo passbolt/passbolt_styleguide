@@ -35,7 +35,7 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       const page = new DisplayContentTypesAllowedContentTypesAdministration(defaultProps());
       await waitForTrue(() => page.exists());
 
-      expect(page.title.textContent).toBe("Allow content types");
+      expect(page.title.textContent).toBe("Allow Content Types");
     });
   });
 

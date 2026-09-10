@@ -14,7 +14,7 @@
 import { MemoryRouter, Route } from "react-router-dom";
 import React from "react";
 import DisplayUsers from "./DisplayUsers";
-import { defaultProps, propsWithFirstUserAttentionRequired } from "./DisplayUsers.test.data";
+import { defaultProps, propsWithFirstUserAttentionRequired, stressUsersProps } from "./DisplayUsers.test.data";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import { UserWorkspaceContext } from "../../../contexts/UserWorkspaceContext";
 
@@ -52,4 +52,8 @@ export const Default = {
 
 export const AccountRecoveryPending = {
   args: propsWithFirstUserAttentionRequired(),
+};
+
+export const StressWithLargeUsersList = {
+  args: stressUsersProps,
 };

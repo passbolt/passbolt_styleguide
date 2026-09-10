@@ -25,6 +25,8 @@ import GroupsCollection from "../../../shared/models/entity/group/groupsCollecti
 import GroupEntity from "../../../shared/models/entity/group/groupEntity";
 import UsersCollection from "../../../shared/models/entity/user/usersCollection";
 import { v4 as uuidv4 } from "uuid";
+import mockPort from "../../../../test/mocks/mockPort";
+import mockStorage from "../../../../test/mocks/mockStorage";
 
 /**
  * Returns the default app context for the unit test
@@ -1298,4 +1300,50 @@ export function controlledModeEmbeddedUsersProps(data = {}) {
     onConfirm: jest.fn(),
     ...data,
   };
+}
+
+/**
+ * Stress test: controlled mode seeded with a large permissions list rendered through ReactList
+ * Aims to validate the react-list upstream migration (getListStyle) under load
+ */
+
+const stressPermissionsCount = 500;
+const stressAcoId = uuidv4();
+
+export const stressShareUsers = Array.from({ length: stressPermissionsCount }, (_, i) => {
+  const id = uuidv4();
+  return defaultUserDto({
+    id,
+    username: `user${String(i)}@passbolt.com`,
+    profile: defaultProfileDto({ first_name: "User", last_name: String(i) }),
+  });
+});
+
+export const stressPermissionsDto = stressShareUsers.map((user, i) =>
+  defaultPermissionDto({
+    aco: "Resource",
+    aco_foreign_key: stressAcoId,
+    aro: "User",
+    aro_foreign_key: user.id,
+    type: i === 0 ? 15 : 1,
+  }),
+);
+
+export function propsWithStressPermissions(data = {}) {
+  return defaultProps({
+    context: defaultAppContext({ port: mockPort(mockStorage()) }),
+    initialResources: [
+      {
+        id: null,
+        metadata: { name: "" },
+        permission: { type: 15 },
+        permissions: new PermissionsCollection(stressPermissionsDto, { assertAtLeastOneOwner: false }),
+      },
+    ],
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection(stressShareUsers),
+    onClose: () => {},
+    onConfirm: () => {},
+    ...data,
+  });
 }

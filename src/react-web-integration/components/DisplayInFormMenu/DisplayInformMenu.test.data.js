@@ -24,6 +24,11 @@ import { defaultMetadataKeysDtos } from "../../../shared/models/entity/metadata/
 import { defaultUserDto } from "../../../shared/models/entity/user/userEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import {
+  defaultUserActiveSessionDto,
+  offlineUserActiveSessionDto,
+} from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
  * Default component props.
@@ -37,8 +42,21 @@ export function defaultProps(data = {}) {
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
+    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
     ...data,
   };
+}
+
+/**
+ * Component props of a user signed-in with an offline session.
+ * @param {object} data Override the default props.
+ * @returns {object}
+ */
+export function offlineSessionProps(data = {}) {
+  return defaultProps({
+    activeSession: new UserActiveSessionEntity(offlineUserActiveSessionDto()),
+    ...data,
+  });
 }
 
 /**

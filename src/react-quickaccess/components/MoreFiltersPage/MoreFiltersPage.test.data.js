@@ -19,6 +19,8 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 /**
  * Default component props
  * @param props
@@ -26,6 +28,7 @@ import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/me
  */
 export const defaultProps = (data = {}) => ({
   context: defaultAppContext(data.context),
+  activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),

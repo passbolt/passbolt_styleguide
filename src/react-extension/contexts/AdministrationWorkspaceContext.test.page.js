@@ -194,6 +194,14 @@ export default class AdministrationWorkspaceContextPage {
   }
 
   /**
+   * Go to the offline mode route
+   */
+  async goToOffline() {
+    this.setup(this.context, this.props);
+    await this.goToLink(".offline");
+  }
+
+  /**
    * on save enabled
    */
   onSaveEnabled() {
@@ -282,6 +290,9 @@ export default class AdministrationWorkspaceContextPage {
           </NavLink>
           <NavLink to={{ pathname: "/app/administration/ce-downgrade" }}>
             <a className="ce-downgrade"></a>
+          </NavLink>
+          <NavLink to={{ pathname: "/app/administration/offline" }}>
+            <a className="offline"></a>
           </NavLink>
         </Router>
       </AppContext.Provider>,

@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../resourceType/resourceTypeEntity.test.data";
 import { defaultResourceMetadataDto } from "./metadata/resourceMetadataEntity.test.data";
 import { minimalDefaultSecretDataV5DefaultDto } from "../secretData/secretDataV5DefaultEntity.test.data";
+import { defaultOfflineItemDto } from "../offline/offlineItemEntity.test.data";
 
 /**
  * Build default resource dto.
@@ -31,6 +32,7 @@ export const defaultResourceFormDto = (data = {}) => {
       resource_type_id: data?.metadata?.resource_type_id || data?.resource_type_id || TEST_RESOURCE_TYPE_V5_DEFAULT,
     }),
     secret: minimalDefaultSecretDataV5DefaultDto(),
+    offline: defaultOfflineItemDto(),
     ...data,
   };
 };

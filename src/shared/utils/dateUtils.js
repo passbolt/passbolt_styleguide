@@ -12,7 +12,7 @@
  * @since         4.4.0
  */
 
-import { DateTime } from "luxon";
+import { DateTime, Duration } from "luxon";
 
 /**
  * Format date in time ago
@@ -54,3 +54,30 @@ export const formatExpirationDateTimeAgo = (date, translate, locale) => {
  * @returns {string}
  */
 export const formatDateForApi = (date) => date?.toUTC().toISO() || null;
+
+/**
+ * Format a duration given in seconds
+ * @param {number} seconds The duration in seconds
+ * @param {string} locale The language to format the duration to
+ * @return {string|null} null if the duration is not a positive one
+ */
+export const formatSecondsDuration = (seconds, locale) => {
+  //0, null, undefined all return null
+  if (!(seconds > 0)) {
+    return null;
+  }
+
+  // shift the duration to days, hours, minutes, seconds
+  const units = Duration.fromObject({ seconds }).shiftTo("days", "hours", "minutes", "seconds").toObject();
+  let largestUnit = { seconds: Math.max(1, units.seconds) };
+  if (units.days >= 1) {
+    largestUnit = { days: units.days };
+  } else if (units.hours >= 1) {
+    largestUnit = { hours: units.hours };
+  } else if (units.minutes >= 1) {
+    largestUnit = { minutes: units.minutes };
+  }
+
+  // convert to human friendly conversational string
+  return Duration.fromObject(largestUnit, { locale }).toHuman({ maximumFractionDigits: 0 });
+};

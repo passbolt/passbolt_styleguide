@@ -275,7 +275,7 @@ class DisplaySecretHistoryAdministration extends Component {
                     id="passwordExpirySettingsToggle"
                   />
                   <label htmlFor="passwordExpirySettingsToggle">
-                    <Trans>Secret history</Trans>
+                    <Trans>Secret History</Trans>
                   </label>
                 </span>
               </h3>

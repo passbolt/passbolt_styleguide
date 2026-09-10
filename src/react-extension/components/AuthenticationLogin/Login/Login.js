@@ -17,6 +17,8 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
+import { withActiveSessionLocalStorage } from "../../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import UserActiveSessionEntity from "../../../../shared/models/entity/session/userActiveSessionEntity";
 
 /**
  * The component display variations.
@@ -149,6 +151,9 @@ class Login extends Component {
 
     this.setState({ processing: true });
     if (await this.checkPassphrase()) {
+      if (this.props.activeSession?.isAuthenticated && this.props.activeSession?.isSessionOffline) {
+        await this.props.context.port.request("passbolt.auth.offline-logout");
+      }
       await this.login();
     }
   }
@@ -404,6 +409,7 @@ Login.propTypes = {
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
   switchToSsoLogin: PropTypes.func, // Whenever the user want to sign-in via SSO
   ssoProvider: PropTypes.object, // The SSO provider if any
+  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation("common")(Login));
+export default withActiveSessionLocalStorage(withAppContext(withTranslation("common")(Login)));

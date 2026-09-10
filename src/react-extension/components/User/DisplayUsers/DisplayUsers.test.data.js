@@ -18,6 +18,7 @@ import { defaultAccountRecoveryUserContext } from "../../../contexts/AccountReco
 import { TEST_ROLE_USER_ID } from "../../../../shared/models/entity/role/roleEntity.test.data";
 import { defaultUserWorkspaceContext } from "../../../contexts/UserWorkspaceContext.test.data";
 import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultUsersDtos } from "../../../../shared/models/entity/user/usersCollection.test.data";
 
 /**
  * Default props
@@ -327,3 +328,13 @@ export function createGroup({ id, members = [] }) {
 export function createUser(id) {
   return { id };
 }
+
+/**
+ * Stress test: a larger users grid rendered through GridTable/ReactList
+ * Aims to validate the react-list upstream migration (getListStyle) under load
+ */
+const stressUsersCount = 2000;
+
+const stressUsers = defaultUsersDtos(stressUsersCount);
+export const stressUsersProps = defaultProps();
+stressUsersProps.userWorkspaceContext.filteredUsers = stressUsers;

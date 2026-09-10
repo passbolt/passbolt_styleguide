@@ -12,9 +12,57 @@
  * @since         5.13.0
  */
 import each from "jest-each";
-import { assertNumber } from "./assertions";
+import { v4 as uuid } from "uuid";
+import { assertArrayUUID, assertNumber, assertUuid } from "./assertions";
 
 describe("Assertions", () => {
+  describe("Assertions::assertUuid", () => {
+    it("Should not throw an error if the parameter is valid", () => {
+      expect.assertions(1);
+
+      expect(() => assertUuid(uuid())).not.toThrow();
+    });
+
+    it("Should throw an error if the parameter is not valid", () => {
+      const scenarios = [
+        {},
+        "",
+        false,
+        12,
+        "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", // looks like a UUID but, it's not
+      ];
+
+      expect.assertions(scenarios.length);
+      for (let i = 0; i < scenarios.length; i++) {
+        expect(() => assertUuid(scenarios[i])).toThrow();
+      }
+    });
+  });
+
+  describe("Assertions::assertArrayUUID", () => {
+    each([
+      { scenario: "Array of uuid", value: [uuid(), uuid()] },
+      { scenario: "Empty array", value: [] },
+    ]).describe(`Should not throw an error if the parameter is valid`, (props) => {
+      it(`Scenario: ${props.scenario}`, () => {
+        expect.assertions(1);
+        expect(() => assertArrayUUID(props.value)).not.toThrow();
+      });
+    });
+
+    each([
+      { scenario: "object", value: {} },
+      { scenario: "null", value: null },
+      { scenario: "array of number", value: [1, 2] },
+      { scenario: "array of string", value: ["1", "2"] },
+    ]).describe(`Should throw an error if the parameter is not valid`, (props) => {
+      it(`Scenario: ${props.scenario}`, () => {
+        expect.assertions(1);
+        expect(() => assertArrayUUID(props.value)).toThrow(TypeError);
+      });
+    });
+  });
+
   describe("Assertions::assertNumber", () => {
     each([
       { scenario: "Positive number", value: 42 },

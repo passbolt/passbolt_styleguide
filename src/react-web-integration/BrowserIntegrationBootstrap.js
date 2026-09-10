@@ -15,7 +15,7 @@
 import { QuickAccessEvent } from "./Events/Quickaccess/QuickAccessEvent";
 import { AuthLogin } from "./AuthLogin/AuthLogin";
 import InFormManager from "./lib/InForm/InFormManager";
-import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
+import SiteSettingsServiceWorkerService from "../shared/services/serviceWorker/siteSettings/siteSettingsServiceWorkerService";
 
 /**
  * Bootstrap the browser integration with browsed pages.
@@ -37,8 +37,8 @@ async function init() {
  */
 async function getSiteSettings() {
   try {
-    const siteSettingsDto = await port.request("passbolt.site-settings.get-or-find", false);
-    return new SiteSettingsEntity(siteSettingsDto);
+    const siteSettingsServiceWorkerService = new SiteSettingsServiceWorkerService(port);
+    return await siteSettingsServiceWorkerService.getOrFind();
   } catch (error) {
     console.error(error);
   }

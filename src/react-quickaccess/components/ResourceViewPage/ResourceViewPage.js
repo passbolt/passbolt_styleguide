@@ -37,6 +37,9 @@ import EyeCloseSVG from "../../../img/svg/eye_close.svg";
 import EyeOpenSVG from "../../../img/svg/eye_open.svg";
 import TimerSVG from "../../../img/svg/timer.svg";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
+import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import SecretServiceWorkerService from "../../../shared/services/serviceWorker/secret/secretServiceWorkerService";
 
 const CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND = 30;
 
@@ -73,6 +76,7 @@ class ResourceViewPage extends React.Component {
     this.loadResource();
     this.currentTimeout = null;
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(props.context.port);
+    this.secretServiceWorkerService = new SecretServiceWorkerService(props.context.port, props.activeSession);
     this.generateNodeRefs();
   }
 
@@ -344,7 +348,7 @@ class ResourceViewPage extends React.Component {
    * @throw UserAbortsOperationError If the user cancel the operation
    */
   decryptResourceSecret(resourceId) {
-    return this.props.context.port.request("passbolt.secret.find-by-resource-id", resourceId);
+    return this.secretServiceWorkerService.findByResourceId(resourceId);
   }
 
   /**
@@ -465,14 +469,10 @@ class ResourceViewPage extends React.Component {
       await this.props.context.port.request(
         "passbolt.quickaccess.use-resource-on-current-tab",
         this.state.resource.id,
-        this.props.context.getOpenerTabId(),
+        this.props.context.openerTabId,
       );
 
-      if (this.props.context.getDetached()) {
-        await this.props.context.port.request("passbolt.active-tab.close");
-      } else {
-        await this.props.context.closeWindow();
-      }
+      this.props.context.closeWindow();
     } catch (error) {
       if (error && error.name === "UserAbortsOperationError") {
         this.setState({ usingOnThisTab: false });
@@ -1005,6 +1005,7 @@ class ResourceViewPage extends React.Component {
 ResourceViewPage.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
+  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The role based access control context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
@@ -1013,6 +1014,6 @@ ResourceViewPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(
-  withRbac(withRouter(withResourceTypesLocalStorage(withTranslation("common")(ResourceViewPage)))),
+export default withActiveSessionLocalStorage(
+  withAppContext(withRbac(withRouter(withResourceTypesLocalStorage(withTranslation("common")(ResourceViewPage))))),
 );

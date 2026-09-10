@@ -48,7 +48,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
       await waitForTrue(() => page.exists());
 
-      expect(page.title.textContent).toBe("Metadata key");
+      expect(page.title.textContent).toBe("Metadata Key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
@@ -70,7 +70,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       let page;
       await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
 
-      expect(page.title.textContent).toBe("Metadata key");
+      expect(page.title.textContent).toBe("Metadata Key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
@@ -130,7 +130,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       let page;
       await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
-      expect(page.title.textContent).toBe("Metadata key");
+      expect(page.title.textContent).toBe("Metadata Key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
@@ -193,7 +193,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       let page;
       await act(async () => (page = new DisplayContentTypesMetadataKeyAdministrationPage(props)));
 
-      expect(page.title.textContent).toBe("Metadata key");
+      expect(page.title.textContent).toBe("Metadata Key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);

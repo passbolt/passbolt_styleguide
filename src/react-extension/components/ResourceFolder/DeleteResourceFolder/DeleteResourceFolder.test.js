@@ -36,7 +36,7 @@ describe("Delete Folder", () => {
 
   describe("As LU I should delete a folder", () => {
     it("As System I should send a create request", async () => {
-      const expectedParameters = ["passbolt.folders.delete", "some folder id", false];
+      const expectedParameters = ["passbolt.folders.delete", context.folder.id, false];
       jest.spyOn(context.port, "request").mockImplementationOnce(() => ({ id: "some folder id" }));
       await page.delete(false);
       expect(context.port.request).toHaveBeenCalledWith(...expectedParameters);
@@ -58,7 +58,7 @@ describe("Delete Folder", () => {
     });
 
     it("As LU I should delete the sub-folders of the folder to delete", async () => {
-      const expectedParameters = ["passbolt.folders.delete", "some folder id", true];
+      const expectedParameters = ["passbolt.folders.delete", context.folder.id, true];
       jest.spyOn(context.port, "request").mockImplementationOnce(() => ({ id: "some folder id" }));
       await page.delete(true);
       expect(context.port.request).toHaveBeenCalledWith(...expectedParameters);

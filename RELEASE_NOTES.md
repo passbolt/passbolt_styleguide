@@ -1,4 +1,5 @@
-# v5.15.1
+# v5.16.0
 
 Provides:
-- Fix NullPointerException Gecko bug on host 
+- offline mode
+- autofill improvement

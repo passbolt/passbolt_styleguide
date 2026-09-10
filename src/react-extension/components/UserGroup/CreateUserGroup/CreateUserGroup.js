@@ -547,7 +547,7 @@ class CreateUserGroup extends Component {
                     length={this.state.groups_users.length}
                     minSize={4}
                     type={this.state.groups_users.length < 4 ? "simple" : "uniform"}
-                    usePosition={true}
+                    getListStyle={({ x, y }) => ({ position: "relative", top: y, left: x })}
                     threshold={30}
                   ></ReactList>
                 )}

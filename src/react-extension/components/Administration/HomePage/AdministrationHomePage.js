@@ -44,6 +44,7 @@ import HeartPulseSVG from "../../../../img/svg/heart_pulse.svg";
 import EmailNotificationsSVG from "../../../../img/svg/email_notifications.svg";
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
 import SecretHistorySVG from "../../../../img/svg/secret_history.svg";
+import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
 import { withAdministrationEncryptedMetadataGettingStarted } from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 
 const metadataMenuItems = [
@@ -97,7 +98,7 @@ class AdministrationHomePage extends React.PureComponent {
       },
       {
         icon: <MetadataKeySVG />,
-        title: this.props.t("Getting started"),
+        title: this.props.t("Getting Started"),
         description: this.props.t("Define the strategy to enable new resource types and encrypted metadata."),
         redirectTo: this.props.navigationContext.onGoToAdministrationMetadataGettingStartedRequested,
         flag: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED,
@@ -105,42 +106,42 @@ class AdministrationHomePage extends React.PureComponent {
       },
       {
         icon: <FileKey2SVG />,
-        title: this.props.t("Metadata key"),
+        title: this.props.t("Metadata Key"),
         description: this.props.t("Control the layer of encryption that is used to protect metadata."),
         redirectTo: this.props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested,
         flag: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY,
       },
       {
         icon: <EncryptedMetadataSVG />,
-        title: this.props.t("Encrypted metadata"),
+        title: this.props.t("Encrypted Metadata"),
         description: this.props.t("Choose between cleartext metadata and encrypted metadata."),
         redirectTo: this.props.navigationContext.onGoToAdministrationContentTypesEncryptedMetadataRequested,
         flag: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA,
       },
       {
         icon: <ArrowBigUpDashSVG />,
-        title: this.props.t("Migrate metadata"),
+        title: this.props.t("Migrate Metadata"),
         description: this.props.t("Convert cleartext metadata into encrypted metadata."),
         redirectTo: this.props.navigationContext.onGoToAdministrationMigrateMetadataRequested,
         flag: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
       },
       {
         icon: <ShapesSVG />,
-        title: this.props.t("Allow content types"),
+        title: this.props.t("Allow Content Types"),
         description: this.props.t("Control the content types availability for all users."),
         redirectTo: this.props.navigationContext.onGoToAdministrationAllowContentTypesRequested,
         flag: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES,
       },
       {
         icon: <ExpirySVG />,
-        title: this.props.t("Password expiry"),
+        title: this.props.t("Password Expiry"),
         description: this.props.t("Control the default behaviour of password expiry policy for all users."),
         redirectTo: this.props.navigationContext.onGoToAdministrationPasswordExpirySettingsRequested,
         flag: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY,
       },
       {
         icon: <PasswordPolicySVG />,
-        title: this.props.t("Password policy"),
+        title: this.props.t("Password Policy"),
         description: this.props.t("Modify the default settings of the passwords generator."),
         redirectTo: this.isCommunityEdition()
           ? this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing
@@ -150,14 +151,14 @@ class AdministrationHomePage extends React.PureComponent {
       },
       {
         icon: <SecretHistorySVG />,
-        title: this.props.t("Secret history"),
+        title: this.props.t("Secret History"),
         description: this.props.t("Control how many secret revisions are retained."),
         redirectTo: this.props.navigationContext.onGoToAdministrationSecretHistoryRequested,
         flag: AdministrationWorkspaceMenuTypes.SECRET_HISTORY,
       },
       {
         icon: <PassphrasePolicySVG />,
-        title: this.props.t("User passphrase policies"),
+        title: this.props.t("User Passphrase Policies"),
         description: this.props.t("Define the minimal entropy for the users' private key passphrase."),
         redirectTo: this.isCommunityEdition()
           ? this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing
@@ -167,7 +168,7 @@ class AdministrationHomePage extends React.PureComponent {
       },
       {
         icon: <AccountRecoverySVG />,
-        title: this.props.t("Account recovery"),
+        title: this.props.t("Account Recovery"),
         description: this.props.t("Control the behavior for account recovery for all users."),
         redirectTo: this.isCommunityEdition()
           ? this.props.navigationContext.onGoToAdministrationAccountRecoveryRequestedTeasing
@@ -204,7 +205,7 @@ class AdministrationHomePage extends React.PureComponent {
       },
       {
         icon: <LDAPSVG />,
-        title: this.props.t("Users directory"),
+        title: this.props.t("Users Directory"),
         description: this.props.t("Configure the synchronisation of users and groups with passbolt."),
         redirectTo: this.isCommunityEdition()
           ? this.props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing
@@ -214,7 +215,7 @@ class AdministrationHomePage extends React.PureComponent {
       },
       {
         icon: <SelfRegisterSVG />,
-        title: this.props.t("Self registration"),
+        title: this.props.t("Self Registration"),
         description: this.props.t("Enable users  to enrol without prior admin invitation."),
         redirectTo: this.props.navigationContext.onGoToAdministrationSelfRegistrationRequested,
         flag: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION,
@@ -231,14 +232,14 @@ class AdministrationHomePage extends React.PureComponent {
       },
       {
         icon: <EmailServerSVG />,
-        title: this.props.t("Email server"),
+        title: this.props.t("Email Server"),
         description: this.props.t("Control the SMTP server configuration used to send emails."),
         redirectTo: this.props.navigationContext.onGoToAdministrationSmtpSettingsRequested,
         flag: AdministrationWorkspaceMenuTypes.SMTP_SETTINGS,
       },
       {
         icon: <EmailNotificationsSVG />,
-        title: this.props.t("Email notifications"),
+        title: this.props.t("Email Notifications"),
         description: this.props.t("Define which email notifications will be sent."),
         redirectTo: this.props.navigationContext.onGoToAdministrationEmailNotificationsRequested,
         flag: null,
@@ -249,6 +250,13 @@ class AdministrationHomePage extends React.PureComponent {
         description: this.props.t("Define UI level access controls for the user role."),
         redirectTo: this.props.navigationContext.onGoToAdministrationRbacsRequested,
         flag: AdministrationWorkspaceMenuTypes.RBAC,
+      },
+      {
+        icon: <OfflineModeSVG />,
+        title: this.props.t("Offline mode"),
+        description: this.props.t("Allow users to access resources when the API is not reachable."),
+        redirectTo: this.props.navigationContext.onGoToAdministrationOfflineRequested,
+        flag: AdministrationWorkspaceMenuTypes.OFFLINE,
       },
       {
         icon: <InternationalSVG />,

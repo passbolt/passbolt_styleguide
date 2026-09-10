@@ -271,5 +271,26 @@ describe("MetadataTypesSettingsLocalStorageContext", () => {
 
       expect(spyOnRequest).toHaveBeenCalledTimes(2);
     });
+
+    it("should do nothing if the service worker throw an error.", async () => {
+      expect.assertions(3);
+
+      const props = defaultProps();
+      const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(props);
+
+      props.context.storage.local.set({ [contextProvider.storageKey]: null });
+      props.context.port.addRequestListener("passbolt.metadata.get-or-find-metadata-types-settings", async () =>
+        Promise.reject("Error"),
+      );
+      const spyOnRequest = jest.spyOn(props.context.port, "request");
+
+      mockComponentSetState(contextProvider);
+
+      contextProvider.updateLocalStorage();
+
+      expect(spyOnRequest).toHaveBeenCalledTimes(1);
+      expect(spyOnRequest).toHaveBeenCalledWith("passbolt.metadata.get-or-find-metadata-types-settings");
+      expect(contextProvider.state.metadataTypeSettings).toBeNull();
+    });
   });
 });

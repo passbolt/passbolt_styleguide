@@ -18,7 +18,11 @@
 
 import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import DisplayResourcesWorkspaceFiltersPage from "./DisplayResourcesWorkspaceFilters.test.page";
-import { defaultProps, propsFilterByPrivate } from "./DisplayResourcesWorkspaceFilters.test.data";
+import {
+  defaultProps,
+  propsFilterByPrivate,
+  propsWithOfflineDisabled,
+} from "./DisplayResourcesWorkspaceFilters.test.data";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
@@ -34,6 +38,15 @@ describe("As a signed-in users I can see filters", () => {
     expect(page.exists()).toBeTruthy();
     expect(page.dropdownFilterButton.textContent).toBe("All items");
     expect(page.filterSelected).toBeUndefined();
+    expect(page.filterItemsLength).toBe(6);
+  });
+
+  it("As LU I should not see the Offline filter when the offline feature is disabled", async () => {
+    expect.assertions(2);
+    const props = propsWithOfflineDisabled();
+    const page = new DisplayResourcesWorkspaceFiltersPage(props);
+    await page.openDropdownFilterButton();
+    expect(page.exists()).toBeTruthy();
     expect(page.filterItemsLength).toBe(5);
   });
 
@@ -67,6 +80,11 @@ describe("As a signed-in users I can see filters", () => {
       pathname: "/app/passwords/filter/expired",
       itemIndex: 5,
     },
+    {
+      filter: ResourceWorkspaceFilterTypes.OFFLINE,
+      itemSelected: "Offline",
+      itemIndex: 6,
+    },
   ])("I should be able to filter", (scenario) => {
     it(`for: ${scenario.filter}`, async () => {
       expect.assertions(1);
@@ -93,6 +111,7 @@ describe("As a signed-in users I can see filters", () => {
     { filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Items I own" },
     { filter: ResourceWorkspaceFilterTypes.PRIVATE, itemSelected: "Private" },
     { filter: ResourceWorkspaceFilterTypes.EXPIRED, itemSelected: "Expired" },
+    { filter: ResourceWorkspaceFilterTypes.OFFLINE, itemSelected: "Available offline" },
   ])("I should be able to identify the filters", (scenario) => {
     it(`for: ${scenario.filter}`, async () => {
       expect.assertions(2);

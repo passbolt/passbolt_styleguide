@@ -52,7 +52,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.exists()).toBeTruthy();
       expect(page.saveSettingsButton).not.toBeNull();
       expect(page.title.textContent).toBe("Password Policy");
-      expect(page.passphrasePolicyTitle.textContent).toBe("Password generator default settings");
+      expect(page.passphrasePolicyTitle.textContent).toBe("Password Generator Default Settings");
     });
 
     it("As a logged in administrator I can see an help box in the password policy administration screen ", async () => {
