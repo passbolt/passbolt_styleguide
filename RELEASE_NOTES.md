@@ -1,3 +1,5 @@
-# v5.16.0-alpha.4
+# v5.16.0
 
-Version bump to v5.16.0-alpha.4
+Provides:
+- offline mode
+- autofill improvement
