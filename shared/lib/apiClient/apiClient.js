@@ -409,11 +409,11 @@ export class ApiClient {
     if (!response.ok) {
       const message = responseJson.header.message;
       throw new PassboltApiFetchError(message, {
+        header: responseJson.header,
         code: response.status,
         body: responseJson.body,
       });
     }
-
     return responseJson;
   }
 }

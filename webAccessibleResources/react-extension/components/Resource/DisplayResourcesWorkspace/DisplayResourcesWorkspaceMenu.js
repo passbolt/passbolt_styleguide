@@ -592,7 +592,9 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       resourceType?.isV5() &&
       this.props.context.siteSettings.canIUse("offlineMode") &&
       Boolean(this.props.offlineSettings) &&
-      this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_ADD)
+      this.props.rbacContext.canIUseAction(
+        this.selectedResources[0]?.offline ? actions.OFFLINE_ITEMS_DELETE : actions.OFFLINE_ITEMS_ADD,
+      )
     );
   }
 

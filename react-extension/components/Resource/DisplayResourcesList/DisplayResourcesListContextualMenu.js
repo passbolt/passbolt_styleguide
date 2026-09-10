@@ -534,7 +534,9 @@ class DisplayResourcesListContextualMenu extends React.Component {
       this.props.context.siteSettings.canIUse("offlineMode") &&
       Boolean(this.props.offlineSettings) &&
       resourceType?.isV5() &&
-      this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_ADD)
+      this.props.rbacContext.canIUseAction(
+        this.resource.offline ? actions.OFFLINE_ITEMS_DELETE : actions.OFFLINE_ITEMS_ADD,
+      )
     );
   }
 
