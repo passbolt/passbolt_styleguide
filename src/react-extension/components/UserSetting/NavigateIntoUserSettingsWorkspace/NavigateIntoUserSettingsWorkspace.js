@@ -42,6 +42,14 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Can the user access the in-form integration (autofill) capability.
+   * @returns {bool}
+   */
+  get canIUseInFormIntegrationCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse("inFormIntegration");
+  }
+
+  /**
    * Can the user access the mobile capability.
    * @returns {bool}
    */
@@ -164,6 +172,25 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                     >
                       <span>
                         <Trans>Theme</Trans>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          )}
+          {this.canIUseInFormIntegrationCapability && (
+            <li>
+              <div className={`row ${isSelected("in-form-integration") ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      className="link no-border"
+                      type="button"
+                      onClick={this.props.navigationContext.onGoToUserSettingsInFormIntegrationRequested}
+                    >
+                      <span>
+                        <Trans>Autofill</Trans>
                       </span>
                     </button>
                   </div>
