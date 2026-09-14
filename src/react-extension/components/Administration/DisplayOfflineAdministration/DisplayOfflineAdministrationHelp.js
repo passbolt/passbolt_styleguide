@@ -14,8 +14,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Trans } from "react-i18next";
-// TODO: restore along with help section
-// import InfoSVG from "../../../../img/svg/info.svg";
+import InfoSVG from "../../../../img/svg/info.svg";
 
 /**
  * This component displays the help section for Offline mode Administration
@@ -43,8 +42,6 @@ class DisplayOfflineAdministrationHelp extends Component {
             </div>
           </div>
         )}
-        {/* 
-        TODO: restore the help section and update the link, once the support document is available
         <div className="sidebar-help-section">
           <h3>
             <Trans>Need help?</Trans>
@@ -52,13 +49,18 @@ class DisplayOfflineAdministrationHelp extends Component {
           <p>
             <Trans>Check out the offline mode documentation.</Trans>
           </p>
-          <a className="button" target="_blank" rel="noopener noreferrer" href="">
+          <a
+            className="button"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://passbolt.com/docs/admin/offline-mode/"
+          >
             <InfoSVG />
             <span>
               <Trans>Read the documentation</Trans>
             </span>
           </a>
-        </div> */}
+        </div>
       </>
     );
   }
