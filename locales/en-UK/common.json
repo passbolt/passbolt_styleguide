@@ -313,6 +313,7 @@
   "Check App.fullBaseUrl url scheme in {{configurationFilePath}}": "Check App.fullBaseUrl url scheme in {{configurationFilePath}}",
   "Check out our ldap configuration guide.": "Check out our ldap configuration guide.",
   "Check out our Multi Factor Authentication configuration guide.": "Check out our Multi Factor Authentication configuration guide.",
+  "Check out the offline mode documentation.": "Check out the offline mode documentation.",
   "Check out the Role Based Access Control documentation.": "Check out the Role Based Access Control documentation.",
   "Check that the domain name is correct in {{configurationFilePath}}": "Check that the domain name is correct in {{configurationFilePath}}",
   "Check the settings in config/app.php": "Check the settings in config/app.php",

@@ -116,13 +116,9 @@ class ConfirmMetadataKeyPage extends React.Component {
 
   render() {
     const isMetadataKeyRotation = this.isMetadataKeyRotation;
-    const creatorName = this.props.metadataKey?.creator ? (
-      <>
-        {this.props.metadataKey?.creator?.profile?.name} ({this.props.metadataKey?.creator.username})
-      </>
-    ) : (
-      this.translate("Unknown user")
-    );
+    const creatorName = this.props.metadataKey?.creator
+      ? this.props.metadataKey.creator.getUserFormattedName(this.translate)
+      : this.translate("Unknown user");
 
     return (
       <div className="confirm-metadata-key" onKeyDown={this.handleKeyDown}>
