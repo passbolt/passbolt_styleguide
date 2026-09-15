@@ -33,6 +33,7 @@ export const Providers = {
   TOTP: "totp",
   YUBIKEY: "yubikey",
   DUO: "duo",
+  WEBAUTHN: "webauthn",
 };
 
 /**
