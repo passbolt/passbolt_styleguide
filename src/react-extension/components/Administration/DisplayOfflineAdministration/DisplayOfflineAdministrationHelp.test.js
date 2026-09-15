@@ -21,10 +21,7 @@ beforeEach(() => {
 describe("As LU I should see the offline mode administration help", () => {
   let page;
 
-  // TODO: restore when help section is updated with documentation
-  /* eslint-disable jest/no-commented-out-tests */
-  /*
-    describe("As LU I can access the help page", () => {
+  describe("As LU I can access the help page", () => {
     it("As LU I can see the help section with documentation link", () => {
       expect.assertions(6);
       const props = { shouldDisplayWarning: false };
@@ -35,7 +32,7 @@ describe("As LU I should see the offline mode administration help", () => {
       expect(page.helpBoxTitle.textContent).toEqual("Need help?");
       expect(page.helpBoxDescription[0].textContent).toEqual("Check out the offline mode documentation.");
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute("href")).toEqual("");
+      expect(page.helpBoxButton.getAttribute("href")).toEqual("https://passbolt.com/docs/admin/offline-mode/");
     });
 
     it("As LU I can see the help button attributes", () => {
@@ -46,7 +43,7 @@ describe("As LU I should see the offline mode administration help", () => {
       expect(page.helpBoxButton.getAttribute("target")).toEqual("_blank");
       expect(page.helpBoxButton.getAttribute("rel")).toEqual("noopener noreferrer");
     });
-  });*/
+  });
 
   describe("As LU I can see a warning banner when offline mode is active", () => {
     it("As LU I can see the warning banner when shouldDisplayWarning is true", () => {
