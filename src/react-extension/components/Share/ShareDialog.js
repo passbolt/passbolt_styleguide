@@ -90,21 +90,7 @@ class ShareDialog extends Component {
 
   /**
    * On a move, stage the permissions the moved items end up with, as if the operator had typed them.
-   *
-   * `initialResources` and `initialFolders` seed the dialog with the permissions the items have
-   * today. That is what tells a removal apart from an addition, and what the revert button restores.
-   * But the dialog has to show what the move will actually apply, so `initialAppliedPermissions` is
-   * staged here on top. Every row then sits where an operator edit would have put it: the badges are
-   * right, and the confirmed result folds this in exactly like a hand-made edit.
-   *
-   * Staging happens per item, not per recipient. Each moved item has its own resulting permissions,
-   * so one person can legitimately end up at a different level on each of them. An item missing from
-   * a recipient's set means the move drops them there, and a removal is staged.
-   *
-   * What is displayed is a separate matter. A recipient who does not end up at the same level
-   * everywhere keeps a "varies" row and its per-item list, while the staged changes still carry each
-   * item's own level.
-   *
+   * Staged per item, so an item missing from a recipient's set stages a removal there.
    * @param {Array<object>} permissions The permission rows built from the items' current permissions.
    * @returns {Array<object>} The same rows, with the move applied.
    */
@@ -128,17 +114,13 @@ class ShareDialog extends Component {
     );
     const appliedByAroId = new Map(appliedShareChanges.aggregatePermissionsByAro().map((p) => [p.aro.id, p]));
 
-    // Keyed by recipient id so each row is patched in place.
-    // Insertion order keeps the existing rows first and appends the newly granted ones at the end,
-    // which is where the displayed list puts them.
+    // Keyed by recipient id to patch each row in place. Insertion order keeps the existing rows
+    // first and appends the newly granted ones, where the displayed list puts them.
     const rowsByAroId = new Map(permissions.map((permission) => [permission.aro.id, permission]));
 
     /*
-     * Stage each recipient's level per item, but only on the items whose permissions the move can
-     * change. An item with no resulting set is left strictly alone: the operator does not own it, or
-     * it is already in the destination and the move does nothing to it.
-     * Among the rest, an item the recipient's set does not cover means the move drops them there, so
-     * a removal is staged. ShareChanges narrows this further to the items the operator owns.
+     * Stage each recipient's level only on the items the move re-permissions; the others are left
+     * strictly alone. An item their set does not cover means the move drops them there.
      */
     const rePermissionedAcoIds = [...this.props.initialAppliedPermissions.keys()];
     new Set([...appliedByAroId.keys(), ...rowsByAroId.keys()]).forEach((aroId) => {
@@ -156,18 +138,14 @@ class ShareDialog extends Component {
     appliedByAroId.forEach((applied, aroId) => {
       const current = rowsByAroId.get(aroId);
       if (!current) {
-        /*
-         * Somebody the destination grants who was not on the moved items at all.
-         * The row is already in the shape the displayed list needs, per-item list included.
-         */
+        // Somebody the destination grants who was not on the moved items at all. The row is already
+        // in the shape the displayed list needs.
         rowsByAroId.set(aroId, applied);
         return;
       }
       if (this.shareChanges.getAroChangeStatus(aroId) === ShareChanges.CHANGE_STATUS_REMOVED) {
-        /*
-         * The move drops the recipient from every item it can. The row keeps showing the level they
-         * had, faded, the same way it does when the operator deletes a row by hand.
-         */
+        // The move drops the recipient everywhere it can. Leave the row as a hand-deleted one,
+        // still showing the level they had, faded.
         return;
       }
       const isAbsentFromAnUnchangedAco = (this.props.unchangedAcos ?? []).some(
@@ -175,10 +153,8 @@ class ShareDialog extends Component {
       );
       if (applied.type === -1 || isAbsentFromAnUnchangedAco) {
         /*
-         * The recipient will not be at the same level everywhere after the move. Either the resulting
-         * levels differ, or they have no access at all on an item the operator cannot change.
-         * The per-item list is rebuilt over the whole selection, so the marker also shows the items
-         * the move leaves alone.
+         * The recipient does not end up at the same level everywhere, so show "varies" over the
+         * whole selection, the items the move leaves alone included.
          */
         rowsByAroId.set(aroId, {
           ...current,
@@ -196,9 +172,8 @@ class ShareDialog extends Component {
   }
 
   /**
-   * On a move, the per-item list a "varies" row shows once the move is applied.
-   * The new level on the items the move changes, the current one on the items it leaves alone.
-   * Same shape as the variesDetails built by ShareChanges.aggregatePermissionsByAro.
+   * On a move, the per-item list a "varies" row shows: the new level on the items the move changes,
+   * the current one on the items it leaves alone.
    * @param {object|undefined} applied The recipient's resulting permission, if any.
    * @param {object|undefined} current The recipient's current row, if any.
    * @returns {object} The item names, keyed by the level the recipient ends up with.
@@ -541,16 +516,8 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Fetch a group's member users from the API and store them in the state, keyed by group id.
-   * Called every time a group is added or expanded, so the members are never reused from a previous
-   * expansion. A fetch already running for the same group is not started twice.
-   *
-   * The dialog promises that what it shows is what will be applied, so a failed fetch must never
-   * leave a group displayed with a partial member list. The dialog is closed with an error instead,
-   * and the operator can start again.
-   *
-   * Several groups can be fetching at once, so only the first failure reports and closes. Nothing is
-   * written to the state once the dialog is on its way out.
+   * Fetch a group's member users from the API and store them by group id, once per add or expand.
+   * A partial list would misrepresent what the dialog applies, so the first failure closes the dialog.
    * @param {string} groupId The group identifier
    */
   fetchGroupMembers(groupId) {
@@ -777,9 +744,8 @@ class ShareDialog extends Component {
     if (this.state.loading) {
       return;
     }
-    // Read the `acoType` the collection was seeded with in componentDidMount, rather than the prop.
-    // They cannot disagree, so pairing `initialResources` with an ACO_FOLDER type cannot land here
-    // on an empty collection.
+    // componentDidMount seeds this.resources or this.folders from this same acoType, so the
+    // collection picked here is the one that was filled.
     const acos = this.props.acoType === PermissionEntity.ACO_FOLDER ? this.folders : this.resources;
     return acos.length === 1 ? acos[0].metadata.name : undefined;
   }
@@ -839,24 +805,12 @@ class ShareDialog extends Component {
   }
 
   /**
-   * On a move, the items the operator does not own where the recipient will not end up with the
-   * level the operator picked (`displayPermissionType`). Those are the items the choice cannot reach.
-   *
-   * - A definite level is meant for every moved item, so an item the operator does not own is listed
-   *   unless the recipient already has exactly that level there. An item the recipient is absent from
-   *   counts too, since granting them would be a change the operator cannot make.
-   * - "varies" (-1) leaves every item as it is, so only the items the recipient actually has are
-   *   worth listing. Absent ones stay absent, nothing was asked of them.
-   * - A staged removal cannot reach those items either, so the ones the recipient keeps are listed at
-   *   the level they keep, just like "varies". The displayed level does not reveal a removal, because
-   *   deleting a row puts it back to its original level, so read the intent from the staged changes.
-   *
-   * Items already at the level the operator picked are left out, nothing would change there.
+   * On a move, the items the operator does not own where the level they picked cannot be applied.
+   * A "varies" level or a removal asks nothing of those items, so only the ones the recipient has.
    * @param {object} permission The recipient's row, carrying their permission on each item.
    * @param {number} displayPermissionType The level the operator picked for the recipient.
-   * @returns {Array<{name: string, type: number}>} The level shown per item is the one the operator
-   *   picked, the one that cannot reach it. When no single level was picked, "varies" or a removal,
-   *   it is the recipient's current level on that item instead.
+   * @returns {Array<{name: string, type: number}>} The items, at the level the operator picked, or
+   *   at the recipient's current level when no single level was picked.
    */
   getUnchangeableResources(permission, displayPermissionType) {
     const unchangedAcos = this.props.unchangedAcos ?? [];
@@ -872,15 +826,12 @@ class ShareDialog extends Component {
     return unchangedAcos
       .filter((aco) => {
         const currentType = typeByAcoId.get(aco.id);
-        /*
-         * "varies" and a removal both leave these items as they are, so list only the ones the
-         * recipient actually has.
-         */
+        // "varies" and a removal leave these items as they are, so list only the ones the recipient
+        // actually has.
         if (keepsCurrentState) {
           return currentType !== undefined;
         }
-        // A definite level cannot reach these items unless one already has exactly that level.
-        // An absent item leaves currentType undefined, which never matches, so it gets listed.
+        // A definite level cannot reach them, unless the recipient already has exactly that level.
         return currentType !== displayPermissionType;
       })
       .map((aco) => ({
@@ -890,11 +841,8 @@ class ShareDialog extends Component {
   }
 
   /**
-   * On a move, the items each recipient's choice cannot reach. Computed once per render and used by
-   * both the rows and the footer banner.
-   * The banner needs at least one non-empty entry, not merely a non-empty `unchangedAcos`. A
-   * recipient who already has the destination's level on an item the operator does not own has
-   * nothing blocked, so nothing to warn about.
+   * On a move, the items each recipient's choice cannot reach, computed once per render for the
+   * rows and the footer banner. An empty entry means nothing is blocked for that recipient.
    * @returns {Map<string, Array<{name: string, type: number}>>} Keyed by recipient id.
    */
   getUnchangeableResourcesByAroId() {
@@ -914,7 +862,7 @@ class ShareDialog extends Component {
    * @param {integer} index of the item in the source list
    * @param {Array<object>} displayedPermissions the flat list of rows being rendered
    * @param {Map<string, Array<{name: string, type: number}>>} unchangeableResourcesByAroId the items
-   *   each recipient's choice cannot reach, computed once per render by getUnchangeableResourcesByAroId.
+   *   each recipient's choice cannot reach
    * @returns {JSX.Element}
    */
   renderItem(index, displayedPermissions, unchangeableResourcesByAroId) {
@@ -935,14 +883,7 @@ class ShareDialog extends Component {
     if (isNaN(permissionType)) {
       throw new TypeError(this.translate("Invalid permission type for share permission item."));
     }
-    /*
-     * The row shows the level the recipient really ends up with, already seeded into `permission`.
-     * When that level differs across the moved items, it keeps the "varies" value and its marker.
-     * It is never lowered to what the destination proposes, which would understate a higher level
-     * the item keeps.
-     * On a move, the attention marker also lists the items the operator does not own, left as they
-     * are. Outside a move `unchangedAcos` is empty, so nothing is listed.
-     */
+    // The items this row's level cannot be applied to, empty outside a move.
     const unchangeableResources = unchangeableResourcesByAroId.get(permission.aro.id) ?? [];
 
     if (item.kind === "group") {

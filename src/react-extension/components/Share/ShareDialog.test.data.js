@@ -1231,10 +1231,8 @@ export function folderShareProps(name, data = {}) {
 }
 
 /**
- * Build move props for a single folder, shaped exactly as `FolderMoveFlow` sends them.
- * The folder travels in `initialFolders` with `acoType: "Folder"`, which is the pairing ShareDialog
- * reads. It is seeded with the permissions it has today, plus what the move leaves it with.
- * Folder B, owned by Ada, moves into folder A, owned by Ada and Betty, so Betty is the added recipient.
+ * Build move props for a single folder, shaped as `FolderMoveFlow` sends them: `initialFolders`
+ * with `acoType: "Folder"`. Ada's folder B moves into folder A, so Betty is the added recipient.
  * @param {string} operatorId Ada's id, so the seeded owner is the operator
  * @param {object} data Props to override
  * @returns {object}
@@ -1281,11 +1279,8 @@ export function folderMoveProps(operatorId, data = {}) {
 }
 
 /**
- * Build move props for a batch the operator owns only part of.
- * Ada owns R1, which Carol also owns, and can only update R2, which Betty owns. Both move into
- * folder A, where Ada is owner and Betty can update. Only R1's permissions change, R2 is left alone.
- * This shows the three row states at once: Ada at a definite "owner" with attention, Betty at a
- * definite "modified" with attention, and Carol on an untouched "varies".
+ * Build move props for a batch the operator owns only part of: Ada owns R1, which Carol also owns,
+ * and can only update R2, which Betty owns. Both move into folder A, so only R1 changes.
  * @param {string} operatorId Ada's id, so the seeded owner is the operator
  * @param {object} data Props to override
  * @returns {object}
@@ -1343,9 +1338,8 @@ export function mixedOwnershipMoveProps(operatorId, data = {}) {
 }
 
 /**
- * Build move props where a recipient ends up at different levels on two items the operator owns.
- * Betty can read both RA and RB before the move, and the move raises her to owner on RA only.
- * The row therefore reads "varies" while carrying a real change on RA.
+ * Build move props where a recipient ends up at different levels on two owned items: Betty reads
+ * both, and the move raises her to owner on RA only, so her row reads "varies".
  * @param {string} operatorId The operator's id, so the seeded owner is the operator
  * @param {object} data Props to override
  * @returns {object}
@@ -1400,9 +1394,8 @@ export function variesAppliedMoveProps(operatorId, data = {}) {
 }
 
 /**
- * Build move props where the move drops a recipient from one owned item only.
- * Betty can update both RA and RB before the move. She is kept on RB and dropped from RA, where her
- * permission came from the folder and is not kept.
+ * Build move props where the move drops a recipient from one owned item only: Betty can update RA
+ * and RB, and is dropped from RA, where her permission came from the folder.
  * @param {string} operatorId The operator's id, so the seeded owner is the operator
  * @param {object} data Props to override
  * @returns {object}
@@ -1452,10 +1445,8 @@ export function variesRemovalMoveProps(operatorId, data = {}) {
 }
 
 /**
- * Build move props where a recipient is absent from the item the operator does not own.
- * Carol can read the owned R1 and has nothing on R2, and the move raises her to update on R1.
- * The row stays on "varies", she has no access on R2, while still staging the R1 change.
- * It carries no attention marker: nothing definite was picked for her, so R2 blocks nothing.
+ * Build move props where a recipient is absent from the not-owned item: Carol reads R1 and has
+ * nothing on R2, so her row stays on "varies" with no attention marker, since nothing is blocked.
  * @param {string} operatorId The operator's id, so the seeded owner is the operator
  * @param {object} data Props to override
  * @returns {object}
@@ -1519,9 +1510,8 @@ export function absentFromUnownedMoveProps(operatorId, data = {}) {
 }
 
 /**
- * Build move props with a recipient at the same level on both the owned item and the one the operator
- * does not own, and nothing applied on top.
- * This is the starting point the operator then edits by hand, to check what a removal reports.
+ * Build move props with a recipient at the same level on the owned and the not-owned item, and
+ * nothing applied on top: the starting point for an edit by hand, to check what a removal reports.
  * @param {string} operatorId The operator's id, so the seeded owner is the operator
  * @param {object} data Props to override
  * @returns {object}
@@ -1580,9 +1570,8 @@ export function uniformRecipientMixedOwnershipProps(operatorId, data = {}) {
 }
 
 /**
- * Build move props where the destination grants somebody the moved items did not have at all, at a
- * different level on each. Dame is absent from RA and RB before the move, and ends up able to update
- * RA and owning RB.
+ * Build move props where the destination grants somebody the moved items did not have at all:
+ * Dame ends up able to update RA and owning RB.
  * @param {string} operatorId The operator's id, so the seeded owner is the operator
  * @param {object} data Props to override
  * @returns {object}

@@ -18,10 +18,8 @@ import ShareDetailsList from "./ShareDetailsList";
 import { getSharePermissionLabels } from "./SharePermissionLabels";
 
 /**
- * On a move, tells the operator which items their choice cannot reach for one recipient.
- * Those are the items the operator does not own, which move with their permissions unchanged.
- * Each one is listed with the level that would have applied, "Resource A (Can edit)" for instance.
- * Same shape as ShareVariesDetails, so both tooltips read alike. This one is warning-tinted.
+ * Tooltip body listing the items a recipient's permission cannot be applied to, with the level that
+ * would have applied: "Resource A (Can edit)". Same shape as ShareVariesDetails, warning-tinted.
  */
 class ShareUnchangeableDetails extends Component {
   render() {

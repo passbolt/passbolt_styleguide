@@ -24,8 +24,7 @@ import MoveItemsServiceWorkerService from "../../../../../shared/services/servic
 import { AbstractPermissionFlow, PERMISSION_FLOW_STATUS } from "./AbstractPermissionFlow";
 
 /**
- * Status values driving the resource-move flow state machine.
- * Extends the shared base status enum with the move-specific dialog state.
+ * Status values of the resource-move flow: the shared ones plus the move dialog state.
  * @type {Readonly<{INITIALIZING: string, SHARE_DIALOG_OPEN: string, ERROR: string}>}
  */
 export const RESOURCE_MOVE_FLOW_STATUS = Object.freeze({
@@ -34,22 +33,16 @@ export const RESOURCE_MOVE_FLOW_STATUS = Object.freeze({
 });
 
 /**
- * Orchestrates the resource-move flow.
- * The destination folder's permissions are what the move proposes for the moved resources.
+ * Orchestrates the resource-move flow: a move applies the destination folder's permissions to the
+ * moved resources.
  *
- * 1. Snapshot the destination folder's permissions. The root and a personal folder snapshot to
- *    nothing, they simply have nothing to contribute.
- * 2. Move without opening the dialog when the operator owns none of the resources, or when nothing
- *    would change for any of the ones they own. This is checked even for a destination that shares
- *    with nobody: losing a permission with nothing to replace it is still a change.
- * 3. Otherwise open ShareDialog, seeded from the destination snapshot, so the operator can review
- *    and edit the permissions before anything is encrypted.
- * 4. On confirmation, snapshot the destination again to catch a change made during the review,
- *    rebuild the permissions each resource must end up with, and hand them to the service worker,
- *    which applies them to the owned resources and performs the move.
+ * 1. Snapshot the destination permissions. The root and a personal folder contribute nothing.
+ * 2. Move without the dialog when no owned resource would change permission.
+ * 3. Otherwise open ShareDialog so the operator reviews and edits the permissions first.
+ * 4. On confirmation, re-snapshot to catch a concurrent change, then hand the permissions to the
+ *    service worker, which applies them to the owned resources and performs the move.
  *
- * The flow stays mounted until the operator cancels or the move succeeds, then calls
- * `props.onStop()` to deregister itself.
+ * The flow stays mounted until the operator cancels or the move ends, then calls `props.onStop()`.
  */
 export class ResourceMoveFlow extends AbstractPermissionFlow {
   /**
@@ -60,14 +53,13 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
     super(props);
     this.state = this.defaultState;
     this.moveItemsServiceWorkerService = new MoveItemsServiceWorkerService(props.context.port);
-    // The moved selection is fixed for the flow's lifetime: derive the owned subset once.
+    // The selection never changes, so derive the owned subset once.
     this.ownedResourceIds = new Set(
       props.resources.filter((resource) => this.isOwnedItem(resource)).map((resource) => resource.id),
     );
     /*
      * The resources whose permissions this move can change: the owned ones that really do move.
-     * A resource already sitting in the destination does not move, and the service worker leaves its
-     * permissions alone. It must therefore not appear in the dialog, nor count towards the change.
+     * One already in the destination keeps its permissions, so it is neither shown nor counted.
      */
     this.rePermissionedResourceIds = new Set(
       props.resources
@@ -113,9 +105,8 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Component did mount. Snapshot the destination, or nothing at all when moving to the root.
-   * The dialog then opens on two conditions: the operator owns something, and something would
-   * actually change. Whether the destination is shared is never enough on its own.
+   * Snapshot the destination, then open the dialog only if an owned resource would really change
+   * permission. A destination shared with nobody can still change them.
    * @returns {Promise<void>}
    */
   async componentDidMount() {
@@ -125,9 +116,8 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
         : null;
       if (this.rePermissionedResourceIds.size === 0) {
         /*
-         * No permission can change here. Either the operator owns none of the selected resources, or
-         * the ones they own are already in the destination. Nothing is encrypted and no secret is
-         * shared, so move without the dialog. The service worker moves the ones that can move.
+         * The operator owns none of the resources, or the owned ones are already in the
+         * destination. No permission can change, so move without the dialog.
          */
         const result = await this.moveItemsServiceWorkerService.moveResources(
           this.resourcesIds,
@@ -137,14 +127,11 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
         await this.finalizeMove(result);
         return;
       }
-      // At least one resource is owned. Work out the permissions each owned resource ends up with:
-      // what it keeps of its own, plus the destination, the higher of the two levels winning.
-      // That answers whether the dialog opens, and seeds its added, modified and removed badges.
+      // The permissions each owned resource ends up with, which decide whether the dialog opens.
       const movedSnapshots = await this.permissionSnapshotService.buildSnapshotForResourcesShare(this.resourcesIds);
       const parentPermissionsById = await this.findOwnedResourcesParentPermissions();
       const appliedPermissions = this.buildAppliedPermissions(movedSnapshots, parentPermissionsById, snapshot);
-      // Owning something is not enough, something has to actually change. When nothing does for any
-      // owned resource, move silently, like the case above.
+      // Owning a resource is not enough: a permission has to actually change.
       const anyOwnedResourceHasDelta = this.props.resources.some(
         (resource, index) =>
           this.rePermissionedResourceIds.has(resource.id) &&
@@ -162,10 +149,8 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
         await this.finalizeMove(result);
         return;
       }
-      // Seed the dialog with the permissions each resource has today, not the ones it will end up
-      // with. That is the baseline the badges and the revert button compare against.
-      // The resulting permissions are staged separately, once the dialog is mounted, so the badges
-      // come out right. See openMoveDialog and ShareDialog.applyInitialAppliedPermissions.
+      // The dialog needs two sets: the permissions each resource has now, which the badges and the
+      // revert button compare against, and the ones the move applies, staged on top once the dialog is open.
       this.initialResources = this.buildControlledResources(this.props.resources, movedSnapshots);
       this.appliedPermissionsByItemId = new Map(
         this.props.resources
@@ -179,9 +164,8 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Fetch the current parent-folder permissions of the owned moved resources, so their applied
-   * permissions can be previewed in the dialog. Keyed by folder id; resources at the root have no
-   * parent and are absent from the map.
+   * The current parent-folder permissions of the owned moved resources, by folder id.
+   * A resource at the root has no parent and is absent from the map.
    * @returns {Promise<Object<string, PermissionsCollection>>}
    */
   async findOwnedResourcesParentPermissions() {
@@ -201,10 +185,8 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Work out the permissions each owned moved resource ends up with: what it keeps of its own, plus
-   * the destination, the higher of the two levels winning.
-   * A resource the operator does not own gives `null`, there is nothing to apply to it.
-   * Used to decide whether the dialog opens, and to seed it when it does.
+   * The permissions each owned moved resource ends up with: the ones it keeps plus the
+   * destination's, the higher level winning. A resource the operator does not own gives null.
    * @param {Array<PermissionSnapshotEntity>} movedSnapshots The moved resources' own permission snapshots.
    * @param {Object<string, PermissionsCollection>} parentPermissionsById The owned resources' current parent permissions, by folder id.
    * @param {PermissionSnapshotEntity|null} snapshot The destination folder's permission snapshot. Null
@@ -229,9 +211,7 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
 
   /**
    * The current parent-folder permissions of a moved resource, or null when it sits at the root.
-   * A resource that has a parent but whose permissions could not be retrieved is an error, not a
-   * move from the root. calculateMovedPermissions reads a missing parent as "nothing to drop", and
-   * would quietly keep the permissions the move is meant to remove.
+   * A parent that could not be retrieved throws, it would be read as "nothing to drop".
    * @param {object} resource The moved resource DTO.
    * @param {Object<string, PermissionsCollection>} parentPermissionsById The parent permissions by folder id.
    * @returns {PermissionsCollection|null}
@@ -250,19 +230,11 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Open the ShareDialog for a move.
-   * It is seeded with the permissions each resource has today, `this.initialResources`, plus the
-   * permissions the owned ones end up with, `this.appliedPermissionsByItemId`. ShareDialog stages
-   * the second on mount, so the added, modified and removed badges show without any operator edit.
-   *
-   * The operator can then edit, and their edits are applied as shown, lowerings and removals
-   * included. `this.initialResources` is kept for the confirmation step to fold them into.
-   * The resources the operator does not own just move.
-   * A recipient who does not end up at the same level on every resource gets an "i".
+   * Open ShareDialog seeded with the resources' current permissions and the ones the move applies.
+   * ShareDialog stages the latter on mount, so the badges show without any operator edit.
    */
   openMoveDialog() {
-    // The resources the operator does not own keep their permissions, they only move.
-    // Pass them to the dialog so it can warn about them and list them behind the marker.
+    // The not-owned resources only move, so the dialog lists them as unchangeable.
     const unchangedAcos = this.props.resources
       .filter((resource) => !this.ownedResourceIds.has(resource.id))
       .map((resource) => ({ id: resource.id, name: resource.metadata?.name }));
@@ -282,10 +254,8 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Handle the operator's confirmation.
-   * Snapshot the destination again and compare it with the first one. Any difference aborts.
-   * Then rebuild the permissions each resource must end up with and hand them to the service worker,
-   * which applies them to the owned resources and performs the move.
+   * Handle the operator's confirmation: abort if the permissions changed during the review,
+   * otherwise hand the confirmed ones to the service worker, which applies them and moves.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
    * @returns {Promise<void>}
    */
@@ -293,9 +263,8 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
     this.moveConfirmed = true;
     try {
       await this.assertDestinationPermissionsUnchanged(this.destinationFolderId, this.state.snapshot);
-      // What the operator confirmed was built from the permissions the items had when the dialog
-      // opened. Snapshot them again and abort on any difference, so a permission somebody else added
-      // during the review is not silently undone by a set that is now out of date.
+      // The confirmed set was built when the dialog opened, so applying it now would silently undo
+      // a permission somebody else changed since.
       const currentMovedSnapshots = await this.permissionSnapshotService.buildSnapshotForResourcesShare(
         this.resourcesIds,
       );
@@ -326,9 +295,7 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Handle ShareDialog closing.
-   * After a confirmation the flow is already moving forward. Otherwise the operator cancelled, so
-   * terminate.
+   * Handle ShareDialog closing: a close that does not follow a confirmation is a cancellation.
    */
   handleShareDialogClose() {
     if (this.moveConfirmed) {
@@ -338,10 +305,8 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Finalize the move from the service-worker result.
-   * The service worker skips the resources it cannot move, a read-only one going into a shared
-   * folder for instance. Report that rather than a plain success.
-   * A warning when some were skipped, an error when none could move at all.
+   * Finalize the move from the service-worker result. It skips the resources it cannot move, so
+   * warn when some were skipped and error when none moved at all.
    * @param {{skippedResourceIds: Array<string>}|undefined} result The service-worker move result.
    * @returns {Promise<void>}
    */

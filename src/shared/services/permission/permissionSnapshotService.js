@@ -64,8 +64,7 @@ export default class PermissionSnapshotService {
    * Build the permission snapshot shown to the operator while sharing a folder. The permissions are
    * captured from the folder itself so the operator reviews and edits the folder's own permission
    * set before the share is propagated to its content. Also used to re-snapshot the folder for drift
-   * detection, and by the move flows to capture the destination folder's permissions, the ones the
-   * moved items merge in, together with every group and user they reference.
+   * detection, and by the move flows to capture the destination folder's permissions.
    * @param {string} folderId The id of the folder being shared, or moved into.
    * @returns {Promise<PermissionSnapshotEntity>}
    */
@@ -155,12 +154,8 @@ export default class PermissionSnapshotService {
   }
 
   /**
-   * Assemble the immutable snapshot from a permission set and the groups it references.
-   * The user list holds every user the snapshot can be asked about. That is the users granted
-   * directly, whose data comes embedded in the permissions, plus the members of the groups involved.
-   * It has to be complete. A move seeds the dialog with permissions built by
-   * PermissionEntity::copyForAnotherAco, which carries no embedded user, so the user list is the only
-   * place those recipients can be looked up.
+   * Assemble the immutable snapshot from a permission set and the groups it references. The user list
+   * must be complete: a move copies permissions with copyForAnotherAco, which drops the embedded user.
    * @param {PermissionsCollection} permissions The permission set to capture.
    * @param {Array<GroupEntity>} groups The groups referenced by the permission set.
    * @returns {PermissionSnapshotEntity}

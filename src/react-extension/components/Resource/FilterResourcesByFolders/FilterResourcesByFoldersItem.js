@@ -248,7 +248,7 @@ class FilterResourcesByFoldersItem extends React.Component {
 
   /**
    * Handle when the user drops content on this component.
-   * The workflow started by the drop owns the move, error reporting included, so nothing fails here.
+   * The move is not awaited here: the workflow it starts runs it and reports its own errors.
    * @param {ReactEvent} event The event
    */
   handleDropEvent() {
@@ -314,9 +314,7 @@ class FilterResourcesByFoldersItem extends React.Component {
   }
 
   /**
-   * Start the permission workflow for a drop.
-   * When another permission operation is still running the workflow cannot start, so warn the
-   * operator. A drop that silently does nothing looks exactly like a drag that never registered.
+   * Start the permission workflow for a drop, warning the operator when one is already running.
    * @param {object} workflowProps The props to start HandlePermissionWorkflow with.
    * @return {void}
    */

@@ -42,10 +42,8 @@ beforeEach(() => {
 });
 
 /**
- * Wire the snapshot port events.
- * `permissionsByAcoId` maps an item id to its permission DTOs. That can be the destination folder,
- * an owned resource's parent folder, or a moved resource.
- * Folders are read one at a time, the moved resources through the batched find event.
+ * Wire the snapshot port events. `permissionsByAcoId` maps an item id (destination folder, parent
+ * folder or moved resource) to its permission DTOs; only the resources are read in one batch.
  */
 function wireDestinationSnapshot(port, { permissionsByAcoId = {} } = {}) {
   port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
@@ -125,9 +123,8 @@ describe("ResourceMoveFlow", () => {
 
       await mountUntilShareOpen(props);
 
-      // The seeded permissions are built by PermissionEntity::copyForAnotherAco, which drops the
-      // embedded user, so the dialog can only look this recipient up through initialUsers.
-      // Somebody who only exists on the destination shows up in the resulting set, not in the seed.
+      // The seeded permissions are built by copyForAnotherAco, which drops the embedded user, so
+      // the dialog can only look this recipient up through initialUsers.
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
       expect(shareProps.initialUsers.items.map((user) => user.id)).toContain(readerId);
       expect(
@@ -157,10 +154,8 @@ describe("ResourceMoveFlow", () => {
       props.context.port.addRequestListener(MOVE_RESOURCES_BY_IDS, () => undefined);
       jest.spyOn(props.context.port, "request");
       const newRecipientId = uuidv4();
-      // ShareChanges emits its changes per item. `changes` is what the real dialog would emit on
-      // confirm. ShareDialog staged existingRecipient as added on mount, since they are in the
-      // resulting set but not in the resource's current permissions. The operator then added
-      // newRecipient by hand through the mocked dialog.
+      // What the real dialog would emit on confirm: existingRecipient staged on mount, since the
+      // move adds them, plus newRecipient added by hand.
       const changes = [
         {
           is_new: true,
@@ -468,10 +463,8 @@ describe("ResourceMoveFlow", () => {
       const bettyId = uuidv4();
       wireDestinationSnapshot(props.context.port, {
         permissionsByAcoId: {
-          // The folder grants the operator alone, so their ownership of the resource is dropped as
-          // coming from there. A move to the root puts them back as owner.
-          // Betty's ownership is absent from the folder, so it was granted on the resource and stays.
-          // The result is the same list as before.
+          // The operator's ownership comes from the folder, so it is dropped and given back by the
+          // move to the root. Betty's is granted on the resource and stays: same list.
           [parentFolderId]: [folderPermissionDto(operatorId, parentFolderId)],
           [movedResource.id]: [
             resourcePermissionDto(operatorId, movedResource.id),
@@ -810,12 +803,8 @@ describe("ResourceMoveFlow", () => {
           [resource.id]: [resourcePermissionDto(operatorId, resource.id)],
         },
       });
-      /*
-       * A folder whose permissions could not be retrieved must not be read as "no folder at all".
-       * That path keeps every permission instead of dropping the ones that came from the folder,
-       * which quietly over-shares the moved resource.
-       * Only the folder lookup fails here, so the error can come from nowhere else.
-       */
+      // A folder whose permissions could not be retrieved must not be read as "no folder at all",
+      // that path keeps the permissions it should drop and over-shares the resource.
       const findPermissions = PermissionServiceWorkerService.prototype.findPermissions;
       jest
         .spyOn(PermissionServiceWorkerService.prototype, "findPermissions")

@@ -56,10 +56,8 @@ export default class ShareChanges {
         this._permissions.push(permission);
       });
     });
-    // The items the operator owns, and can therefore stage a permission change on. On a move they
-    // may own only part of the selection.
-    // What is displayed still covers every item, see aggregatePermissionsByAro. Only the staging is
-    // restricted.
+    // The items the operator owns, the only ones a change can be staged on. What is displayed still
+    // covers every item (see aggregatePermissionsByAro).
     this._stageableAcos = this._acos.filter((aco) => aco.permission?.type === ADMIN);
     this._changes = [];
     this._initiallyNewAroIds = new Set();
@@ -258,9 +256,7 @@ export default class ShareChanges {
   }
 
   /**
-   * Update aro's permissions.
-   * Only stages the change on the items the operator owns, `_stageableAcos`.
-   * The permissions of an item they do not own cannot change, whatever level was picked.
+   * Update aro's permissions on the items the operator owns only, whatever level was picked.
    * @param {string} aroId The aro to update the permissions for
    * @param {int} type
    */
@@ -287,21 +283,8 @@ export default class ShareChanges {
   }
 
   /**
-   * Stage the changes taking a recipient from their current permissions to a level chosen per item.
-   *
-   * Same rules as updateAroPermissions: their pending changes are dropped first, and only the items
-   * the operator owns, `_stageableAcos`, are ever staged. The difference is that the level is given
-   * per item rather than once for all of them.
-   * The map carries one entry per item concerned, a level to end up at or null to end up with none.
-   * An item absent from the map is not concerned and is left strictly alone, so a caller can cover
-   * only part of the selection.
-   *
-   * Used to seed a move dialog, where each item has its own resulting permissions and a recipient can
-   * end up at a different level on each, while the items the move does not touch keep what they have.
-   * The row's badge is derived from what was staged, see getAroChangeStatus. A map that deletes every
-   * permission it covers therefore reads as removed, even when the recipient keeps one on an item the
-   * map left out.
-   *
+   * Update aro's permissions with a level per item, rather than one level for all of them, to seed
+   * a move. A null level removes the permission, and an item absent from the map is left alone.
    * @param {object} aro The recipient to stage the permissions for, registered when not already known.
    * @param {Map<string, (int|null)>} targetTypeByAcoId The level (1|7|15) per item id, or null for the
    *   items the recipient must end up without a permission on.
@@ -348,8 +331,7 @@ export default class ShareChanges {
   }
 
   /**
-   * Delete aro's permissions.
-   * Only stages the deletion on the items the operator owns, `_stageableAcos`. See updateAroPermissions.
+   * Delete aro's permissions, on the items the operator owns only.
    * @param {string} aroId The aro to delete the permissions for
    */
   deleteAroPermissions(aroId) {

@@ -399,9 +399,7 @@ class FilterResourcesByFolders extends React.Component {
   }
 
   /**
-   * Start the permission workflow for a drop.
-   * When another permission operation is still running the workflow cannot start, so warn the
-   * operator. A drop that silently does nothing looks exactly like a drag that never registered.
+   * Start the permission workflow for a drop, warning the operator when one is already running.
    * @param {object} workflowProps The props to start HandlePermissionWorkflow with.
    * @return {void}
    */

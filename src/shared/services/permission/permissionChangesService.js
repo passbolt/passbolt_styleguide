@@ -62,27 +62,15 @@ export default class PermissionChangesService {
   }
 
   /**
-   * Build, for each moved item, the complete list of permissions it must end up with.
-   *
-   * The move dialog shows what each item will end up with, then lets the operator edit it. Those
-   * edits are applied as shown, so lowering or removing a permission has to take effect.
-   * This returns the whole resulting list per item: the permissions the item has today, with the
-   * staged changes folded in.
-   *
-   * The dialog stages the destination's own contribution on mount, the same way it stages an operator
-   * edit, so folding the changes over the current permissions gives exactly what the dialog showed.
-   * The service worker then applies each list as it is, without keeping anything back.
-   *
-   * ShareChanges emits its changes per item, so each list is built only from the changes carrying
-   * that item's `aco_foreign_key`. Somebody granted on one moved item never spreads to the others.
-   *
+   * For each moved item, the complete list of permissions it must end up with: the ones it has
+   * today with the dialog's staged changes folded in, which the service worker applies as they are.
    * @param {Array<{id: string, permissions: PermissionsCollection}>} items The items seeded into the dialog, with the permissions they have today.
    * @param {Array<object>} changes The DTO-shape permission changes emitted by ShareDialog.
    * @param {string} aco The moved items' ACO type (PermissionEntity.ACO_RESOURCE or ACO_FOLDER).
    * @returns {Map<string, PermissionsCollection>} The resulting permissions, keyed by item id.
    */
   buildAuthoritativeMovePermissions(items, changes, aco) {
-    // Group the edits by item up front, so each item folds in only its own.
+    // Group the changes by item, so somebody granted on one item never spreads to the others.
     const changesByItemId = new Map();
     for (const change of changes) {
       const itemChanges = changesByItemId.get(change.aco_foreign_key);
@@ -97,7 +85,7 @@ export default class PermissionChangesService {
         aco_foreign_key: item.id,
         type,
       });
-      // Keyed by ARO foreign key (a globally-unique user/group id) so an edit replaces the seeded row.
+      // Keyed by user/group id, so a change replaces the seeded permission rather than adding to it.
       const targetByAro = new Map();
       for (const permission of item.permissions.items) {
         targetByAro.set(permission.aroForeignKey, toEntry(permission.aroForeignKey, permission.aro, permission.type));
@@ -118,9 +106,8 @@ export default class PermissionChangesService {
   }
 
   /**
-   * Whether the move actually changes anything for the item, by recipient and by level.
-   * Permission ids and aco fields are ignored, they always differ between the two lists.
-   * A move that changes nothing opens no dialog and touches nothing inside a moved folder.
+   * Whether the move actually changes anything for the item, by recipient and by level. Permission
+   * ids and aco fields are ignored: they always differ between the two lists.
    * @param {PermissionsCollection} currentPermissions The item's current permissions.
    * @param {PermissionsCollection} appliedPermissions The permissions the item would end up with.
    * @returns {boolean}

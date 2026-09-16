@@ -14,7 +14,6 @@
 
 /**
  * The translated permission level labels, keyed by permission type.
- * Shared by every tooltip that shows a level next to an item name.
  * @param {function} t The translation function
  * @returns {object} {0: "No access", 1: "Can read", 7: "Can edit", 15: "Is owner"}
  */

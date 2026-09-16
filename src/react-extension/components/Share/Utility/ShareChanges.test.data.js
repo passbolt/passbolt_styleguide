@@ -40,11 +40,8 @@ export const carol = defaultUserDto({
 export const board = defaultGroupDto({ name: "Board" });
 
 /**
- * Build two resources in the shape ShareDialog feeds to ShareChanges, one Ada owns and one she does
- * not. This is what a move batch looks like when the operator owns only part of it, and a staged
- * change must never reach the resource she does not own.
- * - "apache", owned: Ada owner, Betty update.
- * - "cakephp", not owned, Ada only updates it: Ada update, Carol the only owner.
+ * Build a move batch the operator owns only part of, where a staged change must never reach the
+ * resource she does not own: "apache" is Ada's, "cakephp" is Carol's and Ada can only update it.
  * @returns {Array<object>}
  */
 export function mixedOwnershipResourcesDtos() {

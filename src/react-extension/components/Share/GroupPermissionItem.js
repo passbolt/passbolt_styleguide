@@ -137,10 +137,8 @@ class GroupPermissionItem extends Component {
   }
 
   /**
-   * Whether the row currently shows the "varies" value. The recipient does not end up at the same
-   * level on every moved item, and the operator has not picked one for them yet.
-   * The per-item marker only shows then. A definite level is checked against the items the operator
-   * does not own instead.
+   * Whether the row shows the "varies" value: the recipient does not end up at the same level on
+   * every moved item, and the operator has not picked one for them.
    * @returns {boolean}
    */
   get showsVaries() {
@@ -148,12 +146,8 @@ class GroupPermissionItem extends Component {
   }
 
   /**
-   * On a move, whether the row shows the attention marker, the red triangle, in place of the plain
-   * per-item one. That happens when some moved items keep their permissions because the operator
-   * does not own them.
-   * It takes priority, and its tooltip is a separate one. It lists only what cannot be applied, never
-   * the per-item breakdown, which is a different question with its own marker.
-   * Outside a move the list is always empty, so the marker never shows.
+   * Whether the row shows the attention marker: on a move, some items keep their permissions
+   * because the operator does not own them.
    * @returns {boolean}
    */
   get showsAttention() {
@@ -201,10 +195,7 @@ class GroupPermissionItem extends Component {
           </div>
         </div>
 
-        {/* Shown even when the row reads as removed: a recipient can be dropped from one item and
-            kept, untouched, on another.
-            A tooltip of its own, separate from the per-item one below. It only covers what the
-            operator's choice cannot reach. */}
+        {/* Shown even on a removed row: a recipient can be dropped from one item and kept on another. */}
         {this.showsAttention && (
           <TooltipPortal
             className="warning"

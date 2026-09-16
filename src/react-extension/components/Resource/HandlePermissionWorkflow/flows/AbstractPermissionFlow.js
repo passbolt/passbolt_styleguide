@@ -97,10 +97,8 @@ export class AbstractPermissionFlow extends React.Component {
   }
 
   /**
-   * Check the destination folder's permissions have not changed since the snapshot was taken.
-   * The move flows call this before submitting. The operator confirmed a set built from that
-   * snapshot, so any difference aborts.
-   * There is nothing to check for a move to the root, and no folder id to snapshot either.
+   * Throw when the destination folder's permissions changed since the snapshot the operator
+   * confirmed. A move to the root has no destination, so nothing to check.
    * @param {string|null} destinationFolderId The destination folder id, or null for the root.
    * @param {PermissionSnapshotEntity|null} snapshot The snapshot captured when the dialog opened.
    * @returns {Promise<void>}

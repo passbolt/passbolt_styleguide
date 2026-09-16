@@ -358,17 +358,8 @@ class PermissionsCollection extends EntityV2Collection {
   }
 
   /**
-   * Work out the permissions an item ends up with after a move, in three steps.
-   * 1. Drop what came from the folder it is leaving. Nothing to drop at the root.
-   * 2. Add the destination folder's permissions on top. The higher of the two levels wins, so the
-   *    destination alone never lowers anybody.
-   * 3. On a move to the root, put the operator back as owner. There is no destination to grant them
-   *    back what step 1 removed, so without this they would lose the item they just moved.
-   *
-   * Used for the move dialog preview, and by the service worker for the moved item itself.
-   * It is not used for what a moved folder contains. Those items are set to the level the folder now
-   * gives, rather than keeping the higher of the two.
-   *
+   * The permissions a moved item ends up with: the ones that did not come from the folder it leaves,
+   * plus the destination's, the higher level winning, plus the operator as owner at the root.
    * @param {object} params
    * @param {PermissionsCollection} params.itemPermissions The moved item's current permissions.
    * @param {PermissionsCollection|null} params.parentPermissions The item's current parent folder permissions, or null at the root.

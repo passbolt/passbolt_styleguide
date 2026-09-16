@@ -54,10 +54,8 @@ export const ControlledModeWithExpandableGroup = {
   },
 };
 
-// A move of a batch the operator owns only part of.
-// Only a move can reach this state, everywhere else canShare() requires owning every selected item.
-// So this story is the visual reference for the attention triangle, its warning-tinted tooltip and
-// the footer banner, next to the plain "varies" row.
+// A move of a batch the operator owns only part of: the only way to reach this state, and the
+// visual reference for the attention triangle, its warning-tinted tooltip and the footer banner.
 export const MoveModeMixedOwnership = {
   args: {
     context: defaultAppContext({ port: mockPort(mockStorage()) }),

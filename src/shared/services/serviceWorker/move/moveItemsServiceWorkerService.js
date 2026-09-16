@@ -19,9 +19,8 @@ export const MOVE_RESOURCES_BY_IDS = "passbolt.resources.move-by-ids";
 
 /**
  * Bridge to the service worker for move operations.
- * The styleguide decides which permissions to apply and passes them along with the move.
- * The service worker applies them to the items the operator owns, then moves everything.
- * Without them, the items just move and keep the permissions they have.
+ * The permissions to apply travel with the move: the service worker applies them to the items the
+ * operator owns, then moves everything. Without them the items move and keep their permissions.
  */
 export default class MoveItemsServiceWorkerService {
   /**
@@ -78,8 +77,7 @@ export default class MoveItemsServiceWorkerService {
   }
 
   /**
-   * Serialize the confirmed permissions for the service worker.
-   * They stay grouped per item, so the format is a map of item id to that item's permission DTOs.
+   * Serialize the confirmed permissions for the service worker, grouped per item id.
    * @param {Map<string, PermissionsCollection>|null} confirmedPermissions
    * @returns {Object<string, Array<object>>|null}
    * @private

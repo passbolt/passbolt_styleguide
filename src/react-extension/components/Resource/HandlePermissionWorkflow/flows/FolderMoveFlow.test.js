@@ -38,9 +38,8 @@ beforeEach(() => {
 });
 
 /**
- * Wire the destination-snapshot port events.
- * `permissionsByFolderId` maps a folder id to its permission DTOs, and the find event answers one
- * requested folder id at a time.
+ * Wire the destination-snapshot port events. `permissionsByFolderId` maps a folder id to its
+ * permission DTOs, and the find event answers one requested folder id at a time.
  */
 function wireDestinationSnapshot(port, { permissionsByFolderId = {} } = {}) {
   port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
@@ -164,10 +163,8 @@ describe("FolderMoveFlow", () => {
       props.context.port.addRequestListener(MOVE_FOLDER_BY_ID, () => undefined);
       jest.spyOn(props.context.port, "request");
       const newRecipientId = uuidv4();
-      // ShareChanges emits its changes per item. `changes` is what the real dialog would emit on
-      // confirm. ShareDialog staged existingRecipient as added on mount, since they are in the
-      // resulting set but not in the folder's current permissions. The operator then added
-      // newRecipient by hand through the mocked dialog.
+      // What the real dialog would emit on confirm: existingRecipient staged on mount, since the
+      // move adds them, plus newRecipient added by hand.
       const changes = [
         {
           is_new: true,
@@ -481,10 +478,8 @@ describe("FolderMoveFlow", () => {
       const bettyId = uuidv4();
       wireDestinationSnapshot(props.context.port, {
         permissionsByFolderId: {
-          // The parent grants the operator alone, so their ownership of the folder is dropped as
-          // coming from there. A move to the root puts them back as owner.
-          // Betty's ownership is absent from the parent, so it was granted on the folder and stays.
-          // The result is the same list as before.
+          // The operator's ownership comes from the parent, so it is dropped and given back by the
+          // move to the root. Betty's is granted on the folder and stays: same list.
           [parentFolderId]: [folderPermissionDto(operatorId, parentFolderId)],
           [props.folder.id]: [
             folderPermissionDto(operatorId, props.folder.id),
@@ -613,11 +608,8 @@ describe("FolderMoveFlow", () => {
 
       await mountUntilStopped(props);
 
-      /*
-       * The service worker only lets a read-only folder leave the root or a personal parent, see
-       * FolderEntity.canFolderMove. A shared parent must therefore be caught here, and say why,
-       * rather than get the generic "can not be moved".
-       */
+      // The service worker only lets a read-only folder leave the root or a personal parent, see
+      // FolderEntity.canFolderMove, so a shared parent is caught here to say why.
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith(
         "Folders you can only read cannot be moved out of a shared folder.",
       );

@@ -602,9 +602,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
   describe("Move mode (controlled)", () => {
     /**
-     * Build move props where a recipient does not end up at the same level on the two moved
-     * resources, read on RA and owner on RB, while the destination proposes "can update" for them.
-     * The operator owns both resources.
+     * Build move props where a recipient ends up read on RA and owner on RB, while the destination
+     * proposes "can update" for them. The operator owns both resources.
      */
     function buildMoveModeProps({ unchangedAcos } = {}) {
       const operatorId = context.userSettings.id;
@@ -676,9 +675,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
       await act(() => (page = new ShareDialogPage(context, props)));
 
-      // reader is owner on RB and only read on RA, so they do not end up at the same level everywhere
-      // and the row reads "varies". Never the destination's lower "can update", which would hide the
-      // ownership RB keeps.
+      // reader does not end up at the same level everywhere, so the row reads "varies", never the
+      // destination's lower "can update", which would hide the ownership RB keeps.
       expect(page.permissionValueForAro("reader@passbolt.com")).toBe("varies");
       expect(page.variesCount).toBeGreaterThanOrEqual(1);
       // Every item here is owned, so the plain marker shows the per-item list.
@@ -785,9 +783,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
       await act(() => (page = new ShareDialogPage(context, props)));
 
-      // ada is owner on the owned R1 but only "can update" on the not-owned R2, so she does not end up
-      // at the same level everywhere. The row reads "varies", not the destination's "is owner", and
-      // shows the attention marker.
+      // ada is owner on the owned R1 but only "can update" on the not-owned R2, so the row reads
+      // "varies", not the destination's "is owner", and shows the attention marker.
       expect(page.permissionValueForAro("ada@passbolt.com")).toBe("varies");
       expect(page.attentionIconForAro("ada@passbolt.com")).not.toBeNull();
     });
@@ -1042,12 +1039,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
       await page.selectRemovePermission(page.rowIndexForAro("betty@passbolt.com"));
 
-      /*
-       * The removal cannot reach R2, which the operator does not own, so Betty keeps her access there.
-       * The row must say so, and the footer must warn.
-       * Deleting a row puts its displayed level back to the original, so the marker cannot be worked
-       * out from what is displayed.
-       */
+      // The removal cannot reach the not-owned R2, so Betty keeps her access there and the row must
+      // say so. Deleting a row restores its displayed level, so the marker cannot be read there.
       expect(page.attentionIconForAro("betty@passbolt.com")).not.toBeNull();
       expect(page.unchangedWarning).not.toBeNull();
 
@@ -1072,11 +1065,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
     describe("Pre-seeded added/modified/removed badges", () => {
       /**
-       * Build move props for a single resource, seeded with the permissions it has today, plus
-       * `initialAppliedPermissions` carrying what it ends up with.
-       * Ada, the operator, is unchanged. Betty goes up, so "modified". Carol is dropped, she only had
-       * a permission that came from the folder, so "removed", still shown but faded. Dame comes from
-       * the destination alone, so "added". Elliot is at the same level in both, so no badge.
+       * Build move props for a single resource, covering every badge at once: Ada unchanged, Betty
+       * modified, Carol removed, Dame added and Elliot at the same level in both.
        */
       function buildPreSeededBadgeProps() {
         const operatorId = context.userSettings.id;
@@ -1389,10 +1379,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       // Moving a batch the operator owns only part of.
       it("As LU moving a mixed-ownership batch I should see a concrete row with attention, a modified row with attention and an untouched varies row", async () => {
         expect.assertions(10);
-        // Ada, the operator, owns R1, which Carol also owns. She can only update R2, which Betty owns.
-        // She moves both into folder A, where she is owner and Betty can update.
-        // R1's permissions change: the destination is merged in, the higher of the two levels winning.
-        // R2 is left alone, Ada does not own it.
+        // Ada owns R1, which Carol also owns, and can only update R2, which Betty owns. Both move into
+        // folder A: only R1's permissions change, the higher of the two levels winning.
         const operatorId = context.userSettings.id;
         context.loggedInUser = { id: operatorId };
         const ada = defaultUserDto({ id: operatorId, username: "ada@passbolt.com" });
@@ -1422,9 +1410,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
           [permission(r2Id, operatorId, 7), permission(r2Id, betty.id, 15)],
           { assertAtLeastOneOwner: false },
         );
-        // What R1 ends up with: the destination, Ada owner and Betty update, merged with what R1 keeps
-        // of its own. Ada is already owner, and Carol stays because the destination says nothing
-        // about her.
+        // What R1 ends up with: the destination merged with what it keeps of its own, so Carol stays,
+        // the destination says nothing about her.
         const r1AppliedPermissions = new PermissionsCollection(
           [permission(r1Id, operatorId, 15), permission(r1Id, betty.id, 7), permission(r1Id, carol.id, 15)],
           { assertAtLeastOneOwner: false },
@@ -1468,11 +1455,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       // An owned resource listed after a not-owned one still has its permissions changed.
       it("As LU moving a mixed-ownership batch to the root, a not-owned resource's sole owner does not wrongly disable Save", async () => {
         expect.assertions(6);
-        // Ada owns R1. Betty can update it at exactly the level folder A grants her, so that came from
-        // the folder and is dropped on the move to the root.
-        // Ada can only update R2, where Betty is the sole owner.
-        // Moving both to Ada's root: R1 keeps only Ada, put back as owner with nothing left to keep.
-        // R2 is left entirely alone. Betty must keep her ownership of it, not be staged for deletion.
+        // Betty's update on R1 comes from folder A, so the move to the root drops it and puts Ada back
+        // as owner. R2, which Ada does not own, is left alone with Betty still its owner.
         const operatorId = context.userSettings.id;
         context.loggedInUser = { id: operatorId };
         const ada = defaultUserDto({ id: operatorId, username: "ada@passbolt.com" });
@@ -1809,11 +1793,8 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       mockContextRequest(requestBextMockImpl);
       await act(() => (page = new ShareDialogPage(context, props)));
 
-      /*
-       * Rows are sorted by name: Ada is 1, then the Developer group is 2 and Marketing is 3.
-       * Expanding a group inserts its member rows right below it, so expand the lower one first to
-       * keep the other's index stable.
-       */
+      // Rows are sorted by name: Ada is 1, Developer 2 and Marketing 3. Expanding a group inserts its
+      // members right below it, so expand the lower one first to keep the other's index stable.
       await act(() => page.toggleGroupMemberVisibility(3));
       await act(() => page.toggleGroupMemberVisibility(2));
       await waitForTrue(() => rejections.length === 2);

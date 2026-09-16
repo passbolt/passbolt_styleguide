@@ -317,11 +317,8 @@
 
 }
 
-// The attention banner shown on a move. Its icon sits beside the text, which can run to two lines.
-// The plain .message.warning used elsewhere is single-line, so this is scoped to the dialog.
-// The icon keeps the default --icon-color, like the varies one, so it needs no color rule.
-// The row icon gets its size from the shared .tooltip-portal svg rule because it sits inside a
-// TooltipPortal. This one has no tooltip around it, so it needs a size of its own.
+// The attention banner shown on a move. Scoped to the dialog: the plain .message.warning is
+// single-line, while this one sets its own icon size beside text that can wrap.
 .share-dialog .message.warning {
     display: flex;
     align-items: center;

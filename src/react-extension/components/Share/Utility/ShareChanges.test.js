@@ -616,9 +616,8 @@ describe("ShareChanges", () => {
       const resources = mixedOwnershipResourcesDtos();
       const shareChanges = new ShareChanges(resources);
 
-      // Carol is the only owner of "cakephp", which the operator does not own.
-      // Deleting her permissions stages nothing against it, see ::deleteAroPermissions, so it must
-      // not be flagged here either. Getting this wrong would disable Save for the whole dialog.
+      // Carol is the only owner of the not-owned "cakephp", where deleting her stages nothing, so it
+      // must not be flagged either. Getting this wrong would disable Save for the whole dialog.
       shareChanges.deleteAroPermissions(carol.id);
 
       expect(shareChanges.getResourcesWithNoOwner()).toEqual([]);
