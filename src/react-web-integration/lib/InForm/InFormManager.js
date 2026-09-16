@@ -616,8 +616,10 @@ class InFormManager {
    */
   handleInFormMenuInsertionEvent() {
     port.on("passbolt.in-form-menu.open", () => {
-      this.menuField?.destroy();
-      this.menuField = new InFormMenuField(this.lastCallToActionFieldClicked.field, this.shadowRoot);
+      if (this.lastCallToActionFieldClicked) {
+        this.menuField?.destroy();
+        this.menuField = new InFormMenuField(this.lastCallToActionFieldClicked.field, this.shadowRoot);
+      }
     });
   }
 
@@ -626,7 +628,7 @@ class InFormManager {
    */
   handleInFormMenuRemoveEvent() {
     port.on("passbolt.in-form-menu.close", () => {
-      this.menuField.removeIframe();
+      this.menuField?.removeIframe();
     });
   }
 
@@ -644,10 +646,14 @@ class InFormManager {
   /** Whenever one requires to get the type and value of the input attached to the last call-to-action performed */
   handleGetLastCallToActionClickedInput() {
     port.on("passbolt.web-integration.last-performed-call-to-action-input", (requestId) => {
-      port.emit(requestId, "SUCCESS", {
-        type: this.lastCallToActionFieldClicked.fieldType,
-        value: this.lastCallToActionFieldClicked.field.value,
-      });
+      if (this.lastCallToActionFieldClicked) {
+        port.emit(requestId, "SUCCESS", {
+          type: this.lastCallToActionFieldClicked.fieldType,
+          value: this.lastCallToActionFieldClicked.field.value,
+        });
+      } else {
+        port.emit(requestId, "ERROR", { name: "Error", message: "No CTA has been clicked yet." });
+      }
     });
   }
 
@@ -676,7 +682,7 @@ class InFormManager {
    */
   handleFillCredentials() {
     port.on("passbolt.web-integration.fill-credentials", ({ username, password, totp }) => {
-      const currentFieldType = this.lastCallToActionFieldClicked?.fieldType;
+      const currentFieldType = this.lastCallToActionFieldClicked.fieldType;
 
       const isUsernameType = currentFieldType === "username";
       const isPasswordType = currentFieldType === "password";
@@ -739,12 +745,16 @@ class InFormManager {
         (callToActionField) =>
           !callToActionField.field.value && UserEventsService.autofill(callToActionField.field, password),
       );
-      this.menuField.removeIframe();
-      // Listen the auto-save on the appropriate form field
-      const formField = this.credentialsFormFields.find((formField) =>
-        formField.field.contains(this.lastCallToActionFieldClicked.field),
-      );
-      formField?.handleAutoSaveEvent();
+
+      this.menuField?.removeIframe();
+
+      const clickedField = this.lastCallToActionFieldClicked?.field;
+      if (clickedField) {
+        const formField = this.credentialsFormFields.find((formField) =>
+          ShadowDomQueryService.containsDeep(formField.field, clickedField),
+        );
+        formField?.handleAutoSaveEvent();
+      }
     });
   }
 
