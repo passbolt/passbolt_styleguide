@@ -116,13 +116,11 @@ class DisplayProviderList extends Component {
    * @param {string} provider
    */
   handleProviderClick(provider) {
-    // The Passkeys settings page does not exist yet.
-    if (provider === Providers.WEBAUTHN) {
-      return;
-    }
     const mfaUserSettings = this.props.mfaContext.getMfaUserSettings();
     this.props.mfaContext.setProvider(provider);
-    if (mfaUserSettings[provider]) {
+    if (provider === Providers.WEBAUTHN) {
+      this.props.mfaContext.navigate(MfaSettingsWorkflowStates.PASSKEYS);
+    } else if (mfaUserSettings[provider]) {
       this.props.mfaContext.navigate(MfaSettingsWorkflowStates.VIEWCONFIGURATION);
     } else {
       switch (provider) {

@@ -54,7 +54,7 @@ describe("DisplayProviderList", () => {
       expect(page.webauthnCardStatus.textContent).toEqual("Disabled");
     });
 
-    it("As a logged user I should see the passkeys card enabled when I have enrolled a passkey", () => {
+    it("As a logged user I should see the passkeys card enabled when I have registered a passkey", () => {
       expect.assertions(1);
 
       const page = new DisplayProviderListPage(
@@ -85,13 +85,30 @@ describe("DisplayProviderList", () => {
       expect(page.totpCard).not.toBeNull();
     });
 
-    it("As a logged user clicking the passkeys card should not navigate yet", async () => {
+    it("As a logged user clicking the passkeys card should navigate to the Passkeys page", async () => {
       expect.assertions(2);
 
       await page.clickOnWebauthnProvider();
 
-      expect(props.mfaContext.setProvider).not.toHaveBeenCalled();
-      expect(props.mfaContext.navigate).not.toHaveBeenCalled();
+      expect(props.mfaContext.setProvider).toHaveBeenCalledWith(Providers.WEBAUTHN);
+      expect(props.mfaContext.navigate).toHaveBeenCalledWith(MfaSettingsWorkflowStates.PASSKEYS);
+    });
+
+    it("As a logged user clicking the passkeys card should navigate to the Passkeys page when I have registered a passkey", async () => {
+      expect.assertions(2);
+
+      const registeredProps = propsWithMfaProviders({
+        mfaContext: {
+          ...props.mfaContext,
+          getMfaUserSettings: () => ({ ...mfaDefined, webauthn: true }),
+        },
+      });
+      const page = new DisplayProviderListPage(registeredProps);
+
+      await page.clickOnWebauthnProvider();
+
+      expect(registeredProps.mfaContext.setProvider).toHaveBeenCalledWith(Providers.WEBAUTHN);
+      expect(registeredProps.mfaContext.navigate).toHaveBeenCalledWith(MfaSettingsWorkflowStates.PASSKEYS);
     });
 
     it("As a logged user I should be able to see the yubikey card", () => {
