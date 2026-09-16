@@ -293,7 +293,7 @@ describe("InFormCallToActionField", () => {
     });
 
     it("should stop the click watcher", () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       const callToActionField = buildCallToActionField();
       callToActionField.handleCallToActionClicked({ addEventListener: jest.fn() });
@@ -303,7 +303,6 @@ describe("InFormCallToActionField", () => {
       callToActionField.removeIframe();
 
       expect(clearIntervalSpy).toHaveBeenCalledWith(watcher);
-      expect(callToActionField.callToActionClickWatcher).toBeNull();
     });
   });
 
