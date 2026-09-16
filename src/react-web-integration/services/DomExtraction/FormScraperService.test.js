@@ -270,7 +270,10 @@ describe("FormScraperService", () => {
           </section>
         </article>`;
 
-      expect(FormScraperService._ancestorHeadings(document.querySelector("form"))).toEqual(["Security", "Account center"]);
+      expect(FormScraperService._ancestorHeadings(document.querySelector("form"))).toEqual([
+        "Security",
+        "Account center",
+      ]);
     });
 
     it("should skip a plain div ancestor sitting between two sections", () => {

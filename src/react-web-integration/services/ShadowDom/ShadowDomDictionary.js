@@ -12,8 +12,6 @@
  * @since         5.15.0
  */
 
-import { SCRAPED_ATTRS } from "../../lib/InForm/ScrapingDictionary";
-
 /**
  * HTML elements that may host a shadow root according to the HTML specs.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow#elements_you_can_attach_a_shadow_to
