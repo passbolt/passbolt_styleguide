@@ -23,6 +23,12 @@ import {
 import { PSEUDO_FORM_ACTION_SELECTOR } from "../../lib/InForm/OrphanDictionary";
 
 /**
+ * Selector matching the heading tags.
+ * @type {string}
+ */
+const HEADING_SELECTOR = HEADING_TAGS.join(",").toLowerCase();
+
+/**
  * Builds a {@link FormScraping} record for a container (real `<form>` or pseudo-form LCA container),
  * capturing the form-level signals that disambiguate a field: attributes, resolved action URL,
  * surrounding section headings and action-button text. Read-only and shadow-aware. `fieldTypes` is left
@@ -91,7 +97,6 @@ class FormScraperService {
    */
   static _ancestorHeadings(formElement) {
     const headings = [];
-    const headingSelector = HEADING_TAGS.join(",").toLowerCase();
 
     let current = ShadowDomQueryService.shadowPiercingParentElement(formElement);
     for (
@@ -104,7 +109,7 @@ class FormScraperService {
         // Direct child only, so a nested fieldset's legend never leaks up.
         source = Array.from(current.children).find((child) => child.nodeName === "LEGEND");
       } else if (SECTION_TAGS.includes(current.nodeName)) {
-        source = current.querySelector(headingSelector);
+        source = current.querySelector(HEADING_SELECTOR);
       }
 
       const text = source && TextNormalizer.normalize(source.textContent);

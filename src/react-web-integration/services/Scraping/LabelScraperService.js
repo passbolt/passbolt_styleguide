@@ -26,6 +26,12 @@ import {
 } from "../../lib/InForm/ScrapingDictionary";
 
 /**
+ * Selector matching the controls which end a sibling label search.
+ * @type {string}
+ */
+const LABEL_BOUNDARY_SELECTOR = LABEL_BOUNDARY_TAGS.join(",").toLowerCase();
+
+/**
  * Finds the best label for a form field (and its ARIA state) by trying several sources in order of
  * reliability, keeping the first non-empty one and recording which source it came from.
  */
@@ -176,7 +182,7 @@ class LabelScraperService {
       return true;
     }
 
-    return element.querySelector(LABEL_BOUNDARY_TAGS.join(",").toLowerCase()) !== null;
+    return element.querySelector(LABEL_BOUNDARY_SELECTOR) !== null;
   }
 
   /**

@@ -286,13 +286,7 @@ class InFormManager {
     const newOTPFields = fields.filter((field) => field.role === FieldRole.TOTP).map((field) => field.element);
 
     const container = this.getContainerElement(newUsernameFields, newPasswordFields, newOTPFields);
-
-    // Create the host on first scan, otherwise re-append it as the last child of its container so it stays on top.
-    if (!this.host) {
-      this.createAndInsertShadowRootWithHost(container);
-    } else if (this.host.parentNode !== container || container.lastChild !== this.host) {
-      container.appendChild(this.host);
-    }
+    this.ensureHostMounted(container);
 
     /**
      * A function factory to map a field to an existing field or create a new one
@@ -377,12 +371,10 @@ class InFormManager {
       }
 
       // Attach the call-to-action fields inside the container
-      const ctasIn = (type) =>
-        this.callToActionFields
-          .filter(
-            (cta) => cta.fieldType === type && ShadowDomQueryService.containsDeep(record.containerElement, cta.field),
-          )
-          .map((cta) => cta.field);
+      const ctasInContainer = this.callToActionFields.filter((cta) =>
+        ShadowDomQueryService.containsDeep(record.containerElement, cta.field),
+      );
+      const ctasIn = (type) => ctasInContainer.filter((cta) => cta.fieldType === type).map((cta) => cta.field);
 
       const [passwordField, ...confirmPasswordFields] = ctasIn("password");
       const [usernameField] = ctasIn("username");
