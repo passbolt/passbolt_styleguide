@@ -12,7 +12,7 @@
  * @since         5.15.0
  */
 
-import FormScraper from "../DomExtraction/FormScraper";
+import FormScraperService from "../DomExtraction/FormScraperService";
 import FieldScraperService from "./FieldScraperService";
 import ScrapingIdentityService from "./ScrapingIdentityService";
 import ScrapingCacheService from "./ScrapingCacheService";
@@ -56,7 +56,7 @@ class PageScraperService {
 
   /**
    * Orchestrate the full page payload: issue a stable id per container, delegate container data to
-   * {@link FormScraper} and each field to {@link FieldScraperService}, and aggregate a per-form
+   * {@link FormScraperService} and each field to {@link FieldScraperService}, and aggregate a per-form
    * `fieldTypes` histogram. Read-only; falls back to {@link _lastSkeleton} when called with no argument.
    *
    * @param {object[]} [formElements] The extraction skeleton; defaults to the last one.
@@ -88,7 +88,7 @@ class PageScraperService {
 
   /**
    * Scrape a single skeleton container: issue its stable id, delegate container data to
-   * {@link FormScraper} and each field to {@link FieldScraperService}, and tally the `fieldTypes` histogram.
+   * {@link FormScraperService} and each field to {@link FieldScraperService}, and tally the `fieldTypes` histogram.
    * @private
    * @param {object} skeleton The skeleton container entry.
    * @returns {{form: FormScraping, fields: FieldScraping[]}} The form and its fields, or `null` when the
@@ -101,7 +101,7 @@ class PageScraperService {
     }
 
     const formId = ScrapingIdentityService.formId(containerElement);
-    const form = FormScraper.scrape(containerElement, formId);
+    const form = FormScraperService.scrape(containerElement, formId);
     const fields = [];
 
     for (const field of skeleton.fields ?? []) {

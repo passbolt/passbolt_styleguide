@@ -13,7 +13,7 @@
  */
 
 import PageScraperService, { RESCRAPE_MIN_DELAY, RESCRAPE_MAX_DELAY } from "./PageScraperService";
-import FormScraper from "../DomExtraction/FormScraper";
+import FormScraperService from "../DomExtraction/FormScraperService";
 import FieldScraperService from "./FieldScraperService";
 import ScrapingCacheService from "./ScrapingCacheService";
 import ScrapingIdentityService from "./ScrapingIdentityService";
@@ -64,7 +64,7 @@ describe("PageScraperService", () => {
   });
 
   describe("PageScraperService::scrape", () => {
-    it("orchestrates the payload by delegating to FormScraper and FieldScraperService", () => {
+    it("orchestrates the payload by delegating to FormScraperService and FieldScraperService", () => {
       expect.assertions(5);
 
       document.body.innerHTML = `
@@ -73,7 +73,7 @@ describe("PageScraperService", () => {
           <input type="password" name="password"/>
         </form>`;
       const form = document.querySelector("form");
-      const formSpy = jest.spyOn(FormScraper, "scrape");
+      const formSpy = jest.spyOn(FormScraperService, "scrape");
       const fieldSpy = jest.spyOn(FieldScraperService, "scrape");
 
       const payload = PageScraperService.scrape([realForm(form)]);
