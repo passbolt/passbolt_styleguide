@@ -44,7 +44,7 @@ class ShadowMutationObserverService {
     subtree: true,
     attributes: true,
     attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
-    attributeOldValue: true,
+    attributeOldValue: false,
   };
 
   /**

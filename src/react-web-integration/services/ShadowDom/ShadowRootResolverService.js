@@ -31,8 +31,7 @@ class ShadowRootResolverService {
     // or custom elements (including a dash [`-`] character).
     // @see https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow#elements_you_can_attach_a_shadow_to
     const tag = element.nodeName;
-    const canHostShadowRoot =
-      SHADOW_ROOT_CANDIDATE_NODE_NAMES.has(tag) || (element instanceof HTMLElement && tag.includes("-"));
+    const canHostShadowRoot = SHADOW_ROOT_CANDIDATE_NODE_NAMES.has(tag) || tag.includes("-");
     if (!canHostShadowRoot) {
       return null;
     }
