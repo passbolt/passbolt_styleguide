@@ -52,6 +52,25 @@ describe("ShadowDomQueryService", () => {
     });
   });
 
+  describe("ShadowDomQueryService::isDocument", () => {
+    it("should return true for a document, including one of another window", () => {
+      expect.assertions(2);
+
+      expect(ShadowDomQueryService.isDocument(document)).toBe(true);
+      expect(ShadowDomQueryService.isDocument(document.implementation.createHTMLDocument())).toBe(true);
+    });
+
+    it("should return false for an element, a shadow root and nullish values", () => {
+      expect.assertions(3);
+
+      const shadowRoot = document.createElement("div").attachShadow({ mode: "open" });
+
+      expect(ShadowDomQueryService.isDocument(document.createElement("div"))).toBe(false);
+      expect(ShadowDomQueryService.isDocument(shadowRoot)).toBe(false);
+      expect(ShadowDomQueryService.isDocument(null)).toBe(false);
+    });
+  });
+
   describe("ShadowDomQueryService::isShadowRoot", () => {
     it("should return true for a shadow root", () => {
       expect.assertions(1);
@@ -67,6 +86,12 @@ describe("ShadowDomQueryService", () => {
       expect(ShadowDomQueryService.isShadowRoot(document.createElement("div"))).toBe(false);
       expect(ShadowDomQueryService.isShadowRoot(document)).toBe(false);
       expect(ShadowDomQueryService.isShadowRoot(null)).toBe(false);
+    });
+
+    it("should return false for a plain document fragment", () => {
+      expect.assertions(1);
+
+      expect(ShadowDomQueryService.isShadowRoot(document.createDocumentFragment())).toBe(false);
     });
   });
 
@@ -342,6 +367,16 @@ describe("ShadowDomQueryService", () => {
       const detached = document.createElement("div");
 
       expect(ShadowDomQueryService.scopeRoot(detached)).toBe(document);
+    });
+
+    it("should return the owning document for an element of another document", () => {
+      expect.assertions(1);
+
+      const iframeDocument = document.implementation.createHTMLDocument();
+      const input = iframeDocument.createElement("input");
+      iframeDocument.body.appendChild(input);
+
+      expect(ShadowDomQueryService.scopeRoot(input)).toBe(iframeDocument);
     });
   });
 

@@ -24,11 +24,18 @@ class ShadowDomQueryService {
   static isElement = (node) => node?.nodeType === Node.ELEMENT_NODE;
 
   /**
+   * Check if the node is a document.
+   * @param {Node} node The node to check
+   * @returns {boolean} true if the node is a document
+   */
+  static isDocument = (node) => node?.nodeType === Node.DOCUMENT_NODE;
+
+  /**
    * Check if the node is a shadow root.
    * @param {Node} node The node to check
    * @returns {boolean} true if the node is a shadow root
    */
-  static isShadowRoot = (node) => node?.nodeType === Node.DOCUMENT_FRAGMENT_NODE && node.host !== null;
+  static isShadowRoot = (node) => node?.nodeType === Node.DOCUMENT_FRAGMENT_NODE && Boolean(node.host);
 
   /**
    * querySelectorAll recursive call applied to all the shadow roots of the page, based on ShadowRootCacheService.
@@ -39,8 +46,7 @@ class ShadowDomQueryService {
   static querySelectorAllDeep(root, selector) {
     const matches = Array.from(root.querySelectorAll(selector));
 
-    const shadowRoots = ShadowRootCacheService.getCachedShadowRoots(root);
-    for (const shadowRoot of shadowRoots) {
+    for (const shadowRoot of ShadowRootCacheService.getCachedShadowRoots(root)) {
       matches.push(...ShadowDomQueryService.querySelectorAllDeep(shadowRoot, selector));
     }
 
@@ -58,8 +64,9 @@ class ShadowDomQueryService {
       return true;
     }
 
-    const shadowRoots = ShadowRootCacheService.getCachedShadowRoots(ancestor);
-    return shadowRoots.some((shadowRoot) => ShadowDomQueryService.containsDeep(shadowRoot, node));
+    return ShadowRootCacheService.getCachedShadowRoots(ancestor).some((shadowRoot) =>
+      ShadowDomQueryService.containsDeep(shadowRoot, node),
+    );
   }
 
   /**
@@ -73,7 +80,7 @@ class ShadowDomQueryService {
 
     // Iterate through the DOM tree upwards until we find a match or reach the top
     do {
-      parent = parent instanceof ShadowRoot ? parent.host : parent?.parentNode;
+      parent = ShadowDomQueryService.isShadowRoot(parent) ? parent.host : parent?.parentNode;
     } while (parent && (!ShadowDomQueryService.isElement(parent) || !parent.matches(selector)));
 
     return Boolean(parent);
@@ -101,7 +108,7 @@ class ShadowDomQueryService {
    */
   static scopeRoot(element) {
     const root = element?.getRootNode();
-    return root instanceof ShadowRoot || root instanceof Document ? root : document;
+    return ShadowDomQueryService.isDocument(root) || ShadowDomQueryService.isShadowRoot(root) ? root : document;
   }
 
   /**
