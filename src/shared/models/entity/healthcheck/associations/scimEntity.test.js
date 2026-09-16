@@ -36,6 +36,18 @@ describe("ScimEntity", () => {
   });
 
   describe("::constructor", () => {
+    it("it should create a scimEntity with all properties", () => {
+      expect.assertions(2);
+      const scimDto = defaultScimData({
+        isSecretTokenNotExpired: true,
+        isSecretTokenNotNearExpiry: false,
+      });
+      const entity = new ScimEntity(scimDto);
+
+      expect(entity.isSecretTokenNotExpired).toBe(true);
+      expect(entity.isSecretTokenNotNearExpiry).toBe(false);
+    });
+
     it("works if valid DTO is provided", () => {
       expect.assertions(3);
       const dto = defaultScimData();
