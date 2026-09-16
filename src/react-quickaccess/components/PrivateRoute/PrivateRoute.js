@@ -17,11 +17,13 @@ class PrivateRoute extends Component {
         path={path}
         render={(props) => (
           <React.Fragment>
-            {this.props.activeSession.isAuthenticated && this.props.context.loggedInUser !== null && (
-              <RbacContextProvider>
-                <Component {...props} {...componentProps} />
-              </RbacContextProvider>
-            )}
+            {this.props.activeSession.isAuthenticated &&
+              this.props.context.loggedInUser != null &&
+              this.props.context.rbacs !== null && (
+                <RbacContextProvider>
+                  <Component {...props} {...componentProps} />
+                </RbacContextProvider>
+              )}
             {!this.props.activeSession.isAuthenticated && this.props.activeSession.isSessionOnline && (
               <Redirect
                 to={{
