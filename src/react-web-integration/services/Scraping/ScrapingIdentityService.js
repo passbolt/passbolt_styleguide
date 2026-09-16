@@ -60,10 +60,10 @@ class ScrapingIdentityService {
    * and register it in both directions. Rescanning the same element returns its existing id, so an
    * element keeps a single stable identity across re-scrapes. Never mutates the element.
    *
-   * @param {?Node} element The element to identify. Non-element nodes resolve to `null` (no throw).
+   * @param {Node} element The element to identify. Non-element nodes resolve to `null` (no throw).
    * @param {string} prefix The contextual prefix for a freshly issued id (see {@link fieldId} /
    *   {@link formId}). Ignored when `element` already has an id.
-   * @returns {?string} The stable id, or `null` when `element` is not an element node.
+   * @returns {string} The stable id, or `null` when `element` is not an element node.
    */
   static idFor(element, prefix) {
     // Non-element nodes cannot be reliably tracked (and are never scraped as fields/forms).
@@ -93,7 +93,7 @@ class ScrapingIdentityService {
    * common SPA occurrence — neither resolves nor lingers in the map.
    *
    * @param {string} id The identifier previously issued by {@link idFor}.
-   * @returns {?Element} The live, connected element, or `null` when unknown, collected or detached.
+   * @returns {Element} The live, connected element, or `null` when unknown, collected or detached.
    */
   static elementFor(id) {
     const ref = ScrapingIdentityService._elementById.get(id);
@@ -112,8 +112,8 @@ class ScrapingIdentityService {
 
   /**
    * Issue (or return the cached) identifier for a scraped field, prefixed `field_`.
-   * @param {?Node} element The field element.
-   * @returns {?string} The field id, or `null` when `element` is not an element node.
+   * @param {Node} element The field element.
+   * @returns {string} The field id, or `null` when `element` is not an element node.
    */
   static fieldId(element) {
     return ScrapingIdentityService.idFor(element, FIELD_ID_PREFIX);
@@ -121,8 +121,8 @@ class ScrapingIdentityService {
 
   /**
    * Issue (or return the cached) identifier for a scraped form container, prefixed `form_`.
-   * @param {?Node} element The form container element.
-   * @returns {?string} The form id, or `null` when `element` is not an element node.
+   * @param {Node} element The form container element.
+   * @returns {string} The form id, or `null` when `element` is not an element node.
    */
   static formId(element) {
     return ScrapingIdentityService.idFor(element, FORM_ID_PREFIX);

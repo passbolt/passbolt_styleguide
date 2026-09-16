@@ -70,7 +70,6 @@ export const SCRAPED_ATTRS = [
 
 /**
  * Attributes tokenized into a field's qualification keyword set (see `ScrapingCacheService.keywords`).
- * Structural metadata only — a field's value/text is never read, so there is nothing sensitive to redact.
  * @type {ReadonlyArray<string>}
  */
 export const QUALIFICATION_TOKEN_ATTRS = [
@@ -110,7 +109,7 @@ export const LABEL_SKIP_TAGS = ["A", "OPTION", "OPTGROUP", "SCRIPT", "STYLE"];
 export const LABEL_FOR_ATTRS = ["id", "name"];
 
 /**
- * Ancestor tags that can legitimately host a field's label text.
+ * Ancestor tags that can host a field's label text.
  * @type {ReadonlyArray<string>}
  */
 export const LABEL_ANCESTOR_TAGS = ["LABEL", "DIV", "TD", "TH", "DD", "LI"];

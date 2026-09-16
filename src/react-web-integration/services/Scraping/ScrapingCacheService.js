@@ -47,7 +47,7 @@ class ScrapingCacheService {
   /**
    * Return the cached scraping payload for an element, or `null` when it has not been scraped yet.
    * @param {Element} element The scraped field element.
-   * @returns {?FieldScraping} The cached payload, or `null` on a miss.
+   * @returns {FieldScraping} The cached payload, or `null` on a miss.
    */
   static getField(element) {
     return ScrapingCacheService._payloadByElement.get(element) ?? null;

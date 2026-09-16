@@ -19,8 +19,6 @@ import ScrapingCacheService from "./ScrapingCacheService";
 import ScrapingIdentityService from "./ScrapingIdentityService";
 import ShadowMutationObserverService from "../ShadowDom/ShadowMutationObserverService";
 import ShadowRootCacheService from "../ShadowDom/ShadowRootCacheService";
-import { OBSERVE_OPTIONS } from "../ShadowDom/ShadowDomDictionary";
-import { SCRAPED_ATTRS } from "../../lib/InForm/ScrapingDictionary";
 
 /**
  * Build a real-form skeleton entry (`{ element }` field shape, à la FormExtractionService).
@@ -870,18 +868,6 @@ describe("PageScraperService", () => {
 
       expect(() => PageScraperService.stop()).not.toThrow();
       expect(PageScraperService._onScrape).toBeNull();
-    });
-  });
-
-  describe("PageScraperService observer attributeFilter contract", () => {
-    it("keeps the shared observer's attributeFilter a superset of SCRAPED_ATTRS", () => {
-      expect.assertions(1);
-      // If this fails, some scraped attribute can mutate without emitting a record, leaving a stale
-      // cache (Concern A). Widen FIELD_ATTRIBUTES_TO_WATCH in ShadowDomDictionary to restore coverage.
-      const watched = new Set(OBSERVE_OPTIONS.attributeFilter);
-      const missing = SCRAPED_ATTRS.filter((attr) => !watched.has(attr));
-
-      expect(missing).toEqual([]);
     });
   });
 });

@@ -16,14 +16,12 @@ import { FieldRole, FormRole } from "./Taxonomy";
 import { SawfToken } from "./KeywordsDictionary";
 
 /**
- * Classifies a `data-form-type` (SAWF) attribute value into field and form roles. Stateless service
- * exposing static methods only.
+ * Classifies a data-form-type (SAWF) attribute value into field and form roles.
  */
 class SawfClassificationService {
   /**
-   * Splits a `data-form-type` value into a set of lowercased tokens, using the comma as the only
-   * separator.
-   * @param {string} raw The raw attribute value (null-safe).
+   * Splits a data-form-type value on commas into a set of lowercased tokens.
+   * @param {string} raw The raw attribute value.
    * @returns {Set<string>} The tokens.
    */
   static parseSawf(raw) {
@@ -36,11 +34,8 @@ class SawfClassificationService {
   }
 
   /**
-   * Returns the field role declared by a `data-form-type` value, resolving by priority
-   * otp (TOTP) > username (USERNAME) > email (EMAIL) > password (PASSWORD). An email marked
-   * `secondary` and any unrecognized value resolve to OTHER. A `password` also marked `confirmation`
-   * resolves to PASSWORD_CONFIRMATION, or marked `new` to NEW_PASSWORD (confirmation wins over new).
-   * @param {string} raw The raw `data-form-type` value (null-safe).
+   * Returns the field role declared by a data-form-type value
+   * @param {string} raw The raw `data-form-type` value.
    * @returns {string} A FieldRole.
    */
   static sawfFieldRole(raw) {
@@ -67,9 +62,8 @@ class SawfClassificationService {
   }
 
   /**
-   * Returns the form role declared by a `data-form-type` value: LOGIN, SIGNUP or CHANGE_PASSWORD,
-   * else OTHER.
-   * @param {string} raw The raw `data-form-type` value (null-safe).
+   * Returns the form role declared by a data-form-type value: LOGIN, SIGNUP, CHANGE_PASSWORD or OTHER.
+   * @param {string} raw The raw `data-form-type` value.
    * @returns {string} A FormRole.
    */
   static sawfFormRole(raw) {
@@ -87,10 +81,8 @@ class SawfClassificationService {
   }
 
   /**
-   * Returns the form role hinted by an `action` token, resolving by priority
-   * change_password > register > login. Returns null when there is no `action` token or no matching
-   * intent token.
-   * @param {string} raw The raw `data-form-type` value (null-safe).
+   * Returns the form role of an action token or null.
+   * @param {string} raw The raw `data-form-type` value.
    * @returns {string|null} A FormRole, or null.
    */
   static sawfActionHint(raw) {
@@ -111,8 +103,8 @@ class SawfClassificationService {
   }
 
   /**
-   * Returns whether a `data-form-type` value carries a `step` or `final` multi-step token.
-   * @param {string} raw The raw `data-form-type` value (null-safe).
+   * Returns true when a data-form-type value has a step or final token.
+   * @param {string} raw The raw `data-form-type` value.
    * @returns {boolean} Whether the form is flagged multi-step.
    */
   static sawfMultiStep(raw) {

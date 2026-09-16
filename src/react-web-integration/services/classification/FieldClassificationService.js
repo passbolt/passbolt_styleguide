@@ -26,13 +26,11 @@ import { Keywords, NON_CREDENTIAL_INPUT_TYPES, MIN_OTP_SEGMENTS, MAX_OTP_SEGMENT
 const EMAIL_PLACEHOLDER = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
 /**
- * Per-field, value-free classification: maps a scraped field to a role and the ladder tier that decided
- * it. Tiers 1-5 resolve here (declared tokens, then input type, then keywords); tiers 6-7 (structural,
- * count) are resolved at scope level. Stateless service exposing static methods only.
+ * Field classification: maps a field to a role and the tier which decided it, from its declared attributes, input type and keywords.
  */
 class FieldClassificationService {
   /**
-   * Runs the ordered classification ladder and returns the first step that decides.
+   * Runs the classification steps in order and returns the first matching one.
    * @param {FieldScraping} field The value-free field record.
    * @returns {{role: string, tier: number}} The role and the deciding Tier.
    */
@@ -58,9 +56,9 @@ class FieldClassificationService {
   }
 
   /**
-   * Pre-computed matching inputs shared by the ladder steps.
+   * Normalizes the texts and declared roles.
    * @param {FieldScraping} field The field.
-   * @returns {{strongText: string, weakText: string, sawfRole: string, acRole: (string|null)}} The signals.
+   * @returns {{strongText: string, weakText: string, sawfRole: string, acRole: string|null}} The signals.
    */
   static signals(field) {
     return {
@@ -76,9 +74,9 @@ class FieldClassificationService {
   }
 
   /**
-   * Impossible input types (checkbox, submit, …) can never be a credential.
+   * Returns OTHER tier for input types which can never be a credential (checkbox, submit, ...).
    * @param {FieldScraping} field The field.
-   * @returns {({role: string, tier: number}|null)} OTHER, or null to continue.
+   * @returns {{role: string, tier: number}|null} OTHER or null.
    */
   static hardExclude(field) {
     if (field.tagName === "INPUT" && NON_CREDENTIAL_INPUT_TYPES.has(field.type)) {
@@ -88,10 +86,10 @@ class FieldClassificationService {
   }
 
   /**
-   * A recovery/backup keyword vetoes the field to OTHER (never a password or a fillable TOTP).
+   * Returns OTHER when a recovery or backup keyword is found.
    * @param {FieldScraping} field The field.
    * @param {{strongText: string, weakText: string}} signals The signals.
-   * @returns {({role: string, tier: number}|null)} OTHER, or null to continue.
+   * @returns {{role: string, tier: number}|null} OTHER or null.
    */
   static recoveryVeto(field, { strongText, weakText }) {
     if (
@@ -104,11 +102,10 @@ class FieldClassificationService {
   }
 
   /**
-   * A TOTP field declared by SAWF/autocomplete, or corroborated by a TOTP keyword (recovery already
-   * vetoed upstream).
+   * Returns TOTP when declared by data-form-type or autocomplete, or when a TOTP keyword is found.
    * @param {FieldScraping} field The field.
-   * @param {{strongText: string, weakText: string, sawfRole: string, acRole: (string|null)}} signals The signals.
-   * @returns {({role: string, tier: number}|null)} A TOTP decision, or null to continue.
+   * @param {{strongText: string, weakText: string, sawfRole: string, acRole: string|null}} signals The signals.
+   * @returns {{role: string, tier: number}|null} A TOTP decision, or null.
    */
   static totp(field, { strongText, weakText, sawfRole, acRole }) {
     if (sawfRole === FieldRole.TOTP) {
@@ -123,11 +120,7 @@ class FieldClassificationService {
     ) {
       return { role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD };
     }
-    // An ambiguous token (`code`/`pin`) is too weak on its own. A login, promo or PIN field would
-    // false-positive. Promote to TOTP only when a structural signal corroborates: a `maxLength` in the
-    // plausible one-time-code range, or a numeric input hint (`inputMode`/`pattern`). Matches the
-    // French DSFR pattern "code de double authentification" + `maxlength=6`, which carries no strong
-    // TOTP token. Segmented boxes stay with SegmentedOtpResolutionService (maxLength 1).
+    // An ambiguous token (code, pin) only counts as TOTP when the maxLength or a numeric input hint confirms it.
     if (
       (KeywordMatchingService.matchesAny(strongText, Keywords.TOTP_AMBIGUOUS) ||
         KeywordMatchingService.matchesAny(weakText, Keywords.TOTP_AMBIGUOUS)) &&
@@ -139,12 +132,9 @@ class FieldClassificationService {
   }
 
   /**
-   * Structural corroboration for an ambiguous one-time-code token on a SINGLE field: a `maxLength`
-   * within the plausible code range ({@link MIN_OTP_SEGMENTS} to {@link MAX_OTP_SEGMENTS}, the same
-   * bounds as a segmented run), or a numeric input hint. Segmented single-character boxes (maxLength 1)
-   * are handled by SegmentedOtpResolutionService, so they never satisfy the length bound here.
+   * Returns true when the maxLength is in the one-time-code range or the input looks numeric.
    * @param {FieldScraping} field The field.
-   * @returns {boolean} Whether a structural OTP signal corroborates the ambiguous token.
+   * @returns {boolean} `true` when the field looks like a one-time-code field.
    */
   static corroboratesSingleOtp(field) {
     const maxLength = field.attributes?.maxLength;
@@ -153,11 +143,10 @@ class FieldClassificationService {
   }
 
   /**
-   * Tier 1 — SAWF `data-form-type`. Once one is declared it decides: credential -> its role,
-   * out-of-taxon -> OTHER, with no fallback to inference.
+   * Returns the role declared by data-form-type when present.
    * @param {FieldScraping} field The field.
    * @param {{sawfRole: string}} signals The signals.
-   * @returns {({role: string, tier: number}|null)} A SAWF decision, or null to continue.
+   * @returns {{role: string, tier: number}|null} A SAWF decision, or null.
    */
   static declaredBySawf(field, { sawfRole }) {
     if (SawfClassificationService.parseSawf(field.dataFormType).size > 0) {
@@ -167,12 +156,10 @@ class FieldClassificationService {
   }
 
   /**
-   * Tier 2 — autocomplete. Only a token we actually map ({@link AUTOCOMPLETE_ROLE}) decides here; anything
-   * else — an unmapped valid type (`tel`, `cc-number`…), an invalid token, or "off"/"on"/group modifiers —
-   * does not stop the cascade and lets the next tier infer the role.
+   * Returns the role mapped from the autocomplete attribute when there is one.
    * @param {FieldScraping} field The field.
-   * @param {{acRole: (string|null)}} signals The signals.
-   * @returns {({role: string, tier: number}|null)} An autocomplete decision, or null to continue.
+   * @param {{acRole: string|null}} signals The signals.
+   * @returns {{role: string, tier: number}|null} An autocomplete decision, or null.
    */
   static declaredByAutocomplete(field, { acRole }) {
     if (acRole) {
@@ -182,9 +169,9 @@ class FieldClassificationService {
   }
 
   /**
-   * Tier 3 — the input type (`password`/`email`).
+   * Returns the role given by the input type (password or email).
    * @param {FieldScraping} field The field.
-   * @returns {({role: string, tier: number}|null)} An input-type decision, or null to continue.
+   * @returns {{role: string, tier: number}|null} An input-type decision, or null.
    */
   static byInputType(field) {
     if (field.type === "password") {
@@ -197,10 +184,30 @@ class FieldClassificationService {
   }
 
   /**
-   * Tier 4 — the elected label / aria text (strong keywords), or an email-shaped placeholder.
+   * A non-credential keyword (search / query / find / captcha / forgot …) vetoes the field to OTHER,
+   * catching page utilities that carry an incidental identifier token before the keyword tiers misread
+   * them as a username. Runs after the declared (SAWF / autocomplete) and native `type=email|password`
+   * tiers, so real credentials still win, and ignores `class` so widget class names never trigger it.
+   * @param {FieldScraping} field The field.
+   * @param {{strongText: string, weakText: string}} signals The signals.
+   * @returns {({role: string, tier: number}|null)} OTHER, or null to continue.
+   */
+  static ignoreVeto(field, { strongText, weakText }) {
+    if (
+      KeywordMatchingService.matchesAny(strongText, Keywords.FIELD_IGNORE) ||
+      KeywordMatchingService.matchesAny(weakText, Keywords.FIELD_IGNORE)
+    ) {
+      return { role: FieldRole.OTHER, tier: Tier.ATTRIBUTE_KEYWORD };
+    }
+    return null;
+  }
+
+  /**
+   * Returns the role found in the label and aria text.
+   * The placeholder is only evaluated for EMAIL.
    * @param {FieldScraping} field The field.
    * @param {{strongText: string}} signals The signals.
-   * @returns {({role: string, tier: number}|null)} A label decision, or null to continue.
+   * @returns {{role: string, tier: number}|null} A label decision, or null.
    */
   static byExplicitLabel(field, { strongText }) {
     if (
@@ -222,10 +229,10 @@ class FieldClassificationService {
   }
 
   /**
-   * Tier 5 — the name/id/placeholder keywords (a password may be rendered as `type=text`).
+   * Returns the role found in the name, id and placeholder keywords.
    * @param {FieldScraping} field The field.
    * @param {{weakText: string}} signals The signals.
-   * @returns {({role: string, tier: number}|null)} A keyword decision, or null to continue.
+   * @returns {{role: string, tier: number}|null} A keyword decision, or null.
    */
   static byAttributeKeyword(field, { weakText }) {
     if (KeywordMatchingService.matchesAny(weakText, Keywords.EMAIL)) {

@@ -91,7 +91,7 @@ class PageScraperService {
    * {@link FormScraper} and each field to {@link FieldScraperService}, and tally the `fieldTypes` histogram.
    * @private
    * @param {object} skeleton The skeleton container entry.
-   * @returns {?{form: FormScraping, fields: FieldScraping[]}} The form and its fields, or `null` when the
+   * @returns {{form: FormScraping, fields: FieldScraping[]}} The form and its fields, or `null` when the
    *   container is not an element.
    */
   static _scrapeForm(skeleton) {
@@ -133,7 +133,7 @@ class PageScraperService {
    * Increment a form's `fieldTypes` histogram (in place). A field with no type adds no bucket.
    * @private
    * @param {FormScraping} formRecord The form record whose histogram is updated.
-   * @param {?string} type The scraped field's input type, if any.
+   * @param {string} type The scraped field's input type, if any.
    * @returns {void}
    */
   static _incrementFieldTypeCount(formRecord, type) {
@@ -150,7 +150,7 @@ class PageScraperService {
    *
    * @param {object[]} formElements The extraction skeleton to keep scraping.
    * @param {(pageScraping: PageScraping) => void} onScrape The callback fed every fresh payload.
-   * @returns {?PageScraping} The initial snapshot (also delivered to `onScrape`), or `undefined` when
+   * @returns {PageScraping} The initial snapshot (also delivered to `onScrape`), or `undefined` when
    *   `onScrape` is nullish — with no callback there is nothing to deliver, so it is a no-op.
    */
   static startIncremental(formElements, onScrape) {

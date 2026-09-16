@@ -75,7 +75,7 @@ const fillForm = function (formData) {
  * belongs to a login/change-password scope.
  * @param {Array<{formId: string, role: string, element: Element}>} fields The classified fields.
  * @param {Object<string, {role: string}>} forms The per-form roles.
- * @returns {?{formId: string, role: string, element: Element}} The chosen password field, or null.
+ * @returns {{formId: string, role: string, element: Element}} The chosen password field, or null.
  */
 const selectPasswordField = function (fields, forms) {
   const passwords = fields.filter((field) => PASSWORD_ROLES.includes(field.role));
@@ -100,8 +100,8 @@ const selectPasswordField = function (fields, forms) {
  * Pick the username field to fill: a field carrying an identifier role, preferring one in the same
  * scope as the chosen password field.
  * @param {Array<{formId: string, role: string, element: Element}>} fields The classified fields.
- * @param {?{formId: string}} passwordField The chosen password field.
- * @returns {?{formId: string, role: string, element: Element}} The chosen username field, or null.
+ * @param {{formId: string}} passwordField The chosen password field.
+ * @returns {{formId: string, role: string, element: Element}} The chosen username field, or null.
  */
 const selectUsernameField = function (fields, passwordField) {
   const identifiers = fields.filter((field) => IDENTIFIER_ROLES.includes(field.role));

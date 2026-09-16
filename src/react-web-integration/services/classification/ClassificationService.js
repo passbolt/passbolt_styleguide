@@ -21,18 +21,18 @@ import FieldsRationalizationService from "./FieldsRationalizationService";
 import { Tier, FormRole } from "./Taxonomy";
 import { MAX_CLASSIFIED_FIELDS } from "./KeywordsDictionary";
 
-// Fixed deterministic tie-break: change_password > register > login (forgot/logout/null ignored).
+// When fields declare different form types, the first one found in this list wins.
 const ACTION_PRIORITY = [FormRole.CHANGE_PASSWORD, FormRole.SIGNUP, FormRole.LOGIN];
 
 /**
- * PUBLIC entry point of the module. PURE function: serializable payload -> role mapping. No DOM, no
- * `value` access, no clock, no network -> snapshot-testable. Stateless service exposing static methods.
+ * Classifies the scraped fields and forms of a page into roles, without touching the DOM.
  */
 class ClassificationService {
   /**
-   * Consolidates the author-declared form role (reads the already-scraped raw `data-form-type`,
-   * value-free). Two levels: (1) a form-level slot (a real <form> or a pseudo-form LCA container);
-   * (2) otherwise the aggregate of the fields' `sawfActionHint`, with the fixed tie-break.
+   * Returns the form role declared by the page:
+   * - From the form's data-form-type first
+   * - From the fields' hints taking into account `ACTION_PRIORITY` order
+   *
    * @param {{form: FormScraping|null, fields: FieldScraping[]}} scope The scope.
    * @returns {string} A FormRole.
    */
@@ -48,8 +48,7 @@ class ClassificationService {
   }
 
   /**
-   * Groups fields by `formId` (scopeKey), preserving DOM order (both of the `fields` and of the scopes'
-   * first appearance). Pure, DOM-free: the field-to-form association was already made at extraction.
+   * Groups the fields by formId, keeping the DOM order.
    * @param {FieldScraping[]} fields The fields.
    * @param {Object<string, FormScraping>} forms The forms keyed by formId.
    * @returns {Array<{scopeKey: string, form: FormScraping|null, fields: FieldScraping[]}>} The scopes.
@@ -69,9 +68,9 @@ class ClassificationService {
   }
 
   /**
-   * @param {PageScraping} page The tab payload (scraping phase 5).
-   * @returns {{fields: Object<string, string>, forms: Object<string, {role: string, multiStep: boolean, otpSegments: Array<Array<string>>}>}}
-   *   The field roles and per-form roles.
+   * Classifies every field and form of the page.
+   * @param {PageScraping} page The page scraping payload.
+   * @returns {{fields: Object<string, string>, forms: Object<string, {role: string, multiStep: boolean, otpSegments: Array<Array<string>>}>}} The field roles and per-form roles.
    */
   static classify(page) {
     const fields = (page.fields || []).slice(0, MAX_CLASSIFIED_FIELDS);
@@ -87,10 +86,10 @@ class ClassificationService {
   }
 
   /**
-   * Runs the per-field cascade over every field, flags author-declared fields (`_byDeclared`, exempt
-   * from the login veto) and returns their roles keyed by fieldId.
+   * Returns the role of each field indexed by fieldId.
+   * Set the _byDeclared flag to true when the role comes from a data-form-type or autocomplete attribute.
    * @param {FieldScraping[]} fields The fields.
-   * @returns {Map<string, string>} The per-field roles.
+   * @returns {Map<string, string>} The roles indexed by fieldId.
    */
   static classifyFields(fields) {
     const perField = new Map();
@@ -126,7 +125,7 @@ class ClassificationService {
   }
 
   /**
-   * The author-declared form role when present (it always wins), otherwise the inferred form role.
+   * Returns the declared form role when present, otherwise the inferred one.
    * @param {{form: FormScraping|null, fields: FieldScraping[], roles: Map<string, string>}} scope The scope.
    * @param {string} declaredFormRole The consolidated author-declared role.
    * @returns {string} A FormRole.

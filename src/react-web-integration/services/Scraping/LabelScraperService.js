@@ -118,7 +118,7 @@ class LabelScraperService {
    * @private
    * @param {Document|ShadowRoot} root The field's root node.
    * @param {Element} element The field element.
-   * @returns {?Element} The matching label, or `null`.
+   * @returns {Element} The matching label, or `null`.
    */
   static _labelForField(root, element) {
     for (const attr of LABEL_FOR_ATTRS) {
@@ -286,7 +286,7 @@ class LabelScraperService {
    * @private
    * @param {Document|ShadowRoot} root The root to resolve within.
    * @param {string} id The element id.
-   * @returns {?Element} The matching element, or `null`.
+   * @returns {Element} The matching element, or `null`.
    */
   static _byId(root, id) {
     if (typeof root.getElementById === "function") {

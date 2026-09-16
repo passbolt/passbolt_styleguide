@@ -13,13 +13,14 @@
  */
 
 /**
- * Field roles — narrow, credential-only. "other" = not relevant for filling.
+ * Field roles.
+ * "OTHER" is not relevant for filling.
  * @type {Readonly<Object<string, string>>}
  */
 export const FieldRole = Object.freeze({
   USERNAME: "username",
   EMAIL: "email",
-  PASSWORD: "password", // generic, before disambiguation (Phase 2)
+  PASSWORD: "password", // generic, used before disambiguation
   CURRENT_PASSWORD: "current-password",
   NEW_PASSWORD: "new-password",
   PASSWORD_CONFIRMATION: "password-confirmation",
@@ -28,9 +29,7 @@ export const FieldRole = Object.freeze({
 });
 
 /**
- * Ladder tier that made the decision — carried for traceability (tests + debug).
- * SAWF = most specific author-declared tier, AT THE TOP (data-form-type is dedicated to PMs and
- * natively expresses current/new/confirmation). Inferred tiers shift down one notch.
+ * Tier which made the decision, from the most specific (SAWF) to the least one.
  * @type {Readonly<Object<string, number>>}
  */
 export const Tier = Object.freeze({
@@ -45,8 +44,7 @@ export const Tier = Object.freeze({
 });
 
 /**
- * FORM role — DOM-less taxon, consumed in P2 (FormClassificationService) and P3
- * (consolidateDeclaredFormRole). Single source: this module.
+ * Form roles.
  * @type {Readonly<Object<string, string>>}
  */
 export const FormRole = Object.freeze({

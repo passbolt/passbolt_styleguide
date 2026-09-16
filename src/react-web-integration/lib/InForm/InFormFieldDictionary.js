@@ -13,14 +13,13 @@
  */
 
 /**
- * CSS selector for HTML elements that will trigger a shadow dom rescan.
+ * CSS selector of the elements which triggers a shadow DOM re-scan.
  * @type {string}
  */
 export const SHADOW_RESCAN_FIELD_SELECTOR = "input, form, [autocomplete]";
 
 /**
- * Field-relevance attributes the shadow observer watches, in addition to the shadow topology.
- * Consumed by ShadowMutationObserverService to build its MutationObserver options.
+ * Attributes which trigger a shadow DOM re-scan when they change.
  * @type {ReadonlyArray<string>}
  */
 export const FIELD_ATTRIBUTES_TO_WATCH = Object.freeze([
@@ -39,10 +38,7 @@ export const FIELD_ATTRIBUTES_TO_WATCH = Object.freeze([
 ]);
 
 /**
- * Subset of {@link FIELD_ATTRIBUTES_TO_WATCH} that can toggle the visibility of a whole subtree.
- * When one of these changes on a CONTAINER holding a field, a pre-rendered form may just have been
- * revealed/hidden (e.g. a login modal toggled via display on its wrapper) — the fields themselves
- * receive no mutation in that case, so the container change is the only signal to re-scan on.
+ * Attributes which can show or hide a whole subtree, so their change on a container also triggers a shadow DOM re-scan.
  * @type {ReadonlyArray<string>}
  */
 export const CONTAINER_VISIBILITY_ATTRIBUTES = Object.freeze(["style", "class", "hidden", "aria-hidden"]);

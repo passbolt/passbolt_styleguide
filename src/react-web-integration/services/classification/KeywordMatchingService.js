@@ -15,18 +15,14 @@
 import { SHORT_AMBIGUOUS, AUTOCOMPLETE_ROLE } from "./KeywordsDictionary";
 
 /**
- * Lowest common denominator of the classification cascade: a stateless, value-free, DOM-free matching
- * primitive. Every tier that reasons about a name, id, label or autocomplete string funnels through
- * it, so its matching semantics set detection accuracy in a single place. Only attribute/label
- * metadata is ever passed in — never a user-typed field value.
+ * Tests a normalized text against a keyword set.
  */
 class KeywordMatchingService {
   /**
-   * Match against a keyword set with a deliberate recall-vs-precision rule: substring on the
-   * CONCATENATED form (recall — catches all-attached attributes like `confirmpassword`), exact
-   * segment for SHORT_AMBIGUOUS tokens (precision — `new` ⊄ `newsletter`). Empty input returns false.
-   * @param {string} normalizedText The output of `TextNormalizer.normalizeForMatch` (space-segmented).
-   * @param {string[]} set The keyword set to test against.
+   * Returns true when a keyword of the set is found in the text.
+   * Short tokens must match a whole segment, the others match as substring.
+   * @param {string} normalizedText The normalized text.
+   * @param {string[]} set The keyword set.
    * @returns {boolean} Whether any keyword matches.
    */
   static matchesAny(normalizedText, set) {
@@ -36,27 +32,22 @@ class KeywordMatchingService {
     const concatenated = normalizedText.replace(/\s/g, "");
     const segments = new Set(normalizedText.split(" "));
     return set.some((keyword) => {
-      // normalizeForMatch emits NFD; keywords are authored precomposed (NFC), so align the needle
-      // before comparing — otherwise CJK/Hangul keywords never match their own decomposed input.
+      // The text has its accented letters split into base letter + accent mark, so split the keyword the same way before comparing.
       const needle = keyword.normalize("NFD");
-      // SHORT_AMBIGUOUS tokens must stand as their own segment (precision: `new` ⊄ `newsletter`);
-      // every other keyword matches as a substring of the attached form (recall: `confirmpassword`).
+      // Short ambiguous tokens must match a whole segment
       return SHORT_AMBIGUOUS.has(keyword) ? segments.has(needle) : concatenated.includes(needle);
     });
   }
 
   /**
-   * Role derived from the `autocomplete` attribute — the LAST significant token, which is the most
-   * specific one. Tokens are scanned right-to-left and the first hit in {@link AUTOCOMPLETE_ROLE} is
-   * returned. "off"/"on" carry no role signal and map to nothing.
-   * @param {string} autoComplete The raw autocomplete attribute (null-safe).
-   * @returns {string|null} A {@link FieldRole} value, or null when no token maps to a role.
+   * Returns the role of the last autocomplete token which maps to one.
+   * @param {string} autoComplete The raw autocomplete attribute.
+   * @returns {string|null} A FieldRole, or null.
    */
   static roleFromAutocomplete(autoComplete) {
     const tokens = (autoComplete || "").toLowerCase().split(/\s+/).filter(Boolean);
     for (let i = tokens.length - 1; i >= 0; i--) {
-      // hasOwnProperty guard: a plain-object lookup would otherwise resolve "constructor",
-      // "toString"… to Object.prototype members and return a non-role value.
+      // hasOwnProperty guard so "constructor" or "toString", for example, are ignored
       if (Object.prototype.hasOwnProperty.call(AUTOCOMPLETE_ROLE, tokens[i])) {
         return AUTOCOMPLETE_ROLE[tokens[i]];
       }

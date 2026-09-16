@@ -13,58 +13,51 @@
  */
 
 /**
- * Any run of Unicode control characters (\p{C}: Cc, Cf, Cs, Co, Cn) and/or whitespace. Collapsed to a
- * single space so invisible formatting/bidi characters never survive into inference.
+ * Any sequence of Unicode control characters and/or whitespace.
  * @type {RegExp}
  */
 const CONTROL_AND_WHITESPACE = /[\p{C}\s]+/gu;
 
 /**
- * The Combining Diacritical Marks block only (U+0300–U+036F). Deliberately NOT the generic \p{M}
- * category: stripping all marks would destroy vowel signs that carry meaning in Brahmic (Devanagari,
- * Bengali, Tamil…) and Thai scripts. This range folds Latin/Greek/Cyrillic accents (é → e) after NFD.
+ * Strips only the U+0300–U+036F accent marks (é → e) once letters are split from their accents;
+ * Removing every Unicode mark (\p{M}) instead would also delete vowel signs that Indic and Thai scripts need.
  * @type {RegExp}
  */
 const COMBINING_DIACRITICS = /[\u0300-\u036f]/g;
 
 /**
- * Acronym-to-word boundary inside camelCase, e.g. "HTMLParser" → "HTML Parser". Applied before the
- * lower→upper boundary so a trailing capitalised word is split off a preceding uppercase run.
+ * Acronym to word boundary inside camelCase, e.g. "HTMLParser" → "HTML Parser".
  * @type {RegExp}
  */
 const ACRONYM_BOUNDARY = /(\p{Lu}+)(\p{Lu}\p{Ll})/gu;
 
 /**
- * The common camelCase boundary: a lowercase letter or digit immediately followed by an uppercase
- * letter, e.g. "userName" → "user Name", "field2Label" → "field2 Label".
+ * The common camelCase boundary: a lowercase letter or digit immediately followed by an uppercase letter.
  * @type {RegExp}
  */
 const CAMEL_BOUNDARY = /([\p{Ll}\p{N}])(\p{Lu})/gu;
 
 /**
- * Any run of characters that are neither letters nor digits (Unicode-aware). Used as the token
- * delimiter when scraping UI text.
+ * Any sequence of characters that are neither letters nor digits (Unicode-aware).
+ * Used as the token delimiter when scraping UI text.
  * @type {RegExp}
  */
 const NON_ALPHANUMERIC = /[^\p{L}\p{N}]+/u;
 
 /**
- * Common visual separators (whitespace, underscore, hyphen, dot, slash) folded to a single space so
- * "sign-up", "sign_up", "sign.up" and "sign up" all match the same keyword.
+ * Common visual separators (whitespace, underscore, hyphen, dot, slash).
  * @type {RegExp}
  */
 const VISUAL_SEPARATORS = /[\s_\-./]+/g;
 
 /**
- * Tokens shorter than this are dropped by {@link TextNormalizer.tokenize} as noise (stray letters,
- * single digits) that add nothing to inference.
+ * Tokens shorter than this are dropped by {@link TextNormalizer.tokenize} as noise (stray letters, single digits) that add nothing to inference.
  * @type {number}
  */
 const MIN_TOKEN_LENGTH = 2;
 
 /**
- * Null-safe cast to string. Anything nullish becomes an empty string; everything else is coerced with
- * `String()`. Centralised so every public method shares identical input handling.
+ * Null-safe cast to string.
  * @param {*} value The raw, possibly nullish, input.
  * @returns {string} The value as a string, or "" when nullish.
  */
@@ -73,12 +66,10 @@ function toSafeString(value) {
 }
 
 /**
- * Module-private preparation step shared by {@link TextNormalizer.tokenize} and
- * {@link TextNormalizer.normalizeForMatch}. It:
- *  1. NFD-decomposes so accents split into base letter + combining mark;
- *  2. strips ONLY the Combining Diacritical Marks block (see {@link COMBINING_DIACRITICS}) so
- *     Latin/Greek/Cyrillic accents fold while Brahmic/Thai vowel signs stay intact;
- *  3. injects spaces at camelCase boundaries so glued identifiers become separate words.
+ * Module-private preparation step. It:
+ *  1. splits accented letters into base letter + accent mark;
+ *  2. removes only those accent marks (é → e), leaving Indic and Thai vowel signs intact;
+ *  3. inserts a space at each camelCase boundary so glued words become separate words.
  *
  * @param {*} value The raw input (null-safe).
  * @returns {string} The folded string. Not lowercased and not trimmed — callers own casing/trimming.
@@ -92,18 +83,13 @@ function fold(value) {
 }
 
 /**
- * Pure, stateless text helper used to normalise scraped DOM text before running keyword/regex
- * inference on it (field classification, button/label detection). Operates entirely in memory: no DOM
- * access, no retained state, all methods static. Guarantees i18n safety by never destructively
- * normalising complex non-Latin scripts.
+ * Normalise scraped DOM text before running keyword/regex inference on it (field classification, button/label detection).
  */
 class TextNormalizer {
   /**
-   * Base normalisation: null-safe cast, then collapse every run of Unicode control characters and
-   * whitespace into a single space, and trim. Keeps human-visible content while removing invisible
-   * formatting/bidi characters and irregular spacing.
+   * Casts the input to a string, replaces every sequence of control characters and whitespace with a single space, then trims.
    *
-   * @param {*} input The raw text (null-safe; non-strings are coerced).
+   * @param {*} input The raw text.
    * @returns {string} The normalised string, possibly empty.
    */
   static normalize(input) {
@@ -111,12 +97,10 @@ class TextNormalizer {
   }
 
   /**
-   * Tokenise UI text (button labels, headings) for scraping. Folds diacritics and camelCase,
-   * lowercases, splits on any non-alphanumeric run, drops tokens shorter than
-   * {@link MIN_TOKEN_LENGTH}, and re-joins the survivors with single spaces.
+   * Splits UI text (button labels, headings) into lowercase words, dropping accents, camelCase and words shorter than {@link MIN_TOKEN_LENGTH}.
    *
-   * @param {*} input The raw text (null-safe).
-   * @returns {string} Space-joined lowercase tokens, or "" when nothing survives.
+   * @param {*} input The raw text.
+   * @returns {string} The words joined by single spaces, or "" if none remain.
    */
   static tokenize(input) {
     return fold(input)
@@ -127,13 +111,10 @@ class TextNormalizer {
   }
 
   /**
-   * Normalise a string for keyword/regex matching during field classification. Folds diacritics and
-   * camelCase, replaces common visual separators (space, `_`, `-`, `.`, `/`) with single spaces,
-   * lowercases, and trims. Unlike {@link TextNormalizer.tokenize} it preserves short tokens so
-   * matches like "id" or "cc" survive.
+   * Lowercases the text, drops accents and camelCase, and turns separators into single spaces; short words like "id" or "cc" are kept.
    *
-   * @param {*} input The raw text (null-safe).
-   * @returns {string} The match-ready string, possibly empty.
+   * @param {*} input The raw text.
+   * @returns {string} The cleaned text, or "" if nothing remains.
    */
   static normalizeForMatch(input) {
     return fold(input).replace(VISUAL_SEPARATORS, " ").toLowerCase().trim();

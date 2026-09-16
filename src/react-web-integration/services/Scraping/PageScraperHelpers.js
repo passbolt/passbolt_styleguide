@@ -17,32 +17,21 @@ import ShadowDomQueryService from "../ShadowDom/ShadowDomQueryService";
 
 class PageScraperHelpers {
   /**
-   * Count the form controls nested inside a candidate element, piercing shadow DOM.
+   * Counts the form controls inside the element, shadow DOM included.
    *
-   * Used as a structural gatekeeper while inferring a field's label: an ancestor that wraps more than
-   * one control is too broad to name a single field, so the scraping cascade can reject it and enforce
-   * a 1:1 label-to-field mapping. Read-only.
-   *
-   * @param {Element} element The candidate element whose form-control descendants are counted.
-   * @returns {number} The number of {@link FORM_CONTROL_SELECTOR} descendants (self excluded).
+   * @param {Element} element The element to search.
+   * @returns {number} The number of form controls found, the element itself excluded.
    */
   static fieldCount(element) {
     return ShadowDomQueryService.querySelectorAllDeep(element, FORM_CONTROL_SELECTOR).length;
   }
 
   /**
-   * Read a candidate label element's text with the text/values of its nested form controls and buttons
-   * stripped out.
+   * Returns the text content of the element (without the text of its form controls and buttons).
+   * NOTE: It is working on a clone so the DOM is not changed.
    *
-   * Reading a wrapper's raw `textContent` echoes the field's own value back as its label (e.g. the typed
-   * email instead of "Email"). This isolates the surrounding label text by deep-cloning the element's
-   * light DOM and removing the controls from the detached copy, so the live page is never mutated.
-   *
-   * Operates on the light DOM only: `cloneNode(true)` does not clone shadow roots, so controls slotted
-   * from a shadow tree are out of scope here.
-   *
-   * @param {Element} element The candidate label element to read.
-   * @returns {string} The element's text without its form-control and button descendants.
+   * @param {Element} element The candidate label element.
+   * @returns {string} The text without form controls and buttons.
    */
   static textWithoutFields(element) {
     const clone = element.cloneNode(true);

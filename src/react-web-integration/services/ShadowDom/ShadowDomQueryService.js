@@ -82,10 +82,9 @@ class ShadowDomQueryService {
   /**
    * The deepest active element, descending through open shadow roots.
    *
-   * `document.activeElement` only exposes the outermost (light-DOM) host of an element focused inside
-   * shadow DOM; when the field is nested several shadow levels deep, that host is not the field's own
-   * host. This walks down `shadowRoot.activeElement` to reach the element that truly holds focus.
-   * @return {Element|null} The deepest focused element (or `document.activeElement` when not in a shadow).
+   * `document.activeElement` only exposes the outermost DOM elements, even when focused inside shadow DOM.
+   * This walks down `shadowRoot.activeElement` to reach the element that truly holds focus.
+   * @return {Element|null} The deepest focused element or `document.activeElement` when not in a shadow.
    */
   static deepActiveElement() {
     let active = document?.activeElement ?? null;
@@ -127,8 +126,7 @@ class ShadowDomQueryService {
   }
 
   /**
-   * Build the composed ancestors chain of an element (starting with the element itself), crossing
-   * shadow boundaries. Guarded against cycles and capped by MAX_PIERCE_DEPTH.
+   * Build the ancestors chain of an element (starting with the element itself), crossing shadow boundaries.
    * @param {Element} element
    * @return {Element[]}
    */

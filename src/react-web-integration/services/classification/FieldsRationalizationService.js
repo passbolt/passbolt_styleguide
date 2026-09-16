@@ -16,13 +16,12 @@ import { FieldRole, FormRole } from "./Taxonomy";
 import { USERNAME_CANDIDATE_TYPES } from "../../lib/InForm/ScrapingDictionary";
 
 /**
- * Final rationalization pass: fixes role inconsistencies across the WHOLE scope (after the per-field
- * Phase 1 and the cascade/form Phase 2). Deterministic, value-free and DOM-free. Stateless service
- * exposing static methods only. Mutates and returns scope.roles.
+ * Final pass fixing role inconsistencies across a whole scope.
  */
 class FieldsRationalizationService {
   /**
-   * @param {{form: FormScraping, formRole: string, fields: FieldScraping[], roles: Map<string, string>}} scope
+   * Applies the fixes in order and returns the corrected roles.
+   * @param {{form: FormScraping, formRole: string, fields: FieldScraping[], roles: Map<string, string>}} scope The scope.
    * @returns {Map<string, string>} The corrected roles.
    */
   static rationalize(scope) {
@@ -39,7 +38,7 @@ class FieldsRationalizationService {
   }
 
   /**
-   * Returns true as soon as a field carrying one of the wanted roles is found (short-circuits).
+   * Returns true when a field has one of the wanted roles.
    * @param {string[]} wantedRoles The roles to look for.
    * @param {FieldScraping[]} fields The fields to scan.
    * @param {Map<string, string>} roles The role map.
@@ -61,8 +60,7 @@ class FieldsRationalizationService {
   }
 
   /**
-   * On a login form with no resolved password, promotes the first type=password field to
-   * CURRENT_PASSWORD (rescues a password missed by an earlier veto).
+   * On a login form with no password role, set the first password field to CURRENT_PASSWORD.
    * @param {{formRole: string, fields: FieldScraping[]}} scope The scope.
    * @param {Map<string, string>} roles The role map to update in place.
    */
@@ -80,14 +78,11 @@ class FieldsRationalizationService {
   }
 
   /**
-   * On a login form with a password but no username/email, promotes the text/email field preceding
-   * the first password (positional back-scan), skipping segmented OTP boxes.
+   * On a login form with a password but no username, the first text or email field found before the first password (skipping OTP) becomes the USERNAME.
    * @param {{formRole: string, fields: FieldScraping[]}} scope The scope.
    * @param {Map<string, string>} roles The role map to update in place.
    */
   static rescueUsername(scope, roles) {
-    // No password guard needed: findIndex below returns -1 when no password exists, so the back-scan
-    // never runs and the method is a no-op.
     if (
       scope.formRole !== FormRole.LOGIN ||
       FieldsRationalizationService.hasRolesField([FieldRole.USERNAME, FieldRole.EMAIL], scope.fields, roles)
@@ -101,10 +96,11 @@ class FieldsRationalizationService {
     );
     for (let index = firstPasswordIndex - 1; index >= 0; index--) {
       const field = scope.fields[index];
-      // Never grab a segmented OTP box (role TOTP, often type=text maxlength=1).
+      // Skip OTP boxes.
       if (roles.get(field.fieldId) === FieldRole.TOTP) {
         continue;
       }
+
       if (USERNAME_CANDIDATE_TYPES.includes(field.type) && field.tagName !== "BUTTON") {
         roles.set(field.fieldId, field.type === "email" ? FieldRole.EMAIL : FieldRole.USERNAME);
         break;
@@ -128,8 +124,7 @@ class FieldsRationalizationService {
   }
 
   /**
-   * On a login form, rewrites any inferred new-password/confirmation to CURRENT_PASSWORD, unless it
-   * was set by an author-declared token (`_byDeclared`, authoritative).
+   * On a login form, change new-password and confirmation roles to CURRENT_PASSWORD, unless declared by the page.
    * @param {{formRole: string, fields: FieldScraping[]}} scope The scope.
    * @param {Map<string, string>} roles The role map to update in place.
    */
@@ -146,8 +141,7 @@ class FieldsRationalizationService {
   }
 
   /**
-   * Defaults any still-generic PASSWORD to CURRENT_PASSWORD (a password manager prefers to offer
-   * filling the existing password).
+   * Rewrites any remaining PASSWORD to CURRENT_PASSWORD.
    * @param {{fields: FieldScraping[]}} scope The scope.
    * @param {Map<string, string>} roles The role map to update in place.
    */

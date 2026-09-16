@@ -18,40 +18,50 @@ import { FieldRole, FormRole } from "./Taxonomy";
 import { Keywords } from "./KeywordsDictionary";
 
 /**
- * INFERRED form role (field-role counts + headings/buttonText). Does NOT read `dataFormType`: the
- * author-DECLARED role is consolidated upstream by ClassificationService.classify (P3) and
- * short-circuits this service. Value-free and DOM-free. Stateless service exposing a static method.
+ * Form classification: Detect the form role from the field roles, the headings, and button texts.
  */
 class FormClassificationService {
   /**
-   * @param {{roles: Map<string, string>, form: FormScraping, fields: FieldScraping[]}} scope
-   * @returns {string} A FormRole (login | signup | change-password | other).
+   * Returns the form role based on the field role counts and the heading keywords.
+   * @param {{roles: Map<string, string>, form: FormScraping, fields: FieldScraping[]}} scope The scope.
+   * @returns {string} A FormRole (login, signup, change-password or other).
    */
   static classify(scope) {
     const headings = TextNormalizer.normalizeForMatch(
       [...(scope.form?.ancestorHeadings || []), scope.form?.buttonText].filter(Boolean).join(" "),
     );
-    const has = (role) => scope.fields.some((field) => scope.roles.get(field.fieldId) === role);
-    const count = (role) => scope.fields.filter((field) => scope.roles.get(field.fieldId) === role).length;
-    const heading = (tokens) => KeywordMatchingService.matchesAny(headings, tokens);
 
-    const identifierCount = count(FieldRole.USERNAME) + count(FieldRole.EMAIL);
+    // Count the fields by role
+    const countByRole = new Map();
+    for (const field of scope.fields) {
+      const role = scope.roles.get(field.fieldId);
+      countByRole.set(role, (countByRole.get(role) ?? 0) + 1);
+    }
+
+    const getRoleCount = (role) => countByRole.get(role) ?? 0;
+    const has = (role) => getRoleCount(role) > 0;
+    const headingMatches = (tokens) => KeywordMatchingService.matchesAny(headings, tokens);
+
+    const identifierCount = getRoleCount(FieldRole.USERNAME) + getRoleCount(FieldRole.EMAIL);
     const passwordCount =
-      count(FieldRole.PASSWORD) +
-      count(FieldRole.CURRENT_PASSWORD) +
-      count(FieldRole.NEW_PASSWORD) +
-      count(FieldRole.PASSWORD_CONFIRMATION);
+      getRoleCount(FieldRole.PASSWORD) +
+      getRoleCount(FieldRole.CURRENT_PASSWORD) +
+      getRoleCount(FieldRole.NEW_PASSWORD) +
+      getRoleCount(FieldRole.PASSWORD_CONFIRMATION);
 
-    if (heading(Keywords.HEADING_EXCLUDE)) {
+    if (headingMatches(Keywords.HEADING_EXCLUDE)) {
       return FormRole.OTHER;
     }
-    if ((has(FieldRole.CURRENT_PASSWORD) && has(FieldRole.NEW_PASSWORD)) || heading(Keywords.HEADING_CHANGE_PASSWORD)) {
+    if (
+      (has(FieldRole.CURRENT_PASSWORD) && has(FieldRole.NEW_PASSWORD)) ||
+      headingMatches(Keywords.HEADING_CHANGE_PASSWORD)
+    ) {
       return FormRole.CHANGE_PASSWORD;
     }
     if (has(FieldRole.NEW_PASSWORD) && !has(FieldRole.CURRENT_PASSWORD)) {
       if (
-        heading(Keywords.HEADING_LOGIN) &&
-        !heading(Keywords.HEADING_SIGNUP) &&
+        headingMatches(Keywords.HEADING_LOGIN) &&
+        !headingMatches(Keywords.HEADING_SIGNUP) &&
         passwordCount <= 1 &&
         identifierCount <= 1
       ) {
@@ -59,10 +69,10 @@ class FormClassificationService {
       }
       return FormRole.SIGNUP;
     }
-    if (heading(Keywords.HEADING_SIGNUP) || passwordCount >= 2 || identifierCount >= 2) {
+    if (headingMatches(Keywords.HEADING_SIGNUP) || passwordCount >= 2 || identifierCount >= 2) {
       return FormRole.SIGNUP;
     }
-    if (passwordCount === 1 || heading(Keywords.HEADING_LOGIN)) {
+    if (passwordCount === 1 || headingMatches(Keywords.HEADING_LOGIN)) {
       return FormRole.LOGIN;
     }
     return FormRole.OTHER;

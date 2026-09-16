@@ -21,17 +21,11 @@ import {
 } from "../../lib/InForm/ScrapingDictionary";
 
 /**
- * Two-layer field qualification. Layer 1 answers "what is this field?" from local signals (the field's
- * own `type`/`autoComplete` plus its cached qualification tokens). Layer 2 answers "does the page hold a
- * simple login?" from page-wide counts. Autonomous from the classification module — it shares only the
- * scraping vocabulary (cached keywords, `field.type`/`field.autoComplete`) and does no DOM reads or
- * mutations of its own: token analysis reuses {@link ScrapingCacheService} and element resolution goes
- * through {@link ScrapingIdentityService}.
+ * Qualifies a field as password or username from its type, autocomplete and cached keywords.
  */
 class FieldQualifierService {
   /**
-   * Layer 1 — a field is a password when its native type is `password` or its cached tokens include
-   * "password".
+   * Returns true when the field type is `password` or its keywords include "password".
    * @param {FieldScraping} field The scraped field payload.
    * @param {Element} element The live field element.
    * @returns {boolean} true when the field qualifies as a password.
@@ -41,9 +35,7 @@ class FieldQualifierService {
   }
 
   /**
-   * Layer 1 — a field is a username candidate when its type is `email`, or it is a candidate type
-   * ({@link USERNAME_CANDIDATE_TYPES}) whose `autoComplete` is whitelisted ({@link USERNAME_AUTOCOMPLETE})
-   * or whose cached tokens intersect {@link USERNAME_KEYWORD_TOKENS}.
+   * Returns true when the field type is `email`, or when its type is a username candidate matched with its autocomplete or its keywords.
    * @param {FieldScraping} field The scraped field payload.
    * @param {Element} element The live field element.
    * @returns {boolean} true when the field qualifies as a username candidate.
@@ -58,16 +50,15 @@ class FieldQualifierService {
     if (USERNAME_AUTOCOMPLETE.includes(field.autoComplete || "")) {
       return true;
     }
+
     const keywords = ScrapingCacheService.keywords(element);
     return USERNAME_KEYWORD_TOKENS.some((token) => keywords.has(token));
   }
 
   /**
-   * Layer 2 — qualify a simple login from the page-wide payload. Strict heuristic: exactly one password
-   * field on the page, paired with the first username candidate found (the password field excluded).
-   * @param {PageScraping} pageScraping The page-wide scraping payload.
-   * @returns {{passwordFieldId: string, usernameFieldId: (string|null)}|null} The credential mapping, or
-   *   `null` when the page holds 0 or more than 1 password field.
+   * Qualifies a simple login: as exactly one password field on the page, paired with the first username found.
+   * @param {PageScraping} pageScraping The scraping payload.
+   * @returns {{passwordFieldId: string, usernameFieldId: string|null}|null} The credential mapping, or null when the page has 0 or more than 1 password field.
    */
   static qualifyLogin(pageScraping) {
     const passwords = pageScraping.fields.filter((field) => {

@@ -136,9 +136,13 @@ class InFormCallToActionField {
    * Whenever the call-to-action must be inserted
    */
   handleInsertionEvent() {
-    // deepActiveElement descends through open shadow roots, so a field nested several shadow levels
-    // deep is matched too (document.activeElement only exposes the outermost host).
-    if (this.field === ShadowDomQueryService.deepActiveElement()) {
+    const fieldRoot = ShadowDomQueryService.scopeRoot(this.field);
+    if (
+      // document.activeElement stops at the top-level shadow host, so look for the focused element through the open shadow roots.
+      this.field === ShadowDomQueryService.deepActiveElement() ||
+      // Closed shadow root: the focus is retargeted to the host, so compare the host with the active element.
+      (ShadowDomQueryService.isShadowRoot(fieldRoot) && fieldRoot.host === document.activeElement)
+    ) {
       this.insertInformCallToActionIframe();
     }
     this.field.addEventListener("mouseover", this.insertInformCallToActionIframe);

@@ -52,30 +52,3 @@ export const IGNORED_SUBTREES = new Set(["svg", "math", "SCRIPT", "STYLE", "NOSC
  * @type {number}
  */
 export const MAX_PIERCE_DEPTH = 100;
-
-/**
- * Attributes to watch for changes in the DOM.
- *
- * Derived from `SCRAPED_ATTRS` (the single source of truth for what the scraper reads) so it stays a
- * superset by construction: a `MutationObserver` only emits attribute records for names in this
- * `attributeFilter`, so any scraped attribute missing here would silently leave a stale cache (see
- * `PageScraperService._onMutation`). `hidden` and `style` are the only extra visibility-only signals, watched
- * for `InFormManager` and never scraped.
- */
-const FIELD_ATTRIBUTES_TO_WATCH = [...SCRAPED_ATTRS, "hidden", "style"];
-
-/**
- * MutationObserver options.
- * @type {MutationObserverInit}
- */
-export const OBSERVE_OPTIONS = {
-  childList: true,
-  subtree: true,
-  attributes: true,
-  attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
-  attributeOldValue: false,
-  // Watched so an in-place text rewrite of a label / heading / button (which re-elects the label of the
-  // fields it describes) still emits a record; `PageScraperService._onMutation` scopes the resulting
-  // invalidation to the enclosing form, so unrelated page text does not trigger needless re-scrapes.
-  characterData: true,
-};

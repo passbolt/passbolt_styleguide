@@ -182,7 +182,7 @@ export const Keywords = Object.freeze({
 
   // --- MFA ---
 
-  // TOTP / one-time-code — STRONG tokens only (ambiguous code/pin -> SHORT_AMBIGUOUS).
+  // Strong one-time-code tokens; the ambiguous ones are in TOTP_AMBIGUOUS.
   TOTP: [
     "otp",
     "totp",
@@ -207,12 +207,12 @@ export const Keywords = Object.freeze({
     "sixdigit",
     "6chiffres", // "six digit" / "6-digit code" (Chromium ONE_TIME_CODE)
   ],
-  // Ambiguous TOTP — promoted to TOTP ONLY if corroborated (veto [V]); handled via SHORT_AMBIGUOUS.
+  // Ambiguous one-time-code tokens, counted as TOTP only when another signal confirms it.
   TOTP_AMBIGUOUS: ["code", "pin"],
 
   // --- Exclusion / veto ---
 
-  // Recovery / backup — VETO: neither password nor TOTP -> OTHER.
+  // Recovery and backup tokens (OTHER)
   RECOVERY: [
     "recovery",
     "recoverycode",
@@ -229,7 +229,7 @@ export const Keywords = Object.freeze({
     "recuperacao", // de / es / pt
   ],
 
-  // Disqualifies a "password-like" field (+ OTP/2FA/recovery/search families).
+  // Tokens which disqualify a password field.
   PASSWORD_EXCLUDE: [
     "forgot",
     "oublie",
@@ -258,20 +258,7 @@ export const Keywords = Object.freeze({
   // The field is not a credential at all (NOT wired for now — data available).
   FIELD_IGNORE: ["captcha", "search", "query", "find", "go", "forgot"],
 
-  // A username must NOT match these (+ PASSWORD tokens in all languages) (NOT wired — data available).
-  IDENTIFIER_NEGATIVE: [
-    "pin",
-    "token",
-    "firstname",
-    "lastname",
-    "prenom",
-    "nom",
-    "fullname",
-    "givenname",
-    "familyname",
-  ],
-
-  // --- Form context (tie-breakers, Phase 2) ---
+  // --- Form context ---
 
   ACCOUNT_CREATION: [
     "new",
@@ -341,11 +328,7 @@ export const Keywords = Object.freeze({
     "antiga",
     "alterar", // pt
   ],
-  // Dedicated heading / button-text lists, kept apart from the field-attribute lists above.
-  // HEADING_CHANGE_PASSWORD uses compound tokens (changepassword…) so generic field words like
-  // "change"/"update" cannot false-match free text. HEADING_SIGNUP holds registration terms only.
-  // HEADING_EXCLUDE holds non-credential markers (newsletter/search/contact…) that veto the form to
-  // OTHER — they mean "not a login/signup form", never "signup".
+  // Heading and button text lists
   HEADING_LOGIN: [
     "signin",
     "login",
@@ -445,11 +428,7 @@ export const Keywords = Object.freeze({
 });
 
 /**
- * Short/ambiguous tokens: EXACT SEGMENT match only (never substring) — hand-curated
- * (anti false-positive: new ⊄ newsletter, pin ⊄ shipping, otp ⊄ notpassword).
- * NB: digit-glued tokens like "2fa" are deliberately NOT here — normalization splits "2FA" into
- * "2 fa" at the digit→uppercase boundary, so an exact segment could never match; they rely on
- * substring recall instead (its distinctive digit makes false positives negligible).
+ * Short ambiguous tokens which must match a whole segment, never a substring (new vs newsletter, pin vs shipping).
  * @type {ReadonlySet<string>}
  */
 export const SHORT_AMBIGUOUS = Object.freeze(
@@ -457,15 +436,13 @@ export const SHORT_AMBIGUOUS = Object.freeze(
 );
 
 /**
- * Standard HTML `autocomplete` token for one-time codes (WHATWG). Single source shared by
- * AUTOCOMPLETE_ROLE and the OTP feature detection.
+ * The standard HTML autocomplete token for one-time codes.
  * @type {string}
  */
 export const AUTOCOMPLETE_OTP_TOKEN = "one-time-code";
 
 /**
- * HTML `autocomplete` tokens that map to a concrete field role. The matcher scans tokens
- * right-to-left, so the last significant token — the most specific one — wins.
+ * The HTML autocomplete tokens which map to a field role.
  * @type {Readonly<Object<string, string>>}
  */
 export const AUTOCOMPLETE_ROLE = Object.freeze({
@@ -474,18 +451,12 @@ export const AUTOCOMPLETE_ROLE = Object.freeze({
   "current-password": FieldRole.CURRENT_PASSWORD,
   "new-password": FieldRole.NEW_PASSWORD,
   [AUTOCOMPLETE_OTP_TOKEN]: FieldRole.TOTP,
-  /*
-   * Not a valid WHATWG token (the spec ones are current-/new-password), but a widespread author error:
-   * `autocomplete="password"` clearly means "this is the password field". Map it to the generic PASSWORD
-   * role — the same outcome as the `type="password"` fallback — and let the downstream password-role
-   * resolution disambiguate current vs new from the form context.
-   */
+  // Not a valid token but a common site mistake meaning "this is the password field".
   password: FieldRole.PASSWORD,
 });
 
 /**
- * The Dashlane SAWF `data-form-type` vocabulary. Fixed, single-language, exact-matched tokens —
- * distinct from the fuzzy multilingual keyword lists above.
+ * The data-form-type (SAWF) tokens.
  * @type {Readonly<Object<string, string>>}
  */
 export const SawfToken = Object.freeze({
@@ -505,32 +476,31 @@ export const SawfToken = Object.freeze({
 });
 
 /**
- * Input types a single-character OTP box may carry (keyboard-enterable, `""` for non-input controls).
+ * Input types a single-character OTP box may have
  * @type {ReadonlyArray<string>}
  */
 export const OTP_BOX_INPUT_TYPES = Object.freeze(["text", "tel", "number", "password", ""]);
 
 /**
- * Lower bound of a plausible one-time code: single-character boxes in a run, or `maxLength` of a single `code`/`pin` field.
+ * Minimum one-time code length.
  * @type {number}
  */
 export const MIN_OTP_SEGMENTS = 4;
 
 /**
- * Upper bound of a plausible one-time code: single-character boxes in a run, or `maxLength` of a single `code`/`pin` field.
+ * Maximum one-time code length.
  * @type {number}
  */
 export const MAX_OTP_SEGMENTS = 12;
 
 /**
- * Upper bound on the number of fields classified per page (bounds work on adversarial/huge DOMs).
+ * Maximum number of fields classified per page.
  * @type {number}
  */
 export const MAX_CLASSIFIED_FIELDS = 200;
 
 /**
- * Input types that can never hold a credential — hard-excluded before the classification ladder.
- * Only the impossible is listed; unusual-but-plausible types (number/url/search) still run the ladder.
+ * Input types which can never hold a credential.
  * @type {ReadonlySet<string>}
  */
 export const NON_CREDENTIAL_INPUT_TYPES = Object.freeze(

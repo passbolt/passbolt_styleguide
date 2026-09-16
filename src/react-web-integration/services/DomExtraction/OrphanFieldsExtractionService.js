@@ -112,7 +112,7 @@ class OrphanFieldsExtractionService {
    * would otherwise corrupt proximity clustering — a NaN rect never matches (silent singleton) while
    * two 0x0 rects always "touch" once inflated by the proximity margin. Mirrors the size floor used by
    * {@link ElementVisibilityService}; visibility itself is re-checked later in {@link isValidPseudoForm}.
-   * @param {?{left: number, top: number, right: number, bottom: number, width?: number, height?: number}} rect
+   * @param {{left: number, top: number, right: number, bottom: number, width?: number, height?: number}} rect
    * @returns {boolean} true when the rect is finite and at least {@link MIN_VIEWABLE_DIMENSION_PX} on both axes.
    */
   static isUsableRect(rect) {

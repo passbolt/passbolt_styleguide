@@ -56,7 +56,7 @@ class FormScraper {
    * Clip an attribute to {@link MAX_FORM_ATTR_LENGTH}. Slices on code points so an astral character at
    * the limit is not split into a lone surrogate.
    * @private
-   * @param {?string} value The raw attribute value.
+   * @param {string} value The raw attribute value.
    * @returns {string} The clipped value, or "".
    */
   static _clip(value) {
@@ -68,7 +68,7 @@ class FormScraper {
   /**
    * Resolve `action` to a full absolute URL (keeps the cross-origin signal), or "" when missing/invalid.
    * @private
-   * @param {?string} action The raw `action` attribute value.
+   * @param {string} action The raw `action` attribute value.
    * @returns {string} The absolute URL, or "".
    */
   static _actionUrl(action) {

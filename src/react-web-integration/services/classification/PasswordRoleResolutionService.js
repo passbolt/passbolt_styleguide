@@ -18,17 +18,15 @@ import { FieldRole, FormRole } from "./Taxonomy";
 import { Keywords } from "./KeywordsDictionary";
 
 /**
- * Rewrites the generic PASSWORD field roles of a scope into CURRENT_PASSWORD, NEW_PASSWORD or
- * PASSWORD_CONFIRMATION, from the Phase-1 roles, the form context, and the password field
- * count/order/keywords. Value-free and DOM-free. Stateless service exposing a static method.
+ * Rwrites the generic PASSWORD roles of a scope into CURRENT_PASSWORD, NEW_PASSWORD or PASSWORD_CONFIRMATION.
+ * Based on the form context and the password fields' order and keywords.
  */
 class PasswordRoleResolutionService {
   /**
-   * @param {Array<{field: FieldScraping, role: string}>} entries The scope fields with their Phase-1 role.
-   * @param {{formIsSignup: boolean, formIsChange: boolean, declaredFormRole: string}} ctx The form
-   *   context. `declaredFormRole` (author-declared, consolidated) takes precedence over
-   *   `formIsSignup`/`formIsChange` when it is not OTHER.
-   * @returns {Map<string, string>} The rewritten password roles, keyed by fieldId.
+   * Resolves the password roles of a scope.
+   * @param {Array<{field: FieldScraping, role: string}>} entries The scope fields with their role.
+   * @param {{formIsSignup: boolean, formIsChange: boolean, declaredFormRole: string}} ctx The form context
+   * @returns {Map<string, string>} The rewritten password roles indexed by fieldId.
    */
   static resolve(entries, ctx) {
     const resolved = new Map();
@@ -88,8 +86,8 @@ class PasswordRoleResolutionService {
   }
 
   /**
-   * One lone password: current for a login (or once a new one is already declared elsewhere), new for
-   * a signup/change context or a creation keyword, current otherwise.
+   * One password: NEW_PASSWORD for a signup or change form or a creation keyword.
+   * CURRENT_PASSWORD otherwise or when a new password is already placed.
    * @param {FieldScraping} field The password field.
    * @param {{formIsSignup: boolean, declaredFormRole: string}} ctx The form context.
    * @param {Map<string, string>} resolved The role map to write into.
@@ -108,9 +106,9 @@ class PasswordRoleResolutionService {
   }
 
   /**
-   * Two passwords: current + new for a login/change form, new + confirmation for a signup form.
-   * Without any signal, defaults to new + confirmation (signup/reset), aligned with
-   * FormClassificationService.
+   * Two passwords:
+   * - current + new for a login or change form
+   * - new + confirmation for a signup form or without any signal
    * @param {FieldScraping[]} passwordFields The two password fields (DOM order).
    * @param {{formIsSignup: boolean, formIsChange: boolean, declaredFormRole: string}} ctx The form context.
    * @param {Map<string, string>} resolved The role map to write into.
@@ -133,14 +131,14 @@ class PasswordRoleResolutionService {
       resolved.set(first.fieldId, FieldRole.CURRENT_PASSWORD);
       resolved.set(second.fieldId, FieldRole.NEW_PASSWORD);
     } else {
-      // No signal: default to signup/reset (new + confirmation), aligned with FormClassificationService.
+      // No signal: default to new + confirmation.
       resolved.set(first.fieldId, FieldRole.NEW_PASSWORD);
       resolved.set(second.fieldId, FieldRole.PASSWORD_CONFIRMATION);
     }
   }
 
   /**
-   * Three or more passwords: current + new + confirmation, positionally; any extra is noise.
+   * Three or more passwords: current, new and confirmation in order; the extra ones are OTHER.
    * @param {FieldScraping[]} passwordFields The password fields (DOM order).
    * @param {Map<string, string>} resolved The role map to write into.
    */
@@ -152,8 +150,7 @@ class PasswordRoleResolutionService {
   }
 
   /**
-   * Turns a field guessed as NEW_PASSWORD back into CURRENT_PASSWORD when its text carries an
-   * update/change keyword.
+   * Turns a NEW_PASSWORD back into CURRENT_PASSWORD when the field text has an update keyword.
    * @param {FieldScraping[]} passwordFields The generic password fields.
    * @param {Map<string, string>} resolved The role map to update in place.
    */
@@ -166,7 +163,7 @@ class PasswordRoleResolutionService {
   }
 
   /**
-   * Whether the field's text carries an account-creation keyword.
+   * Returns true when the field text has an account-creation keyword.
    * @param {FieldScraping} field The field.
    * @returns {boolean} Whether a creation keyword is present.
    */
@@ -175,7 +172,7 @@ class PasswordRoleResolutionService {
   }
 
   /**
-   * Whether the field's text carries a password-update keyword.
+   * Returns true when the field text has a password-update keyword.
    * @param {FieldScraping} field The field.
    * @returns {boolean} Whether an update keyword is present.
    */
