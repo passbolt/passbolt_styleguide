@@ -13,9 +13,7 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import DomUtils from "../Dom/DomUtils";
 import browser from "webextension-polyfill";
-import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
 import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
 
@@ -24,51 +22,6 @@ import InFormFieldGeometryService from "./InFormFieldGeometryService";
  * in-form call-to-action and/or menu can be attached
  */
 class InFormCallToActionField {
-  /**
-   * Retrieve all the DOM elements which can be an in-form username fields
-   */
-  static findAll(selector) {
-    let domFields = Array.from(document.querySelectorAll(selector));
-
-    // Remove nested (duplicated) fields
-    domFields = domFields.filter((nestedField) => {
-      // We ensure that there is no field nested within another field of the `domFiels` list
-      // If this is the case, we remove the nested field(s)
-      // Example:
-      // A field matched having for 6 nested inputs, and those inputs matched as well (for having a specifig class or whatever)
-      // We only keep the parent field and remove the nested ones
-      return domFields.every((domField) => domField === nestedField || !domField.contains(nestedField));
-    });
-
-    const iframesFields = InFormCallToActionField.findAllInIframes(selector);
-    const shadowDomFields = InFormCallToActionField.findAllInShadowDom(selector);
-    return domFields.concat(iframesFields).concat(shadowDomFields);
-  }
-
-  /**
-   * Retrieve all the iframes elements which can be an in-form username fields
-   * @return {*}
-   */
-  static findAllInIframes(selector) {
-    return DomUtils.getAccessibleAndSameDomainIframes().flatMap((iframe) =>
-      Array.from(iframe.contentDocument.querySelectorAll(selector)),
-    );
-  }
-
-  /**
-   * Retrieve all the shadow dom elements which can be an in-form username or password fields
-   * @return {*}
-   */
-  static findAllInShadowDom(selector) {
-    const matches = [];
-
-    for (const shadowRoot of ShadowRootCacheService.getCachedShadowRoots(document)) {
-      matches.push(...ShadowDomQueryService.querySelectorAllDeep(shadowRoot, selector));
-    }
-
-    return matches;
-  }
-
   /**
    * Default constructor
    * @param field The DOM element
@@ -200,6 +153,8 @@ class InFormCallToActionField {
    * @param iframe The call-to-action iframe
    */
   handleCallToActionClicked(iframe) {
+    // Stop the watcher left by a previous insertion before starting a new one.
+    clearInterval(this.callToActionClickWatcher);
     /*
      * In case of click on iframe, the field lose the focus. Since it loses the focus, the iframe is removed.
      * And so the call-to-action. So, we need to restore the focus on the input. In case, it did not have
@@ -259,6 +214,8 @@ class InFormCallToActionField {
    * Remove the call-to-action (iframe)
    */
   removeIframe() {
+    // The iframe goes away, so stop watching for a click on it.
+    clearInterval(this.callToActionClickWatcher);
     const iframes = this.shadowRoot.querySelectorAll("iframe");
     iframes.forEach((iframe) => {
       const identifierToMatch = this.iframeId;

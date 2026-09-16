@@ -16,7 +16,6 @@ import InFormCallToActionField from "./InFormCallToActionField";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
 import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
-import DomUtils from "../Dom/DomUtils";
 import { initializeWindow } from "./InformManager.test.data";
 
 describe("InFormCallToActionField", () => {
@@ -52,80 +51,6 @@ describe("InFormCallToActionField", () => {
 
     return new InFormCallToActionField(field, "username", shadowRoot);
   };
-
-  describe("InFormCallToActionField::findAll", () => {
-    it("should return the matching fields without duplicates", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<div id='outer'><input type='text'/></div>";
-      const outer = document.getElementById("outer");
-
-      expect(InFormCallToActionField.findAll("#outer, #outer input")).toEqual([outer]);
-    });
-
-    it("should concatenate all matches", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<input type='text'/>";
-      const field = document.querySelector("input");
-      const iframeField = document.createElement("input");
-      const shadowField = document.createElement("input");
-      jest.spyOn(InFormCallToActionField, "findAllInIframes").mockReturnValue([iframeField]);
-      jest.spyOn(InFormCallToActionField, "findAllInShadowDom").mockReturnValue([shadowField]);
-
-      expect(InFormCallToActionField.findAll("input")).toEqual([field, iframeField, shadowField]);
-    });
-  });
-
-  describe("InFormCallToActionField::findAllInIframes", () => {
-    it("should return the matching fields of the accessible iframes", () => {
-      expect.assertions(1);
-
-      const iframeDocument = document.implementation.createHTMLDocument();
-      const field = iframeDocument.createElement("input");
-      iframeDocument.body.appendChild(field);
-      jest.spyOn(DomUtils, "getAccessibleAndSameDomainIframes").mockReturnValue([{ contentDocument: iframeDocument }]);
-
-      expect(InFormCallToActionField.findAllInIframes("input")).toEqual([field]);
-    });
-  });
-
-  describe("InFormCallToActionField::findAllInShadowDom", () => {
-    it("should return the matching fields from shadow roots", () => {
-      expect.assertions(1);
-
-      const host = document.createElement("div");
-      const shadowRoot = host.attachShadow({ mode: "open" });
-      const field = document.createElement("input");
-      shadowRoot.appendChild(field);
-      document.body.appendChild(host);
-
-      expect(InFormCallToActionField.findAllInShadowDom("input")).toEqual([field]);
-    });
-
-    it("should return the matching fields from nested shadow roots", () => {
-      expect.assertions(1);
-
-      const outerHost = document.createElement("div");
-      const outerRoot = outerHost.attachShadow({ mode: "open" });
-      document.body.appendChild(outerHost);
-      const innerHost = document.createElement("div");
-      const innerRoot = innerHost.attachShadow({ mode: "open" });
-      outerRoot.appendChild(innerHost);
-      const field = document.createElement("input");
-      innerRoot.appendChild(field);
-
-      expect(InFormCallToActionField.findAllInShadowDom("input")).toEqual([field]);
-    });
-
-    it("should not return the fields of the DOM", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<input type='text'/>";
-
-      expect(InFormCallToActionField.findAllInShadowDom("input")).toEqual([]);
-    });
-  });
 
   describe("InFormCallToActionField::calculateFieldPosition", () => {
     it("should delegate the position calculation to the geometry service", () => {
@@ -257,6 +182,22 @@ describe("InFormCallToActionField", () => {
 
       expect(callToActionField.isCallToActionMousingOver).toBe(false);
     });
+
+    it("should stop the previous click watcher before starting a new one", () => {
+      expect.assertions(2);
+
+      const callToActionField = buildCallToActionField();
+      const iframe = { addEventListener: jest.fn() };
+      const clearIntervalSpy = jest.spyOn(global, "clearInterval");
+
+      callToActionField.handleCallToActionClicked(iframe);
+      const firstWatcher = callToActionField.callToActionClickWatcher;
+      callToActionField.handleCallToActionClicked(iframe);
+
+      expect(clearIntervalSpy).toHaveBeenCalledWith(firstWatcher);
+      expect(callToActionField.callToActionClickWatcher).not.toBe(firstWatcher);
+      clearInterval(callToActionField.callToActionClickWatcher);
+    });
   });
 
   describe("InFormCallToActionField::removeInFormCallToAction", () => {
@@ -349,6 +290,20 @@ describe("InFormCallToActionField", () => {
 
       expect(callToActionField.shadowRoot.querySelector("iframe")).toBe(iframe);
       expect(window.port.emit).not.toHaveBeenCalled();
+    });
+
+    it("should stop the click watcher", () => {
+      expect.assertions(2);
+
+      const callToActionField = buildCallToActionField();
+      callToActionField.handleCallToActionClicked({ addEventListener: jest.fn() });
+      const watcher = callToActionField.callToActionClickWatcher;
+      const clearIntervalSpy = jest.spyOn(global, "clearInterval");
+
+      callToActionField.removeIframe();
+
+      expect(clearIntervalSpy).toHaveBeenCalledWith(watcher);
+      expect(callToActionField.callToActionClickWatcher).toBeNull();
     });
   });
 
