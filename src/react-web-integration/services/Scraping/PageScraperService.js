@@ -64,13 +64,13 @@ class PageScraperService {
    */
   static scrape(formElements) {
     const skeletons = formElements ?? PageScraperService._lastSkeleton ?? [];
-    const forms = [];
+    const forms = {};
     const fields = [];
 
     for (const skeleton of skeletons) {
       const scraped = PageScraperService._scrapeForm(skeleton);
       if (scraped) {
-        forms.push(scraped.form);
+        forms[scraped.form.formId] = scraped.form;
         fields.push(...scraped.fields);
       }
     }

@@ -80,7 +80,7 @@ describe("PageScraperService", () => {
 
       expect(formSpy).toHaveBeenCalledTimes(1);
       expect(fieldSpy).toHaveBeenCalledTimes(2);
-      expect(payload.forms).toHaveLength(1);
+      expect(Object.keys(payload.forms)).toHaveLength(1);
       expect(payload.fields).toHaveLength(2);
       expect(payload).toMatchObject({ url: location.href, documentUrl: document.URL, title: document.title });
     });
@@ -100,7 +100,7 @@ describe("PageScraperService", () => {
       const payload = PageScraperService.scrape([realForm(form)]);
 
       // The untyped input defaults to "text" (per FieldScraperService), so it buckets under `text`.
-      expect(payload.forms[0].fieldTypes).toEqual({ email: 1, password: 2, text: 1 });
+      expect(Object.values(payload.forms)[0].fieldTypes).toEqual({ email: 1, password: 2, text: 1 });
     });
 
     it("counts the same type independently per form (no cross-form bleed)", () => {
@@ -115,8 +115,9 @@ describe("PageScraperService", () => {
         realForm(document.querySelector("#b")),
       ]);
 
-      expect(payload.forms[0].fieldTypes).toEqual({ password: 1 });
-      expect(payload.forms[1].fieldTypes).toEqual({ password: 1 });
+      const forms = Object.values(payload.forms);
+      expect(forms[0].fieldTypes).toEqual({ password: 1 });
+      expect(forms[1].fieldTypes).toEqual({ password: 1 });
     });
 
     it("adds no histogram bucket for a non-input control (empty type)", () => {
@@ -131,7 +132,7 @@ describe("PageScraperService", () => {
 
       expect(payload.fields).toHaveLength(1);
       expect(payload.fields[0].type).toEqual("");
-      expect(payload.forms[0].fieldTypes).toEqual({});
+      expect(Object.values(payload.forms)[0].fieldTypes).toEqual({});
     });
 
     it("scrapes real `{element}` and pseudo `{fieldElement}` field shapes identically", () => {
@@ -145,9 +146,9 @@ describe("PageScraperService", () => {
 
       const payload = PageScraperService.scrape([realForm(real), pseudoForm(pseudo)]);
 
-      expect(payload.forms).toHaveLength(2);
+      expect(Object.keys(payload.forms)).toHaveLength(2);
       expect(payload.fields).toHaveLength(2);
-      expect(payload.forms[1].fieldTypes).toEqual({ password: 1 });
+      expect(Object.values(payload.forms)[1].fieldTypes).toEqual({ password: 1 });
     });
 
     it("skips non-element containers and non-element fields without throwing", () => {
@@ -162,7 +163,7 @@ describe("PageScraperService", () => {
 
       const payload = PageScraperService.scrape(skeleton);
 
-      expect(payload.forms).toHaveLength(1);
+      expect(Object.keys(payload.forms)).toHaveLength(1);
       expect(payload.fields).toHaveLength(1);
     });
 
@@ -195,7 +196,7 @@ describe("PageScraperService", () => {
       // A malformed/partial skeleton entry with no `fields` key exercises the `skeleton.fields ?? []` branch.
       const payload = PageScraperService.scrape([{ containerElement: document.querySelector("form") }]);
 
-      expect(payload.forms).toHaveLength(1);
+      expect(Object.keys(payload.forms)).toHaveLength(1);
       expect(payload.fields).toHaveLength(0);
     });
 
@@ -205,7 +206,7 @@ describe("PageScraperService", () => {
       const payload = PageScraperService.scrape([]);
 
       expect(payload).toMatchObject({ url: location.href, documentUrl: document.URL, title: document.title });
-      expect(payload).toMatchObject({ forms: [], fields: [] });
+      expect(payload).toMatchObject({ forms: {}, fields: [] });
     });
 
     it("returns an empty payload with no argument when there is no last skeleton", () => {
@@ -214,7 +215,7 @@ describe("PageScraperService", () => {
 
       const payload = PageScraperService.scrape();
 
-      expect(payload.forms).toHaveLength(0);
+      expect(Object.keys(payload.forms)).toHaveLength(0);
       expect(payload.fields).toHaveLength(0);
     });
 
@@ -299,7 +300,7 @@ describe("PageScraperService", () => {
         realForm(document.querySelector("#b")),
       ]);
 
-      const formIds = new Set(payload.forms.map((form) => form.formId));
+      const formIds = new Set(Object.keys(payload.forms));
       expect(payload.fields.every((field) => formIds.has(field.formId))).toBe(true);
     });
   });
