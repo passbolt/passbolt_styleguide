@@ -80,6 +80,15 @@ describe("PageScraperHelpers", () => {
       expect(PageScraperHelpers.textWithoutFields(document.querySelector("label"))).toEqual("Email");
     });
 
+    it("should strip the text typed in a nested textarea and the options of a nested select", () => {
+      expect.assertions(1);
+
+      document.body.innerHTML =
+        "<label>Message<textarea>my private note</textarea><select><option>FR</option></select></label>";
+
+      expect(PageScraperHelpers.textWithoutFields(document.querySelector("label"))).toEqual("Message");
+    });
+
     it("should strip the text carried by a nested button", () => {
       expect.assertions(1);
 

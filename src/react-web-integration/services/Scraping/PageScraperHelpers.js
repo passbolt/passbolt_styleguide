@@ -12,7 +12,7 @@
  * @since         5.15.0
  */
 
-import { FORM_CONTROL_SELECTOR } from "../../lib/InForm/ScrapingDictionary";
+import { FORM_CONTROL_SELECTOR, LABEL_TEXT_STRIP_SELECTOR } from "../../lib/InForm/ScrapingDictionary";
 import ShadowDomQueryService from "../ShadowDom/ShadowDomQueryService";
 
 class PageScraperHelpers {
@@ -36,7 +36,7 @@ class PageScraperHelpers {
   static textWithoutFields(element) {
     const clone = element.cloneNode(true);
 
-    const fields = clone.querySelectorAll(`${FORM_CONTROL_SELECTOR}, button`);
+    const fields = clone.querySelectorAll(LABEL_TEXT_STRIP_SELECTOR);
     for (const field of fields) {
       field.remove();
     }

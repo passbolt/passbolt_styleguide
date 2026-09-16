@@ -91,6 +91,12 @@ export const QUALIFICATION_TOKEN_ATTRS = [
 export const FORM_CONTROL_SELECTOR = "input";
 
 /**
+ * Selector of the controls whose content is removed from a label text, since it is user data and not a label.
+ * @type {string}
+ */
+export const LABEL_TEXT_STRIP_SELECTOR = "input, textarea, select, button";
+
+/**
  * Tags that end a label search: reaching one of these means the label lookup crossed into another control.
  * @type {ReadonlyArray<string>}
  */

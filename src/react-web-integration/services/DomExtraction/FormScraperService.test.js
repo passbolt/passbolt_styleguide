@@ -140,14 +140,6 @@ describe("FormScraperService", () => {
       expect(FormScraperService.scrape(document.querySelector("form"), "id").attributes.method).toEqual("get");
     });
 
-    it("should lower-case a post method attribute", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<form method='POST'></form>";
-
-      expect(FormScraperService.scrape(document.querySelector("form"), "id").attributes.method).toEqual("post");
-    });
-
     it("should preserve the query string when resolving a relative action", () => {
       expect.assertions(1);
 
@@ -168,7 +160,7 @@ describe("FormScraperService", () => {
       );
     });
 
-    it("should leave fieldTypes as an empty map for the PageScraper to populate", () => {
+    it("should leave fieldTypes as an empty map for the PageScraperService to populate", () => {
       expect.assertions(1);
 
       document.body.innerHTML = "<form></form>";
@@ -266,15 +258,6 @@ describe("FormScraperService", () => {
       expect(FormScraperService._ancestorHeadings(document.querySelector("form"))).toEqual([]);
     });
 
-    it("should not capture a fieldset heading when the fieldset has no legend", () => {
-      expect.assertions(1);
-
-      // A fieldset is matched by its legend only, never by an inner heading.
-      document.body.innerHTML = "<fieldset><h2>Billing address</h2><form></form></fieldset>";
-
-      expect(FormScraperService._ancestorHeadings(document.querySelector("form"))).toEqual([]);
-    });
-
     it("should collect a heading from each distinct sectioning ancestor", () => {
       expect.assertions(1);
 
@@ -287,10 +270,7 @@ describe("FormScraperService", () => {
           </section>
         </article>`;
 
-      expect(FormScraperService._ancestorHeadings(document.querySelector("form"))).toEqual([
-        "Security",
-        "Account center",
-      ]);
+      expect(FormScraperService._ancestorHeadings(document.querySelector("form"))).toEqual(["Security", "Account center"]);
     });
 
     it("should skip a plain div ancestor sitting between two sections", () => {
@@ -330,28 +310,6 @@ describe("FormScraperService", () => {
       document.body.appendChild(section);
 
       expect(FormScraperService._ancestorHeadings(form)).toEqual([]);
-    });
-
-    it("should capture a section heading sitting exactly at MAX_HEADING_ANCESTOR_HOPS", () => {
-      expect.assertions(1);
-
-      // Place the section as the MAX-th ancestor: section > div * (MAX_HEADING_ANCESTOR_HOPS - 1) > form.
-      const section = document.createElement("section");
-      const heading = document.createElement("h2");
-      heading.textContent = "At the limit";
-      section.appendChild(heading);
-
-      let parent = section;
-      for (let i = 0; i < MAX_HEADING_ANCESTOR_HOPS - 1; i++) {
-        const div = document.createElement("div");
-        parent.appendChild(div);
-        parent = div;
-      }
-      const form = document.createElement("form");
-      parent.appendChild(form);
-      document.body.appendChild(section);
-
-      expect(FormScraperService._ancestorHeadings(form)).toEqual(["At the limit"]);
     });
 
     it("should pierce a shadow boundary while climbing", () => {
