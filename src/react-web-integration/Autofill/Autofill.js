@@ -51,7 +51,7 @@ const fillForm = function (formData) {
     if (passwordField && typeof formData.secret === "string") {
       UserEventsService.autofill(passwordField.element, formData.secret);
     }
-    if (otpField) {
+    if (otpField && formData.otp) {
       const otp = TotpCodeGeneratorService.generate(formData.otp);
       if (typeof otp !== "string") {
         throw new TypeError("Error while generating the TOTP.");

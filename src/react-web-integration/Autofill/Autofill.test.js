@@ -181,6 +181,27 @@ describe("Autofill::fillForm", () => {
       expect(UserEventsService.autofill).toHaveBeenCalledWith(otpElement, totp);
       expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
     });
+
+    it("Should leave the TOTP field untouched when the credential carries no otp", () => {
+      expect.assertions(4);
+      document.body.innerHTML = `
+        <form>
+          <input type="text" name="username" autocomplete="username" />
+          <input type="password" name="password" autocomplete="current-password" />
+          <input type="text" name="otp" autocomplete="one-time-code" />
+        </form>`;
+      const usernameElement = document.querySelector("input[name='username']");
+      const passwordElement = document.querySelector("input[name='password']");
+      formData = defaultFormData({ otp: undefined });
+
+      const page = new AutofillPage();
+      page.fillForm(formData);
+
+      expect(UserEventsService.autofill).toHaveBeenCalledTimes(2);
+      expect(UserEventsService.autofill).toHaveBeenCalledWith(usernameElement, formData.username);
+      expect(UserEventsService.autofill).toHaveBeenCalledWith(passwordElement, formData.secret);
+      expect(window.port.emit).toHaveBeenCalledWith(formData.requestId, "SUCCESS");
+    });
   });
 
   describe("With no suitable element", () => {
