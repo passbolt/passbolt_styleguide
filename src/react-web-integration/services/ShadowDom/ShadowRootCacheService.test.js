@@ -73,6 +73,35 @@ describe("ShadowRootCacheService", () => {
   });
 
   describe("ShadowRootCacheService::getCachedShadowRoots", () => {
+    it("should return the shadow roots hosted inside an element without caching nor observing the element", () => {
+      expect.assertions(3);
+
+      document.body.innerHTML = "<section id='inside'></section><section id='outside'></section>";
+      const inside = document.getElementById("inside");
+      const insideRoot = document.createElement("div").attachShadow({ mode: "open" });
+      inside.appendChild(insideRoot.host);
+      const outsideRoot = document.createElement("div").attachShadow({ mode: "open" });
+      document.getElementById("outside").appendChild(outsideRoot.host);
+
+      expect(ShadowRootCacheService.getCachedShadowRoots(inside)).toEqual([insideRoot]);
+      expect(ShadowRootCacheService.peekCache(inside)).toBeUndefined();
+      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledWith(document);
+    });
+
+    it("should filter the shadow roots of an element inside a shadow root against that shadow root's cache", () => {
+      expect.assertions(2);
+
+      const outerRoot = document.createElement("div").attachShadow({ mode: "open" });
+      document.body.appendChild(outerRoot.host);
+      const section = document.createElement("section");
+      outerRoot.appendChild(section);
+      const innerRoot = document.createElement("div").attachShadow({ mode: "open" });
+      section.appendChild(innerRoot.host);
+
+      expect(ShadowRootCacheService.getCachedShadowRoots(section)).toEqual([innerRoot]);
+      expect(ShadowRootCacheService.peekCache(outerRoot)).toEqual([innerRoot]);
+    });
+
     it("should initialize the cache when there is no cache entry", () => {
       expect.assertions(3);
 
