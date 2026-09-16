@@ -100,6 +100,17 @@ class ShadowDomFocusHealerService {
   }
 
   /**
+   * Removes the focusin listener and forgets the tracked-field callback.
+   */
+  static uninstallFocusinHealer() {
+    if (ShadowDomFocusHealerService._focusinHandler) {
+      document.removeEventListener("focusin", ShadowDomFocusHealerService._focusinHandler, { capture: true });
+    }
+    ShadowDomFocusHealerService._focusinHandler = null;
+    ShadowDomFocusHealerService._isFieldTracked = null;
+  }
+
+  /**
    * Reset re-scanned inputs.
    * Inputs that were not credentials when last focused get another chance once the DOM changes around them.
    */

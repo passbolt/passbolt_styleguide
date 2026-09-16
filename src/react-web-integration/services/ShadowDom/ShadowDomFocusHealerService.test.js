@@ -53,6 +53,32 @@ describe("ShadowDomFocusHealerService", () => {
     });
   });
 
+  describe("ShadowDomFocusHealerService::uninstallFocusinHealer", () => {
+    it("should remove the focusin listener and forget the tracked-field callback", () => {
+      expect.assertions(3);
+
+      jest.spyOn(document, "removeEventListener").mockImplementation();
+      ShadowDomFocusHealerService.installFocusinHealer(() => true);
+      const handler = ShadowDomFocusHealerService._focusinHandler;
+
+      ShadowDomFocusHealerService.uninstallFocusinHealer();
+
+      expect(document.removeEventListener).toHaveBeenCalledWith("focusin", handler, { capture: true });
+      expect(ShadowDomFocusHealerService._focusinHandler).toBeNull();
+      expect(ShadowDomFocusHealerService._isFieldTracked).toBeNull();
+    });
+
+    it("should do nothing when no listener is installed", () => {
+      expect.assertions(1);
+
+      jest.spyOn(document, "removeEventListener").mockImplementation();
+
+      ShadowDomFocusHealerService.uninstallFocusinHealer();
+
+      expect(document.removeEventListener).not.toHaveBeenCalled();
+    });
+  });
+
   describe("ShadowDomFocusHealerService::focusHandler", () => {
     let focusHandler;
 

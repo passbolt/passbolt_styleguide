@@ -836,6 +836,7 @@ class InFormManager {
    */
   destroy() {
     this._unsubscribeShadowMutations?.();
+    ShadowDomFocusHealerService.uninstallFocusinHealer();
     ShadowMutationObserverService.disconnectObserver(document);
     this.hostMutationObserver.disconnect();
     this.htmlMutationObserver.disconnect();
