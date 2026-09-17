@@ -54,23 +54,14 @@ class InFormManager {
    * Default constructor
    */
   constructor() {
-    /** In-form username and password callToActionFields in the target page*/
     this.callToActionFields = [];
-    /** In-form menu menuField in the target page*/
     this.menuField = null;
-    /** In-form form fields in the target page*/
     this.credentialsFormFields = [];
-    /** Debounced re-scan of auth fields */
     this.updateAuthenticationFieldsDebounce = null;
-    /** Set when a mutation batch touched a field; the debounced callback runs the extraction only when this is set. */
     this._pendingFieldScan = false;
-    /** Unsubscribe from the shadow dom mutations */
     this._unsubscribeShadowMutations = null;
-
-    /** The shadow root with the host **/
     this.host = null;
     this.shadowRoot = null;
-
     this.hostMutationObserver = null;
     this.htmlMutationObserver = null;
     this.bodyMutationObserver = null;
@@ -190,7 +181,7 @@ class InFormManager {
    * @param element
    */
   destroyIfElementNotVisible(element) {
-    if (!ElementVisibilityService.isElementViewable(element)) {
+    if (!ElementVisibilityService.isElementRendered(element)) {
       this.destroy();
     }
   }
@@ -462,12 +453,10 @@ class InFormManager {
    */
   handleDomChange() {
     const updateAuthenticationFields = () => {
-      // Check first that the host is still in the body or a dialog; skip the extraction while a remount or destroy is ongoing.
       if (!this._ensureHostIntegrity()) {
         return;
       }
 
-      // Re-classify only when the batch which scheduled us changed a field.
       if (!this._pendingFieldScan) {
         return;
       }
@@ -476,12 +465,6 @@ class InFormManager {
       this.handleInformCallToActionClickEvent();
     };
 
-    // Use requestIdleCallback when available to schedule work during browser idle periods,
-    // This enables us perform background and low priority work on the main thread, without
-    // impacting latency-critical events such as animation and input response.
-    // https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
-    // If requestIdleCallback is not available as in the case of Safari, fall back to a
-    // simple debounce to avoid too many requests.
     this.updateAuthenticationFieldsDebounce = window.requestIdleCallback
       ? debounce(
           () => {
@@ -503,7 +486,6 @@ class InFormManager {
           accumulate: false,
         });
 
-    // Search again for authentication callToActionFields to attach when the DOM changes
     this._unsubscribeShadowMutations = ShadowMutationObserverService.subscribeToShadowMutations(this.onShadowMutation);
   }
 
@@ -524,7 +506,7 @@ class InFormManager {
       this.findAndSetAuthenticationFields();
       this.handleInformCallToActionClickEvent();
       this._pendingFieldScan = true;
-      this.updateAuthenticationFieldsDebounce();
+      this.updateAuthenticationFieldsDebounce?.();
       return;
     }
 
@@ -539,18 +521,11 @@ class InFormManager {
 
     const isDocumentScope = root.nodeType === Node.DOCUMENT_NODE;
 
-    this._pendingFieldScan =
-      /*
-       * Shadow-root scope: schedule only when the change is relevant (a field appeared/disappeared or
-       * a field attribute changed).
-       */
-      affectsFields ||
-      // Document scope: keep the latch from a previous batch.
-      (isDocumentScope && this._pendingFieldScan);
+    this._pendingFieldScan = this._pendingFieldScan || affectsFields;
 
     // Always schedule on document scope so the host check runs on every batch
     if (affectsFields || isDocumentScope) {
-      this.updateAuthenticationFieldsDebounce();
+      this.updateAuthenticationFieldsDebounce?.();
     }
   }
 

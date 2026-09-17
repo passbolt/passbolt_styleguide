@@ -63,6 +63,9 @@ class ShadowRootCacheService {
 
     if (!shadowRoots) {
       shadowRoots = ShadowRootCacheService.initCachedShadowRoots(element);
+    } else {
+      // Ensure there is an observer if it was disconnected without its cache entry being invalidated.
+      ShadowMutationObserverService.observeShadowRootChanges(element);
     }
 
     return shadowRoots;

@@ -15,7 +15,6 @@
 import PageClassificationService from "./PageClassificationService";
 import ElementVisibilityService from "./DomExtraction/ElementVisibilityService";
 import ScrapingIdentityService from "./Scraping/ScrapingIdentityService";
-import ScrapingCacheService from "./Scraping/ScrapingCacheService";
 import DomUtils from "../lib/Dom/DomUtils";
 import { FieldRole, FormRole } from "./classification/Taxonomy";
 
@@ -26,8 +25,6 @@ describe("PageClassificationService", () => {
     ScrapingIdentityService._idByElement = new WeakMap();
     ScrapingIdentityService._elementById = new Map();
     ScrapingIdentityService._seq = 0;
-    ScrapingCacheService._payloadByElement = new WeakMap();
-    ScrapingCacheService._keywordsByElement = new WeakMap();
     // jsdom has no layout, so drive viewability explicitly (mirrors the DomExtraction test setup).
     jest.spyOn(ElementVisibilityService, "isElementViewable").mockReturnValue(true);
   });

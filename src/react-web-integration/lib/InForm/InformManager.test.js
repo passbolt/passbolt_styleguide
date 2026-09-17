@@ -94,7 +94,6 @@ import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutati
 import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
 import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
 import ScrapingIdentityService from "../../services/Scraping/ScrapingIdentityService";
-import ScrapingCacheService from "../../services/Scraping/ScrapingCacheService";
 import { act } from "react";
 import { waitFor } from "@testing-library/react";
 
@@ -111,8 +110,6 @@ beforeEach(() => {
   ScrapingIdentityService._idByElement = new WeakMap();
   ScrapingIdentityService._elementById = new Map();
   ScrapingIdentityService._seq = 0;
-  ScrapingCacheService._payloadByElement = new WeakMap();
-  ScrapingCacheService._keywordsByElement = new WeakMap();
 
   // jsdom has no layout: drive viewability explicitly and give fields a usable rect so the pipeline
   // (and its pseudo-form/no-<form> path) can extract and cluster fields. Defined as a plain prototype
@@ -1674,6 +1671,20 @@ describe("InformManager", () => {
       expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
       expect(informManager.iframesLength).toBe(0);
     });
+
+    it("As LU I should NOT destroy inform when a page-level element collapses to a 0px box while still rendered (SPA loading spinner)", () => {
+      expect.assertions(2);
+      // <html> stays rendered (display/visibility/opacity ok) but an SPA spinner class collapses its height
+      // to 0px. The per-field size floor must not apply to page-level elements (mirrors isPageNotVisible).
+      jest.spyOn(ElementVisibilityService, "isElementRendered").mockReturnValue(true);
+      jest.spyOn(ElementVisibilityService, "hasViewableSize").mockReturnValue(false);
+      jest.spyOn(InFormManager, "destroy").mockImplementation();
+
+      InFormManager.destroyIfElementNotVisible(document.documentElement);
+
+      expect(ElementVisibilityService.isElementRendered).toHaveBeenCalledWith(document.documentElement);
+      expect(InFormManager.destroy).not.toHaveBeenCalled();
+    });
   });
 
   describe("Dialog parent element", () => {
@@ -2045,6 +2056,27 @@ describe("InformManager", () => {
       findSpy.mockRestore();
     });
 
+    it("should keep a scan armed by a light-DOM batch when an unrelated shadow-scope batch follows", async () => {
+      // A page web component mutating its own shadow root during the debounce window must not cancel the
+      // re-scan armed by the light DOM adding a credential field.
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
+      const otherShadowRoot = document.createElement("div").attachShadow({ mode: "open" });
+
+      // The light DOM adds a field: the gate is armed and the debounced re-scan is scheduled.
+      const input = document.createElement("input");
+      InFormManager.onShadowMutation(document, [{ type: "childList", addedNodes: [input], removedNodes: [] }], false);
+      expect(InFormManager._pendingFieldScan).toBe(true);
+
+      // An irrelevant shadow-scope batch lands before the debounce fires: the gate must stay armed.
+      InFormManager.onShadowMutation(otherShadowRoot, [], false);
+      expect(InFormManager._pendingFieldScan).toBe(true);
+    });
+
     it("should re-scan synchronously and schedule a debounced follow-up when a shadow root becomes known", async () => {
       // The focus healer signals shadowRootsChanged=true when a field is focused. The re-scan must be
       // synchronous (so the call-to-action is attached within the same focus turn) AND also scheduled once
@@ -2119,6 +2151,23 @@ describe("InformManager", () => {
       );
 
       expect(InFormManager._pendingFieldScan).toBe(true);
+    });
+
+    it("should classify a field from its new attribute after a DOM mutation, not from the cached scrape", async () => {
+      expect.assertions(2);
+
+      // A lone text field with no hint is not a credential, so no call-to-action is attached.
+      document.body.innerHTML = "<form><input type='text' id='f1'/></form>";
+      await act(async () => new InformManagerPage());
+      expect(InFormManager.callToActionFields).toHaveLength(0);
+
+      // The site labels the field after the first scan; the next scan reads the new attribute.
+      await act(async () => {
+        document.getElementById("f1").setAttribute("aria-label", "Email address");
+      });
+      InFormManager.findAndSetAuthenticationFields();
+
+      expect(InFormManager.callToActionFields).toHaveLength(1);
     });
   });
 

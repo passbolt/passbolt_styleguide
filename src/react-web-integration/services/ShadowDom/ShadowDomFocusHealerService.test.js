@@ -51,6 +51,31 @@ describe("ShadowDomFocusHealerService", () => {
 
       expect(document.addEventListener).toHaveBeenCalledTimes(1);
     });
+
+    it("should store the tracked-field predicate provided at install time", () => {
+      // Guards against the wiring regression where the predicate was silently dropped, disabling the
+      // light-DOM heal that recovers login fields revealed in non-<dialog> modals (e.g. totalcasino.pl).
+      expect.assertions(1);
+
+      const isFieldTracked = () => true;
+
+      ShadowDomFocusHealerService.installFocusinHealer(isFieldTracked);
+
+      expect(ShadowDomFocusHealerService._isFieldTracked).toBe(isFieldTracked);
+    });
+
+    it("should refresh the tracked-field predicate on a subsequent install without re-adding the listener", () => {
+      expect.assertions(2);
+
+      const firstPredicate = () => true;
+      const secondPredicate = () => false;
+
+      ShadowDomFocusHealerService.installFocusinHealer(firstPredicate);
+      ShadowDomFocusHealerService.installFocusinHealer(secondPredicate);
+
+      expect(ShadowDomFocusHealerService._isFieldTracked).toBe(secondPredicate);
+      expect(document.addEventListener).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe("ShadowDomFocusHealerService::uninstallFocusinHealer", () => {

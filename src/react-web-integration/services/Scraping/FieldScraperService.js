@@ -13,7 +13,6 @@
  */
 
 import ScrapingIdentityService from "./ScrapingIdentityService";
-import ScrapingCacheService from "./ScrapingCacheService";
 import LabelScraperService from "./LabelScraperService";
 import { MAX_SCRAPED_STRING_LENGTH, AUTOCOMPLETE_ATTRS, OPT_OUT_ATTRS } from "../../lib/InForm/ScrapingDictionary";
 
@@ -73,26 +72,21 @@ class FieldScraperService {
 
     LabelScraperService.enrich(record);
 
-    // Remove the element so the cache does not keep the node alive.
+    // Remove the element so the record is serializable
     delete record.element;
 
     return record;
   }
 
   /**
-   * Returns the record from the cache, or builds and caches it when the field is new or has moved to another form.
+   * Builds the record of a field.
    *
    * @param {Element} element The field element.
    * @param {string} formId The id of the container the field is in.
    * @returns {FieldScraping} The record.
    */
   static scrape(element, formId) {
-    const cached = ScrapingCacheService.getField(element);
-    if (cached && cached.formId === formId) {
-      return cached;
-    }
-
-    return ScrapingCacheService.setField(element, FieldScraperService.build(element, formId));
+    return FieldScraperService.build(element, formId);
   }
 
   /**

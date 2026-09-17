@@ -68,10 +68,10 @@ class ShadowDomFocusHealerService {
   static _focusinHandler = null;
 
   /**
-   * Function telling whether a focused input already has a CTA.
-   * Null when no manager wired it, in which case the DOM heal will be disabled.
+   * Predicate telling whether a focused input is already backed by a call-to-action, provided by the
+   * in-form manager. Null when no manager wired it, in which case the light-DOM heal stays off.
    * @private
-   * @type {function(HTMLElement): boolean}
+   * @type {?function(HTMLElement): boolean}
    */
   static _isFieldTracked = null;
 
@@ -85,7 +85,8 @@ class ShadowDomFocusHealerService {
 
   /**
    * Install a global 'focusin' listener to elements focused inside undetected shadow roots or fields injected after the last scan.
-   * @param {function(HTMLElement): boolean} [isFieldTracked] Function telling whether an input already has a CTA
+   * If the listener is already installed, only the tracked-field predicate is refreshed.
+   * @param {?function(HTMLElement): boolean} [isFieldTracked] Function telling whether an input already has a CTA
    * @see https://github.com/WICG/webcomponents/issues/390
    */
   static installFocusinHealer(isFieldTracked = null) {

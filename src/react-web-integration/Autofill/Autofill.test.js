@@ -20,7 +20,6 @@ import { FAIL_STRING_SCENARIOS } from "../../../test/assert/assertEntityProperty
 import { TotpCodeGeneratorService } from "../../shared/services/otp/TotpCodeGeneratorService";
 import ElementVisibilityService from "../services/DomExtraction/ElementVisibilityService";
 import ScrapingIdentityService from "../services/Scraping/ScrapingIdentityService";
-import ScrapingCacheService from "../services/Scraping/ScrapingCacheService";
 import ShadowRootCacheService from "../services/ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../services/ShadowDom/ShadowMutationObserverService";
 
@@ -36,8 +35,6 @@ beforeEach(() => {
   ScrapingIdentityService._idByElement = new WeakMap();
   ScrapingIdentityService._elementById = new Map();
   ScrapingIdentityService._seq = 0;
-  ScrapingCacheService._payloadByElement = new WeakMap();
-  ScrapingCacheService._keywordsByElement = new WeakMap();
 
   // jsdom has no layout: drive viewability explicitly and give fields a usable rect so the pseudo-form
   // (no-<form>) path can cluster orphan fields (mirrors the DomExtraction test setup).

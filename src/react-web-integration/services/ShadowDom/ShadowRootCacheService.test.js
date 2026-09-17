@@ -132,7 +132,7 @@ describe("ShadowRootCacheService", () => {
     });
 
     it("should collect the shadow roots only once for a given element", () => {
-      expect.assertions(3);
+      expect.assertions(2);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
@@ -143,7 +143,23 @@ describe("ShadowRootCacheService", () => {
 
       expect(second).toBe(first);
       expect(collectSpy).toHaveBeenCalledTimes(1);
-      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledTimes(1);
+    });
+
+    it("should re-arm the observer of a root whose observer was disconnected while its cache survived", () => {
+      expect.assertions(3);
+
+      const host = document.createElement("div");
+      const shadowRoot = host.attachShadow({ mode: "open" });
+      jest.spyOn(ShadowRootCollectorService, "collectShadowRoots").mockReturnValue([shadowRoot]);
+
+      ShadowRootCacheService.getCachedShadowRoots(document);
+      // InFormManager.destroy() disconnects the document observer but keeps its cache entry.
+      ShadowMutationObserverService.disconnectObserver(document);
+      ShadowRootCacheService.getCachedShadowRoots(document);
+
+      expect(ShadowRootCacheService.peekCache(document)).toEqual([shadowRoot]);
+      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledTimes(2);
+      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledWith(document);
     });
 
     it("should return the cached empty results without collecting again", () => {

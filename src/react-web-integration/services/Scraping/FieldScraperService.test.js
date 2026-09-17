@@ -14,7 +14,6 @@
 
 import FieldScraperService from "./FieldScraperService";
 import LabelScraperService from "./LabelScraperService";
-import ScrapingCacheService from "./ScrapingCacheService";
 import ScrapingIdentityService from "./ScrapingIdentityService";
 import ShadowRootCacheService from "../ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../ShadowDom/ShadowMutationObserverService";
@@ -44,8 +43,6 @@ describe("FieldScraperService", () => {
     ScrapingIdentityService._idByElement = new WeakMap();
     ScrapingIdentityService._elementById = new Map();
     ScrapingIdentityService._seq = 0;
-    ScrapingCacheService._payloadByElement = new WeakMap();
-    ScrapingCacheService._keywordsByElement = new WeakMap();
     document.body.innerHTML = "";
   });
 
@@ -138,7 +135,7 @@ describe("FieldScraperService", () => {
       expect(record.ariaState).toMatchObject({ describedBy: "", hidden: false, disabled: false });
     });
 
-    it("should never carry the live element reference on the returned record (cache GC safety)", () => {
+    it("should never carry the live element reference on the returned record", () => {
       expect.assertions(1);
 
       const record = FieldScraperService.build(field(), "form_0");
@@ -279,68 +276,6 @@ describe("FieldScraperService", () => {
   });
 
   describe("FieldScraperService::scrape", () => {
-    it("should build then cache the payload on a cache miss", () => {
-      expect.assertions(2);
-
-      const element = field({ placeholder: "Email" });
-
-      const record = FieldScraperService.scrape(element, "form_0");
-
-      expect(record.formId).toEqual("form_0");
-      expect(ScrapingCacheService.getField(element)).toBe(record);
-    });
-
-    it("should return the cached payload, without rebuilding, when still bound to the same form", () => {
-      expect.assertions(2);
-
-      const element = field();
-      const cached = { formId: "form_0", marker: true };
-      ScrapingCacheService.setField(element, cached);
-      jest.spyOn(FieldScraperService, "build");
-
-      const record = FieldScraperService.scrape(element, "form_0");
-
-      expect(record).toBe(cached);
-      expect(FieldScraperService.build).not.toHaveBeenCalled();
-    });
-
-    it("should re-scrape when the field is now attributed to a different form", () => {
-      expect.assertions(3);
-
-      const element = field();
-      ScrapingCacheService.setField(element, { formId: "form_0", marker: true });
-
-      const record = FieldScraperService.scrape(element, "form_1");
-
-      expect(record.marker).toBeUndefined();
-      expect(record.formId).toEqual("form_1");
-      expect(ScrapingCacheService.getField(element)).toBe(record);
-    });
-
-    it("should overwrite the cache on re-scrape so the next lookup returns the new payload", () => {
-      expect.assertions(2);
-
-      const element = field();
-      ScrapingCacheService.setField(element, { formId: "form_0", marker: true });
-
-      const rescraped = FieldScraperService.scrape(element, "form_1");
-
-      expect(ScrapingCacheService.getField(element)).toBe(rescraped);
-      expect(ScrapingCacheService.getField(element).marker).toBeUndefined();
-    });
-
-    it("should cache two distinct elements independently", () => {
-      expect.assertions(2);
-
-      const a = field();
-      const b = field();
-      const recordA = FieldScraperService.scrape(a, "form_0");
-      const recordB = FieldScraperService.scrape(b, "form_0");
-
-      expect(ScrapingCacheService.getField(a)).toBe(recordA);
-      expect(ScrapingCacheService.getField(b)).toBe(recordB);
-    });
-
     it("should produce a complete, element-free, label-enriched payload end-to-end via the real enrich", () => {
       expect.assertions(3);
 

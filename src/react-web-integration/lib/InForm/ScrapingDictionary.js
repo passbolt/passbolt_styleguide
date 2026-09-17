@@ -69,22 +69,6 @@ export const SCRAPED_ATTRS = [
 ];
 
 /**
- * Attributes tokenized into a field's qualification keyword set (see `ScrapingCacheService.keywords`).
- * @type {ReadonlyArray<string>}
- */
-export const QUALIFICATION_TOKEN_ATTRS = [
-  "id",
-  "name",
-  "class",
-  "placeholder",
-  "aria-label",
-  "autocomplete",
-  "data-form-type",
-  "title",
-  "type",
-];
-
-/**
  * Selector matching the form controls eligible for scraping.
  * @type {string}
  */
@@ -149,18 +133,6 @@ export const MAX_HEADING_ANCESTOR_HOPS = 50;
  * @type {ReadonlyArray<string>}
  */
 export const USERNAME_CANDIDATE_TYPES = ["text", "email", "tel", ""];
-
-/**
- * Autocomplete hint values that mark a field as a username candidate.
- * @type {ReadonlyArray<string>}
- */
-export const USERNAME_AUTOCOMPLETE = ["username", "email", "tel"];
-
-/**
- * Keyword tokens whose presence in a field's metadata hints at a username field.
- * @type {ReadonlyArray<string>}
- */
-export const USERNAME_KEYWORD_TOKENS = ["username", "email", "login", "user", "phone", "mobile", "tel", "telephone"];
 
 /**
  * Ordered label sources, from most to least reliable, consulted when resolving a field's label.
