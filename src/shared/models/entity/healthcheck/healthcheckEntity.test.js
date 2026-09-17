@@ -443,14 +443,14 @@ describe("HealthcheckEntity", () => {
     it("it should create a scimEntity with all properties", () => {
       expect.assertions(2);
       const scimDto = {
-        isSecretTokenNotExpired: true,
-        isSecretTokenNotNearExpiry: false,
+        isScimTokenNotExpired: true,
+        isScimTokenNotNearExpiry: false,
       };
 
       const scimEntity = new ScimEntity(scimDto);
 
-      expect(scimEntity.isSecretTokenNotExpired).toStrictEqual(true);
-      expect(scimEntity.isSecretTokenNotNearExpiry).toStrictEqual(false);
+      expect(scimEntity.isScimTokenNotExpired).toStrictEqual(true);
+      expect(scimEntity.isScimTokenNotNearExpiry).toStrictEqual(false);
     });
   });
 });

@@ -24,14 +24,14 @@ describe("ScimEntity", () => {
       EntitySchema.validateSchema(ScimEntity.ENTITY_NAME, ScimEntity.getSchema());
     });
 
-    it("validates isSecretTokenNotExpired property", () => {
-      assertEntityProperty.boolean(ScimEntity, "isSecretTokenNotExpired");
-      assertEntityProperty.required(ScimEntity, "isSecretTokenNotExpired");
+    it("validates isScimTokenNotExpired property", () => {
+      assertEntityProperty.boolean(ScimEntity, "isScimTokenNotExpired");
+      assertEntityProperty.required(ScimEntity, "isScimTokenNotExpired");
     });
 
-    it("validates isSecretTokenNotNearExpiry property", () => {
-      assertEntityProperty.boolean(ScimEntity, "isSecretTokenNotNearExpiry");
-      assertEntityProperty.required(ScimEntity, "isSecretTokenNotNearExpiry");
+    it("validates isScimTokenNotNearExpiry property", () => {
+      assertEntityProperty.boolean(ScimEntity, "isScimTokenNotNearExpiry");
+      assertEntityProperty.required(ScimEntity, "isScimTokenNotNearExpiry");
     });
   });
 
@@ -39,13 +39,13 @@ describe("ScimEntity", () => {
     it("it should create a scimEntity with all properties", () => {
       expect.assertions(2);
       const scimDto = defaultScimData({
-        isSecretTokenNotExpired: true,
-        isSecretTokenNotNearExpiry: false,
+        isScimTokenNotExpired: true,
+        isScimTokenNotNearExpiry: false,
       });
       const entity = new ScimEntity(scimDto);
 
-      expect(entity.isSecretTokenNotExpired).toBe(true);
-      expect(entity.isSecretTokenNotNearExpiry).toBe(false);
+      expect(entity.isScimTokenNotExpired).toBe(true);
+      expect(entity.isScimTokenNotNearExpiry).toBe(false);
     });
 
     it("works if valid DTO is provided", () => {
@@ -54,25 +54,25 @@ describe("ScimEntity", () => {
       const entity = new ScimEntity(dto);
 
       expect(entity.toDto()).toEqual(dto);
-      expect(entity.isSecretTokenNotExpired).toBe(true);
-      expect(entity.isSecretTokenNotNearExpiry).toBe(true);
+      expect(entity.isScimTokenNotExpired).toBe(true);
+      expect(entity.isScimTokenNotNearExpiry).toBe(true);
     });
 
     it("exposes the flags returned by the backend", () => {
       expect.assertions(2);
       const dto = defaultScimData({
-        isSecretTokenNotExpired: false,
-        isSecretTokenNotNearExpiry: false,
+        isScimTokenNotExpired: false,
+        isScimTokenNotNearExpiry: false,
       });
       const entity = new ScimEntity(dto);
 
-      expect(entity.isSecretTokenNotExpired).toBe(false);
-      expect(entity.isSecretTokenNotNearExpiry).toBe(false);
+      expect(entity.isScimTokenNotExpired).toBe(false);
+      expect(entity.isScimTokenNotNearExpiry).toBe(false);
     });
 
     it("throws if a required property is missing", () => {
       expect.assertions(1);
-      expect(() => new ScimEntity({ isSecretTokenNotExpired: true })).toThrow(EntityValidationError);
+      expect(() => new ScimEntity({ isScimTokenNotExpired: true })).toThrow(EntityValidationError);
     });
   });
 

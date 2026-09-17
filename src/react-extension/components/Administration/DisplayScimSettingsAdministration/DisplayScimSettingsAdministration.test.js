@@ -17,10 +17,14 @@ import {
   defaultScimSettingsConfiguredProps,
   defaultScimSettingsDisabledProps,
   defaultScimSettingsExpiredTokenProps,
+  defaultScimSettingsExpiringTokenProps,
+  defaultScimSettingsHealthyTokenProps,
 } from "./DisplayScimSettingsAdministration.test.data";
 import DisplayScimSettingsAdministrationPage from "./DisplayScimSettingsAdministration.test.page";
+import { defaultScimSettingsDto } from "../../../../shared/services/serviceWorker/scim/scimSettingsServiceWorkerService.test.data";
 import { waitFor } from "@testing-library/dom";
 import { act } from "react";
+import { DateTime } from "luxon";
 
 describe("DisplayScimSettingsAdministration", () => {
   let page, props;
@@ -128,18 +132,123 @@ describe("DisplayScimSettingsAdministration", () => {
     expect(page.scimSecretTokenExpiryInput).not.toBeNull();
   });
 
-  it("should display a warning when the secret token is expired", async () => {
-    expect.assertions(1);
+  describe("Secret token expiry lifecycle", () => {
+    it("should not show any expiry state when the token expiry is beyond the warning window", async () => {
+      expect.assertions(5);
 
-    props = defaultScimSettingsExpiredTokenProps();
-    await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
+      props = defaultScimSettingsHealthyTokenProps();
+      await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
 
-    expect(page.warning.textContent).toContain("The secret token is expired, you are requested to rotate it.");
+      expect(page.errorBanner).toBeNull();
+      expect(page.warning.textContent).toBe("");
+      expect(page.isExpiryFieldInError).toBeFalsy();
+      expect(page.isExpiryFieldInWarning).toBeFalsy();
+      expect(page.expiryFieldWarningMessage).toBeNull();
+    });
+
+    it("should show the warning state when the token is expiring within the warning window", async () => {
+      expect.assertions(4);
+
+      props = defaultScimSettingsExpiringTokenProps();
+      await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
+
+      const formattedDate = DateTime.now().plus({ days: 14 }).toLocaleString(DateTime.DATE_FULL);
+      expect(page.warning.textContent).toContain(
+        `The SCIM secret token expires on ${formattedDate}. Regenerate it and update it in your provider settings before then to avoid interrupting user provisioning.`,
+      );
+      expect(page.isExpiryFieldInWarning).toBeTruthy();
+      expect(page.expiryFieldWarningMessage.textContent).toBe("This token is about to expire.");
+      expect(page.errorBanner).toBeNull();
+    });
+
+    it("should show the error state when the token has expired", async () => {
+      expect.assertions(3);
+
+      props = defaultScimSettingsExpiredTokenProps();
+      await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
+
+      expect(page.errorBanner.textContent).toContain(
+        "The SCIM secret token has expired and user provisioning has stopped. Regenerate it and update it in your provider settings to resume it.",
+      );
+      expect(page.isExpiryFieldInError).toBeTruthy();
+      // No field error message for the expired state (the banner conveys it).
+      expect(page.expiryFieldErrorMessage).toBeNull();
+    });
   });
 
-  it("should not display expiry warnings when the expiry date is in the future", async () => {
-    expect.assertions(1);
+  describe("Save SCIM settings", () => {
+    it("should not save and show an error when the secret token has expired", async () => {
+      expect.assertions(3);
 
-    expect(page.warning.textContent).not.toContain("The secret token is expired");
+      props = defaultScimSettingsExpiredTokenProps();
+      await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
+
+      await act(() => page.clickSaveButton());
+
+      expect(props.scimSettingsServiceWorkerService.updateSettings).not.toHaveBeenCalled();
+      expect(page.isExpiryFieldInError).toBeTruthy();
+      expect(page.expiryFieldErrorMessage.textContent).toBe("This token has expired.");
+    });
+
+    it("should not save and show an error when the expiry is empty and the token has not been regenerated", async () => {
+      expect.assertions(3);
+
+      const updateSettings = jest.fn();
+      props = defaultProps({
+        scimSettingsServiceWorkerService: {
+          // Legacy settings without an expiry date.
+          findSettings: () => ({ ...defaultScimSettingsDto(), expired: null }),
+          updateSettings,
+        },
+      });
+      await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
+
+      await act(() => page.clickSaveButton());
+
+      expect(updateSettings).not.toHaveBeenCalled();
+      expect(page.isExpiryFieldInError).toBeTruthy();
+      expect(page.expiryFieldErrorMessage.textContent).toBe("Enter an expiry date, or regenerate the secret token.");
+    });
+  });
+
+  describe("Regenerate secret token", () => {
+    it("should set the expiry one year into the future when regenerating", async () => {
+      expect.assertions(2);
+
+      const oldToken = page.scimSecretTokenInput.value;
+      await act(() => page.clickRegenerateSecretTokenButton());
+
+      const expectedExpiry = DateTime.now().plus({ years: 1 }).toISODate();
+      expect(page.scimSecretTokenInput.value).not.toEqual(oldToken);
+      expect(page.scimSecretTokenExpiryInput.value).toBe(expectedExpiry);
+    });
+
+    it("should clear the warning state when regenerating an expiring token", async () => {
+      expect.assertions(4);
+
+      props = defaultScimSettingsExpiringTokenProps();
+      await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
+      expect(page.isExpiryFieldInWarning).toBeTruthy();
+
+      await act(() => page.clickRegenerateSecretTokenButton());
+
+      expect(page.isExpiryFieldInWarning).toBeFalsy();
+      expect(page.expiryFieldWarningMessage).toBeNull();
+      expect(page.warning.textContent).not.toContain("The SCIM secret token expires on");
+    });
+
+    it("should clear the error state when regenerating an expired token", async () => {
+      expect.assertions(4);
+
+      props = defaultScimSettingsExpiredTokenProps();
+      await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
+      expect(page.errorBanner).not.toBeNull();
+
+      await act(() => page.clickRegenerateSecretTokenButton());
+
+      expect(page.isExpiryFieldInError).toBeFalsy();
+      expect(page.expiryFieldErrorMessage).toBeNull();
+      expect(page.errorBanner).toBeNull();
+    });
   });
 });

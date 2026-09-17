@@ -37,6 +37,12 @@ import { withRoles } from "../../../contexts/RoleContext";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 
 /**
+ * The number of days before the expiry date within which the secret token is considered "expiring soon".
+ * @type {number}
+ */
+const SECRET_TOKEN_EXPIRY_WARNING_WINDOW_DAYS = 14;
+
+/**
  * This component allows to display the SCIM settings for the administration
  */
 class DisplayScimSettingsAdministration extends Component {
@@ -256,11 +262,19 @@ class DisplayScimSettingsAdministration extends Component {
   }
 
   /**
-   * Handle the regeneration of the secret token
+   * Handle the regeneration of the secret token.
+   * A regenerated token gets a fresh expiry date set one year in the future, which clears any
+   * expiry warning/error state and messages that were displayed for the previous token.
    */
   handleRegenerateSecretToken() {
     const secretToken = ScimSettingsEntity.generateScimSecretToken();
-    this.setFormPropertyValue("secret_token", secretToken);
+    this.formSettings.set("secret_token", secretToken, { validate: false });
+    // A regenerated token gets a fresh expiry one year in the future, clearing any expiry warning/error.
+    this.formSettings.set("expired", ScimSettingsFormEntity.defaultExpiryDate(), { validate: false });
+    this.setState({
+      settings: this.formSettings.toDto(),
+      hasAlreadyBeenValidated: false,
+    });
   }
 
   /**
@@ -284,7 +298,7 @@ class DisplayScimSettingsAdministration extends Component {
 
     this.setState({ isProcessing: true });
     const validationError = this.validateForm();
-    if (validationError?.hasErrors()) {
+    if (validationError?.hasErrors() || this.validateExpiry()) {
       this.setState({ isProcessing: false, hasAlreadyBeenValidated: true });
       return;
     }
@@ -360,15 +374,56 @@ class DisplayScimSettingsAdministration extends Component {
   }
 
   /**
-   * Check if the secret token is expired
-   * @returns {boolean} true if the expired date is in the past
+   * Get the current form expiry date as a luxon DateTime.
+   * @returns {DateTime|null}
    */
-  isSecretTokenExpired() {
+  get expiryDateTime() {
     const expired = this.state.settings?.expired;
-    if (!expired) {
+    return expired ? DateTime.fromISO(expired) : null;
+  }
+
+  /**
+   * Check if the current form expiry date falls within the warning window.
+   * @returns {boolean}
+   */
+  isExpiryWithinWarningWindow() {
+    const expiryDateTime = this.expiryDateTime;
+    if (!expiryDateTime) {
       return false;
     }
-    return DateTime.fromISO(expired) < DateTime.now();
+    return expiryDateTime < DateTime.now().plus({ days: SECRET_TOKEN_EXPIRY_WARNING_WINDOW_DAYS });
+  }
+
+  /**
+   * Check if the secret token is expired, based on the expiry date being in the past.
+   * @returns {boolean}
+   */
+  isSecretTokenExpired() {
+    const expiryDateTime = this.expiryDateTime;
+    return expiryDateTime ? expiryDateTime < DateTime.now() : false;
+  }
+
+  /**
+   * Check if the secret token is expiring, based on the expiry date being within the warning window
+   * but not yet in the past.
+   * @returns {boolean}
+   */
+  isSecretTokenExpiring() {
+    return !this.isSecretTokenExpired() && this.isExpiryWithinWarningWindow();
+  }
+
+  /**
+   * Validate the secret token expiry date for the save action.
+   * @returns {string|null} An error identifier ("empty" or "expired") or null if valid.
+   */
+  validateExpiry() {
+    if (!this.state.settings?.expired) {
+      return "empty";
+    }
+    if (this.isSecretTokenExpired()) {
+      return "expired";
+    }
+    return null;
   }
 
   /**
@@ -386,6 +441,19 @@ class DisplayScimSettingsAdministration extends Component {
   render() {
     const errors = this.state.hasAlreadyBeenValidated ? this.validateForm() : null;
     const hasSettingsChanges = this.hasSettingsChanges(this.originalSettings, this.formSettings, this.state.settings);
+
+    // Expiry lifecycle states.
+    const expiryValidationError = this.state.hasAlreadyBeenValidated ? this.validateExpiry() : null;
+    const isSecretTokenExpired = this.state.enabled && this.isSecretTokenExpired();
+    const isSecretTokenExpiring = this.state.enabled && this.isSecretTokenExpiring();
+    // The expiry field is in error when the save validation failed or the token is expired.
+    const isExpiryFieldInError = Boolean(expiryValidationError) || isSecretTokenExpired;
+    // The expiry field is in warning when it is not in error and the token is expiring.
+    const isExpiryFieldInWarning = !isExpiryFieldInError && isSecretTokenExpiring;
+    const expiryFieldState = isExpiryFieldInError ? "error" : isExpiryFieldInWarning ? "warning" : "";
+    const formattedExpiryDate = this.state.settings?.expired
+      ? DateTime.fromISO(this.state.settings.expired).toLocaleString(DateTime.DATE_FULL)
+      : "";
 
     return (
       <div className="row">
@@ -474,7 +542,7 @@ class DisplayScimSettingsAdministration extends Component {
                       </button>
                     </div>
                   </div>
-                  <div className={`input text date-wrapper disabled`}>
+                  <div className={`input text date-wrapper disabled ${expiryFieldState}`}>
                     <label>
                       <Trans>Secret token expiry</Trans>
                     </label>
@@ -489,6 +557,21 @@ class DisplayScimSettingsAdministration extends Component {
                       />
                       <CalendarSVG className="svg-icon" />
                     </div>
+                    {expiryValidationError === "expired" && (
+                      <div className="error-message">
+                        <Trans>This token has expired.</Trans>
+                      </div>
+                    )}
+                    {expiryValidationError === "empty" && (
+                      <div className="error-message">
+                        <Trans>Enter an expiry date, or regenerate the secret token.</Trans>
+                      </div>
+                    )}
+                    {!expiryValidationError && isExpiryFieldInWarning && (
+                      <div className="warning-message">
+                        <Trans>This token is about to expire.</Trans>
+                      </div>
+                    )}
                   </div>
                   <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                     <label>
@@ -567,10 +650,13 @@ class DisplayScimSettingsAdministration extends Component {
                 </div>
               )}
 
-              {this.state.enabled && this.isSecretTokenExpired() && (
+              {isSecretTokenExpiring && (
                 <div className="form-banner">
                   <p>
-                    <Trans>The secret token is expired, you are requested to rotate it.</Trans>
+                    <Trans>
+                      The SCIM secret token expires on {{ date: formattedExpiryDate }}. Regenerate it and update it in
+                      your provider settings before then to avoid interrupting user provisioning.
+                    </Trans>
                   </p>
                 </div>
               )}
@@ -586,12 +672,24 @@ class DisplayScimSettingsAdministration extends Component {
               )}
             </div>
           }
+          {isSecretTokenExpired && (
+            <div className="error message">
+              <div className="form-banner">
+                <p>
+                  <Trans>
+                    The SCIM secret token has expired and user provisioning has stopped. Regenerate it and update it in
+                    your provider settings to resume it.
+                  </Trans>
+                </p>
+              </div>
+            </div>
+          )}
         </div>
         <div className="actions-wrapper">
           <button
             type="button"
             className="button primary"
-            disabled={this.state.isProcessing || errors?.hasErrors()}
+            disabled={this.state.isProcessing || errors?.hasErrors() || Boolean(expiryValidationError)}
             onClick={this.handleFormSubmit}
           >
             <span>

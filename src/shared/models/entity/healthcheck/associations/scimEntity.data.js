@@ -14,8 +14,8 @@
 
 export const defaultScimData = (data = {}) => {
   const defaultData = {
-    isSecretTokenNotExpired: true,
-    isSecretTokenNotNearExpiry: true,
+    isScimTokenNotExpired: true,
+    isScimTokenNotNearExpiry: true,
     ...data,
   };
   return Object.assign(defaultData, data);
