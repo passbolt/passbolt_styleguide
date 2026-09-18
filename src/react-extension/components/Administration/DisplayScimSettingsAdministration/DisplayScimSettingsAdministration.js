@@ -27,7 +27,6 @@ import CopySVG from "../../../../img/svg/copy.svg";
 import RefreshSVG from "../../../../img/svg/refresh.svg";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import Password from "../../../../shared/components/Password/Password";
-import CalendarSVG from "../../../../img/svg/calendar.svg";
 import { DateTime } from "luxon";
 import Select from "../../Common/Select/Select";
 import { getUserFormattedName } from "../../../../shared/utils/userUtils";
@@ -341,6 +340,7 @@ class DisplayScimSettingsAdministration extends Component {
    */
   async saveScimSettings() {
     if (this.state.enabled) {
+      this.formSettings.set("expired", ScimSettingsFormEntity.defaultExpiryDate(), { validate: false });
       let scimSettingResult;
       if (!this.originalSettings) {
         scimSettingResult = await this.scimSettingsService.createSettings(this.formSettings);
@@ -555,7 +555,6 @@ class DisplayScimSettingsAdministration extends Component {
                         value={this.state.settings.expired || ""}
                         disabled
                       />
-                      <CalendarSVG className="svg-icon" />
                     </div>
                     {expiryValidationError === "expired" && (
                       <div className="error-message">
@@ -654,8 +653,8 @@ class DisplayScimSettingsAdministration extends Component {
                 <div className="form-banner">
                   <p>
                     <Trans>
-                      The SCIM secret token expires on {{ date: formattedExpiryDate }}. Regenerate it and update it in
-                      your provider settings before then to avoid interrupting user provisioning.
+                      The SCIM secret token expires on {{ date: formattedExpiryDate }}. To avoid service disruption,
+                      generate a new token and save it in your identity provider settings before the expiration date.
                     </Trans>
                   </p>
                 </div>
@@ -677,8 +676,8 @@ class DisplayScimSettingsAdministration extends Component {
               <div className="form-banner">
                 <p>
                   <Trans>
-                    The SCIM secret token has expired and user provisioning has stopped. Regenerate it and update it in
-                    your provider settings to resume it.
+                    The SCIM secret token expired and user provisioning has stopped. To resume service, generate a new
+                    token and save it in your identity provider settings.
                   </Trans>
                 </p>
               </div>

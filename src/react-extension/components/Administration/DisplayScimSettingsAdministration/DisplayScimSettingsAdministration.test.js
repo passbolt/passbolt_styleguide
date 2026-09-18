@@ -154,7 +154,7 @@ describe("DisplayScimSettingsAdministration", () => {
 
       const formattedDate = DateTime.now().plus({ days: 14 }).toLocaleString(DateTime.DATE_FULL);
       expect(page.warning.textContent).toContain(
-        `The SCIM secret token expires on ${formattedDate}. Regenerate it and update it in your provider settings before then to avoid interrupting user provisioning.`,
+        `The SCIM secret token expires on ${formattedDate}. To avoid service disruption, generate a new token and save it in your identity provider settings before the expiration date.`,
       );
       expect(page.isExpiryFieldInWarning).toBeTruthy();
       expect(page.expiryFieldWarningMessage.textContent).toBe("This token is about to expire.");
@@ -168,7 +168,7 @@ describe("DisplayScimSettingsAdministration", () => {
       await act(() => (page = new DisplayScimSettingsAdministrationPage(props)));
 
       expect(page.errorBanner.textContent).toContain(
-        "The SCIM secret token has expired and user provisioning has stopped. Regenerate it and update it in your provider settings to resume it.",
+        "The SCIM secret token expired and user provisioning has stopped. To resume service, generate a new token and save it in your identity provider settings.",
       );
       expect(page.isExpiryFieldInError).toBeTruthy();
       // No field error message for the expired state (the banner conveys it).
