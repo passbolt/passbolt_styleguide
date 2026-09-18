@@ -14,7 +14,7 @@
 
 import { denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 import { MfaSettingsWorkflowStates, Providers } from "../../../contexts/MFAContext";
-import { noMfaDefined } from "../../../contexts/MFAContext.test.data";
+import { allProviders, mfaDefined, noMfaDefined } from "../../../contexts/MFAContext.test.data";
 import { defaultProps, propsWithMfaProviders, propsWithoutMfaProviders } from "./DisplayProviderList.test.data";
 import DisplayProviderListPage from "./DisplayProviderList.test.page";
 import MfaProviders from "./MfaProviders.data";
@@ -32,14 +32,66 @@ describe("DisplayProviderList", () => {
       page = new DisplayProviderListPage(props);
     });
     it("As a logged user I should be able to see the MFA providers list ", () => {
-      expect.assertions(5);
+      expect.assertions(6);
 
       expect(page.exists()).toBeTruthy();
+      expect(page.webauthnCard).not.toBeNull();
       expect(page.yubikeyCard).not.toBeNull();
       expect(page.duoCard).not.toBeNull();
       expect(page.totpCard).not.toBeNull();
       expect(page.title.textContent).toEqual("Multi factor authentication");
       //expect(page.description.textContent).toEqual("Multi-factor authentication (MFA) is a method of confirming a user's identity that requires presenting two or more pieces of evidence (or factor).");
+    });
+
+    it("As a logged user I should be able to see the passkeys card", () => {
+      expect.assertions(4);
+
+      const webauthn = MfaProviders.find((mfaProvider) => mfaProvider.id === Providers.WEBAUTHN);
+
+      expect(page.webauthnCard).not.toBeNull();
+      expect(page.webauthnCardTitle.textContent).toEqual(webauthn.name);
+      expect(page.webauthnCardImage).not.toBeNull();
+      expect(page.webauthnCardStatus.textContent).toEqual("Disabled");
+    });
+
+    it("As a logged user I should see the passkeys card enabled when I have enrolled a passkey", () => {
+      expect.assertions(1);
+
+      const page = new DisplayProviderListPage(
+        propsWithMfaProviders({
+          mfaContext: {
+            ...props.mfaContext,
+            getMfaUserSettings: () => ({ ...mfaDefined, webauthn: true }),
+          },
+        }),
+      );
+
+      expect(page.webauthnCardStatus.textContent).toEqual("Enabled");
+    });
+
+    it("As a logged user I should not see the passkeys card when the organisation has not enabled the provider", () => {
+      expect.assertions(2);
+
+      const page = new DisplayProviderListPage(
+        propsWithMfaProviders({
+          mfaContext: {
+            ...props.mfaContext,
+            getMfaOrganisationSettings: () => ({ ...allProviders, webauthn: false }),
+          },
+        }),
+      );
+
+      expect(page.webauthnCard).toBeNull();
+      expect(page.totpCard).not.toBeNull();
+    });
+
+    it("As a logged user clicking the passkeys card should not navigate yet", async () => {
+      expect.assertions(2);
+
+      await page.clickOnWebauthnProvider();
+
+      expect(props.mfaContext.setProvider).not.toHaveBeenCalled();
+      expect(props.mfaContext.navigate).not.toHaveBeenCalled();
     });
 
     it("As a logged user I should be able to see the yubikey card", () => {

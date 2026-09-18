@@ -20,11 +20,13 @@ export function mockMfaSettings(data = {}) {
       totp: true,
       duo: false,
       yubikey: true,
+      webauthn: true,
     },
     MfaAccountSettings: {
       totp: true,
       duo: false,
       yubikey: true,
+      webauthn: false,
     },
   };
 
@@ -35,18 +37,21 @@ export const noMfaDefined = {
   totp: false,
   duo: false,
   yubikey: false,
+  webauthn: false,
 };
 
 export const mfaDefined = {
   totp: true,
   duo: false,
   yubikey: false,
+  webauthn: false,
 };
 
 export const allProviders = {
   totp: true,
   duo: true,
   yubikey: true,
+  webauthn: true,
 };
 
 export const noMfaUserDefinedWithTotp = {
