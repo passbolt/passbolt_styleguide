@@ -21,12 +21,12 @@ class ScimEntity extends EntityV2 {
   static getSchema() {
     return {
       type: "object",
-      required: ["isSecretTokenNotExpired", "isSecretTokenNotNearExpiry"],
+      required: ["isScimTokenNotExpired", "isScimTokenNotNearExpiry"],
       properties: {
-        isSecretTokenNotExpired: {
+        isScimTokenNotExpired: {
           type: "boolean",
         },
-        isSecretTokenNotNearExpiry: {
+        isScimTokenNotNearExpiry: {
           type: "boolean",
         },
       },
@@ -43,16 +43,16 @@ class ScimEntity extends EntityV2 {
    * Get the flag informing whether the secret token is not expired.
    * @returns {boolean}
    */
-  get isSecretTokenNotExpired() {
-    return this._props.isSecretTokenNotExpired;
+  get isScimTokenNotExpired() {
+    return this._props.isScimTokenNotExpired;
   }
 
   /**
    * Get the flag informing whether the secret token is not near expiry.
    * @returns {boolean}
    */
-  get isSecretTokenNotNearExpiry() {
-    return this._props.isSecretTokenNotNearExpiry;
+  get isScimTokenNotNearExpiry() {
+    return this._props.isScimTokenNotNearExpiry;
   }
 
   /*
