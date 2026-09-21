@@ -130,7 +130,7 @@ export class FolderMoveFlow extends AbstractPermissionFlow {
         itemPermissions: folderSnapshot.permissions,
         parentPermissions,
         destinationPermissions: snapshot?.permissions ?? null,
-        operatorPermission: this.props.folder.permission,
+        operatorPermission: new PermissionEntity(this.props.folder.permission),
         aco: PermissionEntity.ACO_FOLDER,
         acoForeignKey: this.folderId,
       });

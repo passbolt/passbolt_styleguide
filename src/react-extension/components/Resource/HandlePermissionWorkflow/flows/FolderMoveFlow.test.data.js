@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import { defaultDialogContext } from "../../../../contexts/DialogContext.test.data";
 import { defaultAppContext } from "../../../../contexts/ExtAppContext.test.data";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
+import { ownerFolderPermissionDto } from "../../../../../shared/models/entity/permission/permissionEntity.test.data";
 
 /**
  * A minimal folder DTO carrying the operator's own permission on the folder.
@@ -27,8 +28,8 @@ export function folderDto(data = {}) {
   return {
     id,
     name: "Moved folder",
-    permission: { type: PermissionEntity.PERMISSION_OWNER, ...data.permission },
     ...data,
+    permission: ownerFolderPermissionDto({ aco_foreign_key: id, ...data.permission }),
   };
 }
 
@@ -40,12 +41,11 @@ export function folderDto(data = {}) {
 export function defaultProps(props = {}) {
   const context = defaultAppContext(props?.context);
   const folder = props?.folder ?? folderDto();
-  // Attach the operator's own permission to the logged-in user, the way the API returns it.
-  // The move calculation reads that to put the operator back as owner on a move to the root.
+  // Bind the operator's permission to the logged-in user, the way the API returns it (not overridable).
   folder.permission = {
+    ...folder.permission,
     aro: PermissionEntity.ARO_USER,
     aro_foreign_key: context.loggedInUser.id,
-    ...folder.permission,
   };
   const _props = {
     folder,

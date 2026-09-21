@@ -202,7 +202,7 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
         itemPermissions: movedSnapshots[index].permissions,
         parentPermissions: this.getParentPermissions(resource, parentPermissionsById),
         destinationPermissions: snapshot?.permissions ?? null,
-        operatorPermission: resource.permission,
+        operatorPermission: new PermissionEntity(resource.permission),
         aco: PermissionEntity.ACO_RESOURCE,
         acoForeignKey: resource.id,
       });

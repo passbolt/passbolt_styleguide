@@ -909,19 +909,21 @@ describe("PermissionsCollection", () => {
     const destinationFolderId = crypto.randomUUID();
     const parentFolderId = crypto.randomUUID();
 
-    const resourcePermission = (aroForeignKey, type) =>
+    const resourcePermission = (aroForeignKey, type, aro = PermissionEntity.ARO_USER) =>
       defaultPermissionDto({
         aco: PermissionEntity.ACO_RESOURCE,
         aco_foreign_key: itemId,
-        aro: PermissionEntity.ARO_USER,
+        aro,
         aro_foreign_key: aroForeignKey,
         type,
       });
-    const folderPermission = (acoForeignKey, aroForeignKey, type) =>
+    const operatorPermissionEntity = (aroForeignKey, type, aro) =>
+      new PermissionEntity(resourcePermission(aroForeignKey, type, aro));
+    const folderPermission = (acoForeignKey, aroForeignKey, type, aro = PermissionEntity.ARO_USER) =>
       defaultPermissionDto({
         aco: PermissionEntity.ACO_FOLDER,
         aco_foreign_key: acoForeignKey,
-        aro: PermissionEntity.ARO_USER,
+        aro,
         aro_foreign_key: aroForeignKey,
         type,
       });
@@ -1046,7 +1048,7 @@ describe("PermissionsCollection", () => {
         itemPermissions,
         parentPermissions,
         destinationPermissions: null,
-        operatorPermission: { aro: PermissionEntity.ARO_USER, aro_foreign_key: ownerId },
+        operatorPermission: operatorPermissionEntity(ownerId, PermissionEntity.PERMISSION_OWNER),
         aco: PermissionEntity.ACO_RESOURCE,
         acoForeignKey: itemId,
       });
@@ -1057,14 +1059,22 @@ describe("PermissionsCollection", () => {
       expect(typeForAro(result, recipientId)).toBeUndefined();
     });
 
-    it("moving to the root upgrades the operator to owner when their dropped grant was lower", () => {
-      expect.assertions(1);
+    it("moving to the root drops the operator's lower direct grant and puts their group back as owner", () => {
+      expect.assertions(2);
+      const groupId = crypto.randomUUID();
+      // The operator owns through a group, so the API reports the group's row as their permission.
       const itemPermissions = new PermissionsCollection(
-        [resourcePermission(ownerId, PermissionEntity.PERMISSION_UPDATE)],
+        [
+          resourcePermission(ownerId, PermissionEntity.PERMISSION_UPDATE),
+          resourcePermission(groupId, PermissionEntity.PERMISSION_OWNER, PermissionEntity.ARO_GROUP),
+        ],
         { assertAtLeastOneOwner: false },
       );
       const parentPermissions = new PermissionsCollection(
-        [folderPermission(parentFolderId, ownerId, PermissionEntity.PERMISSION_OWNER)],
+        [
+          folderPermission(parentFolderId, ownerId, PermissionEntity.PERMISSION_UPDATE),
+          folderPermission(parentFolderId, groupId, PermissionEntity.PERMISSION_OWNER, PermissionEntity.ARO_GROUP),
+        ],
         { assertAtLeastOneOwner: false },
       );
 
@@ -1072,12 +1082,18 @@ describe("PermissionsCollection", () => {
         itemPermissions,
         parentPermissions,
         destinationPermissions: null,
-        operatorPermission: { aro: PermissionEntity.ARO_USER, aro_foreign_key: ownerId },
+        operatorPermission: operatorPermissionEntity(
+          groupId,
+          PermissionEntity.PERMISSION_OWNER,
+          PermissionEntity.ARO_GROUP,
+        ),
         aco: PermissionEntity.ACO_RESOURCE,
         acoForeignKey: itemId,
       });
 
-      expect(typeForAro(result, ownerId)).toBe(PermissionEntity.PERMISSION_OWNER);
+      // Both grants match the folder's and are dropped, so only the group is put back as owner.
+      expect(typeForAro(result, groupId)).toBe(PermissionEntity.PERMISSION_OWNER);
+      expect(typeForAro(result, ownerId)).toBeUndefined();
     });
 
     it("does not re-assert the operator when a destination is supplied, its own grant covering them", () => {
@@ -1099,7 +1115,7 @@ describe("PermissionsCollection", () => {
         itemPermissions,
         parentPermissions,
         destinationPermissions,
-        operatorPermission: { aro: PermissionEntity.ARO_USER, aro_foreign_key: ownerId },
+        operatorPermission: operatorPermissionEntity(ownerId, PermissionEntity.PERMISSION_OWNER),
         aco: PermissionEntity.ACO_RESOURCE,
         acoForeignKey: itemId,
       });
@@ -1130,6 +1146,25 @@ describe("PermissionsCollection", () => {
 
       expect(typeForAro(result, recipientId)).toBe(PermissionEntity.PERMISSION_READ);
       expect(typeForAro(result, ownerId)).toBe(PermissionEntity.PERMISSION_OWNER);
+    });
+
+    it("throws when the operator permission is not a PermissionEntity", () => {
+      expect.assertions(1);
+      const itemPermissions = new PermissionsCollection(
+        [resourcePermission(ownerId, PermissionEntity.PERMISSION_OWNER)],
+        { assertAtLeastOneOwner: false },
+      );
+
+      expect(() =>
+        PermissionsCollection.calculateMovedPermissions({
+          itemPermissions,
+          parentPermissions: null,
+          destinationPermissions: null,
+          operatorPermission: { aro: PermissionEntity.ARO_USER, aro_foreign_key: ownerId },
+          aco: PermissionEntity.ACO_RESOURCE,
+          acoForeignKey: itemId,
+        }),
+      ).toThrow(TypeError);
     });
   });
 

@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import { defaultDialogContext } from "../../../../contexts/DialogContext.test.data";
 import { defaultAppContext } from "../../../../contexts/ExtAppContext.test.data";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
+import { ownerPermissionDto } from "../../../../../shared/models/entity/permission/permissionEntity.test.data";
 
 /**
  * A minimal resource DTO carrying the operator's own permission on the resource.
@@ -27,8 +28,8 @@ export function resourceDto(data = {}) {
   return {
     id,
     metadata: { name: "Moved resource" },
-    permission: { type: PermissionEntity.PERMISSION_OWNER, ...data.permission },
     ...data,
+    permission: ownerPermissionDto({ aco_foreign_key: id, ...data.permission }),
   };
 }
 
@@ -40,13 +41,12 @@ export function resourceDto(data = {}) {
 export function defaultProps(props = {}) {
   const context = defaultAppContext(props?.context);
   const resources = props?.resources ?? [resourceDto()];
-  // Attach each operator permission to the logged-in user, the way the API returns it.
-  // The move calculation reads that to put the operator back as owner on a move to the root.
+  // Bind each operator permission to the logged-in user, the way the API returns it (not overridable).
   resources.forEach((resource) => {
     resource.permission = {
+      ...resource.permission,
       aro: PermissionEntity.ARO_USER,
       aro_foreign_key: context.loggedInUser.id,
-      ...resource.permission,
     };
   });
   const _props = {

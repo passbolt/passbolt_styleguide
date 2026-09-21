@@ -365,11 +365,12 @@ class PermissionsCollection extends EntityV2Collection {
    * @param {PermissionsCollection|null} params.parentPermissions The item's current parent folder permissions, or null at the root.
    * @param {PermissionsCollection|null} params.destinationPermissions The destination folder
    *   permissions to apply, or null when moving to the root.
-   * @param {object|PermissionEntity} [params.operatorPermission] The operator's own permission on the
-   *   moved item, a DTO or an entity. Put back as owner on a move to the root.
+   * @param {PermissionEntity} [params.operatorPermission] The operator's own permission on the
+   *   moved item. Put back as owner on a move to the root.
    * @param {string} params.aco The moved item's ACO type (PermissionEntity.ACO_RESOURCE or ACO_FOLDER).
    * @param {string} params.acoForeignKey The moved item id (the resulting ACO foreign key).
    * @return {PermissionsCollection}
+   * @throws {TypeError} If the operator permission is given but is not a PermissionEntity.
    */
   static calculateMovedPermissions({
     itemPermissions,
@@ -379,6 +380,9 @@ class PermissionsCollection extends EntityV2Collection {
     aco,
     acoForeignKey,
   }) {
+    if (operatorPermission) {
+      PermissionEntity.assertIsPermission(operatorPermission);
+    }
     const remaining = parentPermissions
       ? PermissionsCollection.diff(itemPermissions, parentPermissions, false)
       : new PermissionsCollection(itemPermissions.toDto(), { assertAtLeastOneOwner: false });
@@ -386,15 +390,14 @@ class PermissionsCollection extends EntityV2Collection {
       ? destinationPermissions.cloneForAco(aco, acoForeignKey, false)
       : new PermissionsCollection([], { assertAtLeastOneOwner: false });
     const movedPermissions = PermissionsCollection.sum(remaining, destinationForItem, false);
-    const operatorAroForeignKey = operatorPermission?.aro_foreign_key ?? operatorPermission?.aroForeignKey;
-    if (!destinationPermissions && operatorAroForeignKey) {
+    if (!destinationPermissions && operatorPermission) {
       // addOrReplace never lowers anybody, so an operator permission already kept stays as it is.
       movedPermissions.addOrReplace(
         new PermissionEntity({
           aco,
           aco_foreign_key: acoForeignKey,
-          aro: operatorPermission.aro ?? PermissionEntity.ARO_USER,
-          aro_foreign_key: operatorAroForeignKey,
+          aro: operatorPermission.aro,
+          aro_foreign_key: operatorPermission.aroForeignKey,
           type: PermissionEntity.PERMISSION_OWNER,
         }),
       );
