@@ -360,7 +360,7 @@ class ExtAppContextProvider extends React.Component {
       const users = changes.users.newValue;
       this.setState({ users });
     }
-    const storageKey = `groups-${this.state.account.id}`;
+    const storageKey = `groups-${this.state.account?.id}`;
     if (changes[storageKey] && changes[storageKey].newValue) {
       const groups = changes[storageKey].newValue;
       this.setState({ groups });
