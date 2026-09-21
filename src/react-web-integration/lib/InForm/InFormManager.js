@@ -215,6 +215,59 @@ class InFormManager {
   }
 
   /**
+   * Resolve once the page reveals its body. No timeout: apps reveal after a variable delay, so we wait as
+   * long as it takes. Observers are torn down once visible (or with the document on navigation).
+   * @return {Promise<boolean>} Resolves `true` once the page becomes visible.
+   */
+  async waitUntilPageVisible() {
+    if (!this.isPageNotVisible()) {
+      return true;
+    }
+
+    return new Promise((resolve) => {
+      let mutationObserver = null;
+      let resizeObserver = null;
+      let pollingId = null;
+
+      const cleanup = () => {
+        mutationObserver?.disconnect();
+        resizeObserver?.disconnect();
+        clearInterval(pollingId);
+      };
+
+      const settleIfVisible = () => {
+        if (this.isPageNotVisible()) {
+          return;
+        }
+        cleanup();
+        resolve(true);
+      };
+
+      // Reveal via a style/class/hidden toggle on html/body.
+      mutationObserver = new MutationObserver(settleIfVisible);
+      mutationObserver.observe(document.documentElement, { attributes: true });
+      mutationObserver.observe(document.body, { attributes: true });
+
+      // Reveal via layout (body goes from 0px to a real size).
+      resizeObserver = new ResizeObserver(settleIfVisible);
+      resizeObserver.observe(document.documentElement);
+      resizeObserver.observe(document.body);
+
+      // Reveal via an external CSS change
+      let retriesLeft = 5;
+      pollingId = setInterval(() => {
+        if (retriesLeft > 0) {
+          retriesLeft--;
+          settleIfVisible();
+        } else {
+          // In this case, we leave the mutation/resize observers on as they may fire later
+          clearInterval(pollingId);
+        }
+      }, 1000);
+    });
+  }
+
+  /**
    * Find authentication fields in the document and set them as object properties
    */
   findAndSetAuthenticationFields() {

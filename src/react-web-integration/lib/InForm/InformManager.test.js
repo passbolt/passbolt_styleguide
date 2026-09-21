@@ -1687,6 +1687,89 @@ describe("InformManager", () => {
     });
   });
 
+  describe("InFormManager::waitUntilPageVisible", () => {
+    let resizeCallback;
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+
+      global.ResizeObserver = jest.fn((callback) => {
+        resizeCallback = callback;
+        return { observe: jest.fn(), disconnect: jest.fn() };
+      });
+
+      jest.spyOn(global, "setInterval");
+      jest.spyOn(global, "clearInterval");
+
+      // Prevent destructor to run during tests
+      jest.spyOn(InFormManager, "destroy").mockImplementation();
+    });
+
+    afterEach(() => {
+      InFormManager.destroy.mockRestore();
+      global.setInterval.mockRestore();
+      global.clearInterval.mockRestore();
+      delete global.ResizeObserver;
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    it("As LU it resolves immediately when the page is already visible", async () => {
+      expect.assertions(2);
+
+      jest.spyOn(InFormManager, "isPageNotVisible").mockReturnValue(false);
+
+      const result = await InFormManager.waitUntilPageVisible();
+
+      expect(result).toBe(true);
+      expect(setInterval).not.toHaveBeenCalled();
+    });
+
+    it("As LU it resolves through the periodic check when an external CSS change reveals the page", async () => {
+      expect.assertions(3);
+
+      // Hidden on the initial check and the first two ticks, revealed on the third tick.
+      jest
+        .spyOn(InFormManager, "isPageNotVisible")
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(true)
+        .mockReturnValue(false);
+
+      const promise = InFormManager.waitUntilPageVisible();
+      jest.advanceTimersByTime(3000);
+      const result = await promise;
+
+      expect(result).toBe(true);
+      expect(InFormManager.isPageNotVisible).toHaveBeenCalledTimes(4);
+      expect(clearInterval).toHaveBeenCalledTimes(1);
+    });
+
+    it("As LU it stops the periodic check after 5 ticks but keeps waiting on the observers", async () => {
+      expect.assertions(5);
+
+      jest.spyOn(InFormManager, "isPageNotVisible").mockReturnValue(true);
+      const resolvedSpy = jest.fn();
+
+      const promise = InFormManager.waitUntilPageVisible().then(resolvedSpy);
+      jest.advanceTimersByTime(6000);
+
+      expect(InFormManager.isPageNotVisible).toHaveBeenCalledTimes(6);
+      expect(clearInterval).toHaveBeenCalledTimes(1);
+      expect(resolvedSpy).not.toHaveBeenCalled();
+
+      // The page is revealed later, the observers must still resolve the promise
+      InFormManager.isPageNotVisible.mockReturnValue(false);
+      resizeCallback();
+      await promise;
+
+      expect(resolvedSpy).toHaveBeenCalledWith(true);
+      expect(clearInterval).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe("Dialog parent element", () => {
     describe("InFormManager::getContainerElement", () => {
       it("As LU the container is the dialog when one of the given fields is contained in a dialog", async () => {
