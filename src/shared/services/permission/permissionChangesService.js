@@ -35,11 +35,13 @@ export default class PermissionChangesService {
     for (const permission of snapshot.permissions.items) {
       finalByAroId.set(permission.aroForeignKey, {
         is_new: true,
-        aro: permission.aro,
-        aro_foreign_key: permission.aroForeignKey,
-        aco: PermissionEntity.ACO_RESOURCE,
-        aco_foreign_key: resourceId,
-        type: permission.type,
+        ...this._toTargetPermissionDto(
+          permission.aro,
+          permission.aroForeignKey,
+          PermissionEntity.ACO_RESOURCE,
+          resourceId,
+          permission.type,
+        ),
       });
     }
     for (const change of dialogChanges) {
@@ -78,23 +80,22 @@ export default class PermissionChangesService {
     }
     const targetByItemId = new Map();
     for (const item of items) {
-      const toEntry = (aroForeignKey, aro, type) => ({
-        aro,
-        aro_foreign_key: aroForeignKey,
-        aco,
-        aco_foreign_key: item.id,
-        type,
-      });
       // Keyed by user/group id, so a change replaces the seeded permission rather than adding to it.
       const targetByAro = new Map();
       for (const permission of item.permissions.items) {
-        targetByAro.set(permission.aroForeignKey, toEntry(permission.aroForeignKey, permission.aro, permission.type));
+        targetByAro.set(
+          permission.aroForeignKey,
+          this._toTargetPermissionDto(permission.aro, permission.aroForeignKey, aco, item.id, permission.type),
+        );
       }
       for (const change of changesByItemId.get(item.id) ?? []) {
         if (change.delete) {
           targetByAro.delete(change.aro_foreign_key);
         } else {
-          targetByAro.set(change.aro_foreign_key, toEntry(change.aro_foreign_key, change.aro, change.type));
+          targetByAro.set(
+            change.aro_foreign_key,
+            this._toTargetPermissionDto(change.aro, change.aro_foreign_key, aco, item.id, change.type),
+          );
         }
       }
       targetByItemId.set(
@@ -126,5 +127,25 @@ export default class PermissionChangesService {
       }
     }
     return false;
+  }
+
+  /**
+   * The permission DTO shape both builders emit: a recipient and a level, stamped onto the target ACO.
+   * @param {string} aro The recipient type (PermissionEntity.ARO_USER or ARO_GROUP).
+   * @param {string} aroForeignKey The recipient id.
+   * @param {string} aco The target ACO type (PermissionEntity.ACO_RESOURCE or ACO_FOLDER).
+   * @param {string} acoForeignKey The target ACO id.
+   * @param {number} type The permission level.
+   * @returns {object}
+   * @private
+   */
+  _toTargetPermissionDto(aro, aroForeignKey, aco, acoForeignKey, type) {
+    return {
+      aro,
+      aro_foreign_key: aroForeignKey,
+      aco,
+      aco_foreign_key: acoForeignKey,
+      type,
+    };
   }
 }
