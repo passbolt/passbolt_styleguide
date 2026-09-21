@@ -68,10 +68,10 @@ class ShadowDomFocusHealerService {
   static _focusinHandler = null;
 
   /**
-   * Predicate telling whether a focused input is already backed by a call-to-action, provided by the
-   * in-form manager. Null when no manager wired it, in which case the light-DOM heal stays off.
+   * Function telling whether a focused input already has a CTA.
+   * Null when no manager wired it, in which case the DOM heal will be disabled.
    * @private
-   * @type {?function(HTMLElement): boolean}
+   * @type {function(HTMLElement): boolean}
    */
   static _isFieldTracked = null;
 

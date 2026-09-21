@@ -74,7 +74,7 @@ export const MAX_PSEUDO_FORM_ELEMENTS = 80;
  * Maximum number of ancestors walked up from an orphan field while assembling a pseudo-form.
  * @type {number}
  */
-export const MAX_PSEUDO_FORM_ANCESTOR_DEPTH = 8;
+export const MAX_PSEUDO_FORM_ANCESTOR_DEPTH = 16;
 
 /**
  * Maximum characters kept from a single button's title/label.

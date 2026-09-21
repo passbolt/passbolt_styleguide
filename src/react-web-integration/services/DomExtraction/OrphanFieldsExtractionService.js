@@ -185,6 +185,7 @@ class OrphanFieldsExtractionService {
    */
   static deriveContainers(clusters) {
     const derived = [];
+
     for (const cluster of clusters) {
       const element = OrphanFieldsExtractionService.deriveContainerElement(cluster);
       if (ShadowDomQueryService.isElement(element)) {
