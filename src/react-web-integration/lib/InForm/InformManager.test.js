@@ -1770,6 +1770,72 @@ describe("InformManager", () => {
     });
   });
 
+  describe("InFormManager::waitingAnimations", () => {
+    /**
+     * Build a fake Animation exposing the Web Animations API surface the manager relies on.
+     * @param {number} endTime
+     * @param {Promise} finished
+     * @return {object}
+     */
+    const mockAnimation = (endTime, finished) => ({
+      effect: { getComputedTiming: () => ({ endTime }) },
+      finished,
+    });
+
+    beforeEach(() => {
+      // Prevent destructor to run during tests
+      jest.spyOn(InFormManager, "destroy").mockImplementation();
+    });
+
+    afterAll(() => {
+      // Restore only once the block is over: the suite-level afterEach still calls destroy after each test.
+      InFormManager.destroy.mockRestore();
+    });
+
+    it("As LU it waits for a finite animation to finish", async () => {
+      expect.assertions(2);
+
+      let finishAnimation;
+      const finished = new Promise((resolve) => (finishAnimation = resolve));
+      const element = { getAnimations: () => [mockAnimation(300, finished)] };
+      const resolvedSpy = jest.fn();
+
+      const promise = InFormManager.waitingAnimations(element).then(resolvedSpy);
+      await Promise.resolve();
+
+      expect(resolvedSpy).not.toHaveBeenCalled();
+
+      finishAnimation();
+      await promise;
+
+      expect(resolvedSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("As LU it does not wait for an infinite animation", async () => {
+      expect.assertions(1);
+
+      const neverFinished = new Promise(() => {});
+      const element = { getAnimations: () => [mockAnimation(Infinity, neverFinished)] };
+      const resolvedSpy = jest.fn();
+
+      await InFormManager.waitingAnimations(element).then(resolvedSpy);
+
+      expect(resolvedSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("As LU it treats a cancelled animation as done", async () => {
+      expect.assertions(1);
+
+      const cancelled = Promise.reject(new DOMException("The animation was aborted", "AbortError"));
+      const element = { getAnimations: () => [mockAnimation(300, cancelled)] };
+      const resolvedSpy = jest.fn();
+
+      await InFormManager.waitingAnimations(element).then(resolvedSpy);
+
+      expect(resolvedSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe("Dialog parent element", () => {
     describe("InFormManager::getContainerElement", () => {
       it("As LU the container is the dialog when one of the given fields is contained in a dialog", async () => {

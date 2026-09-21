@@ -194,12 +194,16 @@ class InFormManager {
   async waitingAnimations(element) {
     const animations = element.getAnimations();
     await Promise.all(
-      animations.map(
-        (animation) =>
-          new Promise((resolve) => {
-            animation.addEventListener("finish", resolve, { once: true });
-          }),
-      ),
+      animations.map((animation) => {
+        // Wait only for animations that _will_ end
+        const endTime = animation.effect?.getComputedTiming().endTime;
+        if (!Number.isFinite(endTime)) {
+          return Promise.resolve();
+        }
+
+        // Set catch as no-op to avoid unhandled promise rejection when the animation is aborted
+        return animation.finished.catch(() => {});
+      }),
     );
   }
 
