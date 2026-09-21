@@ -232,9 +232,8 @@ class ShareDialog extends Component {
 
   /**
    * Build a single controlled-mode resource DTO, embedding the referenced user/group from the
-   * provided lookup maps — falling back to the aro embedded in the permission itself, since
-   * directly-permissioned users are not part of `initialUsers` — so ShareChanges can render and
-   * track edits.
+   * provided lookup maps, falling back to the aro embedded in the permission itself when the maps
+   * do not carry it, so ShareChanges can render and track edits.
    * @param {{id: (string|null), metadata: object, permission: object, permissions: PermissionsCollection}} resource
    * @param {object} groupsById The referenced groups keyed by id.
    * @param {object} usersById The referenced users keyed by id.
