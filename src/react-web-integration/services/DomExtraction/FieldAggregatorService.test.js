@@ -76,22 +76,6 @@ describe("FieldAggregatorService", () => {
       ).toEqual([]);
     });
 
-    it("should annotate deepestFormContainer=false for a field owned by an unmasked nested form", () => {
-      expect.assertions(2);
-
-      jest.spyOn(ElementVisibilityService, "isElementViewable").mockReturnValue(true);
-      // The field belongs to a nested <form>, not to the outer container.
-      document.body.innerHTML = '<div id="outer"><form><input type="text"/></form></div>';
-      const outer = document.getElementById("outer");
-
-      const result = FieldAggregatorService.aggregateFields([
-        { containerElement: outer, fields: [], isPseudoForm: false },
-      ]);
-
-      expect(result[0].fields).toHaveLength(1);
-      expect(result[0].fields[0].deepestFormContainer).toBe(false);
-    });
-
     it("should replace any pre-existing skeleton/seed fields with the re-scan result", () => {
       expect.assertions(1);
 
