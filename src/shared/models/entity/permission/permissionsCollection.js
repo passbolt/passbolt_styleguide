@@ -359,14 +359,14 @@ class PermissionsCollection extends EntityV2Collection {
 
   /**
    * The permissions a moved item ends up with: the ones that did not come from the folder it leaves,
-   * plus the destination's, the higher level winning, plus the operator as owner at the root.
+   * plus the destination's, the higher level winning, plus the operator's own permission at the root.
    * @param {object} params
    * @param {PermissionsCollection} params.itemPermissions The moved item's current permissions.
    * @param {PermissionsCollection|null} params.parentPermissions The item's current parent folder permissions, or null at the root.
    * @param {PermissionsCollection|null} params.destinationPermissions The destination folder
    *   permissions to apply, or null when moving to the root.
    * @param {PermissionEntity} [params.operatorPermission] The operator's own permission on the
-   *   moved item. Put back as owner on a move to the root.
+   *   moved item. Put back at that same level on a move to the root.
    * @param {string} params.aco The moved item's ACO type (PermissionEntity.ACO_RESOURCE or ACO_FOLDER).
    * @param {string} params.acoForeignKey The moved item id (the resulting ACO foreign key).
    * @return {PermissionsCollection}
@@ -398,7 +398,7 @@ class PermissionsCollection extends EntityV2Collection {
           aco_foreign_key: acoForeignKey,
           aro: operatorPermission.aro,
           aro_foreign_key: operatorPermission.aroForeignKey,
-          type: PermissionEntity.PERMISSION_OWNER,
+          type: operatorPermission.type,
         }),
       );
     }
