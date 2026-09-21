@@ -66,6 +66,10 @@ const TRANSITION_STATES = {
   COPY_PIN_CODE_STATE_PROCESSING: "copy_pin_code_state_processing",
   COPY_PIN_CODE_STATE_DONE: "copy_pin_code_state_done",
 
+  COPY_NOTE_STATE_DEFAULT: "copy_note_state_default",
+  COPY_NOTE_STATE_PROCESSING: "copy_note_state_processing",
+  COPY_NOTE_STATE_DONE: "copy_note_state_done",
+
   PASSWORD_DECRYPTING: "password_decrypting",
   PASSWORD_NOT_DECRYPTING: "password_not_decrypting",
 
@@ -74,6 +78,9 @@ const TRANSITION_STATES = {
 
   PIN_CODE_DECRYPTING: "pin_code_decrypting",
   PIN_CODE_NOT_DECRYPTING: "pin_code_not_decrypting",
+
+  NOTE_DECRYPTING: "note_decrypting",
+  NOTE_NOT_DECRYPTING: "note_not_decrypting",
 };
 
 class ResourceViewPage extends React.Component {
@@ -99,6 +106,10 @@ class ResourceViewPage extends React.Component {
     this.handleViewPinCodeButtonClick = this.handleViewPinCodeButtonClick.bind(this);
     this.handleCopyTotpClick = this.handleCopyTotpClick.bind(this);
     this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
+    this.handleCopyNoteClick = this.handleCopyNoteClick.bind(this);
+    this.handleViewNoteButtonClick = this.handleViewNoteButtonClick.bind(this);
+    this.handleCopyCustomFieldClick = this.handleCopyCustomFieldClick.bind(this);
+    this.handleViewCustomFieldButtonClick = this.handleViewCustomFieldButtonClick.bind(this);
     this.handleClickAdditionalUrisSection = this.handleClickAdditionalUrisSection.bind(this);
     this.getNodeRef = this.getNodeRef.bind(this);
   }
@@ -112,13 +123,19 @@ class ResourceViewPage extends React.Component {
       copyLoginState: "default",
       copyTotpState: "default",
       copyPinCodeState: "default",
+      copyNoteState: "default",
+      copyCustomFieldId: null, // the custom field being copied
+      copyCustomFieldState: "default",
       error: "",
       errorTimeout: null,
       previewedSecret: null, // The type of previewed secret
+      previewedCustomFieldIds: [], // The ids of the previewed custom fields
       plaintextSecretDto: null, // The current resource password decrypted
       isPasswordDecrypting: false, // if the password is decrypting
       isTotpDecrypting: false, // if the totp is decrypting
-      isPinCodeDecrypting: false, //if the pin code is decrypting
+      isPinCodeDecrypting: false, // if the pin code is decrypting
+      isNoteDecrypting: false, // if the note is decrypting
+      isCustomFieldsDecrypting: false, // if the custom fields are decrypting
       isOpenAdditionalUris: false, // section additional uris open
       copiedProperty: null, //the last property copied
     };
@@ -204,6 +221,8 @@ class ResourceViewPage extends React.Component {
         copyPasswordState: "default",
         copyTotpState: "default",
         copyPinCodeState: "default",
+        copyNoteState: "default",
+        copyCustomFieldState: "default",
       });
 
       if (this.currentTimeout) {
@@ -583,6 +602,250 @@ class ResourceViewPage extends React.Component {
     this.setState({ plaintextSecretDto, previewedSecret });
   }
 
+  /**
+   * Handle copy note click
+   */
+  async handleCopyNoteClick() {
+    await this.copyNoteToClipboard();
+  }
+
+  /**
+   * Handle preview note button click
+   */
+  async handleViewNoteButtonClick() {
+    await this.togglePreviewNote();
+  }
+
+  /**
+   * Toggle preview note
+   * @returns {Promise<void>}
+   */
+  async togglePreviewNote() {
+    const isNotePreviewed = this.isNotePreviewed();
+    this.hidePreviewedSecret();
+    if (!isNotePreviewed) {
+      await this.previewNote();
+    }
+  }
+
+  /**
+   * Copy the note resource to clipboard
+   * @return {Promise<void>}
+   */
+  async copyNoteToClipboard() {
+    let plaintextSecretDto;
+    const isNotePreviewed = this.isNotePreviewed();
+
+    this.resetError();
+    this.setState({ copyNoteState: "processing" });
+
+    if (isNotePreviewed) {
+      plaintextSecretDto = this.state.plaintextSecretDto;
+    } else {
+      try {
+        plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
+      } catch (error) {
+        if (error.name !== "UserAbortsOperationError") {
+          return;
+        }
+      } finally {
+        this.setState({ copyNoteState: "default" });
+      }
+    }
+
+    if (!plaintextSecretDto) {
+      this.setState({ copyNoteState: "default" });
+      return;
+    }
+    // The note text is stored under "description" in the standalone note secret schema
+    if (!plaintextSecretDto.description?.length) {
+      this.displayTemporarilyError(this.translate("The note is empty and cannot be copied to clipboard."));
+      this.setState({ copyNoteState: "default" });
+      return;
+    }
+    // "description" holds the whole note, copied as it is
+    await this.clipboardServiceWorkerService.copyTemporarily(plaintextSecretDto.description);
+
+    const newState = {
+      copyLoginState: "default",
+      copyPinCodeState: "default",
+      copyPasswordState: "default",
+      copyTotpState: "default",
+      copyNoteState: "done",
+      copiedProperty: null,
+    };
+    this.setState(newState, () => {
+      //ensure it refreshes the animation after another click on the same property
+      this.setState({ copiedProperty: "note" });
+    });
+
+    if (this.currentTimeout) {
+      clearTimeout(this.currentTimeout);
+    }
+
+    this.currentTimeout = setTimeout(() => {
+      this.setState({ copyNoteState: "default", copiedProperty: null });
+    }, CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND * 1000);
+  }
+
+  /**
+   * Preview note
+   * @returns {Promise<void>}
+   */
+  async previewNote() {
+    const previewedSecret = "note";
+    let plaintextSecretDto;
+    this.setState({ error: "", isNoteDecrypting: true });
+
+    try {
+      plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        return;
+      }
+    } finally {
+      this.setState({ isNoteDecrypting: false });
+    }
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto.description?.length) {
+      this.displayTemporarilyError(this.translate("The note is empty and cannot be previewed."));
+      return;
+    }
+
+    this.setState({ plaintextSecretDto, previewedSecret });
+  }
+
+  /**
+   * Handle copy custom field click
+   * @param {string} fieldId The custom field id
+   */
+  async handleCopyCustomFieldClick(fieldId) {
+    await this.copyCustomFieldToClipboard(fieldId);
+  }
+
+  /**
+   * Handle preview custom field button click
+   * @param {string} fieldId The custom field id
+   */
+  async handleViewCustomFieldButtonClick(fieldId) {
+    await this.togglePreviewCustomField(fieldId);
+  }
+
+  /**
+   * Toggle the preview of a custom field
+   * @param {string} fieldId The custom field id
+   * @returns {Promise<void>}
+   */
+  async togglePreviewCustomField(fieldId) {
+    if (this.isCustomFieldPreviewed(fieldId)) {
+      const previewedCustomFieldIds = this.state.previewedCustomFieldIds.filter((id) => id !== fieldId);
+      this.setState({ previewedCustomFieldIds });
+      return;
+    }
+    await this.previewCustomField(fieldId);
+  }
+
+  /**
+   * Copy a custom field value to clipboard
+   * @param {string} fieldId The custom field id
+   * @return {Promise<void>}
+   */
+  async copyCustomFieldToClipboard(fieldId) {
+    this.resetError();
+    this.setState({ copyCustomFieldId: fieldId, copyCustomFieldState: "processing" });
+
+    const plaintextSecretDto = await this.getOrDecryptCustomFieldsSecret();
+    if (!plaintextSecretDto) {
+      this.setState({ copyCustomFieldState: "default" });
+      return;
+    }
+
+    const value = this.getCustomFieldValue(plaintextSecretDto, fieldId);
+    if (!value.length) {
+      this.displayTemporarilyError(
+        this.translate("The custom field value is empty and cannot be copied to clipboard."),
+      );
+      this.setState({ copyCustomFieldState: "default" });
+      return;
+    }
+
+    await this.clipboardServiceWorkerService.copyTemporarily(value);
+
+    const newState = {
+      copyLoginState: "default",
+      copyPinCodeState: "default",
+      copyPasswordState: "default",
+      copyTotpState: "default",
+      copyNoteState: "default",
+      copyCustomFieldState: "done",
+      copiedProperty: null,
+    };
+    this.setState(newState, () => {
+      //ensure it refreshes the animation after another click on the same property
+      this.setState({ copiedProperty: fieldId });
+    });
+
+    if (this.currentTimeout) {
+      clearTimeout(this.currentTimeout);
+    }
+
+    this.currentTimeout = setTimeout(() => {
+      this.setState({ copyCustomFieldId: null, copyCustomFieldState: "default", copiedProperty: null });
+    }, CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND * 1000);
+  }
+
+  /**
+   * Preview a custom field
+   * @param {string} fieldId The custom field id
+   * @returns {Promise<void>}
+   */
+  async previewCustomField(fieldId) {
+    this.resetError();
+    this.setState({ isCustomFieldsDecrypting: true });
+    const plaintextSecretDto = await this.getOrDecryptCustomFieldsSecret();
+    this.setState({ isCustomFieldsDecrypting: false });
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    this.setState({ previewedCustomFieldIds: [...this.state.previewedCustomFieldIds, fieldId] });
+  }
+
+  /**
+   * Get the decrypted custom fields secret
+   * @returns {Promise<object|null>} The plaintext secret dto, or null if the decryption failed or was cancelled
+   */
+  async getOrDecryptCustomFieldsSecret() {
+    if (this.state.plaintextSecretDto) {
+      return this.state.plaintextSecretDto;
+    }
+
+    let plaintextSecretDto;
+    try {
+      plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
+    } catch {
+      return null;
+    }
+
+    this.setState({ plaintextSecretDto });
+    return plaintextSecretDto;
+  }
+
+  /**
+   * Get the value of a custom field from a decrypted secret, as text
+   * @param {object|null} plaintextSecretDto The decrypted secret
+   * @param {string} fieldId The custom field id
+   * @returns {string} The value, empty if the field has no value or is not in the secret
+   */
+  getCustomFieldValue(plaintextSecretDto, fieldId) {
+    const field = plaintextSecretDto?.custom_fields?.find((customField) => customField.id === fieldId);
+    return String(field?.secret_value ?? "");
+  }
+
   handleGoToUrlClick(event) {
     const primaryUri = this.state.resource.metadata?.uris?.[0];
 
@@ -660,6 +923,23 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
+   * Check if the note is previewed
+   * @returns {boolean}
+   */
+  isNotePreviewed() {
+    return this.state.previewedSecret === "note";
+  }
+
+  /**
+   * Check if a custom field is previewed
+   * @param {string} fieldId The custom field id
+   * @returns {boolean}
+   */
+  isCustomFieldPreviewed(fieldId) {
+    return this.state.previewedCustomFieldIds.includes(fieldId);
+  }
+
+  /**
    * Returns true if the logged in user can use the preview password capability.
    * @returns {boolean}
    */
@@ -703,11 +983,42 @@ class ResourceViewPage extends React.Component {
     );
   }
 
+  /**
+   * Is standalone note resource
+   * @return {boolean}
+   */
+  get isStandaloneNoteResource() {
+    return (
+      Boolean(this.state.resource.resource_type_id) &&
+      this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.isStandaloneNote()
+    );
+  }
+
+  /**
+   * Is standalone custom fields resource
+   * @return {boolean}
+   */
+  get isStandaloneCustomFieldsResource() {
+    return (
+      Boolean(this.state.resource.resource_type_id) &&
+      this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.isStandaloneCustomFields()
+    );
+  }
+
   render() {
     const primaryUri = this.state.resource.metadata?.uris?.[0];
     const additionalUris = this.state.resource.metadata?.uris?.slice(1);
     const isPasswordPreviewed = this.isPasswordPreviewed();
     const isTotpPreviewed = this.isTotpPreviewed();
+    const isNotePreviewed = this.isNotePreviewed();
+    const customFields = this.state.resource.metadata?.custom_fields || [];
+    const hasUsernameAndPassword =
+      !this.isStandaloneTotpResource &&
+      !this.isStandalonePinCodeResource &&
+      !this.isStandaloneNoteResource &&
+      !this.isStandaloneCustomFieldsResource;
+    const canUseOnThisPage =
+      !this.isStandalonePinCodeResource && !this.isStandaloneNoteResource && !this.isStandaloneCustomFieldsResource;
     const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
 
     return (
@@ -731,7 +1042,7 @@ class ResourceViewPage extends React.Component {
           </a>
         </div>
         <ul className="properties">
-          {!this.isStandaloneTotpResource && !this.isStandalonePinCodeResource && (
+          {hasUsernameAndPassword && (
             <>
               <li className="property">
                 <div className="information">
@@ -1174,6 +1485,286 @@ class ResourceViewPage extends React.Component {
               )}
             </li>
           )}
+          {this.isStandaloneNoteResource && (
+            <li className="property">
+              <div className="information">
+                <span className="property-name">
+                  <Trans>Notes</Trans>
+                </span>
+                <div className="password-wrapper">
+                  <div
+                    className="property-value secret secret-note"
+                    title={isNotePreviewed ? undefined : this.translate("Click to copy")}
+                  >
+                    {isNotePreviewed ? (
+                      <div className="note-previewed">{this.state.plaintextSecretDto?.description}</div>
+                    ) : (
+                      <button
+                        type="button"
+                        className="no-border encrypted-description"
+                        onClick={this.handleCopyNoteClick}
+                        disabled={!canCopySecret}
+                      >
+                        Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never
+                        gonna make you cry.
+                      </button>
+                    )}
+                  </div>
+                  {this.canPreviewSecret && (
+                    <button
+                      onClick={this.handleViewNoteButtonClick}
+                      className="password-view inline button-transparent"
+                      disabled={this.state.isNoteDecrypting}
+                    >
+                      <Transition
+                        in={!this.state.isNoteDecrypting}
+                        appear={false}
+                        timeout={500}
+                        nodeRef={this.getNodeRef(TRANSITION_STATES.NOTE_NOT_DECRYPTING)}
+                      >
+                        {(status) => (
+                          <span
+                            className={`transition fade-${status} ${this.state.isNoteDecrypting ? "visually-hidden" : ""}`}
+                          >
+                            {isNotePreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
+                          </span>
+                        )}
+                      </Transition>
+                      <Transition
+                        in={this.state.isNoteDecrypting}
+                        appear={true}
+                        timeout={500}
+                        nodeRef={this.getNodeRef(TRANSITION_STATES.NOTE_DECRYPTING)}
+                      >
+                        {(status) => (
+                          <span
+                            className={`transition fade-${status} ${!this.state.isNoteDecrypting ? "visually-hidden" : ""}`}
+                          >
+                            <SpinnerSVG />
+                          </span>
+                        )}
+                      </Transition>
+                      <span className="visually-hidden">
+                        <Trans>View</Trans>
+                      </span>
+                    </button>
+                  )}
+                </div>
+              </div>
+              {canCopySecret && (
+                <>
+                  <a
+                    role="button"
+                    className="button button-transparent property-action copy-note"
+                    onClick={this.handleCopyNoteClick}
+                    title={this.translate("Copy to clipboard")}
+                  >
+                    <Transition
+                      in={this.state.copyNoteState === "default"}
+                      appear={false}
+                      timeout={500}
+                      nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_NOTE_STATE_DEFAULT)}
+                    >
+                      {(status) => (
+                        <span
+                          className={`transition fade-${status} ${this.state.copyNoteState !== "default" ? "visually-hidden" : ""}`}
+                        >
+                          <CopySVG />
+                        </span>
+                      )}
+                    </Transition>
+                    <Transition
+                      in={this.state.copyNoteState === "processing"}
+                      appear={true}
+                      timeout={500}
+                      nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_NOTE_STATE_PROCESSING)}
+                    >
+                      {(status) => (
+                        <span
+                          className={`transition fade-${status} ${this.state.copyNoteState !== "processing" ? "visually-hidden" : ""}`}
+                        >
+                          <SpinnerSVG />
+                        </span>
+                      )}
+                    </Transition>
+                    <Transition
+                      in={this.state.copyNoteState === "done"}
+                      appear={true}
+                      timeout={500}
+                      nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_NOTE_STATE_DONE)}
+                    >
+                      {(status) => (
+                        <span
+                          className={`transition fade-${status} ${this.state.copyNoteState !== "done" ? "visually-hidden" : ""}`}
+                        >
+                          <HealthCheckSuccessSvg />
+                        </span>
+                      )}
+                    </Transition>
+                    <span className="visually-hidden">
+                      <Trans>Copy to clipboard</Trans>
+                    </span>
+                  </a>
+                  {this.state.copiedProperty === "note" && (
+                    <TimerSVG
+                      style={{
+                        "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
+                      }}
+                    />
+                  )}
+                </>
+              )}
+            </li>
+          )}
+          {this.isStandaloneCustomFieldsResource && customFields.length === 0 && (
+            <li className="property">
+              <div className="information">
+                <span className="property-name">
+                  <Trans>Custom fields</Trans>
+                </span>
+                <span className="property-value empty">
+                  <Trans>No custom fields</Trans>
+                </span>
+              </div>
+            </li>
+          )}
+          {this.isStandaloneCustomFieldsResource &&
+            customFields.map((customField) => {
+              const isCustomFieldPreviewed = this.isCustomFieldPreviewed(customField.id);
+              const customFieldValue = isCustomFieldPreviewed
+                ? this.getCustomFieldValue(this.state.plaintextSecretDto, customField.id)
+                : null;
+              const copyCustomFieldState =
+                this.state.copyCustomFieldId === customField.id ? this.state.copyCustomFieldState : "default";
+              return (
+                <li className="property" key={customField.id}>
+                  <div className="information">
+                    {customField.metadata_key?.length > 0 ? (
+                      <span className="property-name">{customField.metadata_key}</span>
+                    ) : (
+                      <span className="property-name empty">
+                        <Trans>no key</Trans>
+                      </span>
+                    )}
+                    <div className="password-wrapper">
+                      <div
+                        className={`property-value secret secret-custom-fields ${isCustomFieldPreviewed ? "" : "secret-copy"}`}
+                        title={isCustomFieldPreviewed ? customFieldValue : this.translate("Click to copy")}
+                      >
+                        <HiddenPassword
+                          canClick={canCopySecret}
+                          preview={customFieldValue}
+                          onClick={() => this.handleCopyCustomFieldClick(customField.id)}
+                          emptySecretSentence={this.translate("There is no value")}
+                        />
+                      </div>
+                      {this.canPreviewSecret && (
+                        <button
+                          onClick={() => this.handleViewCustomFieldButtonClick(customField.id)}
+                          className="password-view inline button-transparent"
+                          disabled={this.state.isCustomFieldsDecrypting}
+                        >
+                          <Transition
+                            in={!this.state.isCustomFieldsDecrypting}
+                            appear={false}
+                            timeout={500}
+                            nodeRef={this.getNodeRef(`custom_field_not_decrypting_${customField.id}`)}
+                          >
+                            {(status) => (
+                              <span
+                                className={`transition fade-${status} ${this.state.isCustomFieldsDecrypting ? "visually-hidden" : ""}`}
+                              >
+                                {isCustomFieldPreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
+                              </span>
+                            )}
+                          </Transition>
+                          <Transition
+                            in={this.state.isCustomFieldsDecrypting}
+                            appear={true}
+                            timeout={500}
+                            nodeRef={this.getNodeRef(`custom_field_decrypting_${customField.id}`)}
+                          >
+                            {(status) => (
+                              <span
+                                className={`transition fade-${status} ${!this.state.isCustomFieldsDecrypting ? "visually-hidden" : ""}`}
+                              >
+                                <SpinnerSVG />
+                              </span>
+                            )}
+                          </Transition>
+                          <span className="visually-hidden">
+                            <Trans>View</Trans>
+                          </span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  {canCopySecret && (
+                    <>
+                      <a
+                        role="button"
+                        className="button button-transparent property-action copy-custom-field"
+                        onClick={() => this.handleCopyCustomFieldClick(customField.id)}
+                        title={this.translate("Copy to clipboard")}
+                      >
+                        <Transition
+                          in={copyCustomFieldState === "default"}
+                          appear={false}
+                          timeout={500}
+                          nodeRef={this.getNodeRef(`copy_custom_field_state_default_${customField.id}`)}
+                        >
+                          {(status) => (
+                            <span
+                              className={`transition fade-${status} ${copyCustomFieldState !== "default" ? "visually-hidden" : ""}`}
+                            >
+                              <CopySVG />
+                            </span>
+                          )}
+                        </Transition>
+                        <Transition
+                          in={copyCustomFieldState === "processing"}
+                          appear={true}
+                          timeout={500}
+                          nodeRef={this.getNodeRef(`copy_custom_field_state_processing_${customField.id}`)}
+                        >
+                          {(status) => (
+                            <span
+                              className={`transition fade-${status} ${copyCustomFieldState !== "processing" ? "visually-hidden" : ""}`}
+                            >
+                              <SpinnerSVG />
+                            </span>
+                          )}
+                        </Transition>
+                        <Transition
+                          in={copyCustomFieldState === "done"}
+                          appear={true}
+                          timeout={500}
+                          nodeRef={this.getNodeRef(`copy_custom_field_state_done_${customField.id}`)}
+                        >
+                          {(status) => (
+                            <span
+                              className={`transition fade-${status} ${copyCustomFieldState !== "done" ? "visually-hidden" : ""}`}
+                            >
+                              <HealthCheckSuccessSvg />
+                            </span>
+                          )}
+                        </Transition>
+                        <span className="visually-hidden">
+                          <Trans>Copy to clipboard</Trans>
+                        </span>
+                      </a>
+                      {this.state.copiedProperty === customField.id && (
+                        <TimerSVG
+                          style={{
+                            "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
+                          }}
+                        />
+                      )}
+                    </>
+                  )}
+                </li>
+              );
+            })}
           {!this.isStandalonePinCodeResource && (
             <li className="property">
               <div className="information">
@@ -1264,7 +1855,7 @@ class ResourceViewPage extends React.Component {
           )}
         </ul>
         <div className="submit-wrapper input">
-          {!this.isStandalonePinCodeResource && (
+          {canUseOnThisPage && (
             <a
               href="#"
               id="popupAction"

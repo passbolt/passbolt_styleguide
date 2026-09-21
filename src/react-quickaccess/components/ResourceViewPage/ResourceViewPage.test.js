@@ -22,6 +22,10 @@ import {
   standaloneTotpResourceProps,
   totpResourceProps,
   standalonePinCodeResourceProps,
+  standaloneNoteResourceProps,
+  standaloneCustomFieldsResourceProps,
+  standaloneEmptyCustomFieldsResourceProps,
+  standaloneCustomFieldsSecretDto,
 } from "./ResourceViewPage.test.data";
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
 import { denyRbacContext } from "../../../shared/context/Rbac/RbacContext.test.data";
@@ -425,6 +429,362 @@ describe("ResourceViewPage", () => {
         expect.anything(),
       );
       expect(page.pinCodeText).toStrictEqual("Copy to clipboard");
+    });
+  });
+
+  describe("As LU, I should see and copy a note resource.", () => {
+    const noteSecret = () => ({
+      object_type: "PASSBOLT_SECRET_DATA",
+      description: "Wifi: office-5G\nThe password is at the reception.",
+    });
+    const emptyNoteSecret = () => ({ object_type: "PASSBOLT_SECRET_DATA", description: "" });
+
+    it("As LU, I should see the note hidden and the URI, and no username, password, totp or use on this page", async () => {
+      expect.assertions(7);
+      const props = standaloneNoteResourceProps();
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.propertyNames).toStrictEqual(["Notes", "URI"]);
+      expect(page.encryptedNote).not.toBeNull();
+      expect(page.uri.textContent).toStrictEqual("https://passbolt.com");
+      expect(page.username).toBeNull();
+      expect(page.password).toBeNull();
+      expect(page.totp).toBeNull();
+      expect(page.useOnThisPageButton).toBeNull();
+    });
+
+    it("As LU, I should be able to copy the note by clicking on the copy icon", async () => {
+      expect.assertions(2);
+      const props = standaloneNoteResourceProps();
+      mockContextRequest(props.context, noteSecret);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.copyNoteButton);
+
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.context.storage.local.get(["resources"]).resources[0].id,
+      );
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.clipboard.copy-temporarily",
+        noteSecret().description,
+      );
+    });
+
+    it("As LU, I should be able to copy the note by clicking on the masked value", async () => {
+      expect.assertions(1);
+      const props = standaloneNoteResourceProps();
+      mockContextRequest(props.context, noteSecret);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.note);
+
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.clipboard.copy-temporarily",
+        noteSecret().description,
+      );
+    });
+
+    it("As LU, I should preview and hide the note", async () => {
+      expect.assertions(4);
+      const props = standaloneNoteResourceProps();
+      mockContextRequest(props.context, noteSecret);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.previewNoteButton.hasAttribute("disabled")).toBeFalsy();
+
+      await page.click(page.previewNoteButton);
+      expect(page.notePreviewed.textContent).toStrictEqual(noteSecret().description);
+
+      await page.click(page.previewNoteButton);
+      expect(page.notePreviewed).toBeNull();
+      expect(page.encryptedNote).not.toBeNull();
+    });
+
+    it("As LU, I shouldn't be able to preview the note if disabled by API flag", async () => {
+      expect.assertions(2);
+      const props = standaloneNoteResourceProps();
+      props.context.siteSettings.canIUse = () => false;
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.previewNoteButton).toBeNull();
+      expect(page.copyNoteButton).not.toBeNull();
+    });
+
+    it("As LU, I shouldn't be able to preview the note if denied by RBAC", async () => {
+      expect.assertions(1);
+      const props = standaloneNoteResourceProps({ rbacContext: denyRbacContext() });
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.previewNoteButton).toBeNull();
+    });
+
+    it("As LU, I should not be able to copy the note if denied by RBAC", async () => {
+      expect.assertions(3);
+      const props = standaloneNoteResourceProps({ rbacContext: denyRbacContext() });
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.encryptedNote).not.toBeNull();
+      expect(page.note.hasAttribute("disabled")).toBeTruthy();
+      expect(page.copyNoteButton).toBeNull();
+    });
+
+    it("As LU, nothing is copied and the note stays hidden if I cancel the passphrase", async () => {
+      expect.assertions(3);
+      const props = standaloneNoteResourceProps();
+      const abortError = new Error("The user aborted the operation");
+      abortError.name = "UserAbortsOperationError";
+      mockContextRequest(props.context, () => Promise.reject(abortError));
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.copyNoteButton);
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.clipboard.copy-temporarily",
+        expect.anything(),
+      );
+      expect(page.encryptedNote).not.toBeNull();
+
+      mockContextRequest(props.context, () => Promise.reject(abortError));
+      await page.click(page.previewNoteButton);
+      expect(page.notePreviewed).toBeNull();
+    });
+
+    it("As LU, I should be told when the note is empty", async () => {
+      expect.assertions(4);
+      const props = standaloneNoteResourceProps();
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      mockContextRequest(props.context, emptyNoteSecret);
+      await page.click(page.copyNoteButton);
+      expect(page.errorMessage.textContent).toStrictEqual("The note is empty and cannot be copied to clipboard.");
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.clipboard.copy-temporarily",
+        expect.anything(),
+      );
+
+      mockContextRequest(props.context, emptyNoteSecret);
+      await page.click(page.previewNoteButton);
+      expect(page.errorMessage.textContent).toStrictEqual("The note is empty and cannot be previewed.");
+      expect(page.notePreviewed).toBeNull();
+    });
+  });
+
+  describe("As LU, I should see and copy a custom fields resource.", () => {
+    const decryptCalls = (props) =>
+      props.context.port.request.mock.calls.filter(([name]) => name === "passbolt.secret.find-by-resource-id");
+
+    it("As LU, I should see one row per custom field, in order, with its label and hidden value, the URI, and no username, password, totp or use on this page", async () => {
+      expect.assertions(8);
+      const props = standaloneCustomFieldsResourceProps();
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.propertyNames).toStrictEqual(["License key", "Port", "no key", "Empty", "URI"]);
+      expect(page.customFieldRows.length).toStrictEqual(4);
+      expect([0, 1, 2, 3].map((index) => page.customFieldValueText(index))).toStrictEqual(
+        Array(4).fill("Copy to clipboard"),
+      );
+      expect(page.uri.textContent).toStrictEqual("https://passbolt.com");
+      expect(page.username).toBeNull();
+      expect(page.password).toBeNull();
+      expect(page.totp).toBeNull();
+      expect(page.useOnThisPageButton).toBeNull();
+    });
+
+    it("As LU, I should be able to copy a single custom field value by clicking on the copy icon", async () => {
+      expect.assertions(2);
+      const props = standaloneCustomFieldsResourceProps();
+      mockContextRequest(props.context, standaloneCustomFieldsSecretDto);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.copyCustomFieldButton(0));
+
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.context.storage.local.get(["resources"]).resources[0].id,
+      );
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", "XYZ-123");
+    });
+
+    it("As LU, I should be able to copy a custom field value by clicking on the masked value", async () => {
+      expect.assertions(1);
+      const props = standaloneCustomFieldsResourceProps();
+      mockContextRequest(props.context, standaloneCustomFieldsSecretDto);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.customFieldValue(0));
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", "XYZ-123");
+    });
+
+    it("As LU, I should copy number and boolean values as text, decrypting the secret only once", async () => {
+      expect.assertions(3);
+      const props = standaloneCustomFieldsResourceProps();
+      mockContextRequest(props.context, standaloneCustomFieldsSecretDto);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.copyCustomFieldButton(1));
+      await page.click(page.copyCustomFieldButton(2));
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", "8080");
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", "true");
+      expect(decryptCalls(props).length).toStrictEqual(1);
+    });
+
+    it("As LU, I should preview each custom field value independently and hide it again", async () => {
+      expect.assertions(7);
+      const props = standaloneCustomFieldsResourceProps();
+      mockContextRequest(props.context, standaloneCustomFieldsSecretDto);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.previewCustomFieldButton(0));
+      expect(page.customFieldValueText(0)).toStrictEqual("XYZ-123");
+      expect(page.customFieldValueText(1)).toStrictEqual("Copy to clipboard");
+
+      await page.click(page.previewCustomFieldButton(1));
+      expect(page.customFieldValueText(0)).toStrictEqual("XYZ-123");
+      expect(page.customFieldValueText(1)).toStrictEqual("8080");
+
+      await page.click(page.previewCustomFieldButton(0));
+      expect(page.customFieldValueText(0)).toStrictEqual("Copy to clipboard");
+      expect(page.customFieldValueText(1)).toStrictEqual("8080");
+      expect(decryptCalls(props).length).toStrictEqual(1);
+    });
+
+    it("As LU, I should be told when a custom field value is empty", async () => {
+      expect.assertions(3);
+      const props = standaloneCustomFieldsResourceProps();
+      mockContextRequest(props.context, standaloneCustomFieldsSecretDto);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.previewCustomFieldButton(3));
+      expect(page.customFieldValueText(3)).toStrictEqual("There is no value");
+
+      await page.click(page.copyCustomFieldButton(3));
+      expect(page.errorMessage.textContent).toStrictEqual(
+        "The custom field value is empty and cannot be copied to clipboard.",
+      );
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.clipboard.copy-temporarily",
+        expect.anything(),
+      );
+    });
+
+    it("As LU, I should see a single row when the resource has no custom fields", async () => {
+      expect.assertions(3);
+      const props = standaloneEmptyCustomFieldsResourceProps();
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.propertyNames).toStrictEqual(["Custom fields", "URI"]);
+      expect(page.customFieldRows.length).toStrictEqual(0);
+      expect(page.emptyCustomFields.textContent).toStrictEqual("No custom fields");
+    });
+
+    it("As LU, I shouldn't be able to preview the custom fields if disabled by API flag", async () => {
+      expect.assertions(2);
+      const props = standaloneCustomFieldsResourceProps();
+      props.context.siteSettings.canIUse = () => false;
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.previewCustomFieldButton(0)).toBeNull();
+      expect(page.copyCustomFieldButton(0)).not.toBeNull();
+    });
+
+    it("As LU, I shouldn't be able to preview the custom fields if denied by RBAC", async () => {
+      expect.assertions(1);
+      const props = standaloneCustomFieldsResourceProps({ rbacContext: denyRbacContext() });
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.previewCustomFieldButton(0)).toBeNull();
+    });
+
+    it("As LU, I should not be able to copy the custom fields if denied by RBAC", async () => {
+      expect.assertions(3);
+      const props = standaloneCustomFieldsResourceProps({ rbacContext: denyRbacContext() });
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.customFieldValueText(0)).toStrictEqual("Copy to clipboard");
+      expect(page.customFieldValue(0).hasAttribute("disabled")).toBeTruthy();
+      expect(page.copyCustomFieldButton(0)).toBeNull();
+    });
+
+    it("As LU, nothing is copied and the values stay hidden if I cancel the passphrase", async () => {
+      expect.assertions(3);
+      const props = standaloneCustomFieldsResourceProps();
+      const abortError = new Error("The user aborted the operation");
+      abortError.name = "UserAbortsOperationError";
+      mockContextRequest(props.context, () => Promise.reject(abortError));
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.copyCustomFieldButton(0));
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.clipboard.copy-temporarily",
+        expect.anything(),
+      );
+      expect(page.customFieldValueText(0)).toStrictEqual("Copy to clipboard");
+
+      mockContextRequest(props.context, () => Promise.reject(abortError));
+      await page.click(page.previewCustomFieldButton(0));
+      expect(page.customFieldValueText(0)).toStrictEqual("Copy to clipboard");
     });
   });
 });
