@@ -60,6 +60,6 @@ describe("ShareUnchangeableDetails", () => {
     expect.assertions(1);
     const { container } = renderComponent([{ name: "R2", type: 1 }]);
 
-    expect(lines(container)).toEqual(["1 permission cannot apply:", "• R2(Can read)"]);
+    expect(lines(container)).toEqual(["One permission cannot apply:", "• R2(Can read)"]);
   });
 });

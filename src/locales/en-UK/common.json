@@ -28,7 +28,7 @@
   "{{count}} items selected:_other": "{{count}} items selected:",
   "{{count}} password is going to be exported._one": "{{count}} password is going to be exported.",
   "{{count}} password is going to be exported._other": "{{count}} passwords are going to be exported.",
-  "{{count}} permissions cannot apply:_one": "{{count}} permission cannot apply:",
+  "{{count}} permissions cannot apply:_one": "One permission cannot apply:",
   "{{count}} permissions cannot apply:_other": "{{count}} permissions cannot apply:",
   "{{count}} permissions vary:_one": "{{count}} permission varies:",
   "{{count}} permissions vary:_other": "{{count}} permissions vary:",
