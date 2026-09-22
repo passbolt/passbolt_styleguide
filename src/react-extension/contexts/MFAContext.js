@@ -19,6 +19,8 @@ import { MfaPolicyEnumerationTypes } from "../../shared/models/mfaPolicy/MfaPoli
 import MfaPolicyService from "../../shared/services/api/mfaPolicy/MfaPolicyService";
 import MFAService from "../../shared/services/api/Mfa/MfaService";
 
+const PASSKEY_CEREMONY_DONE_EVENT = "passbolt.mfa-setup.webauthn-ceremony-done";
+
 // The mfa settings workflow states.
 export const MfaSettingsWorkflowStates = {
   OVERVIEW: "Overview",
@@ -59,6 +61,12 @@ export const MfaContext = React.createContext({
   validateTotpCode: () => {}, //Validate the totp code
   removeProvider: () => {}, //Remove an existing provider
   validateYubikeyCode: () => {}, //Validate the yubikey code
+  findPasskeys: () => {}, // Find the passkeys of the current user
+  findPasskeySettings: () => {}, // Find the organisation passkey settings
+  deletePasskey: () => {}, // Delete a passkey of the current user
+  startPasskeyRegistration: () => {}, // Start the registration of a new passkey
+  finishPasskeyRegistration: () => {}, // Finish the registration of a new passkey with its name
+  abortPasskeyRegistration: () => {}, // Abort the pending registration of a new passkey
 });
 
 /**
@@ -72,6 +80,23 @@ export class MfaContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.pendingPasskeyRegistration = null; // {resolve, reject}
+    this.handlePasskeyCeremonyDone = this.handlePasskeyCeremonyDone.bind(this);
+  }
+
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.props.context.port?.on(PASSKEY_CEREMONY_DONE_EVENT, this.handlePasskeyCeremonyDone);
+  }
+
+  /**
+   * Whenever the component is unmounted
+   */
+  componentWillUnmount() {
+    this.props.context.port?.removeListener(PASSKEY_CEREMONY_DONE_EVENT, this.handlePasskeyCeremonyDone);
+    this.rejectPendingPasskeyRegistration();
   }
 
   /**
@@ -106,6 +131,12 @@ export class MfaContextProvider extends React.Component {
       removeProvider: this.removeProvider.bind(this), //Remove an existing provider
       validateYubikeyCode: this.validateYubikeyCode.bind(this), //Validate the yubikey code
       handleGetStartedWithDuo: this.handleGetStartedWithDuo.bind(this), //Handle the "Get started" button click for DUO.
+      findPasskeys: this.findPasskeys.bind(this), // Find the passkeys of the current user
+      findPasskeySettings: this.findPasskeySettings.bind(this), // Find the organisation passkey settings
+      deletePasskey: this.deletePasskey.bind(this), // Delete a passkey of the current user
+      startPasskeyRegistration: this.startPasskeyRegistration.bind(this), // Start the registration of a new passkey
+      finishPasskeyRegistration: this.finishPasskeyRegistration.bind(this), // Finish the registration of a new passkey with its name
+      abortPasskeyRegistration: this.abortPasskeyRegistration.bind(this), // Abort the pending registration of a new passkey
     };
   }
 
@@ -337,6 +368,121 @@ export class MfaContextProvider extends React.Component {
    */
   async handleGetStartedWithDuo() {
     await this.props.context.port.request("passbolt.mfa-setup.start-with-duo");
+  }
+
+  /**
+   * Find the passkeys of the current user
+   * @returns {Promise<Array<object>>}
+   */
+  async findPasskeys() {
+    return this.props.context.port.request("passbolt.mfa-setup.get-webauthn-credentials");
+  }
+
+  /**
+   * Find the organisation passkey settings
+   * @returns {Promise<object>}
+   */
+  async findPasskeySettings() {
+    return this.props.context.port.request("passbolt.mfa-setup.get-webauthn-settings");
+  }
+
+  /**
+   * Delete a passkey of the current user and refresh the mfa settings, as deleting the last one disables the provider.
+   * @param {string} id the passkey id
+   * @returns {Promise<void>}
+   */
+  async deletePasskey(id) {
+    try {
+      this.setProcessing(true);
+      await this.props.context.port.request("passbolt.mfa-setup.delete-webauthn-credential", id);
+      await this.findMfaSettings();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      this.setProcessing(false);
+    }
+  }
+
+  /**
+   * Start the registration of a new passkey, resolves once the browser prompt succeeded.
+   * @returns {Promise<{aaguid: string|null}>}
+   */
+  async startPasskeyRegistration() {
+    this.rejectPendingPasskeyRegistration();
+    await this.props.context.port.request("passbolt.mfa-setup.begin-webauthn-ceremony");
+    return new Promise((resolve, reject) => {
+      this.pendingPasskeyRegistration = { resolve, reject };
+    });
+  }
+
+  /**
+   * Handle the result of the browser prompt.
+   * @param {object} done
+   * @param {string} done.status "success" or "error"
+   * @param {string|null} [done.aaguid] Set on success
+   * @param {object} [done.error] Set on error
+   */
+  handlePasskeyCeremonyDone(done) {
+    const pending = this.pendingPasskeyRegistration;
+    if (!pending) {
+      return;
+    }
+    this.pendingPasskeyRegistration = null;
+    if (done.status === "success") {
+      pending.resolve({ aaguid: done.aaguid });
+    } else {
+      pending.reject(done.error);
+    }
+  }
+
+  /**
+   * Reject the pending registration as aborted, if any.
+   */
+  rejectPendingPasskeyRegistration() {
+    const pending = this.pendingPasskeyRegistration;
+    if (!pending) {
+      return;
+    }
+    this.pendingPasskeyRegistration = null;
+    pending.reject({ name: "WebauthnCeremonyAbortedError", message: "The passkey registration was aborted." });
+  }
+
+  /**
+   * Finish the registration of a new passkey and refresh the mfa settings.
+   * A failing refresh is only logged: the passkey is registered at that point.
+   * @param {string} name the passkey name
+   * @returns {Promise<void>}
+   */
+  async finishPasskeyRegistration(name) {
+    try {
+      this.setProcessing(true);
+      await this.props.context.port.request("passbolt.mfa-setup.finish-webauthn-ceremony", name);
+    } catch (error) {
+      console.error(error);
+      this.setProcessing(false);
+      throw error;
+    }
+    try {
+      await this.findMfaSettings();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.setProcessing(false);
+    }
+  }
+
+  /**
+   * Abort the pending registration of a new passkey, best effort.
+   * @returns {Promise<void>}
+   */
+  async abortPasskeyRegistration() {
+    this.rejectPendingPasskeyRegistration();
+    try {
+      await this.props.context.port.request("passbolt.mfa-setup.abort-webauthn-ceremony");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /**

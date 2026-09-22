@@ -172,4 +172,99 @@
     }
   }
 
+<<<<<<< HEAD
 }
+=======
+  &.passkeys-setup {
+    .passkeys-list {
+      align-self: stretch;
+      margin: 0 -1.6rem 1.6rem;
+
+      .passkey {
+        display: flex;
+        align-items: center;
+        gap: 1.6rem;
+        padding: 1.6rem;
+        border-bottom: .1rem solid var(--Workspace-Dividers-lighter);
+
+        .passkey-icon {
+          flex-shrink: 0;
+          width: 3.5rem;
+          height: 3.5rem;
+        }
+
+        .passkey-details {
+          flex: 1;
+          min-width: 0;
+
+          .passkey-name {
+            display: block;
+            font-weight: 700;
+            margin-bottom: .4rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          dl {
+            display: grid;
+            grid-template-columns: max-content auto;
+            column-gap: .8rem;
+            row-gap: .2rem;
+            font-size: 1.4rem;
+            color: var(--Text-and-icons-Secondary-text);
+
+            dt, dd {
+              margin: 0;
+            }
+          }
+        }
+
+        .delete-passkey {
+          flex-shrink: 0;
+        }
+      }
+    }
+
+    .add-passkey {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 2.4rem;
+
+      .tooltip {
+        cursor: default;
+      }
+
+      .passkey-registration-hint {
+        margin: 1.2rem 0 0;
+        text-align: center;
+        font-size: 1.4rem;
+        color: var(--Text-and-icons-Secondary-text);
+      }
+    }
+  }
+}
+
+.name-passkey-dialog {
+  .passkey-name-row {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin-bottom: 1.2rem;
+
+    .passkey-icon {
+      flex-shrink: 0;
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+    }
+  }
+}
+>>>>>>> c39fb5d20 (PB-54709 - Add the passkey registration flow to the Passkeys settings page)
