@@ -14,6 +14,9 @@
 
 import { TEST_ROLE_USER_ID } from "../../../../shared/models/entity/role/roleEntity.test.data";
 import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultProfileDto } from "../../../../shared/models/entity/profile/ProfileEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Returns the default app context for the unit test
@@ -242,3 +245,40 @@ export const mockGpgKey = {
   created: "2020-08-19T14:56:54+00:00",
   modified: "2020-08-19T14:56:54+00:00",
 };
+
+/**
+ * Stress test: a group seeded with a large members list rendered through ReactList
+ * Aims to validate the react-list upstream migration (getListStyle) under load
+ */
+const stressMembersCount = 500;
+const stressMembers = Array.from({ length: stressMembersCount }, (_, i) =>
+  defaultUserDto(
+    {
+      username: `member${String(i).padStart(3, "0")}@passbolt.com`,
+      profile: defaultProfileDto({ first_name: "Member", last_name: String(i).padStart(3, "0") }),
+    },
+    { withRole: true },
+  ),
+);
+export const stressGroupContext = defaultAppContext();
+stressGroupContext.users = [...stressGroupContext.users, ...stressMembers];
+stressGroupContext.port.addRequestListener("passbolt.keyring.get-public-key-info-by-user", async () => mockGpgKey);
+
+export const stressGroupProps = defaultProps();
+const stressGroupToEdit = stressGroupProps.userWorkspaceContext.groupToEdit;
+stressGroupToEdit.groups_users = [
+  {
+    id: uuidv4(),
+    group_id: stressGroupToEdit.id,
+    user_id: stressGroupContext.loggedInUser.id,
+    is_admin: true,
+    created: "2020-08-17T16:37:15+00:00",
+  },
+  ...stressMembers.map((user) => ({
+    id: uuidv4(),
+    group_id: stressGroupToEdit.id,
+    user_id: user.id,
+    is_admin: false,
+    created: "2020-08-17T16:37:15+00:00",
+  })),
+];

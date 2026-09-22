@@ -1,7 +1,12 @@
 import React from "react";
 import ShareDialog from "./ShareDialog";
 import AppContext from "../../../shared/context/AppContext/AppContext";
-import { controlledModeWithGroupProps, defaultAppContext, resources } from "./ShareDialog.test.data";
+import {
+  controlledModeWithGroupProps,
+  defaultAppContext,
+  propsWithStressPermissions,
+  resources,
+} from "./ShareDialog.test.data";
 import mockStorage from "../../../../test/mocks/mockStorage";
 import mockPort from "../../../../test/mocks/mockPort";
 
@@ -45,4 +50,8 @@ export const ControlledModeWithExpandableGroup = {
     context: defaultAppContext({ port: mockPort(mockStorage()) }),
     ...controlledModeWithGroupProps({ onClose: () => {}, onConfirm: () => {} }),
   },
+};
+
+export const StressWithLargePermissionsList = {
+  args: propsWithStressPermissions(),
 };

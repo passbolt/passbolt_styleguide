@@ -15,6 +15,8 @@ import ResourceTypesCollection from "../../../shared/models/entity/resourceType/
 import { resourceTypesCollectionDto } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
  * Default component props.
@@ -31,6 +33,7 @@ export function defaultProps(props = {}) {
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     rbacContext: defaultAdministratorRbacContext(),
     initialEntries: `/${resources[0].id}`,
+    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto()),
     ...props,
   };
 }

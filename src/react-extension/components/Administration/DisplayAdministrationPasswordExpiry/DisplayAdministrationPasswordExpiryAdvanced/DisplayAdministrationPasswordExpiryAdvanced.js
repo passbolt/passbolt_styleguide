@@ -162,7 +162,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
               />
               <label htmlFor="default-expiry-period-toggle">
                 <span className="name">
-                  <Trans>Default password expiry period</Trans>
+                  <Trans>Default Password Expiry Period</Trans>
                 </span>
                 <span className="info-input">
                   <Trans>
@@ -220,7 +220,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
             </span>
           </div>
           <h4 className="no-border" id="automatic-workflow-subtitle">
-            <Trans>Automatic workflows</Trans>
+            <Trans>Automatic Workflows</Trans>
           </h4>
           <p id="automatic-workflow-description">
             <Trans>In this section you can choose automatic behaviours.</Trans>

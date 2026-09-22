@@ -31,9 +31,8 @@ export const defaultProps = (props = {}, runExternalDictionaryCheck = false) => 
   }),
   context: defaultAppContext({
     isAuthenticated: true,
-    getOpenerTabId: () => null,
-    getBootstrapFeature: () => null,
-    getDetached: () => false,
+    openerTabId: null,
+    closeWindow: () => jest.fn(),
   }),
   ...props,
 });

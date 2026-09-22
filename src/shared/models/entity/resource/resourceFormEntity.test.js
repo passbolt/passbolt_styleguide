@@ -87,6 +87,7 @@ import ResourceTypeEntity from "../resourceType/resourceTypeEntity";
 import CustomFieldEntity from "../customField/customFieldEntity";
 import { emptyCustomFieldDto } from "../customField/customFieldEntity.test.data";
 import { defaultSecretDataV5StandaloneNoteDto } from "../secretData/secretDataV5StandaloneNoteEntity.test.data";
+import OfflineItemEntity from "../offline/offlineItemEntity";
 
 describe("Resource Form entity", () => {
   describe("ResourceFormEntity::getSchema", () => {
@@ -346,6 +347,7 @@ describe("Resource Form entity", () => {
       expect(ResourceFormEntity.associations).toStrictEqual({
         metadata: ResourceMetadataEntity,
         secret: SecretDataEntity,
+        offline: OfflineItemEntity,
       });
     });
   });

@@ -21,6 +21,6 @@ export const defaultProps = (data = {}) => ({
 export const defaultResourceLocalStorageContext = (data = {}) => ({
   get: jest.fn(),
   resourceTypes: null,
-  updateLocalStorage: jest.fn(),
+  getOrFind: jest.fn(),
   ...data,
 });

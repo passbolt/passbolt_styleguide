@@ -22,6 +22,7 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import { withLoading } from "../../../contexts/LoadingContext";
 import { Trans, withTranslation } from "react-i18next";
+import GroupServiceWorkerService from "../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 /**
  * This component allows user to delete a user
@@ -30,6 +31,7 @@ class DeleteUserGroup extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
+    this.groupServiceWorkerService = new GroupServiceWorkerService(props.context.port);
     this.initEventHandlers();
   }
 
@@ -72,7 +74,7 @@ class DeleteUserGroup extends Component {
     this.setState({ processing: true });
     try {
       this.props.loadingContext.add();
-      await this.props.context.port.request("passbolt.groups.delete", this.group.id);
+      await this.groupServiceWorkerService.delete(this.group.id);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The group has been deleted successfully"));
       this.props.onClose();

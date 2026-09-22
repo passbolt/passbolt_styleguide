@@ -25,8 +25,13 @@ import GridResourceUserSettingServiceWorkerService from "../../shared/services/s
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 import { withPasswordExpiry } from "./PasswordExpirySettingsContext";
 import { withRbac } from "../../shared/context/Rbac/RbacContext";
+import { withOfflineSettingsLocalStorage } from "../../shared/context/offline/OfflineSettingsLocalStorageContext";
+import { withResourceTypesLocalStorage } from "../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import { uiActions } from "../../shared/services/rbacs/uiActionEnumeration";
+import { actions } from "../../shared/services/rbacs/actionEnumeration";
 import { ColumnModelTypes } from "../../shared/models/column/ColumnModel";
+import ResourceTypesCollection from "../../shared/models/entity/resourceType/resourceTypesCollection";
+import { RESOURCE_TYPE_VERSION_5 } from "../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import getPropValue from "../lib/Object/getPropValue";
 import { withTranslation } from "react-i18next";
 import RowsSettingEntity from "../../shared/models/entity/rowsSetting/rowsSettingEntity";
@@ -201,10 +206,39 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    await this.props.passwordExpiryContext.findSettings();
-    this.loadGridResourceSetting();
     this.populate();
     this.handleResourcesWaitedFor();
+    /*
+     * The availability of some columns depends on settings loaded asynchronously. They are all retrieved before
+     * the columns setting is loaded, so the columns are computed once, with everything they depend on known.
+     */
+    await Promise.all([
+      this.waitForOfflineSettings(),
+      this.waitForResourceTypes(),
+      this.props.passwordExpiryContext.findSettings(),
+    ]);
+    this.loadGridResourceSetting();
+  }
+
+  /**
+   * Wait for the resource types to be loaded in the local storage, if they are not already.
+   * @return {Promise<void>}
+   */
+  async waitForResourceTypes() {
+    if (this.props.resourceTypes === null) {
+      await this.props.resourceTypesLocalStorageContext.getOrFind();
+    }
+  }
+
+  /**
+   * Wait for the offline settings to be loaded in the local storage, if they are not already.
+   *
+   * @return {Promise<void>}
+   */
+  async waitForOfflineSettings() {
+    if (this.props.offlineSettingsLocalStorageContext.offlineSettings === undefined) {
+      await this.props.offlineSettingsLocalStorageContext.getOrFind();
+    }
   }
 
   /**
@@ -812,6 +846,26 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Check if the user can use the offline mode feature.
+   * @returns {boolean}
+   */
+  get canUseOfflineMode() {
+    return (
+      this.props.context.siteSettings.canIUse("offlineMode") &&
+      Boolean(this.props.offlineSettings) &&
+      this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_VIEW)
+    );
+  }
+
+  /**
+   * Returns true if pin code resource types are available.
+   * @returns {boolean}
+   */
+  get hasPinCodeResourceTypes() {
+    return Boolean(this.props.resourceTypes?.hasSomePinCodeResourceTypes(RESOURCE_TYPE_VERSION_5));
+  }
+
+  /**
    * Populate the context with initial data such as resources and folders
    */
   populate() {
@@ -875,6 +929,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
       [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.searchBySharedWithMe.bind(this),
       [ResourceWorkspaceFilterTypes.EXPIRED]: this.searchByExpired.bind(this),
+      [ResourceWorkspaceFilterTypes.OFFLINE]: this.searchByOffline.bind(this),
       [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
       [ResourceWorkspaceFilterTypes.NONE]: () => {
         /* No search */
@@ -1015,6 +1070,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   searchByItemsIOwn(filter) {
     const filteredResources = this.resources.filter((resource) => resource.permission.type === 15);
+    this.sort(filteredResources);
+    this.setState({ filter, filteredResources });
+  }
+
+  /**
+   * Search for resources the current user marked offline available
+   * @param {object} filter The filter
+   */
+  searchByOffline(filter) {
+    const filteredResources = this.resources.filter((resource) => resource.offline != null);
     this.sort(filteredResources);
     this.setState({ filter, filteredResources });
   }
@@ -1316,6 +1381,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     if (!this.canUseFolders) {
       columnsResourceSetting.removeById(ColumnModelTypes.LOCATION);
     }
+    if (!this.canUseOfflineMode) {
+      columnsResourceSetting.removeById(ColumnModelTypes.OFFLINE_MODE);
+    }
+    if (!this.hasPinCodeResourceTypes) {
+      columnsResourceSetting.removeById(ColumnModelTypes.PIN_CODE);
+    }
     const sorter = gridUserSettingEntity?.sorter || this.defaultSorter;
     const rowsSetting = gridUserSettingEntity?.rowsSetting;
     // process the search after the grid setting is loaded
@@ -1410,14 +1481,22 @@ ResourceWorkspaceContextProvider.propTypes = {
   actionFeedbackContext: PropTypes.object,
   passwordExpiryContext: PropTypes.object, // the password expiry contexts
   rbacContext: PropTypes.any, // The role based access control context
+  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
+  offlineSettingsLocalStorageContext: PropTypes.object, // The offline settings local storage context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  resourceTypesLocalStorageContext: PropTypes.object, // The resource types local storage context
   loadingContext: PropTypes.object, // The loading context
   t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(
   withRbac(
-    withPasswordExpiry(
-      withLoading(withActionFeedback(withRouter(withTranslation("common")(ResourceWorkspaceContextProvider)))),
+    withOfflineSettingsLocalStorage(
+      withResourceTypesLocalStorage(
+        withPasswordExpiry(
+          withLoading(withActionFeedback(withRouter(withTranslation("common")(ResourceWorkspaceContextProvider)))),
+        ),
+      ),
     ),
   ),
 );
@@ -1456,6 +1535,7 @@ export const ResourceWorkspaceFilterTypes = {
   FAVORITE: "FILTER-BY-FAVORITE", // Favorite resources
   SHARED_WITH_ME: "FILTER-BY-SHARED-WITH-ME", // Resources shared with the current user (who is not the owner)
   EXPIRED: "FILTER-BY-EXPIRED", // Resources recently modified
+  OFFLINE: "FILTER-BY-OFFLINE", // Resources marked as available offline
 };
 
 /**

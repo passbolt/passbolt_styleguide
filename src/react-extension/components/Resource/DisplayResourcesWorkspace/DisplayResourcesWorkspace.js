@@ -47,6 +47,9 @@ import DisplayResourcesListDetails from "../../ResourceDetails/DisplayResourceDe
 import debounce from "debounce-promise";
 import RevertSVG from "../../../../img/svg/revert.svg";
 import { ColumnModelTypes } from "../../../../shared/models/column/ColumnModel";
+import { withOfflineSettingsLocalStorage } from "../../../../shared/context/offline/OfflineSettingsLocalStorageContext";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
   ROW_SETTING_HEIGHT_COMFORTABLE,
   ROW_SETTING_HEIGHT_COMPACT,
@@ -129,6 +132,21 @@ class Workspace extends Component {
     if (offsetActionsButton + offsetActionsSecondary + GAP_AND_PADDING_BUTTONS > offsetWidthActionBar) {
       this.actionsBar.current.classList.add("icon-only");
     }
+  }
+
+  /**
+   * Returns true if the settings the grid columns availability depends on are known.
+   *
+   * They are loaded asynchronously from the local storage. The grid initializes its columns on mount, it must
+   * therefore not be rendered before they are known, otherwise the columns relying on them (pin code, available
+   * offline) are missing.
+   *
+   * @returns {boolean}
+   */
+  get areGridColumnsSettingsKnown() {
+    return (
+      this.props.offlineSettingsLocalStorageContext.offlineSettings !== undefined && this.props.resourceTypes !== null
+    );
   }
 
   /**
@@ -403,7 +421,7 @@ class Workspace extends Component {
                     </div>
                   </div>
                 </div>
-                <DisplayResourcesList />
+                {this.areGridColumnsSettingsKnown && <DisplayResourcesList />}
               </div>
               {this.hasLockDetail() && (
                 <ResizableSidebar
@@ -434,10 +452,16 @@ Workspace.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The rbac context
   resourceWorkspaceContext: PropTypes.any,
+  offlineSettingsLocalStorageContext: PropTypes.object, // The offline settings local storage context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   t: PropTypes.func, // The translation function
   sidebarContext: PropTypes.any,
 };
 
 export default withAppContext(
-  withRbac(withResourceWorkspace(withResizableSidebar(withTranslation("common")(Workspace)))),
+  withRbac(
+    withOfflineSettingsLocalStorage(
+      withResourceTypesLocalStorage(withResourceWorkspace(withResizableSidebar(withTranslation("common")(Workspace)))),
+    ),
+  ),
 );

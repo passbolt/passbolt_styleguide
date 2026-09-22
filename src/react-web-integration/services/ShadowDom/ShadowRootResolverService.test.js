@@ -105,6 +105,32 @@ describe("ShadowRootResolverService", () => {
       expect(browser.dom.openOrClosedShadowRoot).not.toHaveBeenCalled();
     });
 
+    it("should ignore a Firefox user-agent widget shadow root exposed on a media element", () => {
+      // Regression: on Firefox `openOrClosedShadowRoot` also exposes user-agent widget shadow roots (the
+      // native controls of <video>/<audio>, <input type=range|date>...). Resolving and observing those
+      // storms the MutationObserver during media playback and crashes the tab. Non-host elements must be
+      // gated out before this property is ever read.
+      expect.assertions(4);
+
+      const video = document.createElement("video");
+      video.openOrClosedShadowRoot = document.createElement("div").attachShadow({ mode: "closed" });
+
+      const rangeInput = document.createElement("input");
+      rangeInput.type = "range";
+      rangeInput.openOrClosedShadowRoot = document.createElement("div").attachShadow({ mode: "closed" });
+
+      browser.dom = { openOrClosedShadowRoot: jest.fn() };
+
+      expect(ShadowRootResolverService.resolveShadowRoot(video)).toBeNull();
+      expect(ShadowRootResolverService.resolveShadowRoot(rangeInput)).toBeNull();
+      expect(browser.dom.openOrClosedShadowRoot).not.toHaveBeenCalled();
+      // A legitimate open author shadow root on the same media element is still not resolvable (can't attach one),
+      // but a candidate host keeps resolving its Firefox closed root.
+      const div = document.createElement("div");
+      div.openOrClosedShadowRoot = document.createElement("div").attachShadow({ mode: "closed" });
+      expect(ShadowRootResolverService.resolveShadowRoot(div)).toBe(div.openOrClosedShadowRoot);
+    });
+
     it("should return null when no shadow root can be resolved", () => {
       expect.assertions(1);
 

@@ -19,6 +19,7 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
 import PropTypes from "prop-types";
 import { defaultAppContext } from "../../../react-extension/contexts/ExtAppContext.test.data";
 import { createRoot } from "react-dom/client";
+import { USER_ACTIVE_SESSION_ONLINE } from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 export default {
   title: "Components/WebIntegration/AskInFormMenuDisplay",
@@ -73,9 +74,10 @@ const parameters = {
 };
 
 const inactiveMockedPort = new MockPort();
-inactiveMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+inactiveMockedPort.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () => ({
   is_authenticated: false,
-  is_mfa_authenticated: true,
+  is_mfa_required: false,
+  type: USER_ACTIVE_SESSION_ONLINE,
 }));
 
 export const Inactive = {
@@ -89,9 +91,10 @@ export const Inactive = {
 };
 
 const activeWithNoSuggestionMockedPort = new MockPort();
-activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () => ({
   is_authenticated: true,
-  is_mfa_authenticated: true,
+  is_mfa_required: false,
+  type: USER_ACTIVE_SESSION_ONLINE,
 }));
 activeWithNoSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 0);
 
@@ -106,9 +109,10 @@ export const ActiveWithNoSuggestion = {
 };
 
 const activeWithOneSuggestionMockedPort = new MockPort();
-activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.check-status", () => ({
+activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.get-or-find-active-session", () => ({
   is_authenticated: true,
-  is_mfa_authenticated: true,
+  is_mfa_required: false,
+  type: USER_ACTIVE_SESSION_ONLINE,
 }));
 activeWithOneSuggestionMockedPort.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 1);
 

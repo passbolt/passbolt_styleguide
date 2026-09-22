@@ -1,4 +1,7 @@
 import MockPort from "../../../test/mock/MockPort";
+import { v4 as uuidv4 } from "uuid";
+
+const folderId = uuidv4();
 
 /**
  * Returns the default app context for the unit test
@@ -10,12 +13,12 @@ export function defaultAppContext(appContext) {
     port: new MockPort(),
     setContext: jest.fn(),
     folder: {
-      id: "some folder id",
+      id: folderId,
       name: "some name folder",
     },
     folders: [
       {
-        id: "some folder id",
+        id: folderId,
         name: "some name folder",
       },
     ],

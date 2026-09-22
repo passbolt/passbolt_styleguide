@@ -40,6 +40,8 @@ import TagV2SVG from "../../../img/svg/tag_v2.svg";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import { sortResourcesByUriMatchingScore } from "../../../shared/utils/sortUtils";
+import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -83,7 +85,7 @@ class HomePage extends React.Component {
      * than ongoing resource management — The local storage should be updated only the first time the application
      * is open.
      */
-    if (!HomePage.isInitialised) {
+    if (!HomePage.isInitialised && this.props.activeSession.isSessionOnline) {
       this.props.resourcesLocalStorageContext.updateLocalStorage();
       HomePage.isInitialised = true;
     }
@@ -91,7 +93,6 @@ class HomePage extends React.Component {
     // Reset the search and any search history.
     this.props.context.searchHistory = [];
     this.props.context.updateSearch("");
-    this.props.context.focusSearch();
 
     this.loadActiveTabUrl();
   }
@@ -111,7 +112,7 @@ class HomePage extends React.Component {
     try {
       const activeTabUrl = await this.props.context.port.request(
         "passbolt.active-tab.get-url",
-        this.props.context.getOpenerTabId(),
+        this.props.context.openerTabId,
       );
       this.setState({ activeTabUrl });
     } catch (error) {
@@ -168,7 +169,7 @@ class HomePage extends React.Component {
       await this.props.context.port.request(
         "passbolt.quickaccess.use-resource-on-current-tab",
         resource.id,
-        this.props.context.getOpenerTabId(),
+        this.props.context.openerTabId,
       );
       await this.props.context.closeWindow();
     } catch (error) {
@@ -227,6 +228,10 @@ class HomePage extends React.Component {
    * @returns {boolean}
    */
   canCreatePassword() {
+    // Creating a resource requires the server, the action is not offered while in an offline session.
+    if (!this.props.activeSession?.isSessionOnline) {
+      return false;
+    }
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
       return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
@@ -268,6 +273,8 @@ class HomePage extends React.Component {
     const showFiltersSection = !hasSearch;
     const canUseTag =
       this.props.context.siteSettings.canIUse("tags") && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
+    // The groups are retrieved from the API, the filter is not offered while in an offline session.
+    const isSessionOnline = Boolean(this.props.activeSession?.isSessionOnline);
     let browsedResources, suggestedResources;
 
     if (isReady) {
@@ -405,15 +412,17 @@ class HomePage extends React.Component {
                     <CaretRightSVG />
                   </Link>
                 </li>
-                <li className="filter-entry">
-                  <Link to={"/webAccessibleResources/quickaccess/resources/group"}>
-                    <UsersSVG />
-                    <span className="filter-title">
-                      <Trans>Groups</Trans>
-                    </span>
-                    <CaretRightSVG />
-                  </Link>
-                </li>
+                {isSessionOnline && (
+                  <li className="filter-entry">
+                    <Link to={"/webAccessibleResources/quickaccess/resources/group"}>
+                      <UsersSVG />
+                      <span className="filter-title">
+                        <Trans>Groups</Trans>
+                      </span>
+                      <CaretRightSVG />
+                    </Link>
+                  </li>
+                )}
                 {canUseTag && (
                   <li className="filter-entry">
                     <Link to={"/webAccessibleResources/quickaccess/resources/tag"}>
@@ -455,16 +464,19 @@ HomePage.propTypes = {
   resourcesLocalStorageContext: PropTypes.object, // The resources local storage context
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
+  activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(
-  withRbac(
-    withRouter(
-      withResourceTypesLocalStorage(
-        withResourcesLocalStorage(
-          withMetadataTypesSettingsLocalStorage(
-            withMetadataKeysSettingsLocalStorage(withTranslation("common")(HomePage)),
+export default withActiveSessionLocalStorage(
+  withAppContext(
+    withRbac(
+      withRouter(
+        withResourceTypesLocalStorage(
+          withResourcesLocalStorage(
+            withMetadataTypesSettingsLocalStorage(
+              withMetadataKeysSettingsLocalStorage(withTranslation("common")(HomePage)),
+            ),
           ),
         ),
       ),

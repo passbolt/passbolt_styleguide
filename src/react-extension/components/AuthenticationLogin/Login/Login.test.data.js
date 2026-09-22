@@ -15,6 +15,8 @@
 import { LoginVariations } from "./Login";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import UserActiveSessionEntity from "../../../../shared/models/entity/session/userActiveSessionEntity";
+import { defaultUserActiveSessionDto } from "../../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 /**
  * Default props
@@ -40,6 +42,7 @@ export function defaultProps(props = {}) {
     onSignIn: jest.fn(() => Promise.resolve()),
     onCheckPassphrase: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
+    activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_authenticated: false })),
   };
   return Object.assign(defaultProps, props);
 }

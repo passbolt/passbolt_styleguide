@@ -22,6 +22,8 @@ import { ResourceWorkspaceFilterTypes } from "./ResourceWorkspaceContext";
 import { waitFor } from "@testing-library/react";
 import { waitForTrue } from "../../../test/utils/waitFor";
 import { act } from "react";
+import { defaultResourceDto } from "../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultOfflineSettingsStorageContext } from "../../shared/context/offline/OfflineSettingsLocalStorageContext.test.data";
 
 describe("Resource Workspace Context", () => {
   let page; // The page to test against
@@ -61,6 +63,12 @@ describe("Resource Workspace Context", () => {
       await page.goToExpired();
       await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.EXPIRED);
+    });
+
+    it("AS LU I should have an OFFLINE filter when I go to /app/passwords/filter/offline with such a filter", async () => {
+      await page.goToOffline();
+      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);
+      expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.OFFLINE);
     });
 
     it("AS LU I should have an ITEMS-I-OWN filter when I went to /app/passwords with such a filter", async () => {
@@ -206,6 +214,21 @@ describe("Resource Workspace Context", () => {
       await page.goToRootFolder();
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
+
+    it("AS LU I should have only the resources available offline when the filter is OFFLINE", async () => {
+      expect.assertions(2);
+      const offlineResource = defaultResourceDto({}, { withOffline: true });
+      const onlineResource = defaultResourceDto();
+      const notMarkedOfflineResource = defaultResourceDto({ offline: null });
+      const customContext = defaultAppContext({
+        resources: [offlineResource, onlineResource, notMarkedOfflineResource],
+      });
+      const customPage = new ResourceWorkspaceContextPage(customContext, defaultProps());
+      await customPage.goToOffline();
+      await waitForTrue(() => customPage.filter.type === ResourceWorkspaceFilterTypes.OFFLINE);
+      expect(customPage.filteredResources).toHaveLength(1);
+      expect(customPage.filteredResources[0].id).toBe(offlineResource.id);
+    });
   });
 
   describe("As LU I should have the appropriate selected resources at any time", () => {
@@ -328,8 +351,9 @@ describe("Resource Workspace Context", () => {
         { id: "expired", label: "Expiry", position: 10, show: true },
         { id: "modified", label: "Modified", position: 11, show: true },
         { id: "location", label: "Location", position: 12, show: true },
+        { id: "offline_mode", label: "Available Offline", position: 13, show: false },
       ];
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(12);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(13);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(defaultColumnsSetting);
     });
 
@@ -348,6 +372,7 @@ describe("Resource Workspace Context", () => {
         { id: "expired", label: "Expiry", position: 10, show: true },
         { id: "modified", label: "Modified", position: 11, show: true },
         { id: "location", label: "Location", position: 12, show: true },
+        { id: "offline_mode", label: "Available Offline", position: 13, show: false },
       ];
       const sorter = {
         propertyName: "name",
@@ -363,9 +388,29 @@ describe("Resource Workspace Context", () => {
       });
       await page.goToAllItems();
       await page.goToRootFolder();
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(12);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(13);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(columnsSetting);
       expect(page.sorter.toDto()).toStrictEqual(sorter);
+    });
+  });
+
+  describe("As LU the resource columns should reflect the settings loaded on mount", () => {
+    it("As LU I should not have the offline column when the offline settings are not available", async () => {
+      expect.assertions(2);
+
+      const props = defaultProps({
+        offlineSettings: null,
+        offlineSettingsLocalStorageContext: defaultOfflineSettingsStorageContext({
+          offlineSettings: null,
+          getOrFind: jest.fn(() => Promise.resolve(null)),
+        }),
+      });
+      const customPage = new ResourceWorkspaceContextPage(context, props);
+      await customPage.goToAllItems();
+
+      const columnIds = customPage.columnsResourceSetting.toDto().map((column) => column.id);
+      expect(columnIds).not.toContain("offline_mode");
+      expect(columnIds).toContain("pin_code");
     });
   });
 
@@ -409,12 +454,13 @@ describe("Resource Workspace Context", () => {
         { id: "expired", label: "Expiry", position: 10, show: true },
         { id: "modified", label: "Modified", position: 5, width: 250, show: true },
         { id: "location", label: "Location", position: 12, show: true },
+        { id: "offline_mode", label: "Available Offline", position: 13, show: false },
       ];
       await page.goToAllItems();
       page.onChangeColumnView("name", false);
       page.onChangeColumnsSettings(columnsSetting);
 
-      expect(page.columnsResourceSetting.length).toStrictEqual(12);
+      expect(page.columnsResourceSetting.length).toStrictEqual(13);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
     });
   });

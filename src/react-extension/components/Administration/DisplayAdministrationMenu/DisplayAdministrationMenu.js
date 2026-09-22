@@ -180,6 +180,14 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the offline plugin
+   * @returns {boolean}
+   */
+  get canIUseOffline() {
+    return this.canIUse("offlineMode");
+  }
+
+  /**
    * Can I use the User Passphrase Policies plugin
    * @returns {boolean}
    */
@@ -250,6 +258,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleSubmenuClick = this.handleSubmenuClick.bind(this);
     this.handleMetadataGettingStartedClick = this.handleMetadataGettingStartedClick.bind(this);
     this.handleScimClick = this.handleScimClick.bind(this);
+    this.handleOfflineClick = this.handleOfflineClick.bind(this);
   }
 
   /**
@@ -424,6 +433,13 @@ class DisplayAdministrationMenu extends React.Component {
     this.isCommunityEdition()
       ? this.props.navigationContext.onGoToAdministrationScimRequestedTeasing()
       : this.props.navigationContext.onGoToAdministrationScimRequested();
+  }
+
+  /**
+   * Handle when the user click on the offline mode settings menu
+   */
+  handleOfflineClick() {
+    this.props.navigationContext.onGoToAdministrationOfflineRequested();
   }
 
   /**
@@ -679,6 +695,16 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * If offline mode menu is selected
+   * @returns {boolean}
+   */
+  isOfflineSelected() {
+    return (
+      AdministrationWorkspaceMenuTypes.OFFLINE === this.props.administrationWorkspaceContext.selectedAdministration
+    );
+  }
+
+  /**
    * Should display resource configuration section.
    * @returns {boolean}
    */
@@ -791,7 +817,7 @@ class DisplayAdministrationMenu extends React.Component {
                         >
                           {this.state.isContentTypesOpened ? <CaretDownSVG /> : <CaretRightSVG />}
                           <span>
-                            <Trans>Resource types</Trans>
+                            <Trans>Resource Types</Trans>
                           </span>
                         </button>
                       </div>
@@ -810,7 +836,7 @@ class DisplayAdministrationMenu extends React.Component {
                                   onClick={this.handleMetadataGettingStartedClick}
                                 >
                                   <span>
-                                    <Trans>Getting started</Trans>
+                                    <Trans>Getting Started</Trans>
                                   </span>
                                   <span className="chips new">new</span>
                                 </button>
@@ -831,7 +857,7 @@ class DisplayAdministrationMenu extends React.Component {
                                     onClick={this.handleContentTypesMetadataKeyClick}
                                   >
                                     <span>
-                                      <Trans>Metadata key</Trans>
+                                      <Trans>Metadata Key</Trans>
                                     </span>
                                     {this.isBeta("metadata") && <span className="chips beta">beta</span>}
                                   </button>
@@ -849,7 +875,7 @@ class DisplayAdministrationMenu extends React.Component {
                                     onClick={this.handleContentTypesEncryptedMetadataClick}
                                   >
                                     <span>
-                                      <Trans>Encrypted metadata</Trans>
+                                      <Trans>Encrypted Metadata</Trans>
                                     </span>
                                     {this.isBeta("metadata") && <span className="chips beta">beta</span>}
                                   </button>
@@ -867,7 +893,7 @@ class DisplayAdministrationMenu extends React.Component {
                                     onClick={this.handleMigrateMetadataClick}
                                   >
                                     <span>
-                                      <Trans>Migrate metadata</Trans>
+                                      <Trans>Migrate Metadata</Trans>
                                     </span>
                                     {this.isBeta("metadata") && <span className="chips beta">beta</span>}
                                   </button>
@@ -885,7 +911,7 @@ class DisplayAdministrationMenu extends React.Component {
                                     onClick={this.handleAllowedContentTypesClick}
                                   >
                                     <span>
-                                      <Trans>Allow content types</Trans>
+                                      <Trans>Allow Content Types</Trans>
                                     </span>
                                     {this.isBeta("metadata") && <span className="chips beta">beta</span>}
                                   </button>
@@ -911,7 +937,7 @@ class DisplayAdministrationMenu extends React.Component {
                         >
                           {this.state.isResourceConfigurationOpened ? <CaretDownSVG /> : <CaretRightSVG />}
                           <span>
-                            <Trans>Resource policies</Trans>
+                            <Trans>Resource Policies</Trans>
                           </span>
                         </button>
                       </div>
@@ -969,7 +995,7 @@ class DisplayAdministrationMenu extends React.Component {
                                   onClick={this.handleSecretHistoryClick}
                                 >
                                   <span>
-                                    <Trans>Secret history</Trans>
+                                    <Trans>Secret History</Trans>
                                   </span>
                                   {this.isBeta("secretRevisions") && <span className="chips beta">beta</span>}
                                 </button>
@@ -1105,7 +1131,7 @@ class DisplayAdministrationMenu extends React.Component {
                         >
                           {this.state.isUserProvisionningOpened ? <CaretDownSVG /> : <CaretRightSVG />}
                           <span>
-                            <Trans>User provisionning</Trans>
+                            <Trans>User Provisionning</Trans>
                           </span>
                         </button>
                       </div>
@@ -1199,7 +1225,7 @@ class DisplayAdministrationMenu extends React.Component {
                             <div className="main-cell">
                               <button className="link no-border" type="button" onClick={this.handleSmtpSettingsClick}>
                                 <span>
-                                  <Trans>Email server</Trans>
+                                  <Trans>Email Server</Trans>
                                 </span>
                               </button>
                             </div>
@@ -1236,6 +1262,22 @@ class DisplayAdministrationMenu extends React.Component {
                           <span>
                             <Trans>Role-Based Access Control</Trans>
                           </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              )}
+              {this.canIUseOffline && (
+                <li id="offline_menu">
+                  <div className={`row ${this.isOfflineSelected() ? "selected" : ""}`}>
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button className="link no-border" type="button" onClick={this.handleOfflineClick}>
+                          <span>
+                            <Trans>Offline mode</Trans>
+                          </span>
+                          {this.isBeta("offlineMode") && <span className="chips beta">beta</span>}
                         </button>
                       </div>
                     </div>

@@ -35,7 +35,7 @@ describe("DisplaySecretHistoryAdministration", () => {
 
       const page = new DisplaySecretHistoryAdministration(props);
 
-      expect(page.title.textContent).toBe("Secret history");
+      expect(page.title.textContent).toBe("Secret History");
     });
   });
 

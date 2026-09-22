@@ -26,18 +26,10 @@ class ManageQuickAccessMode extends Component {
   }
 
   /**
-   * Get the query parameters from the url
-   * @returns {URLSearchParams}
-   */
-  get queryParameters() {
-    return new URLSearchParams(this.props.location.search);
-  }
-
-  /**
    * Handle close outside window event
    */
   handleCloseOutsideWindowEvent() {
-    const mustCloseWindow = this.props.context.getDetached() && this.props.context.getBootstrapFeature() !== null;
+    const mustCloseWindow = this.props.context.detached && this.props.context.bootstrapFeature !== null;
     if (mustCloseWindow) {
       const closeWindow = async () => {
         if (this.props.context.shouldCloseAtWindowBlur) {
@@ -54,7 +46,7 @@ class ManageQuickAccessMode extends Component {
    * native behaviour of the quickaccess opened from the toolbar.
    */
   handleResizeWindow() {
-    const detachedMode = this.props.context.getDetached();
+    const detachedMode = this.props.context.detached;
     if (detachedMode) {
       const handleWindowResized = (entries) =>
         this.props.context.port.emit("passbolt.quickaccess.update-window-height", entries[0].target.clientHeight);

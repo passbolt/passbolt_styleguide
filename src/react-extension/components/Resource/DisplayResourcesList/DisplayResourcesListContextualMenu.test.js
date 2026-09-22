@@ -40,7 +40,15 @@ import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {
+  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
+  TEST_RESOURCE_TYPE_V5_DEFAULT,
+  TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+  TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
+  TEST_RESOURCE_TYPE_V5_TOTP,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
@@ -49,6 +57,9 @@ import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissin
 import { v4 as uuidv4 } from "uuid";
 import DisplayResourceSecretHistory from "../../SecretHistory/DisplayResourceSecretHistory";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import { defaultOfflineItemDto } from "../../../../shared/models/entity/offline/offlineItemEntity.test.data";
+import OfflineModeServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeServiceWorkerService";
+import PassboltApiFetchError from "../../../../shared/error/passboltApiFetchError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -518,6 +529,183 @@ describe("DisplayResourcesListContextualMenu", () => {
 
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
       expect(props.hide).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("As LU I should be able to mark a resource available offline or remove it", () => {
+    it("As LU I should see the 'Make available offline' item when a v5 resource is not yet available offline", () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+      });
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).not.toBeNull();
+      expect(page.offlineAvailabilityItem.textContent).toBe("Make available offline");
+    });
+
+    it("As LU I should see the 'Remove offline availability' item when a v5 resource is already available offline", () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          offline: defaultOfflineItemDto(),
+        }),
+      });
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).not.toBeNull();
+      expect(page.offlineAvailabilityItem.textContent).toBe("Remove offline availability");
+    });
+
+    it("As LU I should not see the offline availability item for a v4 resource", () => {
+      expect.assertions(1);
+      // defaultResourceDto defaults to a v4 resource type (password and description).
+      const props = defaultProps();
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).toBeNull();
+    });
+
+    it("As LU I can mark a v5 resource as available offline", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.toggleOfflineAvailability();
+
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource has been made available offline.",
+      );
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it("As LU I can remove offline availability from a v5 resource already available offline", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          offline: defaultOfflineItemDto(),
+        }),
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "unmarkItem").mockResolvedValue();
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.toggleOfflineAvailability();
+
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource is no longer available offline.",
+      );
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it("As LU I should see an error notification if the offline update fails", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {
+        jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockResolvedValue();
+        throw new Error("offline failure");
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displayError").mockImplementation(() => {});
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.toggleOfflineAvailability();
+
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(
+        "Unable to update the offline availability of the resource.",
+      );
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it("As LU I should see a dedicated error notification when the maximum number of offline items is reached", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+      });
+      const error = new PassboltApiFetchError("Could not validate offline item data.", {
+        code: 400,
+        body: { max_items: { max_items: "The maximum number of offline items has been reached." } },
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displayError").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockRejectedValue(error);
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.toggleOfflineAvailability();
+
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(
+        "You have reached the maximum number of offline items (1000).",
+      );
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it("As LU I should see the generic error notification when the API error is not about the maximum number of offline items", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+      });
+      const error = new PassboltApiFetchError("Could not validate offline item data.", {
+        code: 400,
+        body: { resource_id: { resource_exists: "The resource does not exist." } },
+      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displayError").mockImplementation(() => {});
+      jest.spyOn(OfflineModeServiceWorkerService.prototype, "markResource").mockRejectedValue(error);
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.toggleOfflineAvailability();
+
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(
+        "Unable to update the offline availability of the resource.",
+      );
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it.each([
+      { scenario: "password and description", resourceTypeId: TEST_RESOURCE_TYPE_V5_DEFAULT },
+      { scenario: "password string", resourceTypeId: TEST_RESOURCE_TYPE_V5_PASSWORD_STRING },
+      { scenario: "password and totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP },
+      { scenario: "standalone totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_TOTP },
+    ])("As LU I should see the offline availability item for a v5 $scenario resource", ({ resourceTypeId }) => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: resourceTypeId }),
+      });
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).not.toBeNull();
+    });
+
+    it.each([
+      { scenario: "custom fields", resourceTypeId: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS },
+      { scenario: "standalone note", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE },
+      { scenario: "standalone pin code", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE },
+    ])(
+      "As LU I should not see the offline availability item for a v5 $scenario resource, it is neither a password nor a totp",
+      ({ resourceTypeId }) => {
+        expect.assertions(1);
+        const props = defaultProps({
+          resource: defaultResourceDto({ resource_type_id: resourceTypeId }),
+        });
+        const page = new DisplayResourcesListContextualMenuPage(props);
+
+        expect(page.offlineAvailabilityItem).toBeNull();
+      },
+    );
+
+    it("As LU I should not see the offline availability item if the resource type is unknown", () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        resource: defaultResourceDto({ resource_type_id: uuidv4() }),
+      });
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      expect(page.offlineAvailabilityItem).toBeNull();
     });
   });
 });

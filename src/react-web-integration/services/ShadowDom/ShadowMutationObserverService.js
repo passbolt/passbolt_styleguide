@@ -47,10 +47,16 @@ class ShadowMutationObserverService {
     }
 
     let foundRoots;
-    // Filter out shadow roots whose host was removed
+    // Filter out shadow roots whose host was removed.
     let hasRemovals = mutations.some((mutation) => mutation.removedNodes.length > 0);
     if (hasRemovals) {
-      foundRoots = cached.filter((shadowRoot) => shadowRoot.host && root.contains(shadowRoot.host));
+      // Prune via the host captured at collection time, NEVER `shadowRoot.host`: reading `.host` on a root
+      // whose host has been torn down (e.g. a <video> user-agent widget) crashes the Firefox content
+      // process (Gecko bug 2063234, PB-54190). A root with no known/connected host is dropped.
+      foundRoots = cached.filter((shadowRoot) => {
+        const host = ShadowRootCollectorService.getHost(shadowRoot);
+        return Boolean(host) && root.contains(host);
+      });
       // We reuse this flag to indicate whether we actually removed any roots
       hasRemovals = foundRoots.length < cached.length;
     } else {

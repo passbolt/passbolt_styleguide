@@ -12,10 +12,51 @@
  * @since         2.11.0
  */
 
+import { fireEvent, render, waitFor } from "@testing-library/react";
+import React from "react";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
+
 /**
- * The FilterUsersByGroupContextualMenu component represented as a page
+ * The DisplayGroupContextualMenu component represented as a page
  */
-export default class DisplayGroupsContextualMenuPageObject {
+export default class DisplayGroupContextualMenuPage {
+  /**
+   * Default constructor
+   * @param appContext An app context
+   * @param props Props to attach
+   */
+  constructor(appContext, props) {
+    this._page = render(
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <DisplayGroupContextualMenu {...props} />
+        </AppContext.Provider>
+      </MockTranslationProvider>,
+    );
+    this.setupPageObjects();
+  }
+
+  /**
+   * Set up the objects of the page
+   */
+  setupPageObjects() {
+    this._displayGroupContextualMenu = new DisplayGroupsContextualMenuPageObject(this._page.container);
+  }
+
+  /**
+   * Returns the page object of the group contextual menu
+   */
+  get displayGroupContextualMenu() {
+    return this._displayGroupContextualMenu;
+  }
+}
+
+/**
+ * The DisplayGroupContextualMenu component represented as a page object
+ */
+export class DisplayGroupsContextualMenuPageObject {
   /**
    * Default constructor
    * @param container The container which includes the AddComment Component
@@ -36,5 +77,13 @@ export default class DisplayGroupsContextualMenuPageObject {
    */
   get editGroupContextualMenu() {
     return this._container.querySelector("#edit-group");
+  }
+
+  /**
+   * Click on the delete group menu element
+   */
+  async clickDelete() {
+    fireEvent.click(this.deleteGroupContextualMenu, { button: 0 });
+    await waitFor(() => {});
   }
 }

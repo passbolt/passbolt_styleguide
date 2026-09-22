@@ -25,6 +25,7 @@ import { Trans, withTranslation } from "react-i18next";
 import { maxSizeValidation } from "../../../lib/Error/InputValidator";
 import { RESOURCE_FOLDER_NAME_MAX_LENGTH } from "../../../../shared/constants/inputs.const";
 import AttentionSVG from "../../../../img/svg/attention.svg";
+import FolderServiceWorkerService from "../../../../shared/services/serviceWorker/folder/folderServiceWorkerService";
 
 class RenameResourceFolder extends Component {
   /**
@@ -34,6 +35,7 @@ class RenameResourceFolder extends Component {
    */
   constructor(props) {
     super(props);
+    this.folderServiceWorkerService = new FolderServiceWorkerService(props.context.port);
     this.state = this.getStateBasedOnContext(props, this.getDefaultState());
     this.createInputRefs();
     this.bindEventHandlers();
@@ -231,7 +233,7 @@ class RenameResourceFolder extends Component {
       id: this.props.context.folder.id,
       name: this.state.name,
     };
-    return await this.props.context.port.request("passbolt.folders.update", folderDto);
+    return await this.folderServiceWorkerService.update(folderDto);
   }
 
   /**

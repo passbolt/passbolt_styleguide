@@ -46,7 +46,7 @@ describe("As AD I can see a Breadcrumb", () => {
     { menuType: AdministrationWorkspaceMenuTypes.SUBSCRIPTION, expectedBreadcrumb: "Subscription" },
     { menuType: AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION, expectedBreadcrumb: "Internationalisation" },
     { menuType: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY, expectedBreadcrumb: "Account Recovery" },
-    { menuType: AdministrationWorkspaceMenuTypes.SMTP_SETTINGS, expectedBreadcrumb: "Email server" },
+    { menuType: AdministrationWorkspaceMenuTypes.SMTP_SETTINGS, expectedBreadcrumb: "Email Server" },
     { menuType: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION, expectedBreadcrumb: "Self Registration" },
     { menuType: AdministrationWorkspaceMenuTypes.SSO, expectedBreadcrumb: "Single Sign-On" },
     { menuType: AdministrationWorkspaceMenuTypes.MFA_POLICY, expectedBreadcrumb: "MFA Policy" },
@@ -60,14 +60,15 @@ describe("As AD I can see a Breadcrumb", () => {
     { menuType: AdministrationWorkspaceMenuTypes.HEALTHCHECK, expectedBreadcrumb: "Passbolt API Status" },
     {
       menuType: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA,
-      expectedBreadcrumb: "Encrypted metadata",
+      expectedBreadcrumb: "Encrypted Metadata",
     },
-    { menuType: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY, expectedBreadcrumb: "Metadata key" },
-    { menuType: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA, expectedBreadcrumb: "Migrate metadata" },
-    { menuType: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES, expectedBreadcrumb: "Allow content types" },
-    { menuType: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED, expectedBreadcrumb: "Getting started" },
+    { menuType: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY, expectedBreadcrumb: "Metadata Key" },
+    { menuType: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA, expectedBreadcrumb: "Migrate Metadata" },
+    { menuType: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES, expectedBreadcrumb: "Allow Content Types" },
+    { menuType: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED, expectedBreadcrumb: "Getting Started" },
     { menuType: AdministrationWorkspaceMenuTypes.SCIM, expectedBreadcrumb: "SCIM" },
-    { menuType: AdministrationWorkspaceMenuTypes.SECRET_HISTORY, expectedBreadcrumb: "Secret history" },
+    { menuType: AdministrationWorkspaceMenuTypes.SECRET_HISTORY, expectedBreadcrumb: "Secret History" },
+    { menuType: AdministrationWorkspaceMenuTypes.OFFLINE, expectedBreadcrumb: "Offline Mode" },
   ])("As AD I should see a breadcrumb for each menu", (scenario) => {
     it(`for: ${scenario.menuType}`, () => {
       const props = defaultProps(scenario.menuType); // The props to pass

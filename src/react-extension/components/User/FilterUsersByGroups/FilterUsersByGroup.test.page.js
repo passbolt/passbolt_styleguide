@@ -20,7 +20,7 @@ import DisplayGroups from "./FilterUsersByGroup";
 import DisplayGroupsFilterContextualMenuPageObject from "./FilterUsersByGroupContextualMenu.test.page";
 import ManageContextualMenu from "../../Common/ContextualMenu/ManageContextualMenu";
 import ContextualMenuContextProvider from "../../../contexts/ContextualMenuContext";
-import DisplayGroupsContextualMenuPageObject from "./DisplayGroupContextualMenu.test.page";
+import { DisplayGroupsContextualMenuPageObject } from "./DisplayGroupContextualMenu.test.page";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**

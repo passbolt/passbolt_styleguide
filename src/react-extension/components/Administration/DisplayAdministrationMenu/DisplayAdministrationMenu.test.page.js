@@ -168,6 +168,13 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the offline mode menu
+   */
+  get offlineSettings() {
+    return this._page.container.querySelector("#offline_menu .row .main-cell-wrapper .main-cell button");
+  }
+
+  /**
    * Returns the Content Types Encrypted Metadata.
    */
   get contentTypesEncryptedMetadata() {
@@ -303,6 +310,11 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the secret history settings element */
   async gotoSecretHistorySettings() {
     await this.click(this.secretHistorySettings);
+  }
+
+  /** Click on the offline mode settings element */
+  async gotoOfflineSettings() {
+    await this.click(this.offlineSettings);
   }
 
   /** Click on the Content Types Encrypted Metadata element */

@@ -12,12 +12,10 @@ import MoreFiltersPage from "./components/MoreFiltersPage/MoreFiltersPage";
 import ResourceCreatePage from "./components/ResourceCreatePage/ResourceCreatePage";
 import ResourceViewPage from "./components/ResourceViewPage/ResourceViewPage";
 import Search from "./components/Search/Search";
-import { MemoryRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { MemoryRouter as Router, Route, Switch } from "react-router-dom";
 import AnimatedSwitch from "./components/AnimatedSwitch/AnimatedSwitch";
 import PassphraseDialog from "./components/PassphraseDialog/PassphraseDialog";
 import PropTypes from "prop-types";
-import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
-import UserSettings from "../shared/lib/Settings/UserSettings";
 import TranslationProvider from "../shared/components/Internationalisation/TranslationProvider";
 import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtensionInProgress/SetupExtensionInProgress";
 import ManageQuickAccessMode from "./components/ManageQuickAccessMode/ManageQuickAccessMode";
@@ -25,10 +23,7 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import SaveResource from "./components/ResourceAutoSave/SaveResource";
 import GeneratePasswordPage from "./components/GeneratePasswordPage/GeneratePasswordPage";
 import PrepareResourceContextProvider from "./contexts/PrepareResourceContext";
-import SpinnerSVG from "../img/svg/spinner.svg";
 import SsoContextProvider from "./contexts/SsoContext";
-import RbacsCollection from "../shared/models/entity/rbac/rbacsCollection";
-import AppContext from "../shared/context/AppContext/AppContext";
 import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import PasswordExpirySettingsContextProvider from "../react-extension/contexts/PasswordExpirySettingsContext";
 import ConfirmCreatePage from "./components/ConfirmCreatePage/ConfirmCreatePage";
@@ -41,8 +36,14 @@ import MetadataKeyEntity from "../shared/models/entity/metadata/metadataKeyEntit
 import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataTrustedKeyEntity";
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import ActionAbortedMissingMetadataKeysPage from "./components/ActionAbortedMissingMetadataKeysPage/ActionAbortedMissingMetadataKeysPage";
-import RbacServiceWorkerService from "../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
-import OnlineSessionEntity from "../shared/models/entity/session/onlineSessionEntity";
+import OfflineSettingsLocalStorageContextProvider from "../shared/context/offline/OfflineSettingsLocalStorageContext";
+import ActiveSessionLocalStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import ExtQuickAccessContextProvider from "./contexts/ExtQuickAccessContext";
+import HandleBootstrapRoute from "./components/HandleBootstrapRoute/HandleBootstrapRoute";
+import QuickAccessServerUnavailable from "./components/QuickAccessServerUnavailable/QuickAccessServerUnavailable";
+import QuickAccessOfflineFooter from "./components/Offline/QuickAccessOfflineFooter";
+import OfflineLoginPage from "./components/Offline/OfflineLoginPage";
+import OfflineFooterDetailsPage from "./components/Offline/OfflineFooterDetailsPage";
 
 const SEARCH_VISIBLE_ROUTES = [
   "/webAccessibleResources/quickaccess/home",
@@ -66,27 +67,10 @@ export const BOOTSTRAP_FEATURE = {
 class ExtQuickAccess extends React.Component {
   constructor(props) {
     super(props);
-    this.createRefs();
     this.bindCallbacks();
-    this.state = this.getDefaultState(props);
-    this.rbacServiceWorkerService = new RbacServiceWorkerService(props.port);
+    this.state = this.defaultState;
+    this.initEventListener();
     this.getAccount();
-  }
-
-  /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createRefs() {
-    this.searchRef = React.createRef();
-  }
-
-  /**
-   * Can the user use the remember until I logout option
-   * @return {boolean}
-   */
-  get canRememberMe() {
-    const options = this.state.siteSettings.getRememberMeOptions();
-    return options !== null && typeof options[-1] !== "undefined";
   }
 
   /**
@@ -94,21 +78,18 @@ class ExtQuickAccess extends React.Component {
    * @return {void}
    */
   bindCallbacks() {
-    this.focusSearch = this.focusSearch.bind(this);
-    this.updateSearch = this.updateSearch.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleBackgroundPageRequiresPassphraseEvent = this.handleBackgroundPageRequiresPassphraseEvent.bind(this);
     this.handlePassphraseDialogCompleted = this.handlePassphraseDialogCompleted.bind(this);
-    this.loginSuccessCallback = this.loginSuccessCallback.bind(this);
-    this.logoutSuccessCallback = this.logoutSuccessCallback.bind(this);
-    this.mfaRequiredCallback = this.mfaRequiredCallback.bind(this);
-    this.setWindowBlurBehaviour = this.setWindowBlurBehaviour.bind(this);
-    this.getOpenerTabId = this.getOpenerTabId.bind(this);
-    this.getBootstrapFeature = this.getBootstrapFeature.bind(this);
-    this.getDetached = this.getDetached.bind(this);
     this.handleBackgroundPageConfirmMetadataKeyEvent = this.handleBackgroundPageConfirmMetadataKeyEvent.bind(this);
     this.handleConfirmMetadataKeyDialogCompleted = this.handleConfirmMetadataKeyDialogCompleted.bind(this);
-    this.closeWindow = this.closeWindow.bind(this);
+  }
+
+  /**
+   * Init event listener
+   */
+  initEventListener() {
+    this.props.port.on("passbolt.passphrase.request", this.handleBackgroundPageRequiresPassphraseEvent);
+    this.props.port.on("passbolt.metadata-key.trust-confirm", this.handleBackgroundPageConfirmMetadataKeyEvent);
   }
 
   /**
@@ -116,61 +97,20 @@ class ExtQuickAccess extends React.Component {
    * Invoked immediately after component is inserted into the tree
    * @return {void}
    */
-  async componentDidMount() {
-    try {
-      this.state.port.on("passbolt.passphrase.request", this.handleBackgroundPageRequiresPassphraseEvent);
-      this.state.port.on("passbolt.metadata-key.trust-confirm", this.handleBackgroundPageConfirmMetadataKeyEvent);
-      this.handlePassphraseRequest();
-      await this.checkPluginIsConfigured();
-      await this.getUser();
-      const isAuthenticated = await this.checkAuthStatus();
-      const siteSettings = await this.getSiteSettings();
-      if (isAuthenticated) {
-        this.getLoggedInUser(siteSettings);
-      }
-      await this.getLocale();
-    } catch (e) {
-      this.setState({
-        hasError: true,
-        errorMessage: e.message,
-      });
-    }
+  componentDidMount() {
+    this.handlePassphraseRequest();
   }
 
   /**
    * Get the default state value.
-   * @param {object} props The component props.
    * @returns {object}
    */
-  getDefaultState(props) {
+  get defaultState() {
     return {
-      storage: props.storage,
-      port: props.port,
-      isAuthenticated: null,
-      userSettings: null,
-      siteSettings: null,
-      loggedInUser: null,
       account: null, // The account
-      rbacs: null, // The role based access control
-      hasError: false,
-      errorMessage: "",
-      locale: "en-UK", // To avoid any weird blink, launch the quickaccess with a default english locale
-      // Search
-      search: "",
-      searchHistory: {},
-      updateSearch: this.updateSearch,
-      focusSearch: this.focusSearch,
       // Passphrase
       passphraseRequired: false,
       passphraseRequestId: "",
-      // Manage popup blur
-      shouldCloseAtWindowBlur: true, // when true the quickaccess in detached mode should close when losing focus
-      setWindowBlurBehaviour: this.setWindowBlurBehaviour, // set the detached mode blur behaviour
-      closeWindow: this.closeWindow,
-      // Quickaccess properties getters.
-      getOpenerTabId: this.getOpenerTabId, // Get the opener tab id, useful when used in detached mode to get info of the opener tab.
-      getBootstrapFeature: this.getBootstrapFeature, // The bootstrap feature.
-      getDetached: this.getDetached, // The detached mode
       // Confirm metadata key
       confirmMetadataKeyRequired: false,
       confirmMetadataKeyRequestId: null,
@@ -180,94 +120,15 @@ class ExtQuickAccess extends React.Component {
   }
 
   /**
-   * Get the opener tab identifier.
-   * @returns {string}
-   */
-  getOpenerTabId() {
-    return this.props.openerTabId;
-  }
-
-  /**
-   * Get the bootstrap feature.
-   * @returns {string}
-   */
-  getBootstrapFeature() {
-    return this.props.bootstrapFeature;
-  }
-
-  /**
-   * Get the detached mode
-   * @return {boolean}
-   */
-  getDetached() {
-    return this.props.detached;
-  }
-
-  updateSearch(search) {
-    this.setState({ search });
-  }
-
-  focusSearch() {
-    if (this.searchRef.current) {
-      this.searchRef.current.focus();
-    }
-  }
-
-  /**
-   * When set to true the quickaccess in detached mode should close when losing focus
-   * @param {boolean} shouldCloseAtWindowBlur
-   */
-  setWindowBlurBehaviour(shouldCloseAtWindowBlur) {
-    this.setState({ shouldCloseAtWindowBlur });
-  }
-
-  /**
    * Closes the current window.
    * @returns {Promise<void>}
    */
   async closeWindow() {
-    if (this.getDetached()) {
+    if (this.props.detached) {
       await this.props.port.request("passbolt.active-tab.close");
     } else {
       window.close();
     }
-  }
-
-  async checkPluginIsConfigured() {
-    const isConfigured = await this.state.port.request("passbolt.addon.is-configured");
-    if (!isConfigured) {
-      await this.props.port.request("passbolt.tabs.open-website-getting-started-page");
-      await this.closeWindow();
-    }
-  }
-
-  async getUser() {
-    const storageData = await this.props.storage.local.get(["_passbolt_data"]);
-    const userSettings = new UserSettings(storageData._passbolt_data.config);
-    this.setState({ userSettings });
-  }
-
-  async getSiteSettings() {
-    const siteSettingsDto = await this.state.port.request("passbolt.site-settings.get-or-find");
-    const siteSettings = new SiteSettingsEntity(siteSettingsDto);
-    this.setState({ siteSettings });
-    return siteSettings;
-  }
-
-  /**
-   * Get the current user info from background page and set it in the state
-   */
-  async getLoggedInUser(siteSettings) {
-    const canIUseRbac = siteSettings.canIUse("rbacs");
-    const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
-    const rbacsDto = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : [];
-    const rbacs = new RbacsCollection(rbacsDto);
-    this.setState({ loggedInUser, rbacs });
-  }
-
-  async getLocale() {
-    const { locale } = await this.state.port.request("passbolt.locale.get");
-    this.setState({ locale });
   }
 
   /**
@@ -275,66 +136,15 @@ class ExtQuickAccess extends React.Component {
    * @returns {Promise<void>}
    */
   async getAccount() {
-    const accountDto = await this.state.port.request("passbolt.account.get");
+    const accountDto = await this.props.port.request("passbolt.account.get");
     const account = new AccountEntity(accountDto);
     this.setState({ account });
   }
 
   /**
-   * Retrieve the authentication status.
-   *
-   * If the user is authenticated but the MFA challenge is required, close the quickaccess and redirect the user to
-   * the passbolt application.
-   *
-   * This function requires the user settings to be present in the component state.
-   * @returns {Promise<boolean>}
+   * Handle background page require passphrase event
+   * @param requestId
    */
-  async checkAuthStatus() {
-    const activeSession = await this.state.port.request("passbolt.auth.check-status");
-    const activeSessionEntity = new OnlineSessionEntity(activeSession);
-    if (!activeSessionEntity.isMfaAuthenticated) {
-      await this.redirectToMfaAuthentication();
-      return;
-    }
-    this.setState({ isAuthenticated: activeSessionEntity.isAuthenticated });
-    return activeSessionEntity.isAuthenticated;
-  }
-
-  /**
-   * Redirect to MFA authentication.
-   */
-  async redirectToMfaAuthentication() {
-    await this.props.port.request("passbolt.tabs.open-trusted-domain");
-    await this.closeWindow();
-  }
-
-  async loginSuccessCallback() {
-    if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.LOGIN) {
-      await this.closeWindow();
-      return;
-    }
-
-    const siteSettings = await this.getSiteSettings();
-    this.setState({ isAuthenticated: true });
-    this.getLoggedInUser(siteSettings);
-  }
-
-  logoutSuccessCallback() {
-    this.setState({ isAuthenticated: false });
-  }
-
-  async mfaRequiredCallback() {
-    await this.props.port.request("passbolt.tabs.open-trusted-domain");
-    await this.closeWindow();
-  }
-
-  async handleKeyDown(event) {
-    // Close the quickaccess popup when the user presses the "ESC" key.
-    if (event.keyCode === 27) {
-      await this.closeWindow();
-    }
-  }
-
   handleBackgroundPageRequiresPassphraseEvent(requestId) {
     this.setState({ passphraseRequired: true, passphraseRequestId: requestId });
   }
@@ -344,11 +154,11 @@ class ExtQuickAccess extends React.Component {
    * @param requestId
    * @param confirmMetadataKey
    */
-  handleBackgroundPageConfirmMetadataKeyEvent(requestId, data) {
+  handleBackgroundPageConfirmMetadataKeyEvent(requestId, confirmMetadataKey) {
     try {
       // Set validation to false as data is required for the entity used by the service worker but should not be sent to the content code.
-      const metadataKey = new MetadataKeyEntity(data.metadata_key, { validate: false });
-      const metadataTrustedKey = new MetadataTrustedKeyEntity(data.metadata_trusted_key);
+      const metadataKey = new MetadataKeyEntity(confirmMetadataKey.metadata_key, { validate: false });
+      const metadataTrustedKey = new MetadataTrustedKeyEntity(confirmMetadataKey.metadata_trusted_key);
       this.setState({
         confirmMetadataKeyRequired: true,
         confirmMetadataKeyRequestId: requestId,
@@ -364,6 +174,12 @@ class ExtQuickAccess extends React.Component {
     }
   }
 
+  /**
+   * Handle passphrase dialog completed
+   * If bootstrap feature equals request passphrase, close the windows
+   * Else reset the state of passphrase required and request id
+   * @return {Promise<void>}
+   */
   async handlePassphraseDialogCompleted() {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
       await this.closeWindow();
@@ -372,6 +188,9 @@ class ExtQuickAccess extends React.Component {
     }
   }
 
+  /**
+   * Handle passphrase request if bootstrap feature equals request passphrase
+   */
   handlePassphraseRequest() {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
       this.handleBackgroundPageRequiresPassphraseEvent(this.props.bootstrapRequestId);
@@ -390,33 +209,12 @@ class ExtQuickAccess extends React.Component {
     });
   }
 
-  isReady() {
-    return (
-      this.state.isAuthenticated !== null &&
-      this.state.userSettings !== null &&
-      this.state.siteSettings != null &&
-      this.state.locale !== null
-    );
-  }
-
   /**
-   * Get the route to quickaccess should bootstrap on.
-   * @returns {string}
+   * Is ready
+   * @return {boolean}
    */
-  getBootstrapRoute() {
-    if (!this.state.isAuthenticated) {
-      return "/webAccessibleResources/quickaccess/login";
-    }
-
-    switch (this.props.bootstrapFeature) {
-      case BOOTSTRAP_FEATURE.CREATE_NEW_CREDENTIALS:
-      case BOOTSTRAP_FEATURE.SAVE_CREDENTIALS:
-        return "/webAccessibleResources/quickaccess/resources/create";
-      case BOOTSTRAP_FEATURE.AUTOSAVE_CREDENTIALS:
-        return "/webAccessibleResources/quickaccess/resources/autosave";
-    }
-
-    return "/webAccessibleResources/quickaccess/home";
+  isReady() {
+    return this.state.account !== null;
   }
 
   /**
@@ -424,37 +222,32 @@ class ExtQuickAccess extends React.Component {
    * @returns {JSX.Element}
    */
   render() {
-    const isReady = this.isReady();
-
     return (
-      <AppContext.Provider value={this.state}>
-        <TranslationProvider
-          loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json"
-          locale={this.state?.locale}
+      this.isReady() && (
+        <ActiveSessionLocalStorageContextProvider
+          account={this.state.account}
+          port={this.props.port}
+          storage={this.props.storage}
         >
-          <Router initialEntries={[`/webAccessibleResources/quickaccess.html`]}>
-            <div className="container quickaccess" onKeyDown={this.handleKeyDown}>
-              <Header logoutSuccessCallback={this.logoutSuccessCallback} />
-              {!isReady && !this.state.hasError && (
-                <div className="processing-wrapper">
-                  <SpinnerSVG />
-                  <p className="processing-text">Connecting your account</p>
-                </div>
-              )}
-              {this.state.hasError && (
-                <div className="processing-wrapper">
-                  <p className="processing-text">{this.state.errorMessage}</p>
-                </div>
-              )}
-              {isReady && (
-                <>
+          <ExtQuickAccessContextProvider
+            storage={this.props.storage}
+            port={this.props.port}
+            account={this.state.account}
+            openerTabId={this.props.openerTabId}
+            bootstrapFeature={this.props.bootstrapFeature}
+            detached={this.props.detached}
+          >
+            <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+              <OfflineSettingsLocalStorageContextProvider>
+                <Router initialEntries={[`/webAccessibleResources/quickaccess.html`]}>
+                  <Header />
                   <ManageQuickAccessMode />
                   <Switch>
                     {/* The initial route the quickaccess panel is loaded on is a triage url. */}
                     <Route
                       exact
                       path={"/webAccessibleResources/quickaccess.html"}
-                      render={() => <Redirect to={this.getBootstrapRoute()} />}
+                      render={() => <HandleBootstrapRoute bootstrapFeature={this.props.bootstrapFeature} />}
                     />
                     {/* The route when the user is not authenticated */}
                     <Route
@@ -462,13 +255,27 @@ class ExtQuickAccess extends React.Component {
                       path="/webAccessibleResources/quickaccess/login"
                       render={() => (
                         <SsoContextProvider>
-                          <LoginPage
-                            loginSuccessCallback={this.loginSuccessCallback}
-                            mfaRequiredCallback={this.mfaRequiredCallback}
-                            canRememberMe={this.canRememberMe}
-                          />
+                          <LoginPage />
                         </SsoContextProvider>
                       )}
+                    />
+                    {/* The route to sign in when the server is not reachable (offline mode). */}
+                    <Route
+                      exact
+                      path="/webAccessibleResources/quickaccess/login-offline"
+                      render={() => <OfflineLoginPage />}
+                    />
+                    {/* The route displaying the expanded offline footer of Offline mode. */}
+                    <Route
+                      exact
+                      path="/webAccessibleResources/quickaccess/offline-footer-details"
+                      render={() => <OfflineFooterDetailsPage />}
+                    />
+                    {/* The route when the server is not reachable (offline). */}
+                    <Route
+                      exact
+                      path="/webAccessibleResources/quickaccess/server-not-reachable"
+                      component={QuickAccessServerUnavailable}
                     />
                     {/* Any other authenticated routes. */}
                     <Route path="/">
@@ -476,7 +283,6 @@ class ExtQuickAccess extends React.Component {
                         <PassphraseDialog
                           requestId={this.state.passphraseRequestId}
                           onComplete={this.handlePassphraseDialogCompleted}
-                          canRememberMe={this.canRememberMe}
                         />
                       )}
                       {this.state.confirmMetadataKeyRequired && (
@@ -490,10 +296,7 @@ class ExtQuickAccess extends React.Component {
                       <div
                         className={`${this.state.passphraseRequired || this.state.confirmMetadataKeyRequired ? "visually-hidden" : ""}`}
                       >
-                        <Route
-                          path={SEARCH_VISIBLE_ROUTES}
-                          render={() => <Search ref={(el) => (this.searchRef = el)} />}
-                        />
+                        <Route path={SEARCH_VISIBLE_ROUTES} render={() => <Search />} />
                         <ResourceTypesLocalStorageContextProvider>
                           <ResourceLocalStorageProvider>
                             <MetadataTypesSettingsLocalStorageContextProvider>
@@ -592,12 +395,13 @@ class ExtQuickAccess extends React.Component {
                       </div>
                     </Route>
                   </Switch>
-                </>
-              )}
-            </div>
-          </Router>
-        </TranslationProvider>
-      </AppContext.Provider>
+                  <QuickAccessOfflineFooter />
+                </Router>
+              </OfflineSettingsLocalStorageContextProvider>
+            </TranslationProvider>
+          </ExtQuickAccessContextProvider>
+        </ActiveSessionLocalStorageContextProvider>
+      )
     );
   }
 }

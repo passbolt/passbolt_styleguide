@@ -16,7 +16,7 @@ import { MemoryRouter } from "react-router-dom";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import CreateUserGroup from "./CreateUserGroup";
-import { defaultAppContext, defaultProps, mockGpgKey } from "./CreateUserGroup.test.data";
+import { defaultAppContext, defaultProps, mockGpgKey, createStressDirectoryContext } from "./CreateUserGroup.test.data";
 
 export default {
   title: "Components/UserGroup/CreateUserGroup",
@@ -38,6 +38,13 @@ context.port.addRequestListener("passbolt.keyring.get-public-key-info-by-user", 
 export const Initial = {
   args: {
     context,
+    ...defaultProps(),
+  },
+};
+
+export const StressWithLargeUserDirectory = {
+  args: {
+    context: createStressDirectoryContext(),
     ...defaultProps(),
   },
 };

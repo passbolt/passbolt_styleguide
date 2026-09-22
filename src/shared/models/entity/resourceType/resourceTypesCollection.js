@@ -121,6 +121,17 @@ class ResourceTypesCollection extends EntityV2Collection {
   }
 
   /**
+   * Filter by Password and TOTP resource types.
+   * @return {void} The function alters the collection itself.
+   */
+  filterByPasswordAndTOTPResourceTypes() {
+    this.filterByCallback(
+      (resourceType) =>
+        PASSWORD_RESOURCE_TYPES.includes(resourceType.slug) || TOTP_RESOURCE_TYPES.includes(resourceType.slug),
+    );
+  }
+
+  /**
    * Filter by resource type version.
    * @param {string} version the version used to filter the resource types
    * @return {void} The function alters the collection itself.

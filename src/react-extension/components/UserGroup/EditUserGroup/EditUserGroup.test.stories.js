@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 
-import { defaultAppContext, defaultProps } from "./EditUserGroup.test.data";
+import { defaultAppContext, defaultProps, stressGroupContext, stressGroupProps } from "./EditUserGroup.test.data";
 import EditUserGroup from "./EditUserGroup";
 import { MemoryRouter } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
@@ -49,5 +49,12 @@ export const Loading = {
   args: {
     context: defaultAppContext({ port: {} }),
     ...defaultProps(),
+  },
+};
+
+export const StressWithLargeMembersList = {
+  args: {
+    context: stressGroupContext,
+    ...stressGroupProps,
   },
 };

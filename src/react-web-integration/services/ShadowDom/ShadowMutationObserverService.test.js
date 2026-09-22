@@ -14,6 +14,7 @@
 
 import ShadowMutationObserverService from "./ShadowMutationObserverService";
 import ShadowRootCacheService from "./ShadowRootCacheService";
+import ShadowRootCollectorService from "./ShadowRootCollectorService";
 
 describe("ShadowMutationObserverService", () => {
   beforeEach(() => {
@@ -22,6 +23,7 @@ describe("ShadowMutationObserverService", () => {
     ShadowRootCacheService._shadowRootsCache = new WeakMap();
     ShadowMutationObserverService._shadowRootsObservers = new WeakMap();
     ShadowMutationObserverService._shadowMutationSubscribers = new Set();
+    ShadowRootCollectorService._hostByShadowRoot = new WeakMap();
 
     document.body.innerHTML = "";
   });
@@ -84,6 +86,62 @@ describe("ShadowMutationObserverService", () => {
 
       expect(result).toBe(true);
       expect(ShadowRootCacheService.peekCache(root)).toEqual([]);
+    });
+
+    it("should prune a stale cached root via the captured host without reading shadowRoot.host", () => {
+      // Regression PB-54190 / Gecko bug 2063234: on Firefox, reading `.host` on a root whose host has been
+      // torn down (e.g. a <video> user-agent widget) crashes the content process. Pruning must rely on the
+      // host captured at collection time, never on `shadowRoot.host`. We make `.host` throw to prove it is
+      // never read.
+      expect.assertions(3);
+
+      const root = document.createElement("div");
+      document.body.appendChild(root);
+      const detachedHost = document.createElement("div");
+      const staleRoot = detachedHost.attachShadow({ mode: "open" });
+      Object.defineProperty(staleRoot, "host", {
+        get() {
+          throw new Error("SIGSEGV: ShadowRoot::Host() null dereference");
+        },
+      });
+      // Host captured at collection time; the host is NOT attached under `root`, so the root is stale.
+      ShadowRootCollectorService._hostByShadowRoot.set(staleRoot, detachedHost);
+      ShadowRootCacheService.setCache(root, [staleRoot]);
+
+      let result;
+      expect(() => {
+        result = ShadowMutationObserverService.applyIncrementalMutationsToCache(root, [
+          { addedNodes: [], removedNodes: [detachedHost] },
+        ]);
+      }).not.toThrow();
+      expect(result).toBe(true);
+      expect(ShadowRootCacheService.peekCache(root)).toEqual([]);
+    });
+
+    it("should keep a cached root whose captured host is still attached under the root", () => {
+      expect.assertions(2);
+
+      const root = document.createElement("div");
+      document.body.appendChild(root);
+      const child = document.createElement("div");
+      const childRoot = child.attachShadow({ mode: "open" });
+      root.appendChild(child);
+      Object.defineProperty(childRoot, "host", {
+        get() {
+          throw new Error("SIGSEGV: ShadowRoot::Host() null dereference");
+        },
+      });
+      ShadowRootCollectorService._hostByShadowRoot.set(childRoot, child);
+      ShadowRootCacheService.setCache(root, [childRoot]);
+
+      // An unrelated removal elsewhere still triggers the prune path.
+      const removedElsewhere = document.createElement("span");
+      const result = ShadowMutationObserverService.applyIncrementalMutationsToCache(root, [
+        { addedNodes: [], removedNodes: [removedElsewhere] },
+      ]);
+
+      expect(result).toBe(false);
+      expect(ShadowRootCacheService.peekCache(root)).toEqual([childRoot]);
     });
 
     it("should not append shadow roots already present in the cache", () => {

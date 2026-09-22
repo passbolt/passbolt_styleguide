@@ -39,7 +39,7 @@ describe("DisplayAdministrationPasswordExpiryAdvanced", () => {
     it("As an administrator I can see the automatic workflow section", async () => {
       expect.assertions(4);
 
-      expect(page.automaticWorkflowTitle.textContent).toEqual("Automatic workflows");
+      expect(page.automaticWorkflowTitle.textContent).toEqual("Automatic Workflows");
       expect(page.automaticWorkflowDescription.textContent).toEqual(
         "In this section you can choose automatic behaviours.",
       );
@@ -99,7 +99,7 @@ describe("DisplayAdministrationPasswordExpiryAdvanced", () => {
     it("As an administrator I can see the default period toggle", async () => {
       expect.assertions(3);
 
-      expect(page.defaultExpiryPeriodLabel.textContent).toEqual("Default password expiry period");
+      expect(page.defaultExpiryPeriodLabel.textContent).toEqual("Default Password Expiry Period");
       expect(page.defaultExpiryPeriodInfo.textContent).toEqual(
         "When a user creates a resource, a default expiry date is set to days",
       );

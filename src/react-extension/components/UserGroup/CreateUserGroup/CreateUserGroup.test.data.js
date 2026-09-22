@@ -12,8 +12,11 @@
  * @since         2.11.0
  */
 
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
 import { TEST_ROLE_USER_ID } from "../../../../shared/models/entity/role/roleEntity.test.data";
 import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultProfileDto } from "../../../../shared/models/entity/profile/ProfileEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Returns the default app context for the unit test
@@ -150,3 +153,30 @@ export const mockGpgKey = {
   created: "2020-08-19T14:56:54+00:00",
   modified: "2020-08-19T14:56:54+00:00",
 };
+
+/**
+ * Stress test: as large user directory to feed the autocomplete. The members list iteself grows interactively (this dialog cannot be seeded);
+ * Aims to validate the react-list upstream migration (getListStyle) under load
+ */
+
+const stressDirectoryCount = 1000;
+export const getStressDirectoryUsers = () => [
+  mockUsers[0],
+  ...Array.from({ length: stressDirectoryCount }, (_, i) => {
+    const id = uuidv4();
+    return defaultUserDto(
+      {
+        id,
+        username: `user${String(i)}@passbolt.com`,
+        profile: defaultProfileDto({ first_name: "User", last_name: String(i) }),
+      },
+      { withRole: true },
+    );
+  }),
+];
+
+export function createStressDirectoryContext() {
+  const context = defaultAppContext({ users: getStressDirectoryUsers() });
+  context.port.addRequestListener("passbolt.keyring.get-public-key-info-by-user", async () => mockGpgKey);
+  return context;
+}

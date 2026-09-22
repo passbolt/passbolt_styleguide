@@ -16,6 +16,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { resourceWorkspaceContextWithSelectedResourcesAndVariousPermission } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultResourcesDtos } from "../../../../shared/models/entity/resource/resourcesCollection.test.data";
 
 /**
  * Default props
@@ -28,5 +29,25 @@ export function defaultProps(data = {}) {
     context: defaultUserAppContext(data.context),
     resourceWorkspaceContext: resourceWorkspaceContext,
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  };
+}
+
+/**
+ * Stress test: a large multi-selection rendered through ReactList
+ * Aims to validate the react-list upstream migration (getListStyle) under load
+ */
+
+const stressSelectionCount = 1000;
+
+export const stressSelectedResources = defaultResourcesDtos(stressSelectionCount);
+
+export function stressSelectionProps(port, overrides = {}) {
+  const baseProps = defaultProps({ context: { port }, ...overrides });
+  return {
+    ...baseProps,
+    resourceWorkspaceContext: {
+      ...baseProps.resourceWorkspaceContext,
+      selectedResources: stressSelectedResources,
+    },
   };
 }
