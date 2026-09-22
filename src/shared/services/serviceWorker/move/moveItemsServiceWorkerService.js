@@ -12,7 +12,7 @@
  * @since         5.16.0
  */
 
-import { isValidUuid } from "../../../utils/assertions";
+import { assertArrayUUID, assertUuid } from "../../../utils/assertions";
 
 export const MOVE_FOLDER_BY_ID = "passbolt.folders.move-by-id";
 export const MOVE_RESOURCES_BY_IDS = "passbolt.resources.move-by-ids";
@@ -42,11 +42,9 @@ export default class MoveItemsServiceWorkerService {
    * @throws {Error} If destinationFolderId is neither null nor a valid UUID.
    */
   async moveFolder(folderId, destinationFolderId, confirmedPermissions = null) {
-    if (!isValidUuid(folderId)) {
-      throw new Error("The given folderId should be a valid UUID.");
-    }
-    if (destinationFolderId !== null && !isValidUuid(destinationFolderId)) {
-      throw new Error("The given destinationFolderId should be a valid UUID or null.");
+    assertUuid(folderId, "The given folderId should be a valid UUID.");
+    if (destinationFolderId !== null) {
+      assertUuid(destinationFolderId, "The given destinationFolderId should be a valid UUID or null.");
     }
     const permissionsDto = this.serializeConfirmedPermissions(confirmedPermissions);
     return this.port.request(MOVE_FOLDER_BY_ID, folderId, destinationFolderId, permissionsDto);
@@ -59,18 +57,17 @@ export default class MoveItemsServiceWorkerService {
    * @param {Map<string, PermissionsCollection>|null} [confirmedPermissions] The permissions the
    *   operator confirmed, keyed by item id. Null to keep the permissions as they are.
    * @returns {Promise<*>}
-   * @throws {Error} If resourceIds is not a non-empty array of UUIDs.
+   * @throws {Error} If resourceIds is not a non-empty array.
+   * @throws {TypeError} If resourceIds contains a value that is not a valid UUID.
    * @throws {Error} If destinationFolderId is neither null nor a valid UUID.
    */
   async moveResources(resourceIds, destinationFolderId, confirmedPermissions = null) {
     if (!Array.isArray(resourceIds) || resourceIds.length === 0) {
       throw new Error("The given resourceIds should be a non-empty array.");
     }
-    if (!resourceIds.every((resourceId) => isValidUuid(resourceId))) {
-      throw new Error("The given resourceIds should only contain valid UUIDs.");
-    }
-    if (destinationFolderId !== null && !isValidUuid(destinationFolderId)) {
-      throw new Error("The given destinationFolderId should be a valid UUID or null.");
+    assertArrayUUID(resourceIds, "The given resourceIds should only contain valid UUIDs.");
+    if (destinationFolderId !== null) {
+      assertUuid(destinationFolderId, "The given destinationFolderId should be a valid UUID or null.");
     }
     const permissionsDto = this.serializeConfirmedPermissions(confirmedPermissions);
     return this.port.request(MOVE_RESOURCES_BY_IDS, resourceIds, destinationFolderId, permissionsDto);
