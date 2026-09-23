@@ -53,7 +53,8 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
     super(props);
     this.state = this.defaultState;
     this.moveItemsServiceWorkerService = new MoveItemsServiceWorkerService(props.context.port);
-    // The selection never changes, so derive the owned subset once.
+    // The selection never changes, so derive the ids and the owned subset once.
+    this.resourcesIds = props.resources.map((resource) => resource.id);
     this.ownedResourceIds = new Set(
       props.resources.filter((resource) => this.isOwnedItem(resource)).map((resource) => resource.id),
     );
@@ -86,14 +87,6 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
       snapshot: null,
       movedSnapshots: null,
     };
-  }
-
-  /**
-   * The ids of the resources being moved.
-   * @returns {Array<string>}
-   */
-  get resourcesIds() {
-    return this.props.resources.map((resource) => resource.id);
   }
 
   /**

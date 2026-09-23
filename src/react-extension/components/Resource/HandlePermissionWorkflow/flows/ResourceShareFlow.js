@@ -50,6 +50,8 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    // The selection never changes, so the ids keep the order the snapshots are aligned on.
+    this.resourcesIds = props.resources.map((resource) => resource.id);
     // Instance flag (not state) so the close-after-confirm signal is visible synchronously when the
     // dialog's wrapped onClose fires right after onConfirm resolves.
     this.shareConfirmed = false;
@@ -66,14 +68,6 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
       status: RESOURCE_SHARE_FLOW_STATUS.INITIALIZING,
       snapshots: null,
     };
-  }
-
-  /**
-   * The ids of the resources being shared, in a stable order shared by the snapshots.
-   * @returns {Array<string>}
-   */
-  get resourcesIds() {
-    return this.props.resources.map((resource) => resource.id);
   }
 
   /**
