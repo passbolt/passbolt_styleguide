@@ -9,15 +9,19 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         5.11.0
+ * @since         5.17.0
  */
 
-export default class WindowNavigationService {
-  static reload() {
-    window.location.reload();
-  }
+import { defaultApiMfaVerifyContext } from "../../../contexts/ApiMfaVerifyContext.test.data";
 
-  static assign(url) {
-    window.location.assign(url);
-  }
+/**
+ * Default props
+ * @param {Object} props The props to override
+ * @returns {object}
+ */
+export function defaultProps(props = {}) {
+  return {
+    ...props,
+    apiMfaVerifyContext: defaultApiMfaVerifyContext(props.apiMfaVerifyContext),
+  };
 }
