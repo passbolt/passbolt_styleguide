@@ -16,10 +16,14 @@ import MoveItemsServiceWorkerService, {
   MOVE_FOLDER_BY_ID,
   MOVE_RESOURCES_BY_IDS,
 } from "./moveItemsServiceWorkerService";
-import { defaultPermissionsDtos } from "../../../models/entity/permission/permissionCollection.test.data";
 import PermissionsCollection from "../../../models/entity/permission/permissionsCollection";
+import { defaultUserDto } from "../../../models/entity/user/userEntity.test.data";
+import { movedIntoSharedFolderPermissionsDtos } from "./moveItemsServiceWorkerService.test.data";
 
 describe("MoveItemsServiceWorkerService", () => {
+  // Ada moves items into a folder she owns and shares with Carol, who can update it.
+  const aros = { operatorId: defaultUserDto().id, recipientId: defaultUserDto().id };
+
   describe("::moveFolder", () => {
     it("should request the move with the operator-confirmed permissions serialized per item", async () => {
       expect.assertions(2);
@@ -27,8 +31,7 @@ describe("MoveItemsServiceWorkerService", () => {
       const folderId = crypto.randomUUID();
       const destinationFolderId = crypto.randomUUID();
       const folderPermissions = new PermissionsCollection(
-        defaultPermissionsDtos({ aco: "Folder", aco_foreign_key: folderId }),
-        { assertAtLeastOneOwner: false },
+        movedIntoSharedFolderPermissionsDtos({ aco: "Folder", aco_foreign_key: folderId }, aros),
       );
       const confirmedPermissions = new Map([[folderId, folderPermissions]]);
 
@@ -45,7 +48,7 @@ describe("MoveItemsServiceWorkerService", () => {
       });
     });
 
-    it("should request the move with null permissions when none are confirmed (move to root)", async () => {
+    it("should request the move with null permissions when the move changes no permissions", async () => {
       expect.assertions(1);
 
       const folderId = crypto.randomUUID();
@@ -85,9 +88,9 @@ describe("MoveItemsServiceWorkerService", () => {
       const permissionsByResourceId = new Map(
         resourceIds.map((resourceId) => [
           resourceId,
-          new PermissionsCollection(defaultPermissionsDtos({ aco: "Resource", aco_foreign_key: resourceId }), {
-            assertAtLeastOneOwner: false,
-          }),
+          new PermissionsCollection(
+            movedIntoSharedFolderPermissionsDtos({ aco: "Resource", aco_foreign_key: resourceId }, aros),
+          ),
         ]),
       );
 
@@ -105,7 +108,7 @@ describe("MoveItemsServiceWorkerService", () => {
       expect(port.request).toHaveBeenCalledWith(MOVE_RESOURCES_BY_IDS, resourceIds, destinationFolderId, expectedDto);
     });
 
-    it("should request the move with null permissions when none are confirmed", async () => {
+    it("should request the move with null permissions when the move changes no permissions", async () => {
       expect.assertions(1);
 
       const resourceIds = [crypto.randomUUID()];

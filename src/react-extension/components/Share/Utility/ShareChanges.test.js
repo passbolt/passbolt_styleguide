@@ -232,11 +232,12 @@ describe("ShareChanges", () => {
       expect(resources[0].permissions[1].type).toBe(originalType);
     });
 
-    it("never stages anything on an aco the operator does not own, whatever the target asks for", () => {
+    it("safety net: never stages anything on an aco the operator does not own, whatever the target asks for", () => {
       expect.assertions(2);
       const resources = mixedOwnershipResourcesDtos();
       const shareChanges = new ShareChanges(resources);
 
+      // The move flows only build a target for the owned items, this guards against a caller that does not.
       shareChanges.updateAroPermissionsByAco(
         betty,
         new Map([
@@ -321,11 +322,12 @@ describe("ShareChanges", () => {
       expect(shareChanges.getAroChangeStatus(board.id)).toBe(ShareChanges.CHANGE_STATUS_ADDED);
     });
 
-    it("drops the changes previously staged for the aro before staging the target", () => {
+    it("safety net: drops the changes previously staged for the aro before staging the target", () => {
       expect.assertions(1);
       const resources = mixedOwnershipResourcesDtos();
       const shareChanges = new ShareChanges(resources);
 
+      // The share dialog stages the target once, on mount, before any edit. This guards a later restage.
       shareChanges.updateAroPermissions(betty.id, 15);
       shareChanges.updateAroPermissionsByAco(betty, new Map([[resources[0].id, 1]]));
 
@@ -437,11 +439,13 @@ describe("ShareChanges", () => {
       expect(shareChanges.getChanges().some((change) => change.aco_foreign_key === resources[1].id)).toBe(false);
     });
 
-    it("never stages anything on an aco the operator does not own", () => {
+    it("safety net: never stages anything on an aco the operator does not own, even when passed as re-permissioned", () => {
       expect.assertions(1);
       const resources = mixedOwnershipResourcesDtos();
       const shareChanges = new ShareChanges(resources);
+      // The move flows only pass the owned items as re-permissioned, this guards against a caller that does not.
       const targetRows = [
+        { aro: ada, permissions: [{ aco_foreign_key: resources[0].id, type: 15 }] },
         {
           aro: board,
           permissions: [
