@@ -373,6 +373,90 @@ describe("ShareChanges", () => {
     });
   });
 
+  describe("::stageTargetPermissions", () => {
+    it("stages the level each recipient ends up with on the re-permissioned acos", () => {
+      expect.assertions(1);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+      const targetRows = [
+        { aro: ada, permissions: [{ aco_foreign_key: resources[0].id, type: 15 }] },
+        { aro: betty, permissions: [{ aco_foreign_key: resources[0].id, type: 15 }] },
+      ];
+
+      shareChanges.stageTargetPermissions(targetRows, [resources[0].id]);
+
+      expect(shareChanges.getChanges()).toEqual([
+        expect.objectContaining({ aro_foreign_key: betty.id, aco_foreign_key: resources[0].id, type: 15 }),
+      ]);
+    });
+
+    it("stages a new permission for a recipient the target grants", () => {
+      expect.assertions(2);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+      const targetRows = [
+        { aro: ada, permissions: [{ aco_foreign_key: resources[0].id, type: 15 }] },
+        { aro: betty, permissions: [{ aco_foreign_key: resources[0].id, type: 7 }] },
+        { aro: board, permissions: [{ aco_foreign_key: resources[0].id, type: 1 }] },
+      ];
+
+      shareChanges.stageTargetPermissions(targetRows, [resources[0].id]);
+
+      expect(shareChanges.getChanges()).toEqual([
+        expect.objectContaining({ is_new: true, aro_foreign_key: board.id, aco_foreign_key: resources[0].id, type: 1 }),
+      ]);
+      expect(shareChanges.getAroChangeStatus(board.id)).toBe(ShareChanges.CHANGE_STATUS_ADDED);
+    });
+
+    it("stages a removal for a recipient missing from the target", () => {
+      expect.assertions(2);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+      const targetRows = [{ aro: ada, permissions: [{ aco_foreign_key: resources[0].id, type: 15 }] }];
+
+      shareChanges.stageTargetPermissions(targetRows, [resources[0].id]);
+
+      expect(shareChanges.getChanges()).toEqual([
+        expect.objectContaining({ aro_foreign_key: betty.id, aco_foreign_key: resources[0].id, delete: true }),
+      ]);
+      expect(shareChanges.getAroChangeStatus(betty.id)).toBe(ShareChanges.CHANGE_STATUS_REMOVED);
+    });
+
+    it("leaves the acos that are not re-permissioned untouched", () => {
+      expect.assertions(1);
+      const resources = defaultSharedResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+      // Only "apache" is re-permissioned. Carol and the Board are dropped there, "cakephp" is left alone.
+      const targetRows = [
+        { aro: ada, permissions: [{ aco_foreign_key: resources[0].id, type: 15 }] },
+        { aro: betty, permissions: [{ aco_foreign_key: resources[0].id, type: 7 }] },
+      ];
+
+      shareChanges.stageTargetPermissions(targetRows, [resources[0].id]);
+
+      expect(shareChanges.getChanges().some((change) => change.aco_foreign_key === resources[1].id)).toBe(false);
+    });
+
+    it("never stages anything on an aco the operator does not own", () => {
+      expect.assertions(1);
+      const resources = mixedOwnershipResourcesDtos();
+      const shareChanges = new ShareChanges(resources);
+      const targetRows = [
+        {
+          aro: board,
+          permissions: [
+            { aco_foreign_key: resources[0].id, type: 1 },
+            { aco_foreign_key: resources[1].id, type: 1 },
+          ],
+        },
+      ];
+
+      shareChanges.stageTargetPermissions(targetRows, [resources[0].id, resources[1].id]);
+
+      expect(shareChanges.getChanges().some((change) => change.aco_foreign_key === resources[1].id)).toBe(false);
+    });
+  });
+
   describe("::deleteAroPermissions", () => {
     it("stages a delete of each original permission of the recipient", () => {
       expect.assertions(1);

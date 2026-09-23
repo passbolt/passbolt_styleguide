@@ -319,6 +319,31 @@ export default class ShareChanges {
   }
 
   /**
+   * On a move, stage the permissions each re-permissioned item ends up with. A recipient missing
+   * from an item's resulting set gets a removal staged on that item.
+   * @param {Array<object>} targetRows The resulting permissions, aggregated by aro.
+   * @param {Array<string>} acoIds The re-permissioned item ids. The other items are left alone.
+   */
+  stageTargetPermissions(targetRows, acoIds) {
+    for (const row of targetRows) {
+      this._aros[row.aro.id] = row.aro;
+    }
+    for (const aroId of Object.keys(this._aros)) {
+      const targetTypeByAcoId = new Map();
+      for (const acoId of acoIds) {
+        targetTypeByAcoId.set(acoId, null);
+      }
+      const targetRow = targetRows.find((row) => row.aro.id === aroId);
+      if (targetRow) {
+        for (const permission of targetRow.permissions) {
+          targetTypeByAcoId.set(permission.aco_foreign_key, permission.type);
+        }
+      }
+      this.updateAroPermissionsByAco(this._aros[aroId], targetTypeByAcoId);
+    }
+  }
+
+  /**
    * Used to initialise the ShareChanges list with already "changed" permissions.
    * For example when creating a new shared resource, the permissions must be shown as "new"
    * instead of "already existing".

@@ -89,111 +89,131 @@ class ShareDialog extends Component {
   }
 
   /**
-   * On a move, stage the permissions the moved items end up with, as if the operator had typed them.
-   * Staged per item, so an item missing from a recipient's set stages a removal there.
+   * On a move, stage the permissions the moved items end up with, as if the operator had typed them,
+   * and show on each row the level the recipient ends up with.
    * @param {Array<object>} permissions The permission rows built from the items' current permissions.
    * @returns {Array<object>} The same rows, with the move applied.
    */
   applyInitialAppliedPermissions(permissions) {
-    if (!this.props.initialAppliedPermissions?.size) {
+    if (!this.props.initialAppliedPermissions || this.props.initialAppliedPermissions.size === 0) {
       return permissions;
     }
+    const appliedRows = this.aggregateAppliedPermissionsByAro();
+    // Safety net: the move flows should never pass an empty set.
+    if (appliedRows.length === 0) {
+      return permissions;
+    }
+    const rePermissionedAcoIds = Array.from(this.props.initialAppliedPermissions.keys());
+    this.shareChanges.stageTargetPermissions(appliedRows, rePermissionedAcoIds);
+    return this.mergeMovedRows(permissions, appliedRows);
+  }
+
+  /**
+   * On a move, the permissions the re-permissioned items end up with, aggregated by recipient.
+   * @returns {Array<object>} The rows, in the shape the displayed list needs.
+   * @private
+   */
+  aggregateAppliedPermissionsByAro() {
     const isFolder = this.props.acoType === PermissionEntity.ACO_FOLDER;
     const seededItems = isFolder ? this.props.initialFolders : this.props.initialResources;
-    const itemsWithAppliedPermissions = seededItems
-      .filter((item) => this.props.initialAppliedPermissions.has(item.id))
-      .map((item) => ({ ...item, permissions: this.props.initialAppliedPermissions.get(item.id) }));
-    if (!itemsWithAppliedPermissions.length) {
-      return permissions;
-    }
-
-    const appliedItems = this.buildResourcesDtos(itemsWithAppliedPermissions);
-    const appliedShareChanges = new ShareChanges(isFolder ? [] : appliedItems, isFolder ? appliedItems : []);
-    const appliedByAroId = new Map(appliedShareChanges.aggregatePermissionsByAro().map((p) => [p.aro.id, p]));
-
-    // Keyed by recipient id to patch each row in place. Insertion order keeps the existing rows
-    // first and appends the newly granted ones, where the displayed list puts them.
-    const rowsByAroId = new Map(permissions.map((permission) => [permission.aro.id, permission]));
-
-    /*
-     * Stage each recipient's level only on the items the move re-permissions; the others are left
-     * strictly alone. An item their set does not cover means the move drops them there.
-     */
-    const rePermissionedAcoIds = [...this.props.initialAppliedPermissions.keys()];
-    new Set([...appliedByAroId.keys(), ...rowsByAroId.keys()]).forEach((aroId) => {
-      const applied = appliedByAroId.get(aroId);
-      const aro = applied?.aro ?? rowsByAroId.get(aroId).aro;
-      const appliedTypeByAcoId = new Map(
-        (applied?.permissions ?? []).map((permission) => [permission.aco_foreign_key, permission.type]),
-      );
-      const targetTypeByAcoId = new Map(
-        rePermissionedAcoIds.map((acoId) => [acoId, appliedTypeByAcoId.get(acoId) ?? null]),
-      );
-      this.shareChanges.updateAroPermissionsByAco(aro, targetTypeByAcoId);
-    });
-
-    appliedByAroId.forEach((applied, aroId) => {
-      const current = rowsByAroId.get(aroId);
-      if (!current) {
-        // Somebody the destination grants who was not on the moved items at all. The row is already
-        // in the shape the displayed list needs.
-        rowsByAroId.set(aroId, applied);
-        return;
-      }
-      if (this.shareChanges.getAroChangeStatus(aroId) === ShareChanges.CHANGE_STATUS_REMOVED) {
-        // The move drops the recipient everywhere it can. Leave the row as a hand-deleted one,
-        // still showing the level they had, faded.
-        return;
-      }
-      const isAbsentFromAnUnchangedAco = (this.props.unchangedAcos ?? []).some(
-        (aco) => !current.permissions.some((permission) => permission.aco_foreign_key === aco.id),
-      );
-      if (applied.type === -1 || isAbsentFromAnUnchangedAco) {
-        /*
-         * The recipient does not end up at the same level everywhere, so show "varies" over the
-         * whole selection, the items the move leaves alone included.
-         */
-        rowsByAroId.set(aroId, {
-          ...current,
-          type: -1,
-          variesDetails: this.buildMovedVariesDetails(applied, current),
+    const itemsWithAppliedPermissions = [];
+    for (const item of seededItems) {
+      if (this.props.initialAppliedPermissions.has(item.id)) {
+        itemsWithAppliedPermissions.push({
+          id: item.id,
+          metadata: item.metadata,
+          permission: item.permission,
+          permissions: this.props.initialAppliedPermissions.get(item.id),
         });
-        return;
       }
-      if (current.type !== applied.type) {
-        rowsByAroId.set(aroId, { ...current, type: applied.type });
-      }
-    });
+    }
+    const appliedItems = this.buildResourcesDtos(itemsWithAppliedPermissions);
+    const appliedShareChanges = isFolder ? new ShareChanges([], appliedItems) : new ShareChanges(appliedItems, []);
+    return appliedShareChanges.aggregatePermissionsByAro();
+  }
 
-    return [...rowsByAroId.values()];
+  /**
+   * On a move, update the rows to the level each recipient ends up with.
+   * @param {Array<object>} permissions The rows built from the items' current permissions.
+   * @param {Array<object>} appliedRows The rows built from the permissions the move applies.
+   * @returns {Array<object>}
+   * @private
+   */
+  mergeMovedRows(permissions, appliedRows) {
+    const rows = [];
+    for (const row of permissions) {
+      const appliedRow = appliedRows.find((applied) => applied.aro.id === row.aro.id);
+      if (appliedRow) {
+        this.applyMovedRow(row, appliedRow);
+      }
+      rows.push(row);
+    }
+    // The recipients the move grants who were not on the items yet go at the end, like an autocomplete add.
+    for (const appliedRow of appliedRows) {
+      const isNewRecipient = !permissions.some((row) => row.aro.id === appliedRow.aro.id);
+      if (isNewRecipient) {
+        rows.push(appliedRow);
+      }
+    }
+    return rows;
+  }
+
+  /**
+   * On a move, set a row to the level its recipient ends up with.
+   * @param {object} row The recipient's current row, updated in place.
+   * @param {object} appliedRow The recipient's row built from the permissions the move applies.
+   * @private
+   */
+  applyMovedRow(row, appliedRow) {
+    // A recipient the move drops everywhere keeps its row faded, at the level it had.
+    if (this.shareChanges.getAroChangeStatus(row.aro.id) === ShareChanges.CHANGE_STATUS_REMOVED) {
+      return;
+    }
+    // "varies" covers the whole selection, the items the move leaves alone included.
+    if (appliedRow.type === -1 || this.isAbsentFromAnUnchangedAco(row.aro.id)) {
+      row.type = -1;
+      row.variesDetails = this.buildMovedVariesDetails(row.aro.id, appliedRow);
+      return;
+    }
+    row.type = appliedRow.type;
+  }
+
+  /**
+   * On a move, whether a recipient has no permission on one of the items the operator does not own.
+   * @param {string} aroId The recipient id.
+   * @returns {boolean}
+   * @private
+   */
+  isAbsentFromAnUnchangedAco(aroId) {
+    for (const aco of this.props.unchangedAcos || []) {
+      if (!this.shareChanges.getAcoAroPermission(aco, aroId)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
    * On a move, the per-item list a "varies" row shows: the new level on the items the move changes,
    * the current one on the items it leaves alone.
-   * @param {object|undefined} applied The recipient's resulting permission, if any.
-   * @param {object|undefined} current The recipient's current row, if any.
+   * @param {string} aroId The recipient id.
+   * @param {object} appliedRow The recipient's row built from the permissions the move applies.
    * @returns {object} The item names, keyed by the level the recipient ends up with.
    * @private
    */
-  buildMovedVariesDetails(applied, current) {
-    const appliedTypeByAcoId = new Map(
-      (applied?.permissions ?? []).map((permission) => [permission.aco_foreign_key, permission.type]),
-    );
-    const currentTypeByAcoId = new Map(
-      (current?.permissions ?? []).map((permission) => [permission.aco_foreign_key, permission.type]),
-    );
-    const rePermissionedAcoIds = new Set(this.props.initialAppliedPermissions.keys());
-    return this.shareChanges.getAcos().reduce(
-      (carry, aco) => {
-        const type = rePermissionedAcoIds.has(aco.id)
-          ? (appliedTypeByAcoId.get(aco.id) ?? 0)
-          : (currentTypeByAcoId.get(aco.id) ?? 0);
-        carry[type].push(aco.metadata.name);
-        return carry;
-      },
-      { 0: [], 1: [], 7: [], 15: [] },
-    );
+  buildMovedVariesDetails(aroId, appliedRow) {
+    const variesDetails = { 0: [], 1: [], 7: [], 15: [] };
+    for (const aco of this.shareChanges.getAcos()) {
+      let permission;
+      if (this.props.initialAppliedPermissions.has(aco.id)) {
+        permission = appliedRow.permissions.find((applied) => applied.aco_foreign_key === aco.id);
+      } else {
+        permission = this.shareChanges.getAcoAroPermission(aco, aroId);
+      }
+      const type = permission ? permission.type : 0;
+      variesDetails[type].push(aco.metadata.name);
+    }
+    return variesDetails;
   }
 
   /**
