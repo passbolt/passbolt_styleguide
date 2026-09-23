@@ -47,7 +47,7 @@ export default class MoveItemsServiceWorkerService {
       assertUuid(destinationFolderId, "The given destinationFolderId should be a valid UUID or null.");
     }
     const permissionsDto = this.serializeConfirmedPermissions(confirmedPermissions);
-    return this.port.request(MOVE_FOLDER_BY_ID, folderId, destinationFolderId, permissionsDto);
+    return await this.port.request(MOVE_FOLDER_BY_ID, folderId, destinationFolderId, permissionsDto);
   }
 
   /**
@@ -70,7 +70,7 @@ export default class MoveItemsServiceWorkerService {
       assertUuid(destinationFolderId, "The given destinationFolderId should be a valid UUID or null.");
     }
     const permissionsDto = this.serializeConfirmedPermissions(confirmedPermissions);
-    return this.port.request(MOVE_RESOURCES_BY_IDS, resourceIds, destinationFolderId, permissionsDto);
+    return await this.port.request(MOVE_RESOURCES_BY_IDS, resourceIds, destinationFolderId, permissionsDto);
   }
 
   /**
