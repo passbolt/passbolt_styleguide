@@ -83,6 +83,10 @@ export default class MoveItemsServiceWorkerService {
     if (!confirmedPermissions) {
       return null;
     }
-    return Object.fromEntries([...confirmedPermissions].map(([itemId, permissions]) => [itemId, permissions.toDto()]));
+    const permissionsDto = {};
+    for (const [itemId, permissions] of confirmedPermissions) {
+      permissionsDto[itemId] = permissions.toDto();
+    }
+    return permissionsDto;
   }
 }
