@@ -40,7 +40,7 @@ export default (uri, options) => {
   }
 
   const whiteListedProtocols = options.whiteListedProtocols || [urlProtocols.HTTP, urlProtocols.HTTPS];
-  const blacklistedProtocols = [urlProtocols.JAVASCRIPT];
+  const blackListedProtocols = [urlProtocols.JAVASCRIPT];
   const defaultProtocol = options.defaultProtocol || "";
 
   // If the uri doesn't have a protocol and a default one is provided, then prepend it to the uri.
@@ -50,7 +50,7 @@ export default (uri, options) => {
 
   try {
     const url = new URL(uri);
-    if (blacklistedProtocols.includes(url.protocol)) {
+    if (blackListedProtocols.includes(url.protocol)) {
       return false;
     }
     if (!whiteListedProtocols.includes(url.protocol)) {
