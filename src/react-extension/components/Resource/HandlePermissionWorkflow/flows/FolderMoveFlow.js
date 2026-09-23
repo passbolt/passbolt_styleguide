@@ -103,9 +103,17 @@ export class FolderMoveFlow extends AbstractPermissionFlow {
          * FolderEntity.canFolderMove. Say why here, since the service worker only answers a generic error.
          */
         if (this.props.folder.permission?.type === PermissionEntity.PERMISSION_READ) {
-          const readOnlyMoveError = await this.getReadOnlyFolderMoveError(snapshot);
-          if (readOnlyMoveError) {
-            await this.props.actionFeedbackContext.displayError(readOnlyMoveError);
+          if (!this.isPersonalPermissionSet(snapshot?.permissions ?? null)) {
+            await this.props.actionFeedbackContext.displayError(
+              this.props.t("Folders you can only read cannot be moved into a shared folder."),
+            );
+            this.terminate();
+            return;
+          }
+          if (!this.isPersonalPermissionSet(await this.findParentPermissions())) {
+            await this.props.actionFeedbackContext.displayError(
+              this.props.t("Folders you can only read cannot be moved out of a shared folder."),
+            );
             this.terminate();
             return;
           }
@@ -120,12 +128,7 @@ export class FolderMoveFlow extends AbstractPermissionFlow {
       }
       // The permissions the owned folder ends up with, which decide whether the dialog opens.
       const folderSnapshot = await this.permissionSnapshotService.buildSnapshotForFolderShare(this.folderId);
-      const parentPermissions = this.props.folder.folder_parent_id
-        ? await this.permissionServiceWorkerService.findPermissions(
-            this.props.folder.folder_parent_id,
-            PermissionEntity.ACO_FOLDER,
-          )
-        : null;
+      const parentPermissions = await this.findParentPermissions();
       const appliedPermissions = PermissionsCollection.calculateMovedPermissions({
         itemPermissions: folderSnapshot.permissions,
         parentPermissions,
@@ -161,26 +164,18 @@ export class FolderMoveFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * The reason a read-only folder cannot be moved, or null when the move is allowed: its current
-   * parent and its destination must each be the root or a personal folder.
-   * @param {object|null} snapshot The destination folder's permission snapshot, null for the root.
-   * @returns {Promise<string|null>} The message to display, or null when the move can proceed.
+   * The permissions of the moved folder's current parent.
+   * @returns {Promise<PermissionsCollection|null>} null when the folder is at the root.
    * @private
    */
-  async getReadOnlyFolderMoveError(snapshot) {
-    if (!this.isPersonalPermissionSet(snapshot?.permissions ?? null)) {
-      return this.props.t("Folders you can only read cannot be moved into a shared folder.");
+  async findParentPermissions() {
+    if (!this.props.folder.folder_parent_id) {
+      return null;
     }
-    const parentPermissions = this.props.folder.folder_parent_id
-      ? await this.permissionServiceWorkerService.findPermissions(
-          this.props.folder.folder_parent_id,
-          PermissionEntity.ACO_FOLDER,
-        )
-      : null;
-    if (!this.isPersonalPermissionSet(parentPermissions)) {
-      return this.props.t("Folders you can only read cannot be moved out of a shared folder.");
-    }
-    return null;
+    return this.permissionServiceWorkerService.findPermissions(
+      this.props.folder.folder_parent_id,
+      PermissionEntity.ACO_FOLDER,
+    );
   }
 
   /**
