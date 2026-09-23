@@ -23,19 +23,18 @@ import { getSharePermissionLabels } from "./SharePermissionLabels";
  */
 class ShareUnchangeableDetails extends Component {
   render() {
-    const resources = this.props.resources ?? [];
     const permissionLabels = getSharePermissionLabels(this.props.t);
     return (
       <ShareDetailsList
-        header={this.props.t("{{count}} permissions cannot apply:", { count: resources.length })}
-        items={resources.map(({ name, type }) => ({ name, detail: permissionLabels[type] }))}
+        header={this.props.t("{{count}} permissions cannot apply:", { count: this.props.resources.length })}
+        items={this.props.resources.map(({ name, type }) => ({ name, detail: permissionLabels[type] }))}
       />
     );
   }
 }
 
 ShareUnchangeableDetails.propTypes = {
-  resources: PropTypes.array, // [{name, type}] the items the choice cannot reach, and the level it would apply
+  resources: PropTypes.array.isRequired, // [{name, type}] the items the choice cannot reach, and the level it would apply
   t: PropTypes.func, // The translation function
 };
 
