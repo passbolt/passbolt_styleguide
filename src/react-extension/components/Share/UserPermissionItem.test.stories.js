@@ -60,7 +60,7 @@ export const Varies = {
 
 export const Attention = {
   args: defaultVariesProps({
-    unchangeableResources: [
+    unappliedResources: [
       { name: "R2", type: 7 },
       { name: "R3", type: 7 },
     ],

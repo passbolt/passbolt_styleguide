@@ -13,14 +13,14 @@
  */
 import { render } from "@testing-library/react";
 import React from "react";
-import ShareUnchangeableDetails from "./ShareUnchangeableDetails";
+import ShareUnappliedDetails from "./ShareUnappliedDetails";
 import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
 
-describe("ShareUnchangeableDetails", () => {
+describe("ShareUnappliedDetails", () => {
   const renderComponent = (resources) =>
     render(
       <MockTranslationProvider>
-        <ShareUnchangeableDetails resources={resources} />
+        <ShareUnappliedDetails resources={resources} />
       </MockTranslationProvider>,
     );
 

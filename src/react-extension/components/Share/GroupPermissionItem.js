@@ -17,7 +17,7 @@ import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import SharePermissionRevertButton from "./SharePermissionRevertButton";
 import ShareVariesDetails from "./ShareVariesDetails";
 import ShareChanges from "./Utility/ShareChanges";
-import ShareUnchangeableDetails from "./ShareUnchangeableDetails";
+import ShareUnappliedDetails from "./ShareUnappliedDetails";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import { withTranslation } from "react-i18next";
 import Select from "../Common/Select/Select";
@@ -151,7 +151,7 @@ class GroupPermissionItem extends Component {
    * @returns {boolean}
    */
   get showsAttention() {
-    return this.props.unchangeableResources?.length > 0;
+    return this.props.unappliedResources?.length > 0;
   }
 
   /**
@@ -199,7 +199,7 @@ class GroupPermissionItem extends Component {
         {this.showsAttention && (
           <TooltipPortal
             className="warning"
-            message={<ShareUnchangeableDetails resources={this.props.unchangeableResources} />}
+            message={<ShareUnappliedDetails resources={this.props.unappliedResources} />}
           >
             <TriangleAlertSVG className="attention-triangle" />
           </TooltipPortal>
@@ -250,7 +250,7 @@ GroupPermissionItem.propTypes = {
   membersCount: PropTypes.number, // The group member count, null otherwise
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
   changeStatus: PropTypes.string, // A ShareChanges.CHANGE_STATUS_* value, null when unchanged
-  unchangeableResources: PropTypes.array, // Move: [{name, type}] the items the choice cannot reach
+  unappliedResources: PropTypes.array, // Move: [{name, type}] the items the choice cannot reach
   disabled: PropTypes.bool,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,

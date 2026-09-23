@@ -166,15 +166,13 @@ describe("GroupPermissionItem", () => {
 
     it("in move mode, shows the attention icon when some items can't be re-permissioned", () => {
       expect.assertions(1);
-      const page = new GroupPermissionItemPage(
-        defaultVariesProps({ unchangeableResources: [{ name: "R2", type: 7 }] }),
-      );
+      const page = new GroupPermissionItemPage(defaultVariesProps({ unappliedResources: [{ name: "R2", type: 7 }] }));
       expect(page.attentionIcon).not.toBeNull();
     });
 
     it("in move mode, shows the plain varies icon (not attention) when every item can be re-permissioned", () => {
       expect.assertions(2);
-      const page = new GroupPermissionItemPage(defaultVariesProps({ unchangeableResources: [] }));
+      const page = new GroupPermissionItemPage(defaultVariesProps({ unappliedResources: [] }));
       expect(page.variesIcon).not.toBeNull();
       expect(page.attentionIcon).toBeNull();
     });
@@ -183,7 +181,7 @@ describe("GroupPermissionItem", () => {
       expect.assertions(2);
       const page = new GroupPermissionItemPage(
         defaultVariesProps({
-          unchangeableResources: [{ name: "R2", type: 7 }],
+          unappliedResources: [{ name: "R2", type: 7 }],
           changeStatus: "removed",
         }),
       );
@@ -195,7 +193,7 @@ describe("GroupPermissionItem", () => {
       expect.assertions(2);
       const page = new GroupPermissionItemPage(
         defaultVariesProps({
-          unchangeableResources: [
+          unappliedResources: [
             { name: "R2", type: 7 },
             { name: "R3", type: 7 },
           ],
@@ -212,7 +210,7 @@ describe("GroupPermissionItem", () => {
       // choice cannot reach. The two tooltips answer different questions and must stay separate.
       const page = new GroupPermissionItemPage(
         defaultVariesProps({
-          unchangeableResources: [
+          unappliedResources: [
             { name: "R2", type: 7 },
             { name: "R3", type: 7 },
           ],

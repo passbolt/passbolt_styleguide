@@ -225,7 +225,7 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
    * ShareDialog stages the latter on mount, so the badges show without any operator edit.
    */
   openMoveDialog() {
-    // The not-owned resources only move, so the dialog lists them as unchangeable.
+    // The not-owned resources only move, so the dialog lists them as unchanged.
     const unchangedAcos = this.props.resources
       .filter((resource) => !this.ownedResourceIds.has(resource.id))
       .map((resource) => ({ id: resource.id, name: resource.metadata?.name }));

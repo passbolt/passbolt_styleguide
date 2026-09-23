@@ -21,7 +21,7 @@ import { getSharePermissionLabels } from "./SharePermissionLabels";
  * Tooltip body listing the items a recipient's permission cannot be applied to, with the level that
  * would have applied: "Resource A (Can edit)". Same shape as ShareVariesDetails, warning-tinted.
  */
-class ShareUnchangeableDetails extends Component {
+class ShareUnappliedDetails extends Component {
   render() {
     const permissionLabels = getSharePermissionLabels(this.props.t);
     return (
@@ -33,9 +33,9 @@ class ShareUnchangeableDetails extends Component {
   }
 }
 
-ShareUnchangeableDetails.propTypes = {
+ShareUnappliedDetails.propTypes = {
   resources: PropTypes.array.isRequired, // [{name, type}] the items the choice cannot reach, and the level it would apply
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation("common")(ShareUnchangeableDetails);
+export default withTranslation("common")(ShareUnappliedDetails);

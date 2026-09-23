@@ -47,6 +47,7 @@ class ShareDialog extends Component {
     this.folders = [];
     this.state = this.getDefaultState();
     this.shareChanges = null;
+    this.unchangedAcoTypesByAroId = new Map();
     this.permissionListRef = React.createRef();
     // Set by the first group-members fetch failure, so only that one reports. See fetchGroupMembers.
     this.isAborting = false;
@@ -71,6 +72,7 @@ class ShareDialog extends Component {
 
     this.shareChanges = new ShareChanges(this.resources, this.folders);
     let permissions = this.shareChanges.aggregatePermissionsByAro();
+    this.unchangedAcoTypesByAroId = this.buildUnchangedAcoTypesByAroId(permissions);
 
     const permissionsMap = new Map(permissions.map((p) => [p.aro.id, p]));
     this.props.initialChanges?.forEach((change) => {
@@ -821,24 +823,46 @@ class ShareDialog extends Component {
   }
 
   /**
+   * On a move, each recipient's current level on the items the operator does not own. The operator
+   * cannot change those items, so this is computed once on mount.
+   * @param {Array<object>} permissions The permission rows built from the items' current permissions.
+   * @returns {Map<string, Map<string, number>>} The levels keyed by item id, keyed by recipient id.
+   * @private
+   */
+  buildUnchangedAcoTypesByAroId(permissions) {
+    if (!this.props.unchangedAcos?.length) {
+      return new Map();
+    }
+    const unchangedAcoIds = new Set(this.props.unchangedAcos.map((aco) => aco.id));
+    return new Map(
+      permissions.map((row) => [
+        row.aro.id,
+        new Map(
+          row.permissions
+            .filter((permission) => unchangedAcoIds.has(permission.aco_foreign_key))
+            .map((permission) => [permission.aco_foreign_key, parseInt(permission.type, 10)]),
+        ),
+      ]),
+    );
+  }
+
+  /**
    * On a move, the items the operator does not own where the level they picked cannot be applied.
    * A "varies" level or a removal asks nothing of those items, so only the ones the recipient has.
-   * @param {object} permission The recipient's row, carrying their permission on each item.
+   * @param {string} aroId The recipient id.
    * @param {number} displayPermissionType The level the operator picked for the recipient.
    * @returns {Array<{name: string, type: number}>} The items, at the level the operator picked, or
    *   at the recipient's current level when no single level was picked.
    */
-  getUnchangeableResources(permission, displayPermissionType) {
+  getUnappliedResources(aroId, displayPermissionType) {
     const unchangedAcos = this.props.unchangedAcos ?? [];
     if (unchangedAcos.length === 0) {
       return [];
     }
-    const typeByAcoId = new Map(
-      (permission.permissions ?? []).map((aco) => [aco.aco_foreign_key, parseInt(aco.type, 10)]),
-    );
+    const typeByAcoId = this.unchangedAcoTypesByAroId.get(aroId) ?? new Map();
     const keepsCurrentState =
       displayPermissionType === -1 ||
-      this.shareChanges.getAroChangeStatus(permission.aro.id) === ShareChanges.CHANGE_STATUS_REMOVED;
+      this.shareChanges.getAroChangeStatus(aroId) === ShareChanges.CHANGE_STATUS_REMOVED;
     return unchangedAcos
       .filter((aco) => {
         const currentType = typeByAcoId.get(aco.id);
@@ -861,14 +885,14 @@ class ShareDialog extends Component {
    * rows and the footer banner. An empty entry means nothing is blocked for that recipient.
    * @returns {Map<string, Array<{name: string, type: number}>>} Keyed by recipient id.
    */
-  getUnchangeableResourcesByAroId() {
+  getUnappliedResourcesByAroId() {
     if (!this.props.unchangedAcos?.length) {
       return new Map();
     }
     return new Map(
       (this.state.permissions ?? []).map((permission) => [
         permission.aro.id,
-        this.getUnchangeableResources(permission, parseInt(permission.type, 10)),
+        this.getUnappliedResources(permission.aro.id, parseInt(permission.type, 10)),
       ]),
     );
   }
@@ -877,11 +901,11 @@ class ShareDialog extends Component {
    * Use to render a single item of the share permission list
    * @param {integer} index of the item in the source list
    * @param {Array<object>} displayedPermissions the flat list of rows being rendered
-   * @param {Map<string, Array<{name: string, type: number}>>} unchangeableResourcesByAroId the items
+   * @param {Map<string, Array<{name: string, type: number}>>} unappliedResourcesByAroId the items
    *   each recipient's choice cannot reach
    * @returns {JSX.Element}
    */
-  renderItem(index, displayedPermissions, unchangeableResourcesByAroId) {
+  renderItem(index, displayedPermissions, unappliedResourcesByAroId) {
     const item = displayedPermissions[index];
 
     if (item.kind === "group-user") {
@@ -900,7 +924,7 @@ class ShareDialog extends Component {
       throw new TypeError(this.translate("Invalid permission type for share permission item."));
     }
     // The items this row's level cannot be applied to, empty outside a move.
-    const unchangeableResources = unchangeableResourcesByAroId.get(permission.aro.id) ?? [];
+    const unappliedResources = unappliedResourcesByAroId.get(permission.aro.id) ?? [];
 
     if (item.kind === "group") {
       return (
@@ -912,7 +936,7 @@ class ShareDialog extends Component {
           permissionType={permissionType}
           variesDetails={permission.variesDetails}
           changeStatus={this.shareChanges.getAroChangeStatus(permission.aro.id)}
-          unchangeableResources={unchangeableResources}
+          unappliedResources={unappliedResources}
           disabled={this.hasAllInputDisabled() || this.isReadOnly()}
           onUpdate={this.handlePermissionUpdate}
           onDelete={this.handlePermissionDelete}
@@ -932,7 +956,7 @@ class ShareDialog extends Component {
         permissionType={permissionType}
         variesDetails={permission.variesDetails}
         changeStatus={this.shareChanges.getAroChangeStatus(permission.aro.id)}
-        unchangeableResources={unchangeableResources}
+        unappliedResources={unappliedResources}
         disabled={this.hasAllInputDisabled() || this.isReadOnly()}
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
@@ -1051,8 +1075,8 @@ class ShareDialog extends Component {
   render() {
     // Computed once per render so ReactList's length and itemRenderer read the same list.
     const displayedPermissions = this.state.loading ? [] : this.getDisplayedPermissions();
-    const unchangeableResourcesByAroId = this.state.loading ? new Map() : this.getUnchangeableResourcesByAroId();
-    const hasAttentionRows = [...unchangeableResourcesByAroId.values()].some((items) => items.length > 0);
+    const unappliedResourcesByAroId = this.state.loading ? new Map() : this.getUnappliedResourcesByAroId();
+    const hasAttentionRows = [...unappliedResourcesByAroId.values()].some((items) => items.length > 0);
     const isReadOnly = this.isReadOnly();
     const operatorOwnershipIsInvalid = !isReadOnly && this.operatorOwnershipIsInvalid();
     const hasNoOwner = !isReadOnly && this.hasNoOwner();
@@ -1077,7 +1101,7 @@ class ShareDialog extends Component {
               )}
               {!this.state.loading && (
                 <ReactList
-                  itemRenderer={(index) => this.renderItem(index, displayedPermissions, unchangeableResourcesByAroId)}
+                  itemRenderer={(index) => this.renderItem(index, displayedPermissions, unappliedResourcesByAroId)}
                   itemsRenderer={this.renderContainer}
                   length={displayedPermissions.length}
                   minSize={this.props.listMinSize}
