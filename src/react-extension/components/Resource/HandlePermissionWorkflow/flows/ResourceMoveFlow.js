@@ -162,19 +162,17 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
    * @returns {Promise<Object<string, PermissionsCollection>>}
    */
   async findOwnedResourcesParentPermissions() {
-    const parentFolderIds = [
-      ...new Set(
-        this.props.resources
-          .filter((resource) => this.rePermissionedResourceIds.has(resource.id) && resource.folder_parent_id)
-          .map((resource) => resource.folder_parent_id),
-      ),
-    ];
-    const permissions = await Promise.all(
-      parentFolderIds.map((parentFolderId) =>
-        this.permissionServiceWorkerService.findPermissions(parentFolderId, PermissionEntity.ACO_FOLDER),
-      ),
-    );
-    return Object.fromEntries(parentFolderIds.map((parentFolderId, index) => [parentFolderId, permissions[index]]));
+    const parentPermissionsById = {};
+    for (const resource of this.props.resources) {
+      const parentFolderId = resource.folder_parent_id;
+      if (parentFolderId && this.rePermissionedResourceIds.has(resource.id) && !parentPermissionsById[parentFolderId]) {
+        parentPermissionsById[parentFolderId] = await this.permissionServiceWorkerService.findPermissions(
+          parentFolderId,
+          PermissionEntity.ACO_FOLDER,
+        );
+      }
+    }
+    return parentPermissionsById;
   }
 
   /**
