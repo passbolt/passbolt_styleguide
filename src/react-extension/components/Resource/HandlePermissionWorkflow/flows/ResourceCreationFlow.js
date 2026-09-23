@@ -39,8 +39,8 @@ export const RESOURCE_CREATION_FLOW_STATUS = Object.freeze({
  * Orchestrates the resource-creation flow:
  * 1. Captures a permission snapshot from the parent folder (when there is one).
  * 2. Dispatches the CreateResource dialog for the operator to fill the form.
- * 3. If the parent is a shared folder, dispatches ShareDialog (in controlled mode, seeded from the
- *    snapshot) so the operator confirms the permission set BEFORE anything hits the server.
+ * 3. If the parent is a shared folder, dispatches ShareDialog (seeded from the snapshot)
+ *    so the operator confirms the permission set BEFORE anything hits the server.
  * 4. Calls `passbolt.resources.create` and, for the shared case, `passbolt.share.resources.save`
  *    in the spec-mandated safe order.
  *
@@ -106,7 +106,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Open the ShareDialog in controlled mode, seeded from the snapshot.
+   * Open the ShareDialog seeded from the snapshot.
    */
   openShareDialog() {
     this.props.dialogContext.open(ShareDialog, {
@@ -190,7 +190,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Handle the operator's confirmation of the permission set in ShareDialog (controlled mode).
+   * Handle the operator's confirmation of the permission set in ShareDialog.
    * Re-snapshot the parent folder and compare against the initial snapshot — any drift aborts
    * the submission. Fold the operator's edits onto the snapshot to get the final share set, then
    * delegate the operator-only create + share orchestration to the extension via a single

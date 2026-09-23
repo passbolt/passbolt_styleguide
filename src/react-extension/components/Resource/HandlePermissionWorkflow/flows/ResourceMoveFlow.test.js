@@ -67,7 +67,7 @@ const mountUntilStopped = (props) => mountUntilFlowStopped(ResourceMoveFlowTestP
 
 describe("ResourceMoveFlow", () => {
   describe("As LU moving resources into a shared destination folder", () => {
-    it("As LU I should review the destination folder permissions seeded into the dialog (controlled, editable)", async () => {
+    it("As LU I should review the destination folder permissions seeded into the dialog (editable)", async () => {
       expect.assertions(5);
       const destinationFolderId = uuidv4();
       const props = defaultProps({ destinationFolderId });

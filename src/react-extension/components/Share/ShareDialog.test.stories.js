@@ -2,7 +2,7 @@ import React from "react";
 import ShareDialog from "./ShareDialog";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import {
-  controlledModeWithGroupProps,
+  withGroupProps,
   defaultAppContext,
   mixedOwnershipMoveProps,
   propsWithStressPermissions,
@@ -45,12 +45,12 @@ export const Loading = {
   },
 };
 
-// Controlled mode: seeded from initial collections (no port fetch). The "Developer" group can be
+// Seeded from initial collections (no port fetch). The "Developer" group can be
 // expanded to reveal its members rendered as GroupUserPermissionItem rows.
-export const ControlledModeWithExpandableGroup = {
+export const WithExpandableGroup = {
   args: {
     context: defaultAppContext({ port: mockPort(mockStorage()) }),
-    ...controlledModeWithGroupProps({ onClose: () => {}, onConfirm: () => {} }),
+    ...withGroupProps({ onClose: () => {}, onConfirm: () => {} }),
   },
 };
 

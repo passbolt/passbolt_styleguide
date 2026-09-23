@@ -35,7 +35,7 @@ export const RESOURCE_SHARE_FLOW_STATUS = Object.freeze({
  * only reviews and edits the recipient set.
  *
  * Captures a permission snapshot per selected resource (a snapshot targets a single ACO), dispatches
- * ShareDialog in controlled mode seeded from those snapshots, and — on confirmation — re-snapshots
+ * ShareDialog seeded from those snapshots, and — on confirmation — re-snapshots
  * to detect drift before saving the operator-confirmed permission changes via
  * `passbolt.share.resources.save`. A single-resource share is just a selection of one.
  *
@@ -91,13 +91,13 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Open the ShareDialog in controlled mode, seeded from the per-resource snapshots. The dialog is
+   * Open the ShareDialog seeded from the per-resource snapshots. The dialog is
    * fully editable (the operator owns every shared resource) and the opt-out checkbox is not shown.
    */
   openShareDialog() {
     const { groups, users } = this.mergeArosFromSnapshots(this.state.snapshots);
     this.props.dialogContext.open(ShareDialog, {
-      initialResources: this.buildControlledResources(this.props.resources, this.state.snapshots),
+      initialResources: this.buildInitialResources(this.props.resources, this.state.snapshots),
       initialGroups: groups,
       initialUsers: users,
       onConfirm: this.handleShareDialogConfirm,

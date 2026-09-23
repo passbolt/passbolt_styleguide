@@ -889,14 +889,14 @@ export const mockResultsResourcesAndFolders = {
 };
 
 /**
- * Build controlled-mode props with a mix of a user and a group permission, where the group carries
+ * Build props with a mix of a user and a group permission, where the group carries
  * resolvable members. Simulates a snapshot captured from a shared parent folder. The user is the
  * owner; a group has read access and two members both present in the initial users collection so
  * they can be displayed when the group is expanded.
  * @param {object} data Props to override
  * @returns {object}
  */
-export function controlledModeWithGroupProps(data = {}) {
+export function withGroupProps(data = {}) {
   const folderId = uuidv4();
 
   const ownerUser = defaultUserDto({
@@ -962,7 +962,7 @@ export function controlledModeWithGroupProps(data = {}) {
  * @param {object} data Props to override
  * @returns {object}
  */
-export function controlledModeWithTwoGroupsProps(data = {}) {
+export function withTwoGroupsProps(data = {}) {
   const folderId = uuidv4();
   const ownerUser = defaultUserDto({
     username: "ada@passbolt.com",
@@ -1022,9 +1022,9 @@ export function controlledModeWithTwoGroupsProps(data = {}) {
 }
 
 /**
- * Build the `passbolt.groups.find-by-ids-for-share` response for the group of the controlled-mode initial
+ * Build the `passbolt.groups.find-by-ids-for-share` response for the group of the initial
  * collections. Pass `members` to simulate a membership that changed since the dialog opened.
- * @param {object} props The controlled-mode props holding the group.
+ * @param {object} props The props holding the group.
  * @param {Array<object>} [members] The member users to embed, defaults to the group's own members.
  * @returns {object}
  */
@@ -1044,7 +1044,7 @@ const ADDED_GROUP_ID = "e2b5a0f4-3d7c-4f1b-9a2e-6c8d1f0b3a75";
 
 /**
  * Build the artifacts simulating a group added through the autocomplete during the dialog session.
- * Such a group is not part of the controlled-mode initial collections, so its members must be fetched
+ * Such a group is not part of the initial collections, so its members must be fetched
  * on demand when it is expanded. Returns the search result the autocomplete receives (no members,
  * just a user_count) and the full group — its memberships carrying their embedded user — as fetched
  * for share; to be returned respectively by the `passbolt.share.search-aros` and
@@ -1082,7 +1082,7 @@ export function addedGroupWithMembersFixture(members = null) {
 }
 
 /**
- * Build controlled-mode props sharing the given resources. An owner (Ada) owns every resource and a
+ * Build props sharing the given resources. An owner (Ada) owns every resource and a
  * reader (Betty) has read access to every resource, so the list always keeps at least one owner.
  * The confirmation mode is disabled so the dialog exposes its "Share …" title.
  * @param {Array<string>} names The names of the resources to share
@@ -1137,7 +1137,7 @@ export function resourcesShareProps(names, data = {}) {
 }
 
 /**
- * Build controlled-mode props for a single resource owned by the operator, shared with a reader.
+ * Build props for a single resource owned by the operator, shared with a reader.
  * Returns the props along with the operator and reader user dtos so the tests can identify them,
  * e.g. as the logged-in user for the operator checks.
  * @param {object} data Props to override
@@ -1191,7 +1191,7 @@ export function operatorResourceShareProps(data = {}) {
 }
 
 /**
- * Build controlled-mode props sharing a single folder owned by an owner (Ada).
+ * Build props sharing a single folder owned by an owner (Ada).
  * The confirmation mode is disabled so the dialog exposes its "Share folder" title.
  * @param {string} name The folder name
  * @param {object} data Props to override
@@ -1635,13 +1635,13 @@ export function variesAppliedNewRecipientMoveProps(operatorId, data = {}) {
 }
 
 /**
- * Build controlled-mode props simulating a snapshot captured from a shared parent folder: a single
+ * Build props simulating a snapshot captured from a shared parent folder: a single
  * synthetic ACO (not yet created, id null) with an owner and a reader. When `data.acoType` is
  * "Folder" the ACO is provided via `initialFolders`, otherwise via `initialResources`.
  * @param {object} data Props to override
  * @returns {object}
  */
-export function controlledModeProps(data = {}) {
+export function parentFolderSnapshotProps(data = {}) {
   const ownerUser = defaultUserDto({ username: "operator@passbolt.com" });
   const readerUser = defaultUserDto({ username: "reader@passbolt.com" });
   const acoId = uuidv4();
@@ -1679,7 +1679,7 @@ export function controlledModeProps(data = {}) {
 }
 
 /**
- * Build controlled-mode props seeded with two resources (RA, RB). An owner owns both; a reader has
+ * Build props seeded with two resources (RA, RB). An owner owns both; a reader has
  * read access to both. Each resource carries its own single-ACO permission set.
  * @param {object} data Props to override
  * @returns {object}
@@ -1728,12 +1728,12 @@ export function twoResourcesShareProps(data = {}) {
 }
 
 /**
- * Build controlled-mode props where the direct users travel embedded in the permissions only
+ * Build props where the direct users travel embedded in the permissions only
  * (initialUsers is empty), as produced by the group-member-derived snapshot.
  * @param {object} data Props to override
  * @returns {object}
  */
-export function controlledModeEmbeddedUsersProps(data = {}) {
+export function embeddedUsersProps(data = {}) {
   const ownerUser = defaultUserDto({ username: "operator@passbolt.com" });
   const readerUser = defaultUserDto({ username: "reader@passbolt.com" });
   const acoId = uuidv4();
@@ -1772,7 +1772,7 @@ export function controlledModeEmbeddedUsersProps(data = {}) {
 }
 
 /**
- * Stress test: controlled mode seeded with a large permissions list rendered through ReactList
+ * Stress test: dialog seeded with a large permissions list rendered through ReactList
  * Aims to validate the react-list upstream migration (getListStyle) under load
  */
 

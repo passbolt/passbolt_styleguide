@@ -70,7 +70,7 @@ export function mixedOwnershipResourcesDtos() {
 }
 
 /**
- * Build two resources in the controlled-mode shape the ShareDialog feeds to ShareChanges, covering
+ * Build two resources in the shape the ShareDialog feeds to ShareChanges, covering
  * each aggregation scenario:
  * - Ada owns both (uniform owner).
  * - Betty can update "apache" and read "cakephp" (varies by type).

@@ -19,10 +19,10 @@ import ShareDialogPage from "./ShareDialog.test.page";
 import {
   absentFromUnownedMoveProps,
   addedGroupWithMembersFixture,
-  controlledModeEmbeddedUsersProps,
-  controlledModeProps,
-  controlledModeWithGroupProps,
-  controlledModeWithTwoGroupsProps,
+  embeddedUsersProps,
+  parentFolderSnapshotProps,
+  withGroupProps,
+  withTwoGroupsProps,
   defaultAppContext,
   defaultProps,
   folderMoveProps,
@@ -342,14 +342,14 @@ describe("As Lu I should see the share dialog", () => {
   });
 });
 
-describe("As LU running ShareDialog in controlled mode (workflow-driven)", () => {
+describe("As LU running ShareDialog from a permission workflow", () => {
   let page;
   const context = defaultAppContext();
   const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
 
-  it("As LU I should not see the dialog fetch resource permissions when controlled-mode props are provided", async () => {
+  it("As LU I should not see the dialog fetch resource permissions", async () => {
     expect.assertions(2);
-    const props = controlledModeProps();
+    const props = parentFolderSnapshotProps();
     mockContextRequest(jest.fn());
 
     await act(() => (page = new ShareDialogPage(context, props)));
@@ -363,7 +363,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
   it("As LU I should see the snapshot's permissions rendered in the order they were captured", async () => {
     expect.assertions(2);
-    const props = controlledModeProps();
+    const props = parentFolderSnapshotProps();
     mockContextRequest(jest.fn());
 
     await act(() => (page = new ShareDialogPage(context, props)));
@@ -375,7 +375,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
   it("As LU I should see directly-permissioned users rendered from the permission-embedded user when absent from initialUsers", async () => {
     expect.assertions(2);
-    const props = controlledModeEmbeddedUsersProps();
+    const props = embeddedUsersProps();
     mockContextRequest(jest.fn());
 
     await act(() => (page = new ShareDialogPage(context, props)));
@@ -386,7 +386,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
   it("As LU creating a resource I should see every initial permission flagged as added", async () => {
     expect.assertions(3);
-    const props = controlledModeProps();
+    const props = parentFolderSnapshotProps();
     // The creation flow passes the snapshot permissions as initial changes to show them all as new.
     props.initialChanges = props.initialResources[0].permissions.items;
     mockContextRequest(jest.fn());
@@ -400,7 +400,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
   it("As LU creating a resource removing my own initially-added row I see it disappear entirely", async () => {
     expect.assertions(3);
-    const props = controlledModeProps();
+    const props = parentFolderSnapshotProps();
     props.initialChanges = props.initialResources[0].permissions.items;
     mockContextRequest(jest.fn());
 
@@ -415,7 +415,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
   it("As LU creating a resource removing another recipient's initially-added row I see it disappear entirely", async () => {
     expect.assertions(3);
-    const props = controlledModeProps();
+    const props = parentFolderSnapshotProps();
     props.initialChanges = props.initialResources[0].permissions.items;
     mockContextRequest(jest.fn());
 
@@ -430,7 +430,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
   it("As LU I should see the Save button enabled as soon as the dialog opens so I can confirm the snapshot as-is", async () => {
     expect.assertions(1);
-    const props = controlledModeProps();
+    const props = parentFolderSnapshotProps();
     mockContextRequest(jest.fn());
 
     await act(() => (page = new ShareDialogPage(context, props)));
@@ -440,7 +440,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
   it("As LU confirming the dialog as-is I should see onConfirm called with an empty delta (backend already inherits parent perms)", async () => {
     expect.assertions(3);
-    const props = controlledModeProps();
+    const props = parentFolderSnapshotProps();
     mockContextRequest(jest.fn());
 
     await act(() => (page = new ShareDialogPage(context, props)));
@@ -460,7 +460,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
   it("As LU removing a row before confirming I should see a delete delta emitted for that row", async () => {
     expect.assertions(3);
-    const props = controlledModeProps();
+    const props = parentFolderSnapshotProps();
     mockContextRequest(jest.fn());
 
     await act(() => (page = new ShareDialogPage(context, props)));
@@ -479,7 +479,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     expect.assertions(2);
     // Folder mode: the seeded entry is the folder itself; its edits must be emitted as Folder deltas
     // so the workflow saves them via the folder-share path.
-    const props = controlledModeProps({ acoType: "Folder" });
+    const props = parentFolderSnapshotProps({ acoType: "Folder" });
     mockContextRequest(jest.fn());
 
     await act(() => (page = new ShareDialogPage(context, props)));
@@ -497,7 +497,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     // (ShareChanges tags new permissions from the ACO bucket type). The folder-share save then
     // received an empty delta and silently did nothing. The seeded folder must live in the folder
     // bucket so additions are emitted as Folder deltas.
-    const props = controlledModeProps({ acoType: "Folder" });
+    const props = parentFolderSnapshotProps({ acoType: "Folder" });
     const newUserId = uuidv4();
     const newUser = defaultUserDto({ id: newUserId, username: "newcomer@passbolt.com" });
     mockContextRequest((request) => {
@@ -543,7 +543,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
       await act(() => (page = new ShareDialogPage(context, props)));
 
-      // Regression: controlled-mode ACOs expose only `metadata.name`, so the tooltip must not
+      // Regression: seeded ACOs expose only `metadata.name`, so the tooltip must not
       // resolve to blank lines.
       expect(page.titleTooltipHeader).toBe("2 items selected:");
       expect(page.titleTooltipItems).toEqual(["• RA", "• RB"]);
@@ -600,7 +600,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     });
   });
 
-  describe("Move mode (controlled)", () => {
+  describe("Move mode", () => {
     /**
      * Build move props where a recipient ends up read on RA and owner on RB, while the destination
      * proposes "can update" for them. The operator owns both resources.
@@ -1523,7 +1523,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
   describe("Read-only mode", () => {
     it("As LU with update-but-not-owner access I should not see the autocomplete to add people or groups", async () => {
       expect.assertions(2);
-      const props = { ...controlledModeProps(), readOnly: true };
+      const props = { ...parentFolderSnapshotProps(), readOnly: true };
       mockContextRequest(jest.fn());
 
       await act(() => (page = new ShareDialogPage(context, props)));
@@ -1535,7 +1535,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
     it("As LU in read-only mode I should still be able to confirm the set as-is (empty delta)", async () => {
       expect.assertions(3);
-      const props = { ...controlledModeProps(), readOnly: true };
+      const props = { ...parentFolderSnapshotProps(), readOnly: true };
       mockContextRequest(jest.fn());
 
       await act(() => (page = new ShareDialogPage(context, props)));
@@ -1551,11 +1551,11 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
       expect.assertions(2);
       mockContextRequest(jest.fn());
 
-      await act(() => (page = new ShareDialogPage(context, { ...controlledModeProps(), readOnly: true })));
+      await act(() => (page = new ShareDialogPage(context, { ...parentFolderSnapshotProps(), readOnly: true })));
 
       expect(page.dialogWrapper.classList.contains("read-only")).toBe(true);
 
-      await act(() => (page = new ShareDialogPage(context, controlledModeProps())));
+      await act(() => (page = new ShareDialogPage(context, parentFolderSnapshotProps())));
 
       expect(page.dialogWrapper.classList.contains("read-only")).toBe(false);
     });
@@ -1565,7 +1565,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
     // Permissions are sorted by aro name: user "Ada Lovelace" (row 1), group "Developer" (row 2).
     it("As LU I should see a members toggle on group rows but not on user rows", async () => {
       expect.assertions(3);
-      const props = controlledModeWithGroupProps();
+      const props = withGroupProps();
       mockContextRequest(jest.fn());
 
       await act(() => (page = new ShareDialogPage(context, props)));
@@ -1577,7 +1577,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
     it("As LU I can still expand the members of a group pending deletion, faded like its row", async () => {
       expect.assertions(4);
-      const props = controlledModeWithGroupProps();
+      const props = withGroupProps();
       const groupForShare = initialGroupForShareFixture(props);
       mockContextRequest((request) => (request === GROUPS_FIND_BY_IDS_FOR_SHARE ? [groupForShare] : undefined));
 
@@ -1595,7 +1595,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
     it("As LU expanding a group I should see its members, and collapsing should hide them", async () => {
       expect.assertions(4);
-      const props = controlledModeWithGroupProps();
+      const props = withGroupProps();
       const groupForShare = initialGroupForShareFixture(props);
       mockContextRequest((request) => (request === GROUPS_FIND_BY_IDS_FOR_SHARE ? [groupForShare] : undefined));
 
@@ -1613,7 +1613,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
     it("As LU expanding a group refetches its members so I see the membership it has now", async () => {
       expect.assertions(3);
-      const props = controlledModeWithGroupProps();
+      const props = withGroupProps();
       const joiningMember = defaultUserDto({
         username: "grace@passbolt.com",
         profile: defaultProfileDto({ first_name: "Grace", last_name: "Hopper" }),
@@ -1670,7 +1670,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
     it("As LU expanding a group I added during the session I should see its members fetched on demand", async () => {
       expect.assertions(3);
-      const props = controlledModeWithGroupProps();
+      const props = withGroupProps();
       const addedGroup = addedGroupWithMembersFixture();
       const requestBextMockImpl = (request) => {
         switch (request) {
@@ -1699,7 +1699,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
     it("As LU removing a group I added and adding it back I should see the member that joined meanwhile", async () => {
       expect.assertions(4);
-      const props = controlledModeWithGroupProps();
+      const props = withGroupProps();
       const joiningMember = defaultUserDto({
         username: "grace@passbolt.com",
         profile: defaultProfileDto({ first_name: "Grace", last_name: "Hopper" }),
@@ -1747,7 +1747,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
     it("As LU expanding a group I added during the session, if its members cannot be fetched the dialog aborts with an error", async () => {
       expect.assertions(2);
-      const props = controlledModeWithGroupProps();
+      const props = withGroupProps();
       const addedGroup = addedGroupWithMembersFixture();
       const error = new Error("Unexpected error");
       const requestBextMockImpl = (request) => {
@@ -1781,7 +1781,7 @@ describe("As LU running ShareDialog in controlled mode (workflow-driven)", () =>
 
     it("As LU expanding two groups whose members both fail to fetch, the dialog aborts once", async () => {
       expect.assertions(2);
-      const props = controlledModeWithTwoGroupsProps();
+      const props = withTwoGroupsProps();
       const rejections = [];
       const requestBextMockImpl = (request) => {
         if (request === GROUPS_FIND_BY_IDS_FOR_SHARE) {

@@ -151,7 +151,7 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
       }
       // The dialog needs two sets: the permissions each resource has now, which the badges and the
       // revert button compare against, and the ones the move applies, staged on top once the dialog is open.
-      this.initialResources = this.buildControlledResources(this.props.resources, movedSnapshots);
+      this.initialResources = this.buildInitialResources(this.props.resources, movedSnapshots);
       this.appliedPermissionsByItemId = new Map(
         this.props.resources
           .map((resource, index) => [resource.id, appliedPermissions[index]])

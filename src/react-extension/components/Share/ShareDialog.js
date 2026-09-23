@@ -64,9 +64,9 @@ class ShareDialog extends Component {
    */
   async componentDidMount() {
     if (this.props.acoType === PermissionEntity.ACO_FOLDER) {
-      this.folders = this.buildControlledResources(this.props.initialFolders);
+      this.folders = this.buildResourcesDtos(this.props.initialFolders);
     } else {
-      this.resources = this.buildControlledResources(this.props.initialResources);
+      this.resources = this.buildResourcesDtos(this.props.initialResources);
     }
 
     this.shareChanges = new ShareChanges(this.resources, this.folders);
@@ -107,11 +107,8 @@ class ShareDialog extends Component {
       return permissions;
     }
 
-    const appliedControlledItems = this.buildControlledResources(itemsWithAppliedPermissions);
-    const appliedShareChanges = new ShareChanges(
-      isFolder ? [] : appliedControlledItems,
-      isFolder ? appliedControlledItems : [],
-    );
+    const appliedItems = this.buildResourcesDtos(itemsWithAppliedPermissions);
+    const appliedShareChanges = new ShareChanges(isFolder ? [] : appliedItems, isFolder ? appliedItems : []);
     const appliedByAroId = new Map(appliedShareChanges.aggregatePermissionsByAro().map((p) => [p.aro.id, p]));
 
     // Keyed by recipient id to patch each row in place. Insertion order keeps the existing rows
@@ -202,7 +199,7 @@ class ShareDialog extends Component {
   /**
    * True when the dialog is displayed read-only: the operator can review the permission set and
    * confirm it as-is but cannot change it. Used by the edit workflow when the operator has update
-   * but not owner permission on the resource. Only meaningful in controlled mode.
+   * but not owner permission on the resource.
    * @returns {boolean}
    */
   isReadOnly() {
@@ -210,14 +207,14 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Build the resource DTOs the dialog renders in controlled mode so ShareChanges + ReactList work
+   * Build the resource DTOs the dialog renders so ShareChanges + ReactList work
    * without touching the server: one entry per resource provided in `initialResources`, each seeded
    * with its id, metadata, the operator's own permission, and its permission set. Create/edit pass a
    * single synthetic resource whose id is null (the resource does not exist yet); share passes the
    * real resources. The user/group lookup maps are built once and shared across resources.
    * @returns {Array<object>}
    */
-  buildControlledResources(resourcesList) {
+  buildResourcesDtos(resourcesList) {
     const groupsById = {};
     this.props.initialGroups?.items.forEach((group) => {
       groupsById[group.id] = group.toDto();
@@ -227,11 +224,11 @@ class ShareDialog extends Component {
       usersById[user.id] = user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS);
     });
 
-    return resourcesList.map((resource) => this.buildControlledResource(resource, groupsById, usersById));
+    return resourcesList.map((resource) => this.buildResourceDto(resource, groupsById, usersById));
   }
 
   /**
-   * Build a single controlled-mode resource DTO, embedding the referenced user/group from the
+   * Build a single resource DTO, embedding the referenced user/group from the
    * provided lookup maps, falling back to the aro embedded in the permission itself when the maps
    * do not carry it, so ShareChanges can render and track edits.
    * @param {{id: (string|null), metadata: object, permission: object, permissions: PermissionsCollection}} resource
@@ -239,7 +236,7 @@ class ShareDialog extends Component {
    * @param {object} usersById The referenced users keyed by id.
    * @returns {object}
    */
-  buildControlledResource(resource, groupsById, usersById) {
+  buildResourceDto(resource, groupsById, usersById) {
     const mappedPermissions = resource.permissions.items.map((permission) => {
       const dto = permission.toDto(PermissionEntity.ALL_CONTAIN_OPTIONS);
       dto.aco = this.props.acoType ?? PermissionEntity.ACO_RESOURCE;
@@ -273,7 +270,7 @@ class ShareDialog extends Component {
       // permission list
       permissions: null,
 
-      // ids of the groups whose members are currently expanded (controlled mode only)
+      // ids of the groups whose members are currently expanded
       expandedGroupIds: [],
 
       // members fetched on demand when a group is added or expanded, keyed by group id:
@@ -371,7 +368,7 @@ class ShareDialog extends Component {
   /**
    * Handle save operation success.
    *
-   * In controlled mode the workspace refresh (`onResourceShared`) and the success toast are
+   * The workspace refresh (`onResourceShared`) and the success toast are
    * the workflow handler's responsibility — the underlying resource doesn't even exist yet
    * when this dialog closes — so we only close.
    */
@@ -556,7 +553,7 @@ class ShareDialog extends Component {
 
   /**
    * Resolve the member users of a group, from the last fetch when there is one, otherwise from the
-   * controlled-mode initial collections. The group entity carries its memberships (groups_users), each
+   * initial collections. The group entity carries its memberships (groups_users), each
    * referencing a user by id that is looked up in the initial users collection. Members not present in
    * the initial users collection (i.e. without a direct permission) cannot be resolved and are omitted.
    * @param {string} groupId The group identifier
@@ -577,8 +574,8 @@ class ShareDialog extends Component {
 
   /**
    * Derive the flat list of rows to display from the permission list.
-   * Each permission becomes either a "user" or a "group" row. When a group is expanded (controlled
-   * mode), its member users are appended as "group-user" rows right after the group row.
+   * Each permission becomes either a "user" or a "group" row. When a group is expanded, its
+   * member users are appended as "group-user" rows right after the group row.
    * @returns {Array<{kind: string, permission?: object, user?: object, groupId?: string}>}
    */
   getDisplayedPermissions() {
@@ -600,7 +597,7 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Save the permissions. In controlled mode the dialog hands the deltas to `onConfirm` instead
+   * Save the permissions. The dialog hands the deltas to `onConfirm` instead
    * of calling the server, so the workflow owns the create-then-share sequence.
    * @returns {Promise<void>}
    */
@@ -762,7 +759,7 @@ class ShareDialog extends Component {
     if (!acos || acos.length <= 1) {
       return null;
     }
-    // `metadata.name` covers resources (and controlled-mode ACOs, which expose no top-level name);
+    // `metadata.name` covers resources (and the seeded ACOs, which expose no top-level name);
     // folders fall back to `aco.name`. Empty names are dropped so the list never shows blank lines.
     // Sorted by name so that the truncation always drops the same items.
     const items = acos

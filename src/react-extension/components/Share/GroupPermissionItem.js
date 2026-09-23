@@ -247,7 +247,7 @@ GroupPermissionItem.defaultProps = {
 GroupPermissionItem.propTypes = {
   id: PropTypes.string, // uuid
   group: PropTypes.object, // {id: <uuid>, name: <string>}
-  membersCount: PropTypes.number, // The group member count (controlled mode only), null otherwise
+  membersCount: PropTypes.number, // The group member count, null otherwise
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
   changeStatus: PropTypes.string, // A ShareChanges.CHANGE_STATUS_* value, null when unchanged
   unchangeableResources: PropTypes.array, // Move: [{name, type}] the items the choice cannot reach

@@ -119,14 +119,14 @@ export class AbstractPermissionFlow extends React.Component {
   }
 
   /**
-   * Pair each ACO with the permission set captured in its snapshot, producing the controlled-mode
+   * Pair each ACO with the permission set captured in its snapshot, producing the
    * resource shape ShareDialog seeds from without a server round-trip. The ACO list and the
    * snapshot list are index-aligned.
    * @param {Array<object>} acos The ACOs being shared/reviewed (each carries id, metadata and the operator's own permission).
    * @param {Array<PermissionSnapshotEntity>} snapshots The snapshot per ACO, in the same order.
    * @returns {Array<object>}
    */
-  buildControlledResources(acos, snapshots) {
+  buildInitialResources(acos, snapshots) {
     return acos.map((aco, index) => ({
       id: aco.id,
       metadata: aco.metadata,
@@ -137,7 +137,7 @@ export class AbstractPermissionFlow extends React.Component {
 
   /**
    * Merge the groups and users referenced across the given permission snapshots into de-duplicated
-   * collections, so a controlled-mode ShareDialog can render their rows and drill down to members.
+   * collections, so the ShareDialog can render their rows and drill down to members.
    * @param {Array<PermissionSnapshotEntity>} snapshots
    * @returns {{groups: GroupsCollection, users: UsersCollection}}
    */
