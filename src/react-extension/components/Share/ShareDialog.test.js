@@ -602,8 +602,8 @@ describe("As LU running ShareDialog from a permission workflow", () => {
 
   describe("Move mode", () => {
     /**
-     * Build move props where a recipient ends up read on RA and owner on RB, while the destination
-     * proposes "can update" for them. The operator owns both resources.
+     * Build move props where a recipient ends up read on RA and owner on RB. The operator owns both
+     * resources.
      */
     function buildMoveModeProps({ unchangedAcos } = {}) {
       const operatorId = context.userSettings.id;
@@ -668,15 +668,14 @@ describe("As LU running ShareDialog from a permission workflow", () => {
       expect(page.changeChip(2).textContent).toBe("added"); // Betty: comes from the destination
     });
 
-    it("As LU moving, a recipient whose applied permission varies shows 'varies' and the attention 'i', not the destination's lower value", async () => {
+    it("As LU moving, a recipient whose applied permission varies shows 'varies' and the varies 'i'", async () => {
       expect.assertions(3);
       const props = buildMoveModeProps();
       mockContextRequest(jest.fn());
 
       await act(() => (page = new ShareDialogPage(context, props)));
 
-      // reader does not end up at the same level everywhere, so the row reads "varies", never the
-      // destination's lower "can update", which would hide the ownership RB keeps.
+      // reader does not end up at the same level everywhere, so the row reads "varies".
       expect(page.permissionValueForAro("reader@passbolt.com")).toBe("varies");
       expect(page.variesCount).toBeGreaterThanOrEqual(1);
       // Every item here is owned, so the plain marker shows the per-item list.
@@ -784,7 +783,7 @@ describe("As LU running ShareDialog from a permission workflow", () => {
       await act(() => (page = new ShareDialogPage(context, props)));
 
       // ada is owner on the owned R1 but only "can update" on the not-owned R2, so the row reads
-      // "varies", not the destination's "is owner", and shows the attention marker.
+      // "varies" and shows the attention marker.
       expect(page.permissionValueForAro("ada@passbolt.com")).toBe("varies");
       expect(page.attentionIconForAro("ada@passbolt.com")).not.toBeNull();
     });
