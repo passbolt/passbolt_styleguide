@@ -791,4 +791,66 @@ describe("Unit testing apiClient with mocked fetch", () => {
     expect(global.customApiClientFetch).toHaveBeenCalled();
     delete global.customApiClientFetch;
   });
+
+  describe("::setApiVersion", () => {
+    it("should build urls with the default api version if it is not overridden", () => {
+      expect.assertions(1);
+      const testClient = new ApiClient(options);
+
+      const builtUrl = testClient.buildUrl("https://test.passbolt.com/resource", {});
+
+      expect(builtUrl.toString()).toStrictEqual("https://test.passbolt.com/resource.json?api-version=v2");
+    });
+
+    it("should build urls with the overridden api version", () => {
+      expect.assertions(1);
+      const testClient = new ApiClient(options);
+
+      testClient.setApiVersion("v5");
+      const builtUrl = testClient.buildUrl("https://test.passbolt.com/resource", {});
+
+      expect(builtUrl.toString()).toStrictEqual("https://test.passbolt.com/resource.json?api-version=v5");
+    });
+
+    it("should keep the url options after the api version", () => {
+      expect.assertions(1);
+      const testClient = new ApiClient(options);
+
+      testClient.setApiVersion("v5");
+      const builtUrl = testClient.buildUrl("https://test.passbolt.com/resource", { "filter[search]": "something" });
+
+      expect(builtUrl.toString()).toStrictEqual(
+        "https://test.passbolt.com/resource.json?api-version=v5&filter%5Bsearch%5D=something",
+      );
+    });
+
+    it("should not alter the api version of another client built from the same options", () => {
+      expect.assertions(1);
+      const testClient = new ApiClient(options);
+      const otherClient = new ApiClient(options);
+
+      testClient.setApiVersion("v5");
+
+      expect(otherClient.buildUrl("https://test.passbolt.com/resource", {}).toString()).toStrictEqual(
+        "https://test.passbolt.com/resource.json?api-version=v2",
+      );
+    });
+
+    describe.each([
+      { apiVersion: 42 },
+      { apiVersion: true },
+      { apiVersion: false },
+      { apiVersion: null },
+      { apiVersion: undefined },
+      { apiVersion: {} },
+      { apiVersion: [] },
+    ])("should throw if the api version is not a string", (scenario) => {
+      it(`scenario: ${JSON.stringify(scenario)}`, () => {
+        expect.assertions(1);
+        const testClient = new ApiClient(options);
+
+        expect(() => testClient.setApiVersion(scenario.apiVersion)).toThrow(TypeError);
+      });
+    });
+  });
 });
