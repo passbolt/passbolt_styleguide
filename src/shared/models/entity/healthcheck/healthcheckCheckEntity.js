@@ -23,7 +23,7 @@ class HealthcheckCheckEntity extends EntityV2 {
    * @inheritDoc
    */
   marshall() {
-    if (typeof this._props.help === "undefined" || this._props.help === null) {
+    if (!Array.isArray(this._props.help)) {
       this._props.help = [];
     }
 
