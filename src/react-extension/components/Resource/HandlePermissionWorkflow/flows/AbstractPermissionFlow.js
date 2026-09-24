@@ -88,14 +88,45 @@ export class AbstractPermissionFlow extends React.Component {
   }
 
   /**
-   * Pair each ACO with the permission set captured in its snapshot, producing the controlled-mode
+   * Whether the operator owns the given item (and may therefore change its permissions).
+   * @param {object} item A resource/folder DTO carrying the operator's own permission.
+   * @returns {boolean}
+   */
+  isOwnedItem(item) {
+    return item.permission?.type === PermissionEntity.PERMISSION_OWNER;
+  }
+
+  /**
+   * Throw when the destination folder's permissions changed since the snapshot the operator
+   * confirmed. A move to the root has no destination, so nothing to check.
+   * @param {string|null} destinationFolderId The destination folder id, or null for the root.
+   * @param {PermissionSnapshotEntity|null} snapshot The snapshot captured when the dialog opened.
+   * @returns {Promise<void>}
+   * @throws {Error} When the destination folder's permissions changed since the snapshot.
+   */
+  async assertDestinationPermissionsUnchanged(destinationFolderId, snapshot) {
+    if (!destinationFolderId) {
+      return;
+    }
+    const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForFolderShare(destinationFolderId);
+    if (!snapshot.equals(currentSnapshot)) {
+      throw new Error(
+        this.props.t(
+          "The destination folder permissions changed during your review. Please retry the operation and verify the permissions again.",
+        ),
+      );
+    }
+  }
+
+  /**
+   * Pair each ACO with the permission set captured in its snapshot, producing the
    * resource shape ShareDialog seeds from without a server round-trip. The ACO list and the
    * snapshot list are index-aligned.
    * @param {Array<object>} acos The ACOs being shared/reviewed (each carries id, metadata and the operator's own permission).
    * @param {Array<PermissionSnapshotEntity>} snapshots The snapshot per ACO, in the same order.
    * @returns {Array<object>}
    */
-  buildControlledResources(acos, snapshots) {
+  buildInitialResources(acos, snapshots) {
     return acos.map((aco, index) => ({
       id: aco.id,
       metadata: aco.metadata,
@@ -106,7 +137,7 @@ export class AbstractPermissionFlow extends React.Component {
 
   /**
    * Merge the groups and users referenced across the given permission snapshots into de-duplicated
-   * collections, so a controlled-mode ShareDialog can render their rows and drill down to members.
+   * collections, so the ShareDialog can render their rows and drill down to members.
    * @param {Array<PermissionSnapshotEntity>} snapshots
    * @returns {{groups: GroupsCollection, users: UsersCollection}}
    */

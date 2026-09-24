@@ -35,7 +35,7 @@ export const FOLDER_SHARE_FLOW_STATUS = Object.freeze({
  * Orchestrates the folder-share flow. A single dialog lets the operator set and validate the
  * folder's permission set at once:
  * 1. Captures a permission snapshot of the folder itself.
- * 2. Dispatches ShareDialog (controlled mode, ACO_FOLDER) so the operator reviews and edits the
+ * 2. Dispatches ShareDialog (ACO_FOLDER) so the operator reviews and edits the
  *    folder's own permission set.
  * 3. On confirmation, re-snapshots the folder to detect drift, then applies the folder permission
  *    changes via `passbolt.share.folders.save` (the extension re-derives and propagates to content).
@@ -92,7 +92,7 @@ export class FolderShareFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Open the ShareDialog in controlled mode seeded from the folder snapshot, so the operator reviews
+   * Open the ShareDialog seeded from the folder snapshot, so the operator reviews
    * and edits the folder's own permissions.
    */
   openShareDialog() {

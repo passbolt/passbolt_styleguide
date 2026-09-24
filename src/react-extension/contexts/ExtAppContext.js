@@ -99,12 +99,6 @@ class ExtAppContextProvider extends React.Component {
 
       // folder dialogs
       folder: {},
-      folderMoveStrategyProps: {
-        requestId: null,
-        folderId: null,
-        foldersIds: [],
-        resourcesIds: [],
-      },
 
       // user dialog
       editUserDialogProps: {
