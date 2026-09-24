@@ -844,12 +844,11 @@ describe("Unit testing apiClient with mocked fetch", () => {
       { apiVersion: undefined },
       { apiVersion: {} },
       { apiVersion: [] },
-    ])(`should throw if the api version is not a string: $apiVersion`, () => {
-        expect.assertions(1);
-        const testClient = new ApiClient(options);
+    ])(`should throw if the api version is not a string: $apiVersion`, (scenario) => {
+      expect.assertions(1);
+      const testClient = new ApiClient(options);
 
-        expect(() => testClient.setApiVersion(scenario.apiVersion)).toThrow(TypeError);
-      });
+      expect(() => testClient.setApiVersion(scenario.apiVersion)).toThrow(TypeError);
     });
   });
 });
