@@ -14,6 +14,8 @@
 
 import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 import HealthcheckEntity from "../../../../shared/models/entity/healthcheck/healthcheckEntity";
+import HealthcheckChecksCollection from "../../../../shared/models/entity/healthcheck/healthcheckChecksCollection";
+import { mixedStatusHealthcheckApiBodyDto } from "../../../../shared/models/entity/healthcheck/healthcheck.test.data";
 import { defaultActionFeedbackContext } from "../../ActionFeedbackContext.test.data";
 
 /**
@@ -27,6 +29,15 @@ export function defaultProps(data = {}) {
     actionFeedbackContext: defaultActionFeedbackContext(),
   };
   return Object.assign(defaultProps, data);
+}
+
+/**
+ * Build a checks collection out of a v5 response body.
+ * @param {array} [body] the response body, defaults to the captured mixed status one
+ * @returns {HealthcheckChecksCollection}
+ */
+export function healthcheckChecksCollection(body = mixedStatusHealthcheckApiBodyDto()) {
+  return new HealthcheckChecksCollection(body, { ignoreInvalidEntity: true });
 }
 
 export function defaultAdministrationHealthcheckContext(data = {}) {
