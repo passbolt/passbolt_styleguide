@@ -17,8 +17,7 @@ import HealthcheckCheckEntity from "./healthcheckCheckEntity";
 
 /**
  * Every check of the healthcheck response, in the order the API sent them.
- * No build rule asserts the key unique: two checks sharing one has to cost nothing rather than
- * throw and blank the page.
+ * No build rule asserts the key unique: two checks sharing one should not throw and blank the page.
  */
 class HealthcheckChecksCollection extends EntityV2Collection {
   /**
