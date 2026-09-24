@@ -836,7 +836,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
       );
     });
 
-    describe.each([
+    it.each([
       { apiVersion: 42 },
       { apiVersion: true },
       { apiVersion: false },
@@ -844,8 +844,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
       { apiVersion: undefined },
       { apiVersion: {} },
       { apiVersion: [] },
-    ])("should throw if the api version is not a string", (scenario) => {
-      it(`scenario: ${JSON.stringify(scenario)}`, () => {
+    ])(`should throw if the api version is not a string: $apiVersion`, () => {
         expect.assertions(1);
         const testClient = new ApiClient(options);
 
