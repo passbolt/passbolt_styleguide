@@ -15,11 +15,6 @@
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration";
 import React from "react";
 import { defaultProps } from "./DisplayHealthcheckAdministration.test.data";
-import {
-  defaultAdministrationHealthcheckContext,
-  mockHealthcheckDataAllChecksFail,
-} from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
-import HealthcheckEntity from "../../../../shared/models/entity/healthcheck/healthcheckEntity";
 
 export default {
   title: "Components/Administration/DisplayHealthcheckAdministration",
@@ -50,12 +45,4 @@ export default {
 
 export const Initial = {
   args: defaultProps(),
-};
-
-export const FailingTest = {
-  args: defaultProps({
-    adminHealthcheckContext: defaultAdministrationHealthcheckContext({
-      healthcheckData: new HealthcheckEntity(mockHealthcheckDataAllChecksFail),
-    }),
-  }),
 };
