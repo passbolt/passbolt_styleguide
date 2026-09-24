@@ -48,7 +48,6 @@ class HealthcheckChecksCollection extends EntityV2Collection {
    * @returns {array<{key: string, title: string, checks: array<HealthcheckCheckEntity>}>}
    */
   groupByDomain() {
-    const groups = [];
     const groupsByKey = new Map();
 
     this.items.forEach((check) => {
@@ -56,12 +55,11 @@ class HealthcheckChecksCollection extends EntityV2Collection {
       if (!group) {
         group = { key: check.domainKey, title: check.domainTitle, checks: [] };
         groupsByKey.set(check.domainKey, group);
-        groups.push(group);
       }
       group.checks.push(check);
     });
 
-    return groups;
+    return Array.from(groupsByKey.values());
   }
 }
 

@@ -14,6 +14,7 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
+import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import HealthcheckCheckEntity from "./healthcheckCheckEntity";
 import { defaultHealthcheckCheckDto } from "./healthcheck.test.data";
 
@@ -21,6 +22,43 @@ describe("HealthcheckCheckEntity", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
       EntitySchema.validateSchema(HealthcheckCheckEntity.name, HealthcheckCheckEntity.getSchema());
+    });
+
+    it("validates key property", () => {
+      assertEntityProperty.string(HealthcheckCheckEntity, "key");
+      assertEntityProperty.notRequired(HealthcheckCheckEntity, "key");
+    });
+
+    it("validates domain_key property", () => {
+      assertEntityProperty.string(HealthcheckCheckEntity, "domain_key");
+      assertEntityProperty.required(HealthcheckCheckEntity, "domain_key");
+    });
+
+    it("validates domain property", () => {
+      const successScenarios = [assertEntityProperty.SCENARIO_OBJECT];
+      const failingScenarios = [
+        assertEntityProperty.SCENARIO_STRING,
+        assertEntityProperty.SCENARIO_INTEGER,
+        assertEntityProperty.SCENARIO_TRUE,
+      ];
+
+      assertEntityProperty.assert(HealthcheckCheckEntity, "domain", successScenarios, failingScenarios, "type");
+      assertEntityProperty.notRequired(HealthcheckCheckEntity, "domain");
+    });
+
+    it("validates status property", () => {
+      assertEntityProperty.string(HealthcheckCheckEntity, "status");
+      assertEntityProperty.required(HealthcheckCheckEntity, "status");
+    });
+
+    it("validates message property", () => {
+      assertEntityProperty.string(HealthcheckCheckEntity, "message");
+      assertEntityProperty.required(HealthcheckCheckEntity, "message");
+    });
+
+    it("validates help property", () => {
+      assertEntityProperty.assertArrayItemString(HealthcheckCheckEntity, "help");
+      assertEntityProperty.notRequired(HealthcheckCheckEntity, "help");
     });
   });
 
@@ -52,6 +90,16 @@ describe("HealthcheckCheckEntity", () => {
       const entity = new HealthcheckCheckEntity(dto);
       expect(entity.help).toEqual([]);
       expect(entity.hasHelp).toBe(false);
+    });
+
+    it("should default a help that is not an array to an empty array so it can always be iterated", () => {
+      const scenarios = [assertEntityProperty.SCENARIO_NULL, ...assertEntityProperty.FAIL_ARRAY_SCENARIOS];
+      expect.assertions(scenarios.length * 2);
+      scenarios.forEach(({ value }) => {
+        const entity = new HealthcheckCheckEntity(defaultHealthcheckCheckDto({ help: value }));
+        expect(entity.help).toEqual([]);
+        expect(entity.hasHelp).toBe(false);
+      });
     });
 
     it("should accept a status outside the documented vocabulary", () => {
