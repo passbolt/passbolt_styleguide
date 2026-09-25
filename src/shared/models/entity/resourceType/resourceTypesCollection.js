@@ -132,6 +132,14 @@ class ResourceTypesCollection extends EntityV2Collection {
   }
 
   /**
+   * Filter by resource types supported by the quick access.
+   * @return {void} The function alters the collection itself.
+   */
+  filterByQuickAccessResourceTypes() {
+    this.filterByCallback((resourceType) => resourceType.isSupportedByQuickAccess());
+  }
+
+  /**
    * Filter by resource type version.
    * @param {string} version the version used to filter the resource types
    * @return {void} The function alters the collection itself.
