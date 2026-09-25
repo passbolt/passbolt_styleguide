@@ -1097,10 +1097,10 @@ describe("ResourceTypeEntity", () => {
       expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).isSupportedByOfflineMode()).toBeTruthy();
     });
 
-    it("v5 note and custom fields types are not supported", () => {
+    it("v5 note and custom fields types are supported", () => {
       expect.assertions(2);
-      expect(new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto()).isSupportedByOfflineMode()).toBeFalsy();
-      expect(new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()).isSupportedByOfflineMode()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()).isSupportedByOfflineMode()).toBeTruthy();
     });
 
     it("v4 types are not supported, whatever their secret shape", () => {

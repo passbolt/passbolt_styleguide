@@ -282,7 +282,14 @@ class ResourceTypeEntity extends EntityV2 {
    * @returns {boolean}
    */
   isSupportedByOfflineMode() {
-    return this.isV5() && (this.hasPassword() || this.hasTotp() || this.hasPinCode());
+    return (
+      this.isV5() &&
+      (this.hasPassword() ||
+        this.hasTotp() ||
+        this.hasPinCode() ||
+        this.isStandaloneNote() ||
+        this.isStandaloneCustomFields())
+    );
   }
 
   /**
