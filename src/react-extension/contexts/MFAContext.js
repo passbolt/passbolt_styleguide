@@ -418,21 +418,25 @@ export class MfaContextProvider extends React.Component {
 
   /**
    * Handle the result of the browser prompt.
-   * @param {object} done
+   * @param {object} resultDto the result of the setup ceremony
+   * @param {boolean} resultDto.success true if the ceremony succeeded
+   * @param {object|Error} resultDto.result the result details of the operation
    * @param {string} done.status "success" or "error"
    * @param {string|null} [done.aaguid] Set on success
    * @param {object} [done.error] Set on error
    */
-  handlePasskeyCeremonyDone(done) {
+  handlePasskeyCeremonyDone(resultDto) {
     const pending = this.pendingPasskeyRegistration;
     if (!pending) {
       return;
     }
     this.pendingPasskeyRegistration = null;
-    if (done.status === "success") {
-      pending.resolve({ aaguid: done.aaguid });
+
+    const { success, result } = resultDto;
+    if (success) {
+      pending.resolve(result);
     } else {
-      pending.reject(done.error);
+      pending.reject(result);
     }
   }
 
