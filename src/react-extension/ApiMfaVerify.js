@@ -50,7 +50,7 @@ class ApiMfaVerify extends Component {
    * @return {string}
    */
   get baseUrl() {
-    const baseElement = document.getElementsByTagName("base") && document.getElementsByTagName("base")[0];
+    const baseElement = document.getElementsByTagName("base")?.[0];
     if (baseElement) {
       return baseElement.attributes.href.value.replace(/\/*$/g, "");
     }
