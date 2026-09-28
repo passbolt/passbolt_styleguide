@@ -27,14 +27,12 @@ export const MfaSettingsWorkflowStates = {
   VIEWCONFIGURATION: "View a totp configuration",
   SETUPYUBIKEY: "Setup Yubikey",
   SETUPDUO: "Setup Duo",
-  PASSKEYS: "Passkeys",
 };
 
 export const Providers = {
   TOTP: "totp",
   YUBIKEY: "yubikey",
   DUO: "duo",
-  WEBAUTHN: "webauthn",
 };
 
 /**
@@ -61,10 +59,6 @@ export const MfaContext = React.createContext({
   validateTotpCode: () => {}, //Validate the totp code
   removeProvider: () => {}, //Remove an existing provider
   validateYubikeyCode: () => {}, //Validate the yubikey code
-  findPasskeys: () => {}, // Find the passkeys of the current user
-  findPasskeySettings: () => {}, // Find the organisation passkey settings
-  deletePasskey: () => {}, // Delete a passkey of the current user
-  startPasskeyRegistration: () => {}, // Start the registration of a new passkey
 });
 
 /**
@@ -112,10 +106,6 @@ export class MfaContextProvider extends React.Component {
       removeProvider: this.removeProvider.bind(this), //Remove an existing provider
       validateYubikeyCode: this.validateYubikeyCode.bind(this), //Validate the yubikey code
       handleGetStartedWithDuo: this.handleGetStartedWithDuo.bind(this), //Handle the "Get started" button click for DUO.
-      findPasskeys: this.findPasskeys.bind(this), // Find the passkeys of the current user
-      findPasskeySettings: this.findPasskeySettings.bind(this), // Find the organisation passkey settings
-      deletePasskey: this.deletePasskey.bind(this), // Delete a passkey of the current user
-      startPasskeyRegistration: this.startPasskeyRegistration.bind(this), // Start the registration of a new passkey
     };
   }
 
@@ -348,46 +338,6 @@ export class MfaContextProvider extends React.Component {
   async handleGetStartedWithDuo() {
     await this.props.context.port.request("passbolt.mfa-setup.start-with-duo");
   }
-
-  /**
-   * Find the passkeys of the current user
-   * @returns {Promise<Array<object>>}
-   */
-  async findPasskeys() {
-    return this.props.context.port.request("passbolt.mfa-setup.get-webauthn-credentials");
-  }
-
-  /**
-   * Find the organisation passkey settings
-   * @returns {Promise<object>}
-   */
-  async findPasskeySettings() {
-    return this.props.context.port.request("passbolt.mfa-setup.get-webauthn-settings");
-  }
-
-  /**
-   * Delete a passkey of the current user and refresh the mfa settings, as deleting the last one disables the provider.
-   * @param {string} id the passkey id
-   * @returns {Promise<void>}
-   */
-  async deletePasskey(id) {
-    try {
-      this.setProcessing(true);
-      await this.props.context.port.request("passbolt.mfa-setup.delete-webauthn-credential", id);
-      await this.findMfaSettings();
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      this.setProcessing(false);
-    }
-  }
-
-  /**
-   * Start the registration of a new passkey.
-   * @returns {Promise<void>}
-   */
-  async startPasskeyRegistration() {}
 
   /**
    * Render the component

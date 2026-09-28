@@ -39,7 +39,7 @@ export function defaultProps(data = {}) {
  * @returns {object}
  */
 export const mockMfaSettings = {
-  providers: ["totp", "webauthn", "yubikey", "duo"],
+  providers: ["totp", "yubikey", "duo"],
   yubikey: {
     clientId: "80412",
     secretKey: "pas6lyijz2AIhX3D9eLIYAxv63lt@",
@@ -57,7 +57,6 @@ export const mockDefaultMfaModel = {
   duoClientSecret: "",
   duoToggle: false,
   totpProviderToggle: false,
-  webauthnToggle: false,
   yubikeyClientIdentifier: "",
   yubikeySecretKey: "",
   yubikeyToggle: false,
@@ -69,7 +68,6 @@ export const mockDefaultMfaModel = {
  */
 export const mockModel = {
   totpProviderToggle: true,
-  webauthnToggle: true,
   yubikeyToggle: true,
   duoToggle: true,
   yubikeyClientIdentifier: "80412",
