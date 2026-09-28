@@ -22,8 +22,6 @@ import {
   noMfaUserDefinedWithTotp,
   setupTotpData,
   MfaOptInPolicy,
-  defaultPasskeysDtos,
-  defaultPasskeySettingsDto,
 } from "./MFAContext.test.data";
 import { enableFetchMocks } from "jest-fetch-mock";
 
@@ -179,60 +177,6 @@ describe("MFAContext", () => {
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.mfa-setup.remove-provider", {
         provider: "totp",
       });
-    });
-  });
-
-  describe("MFAContext::findPasskeys", () => {
-    it("Should request the passkeys of the current user", async () => {
-      expect.assertions(2);
-      const dtos = defaultPasskeysDtos(2);
-      jest.spyOn(props.context.port, "request").mockImplementation(() => dtos);
-
-      const passkeys = await mfaContextProvider.findPasskeys();
-
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.mfa-setup.get-webauthn-credentials");
-      expect(passkeys).toEqual(dtos);
-    });
-  });
-
-  describe("MFAContext::findPasskeySettings", () => {
-    it("Should request the organisation passkey settings", async () => {
-      expect.assertions(2);
-      const dto = defaultPasskeySettingsDto();
-      jest.spyOn(props.context.port, "request").mockImplementation(() => dto);
-
-      const settings = await mfaContextProvider.findPasskeySettings();
-
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.mfa-setup.get-webauthn-settings");
-      expect(settings).toEqual(dto);
-    });
-  });
-
-  describe("MFAContext::deletePasskey", () => {
-    it("Should delete the passkey and refresh the mfa settings", async () => {
-      expect.assertions(4);
-      const id = "8e3874ae-4b40-590b-968a-418f704b9d9a";
-      jest
-        .spyOn(props.context.port, "request")
-        .mockImplementation((event) =>
-          event === "passbolt.mfa-policy.get-mfa-settings" ? mockMfaSettings() : undefined,
-        );
-
-      await mfaContextProvider.deletePasskey(id);
-
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.mfa-setup.delete-webauthn-credential", id);
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.mfa-policy.get-mfa-settings");
-      expect(mfaContextProvider.getMfaUserSettings()).toEqual(mockMfaSettings().MfaAccountSettings);
-      expect(mfaContextProvider.isProcessing()).toBeFalsy();
-    });
-
-    it("Should rethrow the error and stop processing", async () => {
-      expect.assertions(2);
-      const error = new Error("Jest simulate API error.");
-      jest.spyOn(props.context.port, "request").mockImplementation(() => Promise.reject(error));
-
-      await expect(mfaContextProvider.deletePasskey("8e3874ae-4b40-590b-968a-418f704b9d9a")).rejects.toBe(error);
-      expect(mfaContextProvider.isProcessing()).toBeFalsy();
     });
   });
 

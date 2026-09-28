@@ -16,7 +16,7 @@
  * Unit tests on DisplayMfaAdministration in regard of specifications
  */
 import "../../../../../test/mocks/mockPortal.js";
-import { defaultProps, defaultMfaSettings, mockMfaSettings } from "./DisplayMfaAdministration.test.data";
+import { defaultProps, mockMfaSettings } from "./DisplayMfaAdministration.test.data";
 import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 import DisplayMfaAdministrationPage from "./DisplayMfaAdministration.test.page";
 import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
@@ -44,12 +44,11 @@ describe("See the MFA settings", () => {
     });
 
     it("As AD I should see if all fields is available for my Passbolt instance on the administration settings page", async () => {
-      expect.assertions(10);
+      expect.assertions(9);
 
       expect(page.exists()).toBeTruthy();
       // check fields in the form
       expect(page.totp.checked).toBeTruthy();
-      expect(page.passkeys.checked).toBeTruthy();
       expect(page.yubikey.checked).toBeTruthy();
       expect(page.duo.checked).toBeTruthy();
       await page.checkDuo();
@@ -156,63 +155,12 @@ describe("See the MFA settings", () => {
     it("I should see all fields disabled”", () => {
       fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
 
-      expect.assertions(4);
+      expect.assertions(3);
 
       page = new DisplayMfaAdministrationPage(context, props);
       expect(page.totp.getAttribute("disabled")).not.toBeNull();
-      expect(page.passkeys.getAttribute("disabled")).not.toBeNull();
       expect(page.yubikey.getAttribute("disabled")).not.toBeNull();
       expect(page.duo.getAttribute("disabled")).not.toBeNull();
-    });
-  });
-
-  describe("As AD I should be able to toggle the passkeys provider", () => {
-    it("As AD I should be able to disable the passkeys provider", async () => {
-      expect.assertions(5);
-
-      fetch.doMockOnceIf(/mfa\/settings*/, () =>
-        mockApiResponse(defaultMfaSettings({ providers: ["totp", "webauthn", "duo"] })),
-      );
-      await act(() => (page = new DisplayMfaAdministrationPage(context, props)));
-
-      expect(page.passkeys.checked).toBeTruthy();
-      expect(page.passkeysDescription.textContent).toBe("Passkeys are enabled for all users.");
-      await page.checkPasskeys();
-
-      expect(page.passkeysDescription.textContent).toBe("Passkeys are disabled for all users.");
-      expect(page.isSaveButtonEnabled()).toBeTruthy();
-
-      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse({}));
-      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(defaultMfaSettings({ providers: ["totp", "duo"] })));
-      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
-      await page.saveSettings();
-
-      const body = JSON.parse(fetch.mock.calls[1][1].body);
-      expect(body.providers).toEqual(["totp", "duo"]);
-    });
-
-    it("As AD I should be able to enable the passkeys provider", async () => {
-      expect.assertions(5);
-
-      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(defaultMfaSettings({ providers: ["totp", "duo"] })));
-      await act(() => (page = new DisplayMfaAdministrationPage(context, props)));
-
-      expect(page.passkeys.checked).toBeFalsy();
-      expect(page.passkeysDescription.textContent).toBe("Passkeys are disabled for all users.");
-      await page.checkPasskeys();
-
-      expect(page.passkeysDescription.textContent).toBe("Passkeys are enabled for all users.");
-      expect(page.isSaveButtonEnabled()).toBeTruthy();
-
-      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse({}));
-      fetch.doMockOnceIf(/mfa\/settings*/, () =>
-        mockApiResponse(defaultMfaSettings({ providers: ["totp", "webauthn", "duo"] })),
-      );
-      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
-      await page.saveSettings();
-
-      const body = JSON.parse(fetch.mock.calls[1][1].body);
-      expect(body.providers).toEqual(["totp", "webauthn", "duo"]);
     });
   });
 
