@@ -12,6 +12,7 @@
  * @since         5.15.0
  */
 
+import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
 import { BUTTON_LIKE_INPUT_TYPES } from "./OrphanDictionary";
 
 class OrphanFieldPredicates {
@@ -21,7 +22,9 @@ class OrphanFieldPredicates {
    * @returns {boolean} true if the element is comparable to a button
    */
   static isButtonLike(element) {
-    if (element instanceof HTMLElement) {
+    // `nodeType` is realm-agnostic, unlike `instanceof HTMLElement`: elements coming from a
+    // same-origin iframe are built by that frame's constructors, not by ours.
+    if (ShadowDomQueryService.isElement(element)) {
       if (element.tagName === "BUTTON") {
         return true;
       }
