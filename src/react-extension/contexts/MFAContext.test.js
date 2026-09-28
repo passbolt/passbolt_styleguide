@@ -266,7 +266,7 @@ describe("MFAContext", () => {
 
       const promise = mfaContextProvider.startPasskeyRegistration();
       await waitForTrue(() => mfaContextProvider.pendingPasskeyRegistration !== null);
-      await props.context.port.emit(ceremonyDoneEvent, { status: "success", aaguid });
+      await props.context.port.emit(ceremonyDoneEvent, { success: true, result: { aaguid } });
 
       await expect(promise).resolves.toEqual({ aaguid });
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.mfa-setup.begin-webauthn-ceremony");
@@ -280,7 +280,7 @@ describe("MFAContext", () => {
 
       const promise = mfaContextProvider.startPasskeyRegistration();
       await waitForTrue(() => mfaContextProvider.pendingPasskeyRegistration !== null);
-      props.context.port.emit(ceremonyDoneEvent, { status: "error", error });
+      props.context.port.emit(ceremonyDoneEvent, { success: false, result: error });
 
       await expect(promise).rejects.toBe(error);
     });
