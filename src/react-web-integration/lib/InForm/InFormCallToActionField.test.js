@@ -12,7 +12,7 @@
  * @since         5.15.0
  */
 
-import InFormCallToActionField from "./InFormCallToActionField";
+import InFormCallToActionField, { CALL_TO_ACTION_REMOVAL_GRACE_DELAY } from "./InFormCallToActionField";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
 import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
@@ -249,15 +249,63 @@ describe("InFormCallToActionField", () => {
       expect(callToActionField.removeIframe).not.toHaveBeenCalled();
     });
 
-    it("should remove the iframe when the mouse moves out", () => {
-      expect.assertions(1);
+    it("should remove the iframe once the grace period elapsed when the mouse moves out", () => {
+      expect.assertions(2);
+      jest.useFakeTimers();
 
       const callToActionField = buildCallToActionField();
       callToActionField.removeIframe = jest.fn();
 
       callToActionField.removeInFormCallToActionWhenMouseOut({ relatedTarget: null });
 
+      // The pointer may still be travelling to the call-to-action, nothing is removed yet.
+      expect(callToActionField.removeIframe).not.toHaveBeenCalled();
+
+      jest.advanceTimersByTime(CALL_TO_ACTION_REMOVAL_GRACE_DELAY);
+
       expect(callToActionField.removeIframe).toHaveBeenCalledTimes(1);
+      jest.useRealTimers();
+    });
+
+    /*
+     * A field served in a same-origin iframe reports a null relatedTarget when the pointer leaves it
+     * for the call-to-action, which lives in the top document. The grace period is what keeps the
+     * call-to-action alive in that case.
+     */
+    it("should not remove the iframe when the pointer reaches the call-to-action during the grace period", () => {
+      expect.assertions(1);
+      jest.useFakeTimers();
+
+      const callToActionField = buildCallToActionField();
+      callToActionField.removeIframe = jest.fn();
+
+      callToActionField.removeInFormCallToActionWhenMouseOut({ relatedTarget: null });
+      // The call-to-action `mouseover` lands after the field `mouseout`, as it does in the browser.
+      callToActionField.isCallToActionMousingOver = true;
+      callToActionField.cancelScheduledRemoval();
+
+      jest.advanceTimersByTime(CALL_TO_ACTION_REMOVAL_GRACE_DELAY);
+
+      expect(callToActionField.removeIframe).not.toHaveBeenCalled();
+      jest.useRealTimers();
+    });
+
+    it("should cancel a pending removal when the pointer comes back on the field", async () => {
+      expect.assertions(1);
+      jest.useFakeTimers();
+
+      const callToActionField = buildCallToActionField();
+      callToActionField.removeIframe = jest.fn();
+      callToActionField.createCallToActionIframe = jest.fn().mockResolvedValue(document.createElement("iframe"));
+      callToActionField.handleCallToActionClicked = jest.fn();
+
+      callToActionField.removeInFormCallToActionWhenMouseOut({ relatedTarget: null });
+      await callToActionField.insertInformCallToActionIframe();
+
+      jest.advanceTimersByTime(CALL_TO_ACTION_REMOVAL_GRACE_DELAY);
+
+      expect(callToActionField.removeIframe).not.toHaveBeenCalled();
+      jest.useRealTimers();
     });
   });
 

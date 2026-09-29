@@ -325,6 +325,44 @@ describe("ShadowDomQueryService", () => {
       expect(document.activeElement).toBe(outerHost);
       expect(ShadowDomQueryService.deepActiveElement()).toBe(input);
     });
+
+    it("should descend into a same-origin iframe holding the focus", () => {
+      expect.assertions(2);
+
+      const iframe = document.createElement("iframe");
+      document.body.appendChild(iframe);
+      const input = iframe.contentDocument.createElement("input");
+      iframe.contentDocument.body.appendChild(input);
+      input.focus();
+      // jsdom does not propagate the frame focus to the embedder, mirror what a browser reports.
+      jest.spyOn(document, "activeElement", "get").mockReturnValue(iframe);
+
+      expect(document.activeElement).toBe(iframe);
+      expect(ShadowDomQueryService.deepActiveElement()).toBe(input);
+    });
+
+    it("should stop at the frame when nothing is focused inside it", () => {
+      expect.assertions(1);
+
+      const iframe = document.createElement("iframe");
+      document.body.appendChild(iframe);
+      jest.spyOn(document, "activeElement", "get").mockReturnValue(iframe);
+
+      expect(ShadowDomQueryService.deepActiveElement()).toBe(iframe);
+    });
+
+    it("should stop at the frame when its document cannot be reached", () => {
+      expect.assertions(1);
+
+      const iframe = document.createElement("iframe");
+      document.body.appendChild(iframe);
+      jest.spyOn(iframe, "contentDocument", "get").mockImplementation(() => {
+        throw new Error("cross-origin");
+      });
+      jest.spyOn(document, "activeElement", "get").mockReturnValue(iframe);
+
+      expect(ShadowDomQueryService.deepActiveElement()).toBe(iframe);
+    });
   });
 
   describe("ShadowDomQueryService::scopeRoot", () => {

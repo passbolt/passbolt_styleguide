@@ -87,18 +87,48 @@ class ShadowDomQueryService {
   }
 
   /**
-   * The deepest active element, descending through open shadow roots.
+   * The deepest active element, descending through open shadow roots and same-origin iframes.
    *
-   * `document.activeElement` only exposes the outermost DOM elements, even when focused inside shadow DOM.
-   * This walks down `shadowRoot.activeElement` to reach the element that truly holds focus.
-   * @return {Element|null} The deepest focused element or `document.activeElement` when not in a shadow.
+   * `document.activeElement` only exposes the outermost DOM elements: it reports the host for a focus
+   * held inside a shadow root, and the frame element for a focus held inside an iframe. Both are
+   * walked down here so a field served in a same-origin iframe — a supported scenario, page
+   * classification walks those documents — is recognised as focused like any other.
+   * @return {Element|null} The deepest focused element or `document.activeElement` when not nested.
    */
   static deepActiveElement() {
     let active = document?.activeElement ?? null;
-    while (active?.shadowRoot?.activeElement) {
-      active = active.shadowRoot.activeElement;
+
+    for (let depth = 0; depth < MAX_PIERCE_DEPTH; depth++) {
+      const nested = active?.shadowRoot?.activeElement ?? ShadowDomQueryService.frameActiveElement(active);
+      if (!nested) {
+        return active;
+      }
+      active = nested;
     }
+
     return active;
+  }
+
+  /**
+   * The element holding focus inside a frame, when the given element is a frame we can reach into.
+   * @param {Element} element The candidate frame element.
+   * @return {Element|null} The focused element inside the frame, or null when there is no descent to make.
+   */
+  static frameActiveElement(element) {
+    if (element?.tagName !== "IFRAME" && element?.tagName !== "FRAME") {
+      return null;
+    }
+
+    let contentDocument = null;
+    try {
+      contentDocument = element.contentDocument;
+    } catch {
+      // Cross-origin frame: nothing to descend into.
+      return null;
+    }
+
+    const active = contentDocument?.activeElement ?? null;
+    return active && active !== contentDocument.body && active !== contentDocument.documentElement ? active : null;
   }
 
   /**

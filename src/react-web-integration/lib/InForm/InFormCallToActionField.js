@@ -18,6 +18,13 @@ import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryServic
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
 
 /**
+ * Grace period between the pointer leaving the field and the call-to-action being removed, letting
+ * the pointer travel the gap between the two.
+ * @type {number}
+ */
+export const CALL_TO_ACTION_REMOVAL_GRACE_DELAY = 150;
+
+/**
  * An InFormCallToActionField is represented by a DOM element identified as an username field and to which
  * in-form call-to-action and/or menu can be attached
  */
@@ -49,6 +56,8 @@ class InFormCallToActionField {
     this.shadowRoot = shadowRoot;
     /** Rectangle coordinates of the field */
     this.viewableRect = null;
+    /** Pending removal scheduled while the pointer travels from the field to the call-to-action */
+    this.removalTimeout = null;
 
     this.bindCallbacks();
     this.handleInsertionEvent();
@@ -106,6 +115,8 @@ class InFormCallToActionField {
    * Insert an in-form call-to-action iframe
    */
   async insertInformCallToActionIframe() {
+    // The pointer came back onto the field: whatever removal was pending is no longer wanted.
+    this.cancelScheduledRemoval();
     const iframes = this.shadowRoot.querySelectorAll("iframe");
     // Use of Array prototype some method cause NodeList is not an array !
     const iframeId = this.iframeId;
@@ -173,8 +184,16 @@ class InFormCallToActionField {
      * We need to know which iframe the user click on. We cannot add a listener on iframe
      * since there are from different domains (target page vs extension pagemods)
      */
-    iframe.addEventListener("mouseover", () => (this.isCallToActionMousingOver = true));
-    iframe.addEventListener("mouseout", () => (this.isCallToActionMousingOver = false));
+    iframe.addEventListener("mouseover", () => {
+      this.isCallToActionMousingOver = true;
+      // The pointer made it across: keep the call-to-action.
+      this.cancelScheduledRemoval();
+    });
+    iframe.addEventListener("mouseout", () => {
+      this.isCallToActionMousingOver = false;
+      // Leaving the call-to-action itself: same grace period, the pointer may be heading back to the field.
+      this.scheduleRemoval();
+    });
   }
 
   /** CALL-TO-ACTION REMOVE */
@@ -199,23 +218,50 @@ class InFormCallToActionField {
   }
 
   /**
-   * Removes the call-to-action iframe from the username or password field when one moused out
-   * @param event The mouse-out event
+   * Schedules the removal of the call-to-action when the pointer leaves the field.
+   *
+   * The removal cannot be decided synchronously here. When the field is served in a same-origin
+   * iframe the call-to-action host lives in the top document, so the pointer leaves the field's
+   * document entirely: `relatedTarget` is null and can never be the host, and the call-to-action's
+   * own `mouseover` only fires *after* this event. Both signals are therefore useless at this point.
+   * Defer instead, and let a `mouseover` on the field or on the call-to-action cancel the removal.
+   *
+   * @param {MouseEvent} event The mouse-out event
    */
   removeInFormCallToActionWhenMouseOut(event) {
-    const isNotCallToActionIframe = event.relatedTarget !== this.shadowRoot.host;
-    const isActiveElementAnAuthenticationField = ShadowDomQueryService.deepActiveElement() === this.field;
-    if (isNotCallToActionIframe && !isActiveElementAnAuthenticationField) {
-      this.removeIframe();
+    // Same-document shortcut: the pointer is demonstrably entering the call-to-action, keep it.
+    if (event.relatedTarget === this.shadowRoot.host) {
+      return;
     }
+    this.scheduleRemoval();
+  }
+
+  /**
+   * Schedules a removal, replacing any already pending one.
+   */
+  scheduleRemoval() {
+    this.cancelScheduledRemoval();
+    this.removalTimeout = setTimeout(() => {
+      this.removalTimeout = null;
+      this.removeInFormCallToAction();
+    }, CALL_TO_ACTION_REMOVAL_GRACE_DELAY);
+  }
+
+  /**
+   * Cancels a pending removal, if any.
+   */
+  cancelScheduledRemoval() {
+    clearTimeout(this.removalTimeout);
+    this.removalTimeout = null;
   }
 
   /**
    * Remove the call-to-action (iframe)
    */
   removeIframe() {
-    // The iframe goes away, so stop watching for a click on it.
+    // The iframe goes away, so stop watching for a click on it and drop any pending removal.
     clearInterval(this.callToActionClickWatcher);
+    this.cancelScheduledRemoval();
     const iframes = this.shadowRoot.querySelectorAll("iframe");
     iframes.forEach((iframe) => {
       const identifierToMatch = this.iframeId;
@@ -248,6 +294,7 @@ class InFormCallToActionField {
     this.field.removeEventListener("mouseout", this.removeInFormCallToActionWhenMouseOut);
     this.field.removeEventListener("blur", this.removeInFormCallToAction);
     this.scrollableFieldParent.removeEventListener("scroll", this.removeIframe);
+    this.cancelScheduledRemoval();
     this.removeIframe();
   }
 }
