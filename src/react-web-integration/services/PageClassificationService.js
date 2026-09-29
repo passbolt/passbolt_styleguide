@@ -38,15 +38,11 @@ class PageClassificationService {
    *   The classified live fields and per-form roles across all documents.
    */
   static classifyPage() {
-    // Per-layer timings, accumulated across every classified document (page + same-origin iframes).
-    const timings = { enumeration: 0, extraction: 0, scraping: 0, classification: 0, resolution: 0, aggregation: 0 };
-    const enumerationStart = PageClassificationService.now();
     const documents = PageClassificationService.classifiableDocuments();
-    timings.enumeration = PageClassificationService.now() - enumerationStart;
 
     const perDocument = documents.map((root) => {
       try {
-        return PageClassificationService.classifyDocument(root, timings);
+        return PageClassificationService.classifyDocument(root);
       } catch (error) {
         // A single malformed document/iframe must never take down autofill and the call-to-action for
         // the whole page; skip it and surface the cause.
@@ -55,12 +51,10 @@ class PageClassificationService {
       }
     });
 
-    const aggregationStart = PageClassificationService.now();
     const result = {
       fields: perDocument.flatMap((documentResult) => documentResult.fields),
       forms: Object.assign({}, ...perDocument.map((documentResult) => documentResult.forms)),
     };
-    timings.aggregation = PageClassificationService.now() - aggregationStart;
 
     return result;
   }
@@ -87,36 +81,19 @@ class PageClassificationService {
    * @param {Document|Element} root The document (or element) to classify.
    * @returns {{fields: Array<{fieldId: string, formId: string, role: string, element: Element}>, forms: object}} The resolved result for this document.
    */
-  static classifyDocument(root, timings = { extraction: 0, scraping: 0, classification: 0, resolution: 0 }) {
-    const extractionStart = PageClassificationService.now();
+  static classifyDocument(root) {
     const skeleton = FormExtractionService.aggregateForms(root);
     OrphanFieldsExtractionService.aggregatePseudoForms(PageClassificationService.discoverFields(root), skeleton);
+
     // Populate each container's fields[] uniformly (TEXT_FIELDS re-scan) and purge empty containers,
     // mirroring the canonical extraction pipeline (see InFormManager.findAndSetCredentialsFormFields).
     const populated = FieldAggregatorService.aggregateFields(skeleton);
-    timings.extraction += PageClassificationService.now() - extractionStart;
 
-    const scrapingStart = PageClassificationService.now();
     const page = PageScraperService.scrape(populated);
-    timings.scraping += PageClassificationService.now() - scrapingStart;
-
-    const classificationStart = PageClassificationService.now();
     const classification = ClassificationService.classify(page);
-    timings.classification += PageClassificationService.now() - classificationStart;
 
-    const resolutionStart = PageClassificationService.now();
     const resolved = PageClassificationService.resolve(page, classification);
-    timings.resolution += PageClassificationService.now() - resolutionStart;
-
     return resolved;
-  }
-
-  /**
-   * High-resolution timestamp in milliseconds, guarded for document-less contexts.
-   * @returns {number} The current time in milliseconds.
-   */
-  static now() {
-    return typeof performance?.now === "function" ? performance.now() : 0;
   }
 
   /**
