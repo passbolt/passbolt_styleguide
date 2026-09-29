@@ -23,6 +23,8 @@ import {
   noMfaUserDefinedWithTotp,
   setupTotpData,
   MfaOptInPolicy,
+  defaultPasskeysDtos,
+  defaultPasskeySettingsDto,
 } from "./MFAContext.test.data";
 import { enableFetchMocks } from "jest-fetch-mock";
 

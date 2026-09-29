@@ -11,6 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.17.0
  */
+/**
+ * Unit tests on DisplayPasskeys in regard of specifications
+ */
 import { waitFor } from "@testing-library/react";
 import { DateTime } from "luxon";
 import DisplayPasskeysPage from "./DisplayPasskeys.test.page";
@@ -101,6 +104,17 @@ describe("DisplayPasskeys", () => {
   });
 
   describe("As LU I can manage my passkeys", () => {
+    it("As LU I should be able to start the registration of a passkey", async () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const page = new DisplayPasskeysPage(props);
+      await page.waitForLoaded();
+
+      await page.clickOnAddPasskey();
+
+      expect(props.mfaContext.startPasskeyRegistration).toHaveBeenCalled();
+    });
+
     it("As LU I should be able to open the delete passkey dialog", async () => {
       expect.assertions(1);
       const props = defaultProps();

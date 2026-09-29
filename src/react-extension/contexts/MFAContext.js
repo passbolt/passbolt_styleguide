@@ -29,12 +29,14 @@ export const MfaSettingsWorkflowStates = {
   VIEWCONFIGURATION: "View a totp configuration",
   SETUPYUBIKEY: "Setup Yubikey",
   SETUPDUO: "Setup Duo",
+  PASSKEYS: "Passkeys",
 };
 
 export const Providers = {
   TOTP: "totp",
   YUBIKEY: "yubikey",
   DUO: "duo",
+  WEBAUTHN: "webauthn",
 };
 
 /**

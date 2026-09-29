@@ -11,6 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.17.0
  */
+/**
+ * Unit tests on DeletePasskeyDialog in regard of specifications
+ */
 import { waitFor } from "@testing-library/react";
 import DeletePasskeyDialogPage from "./DeletePasskeyDialog.test.page";
 import { defaultProps } from "./DeletePasskeyDialog.test.data";
