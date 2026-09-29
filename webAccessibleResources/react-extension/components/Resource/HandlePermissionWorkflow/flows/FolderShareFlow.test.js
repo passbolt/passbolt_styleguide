@@ -78,7 +78,7 @@ async function mountUntilShareOpen(props) {
 }
 
 describe("FolderShareFlow", () => {
-  it("As LU I should review and edit the folder's own permissions seeded from the snapshot (controlled, ACO_FOLDER, editable)", async () => {
+  it("As LU I should review and edit the folder's own permissions seeded from the snapshot (ACO_FOLDER, editable)", async () => {
     expect.assertions(5);
     const props = defaultProps();
     const operatorId = props.context.loggedInUser.id;

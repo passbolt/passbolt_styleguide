@@ -38,7 +38,7 @@ export const RESOURCE_EDIT_FLOW_STATUS = Object.freeze({
  * Orchestrates the resource-edition flow:
  * 1. Captures a permission snapshot from the resource being edited (not its parent folder).
  * 2. Dispatches the EditResource dialog for the operator to update the form.
- * 3. If the resource is shared, dispatches ShareDialog (controlled mode, seeded from the snapshot)
+ * 3. If the resource is shared, dispatches ShareDialog (seeded from the snapshot)
  *    so the operator confirms the recipient set BEFORE the re-encrypted secret hits the server. The
  *    dialog is shown read-only when the operator has update but not owner permission on the resource.
  * 4. Calls `passbolt.resources.update`, carrying the operator-confirmed permission changes for the
@@ -115,7 +115,7 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Open the ShareDialog in controlled mode, seeded from the snapshot. Displayed read-only when the
+   * Open the ShareDialog seeded from the snapshot. Displayed read-only when the
    * operator has update but not owner permission on the resource.
    */
   openShareDialog() {
@@ -182,7 +182,7 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Handle the operator's confirmation of the permission set in ShareDialog (controlled mode).
+   * Handle the operator's confirmation of the permission set in ShareDialog.
    * Re-snapshot the resource and compare against the initial snapshot — any drift aborts the
    * submission. The dialog already emits deltas relative to the resource's current permissions, so
    * (unlike creation) they are handed straight to the update orchestration: the extension

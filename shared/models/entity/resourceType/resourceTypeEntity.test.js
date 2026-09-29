@@ -1073,6 +1073,45 @@ describe("ResourceTypeEntity", () => {
     });
   });
 
+  describe("::isSupportedByQuickAccess", () => {
+    it("password, totp and pin code types are supported", () => {
+      expect.assertions(3);
+      expect(new ResourceTypeEntity(resourceTypeV5DefaultDto()).isSupportedByQuickAccess()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5TotpDto()).isSupportedByQuickAccess()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).isSupportedByQuickAccess()).toBeTruthy();
+    });
+    it("note and custom fields types are supported", () => {
+      expect.assertions(2);
+      expect(new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto()).isSupportedByQuickAccess()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()).isSupportedByQuickAccess()).toBeTruthy();
+    });
+  });
+
+  describe("::isSupportedByOfflineMode", () => {
+    it("v5 password, totp and pin code types are supported", () => {
+      expect.assertions(5);
+      expect(new ResourceTypeEntity(resourceTypeV5DefaultDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5DefaultTotpDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5PasswordStringDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5TotpDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).isSupportedByOfflineMode()).toBeTruthy();
+    });
+
+    it("v5 note and custom fields types are supported", () => {
+      expect.assertions(2);
+      expect(new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()).isSupportedByOfflineMode()).toBeTruthy();
+    });
+
+    it("v4 types are not supported, whatever their secret shape", () => {
+      expect.assertions(4);
+      expect(new ResourceTypeEntity(resourceTypePasswordStringDto()).isSupportedByOfflineMode()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()).isSupportedByOfflineMode()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeTotpDto()).isSupportedByOfflineMode()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypePasswordDescriptionTotpDto()).isSupportedByOfflineMode()).toBeFalsy();
+    });
+  });
+
   describe("::isStandalonePinCode", () => {
     it("standalone pin code should be truthy", () => {
       expect.assertions(1);
@@ -1126,6 +1165,100 @@ describe("ResourceTypeEntity", () => {
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.isStandalonePinCode()).toBeFalsy();
+    });
+  });
+
+  describe("::isStandaloneNote", () => {
+    it("v5 standalone note should be standalone note", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandaloneNoteDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneNote()).toBeTruthy();
+    });
+
+    it("v5 default should not be standalone note", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneNote()).toBeFalsy();
+    });
+
+    it("password and description should not be standalone note", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordAndDescriptionDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneNote()).toBeFalsy();
+    });
+
+    it("standalone pin code should not be standalone note", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneNote()).toBeFalsy();
+    });
+
+    it("v5 custom fields should not be standalone note", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneNote()).toBeFalsy();
+    });
+  });
+
+  describe("::isStandaloneCustomFields", () => {
+    it("v5 custom fields should be standalone custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneCustomFields()).toBeTruthy();
+    });
+
+    it("v5 default should not be standalone custom fields even if it has custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneCustomFields()).toBeFalsy();
+    });
+
+    it("password and description should not be standalone custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordAndDescriptionDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneCustomFields()).toBeFalsy();
+    });
+
+    it("standalone pin code should not be standalone custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneCustomFields()).toBeFalsy();
+    });
+
+    it("v5 standalone note should not be standalone custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandaloneNoteDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneCustomFields()).toBeFalsy();
     });
   });
 });

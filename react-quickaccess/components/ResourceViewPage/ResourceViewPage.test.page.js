@@ -95,6 +95,62 @@ export default class ResourceViewPagePage {
   }
 
   /**
+   * The pin code button element.
+   * @returns {Element}
+   */
+  get pinCode() {
+    return this._page.container.querySelector(".password-wrapper .secret.secret-pin-code button");
+  }
+
+  /**
+   * The pin code text content.
+   * @returns {string}
+   */
+  get pinCodeText() {
+    return this._page.container.querySelector(".password-wrapper .secret.secret-pin-code button span").textContent;
+  }
+
+  /**
+   * The preview password button.
+   * @returns {Element}
+   */
+  get previewPinCodeButton() {
+    return this._page.container.querySelector(".secret-pin-code + .password-view");
+  }
+
+  /**
+   * The copy password button.
+   * @returns {Element}
+   */
+  get copyPinCodeButton() {
+    return this._page.container.querySelector(".copy-pin-code");
+  }
+
+  /**
+   * The names of the properties displayed on the page.
+   * @returns {Array<string>}
+   */
+  get propertyNames() {
+    return Array.from(this._page.container.querySelectorAll(".property .property-name")).map((el) => el.textContent);
+  }
+
+  /**
+   * The "Use on this page" button.
+   * @returns {Element}
+   */
+  get useOnThisPageButton() {
+    return this._page.container.querySelector("#popupAction");
+  }
+
+  /**
+   * The "View it in passbolt" link.
+   * @returns {Element}
+   */
+  get viewInPassboltLink() {
+    return this._page.container.querySelector(".back-link .secondary-action");
+  }
+
+  /**
    * The totp button element.
    * @returns {Element}
    */
@@ -140,6 +196,117 @@ export default class ResourceViewPagePage {
    */
   get listUris() {
     return this._page.container.querySelectorAll(".list-uris .property-value");
+  }
+
+  /**
+   * The note button element, when the note is hidden.
+   * @returns {Element}
+   */
+  get note() {
+    return this._page.container.querySelector(".password-wrapper .secret.secret-note button");
+  }
+
+  /**
+   * The encrypted note placeholder, when the note is hidden.
+   * @returns {Element}
+   */
+  get encryptedNote() {
+    return this._page.container.querySelector(".password-wrapper .secret.secret-note .encrypted-description");
+  }
+
+  /**
+   * The previewed note block.
+   * @returns {Element}
+   */
+  get notePreviewed() {
+    return this._page.container.querySelector(".password-wrapper .secret.secret-note .note-previewed");
+  }
+
+  /**
+   * The preview note button.
+   * @returns {Element}
+   */
+  get previewNoteButton() {
+    return this._page.container.querySelector(".secret-note + .password-view");
+  }
+
+  /**
+   * The copy note button.
+   * @returns {Element}
+   */
+  get copyNoteButton() {
+    return this._page.container.querySelector(".copy-note");
+  }
+
+  /**
+   * The custom field rows.
+   * @returns {Array<Element>}
+   */
+  get customFieldRows() {
+    return Array.from(this._page.container.querySelectorAll(".secret.secret-custom-fields")).map((element) =>
+      element.closest(".property"),
+    );
+  }
+
+  /**
+   * The label of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {string}
+   */
+  customFieldLabel(index) {
+    return this.customFieldRows[index].querySelector(".property-name").textContent;
+  }
+
+  /**
+   * The value button of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {Element}
+   */
+  customFieldValue(index) {
+    return this.customFieldRows[index].querySelector(".secret.secret-custom-fields button");
+  }
+
+  /**
+   * The value text content of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {string}
+   */
+  customFieldValueText(index) {
+    return this.customFieldRows[index].querySelector(".secret.secret-custom-fields button span").textContent;
+  }
+
+  /**
+   * The preview button of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {Element}
+   */
+  previewCustomFieldButton(index) {
+    return this.customFieldRows[index].querySelector(".password-view");
+  }
+
+  /**
+   * The copy button of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {Element}
+   */
+  copyCustomFieldButton(index) {
+    return this.customFieldRows[index].querySelector(".copy-custom-field");
+  }
+
+  /**
+   * The empty custom fields message.
+   * @returns {Element}
+   */
+  get emptyCustomFields() {
+    return this._page.container.querySelector(".property:first-child .property-value.empty");
+  }
+
+  /**
+   * The error message.
+   * @returns {Element}
+   */
+  get errorMessage() {
+    return this._page.container.querySelector(".submit-wrapper .error-message");
   }
 
   /**

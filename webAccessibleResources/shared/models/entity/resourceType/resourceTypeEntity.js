@@ -264,11 +264,55 @@ class ResourceTypeEntity extends EntityV2 {
   }
 
   /**
+   * Can the quick acces list and display this resource type
+   * @returns {boolean}
+   */
+  isSupportedByQuickAccess() {
+    return (
+      this.hasPassword() ||
+      this.hasTotp() ||
+      this.hasPinCode() ||
+      this.isStandaloneCustomFields() ||
+      this.isStandaloneNote()
+    );
+  }
+
+  /**
+   * Can the resource be available in offline mode
+   * @returns {boolean}
+   */
+  isSupportedByOfflineMode() {
+    return (
+      this.isV5() &&
+      (this.hasPassword() ||
+        this.hasTotp() ||
+        this.hasPinCode() ||
+        this.isStandaloneNote() ||
+        this.isStandaloneCustomFields())
+    );
+  }
+
+  /**
    * Is standalone pin code
    * @returns {boolean}
    */
   isStandalonePinCode() {
     return this.hasPinCode();
+  }
+
+  /**
+   * Is standalone note
+   * @returns {boolean}
+   */
+  isStandaloneNote() {
+    return RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG === this.slug;
+  }
+  /**
+   * Is standalone custom fields
+   * @returns {boolean}
+   */
+  isStandaloneCustomFields() {
+    return RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG === this.slug;
   }
 
   /**

@@ -7,6 +7,9 @@ import {
   deniedRbacProps,
   disabledApiFlagsProps,
   multipleUrisResourceProps,
+  standaloneCustomFieldsResourceProps,
+  standaloneNoteResourceProps,
+  standalonePinCodeResourceProps,
   standaloneTotpResourceProps,
   totpResourceProps,
 } from "./ResourceViewPage.test.data";
@@ -74,5 +77,22 @@ export const StandaloneTotpResourceView = {
 export const ResourceMultipleUrisView = {
   render: Template,
   args: multipleUrisResourceProps(),
+  parameters: parameters,
+};
+
+export const StandalonePinCode = {
+  render: Template,
+  args: standalonePinCodeResourceProps(),
+};
+
+export const StandaloneNote = {
+  render: Template,
+  args: standaloneNoteResourceProps(),
+  parameters: parameters,
+};
+
+export const StandaloneCustomFields = {
+  render: Template,
+  args: standaloneCustomFieldsResourceProps(),
   parameters: parameters,
 };

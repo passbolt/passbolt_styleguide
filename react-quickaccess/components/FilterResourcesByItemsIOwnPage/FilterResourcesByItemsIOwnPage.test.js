@@ -11,7 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.4
  */
-import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import {
+  defaultResourceDto,
+  resourceStandaloneCustomFieldsDto,
+  resourceStandaloneNoteDto,
+  resourceStandalonePinCodeNoUrisDto,
+} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { defaultProps, noFilteredResourcesProps } from "./FilterResourcesByItemsIOwnPage.test.data";
 import FilterResourcesByItemsIOwnPagePage from "./FilterResourcesByItemsIOwnPage.test.page";
@@ -117,6 +122,31 @@ describe("FilterResourcesByItemsIOwnPage", () => {
       });
       const page = new FilterResourcesByItemsIOwnPagePage(props);
       expect(page.displayedMainMessage).toStrictEqual("No result match your search. Try with another search term.");
+    });
+    it("should display a PIN code resource I own", () => {
+      expect.assertions(2);
+      const owned = resourceStandalonePinCodeNoUrisDto();
+      const shared = resourceStandalonePinCodeNoUrisDto({ permission: updatePermissionDto() });
+
+      const page = new FilterResourcesByItemsIOwnPagePage(defaultProps({ resources: [owned, shared] }));
+
+      expect(page.resources?.length).toStrictEqual(1);
+      expect(page.getResource(0).textContent).toStrictEqual("Office alarm");
+    });
+
+    it("should display note and custom fields resources I own with their name and URI only", () => {
+      expect.assertions(3);
+      const note = resourceStandaloneNoteDto();
+      const customFields = resourceStandaloneCustomFieldsDto();
+      const shared = resourceStandaloneNoteDto({ permission: updatePermissionDto() });
+
+      const page = new FilterResourcesByItemsIOwnPagePage(defaultProps({ resources: [note, customFields, shared] }));
+
+      expect(page.resources?.length).toStrictEqual(2);
+      expect(page.getResource(0).textContent).toStrictEqual(`${note.metadata.name}${note.metadata.uris[0]}`);
+      expect(page.getResource(1).textContent).toStrictEqual(
+        `${customFields.metadata.name}${customFields.metadata.uris[0]}`,
+      );
     });
   });
 

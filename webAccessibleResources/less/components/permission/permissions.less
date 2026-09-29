@@ -314,6 +314,23 @@
             }
         }
     }
+
+}
+
+// The attention banner shown on a move. Scoped to the dialog: the plain .message.warning is
+// single-line, while this one sets its own icon size beside text that can wrap.
+.share-dialog .message.warning {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    padding: .8rem 1.2rem;
+    gap: 1.2rem;
+
+    .attention-triangle {
+        flex: none;
+        width: 1.8rem;
+        height: 1.8rem;
+    }
 }
 
 // Read-only mode fades no row, so the caret alone signals the selects are not interactive. Scoped to

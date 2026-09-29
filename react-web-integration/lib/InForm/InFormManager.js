@@ -691,7 +691,10 @@ class InFormManager {
   /**
    * Handler of the "cut" and "copy" event.
    */
-  handleClipboardChange() {
+  handleClipboardChange(e) {
+    if (!e?.isTrusted) {
+      return;
+    }
     this.clipboardServiceWorkerService.cancelClipboardFlush();
   }
 

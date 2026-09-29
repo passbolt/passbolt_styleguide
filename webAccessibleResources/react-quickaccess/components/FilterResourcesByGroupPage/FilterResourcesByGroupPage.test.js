@@ -23,7 +23,12 @@ import FilterResourcesByGroupPagePage from "./FilterResourcesByGroupPage.test.pa
 import { waitForTrue } from "../../../../test/utils/waitFor";
 import { createMemoryHistory } from "history";
 import { defaultGroupDto } from "../../../shared/models/entity/group/groupEntity.test.data";
-import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import {
+  defaultResourceDto,
+  resourceStandaloneCustomFieldsDto,
+  resourceStandaloneNoteDto,
+  resourceStandalonePinCodeNoUrisDto,
+} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV50FreshDto,
@@ -168,6 +173,33 @@ describe("FilterResourcesByGroupPage", () => {
 
       expect(page.resources?.length).toStrictEqual(0);
       expect(page.displayedMainMessage).toStrictEqual("No result match your search. Try with another search term.");
+    });
+    it("should display a PIN code resource shared with the group", async () => {
+      expect.assertions(2);
+      const props = withFilteredResourcesProps({
+        resources: [defaultResourceDto(), resourceStandalonePinCodeNoUrisDto()],
+      });
+
+      const page = new FilterResourcesByGroupPagePage(props);
+      await waitForTrue(() => page.isReady());
+
+      expect(page.resources.length).toStrictEqual(2);
+      expect(page.getResource(0).textContent).toStrictEqual("Office alarm");
+    });
+
+    it("should display note and custom fields resources shared with the group with their name and URI only", async () => {
+      expect.assertions(3);
+      const note = resourceStandaloneNoteDto();
+      const customFields = resourceStandaloneCustomFieldsDto();
+      const props = withFilteredResourcesProps({ resources: [note, customFields] });
+
+      const page = new FilterResourcesByGroupPagePage(props);
+      await waitForTrue(() => page.isReady());
+
+      const displayedResources = Array.from(page.resources).map((el) => el.textContent);
+      expect(page.resources.length).toStrictEqual(2);
+      expect(displayedResources).toContain(`${note.metadata.name}${note.metadata.uris[0]}`);
+      expect(displayedResources).toContain(`${customFields.metadata.name}${customFields.metadata.uris[0]}`);
     });
   });
   describe("As LU I can navigate from the 'Filter by group' page", () => {

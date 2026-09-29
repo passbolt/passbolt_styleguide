@@ -85,7 +85,7 @@ async function mountUntilShareOpen(props) {
 
 describe("ResourceShareFlow", () => {
   describe("As LU sharing a single resource I own", () => {
-    it("As LU I should review the resource permissions seeded from the snapshot (controlled, editable)", async () => {
+    it("As LU I should review the resource permissions seeded from the snapshot (editable)", async () => {
       expect.assertions(4);
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
@@ -101,7 +101,7 @@ describe("ResourceShareFlow", () => {
       expect(props.context.port.request).toHaveBeenCalledWith(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, [resourceId]);
 
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
-      // Controlled via initialResources, editable (no read-only).
+      // Seeded via initialResources, editable (no read-only).
       expect(shareProps.readOnly).toBeUndefined();
       expect(shareProps.initialResources).toHaveLength(1);
       expect(shareProps.initialResources[0].id).toStrictEqual(resourceId);
@@ -271,7 +271,7 @@ describe("ResourceShareFlow", () => {
   });
 
   describe("As LU sharing multiple resources", () => {
-    it("As LU I should review every selected resource, each snapshotted and seeded into the controlled dialog", async () => {
+    it("As LU I should review every selected resource, each snapshotted and seeded into the dialog", async () => {
       expect.assertions(4);
       const resources = [resourceDto(), resourceDto()];
       const props = defaultProps({ resources });
@@ -299,7 +299,7 @@ describe("ResourceShareFlow", () => {
         resources[0].id,
         resources[1].id,
       ]);
-      // It does not fall back to the uncontrolled (context-seeded) path.
+      // It does not seed the dialog through the app context.
       expect(props.context.setContext).not.toHaveBeenCalled();
     });
 

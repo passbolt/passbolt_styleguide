@@ -1,6 +1,11 @@
 .quickaccess {
     .item-browse {
         .properties {
+            max-height: 40rem;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--Workspace-Elevator) transparent;
+
             .property {
                 .clearfix();
                 display: flex;
@@ -94,6 +99,9 @@
                 line-height: 1.8rem;
                 color: var(--Text-and-icons-Secondary-text);
                 margin-bottom: .4rem;
+                &.empty {
+                  font-style: italic;
+                }
             }
             .secret {
                 display: inline-block;
@@ -130,6 +138,12 @@
                     }
                   }
 
+                  &.secret-custom-fields {
+                    > button:before {
+                      content: '00000000';
+                    }
+                  }
+
                   &.secret-totp {
                     > button {
                       &:before {
@@ -142,6 +156,24 @@
                     }
                   }
                 }
+
+                &.secret-note .encrypted-description {
+                  display: block;
+                  font-family: 'Obfuscation';
+                  color: var(--Text-and-icons-Obfucated-text);
+                  text-align: left;
+                  white-space: normal;
+                }
+
+                &.secret-note .note-previewed {
+                  display: block;
+                  max-height: 12rem;
+                  overflow-y: auto;
+                  overflow-wrap: anywhere;
+                  white-space: pre-wrap;
+                  scrollbar-width: thin;
+                  scrollbar-color: var(--Workspace-Elevator) transparent;
+                }
             }
 
             .property-action + .timer {
@@ -149,7 +181,7 @@
               height: 3.2rem;
               position: absolute;
               right: 1.25rem;
-              top: 2.1rem;
+              top: calc(50% - 1.6rem);
               --timer-delay: 0;
               --timer-stroke-width: 1;
               pointer-events: none;
