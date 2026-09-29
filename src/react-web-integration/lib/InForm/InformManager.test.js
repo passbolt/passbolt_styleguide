@@ -2454,6 +2454,44 @@ describe("InformManager", () => {
     });
   });
 
+  describe("In-form menu insertion", () => {
+    it("should not open the menu when the application id matches no tracked call-to-action", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = domElementOnlyUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      await informManager.focusOnUsername();
+      await informManager.clickOnInformCallToAction();
+      await informManager.openInFormMenu("6f1f9a5e-0000-4000-8000-000000000000");
+
+      expect(informManager.menuIframe).toBeUndefined();
+    });
+
+    /*
+     * The application id names the target instead of letting it be deduced, so it must designate a
+     * call-to-action that was actually clickable. One that is not rendered was not clicked.
+     */
+    it("should not open the menu for a call-to-action that is not displayed", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = domElementOnlyUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      await informManager.focusOnUsername();
+      await informManager.clickOnInformCallToAction();
+      const applicationId = InFormManager.lastCallToActionFieldClicked.id;
+      // The call-to-action goes away, but the message keeps claiming its id.
+      InFormManager.lastCallToActionFieldClicked.removeIframe();
+
+      await informManager.openInFormMenu(applicationId);
+
+      expect(informManager.menuIframe).toBeUndefined();
+    });
+  });
+
   describe("IFrame positioning", () => {
     it("should be positionned at the top-left of the containing block", async () => {
       expect.assertions(3);

@@ -145,8 +145,9 @@ export default class InformManagerPage {
   /**
    * Opens the in-form menu for the last clicked call-to-action
    */
-  async openInFormMenu() {
-    await port.emit("passbolt.in-form-menu.open");
+  async openInFormMenu(applicationId = InFormManager.lastCallToActionFieldClicked?.id) {
+    // The background relays the id of the call-to-action that was clicked; the manager resolves from it.
+    await port.emit("passbolt.in-form-menu.open", applicationId);
     await waitFor(() => {});
   }
 

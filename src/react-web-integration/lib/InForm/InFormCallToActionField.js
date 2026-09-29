@@ -58,6 +58,8 @@ class InFormCallToActionField {
     this.viewableRect = null;
     /** Pending removal scheduled while the pointer travels from the field to the call-to-action */
     this.removalTimeout = null;
+    /** The browsing context the call-to-action iframe was given, used to detect that it was destroyed */
+    this.callToActionWindow = null;
 
     this.bindCallbacks();
     this.handleInsertionEvent();
@@ -120,8 +122,11 @@ class InFormCallToActionField {
     const iframes = this.shadowRoot.querySelectorAll("iframe");
     // Use of Array prototype some method cause NodeList is not an array !
     const iframeId = this.iframeId;
-    const isIframeAlreadyInserted = Array.prototype.some.call(iframes, (iframe) => iframe.id === iframeId);
-    if (!isIframeAlreadyInserted) {
+    const existingIframe = Array.prototype.find.call(iframes, (iframe) => iframe.id === iframeId);
+    if (!existingIframe || !this.isCallToActionIframeAlive(existingIframe)) {
+      if (existingIframe) {
+        this.removeIframe();
+      }
       const iframe = await this.createCallToActionIframe();
       this.handleCallToActionClicked(iframe);
     }
@@ -148,7 +153,22 @@ class InFormCallToActionField {
     iframe.style.height = "18px";
     iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
     iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}&applicationId=${this.id}&fieldType=${this.fieldType}`;
+    this.callToActionWindow = iframe.contentWindow;
     return iframe;
+  }
+
+  /**
+   * Whether the given iframe still holds the browsing context the call-to-action was loaded into.
+   *
+   * The iframe carries no `src`: its URL is installed once through `contentWindow.location`. If the
+   * host is detached and re-attached, the browsing context is destroyed and the frame silently falls
+   * back to `about:blank` while the element itself stays in the shadow root.
+   *
+   * @param {HTMLIFrameElement} iframe The iframe to check.
+   * @returns {boolean} true when the iframe still renders the call-to-action.
+   */
+  isCallToActionIframeAlive(iframe) {
+    return Boolean(this.callToActionWindow) && iframe.contentWindow === this.callToActionWindow;
   }
 
   /**
@@ -265,6 +285,7 @@ class InFormCallToActionField {
         port.emit("passbolt.port.disconnect", "InFormCallToAction");
       }
     });
+    this.callToActionWindow = null;
   }
 
   /** SCROLL REPOSITION */

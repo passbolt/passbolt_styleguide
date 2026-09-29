@@ -184,7 +184,7 @@ class AskInFormMenuDisplay extends React.Component {
       Logger.error("Overlap detected, action interrupted for safety reasons");
       return;
     }
-    await this.props.context.port.request("passbolt.in-form-cta.execute");
+    await this.props.context.port.request("passbolt.in-form-cta.execute", this.props.context.applicationId);
   }
 
   /**

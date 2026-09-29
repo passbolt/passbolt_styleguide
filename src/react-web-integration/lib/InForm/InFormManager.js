@@ -639,11 +639,25 @@ class InFormManager {
    * Whenever the user clicks on the in-form call-to-action, it inserts the in-form menu iframe
    */
   handleInFormMenuInsertionEvent() {
-    port.on("passbolt.in-form-menu.open", () => {
-      if (this.lastCallToActionFieldClicked) {
-        this.menuField?.destroy();
-        this.menuField = new InFormMenuField(this.lastCallToActionFieldClicked.field, this.shadowRoot);
+    port.on("passbolt.in-form-menu.open", (applicationId) => {
+      /*
+       * The call-to-action names itself: its iframe was created with this application id, and it is
+       * that same iframe's code which asks for the menu once clicked. Reading the target from the
+       * message leaves nothing to infer — the focus is global state, and a page that manages its own
+       * focus keeps the click watcher from ever recording which call-to-action was clicked.
+       *
+       * It must be a call-to-action we track, and one that is actually on screen: since the target
+       * is now named rather than deduced, it has to be a target that was clickable. A field with no
+       * call-to-action rendered was not clicked, whatever the message claims.
+       */
+      const callToActionField = this.callToActionFields.find((field) => field.id === applicationId);
+      if (!callToActionField || !this.shadowRoot.getElementById(callToActionField.iframeId)) {
+        return;
       }
+      // The fill handlers read this afterwards to know which field to serve.
+      this.lastCallToActionFieldClicked = callToActionField;
+      this.menuField?.destroy();
+      this.menuField = new InFormMenuField(callToActionField.field, this.shadowRoot);
     });
   }
 

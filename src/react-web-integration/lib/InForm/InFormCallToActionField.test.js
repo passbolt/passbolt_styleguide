@@ -131,18 +131,62 @@ describe("InFormCallToActionField", () => {
   });
 
   describe("InFormCallToActionField::insertInformCallToActionIframe", () => {
-    it("should not create a second iframe when one is already inserted", async () => {
+    it("should not create a second iframe when a live one is already inserted", async () => {
       expect.assertions(1);
 
       const callToActionField = buildCallToActionField();
       const iframe = document.createElement("iframe");
       iframe.id = callToActionField.iframeId;
       callToActionField.shadowRoot.appendChild(iframe);
+      // The iframe still holds the browsing context it was loaded into (jsdom gives detached frames none).
+      const browsingContext = {};
+      Object.defineProperty(iframe, "contentWindow", { value: browsingContext });
+      callToActionField.callToActionWindow = browsingContext;
       callToActionField.createCallToActionIframe = jest.fn();
 
       await callToActionField.insertInformCallToActionIframe();
 
       expect(callToActionField.createCallToActionIframe).not.toHaveBeenCalled();
+    });
+
+    /*
+     * Moving the shadow host detaches it, which destroys the browsing context of the iframes it
+     * carries. The element stays in the shadow root but renders nothing, and must not keep matching
+     * the insertion guard or the call-to-action could never come back.
+     */
+    it("should replace an iframe whose browsing context was destroyed", async () => {
+      expect.assertions(2);
+
+      const callToActionField = buildCallToActionField();
+      const iframe = document.createElement("iframe");
+      iframe.id = callToActionField.iframeId;
+      callToActionField.shadowRoot.appendChild(iframe);
+      // A browsing context that is no longer the one the call-to-action was loaded into.
+      callToActionField.callToActionWindow = {};
+      callToActionField.removeIframe = jest.fn();
+      callToActionField.createCallToActionIframe = jest.fn().mockResolvedValue({ addEventListener: jest.fn() });
+      callToActionField.handleCallToActionClicked = jest.fn();
+
+      await callToActionField.insertInformCallToActionIframe();
+
+      expect(callToActionField.removeIframe).toHaveBeenCalledTimes(1);
+      expect(callToActionField.createCallToActionIframe).toHaveBeenCalledTimes(1);
+    });
+
+    it("should report an iframe as dead once it no longer holds its browsing context", () => {
+      expect.assertions(2);
+
+      const callToActionField = buildCallToActionField();
+      const iframe = document.createElement("iframe");
+      callToActionField.shadowRoot.appendChild(iframe);
+      const browsingContext = {};
+      Object.defineProperty(iframe, "contentWindow", { value: browsingContext });
+
+      callToActionField.callToActionWindow = browsingContext;
+      expect(callToActionField.isCallToActionIframeAlive(iframe)).toStrictEqual(true);
+
+      callToActionField.callToActionWindow = null;
+      expect(callToActionField.isCallToActionIframeAlive(iframe)).toStrictEqual(false);
     });
 
     it("should create the iframe and handle its click event", async () => {
