@@ -44,20 +44,21 @@ class FieldAggregatorService {
   /**
    * Populate `fields[]` of every container record with `{ fieldElement, deepestFormContainer }`
    * (replacing whatever seed/skeleton fields it carried), then purge containers left with no field.
-   * @param {Array<{containerElement: Element, fields: Array}>} formElements The container records.
-   * @returns {Array} The same records, filtered to containers with ≥ 1 fillable visible field.
+   * @param {Array<{containerElement: Element, fields: Array<{ fieldElement: HTMLElement }>}>} formElements The container records.
+   * @returns {Array<{containerElement: Element, fields: Array<{ fieldElement: HTMLElement }>}>} The same records, filtered to containers with ≥ 1 fillable visible field.
    */
   static aggregateFields(formElements) {
     for (const form of formElements) {
       const nestedForms = NestedFormExtractionService.captureNestedForms(form.containerElement); // one-shot
       const candidates = FieldAggregatorService.gatherCandidates(form.containerElement);
 
-      form.fields = candidates.map((fieldElement) => ({
-        fieldElement,
-        // Ownership annotation: false when an unmasked nested form owns this field (it belongs to a
-        // deeper container, not this one) — how a re-scan avoids sweeping nested real-form inputs.
-        deepestFormContainer: NestedFormExtractionService.isDeepestFormContainer(fieldElement, nestedForms),
-      }));
+      form.fields = candidates.reduce((acc, fieldElement) => {
+        if (NestedFormExtractionService.isDeepestFormContainer(fieldElement, nestedForms)) {
+          acc.push({ fieldElement });
+        }
+
+        return acc;
+      }, []);
     }
 
     return formElements.filter((form) => form.fields.length !== 0); // purge empty containers
