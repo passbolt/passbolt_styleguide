@@ -325,25 +325,27 @@ class InFormManager {
      * Else we clean and reset callToActionFields.
      */
     const { fields } = PageClassificationService.classifyPage();
-    const newUsernameFields = fields
-      .filter((field) => IDENTIFIER_ROLES.includes(field.role))
-      .map((field) => field.element);
-    const newPasswordFields = fields
-      .filter((field) => PASSWORD_ROLES.includes(field.role))
-      .map((field) => field.element);
-    const newOTPFields = fields.filter((field) => field.role === FieldRole.TOTP).map((field) => field.element);
+    const newUsernameFields = fields.filter((field) => IDENTIFIER_ROLES.includes(field.role));
+    const newPasswordFields = fields.filter((field) => PASSWORD_ROLES.includes(field.role));
+    const newOTPFields = fields.filter((field) => field.role === FieldRole.TOTP);
 
-    const container = this.getContainerElement(newUsernameFields, newPasswordFields, newOTPFields);
+    const container = this.getContainerElement(
+      [...newUsernameFields, ...newPasswordFields, ...newOTPFields].map((field) => field.element),
+    );
     this.ensureHostMounted(container);
 
     /**
-     * A function factory to map a field to an existing field or create a new one
+     * A function factory to map a classified field to an existing call-to-action or create a new one.
+     * The classification (role and scope) is refreshed on every scan, reused instances included, so
+     * the fill logic never reads the roles of a previous state of the DOM.
      * @param {"username"|"password"|"otp"} fieldType The type of field to create
-     * @returns {function(HTMLElement): InFormCallToActionField} The function to map a field to an InFormCallToActionField
+     * @returns {function({element: HTMLElement, role: string, formId: string}): InFormCallToActionField} The function to map a field to an InFormCallToActionField
      */
     const mapField = (fieldType) => (field) => {
-      const existingField = this.callToActionFields.find(({ field: ctaField }) => ctaField === field);
-      return existingField ?? new InFormCallToActionField(field, fieldType, this.shadowRoot);
+      const existingField = this.callToActionFields.find(({ field: ctaField }) => ctaField === field.element);
+      const callToActionField = existingField ?? new InFormCallToActionField(field.element, fieldType, this.shadowRoot);
+      callToActionField.setClassification(field.role, field.formId);
+      return callToActionField;
     };
 
     let newCTAFields = [
@@ -716,6 +718,58 @@ class InFormManager {
   }
 
   /**
+   * The password call-to-action fields a secret must be written into, given the one the user acted on.
+   *
+   * A password confirmation always confirms the new password of its scope, so the two are filled
+   * together and either one can be the field the user acted on: clicking the call-to-action of the
+   * confirmation fills the new password as well, where it used to leave it empty.
+   *
+   * On a change-password form the secret goes into the current password field, and that scope's
+   * confirmation confirms the *new* password: it is left alone, otherwise the old secret would end up
+   * in the new password's confirmation.
+   *
+   * @param {InFormCallToActionField} passwordCallToActionField A password call-to-action.
+   * @returns {InFormCallToActionField[]} The call-to-action fields to fill, the primary one first.
+   */
+  passwordFieldsToFill(passwordCallToActionField) {
+    // Without a scope there is nothing to pair the field with; fill it alone.
+    if (!passwordCallToActionField.formId) {
+      return [passwordCallToActionField];
+    }
+
+    const inScope = (role) =>
+      this.callToActionFields.filter(
+        (callToActionField) =>
+          callToActionField.role === role && callToActionField.formId === passwordCallToActionField.formId,
+      );
+
+    const primary =
+      passwordCallToActionField.role === FieldRole.PASSWORD_CONFIRMATION
+        ? inScope(FieldRole.NEW_PASSWORD)[0]
+        : passwordCallToActionField;
+
+    if (!primary) {
+      // An orphan confirmation: no new password to pair it with, fill the field the user acted on.
+      return [passwordCallToActionField];
+    }
+    if (primary.role !== FieldRole.NEW_PASSWORD) {
+      return [primary];
+    }
+    return [primary, ...inScope(FieldRole.PASSWORD_CONFIRMATION)];
+  }
+
+  /**
+   * Autofills a password call-to-action field and, where the scope has one, its confirmation.
+   * @param {InFormCallToActionField} passwordCallToActionField A password call-to-action.
+   * @param {string} password The password to fill in.
+   */
+  fillPasswordPair(passwordCallToActionField, password) {
+    this.passwordFieldsToFill(passwordCallToActionField).forEach((callToActionField) =>
+      UserEventsService.autofill(callToActionField.field, password),
+    );
+  }
+
+  /**
    * Whenever one requests to fill the current page form with given credentials
    */
   handleFillCredentials() {
@@ -728,8 +782,8 @@ class InFormManager {
 
       if (!isOTPType) {
         if (!isUsernameType) {
-          // Simulate a user to autofill the password field
-          UserEventsService.autofill(this.lastCallToActionFieldClicked.field, password);
+          // Simulate a user to autofill the password field and, where there is one, its confirmation
+          this.fillPasswordPair(this.lastCallToActionFieldClicked, password);
           // Get username fields and find the one with the lowest common ancestor
           const usernameFields = this.callToActionFields.filter(
             (callToActionField) => callToActionField.fieldType === "username",
@@ -754,8 +808,8 @@ class InFormManager {
             passwordFields,
           );
           if (passwordField) {
-            // Simulate a user to autofill the password field
-            UserEventsService.autofill(passwordField.field, password);
+            // Simulate a user to autofill the password field and, where there is one, its confirmation
+            this.fillPasswordPair(passwordField, password);
           }
         }
       } else if (totp) {

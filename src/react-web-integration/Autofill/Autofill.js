@@ -50,6 +50,9 @@ const fillForm = function (formData) {
     }
     if (passwordField && typeof formData.secret === "string") {
       UserEventsService.autofill(passwordField.element, formData.secret);
+      selectPasswordConfirmationFields(fields, passwordField).forEach((field) =>
+        UserEventsService.autofill(field.element, formData.secret),
+      );
     }
     if (otpField && formData.otp) {
       const otp = TotpCodeGeneratorService.generate(formData.otp);
@@ -94,6 +97,28 @@ const selectPasswordField = function (fields, forms) {
   };
   const roleRank = (field) => PASSWORD_ROLES.indexOf(field.role);
   return [...passwords].sort((a, b) => formRank(a) - formRank(b) || roleRank(a) - roleRank(b))[0];
+};
+
+/**
+ * Pick the confirmation fields which must receive the same secret as the chosen password field.
+ *
+ * A confirmation always confirms the new password of its scope, so it is only filled when the chosen
+ * field is that new password. That is what keeps a change-password form (current + new + confirm)
+ * safe: there the chosen field is the current password, and filling the confirmation would write the
+ * old secret into the new password's confirmation. A signup or a password reset, where the chosen
+ * field is the new password, fills the confirmation as expected.
+ *
+ * @param {Array<{fieldId: string, formId: string, role: string, element: Element}>} fields The classified fields.
+ * @param {{formId: string, role: string}} passwordField The chosen password field.
+ * @returns {Array<{formId: string, role: string, element: Element}>} The confirmation fields to fill, possibly empty.
+ */
+const selectPasswordConfirmationFields = function (fields, passwordField) {
+  if (passwordField.role !== FieldRole.NEW_PASSWORD) {
+    return [];
+  }
+  return fields.filter(
+    (field) => field.role === FieldRole.PASSWORD_CONFIRMATION && field.formId === passwordField.formId,
+  );
 };
 
 /**

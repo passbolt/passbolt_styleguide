@@ -40,6 +40,10 @@ class InFormCallToActionField {
     this.field = field;
     /** Type of the field ("username" or "password") */
     this.fieldType = fieldType;
+    /** The FieldRole the classification gave the field, refreshed at each page scan */
+    this.role = null;
+    /** The identifier of the scope (form or pseudo-form) the field belongs to, refreshed at each page scan */
+    this.formId = null;
     /** A unique identifier for the InFormCallToActionField */
     this.id = uuidv4();
     /** A unique identifier for the iframe */
@@ -66,6 +70,20 @@ class InFormCallToActionField {
     this.handleRemoveEvent();
     this.handleScrollEvent();
     this.cacheViewableRect();
+  }
+
+  /**
+   * Stores the classification of the underlying field.
+   *
+   * Called on every page scan, including for a call-to-action reused from the previous scan, so it
+   * never keeps the role or the scope the field had in an earlier state of the DOM.
+   *
+   * @param {string} role The FieldRole the classification gave the field.
+   * @param {string} formId The identifier of the scope (form or pseudo-form) the field belongs to.
+   */
+  setClassification(role, formId) {
+    this.role = role;
+    this.formId = formId;
   }
 
   /**
