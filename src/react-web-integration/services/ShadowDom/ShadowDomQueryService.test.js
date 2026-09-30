@@ -356,9 +356,8 @@ describe("ShadowDomQueryService", () => {
 
       const iframe = document.createElement("iframe");
       document.body.appendChild(iframe);
-      jest.spyOn(iframe, "contentDocument", "get").mockImplementation(() => {
-        throw new Error("cross-origin");
-      });
+      // Not same origin-domain: the getter reports no document, it does not throw.
+      jest.spyOn(iframe, "contentDocument", "get").mockReturnValue(null);
       jest.spyOn(document, "activeElement", "get").mockReturnValue(iframe);
 
       expect(ShadowDomQueryService.deepActiveElement()).toBe(iframe);
