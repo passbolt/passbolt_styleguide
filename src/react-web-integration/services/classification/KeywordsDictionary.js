@@ -121,6 +121,22 @@ export const Keywords = Object.freeze({
     "օգտագործող", // hy
     "მომხმარებელი", // ka
   ],
+  IDENTIFIER_EXCLUDE: [
+    "pin",
+    "token",
+    "userfirstname",
+    "firstname",
+    "userlastname",
+    "lastname",
+    "prenom",
+    "nom",
+    "fullname",
+    "givenname",
+    "familyname",
+    "fname",
+    "lname",
+    "middlename",
+  ],
 
   PASSWORD: [
     "password",

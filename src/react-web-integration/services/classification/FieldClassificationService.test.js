@@ -366,6 +366,54 @@ describe("FieldClassificationService", () => {
           tier: Tier.ATTRIBUTE_KEYWORD,
         });
       });
+
+      it("should NOT classify a field with name 'user_firstname' as USERNAME (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ name: "user_firstname" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should NOT classify a field with name 'user_first_name' as USERNAME (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ name: "user_first_name" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should NOT classify a field with name 'email_firstname' as EMAIL (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ name: "email_firstname" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should NOT classify a field with name 'user_lastname' as USERNAME (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ name: "user_lastname" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should NOT classify a field with name 'user_last_name' as USERNAME (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ name: "user_last_name" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should NOT classify a field with name 'email_lastname' as EMAIL (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ name: "email_lastname" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
     });
 
     describe("fallback", () => {

@@ -235,7 +235,10 @@ class FieldClassificationService {
    * @returns {{role: string, tier: number}|null} A keyword decision, or null.
    */
   static byAttributeKeyword(field, { weakText }) {
-    if (KeywordMatchingService.matchesAny(weakText, Keywords.EMAIL)) {
+    if (
+      KeywordMatchingService.matchesAny(weakText, Keywords.EMAIL) &&
+      !KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER_EXCLUDE)
+    ) {
       return { role: FieldRole.EMAIL, tier: Tier.ATTRIBUTE_KEYWORD };
     }
     if (
@@ -245,7 +248,10 @@ class FieldClassificationService {
     ) {
       return { role: FieldRole.PASSWORD, tier: Tier.ATTRIBUTE_KEYWORD };
     }
-    if (KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER)) {
+    if (
+      KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER) &&
+      !KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER_EXCLUDE)
+    ) {
       return { role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD };
     }
     return null;
