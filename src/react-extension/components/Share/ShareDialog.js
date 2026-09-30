@@ -34,6 +34,7 @@ import { Trans, withTranslation } from "react-i18next";
 import PermissionEntity from "../../../shared/models/entity/permission/permissionEntity";
 import UserEntity from "../../../shared/models/entity/user/userEntity";
 import GroupServiceWorkerService from "../../../shared/services/serviceWorker/group/groupServiceWorkerService";
+import GroupsCollection from "../../../shared/models/entity/group/groupsCollection";
 import TriangleAlertSVG from "../../../img/svg/triangle_alert.svg";
 
 class ShareDialog extends Component {
@@ -295,9 +296,9 @@ class ShareDialog extends Component {
       // ids of the groups whose members are currently expanded
       expandedGroupIds: [],
 
-      // members fetched on demand when a group is added or expanded, keyed by group id:
-      // { [groupId]: Array<userDto> }
-      fetchedGroupMembers: {},
+      // groups (with their members) fetched on demand when a group is added or expanded, keyed by group id:
+      // { [groupId]: GroupEntity }
+      fetchedGroups: {},
 
       // autocomplete
       autocompleteOpen: false,
@@ -442,11 +443,11 @@ class ShareDialog extends Component {
         // A group removed and added back during the session must come back as a brand new row: drop what
         // a previous add fetched for it, and the expanded state it was left in, so it displays the
         // membership the refetch is about to return instead of the one captured earlier.
-        const fetchedGroupMembers = { ...state.fetchedGroupMembers };
-        delete fetchedGroupMembers[aro.id];
+        const fetchedGroups = { ...state.fetchedGroups };
+        delete fetchedGroups[aro.id];
         return {
           permissions: permissions,
-          fetchedGroupMembers: fetchedGroupMembers,
+          fetchedGroups: fetchedGroups,
           expandedGroupIds: state.expandedGroupIds.filter((groupId) => groupId !== aro.id),
         };
       },
@@ -549,14 +550,11 @@ class ShareDialog extends Component {
         // resolves both the membership and the user display data.
         const groups = await groupServiceWorkerService.findByIdsForShare([groupId]);
         const group = groups.items.find((item) => item.id === groupId);
-        const members = (group?.groupsUsers?.items ?? [])
-          .filter((groupUser) => groupUser.user)
-          .map((groupUser) => groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
         if (this.isAborting) {
           return;
         }
         this.setState((state) => ({
-          fetchedGroupMembers: { ...state.fetchedGroupMembers, [groupId]: members },
+          fetchedGroups: { ...state.fetchedGroups, [groupId]: group },
         }));
       } catch (error) {
         if (this.isAborting) {
@@ -582,9 +580,10 @@ class ShareDialog extends Component {
    * @returns {Array<object>} The member users DTOs
    */
   getGroupMembers(groupId) {
-    const fetchedGroupMembers = this.state.fetchedGroupMembers[groupId];
-    if (fetchedGroupMembers) {
-      return fetchedGroupMembers;
+    if (groupId in this.state.fetchedGroups) {
+      return (this.state.fetchedGroups[groupId]?.groupsUsers?.items ?? [])
+        .filter((groupUser) => groupUser.user)
+        .map((groupUser) => groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
     }
     const group = this.props.initialGroups?.items.find((item) => item.id === groupId);
     const groupsUsers = group?.groupsUsers?.items || [];
@@ -624,15 +623,71 @@ class ShareDialog extends Component {
    * @returns {Promise<void>}
    */
   async shareSave() {
+    const addedGroups = this.getAddedGroups();
+    await this.assertAddedGroupsUnchanged(addedGroups);
+
     if (this.props.acoType === PermissionEntity.ACO_FOLDER) {
-      await this.props.onConfirm(this.shareChanges.getFoldersChanges(), this.canOperatorRead());
+      await this.props.onConfirm(this.shareChanges.getFoldersChanges(), {
+        canOperatorRead: this.canOperatorRead(),
+        addedGroups,
+      });
       return;
     }
 
     const changes = this.shareChanges.getResourcesChanges();
     const effectivePermissions = this.getEffectivePermissions();
     const isPersonal = effectivePermissions.length === 1 && Boolean(effectivePermissions[0].aro.profile);
-    await this.props.onConfirm(changes, this.canOperatorRead(), isPersonal);
+    await this.props.onConfirm(changes, { canOperatorRead: this.canOperatorRead(), isPersonal, addedGroups });
+  }
+
+  /**
+   * Get the groups the operator added in the dialog, as they were fetched and displayed.
+   * @returns {GroupsCollection}
+   */
+  getAddedGroups() {
+    const addedGroups = [];
+    for (const permission of this.getEffectivePermissions()) {
+      const isGroup = !permission.aro.profile;
+      const isAdded = this.shareChanges.getAroChangeStatus(permission.aro.id) === ShareChanges.CHANGE_STATUS_ADDED;
+      const group = this.state.fetchedGroups[permission.aro.id];
+      if (isGroup && isAdded && group) {
+        addedGroups.push(group);
+      }
+    }
+    return new GroupsCollection(addedGroups);
+  }
+
+  /**
+   * Throw when a group added in the dialog changed since it was displayed (e.g. a member was added),
+   * naming the changed groups. The displayed groups are refreshed so the operator can review the new
+   * state before saving again.
+   * @param {GroupsCollection} addedGroups The added groups as displayed.
+   * @returns {Promise<void>}
+   * @throws {Error} When an added group changed since it was displayed.
+   */
+  async assertAddedGroupsUnchanged(addedGroups) {
+    if (!addedGroups.length) {
+      return;
+    }
+    const groupIds = addedGroups.extract("id");
+    const groupServiceWorkerService = new GroupServiceWorkerService(this.props.context.port);
+    const currentGroups = await groupServiceWorkerService.findByIdsForShare(groupIds);
+    const changedGroups = addedGroups.getChangedGroups(currentGroups);
+    if (!changedGroups.length) {
+      return;
+    }
+    // A group missing from the response was deleted meanwhile: display it without members.
+    const refreshedGroups = {};
+    for (const groupId of groupIds) {
+      refreshedGroups[groupId] = currentGroups.getFirst("id", groupId) ?? null;
+    }
+    this.setState((state) => ({ fetchedGroups: { ...state.fetchedGroups, ...refreshedGroups } }));
+    throw new Error(
+      this.translate("The groups you added {{groupNames}} changed during your review. Please verify them again.", {
+        count: changedGroups.length,
+        groupNames: changedGroups.map((group) => group.name).join(", "),
+      }),
+    );
   }
 
   /**
@@ -1192,7 +1247,7 @@ ShareDialog.propTypes = {
   acoType: PropTypes.string, // the ACO type of the seeded entries (PermissionEntity.ACO_RESOURCE, default, or ACO_FOLDER)
   initialGroups: PropTypes.object, // GroupsCollection providing the groups referenced by the resources' permissions
   initialUsers: PropTypes.object, // UsersCollection providing the users referenced by the resources' permissions
-  onConfirm: PropTypes.func, // callback invoked with the operator-confirmed permission changes instead of saving via the port
+  onConfirm: PropTypes.func, // callback invoked with the operator-confirmed permission changes instead of saving via the port, and {canOperatorRead, isPersonal (resources only), addedGroups: GroupsCollection of the groups added in the dialog as displayed}
   readOnly: PropTypes.bool, // display the permission set read-only (review/confirm only, no edits)
   ensureOperatorIsOwner: PropTypes.bool, // Ensure the operator remains owner of the edited resource
   unchangedAcos: PropTypes.array, // Move: [{id, name}] the items the operator does not own

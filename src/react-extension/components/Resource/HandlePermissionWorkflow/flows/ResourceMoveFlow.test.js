@@ -35,6 +35,7 @@ import PermissionServiceWorkerService, {
 import { defaultUserDto } from "../../../../../shared/models/entity/user/userEntity.test.data";
 import { KEYRING_SYNC_EVENT } from "../../../../../shared/services/serviceWorker/keyring/keyringServiceWorkerService";
 import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
+import { ADDED_GROUP_CHANGED_ERROR_MESSAGE, addedGroupFixture, mockAddedGroupFetch } from "./permissionFlow.test.data";
 import { MOVE_RESOURCES_BY_IDS } from "../../../../../shared/services/serviceWorker/move/moveItemsServiceWorkerService";
 
 beforeEach(() => {
@@ -333,6 +334,42 @@ describe("ResourceMoveFlow", () => {
         expect.anything(),
         expect.anything(),
       );
+    });
+
+    it("As LU I should see the workflow refuse the submission when a group I added changed during my review", async () => {
+      expect.assertions(3);
+      const destinationFolderId = uuidv4();
+      const movedResource = resourceDto();
+      const props = defaultProps({ destinationFolderId, resources: [movedResource] });
+      const operatorId = props.context.loggedInUser.id;
+      wireDestinationSnapshot(props.context.port, {
+        permissionsByAcoId: {
+          [destinationFolderId]: [
+            folderPermissionDto(operatorId, destinationFolderId),
+            folderPermissionDto(uuidv4(), destinationFolderId, PermissionEntity.PERMISSION_READ),
+          ],
+          [movedResource.id]: [resourcePermissionDto(operatorId, movedResource.id)],
+        },
+      });
+
+      await mountUntilShareOpen(props);
+
+      const { addedGroups, grownGroupDto } = addedGroupFixture();
+      mockAddedGroupFetch(props.context.port, grownGroupDto);
+      jest.spyOn(props.context.port, "request");
+      const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
+      await act(() => shareProps.onConfirm([], { addedGroups }));
+
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
+        error: expect.objectContaining({ message: ADDED_GROUP_CHANGED_ERROR_MESSAGE }),
+      });
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        MOVE_RESOURCES_BY_IDS,
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      );
+      expect(props.onStop).toHaveBeenCalled();
     });
 
     it("As LU cancelling the dialog should terminate the workflow without moving", async () => {
