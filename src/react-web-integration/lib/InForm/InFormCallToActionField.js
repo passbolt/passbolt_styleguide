@@ -220,11 +220,6 @@ class InFormCallToActionField {
   /**
    * Schedules the removal of the call-to-action when the pointer leaves the field.
    *
-   * The removal cannot be decided synchronously here. When the field is served in a same-origin
-   * iframe the call-to-action host lives in the top document, so the pointer leaves the field's
-   * document entirely: `relatedTarget` is null and can never be the host, and the call-to-action's
-   * own `mouseover` only fires *after* this event. Both signals are therefore useless at this point.
-   * Defer instead, and let a `mouseover` on the field or on the call-to-action cancel the removal.
    *
    * @param {MouseEvent} event The mouse-out event
    */

@@ -119,13 +119,8 @@ class ShadowDomQueryService {
       return null;
     }
 
-    let contentDocument = null;
-    try {
-      contentDocument = element.contentDocument;
-    } catch {
-      // Cross-origin frame: nothing to descend into.
-      return null;
-    }
+    // Null when the frame has no content document, and when it is not same origin-domain: nothing to descend into.
+    const contentDocument = element.contentDocument;
 
     const active = contentDocument?.activeElement ?? null;
     return active && active !== contentDocument.body && active !== contentDocument.documentElement ? active : null;
