@@ -15,7 +15,7 @@
 import React from "react";
 import DisplayMfaVerifyError from "./DisplayMfaVerifyError";
 import { ApiMfaVerifyContext } from "../../../contexts/ApiMfaVerifyContext";
-import { apiErrorProps, browserErrorProps } from "./DisplayMfaVerifyError.test.data";
+import { apiErrorProps, browserErrorProps, delegatedProps } from "./DisplayMfaVerifyError.test.data";
 
 export default {
   title: "Components/AuthenticationMfa/DisplayMfaVerifyError",
@@ -44,4 +44,8 @@ export const ApiError = {
 
 export const BrowserError = {
   args: browserErrorProps(),
+};
+
+export const Delegated = {
+  args: delegatedProps(),
 };

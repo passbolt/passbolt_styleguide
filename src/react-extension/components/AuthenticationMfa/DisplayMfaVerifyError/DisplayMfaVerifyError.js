@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
 import { withApiMfaVerifyContext } from "../../../contexts/ApiMfaVerifyContext";
 import SelectAnotherMfaProvider from "../SelectAnotherMfaProvider/SelectAnotherMfaProvider";
+import ReturnToApplication from "../ReturnToApplication/ReturnToApplication";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
@@ -72,6 +73,7 @@ class DisplayMfaVerifyError extends Component {
    * @returns {JSX}
    */
   render() {
+    const hideLogs = this.props.apiMfaVerifyContext.hideErrorLogs;
     return (
       <div className="mfa-verify-error">
         <AnimatedFeedback name="attention" />
@@ -79,19 +81,26 @@ class DisplayMfaVerifyError extends Component {
           <Trans>Something went wrong!</Trans>
         </h1>
         <p>
-          <Trans>Please try again later or check the logs for more information.</Trans>
+          {hideLogs ? (
+            <Trans>Please try again, or return to the application.</Trans>
+          ) : (
+            <Trans>Please try again later or check the logs for more information.</Trans>
+          )}
         </p>
         <div className="form-actions">
           <button type="button" className="button primary big full-width" onClick={this.handleTryAgainClick}>
             <Trans>Try again</Trans>
           </button>
           <SelectAnotherMfaProvider />
+          <ReturnToApplication />
         </div>
-        <div className="accordion-header">
-          <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
-            <Trans>Logs</Trans> {this.state.displayLogs ? <CarretDownSVG /> : <CarretRightSVG />}
-          </button>
-        </div>
+        {!hideLogs && (
+          <div className="accordion-header">
+            <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
+              <Trans>Logs</Trans> {this.state.displayLogs ? <CarretDownSVG /> : <CarretRightSVG />}
+            </button>
+          </div>
+        )}
         {this.state.displayLogs && (
           <div className="accordion-content">
             <textarea readOnly={true} value={this.logs} />

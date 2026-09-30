@@ -16,7 +16,7 @@
  * Unit tests on VerifyWithPasskey in regard of specifications
  */
 import VerifyWithPasskeyPage from "./VerifyWithPasskey.test.page";
-import { defaultProps, processingProps, withoutRememberMeProps } from "./VerifyWithPasskey.test.data";
+import { defaultProps, delegatedProps, processingProps, withoutRememberMeProps } from "./VerifyWithPasskey.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -71,6 +71,25 @@ describe("VerifyWithPasskey", () => {
     expect(page.anotherProviderLink.getAttribute("href")).toStrictEqual(
       "https://localhost:6006/mfa/verify/totp?redirect=%2Fapp%2Fpasswords",
     );
+  });
+
+  it("As a user I should not see the link to return to an application", () => {
+    expect.assertions(1);
+    const page = new VerifyWithPasskeyPage(defaultProps());
+
+    expect(page.returnToApplicationLink).toBeNull();
+  });
+
+  it("As a mobile user I should see the link to return to the application", () => {
+    expect.assertions(4);
+    const page = new VerifyWithPasskeyPage(delegatedProps());
+
+    expect(page.returnToApplicationLink.textContent).toStrictEqual("Return to app");
+    expect(page.returnToApplicationLink.getAttribute("href")).toStrictEqual(
+      "passbolt://mfa/webauthn/callback?error=cancelled",
+    );
+    expect(page.anotherProviderLink).toBeNull();
+    expect(page.rememberCheckbox).toBeNull();
   });
 
   it("As a user I cannot interact with the screen while the browser prompt is pending", () => {

@@ -13,19 +13,13 @@
  */
 
 import React from "react";
-import VerifyWithPasskey from "./VerifyWithPasskey";
+import DisplayMfaVerifyDelegatedExpired from "./DisplayMfaVerifyDelegatedExpired";
 import { ApiMfaVerifyContext } from "../../../contexts/ApiMfaVerifyContext";
-import {
-  defaultProps,
-  delegatedProps,
-  processingProps,
-  singleProviderProps,
-  withoutRememberMeProps,
-} from "./VerifyWithPasskey.test.data";
+import { defaultProps } from "./DisplayMfaVerifyDelegatedExpired.test.data";
 
 export default {
-  title: "Components/AuthenticationMfa/VerifyWithPasskey",
-  component: VerifyWithPasskey,
+  title: "Components/AuthenticationMfa/DisplayMfaVerifyDelegatedExpired",
+  component: DisplayMfaVerifyDelegatedExpired,
   decorators: [
     (Story, { args }) => (
       <div id="container" className="container page login">
@@ -46,20 +40,4 @@ export default {
 
 export const Default = {
   args: defaultProps(),
-};
-
-export const NoRememberMe = {
-  args: withoutRememberMeProps(),
-};
-
-export const SingleProvider = {
-  args: singleProviderProps(),
-};
-
-export const Processing = {
-  args: processingProps(),
-};
-
-export const Delegated = {
-  args: delegatedProps(),
 };

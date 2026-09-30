@@ -15,6 +15,7 @@
 import { defaultApiMfaVerifyContext } from "../../../contexts/ApiMfaVerifyContext.test.data";
 import { ApiMfaVerifyContextState } from "../../../contexts/ApiMfaVerifyContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import { defaultApiMfaVerifyDelegatedContext } from "../../../contexts/ApiMfaVerifyDelegatedContext.test.data";
 
 /**
  * Default props
@@ -48,4 +49,22 @@ export function browserErrorProps() {
   const error = new Error("The operation either timed out or was not allowed.");
   error.name = "NotAllowedError";
   return defaultProps({ apiMfaVerifyContext: { state: ApiMfaVerifyContextState.ERROR_STATE, error } });
+}
+
+/**
+ * Props with an error when the verification is delegated by a mobile application
+ * @returns {object}
+ */
+export function delegatedProps() {
+  const error = new PassboltApiFetchError("The credential could not be verified.", {
+    code: 400,
+    body: null,
+  });
+  return {
+    apiMfaVerifyContext: defaultApiMfaVerifyDelegatedContext({
+      state: ApiMfaVerifyContextState.ERROR_STATE,
+      error,
+      getReturnToApplicationUrl: jest.fn(() => "passbolt://mfa/webauthn/callback?error=verification_failed"),
+    }),
+  };
 }

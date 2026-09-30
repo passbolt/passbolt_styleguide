@@ -12,15 +12,15 @@
  * @since         5.17.0
  */
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import { ApiMfaVerifyContext } from "../../../contexts/ApiMfaVerifyContext";
-import VerifyWithPasskey from "./VerifyWithPasskey";
+import OrchestrateApiMfaVerifyDelegated from "./OrchestrateApiMfaVerifyDelegated";
 
 /**
- * The VerifyWithPasskey component represented as a page
+ * The OrchestrateApiMfaVerifyDelegated component represented as a page
  */
-export default class VerifyWithPasskeyPage {
+export default class OrchestrateApiMfaVerifyDelegatedPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -29,65 +29,51 @@ export default class VerifyWithPasskeyPage {
     this._page = render(
       <MockTranslationProvider>
         <ApiMfaVerifyContext.Provider value={props.apiMfaVerifyContext}>
-          <VerifyWithPasskey {...props} />
+          <OrchestrateApiMfaVerifyDelegated {...props} />
         </ApiMfaVerifyContext.Provider>
       </MockTranslationProvider>,
     );
   }
 
   /**
-   * Returns the passkey logo
+   * Returns the loading spinner screen
    */
-  get logo() {
-    return this._page.container.querySelector(".centered-login-provider-icon");
+  get loadingSpinner() {
+    return this._page.container.querySelector(".login-processing");
   }
 
   /**
-   * Returns the title
+   * Returns the passkey verification screen
    */
-  get title() {
+  get verifyWithPasskey() {
     return this._page.container.querySelector("h1.login-title");
   }
 
   /**
-   * Returns the remember checkbox
+   * Returns the success screen
    */
-  get rememberCheckbox() {
-    return this._page.container.querySelector(".input.checkbox input#remember");
+  get success() {
+    return this._page.container.querySelector(".mfa-verify-delegated-success");
   }
 
   /**
-   * Returns the verify button
+   * Returns the expired screen
    */
-  get verifyButton() {
-    return this._page.container.querySelector(".form-actions button.button.primary");
+  get expired() {
+    return this._page.container.querySelector(".mfa-verify-delegated-expired");
   }
 
   /**
-   * Returns the link to the next provider
+   * Returns the unsupported browser screen
    */
-  get anotherProviderLink() {
-    return this._page.container.querySelector(".form-actions a:not(.return-to-application)");
+  get unsupported() {
+    return this._page.container.querySelector(".mfa-verify-delegated-unsupported");
   }
 
   /**
-   * Returns the link to return to the application
+   * Returns the error screen
    */
-  get returnToApplicationLink() {
-    return this._page.container.querySelector(".form-actions a.return-to-application");
-  }
-
-  /**
-   * Toggle the remember checkbox
-   */
-  toggleRemember() {
-    fireEvent.click(this.rememberCheckbox);
-  }
-
-  /**
-   * Click on the verify button
-   */
-  verify() {
-    fireEvent.click(this.verifyButton);
+  get error() {
+    return this._page.container.querySelector(".mfa-verify-error");
   }
 }

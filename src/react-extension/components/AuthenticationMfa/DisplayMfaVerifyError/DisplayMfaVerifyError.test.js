@@ -16,7 +16,7 @@
  * Unit tests on DisplayMfaVerifyError in regard of specifications
  */
 import DisplayMfaVerifyErrorPage from "./DisplayMfaVerifyError.test.page";
-import { apiErrorProps, browserErrorProps } from "./DisplayMfaVerifyError.test.data";
+import { apiErrorProps, browserErrorProps, delegatedProps } from "./DisplayMfaVerifyError.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -76,5 +76,24 @@ describe("DisplayMfaVerifyError", () => {
     expect(page.anotherProviderLink.getAttribute("href")).toStrictEqual(
       "https://localhost:6006/mfa/verify/totp?redirect=%2Fapp%2Fpasswords",
     );
+  });
+
+  it("As a mobile user I should not see the logs", () => {
+    expect.assertions(2);
+    const page = new DisplayMfaVerifyErrorPage(delegatedProps());
+
+    expect(page.message.textContent).toStrictEqual("Please try again, or return to the application.");
+    expect(page.logsButton).toBeNull();
+  });
+
+  it("As a mobile user I should see the link to return to the application", () => {
+    expect.assertions(3);
+    const page = new DisplayMfaVerifyErrorPage(delegatedProps());
+
+    expect(page.returnToApplicationLink.textContent).toStrictEqual("Return to app");
+    expect(page.returnToApplicationLink.getAttribute("href")).toStrictEqual(
+      "passbolt://mfa/webauthn/callback?error=verification_failed",
+    );
+    expect(page.anotherProviderLink).toBeNull();
   });
 });

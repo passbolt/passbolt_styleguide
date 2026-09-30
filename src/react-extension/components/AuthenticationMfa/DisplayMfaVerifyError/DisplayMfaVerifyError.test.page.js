@@ -60,7 +60,14 @@ export default class DisplayMfaVerifyErrorPage {
    * Returns the link to the next provider
    */
   get anotherProviderLink() {
-    return this._page.container.querySelector(".form-actions a");
+    return this._page.container.querySelector(".form-actions a:not(.return-to-application)");
+  }
+
+  /**
+   * Returns the link to return to the application
+   */
+  get returnToApplicationLink() {
+    return this._page.container.querySelector(".form-actions a.return-to-application");
   }
 
   /**

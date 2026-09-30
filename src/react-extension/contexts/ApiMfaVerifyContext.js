@@ -31,6 +31,7 @@ export const ApiMfaVerifyContext = React.createContext({
   isRememberMeForAMonthEnabled: false, // Whether the organization allows to remember the device for a month
   redirect: "/", // The sanitized path to go to once verified
   error: null, // The error to display if any
+  hideErrorLogs: false, // Whether the error screen hides the technical logs
   onInitializeRequested: () => {}, // Whenever the initialization of the verification is requested
   onVerifyRequested: () => {}, // Whenever the user wants to verify with a passkey
   onRetryRequested: () => {}, // Whenever the user wants to retry after an error

@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
 import { ApiMfaVerifyContextState, withApiMfaVerifyContext } from "../../../contexts/ApiMfaVerifyContext";
 import SelectAnotherMfaProvider from "../SelectAnotherMfaProvider/SelectAnotherMfaProvider";
+import ReturnToApplication from "../ReturnToApplication/ReturnToApplication";
 import PasskeySVG from "../../../../img/svg/passkey.svg";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
@@ -104,6 +105,7 @@ class VerifyWithPasskey extends Component {
             {this.isProcessing && <SpinnerSVG />}
           </button>
           <SelectAnotherMfaProvider />
+          <ReturnToApplication />
         </div>
       </form>
     );

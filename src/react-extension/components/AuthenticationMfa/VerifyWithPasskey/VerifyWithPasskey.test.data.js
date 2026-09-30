@@ -14,6 +14,7 @@
 
 import { defaultApiMfaVerifyContext } from "../../../contexts/ApiMfaVerifyContext.test.data";
 import { ApiMfaVerifyContextState } from "../../../contexts/ApiMfaVerifyContext";
+import { defaultApiMfaVerifyDelegatedContext } from "../../../contexts/ApiMfaVerifyDelegatedContext.test.data";
 
 /**
  * Default props
@@ -49,4 +50,12 @@ export function singleProviderProps() {
  */
 export function processingProps() {
   return defaultProps({ apiMfaVerifyContext: { state: ApiMfaVerifyContextState.CEREMONY_STATE } });
+}
+
+/**
+ * Props when the verification is delegated by a mobile application
+ * @returns {object}
+ */
+export function delegatedProps() {
+  return { apiMfaVerifyContext: defaultApiMfaVerifyDelegatedContext() };
 }
