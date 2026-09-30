@@ -26,6 +26,7 @@ import SmtpSettingsEntity from "./associations/smtpSettingsEntity";
 import DirectorySyncEntity from "./associations/directorySyncEntity";
 import SsoEntity from "./associations/ssoEntity";
 import MetadataEntity from "./associations/metadataEntity";
+import ScimEntity from "./associations/scimEntity";
 
 const ENTITY_NAME = "healthcheck";
 
@@ -91,6 +92,11 @@ class HealthcheckEntity extends Entity {
       this._metadata = new MetadataEntity(this._props.metadata, { clone: false });
       delete this._props.metadata;
     }
+
+    if (this._props.scim) {
+      this._scim = new ScimEntity(this._props.scim, { clone: false });
+      delete this._props.scim;
+    }
   }
 
   /**
@@ -114,6 +120,7 @@ class HealthcheckEntity extends Entity {
         directorySync: DirectorySyncEntity.getSchema(),
         sso: SsoEntity.getSchema(),
         metadata: MetadataEntity.getSchema(),
+        scim: ScimEntity.getSchema(),
       },
     };
   }
@@ -191,6 +198,10 @@ class HealthcheckEntity extends Entity {
 
   get metadata() {
     return this._metadata;
+  }
+
+  get scim() {
+    return this._scim || null;
   }
 }
 
