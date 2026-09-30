@@ -268,7 +268,7 @@ class DisplayPasskeys extends Component {
         onClick={this.handleAddPasskeyClick}
         disabled={this.isLimitReached || this.state.loading || this.isProcessing}
       >
-        <AddSVG />
+        {!this.state.processing && <AddSVG />}
         <span>
           <Trans>Add passkey</Trans>
         </span>
