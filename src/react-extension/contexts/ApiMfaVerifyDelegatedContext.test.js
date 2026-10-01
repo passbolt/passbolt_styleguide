@@ -60,12 +60,14 @@ describe("ApiMfaVerifyDelegatedContext", () => {
   });
 
   describe("::constructor", () => {
-    it("should be in verify state if the browser supports the passkey verification", () => {
-      expect.assertions(2);
+    it("should start the verification if the browser supports the passkey verification", () => {
+      expect.assertions(3);
+      jest.spyOn(apiMfaVerifyDelegatedContext, "onVerifyRequested").mockImplementation(() => {});
 
       apiMfaVerifyDelegatedContext.componentDidMount();
 
       expect(apiMfaVerifyDelegatedContext.state.state).toStrictEqual(ApiMfaVerifyDelegatedContextState.VERIFY_STATE);
+      expect(apiMfaVerifyDelegatedContext.onVerifyRequested).toHaveBeenCalled();
       expect(WindowNavigationService.assign).not.toHaveBeenCalled();
     });
 
@@ -73,15 +75,17 @@ describe("ApiMfaVerifyDelegatedContext", () => {
       ["without parseRequestOptionsFromJSON", { prototype: { toJSON: () => {} } }],
       ["without toJSON", { parseRequestOptionsFromJSON: () => {}, prototype: {} }],
     ])("should return to the application if the browser is %s", (_, publicKeyCredential) => {
-      expect.assertions(2);
+      expect.assertions(3);
       mockPublicKeyCredential(publicKeyCredential);
       initContext();
+      jest.spyOn(apiMfaVerifyDelegatedContext, "onVerifyRequested");
 
       apiMfaVerifyDelegatedContext.componentDidMount();
 
       expect(apiMfaVerifyDelegatedContext.state.state).toStrictEqual(
         ApiMfaVerifyDelegatedContextState.UNSUPPORTED_STATE,
       );
+      expect(apiMfaVerifyDelegatedContext.onVerifyRequested).not.toHaveBeenCalled();
       expect(WindowNavigationService.assign).toHaveBeenCalledWith(`${REDIRECT_URI}?error=browser_unsupported`);
     });
   });

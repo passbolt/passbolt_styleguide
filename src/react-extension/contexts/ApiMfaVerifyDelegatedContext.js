@@ -80,11 +80,13 @@ export class ApiMfaVerifyDelegatedContextProvider extends React.Component {
   }
 
   /**
-   * Return to the application right away if the browser cannot run the ceremony.
+   * Start the verification right away, or return to the application if the browser cannot run the ceremony.
    */
   componentDidMount() {
     if (this.state.state === ApiMfaVerifyDelegatedContextState.UNSUPPORTED_STATE) {
       WindowNavigationService.assign(this.getReturnToApplicationUrl());
+    } else {
+      this.onVerifyRequested();
     }
   }
 
