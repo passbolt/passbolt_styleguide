@@ -93,6 +93,13 @@ export default class GroupPermissionItemPage {
   }
 
   /**
+   * Returns true if the row is highlighted as a group whose composition changed
+   */
+  get isCompositionChanged() {
+    return Boolean(this._page.container.querySelector("li.composition-changed"));
+  }
+
+  /**
    * Returns the group member visibility toggle button element
    */
   get groupVisibilityToggle() {

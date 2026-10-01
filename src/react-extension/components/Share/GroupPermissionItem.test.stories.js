@@ -78,3 +78,7 @@ export const Modified = {
 export const Removed = {
   args: defaultOwnerProps({ changeStatus: "removed" }),
 };
+
+export const CompositionChanged = {
+  args: defaultOwnerProps({ changeStatus: "added", hasChangedComposition: true }),
+};
