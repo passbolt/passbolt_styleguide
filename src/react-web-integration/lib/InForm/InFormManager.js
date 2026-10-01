@@ -122,10 +122,10 @@ class InFormManager {
      */
     await this.waitingAnimations(document.documentElement);
     await this.waitingAnimations(document.body);
-    // Do not initialize if the page is not visible enough before inserting elements
+    // OAuth / SPA shells load with the body hidden and reveal it via JS. `initialize()` runs once, so we
+    // wait for the reveal instead of bailing (which would leave the integration dead until reload).
     if (this.isPageNotVisible()) {
-      console.debug("Cannot insert the in-form menu manager into a page that is not visible.");
-      return;
+      await this.waitUntilPageVisible();
     }
 
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
@@ -208,13 +208,15 @@ class InFormManager {
   }
 
   /**
-   * Is page not visible
+   * Whether the page is not visible, judged on <html>/<body> being rendered (display / visibility / opacity)
+   * — NOT their box size: apps rendering into a fixed/absolute container leave both at 0px while fully
+   * visible (e.g. my.nutanix.com). The per-field size floor (anti-clickjacking) is unaffected.
    * @return {boolean}
    */
   isPageNotVisible() {
     return (
-      !ElementVisibilityService.isElementViewable(document.documentElement) ||
-      !ElementVisibilityService.isElementViewable(document.body)
+      !ElementVisibilityService.isElementRendered(document.documentElement) ||
+      !ElementVisibilityService.isElementRendered(document.body)
     );
   }
 
@@ -491,6 +493,14 @@ class InFormManager {
     // Remount the host only
     this.ensureHostMounted();
     this.handleInformCallToActionClickEvent();
+
+    // Recovery: an SPA that reveals its login form by rebuilding <body> displaces the host in the same
+    // batch that adds the form, so the field scan armed by that batch was skipped on invalid host
+    // integrity and no follow-up mutation may retry it. Re-run it here, but only once the host is back in
+    // a valid location — extraction stays gated on a trusted host, so the anti-tampering invariant holds.
+    if (this._pendingFieldScan && this.isHostInValidLocation()) {
+      this.updateAuthenticationFieldsDebounce?.();
+    }
 
     // Wait N milliseconds before checking again
     setTimeout(() => {
@@ -927,6 +937,9 @@ class InFormManager {
    * Remove all event, observer and iframe
    */
   destroy() {
+    // Disarm the field-scan gate: a debounced callback already in flight must not re-scan (and re-schedule
+    // itself via the retryMountHost recovery) on a destroyed instance.
+    this._pendingFieldScan = false;
     this._unsubscribeShadowMutations?.();
     ShadowDomFocusHealerService.uninstallFocusinHealer();
     ShadowMutationObserverService.disconnectObserver(document);

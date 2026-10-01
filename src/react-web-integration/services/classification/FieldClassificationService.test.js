@@ -293,6 +293,68 @@ describe("FieldClassificationService", () => {
       });
     });
 
+    describe("ignore veto (non-credential utilities)", () => {
+      it("should veto a search-typed field carrying an identifier token to OTHER", () => {
+        expect.assertions(1);
+
+        // A site-search box whose name only looks username-ish (e.g. `user_search`) must not become a
+        // username: 'search' is a FIELD_IGNORE token and vetoes the field before the keyword tiers.
+        expect(
+          FieldClassificationService.classify(defaultField({ type: "search", name: "user_search" })),
+        ).toStrictEqual({
+          role: FieldRole.OTHER,
+          tier: Tier.ATTRIBUTE_KEYWORD,
+        });
+      });
+
+      it("should veto a field labelled 'Search' to OTHER", () => {
+        expect.assertions(1);
+
+        expect(FieldClassificationService.classify(defaultField({ labelText: "Search" }))).toStrictEqual({
+          role: FieldRole.OTHER,
+          tier: Tier.ATTRIBUTE_KEYWORD,
+        });
+      });
+
+      it("should let a natively typed email field win over a search-tainted name", () => {
+        expect.assertions(1);
+
+        // The veto runs AFTER the native-type tier: a real type=email field is decided before the veto,
+        // even when its metadata carries a FIELD_IGNORE token.
+        expect(
+          FieldClassificationService.classify(defaultField({ type: "email", name: "email_search" })),
+        ).toStrictEqual({
+          role: FieldRole.EMAIL,
+          tier: Tier.INPUT_TYPE,
+        });
+      });
+
+      it("should let an autocomplete-declared username win over a search-tainted name", () => {
+        expect.assertions(1);
+
+        expect(
+          FieldClassificationService.classify(defaultField({ autoComplete: "username", name: "search" })),
+        ).toStrictEqual({
+          role: FieldRole.USERNAME,
+          tier: Tier.AUTOCOMPLETE,
+        });
+      });
+
+      it("should NOT veto a type=search field labelled 'Email' (WorldFirst anti-autofill shape)", () => {
+        expect.assertions(1);
+
+        // Financial portals set type=search on the username field to defeat native autofill, but label
+        // it 'Email'. class (`...search-input`) is not a matched signal, so no FIELD_IGNORE token reaches
+        // the veto and the field classifies as EMAIL.
+        expect(FieldClassificationService.classify(defaultField({ type: "search", labelText: "Email" }))).toStrictEqual(
+          {
+            role: FieldRole.EMAIL,
+            tier: Tier.EXPLICIT_LABEL,
+          },
+        );
+      });
+    });
+
     describe("Tier 4 — explicit label / aria (strong text)", () => {
       it("should classify a field labelled 'Email address' as EMAIL at the EXPLICIT_LABEL tier", () => {
         expect.assertions(1);
@@ -320,12 +382,14 @@ describe("FieldClassificationService", () => {
         });
       });
 
-      it("should not classify a field labelled 'Forgot password' as PASSWORD and fall back to OTHER", () => {
+      it("should not classify a field labelled 'Forgot password' as PASSWORD (vetoed to OTHER)", () => {
         expect.assertions(1);
 
+        // 'forgot' is a FIELD_IGNORE token, so the ignore veto (which runs before this tier) owns the
+        // OTHER decision — it never reaches the explicit-label PASSWORD_EXCLUDE fallthrough.
         expect(FieldClassificationService.classify(defaultField({ labelText: "Forgot password" }))).toStrictEqual({
           role: FieldRole.OTHER,
-          tier: Tier.NONE,
+          tier: Tier.ATTRIBUTE_KEYWORD,
         });
       });
 

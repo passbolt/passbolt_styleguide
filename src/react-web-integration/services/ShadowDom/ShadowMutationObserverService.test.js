@@ -15,6 +15,7 @@
 import ShadowMutationObserverService from "./ShadowMutationObserverService";
 import ShadowRootCacheService from "./ShadowRootCacheService";
 import { FIELD_ATTRIBUTES_TO_WATCH } from "../../lib/InForm/InFormFieldDictionary";
+import ShadowRootCollectorService from "./ShadowRootCollectorService";
 
 describe("ShadowMutationObserverService", () => {
   beforeEach(() => {
@@ -23,6 +24,7 @@ describe("ShadowMutationObserverService", () => {
     ShadowRootCacheService._shadowRootsCache = new WeakMap();
     ShadowMutationObserverService._shadowRootsObservers = new WeakMap();
     ShadowMutationObserverService._shadowMutationSubscribers = new Set();
+    ShadowRootCollectorService._hostByShadowRoot = new WeakMap();
 
     document.body.innerHTML = "";
   });

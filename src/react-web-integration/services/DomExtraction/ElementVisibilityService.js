@@ -27,30 +27,33 @@ export const MIN_VIEWABLE_DIMENSION_PX = 1;
 
 class ElementVisibilityService {
   /**
-   * Determine whether a DOM element is rendered (not hidden by CSS and occupying a meaningful
-   * surface). Read-only. Filters honeypots and hidden inputs before form analysis and autofill.
-   *
-   * Ordered cheapest-rejection-first: `checkVisibility` → opacity → `getBoundingClientRect`.
-   * Note: point-in-time sample — does not track viewport, clipping/occlusion, nor mid-transition
-   * opacity; callers must re-evaluate after `transitionend`/`animationend`.
-   *
+   * Whether an element is rendered AND occupies a meaningful surface. The size floor rejects 0x0 /
+   * sub-pixel "ghost" masking fields. Use for fields; for page-level checks prefer {@link isElementRendered}.
    * @param {?Node} element The node to evaluate. Non-element nodes resolve to `false` (no throw).
    * @returns {boolean} `true` if the element is rendered and sized.
    */
   static isElementViewable(element) {
-    // Non-element nodes lack the style/layout APIs below. `nodeType` is realm-agnostic, unlike
-    // `instanceof Element`; optional chaining also covers null/undefined.
+    return ElementVisibilityService.isElementRendered(element) && ElementVisibilityService.hasViewableSize(element);
+  }
+
+  /**
+   * Whether an element is rendered (not hidden by CSS), WITHOUT any box-size requirement. Use for page-level
+   * checks (<html>/<body>) that can be 0px while fully visible (fixed/absolute container, e.g. my.nutanix.com).
+   * Ordered cheapest-rejection-first: `checkVisibility` → opacity.
+   * @param {?Node} element The node to evaluate. Non-element nodes resolve to `false` (no throw).
+   * @returns {boolean} `true` if the element is rendered, regardless of size.
+   */
+  static isElementRendered(element) {
+    // `nodeType` is realm-agnostic (unlike `instanceof Element`) and optional chaining covers null.
     if (element?.nodeType !== Node.ELEMENT_NODE) {
       return false;
     }
 
-    // CSS visibility first: rejects display:none, visibility:hidden/collapse, content-visibility and
-    // strict-0 opacity (element or ancestor) without resolving computed style.
+    // Rejects display:none, visibility:hidden/collapse, content-visibility and strict-0 opacity.
     const hasNativeCheck = typeof element.checkVisibility === "function";
     if (hasNativeCheck) {
-      // The opacity/visibility flags were renamed from the Chrome 105 names (`checkOpacity`/
-      // `checkVisibilityCSS`) to the spec names (`opacityProperty`/`visibilityProperty`). WebIDL
-      // drops unknown keys, so we pass both spellings to stay correct on Chromium and Firefox.
+      // Chrome 105 (`checkOpacity`/`checkVisibilityCSS`) and spec (`opacityProperty`/`visibilityProperty`)
+      // flag names both passed; WebIDL drops unknown keys, so this stays correct on Chromium and Firefox.
       const isVisible = element.checkVisibility({
         checkOpacity: true,
         checkVisibilityCSS: true,
@@ -63,11 +66,9 @@ class ElementVisibilityService {
       }
     }
 
-    // Resolved lazily (only after checkVisibility passes) and once: legacy needs display/visibility,
-    // both paths need opacity.
     const style = getComputedStyle(element);
 
-    // Legacy fallback (no `checkVisibility`): checkVisibility already covers these on the modern path.
+    // Legacy fallback: `checkVisibility` already covers display/visibility on the modern path.
     if (
       !hasNativeCheck &&
       (style.display === "none" || style.visibility === "hidden" || style.visibility === "collapse")
@@ -75,14 +76,21 @@ class ElementVisibilityService {
       return false;
     }
 
-    // Opacity is a string; only reject a finite value below the threshold (unparseable "" / "auto"
-    // must not read as 0). See {@link OPACITY_VISIBILITY_THRESHOLD} for the self-borne-only scope.
+    // Only reject a finite opacity below the threshold ("" / "auto" must not read as 0).
     const opacity = parseFloat(style.opacity);
     if (Number.isFinite(opacity) && opacity < OPACITY_VISIBILITY_THRESHOLD) {
       return false;
     }
 
-    // Layout-triggering, so deferred to last.
+    return true;
+  }
+
+  /**
+   * Whether an element occupies a meaningful surface (rejects 0x0 / sub-pixel). Layout-triggering.
+   * @param {Element} element
+   * @returns {boolean}
+   */
+  static hasViewableSize(element) {
     const rect = element.getBoundingClientRect();
     return rect.width >= MIN_VIEWABLE_DIMENSION_PX && rect.height >= MIN_VIEWABLE_DIMENSION_PX;
   }

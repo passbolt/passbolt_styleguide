@@ -425,6 +425,36 @@ describe("UserEventsService", () => {
     });
   });
 
+  describe("fields whose keydown listener re-renders a controlled value", () => {
+    let field;
+
+    beforeEach(() => {
+      field = document.createElement("input");
+      field.addEventListener("keydown", () => {
+        field.value = "";
+      });
+    });
+
+    it("Should keep the value written between keydown and input", async () => {
+      expect.assertions(1);
+
+      await UserEventsService._autofillSingleField(field, "test");
+
+      expect(field.value).toStrictEqual("test");
+    });
+
+    it("Should let the input listener read the filled value", async () => {
+      expect.assertions(1);
+
+      const seenByInputListener = jest.fn();
+      field.addEventListener("input", () => seenByInputListener(field.value));
+
+      await UserEventsService._autofillSingleField(field, "test");
+
+      expect(seenByInputListener).toHaveBeenCalledWith("test");
+    });
+  });
+
   describe("_isFillableInput", () => {
     it.each([
       { scenario: "null", field: null },

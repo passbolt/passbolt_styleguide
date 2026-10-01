@@ -271,7 +271,8 @@ export const Keywords = Object.freeze({
     "find",
   ],
 
-  // The field is not a credential at all (NOT wired for now — data available).
+  // The field is not a credential at all — wired as a veto in FieldClassificationService.ignoreVeto,
+  // after the declared/native-type tiers and before the keyword tiers.
   FIELD_IGNORE: ["captcha", "search", "query", "find", "go", "forgot"],
 
   // --- Form context ---

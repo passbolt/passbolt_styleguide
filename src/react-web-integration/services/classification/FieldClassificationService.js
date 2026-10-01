@@ -43,6 +43,7 @@ class FieldClassificationService {
       FieldClassificationService.declaredBySawf,
       FieldClassificationService.declaredByAutocomplete,
       FieldClassificationService.byInputType,
+      FieldClassificationService.ignoreVeto,
       FieldClassificationService.byExplicitLabel,
       FieldClassificationService.byAttributeKeyword,
     ];

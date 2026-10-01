@@ -2161,30 +2161,33 @@ describe("InformManager", () => {
       expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
     });
 
-    it("should trigger the re-scan for a document-scope mutation only when it is relevant", async () => {
+    it("should arm the extraction gate for a document-scope mutation only when it is relevant", async () => {
       expect.assertions(2);
 
       document.body.innerHTML = domElementLoginWithNameAttributeUsername;
       await act(async () => new InformManagerPage());
       InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      // Reset the gate: on document scope the debounced callback is always scheduled (cheap host-tampering
+      // check), but the expensive re-scan only runs when _pendingFieldScan is latched by a relevant batch.
+      InFormManager._pendingFieldScan = false;
 
-      // An irrelevant document mutation (no field added/removed, no watched attribute) must not re-scan.
+      // An irrelevant document mutation (no field added/removed, no watched attribute) must not arm the gate.
       const irrelevantNode = document.createElement("span");
       InFormManager.onShadowMutation(
         document,
         [{ type: "childList", addedNodes: [irrelevantNode], removedNodes: [] }],
         false,
       );
-      expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
+      expect(InFormManager._pendingFieldScan).toBe(false);
 
-      // A relevant document mutation (a field added) re-scans.
+      // A relevant document mutation (a field added) arms the gate so the follow-up runs the full re-scan.
       const fieldNode = document.createElement("input");
       InFormManager.onShadowMutation(
         document,
         [{ type: "childList", addedNodes: [fieldNode], removedNodes: [] }],
         false,
       );
-      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+      expect(InFormManager._pendingFieldScan).toBe(true);
     });
 
     it("should not re-scan for an irrelevant shadow-scope mutation", async () => {

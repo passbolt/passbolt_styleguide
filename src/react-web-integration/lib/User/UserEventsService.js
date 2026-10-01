@@ -144,9 +144,9 @@ class UserEventsService {
     const changeEvent = new view.Event("change", { bubbles: true });
 
     field.click();
-    UserEventsService._setNativeValue(field, value);
     // Dispatch events, they happen in this order: down, input, up, change, ↑, ↑, ↓, ↓, ←, →, ←, →, B, A
     field.dispatchEvent(keydownEvent);
+    UserEventsService._setNativeValue(field, value);
     field.dispatchEvent(inputEvent);
     field.dispatchEvent(keyupEvent);
     field.dispatchEvent(changeEvent);
