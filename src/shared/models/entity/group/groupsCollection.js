@@ -111,6 +111,29 @@ class GroupsCollection extends EntityV2Collection {
     }
   }
 
+  /**
+   * Get the groups of this collection that differ from, or are missing in, the given collection.
+   * Groups are compared by their full DTO, members included.
+   * @param {GroupsCollection} otherGroups The groups to compare with, e.g. the same groups fetched again.
+   * @returns {Array<GroupEntity>}
+   */
+  getChangedGroups(otherGroups) {
+    const changedGroups = [];
+    for (const group of this.items) {
+      const otherGroup = otherGroups.items.find((item) => item.id === group.id);
+      if (!otherGroup) {
+        changedGroups.push(group);
+        continue;
+      }
+      const groupJson = JSON.stringify(group.toDto(GroupEntity.ALL_CONTAIN_OPTIONS));
+      const otherGroupJson = JSON.stringify(otherGroup.toDto(GroupEntity.ALL_CONTAIN_OPTIONS));
+      if (groupJson !== otherGroupJson) {
+        changedGroups.push(group);
+      }
+    }
+    return changedGroups;
+  }
+
   /*
    * ==================================================
    * Static getters

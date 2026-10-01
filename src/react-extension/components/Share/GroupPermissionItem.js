@@ -48,13 +48,16 @@ class GroupPermissionItem extends Component {
   }
 
   /**
-   * Returns the CSS class name for the list item, reflecting the removed state.
+   * Returns the CSS class name for the list item, reflecting the removed and changed composition states.
    * @returns {string}
    */
   getClassName() {
     let className = "row has-caret";
     if (this.isRemoved) {
       className += " permission-removed";
+    }
+    if (this.props.hasChangedComposition) {
+      className += " composition-changed";
     }
     return className;
   }
@@ -251,6 +254,7 @@ GroupPermissionItem.propTypes = {
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
   changeStatus: PropTypes.string, // A ShareChanges.CHANGE_STATUS_* value, null when unchanged
   unappliedResources: PropTypes.array, // Move: [{name, type}] the items the choice cannot reach
+  hasChangedComposition: PropTypes.bool, // The group members changed since it was displayed, the operator must review it
   disabled: PropTypes.bool,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,

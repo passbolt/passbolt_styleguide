@@ -121,10 +121,12 @@ export class FolderShareFlow extends AbstractPermissionFlow {
    * the operator confirmed the existing permissions as-is: nothing is sent. The extension re-derives
    * the propagation to the folder's content.
    * @param {Array<object>} folderPermissionChanges The DTO-shape folder permission changes.
-   * @param {boolean} canOperatorRead true if the operator can still read the modified folder
+   * @param {object} [options] The confirmation options ShareDialog emits.
+   * @param {boolean} [options.canOperatorRead] true if the operator can still read the modified folder
+   * @param {GroupsCollection} [options.addedGroups] The groups the operator added in the dialog, as displayed.
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(folderPermissionChanges, canOperatorRead) {
+  async handleShareDialogConfirm(folderPermissionChanges, { canOperatorRead, addedGroups } = {}) {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForFolderShare(this.folderId);
@@ -135,6 +137,7 @@ export class FolderShareFlow extends AbstractPermissionFlow {
           ),
         );
       }
+      await this.assertAddedGroupsUnchanged(addedGroups);
       if (folderPermissionChanges.length) {
         await this.permissionServiceWorkerService.saveFoldersPermissions(this.folderId, folderPermissionChanges);
       }

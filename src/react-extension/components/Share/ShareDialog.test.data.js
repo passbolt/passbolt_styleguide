@@ -1053,10 +1053,13 @@ const ADDED_GROUP_ID = "e2b5a0f4-3d7c-4f1b-9a2e-6c8d1f0b3a75";
  * The group identity is stable across calls, so calling this twice with different members describes the
  * same group before and after somebody joined it.
  * @param {Array<object>} [members] The member users to embed, defaults to two arbitrary users.
+ * @param {object} [identity] The group identity, defaults to the Marketing group.
+ * @param {string} [identity.id] The group id.
+ * @param {string} [identity.name] The group name.
  * @returns {{searchResult: object, group: object, members: Array<object>}}
  */
-export function addedGroupWithMembersFixture(members = null) {
-  const groupId = ADDED_GROUP_ID;
+export function addedGroupWithMembersFixture(members = null, { id = ADDED_GROUP_ID, name = "Marketing" } = {}) {
+  const groupId = id;
   const groupMembers = members ?? [
     defaultUserDto({
       username: "nancy@passbolt.com",
@@ -1069,10 +1072,10 @@ export function addedGroupWithMembersFixture(members = null) {
   ];
 
   return {
-    searchResult: { id: groupId, name: "Marketing", user_count: groupMembers.length },
+    searchResult: { id: groupId, name: name, user_count: groupMembers.length },
     group: defaultGroupDto({
       id: groupId,
-      name: "Marketing",
+      name: name,
       groups_users: groupMembers.map((user, index) =>
         defaultGroupUser({ user_id: user.id, group_id: groupId, user: user, is_admin: index === 0 }),
       ),
