@@ -17,6 +17,7 @@ import { withAppContext } from "../../shared/context/AppContext/AppContext";
 import MfaWebauthnVerifyService from "../../shared/services/api/Mfa/MfaWebauthnVerifyService";
 import WebauthnAssertionCeremonyService from "../../shared/services/webauthn/webauthnAssertionCeremonyService";
 import WindowNavigationService from "../../shared/utils/windowNavigationService";
+import { withTranslation } from "react-i18next";
 
 const WEBAUTHN_PROVIDER = "webauthn";
 
@@ -174,7 +175,22 @@ export class ApiMfaVerifyContextProvider extends React.Component {
    * @param {Error} error The error to display
    */
   handleError(error) {
-    this.setState({ state: ApiMfaVerifyContextState.ERROR_STATE, error });
+    let qualifiedError;
+
+    switch (error.name) {
+      case "SecurityError":
+        qualifiedError = new Error(
+          this.props.t(
+            "The operation requires a secure connection. Passkeys were blocked because your server's TLS certificate is invalid or untrusted.",
+          ),
+        );
+        qualifiedError.cause = error;
+        break;
+      default:
+        qualifiedError = error;
+    }
+
+    this.setState({ state: ApiMfaVerifyContextState.ERROR_STATE, error: qualifiedError });
   }
 
   /**
@@ -217,7 +233,7 @@ ApiMfaVerifyContextProvider.propTypes = {
   value: PropTypes.any, // The initial value of the context
   children: PropTypes.any, // The children components
 };
-export default withAppContext(ApiMfaVerifyContextProvider);
+export default withAppContext(withTranslation("common")(ApiMfaVerifyContextProvider));
 
 /**
  * API MFA Verify Context Consumer HOC

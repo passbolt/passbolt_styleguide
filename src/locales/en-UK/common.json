@@ -1551,6 +1551,7 @@
   "The operation failed with the following error:": "The operation failed with the following error:",
   "The operation has been aborted.": "The operation has been aborted.",
   "The operation may take a few minutes.": "The operation may take a few minutes.",
+  "The operation requires a secure connection. Passkeys were blocked because your server's TLS certificate is invalid or untrusted.": "The operation requires a secure connection. Passkeys were blocked because your server's TLS certificate is invalid or untrusted.",
   "The operation was cancelled.": "The operation was cancelled.",
   "The operation was successful.": "The operation was successful.",
   "The organization private recovery key should not be stored in passbolt.": "The organization private recovery key should not be stored in passbolt.",

@@ -139,6 +139,11 @@ class DisplayPasskeys extends Component {
       case "WebauthnAuthenticatorAlreadyRegisteredError":
         message = this.props.t("This authenticator is already registered for your account.");
         break;
+      case "WebauthnTLSCertificateError":
+        message = this.props.t(
+          "The operation requires a secure connection. Passkeys were blocked because your server's TLS certificate is invalid or untrusted.",
+        );
+        break;
       default:
         message = error?.message;
     }

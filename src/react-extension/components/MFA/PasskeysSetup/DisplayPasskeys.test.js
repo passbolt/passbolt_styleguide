@@ -220,6 +220,12 @@ describe("DisplayPasskeys", () => {
         expected: "This authenticator is already registered for your account.",
       },
       {
+        scenario: "the TLS certificate is invalid or untrusted",
+        error: { name: "WebauthnTLSCertificateError", message: "The TLS certificate is invalid." },
+        expected:
+          "The operation requires a secure connection. Passkeys were blocked because your server's TLS certificate is invalid or untrusted.",
+      },
+      {
         scenario: "the registration cannot start",
         error: { name: "PassboltApiFetchError", message: "The WebAuthn provider is not enabled." },
         expected: "The WebAuthn provider is not enabled.",
