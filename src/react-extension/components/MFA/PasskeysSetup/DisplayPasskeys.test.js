@@ -226,6 +226,11 @@ describe("DisplayPasskeys", () => {
           "The operation requires a secure connection. Passkeys were blocked due to an untrusted TLS certificate or an invalid Relying Party ID.",
       },
       {
+        scenario: "another webauthn ceremony is runnging",
+        error: { name: "WebauthnTLSCertificateError", message: "Another Webauthn ceremony is running." },
+        expected: "A passkey prompt is already opened in another window. Please complete or cancel it to continue.",
+      },
+      {
         scenario: "the registration cannot start",
         error: { name: "PassboltApiFetchError", message: "The WebAuthn provider is not enabled." },
         expected: "The WebAuthn provider is not enabled.",

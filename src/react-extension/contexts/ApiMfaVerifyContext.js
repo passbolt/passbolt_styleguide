@@ -188,6 +188,14 @@ export class ApiMfaVerifyContextProvider extends React.Component {
         );
         qualifiedError.cause = error;
         break;
+      case "ConstraintError":
+        qualifiedError = new Error(
+          this.props.t(
+            "A passkey prompt is already opened in another window. Please complete or cancel it to continue.",
+          ),
+        );
+        qualifiedError.cause = error;
+        break;
       default:
         qualifiedError = error;
     }
