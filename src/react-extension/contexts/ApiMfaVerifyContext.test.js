@@ -199,6 +199,23 @@ describe("ApiMfaVerifyContext", () => {
       expect(fetch).toHaveBeenCalledTimes(1);
     });
 
+    it("should display a clear error is the browser rejected the ceremony due to a TLS certificate issue", async () => {
+      expect.assertions(3);
+      const error = domException("SecurityError");
+      fetch.doMockOnceIf(BEGIN_URL, () => mockApiResponse(defaultVerifyBeginDto()));
+      get.mockRejectedValue(error);
+
+      await apiMfaVerifyContext.onVerifyRequested(false);
+
+      expect(apiMfaVerifyContext.state.state).toStrictEqual(ApiMfaVerifyContextState.ERROR_STATE);
+      expect(apiMfaVerifyContext.state.error).toStrictEqual(
+        new Error(
+          "The operation requires a secure connection. Passkeys were blocked because your server's TLS certificate is invalid or untrusted.",
+        ),
+      );
+      expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
     it("should display the finish error if the session is still authenticated", async () => {
       expect.assertions(3);
       fetch.doMockOnceIf(BEGIN_URL, () => mockApiResponse(defaultVerifyBeginDto()));

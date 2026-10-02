@@ -24,6 +24,7 @@ export function defaultProps(data = {}) {
   return {
     context: defaultAppContext(data.context),
     value: { redirect: "/app/passwords", ...data.value },
+    t: (s) => s,
   };
 }
 
