@@ -210,7 +210,7 @@ describe("ApiMfaVerifyContext", () => {
       expect(apiMfaVerifyContext.state.state).toStrictEqual(ApiMfaVerifyContextState.ERROR_STATE);
       expect(apiMfaVerifyContext.state.error).toStrictEqual(
         new Error(
-          "The operation requires a secure connection. Passkeys were blocked because your server's TLS certificate is invalid or untrusted.",
+          "The operation requires a secure connection. Passkeys were blocked due to an untrusted TLS certificate or an invalid Relying Party ID.",
         ),
       );
       expect(fetch).toHaveBeenCalledTimes(1);

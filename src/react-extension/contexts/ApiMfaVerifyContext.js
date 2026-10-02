@@ -177,11 +177,13 @@ export class ApiMfaVerifyContextProvider extends React.Component {
   handleError(error) {
     let qualifiedError;
 
+    console.dir(error);
+
     switch (error.name) {
       case "SecurityError":
         qualifiedError = new Error(
           this.props.t(
-            "The operation requires a secure connection. Passkeys were blocked because your server's TLS certificate is invalid or untrusted.",
+            "The operation requires a secure connection. Passkeys were blocked due to an untrusted TLS certificate or an invalid Relying Party ID.",
           ),
         );
         qualifiedError.cause = error;

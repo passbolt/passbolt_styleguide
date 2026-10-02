@@ -141,7 +141,7 @@ class DisplayPasskeys extends Component {
         break;
       case "WebauthnTLSCertificateError":
         message = this.props.t(
-          "The operation requires a secure connection. Passkeys were blocked because your server's TLS certificate is invalid or untrusted.",
+          "The operation requires a secure connection. Passkeys were blocked due to an untrusted TLS certificate or an invalid Relying Party ID.",
         );
         break;
       default:
