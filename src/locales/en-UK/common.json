@@ -111,6 +111,7 @@
   "A name can not be more than 50 char in length.": "A name can not be more than 50 char in length.",
   "A name is required.": "A name is required.",
   "A OTP code is required.": "A OTP code is required.",
+  "A passkey prompt is already opened in another window. Please complete or cancel it to continue.": "A passkey prompt is already opened in another window. Please complete or cancel it to continue.",
   "A passphrase is required.": "A passphrase is required.",
   "A password is required.": "A password is required.",
   "A port is required.": "A port is required.",
