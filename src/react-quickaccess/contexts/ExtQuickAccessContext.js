@@ -89,7 +89,8 @@ export class ExtQuickAccessContextProvider extends React.Component {
    */
   async loadOnlineData(siteSettings) {
     if (this.props.activeSession.isAuthenticated) {
-      if (this.props.activeSession.isMfaRequired) {
+      // Redirect the user only if the server is reachable to not be blocked in an infinite loop
+      if (this.props.activeSession.isMfaRequired && this.props.activeSession.isServerReachable) {
         await this.redirectToMfaAuthentication();
         return;
       }
