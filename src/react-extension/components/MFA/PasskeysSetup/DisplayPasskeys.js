@@ -144,6 +144,9 @@ class DisplayPasskeys extends Component {
           "The operation requires a secure connection. Passkeys were blocked due to an untrusted TLS certificate or an invalid Relying Party ID.",
         );
         break;
+      case "WebauthnRelyingPartyIpAddressError":
+        message = this.props.t("Passkeys require Passbolt to be reached through a domain name, not an IP address.");
+        break;
       case "WebauthnAlreadyRunningCeremonyError":
         message = this.props.t(
           "A passkey prompt is already opened in another window. Please complete or cancel it to continue.",

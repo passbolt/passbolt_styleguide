@@ -13,6 +13,7 @@
  */
 
 import WebauthnAssertionCeremonyService from "./webauthnAssertionCeremonyService";
+import WebauthnRelyingPartyIpAddressError from "../../lib/Error/WebauthnRelyingPartyIpAddressError";
 
 describe("WebauthnAssertionCeremonyService", () => {
   const options = { challenge: "Y2hhbGxlbmdl", rpId: "passbolt.local" };
@@ -38,6 +39,18 @@ describe("WebauthnAssertionCeremonyService", () => {
       expect(parseRequestOptionsFromJSON).toHaveBeenCalledWith(options);
       expect(get).toHaveBeenCalledWith({ publicKey: { parsed: options }, signal });
     });
+
+    it.each(["192.168.1.10", "[2001:db8::1]"])(
+      "should not start the ceremony if the relying party id %s is an IP address",
+      async (rpId) => {
+        expect.assertions(2);
+
+        await expect(
+          WebauthnAssertionCeremonyService.run({ ...options, rpId }, new AbortController().signal),
+        ).rejects.toThrow(WebauthnRelyingPartyIpAddressError);
+        expect(get).not.toHaveBeenCalled();
+      },
+    );
 
     it("should let the browser error pass through", async () => {
       expect.assertions(1);

@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.17.0
  */
+import { assertWebauthnRelyingPartyIsNotIpAddress } from "../../utils/assertions";
 
 /**
  * Runs the WebAuthn assertion ceremony in the page.
@@ -22,8 +23,10 @@ export default class WebauthnAssertionCeremonyService {
    * @param {object} credentialRequestOptions The credential request options JSON as returned by the API
    * @param {AbortSignal} signal The signal aborting the pending browser prompt
    * @returns {Promise<object>} The assertion as AuthenticationResponseJSON
+   * @throws {WebauthnRelyingPartyIpAddressError} if the relying party id is an IP address
    */
   static async run(credentialRequestOptions, signal) {
+    assertWebauthnRelyingPartyIsNotIpAddress(credentialRequestOptions.rpId);
     const publicKey = PublicKeyCredential.parseRequestOptionsFromJSON(credentialRequestOptions);
     const credential = await navigator.credentials.get({ publicKey, signal });
     return credential.toJSON();

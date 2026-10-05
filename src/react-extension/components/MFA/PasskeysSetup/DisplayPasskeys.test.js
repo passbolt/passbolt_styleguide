@@ -231,6 +231,14 @@ describe("DisplayPasskeys", () => {
         expected: "A passkey prompt is already opened in another window. Please complete or cancel it to continue.",
       },
       {
+        scenario: "the instance is reached through an IP address",
+        error: {
+          name: "WebauthnRelyingPartyIpAddressError",
+          message: "The relying party id is an IP address.",
+        },
+        expected: "Passkeys require Passbolt to be reached through a domain name, not an IP address.",
+      },
+      {
         scenario: "the registration cannot start",
         error: { name: "PassboltApiFetchError", message: "The WebAuthn provider is not enabled." },
         expected: "The WebAuthn provider is not enabled.",
