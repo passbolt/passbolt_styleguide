@@ -26,6 +26,8 @@ describe("ShadowDomFocusHealerService", () => {
     jest.spyOn(ShadowMutationObserverService, "notifyShadowMutationSubscribers").mockImplementation();
 
     ShadowDomFocusHealerService._focusinHandler = null;
+    ShadowDomFocusHealerService._isFieldTracked = null;
+    ShadowDomFocusHealerService.resetHealAttempts();
 
     document.body.innerHTML = "";
   });
@@ -48,6 +50,57 @@ describe("ShadowDomFocusHealerService", () => {
       ShadowDomFocusHealerService.installFocusinHealer();
 
       expect(document.addEventListener).toHaveBeenCalledTimes(1);
+    });
+
+    it("should store the tracked-field predicate provided at install time", () => {
+      // Guards against the wiring regression where the predicate was silently dropped, disabling the
+      // light-DOM heal that recovers login fields revealed in non-<dialog> modals (e.g. totalcasino.pl).
+      expect.assertions(1);
+
+      const isFieldTracked = () => true;
+
+      ShadowDomFocusHealerService.installFocusinHealer(isFieldTracked);
+
+      expect(ShadowDomFocusHealerService._isFieldTracked).toBe(isFieldTracked);
+    });
+
+    it("should refresh the tracked-field predicate on a subsequent install without re-adding the listener", () => {
+      expect.assertions(2);
+
+      const firstPredicate = () => true;
+      const secondPredicate = () => false;
+
+      ShadowDomFocusHealerService.installFocusinHealer(firstPredicate);
+      ShadowDomFocusHealerService.installFocusinHealer(secondPredicate);
+
+      expect(ShadowDomFocusHealerService._isFieldTracked).toBe(secondPredicate);
+      expect(document.addEventListener).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("ShadowDomFocusHealerService::uninstallFocusinHealer", () => {
+    it("should remove the focusin listener and forget the tracked-field callback", () => {
+      expect.assertions(3);
+
+      jest.spyOn(document, "removeEventListener").mockImplementation();
+      ShadowDomFocusHealerService.installFocusinHealer(() => true);
+      const handler = ShadowDomFocusHealerService._focusinHandler;
+
+      ShadowDomFocusHealerService.uninstallFocusinHealer();
+
+      expect(document.removeEventListener).toHaveBeenCalledWith("focusin", handler, { capture: true });
+      expect(ShadowDomFocusHealerService._focusinHandler).toBeNull();
+      expect(ShadowDomFocusHealerService._isFieldTracked).toBeNull();
+    });
+
+    it("should do nothing when no listener is installed", () => {
+      expect.assertions(1);
+
+      jest.spyOn(document, "removeEventListener").mockImplementation();
+
+      ShadowDomFocusHealerService.uninstallFocusinHealer();
+
+      expect(document.removeEventListener).not.toHaveBeenCalled();
     });
   });
 
@@ -85,7 +138,7 @@ describe("ShadowDomFocusHealerService", () => {
       expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).not.toHaveBeenCalled();
     });
 
-    it("should not invalidate any cache nor trigger a rescan when the focused field is outside a shadow dom", () => {
+    it("should not invalidate any cache nor trigger a rescan when the focused field is outside a shadow dom and no tracked-field predicate is wired", () => {
       expect.assertions(2);
 
       const input = document.createElement("input");
@@ -94,6 +147,46 @@ describe("ShadowDomFocusHealerService", () => {
 
       expect(ShadowRootCacheService.invalidate).not.toHaveBeenCalled();
       expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).not.toHaveBeenCalled();
+    });
+
+    it("should trigger a synchronous rescan when a focused light-DOM input is not yet backed by a call-to-action", () => {
+      expect.assertions(2);
+
+      const input = document.createElement("input");
+      ShadowDomFocusHealerService.installFocusinHealer(() => false);
+
+      focusHandler({ composedPath: () => [input, document.body, document] });
+
+      expect(ShadowRootCacheService.invalidate).not.toHaveBeenCalled();
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
+    });
+
+    it("should not trigger a rescan when the focused light-DOM input is already tracked", () => {
+      expect.assertions(1);
+
+      const input = document.createElement("input");
+      ShadowDomFocusHealerService.installFocusinHealer((focused) => focused === input);
+
+      focusHandler({ composedPath: () => [input, document.body, document] });
+
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).not.toHaveBeenCalled();
+    });
+
+    it("should offer the light-DOM heal at most once per input until the attempts are reset", () => {
+      expect.assertions(2);
+
+      const input = document.createElement("input");
+      ShadowDomFocusHealerService.installFocusinHealer(() => false);
+
+      focusHandler({ composedPath: () => [input, document.body, document] });
+      focusHandler({ composedPath: () => [input, document.body, document] });
+
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledTimes(1);
+
+      ShadowDomFocusHealerService.resetHealAttempts();
+      focusHandler({ composedPath: () => [input, document.body, document] });
+
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledTimes(2);
     });
 
     it("should invalidate the parent scope and trigger a rescan when the focused field is inside a shadow dom", () => {
