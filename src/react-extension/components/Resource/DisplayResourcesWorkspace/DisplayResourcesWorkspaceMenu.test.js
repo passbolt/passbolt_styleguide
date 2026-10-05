@@ -29,6 +29,7 @@ import {
   defaultPropsOneResourceV5OfflineAvailable,
   defaultPropsOneResourceV5OfResourceType,
   defaultPropsOneResourceOwned,
+  defaultPropsOneResourceInTrash,
   defaultPropsOneResourceV5Private,
   defaultPropsOneResourceV5Shared,
   defaultPropsOneTotpResourceOwned,
@@ -225,6 +226,40 @@ describe("See Workspace Menu", () => {
         "secret-password",
         "The secret has been copied to clipboard.",
       );
+    });
+  });
+
+  describe("As LU I can restore or delete a resource from the workspace menu in trash", () => {
+    it("As LU I should see only the restore and delete actions for trash resources", () => {
+      expect.assertions(6);
+      const props = defaultPropsOneResourceInTrash();
+      page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.restoreMenu).not.toBeNull();
+      expect(page.displayMenu.shareMenu).toBeNull();
+      expect(page.displayMenu.copyMenuDropdown).toBeNull();
+      expect(page.displayMenu.editMenu).toBeNull();
+      expect(page.displayMenu.deleteMenu).not.toBeNull();
+    });
+
+    it("As LU I can restore a resource via the workspace main menu", async () => {
+      expect.assertions(4);
+      const props = defaultPropsOneResourceInTrash();
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => []);
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.restoreMenu);
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.restore-all", [
+        props.resourceWorkspaceContext.selectedResources[0].id,
+      ]);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource has been restored successfully.",
+      );
+      expect(props.resourceWorkspaceContext.onResourcesRestored).toHaveBeenCalled();
+      expect(props.resourceWorkspaceContext.onResourceSelected.none).not.toHaveBeenCalled();
     });
   });
 

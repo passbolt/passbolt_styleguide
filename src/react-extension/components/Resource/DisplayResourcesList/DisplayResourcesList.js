@@ -1278,6 +1278,19 @@ class DisplayResourcesList extends React.Component {
                 </div>
               </div>
             )}
+            {filterType === ResourceWorkspaceFilterTypes.TRASH && (
+              <div className="empty-content">
+                <CircleOffSVG />
+                <div className="message">
+                  <h1>
+                    <Trans>No passwords in the trash.</Trans>
+                  </h1>
+                  <p>
+                    <Trans>Deleted passwords will appear here until they are restored.</Trans>
+                  </p>
+                </div>
+              </div>
+            )}
             {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN ||
               filterType === ResourceWorkspaceFilterTypes.ALL) && (
               <div className="empty-content">

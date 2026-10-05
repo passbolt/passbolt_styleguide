@@ -21,6 +21,7 @@ import {
   propsDenySecretsPreview,
   propsDenyUIActions,
   propsResourceExpired,
+  propsResourceInTrash,
   propsResourceStandaloneTotp,
   propsResourceTotp,
   propsResourceWithReadOnlyPermission,
@@ -174,7 +175,10 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it("As LU I can start to delete a resource", async () => {
       await page.delete();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResource, { resources: [props.resource] });
+      expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResource, {
+        resources: [props.resource],
+        recoverable: true,
+      });
       expect(props.hide).toHaveBeenCalled();
     });
 
@@ -225,6 +229,45 @@ describe("DisplayResourcesListContextualMenu", () => {
     it("As LU I can start to display a resource secret history", async () => {
       await page.displaySecretHistory();
       expect(props.dialogContext.open).toHaveBeenCalledWith(DisplayResourceSecretHistory, { resource: props.resource });
+      expect(props.hide).toHaveBeenCalled();
+    });
+  });
+
+  describe("As LU I can restore or delete a resource from the contextual menu in trash", () => {
+    const props = propsResourceInTrash();
+    jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+
+    beforeEach(() => {
+      page = new DisplayResourcesListContextualMenuPage(props);
+    });
+
+    it("As LU I should see only the restore and delete actions for trash resources", () => {
+      expect.assertions(12);
+      expect(page.restoreItem).not.toBeNull();
+      expect(page.copyUsernameItem).toBeNull();
+      expect(page.copyPasswordItem).toBeNull();
+      expect(page.copyUriItem).toBeNull();
+      expect(page.copyPermalinkItem).toBeNull();
+      expect(page.copyTotpItem).toBeNull();
+      expect(page.openUriItem).toBeNull();
+      expect(page.editItem).toBeNull();
+      expect(page.shareItem).toBeNull();
+      expect(page.deleteItem).not.toBeNull();
+      expect(page.markAsExpiredItem).toBeNull();
+      expect(page.setExpiryDateItem).toBeNull();
+    });
+
+    it("As LU I can restore a resource", async () => {
+      expect.assertions(4);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => []);
+
+      await page.restore();
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.restore-all", [props.resource.id]);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The resource has been restored successfully.",
+      );
+      expect(props.resourceWorkspaceContext.onResourcesRestored).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
   });

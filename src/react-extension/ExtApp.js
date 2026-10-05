@@ -131,7 +131,15 @@ class ExtApp extends Component {
                                             <Switch>
                                               {/* The application first load route points to an html document */}
                                               <Route
-                                                path="/webAccessibleResources/passbolt-iframe-app.html"
+                                                path={[
+                                                  "/webAccessibleResources/passbolt-iframe-app.html",
+                                                  /*
+                                                   * The workspace served by the extension itself, used when the API
+                                                   * cannot serve its own page. It is the same application, reached
+                                                   * through a different document, so it boots the same way.
+                                                   */
+                                                  "/webAccessibleResources/workspace.html",
+                                                ]}
                                                 component={HandleApplicationFirstLoadRoute}
                                               />
                                               {/* The following routes are not handled by the browser extension application. */}

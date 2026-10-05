@@ -71,6 +71,11 @@ describe("Resource Workspace Context", () => {
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.OFFLINE);
     });
 
+    it("AS LU I should have a TRASH filter when I went directly to /app/passwords/filter/trash", async () => {
+      await page.goToTrashDirect();
+      expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.TRASH);
+    });
+
     it("AS LU I should have an ITEMS-I-OWN filter when I went to /app/passwords with such a filter", async () => {
       await page.goToItemsIOwn();
       await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL);

@@ -27,10 +27,13 @@ import sanitizeUrl, { urlProtocols } from "../../../react-extension/lib/Sanitize
 import { resourceLinkAuthorizedProtocols } from "../../../react-extension/contexts/ResourceWorkspaceContext";
 import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import { RESOURCE_TYPE_V5_PASSKEY_SLUG } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import CaretDownSVG from "../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import GoSVG from "../../../img/svg/go.svg";
+import EditSVG from "../../../img/svg/edit.svg";
+import DeleteSVG from "../../../img/svg/delete.svg";
 import CopySVG from "../../../img/svg/copy.svg";
 import HealthCheckSuccessSvg from "../../../img/svg/healthcheck_success.svg";
 import EyeCloseSVG from "../../../img/svg/eye_close.svg";
@@ -40,6 +43,9 @@ import ClipboardServiceWorkerService from "../../../shared/services/serviceWorke
 import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import SecretServiceWorkerService from "../../../shared/services/serviceWorker/secret/secretServiceWorkerService";
+import DialogWrapper from "../../../react-extension/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import FormCancelButton from "../../../react-extension/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import FormSubmitButton from "../../../react-extension/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 
 const CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND = 30;
 
@@ -86,6 +92,11 @@ class ResourceViewPage extends React.Component {
     this.handleCopyPasswordClick = this.handleCopyPasswordClick.bind(this);
     this.handleGoToUrlClick = this.handleGoToUrlClick.bind(this);
     this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
+    this.handleDeleteResourceClick = this.handleDeleteResourceClick.bind(this);
+    this.handleViewInVaultClick = this.handleViewInVaultClick.bind(this);
+    this.handleEditInVaultClick = this.handleEditInVaultClick.bind(this);
+    this.handleDeleteResourceCancel = this.handleDeleteResourceCancel.bind(this);
+    this.handleDeleteResourceSubmit = this.handleDeleteResourceSubmit.bind(this);
     this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
     this.handleCopyTotpClick = this.handleCopyTotpClick.bind(this);
     this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
@@ -98,6 +109,9 @@ class ResourceViewPage extends React.Component {
       resource: {},
       passphrase: "",
       usingOnThisTab: false,
+      deleteDialogOpen: false,
+      deletingResource: false,
+      deleteError: "",
       copyPasswordState: "default",
       copyLoginState: "default",
       copyTotpState: "default",
@@ -462,6 +476,71 @@ class ResourceViewPage extends React.Component {
     }
   }
 
+  /**
+   * Open this resource in the vault.
+   *
+   * The address of the vault is decided by the background page rather than linked to directly: the workspace is
+   * normally served by the API, but a browser turns that address into its own error page as soon as the server is
+   * unreachable, and the extension carries a copy of the workspace for exactly that case.
+   * @param {ReactEvent} event The event
+   */
+  async handleViewInVaultClick(event) {
+    event.preventDefault();
+    await this.openInVault();
+  }
+
+  /**
+   * Open this resource in the vault, ready to be edited.
+   * @param {ReactEvent} event The event
+   */
+  async handleEditInVaultClick(event) {
+    event.preventDefault();
+    await this.openInVault("edit");
+  }
+
+  /**
+   * Ask the background page to open this resource in the vault.
+   * @param {string} [action] the action to run once there
+   * @returns {Promise<void>}
+   */
+  async openInVault(action = null) {
+    await this.props.context.port.request("passbolt.tabs.open-vault-page", {
+      pathname: `/app/passwords/view/${this.props.match.params.id}`,
+      action,
+    });
+    window.close();
+  }
+
+  handleDeleteResourceClick(event) {
+    event.preventDefault();
+    this.setState({ deleteDialogOpen: true, deleteError: "" });
+  }
+
+  handleDeleteResourceCancel() {
+    if (!this.state.deletingResource) {
+      this.setState({ deleteDialogOpen: false, deleteError: "" });
+    }
+  }
+
+  async handleDeleteResourceSubmit(event) {
+    event.preventDefault();
+    if (this.state.deletingResource) {
+      return;
+    }
+
+    this.setState({ deletingResource: true, deleteError: "" });
+    try {
+      await this.props.context.port.request("passbolt.resources.delete-all", [this.state.resource.id]);
+      this.props.history.replace("/webAccessibleResources/quickaccess/home");
+    } catch (error) {
+      console.error(error);
+      this.setState({
+        deletingResource: false,
+        deleteError: error?.message || this.translate("An unexpected error occurred"),
+      });
+    }
+  }
+
   async handleUseOnThisTabClick(event) {
     event.preventDefault();
     this.setState({ usingOnThisTab: true });
@@ -554,6 +633,26 @@ class ResourceViewPage extends React.Component {
     );
   }
 
+  /**
+   * Is passkey resource.
+   * @returns {boolean}
+   */
+  get isPasskeyResource() {
+    return (
+      Boolean(this.state.resource.resource_type_id) &&
+      this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.slug ===
+        RESOURCE_TYPE_V5_PASSKEY_SLUG
+    );
+  }
+
+  /**
+   * Can update the resource.
+   * @returns {boolean}
+   */
+  get canUpdateResource() {
+    return this.state.resource.permission?.type >= 7;
+  }
+
   render() {
     const primaryUri = this.state.resource.metadata?.uris?.[0];
     const additionalUris = this.state.resource.metadata?.uris?.slice(1);
@@ -568,19 +667,77 @@ class ResourceViewPage extends React.Component {
             <CaretLeftSVG />
             <span className="primary-action-title">{this.state.resource.metadata?.name}</span>
           </a>
+          {this.canUpdateResource && (
+            <a
+              href="#"
+              role="button"
+              className="secondary-action button-transparent button"
+              onClick={this.handleDeleteResourceClick}
+              title={this.translate("Delete")}
+            >
+              <DeleteSVG />
+              <span className="visually-hidden">
+                <Trans>Delete</Trans>
+              </span>
+            </a>
+          )}
           <a
             href={`${this.props.context.userSettings.getTrustedDomain()}/app/passwords/view/${this.props.match.params.id}`}
             className="secondary-action button-transparent button"
-            target="_blank"
-            rel="noopener noreferrer"
-            title={this.translate("View it in passbolt")}
+            onClick={this.handleViewInVaultClick}
+            title={this.translate("View in the vault")}
           >
             <GoSVG />
             <span className="visually-hidden">
-              <Trans>Edit in passbolt</Trans>
+              <Trans>View in the vault</Trans>
             </span>
           </a>
+          {this.canUpdateResource && (
+            <a
+              href={`${this.props.context.userSettings.getTrustedDomain()}/app/passwords/view/${this.props.match.params.id}?action=edit`}
+              className="secondary-action button-transparent button"
+              onClick={this.handleEditInVaultClick}
+              title={this.translate("Edit in the vault")}
+            >
+              <EditSVG />
+              <span className="visually-hidden">
+                <Trans>Edit in the vault</Trans>
+              </span>
+            </a>
+          )}
         </div>
+        {this.state.deleteDialogOpen && (
+          <DialogWrapper
+            title={this.translate("Delete resource?", { count: 1 })}
+            onClose={this.handleDeleteResourceCancel}
+            disabled={this.state.deletingResource}
+            className="delete-password-dialog"
+          >
+            <form onSubmit={this.handleDeleteResourceSubmit} noValidate>
+              <div className="form-content">
+                <p>
+                  <Trans>
+                    Are you sure you want to delete the resource{" "}
+                    <strong className="dialog-variable">{{ resourceName: this.state.resource.metadata?.name }}</strong>?
+                  </Trans>
+                </p>
+                <p>
+                  <Trans>Once the resource is deleted, it will be removed from the vault until it is restored.</Trans>
+                </p>
+                {this.state.deleteError && <div className="error-message">{this.state.deleteError}</div>}
+              </div>
+              <div className="submit-wrapper clearfix">
+                <FormCancelButton disabled={this.state.deletingResource} onClick={this.handleDeleteResourceCancel} />
+                <FormSubmitButton
+                  disabled={this.state.deletingResource}
+                  processing={this.state.deletingResource}
+                  value={this.translate("Delete")}
+                  warning={true}
+                />
+              </div>
+            </form>
+          </DialogWrapper>
+        )}
         <ul className="properties">
           {!this.isStandaloneTotpResource && (
             <>
@@ -653,129 +810,133 @@ class ResourceViewPage extends React.Component {
                   </span>
                 </a>
               </li>
-              <li className="property">
-                <div className="information">
-                  <span className="property-name">
-                    <Trans>Password</Trans>
-                  </span>
-                  <div className="password-wrapper">
-                    <div
-                      className={`property-value secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                      title={
-                        isPasswordPreviewed ? this.state.plaintextSecretDto?.password : this.translate("Click to copy")
-                      }
-                    >
-                      <HiddenPassword
-                        canClick={canCopySecret}
-                        preview={this.state.plaintextSecretDto?.password}
-                        onClick={this.handleCopyPasswordClick}
-                      />
+              {!this.isPasskeyResource && (
+                <li className="property">
+                  <div className="information">
+                    <span className="property-name">
+                      <Trans>Password</Trans>
+                    </span>
+                    <div className="password-wrapper">
+                      <div
+                        className={`property-value secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
+                        title={
+                          isPasswordPreviewed
+                            ? this.state.plaintextSecretDto?.password
+                            : this.translate("Click to copy")
+                        }
+                      >
+                        <HiddenPassword
+                          canClick={canCopySecret}
+                          preview={this.state.plaintextSecretDto?.password}
+                          onClick={this.handleCopyPasswordClick}
+                        />
+                      </div>
+                      {this.canPreviewSecret && (
+                        <button
+                          onClick={this.handleViewPasswordButtonClick}
+                          className="password-view inline button-transparent"
+                          disabled={this.state.isPasswordDecrypting}
+                        >
+                          <Transition
+                            in={!this.state.isPasswordDecrypting}
+                            appear={false}
+                            timeout={500}
+                            nodeRef={this.getNodeRef(TRANSITION_STATES.PASSWORD_NOT_DECRYPTING)}
+                          >
+                            {(status) => (
+                              <span
+                                className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}
+                              >
+                                {isPasswordPreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
+                              </span>
+                            )}
+                          </Transition>
+                          <Transition
+                            in={this.state.isPasswordDecrypting}
+                            appear={true}
+                            timeout={500}
+                            nodeRef={this.getNodeRef(TRANSITION_STATES.PASSWORD_DECRYPTING)}
+                          >
+                            {(status) => (
+                              <span
+                                className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}
+                              >
+                                <SpinnerSVG />
+                              </span>
+                            )}
+                          </Transition>
+                          <span className="visually-hidden">
+                            <Trans>View</Trans>
+                          </span>
+                        </button>
+                      )}
                     </div>
-                    {this.canPreviewSecret && (
-                      <button
-                        onClick={this.handleViewPasswordButtonClick}
-                        className="password-view inline button-transparent"
-                        disabled={this.state.isPasswordDecrypting}
+                  </div>
+                  {canCopySecret && (
+                    <>
+                      <a
+                        role="button"
+                        className="button button-transparent property-action copy-password"
+                        onClick={this.handleCopyPasswordClick}
+                        title={this.translate("Copy to clipboard")}
                       >
                         <Transition
-                          in={!this.state.isPasswordDecrypting}
+                          in={this.state.copyPasswordState === "default"}
                           appear={false}
                           timeout={500}
-                          nodeRef={this.getNodeRef(TRANSITION_STATES.PASSWORD_NOT_DECRYPTING)}
+                          nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PASSWORD_STATE_DEFAULT)}
                         >
                           {(status) => (
                             <span
-                              className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}
+                              className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}
                             >
-                              {isPasswordPreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
+                              <CopySVG />
                             </span>
                           )}
                         </Transition>
                         <Transition
-                          in={this.state.isPasswordDecrypting}
+                          in={this.state.copyPasswordState === "processing"}
                           appear={true}
                           timeout={500}
-                          nodeRef={this.getNodeRef(TRANSITION_STATES.PASSWORD_DECRYPTING)}
+                          nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PASSWORD_STATE_PROCESSING)}
                         >
                           {(status) => (
                             <span
-                              className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}
+                              className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}
                             >
                               <SpinnerSVG />
                             </span>
                           )}
                         </Transition>
+                        <Transition
+                          in={this.state.copyPasswordState === "done"}
+                          appear={true}
+                          timeout={500}
+                          nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PASSWORD_STATE_DONE)}
+                        >
+                          {(status) => (
+                            <span
+                              className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}
+                            >
+                              <HealthCheckSuccessSvg />
+                            </span>
+                          )}
+                        </Transition>
                         <span className="visually-hidden">
-                          <Trans>View</Trans>
+                          <Trans>Copy to clipboard</Trans>
                         </span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-                {canCopySecret && (
-                  <>
-                    <a
-                      role="button"
-                      className="button button-transparent property-action copy-password"
-                      onClick={this.handleCopyPasswordClick}
-                      title={this.translate("Copy to clipboard")}
-                    >
-                      <Transition
-                        in={this.state.copyPasswordState === "default"}
-                        appear={false}
-                        timeout={500}
-                        nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PASSWORD_STATE_DEFAULT)}
-                      >
-                        {(status) => (
-                          <span
-                            className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}
-                          >
-                            <CopySVG />
-                          </span>
-                        )}
-                      </Transition>
-                      <Transition
-                        in={this.state.copyPasswordState === "processing"}
-                        appear={true}
-                        timeout={500}
-                        nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PASSWORD_STATE_PROCESSING)}
-                      >
-                        {(status) => (
-                          <span
-                            className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}
-                          >
-                            <SpinnerSVG />
-                          </span>
-                        )}
-                      </Transition>
-                      <Transition
-                        in={this.state.copyPasswordState === "done"}
-                        appear={true}
-                        timeout={500}
-                        nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PASSWORD_STATE_DONE)}
-                      >
-                        {(status) => (
-                          <span
-                            className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}
-                          >
-                            <HealthCheckSuccessSvg />
-                          </span>
-                        )}
-                      </Transition>
-                      <span className="visually-hidden">
-                        <Trans>Copy to clipboard</Trans>
-                      </span>
-                    </a>
-                    {this.state.copiedProperty === "password" && (
-                      <TimerSVG
-                        style={{
-                          "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
-                        }}
-                      />
-                    )}
-                  </>
-                )}
-              </li>
+                      </a>
+                      {this.state.copiedProperty === "password" && (
+                        <TimerSVG
+                          style={{
+                            "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
+                          }}
+                        />
+                      )}
+                    </>
+                  )}
+                </li>
+              )}
             </>
           )}
           {this.isTotpResources && (
@@ -984,19 +1145,21 @@ class ResourceViewPage extends React.Component {
             </li>
           )}
         </ul>
-        <div className="submit-wrapper input">
-          <a
-            href="#"
-            id="popupAction"
-            className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`}
-            role="button"
-            onClick={this.handleUseOnThisTabClick}
-          >
-            {this.state.usingOnThisTab && <SpinnerSVG />}
-            {!this.state.usingOnThisTab && <Trans>Use on this page</Trans>}
-          </a>
-          {this.state.error && <div className="error-message">{this.state.error}</div>}
-        </div>
+        {!this.isPasskeyResource && (
+          <div className="submit-wrapper input">
+            <a
+              href="#"
+              id="popupAction"
+              className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`}
+              role="button"
+              onClick={this.handleUseOnThisTabClick}
+            >
+              {this.state.usingOnThisTab && <SpinnerSVG />}
+              {!this.state.usingOnThisTab && <Trans>Use on this page</Trans>}
+            </a>
+            {this.state.error && <div className="error-message">{this.state.error}</div>}
+          </div>
+        )}
       </div>
     );
   }

@@ -187,11 +187,6 @@ export default class CustomFieldsCollection extends EntityV2Collection {
       throw new TypeError("Both parameters must be of type CustomFieldsCollection");
     }
 
-    const length = collectionMetadata.length;
-    if (length !== collectionSecret.length) {
-      console.debug("Collections are corrupted, some data is missing");
-    }
-
     const collectionToMerge = collectionMetadata.toDto();
     // Deep merge keeping the order from the source and add at the end the new entry
     const collectionMergedDto = collectionToMerge.reduce((columnsMerged, columnToMerge) => {

@@ -29,6 +29,7 @@ import CalendarClockSVG from "../../../../img/svg/calendar_clock.svg";
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
 import OwnedByMeSVG from "../../../../img/svg/owned_by_me.svg";
 import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
 import { withRouter } from "react-router-dom";
 import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
@@ -59,6 +60,7 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
     this.handleSharedWithMeClick = this.handleSharedWithMeClick.bind(this);
     this.handleResourcesExpiredClick = this.handleResourcesExpiredClick.bind(this);
     this.handleOfflineClick = this.handleOfflineClick.bind(this);
+    this.handleTrashClick = this.handleTrashClick.bind(this);
     this.handleRemoveFilterClick = this.handleRemoveFilterClick.bind(this);
   }
 
@@ -121,6 +123,15 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
             <CalendarClockSVG />
             <span>
               <Trans>Expired</Trans>
+            </span>
+          </>
+        );
+      case ResourceWorkspaceFilterTypes.TRASH:
+        return (
+          <>
+            <DeleteSVG />
+            <span>
+              <Trans>Trash</Trans>
             </span>
           </>
         );
@@ -205,6 +216,14 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
   }
 
   /**
+   * Whenever the filter "Trash" has been selected
+   */
+  handleTrashClick() {
+    const filter = { type: ResourceWorkspaceFilterTypes.TRASH };
+    this.props.history.push({ pathname: "/app/passwords/filter/trash", state: { filter } });
+  }
+
+  /**
    * Whenever a filter has been removed go back to all items filter
    */
   handleRemoveFilterClick() {
@@ -281,6 +300,14 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
                   </button>
                 </DropdownMenuItem>
               )}
+              <DropdownMenuItem>
+                <button type="button" className="no-border" onClick={this.handleTrashClick}>
+                  <DeleteSVG />
+                  <span>
+                    <Trans>Trash</Trans>
+                  </span>
+                </button>
+              </DropdownMenuItem>
             </DropdownMenu>
           </Dropdown>
         )}

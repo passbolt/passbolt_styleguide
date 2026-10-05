@@ -44,9 +44,8 @@ class GridResourceUserSettingServiceWorkerService {
         return new GridUserSettingEntity(gridSetting);
       }
       return null;
-    } catch (error) {
+    } catch {
       // If an error occurred then return a null settings
-      console.debug(error);
       return null;
     }
   }

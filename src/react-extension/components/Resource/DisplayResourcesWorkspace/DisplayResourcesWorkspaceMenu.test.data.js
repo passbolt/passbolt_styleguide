@@ -17,6 +17,7 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {
@@ -196,6 +197,16 @@ export const defaultPropsOneStandaloneTotpResourceOwned = (data = {}) =>
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
+export const defaultPropsOneResourceInTrash = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filter: { type: ResourceWorkspaceFilterTypes.TRASH },
+      selectedResources: [resourcesMock[0]],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
+
 export const defaultPropsOneResourceNotOwned = (data = {}) =>
   defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({

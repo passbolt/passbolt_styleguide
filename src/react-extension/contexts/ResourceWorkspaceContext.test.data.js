@@ -139,6 +139,8 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onResourceEdited: jest.fn(),
     onSorterChanged: jest.fn(),
     onResourcesToExport: jest.fn(),
+    onResourcesRestored: jest.fn(),
+    onResourcesDeleted: jest.fn(),
     onResourceFileImportResult: jest.fn(),
     onResourceFileToImport: jest.fn(),
     onLockDetail: jest.fn(),

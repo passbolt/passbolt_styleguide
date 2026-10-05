@@ -1,5 +1,3 @@
 <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-<path d="M20.9665 9.1498C22.0165 8.0998 23.8831 8.0998 24.9331 9.1498L31.3498 15.5665C32.3998 16.6165 32.3998 18.4831 31.3498 19.5331L27.0331 23.8498C25.9831 24.8998 24.1165 24.8998 23.0665 23.8498L16.6498 17.4331C15.5998 16.3831 15.5998 14.5165 16.6498 13.4665L20.9665 9.1498Z" stroke="var(--icon-color)"stroke-width="var(--icon-stroke-width)" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M22.8335 14.167L26.3335 17.667" stroke="var(--icon-color)"stroke-width="var(--icon-stroke-width)" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M17.4668 18.3662L8.8335 26.9995V30.4995C8.8335 31.1995 9.30016 31.6662 10.0002 31.6662H14.6668V28.1662H18.1668V24.6662H20.5002L22.1335 23.0329" stroke="var(--icon-color)"stroke-width="var(--icon-stroke-width)" stroke-linecap="round" stroke-linejoin="round"/>
+<path stroke="var(--icon-color)" stroke-linecap="round" stroke-linejoin="round" stroke-width="var(--icon-stroke-width)" d="M11.436 22.385a3.397 3.397 0 1 0 0-6.793 3.397 3.397 0 0 0 0 6.793M21.475 8.95l-7.64 7.64M20.209 13.33l1.954-1.955M30.507 31.049v-1.607a3.213 3.213 0 0 0-3.213-3.212h-6.426a3.213 3.213 0 0 0-3.213 3.212v1.607M24.08 23.017a3.213 3.213 0 1 0 0-6.426 3.213 3.213 0 0 0 0 6.426"></path>
 </svg>

@@ -210,6 +210,14 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
+   * Go directly to the trash route without relying on router location state.
+   */
+  async goToTrashDirect() {
+    this.setup(this.context, this.props, { initialEntry: "/app/passwords/filter/trash" });
+    await waitForTrue(() => this.filter.type === ResourceWorkspaceFilterTypes.TRASH);
+  }
+
+  /**
    * Select all resources
    */
   selectAll() {
@@ -307,12 +315,7 @@ export default class ResourceWorkspaceContextPage {
       <AppContext.Provider value={context}>
         <Router
           history={createMemoryHistory({
-            initialEntries: [
-              "/app/folders/view/:filterByFolderId",
-              "/app/passwords/view/:selectedResourceId",
-              "/app/passwords/filter/:filterType",
-              "/app/passwords",
-            ],
+            initialEntries: [args.initialEntry || "/app/passwords"],
           })}
         >
           <Switch>

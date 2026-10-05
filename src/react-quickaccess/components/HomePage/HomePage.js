@@ -30,6 +30,7 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import DisplayResourceUrisBadge from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import CanSuggestService from "../../../shared/services/canSuggestService/canSuggestService";
@@ -37,6 +38,7 @@ import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import FilterSVG from "../../../img/svg/filter.svg";
 import UsersSVG from "../../../img/svg/users.svg";
 import TagV2SVG from "../../../img/svg/tag_v2.svg";
+import DiceSVG from "../../../img/svg/dice.svg";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import { sortResourcesByUriMatchingScore } from "../../../shared/utils/sortUtils";
@@ -164,6 +166,11 @@ class HomePage extends React.Component {
    * @returns {Promise<void>}
    */
   async handleUseOnThisTabClick(resource) {
+    if (this.isPasskeyResource(resource.resource_type_id)) {
+      this.props.history.push(`/webAccessibleResources/quickaccess/resources/view/${resource.id}`);
+      return;
+    }
+
     this.setState({ usingOnThisTab: true });
     try {
       await this.props.context.port.request(
@@ -206,12 +213,23 @@ class HomePage extends React.Component {
   }
 
   /**
-   * Get resource filtered by resource type to have only resource with password and totp
+   * Is passkey resource
+   * @param {string} resourceTypeId
+   * @returns {boolean}
+   */
+  isPasskeyResource(resourceTypeId) {
+    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.slug === RESOURCE_TYPE_V5_PASSKEY_SLUG;
+  }
+
+  /**
+   * Get resource filtered by resource type to have only resource with password, totp and passkey
    * @return {Array}
    */
   get resourcesFilterByResourceTypePasswordAndTotp() {
     const keepOnlyResourcesPasswordAndTotp = (resource) =>
-      this.isPasswordResource(resource.resource_type_id) || this.isOTPResource(resource.resource_type_id);
+      this.isPasswordResource(resource.resource_type_id) ||
+      this.isOTPResource(resource.resource_type_id) ||
+      this.isPasskeyResource(resource.resource_type_id);
     return this.props.resources.filter(keepOnlyResourcesPasswordAndTotp);
   }
 
@@ -239,6 +257,14 @@ class HomePage extends React.Component {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Can use password generator
+   * @returns {boolean}
+   */
+  canUsePasswordGenerator() {
+    return this.props.context.siteSettings.canIUse("passwordGenerator");
   }
 
   /**
@@ -438,16 +464,34 @@ class HomePage extends React.Component {
             </div>
           )}
         </div>
-        {this.hasMetadataTypesSettings() && this.canCreatePassword() && (
+        {(this.canUsePasswordGenerator() || (this.hasMetadataTypesSettings() && this.canCreatePassword())) && (
           <div className="submit-wrapper button-after-list input">
-            <Link
-              to={`/webAccessibleResources/quickaccess/resources/${this.shouldDisplayActionAbortedMissingMetadataKeys ? "action-aborted-missing-metadata-keys" : "create"}`}
-              id="popupAction"
-              className="button primary big full-width"
-              role="button"
-            >
-              <Trans>Create new</Trans>
-            </Link>
+            {this.canUsePasswordGenerator() && (
+              <Link
+                to={{
+                  pathname: "/webAccessibleResources/quickaccess/resources/generate-password",
+                  state: { standalone: true },
+                }}
+                className="button secondary big full-width"
+                style={this.hasMetadataTypesSettings() && this.canCreatePassword() ? { marginBottom: ".8rem" } : null}
+                role="button"
+              >
+                <DiceSVG />
+                <span>
+                  <Trans>Generate password</Trans>
+                </span>
+              </Link>
+            )}
+            {this.hasMetadataTypesSettings() && this.canCreatePassword() && (
+              <Link
+                to={`/webAccessibleResources/quickaccess/resources/${this.shouldDisplayActionAbortedMissingMetadataKeys ? "action-aborted-missing-metadata-keys" : "create"}`}
+                id="popupAction"
+                className="button primary big full-width"
+                role="button"
+              >
+                <Trans>Create new</Trans>
+              </Link>
+            )}
             {this.state.useOnThisTabError && <div className="error-message">{this.state.useOnThisTabError}</div>}
           </div>
         )}

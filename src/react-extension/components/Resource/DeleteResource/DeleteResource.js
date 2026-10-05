@@ -79,6 +79,9 @@ class DeleteResource extends Component {
     await this.props.actionFeedbackContext.displaySuccess(
       this.translate("The resource has been deleted successfully.", { count: this.resources.length }),
     );
+    await this.props.resourceWorkspaceContext.onResourcesDeleted?.(this.resources, {
+      recoverable: this.isRecoverableDelete(),
+    });
     this.props.onClose();
   }
 
@@ -105,7 +108,9 @@ class DeleteResource extends Component {
     this.setState({ processing: true });
     try {
       const resourcesIds = this.resources.map((resource) => resource.id);
-      await this.props.context.port.request("passbolt.resources.delete-all", resourcesIds);
+      await this.props.context.port.request("passbolt.resources.delete-all", resourcesIds, {
+        recoverable: this.isRecoverableDelete(),
+      });
       await this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
@@ -129,6 +134,18 @@ class DeleteResource extends Component {
    */
   hasAllInputDisabled() {
     return this.state.processing;
+  }
+
+  /**
+   * Is the delete action recoverable.
+   * @returns {boolean}
+   */
+  isRecoverableDelete() {
+    const resources = this.resources || [];
+    const isTrashSelection = resources.length > 0 && resources.every((resource) => Boolean(resource.deleted));
+    const isTrashFilter = this.props.resourceWorkspaceContext?.filter?.type === "FILTER-BY-TRASH";
+
+    return this.props.recoverable !== false && !isTrashSelection && !isTrashFilter;
   }
 
   /**
@@ -165,19 +182,32 @@ class DeleteResource extends Component {
                     <strong className="dialog-variable">{{ resourceName: this.resources[0].metadata.name }}</strong>?
                   </Trans>
                 </p>
-                <p>
-                  <Trans>
-                    Once the resource is deleted, it will be removed permanently and will not be recoverable.
-                  </Trans>
-                </p>
+                {this.isRecoverableDelete() ? (
+                  <p>
+                    <Trans>Once the resource is deleted, it will be removed from the vault until it is restored.</Trans>
+                  </p>
+                ) : (
+                  <p>
+                    <Trans>
+                      Once the resource is deleted, it will be removed permanently and will not be recoverable.
+                    </Trans>
+                  </p>
+                )}
               </>
             )}
             {this.hasMultipleResources() && (
               <p>
-                <Trans>
-                  Please confirm you really want to delete the resources. After clicking ok, the resources will be
-                  deleted permanently.
-                </Trans>
+                {this.isRecoverableDelete() ? (
+                  <Trans>
+                    Please confirm you really want to delete the resources. After clicking ok, the resources will be
+                    removed from the vault until they are restored.
+                  </Trans>
+                ) : (
+                  <Trans>
+                    Please confirm you really want to delete the resources. After clicking ok, the resources will be
+                    deleted permanently.
+                  </Trans>
+                )}
               </p>
             )}
           </div>
@@ -203,6 +233,7 @@ DeleteResource.propTypes = {
   dialogContext: PropTypes.any, // The dialog context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   resources: PropTypes.array, // The resources to delete
+  recoverable: PropTypes.bool, // Whether the delete action is recoverable
   t: PropTypes.func, // The translation function
 };
 

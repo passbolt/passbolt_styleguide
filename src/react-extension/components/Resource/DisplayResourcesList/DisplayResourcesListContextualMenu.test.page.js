@@ -100,6 +100,14 @@ export default class DisplayResourcesListContextualMenuPage {
    * Returns the item.
    * @return {HTMLElement}
    */
+  get restoreItem() {
+    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#restore");
+  }
+
+  /**
+   * Returns the item.
+   * @return {HTMLElement}
+   */
   get shareItem() {
     return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#share");
   }
@@ -191,6 +199,13 @@ export default class DisplayResourcesListContextualMenuPage {
    */
   async openUri() {
     await this.click(this.openUriItem);
+  }
+
+  /**
+   * Click on the menu restore resource
+   */
+  async restore() {
+    await this.click(this.restoreItem);
   }
 
   /**

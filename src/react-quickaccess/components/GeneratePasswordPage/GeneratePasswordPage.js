@@ -85,6 +85,7 @@ class GeneratePasswordPage extends React.Component {
    */
   handleGeneratorConfigurationChanged(generatorSettings) {
     const password = this.generatePassword(generatorSettings);
+    this.props.prepareResourceContext.onGeneratorSettingsChanged?.(generatorSettings);
     this.setState({ generatorSettings, password });
   }
 
@@ -153,9 +154,16 @@ class GeneratePasswordPage extends React.Component {
    * Handle the submission of the generated password.
    * @params {ReactEvent} The react event
    */
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
     this.setState({ processing: true });
+
+    if (this.isStandalone) {
+      await this.handleCopyPassword();
+      this.setState({ processing: false });
+      return;
+    }
+
     this.props.prepareResourceContext.onPasswordGenerated(this.state.password, this.state.generatorSettings);
     this.props.history.goBack();
   }
@@ -195,6 +203,10 @@ class GeneratePasswordPage extends React.Component {
 
   hasGeneratorConfiguration() {
     return Boolean(this.state.generatorSettings);
+  }
+
+  get isStandalone() {
+    return Boolean(this.props.location?.state?.standalone);
   }
 
   get translate() {
@@ -340,7 +352,7 @@ class GeneratePasswordPage extends React.Component {
               className={`button primary big full-width ${this.state.processing ? "processing" : ""}`}
               disabled={this.state.processing || this.isPasswordEmpty()}
             >
-              <Trans>Apply</Trans>
+              {this.isStandalone ? <Trans>Copy password</Trans> : <Trans>Apply</Trans>}
               {this.state.processing && <SpinnerSVG />}
             </button>
           </div>
@@ -354,6 +366,7 @@ GeneratePasswordPage.propTypes = {
   context: PropTypes.any, // The application context
   prepareResourceContext: PropTypes.any, // The password generator context
   history: PropTypes.any, // The history router
+  location: PropTypes.any, // The router location
   t: PropTypes.func, // The translation function
 };
 

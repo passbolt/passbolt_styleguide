@@ -24,6 +24,7 @@ export const RESOURCE_TYPE_V5_TOTP_SLUG = "v5-totp-standalone";
 export const RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG = "v5-custom-fields";
 export const RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG = "v5-note";
 export const RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG = "v5-pin-code";
+export const RESOURCE_TYPE_V5_PASSKEY_SLUG = "v5-passkey";
 
 // Plaintext secret schema for slug: "password-string"
 export const RESOURCE_TYPE_PASSWORD_STRING_LEGACY_DEFINITION_SCHEMA = {
@@ -706,6 +707,202 @@ const RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_DEFINITION_SCHEMA = {
   },
 };
 
+// Plaintext secret schema for slug: "v5-passkey"
+const RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA = {
+  resource: {
+    type: "object",
+    required: ["name"],
+    properties: {
+      name: {
+        type: "string",
+        maxLength: 255,
+      },
+      username: {
+        anyOf: [
+          {
+            type: "string",
+            maxLength: 255,
+          },
+          {
+            type: "null",
+          },
+        ],
+      },
+      uris: {
+        type: "array",
+        items: {
+          anyOf: [
+            {
+              type: "string",
+              maxLength: 1024,
+            },
+            {
+              type: "null",
+            },
+          ],
+        },
+        maxItems: 32,
+      },
+      description: {
+        anyOf: [
+          {
+            type: "string",
+            maxLength: 10000,
+          },
+          {
+            type: "null",
+          },
+        ],
+      },
+      icon: {
+        type: "object",
+        required: [],
+        properties: {
+          type: {
+            type: "string",
+            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+          },
+          value: {
+            type: "integer",
+            minimum: 0,
+          },
+          background_color: {
+            anyOf: [
+              {
+                type: "string",
+                pattern: "^#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$",
+              },
+              {
+                type: "null",
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  secret: {
+    type: "object",
+    required: [
+      "object_type",
+      "schema_version",
+      "credential_id",
+      "rp_id",
+      "user_handle",
+      "user_name",
+      "cose_alg",
+      "public_key_cose",
+      "private_key_pkcs8",
+      "aaguid",
+      "backup_eligible",
+      "backup_state",
+      "sign_count",
+    ],
+    properties: {
+      object_type: {
+        type: "string",
+        enum: ["PASSLY_PASSKEY"],
+      },
+      schema_version: {
+        type: "integer",
+        enum: [1],
+      },
+      credential_id: {
+        type: "string",
+        maxLength: 8192,
+        pattern: "^[A-Za-z0-9_-]+$",
+      },
+      rp_id: {
+        type: "string",
+        maxLength: 253,
+      },
+      origin: {
+        anyOf: [
+          {
+            type: "string",
+            maxLength: 1024,
+          },
+          {
+            type: "null",
+          },
+        ],
+      },
+      user_handle: {
+        type: "string",
+        maxLength: 8192,
+        pattern: "^[A-Za-z0-9_-]+$",
+      },
+      user_name: {
+        type: "string",
+        maxLength: 255,
+      },
+      user_display_name: {
+        anyOf: [
+          {
+            type: "string",
+            maxLength: 255,
+          },
+          {
+            type: "null",
+          },
+        ],
+      },
+      cose_alg: {
+        type: "integer",
+        enum: [-7],
+      },
+      public_key_cose: {
+        type: "string",
+        maxLength: 8192,
+        pattern: "^[A-Za-z0-9_-]+$",
+      },
+      private_key_pkcs8: {
+        type: "string",
+        maxLength: 8192,
+        pattern: "^[A-Za-z0-9_-]+$",
+      },
+      aaguid: {
+        type: "string",
+        format: "uuid",
+      },
+      backup_eligible: {
+        type: "boolean",
+      },
+      backup_state: {
+        type: "boolean",
+      },
+      sign_count: {
+        type: "integer",
+        minimum: 0,
+      },
+      transports: {
+        type: "array",
+        maxItems: 8,
+        items: {
+          type: "string",
+          enum: ["ble", "hybrid", "internal", "nfc", "usb"],
+        },
+      },
+      extensions: {
+        type: "object",
+        required: [],
+        properties: {},
+      },
+      description: {
+        anyOf: [
+          {
+            type: "string",
+            maxLength: 50000,
+          },
+          {
+            type: "null",
+          },
+        ],
+      },
+    },
+  },
+};
+
 export const V4_TO_V5_RESOURCE_TYPE_MAPPING = {
   [RESOURCE_TYPE_PASSWORD_STRING_SLUG]: RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   [RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG]: RESOURCE_TYPE_V5_DEFAULT_SLUG,
@@ -727,6 +924,7 @@ class ResourceTypeSchemasDefinition {
       [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG]: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_DEFINITION_SCHEMA,
+      [RESOURCE_TYPE_V5_PASSKEY_SLUG]: RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA,
     };
   }
 }

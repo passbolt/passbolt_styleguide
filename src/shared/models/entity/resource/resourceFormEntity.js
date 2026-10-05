@@ -24,6 +24,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   V4_TO_V5_RESOURCE_TYPE_MAPPING,
@@ -45,6 +46,7 @@ import { CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH } from "../cu
 import SecretDataV5StandaloneNoteEntity from "../secretData/secretDataV5StandaloneNoteEntity";
 import SecretDataV5StandalonePinCodeEntity from "../secretData/secretDataV5StandalonePinCodeEntity";
 import OfflineItemEntity from "../offline/offlineItemEntity";
+import SecretDataV5PasskeyEntity from "../secretData/secretDataV5PasskeyEntity";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -107,6 +109,7 @@ class ResourceFormEntity extends EntityV2 {
             SecretDataV4PasswordStringEntity.getSchema(),
             SecretDataV5StandaloneCustomFieldsCollection.getSchema(),
             SecretDataV5StandalonePinCodeEntity.getSchema(),
+            SecretDataV5PasskeyEntity.getSchema(),
           ],
         },
         offline: {
@@ -184,6 +187,8 @@ class ResourceFormEntity extends EntityV2 {
         return SecretDataV5StandaloneTotpEntity;
       case RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG:
         return SecretDataV5PasswordStringEntity;
+      case RESOURCE_TYPE_V5_PASSKEY_SLUG:
+        return SecretDataV5PasskeyEntity;
       case RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG:
         return SecretDataV4DefaultEntity;
       case RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG:

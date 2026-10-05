@@ -43,19 +43,42 @@ class ExtAppContextProvider extends React.Component {
   }
 
   async componentDidMount() {
-    await this.getSiteSettings();
-    await this.getExtensionVersion();
-    this.getUserSettings();
-    this.getLoggedInUser();
-    this.initLocale();
-    this.getResources();
-    this.getFolders();
-    const account = await this.getAccount();
-    this.getGroups(account);
-    this.getUsers();
+    /*
+     * Every step stands on its own. Awaited in one chain, a single failure - a request no local copy could answer -
+     * left all the later steps unrun, so the application waited forever for values that were never coming and
+     * rendered nothing at all: a blank page instead of the vault this device holds. A step that fails now costs
+     * only what that step was fetching, and the skeleton is always cleared.
+     */
+    await this.loadOrLogFailure("the organization settings", () => this.getSiteSettings());
+    await this.loadOrLogFailure("the extension version", () => this.getExtensionVersion());
+    this.loadOrLogFailure("the user settings", () => this.getUserSettings());
+    this.loadOrLogFailure("the signed in user", () => this.getLoggedInUser());
+    this.loadOrLogFailure("the locale", () => this.initLocale());
+    this.loadOrLogFailure("the resources", () => this.getResources());
+    this.loadOrLogFailure("the folders", () => this.getFolders());
+    const account = await this.loadOrLogFailure("the account", () => this.getAccount());
+    if (account) {
+      this.loadOrLogFailure("the groups", () => this.getGroups(account));
+    }
+    this.loadOrLogFailure("the users", () => this.getUsers());
     const skeleton = document.getElementById("temporary-skeleton");
     if (skeleton) {
       skeleton.remove();
+    }
+  }
+
+  /**
+   * Run one step of the start up, and let the others carry on if it fails.
+   * @param {string} what the data the step was after, for the log
+   * @param {function} step the step to run
+   * @returns {Promise<*>} what the step returned, or null if it failed
+   */
+  async loadOrLogFailure(what, step) {
+    try {
+      return await step();
+    } catch (error) {
+      console.error(`Could not load ${what}`, error);
+      return null;
     }
   }
 

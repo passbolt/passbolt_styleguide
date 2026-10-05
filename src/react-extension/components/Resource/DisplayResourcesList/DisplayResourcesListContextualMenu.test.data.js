@@ -17,6 +17,7 @@ import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import { defaultWorkflowContext } from "../../../contexts/WorkflowContext.test.data";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import {
   defaultResourceDto,
@@ -89,6 +90,16 @@ export function propsResourceStandaloneTotp() {
  * Props with a selected resource where the user has a read only permission on
  * @returns {object}
  */
+export function propsResourceInTrash() {
+  return {
+    ...defaultProps({
+      resourceWorkspaceContext: defaultResourceWorkspaceContext({
+        filter: { type: ResourceWorkspaceFilterTypes.TRASH },
+      }),
+    }),
+  };
+}
+
 export function propsResourceWithReadOnlyPermission() {
   return {
     ...defaultProps(),

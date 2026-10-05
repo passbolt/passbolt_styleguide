@@ -166,7 +166,7 @@ class ExtQuickAccess extends React.Component {
         confirmMetadataKeyMetadataTrustedKey: metadataTrustedKey,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       this.setState({
         hasError: true,
         errorMessage: error.message,

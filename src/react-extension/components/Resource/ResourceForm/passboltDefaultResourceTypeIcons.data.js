@@ -23,6 +23,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
@@ -31,6 +32,7 @@ import {
 import PasswordSVG from "../../../../img/passbolt-default-resource-type-icons/password.svg";
 import TotpSVG from "../../../../img/passbolt-default-resource-type-icons/totp.svg";
 import PasswordWithTotpSVG from "../../../../img/passbolt-default-resource-type-icons/password-with-totp.svg";
+import PasskeySVG from "../../../../img/passbolt-default-resource-type-icons/passkey.svg";
 import KeyValueSVG from "../../../../img/passbolt-default-resource-type-icons/key-value.svg";
 import NotesSVG from "../../../../img/passbolt-default-resource-type-icons/notes.svg";
 import PinCodeSVG from "../../../../img/passbolt-default-resource-type-icons/pincode.svg";
@@ -40,6 +42,7 @@ export const PASSBOLT_DEFAULT_RESOURCE_TYPE_ICON_MAP = {
   [RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG]: <PasswordSVG />,
   [RESOURCE_TYPE_V5_DEFAULT_SLUG]: <PasswordSVG />,
   [RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG]: <PasswordSVG />,
+  [RESOURCE_TYPE_V5_PASSKEY_SLUG]: <PasskeySVG />,
   [RESOURCE_TYPE_TOTP_SLUG]: <TotpSVG />,
   [RESOURCE_TYPE_V5_TOTP_SLUG]: <TotpSVG />,
   [RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG]: <PasswordWithTotpSVG />,

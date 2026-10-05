@@ -72,7 +72,9 @@ describe("See Password Delete Dialog", () => {
       await page.deleteResourcePageObject.click(submitButton);
 
       const resourceIds = propsOneResource.resources.map((resource) => resource.id);
-      expect(propsOneResource.context.port.request).toHaveBeenCalledWith("passbolt.resources.delete-all", resourceIds);
+      expect(propsOneResource.context.port.request).toHaveBeenCalledWith("passbolt.resources.delete-all", resourceIds, {
+        recoverable: true,
+      });
       expect(propsOneResource.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
       expect(propsOneResource.onClose).toHaveBeenCalledTimes(1);
     });
@@ -140,6 +142,7 @@ describe("See Password Delete Dialog", () => {
       expect(propsMultipleResource.context.port.request).toHaveBeenCalledWith(
         "passbolt.resources.delete-all",
         resourceIds,
+        { recoverable: true },
       );
       expect(propsMultipleResource.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
     });

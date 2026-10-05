@@ -15,6 +15,7 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import DisplayResourceUrisBadge from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
@@ -237,12 +238,23 @@ class FilterResourcesByGroupPage extends React.Component {
   }
 
   /**
-   * Get resource filtered by resource type to have only resource with password and totp
+   * Is passkey resource
+   * @param {string} resourceTypeId
+   * @returns {boolean}
+   */
+  isPasskeyResource(resourceTypeId) {
+    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.slug === RESOURCE_TYPE_V5_PASSKEY_SLUG;
+  }
+
+  /**
+   * Get resource filtered by resource type to have only resource with password, totp and passkey
    * @return {Array}
    */
   get resourcesFilterByResourceTypePasswordAndTotp() {
     const keepOnlyResourcesPasswordAndTotp = (resource) =>
-      this.isPasswordResource(resource.resource_type_id) || this.isOTPResource(resource.resource_type_id);
+      this.isPasswordResource(resource.resource_type_id) ||
+      this.isOTPResource(resource.resource_type_id) ||
+      this.isPasskeyResource(resource.resource_type_id);
     return this.props.resources.filter(keepOnlyResourcesPasswordAndTotp);
   }
 

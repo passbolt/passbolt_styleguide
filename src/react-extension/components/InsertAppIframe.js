@@ -44,6 +44,11 @@ class InsertAppIframe extends Component {
       url.searchParams.append("pathname", pathname);
     }
 
+    const action = this.getPageAction();
+    if (action) {
+      url.searchParams.append("action", action);
+    }
+
     this.iframeRef.current.contentWindow.location = url.toString();
   }
 
@@ -68,6 +73,29 @@ class InsertAppIframe extends Component {
    */
   validatePagePathname() {
     return /^[A-Z/-9\-]*$/i.test(this.props.location.pathname);
+  }
+
+  /**
+   * Get the action from url.
+   *
+   * @returns {string|null} Return null if the action doesn't validate
+   */
+  getPageAction() {
+    const action = new URLSearchParams(this.props.location.search).get("action");
+    if (!this.validatePageAction(action)) {
+      return null;
+    }
+
+    return action;
+  }
+
+  /**
+   * Validate an action.
+   * @param {string|null} action The action to test
+   * @returns {boolean}
+   */
+  validatePageAction(action) {
+    return action === "edit";
   }
 
   /**

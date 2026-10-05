@@ -138,7 +138,6 @@ export class ApiTriageContextProvider extends React.Component {
 
     if (knownProvider.disabledForRecover) {
       // The provider ID from the API is known but is not supported for ssoRecover
-      console.log("Recover processes with this SSO provider is not supported");
       return null;
     }
 
@@ -191,7 +190,6 @@ export class ApiTriageContextProvider extends React.Component {
     /*
      * @todo handle unexpected error.
      * else {
-     *   console.log(error);
      *   await this.props.actionFeedbackContext.displayError("There was an unexpected error, please retry later...");
      *   await this.toggleProcessing();
      * }

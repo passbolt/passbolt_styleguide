@@ -469,7 +469,6 @@
   "Edit App.fullBaseUrl in {{configurationFilePath}}": "Змініть App.fullBaseUrl у {{configurationFilePath}}",
   "Edit Avatar": "Редагувати аватар",
   "Edit group": "Редагувати групу",
-  "Edit in passbolt": "Редагувати в passbolt",
   "Edit or generate another key with a valid email id.": "Редагувати або згенерувати інший ключ з дійсним ідентифікатором електронної пошти.",
   "Edit password": "Редагувати пароль",
   "Edit profile": "Редагувати профіль",
@@ -1807,7 +1806,6 @@
   "Very weak": "Дуже слабкий",
   "View": "Переглянути",
   "View detail": "Переглянути деталі",
-  "View it in passbolt": "Переглянути в Passbolt",
   "VM appliance": "VM-пристрій",
   "Wait for a password to expire.": "Очікувати завершення терміну дії пароля.",
   "Wait for a team member to share a password with you.": "Зачекайте, поки один з членів команди поділиться з вами паролем.",
@@ -2113,5 +2111,13 @@
   "Unable to mark the resource as expired._one": "Неможливо позначити ресурс як прострочений.",
   "Unable to mark the resource as expired._few": "Неможливо позначити ресурси як прострочені.",
   "Unable to mark the resource as expired._many": "Неможливо позначити ресурси як прострочені.",
-  "Unable to mark the resource as expired._other": "Неможливо позначити ресурси як прострочені."
+  "Unable to mark the resource as expired._other": "Неможливо позначити ресурси як прострочені.",
+  "Edit in the vault": "Редагувати в сховищі",
+  "View in the vault": "Переглянути в сховищі",
+  "Trash": "Кошик",
+  "Restore": "Відновити",
+  "Once the resource is deleted, it will be removed from the vault until it is restored.": "Після видалення ресурс буде прибрано зі сховища, доки його не буде відновлено.",
+  "Please confirm you really want to delete the resources. After clicking ok, the resources will be removed from the vault until they are restored.": "Будь ласка, підтвердьте, що ви дійсно хочете видалити ресурси. Після натискання OK ресурси буде прибрано зі сховища, доки їх не буде відновлено.",
+  "The resource has been restored successfully._one": "Ресурс успішно відновлено.",
+  "The resource has been restored successfully._other": "Ресурси успішно відновлено."
 }

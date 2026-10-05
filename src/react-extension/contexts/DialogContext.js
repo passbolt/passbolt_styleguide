@@ -13,6 +13,7 @@
  */
 
 import React from "react";
+import isServerUnreachableError from "../../shared/lib/error/isServerUnreachableError";
 import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -45,6 +46,15 @@ export default class DialogContextProvider extends React.Component {
     return {
       dialogs: [],
       open: (Dialog, DialogProps) => {
+        /*
+         * A server that could not be reached is not an unexpected error, and it must not take over the screen: the
+         * vault lives on this device and goes on working. Every error the server did answer keeps its dialog.
+         */
+        if (isServerUnreachableError(DialogProps?.error)) {
+          console.debug("The server could not be reached, not interrupting with a dialog");
+          return null;
+        }
+
         const dialogKey = uuidv4();
         this.setState((currState) => ({
           dialogs: [...currState.dialogs, { key: dialogKey, Dialog, DialogProps }],
