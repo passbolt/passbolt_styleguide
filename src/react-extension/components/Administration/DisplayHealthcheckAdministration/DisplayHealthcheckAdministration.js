@@ -152,7 +152,7 @@ class DisplayHealthcheckAdministration extends Component {
       );
     }
 
-    return <>{domains.map((domain) => this.renderDomain(domain))}</>;
+    return domains.map((domain) => this.renderDomain(domain));
   }
 
   /**

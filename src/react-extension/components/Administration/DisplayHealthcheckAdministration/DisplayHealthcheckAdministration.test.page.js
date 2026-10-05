@@ -21,8 +21,6 @@ import DisplayAdministrationHealthcheckActions from "../DisplayAdministrationWor
 
 /**
  * The DisplayHealthcheckAdministration component represented as a page.
- * Every selector below is structural, none encodes a count, a domain title or a message: all
- * three are the API's to change and two of them are translated.
  */
 export default class DisplayHealthcheckAdministrationPage {
   /**
