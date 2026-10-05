@@ -24,6 +24,7 @@ import {
   defaultPropsOneTotpResourceOwned,
 } from "./DisplayResourcesWorkspaceMenu.test.data";
 import React from "react";
+import { MemoryRouter } from "react-router-dom";
 
 /**
  * DisplayResourcesWorkspaceMenu stories
@@ -32,13 +33,15 @@ export default {
   title: "Components/Resource/DisplayResourcesWorkspaceMenu",
   decorators: [
     (Story) => (
-      <div className="top-bar">
-        <div className="action-bar">
-          <div className="actions-wrapper">
-            <Story />
+      <MemoryRouter initialEntries={["/app/passwords"]}>
+        <div className="top-bar">
+          <div className="action-bar">
+            <div className="actions-wrapper">
+              <Story />
+            </div>
           </div>
         </div>
-      </div>
+      </MemoryRouter>
     ),
   ],
   component: DisplayResourcesWorkspaceMenu,
