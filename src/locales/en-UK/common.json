@@ -1052,6 +1052,7 @@
   "Passkeys": "Passkeys",
   "Passkeys are disabled for all users.": "Passkeys are disabled for all users.",
   "Passkeys are enabled for all users.": "Passkeys are enabled for all users.",
+  "Passkeys require Passbolt to be reached through a domain name, not an IP address.": "Passkeys require Passbolt to be reached through a domain name, not an IP address.",
   "passphrase": "passphrase",
   "Passphrase": "Passphrase",
   "Passphrase confirmation": "Passphrase confirmation",

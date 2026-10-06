@@ -20,4 +20,8 @@ export default class WindowNavigationService {
   static assign(url) {
     window.location.assign(url);
   }
+
+  static getHostname() {
+    return window.location.hostname;
+  }
 }

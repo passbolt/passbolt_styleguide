@@ -68,6 +68,7 @@ export class ApiMfaVerifyDelegatedContextProvider extends React.Component {
       providers: [],
       isRememberMeForAMonthEnabled: false,
       error: null,
+      errorCode: null, // The error code returned to the application
       hideErrorLogs: true,
       delegatedToken: null, // The token returned to the application once verified
       delegatedState: null, // The delegated state issued to the application
@@ -120,12 +121,7 @@ export class ApiMfaVerifyDelegatedContextProvider extends React.Component {
     try {
       beginDto = await this.mfaWebauthnDelegatedVerifyService.begin(delegatedState);
     } catch (error) {
-      // The begin rejects with a 400 a delegated state that expired, was used or is unknown.
-      const outcome =
-        error.data?.code === 400
-          ? { state: ApiMfaVerifyDelegatedContextState.EXPIRED_STATE }
-          : { state: ApiMfaVerifyDelegatedContextState.ERROR_STATE, error };
-      this.returnToApplication(outcome);
+      this.returnToApplication(this.getFailureOutcome(error, MfaDelegatedErrorCode.UNKNOWN));
       return;
     }
 
@@ -141,15 +137,28 @@ export class ApiMfaVerifyDelegatedContextProvider extends React.Component {
         delegatedToken: mfa_delegated_token,
       });
     } catch (error) {
-      this.returnToApplication({ state: ApiMfaVerifyDelegatedContextState.ERROR_STATE, error });
+      this.returnToApplication(this.getFailureOutcome(error, this.getErrorCode(error)));
     }
+  }
+
+  /**
+   * Returns the outcome of a failed verification: the expired state if the API rejected the delegated state.
+   * @param {Error} error The error
+   * @param {string} errorCode The error code returned to the application if the delegated state was not rejected
+   * @returns {object}
+   */
+  getFailureOutcome(error, errorCode) {
+    const apiError = error?.data?.body?.error;
+    return apiError?.invalidDelegatedState || apiError?.missingDelegatedState
+      ? { state: ApiMfaVerifyDelegatedContextState.EXPIRED_STATE }
+      : { state: ApiMfaVerifyDelegatedContextState.ERROR_STATE, error, errorCode };
   }
 
   /**
    * Retry the verification from the verify screen.
    */
   onRetryRequested() {
-    this.setState({ error: null, state: ApiMfaVerifyDelegatedContextState.VERIFY_STATE });
+    this.setState({ error: null, errorCode: null, state: ApiMfaVerifyDelegatedContextState.VERIFY_STATE });
   }
 
   /**
@@ -162,10 +171,10 @@ export class ApiMfaVerifyDelegatedContextProvider extends React.Component {
 
   /**
    * Build the url returning to the application with the outcome of the given state.
-   * @param {{state: string, error: Error|null, delegatedToken: string|null, redirectUri: string}} value
+   * @param {{state: string, errorCode: string|null, delegatedToken: string|null, redirectUri: string}} value
    * @returns {string|null}
    */
-  buildReturnToApplicationUrl({ state, error, delegatedToken, redirectUri }) {
+  buildReturnToApplicationUrl({ state, errorCode, delegatedToken, redirectUri }) {
     switch (state) {
       case ApiMfaVerifyDelegatedContextState.VERIFIED_STATE:
         return `${redirectUri}?mfa_delegated_token=${encodeURIComponent(delegatedToken)}`;
@@ -176,15 +185,14 @@ export class ApiMfaVerifyDelegatedContextProvider extends React.Component {
       case ApiMfaVerifyDelegatedContextState.VERIFY_STATE:
         return `${redirectUri}?error=${MfaDelegatedErrorCode.CANCELLED}`;
       case ApiMfaVerifyDelegatedContextState.ERROR_STATE:
-        return `${redirectUri}?error=${this.getErrorCode(error)}`;
+        return `${redirectUri}?error=${errorCode}`;
       default:
         return null;
     }
   }
 
   /**
-   * Returns the error code of a failed verification.
-   * A begin 400 leads to the expired state: a 400 here is the finish rejecting the assertion.
+   * Returns the error code of a verification that failed after the begin.
    * @param {Error} error The error
    * @returns {string}
    */

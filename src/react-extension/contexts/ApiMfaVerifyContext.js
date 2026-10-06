@@ -197,6 +197,12 @@ export class ApiMfaVerifyContextProvider extends React.Component {
         );
         qualifiedError.cause = error;
         break;
+      case "WebauthnRelyingPartyIpAddressError":
+        qualifiedError = new Error(
+          this.props.t("Passkeys require Passbolt to be reached through a domain name, not an IP address."),
+        );
+        qualifiedError.cause = error;
+        break;
       default:
         qualifiedError = error;
     }

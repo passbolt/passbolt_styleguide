@@ -14,6 +14,7 @@
 
 import WebauthnAssertionCeremonyService from "./webauthnAssertionCeremonyService";
 import WebauthnRelyingPartyIpAddressError from "../../lib/Error/WebauthnRelyingPartyIpAddressError";
+import WindowNavigationService from "../../utils/windowNavigationService";
 
 describe("WebauthnAssertionCeremonyService", () => {
   const options = { challenge: "Y2hhbGxlbmdl", rpId: "passbolt.local" };
@@ -28,6 +29,7 @@ describe("WebauthnAssertionCeremonyService", () => {
       configurable: true,
     });
     Object.defineProperty(globalThis.navigator, "credentials", { value: { get }, configurable: true });
+    jest.spyOn(WindowNavigationService, "getHostname").mockReturnValue("passbolt.local");
   });
 
   describe("::run", () => {
@@ -41,13 +43,14 @@ describe("WebauthnAssertionCeremonyService", () => {
     });
 
     it.each(["192.168.1.10", "[2001:db8::1]"])(
-      "should not start the ceremony if the relying party id %s is an IP address",
-      async (rpId) => {
+      "should not start the ceremony if the page is reached through the IP address %s",
+      async (hostname) => {
         expect.assertions(2);
+        WindowNavigationService.getHostname.mockReturnValue(hostname);
 
-        await expect(
-          WebauthnAssertionCeremonyService.run({ ...options, rpId }, new AbortController().signal),
-        ).rejects.toThrow(WebauthnRelyingPartyIpAddressError);
+        await expect(WebauthnAssertionCeremonyService.run(options, new AbortController().signal)).rejects.toThrow(
+          WebauthnRelyingPartyIpAddressError,
+        );
         expect(get).not.toHaveBeenCalled();
       },
     );

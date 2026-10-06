@@ -13,7 +13,7 @@
  */
 
 /**
- * The relying party id is an IP address, which WebAuthn forbids, therefore the ceremonies cannot run.
+ * The page is reached through an IP address, which WebAuthn forbids as relying party id, therefore the ceremonies cannot run.
  */
 export default class WebauthnRelyingPartyIpAddressError extends Error {
   constructor(message) {

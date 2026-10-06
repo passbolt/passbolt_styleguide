@@ -52,6 +52,7 @@ describe("ApiMfaVerifyDelegatedContext", () => {
     enableFetchMocks();
     fetch.resetMocks();
     jest.spyOn(WindowNavigationService, "assign").mockImplementation(() => {});
+    jest.spyOn(WindowNavigationService, "getHostname").mockReturnValue("localhost");
     get = jest.fn().mockResolvedValue({ toJSON: () => defaultAssertionDto() });
     parseRequestOptionsFromJSON = jest.fn((json) => ({ parsed: json }));
     mockPublicKeyCredential({ parseRequestOptionsFromJSON, prototype: { toJSON: () => {} } });
@@ -140,14 +141,66 @@ describe("ApiMfaVerifyDelegatedContext", () => {
       await apiMfaVerifyDelegatedContext.onVerifyRequested();
     });
 
-    it("should return to the application if the begin rejects the delegated state", async () => {
+    it.each([
+      ["invalidDelegatedState", "The delegated state is not valid."],
+      ["missingDelegatedState", "A delegated state is required."],
+    ])("should return to the application if the begin rejects the delegated state with %s", async (key, message) => {
       expect.assertions(3);
-      fetch.doMockOnceIf(BEGIN_URL, () => mockApiResponseError(400, "The delegated state is not valid."));
+      fetch.doMockOnceIf(BEGIN_URL, () => mockApiResponseError(400, message, { error: { [key]: message } }));
 
       await apiMfaVerifyDelegatedContext.onVerifyRequested();
 
       expect(apiMfaVerifyDelegatedContext.state.state).toStrictEqual(ApiMfaVerifyDelegatedContextState.EXPIRED_STATE);
       expect(WindowNavigationService.assign).toHaveBeenCalledWith(`${REDIRECT_URI}?error=state_invalid`);
+      expect(get).not.toHaveBeenCalled();
+    });
+
+    it("should return to the application if the finish rejects the delegated state", async () => {
+      expect.assertions(2);
+      const message = "The delegated state is not valid.";
+      fetch.doMockOnceIf(BEGIN_URL, () => mockApiResponse(defaultVerifyBeginDto()));
+      fetch.doMockOnceIf(FINISH_URL, () =>
+        mockApiResponseError(400, message, { error: { invalidDelegatedState: message } }),
+      );
+
+      await apiMfaVerifyDelegatedContext.onVerifyRequested();
+
+      expect(apiMfaVerifyDelegatedContext.state.state).toStrictEqual(ApiMfaVerifyDelegatedContextState.EXPIRED_STATE);
+      expect(WindowNavigationService.assign).toHaveBeenCalledWith(`${REDIRECT_URI}?error=state_invalid`);
+    });
+
+    it("should return to the application if the begin rejects the domain of the instance", async () => {
+      expect.assertions(3);
+      const message = "Passkeys require Passbolt to be reached through a domain name, not an IP address.";
+      fetch.doMockOnceIf(BEGIN_URL, () => mockApiResponseError(400, message, { error: { invalidDomain: message } }));
+
+      await apiMfaVerifyDelegatedContext.onVerifyRequested();
+
+      expect(apiMfaVerifyDelegatedContext.state.state).toStrictEqual(ApiMfaVerifyDelegatedContextState.ERROR_STATE);
+      expect(WindowNavigationService.assign).toHaveBeenCalledWith(`${REDIRECT_URI}?error=unknown`);
+      expect(get).not.toHaveBeenCalled();
+    });
+
+    it("should return to the application if the begin rejects the request without a structured error", async () => {
+      expect.assertions(3);
+      fetch.doMockOnceIf(BEGIN_URL, () => mockApiResponseError(400, "Could not validate the request."));
+
+      await apiMfaVerifyDelegatedContext.onVerifyRequested();
+
+      expect(apiMfaVerifyDelegatedContext.state.state).toStrictEqual(ApiMfaVerifyDelegatedContextState.ERROR_STATE);
+      expect(WindowNavigationService.assign).toHaveBeenCalledWith(`${REDIRECT_URI}?error=unknown`);
+      expect(get).not.toHaveBeenCalled();
+    });
+
+    it("should return to the application if the page is reached through an IP address", async () => {
+      expect.assertions(3);
+      fetch.doMockOnceIf(BEGIN_URL, () => mockApiResponse(defaultVerifyBeginDto()));
+      WindowNavigationService.getHostname.mockReturnValue("192.168.1.10");
+
+      await apiMfaVerifyDelegatedContext.onVerifyRequested();
+
+      expect(apiMfaVerifyDelegatedContext.state.state).toStrictEqual(ApiMfaVerifyDelegatedContextState.ERROR_STATE);
+      expect(WindowNavigationService.assign).toHaveBeenCalledWith(`${REDIRECT_URI}?error=unknown`);
       expect(get).not.toHaveBeenCalled();
     });
 

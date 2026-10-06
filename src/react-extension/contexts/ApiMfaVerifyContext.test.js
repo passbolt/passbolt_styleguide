@@ -49,6 +49,7 @@ describe("ApiMfaVerifyContext", () => {
     enableFetchMocks();
     fetch.resetMocks();
     jest.spyOn(WindowNavigationService, "assign").mockImplementation(() => {});
+    jest.spyOn(WindowNavigationService, "getHostname").mockReturnValue("localhost");
     get = jest.fn().mockResolvedValue({ toJSON: () => defaultAssertionDto() });
     parseRequestOptionsFromJSON = jest.fn((json) => ({ parsed: json }));
     Object.defineProperty(globalThis, "PublicKeyCredential", {
@@ -214,6 +215,20 @@ describe("ApiMfaVerifyContext", () => {
         ),
       );
       expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it("should display a clear error if the page is reached through an IP address", async () => {
+      expect.assertions(3);
+      fetch.doMockOnceIf(BEGIN_URL, () => mockApiResponse(defaultVerifyBeginDto()));
+      WindowNavigationService.getHostname.mockReturnValue("192.168.1.10");
+
+      await apiMfaVerifyContext.onVerifyRequested(false);
+
+      expect(apiMfaVerifyContext.state.state).toStrictEqual(ApiMfaVerifyContextState.ERROR_STATE);
+      expect(apiMfaVerifyContext.state.error).toStrictEqual(
+        new Error("Passkeys require Passbolt to be reached through a domain name, not an IP address."),
+      );
+      expect(get).not.toHaveBeenCalled();
     });
 
     it("should display the finish error if the session is still authenticated", async () => {
