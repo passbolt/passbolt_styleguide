@@ -123,13 +123,17 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * Open the edit resource dialog when requested from the URL action parameter.
    */
   openEditResourceFromQuery() {
+    if (!this.props.location?.search) {
+      return;
+    }
+
     const queryParameters = new URLSearchParams(this.props.location.search);
     if (queryParameters.get("action") !== "edit" || !this.hasOneResourceSelected()) {
       return;
     }
 
     const resource = this.selectedResources[0];
-    const selectedResourceId = this.props.match.params.selectedResourceId;
+    const selectedResourceId = this.props.match?.params?.selectedResourceId;
     if (selectedResourceId && selectedResourceId !== resource.id) {
       return;
     }
@@ -159,6 +163,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @param {URLSearchParams} queryParameters The current query parameters.
    */
   removeEditResourceQuery(queryParameters) {
+    if (!this.props.history || !this.props.location) {
+      return;
+    }
+
     queryParameters.delete("action");
     const search = queryParameters.toString();
     this.props.history.replace({
