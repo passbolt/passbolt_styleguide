@@ -28,6 +28,7 @@ import {
   folderMoveProps,
   folderShareProps,
   initialGroupForShareFixture,
+  largeMoveProps,
   operatorResourceShareProps,
   resourcesShareProps,
   twoResourcesShareProps,
@@ -666,6 +667,21 @@ describe("As LU running ShareDialog from a permission workflow", () => {
       expect(page.count).toBe(2);
       expect(page.changeChip(1)).toBeNull(); // Ada: owner before and after, no badge
       expect(page.changeChip(2).textContent).toBe("added"); // Betty: comes from the destination
+    });
+
+    it("[performance] should ensure opening on a move of a large selection remains effective.", async () => {
+      expect.assertions(2);
+      context.loggedInUser = { id: context.userSettings.id };
+      const props = largeMoveProps();
+      mockContextRequest(jest.fn());
+
+      const start = performance.now();
+      await act(() => (page = new ShareDialogPage(context, props)));
+      const time = performance.now() - start;
+
+      expect(page.count).toBeGreaterThan(0);
+      // Building the rows and rendering dominate here, the bound only guards against the dialog freezing.
+      expect(time).toBeLessThan(2000);
     });
 
     it("As LU moving, a recipient whose applied permission varies shows 'varies' and the varies 'i'", async () => {

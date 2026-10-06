@@ -22,6 +22,7 @@ import {
   board,
   carol,
   defaultSharedResourcesDtos,
+  largeMovedResourcesDtos,
   largeSharedResourcesDtos,
   mixedOwnershipResourcesDtos,
 } from "./ShareChanges.test.data";
@@ -481,6 +482,32 @@ describe("ShareChanges", () => {
       shareChanges.stageTargetPermissions(targetRows, [resources[0].id, resources[1].id]);
 
       expect(shareChanges.getChanges().some((change) => change.aco_foreign_key === resources[1].id)).toBe(false);
+    });
+
+    it("[performance] should ensure staging a move on a large selection remains effective.", () => {
+      expect.assertions(4);
+      const resourceCount = 500;
+      const aroCount = 100;
+      const resources = largeSharedResourcesDtos({ resourceCount, aroCount });
+      const movedResources = largeMovedResourcesDtos(resources);
+
+      const start = performance.now();
+      // Replay what the dialog runs when it opens on a move.
+      const shareChanges = new ShareChanges(resources);
+      const rows = shareChanges.aggregatePermissionsByAro();
+      const targetRows = new ShareChanges(movedResources).aggregatePermissionsByAro();
+      shareChanges.stageTargetPermissions(
+        targetRows,
+        resources.map((resource) => resource.id),
+      );
+      const time = performance.now() - start;
+
+      const changes = shareChanges.getChanges();
+      expect(rows).toHaveLength(aroCount);
+      expect(changes.length).toBeGreaterThan(0);
+      expect(changes.every((change) => change.type === 7 && !change.delete)).toBe(true);
+      // The bound sits well below what the same workload cost before the lookups were indexed.
+      expect(time).toBeLessThan(200);
     });
   });
 
