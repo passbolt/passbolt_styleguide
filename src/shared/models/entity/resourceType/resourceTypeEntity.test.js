@@ -1073,6 +1073,45 @@ describe("ResourceTypeEntity", () => {
     });
   });
 
+  describe("::isSupportedByQuickAccess", () => {
+    it("password, totp and pin code types are supported", () => {
+      expect.assertions(3);
+      expect(new ResourceTypeEntity(resourceTypeV5DefaultDto()).isSupportedByQuickAccess()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5TotpDto()).isSupportedByQuickAccess()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).isSupportedByQuickAccess()).toBeTruthy();
+    });
+    it("note and custom fields types are not supported", () => {
+      expect.assertions(2);
+      expect(new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto()).isSupportedByQuickAccess()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()).isSupportedByQuickAccess()).toBeFalsy();
+    });
+  });
+
+  describe("::isSupportedByOfflineMode", () => {
+    it("v5 password, totp and pin code types are supported", () => {
+      expect.assertions(5);
+      expect(new ResourceTypeEntity(resourceTypeV5DefaultDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5DefaultTotpDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5PasswordStringDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5TotpDto()).isSupportedByOfflineMode()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).isSupportedByOfflineMode()).toBeTruthy();
+    });
+
+    it("v5 note and custom fields types are not supported", () => {
+      expect.assertions(2);
+      expect(new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto()).isSupportedByOfflineMode()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()).isSupportedByOfflineMode()).toBeFalsy();
+    });
+
+    it("v4 types are not supported, whatever their secret shape", () => {
+      expect.assertions(4);
+      expect(new ResourceTypeEntity(resourceTypePasswordStringDto()).isSupportedByOfflineMode()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()).isSupportedByOfflineMode()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeTotpDto()).isSupportedByOfflineMode()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypePasswordDescriptionTotpDto()).isSupportedByOfflineMode()).toBeFalsy();
+    });
+  });
+
   describe("::isStandalonePinCode", () => {
     it("standalone pin code should be truthy", () => {
       expect.assertions(1);
