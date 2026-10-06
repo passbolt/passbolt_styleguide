@@ -310,6 +310,60 @@ export default class ResourceViewPagePage {
   }
 
   /**
+   * The copy username button.
+   * @returns {Element}
+   */
+  get copyLoginButton() {
+    return this._page.container.querySelector(".property:first-child .property-action");
+  }
+
+  /**
+   * The row holding the secret with the given class.
+   * @param {string} secretClass The secret class, e.g. "secret-password"
+   * @returns {Element}
+   */
+  rowOf(secretClass) {
+    return this._page.container.querySelector(`.secret.${secretClass}`)?.closest(".property");
+  }
+
+  /**
+   * The title of the secret value with the given class.
+   * @param {string} secretClass The secret class, e.g. "secret-password"
+   * @returns {string|null}
+   */
+  secretTitle(secretClass) {
+    return this._page.container.querySelector(`.secret.${secretClass}`).getAttribute("title");
+  }
+
+  /**
+   * The state displayed by a copy action, read from its visible icon.
+   * @param {Element} copyAction The copy action element
+   * @returns {string} "default", "processing" or "done"
+   */
+  copyIconState(copyAction) {
+    const states = ["default", "processing", "done"];
+    const icons = Array.from(copyAction.querySelectorAll("span.transition"));
+    return states[icons.findIndex((icon) => !icon.classList.contains("visually-hidden"))];
+  }
+
+  /**
+   * Is the clipboard flush timer displayed next to the given copy action.
+   * Every svg renders as an opaque element in the tests, the timer is found as the sibling of the action.
+   * @param {Element} copyAction The copy action element
+   * @returns {boolean}
+   */
+  hasTimer(copyAction) {
+    return copyAction.nextElementSibling !== null;
+  }
+
+  /**
+   * Unmount the page.
+   */
+  unmount() {
+    this._page.unmount();
+  }
+
+  /**
    * Click on the given element.
    * @param {Element} element The element to click on.
    * @returns {Promise<void>}

@@ -31,6 +31,8 @@ import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeG
 import { denyRbacContext } from "../../../shared/context/Rbac/RbacContext.test.data";
 import { defaultTotpViewModelDto } from "../../../shared/models/entity/totp/totpDto.test.data";
 import { act } from "react";
+import { fireEvent } from "@testing-library/react";
+import { waitForTrue } from "../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -40,13 +42,20 @@ beforeEach(() => {
 describe("ResourceViewPage", () => {
   const mockContextRequest = (context, implementation) =>
     jest.spyOn(context.port, "request").mockImplementationOnce(implementation);
+  const decryptCalls = (props) =>
+    props.context.port.request.mock.calls.filter(([name]) => name === "passbolt.secret.find-by-resource-id");
+  const copyCalls = (props) =>
+    props.context.port.request.mock.calls.filter(([name]) => name === "passbolt.clipboard.copy-temporarily");
 
   describe("As LU, I should preview the secret.", () => {
     it("As LU, I should preview the secret password of a resource ", async () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
       mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
-      const page = new ResourceViewPagePage(props);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.previewPasswordButton.hasAttribute("disabled")).toBeFalsy();
 
@@ -67,21 +76,29 @@ describe("ResourceViewPage", () => {
     });
 
     it("As LU, I shouldn't be able to preview secret password of a resource if disabled by API flag", async () => {
-      expect.assertions(1);
+      expect.assertions(2);
       const props = disabledApiFlagsProps();
       mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
-      const page = new ResourceViewPagePage(props);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.previewPasswordButton).toBeNull();
+      expect(page.copyPasswordButton).not.toBeNull();
     });
 
     it("As LU, I shouldn't be able to preview secret password of a resource if denied by RBAC.", async () => {
-      expect.assertions(1);
+      expect.assertions(2);
       const props = deniedRbacProps(); // The props to pass
       mockContextRequest(props.context, () => ({ password: "secret-decrypted", description: "description" }));
-      const page = new ResourceViewPagePage(props);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
 
       expect(page.previewPasswordButton).toBeNull();
+      expect(page.password).not.toBeNull();
     });
 
     it("As LU, I should preview the secret totp of a resource ", async () => {
@@ -574,7 +591,7 @@ describe("ResourceViewPage", () => {
     });
 
     it("As LU, I should be told when the note is empty", async () => {
-      expect.assertions(4);
+      expect.assertions(5);
       const props = standaloneNoteResourceProps();
       let page;
       await act(async () => {
@@ -589,17 +606,14 @@ describe("ResourceViewPage", () => {
         expect.anything(),
       );
 
-      mockContextRequest(props.context, emptyNoteSecret);
       await page.click(page.previewNoteButton);
       expect(page.errorMessage.textContent).toStrictEqual("The note is empty and cannot be previewed.");
       expect(page.notePreviewed).toBeNull();
+      expect(decryptCalls(props).length).toStrictEqual(1);
     });
   });
 
   describe("As LU, I should see and copy a custom fields resource.", () => {
-    const decryptCalls = (props) =>
-      props.context.port.request.mock.calls.filter(([name]) => name === "passbolt.secret.find-by-resource-id");
-
     it("As LU, I should see one row per custom field, in order, with its label and hidden value, the URI, and no username, password, totp or use on this page", async () => {
       expect.assertions(8);
       const props = standaloneCustomFieldsResourceProps();
@@ -785,6 +799,191 @@ describe("ResourceViewPage", () => {
       mockContextRequest(props.context, () => Promise.reject(abortError));
       await page.click(page.previewCustomFieldButton(0));
       expect(page.customFieldValueText(0)).toStrictEqual("Copy to clipboard");
+    });
+  });
+
+  describe("As LU, I should have one secret revealed at a time and one decryption per visit.", () => {
+    const passwordAndTotpSecret = (totp) => ({ password: "secret-decrypted", description: "description", totp });
+    const passwordSecret = () => ({ password: "secret-decrypted", description: "description" });
+
+    it("As LU, revealing the TOTP should mask the revealed password without decrypting again", async () => {
+      expect.assertions(4);
+      const props = totpResourceProps();
+      const totp = defaultTotpViewModelDto();
+      mockContextRequest(props.context, () => passwordAndTotpSecret(totp));
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.previewPasswordButton);
+      expect(page.passwordText).toStrictEqual("secret-decrypted");
+
+      await page.click(page.previewTotpButton);
+      expect(page.totpText.replace(/\s/, "")).toStrictEqual(TotpCodeGeneratorService.generate(totp));
+      expect(page.passwordText).toStrictEqual("Copy to clipboard");
+      expect(decryptCalls(props).length).toStrictEqual(1);
+    });
+
+    it("As LU, a masked row should hold no plaintext while another row is revealed", async () => {
+      expect.assertions(3);
+      const props = totpResourceProps();
+      const totp = defaultTotpViewModelDto();
+      mockContextRequest(props.context, () => passwordAndTotpSecret(totp));
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.previewTotpButton);
+
+      expect(page.totpText.replace(/\s/, "")).toStrictEqual(TotpCodeGeneratorService.generate(totp));
+      expect(page.rowOf("secret-password").textContent).not.toContain("secret-decrypted");
+      expect(page.secretTitle("secret-password")).toStrictEqual("Click to copy");
+    });
+
+    it("As LU, I should decrypt once per visit whatever the rows I reveal or copy", async () => {
+      expect.assertions(2);
+      const props = totpResourceProps();
+      const totp = defaultTotpViewModelDto();
+      mockContextRequest(props.context, () => passwordAndTotpSecret(totp));
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.previewPasswordButton);
+      await page.click(page.copyTotpButton);
+      await page.click(page.previewTotpButton);
+      await page.click(page.copyPasswordButton);
+
+      expect(copyCalls(props).length).toStrictEqual(2);
+      expect(decryptCalls(props).length).toStrictEqual(1);
+    });
+
+    it("As LU, hiding a secret should keep it decrypted for the visit", async () => {
+      expect.assertions(4);
+      const props = defaultProps();
+      mockContextRequest(props.context, passwordSecret);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.previewPasswordButton);
+      expect(page.passwordText).toStrictEqual("secret-decrypted");
+      await page.click(page.previewPasswordButton);
+      expect(page.passwordText).toStrictEqual("Copy to clipboard");
+
+      await page.click(page.copyPasswordButton);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.clipboard.copy-temporarily",
+        "secret-decrypted",
+      );
+      expect(decryptCalls(props).length).toStrictEqual(1);
+    });
+
+    it("As LU, the decrypted secret should be dropped when I leave the page", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      mockContextRequest(props.context, passwordSecret);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.previewPasswordButton);
+      expect(decryptCalls(props).length).toStrictEqual(1);
+      page.unmount();
+
+      mockContextRequest(props.context, passwordSecret);
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+      await page.click(page.previewPasswordButton);
+      expect(decryptCalls(props).length).toStrictEqual(2);
+    });
+
+    it("As LU, only the row copied last should show the copied state and the clipboard timer", async () => {
+      expect.assertions(8);
+      const props = totpResourceProps();
+      const totp = defaultTotpViewModelDto();
+      mockContextRequest(props.context, () => passwordAndTotpSecret(totp));
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.copyTotpButton);
+      await waitForTrue(() => page.copyIconState(page.copyTotpButton) === "done");
+      expect(page.hasTimer(page.copyTotpButton)).toBeTruthy();
+
+      await page.click(page.copyPasswordButton);
+      await waitForTrue(() => page.copyIconState(page.copyPasswordButton) === "done");
+      expect(page.copyIconState(page.copyTotpButton)).toStrictEqual("default");
+      expect(page.hasTimer(page.copyTotpButton)).toBeFalsy();
+      expect(page.hasTimer(page.copyPasswordButton)).toBeTruthy();
+
+      await page.click(page.copyLoginButton);
+      await waitForTrue(() => page.copyIconState(page.copyLoginButton) === "done");
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", "admin@passbolt.com");
+      expect(page.copyIconState(page.copyPasswordButton)).toStrictEqual("default");
+      expect(page.hasTimer(page.copyPasswordButton)).toBeFalsy();
+      expect(page.copyIconState(page.copyTotpButton)).toStrictEqual("default");
+    });
+
+    it("As LU, the copied state should go back to default when the clipboard is flushed", async () => {
+      expect.assertions(4);
+      jest.useFakeTimers();
+      try {
+        const props = defaultProps();
+        // Every request answers at once: the port mock answers through a timer otherwise.
+        jest
+          .spyOn(props.context.port, "request")
+          .mockImplementation((message) =>
+            message === "passbolt.secret.find-by-resource-id" ? passwordSecret() : undefined,
+          );
+        let page;
+        await act(async () => {
+          page = new ResourceViewPagePage(props);
+        });
+
+        await act(async () => {
+          fireEvent.click(page.copyPasswordButton);
+        });
+        expect(page.copyIconState(page.copyPasswordButton)).toStrictEqual("done");
+        expect(page.hasTimer(page.copyPasswordButton)).toBeTruthy();
+
+        act(() => {
+          jest.advanceTimersByTime(30000);
+        });
+        expect(page.copyIconState(page.copyPasswordButton)).toStrictEqual("default");
+        expect(page.hasTimer(page.copyPasswordButton)).toBeFalsy();
+      } finally {
+        jest.clearAllTimers();
+        jest.useRealTimers();
+      }
+    });
+
+    it("As LU, revealing two custom fields during one decryption should decrypt once and reveal both", async () => {
+      expect.assertions(3);
+      const props = standaloneCustomFieldsResourceProps();
+      let resolveDecryption;
+      mockContextRequest(props.context, () => new Promise((resolve) => (resolveDecryption = resolve)));
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      fireEvent.click(page.previewCustomFieldButton(0));
+      fireEvent.click(page.previewCustomFieldButton(1));
+      await act(async () => {
+        resolveDecryption(standaloneCustomFieldsSecretDto());
+      });
+
+      expect(decryptCalls(props).length).toStrictEqual(1);
+      expect(page.customFieldValueText(0)).toStrictEqual("XYZ-123");
+      expect(page.customFieldValueText(1)).toStrictEqual("8080");
     });
   });
 });
