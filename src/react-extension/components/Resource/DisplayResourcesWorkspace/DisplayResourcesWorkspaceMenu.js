@@ -55,7 +55,7 @@ import DeleteSVG from "../../../../img/svg/delete.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
-import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
+import OfflineModeSVG from "../../../../img/svg/offline.svg";
 import SecretHistorySVG from "../../../../img/svg/history.svg";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
