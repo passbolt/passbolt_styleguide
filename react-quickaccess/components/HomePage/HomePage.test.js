@@ -15,9 +15,7 @@ import { waitForTrue } from "../../../../test/utils/waitFor";
 import {
   defaultResourceDto,
   resourceStandaloneTotpDto,
-  resourceStandalonePinCodeNoUrisDto,
 } from "../../../shared/models/entity/resource/resourceEntity.test.data";
-import { TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE } from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { defaultProps, denyUiActionProps } from "./HomePage.test.data";
 import HomePagePage from "./HomePage.test.page";
@@ -169,7 +167,7 @@ describe("HomePage", () => {
 
       expect(page.suggestedResourcesEntries.length).toStrictEqual(1);
       expect(page.getSuggestedResourceItem(0).textContent).toStrictEqual(
-        `${suggestedResource.metadata.name}${suggestedResource.metadata.uris[0]}`,
+        `${suggestedResource.metadata.name} ${suggestedResource.metadata.uris[0]}`,
       );
     });
 
@@ -290,66 +288,6 @@ describe("HomePage", () => {
       expect(page.browsedResourcesContent.textContent).toStrictEqual(
         "No result match your search. Try with another search term.",
       );
-    });
-    it("it should list a PIN code resource matching the search on its name, showing the name only", () => {
-      expect.assertions(2);
-      const props = defaultProps({
-        resources: [
-          resourceStandalonePinCodeNoUrisDto(),
-          defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "other" }) }),
-        ],
-      });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
-      props.context.search = "alarm";
-
-      const page = new HomePagePage(props);
-
-      expect(page.browsedResources.length).toStrictEqual(1);
-      expect(page.browsedResources[0].textContent).toStrictEqual("Office alarm");
-    });
-
-    it("it should list a PIN code resource matching the search on its description", () => {
-      expect.assertions(1);
-      const props = defaultProps({
-        resources: [
-          resourceStandalonePinCodeNoUrisDto({
-            metadata: defaultResourceMetadataDto({
-              resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
-              name: "Locker",
-              username: null,
-              uris: [],
-              description: "gym building B",
-            }),
-          }),
-        ],
-      });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
-      props.context.search = "gym";
-
-      const page = new HomePagePage(props);
-
-      expect(page.browsedResources.length).toStrictEqual(1);
-    });
-
-    it("it should never suggest a PIN code resource for the currently active URL", async () => {
-      expect.assertions(1);
-      const props = defaultProps({
-        resources: [
-          defaultResourceDto({
-            metadata: defaultResourceMetadataDto({ name: "apache", uris: ["http://www.apache.org"] }),
-          }),
-          resourceStandalonePinCodeNoUrisDto(),
-        ],
-      });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "http://www.apache.org/");
-
-      const page = new HomePagePage(props);
-      await waitForTrue(() => page.suggestedResourcesEntries?.length > 0);
-
-      expect(page.suggestedResourcesEntries.length).toStrictEqual(1);
     });
   });
 

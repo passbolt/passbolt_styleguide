@@ -35,7 +35,7 @@ export const FOLDER_SHARE_FLOW_STATUS = Object.freeze({
  * Orchestrates the folder-share flow. A single dialog lets the operator set and validate the
  * folder's permission set at once:
  * 1. Captures a permission snapshot of the folder itself.
- * 2. Dispatches ShareDialog (ACO_FOLDER) so the operator reviews and edits the
+ * 2. Dispatches ShareDialog (controlled mode, ACO_FOLDER) so the operator reviews and edits the
  *    folder's own permission set.
  * 3. On confirmation, re-snapshots the folder to detect drift, then applies the folder permission
  *    changes via `passbolt.share.folders.save` (the extension re-derives and propagates to content).
@@ -92,7 +92,7 @@ export class FolderShareFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Open the ShareDialog seeded from the folder snapshot, so the operator reviews
+   * Open the ShareDialog in controlled mode seeded from the folder snapshot, so the operator reviews
    * and edits the folder's own permissions.
    */
   openShareDialog() {
@@ -121,12 +121,10 @@ export class FolderShareFlow extends AbstractPermissionFlow {
    * the operator confirmed the existing permissions as-is: nothing is sent. The extension re-derives
    * the propagation to the folder's content.
    * @param {Array<object>} folderPermissionChanges The DTO-shape folder permission changes.
-   * @param {object} [options] The confirmation options ShareDialog emits.
-   * @param {boolean} [options.canOperatorRead] true if the operator can still read the modified folder
-   * @param {GroupsCollection} [options.addedGroups] The groups the operator added in the dialog, as displayed.
+   * @param {boolean} canOperatorRead true if the operator can still read the modified folder
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(folderPermissionChanges, { canOperatorRead, addedGroups } = {}) {
+  async handleShareDialogConfirm(folderPermissionChanges, canOperatorRead) {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForFolderShare(this.folderId);
@@ -137,7 +135,6 @@ export class FolderShareFlow extends AbstractPermissionFlow {
           ),
         );
       }
-      await this.assertAddedGroupsUnchanged(addedGroups);
       if (folderPermissionChanges.length) {
         await this.permissionServiceWorkerService.saveFoldersPermissions(this.folderId, folderPermissionChanges);
       }

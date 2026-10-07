@@ -14,7 +14,6 @@
 
 import ShadowMutationObserverService from "./ShadowMutationObserverService";
 import ShadowRootCacheService from "./ShadowRootCacheService";
-import { FIELD_ATTRIBUTES_TO_WATCH } from "../../lib/InForm/InFormFieldDictionary";
 import ShadowRootCollectorService from "./ShadowRootCollectorService";
 
 describe("ShadowMutationObserverService", () => {
@@ -261,20 +260,37 @@ describe("ShadowMutationObserverService", () => {
 
       ShadowMutationObserverService.observeShadowRootChanges(root);
 
-      // Watches the shadow topology and the InForm field-relevance attributes.
-      expect(observeMock).toHaveBeenCalledWith(root, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
-        attributeOldValue: false,
-      });
+      expect(observeMock).toHaveBeenCalledWith(
+        root,
+        expect.objectContaining({
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: expect.any(Array),
+        }),
+      );
 
       const mutations = [{ addedNodes: [], removedNodes: [] }];
       capturedCallback(mutations);
 
       expect(applySpy).toHaveBeenCalledWith(root, mutations);
       expect(notifySpy).toHaveBeenCalledWith(root, mutations, true);
+    });
+
+    it("should install an observer that watches the attributes", () => {
+      expect.assertions(2);
+
+      const observeMock = jest.fn();
+      jest
+        .spyOn(window, "MutationObserver")
+        .mockImplementation(() => ({ observe: observeMock, disconnect: jest.fn() }));
+      const root = document.createElement("div");
+
+      ShadowMutationObserverService.observeShadowRootChanges(root);
+
+      const [, options] = observeMock.mock.calls[0];
+      expect(options.attributes).toBe(true);
+      expect(options.attributeFilter).toContain("type");
     });
 
     it("should install at most one observer per root", () => {

@@ -73,35 +73,6 @@ describe("ShadowRootCacheService", () => {
   });
 
   describe("ShadowRootCacheService::getCachedShadowRoots", () => {
-    it("should return the shadow roots hosted inside an element without caching nor observing the element", () => {
-      expect.assertions(3);
-
-      document.body.innerHTML = "<section id='inside'></section><section id='outside'></section>";
-      const inside = document.getElementById("inside");
-      const insideRoot = document.createElement("div").attachShadow({ mode: "open" });
-      inside.appendChild(insideRoot.host);
-      const outsideRoot = document.createElement("div").attachShadow({ mode: "open" });
-      document.getElementById("outside").appendChild(outsideRoot.host);
-
-      expect(ShadowRootCacheService.getCachedShadowRoots(inside)).toEqual([insideRoot]);
-      expect(ShadowRootCacheService.peekCache(inside)).toBeUndefined();
-      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledWith(document);
-    });
-
-    it("should filter the shadow roots of an element inside a shadow root against that shadow root's cache", () => {
-      expect.assertions(2);
-
-      const outerRoot = document.createElement("div").attachShadow({ mode: "open" });
-      document.body.appendChild(outerRoot.host);
-      const section = document.createElement("section");
-      outerRoot.appendChild(section);
-      const innerRoot = document.createElement("div").attachShadow({ mode: "open" });
-      section.appendChild(innerRoot.host);
-
-      expect(ShadowRootCacheService.getCachedShadowRoots(section)).toEqual([innerRoot]);
-      expect(ShadowRootCacheService.peekCache(outerRoot)).toEqual([innerRoot]);
-    });
-
     it("should initialize the cache when there is no cache entry", () => {
       expect.assertions(3);
 
@@ -132,7 +103,7 @@ describe("ShadowRootCacheService", () => {
     });
 
     it("should collect the shadow roots only once for a given element", () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const host = document.createElement("div");
       const shadowRoot = host.attachShadow({ mode: "open" });
@@ -143,23 +114,7 @@ describe("ShadowRootCacheService", () => {
 
       expect(second).toBe(first);
       expect(collectSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it("should re-arm the observer of a root whose observer was disconnected while its cache survived", () => {
-      expect.assertions(3);
-
-      const host = document.createElement("div");
-      const shadowRoot = host.attachShadow({ mode: "open" });
-      jest.spyOn(ShadowRootCollectorService, "collectShadowRoots").mockReturnValue([shadowRoot]);
-
-      ShadowRootCacheService.getCachedShadowRoots(document);
-      // InFormManager.destroy() disconnects the document observer but keeps its cache entry.
-      ShadowMutationObserverService.disconnectObserver(document);
-      ShadowRootCacheService.getCachedShadowRoots(document);
-
-      expect(ShadowRootCacheService.peekCache(document)).toEqual([shadowRoot]);
-      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledTimes(2);
-      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledWith(document);
+      expect(ShadowMutationObserverService.observeShadowRootChanges).toHaveBeenCalledTimes(1);
     });
 
     it("should return the cached empty results without collecting again", () => {

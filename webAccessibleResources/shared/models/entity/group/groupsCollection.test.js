@@ -281,34 +281,4 @@ describe("GroupsCollection", () => {
       expect(collection).toHaveLength(2);
     });
   });
-
-  describe("GroupsCollection::getChangedGroups", () => {
-    const groupsDtos = () => defaultGroupsDtos(3, { withGroupsUsers: 2 });
-
-    it("returns no group when both collections hold the same groups", () => {
-      expect.assertions(1);
-      const dtos = groupsDtos();
-      const collection = new GroupsCollection(dtos);
-      expect(collection.getChangedGroups(new GroupsCollection([...dtos].reverse()))).toEqual([]);
-    });
-
-    it("returns the groups whose membership or data changed", () => {
-      expect.assertions(1);
-      const dtos = groupsDtos();
-      const collection = new GroupsCollection(dtos);
-      const otherDtos = [...dtos];
-      otherDtos[0] = { ...dtos[0], groups_users: dtos[0].groups_users.slice(1) };
-      otherDtos[2] = { ...dtos[2], name: "Renamed" };
-      const changedGroups = collection.getChangedGroups(new GroupsCollection(otherDtos));
-      expect(changedGroups.map((group) => group.id)).toEqual([dtos[0].id, dtos[2].id]);
-    });
-
-    it("returns the groups missing from the other collection", () => {
-      expect.assertions(1);
-      const dtos = groupsDtos();
-      const collection = new GroupsCollection(dtos);
-      const changedGroups = collection.getChangedGroups(new GroupsCollection(dtos.slice(1)));
-      expect(changedGroups.map((group) => group.id)).toEqual([dtos[0].id]);
-    });
-  });
 });

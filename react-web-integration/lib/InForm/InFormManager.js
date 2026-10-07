@@ -13,10 +13,11 @@
  */
 
 import InFormCallToActionField from "./InFormCallToActionField";
+import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
-import { SHADOW_RESCAN_FIELD_SELECTOR, CONTAINER_VISIBILITY_ATTRIBUTES } from "./InFormFieldDictionary";
+import { SHADOW_RESCAN_FIELD_SELECTOR } from "./InFormFieldDictionary";
 import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
 import DomUtils from "../Dom/DomUtils";
 import debounce from "debounce-promise";
@@ -24,27 +25,10 @@ import UserEventsService from "../User/UserEventsService";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
 import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
-import FormExtractionService from "../../services/DomExtraction/FormExtractionService";
-import OrphanFieldsExtractionService from "../../services/DomExtraction/OrphanFieldsExtractionService";
-import FieldAggregatorService from "../../services/DomExtraction/FieldAggregatorService";
-import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
-import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
-import PageClassificationService from "../../services/PageClassificationService";
-import { FieldRole } from "../../services/classification/Taxonomy";
 
 const Z_INDEX_MAX = 2147483647;
 const HOST_MOUNT_MAX_RETRIES = 3;
 const HOST_MOUNT_RETRY_DELAY = 100;
-
-// Roles which get a username call-to-action.
-const IDENTIFIER_ROLES = [FieldRole.USERNAME, FieldRole.EMAIL];
-// Roles which get a password call-to-action.
-const PASSWORD_ROLES = [
-  FieldRole.CURRENT_PASSWORD,
-  FieldRole.PASSWORD,
-  FieldRole.NEW_PASSWORD,
-  FieldRole.PASSWORD_CONFIRMATION,
-];
 
 /**
  * Manages the in-form web integration including call-to-action and menu
@@ -54,14 +38,21 @@ class InFormManager {
    * Default constructor
    */
   constructor() {
+    /** In-form username and password callToActionFields in the target page*/
     this.callToActionFields = [];
+    /** In-form menu menuField in the target page*/
     this.menuField = null;
+    /** In-form form fields in the target page*/
     this.credentialsFormFields = [];
+    /** Debounced re-scan of auth fields */
     this.updateAuthenticationFieldsDebounce = null;
-    this._pendingFieldScan = false;
+    /** Unsubscribe from the shadow dom mutations */
     this._unsubscribeShadowMutations = null;
+
+    /** The shadow root with the host **/
     this.host = null;
     this.shadowRoot = null;
+
     this.hostMutationObserver = null;
     this.htmlMutationObserver = null;
     this.bodyMutationObserver = null;
@@ -122,17 +113,15 @@ class InFormManager {
      */
     await this.waitingAnimations(document.documentElement);
     await this.waitingAnimations(document.body);
-    // OAuth / SPA shells load with the body hidden and reveal it via JS. `initialize()` runs once, so we
-    // wait for the reveal instead of bailing (which would leave the integration dead until reload).
+    // Do not initialize if the page is not visible enough before inserting elements
     if (this.isPageNotVisible()) {
-      await this.waitUntilPageVisible();
+      console.debug("Cannot insert the in-form menu manager into a page that is not visible.");
+      return;
     }
 
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
 
-    ShadowDomFocusHealerService.installFocusinHealer((input) =>
-      this.callToActionFields.some(({ field }) => field === input),
-    );
+    ShadowDomFocusHealerService.installFocusinHealer();
 
     this.findAndSetAuthenticationFields();
     this.handleDomChange();
@@ -163,7 +152,9 @@ class InFormManager {
   }
 
   /**
-   * Destroys the component when a style mutation hides the host or the html or body tags.
+   * Monitor inline `style` attribute mutations on the host, <html>, and <body>.
+   * If a mutation makes any of these elements non-visible (e.g., display:none, opacity:0,
+   * visibility:hidden), the component is destroyed as a defensive measure.
    */
   handleDomStyleMutation() {
     // Check any DOM style changes on the element
@@ -181,9 +172,21 @@ class InFormManager {
    * @param element
    */
   destroyIfElementNotVisible(element) {
-    if (!ElementVisibilityService.isElementRendered(element)) {
+    if (this.isElementNotVisible(element)) {
       this.destroy();
     }
+  }
+
+  /**
+   * Is element not visible
+   * @param element
+   * @return {boolean}
+   */
+  isElementNotVisible(element) {
+    const visibilityOptions = {
+      visibilityProperty: true,
+    };
+    return getComputedStyle(element).opacity < 0.4 || !element.checkVisibility(visibilityOptions);
   }
 
   /**
@@ -194,83 +197,21 @@ class InFormManager {
   async waitingAnimations(element) {
     const animations = element.getAnimations();
     await Promise.all(
-      animations.map((animation) => {
-        // Wait only for animations that _will_ end
-        const endTime = animation.effect?.getComputedTiming().endTime;
-        if (!Number.isFinite(endTime)) {
-          return Promise.resolve();
-        }
-
-        // Set catch as no-op to avoid unhandled promise rejection when the animation is aborted
-        return animation.finished.catch(() => {});
-      }),
+      animations.map(
+        (animation) =>
+          new Promise((resolve) => {
+            animation.addEventListener("finish", resolve, { once: true });
+          }),
+      ),
     );
   }
 
   /**
-   * Whether the page is not visible, judged on <html>/<body> being rendered (display / visibility / opacity)
-   * — NOT their box size: apps rendering into a fixed/absolute container leave both at 0px while fully
-   * visible (e.g. my.nutanix.com). The per-field size floor (anti-clickjacking) is unaffected.
+   * Is page not visible
    * @return {boolean}
    */
   isPageNotVisible() {
-    return (
-      !ElementVisibilityService.isElementRendered(document.documentElement) ||
-      !ElementVisibilityService.isElementRendered(document.body)
-    );
-  }
-
-  /**
-   * Resolve once the page reveals its body. No timeout: apps reveal after a variable delay, so we wait as
-   * long as it takes. Observers are torn down once visible (or with the document on navigation).
-   * @return {Promise<boolean>} Resolves `true` once the page becomes visible.
-   */
-  async waitUntilPageVisible() {
-    if (!this.isPageNotVisible()) {
-      return true;
-    }
-
-    return new Promise((resolve) => {
-      let mutationObserver = null;
-      let resizeObserver = null;
-      let pollingId = null;
-
-      const cleanup = () => {
-        mutationObserver?.disconnect();
-        resizeObserver?.disconnect();
-        clearInterval(pollingId);
-      };
-
-      const settleIfVisible = () => {
-        if (this.isPageNotVisible()) {
-          return;
-        }
-        cleanup();
-        resolve(true);
-      };
-
-      // Reveal via a style/class/hidden toggle on html/body.
-      mutationObserver = new MutationObserver(settleIfVisible);
-      mutationObserver.observe(document.documentElement, { attributes: true });
-      mutationObserver.observe(document.body, { attributes: true });
-
-      // Reveal via layout (body goes from 0px to a real size).
-      resizeObserver = new ResizeObserver(settleIfVisible);
-      resizeObserver.observe(document.documentElement);
-      resizeObserver.observe(document.body);
-
-      // Reveal via an external CSS change
-      let retriesLeft = 5;
-      pollingId = setInterval(() => {
-        if (retriesLeft > 0) {
-          retriesLeft--;
-          settleIfVisible();
-        } else {
-          // In this case, we leave the mutation/resize observers on as they may fire later
-          clearInterval(pollingId);
-        }
-      }, 1000);
-    });
+    return this.isElementNotVisible(document.documentElement) || this.isElementNotVisible(document.body);
   }
 
   /**
@@ -302,52 +243,41 @@ class InFormManager {
   }
 
   /**
-   * Creates the shadow host on first call, otherwise moves it back into the container if it moved.
-   * @param {HTMLElement} [newContainer] The element the host should be mounted into.
-   */
-  ensureHostMounted(newContainer) {
-    const container = newContainer ?? this.getContainerElement(this.callToActionFields.map(({ field }) => field));
-
-    if (!this.host) {
-      this.createAndInsertShadowRootWithHost(container);
-    } else if (this.host.parentNode !== container || container.lastChild !== this.host) {
-      // Re-append the host when it is not the last child so it stays above overlays at equal z-index.
-      container.appendChild(this.host);
-    }
-  }
-
-  /**
    * Find authentication callToActionFields in the document and set them as object properties
    */
   findAndSetInputFields() {
     /*
-     * We classify the page once, then partition the classified fields into username / password / OTP
-     * DOM elements by role.
-     * If a field was previously found, we reuse the same InformUsernameField, otherwise we create one.
-     * Else we clean and reset callToActionFields.
+     * We find the username / passwords / OTP DOM callToActionFields.
+     * If it was previously found, we reuse the same InformUsernameField, otherwise we create one
+     * Else we clean and reset callToActionFields
      */
-    const { fields } = PageClassificationService.classifyPage();
-    const newUsernameFields = fields.filter((field) => IDENTIFIER_ROLES.includes(field.role));
-    const newPasswordFields = fields.filter((field) => PASSWORD_ROLES.includes(field.role));
-    const newOTPFields = fields.filter((field) => field.role === FieldRole.TOTP);
+    const newUsernameFields = InFormCallToActionField.findAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+    const newPasswordFields = InFormCallToActionField.findAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
+    const newOTPFields = InFormCallToActionField.findAll(InFormFieldSelector.OTP_FIELD_SELECTOR);
 
-    const container = this.getContainerElement(
-      [...newUsernameFields, ...newPasswordFields, ...newOTPFields].map((field) => field.element),
-    );
-    this.ensureHostMounted(container);
+    const container = this.getContainerElement(newUsernameFields, newPasswordFields, newOTPFields);
+
+    // Ensure the host exists and move it to the correct mount target if needed.
+    if (!this.host) {
+      this.createAndInsertShadowRootWithHost(container);
+    } else if (this.host.parentNode !== container) {
+      container.appendChild(this.host);
+    }
 
     /**
-     * A function factory to map a classified field to an existing call-to-action or create a new one.
-     * The classification (role and scope) is refreshed on every scan, reused instances included, so
-     * the fill logic never reads the roles of a previous state of the DOM.
+     * A function factory to map a field to an existing field or create a new one
      * @param {"username"|"password"|"otp"} fieldType The type of field to create
-     * @returns {function({element: HTMLElement, role: string, formId: string}): InFormCallToActionField} The function to map a field to an InFormCallToActionField
+     * @returns {function(HTMLElement): InFormCallToActionField} The function to map a field to an InFormCallToActionField
      */
     const mapField = (fieldType) => (field) => {
-      const existingField = this.callToActionFields.find(({ field: ctaField }) => ctaField === field.element);
-      const callToActionField = existingField ?? new InFormCallToActionField(field.element, fieldType, this.shadowRoot);
-      callToActionField.setClassification(field.role, field.formId);
-      return callToActionField;
+      const existingField = this.callToActionFields.find(({ field: ctaField }) => ctaField === field);
+
+      if (existingField) {
+        existingField.cacheViewableRect();
+        return existingField;
+      }
+
+      return new InFormCallToActionField(field, fieldType, this.shadowRoot);
     };
 
     let newCTAFields = [
@@ -361,9 +291,6 @@ class InFormManager {
     } else {
       this.clean();
     }
-
-    // Cache each field's viewport rect once
-    newCTAFields.forEach((cta) => cta.cacheViewableRect());
 
     this.callToActionFields = newCTAFields;
   }
@@ -385,65 +312,64 @@ class InFormManager {
   }
 
   /**
-   * Finds the credential form containers (forms, custom forms and pseudo-forms).
+   * Find authentication formFields in the document and set them as object properties
    */
   findAndSetCredentialsFormFields() {
-    const previous = this.credentialsFormFields ?? [];
+    /**
+     * We find the form DOM formFields.
+     * If it was previously found, we reuse the same InformFormField, otherwise we create one
+     */
+    const newCredentialsFormFields = InFormCredentialsFormField.findAll();
 
-    // Collect the explicit containers (forms and custom forms).
-    let formElements = FormExtractionService.aggregateForms();
-
-    // Append pseudo-forms built from orphan call-to-action fields
-    const discoveredFields = this.callToActionFields.map((cta) => ({
-      element: cta.field,
-      viewableRect: cta.viewableRect,
-    }));
-    OrphanFieldsExtractionService.aggregatePseudoForms(discoveredFields, formElements);
-
-    // Fill each container with its fields and drop the containers left empty.
-    formElements = FieldAggregatorService.aggregateFields(formElements);
-
-    // Turn the records into InFormCredentialsFormField instances, reusing existing ones.
-    this.credentialsFormFields = this._materialize(formElements, previous);
+    if (newCredentialsFormFields.length > 0) {
+      this.credentialsFormFields = this._materialize(newCredentialsFormFields);
+    } else {
+      this.credentialsFormFields = [];
+    }
   }
 
   /**
-   * Maps each container to an InFormCredentialsFormField, reusing the existing instance and destroying those whose container is gone.
-   * @param {Array<{ containerElement: Element, isPseudoForm: boolean }>} formElements The discovered containers.
-   * @param {InFormCredentialsFormField[]} previous The instances from the previous scan.
+   * Map each container to an InFormCredentialsFormField instance.
+   * @param {HTMLElement[]} newCredentialsFormFields The discovered form containers.
    * @return {InFormCredentialsFormField[]}
    * @private
    */
-  _materialize(formElements, previous) {
-    const next = formElements.map((record) => {
-      // Reuse the existing instance for this container.
-      const existing = previous.find(({ field }) => field === record.containerElement);
-      if (existing) {
-        return existing;
+  _materialize(newCredentialsFormFields) {
+    // Get all fields, filtered by their types
+    const { usernameCtaFields, passwordCtaFields } = this.callToActionFields.reduce(
+      (acc, ctaField) => {
+        if (ctaField.fieldType === "username") {
+          acc.usernameCtaFields.push(ctaField);
+        } else if (ctaField.fieldType === "password") {
+          acc.passwordCtaFields.push(ctaField);
+        }
+        return acc;
+      },
+      { usernameCtaFields: [], passwordCtaFields: [] },
+    );
+
+    const next = newCredentialsFormFields.map((newField) => {
+      const existingField = this.credentialsFormFields.find(({ field: formField }) => formField === newField);
+
+      if (!existingField) {
+        // We try to find username and password fields contained in the new form field
+        const usernameField = usernameCtaFields.find((ctaField) => newField.contains(ctaField.field));
+        const passwordField = passwordCtaFields.find((ctaField) => newField.contains(ctaField.field));
+
+        return new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
       }
 
-      // Attach the call-to-action fields inside the container
-      const ctasInContainer = this.callToActionFields.filter((cta) =>
-        ShadowDomQueryService.containsDeep(record.containerElement, cta.field),
-      );
-      const ctasIn = (type) => ctasInContainer.filter((cta) => cta.fieldType === type).map((cta) => cta.field);
-
-      const [passwordField, ...confirmPasswordFields] = ctasIn("password");
-      const [usernameField] = ctasIn("username");
-      const [otpField] = ctasIn("otp");
-
-      return new InFormCredentialsFormField(record.containerElement, {
-        usernameField,
-        passwordField,
-        isPseudoForm: record.isPseudoForm,
-        otpField,
-        confirmPasswordFields,
-      });
+      return existingField;
     });
 
-    // Destroy the instances whose container is gone.
-    previous.filter((instance) => !next.includes(instance)).forEach((instance) => instance.destroy());
+    // Destroy the instances that no longer exist
+    this.credentialsFormFields.filter((instance) => !next.includes(instance)).forEach((instance) => instance.destroy());
 
+    for (let field of this.credentialsFormFields) {
+      if (!next.includes(field)) {
+        field.destroy();
+      }
+    }
     return next;
   }
 
@@ -471,18 +397,6 @@ class InFormManager {
   }
 
   /**
-   * Returns whether the host is at a valid location, remounting it otherwise.
-   * @returns {boolean}
-   */
-  _ensureHostIntegrity() {
-    if (this.isHostInValidLocation()) {
-      return true;
-    }
-    this.retryMountHost();
-    return false;
-  }
-
-  /**
    * Remount the host up to 3 times if it is moved out of the DOM
    * If the host keeps being moved out, it is destroyed.
    * @param {number} attempt Remount counter.
@@ -490,17 +404,9 @@ class InFormManager {
   retryMountHost(attempt = 1) {
     console.warn(`The host has been moved out of the DOM, retrying... (${attempt}/${HOST_MOUNT_MAX_RETRIES})`);
 
-    // Remount the host only
-    this.ensureHostMounted();
+    // Remount the host
+    this.findAndSetAuthenticationFields();
     this.handleInformCallToActionClickEvent();
-
-    // Recovery: an SPA that reveals its login form by rebuilding <body> displaces the host in the same
-    // batch that adds the form, so the field scan armed by that batch was skipped on invalid host
-    // integrity and no follow-up mutation may retry it. Re-run it here, but only once the host is back in
-    // a valid location — extraction stays gated on a trusted host, so the anti-tampering invariant holds.
-    if (this._pendingFieldScan && this.isHostInValidLocation()) {
-      this.updateAuthenticationFieldsDebounce?.();
-    }
 
     // Wait N milliseconds before checking again
     setTimeout(() => {
@@ -522,18 +428,25 @@ class InFormManager {
    */
   handleDomChange() {
     const updateAuthenticationFields = () => {
-      if (!this._ensureHostIntegrity()) {
-        return;
+      /**
+       * The only way to prevent an attacker trying to move the host into another parent element and add opacity.
+       * The host must be either in the body or inside a dialog. Anything else is considered tampering: we try to
+       * re-mount the host a few times before giving up and destroying it.
+       */
+      if (this.isHostInValidLocation()) {
+        this.findAndSetAuthenticationFields();
+        this.handleInformCallToActionClickEvent();
+      } else {
+        this.retryMountHost();
       }
-
-      if (!this._pendingFieldScan) {
-        return;
-      }
-      this._pendingFieldScan = false;
-      this.findAndSetAuthenticationFields();
-      this.handleInformCallToActionClickEvent();
     };
 
+    // Use requestIdleCallback when available to schedule work during browser idle periods,
+    // This enables us perform background and low priority work on the main thread, without
+    // impacting latency-critical events such as animation and input response.
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
+    // If requestIdleCallback is not available as in the case of Safari, fall back to a
+    // simple debounce to avoid too many requests.
     this.updateAuthenticationFieldsDebounce = window.requestIdleCallback
       ? debounce(
           () => {
@@ -555,6 +468,7 @@ class InFormManager {
           accumulate: false,
         });
 
+    // Search again for authentication callToActionFields to attach when the DOM changes
     this._unsubscribeShadowMutations = ShadowMutationObserverService.subscribeToShadowMutations(this.onShadowMutation);
   }
 
@@ -570,31 +484,21 @@ class InFormManager {
       return;
     }
 
-    // A new shadow root appeared: re-scan right away so the focused field gets its call-to-action
-    if (shadowRootsChanged) {
-      this.findAndSetAuthenticationFields();
-      this.handleInformCallToActionClickEvent();
-      this._pendingFieldScan = true;
-      this.updateAuthenticationFieldsDebounce?.();
-      return;
-    }
+    /*
+     * If the mutation is on the document, always re-scan.
+     */
+    if (root.nodeType === Node.DOCUMENT_NODE) {
+      this.updateAuthenticationFieldsDebounce();
+    } else if (
+      shadowRootsChanged ||
+      this._mutationsAffectAuthenticationFields(mutations) ||
+      this._attributeMutationAffectsField(mutations)
+    ) {
+      /*
+       * Otherwise, if the mutation is on a shadow root, re-scan only when the change is relevant.
+       */
 
-    // Does this batch actually touch a credential-relevant node or attribute?
-    const affectsFields =
-      this._mutationsAffectAuthenticationFields(mutations) || this._attributeMutationAffectsField(mutations);
-
-    // A field change may turn an ignored input into a credential
-    if (affectsFields) {
-      ShadowDomFocusHealerService.resetHealAttempts();
-    }
-
-    const isDocumentScope = root.nodeType === Node.DOCUMENT_NODE;
-
-    this._pendingFieldScan = this._pendingFieldScan || affectsFields;
-
-    // Always schedule on document scope so the host check runs on every batch
-    if (affectsFields || isDocumentScope) {
-      this.updateAuthenticationFieldsDebounce?.();
+      this.updateAuthenticationFieldsDebounce();
     }
   }
 
@@ -618,26 +522,18 @@ class InFormManager {
   }
 
   /**
-   * Returns true when a watched attribute changed on a field, or on a container holding a field.
+   * Filter on attributes mutations and target.
    * @param {MutationRecord[]} mutations
-   * @return {boolean} true if the mutation may affect the credential field set
+   * @return {boolean} true if the mutation affects an attribute's field
    * @private
    */
   _attributeMutationAffectsField(mutations) {
-    return mutations.some((mutation) => {
-      if (mutation.type !== "attributes" || mutation.target?.nodeType !== Node.ELEMENT_NODE) {
-        return false;
-      }
-
-      if (mutation.target.matches(SHADOW_RESCAN_FIELD_SELECTOR)) {
-        return true;
-      }
-
-      return (
-        CONTAINER_VISIBILITY_ATTRIBUTES.includes(mutation.attributeName) &&
-        Boolean(mutation.target.querySelector(SHADOW_RESCAN_FIELD_SELECTOR))
-      );
-    });
+    return mutations.some(
+      (mutation) =>
+        mutation.type === "attributes" &&
+        mutation.target?.nodeType === Node.ELEMENT_NODE &&
+        mutation.target.matches(SHADOW_RESCAN_FIELD_SELECTOR),
+    );
   }
 
   /**
@@ -651,25 +547,9 @@ class InFormManager {
    * Whenever the user clicks on the in-form call-to-action, it inserts the in-form menu iframe
    */
   handleInFormMenuInsertionEvent() {
-    port.on("passbolt.in-form-menu.open", (applicationId) => {
-      /*
-       * The call-to-action names itself: its iframe was created with this application id, and it is
-       * that same iframe's code which asks for the menu once clicked. Reading the target from the
-       * message leaves nothing to infer — the focus is global state, and a page that manages its own
-       * focus keeps the click watcher from ever recording which call-to-action was clicked.
-       *
-       * It must be a call-to-action we track, and one that is actually on screen: since the target
-       * is now named rather than deduced, it has to be a target that was clickable. A field with no
-       * call-to-action rendered was not clicked, whatever the message claims.
-       */
-      const callToActionField = this.callToActionFields.find((field) => field.id === applicationId);
-      if (!callToActionField || !this.shadowRoot.getElementById(callToActionField.iframeId)) {
-        return;
-      }
-      // The fill handlers read this afterwards to know which field to serve.
-      this.lastCallToActionFieldClicked = callToActionField;
+    port.on("passbolt.in-form-menu.open", () => {
       this.menuField?.destroy();
-      this.menuField = new InFormMenuField(callToActionField.field, this.shadowRoot);
+      this.menuField = new InFormMenuField(this.lastCallToActionFieldClicked.field, this.shadowRoot);
     });
   }
 
@@ -678,7 +558,7 @@ class InFormManager {
    */
   handleInFormMenuRemoveEvent() {
     port.on("passbolt.in-form-menu.close", () => {
-      this.menuField?.removeIframe();
+      this.menuField.removeIframe();
     });
   }
 
@@ -696,14 +576,10 @@ class InFormManager {
   /** Whenever one requires to get the type and value of the input attached to the last call-to-action performed */
   handleGetLastCallToActionClickedInput() {
     port.on("passbolt.web-integration.last-performed-call-to-action-input", (requestId) => {
-      if (this.lastCallToActionFieldClicked) {
-        port.emit(requestId, "SUCCESS", {
-          type: this.lastCallToActionFieldClicked.fieldType,
-          value: this.lastCallToActionFieldClicked.field.value,
-        });
-      } else {
-        port.emit(requestId, "ERROR", { name: "Error", message: "No CTA has been clicked yet." });
-      }
+      port.emit(requestId, "SUCCESS", {
+        type: this.lastCallToActionFieldClicked.fieldType,
+        value: this.lastCallToActionFieldClicked.field.value,
+      });
     });
   }
 
@@ -728,63 +604,11 @@ class InFormManager {
   }
 
   /**
-   * The password call-to-action fields a secret must be written into, given the one the user acted on.
-   *
-   * A password confirmation always confirms the new password of its scope, so the two are filled
-   * together and either one can be the field the user acted on: clicking the call-to-action of the
-   * confirmation fills the new password as well, where it used to leave it empty.
-   *
-   * On a change-password form the secret goes into the current password field, and that scope's
-   * confirmation confirms the *new* password: it is left alone, otherwise the old secret would end up
-   * in the new password's confirmation.
-   *
-   * @param {InFormCallToActionField} passwordCallToActionField A password call-to-action.
-   * @returns {InFormCallToActionField[]} The call-to-action fields to fill, the primary one first.
-   */
-  passwordFieldsToFill(passwordCallToActionField) {
-    // Without a scope there is nothing to pair the field with; fill it alone.
-    if (!passwordCallToActionField.formId) {
-      return [passwordCallToActionField];
-    }
-
-    const inScope = (role) =>
-      this.callToActionFields.filter(
-        (callToActionField) =>
-          callToActionField.role === role && callToActionField.formId === passwordCallToActionField.formId,
-      );
-
-    const primary =
-      passwordCallToActionField.role === FieldRole.PASSWORD_CONFIRMATION
-        ? inScope(FieldRole.NEW_PASSWORD)[0]
-        : passwordCallToActionField;
-
-    if (!primary) {
-      // An orphan confirmation: no new password to pair it with, fill the field the user acted on.
-      return [passwordCallToActionField];
-    }
-    if (primary.role !== FieldRole.NEW_PASSWORD) {
-      return [primary];
-    }
-    return [primary, ...inScope(FieldRole.PASSWORD_CONFIRMATION)];
-  }
-
-  /**
-   * Autofills a password call-to-action field and, where the scope has one, its confirmation.
-   * @param {InFormCallToActionField} passwordCallToActionField A password call-to-action.
-   * @param {string} password The password to fill in.
-   */
-  fillPasswordPair(passwordCallToActionField, password) {
-    this.passwordFieldsToFill(passwordCallToActionField).forEach((callToActionField) =>
-      UserEventsService.autofill(callToActionField.field, password),
-    );
-  }
-
-  /**
    * Whenever one requests to fill the current page form with given credentials
    */
   handleFillCredentials() {
     port.on("passbolt.web-integration.fill-credentials", ({ username, password, totp }) => {
-      const currentFieldType = this.lastCallToActionFieldClicked.fieldType;
+      const currentFieldType = this.lastCallToActionFieldClicked?.fieldType;
 
       const isUsernameType = currentFieldType === "username";
       const isPasswordType = currentFieldType === "password";
@@ -792,8 +616,8 @@ class InFormManager {
 
       if (!isOTPType) {
         if (!isUsernameType) {
-          // Simulate a user to autofill the password field and, where there is one, its confirmation
-          this.fillPasswordPair(this.lastCallToActionFieldClicked, password);
+          // Simulate a user to autofill the password field
+          UserEventsService.autofill(this.lastCallToActionFieldClicked.field, password);
           // Get username fields and find the one with the lowest common ancestor
           const usernameFields = this.callToActionFields.filter(
             (callToActionField) => callToActionField.fieldType === "username",
@@ -818,8 +642,8 @@ class InFormManager {
             passwordFields,
           );
           if (passwordField) {
-            // Simulate a user to autofill the password field and, where there is one, its confirmation
-            this.fillPasswordPair(passwordField, password);
+            // Simulate a user to autofill the password field
+            UserEventsService.autofill(passwordField.field, password);
           }
         }
       } else if (totp) {
@@ -847,16 +671,12 @@ class InFormManager {
         (callToActionField) =>
           !callToActionField.field.value && UserEventsService.autofill(callToActionField.field, password),
       );
-
-      this.menuField?.removeIframe();
-
-      const clickedField = this.lastCallToActionFieldClicked?.field;
-      if (clickedField) {
-        const formField = this.credentialsFormFields.find((formField) =>
-          ShadowDomQueryService.containsDeep(formField.field, clickedField),
-        );
-        formField?.handleAutoSaveEvent();
-      }
+      this.menuField.removeIframe();
+      // Listen the auto-save on the appropriate form field
+      const formField = this.credentialsFormFields.find((formField) =>
+        formField.field.contains(this.lastCallToActionFieldClicked.field),
+      );
+      formField?.handleAutoSaveEvent();
     });
   }
 
@@ -871,10 +691,7 @@ class InFormManager {
   /**
    * Handler of the "cut" and "copy" event.
    */
-  handleClipboardChange(e) {
-    if (!e?.isTrusted) {
-      return;
-    }
+  handleClipboardChange() {
     this.clipboardServiceWorkerService.cancelClipboardFlush();
   }
 
@@ -937,11 +754,7 @@ class InFormManager {
    * Remove all event, observer and iframe
    */
   destroy() {
-    // Disarm the field-scan gate: a debounced callback already in flight must not re-scan (and re-schedule
-    // itself via the retryMountHost recovery) on a destroyed instance.
-    this._pendingFieldScan = false;
     this._unsubscribeShadowMutations?.();
-    ShadowDomFocusHealerService.uninstallFocusinHealer();
     ShadowMutationObserverService.disconnectObserver(document);
     this.hostMutationObserver.disconnect();
     this.htmlMutationObserver.disconnect();

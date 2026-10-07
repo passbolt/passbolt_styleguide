@@ -23,7 +23,6 @@ import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceCon
 import { ContextualMenuContext } from "../../../contexts/ContextualMenuContext";
 import { DialogContext } from "../../../contexts/DialogContext";
 import { ResourceTypesLocalStorageContext } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import { WorkflowContext } from "../../../contexts/WorkflowContext";
 
 /**
  * The FilterResourcesByFolders component represented as a page
@@ -62,11 +61,9 @@ export default class FilterResourcesByFoldersPage {
                   value={{ get: () => props.resourceTypes, resourceTypes: props.resourceTypes }}
                 >
                   <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
-                    <WorkflowContext.Provider value={props.workflowContext}>
-                      <DragContext.Provider value={props.dragContext}>
-                        <FilterResourcesByFolders.WrappedComponent {...props} />
-                      </DragContext.Provider>
-                    </WorkflowContext.Provider>
+                    <DragContext.Provider value={props.dragContext}>
+                      <FilterResourcesByFolders.WrappedComponent {...props} />
+                    </DragContext.Provider>
                   </ResourceWorkspaceContext.Provider>
                 </ResourceTypesLocalStorageContext.Provider>
               </DialogContext.Provider>

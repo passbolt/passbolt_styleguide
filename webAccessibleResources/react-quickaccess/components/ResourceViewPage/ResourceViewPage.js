@@ -62,18 +62,10 @@ const TRANSITION_STATES = {
   COPY_TOTP_STATE_PROCESSING: "copy_totp_state_processing",
   COPY_TOTP_STATE_DONE: "copy_totp_state_done",
 
-  COPY_PIN_CODE_STATE_DEFAULT: "copy_pin_code_state_default",
-  COPY_PIN_CODE_STATE_PROCESSING: "copy_pin_code_state_processing",
-  COPY_PIN_CODE_STATE_DONE: "copy_pin_code_state_done",
-
   PASSWORD_DECRYPTING: "password_decrypting",
   PASSWORD_NOT_DECRYPTING: "password_not_decrypting",
-
   TOTP_DECRYPTING: "totp_decrypting",
   TOTP_NOT_DECRYPTING: "totp_not_decrypting",
-
-  PIN_CODE_DECRYPTING: "pin_code_decrypting",
-  PIN_CODE_NOT_DECRYPTING: "pin_code_not_decrypting",
 };
 
 class ResourceViewPage extends React.Component {
@@ -92,11 +84,9 @@ class ResourceViewPage extends React.Component {
     this.handleGoBackClick = this.handleGoBackClick.bind(this);
     this.handleCopyLoginClick = this.handleCopyLoginClick.bind(this);
     this.handleCopyPasswordClick = this.handleCopyPasswordClick.bind(this);
-    this.handleCopyPinCodeClick = this.handleCopyPinCodeClick.bind(this);
     this.handleGoToUrlClick = this.handleGoToUrlClick.bind(this);
     this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
     this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
-    this.handleViewPinCodeButtonClick = this.handleViewPinCodeButtonClick.bind(this);
     this.handleCopyTotpClick = this.handleCopyTotpClick.bind(this);
     this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
     this.handleClickAdditionalUrisSection = this.handleClickAdditionalUrisSection.bind(this);
@@ -111,14 +101,12 @@ class ResourceViewPage extends React.Component {
       copyPasswordState: "default",
       copyLoginState: "default",
       copyTotpState: "default",
-      copyPinCodeState: "default",
       error: "",
       errorTimeout: null,
       previewedSecret: null, // The type of previewed secret
       plaintextSecretDto: null, // The current resource password decrypted
       isPasswordDecrypting: false, // if the password is decrypting
       isTotpDecrypting: false, // if the totp is decrypting
-      isPinCodeDecrypting: false, //if the pin code is decrypting
       isOpenAdditionalUris: false, // section additional uris open
       copiedProperty: null, //the last property copied
     };
@@ -203,7 +191,6 @@ class ResourceViewPage extends React.Component {
         copyLoginState: "processing",
         copyPasswordState: "default",
         copyTotpState: "default",
-        copyPinCodeState: "default",
       });
 
       if (this.currentTimeout) {
@@ -277,7 +264,6 @@ class ResourceViewPage extends React.Component {
       copyLoginState: "default",
       copyPasswordState: "done",
       copyTotpState: "default",
-      copyPinCodeState: "default",
       copiedProperty: null,
     };
     this.setState(newState, () => {
@@ -467,122 +453,6 @@ class ResourceViewPage extends React.Component {
     this.setState({ plaintextSecretDto, previewedSecret });
   }
 
-  /**
-   * Handle copy pin code click
-   */
-  async handleCopyPinCodeClick() {
-    await this.copyPinCodeToClipboard();
-  }
-
-  /**
-   * Handle preview pin code button click
-   */
-  async handleViewPinCodeButtonClick() {
-    await this.togglePreviewPinCode();
-  }
-
-  /**
-   * Toggle preview pin code
-   * @returns {Promise<void>}
-   */
-  async togglePreviewPinCode() {
-    const isPinCodePreviewed = this.isPinCodePreviewed();
-    this.hidePreviewedSecret();
-    if (!isPinCodePreviewed) {
-      await this.previewPinCode();
-    }
-  }
-
-  /**
-   * Copy the pin code resource to clipboard
-   * @return {Promise<void>}
-   */
-  async copyPinCodeToClipboard() {
-    let plaintextSecretDto;
-    const isPinCodePreviewed = this.isPinCodePreviewed();
-
-    this.resetError();
-    this.setState({ copyPinCodeState: "processing" });
-
-    if (isPinCodePreviewed) {
-      plaintextSecretDto = this.state.plaintextSecretDto;
-    } else {
-      try {
-        plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
-      } catch (error) {
-        if (error.name !== "UserAbortsOperationError") {
-          return;
-        }
-      } finally {
-        this.setState({ copyPinCodeState: "default" });
-      }
-    }
-
-    if (!plaintextSecretDto) {
-      this.setState({ copyPinCodeState: "default" });
-      return;
-    }
-
-    if (!plaintextSecretDto.pin_code?.length) {
-      this.displayTemporarilyError(this.translate("The pin code is empty and cannot be copied to clipboard."));
-      this.setState({ copyPinCodeState: "default" });
-      return;
-    }
-
-    await this.clipboardServiceWorkerService.copyTemporarily(plaintextSecretDto.pin_code);
-
-    const newState = {
-      copyLoginState: "default",
-      copyPinCodeState: "done",
-      copyPasswordState: "default",
-      copyTotpState: "default",
-      copiedProperty: null,
-    };
-    this.setState(newState, () => {
-      //ensure it refreshes the animation after another click on the same property
-      this.setState({ copiedProperty: "pin_code" });
-    });
-
-    if (this.currentTimeout) {
-      clearTimeout(this.currentTimeout);
-    }
-
-    this.currentTimeout = setTimeout(() => {
-      this.setState({ copyPinCodeState: "default", copiedProperty: null });
-    }, CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND * 1000);
-  }
-
-  /**
-   * Preview pin code
-   * @returns {Promise<void>}
-   */
-  async previewPinCode() {
-    const previewedSecret = "pin_code";
-    let plaintextSecretDto;
-    this.setState({ error: "", isPinCodeDecrypting: true });
-
-    try {
-      plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
-    } catch (error) {
-      if (error.name !== "UserAbortsOperationError") {
-        return;
-      }
-    } finally {
-      this.setState({ isPinCodeDecrypting: false });
-    }
-
-    if (!plaintextSecretDto) {
-      return;
-    }
-
-    if (!plaintextSecretDto.pin_code?.length) {
-      this.displayTemporarilyError(this.translate("The pin code is empty and cannot be previewed."));
-      return;
-    }
-
-    this.setState({ plaintextSecretDto, previewedSecret });
-  }
-
   handleGoToUrlClick(event) {
     const primaryUri = this.state.resource.metadata?.uris?.[0];
 
@@ -652,14 +522,6 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * Check if the pin code is previewed
-   * @returns {boolean}
-   */
-  isPinCodePreviewed() {
-    return this.state.previewedSecret === "pin_code";
-  }
-
-  /**
    * Returns true if the logged in user can use the preview password capability.
    * @returns {boolean}
    */
@@ -692,17 +554,6 @@ class ResourceViewPage extends React.Component {
     );
   }
 
-  /**
-   * Is standalone PIN code resource
-   * @return {boolean}
-   */
-  get isStandalonePinCodeResource() {
-    return (
-      Boolean(this.state.resource.resource_type_id) &&
-      this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.isStandalonePinCode()
-    );
-  }
-
   render() {
     const primaryUri = this.state.resource.metadata?.uris?.[0];
     const additionalUris = this.state.resource.metadata?.uris?.slice(1);
@@ -731,7 +582,7 @@ class ResourceViewPage extends React.Component {
           </a>
         </div>
         <ul className="properties">
-          {!this.isStandaloneTotpResource && !this.isStandalonePinCodeResource && (
+          {!this.isStandaloneTotpResource && (
             <>
               <li className="property">
                 <div className="information">
@@ -1047,174 +898,44 @@ class ResourceViewPage extends React.Component {
               )}
             </li>
           )}
-          {this.isStandalonePinCodeResource && (
-            <li className="property">
-              <div className="information">
-                <span className="property-name">
-                  <Trans>Pin code</Trans>
-                </span>
-                <div className="password-wrapper">
-                  <div
-                    className={`property-value secret secret-pin-code ${this.isPinCodePreviewed() ? "" : "secret-copy"}`}
-                    title={
-                      this.isPinCodePreviewed()
-                        ? this.state.plaintextSecretDto?.pin_code
-                        : this.translate("Click to copy")
-                    }
-                  >
-                    <HiddenPassword
-                      canClick={canCopySecret}
-                      preview={this.state.plaintextSecretDto?.pin_code}
-                      onClick={this.handleCopyPinCodeClick}
-                    />
-                  </div>
-                  {this.canPreviewSecret && (
-                    <button
-                      onClick={this.handleViewPinCodeButtonClick}
-                      className="password-view inline button-transparent"
-                      disabled={this.state.isPinCodeDecrypting}
-                    >
-                      <Transition
-                        in={!this.state.isPinCodeDecrypting}
-                        appear={false}
-                        timeout={500}
-                        nodeRef={this.getNodeRef(TRANSITION_STATES.PIN_CODE_NOT_DECRYPTING)}
-                      >
-                        {(status) => (
-                          <span
-                            className={`transition fade-${status} ${this.state.isPinCodeDecrypting ? "visually-hidden" : ""}`}
-                          >
-                            {this.isPinCodePreviewed() ? <EyeCloseSVG /> : <EyeOpenSVG />}
-                          </span>
-                        )}
-                      </Transition>
-                      <Transition
-                        in={this.state.isPinCodeDecrypting}
-                        appear={true}
-                        timeout={500}
-                        nodeRef={this.getNodeRef(TRANSITION_STATES.PIN_CODE_DECRYPTING)}
-                      >
-                        {(status) => (
-                          <span
-                            className={`transition fade-${status} ${!this.state.isPinCodeDecrypting ? "visually-hidden" : ""}`}
-                          >
-                            <SpinnerSVG />
-                          </span>
-                        )}
-                      </Transition>
-                      <span className="visually-hidden">
-                        <Trans>View</Trans>
-                      </span>
-                    </button>
-                  )}
-                </div>
-              </div>
-              {canCopySecret && (
-                <>
-                  <a
-                    role="button"
-                    className="button button-transparent property-action copy-pin-code"
-                    onClick={this.handleCopyPinCodeClick}
-                    title={this.translate("Copy to clipboard")}
-                  >
-                    <Transition
-                      in={this.state.copyPinCodeState === "default"}
-                      appear={false}
-                      timeout={500}
-                      nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PIN_CODE_STATE_DEFAULT)}
-                    >
-                      {(status) => (
-                        <span
-                          className={`transition fade-${status} ${this.state.copyPinCodeState !== "default" ? "visually-hidden" : ""}`}
-                        >
-                          <CopySVG />
-                        </span>
-                      )}
-                    </Transition>
-                    <Transition
-                      in={this.state.copyPinCodeState === "processing"}
-                      appear={true}
-                      timeout={500}
-                      nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PIN_CODE_STATE_PROCESSING)}
-                    >
-                      {(status) => (
-                        <span
-                          className={`transition fade-${status} ${this.state.copyPinCodeState !== "processing" ? "visually-hidden" : ""}`}
-                        >
-                          <SpinnerSVG />
-                        </span>
-                      )}
-                    </Transition>
-                    <Transition
-                      in={this.state.copyPinCodeState === "done"}
-                      appear={true}
-                      timeout={500}
-                      nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_PIN_CODE_STATE_DONE)}
-                    >
-                      {(status) => (
-                        <span
-                          className={`transition fade-${status} ${this.state.copyPinCodeState !== "done" ? "visually-hidden" : ""}`}
-                        >
-                          <HealthCheckSuccessSvg />
-                        </span>
-                      )}
-                    </Transition>
-                    <span className="visually-hidden">
-                      <Trans>Copy to clipboard</Trans>
-                    </span>
-                  </a>
-                  {this.state.copiedProperty === "pin_code" && (
-                    <TimerSVG
-                      style={{
-                        "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
-                      }}
-                    />
-                  )}
-                </>
+          <li className="property">
+            <div className="information">
+              <span className="property-name">URI</span>
+              {primaryUri && this.sanitizeResourceUrl(primaryUri) && (
+                <a
+                  href={this.sanitizeResourceUrl(primaryUri)}
+                  role="button"
+                  className="property-value"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {primaryUri}
+                </a>
               )}
-            </li>
-          )}
-          {!this.isStandalonePinCodeResource && (
-            <li className="property">
-              <div className="information">
-                <span className="property-name">URI</span>
-                {primaryUri && this.sanitizeResourceUrl(primaryUri) && (
-                  <a
-                    href={this.sanitizeResourceUrl(primaryUri)}
-                    role="button"
-                    className="property-value"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {primaryUri}
-                  </a>
-                )}
-                {primaryUri && !this.sanitizeResourceUrl(primaryUri) && (
-                  <span className="property-value">{primaryUri}</span>
-                )}
-                {!primaryUri && (
-                  <span className="property-value empty">
-                    <Trans>no url provided</Trans>
-                  </span>
-                )}
-              </div>
-              <a
-                href={`${this.sanitizeResourceUrl(primaryUri) ? this.sanitizeResourceUrl(primaryUri) : "#"}`}
-                role="button"
-                className={`button button-transparent property-action ${!this.sanitizeResourceUrl(primaryUri) ? "disabled" : ""}`}
-                onClick={this.handleGoToUrlClick}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={this.translate("open in a new tab")}
-              >
-                <GoSVG />
-                <span className="visually-hidden">
-                  <Trans>Open in new window</Trans>
+              {primaryUri && !this.sanitizeResourceUrl(primaryUri) && (
+                <span className="property-value">{primaryUri}</span>
+              )}
+              {!primaryUri && (
+                <span className="property-value empty">
+                  <Trans>no url provided</Trans>
                 </span>
-              </a>
-            </li>
-          )}
-
+              )}
+            </div>
+            <a
+              href={`${this.sanitizeResourceUrl(primaryUri) ? this.sanitizeResourceUrl(primaryUri) : "#"}`}
+              role="button"
+              className={`button button-transparent property-action ${!this.sanitizeResourceUrl(primaryUri) ? "disabled" : ""}`}
+              onClick={this.handleGoToUrlClick}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={this.translate("open in a new tab")}
+            >
+              <GoSVG />
+              <span className="visually-hidden">
+                <Trans>Open in new window</Trans>
+              </span>
+            </a>
+          </li>
           {additionalUris?.length > 0 && (
             <li className="property">
               <div className="information">
@@ -1264,18 +985,16 @@ class ResourceViewPage extends React.Component {
           )}
         </ul>
         <div className="submit-wrapper input">
-          {!this.isStandalonePinCodeResource && (
-            <a
-              href="#"
-              id="popupAction"
-              className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`}
-              role="button"
-              onClick={this.handleUseOnThisTabClick}
-            >
-              {this.state.usingOnThisTab && <SpinnerSVG />}
-              {!this.state.usingOnThisTab && <Trans>Use on this page</Trans>}
-            </a>
-          )}
+          <a
+            href="#"
+            id="popupAction"
+            className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`}
+            role="button"
+            onClick={this.handleUseOnThisTabClick}
+          >
+            {this.state.usingOnThisTab && <SpinnerSVG />}
+            {!this.state.usingOnThisTab && <Trans>Use on this page</Trans>}
+          </a>
           {this.state.error && <div className="error-message">{this.state.error}</div>}
         </div>
       </div>

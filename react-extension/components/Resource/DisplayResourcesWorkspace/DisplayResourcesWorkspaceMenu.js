@@ -586,7 +586,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   canUseOffline() {
+    const resourceType = this.props.resourceTypes?.getFirstById(this.selectedResources[0]?.resource_type_id);
+
     return (
+      resourceType?.isV5() &&
       this.props.context.siteSettings.canIUse("offlineMode") &&
       Boolean(this.props.offlineSettings) &&
       this.props.rbacContext.canIUseAction(
@@ -596,17 +599,17 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * To check if the resource is supported by offline mode
+   * To check if the resource is a Password or TOTP resource
    *
-   * This method is to add a conditional check for Offline Mode
+   * This method is to add a conditional check for Offline Mode Phase 1
    * where the option to mark/unmark a resource as available offline is
-   * only resources supported by offline mode
+   * only for passwords or TOTP
    *
    * @return {boolean}
    */
-  isOfflineSupportedType() {
+  isPasswordOrTotp() {
     const resourceType = this.props.resourceTypes?.getFirstById(this.selectedResources[0]?.resource_type_id);
-    return resourceType?.isSupportedByOfflineMode();
+    return resourceType?.hasPassword() || resourceType?.hasTotp();
   }
 
   /**
@@ -642,8 +645,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     // Copy menu
     const canCopySecret = this.canCopySecrets() && this.canCopyPassword();
     const canCopyTotp = this.canUseTotp() && this.canCopyTotp();
-    const canMarkOrRemoveOfflineAccess =
-      hasOneResourceSelected && this.canUseOffline() && this.isOfflineSupportedType();
+    const canMarkOrRemoveOfflineAccess = hasOneResourceSelected && this.canUseOffline() && this.isPasswordOrTotp();
 
     return (
       <div className="actions" ref={this.props.actionsButtonRef}>

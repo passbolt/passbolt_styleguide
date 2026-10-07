@@ -7,7 +7,6 @@ import {
   deniedRbacProps,
   disabledApiFlagsProps,
   multipleUrisResourceProps,
-  standalonePinCodeResourceProps,
   standaloneTotpResourceProps,
   totpResourceProps,
 } from "./ResourceViewPage.test.data";
@@ -76,9 +75,4 @@ export const ResourceMultipleUrisView = {
   render: Template,
   args: multipleUrisResourceProps(),
   parameters: parameters,
-};
-
-export const StandalonePinCode = {
-  render: Template,
-  args: standalonePinCodeResourceProps(),
 };

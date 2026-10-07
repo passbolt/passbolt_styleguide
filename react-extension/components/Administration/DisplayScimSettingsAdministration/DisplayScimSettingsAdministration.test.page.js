@@ -162,58 +162,10 @@ export default class DisplayScimSettingsAdministrationPage {
   }
 
   /**
-   * return the warning message banner
+   * return the warning message
    */
   get warning() {
     return this.select(".warning.message");
-  }
-
-  /**
-   * return the error message banner
-   * @returns {HTMLElement|null}
-   */
-  get errorBanner() {
-    return this.select(".error.message");
-  }
-
-  /**
-   * Returns the secret token expiry field wrapper element
-   * @returns {HTMLElement}
-   */
-  get expiryFieldWrapper() {
-    return this.select(".date-wrapper");
-  }
-
-  /**
-   * Returns true if the secret token expiry field is in the error state
-   * @returns {boolean}
-   */
-  get isExpiryFieldInError() {
-    return this.expiryFieldWrapper.classList.contains("error");
-  }
-
-  /**
-   * Returns true if the secret token expiry field is in the warning state
-   * @returns {boolean}
-   */
-  get isExpiryFieldInWarning() {
-    return this.expiryFieldWrapper.classList.contains("warning");
-  }
-
-  /**
-   * Returns the error message shown below the secret token expiry field
-   * @returns {HTMLElement|null}
-   */
-  get expiryFieldErrorMessage() {
-    return this.expiryFieldWrapper.querySelector(".error-message");
-  }
-
-  /**
-   * Returns the warning message shown below the secret token expiry field
-   * @returns {HTMLElement|null}
-   */
-  get expiryFieldWarningMessage() {
-    return this.expiryFieldWrapper.querySelector(".warning-message");
   }
 
   /**

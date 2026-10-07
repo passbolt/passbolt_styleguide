@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import { withTranslation } from "react-i18next";
 import UserAvatarSVG from "../../../../img/avatar/user_default.svg";
 import AttentionSVG from "../../../../img/svg/attention.svg";
+import { BROWSER_NAMES, detectBrowserName } from "../../../../shared/lib/Browser/detectBrowserName";
 
 const DEFAULT_AVATAR_URL_REGEXP = /img\/avatar\/user(?:_medium)?\.png$/;
 
@@ -93,10 +94,23 @@ class UserAvatar extends Component {
   }
 
   /**
+   * Returns true if we are currently running under Safari.
+   * @todo: to be removed when Safari stops breaking user's session when downloading images
+   * @returns {boolean}
+   */
+  isRunningUnderSafari() {
+    return detectBrowserName() === BROWSER_NAMES.SAFARI;
+  }
+
+  /**
    * Returns true if the default avatar must be displayed instead of a custom avatar.
    * @returns {boolean}
    */
   shouldDisplayDefaultAvatar() {
+    if (this.isRunningUnderSafari()) {
+      return true;
+    }
+
     const hasAvatarUrl = Boolean(this.getAvatarSrc());
     return this.state.error || !this.props.user || this.isDefaultAvatarUrlFromApi() || !hasAvatarUrl;
   }

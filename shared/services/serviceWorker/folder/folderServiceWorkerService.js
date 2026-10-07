@@ -29,7 +29,7 @@ class FolderServiceWorkerService {
    * @return {Promise<Object>}
    */
   async update(folderDto) {
-    return await this.port.request(FOLDER_UPDATE_EVENT, folderDto);
+    return this.port.request(FOLDER_UPDATE_EVENT, folderDto);
   }
   /**
    * Delete a folder.

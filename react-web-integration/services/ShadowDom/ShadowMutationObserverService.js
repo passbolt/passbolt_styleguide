@@ -14,7 +14,7 @@
 
 import ShadowRootCollectorService from "./ShadowRootCollectorService";
 import ShadowRootCacheService from "./ShadowRootCacheService";
-import { FIELD_ATTRIBUTES_TO_WATCH } from "../../lib/InForm/InFormFieldDictionary";
+import { OBSERVE_OPTIONS } from "./ShadowDomDictionary";
 
 class ShadowMutationObserverService {
   /**
@@ -34,20 +34,6 @@ class ShadowMutationObserverService {
   static _shadowMutationSubscribers = new Set();
 
   /**
-   * Options passed to every installed MutationObserver. `childList`/`subtree` watch the shadow
-   * topology (node add/remove); the attribute filter watches the InForm field-relevance attributes.
-   * @private
-   * @type {MutationObserverInit}
-   */
-  static _observeOptions = {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
-    attributeOldValue: false,
-  };
-
-  /**
    * Update the cache for `root` according to the given mutations.
    * @param {Document|ShadowRoot|Element} root
    * @param {MutationRecord[]} mutations
@@ -64,9 +50,9 @@ class ShadowMutationObserverService {
     // Filter out shadow roots whose host was removed.
     let hasRemovals = mutations.some((mutation) => mutation.removedNodes.length > 0);
     if (hasRemovals) {
-      // A root with no known/connected host is dropped.
-      // We use the host captured at collection time, NEVER `shadowRoot.host` because  it may crash on Firefox
-      // @see Gecko bug 2063234, PB-54190
+      // Prune via the host captured at collection time, NEVER `shadowRoot.host`: reading `.host` on a root
+      // whose host has been torn down (e.g. a <video> user-agent widget) crashes the Firefox content
+      // process (Gecko bug 2063234, PB-54190). A root with no known/connected host is dropped.
       foundRoots = cached.filter((shadowRoot) => {
         const host = ShadowRootCollectorService.getHost(shadowRoot);
         return Boolean(host) && root.contains(host);
@@ -142,7 +128,7 @@ class ShadowMutationObserverService {
       ShadowMutationObserverService.notifyShadowMutationSubscribers(root, mutations, shadowRootsChanged);
     });
 
-    observer.observe(root, ShadowMutationObserverService._observeOptions);
+    observer.observe(root, OBSERVE_OPTIONS);
     ShadowMutationObserverService._shadowRootsObservers.set(root, observer);
   }
 

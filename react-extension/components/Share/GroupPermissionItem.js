@@ -17,13 +17,11 @@ import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import SharePermissionRevertButton from "./SharePermissionRevertButton";
 import ShareVariesDetails from "./ShareVariesDetails";
 import ShareChanges from "./Utility/ShareChanges";
-import ShareUnappliedDetails from "./ShareUnappliedDetails";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import { withTranslation } from "react-i18next";
 import Select from "../Common/Select/Select";
 import TooltipPortal from "../Common/Tooltip/TooltipPortal";
 import InfoSVG from "../../../img/svg/info.svg";
-import TriangleAlertSVG from "../../../img/svg/triangle_alert.svg";
 import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import CaretDownSVG from "../../../img/svg/caret_down.svg";
 
@@ -48,16 +46,13 @@ class GroupPermissionItem extends Component {
   }
 
   /**
-   * Returns the CSS class name for the list item, reflecting the removed and changed composition states.
+   * Returns the CSS class name for the list item, reflecting the removed state.
    * @returns {string}
    */
   getClassName() {
     let className = "row has-caret";
     if (this.isRemoved) {
       className += " permission-removed";
-    }
-    if (this.props.hasChangedComposition) {
-      className += " composition-changed";
     }
     return className;
   }
@@ -140,24 +135,6 @@ class GroupPermissionItem extends Component {
   }
 
   /**
-   * Whether the row shows the "varies" value: the recipient does not end up at the same level on
-   * every moved item, and the operator has not picked one for them.
-   * @returns {boolean}
-   */
-  get showsVaries() {
-    return Boolean(this.props.variesDetails) && this.props.permissionType === -1;
-  }
-
-  /**
-   * Whether the row shows the attention marker: on a move, some items keep their permissions
-   * because the operator does not own them.
-   * @returns {boolean}
-   */
-  get showsAttention() {
-    return this.props.unappliedResources?.length > 0;
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -198,16 +175,7 @@ class GroupPermissionItem extends Component {
           </div>
         </div>
 
-        {/* Shown even on a removed row: a recipient can be dropped from one item and kept on another. */}
-        {this.showsAttention && (
-          <TooltipPortal
-            className="warning"
-            message={<ShareUnappliedDetails resources={this.props.unappliedResources} />}
-          >
-            <TriangleAlertSVG className="attention-triangle" />
-          </TooltipPortal>
-        )}
-        {!this.isRemoved && !this.showsAttention && this.showsVaries && (
+        {this.props.variesDetails && this.isVarying && !this.isRemoved && (
           <TooltipPortal message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
             <InfoSVG className="varies-icon" />
           </TooltipPortal>
@@ -250,11 +218,9 @@ GroupPermissionItem.defaultProps = {
 GroupPermissionItem.propTypes = {
   id: PropTypes.string, // uuid
   group: PropTypes.object, // {id: <uuid>, name: <string>}
-  membersCount: PropTypes.number, // The group member count, null otherwise
+  membersCount: PropTypes.number, // The group member count (controlled mode only), null otherwise
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
   changeStatus: PropTypes.string, // A ShareChanges.CHANGE_STATUS_* value, null when unchanged
-  unappliedResources: PropTypes.array, // Move: [{name, type}] the items the choice cannot reach
-  hasChangedComposition: PropTypes.bool, // The group members changed since it was displayed, the operator must review it
   disabled: PropTypes.bool,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,

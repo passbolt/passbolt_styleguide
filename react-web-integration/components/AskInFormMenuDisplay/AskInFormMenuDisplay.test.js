@@ -64,7 +64,7 @@ describe("AskInFormMenuDisplay", () => {
 
       await waitFor(() => expect(context.port.request).toHaveBeenCalledTimes(3));
       expect(context.port.request).toHaveBeenCalledWith("passbolt.in-form-cta.is-application-overlaid", 1);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.in-form-cta.execute", 1);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.in-form-cta.execute");
     });
 
     it("I should not trigger menu opening when clicking the icon while the application is overlaid", async () => {
@@ -80,7 +80,7 @@ describe("AskInFormMenuDisplay", () => {
 
       await waitFor(() => expect(context.port.request).toHaveBeenCalledTimes(2));
       expect(context.port.request).toHaveBeenCalledWith("passbolt.in-form-cta.is-application-overlaid", 1);
-      expect(context.port.request).not.toHaveBeenCalledWith("passbolt.in-form-cta.execute", 1);
+      expect(context.port.request).not.toHaveBeenCalledWith("passbolt.in-form-cta.execute");
     });
   });
 
@@ -133,7 +133,7 @@ describe("AskInFormMenuDisplay", () => {
 
       await waitFor(() => expect(context.port.request).toHaveBeenCalledTimes(4));
       expect(context.port.request).toHaveBeenCalledWith("passbolt.in-form-cta.is-application-overlaid", 1);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.in-form-cta.execute", 1);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.in-form-cta.execute");
     });
 
     it("I should not trigger menu opening when clicking the icon while the application is overlaid", async () => {
@@ -148,7 +148,7 @@ describe("AskInFormMenuDisplay", () => {
 
       await waitFor(() => expect(context.port.request).toHaveBeenCalledTimes(3));
       expect(context.port.request).toHaveBeenCalledWith("passbolt.in-form-cta.is-application-overlaid", 1);
-      expect(context.port.request).not.toHaveBeenCalledWith("passbolt.in-form-cta.execute", 1);
+      expect(context.port.request).not.toHaveBeenCalledWith("passbolt.in-form-cta.execute");
     });
   });
 

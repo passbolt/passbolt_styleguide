@@ -15,7 +15,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "react-i18next";
 import ShareDetailsList from "./ShareDetailsList";
-import { getSharePermissionLabels } from "./SharePermissionLabels";
 
 /**
  * Tooltip body listing the permission the recipient has on each of the shared items.
@@ -26,7 +25,12 @@ class ShareVariesDetails extends Component {
    * @returns {object}
    */
   get permissionLabels() {
-    return getSharePermissionLabels(this.props.t);
+    return {
+      0: this.props.t("No access"),
+      1: this.props.t("Can read"),
+      7: this.props.t("Can edit"),
+      15: this.props.t("Is owner"),
+    };
   }
 
   /**

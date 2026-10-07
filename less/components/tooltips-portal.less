@@ -65,29 +65,6 @@
     }
   }
 
-  // Warning-tinted variant, used by the attention tooltip. Same colors as the .message.warning
-  // banner in messages.less, with the arrow tinted per direction.
-  &.warning {
-    background: var(--Palette-Warning);
-    color: var(--Text-and-icons-Main-text);
-
-    &.top::after {
-      border-top-color: var(--Palette-Warning);
-    }
-
-    &.right::after {
-      border-right-color: var(--Palette-Warning);
-    }
-
-    &.bottom::after {
-      border-bottom-color: var(--Palette-Warning);
-    }
-
-    &.left::after {
-      border-left-color: var(--Palette-Warning);
-    }
-  }
-
   &.left {
     &::after {
       top: calc(50% - 5px);

@@ -34,12 +34,6 @@ class MockPort {
     this.addOnListener(name, callback);
   }
 
-  removeListener(name, callback) {
-    if (this.emitListener[name] === callback) {
-      delete this.emitListener[name];
-    }
-  }
-
   async request(name) {
     console.debug(`PORT REQUEST: ${name}`);
     console.debug("PORT REQUEST PARAMETERS:", Array.prototype.slice.call(arguments));

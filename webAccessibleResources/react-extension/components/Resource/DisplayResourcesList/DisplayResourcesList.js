@@ -1125,7 +1125,7 @@ class DisplayResourcesList extends React.Component {
     if (!resourceType) {
       return false;
     }
-    return resourceType.isSupportedByOfflineMode();
+    return resourceType.isV5() && (resourceType.hasPassword() || resourceType.hasTotp());
   }
 
   /**

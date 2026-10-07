@@ -116,15 +116,6 @@ class DisplayHealthcheckAdministration extends Component {
   }
 
   /**
-   * Returns true if the "SCIM" section should be displayed.
-   *
-   * @returns {boolean}
-   */
-  get shouldDisplayScim() {
-    return this.canIUse("scim") && Boolean(this.healthCheckData.scim);
-  }
-
-  /**
    * Renders the component
    * @returns {JSX.Element}
    */
@@ -1553,51 +1544,6 @@ class DisplayHealthcheckAdministration extends Component {
       }
     };
 
-    /*
-     * SCIM VALIDATION
-     */
-    const isScimSecretTokenNotExpired = () => {
-      if (healthcheckData.scim.isScimTokenNotExpired === true) {
-        return (
-          <span className="healthcheck-success">
-            <HealthcheckSuccessSVG />
-            <Trans>The SCIM secret token has not expired.</Trans>
-          </span>
-        );
-      } else {
-        return (
-          <span className="healthcheck-fail">
-            <HealthcheckErrorSVG />
-            <Trans>The SCIM secret token has expired.</Trans>
-            <Tooltip message={this.props.t("Generate a new secret token in the SCIM administration settings.")}>
-              <InfoSVG className="baseline svg-icon" />
-            </Tooltip>
-          </span>
-        );
-      }
-    };
-
-    const isScimSecretTokenNotNearExpiry = () => {
-      if (healthcheckData.scim.isScimTokenNotNearExpiry === true) {
-        return (
-          <span className="healthcheck-success">
-            <HealthcheckSuccessSVG />
-            <Trans>The SCIM secret token is not nearing expiry.</Trans>
-          </span>
-        );
-      } else {
-        return (
-          <span className="healthcheck-warning">
-            <TriangleAlertSVG />
-            <Trans>The SCIM secret token is nearing expiry.</Trans>
-            <Tooltip message={this.props.t("Generate a new secret token in the SCIM administration settings.")}>
-              <InfoSVG className="baseline svg-icon" />
-            </Tooltip>
-          </span>
-        );
-      }
-    };
-
     const renderHealthcheck = () => {
       if (!healthcheckData || this.props.adminHealthcheckContext.isProcessing()) {
         return <SpinnerSVG />;
@@ -1731,18 +1677,6 @@ class DisplayHealthcheckAdministration extends Component {
                   <Trans>Metadata</Trans>
                 </h4>
                 <div className="healthcheck-metadata-section">{renderMetadataHealthcheck()}</div>
-              </>
-            )}
-
-            {this.shouldDisplayScim && (
-              <>
-                <h4>
-                  <Trans>SCIM</Trans>
-                </h4>
-                <div className="healthcheck-scim-section">
-                  <div>{isScimSecretTokenNotExpired()}</div>
-                  {healthcheckData.scim.isScimTokenNotExpired === true && <div>{isScimSecretTokenNotNearExpiry()}</div>}
-                </div>
               </>
             )}
           </>

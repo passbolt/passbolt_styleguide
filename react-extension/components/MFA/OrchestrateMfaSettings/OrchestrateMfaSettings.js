@@ -16,14 +16,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
-import { MfaSettingsWorkflowStates, Providers, withMfa } from "../../../contexts/MFAContext";
+import { MfaSettingsWorkflowStates, withMfa } from "../../../contexts/MFAContext";
 import DisplayProviderList from "../DisplayProviderList/DisplayProviderList";
 import ScanTotpCode from "../TotpSetup/ScanTotpCode/ScanTotpCode";
 import TotpGetStarted from "../TotpSetup/TotpGetStarted/TotpGetStarted";
 import DisplayMfaProviderConfiguration from "../DisplayMfaProviderConfiguration/DisplayMfaProviderConfiguration";
 import YubikeySetup from "../YubikeySetup/YubikeySetup";
 import DuoGetStarted from "../DuoSetup/DuoGetStarted";
-import DisplayPasskeys from "../PasskeysSetup/DisplayPasskeys";
 import { withRouter } from "react-router-dom";
 
 /**
@@ -43,11 +42,7 @@ class OrchestrateMfaSettings extends Component {
 
     if (provider) {
       this.props.mfaContext.setProvider(provider);
-      const state =
-        provider === Providers.WEBAUTHN
-          ? MfaSettingsWorkflowStates.PASSKEYS
-          : MfaSettingsWorkflowStates.VIEWCONFIGURATION;
-      this.props.mfaContext.navigate(state);
+      this.props.mfaContext.navigate(MfaSettingsWorkflowStates.VIEWCONFIGURATION);
     } else {
       await this.props.mfaContext.goToProviderList();
     }
@@ -69,8 +64,6 @@ class OrchestrateMfaSettings extends Component {
         return <DuoGetStarted onGetStartedWithDuo={this.props.mfaContext.handleGetStartedWithDuo} />;
       case MfaSettingsWorkflowStates.VIEWCONFIGURATION:
         return <DisplayMfaProviderConfiguration />;
-      case MfaSettingsWorkflowStates.PASSKEYS:
-        return <DisplayPasskeys />;
     }
   }
 }

@@ -95,62 +95,6 @@ export default class ResourceViewPagePage {
   }
 
   /**
-   * The pin code button element.
-   * @returns {Element}
-   */
-  get pinCode() {
-    return this._page.container.querySelector(".password-wrapper .secret.secret-pin-code button");
-  }
-
-  /**
-   * The pin code text content.
-   * @returns {string}
-   */
-  get pinCodeText() {
-    return this._page.container.querySelector(".password-wrapper .secret.secret-pin-code button span").textContent;
-  }
-
-  /**
-   * The preview password button.
-   * @returns {Element}
-   */
-  get previewPinCodeButton() {
-    return this._page.container.querySelector(".secret-pin-code + .password-view");
-  }
-
-  /**
-   * The copy password button.
-   * @returns {Element}
-   */
-  get copyPinCodeButton() {
-    return this._page.container.querySelector(".copy-pin-code");
-  }
-
-  /**
-   * The names of the properties displayed on the page.
-   * @returns {Array<string>}
-   */
-  get propertyNames() {
-    return Array.from(this._page.container.querySelectorAll(".property .property-name")).map((el) => el.textContent);
-  }
-
-  /**
-   * The "Use on this page" button.
-   * @returns {Element}
-   */
-  get useOnThisPageButton() {
-    return this._page.container.querySelector("#popupAction");
-  }
-
-  /**
-   * The "View it in passbolt" link.
-   * @returns {Element}
-   */
-  get viewInPassboltLink() {
-    return this._page.container.querySelector(".back-link .secondary-action");
-  }
-
-  /**
    * The totp button element.
    * @returns {Element}
    */

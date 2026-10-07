@@ -851,7 +851,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                       className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? "disabled" : ""}`}
                     >
                       <label>
-                        <Trans>Default group manager</Trans>
+                        <Trans>Default group admin</Trans>
                       </label>
                       <Select
                         items={this.getUsersAllowedToBeDefaultGroupAdmin()}

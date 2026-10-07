@@ -48,7 +48,7 @@ export default class PermissionServiceWorkerService {
    * @returns {Promise<Array<object>>} The resource DTOs, each carrying its `id` and `permissions`.
    */
   async findByIdsForShare(resourcesIds) {
-    return await this.port.request(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, resourcesIds);
+    return this.port.request(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, resourcesIds);
   }
 
   /**
@@ -63,7 +63,7 @@ export default class PermissionServiceWorkerService {
       throw new Error("The given resourcesIds should be a non-empty array.");
     }
     assertArrayUUID(resourcesIds, "The given resourcesIds should only contain valid UUIDs.");
-    return await this.port.request(SHARE_RESOURCES_SAVE, resourcesIds, permissionChangesDto);
+    return this.port.request(SHARE_RESOURCES_SAVE, resourcesIds, permissionChangesDto);
   }
 
   /**
@@ -75,7 +75,7 @@ export default class PermissionServiceWorkerService {
    */
   async saveFoldersPermissions(folderId, permissionChangesDto) {
     assertUuid(folderId, "The given folderId should be a valid UUID.");
-    return await this.port.request(SHARE_FOLDERS_SAVE, folderId, permissionChangesDto);
+    return this.port.request(SHARE_FOLDERS_SAVE, folderId, permissionChangesDto);
   }
 
   /**
@@ -86,7 +86,7 @@ export default class PermissionServiceWorkerService {
    * @returns {Promise<*>}
    */
   async createResource(resourceDto, secretDto, permissionChanges) {
-    return await this.port.request(RESOURCES_CREATE, resourceDto, secretDto, permissionChanges);
+    return this.port.request(RESOURCES_CREATE, resourceDto, secretDto, permissionChanges);
   }
 
   /**
@@ -97,6 +97,6 @@ export default class PermissionServiceWorkerService {
    * @returns {Promise<*>}
    */
   async updateResource(resourceDto, secretDto, permissionChanges) {
-    return await this.port.request(RESOURCES_UPDATE, resourceDto, secretDto, permissionChanges);
+    return this.port.request(RESOURCES_UPDATE, resourceDto, secretDto, permissionChanges);
   }
 }

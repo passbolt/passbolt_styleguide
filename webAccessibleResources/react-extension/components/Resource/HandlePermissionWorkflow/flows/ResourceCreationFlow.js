@@ -39,8 +39,8 @@ export const RESOURCE_CREATION_FLOW_STATUS = Object.freeze({
  * Orchestrates the resource-creation flow:
  * 1. Captures a permission snapshot from the parent folder (when there is one).
  * 2. Dispatches the CreateResource dialog for the operator to fill the form.
- * 3. If the parent is a shared folder, dispatches ShareDialog (seeded from the snapshot)
- *    so the operator confirms the permission set BEFORE anything hits the server.
+ * 3. If the parent is a shared folder, dispatches ShareDialog (in controlled mode, seeded from the
+ *    snapshot) so the operator confirms the permission set BEFORE anything hits the server.
  * 4. Calls `passbolt.resources.create` and, for the shared case, `passbolt.share.resources.save`
  *    in the spec-mandated safe order.
  *
@@ -106,7 +106,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Open the ShareDialog seeded from the snapshot.
+   * Open the ShareDialog in controlled mode, seeded from the snapshot.
    */
   openShareDialog() {
     this.props.dialogContext.open(ShareDialog, {
@@ -190,18 +190,16 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Handle the operator's confirmation of the permission set in ShareDialog.
+   * Handle the operator's confirmation of the permission set in ShareDialog (controlled mode).
    * Re-snapshot the parent folder and compare against the initial snapshot — any drift aborts
    * the submission. Fold the operator's edits onto the snapshot to get the final share set, then
    * delegate the operator-only create + share orchestration to the extension via a single
    * `passbolt.resources.create` call carrying both the secret and the permission changes.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
-   * @param {object} [options] The confirmation options ShareDialog emits.
-   * @param {boolean} [options.canOperatorRead] true if the operator can still read the modified resource
-   * @param {GroupsCollection} [options.addedGroups] The groups the operator added in the dialog, as displayed.
+   * @param {boolean} canOperatorRead true if the operator can still read the modified resource
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(permissionChanges, { canOperatorRead, addedGroups } = {}) {
+  async handleShareDialogConfirm(permissionChanges, canOperatorRead) {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForResourceCreation(
@@ -214,7 +212,6 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
           ),
         );
       }
-      await this.assertAddedGroupsUnchanged(addedGroups);
       const finalChanges = this.permissionChangesService.buildResourcePermissionChanges(
         this.state.snapshot,
         permissionChanges,

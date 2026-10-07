@@ -12,18 +12,11 @@
  * @since         4.10.0
  */
 
-import {
-  defaultResourceDto,
-  resourceStandalonePinCodeDto,
-  resourceStandaloneTotpDto,
-} from "../models/entity/resource/resourceEntity.test.data";
-import { filterResourcesBySearch, filterResourcesSupportedByQuickAccess } from "./filterUtils";
+import { defaultResourceDto } from "../models/entity/resource/resourceEntity.test.data";
+import { filterResourcesBySearch } from "./filterUtils";
 import { defaultResourceMetadataDto } from "../models/entity/resource/metadata/resourceMetadataEntity.test.data";
-import ResourceTypesCollection from "../models/entity/resourceType/resourceTypesCollection";
-import { resourceTypesCollectionDto } from "../models/entity/resourceType/resourceTypesCollection.test.data";
-import { TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE } from "../models/entity/resourceType/resourceTypeEntity.test.data";
 
-describe("filterUtils", () => {
+describe("filterUtils", () =>
   describe("::filterResourcesBySearch", () => {
     it("should filter the resources with the given keyword on the resource name", () => {
       expect.assertions(2);
@@ -80,26 +73,4 @@ describe("filterUtils", () => {
       expect(resources.length).toStrictEqual(1);
       expect(resources[0]).toStrictEqual(resource2);
     });
-  });
-
-  describe("::filterResourcesSupportedByQuickAccess", () => {
-    it("should keep the password, totp and pin code resources and drop the others", () => {
-      expect.assertions(4);
-      const resourceType = new ResourceTypesCollection(resourceTypesCollectionDto());
-      const password = defaultResourceDto();
-      const totp = resourceStandaloneTotpDto();
-      const pinCode = resourceStandalonePinCodeDto();
-      const note = defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE });
-      const resources = filterResourcesSupportedByQuickAccess([password, totp, pinCode, note], resourceType);
-      expect(resources.length).toStrictEqual(3);
-      expect(resources).toContain(password);
-      expect(resources).toContain(pinCode);
-      expect(resources).toContain(totp);
-    });
-
-    it("should load nothing when resource types are not loaded", () => {
-      expect.assertions(1);
-      expect(filterResourcesSupportedByQuickAccess([defaultResourceDto()], null)).toStrictEqual([]);
-    });
-  });
-});
+  }));

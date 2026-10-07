@@ -18,6 +18,7 @@ import ShadowMutationObserverService from "./ShadowMutationObserverService";
 class ShadowRootCacheService {
   /**
    * We use a WeakMap to store the shadow roots of a given root.
+   * This allows us to reduce the impact on the performance.
    * It is not intended to be mutated outside of this class.
    * @private
    * @type {WeakMap<Document|ShadowRoot|Element, ShadowRoot[]>}
@@ -40,32 +41,16 @@ class ShadowRootCacheService {
   }
 
   /**
-   * Return the shadow roots under `element`:
-   * - the cached ones for a document or a shadow root,
-   * - the ones of its scope whose host it contains for an element.
-   *
+   * Return the shadow roots under `element`.
+   * If the values were already computed, return the cached value.
    * @param {Document|ShadowRoot|Element} element
    * @return {Array<ShadowRoot>}
    */
   static getCachedShadowRoots(element) {
-    if (element.nodeType === Node.ELEMENT_NODE) {
-      // An element keeps no cache and no observer
-      const root = element.getRootNode();
-      const scope = root.nodeType === Node.DOCUMENT_NODE || root.host ? root : document;
-
-      return ShadowRootCacheService.getCachedShadowRoots(scope).filter((shadowRoot) => {
-        const host = ShadowRootCollectorService.getHost(shadowRoot);
-        return Boolean(host) && element.contains(host);
-      });
-    }
-
     let shadowRoots = ShadowRootCacheService.peekCache(element);
 
     if (!shadowRoots) {
       shadowRoots = ShadowRootCacheService.initCachedShadowRoots(element);
-    } else {
-      // Ensure there is an observer if it was disconnected without its cache entry being invalidated.
-      ShadowMutationObserverService.observeShadowRootChanges(element);
     }
 
     return shadowRoots;

@@ -1,0 +1,120 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.3.0
+ */
+
+import { UsernameFieldSelectorException } from "./InFormFieldSelectorException";
+
+/**
+ * All the possible in-form fields DOM selectors
+ */
+export default {
+  /**
+   * Selectors to detect username inputs (input type text or not type with id or class or name contain user)
+   * The selector create-account-input is for ovh.com website
+   * The selector benutzerkennung is for german website
+   * The selector benutzername is also for somes german websites
+   * The selector utilisateur is for french website
+   * The selector utente is for italian website
+   */
+  USERNAME_FIELD_SELECTOR: `${Object.values(UsernameFieldSelectorException).join(",")},
+  input[type='text' i][name*='user' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='email' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='login' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='benutzerkennung' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='benutzername' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='utilisateur' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='utente' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='logto' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='identifier' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='user' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='email' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='login' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='logto' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='benutzerkennung' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='benutzername' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='utilisateur' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='utente' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='usrName' i]:not([hidden]):not([disabled]),
+  input[type='text' i][class*='user' i]:not([hidden]):not([disabled]),
+  input[type='text' i][class*='email' i]:not([hidden]):not([disabled]),
+  input[type='text' i][class*='create-account-input' i]:not([hidden]):not([disabled]),
+  input[type='text' i][class*='pwt-flex-fill' i][required]:not([role]):not([hidden]):not([disabled]),
+  input[type='text' i][autocomplete*='user' i]:not([hidden]):not([disabled]),
+  input[type='text' i][autocomplete*='email' i]:not([hidden]):not([disabled]),
+  input[type='text' i][placeholder*='user' i]:not([hidden]):not([disabled]),
+  input[type='text' i][placeholder*='email' i]:not([hidden]):not([disabled]),
+  input[type='text' i][placeholder*='e-mail' i]:not([hidden]):not([disabled]),
+  input[type='text' i][placeholder*='utilisateur' i]:not([hidden]):not([disabled]),
+  input[type='text' i][placeholder*='utente' i]:not([hidden]):not([disabled]),
+  input[type='email' i]:not([hidden]):not([disabled]),
+  input[name*='user' i]:not([type]):not([hidden]):not([disabled]),
+  input[name*='email' i]:not([type]):not([hidden]):not([disabled]),
+  input[name*='login' i]:not([type]):not([hidden]):not([disabled]),
+  input[name*='benutzerkennung' i]:not([type]):not([hidden]):not([disabled]),
+  input[name*='benutzername' i]:not([type]):not([hidden]):not([disabled]),
+  input[name*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
+  input[name*='utente' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='user' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='email' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='login' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='benutzerkennung' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='benutzername' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='utente' i]:not([type]):not([hidden]):not([disabled]),
+  input[class*='user' i]:not([type]):not([hidden]):not([disabled]),
+  input[class*='email' i]:not([type]):not([hidden]):not([disabled]),
+  input[class*='create-account-input' i]:not([type]):not([hidden]):not([disabled]),
+  input[autocomplete*='user' i]:not([type]):not([hidden]):not([disabled]),
+  input[autocomplete*='email' i]:not([type]):not([hidden]):not([disabled]),
+  input[placeholder*='user' i]:not([type]):not([hidden]):not([disabled]),
+  input[placeholder*='email' i]:not([type]):not([hidden]):not([disabled]),
+  input[placeholder*='e-mail' i]:not([type]):not([hidden]):not([disabled]),
+  input[placeholder*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
+  input[placeholder*='utente' i]:not([type]):not([hidden]):not([disabled])`,
+  /** Selectors to detect password inputs (input type password or type text with id or class or name contain password) */
+  PASSWORD_FIELD_SELECTOR: `input[type='password' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='password' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='password' i]:not([hidden]):not([disabled]),
+  input[type='text' i][class*='password' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='passwort' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='passwort' i]:not([hidden]):not([disabled]),
+  input[type='text' i][class*='passwort' i]:not([hidden]):not([disabled])`,
+  /** Selectors to detect OTP inputs (input with one-time-code autocomplete, OTP pattern, with id or class or name matching OTP possible values) */
+  OTP_FIELD_SELECTOR: `input[autocomplete='one-time-code']:not([hidden]):not([disabled]),
+  input[pattern*='\d{6}' i]:not([hidden]):not([disabled]),
+  input[pattern*='[0-9]{6}' i]:not([hidden]):not([disabled]),
+  input[minlength='6' i][maxlength='6' i]:not([hidden]):not([disabled]),
+  input[name*='one-time-code' i]:not([hidden]):not([disabled]),
+  input[id*='one-time-code' i]:not([hidden]):not([disabled]),
+  input[class*='one-time-code' i]:not([hidden]):not([disabled]),
+  input[name*='onetime-code' i]:not([hidden]):not([disabled]),
+  input[id*='onetime-code' i]:not([hidden]):not([disabled]),
+  input[class*='onetime-code' i]:not([hidden]):not([disabled]),
+  input[name*='onetimecode' i]:not([hidden]):not([disabled]),
+  input[id*='onetimecode' i]:not([hidden]):not([disabled]),
+  input[class*='onetimecode' i]:not([hidden]):not([disabled]),
+  input[name*='otc' i]:not([hidden]):not([disabled]),
+  input[id*='otc' i]:not([hidden]):not([disabled]),
+  input[class*='otc' i]:not([hidden]):not([disabled]),
+  input[name*='mfa' i]:not([hidden]):not([disabled]),
+  input[id*='mfa' i]:not([hidden]):not([disabled]),
+  input[class*='mfa' i]:not([hidden]):not([disabled]),
+  input[name*='2fa' i]:not([hidden]):not([disabled]),
+  input[class*='2fa' i]:not([hidden]):not([disabled]),
+  *:has(> input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[class*='otp' i]:not([type='hidden']):not([hidden]):not([disabled])),
+  input[name*='otp' i]:not([hidden]):not([disabled]),
+  input[id*='otp' i]:not([hidden]):not([disabled]),
+  input[class*='otp' i]:not([hidden]):not([disabled]),
+  *:has(> input[aria-label*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[aria-label*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[aria-label*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[aria-label*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[aria-label*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]) + input[aria-label*='otp' i]:not([type='hidden']):not([hidden]):not([disabled]))
+  `,
+};

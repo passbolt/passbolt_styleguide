@@ -17,8 +17,6 @@ import {
   defaultProps,
   defaultScimSettingsConfiguredProps,
   defaultScimSettingsDisabledProps,
-  defaultScimSettingsExpiringTokenProps,
-  defaultScimSettingsExpiredTokenProps,
 } from "./DisplayScimSettingsAdministration.test.data";
 import { MemoryRouter } from "react-router-dom";
 import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
@@ -81,12 +79,4 @@ export const ScimSettingsDefined = {
 
 export const ScimSettingsDisabled = {
   args: defaultScimSettingsDisabledProps(),
-};
-
-export const SecretTokenExpiring = {
-  args: defaultScimSettingsExpiringTokenProps(),
-};
-
-export const SecretTokenExpired = {
-  args: defaultScimSettingsExpiredTokenProps(),
 };

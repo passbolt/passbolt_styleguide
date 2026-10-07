@@ -111,28 +111,6 @@ export default class UserPermissionItemPage {
   }
 
   /**
-   * Returns the move attention icon, shown when some items keep their permissions
-   */
-  get attentionIcon() {
-    return this._page.container.querySelector(".attention-triangle");
-  }
-
-  /**
-   * Returns the text of the tooltip currently shown, rendered into a portal on document.body
-   */
-  get tooltipText() {
-    return document.body.querySelector(".tooltip-portal-text")?.textContent;
-  }
-
-  /**
-   * Hover the move attention icon to reveal its tooltip, which names the items left unchanged
-   */
-  async hoverAttentionIcon() {
-    await this.user.hover(this.attentionIcon.closest(".tooltip-portal"));
-    await waitFor(() => {});
-  }
-
-  /**
    * Returns the fingerprint SVG trigger element inside the aro-name
    */
   get fingerprintIcon() {

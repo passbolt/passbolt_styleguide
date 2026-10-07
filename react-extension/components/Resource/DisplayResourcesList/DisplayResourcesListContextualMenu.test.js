@@ -46,6 +46,7 @@ import {
   TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
   TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
   TEST_RESOURCE_TYPE_V5_TOTP,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
@@ -683,8 +684,9 @@ describe("DisplayResourcesListContextualMenu", () => {
     it.each([
       { scenario: "custom fields", resourceTypeId: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS },
       { scenario: "standalone note", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE },
+      { scenario: "standalone pin code", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE },
     ])(
-      "As LU I should not see the offline availability item for a v5 $scenario resource, it is neither a password, pin code nor a totp",
+      "As LU I should not see the offline availability item for a v5 $scenario resource, it is neither a password nor a totp",
       ({ resourceTypeId }) => {
         expect.assertions(1);
         const props = defaultProps({

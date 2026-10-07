@@ -28,9 +28,6 @@ class MfaModel {
     // ONE TIME PASSWORD
     this.totpProviderToggle = "providers" in mfaDTO ? mfaDTO.providers.includes(MfaProviders.totp) : false; // One Time Password toggle value
 
-    // PASSKEYS (WEBAUTHN)
-    this.webauthnToggle = "providers" in mfaDTO ? mfaDTO.providers.includes(MfaProviders.webauthn) : false; // passkeys toggle value
-
     // YUBIKEY
     this.yubikeyToggle = "providers" in mfaDTO ? mfaDTO.providers.includes(MfaProviders.yubikey) : false; //  yubikey toggle value
     this.yubikeyClientIdentifier = "yubikey" in mfaDTO ? mfaDTO.yubikey.clientId : ""; // yubikey client identifier

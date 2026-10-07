@@ -44,14 +44,10 @@ export default class WorkflowContextProvider extends React.Component {
   get defaultState() {
     return {
       workflows: [],
-      /*
-       * Start a workflow. The same Workflow component cannot run twice at once:
-       * returns the workflow key, or null if it is already running.
-       */
       start: (Workflow, workflowProps) => {
         const isWorkflowStarted = this.state.workflows.find((w) => w.Workflow === Workflow);
         if (isWorkflowStarted) {
-          return null;
+          return;
         }
         const workflowKey = uuidv4();
         this.setState({ workflows: [...this.state.workflows, { key: workflowKey, Workflow, workflowProps }] });

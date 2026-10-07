@@ -16,12 +16,4 @@ export default class WindowNavigationService {
   static reload() {
     window.location.reload();
   }
-
-  static assign(url) {
-    window.location.assign(url);
-  }
-
-  static getHostname() {
-    return window.location.hostname;
-  }
 }

@@ -17,7 +17,6 @@ import PermissionsCollection from "./permissionsCollection";
 import GroupsCollection from "../group/groupsCollection";
 import UsersCollection from "../user/usersCollection";
 import { defaultPermissionSnapshotDto } from "./permissionSnapshotEntity.test.data";
-import { defaultGroupsDtos } from "../group/groupsCollection.test.data";
 
 describe("PermissionSnapshotEntity", () => {
   describe("PermissionSnapshotEntity::getSchema", () => {
@@ -169,28 +168,6 @@ describe("PermissionSnapshotEntity", () => {
       const dto = defaultPermissionSnapshotDto();
       const a = new PermissionSnapshotEntity(dto);
       const b = new PermissionSnapshotEntity({ ...dto, groups: dto.groups.slice(0, dto.groups.length - 1) });
-      expect(a.equals(b)).toBe(false);
-    });
-
-    it("returns false when a group membership changed while the group set stayed the same", () => {
-      expect.assertions(1);
-      const dto = defaultPermissionSnapshotDto({ groups: defaultGroupsDtos(2, { withGroupsUsers: 2 }) });
-      const a = new PermissionSnapshotEntity(dto);
-      const groups = [...dto.groups];
-      groups[0] = { ...groups[0], groups_users: groups[0].groups_users.slice(1) };
-      const b = new PermissionSnapshotEntity({ ...dto, groups });
-      expect(a.equals(b)).toBe(false);
-    });
-
-    it("returns false when a group member's manager role changed", () => {
-      expect.assertions(1);
-      const dto = defaultPermissionSnapshotDto({ groups: defaultGroupsDtos(2, { withGroupsUsers: 2 }) });
-      const a = new PermissionSnapshotEntity(dto);
-      const groups = [...dto.groups];
-      const groupsUsers = [...groups[0].groups_users];
-      groupsUsers[0] = { ...groupsUsers[0], is_admin: !groupsUsers[0].is_admin };
-      groups[0] = { ...groups[0], groups_users: groupsUsers };
-      const b = new PermissionSnapshotEntity({ ...dto, groups });
       expect(a.equals(b)).toBe(false);
     });
 

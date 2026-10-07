@@ -11,10 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.4
  */
-import {
-  defaultResourceDto,
-  resourceStandalonePinCodeNoUrisDto,
-} from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { defaultProps, noResourcesProps } from "./FilterResourcesByFavoritePage.test.data";
 import FilterResourcesByFavoritePagePage from "./FilterResourcesByFavoritePage.test.page";
@@ -127,19 +124,6 @@ describe("FilterResourcesByFavoritePage", () => {
       const page = new FilterResourcesByFavoritePagePage(props);
 
       expect(page.displayedMainMessage).toStrictEqual("No result match your search. Try with another search term.");
-    });
-    it("should display a favourite PIN code resource", () => {
-      expect.assertions(2);
-      const resource1 = defaultResourceDto({}, { withFavorite: true });
-      const pinCode = resourceStandalonePinCodeNoUrisDto({}, { withFavorite: true });
-      const notFavourite = resourceStandalonePinCodeNoUrisDto({}, { withFavorite: false });
-
-      const page = new FilterResourcesByFavoritePagePage(
-        defaultProps({ resources: [resource1, pinCode, notFavourite] }),
-      );
-
-      expect(page.resources?.length).toStrictEqual(2);
-      expect(page.getResource(1).textContent).toStrictEqual("Office alarm");
     });
   });
 

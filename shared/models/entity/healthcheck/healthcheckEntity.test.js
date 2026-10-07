@@ -33,7 +33,6 @@ import SmtpSettingsEntity from "./associations/smtpSettingsEntity";
 import DirectorySyncEntity from "./associations/directorySyncEntity";
 import SsoEntity from "./associations/ssoEntity";
 import MetadataEntity from "./associations/metadataEntity";
-import ScimEntity from "./associations/scimEntity";
 
 describe("HealthcheckEntity", () => {
   describe("HealthcheckEntity:constructor", () => {
@@ -42,7 +41,7 @@ describe("HealthcheckEntity", () => {
     });
 
     it("it should instantiate the entity with the default dto", () => {
-      expect.assertions(12);
+      expect.assertions(11);
       const dto = defaultHealthcheckData();
       const entity = new HealthcheckEntity(dto);
       expect(entity).toBeInstanceOf(HealthcheckEntity);
@@ -56,15 +55,6 @@ describe("HealthcheckEntity", () => {
       expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
       expect(entity.directorySync.toDto()).toEqual(dto.directorySync);
       expect(entity.sso.toDto()).toEqual(dto.sso);
-      expect(entity.scim.toDto()).toEqual(dto.scim);
-    });
-
-    it("it should not break the entity if scim is not present", () => {
-      expect.assertions(2);
-      const dto = defaultHealthcheckCEdata();
-      const entity = new HealthcheckEntity(dto);
-      expect(entity).toBeInstanceOf(HealthcheckEntity);
-      expect(entity.scim).toBeNull();
     });
 
     it("it should not break the entity if sso and directorySync are not present", () => {
@@ -438,19 +428,6 @@ describe("HealthcheckEntity", () => {
       const metadataEntity = new MetadataEntity(metadataDto);
 
       expect(metadataEntity.canDecryptMetadataPrivateKey).toStrictEqual(true);
-    });
-
-    it("it should create a scimEntity with all properties", () => {
-      expect.assertions(2);
-      const scimDto = {
-        isScimTokenNotExpired: true,
-        isScimTokenNotNearExpiry: false,
-      };
-
-      const scimEntity = new ScimEntity(scimDto);
-
-      expect(scimEntity.isScimTokenNotExpired).toStrictEqual(true);
-      expect(scimEntity.isScimTokenNotNearExpiry).toStrictEqual(false);
     });
   });
 });

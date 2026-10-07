@@ -197,21 +197,6 @@ export const resourceStandalonePinCodeDto = (data = {}, options = {}) =>
     options,
   );
 
-export const resourceStandalonePinCodeNoUrisDto = (data = {}, options = {}) =>
-  resourceStandalonePinCodeDto(
-    {
-      resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
-      metadata: defaultResourceMetadataDto({
-        resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
-        name: "Office alarm",
-        username: null,
-        uris: [],
-      }),
-      ...data,
-    },
-    options,
-  );
-
 export const resourceUnknownResourceTypeDto = (data = {}, options = {}) =>
   defaultResourceDto(
     {

@@ -22,12 +22,7 @@ import {
   PERMISSIONS_FIND_BY_IDS_FOR_SHARE,
 } from "../serviceWorker/permission/permissionServiceWorkerService";
 import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../serviceWorker/group/groupServiceWorkerService";
-import {
-  defaultUserPermissionDto,
-  ownerGroupPermissionDto,
-  readGroupPermissionDto,
-  updateGroupPermissionDto,
-} from "../../models/entity/permission/permissionEntity.test.data";
+import { defaultPermissionDto } from "../../models/entity/permission/permissionEntity.test.data";
 import { defaultGroupDto } from "../../models/entity/group/groupEntity.test.data";
 import { defaultGroupUser } from "../../models/entity/groupUser/groupUserEntity.test.data";
 import { defaultUserDto } from "../../models/entity/user/userEntity.test.data";
@@ -52,11 +47,28 @@ describe("PermissionSnapshotService", () => {
       const groupIds = [uuidv4(), uuidv4()];
       const memberA = defaultUserDto({ username: "member-a@passbolt.com" });
       const memberB = defaultUserDto({ username: "member-b@passbolt.com" });
-      const directUser = defaultUserDto({ username: "direct@passbolt.com" });
       const permissionsDto = [
-        ownerGroupPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: groupIds[0] }),
-        updateGroupPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: groupIds[1] }),
-        defaultUserPermissionDto({ aco: "Folder", aco_foreign_key: folderId, type: 1, user: directUser }),
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "Group",
+          aro_foreign_key: groupIds[0],
+          type: 15,
+        }),
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "Group",
+          aro_foreign_key: groupIds[1],
+          type: 7,
+        }),
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "User",
+          aro_foreign_key: uuidv4(),
+          type: 1,
+        }),
       ];
       const groupsDto = [
         defaultGroupDto({
@@ -83,7 +95,7 @@ describe("PermissionSnapshotService", () => {
       expect(snapshot).toBeInstanceOf(PermissionSnapshotEntity);
       expect(snapshot.permissions.toDto()).toStrictEqual(permissionsDto);
       expect(snapshot.groups.toDto()).toStrictEqual(groupsDto);
-      expect(snapshot.users.toDto()).toStrictEqual([directUser, memberA, memberB]);
+      expect(snapshot.users.toDto()).toStrictEqual([memberA, memberB]);
     });
 
     it("skips the group fetch when the parent folder has no group permissions, derives no users, and still returns a PermissionSnapshotEntity", async () => {
@@ -110,7 +122,13 @@ describe("PermissionSnapshotService", () => {
       const groupId = uuidv4();
       port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
       port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => [
-        readGroupPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: groupId }),
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "Group",
+          aro_foreign_key: groupId,
+          type: 1,
+        }),
       ]);
       port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => [defaultGroupDto({ id: groupId, name: "Group 0" })]);
       jest.spyOn(port, "request");
@@ -127,19 +145,37 @@ describe("PermissionSnapshotService", () => {
       );
     });
 
-    it("derives the snapshot users from the direct recipients and the permissioned groups members, deduplicated across groups", async () => {
-      expect.assertions(2);
+    it("derives the snapshot users from the permissioned groups members, deduplicated across groups, excluding directly-permissioned non-members", async () => {
+      expect.assertions(3);
 
       const folderId = uuidv4();
       const groupAId = uuidv4();
       const groupBId = uuidv4();
-      const directUser = defaultUserDto({ username: "direct@passbolt.com" });
+      const directUserId = uuidv4();
       const sharedMember = defaultUserDto({ username: "shared@passbolt.com" });
       const soloMember = defaultUserDto({ username: "solo@passbolt.com" });
       const permissionsDto = [
-        readGroupPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: groupAId }),
-        readGroupPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: groupBId }),
-        defaultUserPermissionDto({ aco: "Folder", aco_foreign_key: folderId, type: 15, user: directUser }),
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "Group",
+          aro_foreign_key: groupAId,
+          type: 1,
+        }),
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "Group",
+          aro_foreign_key: groupBId,
+          type: 1,
+        }),
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "User",
+          aro_foreign_key: directUserId,
+          type: 15,
+        }),
       ];
       const groupsDto = [
         defaultGroupDto({
@@ -163,50 +199,9 @@ describe("PermissionSnapshotService", () => {
 
       const snapshot = await service.buildSnapshotForResourceCreation(folderId);
 
-      expect(snapshot.users.toDto()).toStrictEqual([directUser, sharedMember, soloMember]);
+      expect(snapshot.users.toDto()).toStrictEqual([sharedMember, soloMember]);
+      expect(snapshot.users.items.find((u) => u.id === directUserId)).toBeUndefined();
       expect(port.request).not.toHaveBeenCalledWith("passbolt.users.get-by-ids", expect.anything());
-    });
-
-    it("captures a directly-permissioned user from the data embedded in its permission, without a dedicated request", async () => {
-      expect.assertions(2);
-
-      const folderId = uuidv4();
-      const directUser = defaultUserDto({ username: "direct@passbolt.com" });
-      const permissionsDto = [
-        defaultUserPermissionDto({ aco: "Folder", aco_foreign_key: folderId, type: 15, user: directUser }),
-      ];
-      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
-      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => permissionsDto);
-      jest.spyOn(port, "request");
-
-      const snapshot = await service.buildSnapshotForResourceCreation(folderId);
-
-      expect(snapshot.users.toDto()).toStrictEqual([directUser]);
-      expect(port.request).not.toHaveBeenCalledWith("passbolt.users.get-by-ids", expect.anything());
-    });
-
-    it("captures a direct recipient who is also a member of a permissioned group only once", async () => {
-      expect.assertions(1);
-
-      const folderId = uuidv4();
-      const groupId = uuidv4();
-      const directUser = defaultUserDto({ username: "direct@passbolt.com" });
-      port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
-      port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => [
-        ownerGroupPermissionDto({ aco: "Folder", aco_foreign_key: folderId, aro_foreign_key: groupId }),
-        defaultUserPermissionDto({ aco: "Folder", aco_foreign_key: folderId, type: 15, user: directUser }),
-      ]);
-      port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => [
-        defaultGroupDto({
-          id: groupId,
-          name: "Group 0",
-          groups_users: [defaultGroupUser({ group_id: groupId, user_id: directUser.id, user: directUser })],
-        }),
-      ]);
-
-      const snapshot = await service.buildSnapshotForResourceCreation(folderId);
-
-      expect(snapshot.users.toDto()).toStrictEqual([directUser]);
     });
 
     it("propagates the error when the keyring synchronisation fails", async () => {
@@ -231,7 +226,15 @@ describe("PermissionSnapshotService", () => {
       port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, (ids) =>
         ids.map((id) => ({
           id,
-          permissions: [defaultUserPermissionDto({ aco: "Resource", aco_foreign_key: id, type: 15 })],
+          permissions: [
+            defaultPermissionDto({
+              aco: "Resource",
+              aco_foreign_key: id,
+              aro: "User",
+              aro_foreign_key: uuidv4(),
+              type: 15,
+            }),
+          ],
         })),
       );
       port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);
@@ -277,7 +280,15 @@ describe("PermissionSnapshotService", () => {
       port.addRequestListener(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, (ids) =>
         ids.map((id) => ({
           id,
-          permissions: [ownerGroupPermissionDto({ aco: "Resource", aco_foreign_key: id, aro_foreign_key: groupId })],
+          permissions: [
+            defaultPermissionDto({
+              aco: "Resource",
+              aco_foreign_key: id,
+              aro: "Group",
+              aro_foreign_key: groupId,
+              type: 15,
+            }),
+          ],
         })),
       );
       port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => [
@@ -332,7 +343,16 @@ describe("PermissionSnapshotService", () => {
       expect.assertions(3);
 
       const folderId = uuidv4();
-      const permissionsDto = [defaultUserPermissionDto({ aco: "Folder", aco_foreign_key: folderId, type: 15 })];
+      const userId = uuidv4();
+      const permissionsDto = [
+        defaultPermissionDto({
+          aco: "Folder",
+          aco_foreign_key: folderId,
+          aro: "User",
+          aro_foreign_key: userId,
+          type: 15,
+        }),
+      ];
       port.addRequestListener(KEYRING_SYNC_EVENT, () => {});
       port.addRequestListener(PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY, () => permissionsDto);
       port.addRequestListener(GROUPS_FIND_BY_IDS_FOR_SHARE, () => []);

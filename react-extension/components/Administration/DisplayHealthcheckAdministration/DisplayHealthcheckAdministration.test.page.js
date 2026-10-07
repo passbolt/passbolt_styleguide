@@ -320,43 +320,6 @@ export default class DisplayHealthcheckAdministrationPage {
   }
 
   /**
-   * Returns the healthcheck scim section
-   */
-  get healthcheckScim() {
-    return this._page.container.querySelector(".healthcheck-scim-section");
-  }
-
-  /**
-   * Returns the healthcheck scim sub sections isSuccess
-   */
-  get isAllHealthcheckSubSectionScimSuccess() {
-    const healthcheckSuccesses = this.healthcheckScim.querySelectorAll(".healthcheck-success");
-    return healthcheckSuccesses.length === 2;
-  }
-
-  /**
-   * Returns true when the scim section reflects an expired token: a single failed line (token expired)
-   * and no near-expiry line, as it is not relevant once the token has expired.
-   */
-  get isAllHealthcheckSubSectionScimExpired() {
-    const healthcheckSuccesses = this.healthcheckScim.querySelectorAll(".healthcheck-success");
-    const healthcheckFails = this.healthcheckScim.querySelectorAll(".healthcheck-fail");
-    const healthcheckWarnings = this.healthcheckScim.querySelectorAll(".healthcheck-warning");
-    return healthcheckFails.length === 1 && healthcheckWarnings.length === 0 && healthcheckSuccesses.length === 0;
-  }
-
-  /**
-   * Returns true when the scim section reflects an expiring token: a success line (not expired)
-   * and a warning line (nearing expiry).
-   */
-  get isAllHealthcheckSubSectionScimExpiring() {
-    const healthcheckSuccesses = this.healthcheckScim.querySelectorAll(".healthcheck-success");
-    const healthcheckFails = this.healthcheckScim.querySelectorAll(".healthcheck-fail");
-    const healthcheckWarnings = this.healthcheckScim.querySelectorAll(".healthcheck-warning");
-    return healthcheckSuccesses.length === 1 && healthcheckWarnings.length === 1 && healthcheckFails.length === 0;
-  }
-
-  /**
    * Click on the element
    */
   async click(element) {

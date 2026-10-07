@@ -55,12 +55,6 @@ export function defaultProps(data = {}) {
       push: jest.fn(),
     },
     dialogContext: defaultDialogContext(),
-    actionFeedbackContext: { displaySuccess: jest.fn(), displayWarning: jest.fn(), displayError: jest.fn() },
-    workflowContext: {
-      // A started workflow returns its key. Null means it was refused, one is already running.
-      start: jest.fn(() => "9e03fd73-04c0-5514-95fa-1a6cf2c7c093"),
-      stop: jest.fn(),
-    },
     match: {
       params: {
         filterByFolderId: foldersMock[0].id,

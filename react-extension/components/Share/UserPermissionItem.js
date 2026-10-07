@@ -18,7 +18,6 @@ import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import SharePermissionRevertButton from "./SharePermissionRevertButton";
 import ShareVariesDetails from "./ShareVariesDetails";
 import ShareChanges from "./Utility/ShareChanges";
-import ShareUnappliedDetails from "./ShareUnappliedDetails";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import { withTranslation } from "react-i18next";
@@ -28,7 +27,6 @@ import TooltipPortal from "../Common/Tooltip/TooltipPortal";
 import TooltipMessageFingerprintLoading from "../Common/Tooltip/TooltipMessageFingerprintLoading";
 import Fingerprint from "../Common/Fingerprint/Fingerprint";
 import InfoSVG from "../../../img/svg/info.svg";
-import TriangleAlertSVG from "../../../img/svg/triangle_alert.svg";
 import FingerprintSVG from "../../../img/svg/fingerprint.svg";
 
 class UserPermissionItem extends Component {
@@ -174,24 +172,6 @@ class UserPermissionItem extends Component {
   }
 
   /**
-   * Whether the row shows the "varies" value: the recipient does not end up at the same level on
-   * every moved item, and the operator has not picked one for them.
-   * @returns {boolean}
-   */
-  get showsVaries() {
-    return Boolean(this.props.variesDetails) && this.props.permissionType === -1;
-  }
-
-  /**
-   * Whether the row shows the attention marker: on a move, some items keep their permissions
-   * because the operator does not own them.
-   * @returns {boolean}
-   */
-  get showsAttention() {
-    return this.props.unappliedResources?.length > 0;
-  }
-
-  /**
    * Returns true if the feature flag disableUser is enabled and the given user is suspended.
    * @returns {boolean}
    */
@@ -228,16 +208,7 @@ class UserPermissionItem extends Component {
           </div>
         </div>
 
-        {/* Shown even on a removed row: a recipient can be dropped from one item and kept on another. */}
-        {this.showsAttention && (
-          <TooltipPortal
-            className="warning"
-            message={<ShareUnappliedDetails resources={this.props.unappliedResources} />}
-          >
-            <TriangleAlertSVG className="attention-triangle" />
-          </TooltipPortal>
-        )}
-        {!this.isRemoved && !this.showsAttention && this.showsVaries && (
+        {this.props.variesDetails && this.isVarying && !this.isRemoved && (
           <TooltipPortal message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
             <InfoSVG className="varies-icon" />
           </TooltipPortal>
@@ -279,7 +250,6 @@ UserPermissionItem.propTypes = {
   user: PropTypes.object, // {id: <uuid>, username: <string>, profile: <object>, ...etc}
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
   changeStatus: PropTypes.string, // A ShareChanges.CHANGE_STATUS_* value, null when unchanged
-  unappliedResources: PropTypes.array, // Move: [{name, type}] the items the choice cannot reach
   disabled: PropTypes.bool,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,

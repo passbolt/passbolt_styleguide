@@ -17,20 +17,20 @@ import ResourceCreationFlow from "./flows/ResourceCreationFlow";
 import ResourceEditFlow from "./flows/ResourceEditFlow";
 import ResourceShareFlow from "./flows/ResourceShareFlow";
 import FolderShareFlow from "./flows/FolderShareFlow";
-import ResourceMoveFlow from "./flows/ResourceMoveFlow";
-import FolderMoveFlow from "./flows/FolderMoveFlow";
 
 /**
  * The set of permission-touching operations this workflow can drive.
  * Each value corresponds to a focused flow component under `flows/`.
  *
- * @type {Readonly<{CREATE_RESOURCE: string, EDIT_RESOURCE: string, MOVE_RESOURCES: string, MOVE_FOLDERS: string, SHARE_RESOURCE: string, SHARE_FOLDER: string}>}
+ * @todo `CREATE_RESOURCE`, `EDIT_RESOURCE`, `SHARE_RESOURCE` and `SHARE_FOLDER` are wired today.
+ *       `MOVE_RESOURCES` lands with its respective ticket — passing that key to the dispatcher will
+ *       throw until the matching flow component exists.
+ * @type {Readonly<{CREATE_RESOURCE: string, EDIT_RESOURCE: string, MOVE_RESOURCES: string, SHARE_RESOURCE: string, SHARE_FOLDER: string}>}
  */
 export const PERMISSION_WORKFLOW_OPERATION = Object.freeze({
   CREATE_RESOURCE: "create-resource",
   EDIT_RESOURCE: "edit-resource",
   MOVE_RESOURCES: "move-resources",
-  MOVE_FOLDERS: "move-folders",
   SHARE_RESOURCE: "share-resource",
   SHARE_FOLDER: "share-folder",
 });
@@ -40,6 +40,10 @@ export const PERMISSION_WORKFLOW_OPERATION = Object.freeze({
  * `workflowContext.start(HandlePermissionWorkflow, { operation, ...flowProps })`; we pick the
  * matching per-operation flow component and render it. Each flow owns its own state machine,
  * dialog sequence, and API ordering.
+ *
+ * `CREATE_RESOURCE`, `EDIT_RESOURCE`, `SHARE_RESOURCE` and `SHARE_FOLDER` are wired today.
+ * `MOVE_RESOURCES` lands with its respective ticket and slots in as an additional case here without
+ * bloating this file.
  */
 export class HandlePermissionWorkflow extends React.Component {
   /**
@@ -56,10 +60,6 @@ export class HandlePermissionWorkflow extends React.Component {
         return <ResourceShareFlow {...this.props} />;
       case PERMISSION_WORKFLOW_OPERATION.SHARE_FOLDER:
         return <FolderShareFlow {...this.props} />;
-      case PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES:
-        return <ResourceMoveFlow {...this.props} />;
-      case PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS:
-        return <FolderMoveFlow {...this.props} />;
       default:
         throw new Error(`HandlePermissionWorkflow: unsupported operation "${this.props.operation}".`);
     }

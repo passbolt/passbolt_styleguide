@@ -18,7 +18,7 @@
  *
  * @param {string} uri
  * @param {object} options
- * - {array<string>} whiteListedProtocols The protocols to white list. Default ['https:','http:']
+ * - {array<string>} whitelistedProtocols The protocols to white list. Default ['https:','http:']
  * - {string} defaultProtocol Default protocol if the uri has none.
  * @returns {string|boolean}
  */
@@ -28,9 +28,9 @@ export default (uri, options) => {
     return false;
   }
   options = options || {};
-  if (options.whiteListedProtocols) {
-    if (!Array.isArray(options.whiteListedProtocols)) {
-      throw new TypeError("The whiteListedProtocols should be an array of string.");
+  if (options.whitelistedProtocols) {
+    if (!Array.isArray(options.whitelistedProtocols)) {
+      throw new TypeError("The whitelistedProtocols should be an array of string.");
     }
   }
   if (options.defaultProtocol) {
@@ -39,8 +39,8 @@ export default (uri, options) => {
     }
   }
 
-  const whiteListedProtocols = options.whiteListedProtocols || [urlProtocols.HTTP, urlProtocols.HTTPS];
-  const blackListedProtocols = [urlProtocols.JAVASCRIPT];
+  const whitelistedProtocols = options.whitelistedProtocols || [urlProtocols.HTTP, urlProtocols.HTTPS];
+  const blacklistedProtocols = [urlProtocols.JAVASCRIPT];
   const defaultProtocol = options.defaultProtocol || "";
 
   // If the uri doesn't have a protocol and a default one is provided, then prepend it to the uri.
@@ -50,10 +50,10 @@ export default (uri, options) => {
 
   try {
     const url = new URL(uri);
-    if (blackListedProtocols.includes(url.protocol)) {
+    if (blacklistedProtocols.includes(url.protocol)) {
       return false;
     }
-    if (!whiteListedProtocols.includes(url.protocol)) {
+    if (!whitelistedProtocols.includes(url.protocol)) {
       return false;
     }
     return url.href;

@@ -69,16 +69,14 @@ describe("ShadowRootResolverService", () => {
       expect(browser.dom.openOrClosedShadowRoot).toHaveBeenCalledWith(element);
     });
 
-    it("should call the extension API for a custom element from an iframe", () => {
+    it("should not call the extension API for an SVG element", () => {
       expect.assertions(2);
 
-      const iframe = document.createElement("iframe");
-      document.body.appendChild(iframe);
-      const element = iframe.contentDocument.createElement("login-form");
-      browser.dom = { openOrClosedShadowRoot: jest.fn().mockReturnValue(null) };
+      const element = document.createElementNS("http://www.w3.org/2000/svg", "font-face");
+      browser.dom = { openOrClosedShadowRoot: jest.fn() };
 
       expect(ShadowRootResolverService.resolveShadowRoot(element)).toBeNull();
-      expect(browser.dom.openOrClosedShadowRoot).toHaveBeenCalledWith(element);
+      expect(browser.dom.openOrClosedShadowRoot).not.toHaveBeenCalled();
     });
 
     it("should resolve a shadow root on an element from an iframe", () => {

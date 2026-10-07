@@ -18,6 +18,7 @@
 
 import InFormManager from "./InFormManager";
 import { fireEvent, waitFor } from "@testing-library/react";
+import InFormFieldSelector from "./InFormFieldSelector";
 
 export default class InformManagerPage {
   /**
@@ -46,14 +47,7 @@ export default class InformManagerPage {
    * Returns the username in iframe element
    */
   get usernameIframe() {
-    // The detected username field that lives inside the same-origin iframe. Same source as `username`
-    // (the classification result), scoped to the iframe document so it is unambiguous when the page also
-    // holds fields outside the iframe.
-    const iframeDocument = document.querySelector("iframe").contentDocument;
-    const username = InFormManager.callToActionFields.find(
-      (field) => field.fieldType === "username" && iframeDocument.contains(field.field),
-    );
-    return username?.field;
+    return document.querySelector("iframe").contentDocument.querySelector(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
   }
 
   /**
@@ -77,12 +71,7 @@ export default class InformManagerPage {
    * Returns the password in iframe element
    */
   get passwordIframe() {
-    // The detected password field that lives inside the same-origin iframe (see usernameIframe).
-    const iframeDocument = document.querySelector("iframe").contentDocument;
-    const password = InFormManager.callToActionFields.find(
-      (field) => field.fieldType === "password" && iframeDocument.contains(field.field),
-    );
-    return password?.field;
+    return document.querySelector("iframe").contentDocument.querySelector(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
   }
 
   /**
@@ -156,9 +145,8 @@ export default class InformManagerPage {
   /**
    * Opens the in-form menu for the last clicked call-to-action
    */
-  async openInFormMenu(applicationId = InFormManager.lastCallToActionFieldClicked?.id) {
-    // The background relays the id of the call-to-action that was clicked; the manager resolves from it.
-    await port.emit("passbolt.in-form-menu.open", applicationId);
+  async openInFormMenu() {
+    await port.emit("passbolt.in-form-menu.open");
     await waitFor(() => {});
   }
 

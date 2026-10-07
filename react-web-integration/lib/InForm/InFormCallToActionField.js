@@ -13,22 +13,62 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
+import DomUtils from "../Dom/DomUtils";
 import browser from "webextension-polyfill";
+import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
 import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
-
-/**
- * Grace period between the pointer leaving the field and the call-to-action being removed, letting
- * the pointer travel the gap between the two.
- * @type {number}
- */
-export const CALL_TO_ACTION_REMOVAL_GRACE_DELAY = 150;
 
 /**
  * An InFormCallToActionField is represented by a DOM element identified as an username field and to which
  * in-form call-to-action and/or menu can be attached
  */
 class InFormCallToActionField {
+  /**
+   * Retrieve all the DOM elements which can be an in-form username fields
+   */
+  static findAll(selector) {
+    let domFields = Array.from(document.querySelectorAll(selector));
+
+    // Remove nested (duplicated) fields
+    domFields = domFields.filter((nestedField) => {
+      // We ensure that there is no field nested within another field of the `domFiels` list
+      // If this is the case, we remove the nested field(s)
+      // Example:
+      // A field matched having for 6 nested inputs, and those inputs matched as well (for having a specifig class or whatever)
+      // We only keep the parent field and remove the nested ones
+      return domFields.every((domField) => domField === nestedField || !domField.contains(nestedField));
+    });
+
+    const iframesFields = InFormCallToActionField.findAllInIframes(selector);
+    const shadowDomFields = InFormCallToActionField.findAllInShadowDom(selector);
+    return domFields.concat(iframesFields).concat(shadowDomFields);
+  }
+
+  /**
+   * Retrieve all the iframes elements which can be an in-form username fields
+   * @return {*}
+   */
+  static findAllInIframes(selector) {
+    return DomUtils.getAccessibleAndSameDomainIframes().flatMap((iframe) =>
+      Array.from(iframe.contentDocument.querySelectorAll(selector)),
+    );
+  }
+
+  /**
+   * Retrieve all the shadow dom elements which can be an in-form username or password fields
+   * @return {*}
+   */
+  static findAllInShadowDom(selector) {
+    const matches = [];
+
+    for (const shadowRoot of ShadowRootCacheService.getCachedShadowRoots(document)) {
+      matches.push(...ShadowDomQueryService.querySelectorAllDeep(shadowRoot, selector));
+    }
+
+    return matches;
+  }
+
   /**
    * Default constructor
    * @param field The DOM element
@@ -40,10 +80,6 @@ class InFormCallToActionField {
     this.field = field;
     /** Type of the field ("username" or "password") */
     this.fieldType = fieldType;
-    /** The FieldRole the classification gave the field, refreshed at each page scan */
-    this.role = null;
-    /** The identifier of the scope (form or pseudo-form) the field belongs to, refreshed at each page scan */
-    this.formId = null;
     /** A unique identifier for the InFormCallToActionField */
     this.id = uuidv4();
     /** A unique identifier for the iframe */
@@ -60,30 +96,12 @@ class InFormCallToActionField {
     this.shadowRoot = shadowRoot;
     /** Rectangle coordinates of the field */
     this.viewableRect = null;
-    /** Pending removal scheduled while the pointer travels from the field to the call-to-action */
-    this.removalTimeout = null;
-    /** The browsing context the call-to-action iframe was given, used to detect that it was destroyed */
-    this.callToActionWindow = null;
 
     this.bindCallbacks();
     this.handleInsertionEvent();
     this.handleRemoveEvent();
     this.handleScrollEvent();
     this.cacheViewableRect();
-  }
-
-  /**
-   * Stores the classification of the underlying field.
-   *
-   * Called on every page scan, including for a call-to-action reused from the previous scan, so it
-   * never keeps the role or the scope the field had in an earlier state of the DOM.
-   *
-   * @param {string} role The FieldRole the classification gave the field.
-   * @param {string} formId The identifier of the scope (form or pseudo-form) the field belongs to.
-   */
-  setClassification(role, formId) {
-    this.role = role;
-    this.formId = formId;
   }
 
   /**
@@ -120,10 +138,8 @@ class InFormCallToActionField {
   handleInsertionEvent() {
     const fieldRoot = ShadowDomQueryService.scopeRoot(this.field);
     if (
-      // document.activeElement stops at the top-level shadow host, so look for the focused element through the open shadow roots.
-      this.field === ShadowDomQueryService.deepActiveElement() ||
-      // Closed shadow root: the focus is retargeted to the host, so compare the host with the active element.
-      (ShadowDomQueryService.isShadowRoot(fieldRoot) && fieldRoot.host === document.activeElement)
+      this.field === document.activeElement ||
+      (fieldRoot instanceof ShadowRoot && fieldRoot.host === document.activeElement)
     ) {
       this.insertInformCallToActionIframe();
     }
@@ -135,16 +151,11 @@ class InFormCallToActionField {
    * Insert an in-form call-to-action iframe
    */
   async insertInformCallToActionIframe() {
-    // The pointer came back onto the field: whatever removal was pending is no longer wanted.
-    this.cancelScheduledRemoval();
     const iframes = this.shadowRoot.querySelectorAll("iframe");
     // Use of Array prototype some method cause NodeList is not an array !
     const iframeId = this.iframeId;
-    const existingIframe = Array.prototype.find.call(iframes, (iframe) => iframe.id === iframeId);
-    if (!existingIframe || !this.isCallToActionIframeAlive(existingIframe)) {
-      if (existingIframe) {
-        this.removeIframe();
-      }
+    const isIframeAlreadyInserted = Array.prototype.some.call(iframes, (iframe) => iframe.id === iframeId);
+    if (!isIframeAlreadyInserted) {
       const iframe = await this.createCallToActionIframe();
       this.handleCallToActionClicked(iframe);
     }
@@ -171,22 +182,7 @@ class InFormCallToActionField {
     iframe.style.height = "18px";
     iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
     iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}&applicationId=${this.id}&fieldType=${this.fieldType}`;
-    this.callToActionWindow = iframe.contentWindow;
     return iframe;
-  }
-
-  /**
-   * Whether the given iframe still holds the browsing context the call-to-action was loaded into.
-   *
-   * The iframe carries no `src`: its URL is installed once through `contentWindow.location`. If the
-   * host is detached and re-attached, the browsing context is destroyed and the frame silently falls
-   * back to `about:blank` while the element itself stays in the shadow root.
-   *
-   * @param {HTMLIFrameElement} iframe The iframe to check.
-   * @returns {boolean} true when the iframe still renders the call-to-action.
-   */
-  isCallToActionIframeAlive(iframe) {
-    return Boolean(this.callToActionWindow) && iframe.contentWindow === this.callToActionWindow;
   }
 
   /**
@@ -202,8 +198,6 @@ class InFormCallToActionField {
    * @param iframe The call-to-action iframe
    */
   handleCallToActionClicked(iframe) {
-    // Stop the watcher left by a previous insertion before starting a new one.
-    clearInterval(this.callToActionClickWatcher);
     /*
      * In case of click on iframe, the field lose the focus. Since it loses the focus, the iframe is removed.
      * And so the call-to-action. So, we need to restore the focus on the input. In case, it did not have
@@ -222,16 +216,8 @@ class InFormCallToActionField {
      * We need to know which iframe the user click on. We cannot add a listener on iframe
      * since there are from different domains (target page vs extension pagemods)
      */
-    iframe.addEventListener("mouseover", () => {
-      this.isCallToActionMousingOver = true;
-      // The pointer made it across: keep the call-to-action.
-      this.cancelScheduledRemoval();
-    });
-    iframe.addEventListener("mouseout", () => {
-      this.isCallToActionMousingOver = false;
-      // Leaving the call-to-action itself: same grace period, the pointer may be heading back to the field.
-      this.scheduleRemoval();
-    });
+    iframe.addEventListener("mouseover", () => (this.isCallToActionMousingOver = true));
+    iframe.addEventListener("mouseout", () => (this.isCallToActionMousingOver = false));
   }
 
   /** CALL-TO-ACTION REMOVE */
@@ -249,52 +235,28 @@ class InFormCallToActionField {
    */
   removeInFormCallToAction() {
     const isIframeMouseOver = this.isCallToActionMousingOver;
-    const isActiveElementAnAuthenticationField = ShadowDomQueryService.deepActiveElement() === this.field;
+    const isActiveElementAnAuthenticationField = document.activeElement === this.field;
     if (!isIframeMouseOver && !isActiveElementAnAuthenticationField) {
       this.removeIframe();
     }
   }
 
   /**
-   * Schedules the removal of the call-to-action when the pointer leaves the field.
-   *
-   *
-   * @param {MouseEvent} event The mouse-out event
+   * Removes the call-to-action iframe from the username or password field when one moused out
+   * @param event The mouse-out event
    */
   removeInFormCallToActionWhenMouseOut(event) {
-    // Same-document shortcut: the pointer is demonstrably entering the call-to-action, keep it.
-    if (event.relatedTarget === this.shadowRoot.host) {
-      return;
+    const isNotCallToActionIframe = event.relatedTarget !== this.shadowRoot.host;
+    const isActiveElementAnAuthenticationField = document.activeElement === this.field;
+    if (isNotCallToActionIframe && !isActiveElementAnAuthenticationField) {
+      this.removeIframe();
     }
-    this.scheduleRemoval();
-  }
-
-  /**
-   * Schedules a removal, replacing any already pending one.
-   */
-  scheduleRemoval() {
-    this.cancelScheduledRemoval();
-    this.removalTimeout = setTimeout(() => {
-      this.removalTimeout = null;
-      this.removeInFormCallToAction();
-    }, CALL_TO_ACTION_REMOVAL_GRACE_DELAY);
-  }
-
-  /**
-   * Cancels a pending removal, if any.
-   */
-  cancelScheduledRemoval() {
-    clearTimeout(this.removalTimeout);
-    this.removalTimeout = null;
   }
 
   /**
    * Remove the call-to-action (iframe)
    */
   removeIframe() {
-    // The iframe goes away, so stop watching for a click on it and drop any pending removal.
-    clearInterval(this.callToActionClickWatcher);
-    this.cancelScheduledRemoval();
     const iframes = this.shadowRoot.querySelectorAll("iframe");
     iframes.forEach((iframe) => {
       const identifierToMatch = this.iframeId;
@@ -303,7 +265,6 @@ class InFormCallToActionField {
         port.emit("passbolt.port.disconnect", "InFormCallToAction");
       }
     });
-    this.callToActionWindow = null;
   }
 
   /** SCROLL REPOSITION */
@@ -328,7 +289,6 @@ class InFormCallToActionField {
     this.field.removeEventListener("mouseout", this.removeInFormCallToActionWhenMouseOut);
     this.field.removeEventListener("blur", this.removeInFormCallToAction);
     this.scrollableFieldParent.removeEventListener("scroll", this.removeIframe);
-    this.cancelScheduledRemoval();
     this.removeIframe();
   }
 }

@@ -112,8 +112,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.rowsSetting = RowsSettingEntity.createFromDefault();
-    // The group the resource ids are currently being retrieved for, used to ignore outdated responses.
-    this.groupResourceIdsRequestedFor = null;
     this.state = this.defaultState;
     this.gridResourceUserSetting = new GridResourceUserSettingServiceWorkerService(props.context.port);
     this.resourcesServiceWorkerService = new ResourcesServiceWorkerService(props.context.port);
@@ -139,7 +137,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       filter: { type: ResourceWorkspaceFilterTypes.NONE }, // The current resource search filter
       sorter: this.defaultSorter, // The default sorter
       filteredResources: null, // The current list of filtered resources
-      groupResourceIds: null, // The ids of the resources shared with the group being filtered on
       selectedResources: [], // The current list of selected resources
       columnsResourceSetting: null, // The settings of columns for resources
       rowsSetting: this.rowsSetting.toDto(), // The setting for the display of the rows
@@ -283,7 +280,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       folders: prevProps.context.folders !== this.folders,
       resources: prevProps.context.resources !== this.resources,
       selection: prevState.selectedResources !== this.state.selectedResources,
-      groupResourceIds: prevState.groupResourceIds !== this.state.groupResourceIds,
       filter: !this.isFilterEqual(prevState.filter, this.state.filter),
       details: prevState.details !== this.state.details,
       sorter: prevState.sorter !== this.state.sorter,
@@ -383,7 +379,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   applyStateUpdatesAndSearch(nextState, changes, hasFilterChanged) {
     this.handleSelectedResourcesChange(nextState.selectedResources);
     this.handleDetailsChange(nextState.details);
-    const needsSearch = hasFilterChanged || changes.folders || changes.resources || changes.groupResourceIds;
+    const needsSearch = hasFilterChanged || changes.folders || changes.resources;
     if (needsSearch) {
       // The search will set the filter state
       this.search(nextState.filter);
@@ -592,43 +588,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       nextState.filter.type !== ResourceWorkspaceFilterTypes.FOLDER
     ) {
       this.populate();
-    }
-    if (nextState.filter.type === ResourceWorkspaceFilterTypes.GROUP) {
-      this.findAndSetGroupResourceIds(nextState.filter.payload.group.id);
-    }
-  }
-
-  /**
-   * Find the ids of the resources shared with the given group and keep them in the state.
-   *
-   * The request is made whenever the group filter changes, and not while filtering, because it also updates the
-   * resources local storage. Requesting it from the filtering would make the resources change, which triggers the
-   * filtering again, looping infinitely causing issues on Firefox.
-   * @param {string} groupId The id of the group to filter the resources with
-   * @returns {Promise<void>}
-   */
-  async findAndSetGroupResourceIds(groupId) {
-    /*
-     * Track the group the ids are retrieved for before awaiting, it allows to ignore the response of a request made
-     * for a group that is not filtered on anymore.
-     */
-    this.groupResourceIdsRequestedFor = groupId;
-    // Clear grid of the previously filtered group, or the grid keeps displaying old previous list under the new group until the state is updated
-    this.setState({ groupResourceIds: null });
-    this.props.loadingContext.add();
-    try {
-      const groupResourceIds = await this.resourcesServiceWorkerService.findAllIdsByIsSharedWithGroup(groupId);
-      // If another group is filtered on in the meantime, the response is outdated.
-      if (this.groupResourceIdsRequestedFor === groupId) {
-        this.setState({ groupResourceIds });
-      }
-    } catch (error) {
-      console.error(error);
-      const message =
-        this.props.t("Unable to filter the resources by group.") + (error?.message ? ` ${error?.message}` : "");
-      await this.props.actionFeedbackContext.displayError(message);
-    } finally {
-      this.props.loadingContext.remove();
     }
   }
 
@@ -1076,11 +1035,33 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param {object} filter The filter
    */
   searchByGroup(filter) {
-    const groupResourceIds = new Set(this.state.groupResourceIds);
-    // keep only the resource with the group
-    const groupResources = this.resources.filter((resource) => groupResourceIds.has(resource.id));
-    this.sort(groupResources);
-    this.setState({ filter, filteredResources: groupResources });
+    if (this.isFilterEqual(this.state.filter, filter) && Boolean(this.state.filteredResources)) {
+      return;
+    }
+
+    this.props.loadingContext.add();
+
+    /*
+     * Resources filtering is applied after having set the configuration of the filter in the state.
+     * It allows Firefox not to loop infinitely because of the local storage update induced by the call of the background page.
+     *
+     * What seem to happen on Firefox is that the state is not updated on the right time but the local storage onChanged callback is executed.
+     * This creates a confusion in the filtering system where we expect resources to be filtered by group but the filter is still on "ALL".
+     * The execution order of the callback from the local storage and the state change (that calls componentDidUpdate)
+     * produces an infinite loop in Firefox.
+     */
+    this.setState({ filter, selectedResources: [] }, async () => {
+      const resourceIds =
+        (await this.props.context.port.request(
+          "passbolt.resources.find-all-ids-by-is-shared-with-group",
+          filter.payload.group.id,
+        )) || [];
+      // keep only the resource with the group
+      const groupResources = this.resources.filter((resource) => resourceIds.includes(resource.id));
+      this.sort(groupResources);
+      this.setState({ filteredResources: groupResources });
+      this.props.loadingContext.remove();
+    });
   }
 
   /**

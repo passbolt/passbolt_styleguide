@@ -118,9 +118,7 @@ class DisplayProviderList extends Component {
   handleProviderClick(provider) {
     const mfaUserSettings = this.props.mfaContext.getMfaUserSettings();
     this.props.mfaContext.setProvider(provider);
-    if (provider === Providers.WEBAUTHN) {
-      this.props.mfaContext.navigate(MfaSettingsWorkflowStates.PASSKEYS);
-    } else if (mfaUserSettings[provider]) {
+    if (mfaUserSettings[provider]) {
       this.props.mfaContext.navigate(MfaSettingsWorkflowStates.VIEWCONFIGURATION);
     } else {
       switch (provider) {
@@ -173,19 +171,6 @@ class DisplayProviderList extends Component {
                     <Trans>Please select a provider</Trans>
                   </h4>
                   <ul className="mfa-providers">
-                    {this.organisationMfaProviders["webauthn"] && (
-                      <li id="webauthn">
-                        <a href="#" onClick={() => this.handleProviderClick("webauthn")}>
-                          <div className="provider-img">{this.getProvider("webauthn").icon}</div>
-                          <p className="provider-name">
-                            <Trans>Passkeys</Trans>
-                          </p>
-                        </a>
-                        <div className={`mfa-provider-status ${this.userMfaSettings["webauthn"]}`}>
-                          {this.userMfaSettings["webauthn"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
-                        </div>
-                      </li>
-                    )}
                     {this.organisationMfaProviders["totp"] && (
                       <li id="totp">
                         <a href="#" onClick={() => this.handleProviderClick("totp")}>

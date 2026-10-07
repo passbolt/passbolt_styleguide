@@ -50,3 +50,33 @@ export const IGNORED_SUBTREES = new Set(["svg", "math", "SCRIPT", "STYLE", "NOSC
  * @type {number}
  */
 export const MAX_PIERCE_DEPTH = 100;
+
+/**
+ * Attributes to watch for changes in the DOM.
+ */
+const FIELD_ATTRIBUTES_TO_WATCH = [
+  "type",
+  "name",
+  "id",
+  "autocomplete",
+  "hidden",
+  "disabled",
+  "readonly",
+  "placeholder",
+  "aria-hidden",
+  "role",
+  "style",
+  "class",
+];
+
+/**
+ * MutationObserver options.
+ * @type {MutationObserverInit}
+ */
+export const OBSERVE_OPTIONS = {
+  childList: true,
+  subtree: true,
+  attributes: true,
+  attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
+  attributeOldValue: false,
+};

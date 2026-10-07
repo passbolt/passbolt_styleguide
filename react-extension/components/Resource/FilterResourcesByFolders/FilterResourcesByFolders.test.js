@@ -22,6 +22,7 @@ import FilterResourcesByFoldersPage from "./FilterResourcesByFolders.test.page";
 import { defaultResourcesDtos } from "../../../../shared/models/entity/resource/resourcesCollection.test.data";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
@@ -29,9 +30,6 @@ import { v4 as uuidv4 } from "uuid";
 import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultFolderDto } from "../../../../shared/models/entity/folder/folderEntity.test.data";
-import HandlePermissionWorkflow, {
-  PERMISSION_WORKFLOW_OPERATION,
-} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
 
 beforeEach(() => {
   jest.resetModules();
@@ -143,34 +141,12 @@ describe("See Folders", () => {
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDrop;
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(props.workflowContext.start).toHaveBeenCalledWith(
-        HandlePermissionWorkflow,
-        expect.objectContaining({
-          operation: PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS,
-          destinationFolderId: null,
-        }),
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.folders.move-by-id",
+        "3ed65efd-7c41-5906-9c02-71e2d95951db",
+        null,
       );
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
-    });
-
-    it("As LU dropping a folder while another permission operation is running I should be told to finish it first", async () => {
-      expect.assertions(2);
-      // A permission workflow is already registered, so this request is refused.
-      props.workflowContext.start.mockReturnValue(null);
-
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(1);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
-      await page.filterResourcesByFolders.onDragOver;
-      await page.filterResourcesByFolders.onDrop;
-
-      /*
-       * Two drops in a row is normal drag and drop. A refused request that shows nothing at all
-       * looks exactly like a drag that never registered.
-       */
-      expect(props.workflowContext.start).toHaveBeenCalled();
-      expect(props.actionFeedbackContext.displayWarning).toHaveBeenCalledWith(
-        "Please complete the operation in progress before starting another one.",
-      );
     });
 
     it("As LU I should be able to drag and drop a folder on another folder", async () => {
@@ -180,13 +156,35 @@ describe("See Folders", () => {
       await page.filterResourcesByFoldersItem.dragEndOnFolder(5);
       await page.filterResourcesByFoldersItem.onDropFolder(4);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(props.workflowContext.start).toHaveBeenCalledWith(
-        HandlePermissionWorkflow,
-        expect.objectContaining({
-          operation: PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS,
-          destinationFolderId: foldersMock[0].id,
-        }),
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.folders.move-by-id",
+        "3ed65efd-7c41-5906-9c02-71e2d95951db",
+        foldersMock[0].id,
       );
+    });
+
+    it("As LU I should throw an error dialog if somethings went wrong when a folder is dropped", async () => {
+      expect.assertions(2);
+
+      const error = new Error("ERROR");
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => {
+        throw error;
+      });
+
+      const page = new FilterResourcesByFoldersPage(props);
+
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(5);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(5);
+      await page.filterResourcesByFoldersItem.onDropFolder(4);
+
+      // Throw dialog general error message
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.folders.move-by-id",
+        "3ed65efd-7c41-5906-9c02-71e2d95951db",
+        foldersMock[0].id,
+      );
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
 
     it("As LU I should be able to open and close folder to see or not the child folders", async () => {
@@ -202,7 +200,7 @@ describe("See Folders", () => {
 
   describe("As LU I should be able to drag and drop resources on folders", () => {
     it("As LU I should be able to drag and drop resources on the root folder", async () => {
-      expect.assertions(1);
+      expect.assertions(2);
       const resources = defaultResourcesDtos();
       const props = defaultProps({
         dragContext: {
@@ -215,6 +213,14 @@ describe("See Folders", () => {
           onDragEnd: jest.fn(),
         },
       });
+
+      props.context.port.addRequestListener(
+        "passbolt.resources.move-by-ids",
+        async (resourcesIds, destinationFolder) => {
+          expect(destinationFolder).toBeNull();
+          expect(resourcesIds).toStrictEqual(resources.map((r) => r.id));
+        },
+      );
 
       const page = new FilterResourcesByFoldersPage(props);
 
@@ -222,16 +228,10 @@ describe("See Folders", () => {
       await page.filterResourcesByFolders.onDragLeave;
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDrop;
-
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES,
-        resources,
-        destinationFolderId: null,
-      });
     });
 
     it("As LU I should be able to drag and drop resources on another folder", async () => {
-      expect.assertions(3);
+      expect.assertions(4);
       const resources = defaultResourcesDtos();
       const props = defaultProps({
         dragContext: {
@@ -244,6 +244,14 @@ describe("See Folders", () => {
           onDragEnd: jest.fn(),
         },
       });
+
+      props.context.port.addRequestListener(
+        "passbolt.resources.move-by-ids",
+        async (resourcesIds, destinationFolder) => {
+          expect(destinationFolder).toStrictEqual(foldersMock[4].id);
+          expect(resourcesIds).toStrictEqual(resources.map((r) => r.id));
+        },
+      );
 
       const page = new FilterResourcesByFoldersPage(props);
 
@@ -257,11 +265,6 @@ describe("See Folders", () => {
       await page.filterResourcesByFoldersItem.onDropFolder(7);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES,
-        resources,
-        destinationFolderId: foldersMock[4].id,
-      });
     });
 
     it("As LU I should not be able to drag and drop personal resources v5 on a shared folder if I have missing keys", async () => {
@@ -316,6 +319,46 @@ describe("See Folders", () => {
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+    });
+
+    it("As LU I should throw an error dialog if somethings went wrong when a resource is dropped", async () => {
+      expect.assertions(2);
+      const resources = defaultResourcesDtos();
+      const props = defaultProps({
+        dragContext: {
+          dragging: true,
+          draggedItems: {
+            folders: [],
+            resources: resources,
+          },
+          onDragStart: jest.fn(),
+          onDragEnd: jest.fn(),
+        },
+      });
+
+      const error = new Error("ERROR");
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => {
+        throw error;
+      });
+
+      const page = new FilterResourcesByFoldersPage(props);
+
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(6);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.onDropFolder(7);
+
+      // Throw dialog general error message
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.resources.move-by-ids",
+        resources.map((resource) => resource.id),
+        foldersMock[4].id,
+      );
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
   });
 

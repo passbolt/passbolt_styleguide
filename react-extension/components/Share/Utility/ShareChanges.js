@@ -56,9 +56,6 @@ export default class ShareChanges {
         this._permissions.push(permission);
       });
     });
-    // The items the operator owns, the only ones a change can be staged on. What is displayed still
-    // covers every item (see aggregatePermissionsByAro).
-    this._stageableAcos = this._acos.filter((aco) => aco.permission?.type === ADMIN);
     this._changes = [];
     this._initiallyNewAroIds = new Set();
   }
@@ -256,17 +253,13 @@ export default class ShareChanges {
   }
 
   /**
-   * Update aro's permissions on the items the operator owns only, whatever level was picked.
+   * Update aro's permissions.
    * @param {string} aroId The aro to update the permissions for
    * @param {int} type
    */
   updateAroPermissions(aroId, type) {
     this._removeAroChanges(aroId);
-    // Selecting "varies" reverts the aro to its original per-resource permissions (no change emitted).
-    if (type === -1) {
-      return;
-    }
-    this._stageableAcos.forEach((aco) => {
+    this._acos.forEach((aco) => {
       const permissionOriginal = this.getAcoAroPermission(aco, aroId);
       if (permissionOriginal) {
         if (permissionOriginal.type !== type) {
@@ -283,67 +276,6 @@ export default class ShareChanges {
   }
 
   /**
-   * Update aro's permissions with a level per item, rather than one level for all of them, to seed
-   * a move. A null level removes the permission, and an item absent from the map is left alone.
-   * @param {object} aro The recipient to stage the permissions for, registered when not already known.
-   * @param {Map<string, (int|null)>} targetTypeByAcoId The level (1|7|15) per item id, or null for the
-   *   items the recipient must end up without a permission on.
-   */
-  updateAroPermissionsByAco(aro, targetTypeByAcoId) {
-    this._aros[aro.id] = aro;
-    this._removeAroChanges(aro.id);
-    this._stageableAcos.forEach((aco) => {
-      if (!targetTypeByAcoId.has(aco.id)) {
-        return;
-      }
-      const type = targetTypeByAcoId.get(aco.id);
-      const permissionOriginal = this.getAcoAroPermission(aco, aro.id);
-      if (type === null) {
-        if (permissionOriginal) {
-          const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
-          permissionChange.delete = true;
-          this._changes.push(permissionChange);
-        }
-        return;
-      }
-      if (!permissionOriginal) {
-        this._changes.push(this._buildChange(aco, aro, type));
-        return;
-      }
-      if (permissionOriginal.type !== type) {
-        const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
-        permissionChange.type = type;
-        this._changes.push(permissionChange);
-      }
-    });
-  }
-
-  /**
-   * On a move, stage the permissions each re-permissioned item ends up with. A recipient missing
-   * from an item's resulting set gets a removal staged on that item.
-   * @param {Array<object>} targetRows The resulting permissions, aggregated by aro.
-   * @param {Array<string>} acoIds The re-permissioned item ids. The other items are left alone.
-   */
-  stageTargetPermissions(targetRows, acoIds) {
-    for (const row of targetRows) {
-      this._aros[row.aro.id] = row.aro;
-    }
-    for (const aroId of Object.keys(this._aros)) {
-      const targetTypeByAcoId = new Map();
-      for (const acoId of acoIds) {
-        targetTypeByAcoId.set(acoId, null);
-      }
-      const targetRow = targetRows.find((row) => row.aro.id === aroId);
-      if (targetRow) {
-        for (const permission of targetRow.permissions) {
-          targetTypeByAcoId.set(permission.aco_foreign_key, permission.type);
-        }
-      }
-      this.updateAroPermissionsByAco(this._aros[aroId], targetTypeByAcoId);
-    }
-  }
-
-  /**
    * Used to initialise the ShareChanges list with already "changed" permissions.
    * For example when creating a new shared resource, the permissions must be shown as "new"
    * instead of "already existing".
@@ -356,12 +288,12 @@ export default class ShareChanges {
   }
 
   /**
-   * Delete aro's permissions, on the items the operator owns only.
+   * Delete aro's permissions.
    * @param {string} aroId The aro to delete the permissions for
    */
   deleteAroPermissions(aroId) {
     this._removeAroChanges(aroId);
-    this._stageableAcos.forEach((aco) => {
+    this._acos.forEach((aco) => {
       const permissionOriginal = this.getAcoAroPermission(aco, aroId);
       if (permissionOriginal) {
         const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));

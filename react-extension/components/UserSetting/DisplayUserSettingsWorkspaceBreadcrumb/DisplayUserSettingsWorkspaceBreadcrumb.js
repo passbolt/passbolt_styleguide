@@ -60,21 +60,21 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
    * Returns the current item name given the current location
    */
   get getLastBreadcrumbItemName() {
-    // Matched on a path segment so that the provider sub-pages of a section (e.g. /mfa/webauthn) keep its name.
-    const segments = this.props.location.pathname.split("/");
+    const matchPathSuffix = (pathSuffix) => this.props.location.pathname.endsWith(pathSuffix);
     const names = {
       profile: this.translate("Profile"),
       passphrase: this.translate("Passphrase"),
       "security-token": this.translate("Security token"),
       theme: this.translate("Theme"),
       mfa: this.translate("Multi Factor Authentication"),
+      duo: this.translate("Multi Factor Authentication"),
       keys: this.translate("Keys inspector"),
       mobile: this.translate("Mobile transfer"),
       "account-recovery": this.translate("Account Recovery"),
       "smtp-settings": this.translate("Email server"),
       desktop: this.translate("Desktop app setup"),
     };
-    const matchedKey = Object.keys(names).find((key) => segments.includes(key));
+    const matchedKey = Object.keys(names).find(matchPathSuffix);
     return names[matchedKey];
   }
 

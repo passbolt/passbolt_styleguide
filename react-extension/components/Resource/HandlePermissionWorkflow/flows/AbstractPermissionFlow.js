@@ -17,7 +17,6 @@ import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 import PermissionSnapshotService from "../../../../../shared/services/permission/permissionSnapshotService";
 import PermissionChangesService from "../../../../../shared/services/permission/permissionChangesService";
 import PermissionServiceWorkerService from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
-import GroupServiceWorkerService from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
 import GroupEntity from "../../../../../shared/models/entity/group/groupEntity";
 import GroupsCollection from "../../../../../shared/models/entity/group/groupsCollection";
@@ -54,7 +53,6 @@ export class AbstractPermissionFlow extends React.Component {
     this.permissionSnapshotService = new PermissionSnapshotService(props.context.port);
     this.permissionChangesService = new PermissionChangesService(props.context.port);
     this.permissionServiceWorkerService = new PermissionServiceWorkerService(props.context.port);
-    this.groupServiceWorkerService = new GroupServiceWorkerService(props.context.port);
     this.handleError = this.handleError.bind(this);
     this.terminate = this.terminate.bind(this);
     this.finalizeSuccess = this.finalizeSuccess.bind(this);
@@ -90,69 +88,14 @@ export class AbstractPermissionFlow extends React.Component {
   }
 
   /**
-   * Whether the operator owns the given item (and may therefore change its permissions).
-   * @param {object} item A resource/folder DTO carrying the operator's own permission.
-   * @returns {boolean}
-   */
-  isOwnedItem(item) {
-    return item.permission?.type === PermissionEntity.PERMISSION_OWNER;
-  }
-
-  /**
-   * Throw when the destination folder's permissions changed since the snapshot the operator
-   * confirmed. A move to the root has no destination, so nothing to check.
-   * @param {string|null} destinationFolderId The destination folder id, or null for the root.
-   * @param {PermissionSnapshotEntity|null} snapshot The snapshot captured when the dialog opened.
-   * @returns {Promise<void>}
-   * @throws {Error} When the destination folder's permissions changed since the snapshot.
-   */
-  async assertDestinationPermissionsUnchanged(destinationFolderId, snapshot) {
-    if (!destinationFolderId) {
-      return;
-    }
-    const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForFolderShare(destinationFolderId);
-    if (!snapshot.equals(currentSnapshot)) {
-      throw new Error(
-        this.props.t(
-          "The destination folder permissions changed during your review. Please retry the operation and verify the permissions again.",
-        ),
-      );
-    }
-  }
-
-  /**
-   * Throw when a group the operator added in the ShareDialog changed since the dialog displayed it
-   * (e.g. a member was added), naming the changed groups. These groups are not part of any snapshot, the ACO
-   * had no permission for them.
-   * @param {GroupsCollection|undefined} addedGroups The added groups as displayed by the dialog.
-   * @returns {Promise<void>}
-   * @throws {Error} When an added group changed since the dialog displayed it.
-   */
-  async assertAddedGroupsUnchanged(addedGroups) {
-    if (!addedGroups?.length) {
-      return;
-    }
-    const currentGroups = await this.groupServiceWorkerService.findByIdsForShare(addedGroups.extract("id"));
-    const changedGroups = addedGroups.getChangedGroups(currentGroups);
-    if (changedGroups.length) {
-      throw new Error(
-        this.props.t(
-          "The groups you added {{groupNames}} changed during your review. Please retry the operation and verify them again.",
-          { count: changedGroups.length, groupNames: changedGroups.map((group) => group.name).join(", ") },
-        ),
-      );
-    }
-  }
-
-  /**
-   * Pair each ACO with the permission set captured in its snapshot, producing the
+   * Pair each ACO with the permission set captured in its snapshot, producing the controlled-mode
    * resource shape ShareDialog seeds from without a server round-trip. The ACO list and the
    * snapshot list are index-aligned.
    * @param {Array<object>} acos The ACOs being shared/reviewed (each carries id, metadata and the operator's own permission).
    * @param {Array<PermissionSnapshotEntity>} snapshots The snapshot per ACO, in the same order.
    * @returns {Array<object>}
    */
-  buildInitialResources(acos, snapshots) {
+  buildControlledResources(acos, snapshots) {
     return acos.map((aco, index) => ({
       id: aco.id,
       metadata: aco.metadata,
@@ -163,7 +106,7 @@ export class AbstractPermissionFlow extends React.Component {
 
   /**
    * Merge the groups and users referenced across the given permission snapshots into de-duplicated
-   * collections, so the ShareDialog can render their rows and drill down to members.
+   * collections, so a controlled-mode ShareDialog can render their rows and drill down to members.
    * @param {Array<PermissionSnapshotEntity>} snapshots
    * @returns {{groups: GroupsCollection, users: UsersCollection}}
    */

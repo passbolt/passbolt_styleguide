@@ -35,7 +35,7 @@ export const RESOURCE_SHARE_FLOW_STATUS = Object.freeze({
  * only reviews and edits the recipient set.
  *
  * Captures a permission snapshot per selected resource (a snapshot targets a single ACO), dispatches
- * ShareDialog seeded from those snapshots, and — on confirmation — re-snapshots
+ * ShareDialog in controlled mode seeded from those snapshots, and — on confirmation — re-snapshots
  * to detect drift before saving the operator-confirmed permission changes via
  * `passbolt.share.resources.save`. A single-resource share is just a selection of one.
  *
@@ -50,8 +50,6 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    // The selection never changes, so the ids keep the order the snapshots are aligned on.
-    this.resourcesIds = props.resources.map((resource) => resource.id);
     // Instance flag (not state) so the close-after-confirm signal is visible synchronously when the
     // dialog's wrapped onClose fires right after onConfirm resolves.
     this.shareConfirmed = false;
@@ -71,6 +69,14 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
   }
 
   /**
+   * The ids of the resources being shared, in a stable order shared by the snapshots.
+   * @returns {Array<string>}
+   */
+  get resourcesIds() {
+    return this.props.resources.map((resource) => resource.id);
+  }
+
+  /**
    * Component did mount: capture one snapshot per resource, then open the share dialog.
    * @returns {Promise<void>}
    */
@@ -85,13 +91,13 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
   }
 
   /**
-   * Open the ShareDialog seeded from the per-resource snapshots. The dialog is
+   * Open the ShareDialog in controlled mode, seeded from the per-resource snapshots. The dialog is
    * fully editable (the operator owns every shared resource) and the opt-out checkbox is not shown.
    */
   openShareDialog() {
     const { groups, users } = this.mergeArosFromSnapshots(this.state.snapshots);
     this.props.dialogContext.open(ShareDialog, {
-      initialResources: this.buildInitialResources(this.props.resources, this.state.snapshots),
+      initialResources: this.buildControlledResources(this.props.resources, this.state.snapshots),
       initialGroups: groups,
       initialUsers: users,
       onConfirm: this.handleShareDialogConfirm,
@@ -107,12 +113,10 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
    * dialog emits deltas already targeting the real resources, so they are saved as-is. An empty
    * delta set means the operator confirmed the existing permissions as-is: nothing is sent.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
-   * @param {object} [options] The confirmation options ShareDialog emits.
-   * @param {boolean} [options.canOperatorRead] true if the operator can still read the modified resource
-   * @param {GroupsCollection} [options.addedGroups] The groups the operator added in the dialog, as displayed.
+   * @param {boolean} canOperatorRead true if the operator can still read the modified resource
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(permissionChanges, { canOperatorRead, addedGroups } = {}) {
+  async handleShareDialogConfirm(permissionChanges, canOperatorRead) {
     this.shareConfirmed = true;
     try {
       const currentSnapshots = await this.permissionSnapshotService.buildSnapshotForResourcesShare(this.resourcesIds);
@@ -124,7 +128,6 @@ export class ResourceShareFlow extends AbstractPermissionFlow {
           ),
         );
       }
-      await this.assertAddedGroupsUnchanged(addedGroups);
       if (permissionChanges.length) {
         await this.permissionServiceWorkerService.saveResourcesPermissions(this.resourcesIds, permissionChanges);
       }

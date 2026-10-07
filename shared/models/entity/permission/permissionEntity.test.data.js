@@ -130,11 +130,6 @@ export const readFolderPermissionDto = (data = {}) =>
     ...data,
   });
 
-export const defaultUserPermissionDto = (data = {}) => {
-  const user = data.user ?? defaultUserDto();
-  return defaultPermissionDto({ aro: "User", ...data, aro_foreign_key: user.id, user });
-};
-
 export const ownerGroupPermissionDto = (data = {}) =>
   defaultPermissionDto(
     {

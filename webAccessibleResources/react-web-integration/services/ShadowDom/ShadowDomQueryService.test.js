@@ -52,25 +52,6 @@ describe("ShadowDomQueryService", () => {
     });
   });
 
-  describe("ShadowDomQueryService::isDocument", () => {
-    it("should return true for a document, including one of another window", () => {
-      expect.assertions(2);
-
-      expect(ShadowDomQueryService.isDocument(document)).toBe(true);
-      expect(ShadowDomQueryService.isDocument(document.implementation.createHTMLDocument())).toBe(true);
-    });
-
-    it("should return false for an element, a shadow root and nullish values", () => {
-      expect.assertions(3);
-
-      const shadowRoot = document.createElement("div").attachShadow({ mode: "open" });
-
-      expect(ShadowDomQueryService.isDocument(document.createElement("div"))).toBe(false);
-      expect(ShadowDomQueryService.isDocument(shadowRoot)).toBe(false);
-      expect(ShadowDomQueryService.isDocument(null)).toBe(false);
-    });
-  });
-
   describe("ShadowDomQueryService::isShadowRoot", () => {
     it("should return true for a shadow root", () => {
       expect.assertions(1);
@@ -86,12 +67,6 @@ describe("ShadowDomQueryService", () => {
       expect(ShadowDomQueryService.isShadowRoot(document.createElement("div"))).toBe(false);
       expect(ShadowDomQueryService.isShadowRoot(document)).toBe(false);
       expect(ShadowDomQueryService.isShadowRoot(null)).toBe(false);
-    });
-
-    it("should return false for a plain document fragment", () => {
-      expect.assertions(1);
-
-      expect(ShadowDomQueryService.isShadowRoot(document.createDocumentFragment())).toBe(false);
     });
   });
 
@@ -161,87 +136,6 @@ describe("ShadowDomQueryService", () => {
     });
   });
 
-  describe("ShadowDomQueryService::containsDeep", () => {
-    it("should return true when the node is the ancestor itself", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<form></form>";
-      const form = document.querySelector("form");
-
-      expect(ShadowDomQueryService.containsDeep(form, form)).toBe(true);
-    });
-
-    it("should return true for a child of the ancestor", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<form><div><input type='text'/></div></form>";
-      const form = document.querySelector("form");
-      const input = document.querySelector("input");
-
-      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(true);
-    });
-
-    it("should return true for a node inside a shadow root of the ancestor", () => {
-      expect.assertions(2);
-
-      document.body.innerHTML = "<form></form>";
-      const form = document.querySelector("form");
-      const host = document.createElement("div");
-      const shadowRoot = host.attachShadow({ mode: "open" });
-      const input = document.createElement("input");
-      shadowRoot.appendChild(input);
-      form.appendChild(host);
-
-      expect(form.contains(input)).toBe(false);
-      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(true);
-    });
-
-    it("should return true for a node inside nested shadow roots of the ancestor", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<form></form>";
-      const form = document.querySelector("form");
-      const outerHost = document.createElement("div");
-      const outerRoot = outerHost.attachShadow({ mode: "open" });
-      form.appendChild(outerHost);
-      const innerHost = document.createElement("div");
-      const innerRoot = innerHost.attachShadow({ mode: "open" });
-      outerRoot.appendChild(innerHost);
-      const input = document.createElement("input");
-      innerRoot.appendChild(input);
-
-      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(true);
-    });
-
-    it("should return false for a node outside the ancestor", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<form></form><div><input type='text'/></div>";
-      const form = document.querySelector("form");
-      const input = document.querySelector("input");
-
-      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(false);
-    });
-
-    it("should return false for a node inside a shadow root that is not under the ancestor", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<form></form>";
-      const form = document.querySelector("form");
-      const host = document.createElement("div");
-      host.attachShadow({ mode: "open" });
-      form.appendChild(host);
-
-      const otherHost = document.createElement("div");
-      const otherRoot = otherHost.attachShadow({ mode: "open" });
-      const input = document.createElement("input");
-      otherRoot.appendChild(input);
-      document.body.appendChild(otherHost);
-
-      expect(ShadowDomQueryService.containsDeep(form, input)).toBe(false);
-    });
-  });
-
   describe("ShadowDomQueryService::hasAncestorMatchingDeep", () => {
     it("should return true when an ancestor of the element matches", () => {
       expect.assertions(1);
@@ -297,73 +191,6 @@ describe("ShadowDomQueryService", () => {
     });
   });
 
-  describe("ShadowDomQueryService::deepActiveElement", () => {
-    it("should return document.activeElement for a focused light-DOM element", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<input type='text'/>";
-      const input = document.querySelector("input");
-      input.focus();
-
-      expect(ShadowDomQueryService.deepActiveElement()).toBe(input);
-    });
-
-    it("should descend through nested open shadow roots to the truly focused element", () => {
-      expect.assertions(2);
-
-      const outerHost = document.createElement("div");
-      const outerRoot = outerHost.attachShadow({ mode: "open" });
-      document.body.appendChild(outerHost);
-      const innerHost = document.createElement("div");
-      const innerRoot = innerHost.attachShadow({ mode: "open" });
-      outerRoot.appendChild(innerHost);
-      const input = document.createElement("input");
-      innerRoot.appendChild(input);
-      input.focus();
-
-      // document.activeElement only exposes the outermost host; deepActiveElement reaches the input.
-      expect(document.activeElement).toBe(outerHost);
-      expect(ShadowDomQueryService.deepActiveElement()).toBe(input);
-    });
-
-    it("should descend into a same-origin iframe holding the focus", () => {
-      expect.assertions(2);
-
-      const iframe = document.createElement("iframe");
-      document.body.appendChild(iframe);
-      const input = iframe.contentDocument.createElement("input");
-      iframe.contentDocument.body.appendChild(input);
-      input.focus();
-      // jsdom does not propagate the frame focus to the embedder, mirror what a browser reports.
-      jest.spyOn(document, "activeElement", "get").mockReturnValue(iframe);
-
-      expect(document.activeElement).toBe(iframe);
-      expect(ShadowDomQueryService.deepActiveElement()).toBe(input);
-    });
-
-    it("should stop at the frame when nothing is focused inside it", () => {
-      expect.assertions(1);
-
-      const iframe = document.createElement("iframe");
-      document.body.appendChild(iframe);
-      jest.spyOn(document, "activeElement", "get").mockReturnValue(iframe);
-
-      expect(ShadowDomQueryService.deepActiveElement()).toBe(iframe);
-    });
-
-    it("should stop at the frame when its document cannot be reached", () => {
-      expect.assertions(1);
-
-      const iframe = document.createElement("iframe");
-      document.body.appendChild(iframe);
-      // Not same origin-domain: the getter reports no document, it does not throw.
-      jest.spyOn(iframe, "contentDocument", "get").mockReturnValue(null);
-      jest.spyOn(document, "activeElement", "get").mockReturnValue(iframe);
-
-      expect(ShadowDomQueryService.deepActiveElement()).toBe(iframe);
-    });
-  });
-
   describe("ShadowDomQueryService::scopeRoot", () => {
     it("should return the document for an element in the DOM", () => {
       expect.assertions(1);
@@ -404,16 +231,6 @@ describe("ShadowDomQueryService", () => {
       const detached = document.createElement("div");
 
       expect(ShadowDomQueryService.scopeRoot(detached)).toBe(document);
-    });
-
-    it("should return the owning document for an element of another document", () => {
-      expect.assertions(1);
-
-      const iframeDocument = document.implementation.createHTMLDocument();
-      const input = iframeDocument.createElement("input");
-      iframeDocument.body.appendChild(input);
-
-      expect(ShadowDomQueryService.scopeRoot(input)).toBe(iframeDocument);
     });
   });
 

@@ -24,7 +24,6 @@ import {
   scimSettingsWithoutSecretTokenDto,
 } from "../../../../shared/services/serviceWorker/scim/scimSettingsServiceWorkerService.test.data";
 import { defaultRoleContext } from "../../../contexts/RoleContext.test.data";
-import { DateTime } from "luxon";
 
 /**
  * Default props.
@@ -92,7 +91,7 @@ export function defaultScimSettingsConfiguredProps(props = {}) {
 }
 
 /**
- * Props with an expired secret token (expiry date in the past).
+ * Props with expired secret token.
  * @param {Object} props The props to override
  * @returns {object}
  */
@@ -101,43 +100,7 @@ export function defaultScimSettingsExpiredTokenProps(props = {}) {
     scimSettingsServiceWorkerService: {
       findSettings: () =>
         defaultScimSettingsDto({
-          expired: DateTime.now().minus({ days: 1 }).toISODate(),
-        }),
-      updateSettings: jest.fn(),
-    },
-    ...props,
-  });
-}
-
-/**
- * Props with a secret token expiring within the warning window (expiry date 14 days in the future).
- * @param {Object} props The props to override
- * @returns {object}
- */
-export function defaultScimSettingsExpiringTokenProps(props = {}) {
-  return defaultProps({
-    scimSettingsServiceWorkerService: {
-      findSettings: () =>
-        defaultScimSettingsDto({
-          expired: DateTime.now().plus({ days: 14 }).toISODate(),
-        }),
-      updateSettings: jest.fn(),
-    },
-    ...props,
-  });
-}
-
-/**
- * Props with a healthy secret token (expiry beyond the warning window).
- * @param {Object} props The props to override
- * @returns {object}
- */
-export function defaultScimSettingsHealthyTokenProps(props = {}) {
-  return defaultProps({
-    scimSettingsServiceWorkerService: {
-      findSettings: () =>
-        defaultScimSettingsDto({
-          expired: DateTime.now().plus({ years: 1 }).toISODate(),
+          expired: "2020-01-01",
         }),
       updateSettings: jest.fn(),
     },

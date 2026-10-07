@@ -41,6 +41,7 @@ import UserSettingsContextProvider from "./contexts/UserSettingsContext";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
 import AppContext from "../shared/context/AppContext/AppContext";
 import HandlePassphraseEntryEvents from "./components/AuthenticationPassphrase/HandlePassphraseEntryEvents/HandlePassphraseEntryEvents";
+import HandleFolderMoveStrategyEvents from "./components/ResourceFolder/HandleFolderMoveStrategyEvents/HandleFolderMoveStrategyEvents";
 import HandleProgressEvents from "./components/Common/Progress/HandleProgressEvents/HandleProgressEvents";
 import DisplayResourcesWorkspace from "./components/Resource/DisplayResourcesWorkspace/DisplayResourcesWorkspace";
 import DragContextProvider from "./contexts/DragContext";
@@ -109,6 +110,7 @@ class ExtApp extends Component {
                                         {/* Dialogs Management */}
                                         <HandlePassphraseEntryEvents />
                                         <HandleConfirmMetadataKeyEntryEvents />
+                                        <HandleFolderMoveStrategyEvents />
                                         <HandleProgressEvents />
                                         <HandleSessionExpired />
 
