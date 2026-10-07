@@ -1,4 +1,4 @@
-# v5.17.0-alpha.2
+# v5.17.0
 
 Provides:
-- `assertWebauthnRelyingPartyIsNotIpAddress` check for webauthn
+- Webauthn features
