@@ -20,6 +20,7 @@ import { Trans, withTranslation } from "react-i18next";
 import DisplayAdministrationHealthcheckActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationHealthcheckActions/DisplayAdministrationHealthcheckActions";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import { createSafePortal } from "../../../../shared/utils/portals";
+import { containsUnsafeUrl, linkifyText } from "../../../../shared/utils/linkifyUtils";
 import HealthcheckSuccessSVG from "../../../../img/svg/healthcheck_success.svg";
 import HealthcheckErrorSVG from "../../../../img/svg/healthcheck_error.svg";
 import HealthcheckInfoSVG from "../../../../img/svg/healthcheck_info.svg";
@@ -41,8 +42,8 @@ const STATUS_RENDERING = {
 /**
  * Displays the API healthcheck, whatever the API reports.
  *
- * Every row is drawn from status and message alone, so a healthcheck added on the API shows up
- * here with no change to this file. A branch on a given check or domain defeats that.
+ * Every row is drawn from status / message / help alone, so a healthcheck added on the API shows
+ * up here with no change to this file. A branch on a given check or domain defeats that.
  */
 class DisplayHealthcheckAdministration extends Component {
   /**
@@ -93,6 +94,16 @@ class DisplayHealthcheckAdministration extends Component {
   }
 
   /**
+   * Returns the help entries of the given check that embed no unsafe URL.
+   * @param {HealthcheckCheckEntity} check
+   * @param {string} checkKey
+   * @returns {array<string>}
+   */
+  getSafeHelp(check, checkKey) {
+    return check.help.filter((helpEntry) => !containsUnsafeUrl(helpEntry, `the help of the check ${checkKey}`));
+  }
+
+  /**
    * Renders one check row.
    * @param {HealthcheckCheckEntity} check
    * @param {string} domainKey
@@ -102,7 +113,9 @@ class DisplayHealthcheckAdministration extends Component {
   renderCheck(check, domainKey, checkIndex) {
     // The position is a fallback, for the day a check reaches the browser with no key.
     const checkKey = check.key ?? `${domainKey}-check-${checkIndex}`;
+    const helpId = `healthcheck-help-${checkKey}`;
     const { modifier, icon: StatusIcon } = this.getStatusRendering(check.status);
+    const safeHelp = this.getSafeHelp(check, checkKey);
 
     return (
       <div key={checkKey} className="healthcheck-check">
@@ -112,6 +125,13 @@ class DisplayHealthcheckAdministration extends Component {
           </span>
           <span className="healthcheck-check-message">{check.message}</span>
         </div>
+        {safeHelp.length > 0 && (
+          <ul id={helpId} className="healthcheck-help">
+            {safeHelp.map((helpEntry, helpIndex) => (
+              <li key={`${checkKey}-help-${helpIndex}`}>{linkifyText(helpEntry, `${checkKey}-help-${helpIndex}`)}</li>
+            ))}
+          </ul>
+        )}
       </div>
     );
   }
