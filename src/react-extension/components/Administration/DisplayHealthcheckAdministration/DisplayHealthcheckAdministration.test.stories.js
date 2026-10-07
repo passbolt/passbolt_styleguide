@@ -14,7 +14,12 @@
 
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration";
 import React from "react";
-import { defaultProps } from "./DisplayHealthcheckAdministration.test.data";
+import { defaultProps, propsWithHealthcheckApiBody } from "./DisplayHealthcheckAdministration.test.data";
+import {
+  allPassHealthcheckApiBodyDto,
+  mixedStatusHealthcheckApiBodyDto,
+  unknownContractHealthcheckApiBodyDto,
+} from "../../../../shared/models/entity/healthcheck/healthcheck.test.data";
 
 export default {
   title: "Components/Administration/DisplayHealthcheckAdministration",
@@ -43,6 +48,23 @@ export default {
   },
 };
 
-export const Initial = {
-  args: defaultProps(),
+export const AllPass = {
+  args: propsWithHealthcheckApiBody(allPassHealthcheckApiBodyDto()),
+};
+
+export const MixedStatus = {
+  args: propsWithHealthcheckApiBody(mixedStatusHealthcheckApiBodyDto()),
+};
+
+export const UnknownContract = {
+  args: propsWithHealthcheckApiBody(unknownContractHealthcheckApiBodyDto()),
+};
+
+export const EndpointDisabled = {
+  args: defaultProps({
+    adminHealthcheckContext: {
+      healthcheckData: null,
+      isHealthcheckEndpointEnabled: () => false,
+    },
+  }),
 };
