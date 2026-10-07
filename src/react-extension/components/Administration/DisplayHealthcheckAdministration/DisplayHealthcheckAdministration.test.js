@@ -11,26 +11,43 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
-import { defaultProps } from "./DisplayHealthcheckAdministration.test.data";
+import { defaultProps, propsWithHealthcheckApiBody } from "./DisplayHealthcheckAdministration.test.data";
 import DisplayHealthcheckAdministrationPage from "./DisplayHealthcheckAdministration.test.page";
+import { healthcheckChecksCollection } from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
 import {
-  defaultAdministrationHealthcheckContext,
-  mockHealthcheckAirGappedEnvironment,
-  mockHealthcheckDataAllChecksFail,
-} from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
+  allPassHealthcheckApiBodyDto,
+  emptyHealthcheckApiBodyDto,
+  mixedStatusHealthcheckApiBodyDto,
+  nonContiguousHealthcheckApiBodyDto,
+} from "../../../../shared/models/entity/healthcheck/healthcheck.test.data";
 
-describe("See the healthCheck settings", () => {
+/**
+ * The domains the page is expected to draw out of a response body, in the order it draws them.
+ * @param {array} body
+ * @returns {array<{key: string, title: string, checks: array}>}
+ */
+const domainsOf = (body) => healthcheckChecksCollection(body).groupByDomain();
+
+describe("See the healthcheck settings", () => {
   afterEach(() => {
     jest.resetModules();
     jest.resetAllMocks();
   });
 
-  describe("As AD, I should see the healthcheck status on the administration page", () => {
-    let page, props;
+  describe("As AD, I should see the healthcheck the API reports", () => {
+    let page, props, body, domains;
 
     beforeEach(() => {
-      props = defaultProps();
+      body = mixedStatusHealthcheckApiBodyDto();
+      domains = domainsOf(body);
+      props = propsWithHealthcheckApiBody(body);
       page = new DisplayHealthcheckAdministrationPage(props);
+    });
+
+    it("should render the panel and enable the refresh button", () => {
+      expect.assertions(2);
+      expect(page.exists()).toBeTruthy();
+      expect(page.isRefreshButtonEnabled()).toBeTruthy();
     });
 
     it("should be able to refresh", async () => {
@@ -41,231 +58,78 @@ describe("See the healthCheck settings", () => {
       expect(props.adminHealthcheckContext.loadHealthcheckData).toHaveBeenCalledTimes(2);
     });
 
-    it("should render and enable the refresh button", () => {
+    it("should render one section per domain the API returned", () => {
       expect.assertions(2);
-      expect(page.exists()).toBeTruthy();
-      expect(page.isRefreshButtonEnabled()).toBeTruthy();
+      expect(page.domainCount).toEqual(domains.length);
+      expect(page.domains.every((_, domainIndex) => page.domainSection(domainIndex) !== null)).toBe(true);
     });
 
-    it("should display all the healthcheck sections", () => {
-      expect.assertions(11);
-      expect(page.healthCheckEnvironment).not.toBeNull();
-      expect(page.healthCheckApp).not.toBeNull();
-      expect(page.healthCheckGPG).not.toBeNull();
-      expect(page.healthCheckConfigurationFiles).not.toBeNull();
-      expect(page.healthCheckDatabase).not.toBeNull();
-      expect(page.healthCheckSmtp).not.toBeNull();
-      expect(page.healthCheckSSL).not.toBeNull();
-      expect(page.healthCheckCore).not.toBeNull();
-      expect(page.healthcheckDirectorySync).not.toBeNull();
-      expect(page.healthcheckSso).not.toBeNull();
-      expect(page.healthcheckMetadata).not.toBeNull();
-    });
-
-    it("should display all subssections success status", () => {
-      expect.assertions(22);
-      expect(page.isAllHealthcheckSubSectionEnvironmentSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionConfigFilesSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionCoreSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionSSLSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionDatabaseSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionAppSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionGPGSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionSMTPSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionDirectorySyncSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionSsoSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionMetadataSuccess).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionEnvironmentFailed).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionConfigFilesWarned).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionCoreFailed).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionSSLFailed).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionDatabaseFailed).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionAppFailed).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionGPGFailed).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionSMTPFailed).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionDirectorySyncWarned).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionSsoWarned).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionMetadataFailed).toBeFalsy();
-    });
-  });
-
-  describe("As AD, I should see the healthcheck status failed on the administration page", () => {
-    let page, props;
-
-    beforeEach(() => {
-      props = defaultProps({
-        adminHealthcheckContext: defaultAdministrationHealthcheckContext({
-          healthcheckData: mockHealthcheckDataAllChecksFail,
-        }),
-      });
-      page = new DisplayHealthcheckAdministrationPage(props);
-    });
-    it("should display all subssections fail status", async () => {
-      expect.assertions(22);
-      expect(page.isAllHealthcheckSubSectionEnvironmentFailed).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionConfigFilesWarned).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionCoreFailed).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionSSLFailed).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionDatabaseFailed).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionAppFailed).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionGPGFailed).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionSMTPFailed).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionDirectorySyncWarned).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionSsoWarned).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionMetadataFailed).toBeTruthy();
-      expect(page.isAllHealthcheckSubSectionEnvironmentSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionConfigFilesSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionCoreSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionSSLSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionDatabaseSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionAppSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionGPGSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionSMTPSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionDirectorySyncSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionSsoSuccess).toBeFalsy();
-      expect(page.isAllHealthcheckSubSectionMetadataSuccess).toBeFalsy();
-    });
-  });
-
-  describe("As AD running an air gaped environment, I should see the application sub section healthcheck status failing on the administration page", () => {
-    let page, props;
-
-    beforeEach(() => {
-      props = defaultProps({
-        adminHealthcheckContext: defaultAdministrationHealthcheckContext({
-          healthcheckData: mockHealthcheckAirGappedEnvironment,
-        }),
-      });
-      page = new DisplayHealthcheckAdministrationPage(props);
-    });
-    it("should display a fail for the app sub section on a air gaped environment", async () => {
+    it("should render the domains in the order the API returned them", () => {
       expect.assertions(1);
-      expect(page.isAllHealthcheckSubSectionAppSuccessAirGapped).toBeTruthy();
-    });
-  });
-
-  describe("As AD, I should see the button disabled during loading", () => {
-    let page;
-    const props = defaultProps({
-      adminHealthcheckContext: defaultAdministrationHealthcheckContext({ isProcessing: () => true }),
+      expect(page.domainTitles).toEqual(domains.map((domain) => domain.title));
     });
 
-    beforeEach(() => {
-      page = new DisplayHealthcheckAdministrationPage(props);
+    it("should render the checks of a domain together even when the API sent them apart", () => {
+      expect.assertions(2);
+      const apartBody = nonContiguousHealthcheckApiBodyDto();
+      const apartPage = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(apartBody));
+      expect(apartPage.domainCount).toEqual(2);
+      expect(apartPage.checks(0)).toHaveLength(2);
     });
-    it("should display refresh button disabled", async () => {
-      expect.assertions(1);
-      expect(page.isRefreshButtonEnabled()).toBeFalsy();
-    });
-  });
 
-  describe("As AD, I should not be able to refresh the data if the endpoint is disabled", () => {
-    it("should display refresh button disabled", async () => {
-      expect.assertions(1);
-      const adminHealthcheckContext = defaultAdministrationHealthcheckContext({
-        isHealthcheckEndpointEnabled: () => false,
-        isProcessing: () => false,
+    it("should render every check of every domain, in the order the API returned them", () => {
+      expect.assertions(domains.length * 2);
+      domains.forEach((domain, domainIndex) => {
+        expect(page.checks(domainIndex)).toHaveLength(domain.checks.length);
+        expect(page.checks(domainIndex).map((_, checkIndex) => page.checkMessage(domainIndex, checkIndex))).toEqual(
+          domain.checks.map((check) => check.message),
+        );
       });
+    });
 
-      const props = defaultProps({ adminHealthcheckContext });
+    it("should give every check the badge of its status", () => {
+      expect.assertions(1);
+      const expected = domains
+        .flatMap((domain) => domain.checks)
+        .map((check) => `healthcheck-badge--${check.status === "pass" ? "success" : check.status}`);
+      expect(page.allBadgeModifiers).toEqual(expected);
+    });
+  });
+
+  describe("As AD, I should see the states the panel can be in", () => {
+    it("should display the spinner while the healthcheck is being processed", () => {
+      expect.assertions(1);
+      const props = defaultProps({
+        adminHealthcheckContext: { isProcessing: jest.fn(() => true) },
+      });
       const page = new DisplayHealthcheckAdministrationPage(props);
+      expect(page.domainCount).toEqual(0);
+    });
 
+    it("should display the empty state when the API returned no healthcheck at all", () => {
+      expect.assertions(2);
+      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(emptyHealthcheckApiBodyDto()));
+      expect(page.domainCount).toEqual(0);
+      expect(page.emptyState).not.toBeNull();
+    });
+
+    it("should display the disabled message and disable refresh when the endpoint is off", () => {
+      expect.assertions(3);
+      const props = defaultProps({
+        adminHealthcheckContext: { isHealthcheckEndpointEnabled: jest.fn(() => false) },
+      });
+      const page = new DisplayHealthcheckAdministrationPage(props);
+      expect(page.domainCount).toEqual(0);
+      expect(page.endpointDisabledMessage).not.toBeNull();
       expect(page.isRefreshButtonEnabled()).toBeFalsy();
     });
-  });
 
-  describe("As AD, I am not able to see the SSO section if it is disabled", () => {
-    let page, props;
-
-    beforeEach(() => {
-      props = defaultProps({ context: { siteSettings: { canIUse: (plugins) => plugins !== "sso" } } });
-      page = new DisplayHealthcheckAdministrationPage(props);
-    });
-
-    it("should display all the healthcheck sections except the sso", () => {
-      expect.assertions(10);
-      expect(page.healthCheckEnvironment).not.toBeNull();
-      expect(page.healthCheckApp).not.toBeNull();
-      expect(page.healthCheckGPG).not.toBeNull();
-      expect(page.healthCheckConfigurationFiles).not.toBeNull();
-      expect(page.healthCheckDatabase).not.toBeNull();
-      expect(page.healthCheckSmtp).not.toBeNull();
-      expect(page.healthCheckSSL).not.toBeNull();
-      expect(page.healthCheckCore).not.toBeNull();
-      expect(page.healthcheckDirectorySync).not.toBeNull();
-      expect(page.healthcheckSso).toBeNull();
-    });
-  });
-
-  describe("As AD, I am not able to see the directorySync section if it is disabled", () => {
-    let page, props;
-
-    beforeEach(() => {
-      props = defaultProps({ context: { siteSettings: { canIUse: (plugins) => plugins !== "directorySync" } } });
-      page = new DisplayHealthcheckAdministrationPage(props);
-    });
-
-    it("should display all the healthcheck sections except the directorySync", () => {
-      expect.assertions(10);
-      expect(page.healthCheckEnvironment).not.toBeNull();
-      expect(page.healthCheckApp).not.toBeNull();
-      expect(page.healthCheckGPG).not.toBeNull();
-      expect(page.healthCheckConfigurationFiles).not.toBeNull();
-      expect(page.healthCheckDatabase).not.toBeNull();
-      expect(page.healthCheckSmtp).not.toBeNull();
-      expect(page.healthCheckSSL).not.toBeNull();
-      expect(page.healthCheckCore).not.toBeNull();
-      expect(page.healthcheckDirectorySync).toBeNull();
-      expect(page.healthcheckSso).not.toBeNull();
-    });
-  });
-
-  describe("As AD, I am not able to see the SSO and directorySync section if it is disabled", () => {
-    let page, props;
-
-    beforeEach(() => {
-      props = defaultProps({
-        context: { siteSettings: { canIUse: (plugins) => plugins !== "sso" && plugins !== "directorySync" } },
-      });
-      page = new DisplayHealthcheckAdministrationPage(props);
-    });
-
-    it("should display all the healthcheck sections except directorySync and SSO", () => {
-      expect.assertions(10);
-      expect(page.healthCheckEnvironment).not.toBeNull();
-      expect(page.healthCheckApp).not.toBeNull();
-      expect(page.healthCheckGPG).not.toBeNull();
-      expect(page.healthCheckConfigurationFiles).not.toBeNull();
-      expect(page.healthCheckDatabase).not.toBeNull();
-      expect(page.healthCheckSmtp).not.toBeNull();
-      expect(page.healthCheckSSL).not.toBeNull();
-      expect(page.healthCheckCore).not.toBeNull();
-      expect(page.healthcheckDirectorySync).toBeNull();
-      expect(page.healthcheckSso).toBeNull();
-    });
-  });
-
-  describe("As AD, I am not able to see the metadata section if it is disabled", () => {
-    let page, props;
-
-    beforeEach(() => {
-      props = defaultProps({ context: { siteSettings: { canIUse: (plugins) => plugins !== "metadata" } } });
-      page = new DisplayHealthcheckAdministrationPage(props);
-    });
-
-    it("should display all the healthcheck sections except the metadata", () => {
-      expect.assertions(11);
-      expect(page.healthCheckEnvironment).not.toBeNull();
-      expect(page.healthCheckApp).not.toBeNull();
-      expect(page.healthCheckGPG).not.toBeNull();
-      expect(page.healthCheckConfigurationFiles).not.toBeNull();
-      expect(page.healthCheckDatabase).not.toBeNull();
-      expect(page.healthCheckSmtp).not.toBeNull();
-      expect(page.healthCheckSSL).not.toBeNull();
-      expect(page.healthCheckCore).not.toBeNull();
-      expect(page.healthcheckDirectorySync).not.toBeNull();
-      expect(page.healthcheckSso).not.toBeNull();
-      expect(page.healthcheckMetadata).toBeNull();
+    it("should render every domain of an all passing instance with the success badge", () => {
+      expect.assertions(1);
+      const page = new DisplayHealthcheckAdministrationPage(
+        propsWithHealthcheckApiBody(allPassHealthcheckApiBodyDto()),
+      );
+      expect(new Set(page.allBadgeModifiers)).toEqual(new Set(["healthcheck-badge--success"]));
     });
   });
 });
