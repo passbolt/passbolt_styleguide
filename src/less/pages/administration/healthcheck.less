@@ -3,52 +3,92 @@
     align-items: stretch;
   }
 
-  .healthcheck-environment-section,
-  .healthcheck-configFiles-section,
-  .healthcheck-core-section,
-  .healthcheck-ssl-section,
-  .healthcheck-database-section,
-  .healthcheck-gpg-section,
-  .healthcheck-app-section,
-  .healthcheck-smtp-section,
-  .healthcheck-directorySync-section,
-  .healthcheck-sso-section,
-  .healthcheck-metadata-section {
-    .healthcheck-success,
-    .healthcheck-warning,
-    .healthcheck-fail,
-    .healthcheck-info {
-      display: flex;
-      align-items: center;
-      margin: 1rem 0;
-      gap: 1rem;
-      padding: 1rem;
-      border-radius: var(--Section-border-radius);
-
-      .tooltip {
-        margin: .3rem 0 0 -.5rem;
-      }
-    }
-    .healthcheck-success {
-      background: var(--Healthcheck-Healthcheck-Success);
-    }
-    .healthcheck-warning {
-      background: var(--Healthcheck-Healthcheck-Warning);
-    }
-    .healthcheck-fail {
-      background: var(--Healthcheck-Healthcheck-Error);
-    }
-    .healthcheck-info {
-      background: var(--Healthcheck-Healthcheck-Ignored);
-    }
-  }
-
+  // Scoped: a free .svg-icon rule would size every icon of the page.
   .svg-icon {
     width: 1.8rem;
     min-width: 1.8rem;
     height: 1.8rem;
     align-items: center;
     justify-content: center;
+  }
+}
+
+// Unscoped on purpose: the panel also mounts outside .page.administration .app.
+.healthcheck-domain {
+  & + .healthcheck-domain {
+    margin-top: 2.4rem;
+  }
+
+  h4.accordion-header {
+    margin-bottom: 0;
+
+    button {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1.2rem;
+      // Restated: button.link resets the font to 1.5rem and normal weight.
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 2.8rem;
+    }
+  }
+}
+
+.healthcheck-empty {
+  padding: 1rem 0;
+}
+
+.healthcheck-domain-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-top: 1.2rem;
+}
+
+.healthcheck-check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: 1.2rem 1.6rem;
+  border-radius: var(--Section-border-radius);
+}
+
+.healthcheck-check-message {
+  flex: 1;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  // Optically centres the first line against the badge beside it.
+  padding-top: 0.4rem;
+  // Messages carry raw command output and file paths, which have no break opportunity.
+  word-break: break-word;
+}
+
+.healthcheck-help-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 2.4rem;
+  // Matches the badge height, so the caret centres on the first line of the message.
+  height: 3.2rem;
+  margin-left: 1.6rem;
+  border-bottom: 0;
+}
+
+.healthcheck-help {
+  // Indented past the badge and its gap, so the entries hang under the message.
+  margin: 0.4rem 1.6rem 1.2rem 6rem;
+  // Holds the markers, drawn here by list-style-position: outside.
+  padding-left: 1.6rem;
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+
+  li {
+    // Restored on the li and not on the ul, base/lists.less resets "ul li {list-style: none}".
+    list-style: disc;
+    margin: 0.6rem 0;
+    word-break: break-word;
   }
 }
 
