@@ -16,6 +16,8 @@ import { assertUuid } from "../../../utils/assertions";
 export const RESOURCES_UPDATE_LOCAL_STORAGE_BY_PARENT_FOLDER_ID =
   "passbolt.resources.update-local-storage-by-folder-parent-id";
 
+export const RESOURCES_FIND_ALL_IDS_BY_IS_SHARED_WITH_GROUP = "passbolt.resources.find-all-ids-by-is-shared-with-group";
+
 class ResourcesServiceWorkerService {
   /**
    * Constructor
@@ -32,6 +34,16 @@ class ResourcesServiceWorkerService {
   async updateResourceLocalStorageForParentFolderId(parentFolderId) {
     assertUuid(parentFolderId, "The given parentFolderId should be a valid UUID");
     await this.port.request(RESOURCES_UPDATE_LOCAL_STORAGE_BY_PARENT_FOLDER_ID, parentFolderId);
+  }
+
+  /**
+   * Find the ids of the resources shared with the given group.
+   * @param {string} groupId The group id
+   * @returns {Promise<array<string>>} The ids of the resources shared with the group
+   */
+  async findAllIdsByIsSharedWithGroup(groupId) {
+    assertUuid(groupId, "The given groupId should be a valid UUID");
+    return (await this.port.request(RESOURCES_FIND_ALL_IDS_BY_IS_SHARED_WITH_GROUP, groupId)) || [];
   }
 }
 

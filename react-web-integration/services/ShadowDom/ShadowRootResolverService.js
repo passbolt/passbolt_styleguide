@@ -22,32 +22,21 @@ class ShadowRootResolverService {
    * @return {ShadowRoot?} The shadow root of the given element, or null if it doesn't have one.
    */
   static resolveShadowRoot(element) {
-    // An author-attached *open* shadow root is always safe to read directly: `element.shadowRoot` never
-    // exposes user-agent widgets, so it needs no gating.
+    // Author-attached *open* shadow root
     if (element.shadowRoot) {
       return element.shadowRoot;
     }
 
-    // We only consider elements that are likely to host an author-created shadow root: either elements
-    // allowed to attach one, or custom elements (including a dash [`-`] character).
+    // We only consider elements that are likely to host a shadow root: either elements allowed to attach one,
+    // or custom elements (including a dash [`-`] character).
     // @see https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow#elements_you_can_attach_a_shadow_to
-    //
-    // This gate MUST also cover the closed-root resolution below. Unlike `element.shadowRoot`, both the
-    // Firefox `openOrClosedShadowRoot` property and the `browser.dom` API also expose user-agent widget
-    // shadow roots — the native controls of <video>/<audio>, <input type=range|date>, <select>… Firefox
-    // mounts and tears those down on every playback-state change; once cached, reading `.host` on a
-    // torn-down widget dereferences a null host and crashes the content process (Gecko bug 2063234,
-    // PB-54190). `attachShadow()` throws on all those elements, so gating here never drops a legitimate
-    // author shadow root.
     const tag = element.nodeName;
-    const canHostShadowRoot =
-      SHADOW_ROOT_CANDIDATE_NODE_NAMES.has(tag) || (element instanceof HTMLElement && tag.includes("-"));
+    const canHostShadowRoot = SHADOW_ROOT_CANDIDATE_NODE_NAMES.has(tag) || tag.includes("-");
     if (!canHostShadowRoot) {
       return null;
     }
 
-    // Closed author shadow root, exposed directly by the Firefox content-script property.
-    // `openOrClosedShadowRoot` is only available on Firefox.
+    // `openOrClosedShadowRoot` property is only available on Firefox.
     // @see Refer to compatibility table here: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/dom/openOrClosedShadowRoot#browser_compatibility
     if (element.openOrClosedShadowRoot) {
       return element.openOrClosedShadowRoot;
@@ -56,7 +45,7 @@ class ShadowRootResolverService {
     // Otherwise fall back to the extension API to get the closed shadow root (chromium browsers).
     try {
       if (browser?.dom?.openOrClosedShadowRoot) {
-        return browser.dom.openOrClosedShadowRoot(element) ?? null;
+        return browser.dom.openOrClosedShadowRoot(element);
       }
     } catch (error) {
       console.warn("ShadowRootResolverService.resolveShadowRoot threw on element", element, error);

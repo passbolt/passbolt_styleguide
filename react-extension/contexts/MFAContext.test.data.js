@@ -20,11 +20,13 @@ export function mockMfaSettings(data = {}) {
       totp: true,
       duo: false,
       yubikey: true,
+      webauthn: true,
     },
     MfaAccountSettings: {
       totp: true,
       duo: false,
       yubikey: true,
+      webauthn: false,
     },
   };
 
@@ -35,18 +37,21 @@ export const noMfaDefined = {
   totp: false,
   duo: false,
   yubikey: false,
+  webauthn: false,
 };
 
 export const mfaDefined = {
   totp: true,
   duo: false,
   yubikey: false,
+  webauthn: false,
 };
 
 export const allProviders = {
   totp: true,
   duo: true,
   yubikey: true,
+  webauthn: true,
 };
 
 export const noMfaUserDefinedWithTotp = {
@@ -79,3 +84,30 @@ export const setupTotpData = (props = {}) => {
   };
   return Object.assign(data, props);
 };
+
+export const defaultPasskeyDto = (data = {}) => ({
+  id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+  credential_id: "AZv1kKjbTxOX8BRWmQE1bPQmnPX5Gm0ARgqVGaM_UZo",
+  aaguid: "adce0002-35bc-c60a-648b-0b25f1f05503",
+  name: "My passkey",
+  sign_count: 3,
+  last_used: "2026-09-10T10:00:00+00:00",
+  created: "2026-09-01T10:00:00+00:00",
+  modified: "2026-09-10T10:00:00+00:00",
+  ...data,
+});
+
+export const defaultPasskeysDtos = (count = 3, data = {}) =>
+  Array.from({ length: count }, (_, i) =>
+    defaultPasskeyDto({
+      id: `8e3874ae-4b40-590b-968a-418f704b9d${String(i).padStart(2, "0")}`,
+      name: `Passkey ${i + 1}`,
+      ...data,
+    }),
+  );
+
+export const defaultPasskeySettingsDto = (data = {}) => ({
+  max_credentials_per_user: 10,
+  timeout_ms: 60000,
+  ...data,
+});

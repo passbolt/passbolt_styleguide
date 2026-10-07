@@ -77,37 +77,15 @@ describe("ResourceCreatePage", () => {
       const expectedData = {
         name: "newtab",
         uris: ["chrome://newtab/"],
-        secret_clear: "AAAAAAAAAAAAAAAAAA",
       };
 
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => expectedData);
       const page = new ResourceCreatePagePage(props);
-      // Wait until the username input value is found (This will ensure the state has been updated with the tab info)
-      await screen.findByDisplayValue(props.context.userSettings.username);
+      await waitForTrue(() => page.name.value === "");
 
       // Assert the form.
       expect(page.name.value).toStrictEqual("");
-      expect(page.uri.value).toStrictEqual("");
-    });
-
-    it("should not initialize with edge new tab metadata", async () => {
-      expect.assertions(2);
-
-      const expectedData = {
-        name: "New tab",
-        uris: ["edge://newtab/"],
-        secret_clear: "AAAAAAAAAAAAAAAAAA",
-      };
-
-      const props = defaultProps();
-      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => expectedData);
-      const page = new ResourceCreatePagePage(props);
-      // Wait until the username input value is found (This will ensure the state has been updated with the tab info)
-      await screen.findByDisplayValue(props.context.userSettings.username);
-
-      // Assert the form.
-      expect(page.name.value).toStrictEqual("New tab");
       expect(page.uri.value).toStrictEqual("");
     });
 
@@ -115,14 +93,12 @@ describe("ResourceCreatePage", () => {
       const expectedData = {
         name: "",
         uris: ["about:newtab"],
-        secret_clear: "AAAAAAAAAAAAAAAAAA",
       };
 
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async () => expectedData);
       const page = new ResourceCreatePagePage(props);
-      // Wait until the username input value is found (This will ensure the state has been updated with the tab info)
-      await screen.findByDisplayValue(props.context.userSettings.username);
+      await waitForTrue(() => page.name.value === "");
 
       // Assert the form.
       expect(page.name.value).toStrictEqual("");

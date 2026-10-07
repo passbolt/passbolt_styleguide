@@ -21,15 +21,16 @@ describe("MfaDTO model", () => {
     it("should init dto with model", () => {
       const dto = new MfaDTO(mockModel);
 
-      expect.assertions(3);
+      expect.assertions(4);
 
-      expect(dto.providers).toEqual([MfaProviders.totp, MfaProviders.yubikey, MfaProviders.duo]);
+      expect(dto.providers).toEqual([MfaProviders.totp, MfaProviders.webauthn, MfaProviders.yubikey, MfaProviders.duo]);
       expect(dto.duo).toEqual({
         apiHostName: "api-123456af.duosecurity.com",
         clientId: "PAGI605APMFKP8YSME6T",
         clientSecret: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT",
       });
       expect(dto.yubikey).toEqual({ clientId: "80412", secretKey: "pas6lyijz2AIhX3D9eLIYAxv63lt@" });
+      expect(dto).not.toHaveProperty("webauthn");
     });
 
     it("should not init with yubikey and duo if not selected", () => {
@@ -37,6 +38,7 @@ describe("MfaDTO model", () => {
       model.yubikeyToggle = false;
       model.duoToggle = false;
       model.totpProviderToggle = false;
+      model.webauthnToggle = false;
       const dto = new MfaDTO(model);
 
       expect.assertions(3);

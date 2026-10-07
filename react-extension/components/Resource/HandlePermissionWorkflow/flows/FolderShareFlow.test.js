@@ -27,6 +27,7 @@ import {
   SHARE_FOLDERS_SAVE,
 } from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
 import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
+import { ADDED_GROUP_CHANGED_ERROR_MESSAGE, addedGroupFixture, mockAddedGroupFetch } from "./permissionFlow.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -78,7 +79,7 @@ async function mountUntilShareOpen(props) {
 }
 
 describe("FolderShareFlow", () => {
-  it("As LU I should review and edit the folder's own permissions seeded from the snapshot (controlled, ACO_FOLDER, editable)", async () => {
+  it("As LU I should review and edit the folder's own permissions seeded from the snapshot (ACO_FOLDER, editable)", async () => {
     expect.assertions(5);
     const props = defaultProps();
     const operatorId = props.context.loggedInUser.id;
@@ -193,6 +194,44 @@ describe("FolderShareFlow", () => {
       expect.anything(),
       expect.anything(),
     );
+  });
+
+  it("As LU I should see the workflow refuse the share when a group I added changed during my review", async () => {
+    expect.assertions(3);
+    const props = defaultProps();
+    const operatorId = props.context.loggedInUser.id;
+    const folderId = props.folder.id;
+    wireSnapshotListeners(props.context.port, {
+      folderPermissions: [permissionDto("Folder", folderId, operatorId)],
+    });
+
+    await mountUntilShareOpen(props);
+
+    const { addedGroups, grownGroupDto } = addedGroupFixture();
+    mockAddedGroupFetch(props.context.port, grownGroupDto);
+    jest.spyOn(props.context.port, "request");
+    const folderChanges = [
+      {
+        aro: "Group",
+        aro_foreign_key: grownGroupDto.id,
+        aco: "Folder",
+        aco_foreign_key: folderId,
+        type: 1,
+        is_new: true,
+      },
+    ];
+    const [shareProps] = shareDialogProps(props.dialogContext);
+    await act(() => shareProps.onConfirm(folderChanges, { addedGroups }));
+
+    expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
+      error: expect.objectContaining({ message: ADDED_GROUP_CHANGED_ERROR_MESSAGE }),
+    });
+    expect(props.context.port.request).not.toHaveBeenCalledWith(
+      SHARE_FOLDERS_SAVE,
+      expect.anything(),
+      expect.anything(),
+    );
+    expect(props.onStop).toHaveBeenCalled();
   });
 
   it("As LU cancelling the dialog should terminate the workflow without saving", async () => {

@@ -45,18 +45,6 @@ import CloseSVG from "../../../img/svg/close.svg";
 import DiceSVG from "../../../img/svg/dice.svg";
 import SettingsSVG from "../../../img/svg/settings.svg";
 
-/**
- * Tab names that should not be used to prefill the resource name.
- * @type {Array<string>}
- */
-const IGNORE_NAMES = ["newtab"];
-
-/**
- * Tab URIs that should not be used to prefill the resource uri (browsers new tab pages).
- * @type {Array<string>}
- */
-const IGNORE_URIS = ["chrome://newtab/", "about:newtab", "edge://newtab/"];
-
 class ResourceCreatePage extends React.Component {
   /**
    * @constructor
@@ -217,6 +205,8 @@ class ResourceCreatePage extends React.Component {
     let uri = "";
     let username = "";
     let password = "";
+    const ignoreNames = ["newtab"];
+    const ignoreUris = ["chrome://newtab/", "about:newtab"];
 
     try {
       const tabInfo = await this.props.context.port.request(
@@ -224,11 +214,11 @@ class ResourceCreatePage extends React.Component {
         this.props.context.openerTabId,
       );
 
-      if (!IGNORE_NAMES.includes(tabInfo["name"])) {
+      if (!ignoreNames.includes(tabInfo["name"])) {
         name = tabInfo["name"].substring(0, 255);
       }
 
-      if (tabInfo["uris"].length > 0 && !IGNORE_URIS.includes(tabInfo["uris"][0])) {
+      if (!ignoreUris.includes(tabInfo["uris"]) && tabInfo["uris"].length > 0) {
         uri = tabInfo["uris"][0];
       }
 

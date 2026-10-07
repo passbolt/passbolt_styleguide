@@ -11,7 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.4
  */
-import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import {
+  defaultResourceDto,
+  resourceStandalonePinCodeNoUrisDto,
+} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { defaultProps, noFilteredResourcesProps } from "./FilterResourcesBySharedWithMePage.test.data";
 import FilterResourcesBySharedWithMePagePage from "./FilterResourcesBySharedWithMePage.test.page";
@@ -122,6 +125,16 @@ describe("FilterResourcesBySharedWithMePage", () => {
       const page = new FilterResourcesBySharedWithMePagePage(props);
 
       expect(page.displayedMainMessage).toStrictEqual("No result match your search. Try with another search term.");
+    });
+    it("should display a PIN code resource shared with me", () => {
+      expect.assertions(2);
+      const owned = resourceStandalonePinCodeNoUrisDto();
+      const shared = resourceStandalonePinCodeNoUrisDto({ permission: updatePermissionDto() });
+
+      const page = new FilterResourcesBySharedWithMePagePage(defaultProps({ resources: [owned, shared] }));
+
+      expect(page.resources?.length).toStrictEqual(1);
+      expect(page.getResource(0).textContent).toStrictEqual("Office alarm");
     });
   });
 

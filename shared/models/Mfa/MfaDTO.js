@@ -37,6 +37,9 @@ class MfaDTO {
     if (mfaModel.totpProviderToggle) {
       this.providers.push(MfaProviders.totp);
     }
+    if (mfaModel.webauthnToggle) {
+      this.providers.push(MfaProviders.webauthn);
+    }
     if (mfaModel.yubikeyToggle) {
       this.providers.push(MfaProviders.yubikey);
     }

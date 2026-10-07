@@ -55,6 +55,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
    */
   async initialize() {
     try {
+      await this.checkPluginIsConfigured();
       await this.props.activeSessionLocalStorageContext.updateLocalStorage();
       await this.getUserSettings();
       await this.getLocale();
@@ -88,7 +89,8 @@ export class ExtQuickAccessContextProvider extends React.Component {
    */
   async loadOnlineData(siteSettings) {
     if (this.props.activeSession.isAuthenticated) {
-      if (this.props.activeSession.isMfaRequired) {
+      // Redirect the user only if the server is reachable to not be blocked in an infinite loop
+      if (this.props.activeSession.isMfaRequired && this.props.activeSession.isServerReachable) {
         await this.redirectToMfaAuthentication();
         return;
       }
@@ -194,6 +196,19 @@ export class ExtQuickAccessContextProvider extends React.Component {
    */
   setWindowBlurBehaviour(shouldCloseAtWindowBlur) {
     this.setState({ shouldCloseAtWindowBlur });
+  }
+
+  /**
+   * Check if plugin is configured
+   *  - not configured will redirect to getting started passbolt page and close quickaccess
+   * @return {Promise<void>}
+   */
+  async checkPluginIsConfigured() {
+    const isConfigured = await this.state.port.request("passbolt.addon.is-configured");
+    if (!isConfigured) {
+      await this.props.state.request("passbolt.tabs.open-website-getting-started-page");
+      await this.closeWindow();
+    }
   }
 
   /**

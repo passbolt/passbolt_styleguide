@@ -33,15 +33,15 @@ describe("Sanitize URL checks", () => {
   });
 
   it("White listed protocols option", () => {
-    const whitelistedProtocols = ["ssh:", "ftp:", "javascript:"];
+    const whiteListedProtocols = ["ssh:", "ftp:", "javascript:"];
 
-    expect(sanitizeUrl("javascript:alert(1)", { whitelistedProtocols })).toBe(false);
+    expect(sanitizeUrl("javascript:alert(1)", { whiteListedProtocols })).toBe(false);
 
-    expect(sanitizeUrl("ssh://localhost", { whitelistedProtocols })).not.toBe(false);
-    expect(sanitizeUrl("ftp://localhost", { whitelistedProtocols })).not.toBe(false);
+    expect(sanitizeUrl("ssh://localhost", { whiteListedProtocols })).not.toBe(false);
+    expect(sanitizeUrl("ftp://localhost", { whiteListedProtocols })).not.toBe(false);
 
-    expect(sanitizeUrl("http://passbolt.com", { whitelistedProtocols })).toBe(false);
-    expect(sanitizeUrl("https://passbolt.com", { whitelistedProtocols })).toBe(false);
+    expect(sanitizeUrl("http://passbolt.com", { whiteListedProtocols })).toBe(false);
+    expect(sanitizeUrl("https://passbolt.com", { whiteListedProtocols })).toBe(false);
   });
 
   it("Default protocol option", () => {

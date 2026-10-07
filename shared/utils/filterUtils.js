@@ -58,3 +58,15 @@ export const filterResourcesBySearch = (resources, needle, limit = Number.MAX_SA
     return true;
   });
 };
+
+/**
+ * Keep only the resources the quick access can list and display
+ * @param {array} resources The resources DTOs
+ * @param {ResourceTypesCollection} resourceTypes The resource types
+ * @returns {array}
+ */
+export const filterResourcesSupportedByQuickAccess = (resources = [], resourceTypes) => {
+  return resources.filter((resource) => {
+    return resourceTypes?.getFirstById(resource.resource_type_id)?.isSupportedByQuickAccess();
+  });
+};

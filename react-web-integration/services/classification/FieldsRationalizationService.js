@@ -1,0 +1,158 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         5.15.0
+ */
+
+import { FieldRole, FormRole } from "./Taxonomy";
+import { USERNAME_CANDIDATE_TYPES } from "../../lib/InForm/ScrapingDictionary";
+
+/**
+ * Final pass fixing role inconsistencies across a whole scope.
+ */
+class FieldsRationalizationService {
+  /**
+   * Applies the fixes in order and returns the corrected roles.
+   * @param {{form: FormScraping, formRole: string, fields: FieldScraping[], roles: Map<string, string>}} scope The scope.
+   * @returns {Map<string, string>} The corrected roles.
+   */
+  static rationalize(scope) {
+    const roles = scope.roles;
+    // Order matters
+    FieldsRationalizationService.rescueLoginPassword(scope, roles);
+    FieldsRationalizationService.rescueUsername(scope, roles);
+    FieldsRationalizationService.dedupeKeepFirst(scope, roles, FieldRole.USERNAME);
+    FieldsRationalizationService.fixOrphanConfirmation(scope, roles);
+    FieldsRationalizationService.enforceLoginConsistency(scope, roles);
+    FieldsRationalizationService.defaultGenericPasswords(scope, roles);
+    FieldsRationalizationService.dedupeKeepFirst(scope, roles, FieldRole.CURRENT_PASSWORD);
+    return roles;
+  }
+
+  /**
+   * Returns true when a field has one of the wanted roles.
+   * @param {string[]} wantedRoles The roles to look for.
+   * @param {FieldScraping[]} fields The fields to scan.
+   * @param {Map<string, string>} roles The role map.
+   * @returns {boolean}
+   */
+  static hasRolesField(wantedRoles, fields, roles) {
+    return fields.some((field) => wantedRoles.includes(roles.get(field.fieldId)));
+  }
+
+  /**
+   * Keeps the first field (DOM order) with the given role and demotes the rest to OTHER.
+   * @param {{fields: FieldScraping[]}} scope The scope.
+   * @param {Map<string, string>} roles The role map to update in place.
+   * @param {string} role The role to deduplicate.
+   */
+  static dedupeKeepFirst(scope, roles, role) {
+    const hits = scope.fields.filter((field) => roles.get(field.fieldId) === role);
+    hits.slice(1).forEach((field) => roles.set(field.fieldId, FieldRole.OTHER));
+  }
+
+  /**
+   * On a login form with no password role, set the first password field to CURRENT_PASSWORD.
+   * @param {{formRole: string, fields: FieldScraping[]}} scope The scope.
+   * @param {Map<string, string>} roles The role map to update in place.
+   */
+  static rescueLoginPassword(scope, roles) {
+    if (
+      scope.formRole !== FormRole.LOGIN ||
+      FieldsRationalizationService.hasRolesField([FieldRole.CURRENT_PASSWORD, FieldRole.PASSWORD], scope.fields, roles)
+    ) {
+      return;
+    }
+    const candidate = scope.fields.find((field) => field.type === "password");
+    if (candidate) {
+      roles.set(candidate.fieldId, FieldRole.CURRENT_PASSWORD);
+    }
+  }
+
+  /**
+   * On a login form with a password but no username, the first text or email field found before the first password (skipping OTP) becomes the USERNAME.
+   * @param {{formRole: string, fields: FieldScraping[]}} scope The scope.
+   * @param {Map<string, string>} roles The role map to update in place.
+   */
+  static rescueUsername(scope, roles) {
+    if (
+      scope.formRole !== FormRole.LOGIN ||
+      FieldsRationalizationService.hasRolesField([FieldRole.USERNAME, FieldRole.EMAIL], scope.fields, roles)
+    ) {
+      return;
+    }
+
+    const firstPasswordIndex = scope.fields.findIndex(
+      (field) =>
+        roles.get(field.fieldId) === FieldRole.CURRENT_PASSWORD || roles.get(field.fieldId) === FieldRole.PASSWORD,
+    );
+    for (let index = firstPasswordIndex - 1; index >= 0; index--) {
+      const field = scope.fields[index];
+      // Skip OTP boxes.
+      if (roles.get(field.fieldId) === FieldRole.TOTP) {
+        continue;
+      }
+
+      if (USERNAME_CANDIDATE_TYPES.includes(field.type) && field.tagName !== "BUTTON") {
+        roles.set(field.fieldId, field.type === "email" ? FieldRole.EMAIL : FieldRole.USERNAME);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Rewrites a password-confirmation with no matching new-password back to a generic PASSWORD.
+   * @param {{fields: FieldScraping[]}} scope The scope.
+   * @param {Map<string, string>} roles The role map to update in place.
+   */
+  static fixOrphanConfirmation(scope, roles) {
+    const confirmations = scope.fields.filter((field) => roles.get(field.fieldId) === FieldRole.PASSWORD_CONFIRMATION);
+    if (
+      confirmations.length &&
+      !FieldsRationalizationService.hasRolesField([FieldRole.NEW_PASSWORD], scope.fields, roles)
+    ) {
+      confirmations.forEach((field) => roles.set(field.fieldId, FieldRole.PASSWORD));
+    }
+  }
+
+  /**
+   * On a login form, change new-password and confirmation roles to CURRENT_PASSWORD, unless declared by the page.
+   * @param {{formRole: string, fields: FieldScraping[]}} scope The scope.
+   * @param {Map<string, string>} roles The role map to update in place.
+   */
+  static enforceLoginConsistency(scope, roles) {
+    if (scope.formRole !== FormRole.LOGIN) {
+      return;
+    }
+    scope.fields.forEach((field) => {
+      const role = roles.get(field.fieldId);
+      if ((role === FieldRole.NEW_PASSWORD || role === FieldRole.PASSWORD_CONFIRMATION) && !field._byDeclared) {
+        roles.set(field.fieldId, FieldRole.CURRENT_PASSWORD);
+      }
+    });
+  }
+
+  /**
+   * Rewrites any remaining PASSWORD to CURRENT_PASSWORD.
+   * @param {{fields: FieldScraping[]}} scope The scope.
+   * @param {Map<string, string>} roles The role map to update in place.
+   */
+  static defaultGenericPasswords(scope, roles) {
+    scope.fields.forEach((field) => {
+      const role = roles.get(field.fieldId);
+      if (role === FieldRole.PASSWORD) {
+        roles.set(field.fieldId, FieldRole.CURRENT_PASSWORD);
+      }
+    });
+  }
+}
+
+export default FieldsRationalizationService;

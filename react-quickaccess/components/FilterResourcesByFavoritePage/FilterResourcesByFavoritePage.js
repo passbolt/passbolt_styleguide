@@ -18,7 +18,7 @@ import { withRouter, Link } from "react-router-dom";
 import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
-import { filterResourcesBySearch } from "../../../shared/utils/filterUtils";
+import { filterResourcesBySearch, filterResourcesSupportedByQuickAccess } from "../../../shared/utils/filterUtils";
 import { withResourcesLocalStorage } from "../../contexts/ResourceLocalStorageContext";
 import memoize from "memoize-one";
 import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
@@ -115,31 +115,11 @@ class FilterResourcesByFavoritePage extends React.Component {
   });
 
   /**
-   * Is password resource
-   * @param {string} resourceTypeId
-   * @returns {boolean}
-   */
-  isPasswordResource(resourceTypeId) {
-    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.hasPassword();
-  }
-
-  /**
-   * Is OTP resource
-   * @param {string} resourceTypeId
-   * @returns {boolean}
-   */
-  isOTPResource(resourceTypeId) {
-    return this.props.resourceTypes?.getFirstById(resourceTypeId)?.hasTotp();
-  }
-
-  /**
-   * Get resource filtered by resource type to have only resource with password and totp
+   * Get the resources the quick access can list
    * @return {Array}
    */
-  get resourcesFilterByResourceTypePasswordAndTotp() {
-    const keepOnlyResourcesPasswordAndTotp = (resource) =>
-      this.isPasswordResource(resource.resource_type_id) || this.isOTPResource(resource.resource_type_id);
-    return this.props.resources.filter(keepOnlyResourcesPasswordAndTotp);
+  get resourcesSupportedByQuickAccess() {
+    return filterResourcesSupportedByQuickAccess(this.props.resources, this.props.resourceTypes);
   }
 
   /**
@@ -194,10 +174,7 @@ class FilterResourcesByFavoritePage extends React.Component {
     let browsedResources;
 
     if (isReady) {
-      browsedResources = this.filterSearchedResources(
-        this.resourcesFilterByResourceTypePasswordAndTotp,
-        this.props.context.search,
-      );
+      browsedResources = this.filterSearchedResources(this.resourcesSupportedByQuickAccess, this.props.context.search);
     }
 
     /**
@@ -257,8 +234,7 @@ class FilterResourcesByFavoritePage extends React.Component {
                           <div className="inline-resource-name">
                             <span className="title">{resource.metadata.name}</span>
                             <span className="username">
-                              {" "}
-                              {resource.metadata.username ? `(${resource.metadata.username})` : ""}
+                              {resource.metadata.username ? ` (${resource.metadata.username})` : ""}
                             </span>
                           </div>
                           <div className="uris">
