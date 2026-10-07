@@ -96,6 +96,7 @@
   },
   "overrides": {
     "uuid": "^14.0.0",
+    "shell-quote": "1.12.0",
     "js-yaml": "^4.3.2",
     "qrcode": {
       "yargs": "^18.1.0"
