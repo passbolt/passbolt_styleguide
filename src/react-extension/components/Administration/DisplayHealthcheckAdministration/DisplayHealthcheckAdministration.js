@@ -176,6 +176,44 @@ class DisplayHealthcheckAdministration extends Component {
   }
 
   /**
+   * Renders the legend of the sidebar help panel.
+   * @returns {JSX.Element}
+   */
+  renderLegend() {
+    return (
+      <div className="healthcheck-color-legends">
+        <div>
+          <span className="healthcheck-badge healthcheck-badge--success">
+            <HealthcheckSuccessSVG />
+          </span>
+          <Trans>Everything is running as expected.</Trans>
+        </div>
+        <div>
+          <span className="healthcheck-badge healthcheck-badge--warning">
+            <TriangleAlertSVG />
+          </span>
+          <Trans>
+            Something inside your configuration is not what we recommend, but you can skip it if it has been done on
+            purpose.
+          </Trans>
+        </div>
+        <div>
+          <span className="healthcheck-badge healthcheck-badge--error">
+            <HealthcheckErrorSVG />
+          </span>
+          <Trans>There is an error with the current configuration, you might want to resolve it.</Trans>
+        </div>
+        <div>
+          <span className="healthcheck-badge healthcheck-badge--info">
+            <HealthcheckInfoSVG />
+          </span>
+          <Trans>This is just an information shared, no action is required.</Trans>
+        </div>
+      </div>
+    );
+  }
+
+  /**
    * Renders the component
    * @returns {JSX.Element}
    */
@@ -215,25 +253,7 @@ class DisplayHealthcheckAdministration extends Component {
                     expected
                   </Trans>
                 </p>
-                <div className="healthcheck-color-legends">
-                  <div className="healthcheck-success">
-                    <HealthcheckSuccessSVG /> <Trans>Everything is running as expected.</Trans>
-                  </div>
-                  <div className="healthcheck-warning">
-                    <TriangleAlertSVG />{" "}
-                    <Trans>
-                      Something inside your configuration is not what we recommend, but you can skip it if it has been
-                      done on purpose.
-                    </Trans>
-                  </div>
-                  <div className="healthcheck-fail">
-                    <HealthcheckErrorSVG />{" "}
-                    <Trans>There is an error with the current configuration, you might want to resolve it.</Trans>
-                  </div>
-                  <div className="healthcheck-info">
-                    <HealthcheckInfoSVG /> <Trans>This is just an information shared, no action is required.</Trans>
-                  </div>
-                </div>
+                {this.renderLegend()}
               </div>
               <div className="sidebar-help-section">
                 <h3>
