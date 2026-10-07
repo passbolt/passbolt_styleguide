@@ -1813,6 +1813,213 @@ describe("As LU running ShareDialog from a permission workflow", () => {
     });
   });
 
+  describe("Groups added during the session changing before the save", () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    const countGroupFetches = () =>
+      context.port.request.mock.calls.filter(([request]) => request === GROUPS_FIND_BY_IDS_FOR_SHARE).length;
+
+    it("As LU saving after a member joined a group I added, I see a warning, the group highlighted and its refreshed members, then I can save", async () => {
+      expect.assertions(10);
+      const props = withGroupProps();
+      const joiningMember = defaultUserDto({
+        username: "betty@passbolt.com",
+        profile: defaultProfileDto({ first_name: "Betty", last_name: "Holberton" }),
+      });
+      const addedGroup = addedGroupWithMembersFixture();
+      let currentGroup = addedGroup;
+      mockContextRequest((request) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return [currentGroup.searchResult];
+          case GROUPS_FIND_BY_IDS_FOR_SHARE:
+            return [currentGroup.group];
+        }
+      });
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      await page.searchName("market");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      await act(() => page.toggleGroupMemberVisibility(3));
+      await waitForTrue(() => page.groupMemberCount === 2);
+
+      // Betty joins the group while the dialog is still open.
+      currentGroup = addedGroupWithMembersFixture([...addedGroup.members, joiningMember]);
+
+      await page.savePermissions();
+      await waitForTrue(() => page.groupMemberCount === 3);
+      expect(props.onConfirm).not.toHaveBeenCalled();
+      expect(props.onClose).not.toHaveBeenCalled();
+      expect(props.dialogContext.open).not.toHaveBeenCalledWith(NotifyError, expect.anything());
+      expect(page.changedGroupsWarning).toBe(
+        "Group composition (Marketing) was updated while you were reviewing this share request, please review it before saving.",
+      );
+      expect(page.isCompositionChanged(3)).toBe(true);
+      expect(page.groupMember(3).textContent).toContain("Betty Holberton");
+
+      // The operator reviewed the refreshed membership: saving again goes through with it.
+      await page.savePermissions();
+      expect(props.onConfirm).toHaveBeenCalledTimes(1);
+      const addedGroups = props.onConfirm.mock.calls[0][1].addedGroups;
+      expect(addedGroups.items[0].groupsUsers.extract("user_id")).toContain(joiningMember.id);
+      expect(page.changedGroupsWarning).toBeNull();
+      expect(page.isCompositionChanged(3)).toBe(false);
+    });
+
+    it("As LU saving after several groups I added changed, I see a warning naming all of them", async () => {
+      expect.assertions(4);
+      const props = withGroupProps();
+      const joiningMember = defaultUserDto({
+        username: "betty@passbolt.com",
+        profile: defaultProfileDto({ first_name: "Betty", last_name: "Holberton" }),
+      });
+      const adminsIdentity = { id: uuidv4(), name: "Admins" };
+      const addedMarketing = addedGroupWithMembersFixture();
+      const addedAdmins = addedGroupWithMembersFixture(null, adminsIdentity);
+      let currentGroups = [addedAdmins, addedMarketing];
+      mockContextRequest((request, ...args) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return currentGroups
+              .map((group) => group.searchResult)
+              .filter((searchResult) => searchResult.name.toLowerCase().startsWith(args[0]));
+          case GROUPS_FIND_BY_IDS_FOR_SHARE:
+            return currentGroups.map((group) => group.group);
+        }
+      });
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      await page.searchName("admin");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      await page.searchName("market");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      await waitForTrue(() => countGroupFetches() === 2);
+
+      // Betty joins both groups while the dialog is still open.
+      currentGroups = [
+        addedGroupWithMembersFixture([...addedAdmins.members, joiningMember], adminsIdentity),
+        addedGroupWithMembersFixture([...addedMarketing.members, joiningMember]),
+      ];
+
+      await page.savePermissions();
+      await waitForTrue(() => page.changedGroupsWarning !== null);
+      expect(props.onConfirm).not.toHaveBeenCalled();
+      expect(page.changedGroupsWarning).toBe(
+        "Group compositions (Admins, Marketing) were updated while you were reviewing this share request, please review them before saving.",
+      );
+      expect(page.isCompositionChanged(3)).toBe(true);
+      expect(page.isCompositionChanged(4)).toBe(true);
+    });
+
+    it("As LU removing a group I added after it was reported changed, I see the warning disappear", async () => {
+      expect.assertions(2);
+      const props = withGroupProps();
+      const joiningMember = defaultUserDto({
+        username: "betty@passbolt.com",
+        profile: defaultProfileDto({ first_name: "Betty", last_name: "Holberton" }),
+      });
+      const addedGroup = addedGroupWithMembersFixture();
+      let currentGroup = addedGroup;
+      mockContextRequest((request) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return [currentGroup.searchResult];
+          case GROUPS_FIND_BY_IDS_FOR_SHARE:
+            return [currentGroup.group];
+        }
+      });
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      await page.searchName("market");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      await waitForTrue(() => countGroupFetches() === 1);
+
+      currentGroup = addedGroupWithMembersFixture([...addedGroup.members, joiningMember]);
+
+      await page.savePermissions();
+      await waitForTrue(() => page.changedGroupsWarning !== null);
+      expect(page.changedGroupsWarning).not.toBeNull();
+
+      await page.selectRemovePermission(3);
+      expect(page.changedGroupsWarning).toBeNull();
+    });
+
+    it("As LU saving with a group I added that did not change, I see onConfirm called with that group", async () => {
+      expect.assertions(3);
+      const props = withGroupProps();
+      const addedGroup = addedGroupWithMembersFixture();
+      mockContextRequest((request) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return [addedGroup.searchResult];
+          case GROUPS_FIND_BY_IDS_FOR_SHARE:
+            return [addedGroup.group];
+        }
+      });
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      await page.searchName("market");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      await waitForTrue(() => countGroupFetches() === 1);
+      await page.savePermissions();
+
+      expect(props.onConfirm).toHaveBeenCalledTimes(1);
+      expect(props.onConfirm.mock.calls[0][1].addedGroups.extract("id")).toEqual([addedGroup.group.id]);
+      // One fetch when the group was added, one to check it before saving.
+      expect(countGroupFetches()).toBe(2);
+    });
+
+    it("As LU saving without adding any group, I see no group fetched and onConfirm called with no added group", async () => {
+      expect.assertions(3);
+      const props = withGroupProps();
+      mockContextRequest(jest.fn());
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+      await page.savePermissions();
+
+      expect(props.onConfirm).toHaveBeenCalledTimes(1);
+      expect(props.onConfirm.mock.calls[0][1].addedGroups.length).toBe(0);
+      expect(countGroupFetches()).toBe(0);
+    });
+
+    it("As LU saving after removing a group I added, I see that group not checked", async () => {
+      expect.assertions(2);
+      const props = withGroupProps();
+      const addedGroup = addedGroupWithMembersFixture();
+      mockContextRequest((request) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return [addedGroup.searchResult];
+          case GROUPS_FIND_BY_IDS_FOR_SHARE:
+            return [addedGroup.group];
+        }
+      });
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      await page.searchName("market");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      await page.selectUserOrGroup(1);
+      await waitForTrue(() => countGroupFetches() === 1);
+      await page.selectRemovePermission(3);
+      await page.savePermissions();
+
+      expect(props.onConfirm).toHaveBeenCalledTimes(1);
+      expect(countGroupFetches()).toBe(1);
+    });
+  });
+
   describe("Operator checks with rows pending deletion", () => {
     it("As LU removing my own owner permission I see the ownership error until reverted", async () => {
       expect.assertions(3);
@@ -1846,9 +2053,9 @@ describe("As LU running ShareDialog from a permission workflow", () => {
 
       expect(props.onConfirm).toHaveBeenCalledTimes(1);
       // The operator can no longer read: its own permission is pending deletion.
-      expect(props.onConfirm.mock.calls[0][1]).toBe(false);
+      expect(props.onConfirm.mock.calls[0][1].canOperatorRead).toBe(false);
       // A single user row survives: the share is personal.
-      expect(props.onConfirm.mock.calls[0][2]).toBe(true);
+      expect(props.onConfirm.mock.calls[0][1].isPersonal).toBe(true);
     });
   });
 });

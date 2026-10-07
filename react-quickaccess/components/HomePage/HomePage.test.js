@@ -14,21 +14,10 @@
 import { waitForTrue } from "../../../../test/utils/waitFor";
 import {
   defaultResourceDto,
-  resourceStandaloneCustomFieldsDto,
-  resourceStandaloneNoteDto,
   resourceStandaloneTotpDto,
   resourceStandalonePinCodeNoUrisDto,
 } from "../../../shared/models/entity/resource/resourceEntity.test.data";
-import {
-  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
-  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
-} from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import {
-  customFieldWithAllInMetadata,
-  customFieldWithAllInSecret,
-} from "../../../shared/models/entity/customField/customFieldEntity.test.data";
-import CustomFieldEntity from "../../../shared/models/entity/customField/customFieldEntity";
+import { TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE } from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { defaultProps, denyUiActionProps } from "./HomePage.test.data";
 import HomePagePage from "./HomePage.test.page";
@@ -361,135 +350,6 @@ describe("HomePage", () => {
       await waitForTrue(() => page.suggestedResourcesEntries?.length > 0);
 
       expect(page.suggestedResourcesEntries.length).toStrictEqual(1);
-    });
-
-    it("it should list note and custom fields resources matching the search on their name, showing the name and URI only", () => {
-      expect.assertions(3);
-      const note = resourceStandaloneNoteDto();
-      const customFields = resourceStandaloneCustomFieldsDto();
-      const props = defaultProps({
-        resources: [
-          note,
-          customFields,
-          defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "other" }) }),
-        ],
-      });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
-      props.context.search = "office";
-
-      const page = new HomePagePage(props);
-
-      const browsedResources = Array.from(page.browsedResources).map((el) => el.textContent);
-      expect(page.browsedResources.length).toStrictEqual(2);
-      expect(browsedResources).toContain(`${note.metadata.name}${note.metadata.uris[0]}`);
-      expect(browsedResources).toContain(`${customFields.metadata.name}${customFields.metadata.uris[0]}`);
-    });
-
-    it("it should list a custom fields resource matching the search on one of its field labels", () => {
-      expect.assertions(2);
-      const customFields = resourceStandaloneCustomFieldsDto({
-        metadata: defaultResourceMetadataDto({
-          resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-          name: "Router",
-          username: null,
-          custom_fields: [customFieldWithAllInMetadata({ metadata_key: "License key", metadata_value: "XYZ-123" })],
-        }),
-      });
-      const props = defaultProps({
-        resources: [customFields, defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "other" }) })],
-      });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
-      props.context.search = "license";
-
-      const page = new HomePagePage(props);
-
-      expect(page.browsedResources.length).toStrictEqual(1);
-      expect(page.browsedResources[0].textContent).toStrictEqual(
-        `${customFields.metadata.name}${customFields.metadata.uris[0]}`,
-      );
-    });
-
-    it("it should never list a custom fields resource matching the search on one of its field values", () => {
-      expect.assertions(2);
-      const customFields = resourceStandaloneCustomFieldsDto({
-        metadata: defaultResourceMetadataDto({
-          resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-          name: "Router",
-          username: null,
-          custom_fields: [customFieldWithAllInMetadata({ metadata_key: "License key", metadata_value: "XYZ-123" })],
-        }),
-      });
-      const props = defaultProps({ resources: [customFields] });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
-      props.context.search = "XYZ-123";
-
-      const page = new HomePagePage(props);
-
-      expect(page.browsedResources.length).toStrictEqual(0);
-      expect(page.browsedResourcesContent.textContent).toStrictEqual(
-        "No result match your search. Try with another search term.",
-      );
-    });
-
-    it("it should never list a custom fields resource matching the search on a field label stored in the secret", () => {
-      expect.assertions(2);
-      const customField = new CustomFieldEntity(customFieldWithAllInSecret({ secret_key: "License key" }));
-      const customFields = resourceStandaloneCustomFieldsDto({
-        metadata: defaultResourceMetadataDto({
-          resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-          name: "Router",
-          username: null,
-          custom_fields: [customField.toMetadataDto()],
-        }),
-      });
-      const props = defaultProps({ resources: [customFields] });
-      props.context.getOpenerTabId = () => 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "about:blank");
-      props.context.search = "license";
-
-      const page = new HomePagePage(props);
-
-      expect(page.browsedResources.length).toStrictEqual(0);
-      expect(page.browsedResourcesContent.textContent).toStrictEqual(
-        "No result match your search. Try with another search term.",
-      );
-    });
-
-    it("it should suggest note and custom fields resources for the currently active URL", async () => {
-      expect.assertions(3);
-      const note = resourceStandaloneNoteDto({
-        metadata: defaultResourceMetadataDto({
-          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
-          name: "apache note",
-          username: null,
-          uris: ["http://www.apache.org"],
-        }),
-      });
-      const customFields = resourceStandaloneCustomFieldsDto({
-        metadata: defaultResourceMetadataDto(
-          {
-            resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-            name: "apache custom fields",
-            username: null,
-            uris: ["http://www.apache.org"],
-          },
-          { withCustomFields: true },
-        ),
-      });
-      const props = defaultProps({ resources: [note, customFields, defaultResourceDto()] });
-      props.context.openerTabId = 1;
-      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "http://www.apache.org/");
-
-      const page = new HomePagePage(props);
-      await waitForTrue(() => page.suggestedResourcesEntries?.length > 1);
-
-      const suggestedResources = Array.from(page.suggestedResourcesEntries).map((el) => el.textContent);
-      expect(page.suggestedResourcesEntries.length).toStrictEqual(2);
-      expect(suggestedResources).toContain(`${note.metadata.name}${note.metadata.uris[0]}`);
-      expect(suggestedResources).toContain(`${customFields.metadata.name}${customFields.metadata.uris[0]}`);
     });
   });
 

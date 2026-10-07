@@ -22,8 +22,6 @@ import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorks
 import { defaultContextualMenuContext } from "../../../contexts/ContextualMenuContext.test.data";
 import {
   defaultResourceDto,
-  resourceStandaloneCustomFieldsDto,
-  resourceStandaloneNoteDto,
   resourceStandalonePinCodeDto,
   resourceStandaloneTotpDto,
   resourceWithFavoriteDto,
@@ -35,9 +33,7 @@ import { defaultResourceMetadataDto } from "../../../../shared/models/entity/res
 import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_TOTP,
-  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
   TEST_RESOURCE_TYPE_V5_DEFAULT,
-  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
   TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -162,21 +158,6 @@ export function propsWithFilteredResourcesAndOfflineEnabled(data = {}) {
         name: "not-available-offline",
         resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
       }),
-    }),
-    resourceStandaloneNoteDto(
-      {
-        metadata: defaultResourceMetadataDto({
-          name: "note-available-offline",
-          resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
-        }),
-      },
-      { withOffline: true },
-    ),
-    resourceStandaloneCustomFieldsDto({
-      metadata: defaultResourceMetadataDto(
-        { name: "custom-fields-not-available-offline", resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS },
-        { withCustomFields: true },
-      ),
     }),
   ];
 

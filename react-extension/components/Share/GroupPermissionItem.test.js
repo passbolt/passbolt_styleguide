@@ -115,6 +115,21 @@ describe("GroupPermissionItem", () => {
       expect(page.groupVisibilityToggle).not.toBeNull();
     });
 
+    it("highlights the row when the group composition changed", () => {
+      expect.assertions(2);
+      const page = new GroupPermissionItemPage(
+        defaultOwnerProps({ changeStatus: "added", hasChangedComposition: true }),
+      );
+      expect(page.isCompositionChanged).toBe(true);
+      expect(page.changeChip.textContent).toBe("added");
+    });
+
+    it("does not highlight the row when the group composition did not change", () => {
+      expect.assertions(1);
+      const page = new GroupPermissionItemPage(defaultOwnerProps({ changeStatus: "added" }));
+      expect(page.isCompositionChanged).toBe(false);
+    });
+
     it("calls onRevert with the permission id when the revert button is clicked", async () => {
       expect.assertions(1);
       const props = defaultOwnerProps({ changeStatus: "removed" });

@@ -35,9 +35,7 @@ import {
   resourceTypeV5DefaultDto,
   TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
   TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
-  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
 } from "./resourceTypeEntity.test.data";
-import ResourceTypeEntity from "./resourceTypeEntity";
 import CollectionValidationError from "../../entity/abstract/collectionValidationError";
 import { v4 as uuid } from "uuid";
 import {
@@ -182,38 +180,6 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_TOTP)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeTruthy();
-    });
-  });
-
-  describe("::filterByQuickAccessResourceTypes", () => {
-    it("should keep the password, TOTP, PIN code, note and custom fields resource types.", () => {
-      expect.assertions(12);
-      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
-      resourceTypes.filterByQuickAccessResourceTypes();
-      expect(resourceTypes).toHaveLength(11);
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_TOTP)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_PASSWORD_STRING)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS)).toBeTruthy();
-    });
-
-    it("should drop the resource types the quick access does not support.", () => {
-      expect.assertions(2);
-      const spy = jest.spyOn(ResourceTypeEntity.prototype, "isSupportedByQuickAccess").mockImplementation(function () {
-        return !this.isStandaloneNote();
-      });
-      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
-      resourceTypes.filterByQuickAccessResourceTypes();
-      expect(resourceTypes).toHaveLength(10);
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE)).toBeUndefined();
-      spy.mockRestore();
     });
   });
 

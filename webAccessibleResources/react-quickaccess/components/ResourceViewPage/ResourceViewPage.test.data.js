@@ -11,31 +11,13 @@ import {
   resourceStandaloneTotpDto,
   resourceWithTotpDto,
   resourceStandalonePinCodeDto,
-  resourceStandaloneNoteDto,
-  resourceStandaloneCustomFieldsDto,
 } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { resourceTypesCollectionDto } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {
-  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-  TEST_RESOURCE_TYPE_V5_DEFAULT,
-} from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
-import CustomFieldEntity from "../../../shared/models/entity/customField/customFieldEntity";
-import { defaultCustomField } from "../../../shared/models/entity/customField/customFieldEntity.test.data";
-
-/**
- * The custom fields of the standalone custom fields resource, with both their metadata and secret halves.
- * Built once so the metadata half in the resource and the secret half in the decrypted secret share their ids.
- */
-const customFieldsDtos = [
-  defaultCustomField({ metadata_key: "License key", secret_value: "XYZ-123" }),
-  defaultCustomField({ type: "number", metadata_key: "Port", secret_value: 8080 }),
-  defaultCustomField({ type: "boolean", metadata_key: "", secret_value: true }),
-  defaultCustomField({ metadata_key: "Empty", secret_value: "" }),
-];
 
 /**
  * Default component props.
@@ -171,64 +153,3 @@ export function multipleUrisResourceProps(props = {}) {
     ...props,
   });
 }
-
-/**
- * Standalone note resource props.
- * @param {object} props Override the default props.
- * @returns {object}
- */
-export function standaloneNoteResourceProps(props = {}) {
-  const storage = new MockStorage();
-  const resources = [resourceStandaloneNoteDto(), defaultResourceDto()];
-  storage.local.set({ resources });
-
-  return defaultProps({
-    context: defaultAppContext({ storage }),
-    initialEntries: `/${resources[0].id}`,
-    ...props,
-  });
-}
-
-/**
- * Standalone custom fields resource props, the resource metadata holding the metadata half of the custom fields.
- * @param {object} props Override the default props.
- * @param {array} [customFields] The custom fields, with both halves.
- * @returns {object}
- */
-export function standaloneCustomFieldsResourceProps(props = {}, customFields = customFieldsDtos) {
-  const storage = new MockStorage();
-  const resource = resourceStandaloneCustomFieldsDto({
-    metadata: defaultResourceMetadataDto({
-      resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-      name: "Office router",
-      username: null,
-      custom_fields: customFields.map((customField) => new CustomFieldEntity(customField).toMetadataDto()),
-    }),
-  });
-  const resources = [resource, defaultResourceDto()];
-  storage.local.set({ resources });
-
-  return defaultProps({
-    context: defaultAppContext({ storage }),
-    initialEntries: `/${resources[0].id}`,
-    ...props,
-  });
-}
-
-/**
- * Standalone custom fields resource props, without any custom field.
- * @param {object} props Override the default props.
- * @returns {object}
- */
-export function standaloneEmptyCustomFieldsResourceProps(props = {}) {
-  return standaloneCustomFieldsResourceProps(props, []);
-}
-
-/**
- * The decrypted secret of the standalone custom fields resource, holding the secret half of the custom fields.
- * @returns {object}
- */
-export const standaloneCustomFieldsSecretDto = () => ({
-  object_type: "PASSBOLT_SECRET_DATA",
-  custom_fields: customFieldsDtos.map((customField) => new CustomFieldEntity(customField).toSecretDto()),
-});

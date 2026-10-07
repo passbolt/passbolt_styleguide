@@ -268,13 +268,7 @@ class ResourceTypeEntity extends EntityV2 {
    * @returns {boolean}
    */
   isSupportedByQuickAccess() {
-    return (
-      this.hasPassword() ||
-      this.hasTotp() ||
-      this.hasPinCode() ||
-      this.isStandaloneCustomFields() ||
-      this.isStandaloneNote()
-    );
+    return this.hasPassword() || this.hasTotp() || this.hasPinCode();
   }
 
   /**
@@ -282,14 +276,7 @@ class ResourceTypeEntity extends EntityV2 {
    * @returns {boolean}
    */
   isSupportedByOfflineMode() {
-    return (
-      this.isV5() &&
-      (this.hasPassword() ||
-        this.hasTotp() ||
-        this.hasPinCode() ||
-        this.isStandaloneNote() ||
-        this.isStandaloneCustomFields())
-    );
+    return this.isV5() && (this.hasPassword() || this.hasTotp() || this.hasPinCode());
   }
 
   /**
@@ -298,21 +285,6 @@ class ResourceTypeEntity extends EntityV2 {
    */
   isStandalonePinCode() {
     return this.hasPinCode();
-  }
-
-  /**
-   * Is standalone note
-   * @returns {boolean}
-   */
-  isStandaloneNote() {
-    return RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG === this.slug;
-  }
-  /**
-   * Is standalone custom fields
-   * @returns {boolean}
-   */
-  isStandaloneCustomFields() {
-    return RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG === this.slug;
   }
 
   /**

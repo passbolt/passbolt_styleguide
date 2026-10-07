@@ -248,9 +248,11 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
    * Handle the operator's confirmation: abort if the permissions changed during the review,
    * otherwise hand the confirmed ones to the service worker, which applies them and moves.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
+   * @param {object} [options] The confirmation options ShareDialog emits.
+   * @param {GroupsCollection} [options.addedGroups] The groups the operator added in the dialog, as displayed.
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(permissionChanges) {
+  async handleShareDialogConfirm(permissionChanges, { addedGroups } = {}) {
     this.moveConfirmed = true;
     try {
       await this.assertDestinationPermissionsUnchanged(this.destinationFolderId, this.state.snapshot);
@@ -269,6 +271,7 @@ export class ResourceMoveFlow extends AbstractPermissionFlow {
           ),
         );
       }
+      await this.assertAddedGroupsUnchanged(addedGroups);
       const confirmedPermissionsByItemId = this.permissionChangesService.buildAuthoritativeMovePermissions(
         this.initialResources,
         permissionChanges,

@@ -190,10 +190,12 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
    * read-only mode the deltas are empty, so the resource is simply re-encrypted for its existing
    * recipients.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
-   * @param {boolean} isPersonal true if the resource must be marked as personal
+   * @param {object} [options] The confirmation options ShareDialog emits.
+   * @param {boolean} [options.isPersonal] true if the resource must be marked as personal
+   * @param {GroupsCollection} [options.addedGroups] The groups the operator added in the dialog, as displayed.
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(permissionChanges, _, isPersonal) {
+  async handleShareDialogConfirm(permissionChanges, { isPersonal, addedGroups } = {}) {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForResourceEdition(
@@ -206,6 +208,7 @@ export class ResourceEditFlow extends AbstractPermissionFlow {
           ),
         );
       }
+      await this.assertAddedGroupsUnchanged(addedGroups);
       await this.updateResource(
         this.pendingResourceFormEntity,
         this.pendingResourceSecret,

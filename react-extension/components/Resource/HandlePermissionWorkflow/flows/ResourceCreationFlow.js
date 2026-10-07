@@ -196,10 +196,12 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
    * delegate the operator-only create + share orchestration to the extension via a single
    * `passbolt.resources.create` call carrying both the secret and the permission changes.
    * @param {Array<object>} permissionChanges The DTO-shape permission changes ShareDialog emits.
-   * @param {boolean} canOperatorRead true if the operator can still read the modified resource
+   * @param {object} [options] The confirmation options ShareDialog emits.
+   * @param {boolean} [options.canOperatorRead] true if the operator can still read the modified resource
+   * @param {GroupsCollection} [options.addedGroups] The groups the operator added in the dialog, as displayed.
    * @returns {Promise<void>}
    */
-  async handleShareDialogConfirm(permissionChanges, canOperatorRead) {
+  async handleShareDialogConfirm(permissionChanges, { canOperatorRead, addedGroups } = {}) {
     this.shareConfirmed = true;
     try {
       const currentSnapshot = await this.permissionSnapshotService.buildSnapshotForResourceCreation(
@@ -212,6 +214,7 @@ export class ResourceCreationFlow extends AbstractPermissionFlow {
           ),
         );
       }
+      await this.assertAddedGroupsUnchanged(addedGroups);
       const finalChanges = this.permissionChangesService.buildResourcePermissionChanges(
         this.state.snapshot,
         permissionChanges,

@@ -134,6 +134,22 @@ export default class ShareDialogPage {
   }
 
   /**
+   * Returns the "group compositions updated" warning text, or null when it is not rendered
+   */
+  get changedGroupsWarning() {
+    return this._page.container.querySelector(".message.warning .changed-groups-warning")?.textContent ?? null;
+  }
+
+  /**
+   * Returns true if the 'index' permission row is highlighted as a group whose composition changed
+   */
+  isCompositionChanged(index) {
+    return this._page.container
+      .querySelectorAll(".permissions .row")
+      [index - 1].classList.contains("composition-changed");
+  }
+
+  /**
    * Returns the attention triangle icon rendered in the "left unchanged" warning banner, or null
    */
   get unchangedWarningIcon() {

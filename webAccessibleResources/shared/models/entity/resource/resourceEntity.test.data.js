@@ -19,8 +19,6 @@ import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_TOTP,
-  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
   TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "../resourceType/resourceTypeEntity.test.data";
 import { defaultUserDto } from "../user/userEntity.test.data";
@@ -209,37 +207,6 @@ export const resourceStandalonePinCodeNoUrisDto = (data = {}, options = {}) =>
         username: null,
         uris: [],
       }),
-      ...data,
-    },
-    options,
-  );
-
-export const resourceStandaloneNoteDto = (data = {}, options = {}) =>
-  defaultResourceDto(
-    {
-      resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
-      metadata: defaultResourceMetadataDto({
-        resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
-        name: "Office wifi",
-        username: null,
-      }),
-      ...data,
-    },
-    options,
-  );
-
-export const resourceStandaloneCustomFieldsDto = (data = {}, options = {}) =>
-  defaultResourceDto(
-    {
-      resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-      metadata: defaultResourceMetadataDto(
-        {
-          resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-          name: "Office router",
-          username: null,
-        },
-        { withCustomFields: true },
-      ),
       ...data,
     },
     options,

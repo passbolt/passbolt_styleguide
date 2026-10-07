@@ -729,7 +729,7 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
 });
 
 /**
- * Resource V5 Custom fields resource type DTO.
+ * Resource V5 TOTP resource type DTO.
  * @param {object} data The data to override
  * @returns {object}
  */

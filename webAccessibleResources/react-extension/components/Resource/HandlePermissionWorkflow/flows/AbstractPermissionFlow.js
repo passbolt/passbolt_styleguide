@@ -17,6 +17,7 @@ import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 import PermissionSnapshotService from "../../../../../shared/services/permission/permissionSnapshotService";
 import PermissionChangesService from "../../../../../shared/services/permission/permissionChangesService";
 import PermissionServiceWorkerService from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
+import GroupServiceWorkerService from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
 import GroupEntity from "../../../../../shared/models/entity/group/groupEntity";
 import GroupsCollection from "../../../../../shared/models/entity/group/groupsCollection";
@@ -53,6 +54,7 @@ export class AbstractPermissionFlow extends React.Component {
     this.permissionSnapshotService = new PermissionSnapshotService(props.context.port);
     this.permissionChangesService = new PermissionChangesService(props.context.port);
     this.permissionServiceWorkerService = new PermissionServiceWorkerService(props.context.port);
+    this.groupServiceWorkerService = new GroupServiceWorkerService(props.context.port);
     this.handleError = this.handleError.bind(this);
     this.terminate = this.terminate.bind(this);
     this.finalizeSuccess = this.finalizeSuccess.bind(this);
@@ -113,6 +115,30 @@ export class AbstractPermissionFlow extends React.Component {
       throw new Error(
         this.props.t(
           "The destination folder permissions changed during your review. Please retry the operation and verify the permissions again.",
+        ),
+      );
+    }
+  }
+
+  /**
+   * Throw when a group the operator added in the ShareDialog changed since the dialog displayed it
+   * (e.g. a member was added), naming the changed groups. These groups are not part of any snapshot, the ACO
+   * had no permission for them.
+   * @param {GroupsCollection|undefined} addedGroups The added groups as displayed by the dialog.
+   * @returns {Promise<void>}
+   * @throws {Error} When an added group changed since the dialog displayed it.
+   */
+  async assertAddedGroupsUnchanged(addedGroups) {
+    if (!addedGroups?.length) {
+      return;
+    }
+    const currentGroups = await this.groupServiceWorkerService.findByIdsForShare(addedGroups.extract("id"));
+    const changedGroups = addedGroups.getChangedGroups(currentGroups);
+    if (changedGroups.length) {
+      throw new Error(
+        this.props.t(
+          "The groups you added {{groupNames}} changed during your review. Please retry the operation and verify them again.",
+          { count: changedGroups.length, groupNames: changedGroups.map((group) => group.name).join(", ") },
         ),
       );
     }
