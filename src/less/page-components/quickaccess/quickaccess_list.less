@@ -7,6 +7,20 @@
             scrollbar-width: thin;
             scrollbar-color: var(--Workspace-Elevator) transparent;
         }
+        /* Visible keyboard-focus indicator for list rows (suggested, browse, filters, launch). */
+        .resource-details,
+        .chevron-right-wrapper,
+        .launch-resource-button,
+        .browse-resource-entry > a,
+        .filter-entry > a {
+            /* !important so the focus ring wins over each control's base inset box-shadow (divider). */
+            &:focus-visible {
+                box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus) !important;
+                outline: none;
+                position: relative;
+                z-index: 1;
+            }
+        }
         .list-title {
             background: var(--Quick-Access-Header-and-footer-background);
         }
@@ -108,7 +122,12 @@
         }
 
         .browse-resource-entry {
+          display: flex;
+          align-items: stretch;
+
           a {
+            flex: 1 1 auto;
+            min-width: 0;
             .inline-resource-entry {
               flex: 1 1 auto;
               width: 80%;
@@ -136,6 +155,23 @@
                   margin-top: .2rem;
                 }
               }
+            }
+          }
+
+          .launch-resource-button {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 1.6rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--Text-and-icons-Secondary-text);
+            box-shadow: inset 0 -.1rem 0 var(--Workspace-Dividers);
+
+            &:hover {
+              background: var(--Quick-Access-Filter-hover);
+              color: var(--Text-and-icons-Main-text);
             }
           }
         }
