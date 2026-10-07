@@ -9,58 +9,50 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         5.17.0
+ * @since         5.18.0
  */
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import SecretPropertyRow from "./SecretPropertyRow";
+import ResourceViewPagePinCode from "./ResourceViewPagePinCode";
 
 /**
- * The SecretPropertyRow component represented as a page
+ * The ResourceViewPagePinCode component represented as a page
  */
-export default class SecretPropertyRowPage {
+export default class ResourceViewPagePinCodePage {
   /**
    * Default constructor
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(this.renderRow(props));
+    this._page = render(this.renderSection(props));
   }
 
   /**
-   * Render the row in its list.
-   * @param {object} props The row props
+   * Render the section in its list.
+   * @param {object} props The section props
    * @returns {JSX}
    */
-  renderRow(props) {
+  renderSection(props) {
     return (
       <MockTranslationProvider>
         <ul className="properties">
-          <SecretPropertyRow {...props} />
+          <ResourceViewPagePinCode {...props} />
         </ul>
       </MockTranslationProvider>
     );
   }
 
   /**
-   * Render the row again with other props.
-   * @param {object} props The row props
+   * Render the section again with other props.
+   * @param {object} props The section props
    */
   rerender(props) {
-    this._page.rerender(this.renderRow(props));
+    this._page.rerender(this.renderSection(props));
   }
 
   /**
-   * The row element.
-   * @returns {Element}
-   */
-  get row() {
-    return this._page.container.querySelector("li.property");
-  }
-
-  /**
-   * The property name element.
+   * The row label.
    * @returns {Element}
    */
   get label() {
@@ -68,59 +60,35 @@ export default class SecretPropertyRowPage {
   }
 
   /**
-   * The secret value element.
+   * The PIN code secret element.
    * @returns {Element}
    */
   get secret() {
-    return this._page.container.querySelector(".property-value.secret");
+    return this._page.container.querySelector(".secret.secret-pin-code");
   }
 
   /**
-   * The value button, when the value is masked or a hidden password.
+   * The value button.
    * @returns {Element}
    */
   get valueButton() {
-    return this._page.container.querySelector(".property-value.secret button");
+    return this._page.container.querySelector(".secret.secret-pin-code button");
   }
 
   /**
-   * The value text, when the value is masked or a hidden password.
+   * The value text, when masked.
    * @returns {string}
    */
   get valueText() {
-    return this._page.container.querySelector(".property-value.secret button span")?.textContent;
+    return this._page.container.querySelector(".secret.secret-pin-code button span")?.textContent;
   }
 
   /**
-   * The revealed password typography text.
+   * The revealed PIN code typography text.
    * @returns {string}
    */
-  get revealedPasswordText() {
-    return this._page.container.querySelector(".property-value.secret .password-typography")?.textContent;
-  }
-
-  /**
-   * The encrypted note placeholder.
-   * @returns {Element}
-   */
-  get encryptedNote() {
-    return this._page.container.querySelector(".encrypted-description");
-  }
-
-  /**
-   * The revealed note block.
-   * @returns {Element}
-   */
-  get notePreviewed() {
-    return this._page.container.querySelector(".note-previewed");
-  }
-
-  /**
-   * The revealed TOTP code element.
-   * @returns {Element}
-   */
-  get totpCode() {
-    return this._page.container.querySelector(".totp-code");
+  get revealedPinCodeText() {
+    return this._page.container.querySelector(".secret.secret-pin-code .password-typography")?.textContent;
   }
 
   /**
@@ -128,7 +96,7 @@ export default class SecretPropertyRowPage {
    * @returns {Element}
    */
   get previewButton() {
-    return this._page.container.querySelector(".password-view, .totp-view");
+    return this._page.container.querySelector(".password-view");
   }
 
   /**
@@ -136,7 +104,7 @@ export default class SecretPropertyRowPage {
    * @returns {Element}
    */
   get copyButton() {
-    return this._page.container.querySelector(".property-action");
+    return this._page.container.querySelector(".copy-pin-code");
   }
 
   /**

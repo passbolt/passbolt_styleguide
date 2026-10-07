@@ -11,8 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import React, { createRef } from "react";
-import Transition from "react-transition-group/Transition";
+import React from "react";
 import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
 import { withRouter } from "react-router-dom";
@@ -21,25 +20,21 @@ import { uiActions } from "../../../shared/services/rbacs/uiActionEnumeration";
 import { withRbac } from "../../../shared/context/Rbac/RbacContext";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
-import sanitizeUrl, { urlProtocols } from "../../../react-extension/lib/Sanitize/sanitizeUrl";
-import { resourceLinkAuthorizedProtocols } from "../../../react-extension/contexts/ResourceWorkspaceContext";
 import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
-import CaretDownSVG from "../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import GoSVG from "../../../img/svg/go.svg";
-import CopySVG from "../../../img/svg/copy.svg";
-import HealthCheckSuccessSvg from "../../../img/svg/healthcheck_success.svg";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
 import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import SecretServiceWorkerService from "../../../shared/services/serviceWorker/secret/secretServiceWorkerService";
-import SecretPropertyRow, {
-  CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND,
-  COPY_STATUSES,
-  SECRET_PROPERTY_ROW_TYPES,
-} from "./SecretPropertyRow";
+import ResourceViewPagePassword from "./ResourceViewPagePassword";
+import ResourceViewPageTotp from "./ResourceViewPageTotp";
+import ResourceViewPagePinCode from "./ResourceViewPagePinCode";
+import ResourceViewPageNote from "./ResourceViewPageNote";
+import ResourceViewPageCustomFields from "./ResourceViewPageCustomFields";
+import ResourceViewPageUris from "./ResourceViewPageUris";
+import { CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND, COPY_STATUSES } from "./secretRowState";
 
 /**
  * The delay after which the username copy action goes back to its default state, in ms.
@@ -63,12 +58,6 @@ const SECRET_KEYS = {
   TOTP: "totp",
   PIN_CODE: "pin_code",
   NOTE: "note",
-};
-
-const TRANSITION_STATES = {
-  COPY_LOGIN_STATE_DEFAULT: "copy_login_state_default",
-  COPY_LOGIN_STATE_PROCESSING: "copy_login_state_processing",
-  COPY_LOGIN_STATE_DONE: "copy_login_state_done",
 };
 
 /**
@@ -130,6 +119,9 @@ const CUSTOM_FIELD_PROPERTY = {
   previewEmptyError: null,
 };
 
+/**
+ * The quick access resource view page: holds the resource and its decrypted secret, serves one section per content kind.
+ */
 class ResourceViewPage extends React.Component {
   constructor(props) {
     super(props);
@@ -140,16 +132,13 @@ class ResourceViewPage extends React.Component {
     this.pendingDecryption = null;
     this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(props.context.port);
     this.secretServiceWorkerService = new SecretServiceWorkerService(props.context.port, props.activeSession);
-    this.generateNodeRefs();
   }
 
   initEventHandlers() {
     this.handleGoBackClick = this.handleGoBackClick.bind(this);
     this.handleCopyLoginClick = this.handleCopyLoginClick.bind(this);
-    this.handleGoToUrlClick = this.handleGoToUrlClick.bind(this);
     this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
-    this.handleClickAdditionalUrisSection = this.handleClickAdditionalUrisSection.bind(this);
-    this.getNodeRef = this.getNodeRef.bind(this);
+    this.resetError = this.resetError.bind(this);
   }
 
   initState() {
@@ -164,7 +153,6 @@ class ResourceViewPage extends React.Component {
       revealedCustomFieldIds: [], // The ids of the revealed custom fields, several may be revealed together
       plaintextSecretDto: null, // The decrypted secret, kept for the visit of the page
       decryptingSecret: null, // The key of the row decrypting the secret, or null
-      isOpenAdditionalUris: false, // section additional uris open
       copiedProperty: null, //the last property copied
     };
   }
@@ -173,29 +161,6 @@ class ResourceViewPage extends React.Component {
     if (this.currentTimeout) {
       clearTimeout(this.currentTimeout);
     }
-  }
-
-  /**
-   * Create refs for each Transition
-   * @returns {void}
-   */
-  generateNodeRefs() {
-    this.nodeRefs = {};
-    Object.values(TRANSITION_STATES).forEach((stateKey) => {
-      this.nodeRefs[stateKey] = createRef();
-    });
-  }
-
-  /**
-   * Get NodeRef or create if it doesn't exist
-   * @param {string} key - The key for the node ref
-   * @returns {React.RefObject<HTMLElement>} The ref object for the node
-   */
-  getNodeRef(key) {
-    if (!this.nodeRefs[key]) {
-      this.nodeRefs[key] = createRef();
-    }
-    return this.nodeRefs[key];
   }
 
   /**
@@ -297,9 +262,8 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * Reveal a secret property, or hide it when it is revealed.
-   * One fixed row is revealed at a time, custom fields may be revealed together, and revealing a row of one kind
-   * masks the rows of the other kind.
+   * Reveal a secret property, or hide it when it is revealed. One fixed row at a time, custom fields together,
+   * each kind masking the other.
    * @param {string} key The row key
    * @returns {Promise<void>}
    */
@@ -460,11 +424,12 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * Get the props of a secret row. The row receives the plaintext only while it is revealed.
+   * Get the state of a secret row, as given to the section displaying it. The row receives the plaintext only
+   * while it is revealed.
    * @param {string} key The row key
    * @returns {object}
    */
-  getSecretRowProps(key) {
+  getSecretRowState(key) {
     const revealed = this.isRevealed(key);
     return {
       revealed,
@@ -472,20 +437,9 @@ class ResourceViewPage extends React.Component {
       decrypting: this.isDecrypting(key),
       copyStatus: this.getCopyStatus(key),
       showTimer: this.state.copiedProperty === key,
-      canCopy: this.canCopySecret,
-      canPreview: this.canPreviewSecret,
       onCopy: () => this.copySecret(key),
       onPreview: () => this.previewSecret(key),
     };
-  }
-
-  handleGoToUrlClick(event) {
-    const primaryUri = this.state.resource.metadata?.uris?.[0];
-
-    this.resetError();
-    if (!this.sanitizeResourceUrl(primaryUri)) {
-      event.preventDefault();
-    }
   }
 
   async handleUseOnThisTabClick(event) {
@@ -510,25 +464,6 @@ class ResourceViewPage extends React.Component {
         });
       }
     }
-  }
-
-  /**
-   * Handle click on additional uris
-   */
-  handleClickAdditionalUrisSection() {
-    this.setState({ isOpenAdditionalUris: !this.state.isOpenAdditionalUris });
-  }
-
-  /**
-   * Sanitize resource url
-   * @param url
-   * @returns {string|boolean|*}
-   */
-  sanitizeResourceUrl(url) {
-    return sanitizeUrl(url, {
-      whiteListedProtocols: resourceLinkAuthorizedProtocols,
-      defaultProtocol: urlProtocols.HTTPS,
-    });
   }
 
   /**
@@ -562,42 +497,42 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * Gate for the username and password rows: the type carries a password.
+   * Gate for the password section: the type carries a password.
    * @returns {boolean}
    */
-  get hasPasswordRow() {
+  get isPasswordResources() {
     return Boolean(this.resourceType?.hasPassword());
   }
 
   /**
-   * Gate for the TOTP row: the type carries a TOTP.
+   * Gate for the TOTP section: the type carries a TOTP.
    * @returns {boolean}
    */
-  get hasTotpRow() {
+  get isTotpResources() {
     return Boolean(this.resourceType?.hasTotp());
   }
 
   /**
-   * Gate for the PIN code row: the type carries a PIN code.
+   * Gate for the PIN code section: the type carries a PIN code.
    * @returns {boolean}
    */
-  get hasPinCodeRow() {
+  get isPinCodeResources() {
     return Boolean(this.resourceType?.hasPinCode());
   }
 
   /**
-   * Gate for the note row: the standalone note type.
+   * Gate for the note section: the standalone note type.
    * @returns {boolean}
    */
-  get hasNoteRow() {
+  get isStandaloneNoteResource() {
     return Boolean(this.resourceType?.isStandaloneNote());
   }
 
   /**
-   * Gate for the custom field rows: the standalone custom fields type.
+   * Gate for the custom fields section: the standalone custom fields type.
    * @returns {boolean}
    */
-  get hasCustomFieldsRows() {
+  get isStandaloneCustomFieldsResource() {
     return Boolean(this.resourceType?.isStandaloneCustomFields());
   }
 
@@ -606,14 +541,25 @@ class ResourceViewPage extends React.Component {
    * @returns {boolean}
    */
   get canUseOnThisPage() {
-    return this.hasPasswordRow || this.hasTotpRow;
+    return this.isPasswordResources || this.isTotpResources;
+  }
+
+  /**
+   * The custom fields of the resource with the state of their row.
+   * @returns {Array<object>}
+   */
+  get customFieldsWithState() {
+    const customFields = this.state.resource.metadata?.custom_fields || [];
+    return customFields.map((customField) => ({
+      id: customField.id,
+      metadata_key: customField.metadata_key,
+      state: this.getSecretRowState(customField.id),
+    }));
   }
 
   render() {
-    const primaryUri = this.state.resource.metadata?.uris?.[0];
-    const additionalUris = this.state.resource.metadata?.uris?.slice(1);
-    const customFields = this.state.resource.metadata?.custom_fields || [];
-    const loginCopyStatus = this.getCopyStatus(SECRET_KEYS.USERNAME);
+    const canCopySecret = this.canCopySecret;
+    const canPreviewSecret = this.canPreviewSecret;
 
     return (
       <div className="resource item-browse">
@@ -636,217 +582,46 @@ class ResourceViewPage extends React.Component {
           </a>
         </div>
         <ul className="properties">
-          {this.hasPasswordRow && (
-            <>
-              <li className="property">
-                <div className="information">
-                  <span className="property-name">
-                    <Trans>Username</Trans>
-                  </span>
-                  {this.state.resource.metadata?.username && (
-                    <a href="#" role="button" className="property-value" onClick={this.handleCopyLoginClick}>
-                      {this.state.resource.metadata?.username}
-                    </a>
-                  )}
-                  {!this.state.resource.metadata?.username && (
-                    <span className="property-value empty">
-                      <Trans>no username provided</Trans>
-                    </span>
-                  )}
-                </div>
-                <a
-                  role="button"
-                  className={`button button-transparent property-action ${!this.state.resource.metadata?.username ? "disabled" : ""}`}
-                  onClick={this.handleCopyLoginClick}
-                  title={this.translate("Copy to clipboard")}
-                >
-                  <Transition
-                    in={loginCopyStatus === COPY_STATUSES.DEFAULT}
-                    appear={false}
-                    timeout={500}
-                    nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_LOGIN_STATE_DEFAULT)}
-                  >
-                    {(status) => (
-                      <span
-                        ref={this.getNodeRef(TRANSITION_STATES.COPY_LOGIN_STATE_DEFAULT)}
-                        className={`transition fade-${status} ${loginCopyStatus !== COPY_STATUSES.DEFAULT ? "visually-hidden" : ""}`}
-                      >
-                        <CopySVG />
-                      </span>
-                    )}
-                  </Transition>
-                  <Transition
-                    in={loginCopyStatus === COPY_STATUSES.PROCESSING}
-                    appear={true}
-                    timeout={500}
-                    nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_LOGIN_STATE_PROCESSING)}
-                  >
-                    {(status) => (
-                      <span
-                        ref={this.getNodeRef(TRANSITION_STATES.COPY_LOGIN_STATE_PROCESSING)}
-                        className={`transition fade-${status} ${loginCopyStatus !== COPY_STATUSES.PROCESSING ? "visually-hidden" : ""}`}
-                      >
-                        <SpinnerSVG />
-                      </span>
-                    )}
-                  </Transition>
-                  <Transition
-                    in={loginCopyStatus === COPY_STATUSES.DONE}
-                    appear={true}
-                    timeout={500}
-                    nodeRef={this.getNodeRef(TRANSITION_STATES.COPY_LOGIN_STATE_DONE)}
-                  >
-                    {(status) => (
-                      <span
-                        ref={this.getNodeRef(TRANSITION_STATES.COPY_LOGIN_STATE_DONE)}
-                        className={`transition fade-${status} ${loginCopyStatus !== COPY_STATUSES.DONE ? "visually-hidden" : ""}`}
-                      >
-                        <HealthCheckSuccessSvg />
-                      </span>
-                    )}
-                  </Transition>
-                  <span className="visually-hidden">
-                    <Trans>Copy to clipboard</Trans>
-                  </span>
-                </a>
-              </li>
-              <SecretPropertyRow
-                type={SECRET_PROPERTY_ROW_TYPES.PASSWORD}
-                label={<Trans>Password</Trans>}
-                {...this.getSecretRowProps(SECRET_KEYS.PASSWORD)}
-              />
-            </>
-          )}
-          {this.hasTotpRow && (
-            <SecretPropertyRow
-              type={SECRET_PROPERTY_ROW_TYPES.TOTP}
-              label={<Trans>TOTP</Trans>}
-              {...this.getSecretRowProps(SECRET_KEYS.TOTP)}
+          {this.isPasswordResources && (
+            <ResourceViewPagePassword
+              username={this.state.resource.metadata?.username}
+              usernameCopyStatus={this.getCopyStatus(SECRET_KEYS.USERNAME)}
+              onCopyUsername={this.handleCopyLoginClick}
+              password={this.getSecretRowState(SECRET_KEYS.PASSWORD)}
+              canCopy={canCopySecret}
+              canPreview={canPreviewSecret}
             />
           )}
-          {this.hasPinCodeRow && (
-            <SecretPropertyRow
-              type={SECRET_PROPERTY_ROW_TYPES.PIN_CODE}
-              label={<Trans>Pin code</Trans>}
-              {...this.getSecretRowProps(SECRET_KEYS.PIN_CODE)}
+          {this.isTotpResources && (
+            <ResourceViewPageTotp
+              totp={this.getSecretRowState(SECRET_KEYS.TOTP)}
+              canCopy={canCopySecret}
+              canPreview={canPreviewSecret}
             />
           )}
-          {this.hasNoteRow && (
-            <SecretPropertyRow
-              type={SECRET_PROPERTY_ROW_TYPES.NOTE}
-              label={<Trans>Notes</Trans>}
-              {...this.getSecretRowProps(SECRET_KEYS.NOTE)}
+          {this.isPinCodeResources && (
+            <ResourceViewPagePinCode
+              pinCode={this.getSecretRowState(SECRET_KEYS.PIN_CODE)}
+              canCopy={canCopySecret}
+              canPreview={canPreviewSecret}
             />
           )}
-          {this.hasCustomFieldsRows && customFields.length === 0 && (
-            <li className="property">
-              <div className="information">
-                <span className="property-name">
-                  <Trans>Custom fields</Trans>
-                </span>
-                <span className="property-value empty">
-                  <Trans>No custom fields</Trans>
-                </span>
-              </div>
-            </li>
+          {this.isStandaloneNoteResource && (
+            <ResourceViewPageNote
+              note={this.getSecretRowState(SECRET_KEYS.NOTE)}
+              canCopy={canCopySecret}
+              canPreview={canPreviewSecret}
+            />
           )}
-          {this.hasCustomFieldsRows &&
-            customFields.map((customField) => (
-              <SecretPropertyRow
-                key={customField.id}
-                type={SECRET_PROPERTY_ROW_TYPES.CUSTOM_FIELD}
-                label={customField.metadata_key}
-                emptySecretSentence={this.translate("There is no value")}
-                {...this.getSecretRowProps(customField.id)}
-              />
-            ))}
-          {!this.hasPinCodeRow && (
-            <li className="property">
-              <div className="information">
-                <span className="property-name">URI</span>
-                {primaryUri && this.sanitizeResourceUrl(primaryUri) && (
-                  <a
-                    href={this.sanitizeResourceUrl(primaryUri)}
-                    role="button"
-                    className="property-value"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {primaryUri}
-                  </a>
-                )}
-                {primaryUri && !this.sanitizeResourceUrl(primaryUri) && (
-                  <span className="property-value">{primaryUri}</span>
-                )}
-                {!primaryUri && (
-                  <span className="property-value empty">
-                    <Trans>no url provided</Trans>
-                  </span>
-                )}
-              </div>
-              <a
-                href={`${this.sanitizeResourceUrl(primaryUri) ? this.sanitizeResourceUrl(primaryUri) : "#"}`}
-                role="button"
-                className={`button button-transparent property-action ${!this.sanitizeResourceUrl(primaryUri) ? "disabled" : ""}`}
-                onClick={this.handleGoToUrlClick}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={this.translate("open in a new tab")}
-              >
-                <GoSVG />
-                <span className="visually-hidden">
-                  <Trans>Open in new window</Trans>
-                </span>
-              </a>
-            </li>
+          {this.isStandaloneCustomFieldsResource && (
+            <ResourceViewPageCustomFields
+              customFields={this.customFieldsWithState}
+              canCopy={canCopySecret}
+              canPreview={canPreviewSecret}
+            />
           )}
-
-          {additionalUris?.length > 0 && (
-            <li className="property">
-              <div className="information">
-                <div className="accordion">
-                  <div className="accordion-header additional-uris" onClick={this.handleClickAdditionalUrisSection}>
-                    <button type="button" className="link no-border property-name">
-                      {this.state.isOpenAdditionalUris ? (
-                        <CaretDownSVG className="caret-down" />
-                      ) : (
-                        <CaretRightSVG className="caret-right" />
-                      )}
-                      <span>
-                        <Trans>Additional URIs</Trans>
-                      </span>
-                    </button>
-                  </div>
-                  {this.state.isOpenAdditionalUris && (
-                    <div className="accordion-content">
-                      <div className="list-uris">
-                        {additionalUris.map((uri, index) => {
-                          const safeUri = this.sanitizeResourceUrl(uri);
-                          if (safeUri) {
-                            return (
-                              <a
-                                href={safeUri}
-                                className="property-value"
-                                key={index}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <span className="ellipsis">{uri}</span>
-                              </a>
-                            );
-                          }
-                          return (
-                            <span className="property-value" key={index}>
-                              {uri}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </li>
+          {!this.isPinCodeResources && (
+            <ResourceViewPageUris uris={this.state.resource.metadata?.uris || []} onGoToUrl={this.resetError} />
           )}
         </ul>
         <div className="submit-wrapper input">
