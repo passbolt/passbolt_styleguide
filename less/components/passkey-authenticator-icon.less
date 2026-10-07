@@ -1,0 +1,23 @@
+.passkey-authenticator-icon {
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.4rem;
+
+  svg {
+    width: 100%;
+    height: 100%;
+
+    // Logos scale their strokes with the viewBox, unlike the app icons pinned by the global non-scaling-stroke rule.
+    * {
+      vector-effect: none;
+    }
+
+    &.light {
+      display: var(--passkey-authenticator-icon-light-display, block);
+    }
+
+    &.dark {
+      display: var(--passkey-authenticator-icon-dark-display, none);
+    }
+  }
+}

@@ -66,6 +66,20 @@ export default class DisplayMfaAdministrationPage {
   }
 
   /**
+   * Returns the passkeys input element
+   */
+  get passkeys() {
+    return this._page.container.querySelector("#webauthn-provider-toggle-button");
+  }
+
+  /**
+   * Returns the passkeys description element
+   */
+  get passkeysDescription() {
+    return this.passkeys.closest(".provider-section").querySelector("p.description");
+  }
+
+  /**
    * Returns the yubikey input element
    */
   get yubikey() {
@@ -217,6 +231,11 @@ export default class DisplayMfaAdministrationPage {
   /** Click on the duo element */
   async checkDuo() {
     await this.click(this.duo);
+  }
+
+  /** Click on the passkeys element */
+  async checkPasskeys() {
+    await this.click(this.passkeys);
   }
 
   /** Click on the yubikey element */
