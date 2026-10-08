@@ -25,6 +25,7 @@ import UserActiveSessionEntity from "../../shared/models/entity/session/userActi
 import { BOOTSTRAP_FEATURE } from "../ExtQuickAccess";
 import LogoSVG from "../../img/svg/logo.svg";
 import SiteSettingsServiceWorkerService from "../../shared/services/serviceWorker/siteSettings/siteSettingsServiceWorkerService";
+import { Trans } from "react-i18next";
 
 /**
  * The ExtApp context provider
@@ -63,12 +64,26 @@ export class ExtQuickAccessContextProvider extends React.Component {
           ? await this.findAndUpdateSiteSettings()
           : await this.getOrFindSiteSettings();
       if (this.props.activeSession.isSessionOnline) {
-        this.loadOnlineData(siteSettings);
+        await this.loadOnlineData(siteSettings);
       } else if (this.props.activeSession.isSessionOffline) {
-        this.loadOfflineData(siteSettings);
+        await this.loadOfflineData(siteSettings);
+      }
+      if (!this.props.activeSession.isServerReachable) {
+        if (!this.state.loggedInUser) {
+          await this.getLoggedInUser();
+        }
+        if (!this.state.rbacs) {
+          await this.getOrFindRbacs(siteSettings);
+        }
       }
     } catch (e) {
       console.error(e);
+      if (!this.props.activeSession.isServerReachable) {
+        if (typeof this.state.siteSettings === "undefined") {
+          this.setState({ siteSettings: null });
+        }
+        return;
+      }
       this.setState({
         hasError: true,
         errorMessage: e.message,
@@ -92,8 +107,11 @@ export class ExtQuickAccessContextProvider extends React.Component {
         await this.redirectToMfaAuthentication();
         return;
       }
-      this.getLoggedInUser();
-      this.getOrFindRbacs(siteSettings);
+      await this.getLoggedInUser();
+      await this.getOrFindRbacs(siteSettings);
+    } else if (!this.props.activeSession.isServerReachable) {
+      await this.getLoggedInUser();
+      await this.getOrFindRbacs(siteSettings);
     }
   }
 
@@ -106,8 +124,8 @@ export class ExtQuickAccessContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async loadOfflineData(siteSettings) {
-    this.getLoggedInUser();
-    this.getOrFindRbacs(siteSettings);
+    await this.getLoggedInUser();
+    await this.getOrFindRbacs(siteSettings);
   }
 
   /**
@@ -354,12 +372,16 @@ export class ExtQuickAccessContextProvider extends React.Component {
               {!this.state.hasError && (
                 <div className="processing-wrapper">
                   <SpinnerSVG />
-                  <p className="processing-text">Connecting your account</p>
+                  <p className="processing-text">
+                    <Trans>Connecting your account</Trans>
+                  </p>
                 </div>
               )}
               {this.state.hasError && (
                 <div className="processing-wrapper">
-                  <p className="processing-text">{this.state.errorMessage}</p>
+                  <p className="processing-text">
+                    <Trans>{this.state.errorMessage}</Trans>
+                  </p>
                 </div>
               )}
             </>

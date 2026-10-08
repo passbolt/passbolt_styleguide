@@ -41,18 +41,26 @@ class QuickAccessServerUnavailable extends Component {
   }
 
   get canIUseOfflineMode() {
-    const { siteSettings, loggedInUser, rbacs } = this.props.context;
+    const { siteSettings, loggedInUser, rbacs, account } = this.props.context;
+    const offlineSettings = this.props.offlineSettings;
 
-    return (
-      // plugin enabled
-      siteSettings?.canIUse("offlineMode") &&
-      // user has a role (required for rbac)
-      Boolean(loggedInUser?.role) &&
-      // RBAC permission is allowed
-      CanUse.canRoleUseAction(loggedInUser, rbacs, actions.OFFLINE_ITEMS_VIEW) &&
-      // Offline settings is set
-      this.props.offlineSettings != null
-    );
+    // Offline mode must be enabled and settings present
+    if (!siteSettings?.canIUse("offlineMode") || !offlineSettings) {
+      return false;
+    }
+
+    // Explicitly null loggedInUser means empty/denied user
+    if (loggedInUser === null) {
+      return false;
+    }
+
+    // If user has a role, check RBAC permission
+    if (loggedInUser?.role) {
+      return CanUse.canRoleUseAction(loggedInUser, rbacs, actions.OFFLINE_ITEMS_VIEW);
+    }
+
+    // If unauthenticated or user not loaded yet, permit offline login when account is present
+    return Boolean(account);
   }
 
   /**
