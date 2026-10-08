@@ -84,8 +84,8 @@ describe("DisplayOfflineAdministration", () => {
       expect(page.isDisabled(page.sessionDurationSelect)).toBe(false);
       expect(page.isDisabled(page.maximumRetentionPeriodSelect)).toBe(false);
       // The select filters the selected value out of its list, hence the default option missing.
-      expect(page.optionsOf(page.sessionDurationSelect)).toEqual(["15 minutes", "1 hour", "1 day"]);
-      expect(page.optionsOf(page.maximumRetentionPeriodSelect)).toEqual(["1 day", "14 days", "30 days"]);
+      expect(page.optionsOf(page.sessionDurationSelect)).toEqual(["5 minutes", "15 minutes", "1 hour", "1 day"]);
+      expect(page.optionsOf(page.maximumRetentionPeriodSelect)).toEqual(["Unlimited", "7 days", "14 days", "30 days"]);
     });
 
     it("can change the session duration and the data retention period", async () => {
@@ -107,7 +107,7 @@ describe("DisplayOfflineAdministration", () => {
   });
 
   describe("As a signed-in administrator of a community edition instance I cannot edit the offline settings", () => {
-    it("pins the settings to 5 minutes and 7 days when enabling the feature", async () => {
+    it("pins the settings to unlimited session and data retention when enabling the feature", async () => {
       expect.assertions(2);
       const props = communityEditionProps();
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => null);
@@ -118,8 +118,8 @@ describe("DisplayOfflineAdministration", () => {
       });
       await page.clickOnFeature();
 
-      expect(page.selectedValueOf(page.sessionDurationSelect)).toBe("5 minutes");
-      expect(page.selectedValueOf(page.maximumRetentionPeriodSelect)).toBe("7 days");
+      expect(page.selectedValueOf(page.sessionDurationSelect)).toBe("Unlimited");
+      expect(page.selectedValueOf(page.maximumRetentionPeriodSelect)).toBe("Unlimited");
     });
 
     it("disables both inputs and offers no other value than the one in use", async () => {
@@ -154,8 +154,8 @@ describe("DisplayOfflineAdministration", () => {
       await page.save();
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.offline.save-settings", {
-        max_session_duration: 300,
-        data_retention_period: 7,
+        max_session_duration: 0,
+        data_retention_period: 0,
       });
     });
   });

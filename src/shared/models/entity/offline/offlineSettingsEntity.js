@@ -13,20 +13,18 @@
  */
 import EntityV2 from "../abstract/entityV2";
 
-// 5 minutes, 15 minutes, 1 hour, 1 day
-export const SESSION_DURATION_ALLOWED = Object.freeze([300, 900, 3600, 86400]);
-// 1 day, 7 days, 14 days, 30 days
-export const DATA_RETENTION_PERIOD_ALLOWED = Object.freeze([1, 7, 14, 30]);
+// 0 (unlimited), 5 minutes, 15 minutes, 1 hour, 1 day
+export const SESSION_DURATION_ALLOWED = Object.freeze([0, 300, 900, 3600, 86400]);
+// 0 (unlimited), 1 day, 7 days, 14 days, 30 days
+export const DATA_RETENTION_PERIOD_ALLOWED = Object.freeze([0, 1, 7, 14, 30]);
 
 /*
- * Tuning the offline policy is a pro capability. The community edition is pinned to 5 minutes of
- * session duration and 7 days of data retention: the administration screen renders both controls
- * disabled and offers no other value than the one in use. Both values have to stay members of the
- * enums above, otherwise the entity rejects the settings the community edition itself saves.
+ * Passly: perpetual offline policy by default (0 = unlimited retention and session).
  */
 export const COMMUNITY_EDITION_OFFLINE_SETTINGS = Object.freeze({
-  max_session_duration: 300,
-  data_retention_period: 7,
+  max_session_duration: 0,
+  data_retention_period: 0,
+  max_items: 0,
 });
 
 class OfflineSettingsEntity extends EntityV2 {
@@ -45,16 +43,15 @@ class OfflineSettingsEntity extends EntityV2 {
         },
         max_session_duration: {
           type: "integer",
-          enum: SESSION_DURATION_ALLOWED,
+          minimum: 0,
         },
         data_retention_period: {
           type: "integer",
-          enum: DATA_RETENTION_PERIOD_ALLOWED,
+          minimum: 0,
         },
         max_items: {
           type: "integer",
-          minimum: 1000,
-          maximum: 1000,
+          minimum: 0,
         },
         created: {
           type: "string",
@@ -81,7 +78,7 @@ class OfflineSettingsEntity extends EntityV2 {
    */
   marshall() {
     if (this._props.max_items == null) {
-      this._props.max_items = 1000;
+      this._props.max_items = 0;
     }
   }
 
@@ -103,7 +100,7 @@ class OfflineSettingsEntity extends EntityV2 {
    * @returns {integer|null}
    */
   get sessionDuration() {
-    return this._props.max_session_duration || null;
+    return typeof this._props.max_session_duration === "number" ? this._props.max_session_duration : null;
   }
 
   /**
@@ -112,7 +109,15 @@ class OfflineSettingsEntity extends EntityV2 {
    * @returns {(integer|null)}
    */
   get maximumRetentionPeriod() {
-    return this._props.data_retention_period || null;
+    return typeof this._props.data_retention_period === "number" ? this._props.data_retention_period : null;
+  }
+
+  /**
+   * Get max items
+   * @returns {integer}
+   */
+  get maxItems() {
+    return typeof this._props.max_items === "number" ? this._props.max_items : 0;
   }
 
   /**

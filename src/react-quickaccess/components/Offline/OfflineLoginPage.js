@@ -76,7 +76,10 @@ class OfflineLoginPage extends React.Component {
 
   async login() {
     let passphrase = this.passphraseInputRef.current.value;
-    const max_session_duration = this.props.offlineSettings?.sessionDuration || 300;
+    const max_session_duration =
+      typeof this.props.offlineSettings?.sessionDuration === "number" && this.props.offlineSettings.sessionDuration <= 0
+        ? -1
+        : (this.props.offlineSettings?.sessionDuration || 300);
     await this.props.context.port.request("passbolt.auth.login-offline", passphrase, max_session_duration);
     passphrase = null;
     this.passphraseInputRef.current.value = null;

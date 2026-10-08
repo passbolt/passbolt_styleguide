@@ -263,7 +263,7 @@ class DisplayOfflineAdministration extends Component {
       : SESSION_DURATION_ALLOWED;
     return allowedValues.map((value) => ({
       value,
-      label: formatSecondsDuration(value, this.props.context.locale),
+      label: value === 0 ? this.props.t("Unlimited") : formatSecondsDuration(value, this.props.context.locale),
     }));
   }
 
@@ -277,7 +277,7 @@ class DisplayOfflineAdministration extends Component {
       : DATA_RETENTION_PERIOD_ALLOWED;
     return allowedValues.map((value) => ({
       value,
-      label: this.props.t("{{count}} day", { count: value }),
+      label: value === 0 ? this.props.t("Unlimited") : this.props.t("{{count}} day", { count: value }),
     }));
   }
 

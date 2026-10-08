@@ -39,12 +39,7 @@ describe("OfflineSettingsEntity", () => {
         failingScenarios,
         "type",
       );
-      assertEntityProperty.enumeration(
-        OfflineSettingsEntity,
-        "max_session_duration",
-        [300, 900, 3600, 86400],
-        [400, 500, 90000],
-      );
+      assertEntityProperty.minimum(OfflineSettingsEntity, "max_session_duration", 0);
       assertEntityProperty.required(OfflineSettingsEntity, "max_session_duration");
     });
 
@@ -64,7 +59,7 @@ describe("OfflineSettingsEntity", () => {
         failingScenarios,
         "type",
       );
-      assertEntityProperty.enumeration(OfflineSettingsEntity, "data_retention_period", [1, 7, 14, 30], [2, 5, 20, 100]);
+      assertEntityProperty.minimum(OfflineSettingsEntity, "data_retention_period", 0);
       assertEntityProperty.required(OfflineSettingsEntity, "data_retention_period");
     });
 
@@ -94,12 +89,12 @@ describe("OfflineSettingsEntity", () => {
   });
 
   describe("OfflineSettingsEntity::COMMUNITY_EDITION_OFFLINE_SETTINGS", () => {
-    it("should be pinned to 5 minutes and 7 days, and pass the entity validation", () => {
+    it("should be perpetual (0 seconds and 0 days), and pass the entity validation", () => {
       expect.assertions(2);
       const entity = new OfflineSettingsEntity(COMMUNITY_EDITION_OFFLINE_SETTINGS);
 
-      expect(entity.sessionDuration).toStrictEqual(300);
-      expect(entity.maximumRetentionPeriod).toStrictEqual(7);
+      expect(entity.sessionDuration).toStrictEqual(0);
+      expect(entity.maximumRetentionPeriod).toStrictEqual(0);
     });
   });
 
