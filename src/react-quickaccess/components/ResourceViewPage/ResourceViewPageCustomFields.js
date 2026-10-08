@@ -26,11 +26,10 @@ import {
   CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND,
   COPY_STATUSES,
   TRANSITION_DURATION_IN_MS,
-  secretRowStatePropType,
-} from "./secretRowState";
+} from "./secretState";
 
 /**
- * The custom fields section of the resource view page
+ * The custom fields section of the resource view page: one row per custom field, keyed by the custom field id.
  */
 class ResourceViewPageCustomFields extends React.Component {
   /**
@@ -52,6 +51,15 @@ class ResourceViewPageCustomFields extends React.Component {
       this.nodeRefs[key] = createRef();
     }
     return this.nodeRefs[key];
+  }
+
+  /**
+   * Get the copy status of a row: the page status while the row is the one being copied, the default one otherwise.
+   * @param {string} id The custom field id, the row key
+   * @returns {string}
+   */
+  getCopyStatus(id) {
+    return this.props.copyingSecret === id ? this.props.copyStatus : COPY_STATUSES.DEFAULT;
   }
 
   /**
@@ -94,13 +102,17 @@ class ResourceViewPageCustomFields extends React.Component {
   }
 
   /**
-   * Render the row of a custom field.
-   * @param {object} customField The custom field: its id, its key and its row state
+   * Render the row of a custom field. The page gives its plaintext only while it is revealed.
+   * @param {object} customField The custom field: its id, its key and its value
    * @returns {JSX}
    */
   renderCustomFieldRow(customField) {
-    const { canCopy, canPreview } = this.props;
-    const { id, state } = customField;
+    const { decryptingSecret, copiedProperty, canCopy, canPreview } = this.props;
+    const { id, value } = customField;
+    const isRevealed = value !== null;
+    const isDecrypting = decryptingSecret === id;
+    const copyStatus = this.getCopyStatus(id);
+    const isCopied = copiedProperty === id;
     return (
       <li className="property" key={id}>
         <div className="information">
@@ -113,30 +125,30 @@ class ResourceViewPageCustomFields extends React.Component {
           )}
           <div className="password-wrapper">
             <div
-              className={`property-value secret secret-custom-fields ${state.revealed ? "" : "secret-copy"}`}
-              title={state.revealed ? state.value : this.props.t("Click to copy")}
+              className={`property-value secret secret-custom-fields ${isRevealed ? "" : "secret-copy"}`}
+              title={isRevealed ? value : this.props.t("Click to copy")}
             >
               <HiddenPassword
                 canClick={canCopy}
-                preview={state.revealed ? state.value : null}
-                onClick={state.onCopy}
+                preview={value}
+                onClick={() => this.props.onCopy(id)}
                 emptySecretSentence={this.props.t("There is no value")}
               />
             </div>
             {canPreview && (
               <button
                 type="button"
-                onClick={state.onPreview}
+                onClick={() => this.props.onPreview(id)}
                 className="password-view inline button-transparent"
-                disabled={state.decrypting}
+                disabled={isDecrypting}
               >
                 {this.renderIcon(
                   this.getNodeRef(`${id}:preview-idle`),
-                  !state.decrypting,
+                  !isDecrypting,
                   false,
-                  state.revealed ? <EyeCloseSVG /> : <EyeOpenSVG />,
+                  isRevealed ? <EyeCloseSVG /> : <EyeOpenSVG />,
                 )}
-                {this.renderIcon(this.getNodeRef(`${id}:preview-decrypting`), state.decrypting, true, <SpinnerSVG />)}
+                {this.renderIcon(this.getNodeRef(`${id}:preview-decrypting`), isDecrypting, true, <SpinnerSVG />)}
                 <span className="visually-hidden">
                   <Trans>View</Trans>
                 </span>
@@ -149,24 +161,24 @@ class ResourceViewPageCustomFields extends React.Component {
             <a
               role="button"
               className="button button-transparent property-action copy-custom-field"
-              onClick={state.onCopy}
+              onClick={() => this.props.onCopy(id)}
               title={this.props.t("Copy to clipboard")}
             >
               {this.renderIcon(
                 this.getNodeRef(`${id}:copy-default`),
-                state.copyStatus === COPY_STATUSES.DEFAULT,
+                copyStatus === COPY_STATUSES.DEFAULT,
                 false,
                 <CopySVG />,
               )}
               {this.renderIcon(
                 this.getNodeRef(`${id}:copy-processing`),
-                state.copyStatus === COPY_STATUSES.PROCESSING,
+                copyStatus === COPY_STATUSES.PROCESSING,
                 true,
                 <SpinnerSVG />,
               )}
               {this.renderIcon(
                 this.getNodeRef(`${id}:copy-done`),
-                state.copyStatus === COPY_STATUSES.DONE,
+                copyStatus === COPY_STATUSES.DONE,
                 true,
                 <HealthCheckSuccessSvg />,
               )}
@@ -174,7 +186,7 @@ class ResourceViewPageCustomFields extends React.Component {
                 <Trans>Copy to clipboard</Trans>
               </span>
             </a>
-            {state.showTimer && (
+            {isCopied && (
               <TimerSVG
                 style={{
                   "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
@@ -207,11 +219,17 @@ ResourceViewPageCustomFields.defaultProps = {
 ResourceViewPageCustomFields.propTypes = {
   customFields: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired, // The custom field id
+      id: PropTypes.string.isRequired, // The custom field id, the key of its row
       metadata_key: PropTypes.string, // The custom field key, from the resource metadata
-      state: secretRowStatePropType.isRequired, // The row state given by the page
+      value: PropTypes.string, // The plaintext while the custom field is revealed, null while it is masked
     }),
   ), // The custom fields, in the stored order
+  decryptingSecret: PropTypes.string, // The key of the row decrypting the secret, null when none
+  copyingSecret: PropTypes.string, // The key of the row being copied, null when none
+  copyStatus: PropTypes.oneOf(Object.values(COPY_STATUSES)), // The copy status of the row being copied, null when none
+  copiedProperty: PropTypes.string, // The key of the last copied row, the clipboard timer runs for it, null when none
+  onCopy: PropTypes.func.isRequired, // The copy handler, receives the row key
+  onPreview: PropTypes.func.isRequired, // The preview toggle handler, receives the row key
   canCopy: PropTypes.bool.isRequired, // Can the user copy the secret
   canPreview: PropTypes.bool.isRequired, // Can the user preview the secret
   t: PropTypes.func, // The translation function

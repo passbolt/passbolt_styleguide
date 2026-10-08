@@ -12,16 +12,19 @@
  * @since         5.18.0
  */
 
-import { defaultSecretRowState } from "./secretRowState.test.data";
+import { defaultSecretState } from "./secretState.test.data";
 
 /**
- * Default component props: a hidden note.
+ * Default component props: a hidden note, the page secret state idle.
  * @param {object} props Override the default props.
  * @returns {object}
  */
 export function defaultProps(props = {}) {
   return {
-    note: defaultSecretRowState(),
+    note: null,
+    ...defaultSecretState(),
+    onCopy: jest.fn(),
+    onPreview: jest.fn(),
     canCopy: true,
     canPreview: true,
     ...props,
@@ -34,8 +37,5 @@ export function defaultProps(props = {}) {
  * @returns {object}
  */
 export function revealedNoteProps(props = {}) {
-  return defaultProps({
-    note: defaultSecretRowState({ revealed: true, value: "Wifi: office-5G\nThe password is at the reception." }),
-    ...props,
-  });
+  return defaultProps({ note: "Wifi: office-5G\nThe password is at the reception.", ...props });
 }

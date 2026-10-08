@@ -12,17 +12,20 @@
  * @since         5.18.0
  */
 
-import { defaultSecretRowState } from "./secretRowState.test.data";
+import { defaultSecretState } from "./secretState.test.data";
 import { defaultTotpViewModelDto } from "../../../shared/models/entity/totp/totpDto.test.data";
 
 /**
- * Default component props: a masked TOTP.
+ * Default component props: a masked TOTP, the page secret state idle.
  * @param {object} props Override the default props.
  * @returns {object}
  */
 export function defaultProps(props = {}) {
   return {
-    totp: defaultSecretRowState(),
+    totp: null,
+    ...defaultSecretState(),
+    onCopy: jest.fn(),
+    onPreview: jest.fn(),
     canCopy: true,
     canPreview: true,
     ...props,
@@ -35,5 +38,5 @@ export function defaultProps(props = {}) {
  * @returns {object}
  */
 export function revealedTotpProps(props = {}) {
-  return defaultProps({ totp: defaultSecretRowState({ revealed: true, value: defaultTotpViewModelDto() }), ...props });
+  return defaultProps({ totp: defaultTotpViewModelDto(), ...props });
 }

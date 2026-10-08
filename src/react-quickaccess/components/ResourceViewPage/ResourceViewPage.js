@@ -34,7 +34,7 @@ import ResourceViewPagePinCode from "./ResourceViewPagePinCode";
 import ResourceViewPageNote from "./ResourceViewPageNote";
 import ResourceViewPageCustomFields from "./ResourceViewPageCustomFields";
 import ResourceViewPageUris from "./ResourceViewPageUris";
-import { CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND, COPY_STATUSES } from "./secretRowState";
+import { CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND, COPY_STATUSES, SECRET_KEYS } from "./secretState";
 
 /**
  * The delay after which the username copy action goes back to its default state, in ms.
@@ -47,18 +47,6 @@ const LOGIN_COPY_STATE_RESET_DELAY_IN_MS = 15000;
  * @type {number}
  */
 const DEFAULT_ERROR_DISPLAY_TIME_IN_MS = 5000;
-
-/**
- * The keys of the rows with a fixed name. A custom field row is keyed by the custom field id.
- * @type {object}
- */
-const SECRET_KEYS = {
-  USERNAME: "username",
-  PASSWORD: "password",
-  TOTP: "totp",
-  PIN_CODE: "pin_code",
-  NOTE: "note",
-};
 
 /**
  * Get the value of a custom field from a decrypted secret as text
@@ -139,6 +127,8 @@ class ResourceViewPage extends React.Component {
     this.handleCopyLoginClick = this.handleCopyLoginClick.bind(this);
     this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
     this.resetError = this.resetError.bind(this);
+    this.copySecret = this.copySecret.bind(this);
+    this.previewSecret = this.previewSecret.bind(this);
   }
 
   initState() {
@@ -405,41 +395,12 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * Is the row decrypting the secret.
+   * Get the plaintext of a row while it is revealed. A masked row holds no plaintext.
    * @param {string} key The row key
-   * @returns {boolean}
+   * @returns {string|object|null} The plaintext, the totp dto for the TOTP row, null while the row is masked
    */
-  isDecrypting(key) {
-    return this.state.decryptingSecret === key;
-  }
-
-  /**
-   * Get the copy status of a row. Only the row being copied has a status, the others are in their default state.
-   * @param {string} key The row key
-   * @returns {string}
-   */
-  getCopyStatus(key) {
-    const isCopying = this.state.copyingSecret === key && Boolean(this.state.copyStatus);
-    return isCopying ? this.state.copyStatus : COPY_STATUSES.DEFAULT;
-  }
-
-  /**
-   * Get the state of a secret row, as given to the section displaying it. The row receives the plaintext only
-   * while it is revealed.
-   * @param {string} key The row key
-   * @returns {object}
-   */
-  getSecretRowState(key) {
-    const revealed = this.isRevealed(key);
-    return {
-      revealed,
-      value: revealed ? this.getSecretProperty(key).read(this.state.plaintextSecretDto, key) : null,
-      decrypting: this.isDecrypting(key),
-      copyStatus: this.getCopyStatus(key),
-      showTimer: this.state.copiedProperty === key,
-      onCopy: () => this.copySecret(key),
-      onPreview: () => this.previewSecret(key),
-    };
+  getRevealedValue(key) {
+    return this.isRevealed(key) ? this.getSecretProperty(key).read(this.state.plaintextSecretDto, key) : null;
   }
 
   async handleUseOnThisTabClick(event) {
@@ -545,19 +506,20 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * The custom fields of the resource with the state of their row.
+   * The custom fields of the resource: their id, their key and their plaintext while revealed.
    * @returns {Array<object>}
    */
-  get customFieldsWithState() {
+  get customFields() {
     const customFields = this.state.resource.metadata?.custom_fields || [];
     return customFields.map((customField) => ({
       id: customField.id,
       metadata_key: customField.metadata_key,
-      state: this.getSecretRowState(customField.id),
+      value: this.getRevealedValue(customField.id),
     }));
   }
 
   render() {
+    const { decryptingSecret, copyingSecret, copyStatus, copiedProperty } = this.state;
     const canCopySecret = this.canCopySecret;
     const canPreviewSecret = this.canPreviewSecret;
 
@@ -585,37 +547,66 @@ class ResourceViewPage extends React.Component {
           {this.isPasswordResources && (
             <ResourceViewPagePassword
               username={this.state.resource.metadata?.username}
-              usernameCopyStatus={this.getCopyStatus(SECRET_KEYS.USERNAME)}
               onCopyUsername={this.handleCopyLoginClick}
-              password={this.getSecretRowState(SECRET_KEYS.PASSWORD)}
+              password={this.getRevealedValue(SECRET_KEYS.PASSWORD)}
+              decryptingSecret={decryptingSecret}
+              copyingSecret={copyingSecret}
+              copyStatus={copyStatus}
+              copiedProperty={copiedProperty}
+              onCopy={this.copySecret}
+              onPreview={this.previewSecret}
               canCopy={canCopySecret}
               canPreview={canPreviewSecret}
             />
           )}
           {this.isTotpResources && (
             <ResourceViewPageTotp
-              totp={this.getSecretRowState(SECRET_KEYS.TOTP)}
+              totp={this.getRevealedValue(SECRET_KEYS.TOTP)}
+              decryptingSecret={decryptingSecret}
+              copyingSecret={copyingSecret}
+              copyStatus={copyStatus}
+              copiedProperty={copiedProperty}
+              onCopy={this.copySecret}
+              onPreview={this.previewSecret}
               canCopy={canCopySecret}
               canPreview={canPreviewSecret}
             />
           )}
           {this.isPinCodeResources && (
             <ResourceViewPagePinCode
-              pinCode={this.getSecretRowState(SECRET_KEYS.PIN_CODE)}
+              pinCode={this.getRevealedValue(SECRET_KEYS.PIN_CODE)}
+              decryptingSecret={decryptingSecret}
+              copyingSecret={copyingSecret}
+              copyStatus={copyStatus}
+              copiedProperty={copiedProperty}
+              onCopy={this.copySecret}
+              onPreview={this.previewSecret}
               canCopy={canCopySecret}
               canPreview={canPreviewSecret}
             />
           )}
           {this.isStandaloneNoteResource && (
             <ResourceViewPageNote
-              note={this.getSecretRowState(SECRET_KEYS.NOTE)}
+              note={this.getRevealedValue(SECRET_KEYS.NOTE)}
+              decryptingSecret={decryptingSecret}
+              copyingSecret={copyingSecret}
+              copyStatus={copyStatus}
+              copiedProperty={copiedProperty}
+              onCopy={this.copySecret}
+              onPreview={this.previewSecret}
               canCopy={canCopySecret}
               canPreview={canPreviewSecret}
             />
           )}
           {this.isStandaloneCustomFieldsResource && (
             <ResourceViewPageCustomFields
-              customFields={this.customFieldsWithState}
+              customFields={this.customFields}
+              decryptingSecret={decryptingSecret}
+              copyingSecret={copyingSecret}
+              copyStatus={copyStatus}
+              copiedProperty={copiedProperty}
+              onCopy={this.copySecret}
+              onPreview={this.previewSecret}
               canCopy={canCopySecret}
               canPreview={canPreviewSecret}
             />

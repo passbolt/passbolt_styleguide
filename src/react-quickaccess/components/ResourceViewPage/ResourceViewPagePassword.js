@@ -25,12 +25,12 @@ import TimerSVG from "../../../img/svg/timer.svg";
 import {
   CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND,
   COPY_STATUSES,
+  SECRET_KEYS,
   TRANSITION_DURATION_IN_MS,
-  secretRowStatePropType,
-} from "./secretRowState";
+} from "./secretState";
 
 /**
- * The password section of the resource view page
+ * The password section of the resource view page: the username row and the password row.
  */
 class ResourceViewPagePassword extends React.Component {
   /**
@@ -39,6 +39,7 @@ class ResourceViewPagePassword extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.bindCallbacks();
     this.usernameCopyDefaultRef = createRef();
     this.usernameCopyProcessingRef = createRef();
     this.usernameCopyDoneRef = createRef();
@@ -47,6 +48,61 @@ class ResourceViewPagePassword extends React.Component {
     this.copyDefaultRef = createRef();
     this.copyProcessingRef = createRef();
     this.copyDoneRef = createRef();
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleCopyClick = this.handleCopyClick.bind(this);
+    this.handlePreviewClick = this.handlePreviewClick.bind(this);
+  }
+
+  /**
+   * Handle the click on the password value or on its copy action.
+   */
+  handleCopyClick() {
+    this.props.onCopy(SECRET_KEYS.PASSWORD);
+  }
+
+  /**
+   * Handle the click on the password preview action.
+   */
+  handlePreviewClick() {
+    this.props.onPreview(SECRET_KEYS.PASSWORD);
+  }
+
+  /**
+   * Is the password revealed. The page gives the plaintext only while it is.
+   * @returns {boolean}
+   */
+  get isRevealed() {
+    return this.props.password !== null;
+  }
+
+  /**
+   * Is the password row decrypting the secret.
+   * @returns {boolean}
+   */
+  get isDecrypting() {
+    return this.props.decryptingSecret === SECRET_KEYS.PASSWORD;
+  }
+
+  /**
+   * Is the password the last copied property, the clipboard timer runs for it.
+   * @returns {boolean}
+   */
+  get isCopied() {
+    return this.props.copiedProperty === SECRET_KEYS.PASSWORD;
+  }
+
+  /**
+   * Get the copy status of a row: the page status while the row is the one being copied, the default one otherwise.
+   * @param {string} key The row key
+   * @returns {string}
+   */
+  getCopyStatus(key) {
+    return this.props.copyingSecret === key ? this.props.copyStatus : COPY_STATUSES.DEFAULT;
   }
 
   /**
@@ -74,7 +130,8 @@ class ResourceViewPagePassword extends React.Component {
    * @returns {JSX}
    */
   renderUsernameRow() {
-    const { username, usernameCopyStatus, onCopyUsername } = this.props;
+    const { username, onCopyUsername } = this.props;
+    const copyStatus = this.getCopyStatus(SECRET_KEYS.USERNAME);
     return (
       <li className="property">
         <div className="information">
@@ -98,21 +155,16 @@ class ResourceViewPagePassword extends React.Component {
           onClick={onCopyUsername}
           title={this.props.t("Copy to clipboard")}
         >
-          {this.renderIcon(
-            this.usernameCopyDefaultRef,
-            usernameCopyStatus === COPY_STATUSES.DEFAULT,
-            false,
-            <CopySVG />,
-          )}
+          {this.renderIcon(this.usernameCopyDefaultRef, copyStatus === COPY_STATUSES.DEFAULT, false, <CopySVG />)}
           {this.renderIcon(
             this.usernameCopyProcessingRef,
-            usernameCopyStatus === COPY_STATUSES.PROCESSING,
+            copyStatus === COPY_STATUSES.PROCESSING,
             true,
             <SpinnerSVG />,
           )}
           {this.renderIcon(
             this.usernameCopyDoneRef,
-            usernameCopyStatus === COPY_STATUSES.DONE,
+            copyStatus === COPY_STATUSES.DONE,
             true,
             <HealthCheckSuccessSvg />,
           )}
@@ -130,6 +182,9 @@ class ResourceViewPagePassword extends React.Component {
    */
   renderPasswordRow() {
     const { password, canCopy, canPreview } = this.props;
+    const isRevealed = this.isRevealed;
+    const isDecrypting = this.isDecrypting;
+    const copyStatus = this.getCopyStatus(SECRET_KEYS.PASSWORD);
     return (
       <li className="property">
         <div className="information">
@@ -138,29 +193,25 @@ class ResourceViewPagePassword extends React.Component {
           </span>
           <div className="password-wrapper">
             <div
-              className={`property-value secret secret-password ${password.revealed ? "" : "secret-copy"}`}
-              title={password.revealed ? password.value : this.props.t("Click to copy")}
+              className={`property-value secret secret-password ${isRevealed ? "" : "secret-copy"}`}
+              title={isRevealed ? password : this.props.t("Click to copy")}
             >
-              <HiddenPassword
-                canClick={canCopy}
-                preview={password.revealed ? password.value : null}
-                onClick={password.onCopy}
-              />
+              <HiddenPassword canClick={canCopy} preview={password} onClick={this.handleCopyClick} />
             </div>
             {canPreview && (
               <button
                 type="button"
-                onClick={password.onPreview}
+                onClick={this.handlePreviewClick}
                 className="password-view inline button-transparent"
-                disabled={password.decrypting}
+                disabled={isDecrypting}
               >
                 {this.renderIcon(
                   this.previewIdleRef,
-                  !password.decrypting,
+                  !isDecrypting,
                   false,
-                  password.revealed ? <EyeCloseSVG /> : <EyeOpenSVG />,
+                  isRevealed ? <EyeCloseSVG /> : <EyeOpenSVG />,
                 )}
-                {this.renderIcon(this.previewDecryptingRef, password.decrypting, true, <SpinnerSVG />)}
+                {this.renderIcon(this.previewDecryptingRef, isDecrypting, true, <SpinnerSVG />)}
                 <span className="visually-hidden">
                   <Trans>View</Trans>
                 </span>
@@ -173,27 +224,17 @@ class ResourceViewPagePassword extends React.Component {
             <a
               role="button"
               className="button button-transparent property-action copy-password"
-              onClick={password.onCopy}
+              onClick={this.handleCopyClick}
               title={this.props.t("Copy to clipboard")}
             >
-              {this.renderIcon(this.copyDefaultRef, password.copyStatus === COPY_STATUSES.DEFAULT, false, <CopySVG />)}
-              {this.renderIcon(
-                this.copyProcessingRef,
-                password.copyStatus === COPY_STATUSES.PROCESSING,
-                true,
-                <SpinnerSVG />,
-              )}
-              {this.renderIcon(
-                this.copyDoneRef,
-                password.copyStatus === COPY_STATUSES.DONE,
-                true,
-                <HealthCheckSuccessSvg />,
-              )}
+              {this.renderIcon(this.copyDefaultRef, copyStatus === COPY_STATUSES.DEFAULT, false, <CopySVG />)}
+              {this.renderIcon(this.copyProcessingRef, copyStatus === COPY_STATUSES.PROCESSING, true, <SpinnerSVG />)}
+              {this.renderIcon(this.copyDoneRef, copyStatus === COPY_STATUSES.DONE, true, <HealthCheckSuccessSvg />)}
               <span className="visually-hidden">
                 <Trans>Copy to clipboard</Trans>
               </span>
             </a>
-            {password.showTimer && (
+            {this.isCopied && (
               <TimerSVG
                 style={{
                   "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
@@ -220,11 +261,20 @@ class ResourceViewPagePassword extends React.Component {
   }
 }
 
+ResourceViewPagePassword.defaultProps = {
+  password: null,
+};
+
 ResourceViewPagePassword.propTypes = {
   username: PropTypes.string, // The resource username, metadata in clear
-  usernameCopyStatus: PropTypes.oneOf(Object.values(COPY_STATUSES)).isRequired, // The copy status of the username action
   onCopyUsername: PropTypes.func.isRequired, // The username copy handler, receives the click event
-  password: secretRowStatePropType.isRequired, // The password row state given by the page
+  password: PropTypes.string, // The plaintext while the password is revealed, null while it is masked
+  decryptingSecret: PropTypes.string, // The key of the row decrypting the secret, null when none
+  copyingSecret: PropTypes.string, // The key of the row being copied, null when none
+  copyStatus: PropTypes.oneOf(Object.values(COPY_STATUSES)), // The copy status of the row being copied, null when none
+  copiedProperty: PropTypes.string, // The key of the last copied row, the clipboard timer runs for it, null when none
+  onCopy: PropTypes.func.isRequired, // The copy handler, receives the row key
+  onPreview: PropTypes.func.isRequired, // The preview toggle handler, receives the row key
   canCopy: PropTypes.bool.isRequired, // Can the user copy the secret
   canPreview: PropTypes.bool.isRequired, // Can the user preview the secret
   t: PropTypes.func, // The translation function

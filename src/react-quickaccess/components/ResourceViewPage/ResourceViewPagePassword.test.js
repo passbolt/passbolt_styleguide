@@ -14,7 +14,7 @@
 
 import ResourceViewPagePasswordPage from "./ResourceViewPagePassword.test.page";
 import { defaultProps, noUsernameProps, revealedPasswordProps } from "./ResourceViewPagePassword.test.data";
-import { defaultSecretRowState } from "./secretRowState.test.data";
+import { copiedSecretState, copyingSecretState, decryptingSecretState } from "./secretState.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -43,10 +43,10 @@ describe("ResourceViewPagePassword", () => {
       const page = new ResourceViewPagePasswordPage(defaultProps());
       expect(page.usernameCopyIconState).toStrictEqual("default");
 
-      page.rerender(defaultProps({ usernameCopyStatus: "processing" }));
+      page.rerender(defaultProps(copyingSecretState("username")));
       expect(page.usernameCopyIconState).toStrictEqual("processing");
 
-      page.rerender(defaultProps({ usernameCopyStatus: "done" }));
+      page.rerender(defaultProps(copiedSecretState("username")));
       expect(page.usernameCopyIconState).toStrictEqual("done");
     });
 
@@ -90,13 +90,13 @@ describe("ResourceViewPagePassword", () => {
       const page = new ResourceViewPagePasswordPage(props);
 
       await page.click(page.valueButton);
-      expect(props.password.onCopy).toHaveBeenCalledTimes(1);
+      expect(props.onCopy).toHaveBeenCalledWith("password");
 
       await page.click(page.copyButton);
-      expect(props.password.onCopy).toHaveBeenCalledTimes(2);
+      expect(props.onCopy).toHaveBeenCalledTimes(2);
 
       await page.click(page.previewButton);
-      expect(props.password.onPreview).toHaveBeenCalledTimes(1);
+      expect(props.onPreview).toHaveBeenCalledWith("password");
     });
 
     it("As LU, I should not see the preview action without the preview right", () => {
@@ -118,9 +118,7 @@ describe("ResourceViewPagePassword", () => {
 
     it("As LU, I should see the eye disabled and spinning while the secret decrypts", () => {
       expect.assertions(2);
-      const page = new ResourceViewPagePasswordPage(
-        defaultProps({ password: defaultSecretRowState({ decrypting: true }) }),
-      );
+      const page = new ResourceViewPagePasswordPage(defaultProps(decryptingSecretState("password")));
 
       expect(page.previewButton.hasAttribute("disabled")).toBeTruthy();
       expect(page.previewIconState).toStrictEqual("decrypting");
@@ -133,12 +131,24 @@ describe("ResourceViewPagePassword", () => {
       expect(page.copyIconState).toStrictEqual("default");
       expect(page.hasTimer(page.copyButton)).toBeFalsy();
 
-      page.rerender(defaultProps({ password: defaultSecretRowState({ copyStatus: "processing" }) }));
+      page.rerender(defaultProps(copyingSecretState("password")));
       expect(page.copyIconState).toStrictEqual("processing");
 
-      page.rerender(defaultProps({ password: defaultSecretRowState({ copyStatus: "done", showTimer: true }) }));
+      page.rerender(defaultProps(copiedSecretState("password")));
       expect(page.copyIconState).toStrictEqual("done");
       expect(page.hasTimer(page.copyButton)).toBeTruthy();
+    });
+
+    it("As LU, I should see the password row idle while another row decrypts or copies", () => {
+      expect.assertions(4);
+      const page = new ResourceViewPagePasswordPage(defaultProps(decryptingSecretState("totp")));
+
+      expect(page.previewButton.hasAttribute("disabled")).toBeFalsy();
+      expect(page.previewIconState).toStrictEqual("idle");
+
+      page.rerender(defaultProps(copiedSecretState("username")));
+      expect(page.copyIconState).toStrictEqual("default");
+      expect(page.hasTimer(page.copyButton)).toBeFalsy();
     });
   });
 });

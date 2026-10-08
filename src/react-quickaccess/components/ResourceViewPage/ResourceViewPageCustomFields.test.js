@@ -13,7 +13,13 @@
  */
 
 import ResourceViewPageCustomFieldsPage from "./ResourceViewPageCustomFields.test.page";
-import { defaultProps, emptyCustomFieldsProps, mixedStatesProps } from "./ResourceViewPageCustomFields.test.data";
+import {
+  CUSTOM_FIELD_IDS,
+  defaultProps,
+  emptyCustomFieldsProps,
+  mixedStatesProps,
+} from "./ResourceViewPageCustomFields.test.data";
+import { copiedSecretState, decryptingSecretState } from "./secretState.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -50,19 +56,29 @@ describe("ResourceViewPageCustomFields", () => {
   });
 
   it("As LU, I should copy and preview the row I click, and no other", async () => {
-    expect.assertions(5);
+    expect.assertions(3);
     const props = defaultProps();
     const page = new ResourceViewPageCustomFieldsPage(props);
 
     await page.click(page.valueButton(1));
     await page.click(page.copyButton(1));
-    expect(props.customFields[1].state.onCopy).toHaveBeenCalledTimes(2);
-    expect(props.customFields[0].state.onCopy).not.toHaveBeenCalled();
+    expect(props.onCopy.mock.calls).toStrictEqual([[CUSTOM_FIELD_IDS[1]], [CUSTOM_FIELD_IDS[1]]]);
 
     await page.click(page.previewButton(3));
-    expect(props.customFields[3].state.onPreview).toHaveBeenCalledTimes(1);
-    expect(props.customFields[2].state.onPreview).not.toHaveBeenCalled();
+    expect(props.onPreview.mock.calls).toStrictEqual([[CUSTOM_FIELD_IDS[3]]]);
     expect(page.copyIconState(1)).toStrictEqual("default");
+  });
+
+  it("As LU, I should see the rows idle while another row decrypts or copies", () => {
+    expect.assertions(4);
+    const page = new ResourceViewPageCustomFieldsPage(defaultProps(decryptingSecretState("password")));
+
+    expect(page.rows.every((row, index) => page.previewIconState(index) === "idle")).toBeTruthy();
+    expect(page.rows.every((row) => !row.querySelector(".password-view").hasAttribute("disabled"))).toBeTruthy();
+
+    page.rerender(defaultProps(copiedSecretState("password")));
+    expect(page.rows.every((row, index) => page.copyIconState(index) === "default")).toBeTruthy();
+    expect(page.rows.every((row, index) => !page.hasTimer(index))).toBeTruthy();
   });
 
   it("As LU, I should not see the preview actions without the preview right", () => {

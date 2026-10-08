@@ -12,16 +12,19 @@
  * @since         5.18.0
  */
 
-import { defaultSecretRowState } from "./secretRowState.test.data";
+import { defaultSecretState } from "./secretState.test.data";
 
 /**
- * Default component props: a masked PIN code.
+ * Default component props: a masked PIN code, the page secret state idle.
  * @param {object} props Override the default props.
  * @returns {object}
  */
 export function defaultProps(props = {}) {
   return {
-    pinCode: defaultSecretRowState(),
+    pinCode: null,
+    ...defaultSecretState(),
+    onCopy: jest.fn(),
+    onPreview: jest.fn(),
     canCopy: true,
     canPreview: true,
     ...props,
@@ -34,5 +37,5 @@ export function defaultProps(props = {}) {
  * @returns {object}
  */
 export function revealedPinCodeProps(props = {}) {
-  return defaultProps({ pinCode: defaultSecretRowState({ revealed: true, value: "482913" }), ...props });
+  return defaultProps({ pinCode: "482913", ...props });
 }

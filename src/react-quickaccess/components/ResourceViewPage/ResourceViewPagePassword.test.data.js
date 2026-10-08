@@ -12,19 +12,21 @@
  * @since         5.18.0
  */
 
-import { defaultSecretRowState } from "./secretRowState.test.data";
+import { defaultSecretState } from "./secretState.test.data";
 
 /**
- * Default component props: a username and a masked password.
+ * Default component props: a username and a masked password, the page secret state idle.
  * @param {object} props Override the default props.
  * @returns {object}
  */
 export function defaultProps(props = {}) {
   return {
     username: "admin@passbolt.com",
-    usernameCopyStatus: "default",
     onCopyUsername: jest.fn(),
-    password: defaultSecretRowState(),
+    password: null,
+    ...defaultSecretState(),
+    onCopy: jest.fn(),
+    onPreview: jest.fn(),
     canCopy: true,
     canPreview: true,
     ...props,
@@ -37,7 +39,7 @@ export function defaultProps(props = {}) {
  * @returns {object}
  */
 export function revealedPasswordProps(props = {}) {
-  return defaultProps({ password: defaultSecretRowState({ revealed: true, value: "secret-decrypted" }), ...props });
+  return defaultProps({ password: "secret-decrypted", ...props });
 }
 
 /**

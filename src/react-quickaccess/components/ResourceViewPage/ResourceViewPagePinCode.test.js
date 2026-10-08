@@ -14,7 +14,7 @@
 
 import ResourceViewPagePinCodePage from "./ResourceViewPagePinCode.test.page";
 import { defaultProps, revealedPinCodeProps } from "./ResourceViewPagePinCode.test.data";
-import { defaultSecretRowState } from "./secretRowState.test.data";
+import { copiedSecretState, copyingSecretState, decryptingSecretState } from "./secretState.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -50,13 +50,13 @@ describe("ResourceViewPagePinCode", () => {
     const page = new ResourceViewPagePinCodePage(props);
 
     await page.click(page.valueButton);
-    expect(props.pinCode.onCopy).toHaveBeenCalledTimes(1);
+    expect(props.onCopy).toHaveBeenCalledWith("pin_code");
 
     await page.click(page.copyButton);
-    expect(props.pinCode.onCopy).toHaveBeenCalledTimes(2);
+    expect(props.onCopy).toHaveBeenCalledTimes(2);
 
     await page.click(page.previewButton);
-    expect(props.pinCode.onPreview).toHaveBeenCalledTimes(1);
+    expect(props.onPreview).toHaveBeenCalledWith("pin_code");
   });
 
   it("As LU, I should not see the preview action without the preview right", () => {
@@ -77,19 +77,29 @@ describe("ResourceViewPagePinCode", () => {
 
   it("As LU, I should see the eye disabled and spinning while the secret decrypts, and the copy status icons", () => {
     expect.assertions(6);
-    const page = new ResourceViewPagePinCodePage(
-      defaultProps({ pinCode: defaultSecretRowState({ decrypting: true }) }),
-    );
+    const page = new ResourceViewPagePinCodePage(defaultProps(decryptingSecretState("pin_code")));
 
     expect(page.previewButton.hasAttribute("disabled")).toBeTruthy();
     expect(page.previewIconState).toStrictEqual("decrypting");
     expect(page.hasTimer).toBeFalsy();
 
-    page.rerender(defaultProps({ pinCode: defaultSecretRowState({ copyStatus: "processing" }) }));
+    page.rerender(defaultProps(copyingSecretState("pin_code")));
     expect(page.copyIconState).toStrictEqual("processing");
 
-    page.rerender(defaultProps({ pinCode: defaultSecretRowState({ copyStatus: "done", showTimer: true }) }));
+    page.rerender(defaultProps(copiedSecretState("pin_code")));
     expect(page.copyIconState).toStrictEqual("done");
     expect(page.hasTimer).toBeTruthy();
+  });
+
+  it("As LU, I should see the PIN code row idle while another row decrypts or copies", () => {
+    expect.assertions(4);
+    const page = new ResourceViewPagePinCodePage(defaultProps(decryptingSecretState("password")));
+
+    expect(page.previewButton.hasAttribute("disabled")).toBeFalsy();
+    expect(page.previewIconState).toStrictEqual("idle");
+
+    page.rerender(defaultProps(copiedSecretState("password")));
+    expect(page.copyIconState).toStrictEqual("default");
+    expect(page.hasTimer).toBeFalsy();
   });
 });

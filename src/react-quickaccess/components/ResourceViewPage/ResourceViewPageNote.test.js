@@ -14,7 +14,7 @@
 
 import ResourceViewPageNotePage from "./ResourceViewPageNote.test.page";
 import { defaultProps, revealedNoteProps } from "./ResourceViewPageNote.test.data";
-import { defaultSecretRowState } from "./secretRowState.test.data";
+import { copiedSecretState, copyingSecretState, decryptingSecretState } from "./secretState.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -40,7 +40,7 @@ describe("ResourceViewPageNote", () => {
     const props = revealedNoteProps();
     const page = new ResourceViewPageNotePage(props);
 
-    expect(page.notePreviewed.textContent).toStrictEqual(props.note.value);
+    expect(page.notePreviewed.textContent).toStrictEqual(props.note);
     expect(page.encryptedNote).toBeNull();
     expect(page.secret.hasAttribute("title")).toBeFalsy();
   });
@@ -51,13 +51,13 @@ describe("ResourceViewPageNote", () => {
     const page = new ResourceViewPageNotePage(props);
 
     await page.click(page.encryptedNote);
-    expect(props.note.onCopy).toHaveBeenCalledTimes(1);
+    expect(props.onCopy).toHaveBeenCalledWith("note");
 
     await page.click(page.copyButton);
-    expect(props.note.onCopy).toHaveBeenCalledTimes(2);
+    expect(props.onCopy).toHaveBeenCalledTimes(2);
 
     await page.click(page.previewButton);
-    expect(props.note.onPreview).toHaveBeenCalledTimes(1);
+    expect(props.onPreview).toHaveBeenCalledWith("note");
   });
 
   it("As LU, I should not see the preview action without the preview right", () => {
@@ -78,17 +78,29 @@ describe("ResourceViewPageNote", () => {
 
   it("As LU, I should see the eye disabled and spinning while the secret decrypts, and the copy status icons", () => {
     expect.assertions(6);
-    const page = new ResourceViewPageNotePage(defaultProps({ note: defaultSecretRowState({ decrypting: true }) }));
+    const page = new ResourceViewPageNotePage(defaultProps(decryptingSecretState("note")));
 
     expect(page.previewButton.hasAttribute("disabled")).toBeTruthy();
     expect(page.previewIconState).toStrictEqual("decrypting");
     expect(page.hasTimer).toBeFalsy();
 
-    page.rerender(defaultProps({ note: defaultSecretRowState({ copyStatus: "processing" }) }));
+    page.rerender(defaultProps(copyingSecretState("note")));
     expect(page.copyIconState).toStrictEqual("processing");
 
-    page.rerender(defaultProps({ note: defaultSecretRowState({ copyStatus: "done", showTimer: true }) }));
+    page.rerender(defaultProps(copiedSecretState("note")));
     expect(page.copyIconState).toStrictEqual("done");
     expect(page.hasTimer).toBeTruthy();
+  });
+
+  it("As LU, I should see the note row idle while another row decrypts or copies", () => {
+    expect.assertions(4);
+    const page = new ResourceViewPageNotePage(defaultProps(decryptingSecretState("password")));
+
+    expect(page.previewButton.hasAttribute("disabled")).toBeFalsy();
+    expect(page.previewIconState).toStrictEqual("idle");
+
+    page.rerender(defaultProps(copiedSecretState("password")));
+    expect(page.copyIconState).toStrictEqual("default");
+    expect(page.hasTimer).toBeFalsy();
   });
 });

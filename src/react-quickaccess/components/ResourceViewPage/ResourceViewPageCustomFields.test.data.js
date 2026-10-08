@@ -12,7 +12,7 @@
  * @since         5.18.0
  */
 
-import { defaultSecretRowState } from "./secretRowState.test.data";
+import { copiedSecretState, defaultSecretState } from "./secretState.test.data";
 
 /**
  * The ids of the custom fields of the default props.
@@ -26,18 +26,21 @@ export const CUSTOM_FIELD_IDS = [
 ];
 
 /**
- * Default component props: four masked custom fields, the third one without key.
+ * Default component props: four masked custom fields, the third one without key, the page secret state idle.
  * @param {object} props Override the default props.
  * @returns {object}
  */
 export function defaultProps(props = {}) {
   return {
     customFields: [
-      { id: CUSTOM_FIELD_IDS[0], metadata_key: "License key", state: defaultSecretRowState() },
-      { id: CUSTOM_FIELD_IDS[1], metadata_key: "Port", state: defaultSecretRowState() },
-      { id: CUSTOM_FIELD_IDS[2], metadata_key: "", state: defaultSecretRowState() },
-      { id: CUSTOM_FIELD_IDS[3], metadata_key: "Empty", state: defaultSecretRowState() },
+      { id: CUSTOM_FIELD_IDS[0], metadata_key: "License key", value: null },
+      { id: CUSTOM_FIELD_IDS[1], metadata_key: "Port", value: null },
+      { id: CUSTOM_FIELD_IDS[2], metadata_key: "", value: null },
+      { id: CUSTOM_FIELD_IDS[3], metadata_key: "Empty", value: null },
     ],
+    ...defaultSecretState(),
+    onCopy: jest.fn(),
+    onPreview: jest.fn(),
     canCopy: true,
     canPreview: true,
     ...props,
@@ -45,26 +48,20 @@ export function defaultProps(props = {}) {
 }
 
 /**
- * Props with the four custom fields in different states: revealed, masked, decrypting, copied, the last one revealed empty.
+ * Props with the four custom fields in different states: revealed, decrypting, copied, the last one revealed empty.
  * @param {object} props Override the default props.
  * @returns {object}
  */
 export function mixedStatesProps(props = {}) {
   return defaultProps({
     customFields: [
-      {
-        id: CUSTOM_FIELD_IDS[0],
-        metadata_key: "License key",
-        state: defaultSecretRowState({ revealed: true, value: "XYZ-123" }),
-      },
-      { id: CUSTOM_FIELD_IDS[1], metadata_key: "Port", state: defaultSecretRowState({ decrypting: true }) },
-      {
-        id: CUSTOM_FIELD_IDS[2],
-        metadata_key: "",
-        state: defaultSecretRowState({ copyStatus: "done", showTimer: true }),
-      },
-      { id: CUSTOM_FIELD_IDS[3], metadata_key: "Empty", state: defaultSecretRowState({ revealed: true, value: "" }) },
+      { id: CUSTOM_FIELD_IDS[0], metadata_key: "License key", value: "XYZ-123" },
+      { id: CUSTOM_FIELD_IDS[1], metadata_key: "Port", value: null },
+      { id: CUSTOM_FIELD_IDS[2], metadata_key: "", value: null },
+      { id: CUSTOM_FIELD_IDS[3], metadata_key: "Empty", value: "" },
     ],
+    ...copiedSecretState(CUSTOM_FIELD_IDS[2]),
+    decryptingSecret: CUSTOM_FIELD_IDS[1],
     ...props,
   });
 }

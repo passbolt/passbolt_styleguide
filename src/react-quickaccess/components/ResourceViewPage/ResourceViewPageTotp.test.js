@@ -14,7 +14,7 @@
 
 import ResourceViewPageTotpPage from "./ResourceViewPageTotp.test.page";
 import { defaultProps, revealedTotpProps } from "./ResourceViewPageTotp.test.data";
-import { defaultSecretRowState } from "./secretRowState.test.data";
+import { copiedSecretState, copyingSecretState, decryptingSecretState } from "./secretState.test.data";
 import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
 
 beforeEach(() => {
@@ -36,15 +36,13 @@ describe("ResourceViewPageTotp", () => {
     expect(page.copyIconState).toStrictEqual("default");
   });
 
-  it("As LU, I should see the revealed TOTP code without title", () => {
+  it("As LU, I should see the revealed TOTP code, the title staying the copy sentence", () => {
     expect.assertions(3);
     const props = revealedTotpProps();
     const page = new ResourceViewPageTotpPage(props);
 
-    expect(page.totpCode.textContent.replace(/\s/, "")).toStrictEqual(
-      TotpCodeGeneratorService.generate(props.totp.value),
-    );
-    expect(page.secret.hasAttribute("title")).toBeFalsy();
+    expect(page.totpCode.textContent.replace(/\s/, "")).toStrictEqual(TotpCodeGeneratorService.generate(props.totp));
+    expect(page.secret.getAttribute("title")).toStrictEqual("Click to copy");
     expect(page.secret.classList.contains("secret-copy")).toBeFalsy();
   });
 
@@ -54,18 +52,18 @@ describe("ResourceViewPageTotp", () => {
     const page = new ResourceViewPageTotpPage(props);
 
     await page.click(page.valueButton);
-    expect(props.totp.onCopy).toHaveBeenCalledTimes(1);
+    expect(props.onCopy).toHaveBeenCalledWith("totp");
 
     await page.click(page.copyButton);
-    expect(props.totp.onCopy).toHaveBeenCalledTimes(2);
+    expect(props.onCopy).toHaveBeenCalledTimes(2);
 
     await page.click(page.previewButton);
-    expect(props.totp.onPreview).toHaveBeenCalledTimes(1);
+    expect(props.onPreview).toHaveBeenCalledWith("totp");
 
     const revealedProps = revealedTotpProps();
     page.rerender(revealedProps);
     await page.click(page.valueButton);
-    expect(revealedProps.totp.onCopy).toHaveBeenCalledTimes(1);
+    expect(revealedProps.onCopy).toHaveBeenCalledWith("totp");
   });
 
   it("As LU, I should not see the preview action without the preview right", () => {
@@ -86,17 +84,29 @@ describe("ResourceViewPageTotp", () => {
 
   it("As LU, I should see the eye disabled and spinning while the secret decrypts, and the copy status icons", () => {
     expect.assertions(6);
-    const page = new ResourceViewPageTotpPage(defaultProps({ totp: defaultSecretRowState({ decrypting: true }) }));
+    const page = new ResourceViewPageTotpPage(defaultProps(decryptingSecretState("totp")));
 
     expect(page.previewButton.hasAttribute("disabled")).toBeTruthy();
     expect(page.previewIconState).toStrictEqual("decrypting");
     expect(page.hasTimer).toBeFalsy();
 
-    page.rerender(defaultProps({ totp: defaultSecretRowState({ copyStatus: "processing" }) }));
+    page.rerender(defaultProps(copyingSecretState("totp")));
     expect(page.copyIconState).toStrictEqual("processing");
 
-    page.rerender(defaultProps({ totp: defaultSecretRowState({ copyStatus: "done", showTimer: true }) }));
+    page.rerender(defaultProps(copiedSecretState("totp")));
     expect(page.copyIconState).toStrictEqual("done");
     expect(page.hasTimer).toBeTruthy();
+  });
+
+  it("As LU, I should see the TOTP row idle while another row decrypts or copies", () => {
+    expect.assertions(4);
+    const page = new ResourceViewPageTotpPage(defaultProps(decryptingSecretState("password")));
+
+    expect(page.previewButton.hasAttribute("disabled")).toBeFalsy();
+    expect(page.previewIconState).toStrictEqual("idle");
+
+    page.rerender(defaultProps(copiedSecretState("password")));
+    expect(page.copyIconState).toStrictEqual("default");
+    expect(page.hasTimer).toBeFalsy();
   });
 });

@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.18.0
  */
-import PropTypes from "prop-types";
 
 /**
  * The delay after which the clipboard content copied temporarily is flushed, in seconds.
@@ -36,14 +35,13 @@ export const COPY_STATUSES = {
 };
 
 /**
- * The state of a secret row as the page gives it to a section, the plaintext only while the row is revealed.
+ * The keys of the rows with a fixed name. A custom field row is keyed by the custom field id.
+ * @type {object}
  */
-export const secretRowStatePropType = PropTypes.shape({
-  revealed: PropTypes.bool, // Is the value revealed
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]), // The plaintext, given only while revealed (the totp dto for a TOTP row)
-  decrypting: PropTypes.bool, // Is the secret decrypting for this row
-  copyStatus: PropTypes.oneOf(Object.values(COPY_STATUSES)), // The copy action status
-  showTimer: PropTypes.bool, // Display the clipboard flush timer next to the copy action
-  onCopy: PropTypes.func, // The copy handler
-  onPreview: PropTypes.func, // The preview toggle handler
-});
+export const SECRET_KEYS = {
+  USERNAME: "username",
+  PASSWORD: "password",
+  TOTP: "totp",
+  PIN_CODE: "pin_code",
+  NOTE: "note",
+};
