@@ -903,14 +903,6 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Return true if the permission list have changed since the start
-   * @returns {null|boolean}
-   */
-  hasChanges() {
-    return this.shareChanges && this.shareChanges.getChanges().length > 0;
-  }
-
-  /**
    * Return true if submit button should be disabled
    * True if there is no owner, if the operator ownership requirement is not met or if all input
    * should be disabled. An unchanged permission list does not disable the submit button: the
