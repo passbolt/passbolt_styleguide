@@ -49,9 +49,12 @@ class ShareDialog extends Component {
     this.state = this.getDefaultState();
     this.shareChanges = null;
     this.unchangedAcoTypesByAroId = new Map();
-    // The initial collections are fixed for the dialog lifetime, so their group members are resolved once.
+    // The initial collections are fixed for the dialog lifetime, so their users and groups are converted, and their group members resolved, only once.
     this.initialUsersById = new Map((props.initialUsers?.items || []).map((user) => [user.id, user]));
     this.initialGroupMembersByGroupId = new Map();
+    const userContain = props.initialUsers?.entityClass?.ALL_CONTAIN_OPTIONS;
+    this.userDtosById = new Map((props.initialUsers?.items || []).map((user) => [user.id, user.toDto(userContain)]));
+    this.groupDtosById = new Map((props.initialGroups?.items || []).map((group) => [group.id, group.toDto()]));
     this.permissionListRef = React.createRef();
     // Set by the first group-members fetch failure, so only that one reports. See fetchGroupMembers.
     this.isAborting = false;
@@ -241,53 +244,44 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Build the resource DTOs the dialog renders so ShareChanges + ReactList work
-   * without touching the server: one entry per resource provided in `initialResources`, each seeded
-   * with its id, metadata, the operator's own permission, and its permission set. Create/edit pass a
-   * single synthetic resource whose id is null (the resource does not exist yet); share passes the
-   * real resources. The user/group lookup maps are built once and shared across resources.
+   * Convert the items into the plain objects the dialog displays.
+   * On create and edit, there is a single item whose id is null, as it does not exist yet.
+   * @param {Array<object>} items The items, with their permissions.
    * @returns {Array<object>}
    */
-  buildResourcesDtos(resourcesList) {
-    const groupsById = {};
-    this.props.initialGroups?.items.forEach((group) => {
-      groupsById[group.id] = group.toDto();
-    });
-    const usersById = {};
-    this.props.initialUsers?.items.forEach((user) => {
-      usersById[user.id] = user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS);
-    });
-
-    return resourcesList.map((resource) => this.buildResourceDto(resource, groupsById, usersById));
+  buildResourcesDtos(items) {
+    return items.map((item) => this.buildResourceDto(item));
   }
 
   /**
-   * Build a single resource DTO, embedding the referenced user/group from the
-   * provided lookup maps, falling back to the aro embedded in the permission itself when the maps
-   * do not carry it, so ShareChanges can render and track edits.
-   * @param {{id: (string|null), metadata: object, permission: object, permissions: PermissionsCollection}} resource
-   * @param {object} groupsById The referenced groups keyed by id.
-   * @param {object} usersById The referenced users keyed by id.
+   * Convert one item and its permissions, each with the user or group it is given to.
+   * @param {{id: (string|null), metadata: object, permission: object, permissions: PermissionsCollection}} item
    * @returns {object}
    */
-  buildResourceDto(resource, groupsById, usersById) {
-    const mappedPermissions = resource.permissions.items.map((permission) => {
-      const dto = permission.toDto(PermissionEntity.ALL_CONTAIN_OPTIONS);
+  buildResourceDto(item) {
+    const permissions = [];
+    for (const permission of item.permissions.items) {
+      const dto = permission.toDto();
       dto.aco = this.props.acoType ?? PermissionEntity.ACO_RESOURCE;
-      dto.aco_foreign_key = resource.id;
-      if (dto.aro === PermissionEntity.ARO_USER) {
-        dto.user = usersById[dto.aro_foreign_key] ?? dto.user;
-      } else if (dto.aro === PermissionEntity.ARO_GROUP) {
-        dto.group = groupsById[dto.aro_foreign_key] ?? dto.group;
+      dto.aco_foreign_key = item.id;
+
+      if (permission.aro === PermissionEntity.ARO_USER) {
+        // Take the user already converted, the permission's own copy only when missing, as it is costly.
+        dto.user =
+          this.userDtosById.get(permission.aroForeignKey) ??
+          permission.user?.toDto(PermissionEntity.ALL_CONTAIN_OPTIONS.user);
+      } else if (permission.aro === PermissionEntity.ARO_GROUP) {
+        // Take the group already converted, the permission's own copy only when missing.
+        dto.group = this.groupDtosById.get(permission.aroForeignKey) ?? permission.group?.toDto();
       }
-      return dto;
-    });
+      permissions.push(dto);
+    }
 
     return {
-      id: resource.id,
-      metadata: { name: resource.metadata?.name ?? "" },
-      permission: { type: resource.permission?.type ?? PermissionEntity.PERMISSION_OWNER },
-      permissions: mappedPermissions,
+      id: item.id,
+      metadata: { name: item.metadata?.name ?? "" },
+      permission: { type: item.permission?.type ?? PermissionEntity.PERMISSION_OWNER },
+      permissions: permissions,
     };
   }
 
