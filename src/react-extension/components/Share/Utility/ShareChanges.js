@@ -67,6 +67,8 @@ export default class ShareChanges {
     this._changesByAro = new Map();
     /** @type {Set<string>} The ids of the aros marked as initially new. */
     this._initiallyNewAroIds = new Set();
+    /** @type {Array<object>|null} The items left without owner by the pending changes, null until computed. */
+    this._resourcesWithNoOwner = null;
   }
 
   /**
@@ -415,11 +417,16 @@ export default class ShareChanges {
 
   /**
    * Get the resources with no owners after applying the changes.
+   * The dialog reads it on every render while it only changes when a change is staged or removed,
+   * so it is cached between the edits.
    * @returns {Resource.List}
    */
   getResourcesWithNoOwner() {
+    if (this._resourcesWithNoOwner !== null) {
+      return this._resourcesWithNoOwner;
+    }
     const allChanges = this.getChanges();
-    return this._acos.filter((aco) => {
+    this._resourcesWithNoOwner = this._acos.filter((aco) => {
       const changes = allChanges.filter((change) => change.aco_foreign_key === aco.id);
       // Check if a new owner is promoted.
       const grantedOwner = changes.find((change) => change.type === ADMIN && !change.delete);
@@ -440,6 +447,7 @@ export default class ShareChanges {
 
       return revokedOwners.length === originalOwnersPermissionsIds.length;
     });
+    return this._resourcesWithNoOwner;
   }
 
   /**
@@ -473,6 +481,7 @@ export default class ShareChanges {
     } else {
       this._changesByAro.set(change.aro_foreign_key, [change]);
     }
+    this._resourcesWithNoOwner = null;
   }
 
   /**
@@ -482,6 +491,7 @@ export default class ShareChanges {
    */
   _removeAroChanges(aroId) {
     this._changesByAro.delete(aroId);
+    this._resourcesWithNoOwner = null;
   }
 
   /**
