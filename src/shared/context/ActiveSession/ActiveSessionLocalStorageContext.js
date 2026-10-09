@@ -191,9 +191,7 @@ export function withActiveSessionLocalStorage(WrappedComponent) {
           {(activeSessionLocalStorageContext) => (
             <WrappedComponent
               activeSessionLocalStorageContext={activeSessionLocalStorageContext}
-              activeSession={
-                activeSessionLocalStorageContext.activeSession || activeSessionLocalStorageContext.get()
-              }
+              activeSession={activeSessionLocalStorageContext.activeSession || activeSessionLocalStorageContext.get()}
               {...this.props}
             />
           )}

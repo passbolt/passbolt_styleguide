@@ -110,7 +110,10 @@ export class ExtQuickAccessContextProvider extends React.Component {
    * @param {UserActiveSessionEntity} [activeSession]
    * @return {Promise<void>}
    */
-  async loadOnlineData(siteSettings, activeSession = this.props.activeSession || this.props.activeSessionLocalStorageContext?.get()) {
+  async loadOnlineData(
+    siteSettings,
+    activeSession = this.props.activeSession || this.props.activeSessionLocalStorageContext?.get(),
+  ) {
     if (activeSession?.isAuthenticated) {
       if (activeSession?.isMfaRequired) {
         await this.redirectToMfaAuthentication();
