@@ -49,6 +49,9 @@ class ShareDialog extends Component {
     this.state = this.getDefaultState();
     this.shareChanges = null;
     this.unchangedAcoTypesByAroId = new Map();
+    // The initial collections are fixed for the dialog lifetime, so their group members are resolved once.
+    this.initialUsersById = new Map((props.initialUsers?.items || []).map((user) => [user.id, user]));
+    this.initialGroupMembersByGroupId = new Map();
     this.permissionListRef = React.createRef();
     // Set by the first group-members fetch failure, so only that one reports. See fetchGroupMembers.
     this.isAborting = false;
@@ -598,12 +601,32 @@ class ShareDialog extends Component {
         .filter((groupUser) => groupUser.user)
         .map((groupUser) => groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
     }
+    return this.getInitialGroupMembers(groupId);
+  }
+
+  /**
+   * Resolve the member users of a group from the initial collections, once per group.
+   * @param {string} groupId The group identifier
+   * @returns {Array<object>} The member users DTOs
+   * @private
+   */
+  getInitialGroupMembers(groupId) {
+    if (this.initialGroupMembersByGroupId.has(groupId)) {
+      return this.initialGroupMembersByGroupId.get(groupId);
+    }
+
     const group = this.props.initialGroups?.items.find((item) => item.id === groupId);
     const groupsUsers = group?.groupsUsers?.items || [];
-    return groupsUsers
-      .map((groupUser) => this.props.initialUsers?.items.find((user) => user.id === groupUser.userId))
-      .filter(Boolean)
-      .map((user) => user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS));
+    const members = [];
+    for (const groupUser of groupsUsers) {
+      const user = this.initialUsersById.get(groupUser.userId);
+      if (user) {
+        members.push(user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS));
+      }
+    }
+
+    this.initialGroupMembersByGroupId.set(groupId, members);
+    return members;
   }
 
   /**
