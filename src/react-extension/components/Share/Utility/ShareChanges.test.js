@@ -138,7 +138,7 @@ describe("ShareChanges", () => {
         { ...originalAdaPermissions[1], type: 1 },
       ]);
       expect(changes[0].is_new).toBeUndefined();
-      // The originals are left untouched: the staged changes are deep clones.
+      // The originals are left untouched: the staged changes are copies.
       expect(originalAdaPermissions[0].type).toBe(15);
       expect(originalAdaPermissions[1].type).toBe(15);
     });

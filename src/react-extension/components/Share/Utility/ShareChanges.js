@@ -251,9 +251,7 @@ export default class ShareChanges {
       const permissionOriginal = this.getAcoAroPermission(aco, aroId);
       if (permissionOriginal) {
         if (permissionOriginal.type !== type) {
-          const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
-          permissionChange.type = type;
-          this._pushChange(permissionChange);
+          this._pushChange({ ...permissionOriginal, type: type });
         }
       } else {
         const aro = this._aros[aroId];
@@ -280,9 +278,7 @@ export default class ShareChanges {
       const permissionOriginal = this.getAcoAroPermission(aco, aro.id);
       if (type === null) {
         if (permissionOriginal) {
-          const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
-          permissionChange.delete = true;
-          this._pushChange(permissionChange);
+          this._pushChange({ ...permissionOriginal, delete: true });
         }
         return;
       }
@@ -291,9 +287,7 @@ export default class ShareChanges {
         return;
       }
       if (permissionOriginal.type !== type) {
-        const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
-        permissionChange.type = type;
-        this._pushChange(permissionChange);
+        this._pushChange({ ...permissionOriginal, type: type });
       }
     });
   }
@@ -346,9 +340,7 @@ export default class ShareChanges {
     this._stageableAcos.forEach((aco) => {
       const permissionOriginal = this.getAcoAroPermission(aco, aroId);
       if (permissionOriginal) {
-        const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
-        permissionChange.delete = true;
-        this._pushChange(permissionChange);
+        this._pushChange({ ...permissionOriginal, delete: true });
       }
     });
   }
