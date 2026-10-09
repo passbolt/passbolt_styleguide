@@ -28,7 +28,6 @@ export default class ShareChanges {
   constructor(resources, folders) {
     this._folders = folders || [];
     this._resources = resources || [];
-    this._permissions = [];
     this._aroPermissions = [];
     this._aros = {};
     this._acos = [];
@@ -60,7 +59,6 @@ export default class ShareChanges {
         if (!this._aros[aro.id]) {
           this._aros[aro.id] = aro;
         }
-        this._permissions.push(permission);
         this._indexPermission(permission);
         if (permission.type === ADMIN) {
           ownerAroIds.add(permission.aro_foreign_key);
@@ -135,45 +133,14 @@ export default class ShareChanges {
    * }
    */
   aggregatePermissionsByAro() {
-    // Aggregate the data as expected.
     const arosPermissions = [];
-    const aroPermissionByAroId = new Map();
-    this._permissions.forEach((permission) => {
-      let aroPermission = aroPermissionByAroId.get(permission.aro_foreign_key);
-      if (!aroPermission) {
-        const aro = permission.user || permission.group;
-        aroPermission = {
-          id: aro.id,
-          aro: aro,
-          type: permission.type,
-          permissions: [],
-        };
-        arosPermissions.push(aroPermission);
-        aroPermissionByAroId.set(permission.aro_foreign_key, aroPermission);
-      }
-      aroPermission.type = aroPermission.type === permission.type ? aroPermission.type : -1;
-      aroPermission.permissions.push(permission);
-    });
-
-    // Calculate varies details
-    arosPermissions.forEach((aroPermissions) => {
-      // permission type varies also in the case there is less permissions than resources shared.
-      if (aroPermissions.permissions.length !== this._acos.length) {
-        aroPermissions.type = -1;
-      }
+    for (const aroId of this._permissionsByAro.keys()) {
+      const aroPermissions = this._buildAroPermissionRow(aroId);
       if (aroPermissions.type === -1) {
-        // For each permission, aggregate the resources aro has access.
-        aroPermissions.variesDetails = this._acos.reduce(
-          (carry, aco) => {
-            const carryType = this.getAcoAroPermission(aco, aroPermissions.id)?.type || 0;
-            const acoName = aco.metadata.name;
-            carry[carryType].push(acoName);
-            return carry;
-          },
-          { 0: [], 1: [], 7: [], 15: [] },
-        );
+        aroPermissions.variesDetails = this._getAcoNamesByPermissionType(aroPermissions.id);
       }
-    });
+      arosPermissions.push(aroPermissions);
+    }
 
     // Order the array by aros (user firstname / group name).
     arosPermissions.sort((a, b) => {
@@ -495,6 +462,40 @@ export default class ShareChanges {
   _removeAroChanges(aroId) {
     this._changesByAro.delete(aroId);
     this._resourcesWithNoOwner = null;
+  }
+
+  /**
+   * Build the displayed row of an aro from its original permissions.
+   * @param {string} aroId The aro identifier
+   * @returns {object}
+   * @private
+   */
+  _buildAroPermissionRow(aroId) {
+    const originalPermissions = this._permissionsByAro.get(aroId);
+    const firstPermission = originalPermissions[0];
+    const aro = firstPermission.user || firstPermission.group;
+    return {
+      id: aro.id,
+      aro: aro,
+      type: this.getOriginalAroPermissionType(aroId),
+      // Copied so the index array is never handed out.
+      permissions: [...originalPermissions],
+    };
+  }
+
+  /**
+   * Get the names of the acos, grouped by the permission type an aro has on them (0 when it has none).
+   * @param {string} aroId The aro identifier
+   * @returns {object}
+   * @private
+   */
+  _getAcoNamesByPermissionType(aroId) {
+    const acoNamesByPermissionType = { 0: [], 1: [], 7: [], 15: [] };
+    for (const aco of this._acos) {
+      const permissionType = this.getAcoAroPermission(aco, aroId)?.type || 0;
+      acoNamesByPermissionType[permissionType].push(aco.metadata.name);
+    }
+    return acoNamesByPermissionType;
   }
 
   /**
