@@ -55,6 +55,8 @@ class ShareDialog extends Component {
     this.permissionListRef = React.createRef();
     // Set by the first group-members fetch failure, so only that one reports. See fetchGroupMembers.
     this.isAborting = false;
+    // Not in the state as nothing renders it: the search results open it on each debounced search.
+    this.autocompleteOpen = false;
     this.bindEventHandlers();
   }
 
@@ -312,9 +314,6 @@ class ShareDialog extends Component {
       // ids of the added groups found changed at the last save attempt
       changedGroupIds: [],
 
-      // autocomplete
-      autocompleteOpen: false,
-
       // ids of the groups whose members are currently being fetched
       fetchingGroupIds: [],
     };
@@ -354,7 +353,7 @@ class ShareDialog extends Component {
    * @return {void}
    */
   handleAutocompleteOpen() {
-    this.setState({ autocompleteOpen: true });
+    this.autocompleteOpen = true;
   }
 
   /**
@@ -362,7 +361,7 @@ class ShareDialog extends Component {
    * @return {void}
    */
   handleAutocompleteClose() {
-    this.setState({ autocompleteOpen: false });
+    this.autocompleteOpen = false;
   }
 
   /**
@@ -374,7 +373,7 @@ class ShareDialog extends Component {
     event.preventDefault();
 
     // Prevent enter on autocomplete to trigger submit
-    if (this.state.autocompleteOpen) {
+    if (this.autocompleteOpen) {
       return;
     }
     // Do not re-submit an already processing form
