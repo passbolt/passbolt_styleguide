@@ -169,7 +169,8 @@ class PrepareResourceContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async resetSecretGeneratorSettings() {
-    if (this.props.activeSession && !this.props.activeSession.isSessionOnline) {
+    const activeSession = this.props.activeSession || this.props.activeSessionLocalStorageContext?.get();
+    if (activeSession && !activeSession.isSessionOnline) {
       return;
     }
     const passwordPolicies = await this.props.passwordPoliciesContext.loadPolicies();

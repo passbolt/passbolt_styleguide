@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import { BOOTSTRAP_FEATURE } from "../../ExtQuickAccess";
 import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 
 /**
@@ -27,7 +27,10 @@ class HandleBootstrapRoute extends React.Component {
    * @returns {string}
    */
   getBootstrapRoute() {
-    const activeSession = this.props.activeSession;
+    const activeSession = this.props.activeSession || this.props.activeSessionLocalStorageContext?.get();
+    if (!activeSession) {
+      return "/webAccessibleResources/quickaccess/login";
+    }
     /*
      * An authenticated offline session should persist: the user stays in the app whether or not the server
      * is reachable.
@@ -73,7 +76,11 @@ class HandleBootstrapRoute extends React.Component {
    * @returns {JSX.Element}
    */
   render() {
-    return this.props.history.push(this.getBootstrapRoute());
+    const route = this.getBootstrapRoute();
+    if (this.props.history?.push) {
+      this.props.history.push(route);
+    }
+    return <Redirect to={route} />;
   }
 }
 

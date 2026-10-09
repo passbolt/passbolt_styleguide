@@ -56,19 +56,26 @@ export class ExtQuickAccessContextProvider extends React.Component {
    */
   async initialize() {
     try {
-      await this.props.activeSessionLocalStorageContext.updateLocalStorage();
+      const activeSession =
+        (await this.props.activeSessionLocalStorageContext.updateLocalStorage()) ||
+        this.props.activeSessionLocalStorageContext.get() ||
+        this.props.activeSession;
       await this.getUserSettings();
       await this.getLocale();
+      const isSessionOnline = Boolean(activeSession?.isSessionOnline);
+      const isServerReachable = Boolean(activeSession?.isServerReachable);
+      const isSessionOffline = Boolean(activeSession?.isSessionOffline);
+
       const siteSettings =
-        this.props.activeSession.isSessionOnline && this.props.activeSession.isServerReachable
+        isSessionOnline && isServerReachable
           ? await this.findAndUpdateSiteSettings()
           : await this.getOrFindSiteSettings();
-      if (this.props.activeSession.isSessionOnline) {
-        await this.loadOnlineData(siteSettings);
-      } else if (this.props.activeSession.isSessionOffline) {
+      if (isSessionOnline) {
+        await this.loadOnlineData(siteSettings, activeSession);
+      } else if (isSessionOffline) {
         await this.loadOfflineData(siteSettings);
       }
-      if (!this.props.activeSession.isServerReachable) {
+      if (!isServerReachable) {
         if (!this.state.loggedInUser) {
           await this.getLoggedInUser();
         }
@@ -78,7 +85,8 @@ export class ExtQuickAccessContextProvider extends React.Component {
       }
     } catch (e) {
       console.error(e);
-      if (!this.props.activeSession.isServerReachable) {
+      const currentSession = this.props.activeSessionLocalStorageContext?.get() || this.props.activeSession;
+      if (!currentSession?.isServerReachable) {
         if (typeof this.state.siteSettings === "undefined") {
           this.setState({ siteSettings: null });
         }
@@ -99,17 +107,18 @@ export class ExtQuickAccessContextProvider extends React.Component {
    *  - Get or find rbacs
    *  - Get logged-in user
    * @param {SiteSettingsEntity} siteSettings
+   * @param {UserActiveSessionEntity} [activeSession]
    * @return {Promise<void>}
    */
-  async loadOnlineData(siteSettings) {
-    if (this.props.activeSession.isAuthenticated) {
-      if (this.props.activeSession.isMfaRequired) {
+  async loadOnlineData(siteSettings, activeSession = this.props.activeSession || this.props.activeSessionLocalStorageContext?.get()) {
+    if (activeSession?.isAuthenticated) {
+      if (activeSession?.isMfaRequired) {
         await this.redirectToMfaAuthentication();
         return;
       }
       await this.getLoggedInUser();
       await this.getOrFindRbacs(siteSettings);
-    } else if (!this.props.activeSession.isServerReachable) {
+    } else if (!activeSession?.isServerReachable) {
       await this.getLoggedInUser();
       await this.getOrFindRbacs(siteSettings);
     }
@@ -343,12 +352,16 @@ export class ExtQuickAccessContextProvider extends React.Component {
    * @return {boolean}
    */
   isReady() {
+    const activeSession = this.props.activeSession || this.props.activeSessionLocalStorageContext?.get();
+    if (!activeSession) {
+      return false;
+    }
     return (
-      this.props.activeSession?.isAuthenticated !== null &&
+      activeSession.isAuthenticated !== null &&
       this.state.userSettings !== null &&
       this.state.siteSettings !== undefined &&
       this.state.locale !== null &&
-      (this.props.activeSession.isSessionOnline || this.isOfflineDataLoaded)
+      (Boolean(activeSession.isSessionOnline) || this.isOfflineDataLoaded)
     );
   }
 

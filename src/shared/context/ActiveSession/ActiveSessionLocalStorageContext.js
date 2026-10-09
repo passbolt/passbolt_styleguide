@@ -88,7 +88,9 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
    */
   set(activeSession) {
     const activeSessionEntity = new ActiveSessionEntity(activeSession);
+    this._activeSession = activeSessionEntity;
     this.setState({ activeSession: activeSessionEntity });
+    return activeSessionEntity;
   }
 
   /**
@@ -96,12 +98,12 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
    * @returns {ActiveSessionEntity|null}
    */
   get() {
-    if (this.state.activeSession === null) {
+    if (this.state.activeSession === null && !this._activeSession) {
       this.loadLocalStorage();
       return null;
     }
 
-    return this.state.activeSession;
+    return this.state.activeSession || this._activeSession;
   }
 
   /**
@@ -119,31 +121,41 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
    * @private
    */
   async loadLocalStorage() {
-    const storageData = await this.props.storage.local.get([this.storageKey]);
-    if (!storageData[this.storageKey]) {
-      this.updateLocalStorage();
-      return;
-    }
+    try {
+      const storageData = await this.props.storage.local.get([this.storageKey]);
+      if (!storageData || !storageData[this.storageKey]) {
+        return await this.updateLocalStorage();
+      }
 
-    this.set(storageData[this.storageKey]);
+      return this.set(storageData[this.storageKey]);
+    } catch (error) {
+      console.error("Failed to load active session from local storage:", error);
+      return null;
+    }
   }
 
   /**
    * Forces the update of the active session in the local storage.
-   * @return {Promise<void>}
+   * @return {Promise<ActiveSessionEntity|null>}
    */
   async updateLocalStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
       this.runningLocalStorageUpdatePromise =
         this.activeSessionServiceWorkerService.findAndUpdateAuthenticationStatus();
-      const activeSession = await this.runningLocalStorageUpdatePromise;
-      if (activeSession) {
-        this.set(activeSession);
+      try {
+        const activeSession = await this.runningLocalStorageUpdatePromise;
+        if (activeSession) {
+          return this.set(activeSession);
+        }
+      } catch (error) {
+        console.error("Failed to update active session status:", error);
+      } finally {
+        this.runningLocalStorageUpdatePromise = null;
       }
-      this.runningLocalStorageUpdatePromise = null;
     } else {
       await this.runningLocalStorageUpdatePromise;
     }
+    return this.state.activeSession || this._activeSession;
   }
 
   /**
@@ -179,7 +191,9 @@ export function withActiveSessionLocalStorage(WrappedComponent) {
           {(activeSessionLocalStorageContext) => (
             <WrappedComponent
               activeSessionLocalStorageContext={activeSessionLocalStorageContext}
-              activeSession={activeSessionLocalStorageContext.get()}
+              activeSession={
+                activeSessionLocalStorageContext.activeSession || activeSessionLocalStorageContext.get()
+              }
               {...this.props}
             />
           )}

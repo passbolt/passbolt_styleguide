@@ -9,6 +9,11 @@ import UserActiveSessionEntity from "../../../shared/models/entity/session/userA
 class PrivateRoute extends Component {
   render() {
     const { component: Component, exact, strict, path, ...componentProps } = this.props;
+    const activeSession = this.props.activeSession || this.props.activeSessionLocalStorageContext?.get();
+
+    if (!activeSession) {
+      return null;
+    }
 
     return (
       <Route
@@ -17,14 +22,14 @@ class PrivateRoute extends Component {
         path={path}
         render={(props) => (
           <React.Fragment>
-            {this.props.activeSession.isAuthenticated &&
+            {Boolean(activeSession.isAuthenticated) &&
               this.props.context.loggedInUser != null &&
               this.props.context.rbacs !== null && (
                 <RbacContextProvider>
                   <Component {...props} {...componentProps} />
                 </RbacContextProvider>
               )}
-            {!this.props.activeSession.isAuthenticated && this.props.activeSession.isSessionOnline && (
+            {!activeSession.isAuthenticated && Boolean(activeSession.isSessionOnline) && (
               <Redirect
                 to={{
                   pathname: "/webAccessibleResources/quickaccess/login",
@@ -33,7 +38,7 @@ class PrivateRoute extends Component {
                 }}
               />
             )}
-            {!this.props.activeSession.isAuthenticated && !this.props.activeSession.isServerReachable && (
+            {!activeSession.isAuthenticated && !activeSession.isServerReachable && (
               <Redirect
                 to={{
                   pathname: "/webAccessibleResources/quickaccess/login-offline",
