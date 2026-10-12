@@ -87,11 +87,11 @@ const SECRET_PROPERTIES = {
     previewEmptyError: (t) => t("The pin code is empty and cannot be previewed."),
   },
   [SECRET_KEYS.NOTE]: {
-    read: (plaintextSecretDto) => plaintextSecretDto?.description,
+    read: (plaintextSecretDto) => plaintextSecretDto?.description ?? "",
     isEmpty: (value) => !value?.length,
     toClipboard: (value) => value,
     copyEmptyError: (t) => t("The note is empty and cannot be copied to clipboard."),
-    previewEmptyError: (t) => t("The note is empty and cannot be previewed."),
+    previewEmptyError: null, // An empty note is revealed, the row then reads "There is no note."
   },
 };
 
@@ -482,11 +482,11 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * Gate for the note section: the standalone note type.
+   * Gate for the note section: the type carries a note in its secret, v5 only.
    * @returns {boolean}
    */
-  get isStandaloneNoteResource() {
-    return Boolean(this.resourceType?.isStandaloneNote());
+  get isNoteResources() {
+    return Boolean(this.resourceType?.hasSecretDescription() && this.resourceType?.isV5());
   }
 
   /**
@@ -585,7 +585,7 @@ class ResourceViewPage extends React.Component {
               canPreview={canPreviewSecret}
             />
           )}
-          {this.isStandaloneNoteResource && (
+          {this.isNoteResources && (
             <ResourceViewPageNote
               note={this.getRevealedValue(SECRET_KEYS.NOTE)}
               decryptingSecret={decryptingSecret}

@@ -1,6 +1,5 @@
 import React from "react";
 import { MemoryRouter, Route } from "react-router-dom";
-import PropTypes from "prop-types";
 import ResourceViewPage from "./ResourceViewPage";
 import {
   defaultProps,
@@ -12,87 +11,75 @@ import {
   standalonePinCodeResourceProps,
   standaloneTotpResourceProps,
   totpResourceProps,
+  v5DefaultResourceProps,
+  v5DefaultTotpResourceProps,
 } from "./ResourceViewPage.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {
   title: "Components/QuickAccess/ResourceView",
   component: ResourceViewPage,
-};
-
-const Template = ({ context, initialEntries, ...args }) => (
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={[initialEntries]}>
-      <Route
-        path="/:id"
-        component={(routerProps) => (
-          <div className="container quickaccess">
-            <ResourceViewPage {...args} {...routerProps} />
-          </div>
-        )}
-      />
-    </MemoryRouter>
-  </AppContext.Provider>
-);
-
-Template.propTypes = {
-  context: PropTypes.object,
-  initialEntries: PropTypes.array,
-};
-
-const parameters = {
-  css: "ext_quickaccess",
+  decorators: [
+    (Story, { args }) => (
+      <AppContext.Provider value={args.context}>
+        <MemoryRouter initialEntries={[args.initialEntries]}>
+          <Route
+            path="/:id"
+            component={(routerProps) => (
+              <div className="container quickaccess">
+                <Story {...args} {...routerProps} />
+              </div>
+            )}
+          />
+        </MemoryRouter>
+      </AppContext.Provider>
+    ),
+  ],
+  parameters: {
+    css: "ext_quickaccess",
+  },
 };
 
 export const ResourceView = {
-  render: Template,
   args: defaultProps(),
-  parameters: parameters,
 };
 
 export const AllApiFlagDisabled = {
-  render: Template,
   args: disabledApiFlagsProps(),
-  parameters: parameters,
 };
 
 export const AllRbacsDenied = {
-  render: Template,
   args: deniedRbacProps(),
-  parameters: parameters,
 };
 
 export const TotpResourceView = {
-  render: Template,
   args: totpResourceProps(),
-  parameters: parameters,
 };
 
 export const StandaloneTotpResourceView = {
-  render: Template,
   args: standaloneTotpResourceProps(),
-  parameters: parameters,
 };
 
 export const ResourceMultipleUrisView = {
-  render: Template,
   args: multipleUrisResourceProps(),
-  parameters: parameters,
 };
 
 export const StandalonePinCode = {
-  render: Template,
   args: standalonePinCodeResourceProps(),
 };
 
 export const StandaloneNote = {
-  render: Template,
   args: standaloneNoteResourceProps(),
-  parameters: parameters,
 };
 
 export const StandaloneCustomFields = {
-  render: Template,
   args: standaloneCustomFieldsResourceProps(),
-  parameters: parameters,
+};
+
+export const V5DefaultResourceView = {
+  args: v5DefaultResourceProps(),
+};
+
+export const V5DefaultTotpResourceView = {
+  args: v5DefaultTotpResourceProps(),
 };

@@ -45,6 +45,15 @@ describe("ResourceViewPageNote", () => {
     expect(page.secret.hasAttribute("title")).toBeFalsy();
   });
 
+  it("As LU, I should see the revealed empty note as there is no note, in the empty style", () => {
+    expect.assertions(3);
+    const page = new ResourceViewPageNotePage(revealedNoteProps({ note: "" }));
+
+    expect(page.notePreviewed.textContent).toStrictEqual("There is no note.");
+    expect(page.secret.classList.contains("empty")).toBeTruthy();
+    expect(page.encryptedNote).toBeNull();
+  });
+
   it("As LU, I should copy by clicking the placeholder or the copy action, and preview by clicking the eye", async () => {
     expect.assertions(3);
     const props = defaultProps();

@@ -19,6 +19,7 @@ import { resourceTypesCollectionDto } from "../../../shared/models/entity/resour
 import {
   TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
   TEST_RESOURCE_TYPE_V5_DEFAULT,
+  TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
 } from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
@@ -231,4 +232,56 @@ export function standaloneEmptyCustomFieldsResourceProps(props = {}) {
 export const standaloneCustomFieldsSecretDto = () => ({
   object_type: "PASSBOLT_SECRET_DATA",
   custom_fields: customFieldsDtos.map((customField) => new CustomFieldEntity(customField).toSecretDto()),
+});
+
+/**
+ * Props of a v5-default resource with a note.
+ * @param {object} props Override the default props.
+ * @returns {object}
+ */
+export function v5DefaultResourceProps(props = {}) {
+  const storage = new MockStorage();
+  const resource = defaultResourceDto({
+    resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+    metadata: defaultResourceMetadataDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+  });
+  const resources = [resource, defaultResourceDto()];
+  storage.local.set({ resources });
+
+  return defaultProps({
+    context: defaultAppContext({ storage }),
+    initialEntries: `/${resources[0].id}`,
+    ...props,
+  });
+}
+
+/**
+ * Props of a v5-default-with-totp resource with a note.
+ * @param {object} props Override the default props.
+ * @returns {object}
+ */
+export function v5DefaultTotpResourceProps(props = {}) {
+  const storage = new MockStorage();
+  const resource = defaultResourceDto({
+    resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+    metadata: defaultResourceMetadataDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP }),
+  });
+  const resources = [resource, defaultResourceDto()];
+  storage.local.set({ resources });
+
+  return defaultProps({
+    context: defaultAppContext({ storage }),
+    initialEntries: `/${resources[0].id}`,
+    ...props,
+  });
+}
+
+/**
+ * The decrypted secret of the v5-default resources: the password and the note.
+ * @returns {object}
+ */
+export const v5DefaultSecretDto = () => ({
+  object_type: "PASSBOLT_SECRET_DATA",
+  password: "secret-decrypted",
+  description: "Wifi: office-5G\nThe password is at the reception.",
 });

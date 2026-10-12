@@ -77,6 +77,14 @@ class ResourceViewPageNote extends React.Component {
   }
 
   /**
+   * Is the note revealed and empty.
+   * @returns {boolean}
+   */
+  get isEmpty() {
+    return this.props.note === "";
+  }
+
+  /**
    * Is the note row decrypting the secret.
    * @returns {boolean}
    */
@@ -128,7 +136,7 @@ class ResourceViewPageNote extends React.Component {
   renderValue() {
     const { note, canCopy } = this.props;
     if (this.isRevealed) {
-      return <div className="note-previewed">{note}</div>;
+      return <div className="note-previewed">{this.isEmpty ? <Trans>There is no note.</Trans> : note}</div>;
     }
     return (
       <button
@@ -160,7 +168,7 @@ class ResourceViewPageNote extends React.Component {
           </span>
           <div className="password-wrapper">
             <div
-              className="property-value secret secret-note"
+              className={`property-value secret secret-note ${this.isEmpty ? "empty" : ""}`}
               title={isRevealed ? undefined : this.props.t("Click to copy")}
             >
               {this.renderValue()}
