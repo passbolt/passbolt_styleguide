@@ -843,10 +843,23 @@ describe("ResourceViewPage", () => {
     });
   });
 
-  describe("As LU, I should see the note of a password resource.", () => {
+  describe("As LU, I should see the note and the custom fields of a password resource.", () => {
     it.each([
-      ["v5-default", () => v5DefaultResourceProps(), ["Username", "Password", "Notes", "URI"]],
-      ["v5-default-with-totp", () => v5DefaultTotpResourceProps(), ["Username", "Password", "TOTP", "Notes", "URI"]],
+      [
+        "v5-default with custom fields",
+        () => v5DefaultResourceProps(),
+        ["Username", "Password", "Notes", "License key", "Port", "no key", "Empty", "URI"],
+      ],
+      [
+        "v5-default-with-totp with custom fields",
+        () => v5DefaultTotpResourceProps(),
+        ["Username", "Password", "TOTP", "Notes", "License key", "Port", "no key", "Empty", "URI"],
+      ],
+      [
+        "v5-default without custom fields",
+        () => v5DefaultResourceProps({}, []),
+        ["Username", "Password", "Notes", "URI"],
+      ],
       ["password-and-description", () => defaultProps(), ["Username", "Password", "URI"]],
       ["password-description-totp", () => totpResourceProps(), ["Username", "Password", "TOTP", "URI"]],
     ])("As LU, I should see the rows of a %s resource in order", async (_, buildProps, propertyNames) => {
@@ -884,7 +897,50 @@ describe("ResourceViewPage", () => {
       expect(decryptCalls(props).length).toStrictEqual(1);
     });
 
-    it("As LU, I should decrypt once across the note, the password and the TOTP, a masked note holding no plaintext", async () => {
+    it("As LU, I should copy a single custom field of a password resource", async () => {
+      expect.assertions(2);
+      const props = v5DefaultResourceProps();
+      mockContextRequest(props.context, v5DefaultSecretDto);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.copyCustomFieldButton(0));
+
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.context.storage.local.get(["resources"]).resources[0].id,
+      );
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", "XYZ-123");
+    });
+
+    it("As LU, revealing a custom field should mask the password, fields stay revealed together, and revealing the note should mask them", async () => {
+      expect.assertions(7);
+      const props = v5DefaultResourceProps();
+      mockContextRequest(props.context, v5DefaultSecretDto);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.previewPasswordButton);
+      expect(page.passwordText).toStrictEqual("secret-decrypted");
+
+      await page.click(page.previewCustomFieldButton(0));
+      expect(page.passwordText).toStrictEqual("Copy to clipboard");
+      expect(page.customFieldValueText(0)).toStrictEqual("XYZ-123");
+
+      await page.click(page.previewCustomFieldButton(1));
+      expect(page.customFieldValueText(0)).toStrictEqual("XYZ-123");
+      expect(page.customFieldValueText(1)).toStrictEqual("8080");
+
+      await page.click(page.previewNoteButton);
+      expect(page.notePreviewed.textContent).toStrictEqual(v5DefaultSecretDto().description);
+      expect([0, 1].map((index) => page.customFieldValueText(index))).toStrictEqual(Array(2).fill("Copy to clipboard"));
+    });
+
+    it("As LU, I should decrypt once across the note, a custom field, the password and the TOTP, a masked note holding no plaintext", async () => {
       expect.assertions(4);
       const props = v5DefaultTotpResourceProps();
       const secret = { ...v5DefaultSecretDto(), totp: defaultTotpViewModelDto() };
@@ -895,7 +951,7 @@ describe("ResourceViewPage", () => {
       });
 
       await page.click(page.previewNoteButton);
-      await page.click(page.previewPasswordButton);
+      await page.click(page.previewCustomFieldButton(0));
       expect(page.rowOf("secret-note").textContent).not.toContain(secret.description);
       expect(page.secretTitle("secret-note")).toStrictEqual("Click to copy");
 
@@ -926,6 +982,27 @@ describe("ResourceViewPage", () => {
         "passbolt.clipboard.copy-temporarily",
         v5DefaultSecretDto().description,
       );
+      expect(decryptCalls(props).length).toStrictEqual(0);
+    });
+
+    it("As LU, I should copy a custom field of a password resource from the offline secret when my session is offline", async () => {
+      expect.assertions(3);
+      const props = v5DefaultResourceProps({
+        activeSession: new UserActiveSessionEntity(offlineUserActiveSessionDto()),
+      });
+      mockContextRequest(props.context, v5DefaultSecretDto);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      await page.click(page.copyCustomFieldButton(0));
+
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.offline.find-secret-by-resource-id",
+        props.context.storage.local.get(["resources"]).resources[0].id,
+      );
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", "XYZ-123");
       expect(decryptCalls(props).length).toStrictEqual(0);
     });
   });

@@ -235,15 +235,19 @@ export const standaloneCustomFieldsSecretDto = () => ({
 });
 
 /**
- * Props of a v5-default resource with a note.
+ * Props of a v5-default resource with a note and custom fields, the metadata holding their metadata half.
  * @param {object} props Override the default props.
+ * @param {array} [customFields] The custom fields, with both halves.
  * @returns {object}
  */
-export function v5DefaultResourceProps(props = {}) {
+export function v5DefaultResourceProps(props = {}, customFields = customFieldsDtos) {
   const storage = new MockStorage();
   const resource = defaultResourceDto({
     resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
-    metadata: defaultResourceMetadataDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+    metadata: defaultResourceMetadataDto({
+      resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+      custom_fields: customFields.map((customField) => new CustomFieldEntity(customField).toMetadataDto()),
+    }),
   });
   const resources = [resource, defaultResourceDto()];
   storage.local.set({ resources });
@@ -256,15 +260,19 @@ export function v5DefaultResourceProps(props = {}) {
 }
 
 /**
- * Props of a v5-default-with-totp resource with a note.
+ * Props of a v5-default-with-totp resource with a note and custom fields, the metadata holding their metadata half.
  * @param {object} props Override the default props.
+ * @param {array} [customFields] The custom fields, with both halves.
  * @returns {object}
  */
-export function v5DefaultTotpResourceProps(props = {}) {
+export function v5DefaultTotpResourceProps(props = {}, customFields = customFieldsDtos) {
   const storage = new MockStorage();
   const resource = defaultResourceDto({
     resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
-    metadata: defaultResourceMetadataDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP }),
+    metadata: defaultResourceMetadataDto({
+      resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+      custom_fields: customFields.map((customField) => new CustomFieldEntity(customField).toMetadataDto()),
+    }),
   });
   const resources = [resource, defaultResourceDto()];
   storage.local.set({ resources });
@@ -277,11 +285,11 @@ export function v5DefaultTotpResourceProps(props = {}) {
 }
 
 /**
- * The decrypted secret of the v5-default resources: the password and the note.
+ * The decrypted secret of the v5-default resources: the password, the note and the secret half of the custom fields.
  * @returns {object}
  */
 export const v5DefaultSecretDto = () => ({
-  object_type: "PASSBOLT_SECRET_DATA",
+  ...standaloneCustomFieldsSecretDto(),
   password: "secret-decrypted",
   description: "Wifi: office-5G\nThe password is at the reception.",
 });

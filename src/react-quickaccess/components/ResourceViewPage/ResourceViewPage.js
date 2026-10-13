@@ -490,11 +490,15 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * Gate for the custom fields section: the standalone custom fields type.
+   * Gate for the custom fields section: fields in the metadata, or the standalone type.
    * @returns {boolean}
    */
-  get isStandaloneCustomFieldsResource() {
-    return Boolean(this.resourceType?.isStandaloneCustomFields());
+  get isCustomFieldsResources() {
+    const resourceType = this.resourceType;
+    return Boolean(
+      resourceType?.isStandaloneCustomFields() ||
+        (resourceType?.hasCustomFields() && this.state.resource.metadata?.custom_fields?.length > 0),
+    );
   }
 
   /**
@@ -598,7 +602,7 @@ class ResourceViewPage extends React.Component {
               canPreview={canPreviewSecret}
             />
           )}
-          {this.isStandaloneCustomFieldsResource && (
+          {this.isCustomFieldsResources && (
             <ResourceViewPageCustomFields
               customFields={this.customFields}
               decryptingSecret={decryptingSecret}
