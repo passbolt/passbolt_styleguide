@@ -1,6 +1,4 @@
-# v5.16.1
+# v5.16.2
 
 Provides:
-- Help section for Offline Mode settings
-- QuickAccess blank page on SSO login issue fix
-- Metadata key rotation creator name display issue fix
+- Resolve tab freezing after a certain time
