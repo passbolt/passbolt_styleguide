@@ -51,6 +51,16 @@ export default class DisplayHealthcheckAdministrationPage {
   }
 
   /**
+   * Rerender the page with the given props.
+   * @param {object} props Props to attach
+   * @returns {Promise<void>}
+   */
+  async rerender(props) {
+    this._page.rerender(this.constructor.markup(props));
+    await waitFor(() => {});
+  }
+
+  /**
    * Returns true if the page exists.
    * @returns {boolean}
    */
@@ -111,7 +121,25 @@ export default class DisplayHealthcheckAdministrationPage {
    * @returns {Array<string>}
    */
   get domainTitles() {
-    return this.domains.map((domain) => domain.querySelector("h4").textContent);
+    return this.domains.map((domain) => domain.querySelector(".healthcheck-domain-toggle span").textContent);
+  }
+
+  /**
+   * The disclosure button of the given domain.
+   * @param {number} domainIndex
+   * @returns {HTMLElement}
+   */
+  domainToggle(domainIndex) {
+    return this.domains[domainIndex].querySelector(".healthcheck-domain-toggle");
+  }
+
+  /**
+   * True when the given domain reports itself expanded.
+   * @param {number} domainIndex
+   * @returns {boolean}
+   */
+  isDomainExpanded(domainIndex) {
+    return this.domainToggle(domainIndex).getAttribute("aria-expanded") === "true";
   }
 
   /**
@@ -151,6 +179,26 @@ export default class DisplayHealthcheckAdministrationPage {
    */
   checkMessage(domainIndex, checkIndex) {
     return this.checks(domainIndex)[checkIndex].querySelector(".healthcheck-check-message").textContent;
+  }
+
+  /**
+   * The help disclosure button of the given check, if it has one.
+   * @param {number} domainIndex
+   * @param {number} checkIndex
+   * @returns {HTMLElement|null}
+   */
+  helpToggle(domainIndex, checkIndex) {
+    return this.checks(domainIndex)[checkIndex].querySelector(".healthcheck-help-toggle");
+  }
+
+  /**
+   * True when the given check reports its help opened.
+   * @param {number} domainIndex
+   * @param {number} checkIndex
+   * @returns {boolean}
+   */
+  isHelpOpened(domainIndex, checkIndex) {
+    return this.helpToggle(domainIndex, checkIndex)?.getAttribute("aria-expanded") === "true";
   }
 
   /**

@@ -26,6 +26,8 @@ import HealthcheckErrorSVG from "../../../../img/svg/healthcheck_error.svg";
 import HealthcheckInfoSVG from "../../../../img/svg/healthcheck_info.svg";
 import TriangleAlertSVG from "../../../../img/svg/triangle_alert.svg";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 /**
  * How each status is drawn. A status missing from this map falls back to the neutral info badge,
@@ -47,6 +49,36 @@ const STATUS_RENDERING = {
  */
 class DisplayHealthcheckAdministration extends Component {
   /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.state = this.defaultState;
+    this.bindCallbacks();
+  }
+
+  /**
+   * Get default state
+   * @returns {Object}
+   */
+  get defaultState() {
+    return {
+      collapsedDomains: new Set(),
+      openedHelp: new Set(),
+    };
+  }
+
+  /**
+   * Bind callbacks methods
+   * @returns {void}
+   */
+  bindCallbacks() {
+    this.handleDomainToggleClick = this.handleDomainToggleClick.bind(this);
+    this.handleHelpToggleClick = this.handleHelpToggleClick.bind(this);
+  }
+
+  /**
    * Invoked immediately after component is mounted.
    * Sets the administration workspace action and loads healthcheck data.
    * @returns {Promise<void>}
@@ -56,6 +88,18 @@ class DisplayHealthcheckAdministration extends Component {
       DisplayAdministrationHealthcheckActions,
     );
     await this.props.adminHealthcheckContext.loadHealthcheckData();
+  }
+
+  /**
+   * Invoked immediately after updating.
+   * Resets the disclosure state when the healthcheck data changes.
+   * @param {Object} previousProps
+   * @returns {void}
+   */
+  componentDidUpdate(previousProps) {
+    if (previousProps.adminHealthcheckContext.healthcheckData !== this.healthcheckChecks) {
+      this.resetDisclosureState();
+    }
   }
 
   /**
@@ -82,6 +126,48 @@ class DisplayHealthcheckAdministration extends Component {
    */
   get isLoading() {
     return !this.healthcheckChecks || this.props.adminHealthcheckContext.isProcessing();
+  }
+
+  /**
+   * Puts every domain back to expanded and every help back to collapsed.
+   * @returns {void}
+   */
+  resetDisclosureState() {
+    this.setState(this.defaultState);
+  }
+
+  /**
+   * Collapses or expands the given domain.
+   * @param {string} domainKey
+   * @returns {void}
+   */
+  handleDomainToggleClick(domainKey) {
+    this.setState((previousState) => {
+      const collapsedDomains = new Set(previousState.collapsedDomains);
+      if (collapsedDomains.has(domainKey)) {
+        collapsedDomains.delete(domainKey);
+      } else {
+        collapsedDomains.add(domainKey);
+      }
+      return { collapsedDomains };
+    });
+  }
+
+  /**
+   * Opens or closes the help of the given check.
+   * @param {string} checkKey
+   * @returns {void}
+   */
+  handleHelpToggleClick(checkKey) {
+    this.setState((previousState) => {
+      const openedHelp = new Set(previousState.openedHelp);
+      if (openedHelp.has(checkKey)) {
+        openedHelp.delete(checkKey);
+      } else {
+        openedHelp.add(checkKey);
+      }
+      return { openedHelp };
+    });
   }
 
   /**
@@ -116,17 +202,30 @@ class DisplayHealthcheckAdministration extends Component {
     const helpId = `healthcheck-help-${checkKey}`;
     const { modifier, icon: StatusIcon } = this.getStatusRendering(check.status);
     const safeHelp = this.getSafeHelp(check, checkKey);
+    const hasHelp = safeHelp.length > 0;
+    const isHelpOpened = hasHelp && this.state.openedHelp.has(checkKey);
 
     return (
-      <div key={checkKey} className="healthcheck-check">
-        <div className="healthcheck-check-row">
+      <div key={checkKey} className={`accordion healthcheck-check ${isHelpOpened ? "" : "closed"}`}>
+        <div className="healthcheck-check-row accordion-header">
           <span className={`healthcheck-badge ${modifier}`}>
             <StatusIcon />
           </span>
           <span className="healthcheck-check-message">{check.message}</span>
+          {hasHelp && (
+            <button
+              type="button"
+              className="link no-border healthcheck-help-toggle"
+              aria-expanded={isHelpOpened}
+              aria-controls={helpId}
+              onClick={() => this.handleHelpToggleClick(checkKey)}
+            >
+              {isHelpOpened ? <CaretDownSVG /> : <CaretRightSVG />}
+            </button>
+          )}
         </div>
-        {safeHelp.length > 0 && (
-          <ul id={helpId} className="healthcheck-help">
+        {isHelpOpened && (
+          <ul id={helpId} className="healthcheck-help accordion-content">
             {safeHelp.map((helpEntry, helpIndex) => (
               <li key={`${checkKey}-help-${helpIndex}`}>{linkifyText(helpEntry, `${checkKey}-help-${helpIndex}`)}</li>
             ))}
@@ -143,13 +242,28 @@ class DisplayHealthcheckAdministration extends Component {
    */
   renderDomain(domain) {
     const domainKey = domain.key;
+    const sectionId = `healthcheck-domain-${domainKey}-section`;
+    const isCollapsed = this.state.collapsedDomains.has(domainKey);
 
     return (
-      <div key={domainKey} className="healthcheck-domain">
-        <h4>{domain.title}</h4>
-        <div className="healthcheck-domain-section">
-          {domain.checks.map((check, checkIndex) => this.renderCheck(check, domainKey, checkIndex))}
-        </div>
+      <div key={domainKey} className={`accordion healthcheck-domain ${isCollapsed ? "closed" : ""}`}>
+        <h4 className="accordion-header">
+          <button
+            type="button"
+            className="link no-border healthcheck-domain-toggle"
+            aria-expanded={!isCollapsed}
+            aria-controls={sectionId}
+            onClick={() => this.handleDomainToggleClick(domainKey)}
+          >
+            {isCollapsed ? <CaretRightSVG /> : <CaretDownSVG />}
+            <span>{domain.title}</span>
+          </button>
+        </h4>
+        {!isCollapsed && (
+          <div id={sectionId} className="accordion-content healthcheck-domain-section">
+            {domain.checks.map((check, checkIndex) => this.renderCheck(check, domainKey, checkIndex))}
+          </div>
+        )}
       </div>
     );
   }
