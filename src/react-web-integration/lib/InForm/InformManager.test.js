@@ -2229,24 +2229,49 @@ describe("InformManager", () => {
       expect(InFormManager._pendingFieldScan).toBe(true);
     });
 
-    it("should re-scan synchronously and schedule a debounced follow-up when a shadow root becomes known", async () => {
-      // The focus healer signals shadowRootsChanged=true when a field is focused. The re-scan must be
-      // synchronous (so the call-to-action is attached within the same focus turn) AND also scheduled once
-      // more (debounced) to catch a web component that hydrates just after an autofocus.
-      expect.assertions(2);
+    it("should re-scan synchronously and schedule a debounced follow-up when the user focuses a field", async () => {
+      // The focus healer notifies with fromFocus when a field is focused. The re-scan must be synchronous
+      // (so the call-to-action is attached within the same focus turn) AND also scheduled once more
+      // (debounced) to catch a web component that hydrates just after an autofocus.
+      expect.assertions(3);
 
       document.body.innerHTML = domElementLoginWithNameAttributeUsername;
       await act(async () => new InformManagerPage());
       InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
       const findSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields").mockImplementation();
 
-      InFormManager.onShadowMutation(document, [], true);
+      InFormManager.onShadowMutation(document, [], true, { fromFocus: true });
 
       expect(InFormManager.findAndSetAuthenticationFields).toHaveBeenCalledTimes(1);
       expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+      expect(InFormManager._pendingFieldScan).toBe(true);
 
       // The suite clears (not restores) mocks between tests, so restore the persistent no-op now to avoid
       // leaking it into the tests below.
+      findSpy.mockRestore();
+    });
+
+    it("should only schedule a debounced re-scan when a mutation adds shadow roots", async () => {
+      // A component-heavy page (e.g. Reddit) adds hundreds of shadow roots per render: each observer batch
+      // must not trigger a synchronous full-page scan, only arm the gate and schedule a single debounced one.
+      expect.assertions(3);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
+      const findSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields").mockImplementation();
+      const otherShadowRoot = document.createElement("div").attachShadow({ mode: "open" });
+
+      for (let i = 0; i < 200; i++) {
+        InFormManager.onShadowMutation(otherShadowRoot, [], true);
+      }
+
+      expect(InFormManager.findAndSetAuthenticationFields).not.toHaveBeenCalled();
+      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(200);
+      expect(InFormManager._pendingFieldScan).toBe(true);
+
       findSpy.mockRestore();
     });
 
@@ -2320,6 +2345,28 @@ describe("InformManager", () => {
       InFormManager.findAndSetAuthenticationFields();
 
       expect(InFormManager.callToActionFields).toHaveLength(1);
+    });
+
+    it("should not attach a call-to-action to a disabled field until it is enabled", async () => {
+      expect.assertions(3);
+
+      // Second step of a multi-step login: the identifier is recalled in a disabled field above the password.
+      document.body.innerHTML = `<form>
+        <input type='email' id='email' name='email' disabled value='admin@passbolt.com'/>
+        <input type='password' id='password' name='password'/>
+      </form>`;
+      await act(async () => new InformManagerPage());
+      const ctaElements = () => InFormManager.callToActionFields.map(({ field }) => field);
+      expect(ctaElements()).not.toContain(document.getElementById("email"));
+      expect(ctaElements()).toContain(document.getElementById("password"));
+
+      // The site enables the field: the next scan attaches its call-to-action.
+      await act(async () => {
+        document.getElementById("email").disabled = false;
+      });
+      InFormManager.findAndSetAuthenticationFields();
+
+      expect(ctaElements()).toContain(document.getElementById("email"));
     });
   });
 
