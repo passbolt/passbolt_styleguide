@@ -92,6 +92,8 @@ import DomUtils from "../Dom/DomUtils";
 import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
 import ShadowDomFocusHealerService from "../../services/ShadowDom/ShadowDomFocusHealerService";
+import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
+import ScrapingIdentityService from "../../services/Scraping/ScrapingIdentityService";
 import { act } from "react";
 import { waitFor } from "@testing-library/react";
 
@@ -103,6 +105,22 @@ beforeEach(() => {
   ShadowRootCacheService._shadowRootsCache = new WeakMap();
   ShadowMutationObserverService._shadowRootsObservers = new WeakMap();
   ShadowMutationObserverService._shadowMutationSubscribers = new Set();
+
+  // The classification pipeline registers fields by identity; reset the shared registries per test.
+  ScrapingIdentityService._idByElement = new WeakMap();
+  ScrapingIdentityService._elementById = new Map();
+  ScrapingIdentityService._seq = 0;
+
+  // jsdom has no layout: drive viewability explicitly and give fields a usable rect so the pipeline
+  // (and its pseudo-form/no-<form> path) can extract and cluster fields. Defined as a plain prototype
+  // function (not a jest spy) so per-test `jest.spyOn(element, "getBoundingClientRect")` overrides in
+  // the positioning tests create their own element-level property instead of colliding on a shared mock.
+  jest.spyOn(ElementVisibilityService, "isElementViewable").mockReturnValue(true);
+  Object.defineProperty(Element.prototype, "getBoundingClientRect", {
+    configurable: true,
+    writable: true,
+    value: () => ({ x: 0, y: 0, left: 0, top: 0, right: 100, bottom: 20, width: 100, height: 20 }),
+  });
 });
 
 describe("InformManager", () => {
@@ -113,6 +131,9 @@ describe("InformManager", () => {
     jest.clearAllMocks();
     // Force to true as Jest do not provide opacity value
     jest.spyOn(InFormManager, "isPageNotVisible").mockImplementation(() => false);
+    jest
+      .spyOn(ElementVisibilityService, "isElementViewable")
+      .mockImplementation((element) => !(parseFloat(getComputedStyle(element).opacity) < 0.4));
     Element.prototype.getAnimations = () => [];
     /** Mock create element to add a content window property in the iframe due to jest issue with iframe in shadow dom **/
     const div = document.createElement("div");
@@ -969,48 +990,30 @@ describe("InformManager", () => {
       expect(informManager.iframesLength).toBe(2);
     });
 
-    it("As LU I should see the inform call to action on form with class email", async () => {
-      expect.assertions(7);
-      // Set up document body
-      document.body.innerHTML = domElementLoginWithClassEmail; // The Dom
+    // The classifier intentionally ignores the `class` attribute (noise-prone: utility/framework class
+    // names). When both fields are type=text and rely solely on their class (no real type=password to
+    // anchor structural inference), nothing is detected. Real login forms expose type=password plus
+    // name/id/autocomplete, which the "no type and class ..." fixtures below still cover.
+    it("As LU I shouldn't detect fields that rely solely on their class attribute (class email)", async () => {
+      expect.assertions(3);
+      document.body.innerHTML = domElementLoginWithClassEmail;
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
       expect(informManager.iframesLength).toBe(0);
-      await informManager.focusOnUsername();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.mouseOverOnPassword();
-      expect(informManager.iframesLength).toBe(2);
-      await informManager.blurOnUsername();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.blurOnPassword();
-      expect(informManager.iframesLength).toBe(0);
-      await informManager.focusOnPassword();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.mouseOverOnUsername();
-      expect(informManager.iframesLength).toBe(2);
+      expect(informManager.usernames.length).toBe(0);
+      expect(informManager.passwords.length).toBe(0);
     });
 
-    it("As LU I should see the inform call to action on form with class create-account-input", async () => {
-      expect.assertions(7);
-      // Set up document body
-      document.body.innerHTML = domElementLoginWithClassCreateAccount; // The Dom
+    it("As LU I shouldn't detect fields that rely solely on their class attribute (class create-account-input)", async () => {
+      expect.assertions(3);
+      document.body.innerHTML = domElementLoginWithClassCreateAccount;
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
       expect(informManager.iframesLength).toBe(0);
-      await informManager.focusOnUsername();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.mouseOverOnPassword();
-      expect(informManager.iframesLength).toBe(2);
-      await informManager.blurOnUsername();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.blurOnPassword();
-      expect(informManager.iframesLength).toBe(0);
-      await informManager.focusOnPassword();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.mouseOverOnUsername();
-      expect(informManager.iframesLength).toBe(2);
+      expect(informManager.usernames.length).toBe(0);
+      expect(informManager.passwords.length).toBe(0);
     });
 
     it("As LU I should see the inform call to action on form with no type and class username", async () => {
@@ -1219,17 +1222,25 @@ describe("InformManager", () => {
     });
 
     it("As LU I should see the inform call to action on form with generic text and password", async () => {
-      expect.assertions(4);
+      // A keyword-less text field preceding a password is inferred as the username by structural
+      // analysis, so a call-to-action is attached to it as well.
+      expect.assertions(7);
       document.body.innerHTML = domGenericTextAndPassword;
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
       expect(informManager.iframesLength).toBe(0);
-      expect(informManager.usernames.length).toBe(0);
-      await informManager.focusOnPassword();
+      expect(informManager.usernames.length).toBe(1);
+      await informManager.focusOnUsername();
+      expect(informManager.iframesLength).toBe(1);
+      await informManager.mouseOverOnPassword();
+      expect(informManager.iframesLength).toBe(2);
+      await informManager.blurOnUsername();
       expect(informManager.iframesLength).toBe(1);
       await informManager.blurOnPassword();
       expect(informManager.iframesLength).toBe(0);
+      await informManager.focusOnPassword();
+      expect(informManager.iframesLength).toBe(1);
     });
 
     it("As LU I should see the inform call to action on form with two email inputs and password", async () => {
@@ -1296,8 +1307,10 @@ describe("InformManager", () => {
       expect(informManager.iframesLength).toBe(2);
     });
 
-    it("As LU I should see the inform call to action on form with OTP multi-field input", async () => {
-      expect.assertions(5);
+    it("As LU I shouldn't detect an OTP multi-field that relies solely on its class attribute", async () => {
+      // The classifier intentionally ignores the `class` attribute, so OTP inputs identified only by a
+      // class (here `time-otp`) are not detected. The aria-label variant below is the covered case.
+      expect.assertions(4);
       document.body.innerHTML = domSingleOTPMultiField;
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
@@ -1305,10 +1318,7 @@ describe("InformManager", () => {
       expect(informManager.iframesLength).toBe(0);
       expect(informManager.usernames.length).toBe(0);
       expect(informManager.passwords.length).toBe(0);
-      await informManager.focusOnOtp();
-      expect(informManager.iframesLength).toBe(1);
-      await informManager.blurOnOtp();
-      expect(informManager.iframesLength).toBe(0);
+      expect(informManager.otps.length).toBe(0);
     });
 
     it("As LU I should see the inform call to action on form with OTP multi-field with aria-label", async () => {
@@ -1440,6 +1450,15 @@ describe("InformManager", () => {
       expect.assertions(13);
       // Set up document body
       document.body.innerHTML = domElementWithMultipleLogin; // The Dom
+      // Three stacked login blocks with no <form>: give each block a distinct, separated rect so the
+      // pseudo-form extraction clusters them into three separate scopes (one username + password each)
+      // rather than merging into a single scope where the extra usernames would be rationalized away.
+      [...document.querySelectorAll("input")].forEach((input, index) => {
+        const top = Math.floor(index / 2) * 300;
+        jest
+          .spyOn(input, "getBoundingClientRect")
+          .mockReturnValue({ x: 0, y: top, top, left: 0, right: 100, bottom: top + 20, width: 100, height: 20 });
+      });
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
@@ -1555,6 +1574,14 @@ describe("InformManager", () => {
       iframe.srcdoc = domElementLoginWithIdAttributeLogin;
       document.body.appendChild(iframe);
       iframe.contentDocument.body.innerHTML = domElementLoginWithIdAttributeLogin;
+      // The iframe document is a separate realm, so the prototype rect stub set in beforeEach does not
+      // reach its inputs; give them a usable rect so the pseudo-form path discovers them (jsdom has no
+      // layout inside the iframe either).
+      [...iframe.contentDocument.querySelectorAll("input")].forEach((input) => {
+        jest
+          .spyOn(input, "getBoundingClientRect")
+          .mockReturnValue({ x: 0, y: 0, top: 0, left: 0, right: 100, bottom: 20, width: 100, height: 20 });
+      });
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
@@ -1643,6 +1670,169 @@ describe("InformManager", () => {
 
       expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
       expect(informManager.iframesLength).toBe(0);
+    });
+
+    it("As LU I should NOT destroy inform when a page-level element collapses to a 0px box while still rendered (SPA loading spinner)", () => {
+      expect.assertions(2);
+      // <html> stays rendered (display/visibility/opacity ok) but an SPA spinner class collapses its height
+      // to 0px. The per-field size floor must not apply to page-level elements (mirrors isPageNotVisible).
+      jest.spyOn(ElementVisibilityService, "isElementRendered").mockReturnValue(true);
+      jest.spyOn(ElementVisibilityService, "hasViewableSize").mockReturnValue(false);
+      jest.spyOn(InFormManager, "destroy").mockImplementation();
+
+      InFormManager.destroyIfElementNotVisible(document.documentElement);
+
+      expect(ElementVisibilityService.isElementRendered).toHaveBeenCalledWith(document.documentElement);
+      expect(InFormManager.destroy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("InFormManager::waitUntilPageVisible", () => {
+    let resizeCallback;
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+
+      global.ResizeObserver = jest.fn((callback) => {
+        resizeCallback = callback;
+        return { observe: jest.fn(), disconnect: jest.fn() };
+      });
+
+      jest.spyOn(global, "setInterval");
+      jest.spyOn(global, "clearInterval");
+
+      // Prevent destructor to run during tests
+      jest.spyOn(InFormManager, "destroy").mockImplementation();
+    });
+
+    afterEach(() => {
+      InFormManager.destroy.mockRestore();
+      global.setInterval.mockRestore();
+      global.clearInterval.mockRestore();
+      delete global.ResizeObserver;
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    it("As LU it resolves immediately when the page is already visible", async () => {
+      expect.assertions(2);
+
+      jest.spyOn(InFormManager, "isPageNotVisible").mockReturnValue(false);
+
+      const result = await InFormManager.waitUntilPageVisible();
+
+      expect(result).toBe(true);
+      expect(setInterval).not.toHaveBeenCalled();
+    });
+
+    it("As LU it resolves through the periodic check when an external CSS change reveals the page", async () => {
+      expect.assertions(3);
+
+      // Hidden on the initial check and the first two ticks, revealed on the third tick.
+      jest
+        .spyOn(InFormManager, "isPageNotVisible")
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(true)
+        .mockReturnValue(false);
+
+      const promise = InFormManager.waitUntilPageVisible();
+      jest.advanceTimersByTime(3000);
+      const result = await promise;
+
+      expect(result).toBe(true);
+      expect(InFormManager.isPageNotVisible).toHaveBeenCalledTimes(4);
+      expect(clearInterval).toHaveBeenCalledTimes(1);
+    });
+
+    it("As LU it stops the periodic check after 5 ticks but keeps waiting on the observers", async () => {
+      expect.assertions(5);
+
+      jest.spyOn(InFormManager, "isPageNotVisible").mockReturnValue(true);
+      const resolvedSpy = jest.fn();
+
+      const promise = InFormManager.waitUntilPageVisible().then(resolvedSpy);
+      jest.advanceTimersByTime(6000);
+
+      expect(InFormManager.isPageNotVisible).toHaveBeenCalledTimes(6);
+      expect(clearInterval).toHaveBeenCalledTimes(1);
+      expect(resolvedSpy).not.toHaveBeenCalled();
+
+      // The page is revealed later, the observers must still resolve the promise
+      InFormManager.isPageNotVisible.mockReturnValue(false);
+      resizeCallback();
+      await promise;
+
+      expect(resolvedSpy).toHaveBeenCalledWith(true);
+      expect(clearInterval).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe("InFormManager::waitingAnimations", () => {
+    /**
+     * Build a fake Animation exposing the Web Animations API surface the manager relies on.
+     * @param {number} endTime
+     * @param {Promise} finished
+     * @return {object}
+     */
+    const mockAnimation = (endTime, finished) => ({
+      effect: { getComputedTiming: () => ({ endTime }) },
+      finished,
+    });
+
+    beforeEach(() => {
+      // Prevent destructor to run during tests
+      jest.spyOn(InFormManager, "destroy").mockImplementation();
+    });
+
+    afterAll(() => {
+      // Restore only once the block is over: the suite-level afterEach still calls destroy after each test.
+      InFormManager.destroy.mockRestore();
+    });
+
+    it("As LU it waits for a finite animation to finish", async () => {
+      expect.assertions(2);
+
+      let finishAnimation;
+      const finished = new Promise((resolve) => (finishAnimation = resolve));
+      const element = { getAnimations: () => [mockAnimation(300, finished)] };
+      const resolvedSpy = jest.fn();
+
+      const promise = InFormManager.waitingAnimations(element).then(resolvedSpy);
+      await Promise.resolve();
+
+      expect(resolvedSpy).not.toHaveBeenCalled();
+
+      finishAnimation();
+      await promise;
+
+      expect(resolvedSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("As LU it does not wait for an infinite animation", async () => {
+      expect.assertions(1);
+
+      const neverFinished = new Promise(() => {});
+      const element = { getAnimations: () => [mockAnimation(Infinity, neverFinished)] };
+      const resolvedSpy = jest.fn();
+
+      await InFormManager.waitingAnimations(element).then(resolvedSpy);
+
+      expect(resolvedSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("As LU it treats a cancelled animation as done", async () => {
+      expect.assertions(1);
+
+      const cancelled = Promise.reject(new DOMException("The animation was aborted", "AbortError"));
+      const element = { getAnimations: () => [mockAnimation(300, cancelled)] };
+      const resolvedSpy = jest.fn();
+
+      await InFormManager.waitingAnimations(element).then(resolvedSpy);
+
+      expect(resolvedSpy).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -1770,16 +1960,18 @@ describe("InformManager", () => {
 
     describe("InFormManager::retryMountHost", () => {
       let destroySpy;
-      let findAndSetAuthenticationFieldsSpy;
+      let ensureHostMountedSpy;
 
       beforeEach(() => {
         jest.useFakeTimers();
         destroySpy = jest.spyOn(InFormManager, "destroy");
-        findAndSetAuthenticationFieldsSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields");
+        // Spy only (real impl by default). The remount is now driven by ensureHostMounted, not by the
+        // classification (findAndSetAuthenticationFields) — that is the security/extraction decoupling.
+        ensureHostMountedSpy = jest.spyOn(InFormManager, "ensureHostMounted");
       });
 
       afterEach(() => {
-        findAndSetAuthenticationFieldsSpy.mockRestore();
+        ensureHostMountedSpy.mockRestore();
         destroySpy.mockRestore();
       });
 
@@ -1798,7 +1990,7 @@ describe("InformManager", () => {
         const otherElement = document.createElement("div");
         document.body.append(otherElement);
         otherElement.appendChild(informManager.host);
-        findAndSetAuthenticationFieldsSpy.mockImplementation(() => {});
+        ensureHostMountedSpy.mockImplementation(() => {});
 
         InFormManager.retryMountHost();
 
@@ -1813,7 +2005,7 @@ describe("InformManager", () => {
         let informManager;
         await act(async () => (informManager = new InformManagerPage()));
 
-        // Move the host into another element; the real findAndSetAuthenticationFields moves it back.
+        // Move the host into another element; the real ensureHostMounted moves it back.
         const otherElement = document.createElement("div");
         document.body.append(otherElement);
         otherElement.appendChild(informManager.host);
@@ -1822,6 +2014,82 @@ describe("InformManager", () => {
         jest.advanceTimersByTime(100);
 
         expect(destroySpy).not.toHaveBeenCalled();
+        expect(informManager.host.parentNode).toBe(document.body);
+      });
+
+      it("As LU it remounts the host WITHOUT triggering the classification/extraction (security ≠ extraction)", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        await act(async () => new InformManagerPage());
+
+        // Neutralize the actual remount so the retry setTimeout stays inert; we only assert what is called.
+        ensureHostMountedSpy.mockImplementation(() => {});
+        const scanSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields");
+        const credentialsSpy = jest.spyOn(InFormManager, "findAndSetCredentialsFormFields");
+
+        InFormManager.retryMountHost();
+
+        expect(scanSpy).not.toHaveBeenCalled();
+        expect(credentialsSpy).not.toHaveBeenCalled();
+
+        scanSpy.mockRestore();
+        credentialsSpy.mockRestore();
+      });
+    });
+
+    describe("InFormManager::_ensureHostIntegrity", () => {
+      it("should return true and NOT remount when the host is at a valid location", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        await act(async () => new InformManagerPage());
+        jest.spyOn(InFormManager, "isHostInValidLocation").mockReturnValue(true);
+        const retrySpy = jest.spyOn(InFormManager, "retryMountHost").mockImplementation(() => {});
+
+        const result = InFormManager._ensureHostIntegrity();
+
+        expect(result).toBe(true);
+        expect(retrySpy).not.toHaveBeenCalled();
+
+        InFormManager.isHostInValidLocation.mockRestore();
+        retrySpy.mockRestore();
+      });
+
+      it("should return false and remount when the host has been moved (anti-tampering)", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        await act(async () => new InformManagerPage());
+        jest.spyOn(InFormManager, "isHostInValidLocation").mockReturnValue(false);
+        const retrySpy = jest.spyOn(InFormManager, "retryMountHost").mockImplementation(() => {});
+
+        const result = InFormManager._ensureHostIntegrity();
+
+        expect(result).toBe(false);
+        expect(retrySpy).toHaveBeenCalledTimes(1);
+
+        InFormManager.isHostInValidLocation.mockRestore();
+        retrySpy.mockRestore();
+      });
+    });
+
+    describe("InFormManager::ensureHostMounted", () => {
+      it("should move the host back to the given container when it has drifted", async () => {
+        expect.assertions(2);
+
+        document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+        let informManager;
+        await act(async () => (informManager = new InformManagerPage()));
+
+        // Move the host out; ensureHostMounted with the default container (body) puts it back.
+        const otherElement = document.createElement("div");
+        document.body.append(otherElement);
+        otherElement.appendChild(informManager.host);
+        expect(informManager.host.parentNode).toBe(otherElement);
+
+        InFormManager.ensureHostMounted(document.body);
+
         expect(informManager.host.parentNode).toBe(document.body);
       });
     });
@@ -1856,6 +2124,28 @@ describe("InformManager", () => {
 
       expect(InFormManager.host.parentNode).toBe(dialog);
     });
+
+    it("As LU it re-appends the host as the last child of its container so it wins at equal z-index", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      // The host mounts in the body; simulate a later-inserted overlay (e.g. a modal) becoming the last child.
+      const overlay = document.createElement("div");
+      document.body.append(overlay);
+      expect(document.body.lastChild).not.toBe(informManager.host);
+
+      // A re-scan must move the host back to the end so that, at equal z-index, it stays painted on top
+      // (repairing both the hidden call-to-action and elementFromPoint hit-testing on the modal).
+      await act(async () => {
+        InFormManager.findAndSetInputFields();
+        await waitFor(() => {});
+      });
+
+      expect(document.body.lastChild).toBe(informManager.host);
+    });
   });
 
   describe("InFormManager::onShadowMutation", () => {
@@ -1871,31 +2161,165 @@ describe("InformManager", () => {
       expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
     });
 
-    it("should trigger the re-scan unconditionally for a document-scope mutation", async () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
-      await act(async () => new InformManagerPage());
-      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
-
-      InFormManager.onShadowMutation(document, [], false);
-
-      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
-    });
-
-    it("should trigger the re-scan for a shadow-scope mutation only when it is relevant", async () => {
+    it("should arm the extraction gate for a document-scope mutation only when it is relevant", async () => {
       expect.assertions(2);
 
       document.body.innerHTML = domElementLoginWithNameAttributeUsername;
       await act(async () => new InformManagerPage());
       InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      // Reset the gate: on document scope the debounced callback is always scheduled (cheap host-tampering
+      // check), but the expensive re-scan only runs when _pendingFieldScan is latched by a relevant batch.
+      InFormManager._pendingFieldScan = false;
+
+      // An irrelevant document mutation (no field added/removed, no watched attribute) must not arm the gate.
+      const irrelevantNode = document.createElement("span");
+      InFormManager.onShadowMutation(
+        document,
+        [{ type: "childList", addedNodes: [irrelevantNode], removedNodes: [] }],
+        false,
+      );
+      expect(InFormManager._pendingFieldScan).toBe(false);
+
+      // A relevant document mutation (a field added) arms the gate so the follow-up runs the full re-scan.
+      const fieldNode = document.createElement("input");
+      InFormManager.onShadowMutation(
+        document,
+        [{ type: "childList", addedNodes: [fieldNode], removedNodes: [] }],
+        false,
+      );
+      expect(InFormManager._pendingFieldScan).toBe(true);
+    });
+
+    it("should not re-scan for an irrelevant shadow-scope mutation", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      const findSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields");
       const otherShadowRoot = document.createElement("div").attachShadow({ mode: "open" });
 
       InFormManager.onShadowMutation(otherShadowRoot, [], false);
-      expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
 
-      InFormManager.onShadowMutation(otherShadowRoot, [], true);
+      expect(InFormManager.updateAuthenticationFieldsDebounce).not.toHaveBeenCalled();
+      expect(InFormManager.findAndSetAuthenticationFields).not.toHaveBeenCalled();
+
+      // The suite clears (not restores) mocks between tests; restore so the spy does not leak below.
+      findSpy.mockRestore();
+    });
+
+    it("should keep a scan armed by a light-DOM batch when an unrelated shadow-scope batch follows", async () => {
+      // A page web component mutating its own shadow root during the debounce window must not cancel the
+      // re-scan armed by the light DOM adding a credential field.
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
+      const otherShadowRoot = document.createElement("div").attachShadow({ mode: "open" });
+
+      // The light DOM adds a field: the gate is armed and the debounced re-scan is scheduled.
+      const input = document.createElement("input");
+      InFormManager.onShadowMutation(document, [{ type: "childList", addedNodes: [input], removedNodes: [] }], false);
+      expect(InFormManager._pendingFieldScan).toBe(true);
+
+      // An irrelevant shadow-scope batch lands before the debounce fires: the gate must stay armed.
+      InFormManager.onShadowMutation(otherShadowRoot, [], false);
+      expect(InFormManager._pendingFieldScan).toBe(true);
+    });
+
+    it("should re-scan synchronously and schedule a debounced follow-up when a shadow root becomes known", async () => {
+      // The focus healer signals shadowRootsChanged=true when a field is focused. The re-scan must be
+      // synchronous (so the call-to-action is attached within the same focus turn) AND also scheduled once
+      // more (debounced) to catch a web component that hydrates just after an autofocus.
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      const findSpy = jest.spyOn(InFormManager, "findAndSetAuthenticationFields").mockImplementation();
+
+      InFormManager.onShadowMutation(document, [], true);
+
+      expect(InFormManager.findAndSetAuthenticationFields).toHaveBeenCalledTimes(1);
       expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+
+      // The suite clears (not restores) mocks between tests, so restore the persistent no-op now to avoid
+      // leaking it into the tests below.
+      findSpy.mockRestore();
+    });
+
+    it("should NOT queue an expensive field scan for a non-relevant document mutation (only the host check)", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
+
+      // A childList mutation adding a plain <div> (no field) — irrelevant.
+      const div = document.createElement("div");
+      InFormManager.onShadowMutation(document, [{ type: "childList", addedNodes: [div], removedNodes: [] }], false);
+
+      // The debounce is still scheduled (host-tampering check must run on every document batch)...
+      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+      // ...but no expensive extraction is queued for an unrelated mutation.
+      expect(InFormManager._pendingFieldScan).toBe(false);
+    });
+
+    it("should queue an expensive field scan for a relevant document mutation", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
+
+      // A childList mutation adding an <input> (matches the field selector) — relevant.
+      const input = document.createElement("input");
+      InFormManager.onShadowMutation(document, [{ type: "childList", addedNodes: [input], removedNodes: [] }], false);
+
+      expect(InFormManager.updateAuthenticationFieldsDebounce).toHaveBeenCalledTimes(1);
+      expect(InFormManager._pendingFieldScan).toBe(true);
+    });
+
+    it("should queue a field scan when a pre-rendered login modal is revealed via its wrapper (visibility attribute)", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      await act(async () => new InformManagerPage());
+      InFormManager.updateAuthenticationFieldsDebounce = jest.fn();
+      InFormManager._pendingFieldScan = false;
+
+      // mydealz-style reveal: the login form pre-exists in the DOM, hidden; opening the modal only
+      // toggles `style` on its wrapper — no childList mutation, no mutation on the fields themselves.
+      const modalWrapper = document.createElement("div");
+      modalWrapper.appendChild(document.createElement("input"));
+      InFormManager.onShadowMutation(
+        document,
+        [{ type: "attributes", attributeName: "style", target: modalWrapper }],
+        false,
+      );
+
+      expect(InFormManager._pendingFieldScan).toBe(true);
+    });
+
+    it("should classify a field from its new attribute after a DOM mutation, not from the cached scrape", async () => {
+      expect.assertions(2);
+
+      // A lone text field with no hint is not a credential, so no call-to-action is attached.
+      document.body.innerHTML = "<form><input type='text' id='f1'/></form>";
+      await act(async () => new InformManagerPage());
+      expect(InFormManager.callToActionFields).toHaveLength(0);
+
+      // The site labels the field after the first scan; the next scan reads the new attribute.
+      await act(async () => {
+        document.getElementById("f1").setAttribute("aria-label", "Email address");
+      });
+      InFormManager.findAndSetAuthenticationFields();
+
+      expect(InFormManager.callToActionFields).toHaveLength(1);
     });
   });
 
@@ -2002,6 +2426,73 @@ describe("InformManager", () => {
 
       expect(InFormManager._attributeMutationAffectsField([{ type: "attributes", target: div }])).toBe(false);
     });
+
+    it("should return true when a visibility attribute changes on a container holding a field (pre-rendered modal reveal)", async () => {
+      expect.assertions(2);
+
+      await act(async () => new InformManagerPage());
+      const wrapper = document.createElement("div");
+      wrapper.appendChild(document.createElement("input"));
+
+      // v-show style reveal: display toggled via `style` on the wrapper, the input itself gets no mutation.
+      expect(
+        InFormManager._attributeMutationAffectsField([{ type: "attributes", attributeName: "style", target: wrapper }]),
+      ).toBe(true);
+      expect(
+        InFormManager._attributeMutationAffectsField([{ type: "attributes", attributeName: "class", target: wrapper }]),
+      ).toBe(true);
+    });
+
+    it("should return false when a non-visibility attribute changes on a container holding a field", async () => {
+      expect.assertions(1);
+
+      await act(async () => new InformManagerPage());
+      const wrapper = document.createElement("div");
+      wrapper.appendChild(document.createElement("input"));
+
+      // Identity attributes only matter ON the field itself, not on a container — no needless re-scan.
+      expect(
+        InFormManager._attributeMutationAffectsField([{ type: "attributes", attributeName: "name", target: wrapper }]),
+      ).toBe(false);
+    });
+  });
+
+  describe("In-form menu insertion", () => {
+    it("should not open the menu when the application id matches no tracked call-to-action", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = domElementOnlyUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      await informManager.focusOnUsername();
+      await informManager.clickOnInformCallToAction();
+      await informManager.openInFormMenu("6f1f9a5e-0000-4000-8000-000000000000");
+
+      expect(informManager.menuIframe).toBeUndefined();
+    });
+
+    /*
+     * The application id names the target instead of letting it be deduced, so it must designate a
+     * call-to-action that was actually clickable. One that is not rendered was not clicked.
+     */
+    it("should not open the menu for a call-to-action that is not displayed", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = domElementOnlyUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      await informManager.focusOnUsername();
+      await informManager.clickOnInformCallToAction();
+      const applicationId = InFormManager.lastCallToActionFieldClicked.id;
+      // The call-to-action goes away, but the message keeps claiming its id.
+      InFormManager.lastCallToActionFieldClicked.removeIframe();
+
+      await informManager.openInFormMenu(applicationId);
+
+      expect(informManager.menuIframe).toBeUndefined();
+    });
   });
 
   describe("IFrame positioning", () => {
@@ -2029,7 +2520,7 @@ describe("InformManager", () => {
 
       jest
         .spyOn(informManager.username, "getBoundingClientRect")
-        .mockReturnValue({ top: 100, left: 200, width: 300, height: 40 });
+        .mockReturnValue({ x: 200, y: 100, top: 100, left: 200, right: 500, bottom: 140, width: 300, height: 40 });
       jest.spyOn(informManager.host, "getBoundingClientRect").mockReturnValue({ top: 30, left: 40 });
 
       await informManager.focusOnUsername();
@@ -2047,7 +2538,7 @@ describe("InformManager", () => {
 
       jest
         .spyOn(informManager.username, "getBoundingClientRect")
-        .mockReturnValue({ top: 100, left: 200, width: 300, height: 40 });
+        .mockReturnValue({ x: 200, y: 100, top: 100, left: 200, right: 500, bottom: 140, width: 300, height: 40 });
       jest.spyOn(informManager.host, "getBoundingClientRect").mockReturnValue({ top: 50, left: 60 });
 
       await informManager.focusOnUsername();
@@ -2067,7 +2558,7 @@ describe("InformManager", () => {
 
       jest
         .spyOn(informManager.username, "getBoundingClientRect")
-        .mockReturnValue({ top: 10, left: 50, width: 100, height: 20 });
+        .mockReturnValue({ x: 50, y: 10, top: 10, left: 50, right: 150, bottom: 30, width: 100, height: 20 });
       jest.spyOn(informManager.host, "getBoundingClientRect").mockReturnValue({ top: 100, left: 0 });
 
       await informManager.focusOnUsername();

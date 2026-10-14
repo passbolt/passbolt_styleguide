@@ -25,6 +25,7 @@ import PermissionEntity from "../../../../../shared/models/entity/permission/per
 import { KEYRING_SYNC_EVENT } from "../../../../../shared/services/serviceWorker/keyring/keyringServiceWorkerService";
 import { PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY } from "../../../../../shared/services/serviceWorker/permission/permissionServiceWorkerService";
 import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
+import { ADDED_GROUP_CHANGED_ERROR_MESSAGE, addedGroupFixture, mockAddedGroupFetch } from "./permissionFlow.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -175,6 +176,47 @@ describe("ResourceEditFlow", () => {
           message:
             "The resource permissions changed during your review. Please retry the operation and verify the permissions again.",
         }),
+      });
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.resources.update",
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      );
+      expect(props.onStop).toHaveBeenCalled();
+    });
+  });
+
+  describe("As LU editing a shared resource and adding a group that changes during my review", () => {
+    it("As LU I should see the workflow refuse the submission", async () => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const operatorId = props.context.loggedInUser.id;
+      wireSnapshotListeners(props.context.port, {
+        permissions: [
+          resourcePermissionDto(operatorId, props.resource.id),
+          resourcePermissionDto(uuidv4(), props.resource.id, PermissionEntity.PERMISSION_READ),
+        ],
+      });
+
+      const page = await mountUntilEditOpen(props);
+      const editProps = dialogPropsFor(props.dialogContext, EditResource);
+      await act(() => editProps.onSubmit(fakeResourceFormEntity, fakeSecretDto));
+      await waitFor(() => {
+        if (page._instance.state.status !== RESOURCE_EDIT_FLOW_STATUS.SHARE_DIALOG_OPEN) {
+          throw new Error("ShareDialog not yet opened");
+        }
+      });
+
+      const { addedGroups, grownGroupDto } = addedGroupFixture();
+      mockAddedGroupFetch(props.context.port, grownGroupDto);
+      jest.spyOn(props.context.port, "request");
+      const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
+      const groupChanges = [{ aro: "Group", aro_foreign_key: grownGroupDto.id, type: 1, is_new: true }];
+      await act(() => shareProps.onConfirm(groupChanges, { addedGroups }));
+
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
+        error: expect.objectContaining({ message: ADDED_GROUP_CHANGED_ERROR_MESSAGE }),
       });
       expect(props.context.port.request).not.toHaveBeenCalledWith(
         "passbolt.resources.update",

@@ -1,4 +1,4 @@
-# v5.16.2
+# v5.17.0
 
 Provides:
-- Resolve tab freezing after a certain time
+- Webauthn features

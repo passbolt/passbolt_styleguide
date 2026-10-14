@@ -15,6 +15,8 @@ module.exports = {
     "api-setup": path.resolve(__dirname, "./src/react-extension/ApiSetup.entry.js"), // The setup application served by the API
     "api-triage": path.resolve(__dirname, "./src/react-extension/ApiTriage.entry.js"), // The triage application served by the API
     "api-feedback": path.resolve(__dirname, "./src/react-extension/ApiFeedback.entry.js"), // The feedback application served by the API
+    "api-mfa-verify": path.resolve(__dirname, "./src/react-extension/ApiMfaVerify.entry.js"), // The MFA verification application served by the API
+    "api-mfa-verify-delegated": path.resolve(__dirname, "./src/react-extension/ApiMfaVerifyDelegated.entry.js"), // The delegated MFA verification application served by the API for the mobile applications
     ...buildLessEntries(),
   }),
   ...(isDevelopment && {

@@ -155,6 +155,10 @@ export const mockHealthcheckData = {
     noActiveMetadataKey: true,
     isServerMetadataKeyAccessInZeroKnowledgeMode: false,
   },
+  scim: {
+    isScimTokenNotExpired: true,
+    isScimTokenNotNearExpiry: true,
+  },
 };
 
 export const mockHealthcheckWrongData = {
@@ -381,6 +385,10 @@ export const mockHealthcheckDataAllChecksFail = {
     noActiveMetadataKey: false,
     isServerMetadataKeyAccessInZeroKnowledgeMode: false,
   },
+  scim: {
+    isScimTokenNotExpired: false,
+    isScimTokenNotNearExpiry: false,
+  },
 };
 
 export const mockHealthcheckAirGappedEnvironment = {
@@ -496,5 +504,9 @@ export const mockHealthcheckAirGappedEnvironment = {
     isServerHasAccessToMetadataKey: true,
     noActiveMetadataKey: true,
     isServerMetadataKeyAccessInZeroKnowledgeMode: false,
+  },
+  scim: {
+    isScimTokenNotExpired: true,
+    isScimTokenNotNearExpiry: true,
   },
 };
