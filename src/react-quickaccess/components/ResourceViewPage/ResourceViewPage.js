@@ -482,11 +482,11 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * Gate for the note section: the type carries a note in its secret, v5 only.
+   * Gate for the note section: the type carries a note in its secret.
    * @returns {boolean}
    */
   get isNoteResources() {
-    return Boolean(this.resourceType?.hasSecretDescription() && this.resourceType?.isV5());
+    return Boolean(this.resourceType?.hasSecretDescription());
   }
 
   /**

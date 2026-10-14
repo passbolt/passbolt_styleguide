@@ -51,6 +51,7 @@ describe("ResourceViewPage", () => {
     props.context.port.request.mock.calls.filter(([name]) => name === "passbolt.secret.find-by-resource-id");
   const copyCalls = (props) =>
     props.context.port.request.mock.calls.filter(([name]) => name === "passbolt.clipboard.copy-temporarily");
+  const passwordSecret = () => ({ password: "secret-decrypted", description: "description" });
 
   describe("As LU, I should preview the secret.", () => {
     it("As LU, I should preview the secret password of a resource ", async () => {
@@ -860,8 +861,8 @@ describe("ResourceViewPage", () => {
         () => v5DefaultResourceProps({}, []),
         ["Username", "Password", "Notes", "URI"],
       ],
-      ["password-and-description", () => defaultProps(), ["Username", "Password", "URI"]],
-      ["password-description-totp", () => totpResourceProps(), ["Username", "Password", "TOTP", "URI"]],
+      ["password-and-description", () => defaultProps(), ["Username", "Password", "Notes", "URI"]],
+      ["password-description-totp", () => totpResourceProps(), ["Username", "Password", "TOTP", "Notes", "URI"]],
     ])("As LU, I should see the rows of a %s resource in order", async (_, buildProps, propertyNames) => {
       expect.assertions(2);
       const props = buildProps();
@@ -874,10 +875,14 @@ describe("ResourceViewPage", () => {
       expect(page.useOnThisPageButton).not.toBeNull();
     });
 
-    it("As LU, I should copy, preview and hide the note of a password resource", async () => {
+    it.each([
+      ["v5-default", () => v5DefaultResourceProps(), v5DefaultSecretDto],
+      ["password-and-description", () => defaultProps(), passwordSecret],
+      ["password-description-totp", () => totpResourceProps(), passwordSecret],
+    ])("As LU, I should copy, preview and hide the note of a %s resource", async (_, buildProps, secret) => {
       expect.assertions(4);
-      const props = v5DefaultResourceProps();
-      mockContextRequest(props.context, v5DefaultSecretDto);
+      const props = buildProps();
+      mockContextRequest(props.context, secret);
       let page;
       await act(async () => {
         page = new ResourceViewPagePage(props);
@@ -886,11 +891,11 @@ describe("ResourceViewPage", () => {
       await page.click(page.copyNoteButton);
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.clipboard.copy-temporarily",
-        v5DefaultSecretDto().description,
+        secret().description,
       );
 
       await page.click(page.previewNoteButton);
-      expect(page.notePreviewed.textContent).toStrictEqual(v5DefaultSecretDto().description);
+      expect(page.notePreviewed.textContent).toStrictEqual(secret().description);
 
       await page.click(page.previewNoteButton);
       expect(page.encryptedNote).not.toBeNull();
@@ -1009,7 +1014,6 @@ describe("ResourceViewPage", () => {
 
   describe("As LU, I should have one secret revealed at a time and one decryption per visit.", () => {
     const passwordAndTotpSecret = (totp) => ({ password: "secret-decrypted", description: "description", totp });
-    const passwordSecret = () => ({ password: "secret-decrypted", description: "description" });
 
     it("As LU, revealing the TOTP should mask the revealed password without decrypting again", async () => {
       expect.assertions(4);
