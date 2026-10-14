@@ -18,7 +18,17 @@ import { containsUnsafeUrl, linkifyText } from "./linkifyUtils";
 
 const renderNodes = (text) => render(<span>{linkifyText(text)}</span>);
 
-const UNSAFE_URLS = ["javascript:alert(1)", "data:text/html,<script>alert(1)</script>", "file:///etc/passwd"];
+const IGNORED_URLS = [
+  "javascript:alert(1)",
+  "vbscript:msgbox(1)",
+  "data:text/html,<script>alert(1)</script>",
+  "file:///etc/passwd",
+  "ftp://files.example.com/key.asc",
+  "ldap://directory.example.com:389",
+  "ssh://user@host",
+];
+
+const REJECTED_URLS = ["https://[", "https://:80", "https://a:b:c", "http://]"];
 
 describe("linkifyUtils", () => {
   beforeEach(() => {
@@ -59,6 +69,14 @@ describe("linkifyUtils", () => {
       );
     });
 
+    it("should give back a trailing backtick when the URL sits inside a command", () => {
+      expect.assertions(2);
+      const text = "Run `curl https://www.passbolt.com/docs/`";
+      const { container } = renderNodes(text);
+      expect(container.querySelector("a").getAttribute("href")).toEqual("https://www.passbolt.com/docs/");
+      expect(container.textContent).toEqual(text);
+    });
+
     it("should not swallow the full stop that ends the sentence into the href", () => {
       expect.assertions(2);
       const { container } = renderNodes("Read https://www.passbolt.com/docs/.");
@@ -92,6 +110,13 @@ describe("linkifyUtils", () => {
       expect(container.textContent).toEqual(text);
     });
 
+    it("should link an upper-case URL with the href normalised by sanitizeUrl, keeping its text", () => {
+      expect.assertions(2);
+      const { container } = renderNodes("See HTTPS://WWW.PASSBOLT.COM/DOCS/");
+      expect(container.querySelector("a").getAttribute("href")).toEqual("https://www.passbolt.com/DOCS/");
+      expect(container.querySelector("a").textContent).toEqual("HTTPS://WWW.PASSBOLT.COM/DOCS/");
+    });
+
     it("should render markup coming from the server as text and never as HTML", () => {
       expect.assertions(2);
       const text = '<img src=x onerror="alert(1)"> and <script>alert(1)</script>';
@@ -100,7 +125,7 @@ describe("linkifyUtils", () => {
       expect(container.textContent).toEqual(text);
     });
 
-    it.each(UNSAFE_URLS)("should never turn the unsafe URL %s into an anchor", (url) => {
+    it.each(IGNORED_URLS)("should never turn %s into an anchor", (url) => {
       expect.assertions(2);
       const text = `Open ${url} now`;
       const { container } = renderNodes(text);
@@ -113,6 +138,16 @@ describe("linkifyUtils", () => {
       const text = "sudo chown -Rf www-data:www-data /var/www/html/config/jwt/";
       const { container } = renderNodes(text);
       expect(container.querySelectorAll("a")).toHaveLength(0);
+      expect(container.textContent).toEqual(text);
+    });
+
+    it("should leave a URL sanitizeUrl rejects as plain text, losing none of the sentence", () => {
+      expect.assertions(3);
+      jest.spyOn(console, "error").mockImplementation(() => {});
+      const text = "Set the full base url to https://[ then see https://www.passbolt.com/docs/";
+      const { container } = renderNodes(text);
+      expect(container.querySelectorAll("a")).toHaveLength(1);
+      expect(container.querySelector("a").getAttribute("href")).toEqual("https://www.passbolt.com/docs/");
       expect(container.textContent).toEqual(text);
     });
 
@@ -134,20 +169,25 @@ describe("linkifyUtils", () => {
   });
 
   describe("::containsUnsafeUrl", () => {
-    it.each(UNSAFE_URLS)("should be true for %s", (url) => {
+    beforeEach(() => {
+      jest.spyOn(console, "error").mockImplementation(() => {});
+    });
+
+    it.each(REJECTED_URLS)("should be true for %s, which sanitizeUrl rejects", (url) => {
       expect.assertions(1);
       expect(containsUnsafeUrl(`Open ${url} now`)).toBe(true);
     });
 
-    it("should catch an unsafe scheme whatever its case", () => {
-      expect.assertions(1);
-      expect(containsUnsafeUrl("Open JavaScript:alert(1)")).toBe(true);
-    });
-
     it("should be false for an http and an https URL", () => {
-      expect.assertions(2);
+      expect.assertions(3);
       expect(containsUnsafeUrl("See http://php.net/manual/en/gnupg.installation.php")).toBe(false);
       expect(containsUnsafeUrl("See https://www.passbolt.com/docs/.")).toBe(false);
+      expect(containsUnsafeUrl("See HTTPS://WWW.PASSBOLT.COM/DOCS/")).toBe(false);
+    });
+
+    it.each(IGNORED_URLS)("should be false for %s, which the matcher never examines", (url) => {
+      expect.assertions(1);
+      expect(containsUnsafeUrl(`Fetch it from ${url} before retrying.`)).toBe(false);
     });
 
     it("should be false for a string with no URL", () => {
@@ -156,9 +196,9 @@ describe("linkifyUtils", () => {
       expect(containsUnsafeUrl("sudo chown -Rf root:www-data /var/www/html/config/jwt/")).toBe(false);
     });
 
-    it("should be true when one rejected URL sits beside a safe one", () => {
+    it("should be true when a rejected URL sits beside a safe one", () => {
       expect.assertions(1);
-      expect(containsUnsafeUrl("See https://www.passbolt.com/docs/ or javascript:alert(1)")).toBe(true);
+      expect(containsUnsafeUrl("See https://www.passbolt.com/docs/ or https://[")).toBe(true);
     });
 
     it("should be false for an empty or non string input", () => {
@@ -170,43 +210,15 @@ describe("linkifyUtils", () => {
 
     it("should warn naming the source and the rejected URL", () => {
       expect.assertions(2);
-      containsUnsafeUrl("Open javascript:alert(1) now", "time-sync");
+      containsUnsafeUrl("Set the full base url to https://[ in passbolt.php", "ssl-fullbaseurl");
       expect(console.warn).toHaveBeenCalledTimes(1);
-      expect(console.warn).toHaveBeenCalledWith(expect.stringMatching(/time-sync.*javascript:alert\(1\)/));
+      expect(console.warn).toHaveBeenCalledWith(expect.stringMatching(/ssl-fullbaseurl.*https:\/\/\[/));
     });
 
     it("should not warn when every URL is safe", () => {
       expect.assertions(1);
       containsUnsafeUrl("See https://www.passbolt.com/docs/");
       expect(console.warn).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("::linkifyText and ::containsUnsafeUrl", () => {
-    const SINGLE_URL_STRINGS = [
-      "See https://www.passbolt.com/docs/.",
-      "See http://php.net/manual/en/gnupg.installation.php",
-      "See HTTPS://WWW.PASSBOLT.COM/DOCS/",
-      "Open javascript:alert(1) now",
-      "Open vbscript:msgbox(1) now",
-      "Open data:text/html,<script>alert(1)</script>",
-      "Open file:///etc/passwd",
-      "Open ftp://files.example.com/key.asc",
-      "Run `curl https://www.passbolt.com/docs/`",
-    ];
-
-    it.each(SINGLE_URL_STRINGS)("should agree on what a URL is in: %s", (text) => {
-      expect.assertions(1);
-      const { container } = renderNodes(text);
-      const isLinked = container.querySelectorAll("a").length === 1;
-      expect(isLinked).toEqual(!containsUnsafeUrl(text));
-    });
-
-    it("should agree there is no URL in a string carrying none", () => {
-      expect.assertions(2);
-      const text = "sudo chown -Rf www-data:www-data /var/www/html/config/jwt/";
-      expect(linkifyText(text)).toEqual([text]);
-      expect(containsUnsafeUrl(text)).toBe(false);
     });
   });
 });

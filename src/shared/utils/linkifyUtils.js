@@ -16,13 +16,10 @@ import React from "react";
 import sanitizeUrl from "../../react-extension/lib/Sanitize/sanitizeUrl";
 
 /**
- * Matches the URL candidates of a string, unsafe schemes included so that they can be rejected.
- * A bare "word:" scheme is not matched, or `chown root:www-data` would be read as a URL.
- * The first group holds the preceding character, as a lookbehind is not supported by every target
- * browser, so that the "data:" of "www-data:www-data" is not matched.
+ * Matches the http and https URL candidates of a string.
  * @type {RegExp}
  */
-const URL_CANDIDATE_PATTERN = /(^|[^\w+.-])((?:[a-z][a-z\d+.-]*:\/\/|(?:javascript|vbscript|data|blob|file):)\S+)/gi;
+const URL_CANDIDATE_PATTERN = /https?:\/\/\S+/gi;
 
 /**
  * Characters that end a sentence rather than a URL.
@@ -69,8 +66,8 @@ const trimTrailingPunctuation = (url) => {
  */
 const findUrlCandidates = (text) =>
   Array.from(text.matchAll(URL_CANDIDATE_PATTERN), (match) => ({
-    url: trimTrailingPunctuation(match[2]),
-    start: match.index + match[1].length,
+    url: trimTrailingPunctuation(match[0]),
+    start: match.index,
   }));
 
 /**
@@ -115,8 +112,7 @@ export function linkifyText(text, keyPrefix = "linkified") {
 }
 
 /**
- * Returns true if the given string embeds a URL sanitizeUrl rejects.
- * Each rejected URL is warned about, as sanitizeUrl rejects a protocol silently.
+ * Returns true if the given string embeds a URL sanitizeUrl rejects, warning about each one.
  * @param {string} text the string to check
  * @param {string} [source] what the text belongs to, named in the warning
  * @returns {boolean}

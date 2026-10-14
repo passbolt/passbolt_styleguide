@@ -153,34 +153,35 @@ describe("See the healthcheck settings", () => {
 
     beforeEach(() => {
       jest.spyOn(console, "warn").mockImplementation(() => {});
+      jest.spyOn(console, "error").mockImplementation(() => {});
     });
 
     afterEach(() => {
       jest.restoreAllMocks();
     });
 
-    it.each(["javascript:alert(1)", "data:text/html,<script>alert(1)</script>", "file:///etc/passwd"])(
-      "should drop a help entry containing %s entirely and keep the others",
-      (unsafeUrl) => {
+    it.each(["https://[", "https://:80", "https://a:b:c"])(
+      "should drop a help entry whose URL %s is rejected by sanitizeUrl, and keep the others",
+      (rejectedUrl) => {
         expect.assertions(5);
-        const unsafeEntry = `Open ${unsafeUrl} to repair the installation.`;
-        const help = [SAFE_ENTRIES[0], unsafeEntry, SAFE_ENTRIES[1]];
+        const rejectedEntry = `Set the full base url to ${rejectedUrl} to repair the installation.`;
+        const help = [SAFE_ENTRIES[0], rejectedEntry, SAFE_ENTRIES[1]];
         const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", status: "error", help })];
         const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
 
         expect(page.helpEntries(0, 0).map((entry) => entry.textContent)).toEqual(SAFE_ENTRIES);
-        expect(page.checks(0)[0].textContent).not.toContain(unsafeUrl);
+        expect(page.checks(0)[0].textContent).not.toContain(rejectedUrl);
         expect(page.checks(0)[0].textContent).not.toContain("to repair the installation");
         expect(page.helpLinks(0, 0).map((link) => link.getAttribute("href"))).toEqual([
           "https://www.passbolt.com/docs/",
         ]);
-        expect(console.warn).toHaveBeenCalledWith(expect.stringContaining(unsafeUrl));
+        expect(console.warn).toHaveBeenCalledWith(expect.stringContaining(rejectedUrl));
       },
     );
 
     it("should render no help list when every entry of a check is unsafe, leaving badge and message", () => {
       expect.assertions(4);
-      const help = ["Open javascript:alert(1).", "Open file:///etc/passwd."];
+      const help = ["Set the url to https://[.", "Or to https://:80."];
       const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", status: "error", message: "Broken.", help })];
       const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
 
@@ -192,9 +193,25 @@ describe("See the healthcheck settings", () => {
 
     it("should name the check whose help was dropped in the warning", () => {
       expect.assertions(1);
-      const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", help: ["Open javascript:alert(1)."] })];
+      const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", help: ["Set the url to https://[."] })];
       new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
-      expect(console.warn).toHaveBeenCalledWith(expect.stringMatching(/flux-capacitor.*javascript:alert\(1\)/));
+      expect(console.warn).toHaveBeenCalledWith(expect.stringMatching(/flux-capacitor.*https:\/\/\[/));
+    });
+
+    it.each([
+      "ftp://files.example.com/key.asc",
+      "ldap://directory.example.com:389",
+      "javascript:alert(1)",
+      "file:///etc/passwd",
+    ])("should keep a help entry carrying %s, shown as plain text rather than hidden", (ignoredUrl) => {
+      expect.assertions(3);
+      const entry = `Fetch it from ${ignoredUrl} before retrying.`;
+      const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", status: "error", help: [entry] })];
+      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+
+      expect(page.helpEntries(0, 0).map((helpEntry) => helpEntry.textContent)).toEqual([entry]);
+      expect(page.helpLinks(0, 0)).toHaveLength(0);
+      expect(console.warn).not.toHaveBeenCalled();
     });
   });
 
