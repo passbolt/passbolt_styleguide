@@ -1,7 +1,6 @@
-# v5.17.1
+# v5.17.2
 
 Provides:
-- Merge of the 5.17.0 with the 5.16.2 that brings Edge on MV3
-- hot fixes:
-    - get tab by id
-    - some offline mode issues
+- Updates of the translation
+- fix for the error message whenever an admin wants to activate passkey MFA on an instance served with IP
+- autofill performance improvement
