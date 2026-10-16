@@ -29,7 +29,7 @@ import {
 } from "./secretState";
 
 /**
- * The custom fields section of the resource view page: one row per custom field, keyed by the custom field id.
+ * The custom fields section of the resource view page: a title and one row per custom field, keyed by the field id.
  */
 class ResourceViewPageCustomFields extends React.Component {
   /**
@@ -83,25 +83,6 @@ class ResourceViewPageCustomFields extends React.Component {
   }
 
   /**
-   * Render the row shown when the resource has no custom field.
-   * @returns {JSX}
-   */
-  renderEmptyRow() {
-    return (
-      <li className="property">
-        <div className="information">
-          <span className="property-name">
-            <Trans>Custom fields</Trans>
-          </span>
-          <span className="property-value empty">
-            <Trans>No custom fields</Trans>
-          </span>
-        </div>
-      </li>
-    );
-  }
-
-  /**
    * Render the row of a custom field. The page gives its plaintext only while it is revealed.
    * @param {object} customField The custom field: its id, its key and its value
    * @returns {JSX}
@@ -114,7 +95,7 @@ class ResourceViewPageCustomFields extends React.Component {
     const copyStatus = this.getCopyStatus(id);
     const isCopied = copiedProperty === id;
     return (
-      <li className="property" key={id}>
+      <li className="custom-field" key={id}>
         <div className="information">
           {customField.metadata_key?.length > 0 ? (
             <span className="property-name">{customField.metadata_key}</span>
@@ -144,9 +125,15 @@ class ResourceViewPageCustomFields extends React.Component {
               >
                 {this.renderIcon(
                   this.getNodeRef(`${id}:preview-idle`),
-                  !isDecrypting,
+                  !isDecrypting && !isRevealed,
                   false,
-                  isRevealed ? <EyeCloseSVG /> : <EyeOpenSVG />,
+                  <EyeOpenSVG />,
+                )}
+                {this.renderIcon(
+                  this.getNodeRef(`${id}:preview-revealed`),
+                  !isDecrypting && isRevealed,
+                  false,
+                  <EyeCloseSVG />,
                 )}
                 {this.renderIcon(this.getNodeRef(`${id}:preview-decrypting`), isDecrypting, true, <SpinnerSVG />)}
                 <span className="visually-hidden">
@@ -205,10 +192,20 @@ class ResourceViewPageCustomFields extends React.Component {
    */
   render() {
     const { customFields } = this.props;
-    if (customFields.length === 0) {
-      return this.renderEmptyRow();
-    }
-    return <>{customFields.map((customField) => this.renderCustomFieldRow(customField))}</>;
+    return (
+      <li className="property custom-fields">
+        <span className="property-name">
+          <Trans>Custom fields</Trans>
+        </span>
+        {customFields.length === 0 ? (
+          <span className="property-value empty">
+            <Trans>No custom fields</Trans>
+          </span>
+        ) : (
+          <ul>{customFields.map((customField) => this.renderCustomFieldRow(customField))}</ul>
+        )}
+      </li>
+    );
   }
 }
 

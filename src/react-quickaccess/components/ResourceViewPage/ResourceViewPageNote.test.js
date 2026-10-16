@@ -35,14 +35,15 @@ describe("ResourceViewPageNote", () => {
     expect(page.copyIconState).toStrictEqual("default");
   });
 
-  it("As LU, I should see the revealed note in its block, without title", () => {
-    expect.assertions(3);
+  it("As LU, I should see the revealed note in its block, without title, and the hide eye", () => {
+    expect.assertions(4);
     const props = revealedNoteProps();
     const page = new ResourceViewPageNotePage(props);
 
     expect(page.notePreviewed.textContent).toStrictEqual(props.note);
     expect(page.encryptedNote).toBeNull();
     expect(page.secret.hasAttribute("title")).toBeFalsy();
+    expect(page.previewIconState).toStrictEqual("revealed");
   });
 
   it("As LU, I should see the revealed empty note as there is no note, in the empty style", () => {

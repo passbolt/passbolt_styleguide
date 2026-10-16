@@ -35,13 +35,14 @@ describe("ResourceViewPagePinCode", () => {
     expect(page.copyIconState).toStrictEqual("default");
   });
 
-  it("As LU, I should see the revealed PIN code with its characters and its value as title", () => {
-    expect.assertions(3);
+  it("As LU, I should see the revealed PIN code with its characters, its value as title and the hide eye", () => {
+    expect.assertions(4);
     const page = new ResourceViewPagePinCodePage(revealedPinCodeProps());
 
     expect(page.revealedPinCodeText).toStrictEqual("482913");
     expect(page.secret.getAttribute("title")).toStrictEqual("482913");
     expect(page.secret.classList.contains("secret-copy")).toBeFalsy();
+    expect(page.previewIconState).toStrictEqual("revealed");
   });
 
   it("As LU, I should copy by clicking the value or the copy action, and preview by clicking the eye", async () => {

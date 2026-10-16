@@ -75,13 +75,14 @@ describe("ResourceViewPagePassword", () => {
       expect(page.copyIconState).toStrictEqual("default");
     });
 
-    it("As LU, I should see the revealed password with its characters and its value as title", () => {
-      expect.assertions(3);
+    it("As LU, I should see the revealed password with its characters, its value as title and the hide eye", () => {
+      expect.assertions(4);
       const page = new ResourceViewPagePasswordPage(revealedPasswordProps());
 
       expect(page.revealedPasswordText).toStrictEqual("secret-decrypted");
       expect(page.secret.getAttribute("title")).toStrictEqual("secret-decrypted");
       expect(page.secret.classList.contains("secret-copy")).toBeFalsy();
+      expect(page.previewIconState).toStrictEqual("revealed");
     });
 
     it("As LU, I should copy by clicking the value or the copy action, and preview by clicking the eye", async () => {

@@ -41,6 +41,7 @@ class ResourceViewPageNote extends React.Component {
     this.bindCallbacks();
     this.previewIdleRef = createRef();
     this.previewDecryptingRef = createRef();
+    this.previewRevealedRef = createRef();
     this.copyDefaultRef = createRef();
     this.copyProcessingRef = createRef();
     this.copyDoneRef = createRef();
@@ -145,8 +146,7 @@ class ResourceViewPageNote extends React.Component {
         onClick={this.handleCopyClick}
         disabled={!canCopy}
       >
-        Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never gonna make you
-        cry.
+        Never gonna give you up. Never gonna let you down. Never gonna run around and desert you.
       </button>
     );
   }
@@ -180,12 +180,8 @@ class ResourceViewPageNote extends React.Component {
                 className="password-view inline button-transparent"
                 disabled={isDecrypting}
               >
-                {this.renderIcon(
-                  this.previewIdleRef,
-                  !isDecrypting,
-                  false,
-                  isRevealed ? <EyeCloseSVG /> : <EyeOpenSVG />,
-                )}
+                {this.renderIcon(this.previewIdleRef, !isDecrypting && !isRevealed, false, <EyeOpenSVG />)}
+                {this.renderIcon(this.previewRevealedRef, !isDecrypting && isRevealed, false, <EyeCloseSVG />)}
                 {this.renderIcon(this.previewDecryptingRef, isDecrypting, true, <SpinnerSVG />)}
                 <span className="visually-hidden">
                   <Trans>View</Trans>

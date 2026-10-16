@@ -26,10 +26,11 @@ beforeEach(() => {
 });
 
 describe("ResourceViewPageCustomFields", () => {
-  it("As LU, I should see one masked row per custom field, in order, with its label or no key", () => {
-    expect.assertions(8);
+  it("As LU, I should see the section title and one masked row per custom field, in order, with its label or no key", () => {
+    expect.assertions(9);
     const page = new ResourceViewPageCustomFieldsPage(defaultProps());
 
+    expect(page.title.textContent).toStrictEqual("Custom fields");
     expect(page.rows.length).toStrictEqual(4);
     expect(page.labels).toStrictEqual(["License key", "Port", "no key", "Empty"]);
     expect(page.label(2).classList.contains("empty")).toBeTruthy();
@@ -41,12 +42,13 @@ describe("ResourceViewPageCustomFields", () => {
   });
 
   it("As LU, I should see each row in its own state", () => {
-    expect.assertions(9);
+    expect.assertions(10);
     const page = new ResourceViewPageCustomFieldsPage(mixedStatesProps());
 
     expect(page.valueText(0)).toStrictEqual("XYZ-123");
     expect(page.secret(0).getAttribute("title")).toStrictEqual("XYZ-123");
     expect(page.secret(0).classList.contains("secret-copy")).toBeFalsy();
+    expect(page.previewIconState(0)).toStrictEqual("revealed");
     expect(page.valueText(1)).toStrictEqual("Copy to clipboard");
     expect(page.previewButton(1).hasAttribute("disabled")).toBeTruthy();
     expect(page.previewIconState(1)).toStrictEqual("decrypting");
@@ -97,13 +99,12 @@ describe("ResourceViewPageCustomFields", () => {
     expect(page.rows.every((row) => row.querySelector(".secret button").hasAttribute("disabled"))).toBeTruthy();
   });
 
-  it("As LU, I should see a single row when the resource has no custom field", () => {
-    expect.assertions(4);
+  it("As LU, I should see the section title and the empty message when the resource has no custom field", () => {
+    expect.assertions(3);
     const page = new ResourceViewPageCustomFieldsPage(emptyCustomFieldsProps());
 
-    expect(page.rows.length).toStrictEqual(1);
-    expect(page.labels).toStrictEqual(["Custom fields"]);
+    expect(page.title.textContent).toStrictEqual("Custom fields");
+    expect(page.rows.length).toStrictEqual(0);
     expect(page.emptyCustomFields.textContent).toStrictEqual("No custom fields");
-    expect(page.rows[0].querySelector(".secret")).toBeNull();
   });
 });

@@ -36,14 +36,15 @@ describe("ResourceViewPageTotp", () => {
     expect(page.copyIconState).toStrictEqual("default");
   });
 
-  it("As LU, I should see the revealed TOTP code, the title staying the copy sentence", () => {
-    expect.assertions(3);
+  it("As LU, I should see the revealed TOTP code and the hide eye, the title staying the copy sentence", () => {
+    expect.assertions(4);
     const props = revealedTotpProps();
     const page = new ResourceViewPageTotpPage(props);
 
     expect(page.totpCode.textContent.replace(/\s/, "")).toStrictEqual(TotpCodeGeneratorService.generate(props.totp));
     expect(page.secret.getAttribute("title")).toStrictEqual("Click to copy");
     expect(page.secret.classList.contains("secret-copy")).toBeFalsy();
+    expect(page.previewIconState).toStrictEqual("revealed");
   });
 
   it("As LU, I should copy by clicking the masked value, the revealed code or the copy action, and preview by clicking the eye", async () => {

@@ -664,7 +664,7 @@ describe("ResourceViewPage", () => {
         page = new ResourceViewPagePage(props);
       });
 
-      expect(page.propertyNames).toStrictEqual(["License key", "Port", "no key", "Empty", "URI"]);
+      expect(page.propertyNames).toStrictEqual(["Custom fields", "License key", "Port", "no key", "Empty", "URI"]);
       expect(page.customFieldRows.length).toStrictEqual(4);
       expect([0, 1, 2, 3].map((index) => page.customFieldValueText(index))).toStrictEqual(
         Array(4).fill("Copy to clipboard"),
@@ -849,12 +849,12 @@ describe("ResourceViewPage", () => {
       [
         "v5-default with custom fields",
         () => v5DefaultResourceProps(),
-        ["Username", "Password", "Notes", "License key", "Port", "no key", "Empty", "URI"],
+        ["Username", "Password", "Notes", "Custom fields", "License key", "Port", "no key", "Empty", "URI"],
       ],
       [
         "v5-default-with-totp with custom fields",
         () => v5DefaultTotpResourceProps(),
-        ["Username", "Password", "TOTP", "Notes", "License key", "Port", "no key", "Empty", "URI"],
+        ["Username", "Password", "TOTP", "Notes", "Custom fields", "License key", "Port", "no key", "Empty", "URI"],
       ],
       [
         "v5-default without custom fields",

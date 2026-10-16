@@ -244,7 +244,7 @@ export default class ResourceViewPagePage {
    */
   get customFieldRows() {
     return Array.from(this._page.container.querySelectorAll(".secret.secret-custom-fields")).map((element) =>
-      element.closest(".property"),
+      element.closest(".custom-field"),
     );
   }
 

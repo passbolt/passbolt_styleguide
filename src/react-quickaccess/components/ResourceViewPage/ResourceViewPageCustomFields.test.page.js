@@ -52,11 +52,19 @@ export default class ResourceViewPageCustomFieldsPage {
   }
 
   /**
-   * The rows.
+   * The section title.
+   * @returns {Element}
+   */
+  get title() {
+    return this._page.container.querySelector(".custom-fields > .property-name");
+  }
+
+  /**
+   * The custom field rows.
    * @returns {Array<Element>}
    */
   get rows() {
-    return Array.from(this._page.container.querySelectorAll("li.property"));
+    return Array.from(this._page.container.querySelectorAll("li.custom-field"));
   }
 
   /**
@@ -132,10 +140,10 @@ export default class ResourceViewPageCustomFieldsPage {
   /**
    * The state displayed by the preview button of the row at the given index.
    * @param {number} index The row index
-   * @returns {string} "idle" or "decrypting"
+   * @returns {string} "idle", "revealed" or "decrypting"
    */
   previewIconState(index) {
-    return this.iconState(this.previewButton(index), ["idle", "decrypting"]);
+    return this.iconState(this.previewButton(index), ["idle", "revealed", "decrypting"]);
   }
 
   /**

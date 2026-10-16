@@ -45,6 +45,7 @@ class ResourceViewPagePassword extends React.Component {
     this.usernameCopyDoneRef = createRef();
     this.previewIdleRef = createRef();
     this.previewDecryptingRef = createRef();
+    this.previewRevealedRef = createRef();
     this.copyDefaultRef = createRef();
     this.copyProcessingRef = createRef();
     this.copyDoneRef = createRef();
@@ -205,12 +206,8 @@ class ResourceViewPagePassword extends React.Component {
                 className="password-view inline button-transparent"
                 disabled={isDecrypting}
               >
-                {this.renderIcon(
-                  this.previewIdleRef,
-                  !isDecrypting,
-                  false,
-                  isRevealed ? <EyeCloseSVG /> : <EyeOpenSVG />,
-                )}
+                {this.renderIcon(this.previewIdleRef, !isDecrypting && !isRevealed, false, <EyeOpenSVG />)}
+                {this.renderIcon(this.previewRevealedRef, !isDecrypting && isRevealed, false, <EyeCloseSVG />)}
                 {this.renderIcon(this.previewDecryptingRef, isDecrypting, true, <SpinnerSVG />)}
                 <span className="visually-hidden">
                   <Trans>View</Trans>

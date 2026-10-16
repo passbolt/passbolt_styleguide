@@ -109,10 +109,10 @@ export default class ResourceViewPagePinCodePage {
 
   /**
    * The state displayed by the preview button, read from its visible icon.
-   * @returns {string} "idle" or "decrypting"
+   * @returns {string} "idle", "revealed" or "decrypting"
    */
   get previewIconState() {
-    return this.iconState(this.previewButton, ["idle", "decrypting"]);
+    return this.iconState(this.previewButton, ["idle", "revealed", "decrypting"]);
   }
 
   /**

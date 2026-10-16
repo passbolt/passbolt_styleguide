@@ -42,6 +42,7 @@ class ResourceViewPageTotp extends React.Component {
     this.bindCallbacks();
     this.previewIdleRef = createRef();
     this.previewDecryptingRef = createRef();
+    this.previewRevealedRef = createRef();
     this.copyDefaultRef = createRef();
     this.copyProcessingRef = createRef();
     this.copyDoneRef = createRef();
@@ -166,12 +167,8 @@ class ResourceViewPageTotp extends React.Component {
                 className="totp-view inline button-transparent"
                 disabled={isDecrypting}
               >
-                {this.renderIcon(
-                  this.previewIdleRef,
-                  !isDecrypting,
-                  false,
-                  isRevealed ? <EyeCloseSVG /> : <EyeOpenSVG />,
-                )}
+                {this.renderIcon(this.previewIdleRef, !isDecrypting && !isRevealed, false, <EyeOpenSVG />)}
+                {this.renderIcon(this.previewRevealedRef, !isDecrypting && isRevealed, false, <EyeCloseSVG />)}
                 {this.renderIcon(this.previewDecryptingRef, isDecrypting, true, <SpinnerSVG />)}
                 <span className="visually-hidden">
                   <Trans>View</Trans>
