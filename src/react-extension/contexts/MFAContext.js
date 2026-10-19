@@ -29,6 +29,7 @@ export const MfaSettingsWorkflowStates = {
   VIEWCONFIGURATION: "View a totp configuration",
   SETUPYUBIKEY: "Setup Yubikey",
   SETUPDUO: "Setup Duo",
+  SETUPDUOERROR: "Setup Duo error",
   PASSKEYS: "Passkeys",
 };
 
@@ -37,6 +38,11 @@ export const Providers = {
   YUBIKEY: "yubikey",
   DUO: "duo",
   WEBAUTHN: "webauthn",
+};
+
+export const DuoSetupErrors = {
+  SUBSCRIBER_MISMATCH: "duoSubscriberMismatch",
+  SETUP_FAILED: "duoSetupFailed",
 };
 
 /**
