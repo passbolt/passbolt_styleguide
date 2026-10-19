@@ -29,6 +29,8 @@ export default class DisplayHealthcheckAdministrationPage {
    */
   constructor(props) {
     this._page = render(this.constructor.markup(props));
+    // The sidebar portals into #administration-help-panel, which is only in the document once the first render commits.
+    this._page.rerender(this.constructor.markup(props));
   }
 
   /**
@@ -42,6 +44,7 @@ export default class DisplayHealthcheckAdministrationPage {
         <AppContext.Provider value={props.context}>
           <DisplayAdministrationHealthcheckActions {...props} />
           <DisplayHealthcheckAdministration {...props} />
+          <div id="administration-help-panel"></div>
         </AppContext.Provider>
       </MockTranslationProvider>
     );
@@ -182,13 +185,23 @@ export default class DisplayHealthcheckAdministrationPage {
 
   /**
    * All the badge modifiers rendered on the page, in render order.
-   * Scoped to the panel root: the sidebar legend carries badges of its own once WP 7.1 lands.
+   * Scoped to the panel root: the sidebar legend carries badges of its own.
    * @returns {Array<string>}
    */
   get allBadgeModifiers() {
     return Array.from(this._page.container.querySelectorAll(".healthcheck-settings .healthcheck-badge")).map((badge) =>
       Array.from(badge.classList).find((className) => className.startsWith("healthcheck-badge--")),
     );
+  }
+
+  /**
+   * The badge modifiers of the sidebar legend, in render order.
+   * @returns {Array<string>}
+   */
+  get legendBadgeModifiers() {
+    return Array.from(
+      this._page.container.querySelectorAll("#administration-help-panel .healthcheck-color-legends .healthcheck-badge"),
+    ).map((badge) => Array.from(badge.classList).find((className) => className.startsWith("healthcheck-badge--")));
   }
 
   /**

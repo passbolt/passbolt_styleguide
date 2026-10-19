@@ -251,4 +251,22 @@ describe("See the healthcheck settings", () => {
       expect(new Set(page.allBadgeModifiers)).toEqual(new Set(["healthcheck-badge--success"]));
     });
   });
+
+  describe("As AD, I should see a legend that explains the status badges", () => {
+    let page;
+
+    beforeEach(() => {
+      page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(mixedStatusHealthcheckApiBodyDto()));
+    });
+
+    it("should render one badge per status, in the order success, warning, error, info", () => {
+      expect.assertions(1);
+      expect(page.legendBadgeModifiers).toEqual([
+        "healthcheck-badge--success",
+        "healthcheck-badge--warning",
+        "healthcheck-badge--error",
+        "healthcheck-badge--info",
+      ]);
+    });
+  });
 });
