@@ -29,6 +29,23 @@ import {
  */
 const domainsOf = (body) => healthcheckChecksCollection(body).groupByDomain();
 
+/**
+ * Position of the first check of a body matching the predicate, as [domainIndex, checkIndex].
+ * @param {array} body
+ * @param {function} predicate
+ * @returns {Array<number>|null}
+ */
+const firstCheckWhere = (body, predicate) => {
+  const domains = domainsOf(body);
+  for (let domainIndex = 0; domainIndex < domains.length; domainIndex++) {
+    const checkIndex = domains[domainIndex].checks.findIndex(predicate);
+    if (checkIndex !== -1) {
+      return [domainIndex, checkIndex];
+    }
+  }
+  return null;
+};
+
 describe("See the healthcheck settings", () => {
   afterEach(() => {
     jest.resetModules();
@@ -97,42 +114,112 @@ describe("See the healthcheck settings", () => {
     });
   });
 
-  describe("As AD, I should see the help of a check", () => {
-    it("should list the help entries of every check in order, with their text", () => {
+  describe("As AD, I should be able to collapse and expand a domain", () => {
+    let page, domains;
+
+    beforeEach(() => {
       const body = mixedStatusHealthcheckApiBodyDto();
-      const domains = domainsOf(body);
-      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
-      const checkCount = domains.reduce((count, domain) => count + domain.checks.length, 0);
-      expect.assertions(checkCount);
-      domains.forEach((domain, domainIndex) => {
-        domain.checks.forEach((check, checkIndex) => {
-          expect(page.helpEntries(domainIndex, checkIndex).map((entry) => entry.textContent)).toEqual(check.help);
-        });
+      domains = domainsOf(body);
+      page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+    });
+
+    it("should render every domain expanded on load", () => {
+      expect.assertions(domains.length * 2);
+      domains.forEach((_, domainIndex) => {
+        expect(page.isDomainExpanded(domainIndex)).toBe(true);
+        expect(page.domainSection(domainIndex)).not.toBeNull();
       });
     });
 
-    it("should not render a help list on a check with no help", () => {
-      expect.assertions(2);
-      const body = [defaultHealthcheckCheckDto({ help: [] })];
-      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
-      expect(page.checks(0)).toHaveLength(1);
-      expect(page.helpList(0, 0)).toBeNull();
+    it("should hide the checks of a domain when it is collapsed, and show them again", async () => {
+      expect.assertions(4);
+      await page.click(page.domainToggle(0));
+      expect(page.isDomainExpanded(0)).toBe(false);
+      expect(page.domainSection(0)).toBeNull();
+
+      await page.click(page.domainToggle(0));
+      expect(page.isDomainExpanded(0)).toBe(true);
+      expect(page.domainSection(0)).not.toBeNull();
     });
 
-    it("should show the help of a check reported as info", () => {
+    it("should leave the other domains alone when one is collapsed", async () => {
       expect.assertions(2);
+      await page.click(page.domainToggle(0));
+      expect(page.isDomainExpanded(1)).toBe(true);
+      expect(page.domainSection(1)).not.toBeNull();
+    });
+  });
+
+  describe("As AD, I should be able to open the help of a check", () => {
+    let page, body, withHelp, withoutHelp;
+
+    beforeEach(() => {
+      body = mixedStatusHealthcheckApiBodyDto();
+      withHelp = firstCheckWhere(body, (check) => check.hasHelp);
+      withoutHelp = firstCheckWhere(body, (check) => !check.hasHelp);
+      page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+    });
+
+    it("should render the help collapsed on load", () => {
+      expect.assertions(3);
+      const [domainIndex, checkIndex] = withHelp;
+      expect(page.helpToggle(domainIndex, checkIndex)).not.toBeNull();
+      expect(page.isHelpOpened(domainIndex, checkIndex)).toBe(false);
+      expect(page.helpList(domainIndex, checkIndex)).toBeNull();
+    });
+
+    it("should render no toggle on a check that carries no help", () => {
+      expect.assertions(2);
+      const [domainIndex, checkIndex] = withoutHelp;
+      expect(page.checks(domainIndex)[checkIndex]).toBeDefined();
+      expect(page.helpToggle(domainIndex, checkIndex)).toBeNull();
+    });
+
+    it("should list the help entries of every check in order, with their text, once opened", async () => {
+      const domains = domainsOf(body);
+      const checkCount = domains.reduce((count, domain) => count + domain.checks.length, 0);
+      expect.assertions(checkCount);
+      for (const [domainIndex, domain] of domains.entries()) {
+        for (const [checkIndex, check] of domain.checks.entries()) {
+          if (check.hasHelp) {
+            await page.click(page.helpToggle(domainIndex, checkIndex));
+          }
+          expect(page.helpEntries(domainIndex, checkIndex).map((entry) => entry.textContent)).toEqual(check.help);
+        }
+      }
+    });
+
+    it("should leave every other help alone when one is opened", async () => {
+      expect.assertions(2);
+      const [domainIndex, checkIndex] = withHelp;
+      await page.click(page.helpToggle(domainIndex, checkIndex));
+
+      const openedHelp = page.domains.flatMap((_, otherDomainIndex) =>
+        page.checks(otherDomainIndex).map((_, otherCheckIndex) => page.isHelpOpened(otherDomainIndex, otherCheckIndex)),
+      );
+      expect(page.isHelpOpened(domainIndex, checkIndex)).toBe(true);
+      expect(openedHelp.filter(Boolean)).toHaveLength(1);
+    });
+
+    it("should show the help of a check reported as info", async () => {
+      expect.assertions(3);
       const help = ["See `timedatectl | grep -i -A 1 clock`."];
       const body = [defaultHealthcheckCheckDto({ key: "time-sync", status: "info", help })];
       const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
       expect(page.checkBadgeModifier(0, 0)).toEqual("healthcheck-badge--info");
+      expect(page.helpToggle(0, 0)).not.toBeNull();
+
+      await page.click(page.helpToggle(0, 0));
       expect(page.helpEntries(0, 0).map((entry) => entry.textContent)).toEqual(help);
     });
 
-    it("should render a URL of a help entry as a link opening in a new tab", () => {
+    it("should render a URL of a help entry as a link opening in a new tab", async () => {
       expect.assertions(4);
       const help = ["See. https://www.passbolt.com/help/tech/install#toc_gpg"];
       const body = [defaultHealthcheckCheckDto({ status: "error", help })];
       const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+      await page.click(page.helpToggle(0, 0));
+
       const links = page.helpLinks(0, 0);
       expect(links).toHaveLength(1);
       expect(links[0].getAttribute("href")).toEqual("https://www.passbolt.com/help/tech/install#toc_gpg");
@@ -140,11 +227,39 @@ describe("See the healthcheck settings", () => {
       expect(links[0].getAttribute("rel")).toEqual("noopener noreferrer");
     });
 
-    it("should give the help list an id derived from the check key", () => {
+    it("should give the help list an id derived from the check key", async () => {
       expect.assertions(1);
       const body = [defaultHealthcheckCheckDto({ key: "time-sync", help: ["See `timedatectl`."] })];
       const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+      await page.click(page.helpToggle(0, 0));
       expect(page.helpList(0, 0).id).toEqual("healthcheck-help-time-sync");
+    });
+  });
+
+  describe("As AD, I should get a clean view when the data reloads", () => {
+    it("should expand every domain and collapse every help again", async () => {
+      expect.assertions(4);
+      const body = mixedStatusHealthcheckApiBodyDto();
+      const [domainIndex, checkIndex] = firstCheckWhere(body, (check) => check.hasHelp);
+      const props = propsWithHealthcheckApiBody(body);
+      const page = new DisplayHealthcheckAdministrationPage(props);
+      const otherDomainIndex = domainIndex === 0 ? 1 : 0;
+
+      await page.click(page.domainToggle(otherDomainIndex));
+      await page.click(page.helpToggle(domainIndex, checkIndex));
+      expect(page.isDomainExpanded(otherDomainIndex)).toBe(false);
+      expect(page.isHelpOpened(domainIndex, checkIndex)).toBe(true);
+
+      await page.rerender({
+        ...props,
+        adminHealthcheckContext: {
+          ...props.adminHealthcheckContext,
+          healthcheckData: healthcheckChecksCollection(body),
+        },
+      });
+
+      expect(page.isDomainExpanded(otherDomainIndex)).toBe(true);
+      expect(page.isHelpOpened(domainIndex, checkIndex)).toBe(false);
     });
   });
 
@@ -162,12 +277,13 @@ describe("See the healthcheck settings", () => {
 
     it.each(["https://[", "https://:80", "https://a:b:c"])(
       "should drop a help entry whose URL %s is rejected by sanitizeUrl, and keep the others",
-      (rejectedUrl) => {
+      async (rejectedUrl) => {
         expect.assertions(5);
         const rejectedEntry = `Set the full base url to ${rejectedUrl} to repair the installation.`;
         const help = [SAFE_ENTRIES[0], rejectedEntry, SAFE_ENTRIES[1]];
         const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", status: "error", help })];
         const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+        await page.click(page.helpToggle(0, 0));
 
         expect(page.helpEntries(0, 0).map((entry) => entry.textContent)).toEqual(SAFE_ENTRIES);
         expect(page.checks(0)[0].textContent).not.toContain(rejectedUrl);
@@ -179,12 +295,13 @@ describe("See the healthcheck settings", () => {
       },
     );
 
-    it("should render no help list when every entry of a check is unsafe, leaving badge and message", () => {
-      expect.assertions(4);
+    it("should render no help toggle when every entry of a check is unsafe, leaving badge and message", () => {
+      expect.assertions(5);
       const help = ["Set the url to https://[.", "Or to https://:80."];
       const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", status: "error", message: "Broken.", help })];
       const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
 
+      expect(page.helpToggle(0, 0)).toBeNull();
       expect(page.helpList(0, 0)).toBeNull();
       expect(page.checks(0)[0].querySelectorAll("a")).toHaveLength(0);
       expect(page.checkBadgeModifier(0, 0)).toEqual("healthcheck-badge--error");
@@ -203,11 +320,12 @@ describe("See the healthcheck settings", () => {
       "ldap://directory.example.com:389",
       "javascript:alert(1)",
       "file:///etc/passwd",
-    ])("should keep a help entry carrying %s, shown as plain text rather than hidden", (ignoredUrl) => {
+    ])("should keep a help entry carrying %s, shown as plain text rather than hidden", async (ignoredUrl) => {
       expect.assertions(3);
       const entry = `Fetch it from ${ignoredUrl} before retrying.`;
       const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", status: "error", help: [entry] })];
       const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+      await page.click(page.helpToggle(0, 0));
 
       expect(page.helpEntries(0, 0).map((helpEntry) => helpEntry.textContent)).toEqual([entry]);
       expect(page.helpLinks(0, 0)).toHaveLength(0);
