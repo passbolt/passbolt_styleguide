@@ -216,6 +216,119 @@ describe("See the MFA settings", () => {
     });
   });
 
+  describe("As AD I should be able to manage the Duo verify subscriber policy", () => {
+    const loadPage = async (settings) => {
+      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(settings));
+      await act(() => (page = new DisplayMfaAdministrationPage(context, props)));
+    };
+    const duoSettings = (verifySubscriber) =>
+      defaultMfaSettings({ providers: ["totp", "duo"], duo: { ...mockMfaSettings.duo, verifySubscriber } });
+    const saveAndGetBody = async () => {
+      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse({}));
+      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      await page.saveSettings();
+      return JSON.parse(fetch.mock.calls[1][1].body);
+    };
+
+    it("As AD I should see the saved policy turned on", async () => {
+      expect.assertions(4);
+      await loadPage(duoSettings(true));
+
+      expect(page.duoVerifySubscriber).not.toBeNull();
+      expect(page.duoVerifySubscriber.checked).toStrictEqual(true);
+      expect(page.duoVerifySubscriber.closest(".toggle-switch").textContent).toContain(
+        "Verify the Duo user (recommended)",
+      );
+      expect(page.duoVerifySubscriber.closest(".toggle-switch").textContent).toContain(
+        "The Duo user completing the authentication must match the Passbolt user signing in.",
+      );
+    });
+
+    it("As AD I should see the saved policy turned off", async () => {
+      expect.assertions(2);
+      await loadPage(duoSettings(false));
+
+      expect(page.duoVerifySubscriber.checked).toStrictEqual(false);
+      expect(page.duoVerifySubscriberWarning).toBeNull();
+    });
+
+    it("As AD I should not see the policy when Duo is disabled", async () => {
+      expect.assertions(1);
+      await loadPage(defaultMfaSettings({ providers: ["totp"], duo: {} }));
+
+      expect(page.duoVerifySubscriber).toBeNull();
+    });
+
+    it("As AD I should see the policy turned on by default when I enable Duo for the first time", async () => {
+      expect.assertions(3);
+      await loadPage(defaultMfaSettings({ providers: ["totp"], duo: {} }));
+
+      await page.checkDuo();
+
+      expect(page.duoVerifySubscriber.checked).toStrictEqual(true);
+      expect(page.duoVerifySubscriberWarning).toBeNull();
+      expect(page.duoVerifySubscriber.closest(".toggle-switch").classList.contains("warning")).toStrictEqual(false);
+    });
+
+    it("As AD I should see a warning when I turn the policy on for an existing Duo integration", async () => {
+      expect.assertions(6);
+      await loadPage(duoSettings(false));
+
+      await page.checkDuoVerifySubscriber();
+
+      expect(page.duoVerifySubscriber.checked).toStrictEqual(true);
+      expect(page.duoVerifySubscriberWarning).not.toBeNull();
+      expect(page.duoVerifySubscriberWarning.textContent).toStrictEqual(
+        "Users whose Duo username does not match their Passbolt username will be blocked at their next sign-in. Make sure usernames match in both systems before saving. Learn more.",
+      );
+      expect(page.duoVerifySubscriberWarning.querySelector("a").getAttribute("href")).toStrictEqual(
+        "https://www.passbolt.com/docs/admin/authentication/mfa/duo",
+      );
+      expect(page.duoVerifySubscriber.closest(".toggle-switch").classList.contains("warning")).toStrictEqual(true);
+
+      const body = await saveAndGetBody();
+      expect(body.duo.verifySubscriber).toStrictEqual(true);
+    });
+
+    it("As AD I should not see the warning anymore when I turn the policy off again", async () => {
+      expect.assertions(2);
+      await loadPage(duoSettings(false));
+
+      await page.checkDuoVerifySubscriber();
+      await page.checkDuoVerifySubscriber();
+
+      expect(page.duoVerifySubscriberWarning).toBeNull();
+      expect(page.duoVerifySubscriber.closest(".toggle-switch").classList.contains("warning")).toStrictEqual(false);
+    });
+
+    it("As AD I should be able to turn the policy off", async () => {
+      expect.assertions(3);
+      await loadPage(duoSettings(true));
+
+      await page.checkDuoVerifySubscriber();
+
+      expect(page.duoVerifySubscriber.checked).toStrictEqual(false);
+      expect(page.duoVerifySubscriberWarning).toBeNull();
+
+      const body = await saveAndGetBody();
+      expect(body.duo.verifySubscriber).toStrictEqual(false);
+    });
+
+    it("As AD I should see the policy disabled while the settings are processing", async () => {
+      expect.assertions(2);
+      await loadPage(duoSettings(false));
+      expect(page.duoVerifySubscriber.getAttribute("disabled")).toBeNull();
+
+      await page.checkDuoVerifySubscriber();
+      // Keep the save request pending to stay in processing state
+      fetch.doMockOnceIf(/mfa\/settings*/, () => new Promise(() => {}));
+      await page.saveSettings();
+
+      expect(page.duoVerifySubscriber.getAttribute("disabled")).not.toBeNull();
+    });
+  });
+
   describe("Should not display the form if the site is not running under https", () => {
     it("Should display a message to the admin explaining the reason why the form is not displayed", () => {
       expect.assertions(1);
