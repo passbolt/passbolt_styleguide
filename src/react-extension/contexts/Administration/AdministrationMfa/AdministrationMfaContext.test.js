@@ -17,6 +17,7 @@ import {
   mockMfaSettings,
   mockDuoError,
   mockDefaultMfaModel,
+  defaultMfaSettings,
 } from "../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import { AdminMfaContextProvider } from "./AdministrationMfaContext";
 import { enableFetchMocks } from "jest-fetch-mock";
@@ -28,9 +29,9 @@ describe("AdminMfaContext", () => {
   let adminMfaContext; // The adminMfaContext to test
   const props = defaultProps(); // The props to pass
 
-  //Initialize context by default
-  const initContext = async () => {
-    fetch.doMock(() => mockApiResponse(mockMfaSettings));
+  //Initialize context with the given settings, by default
+  const initContext = async (settings = mockMfaSettings) => {
+    fetch.doMock(() => mockApiResponse(settings));
     await adminMfaContext.findMfaSettings();
   };
 
@@ -149,6 +150,106 @@ describe("AdminMfaContext", () => {
 
       expect(adminMfaContext.getCurrentSettings().duoToggle).toBeTruthy();
       expect(adminMfaContext.getSettings().duoToggle).toBeFalsy();
+    });
+  });
+
+  describe("AdminMfaContext::setDuoToggle", () => {
+    it("should turn the verify subscriber policy on when Duo is enabled for the first time", async () => {
+      expect.assertions(2);
+      await initContext(defaultMfaSettings({ providers: [], duo: {} }));
+
+      adminMfaContext.setDuoToggle(true);
+
+      expect(adminMfaContext.getSettings().duoToggle).toStrictEqual(true);
+      expect(adminMfaContext.getSettings().duoVerifySubscriber).toStrictEqual(true);
+    });
+
+    it("should keep the saved verify subscriber policy off when Duo is enabled again after being configured", async () => {
+      expect.assertions(2);
+      await initContext(defaultMfaSettings({ duo: { ...mockMfaSettings.duo, verifySubscriber: false } }));
+
+      adminMfaContext.setDuoToggle(false);
+      adminMfaContext.setDuoToggle(true);
+
+      expect(adminMfaContext.getSettings().duoToggle).toStrictEqual(true);
+      expect(adminMfaContext.getSettings().duoVerifySubscriber).toStrictEqual(false);
+    });
+
+    it("should keep the saved verify subscriber policy on when Duo is enabled again after being configured", async () => {
+      expect.assertions(2);
+      await initContext(defaultMfaSettings({ duo: { ...mockMfaSettings.duo, verifySubscriber: true } }));
+
+      adminMfaContext.setDuoToggle(false);
+      adminMfaContext.setDuoToggle(true);
+
+      expect(adminMfaContext.getSettings().duoToggle).toStrictEqual(true);
+      expect(adminMfaContext.getSettings().duoVerifySubscriber).toStrictEqual(true);
+    });
+
+    it("should restore the saved verify subscriber policy when Duo is disabled", async () => {
+      expect.assertions(3);
+      await initContext(defaultMfaSettings({ providers: [], duo: {} }));
+
+      adminMfaContext.setDuoToggle(true);
+      adminMfaContext.setDuoToggle(false);
+
+      expect(adminMfaContext.getSettings().duoToggle).toStrictEqual(false);
+      expect(adminMfaContext.getSettings().duoVerifySubscriber).toStrictEqual(false);
+      expect(adminMfaContext.hasSettingsChanges()).toStrictEqual(false);
+    });
+  });
+
+  describe("AdminMfaContext::hasDuoVerifySubscriberLockoutRisk", () => {
+    const configuredDuoWithPolicyOff = () =>
+      defaultMfaSettings({ duo: { ...mockMfaSettings.duo, verifySubscriber: false } });
+
+    it("should return true when the policy is turned on for an existing Duo integration", async () => {
+      expect.assertions(1);
+      await initContext(configuredDuoWithPolicyOff());
+
+      adminMfaContext.setSettings("duoVerifySubscriber", true);
+
+      expect(adminMfaContext.hasDuoVerifySubscriberLockoutRisk()).toStrictEqual(true);
+    });
+
+    it("should return false when Duo is not configured yet", async () => {
+      expect.assertions(1);
+      await initContext(defaultMfaSettings({ providers: [], duo: {} }));
+
+      adminMfaContext.setDuoToggle(true);
+
+      expect(adminMfaContext.hasDuoVerifySubscriberLockoutRisk()).toStrictEqual(false);
+    });
+
+    it("should return false when the policy is already on in the saved settings", async () => {
+      expect.assertions(1);
+      await initContext(defaultMfaSettings({ duo: { ...mockMfaSettings.duo, verifySubscriber: true } }));
+
+      adminMfaContext.setSettings("duoVerifySubscriber", true);
+
+      expect(adminMfaContext.hasDuoVerifySubscriberLockoutRisk()).toStrictEqual(false);
+    });
+
+    it("should return false when the policy is off in the edited settings", async () => {
+      expect.assertions(1);
+      await initContext(configuredDuoWithPolicyOff());
+
+      expect(adminMfaContext.hasDuoVerifySubscriberLockoutRisk()).toStrictEqual(false);
+    });
+
+    it("should return false when Duo is turned off in the edited settings", async () => {
+      expect.assertions(1);
+      await initContext(configuredDuoWithPolicyOff());
+
+      adminMfaContext.setSettings("duoVerifySubscriber", true);
+      adminMfaContext.setSettings("duoToggle", false);
+
+      expect(adminMfaContext.hasDuoVerifySubscriberLockoutRisk()).toStrictEqual(false);
+    });
+
+    it("should return false when the settings are not loaded yet", () => {
+      expect.assertions(1);
+      expect(adminMfaContext.hasDuoVerifySubscriberLockoutRisk()).toStrictEqual(false);
     });
   });
 
