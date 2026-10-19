@@ -151,6 +151,36 @@ export default class DisplayHealthcheckAdministrationPage {
   }
 
   /**
+   * The help list of the given check, if it is rendered.
+   * @param {number} domainIndex
+   * @param {number} checkIndex
+   * @returns {HTMLElement|null}
+   */
+  helpList(domainIndex, checkIndex) {
+    return this.checks(domainIndex)[checkIndex].querySelector(".healthcheck-help");
+  }
+
+  /**
+   * The help entries of the given check, in render order.
+   * @param {number} domainIndex
+   * @param {number} checkIndex
+   * @returns {Array<HTMLElement>}
+   */
+  helpEntries(domainIndex, checkIndex) {
+    return Array.from(this.checks(domainIndex)[checkIndex].querySelectorAll(".healthcheck-help li"));
+  }
+
+  /**
+   * The links of the help of the given check, in render order.
+   * @param {number} domainIndex
+   * @param {number} checkIndex
+   * @returns {Array<HTMLElement>}
+   */
+  helpLinks(domainIndex, checkIndex) {
+    return Array.from(this.checks(domainIndex)[checkIndex].querySelectorAll(".healthcheck-help a"));
+  }
+
+  /**
    * All the badge modifiers rendered on the page, in render order.
    * Scoped to the panel root: the sidebar legend carries badges of its own once WP 7.1 lands.
    * @returns {Array<string>}

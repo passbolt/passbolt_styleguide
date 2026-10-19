@@ -16,6 +16,7 @@ import DisplayHealthcheckAdministrationPage from "./DisplayHealthcheckAdministra
 import { healthcheckChecksCollection } from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
 import {
   allPassHealthcheckApiBodyDto,
+  defaultHealthcheckCheckDto,
   emptyHealthcheckApiBodyDto,
   mixedStatusHealthcheckApiBodyDto,
   nonContiguousHealthcheckApiBodyDto,
@@ -93,6 +94,124 @@ describe("See the healthcheck settings", () => {
         .flatMap((domain) => domain.checks)
         .map((check) => `healthcheck-badge--${check.status === "pass" ? "success" : check.status}`);
       expect(page.allBadgeModifiers).toEqual(expected);
+    });
+  });
+
+  describe("As AD, I should see the help of a check", () => {
+    it("should list the help entries of every check in order, with their text", () => {
+      const body = mixedStatusHealthcheckApiBodyDto();
+      const domains = domainsOf(body);
+      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+      const checkCount = domains.reduce((count, domain) => count + domain.checks.length, 0);
+      expect.assertions(checkCount);
+      domains.forEach((domain, domainIndex) => {
+        domain.checks.forEach((check, checkIndex) => {
+          expect(page.helpEntries(domainIndex, checkIndex).map((entry) => entry.textContent)).toEqual(check.help);
+        });
+      });
+    });
+
+    it("should not render a help list on a check with no help", () => {
+      expect.assertions(2);
+      const body = [defaultHealthcheckCheckDto({ help: [] })];
+      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+      expect(page.checks(0)).toHaveLength(1);
+      expect(page.helpList(0, 0)).toBeNull();
+    });
+
+    it("should show the help of a check reported as info", () => {
+      expect.assertions(2);
+      const help = ["See `timedatectl | grep -i -A 1 clock`."];
+      const body = [defaultHealthcheckCheckDto({ key: "time-sync", status: "info", help })];
+      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+      expect(page.checkBadgeModifier(0, 0)).toEqual("healthcheck-badge--info");
+      expect(page.helpEntries(0, 0).map((entry) => entry.textContent)).toEqual(help);
+    });
+
+    it("should render a URL of a help entry as a link opening in a new tab", () => {
+      expect.assertions(4);
+      const help = ["See. https://www.passbolt.com/help/tech/install#toc_gpg"];
+      const body = [defaultHealthcheckCheckDto({ status: "error", help })];
+      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+      const links = page.helpLinks(0, 0);
+      expect(links).toHaveLength(1);
+      expect(links[0].getAttribute("href")).toEqual("https://www.passbolt.com/help/tech/install#toc_gpg");
+      expect(links[0].getAttribute("target")).toEqual("_blank");
+      expect(links[0].getAttribute("rel")).toEqual("noopener noreferrer");
+    });
+
+    it("should give the help list an id derived from the check key", () => {
+      expect.assertions(1);
+      const body = [defaultHealthcheckCheckDto({ key: "time-sync", help: ["See `timedatectl`."] })];
+      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+      expect(page.helpList(0, 0).id).toEqual("healthcheck-help-time-sync");
+    });
+  });
+
+  describe("As AD, I should not see help I cannot act on", () => {
+    const SAFE_ENTRIES = ["Run `bin/cake passbolt healthcheck`.", "See https://www.passbolt.com/docs/."];
+
+    beforeEach(() => {
+      jest.spyOn(console, "warn").mockImplementation(() => {});
+      jest.spyOn(console, "error").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it.each(["https://[", "https://:80", "https://a:b:c"])(
+      "should drop a help entry whose URL %s is rejected by sanitizeUrl, and keep the others",
+      (rejectedUrl) => {
+        expect.assertions(5);
+        const rejectedEntry = `Set the full base url to ${rejectedUrl} to repair the installation.`;
+        const help = [SAFE_ENTRIES[0], rejectedEntry, SAFE_ENTRIES[1]];
+        const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", status: "error", help })];
+        const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+
+        expect(page.helpEntries(0, 0).map((entry) => entry.textContent)).toEqual(SAFE_ENTRIES);
+        expect(page.checks(0)[0].textContent).not.toContain(rejectedUrl);
+        expect(page.checks(0)[0].textContent).not.toContain("to repair the installation");
+        expect(page.helpLinks(0, 0).map((link) => link.getAttribute("href"))).toEqual([
+          "https://www.passbolt.com/docs/",
+        ]);
+        expect(console.warn).toHaveBeenCalledWith(expect.stringContaining(rejectedUrl));
+      },
+    );
+
+    it("should render no help list when every entry of a check is unsafe, leaving badge and message", () => {
+      expect.assertions(4);
+      const help = ["Set the url to https://[.", "Or to https://:80."];
+      const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", status: "error", message: "Broken.", help })];
+      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+
+      expect(page.helpList(0, 0)).toBeNull();
+      expect(page.checks(0)[0].querySelectorAll("a")).toHaveLength(0);
+      expect(page.checkBadgeModifier(0, 0)).toEqual("healthcheck-badge--error");
+      expect(page.checkMessage(0, 0)).toEqual("Broken.");
+    });
+
+    it("should name the check whose help was dropped in the warning", () => {
+      expect.assertions(1);
+      const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", help: ["Set the url to https://[."] })];
+      new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+      expect(console.warn).toHaveBeenCalledWith(expect.stringMatching(/flux-capacitor.*https:\/\/\[/));
+    });
+
+    it.each([
+      "ftp://files.example.com/key.asc",
+      "ldap://directory.example.com:389",
+      "javascript:alert(1)",
+      "file:///etc/passwd",
+    ])("should keep a help entry carrying %s, shown as plain text rather than hidden", (ignoredUrl) => {
+      expect.assertions(3);
+      const entry = `Fetch it from ${ignoredUrl} before retrying.`;
+      const body = [defaultHealthcheckCheckDto({ key: "flux-capacitor", status: "error", help: [entry] })];
+      const page = new DisplayHealthcheckAdministrationPage(propsWithHealthcheckApiBody(body));
+
+      expect(page.helpEntries(0, 0).map((helpEntry) => helpEntry.textContent)).toEqual([entry]);
+      expect(page.helpLinks(0, 0)).toHaveLength(0);
+      expect(console.warn).not.toHaveBeenCalled();
     });
   });
 
