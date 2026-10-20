@@ -175,7 +175,7 @@ export class MfaContextProvider extends React.Component {
 
   /**
    * Find the mfa settings of the current user
-   * @return {Promise<void>}
+   * @returns {Promise<{mfaUserSettings: Object<string, boolean>, mfaOrganisationSettings: Object<string, boolean>}>}
    */
   async findMfaSettings() {
     this.setProcessing(true);
