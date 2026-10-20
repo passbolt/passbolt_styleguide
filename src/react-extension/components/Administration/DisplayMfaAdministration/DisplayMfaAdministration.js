@@ -392,31 +392,13 @@ class DisplayMfaAdministration extends React.Component {
                           checked={settings.duoVerifySubscriber}
                           disabled={this.hasAllInputDisabled()}
                         />
-                        <label htmlFor="duo-verify-subscriber">
+                        <label className="text" htmlFor="duo-verify-subscriber">
                           <span className="name">
-                            <Trans>Verify the Duo user (recommended)</Trans>
+                            <Trans>Verify Duo username (recommended)</Trans>
                           </span>
                           <span className="info">
-                            <Trans>
-                              The Duo user completing the authentication must match the Passbolt user signing in.
-                            </Trans>
+                            <Trans>Requires each user&apos;s Duo username to match their Passbolt username.</Trans>
                           </span>
-                          {hasDuoVerifySubscriberLockoutRisk && (
-                            <div className="duo-verify-subscriber warning-message">
-                              <Trans>
-                                Users whose Duo username does not match their Passbolt username will be blocked at their
-                                next sign-in. Make sure usernames match in both systems before saving.
-                              </Trans>{" "}
-                              <a
-                                href="https://www.passbolt.com/docs/admin/authentication/mfa/duo"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <Trans>Learn more</Trans>
-                              </a>
-                              .
-                            </div>
-                          )}
                         </label>
                       </span>
                     </>
@@ -425,13 +407,32 @@ class DisplayMfaAdministration extends React.Component {
               </>
             )}
           </div>
-          {hasSaveWarning && (
+          {(hasSaveWarning || hasDuoVerifySubscriberLockoutRisk) && (
             <div className="warning message">
-              <div>
-                <p>
-                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
-                </p>
-              </div>
+              {hasSaveWarning && (
+                <div>
+                  <p>
+                    <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                  </p>
+                </div>
+              )}
+              {hasDuoVerifySubscriberLockoutRisk && (
+                <div id="duo-verify-subscriber-warning-banner">
+                  <p>
+                    <Trans>
+                      Users whose Duo username does not match their Passbolt username will be blocked at their next
+                      sign-in. Make sure usernames match in both systems before saving.
+                    </Trans>{" "}
+                    <a
+                      href="https://www.passbolt.com/docs/admin/authentication/mfa/duo"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Trans>Learn more</Trans>
+                    </a>
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>

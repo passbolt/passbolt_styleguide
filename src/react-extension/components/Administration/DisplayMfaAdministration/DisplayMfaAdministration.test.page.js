@@ -139,7 +139,7 @@ export default class DisplayMfaAdministrationPage {
    * Returns the duo verify subscriber warning element
    */
   get duoVerifySubscriberWarning() {
-    return this._page.container.querySelector(".duo-verify-subscriber.warning-message");
+    return this._page.container.querySelector("#duo-verify-subscriber-warning-banner");
   }
 
   /**

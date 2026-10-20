@@ -238,10 +238,10 @@ describe("See the MFA settings", () => {
       expect(page.duoVerifySubscriber).not.toBeNull();
       expect(page.duoVerifySubscriber.checked).toStrictEqual(true);
       expect(page.duoVerifySubscriber.closest(".toggle-switch").textContent).toContain(
-        "Verify the Duo user (recommended)",
+        "Verify Duo username (recommended)",
       );
       expect(page.duoVerifySubscriber.closest(".toggle-switch").textContent).toContain(
-        "The Duo user completing the authentication must match the Passbolt user signing in.",
+        "Requires each user's Duo username to match their Passbolt username.",
       );
     });
 
@@ -272,15 +272,19 @@ describe("See the MFA settings", () => {
     });
 
     it("As AD I should see a warning when I turn the policy on for an existing Duo integration", async () => {
-      expect.assertions(6);
+      expect.assertions(8);
       await loadPage(duoSettings(false));
 
       await page.checkDuoVerifySubscriber();
 
       expect(page.duoVerifySubscriber.checked).toStrictEqual(true);
       expect(page.duoVerifySubscriberWarning).not.toBeNull();
+      expect(page.duoVerifySubscriberWarning.parentElement.classList.contains("message")).toStrictEqual(true);
+      expect(page.duoVerifySubscriberWarning.previousElementSibling.textContent).toStrictEqual(
+        "Don't forget to save your settings to apply your modification.",
+      );
       expect(page.duoVerifySubscriberWarning.textContent).toStrictEqual(
-        "Users whose Duo username does not match their Passbolt username will be blocked at their next sign-in. Make sure usernames match in both systems before saving. Learn more.",
+        "Users whose Duo username does not match their Passbolt username will be blocked at their next sign-in. Make sure usernames match in both systems before saving. Learn more",
       );
       expect(page.duoVerifySubscriberWarning.querySelector("a").getAttribute("href")).toStrictEqual(
         "https://www.passbolt.com/docs/admin/authentication/mfa/duo",
