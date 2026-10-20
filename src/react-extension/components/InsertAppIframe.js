@@ -14,6 +14,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import SearchParamsValidator from "../../shared/lib/Validator/SearchParamsValidator";
 
 class InsertAppIframe extends Component {
   constructor(props) {
@@ -42,6 +43,11 @@ class InsertAppIframe extends Component {
     const pathname = this.getPagePathname();
     if (pathname && pathname !== "/") {
       url.searchParams.append("pathname", pathname);
+    }
+
+    const errorCode = SearchParamsValidator.getErrorCode(this.props.location?.search);
+    if (errorCode) {
+      url.searchParams.append("error", errorCode);
     }
 
     this.iframeRef.current.contentWindow.location = url.toString();
