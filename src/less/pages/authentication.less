@@ -281,6 +281,18 @@ html, body {
     margin: 1.2rem 0 0 0;
   }
 
+  // Flash error messages rendered by the API, styled like the form error messages
+  .message.error {
+    padding: 0;
+    border: 0;
+    background: none;
+    margin-bottom: 1.6rem;
+    font-size: 1.5rem;
+    font-weight: normal;
+    color: var(--Field-Error);
+    text-align: center;
+  }
+
   // Only for yubikey authentication
   .totp-setup,.yubikey-setup {
     .input.password {
