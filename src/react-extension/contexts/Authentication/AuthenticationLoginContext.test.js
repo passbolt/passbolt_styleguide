@@ -19,6 +19,8 @@ import {
   withServerKeyChanged,
 } from "./AuthenticationLoginContext.test.data";
 import InvalidMasterPasswordError from "../../lib/Error/InvalidMasterPasswordError";
+import SiteSettingsEntity from "../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import { siteSettingsCe } from "../../test/fixture/Settings/siteSettings";
 
 beforeEach(() => {
   jest.resetModules();
@@ -99,6 +101,27 @@ describe("AuthenticationLoginContextProvider", () => {
       expect(contextProvider.state.state).toEqual(AuthenticationLoginWorkflowStates.SIGN_IN_SSO);
     });
 
+    it("If the user has an SSO kit but the SSO plugin is not available, the machine state should be set to: SIGN_IN", async () => {
+      const props = defaultProps({
+        ssoContext: {
+          loadSsoConfiguration: () => "azure",
+        },
+      });
+      props.context.siteSettings = new SiteSettingsEntity(siteSettingsCe);
+      props.context.port.addRequestListener(
+        "passbolt.sso.has-sso-login-error",
+        jest.fn(async () => false),
+      );
+      const contextProvider = new AuthenticationLoginContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(2);
+      await contextProvider.componentDidMount();
+
+      expect(props.context.port.requestListeners["passbolt.auth.verify-server-key"]).toHaveBeenCalled();
+      expect(contextProvider.state.state).toEqual(AuthenticationLoginWorkflowStates.SIGN_IN);
+    });
+
     it("If the user attempted an SSO login but the feature is disabled, the machine state should be set to: SSO_DISABLED_ERROR", async () => {
       const props = defaultProps({
         ssoContext: {
@@ -177,6 +200,33 @@ describe("AuthenticationLoginContextProvider", () => {
 
       expect(props.context.port.requestListeners["passbolt.auth.verify-server-key"]).toHaveBeenCalled();
       expect(contextProvider.state.state).toEqual(AuthenticationLoginWorkflowStates.SIGN_IN_SSO);
+    });
+  });
+
+  describe("AuthenticationLoginContextProvider::isSsoAvailable", () => {
+    it("should return true if the SSO plugin is enabled and the user has an SSO kit", async () => {
+      const props = defaultProps({ ssoContext: { hasUserAnSsoKit: () => true } });
+      const contextProvider = new AuthenticationLoginContextProvider(props);
+
+      expect.assertions(1);
+      expect(contextProvider.isSsoAvailable()).toStrictEqual(true);
+    });
+
+    it("should return false if the user has no SSO kit", async () => {
+      const props = defaultProps({ ssoContext: { hasUserAnSsoKit: () => false } });
+      const contextProvider = new AuthenticationLoginContextProvider(props);
+
+      expect.assertions(1);
+      expect(contextProvider.isSsoAvailable()).toStrictEqual(false);
+    });
+
+    it("should return false if the SSO plugin is not available even if the user has an SSO kit", async () => {
+      const props = defaultProps({ ssoContext: { hasUserAnSsoKit: () => true } });
+      props.context.siteSettings = new SiteSettingsEntity(siteSettingsCe);
+      const contextProvider = new AuthenticationLoginContextProvider(props);
+
+      expect.assertions(1);
+      expect(contextProvider.isSsoAvailable()).toStrictEqual(false);
     });
   });
 
