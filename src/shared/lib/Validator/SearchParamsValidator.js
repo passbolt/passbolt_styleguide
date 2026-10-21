@@ -12,7 +12,7 @@
  * @since         5.18.0
  */
 
-export const GENERIC_URL_PARAMS_REGEX = /^[a-z]+$/i;
+export const ERROR_URL_PARAM_REGEX = /^[a-z]+$/i;
 
 /**
  * Validates search parameters according to our rules.
@@ -28,9 +28,10 @@ class SearchParamsValidator {
       return false;
     }
 
+    // We only validate the error code
     const searchParams = new URLSearchParams(search);
-    const values = Array.from(searchParams.values());
-    return values.every((entry) => GENERIC_URL_PARAMS_REGEX.test(entry));
+    const errorCode = searchParams.get("error");
+    return errorCode ? ERROR_URL_PARAM_REGEX.test(errorCode) : true;
   }
 
   /**

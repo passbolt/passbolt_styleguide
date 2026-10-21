@@ -14,6 +14,7 @@
 
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import { MfaSettingsWorkflowStates, Providers, withMfa } from "../../../contexts/MFAContext";
@@ -24,12 +25,29 @@ import DisplayMfaProviderConfiguration from "../DisplayMfaProviderConfiguration/
 import YubikeySetup from "../YubikeySetup/YubikeySetup";
 import DuoGetStarted from "../DuoSetup/DuoGetStarted";
 import DisplayPasskeys from "../PasskeysSetup/DisplayPasskeys";
-import { withRouter } from "react-router-dom";
+import DuoSetupError from "../DuoSetup/DuoSetupError";
+import SearchParamsValidator from "../../../../shared/lib/Validator/SearchParamsValidator";
 
 /**
  * The component orchestrates the mfa settings flow.
  */
 class OrchestrateMfaSettings extends Component {
+  constructor(props) {
+    super(props);
+    this.state = this.defaultState;
+    this.bindCallbacks();
+  }
+
+  bindCallbacks() {
+    this.handleRetryDuoSetup = this.handleRetryDuoSetup.bind(this);
+  }
+
+  get defaultState() {
+    return {
+      error: null,
+    };
+  }
+
   /**
    * Whenever the component is mounted
    */
@@ -40,18 +58,39 @@ class OrchestrateMfaSettings extends Component {
 
   async initInitialView() {
     const provider = this.props.match.params.provider;
+    const error = SearchParamsValidator.getErrorCode(this.props.location.search);
+    this.setState({ error });
 
     if (provider) {
       this.props.mfaContext.setProvider(provider);
-      const state =
-        provider === Providers.WEBAUTHN
-          ? MfaSettingsWorkflowStates.PASSKEYS
-          : MfaSettingsWorkflowStates.VIEWCONFIGURATION;
-      this.props.mfaContext.navigate(state);
+
+      const isProviderEnabled =
+        this.props.mfaContext.mfaUserSettings?.[provider] && this.props.mfaContext.mfaOrganisationSettings?.[provider];
+
+      let state = MfaSettingsWorkflowStates.OVERVIEW;
+      if (isProviderEnabled) {
+        state =
+          provider === Providers.WEBAUTHN
+            ? MfaSettingsWorkflowStates.PASSKEYS
+            : MfaSettingsWorkflowStates.VIEWCONFIGURATION;
+      } else if (provider === Providers.DUO && error) {
+        state = MfaSettingsWorkflowStates.SETUPDUOERROR;
+      }
+
+      if (state === MfaSettingsWorkflowStates.OVERVIEW) {
+        await this.props.mfaContext.goToProviderList();
+      } else {
+        this.props.mfaContext.navigate(state);
+      }
     } else {
       await this.props.mfaContext.goToProviderList();
     }
   }
+
+  handleRetryDuoSetup() {
+    this.props.mfaContext.navigate(MfaSettingsWorkflowStates.SETUPDUO);
+  }
+
   /**
    * Render the component
    */
@@ -67,6 +106,14 @@ class OrchestrateMfaSettings extends Component {
         return <YubikeySetup />;
       case MfaSettingsWorkflowStates.SETUPDUO:
         return <DuoGetStarted onGetStartedWithDuo={this.props.mfaContext.handleGetStartedWithDuo} />;
+      case MfaSettingsWorkflowStates.SETUPDUOERROR:
+        return (
+          <DuoSetupError
+            errorCode={this.state.error}
+            onTryAgain={this.handleRetryDuoSetup}
+            onCancel={this.props.mfaContext.goToProviderList}
+          />
+        );
       case MfaSettingsWorkflowStates.VIEWCONFIGURATION:
         return <DisplayMfaProviderConfiguration />;
       case MfaSettingsWorkflowStates.PASSKEYS:
@@ -74,10 +121,12 @@ class OrchestrateMfaSettings extends Component {
     }
   }
 }
+
 OrchestrateMfaSettings.propTypes = {
   t: PropTypes.func, // The translation function
   context: PropTypes.any.isRequired, // The application context
   match: PropTypes.object, // The router match helper
   mfaContext: PropTypes.any.isRequired, // The mfa content
 };
+
 export default withAppContext(withMfa(withRouter(withTranslation("common")(OrchestrateMfaSettings))));

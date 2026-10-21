@@ -40,20 +40,18 @@ describe("DuoSetupError", () => {
       },
     );
 
-    it("should show the subscriber mismatch error without a documentation link", () => {
+    it("should show the subscriber mismatch error with a documentation link", () => {
       expect.assertions(4);
 
       const props = defaultProps({ errorCode: DuoSetupErrors.SUBSCRIBER_MISMATCH });
       const page = new DuoSetupErrorPage(props);
 
       expect(page.exists()).toBe(true);
-      expect(page.title.textContent).toBe(
-        "Your organisation requires your Duo username to match your Passbolt username.",
+      expect(page.title.textContent).toBe("Sorry, Duo could not be enabled");
+      expect(page.description.textContent).toBe(
+        "Your Duo username does not match your Passbolt username. Please contact your administrator to fix this issue. Learn more",
       );
-      expect(page.description.textContent.trim()).toBe(
-        "Contact your administrator to update your Duo username, then try again.",
-      );
-      expect(page.learnMoreLink).toBeNull();
+      expect(page.learnMoreLink.getAttribute("href")).toBe(DUO_DOCUMENTATION_URL);
     });
   });
 
