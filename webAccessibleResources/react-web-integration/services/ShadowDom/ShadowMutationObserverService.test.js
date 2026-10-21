@@ -221,18 +221,7 @@ describe("ShadowMutationObserverService", () => {
 
       ShadowMutationObserverService.notifyShadowMutationSubscribers(root, mutations, true);
 
-      expect(callback).toHaveBeenCalledWith(root, mutations, true, {});
-    });
-
-    it("should forward the notification options to the subscribers", () => {
-      expect.assertions(1);
-
-      const callback = jest.fn();
-      ShadowMutationObserverService._shadowMutationSubscribers.add(callback);
-
-      ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true, { fromFocus: true });
-
-      expect(callback).toHaveBeenCalledWith(document, [], true, { fromFocus: true });
+      expect(callback).toHaveBeenCalledWith(root, mutations, true);
     });
 
     it("should isolate a throwing subscriber so the others still run", () => {

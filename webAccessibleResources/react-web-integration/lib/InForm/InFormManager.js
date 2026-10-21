@@ -326,8 +326,7 @@ class InFormManager {
      * If a field was previously found, we reuse the same InformUsernameField, otherwise we create one.
      * Else we clean and reset callToActionFields.
      */
-    const { fields: classifiedFields } = PageClassificationService.classifyPage();
-    const fields = classifiedFields.filter(({ element }) => !element.disabled);
+    const { fields } = PageClassificationService.classifyPage();
     const newUsernameFields = fields.filter((field) => IDENTIFIER_ROLES.includes(field.role));
     const newPasswordFields = fields.filter((field) => PASSWORD_ROLES.includes(field.role));
     const newOTPFields = fields.filter((field) => field.role === FieldRole.TOTP);
@@ -564,26 +563,17 @@ class InFormManager {
    * @param {Document|ShadowRoot|Element} root The observed node.
    * @param {MutationRecord[]} mutations The list of mutations.
    * @param {boolean} shadowRootsChanged Whether the mutation includes a change in the shadowRoots.
-   * @param {object} [options]
-   * @param {boolean} [options.fromFocus=false] Whether the notification comes from the user focusing a field.
    */
-  onShadowMutation(root, mutations, shadowRootsChanged, { fromFocus = false } = {}) {
+  onShadowMutation(root, mutations, shadowRootsChanged) {
     // Never scan our own CTA shadow root
     if (root === this.shadowRoot) {
       return;
     }
 
-    // The user focused a field: re-scan right away so it gets its call-to-action on first focus
-    if (fromFocus) {
+    // A new shadow root appeared: re-scan right away so the focused field gets its call-to-action
+    if (shadowRootsChanged) {
       this.findAndSetAuthenticationFields();
       this.handleInformCallToActionClickEvent();
-      this._pendingFieldScan = true;
-      this.updateAuthenticationFieldsDebounce?.();
-      return;
-    }
-
-    // A new shadow root appeared: wait for the page to settle, a component-heavy page adds hundreds at once
-    if (shadowRootsChanged) {
       this._pendingFieldScan = true;
       this.updateAuthenticationFieldsDebounce?.();
       return;

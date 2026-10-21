@@ -363,8 +363,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       page = new DisplayResourcesListContextualMenuPage(props);
     });
 
-    it("As LU I should not be able to share a password I have update access", async () => {
-      expect.assertions(18);
+    it("As LU I should be able to edit and delete but not share a password I have update access", async () => {
+      expect.assertions(19);
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
@@ -378,7 +378,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.editItem).not.toBeNull();
       expect(page.editItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.shareItem).toBeNull();
-      expect(page.deleteItem).toBeNull();
+      expect(page.deleteItem).not.toBeNull();
+      expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.markAsExpiredItem).not.toBeNull();
       expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.setExpiryDateItem).not.toBeNull();

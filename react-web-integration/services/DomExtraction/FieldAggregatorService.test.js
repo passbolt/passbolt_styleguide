@@ -45,43 +45,6 @@ describe("FieldAggregatorService", () => {
       expect(result[0].fields.map((field) => field.fieldElement.id)).toContain("reg-phone");
     });
 
-    it("should populate the fields slotted into a container living in a web component shadow root", () => {
-      expect.assertions(2);
-
-      jest.spyOn(ElementVisibilityService, "isElementViewable").mockReturnValue(true);
-      // The landal.de shape: the host's light DOM inputs are rendered through named slots of its shadow root.
-      document.body.innerHTML = `<login-panel-component>
-        <input slot="username" type="email" id="username"/>
-        <input slot="password" type="password" id="current-password"/>
-      </login-panel-component>`;
-      const host = document.querySelector("login-panel-component");
-      const shadowRoot = host.attachShadow({ mode: "open" });
-      shadowRoot.innerHTML = '<div id="panel"><slot name="username"></slot><slot name="password"></slot></div>';
-      const container = shadowRoot.getElementById("panel");
-
-      const result = FieldAggregatorService.aggregateFields([
-        { containerElement: container, fields: [], isPseudoForm: true },
-      ]);
-
-      expect(result).toHaveLength(1);
-      expect(result[0].fields.map((field) => field.fieldElement.id)).toEqual(["username", "current-password"]);
-    });
-
-    it("should not duplicate a field found both as a descendant and through a slot", () => {
-      expect.assertions(1);
-
-      jest.spyOn(ElementVisibilityService, "isElementViewable").mockReturnValue(true);
-      document.body.innerHTML = '<login-panel-component><input slot="username" id="username"/></login-panel-component>';
-      const host = document.querySelector("login-panel-component");
-      host.attachShadow({ mode: "open" }).innerHTML = '<slot name="username"></slot>';
-
-      const result = FieldAggregatorService.aggregateFields([
-        { containerElement: host, fields: [], isPseudoForm: true },
-      ]);
-
-      expect(result[0].fields).toHaveLength(1);
-    });
-
     it("should keep only visible fields", () => {
       expect.assertions(2);
 

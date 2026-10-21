@@ -17,6 +17,8 @@
  */
 import LoginPageTest from "./LoginPage.test.page";
 import { defaultPropsWithSsoDisabled, defaultPropsWithSsoEnabled } from "./LoginPage.test.data";
+import SiteSettingsEntity from "../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import { siteSettingsCe } from "../../../react-extension/test/fixture/Settings/siteSettings";
 
 beforeEach(() => {
   jest.resetModules();
@@ -87,6 +89,20 @@ describe("Quickaccess::LoginPage", () => {
     await page.isReady();
 
     expect(page.passphraseInput).toBeTruthy();
+    expect(page.switchToSsoFormButton).toBeFalsy();
+  });
+
+  it(`As AN I cannot use the SSO login feature if the SSO plugin is not available even if I have an SSO kit on my browser profile`, async () => {
+    expect.assertions(3);
+
+    const props = defaultPropsWithSsoEnabled();
+    props.context.siteSettings = new SiteSettingsEntity(siteSettingsCe);
+    const page = new LoginPageTest(props);
+
+    await page.isReady();
+
+    expect(page.passphraseInput).toBeTruthy();
+    expect(page.ssoLoginButton).toBeFalsy();
     expect(page.switchToSsoFormButton).toBeFalsy();
   });
 

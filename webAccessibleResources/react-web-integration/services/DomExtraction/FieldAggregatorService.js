@@ -36,30 +36,8 @@ class FieldAggregatorService {
    * @returns {Element[]} The visible fillable fields.
    */
   static gatherCandidates(containerElement) {
-    const elements = new Set(ShadowDomQueryService.querySelectorAllDeep(containerElement, TEXT_FIELDS));
-    FieldAggregatorService.gatherSlottedFields(containerElement).forEach((element) => elements.add(element));
-
-    return [...elements].filter(
+    return ShadowDomQueryService.querySelectorAllDeep(containerElement, TEXT_FIELDS).filter(
       (element) => ShadowDomQueryService.isElement(element) && ElementVisibilityService.isElementViewable(element),
-    );
-  }
-
-  /**
-   * TEXT_FIELDS assigned to the slots of a container. A web component may render the light DOM fields of its host
-   * through slots of its shadow root: they are displayed inside the container but are not its descendants.
-   * @param {Element} containerElement The container to scan.
-   * @returns {Element[]} The slotted fields.
-   */
-  static gatherSlottedFields(containerElement) {
-    const slots = ShadowDomQueryService.querySelectorAllDeep(containerElement, "slot");
-
-    return slots.flatMap((slot) =>
-      slot
-        .assignedElements({ flatten: true })
-        .flatMap((assigned) => [
-          ...(assigned.matches(TEXT_FIELDS) ? [assigned] : []),
-          ...ShadowDomQueryService.querySelectorAllDeep(assigned, TEXT_FIELDS),
-        ]),
     );
   }
 

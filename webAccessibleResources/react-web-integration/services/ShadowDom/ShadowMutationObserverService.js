@@ -103,7 +103,7 @@ class ShadowMutationObserverService {
 
   /**
    * Register a subscriber to the shadow root mutations
-   * @param {(root: Document|ShadowRoot|Element, mutations: MutationRecord[], shadowRootsChanged: boolean, options: {fromFocus?: boolean}) => void} callback
+   * @param {(root: Document|ShadowRoot|Element, mutations: MutationRecord[], shadowRootsChanged: boolean) => void} callback
    * @return {() => void} unsubscribe closure — must be called in the consumer's teardown.
    */
   static subscribeToShadowMutations(callback) {
@@ -116,13 +116,11 @@ class ShadowMutationObserverService {
    * @param {Document|ShadowRoot|Element} root
    * @param {MutationRecord[]} mutations
    * @param {boolean} shadowRootsChanged
-   * @param {object} [options]
-   * @param {boolean} [options.fromFocus=false] Whether the notification comes from the user focusing a field.
    */
-  static notifyShadowMutationSubscribers(root, mutations, shadowRootsChanged, options = {}) {
+  static notifyShadowMutationSubscribers(root, mutations, shadowRootsChanged) {
     for (const callback of ShadowMutationObserverService._shadowMutationSubscribers) {
       try {
-        callback(root, mutations, shadowRootsChanged, options);
+        callback(root, mutations, shadowRootsChanged);
       } catch (error) {
         console.warn("ShadowMutationObserverService shadow-mutation subscriber threw", error);
       }
