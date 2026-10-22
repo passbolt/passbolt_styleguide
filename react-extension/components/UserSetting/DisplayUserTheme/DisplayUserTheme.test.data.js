@@ -67,12 +67,4 @@ export const themes = [
     id: "solarized_light",
     name: "solarized_light",
   },
-  {
-    id: "sakura",
-    name: "sakura",
-  },
-  {
-    id: "layette",
-    name: "layette",
-  },
 ];

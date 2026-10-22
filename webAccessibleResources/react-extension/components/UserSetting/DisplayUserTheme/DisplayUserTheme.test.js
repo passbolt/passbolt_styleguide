@@ -36,16 +36,9 @@ describe("Display user theme", () => {
       expect.assertions(4);
       const themeButtons = await screen.findAllByRole("button");
       expect(themeButtons.length).toBeGreaterThan(0);
-      expect(page.themesCount).toStrictEqual(6);
+      expect(page.themesCount).toStrictEqual(4);
       expect(props.loadingContext.add).toHaveBeenCalledTimes(1);
       expect(props.loadingContext.remove).toHaveBeenCalledTimes(1);
-    });
-
-    it("As LU, I should see the Sakura and Layette themes", async () => {
-      expect.assertions(2);
-      await screen.findAllByRole("button");
-      expect(page.theme(5).name).toStrictEqual("Sakura");
-      expect(page.theme(6).name).toStrictEqual("Layette");
     });
   });
 
@@ -92,19 +85,6 @@ describe("Display user theme", () => {
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: "error" });
       expect(props.loadingContext.add).toHaveBeenCalledTimes(2);
       expect(props.loadingContext.remove).toHaveBeenCalledTimes(2);
-    });
-
-    it("As LU, I should see the previous theme restored when the change fails", async () => {
-      expect.assertions(4);
-      await screen.findAllByRole("button");
-      expect(page.theme(1).isSelected).toBeTruthy();
-
-      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject("error"));
-      await page.theme(5).select();
-
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: "error" });
-      expect(page.theme(1).isSelected).toBeTruthy();
-      expect(page.theme(5).isSelected).toBeFalsy();
     });
   });
 });

@@ -202,5 +202,20 @@ describe("DisplayProviderList", () => {
 
       expect(page.duoCard).toBeNull();
     });
+
+    it("As a desktop application I should not see the passkeys card", () => {
+      expect.assertions(2);
+
+      window.chrome = { webview: {} };
+
+      const page = new DisplayProviderListPage(
+        propsWithMfaProviders({
+          rbacContext: denyRbacContext(),
+        }),
+      );
+
+      expect(page.totpCard).not.toBeNull();
+      expect(page.webauthnCard).toBeNull();
+    });
   });
 });
