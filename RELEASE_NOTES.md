@@ -1,4 +1,4 @@
-# v5.17.0
+# v5.17.1
 
 Provides:
-- Webauthn features
+- Add RBAC to hide Passkeys setup on the windows app

@@ -16,9 +16,9 @@ import { uiActions } from "./uiActionEnumeration";
 
 describe("uiActions", () => {
   it("should have the expected UI action keys", () => {
-    expect.assertions(18);
+    expect.assertions(19);
 
-    expect(Object.keys(uiActions).length).toEqual(17);
+    expect(Object.keys(uiActions).length).toEqual(18);
     expect(uiActions["FOLDERS_USE"]).toEqual("Folders.use");
     expect(uiActions["RESOURCES_IMPORT"]).toEqual("Resources.import");
     expect(uiActions["RESOURCES_EXPORT"]).toEqual("Resources.export");
@@ -36,5 +36,6 @@ describe("uiActions", () => {
     expect(uiActions["AVATAR_UPLOAD"]).toEqual("Avatar.upload");
     expect(uiActions["SHARE_FOLDER"]).toEqual("Folders.share");
     expect(uiActions["PROFIL_ACCOUNT_RECOVERY"]).toEqual("Profil.accountRecovery");
+    expect(uiActions["PASSKEYS_CONFIGURATION"]).toEqual("Passkeys.configuration");
   });
 });
