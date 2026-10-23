@@ -152,3 +152,18 @@ export function largeSharedResourcesDtos({ resourceCount = 500, aroCount = 100 }
     };
   });
 }
+
+/**
+ * Build the permissions a move gives a large share selection: the readers are raised to update on
+ * one resource in ten, the rest is left as is.
+ * @param {Array<object>} resources The selection, as built by largeSharedResourcesDtos.
+ * @returns {Array<object>}
+ */
+export function largeMovedResourcesDtos(resources) {
+  return resources.map((resource, resourceIndex) => ({
+    ...resource,
+    permissions: resource.permissions.map((permission) =>
+      resourceIndex % 10 === 0 && permission.type === 1 ? { ...permission, type: 7 } : permission,
+    ),
+  }));
+}

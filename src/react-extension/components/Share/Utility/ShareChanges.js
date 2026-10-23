@@ -127,8 +127,10 @@ export default class ShareChanges {
    */
   aggregatePermissionsByAro() {
     // Aggregate the data as expected.
-    const arosPermissions = this._permissions.reduce((carry, permission) => {
-      let aroPermission = carry.find((_data) => _data.id === permission.aro_foreign_key);
+    const arosPermissions = [];
+    const aroPermissionByAroId = new Map();
+    this._permissions.forEach((permission) => {
+      let aroPermission = aroPermissionByAroId.get(permission.aro_foreign_key);
       if (!aroPermission) {
         const aro = permission.user || permission.group;
         aroPermission = {
@@ -137,12 +139,12 @@ export default class ShareChanges {
           type: permission.type,
           permissions: [],
         };
-        carry.push(aroPermission);
+        arosPermissions.push(aroPermission);
+        aroPermissionByAroId.set(permission.aro_foreign_key, aroPermission);
       }
       aroPermission.type = aroPermission.type === permission.type ? aroPermission.type : -1;
       aroPermission.permissions.push(permission);
-      return carry;
-    }, []);
+    });
 
     // Calculate varies details
     arosPermissions.forEach((aroPermissions) => {
@@ -154,8 +156,7 @@ export default class ShareChanges {
         // For each permission, aggregate the resources aro has access.
         aroPermissions.variesDetails = this._acos.reduce(
           (carry, aco) => {
-            const result = aroPermissions.permissions.filter((permission) => permission.aco_foreign_key === aco.id);
-            const carryType = result[0]?.type || 0;
+            const carryType = this.getAcoAroPermission(aco, aroPermissions.id)?.type || 0;
             const acoName = aco.metadata.name;
             carry[carryType].push(acoName);
             return carry;
@@ -328,15 +329,17 @@ export default class ShareChanges {
    * @param {Array<string>} acoIds The re-permissioned item ids. The other items are left alone.
    */
   stageTargetPermissions(targetRows, acoIds) {
+    const targetRowByAroId = new Map();
     for (const row of targetRows) {
       this._aros[row.aro.id] = row.aro;
+      targetRowByAroId.set(row.aro.id, row);
     }
     for (const aroId of Object.keys(this._aros)) {
       const targetTypeByAcoId = new Map();
       for (const acoId of acoIds) {
         targetTypeByAcoId.set(acoId, null);
       }
-      const targetRow = targetRows.find((row) => row.aro.id === aroId);
+      const targetRow = targetRowByAroId.get(aroId);
       if (targetRow) {
         for (const permission of targetRow.permissions) {
           targetTypeByAcoId.set(permission.aco_foreign_key, permission.type);

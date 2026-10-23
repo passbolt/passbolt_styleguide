@@ -143,17 +143,20 @@ class ShareDialog extends Component {
    * @private
    */
   mergeMovedRows(permissions, appliedRows) {
+    const appliedRowByAroId = new Map(appliedRows.map((appliedRow) => [appliedRow.aro.id, appliedRow]));
+    const currentAroIds = new Set();
     const rows = [];
     for (const row of permissions) {
-      const appliedRow = appliedRows.find((applied) => applied.aro.id === row.aro.id);
+      const appliedRow = appliedRowByAroId.get(row.aro.id);
       if (appliedRow) {
         this.applyMovedRow(row, appliedRow);
       }
+      currentAroIds.add(row.aro.id);
       rows.push(row);
     }
     // The recipients the move grants who were not on the items yet go at the end, like an autocomplete add.
     for (const appliedRow of appliedRows) {
-      const isNewRecipient = !permissions.some((row) => row.aro.id === appliedRow.aro.id);
+      const isNewRecipient = !currentAroIds.has(appliedRow.aro.id);
       if (isNewRecipient) {
         rows.push(appliedRow);
       }
@@ -206,10 +209,13 @@ class ShareDialog extends Component {
    */
   buildMovedVariesDetails(aroId, appliedRow) {
     const variesDetails = { 0: [], 1: [], 7: [], 15: [] };
+    const appliedPermissionByAcoId = new Map(
+      appliedRow.permissions.map((applied) => [applied.aco_foreign_key, applied]),
+    );
     for (const aco of this.shareChanges.getAcos()) {
       let permission;
       if (this.props.initialAppliedPermissions.has(aco.id)) {
-        permission = appliedRow.permissions.find((applied) => applied.aco_foreign_key === aco.id);
+        permission = appliedPermissionByAcoId.get(aco.id);
       } else {
         permission = this.shareChanges.getAcoAroPermission(aco, aroId);
       }
