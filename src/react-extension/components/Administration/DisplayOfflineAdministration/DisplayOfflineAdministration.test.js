@@ -88,6 +88,19 @@ describe("DisplayOfflineAdministration", () => {
       expect(page.optionsOf(page.maximumRetentionPeriodSelect)).toEqual(["1 day", "14 days", "30 days"]);
     });
 
+    it("does not display the pro teasing icon next to the settings labels", async () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultOfflineSettingsDtoFromApi());
+
+      let page;
+      await act(async () => {
+        page = new DisplayOfflineAdministration(props);
+      });
+
+      expect(page.proTeasingTooltips).toHaveLength(0);
+    });
+
     it("can change the session duration and the data retention period", async () => {
       expect.assertions(2);
       const props = defaultProps();
@@ -136,6 +149,21 @@ describe("DisplayOfflineAdministration", () => {
       expect(page.isDisabled(page.maximumRetentionPeriodSelect)).toBe(true);
       expect(page.optionsOf(page.sessionDurationSelect)).toEqual([]);
       expect(page.optionsOf(page.maximumRetentionPeriodSelect)).toEqual([]);
+    });
+
+    it("displays the pro teasing icon with an upgrade tooltip next to the settings labels", async () => {
+      expect.assertions(3);
+      const props = communityEditionProps();
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultOfflineSettingsDtoFromApi());
+
+      let page;
+      await act(async () => {
+        page = new DisplayOfflineAdministration(props);
+      });
+
+      expect(page.proTeasingTooltips).toHaveLength(2);
+      expect(page.proTeasingTooltips[0].textContent).toBe("Upgrade to Pro Edition to customise offline settings.");
+      expect(page.proTeasingTooltips[1].textContent).toBe("Upgrade to Pro Edition to customise offline settings.");
     });
 
     it("saves the pinned settings when enabling the feature", async () => {

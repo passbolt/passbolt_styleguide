@@ -30,6 +30,8 @@ import { GROUPS_FIND_BY_IDS_FOR_SHARE } from "../../../../../shared/services/ser
 import { defaultGroupDto } from "../../../../../shared/models/entity/group/groupEntity.test.data";
 import { defaultGroupUser } from "../../../../../shared/models/entity/groupUser/groupUserEntity.test.data";
 import { defaultUserDto } from "../../../../../shared/models/entity/user/userEntity.test.data";
+import { ADDED_GROUP_CHANGED_ERROR_MESSAGE, addedGroupFixture, mockAddedGroupFetch } from "./permissionFlow.test.data";
+import GroupsCollection from "../../../../../shared/models/entity/group/groupsCollection";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -85,7 +87,7 @@ async function mountUntilShareOpen(props) {
 
 describe("ResourceShareFlow", () => {
   describe("As LU sharing a single resource I own", () => {
-    it("As LU I should review the resource permissions seeded from the snapshot (controlled, editable)", async () => {
+    it("As LU I should review the resource permissions seeded from the snapshot (editable)", async () => {
       expect.assertions(4);
       const props = defaultProps();
       const operatorId = props.context.loggedInUser.id;
@@ -101,7 +103,7 @@ describe("ResourceShareFlow", () => {
       expect(props.context.port.request).toHaveBeenCalledWith(PERMISSIONS_FIND_BY_IDS_FOR_SHARE, [resourceId]);
 
       const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
-      // Controlled via initialResources, editable (no read-only).
+      // Seeded via initialResources, editable (no read-only).
       expect(shareProps.readOnly).toBeUndefined();
       expect(shareProps.initialResources).toHaveLength(1);
       expect(shareProps.initialResources[0].id).toStrictEqual(resourceId);
@@ -205,6 +207,105 @@ describe("ResourceShareFlow", () => {
       expect(props.onStop).toHaveBeenCalled();
     });
 
+    it("As LU I should see the workflow refuse the submission when a group I added changed during my review", async () => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const operatorId = props.context.loggedInUser.id;
+      const resourceId = props.resources[0].id;
+      wireSnapshotListeners(props.context.port, {
+        permissionsByResourceId: { [resourceId]: [resourcePermissionDto(operatorId, resourceId)] },
+      });
+
+      await mountUntilShareOpen(props);
+
+      const { addedGroups, grownGroupDto } = addedGroupFixture();
+      mockAddedGroupFetch(props.context.port, grownGroupDto);
+      jest.spyOn(props.context.port, "request");
+      const groupChanges = [
+        {
+          aro: "Group",
+          aro_foreign_key: grownGroupDto.id,
+          aco: "Resource",
+          aco_foreign_key: resourceId,
+          type: 1,
+          is_new: true,
+        },
+      ];
+      const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
+      await act(() => shareProps.onConfirm(groupChanges, { addedGroups }));
+
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
+        error: expect.objectContaining({ message: ADDED_GROUP_CHANGED_ERROR_MESSAGE }),
+      });
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        SHARE_RESOURCES_SAVE,
+        expect.anything(),
+        expect.anything(),
+      );
+      expect(props.onStop).toHaveBeenCalled();
+    });
+
+    it("As LU I should see which of the groups I added changed during my review", async () => {
+      expect.assertions(1);
+      const props = defaultProps({ t: jest.fn((text) => text) });
+      const operatorId = props.context.loggedInUser.id;
+      const resourceId = props.resources[0].id;
+      wireSnapshotListeners(props.context.port, {
+        permissionsByResourceId: { [resourceId]: [resourcePermissionDto(operatorId, resourceId)] },
+      });
+
+      await mountUntilShareOpen(props);
+
+      const marketing = addedGroupFixture("Marketing");
+      const sales = addedGroupFixture("Sales");
+      const support = addedGroupFixture("Support");
+      const addedGroups = new GroupsCollection([
+        marketing.displayedGroupDto,
+        sales.displayedGroupDto,
+        support.displayedGroupDto,
+      ]);
+      mockAddedGroupFetch(props.context.port, marketing.grownGroupDto, sales.displayedGroupDto, support.grownGroupDto);
+      const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
+      await act(() => shareProps.onConfirm([], { addedGroups }));
+
+      expect(props.t).toHaveBeenCalledWith(ADDED_GROUP_CHANGED_ERROR_MESSAGE, {
+        count: 2,
+        groupNames: "Marketing, Support",
+      });
+    });
+
+    it("As LU I should see the changes saved when a group I added did not change during my review", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      const operatorId = props.context.loggedInUser.id;
+      const resourceId = props.resources[0].id;
+      wireSnapshotListeners(props.context.port, {
+        permissionsByResourceId: { [resourceId]: [resourcePermissionDto(operatorId, resourceId)] },
+      });
+
+      await mountUntilShareOpen(props);
+
+      const { addedGroups, displayedGroupDto } = addedGroupFixture();
+      mockAddedGroupFetch(props.context.port, displayedGroupDto);
+      props.context.port.addRequestListener(SHARE_RESOURCES_SAVE, () => undefined);
+      jest.spyOn(props.context.port, "request");
+      const groupChanges = [
+        {
+          aro: "Group",
+          aro_foreign_key: displayedGroupDto.id,
+          aco: "Resource",
+          aco_foreign_key: resourceId,
+          type: 1,
+          is_new: true,
+        },
+      ];
+      const shareProps = dialogPropsFor(props.dialogContext, ShareDialog);
+      await act(() => shareProps.onConfirm(groupChanges, { addedGroups }));
+
+      expect(props.context.port.request).toHaveBeenCalledWith(GROUPS_FIND_BY_IDS_FOR_SHARE, [displayedGroupDto.id]);
+      expect(props.context.port.request).toHaveBeenCalledWith(SHARE_RESOURCES_SAVE, [resourceId], groupChanges);
+    });
+
     it("As LU cancelling ShareDialog should terminate the workflow without saving", async () => {
       expect.assertions(2);
       const props = defaultProps();
@@ -271,7 +372,7 @@ describe("ResourceShareFlow", () => {
   });
 
   describe("As LU sharing multiple resources", () => {
-    it("As LU I should review every selected resource, each snapshotted and seeded into the controlled dialog", async () => {
+    it("As LU I should review every selected resource, each snapshotted and seeded into the dialog", async () => {
       expect.assertions(4);
       const resources = [resourceDto(), resourceDto()];
       const props = defaultProps({ resources });
@@ -299,7 +400,7 @@ describe("ResourceShareFlow", () => {
         resources[0].id,
         resources[1].id,
       ]);
-      // It does not fall back to the uncontrolled (context-seeded) path.
+      // It does not seed the dialog through the app context.
       expect(props.context.setContext).not.toHaveBeenCalled();
     });
 

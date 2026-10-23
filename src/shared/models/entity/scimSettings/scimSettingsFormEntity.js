@@ -14,6 +14,13 @@
 
 import ScimSettingsEntity from "./scimSettingsEntity";
 import { v4 as uuidv4 } from "uuid";
+import { DateTime } from "luxon";
+
+/**
+ * The number of years a freshly generated secret token remains valid.
+ * @type {number}
+ */
+const SECRET_TOKEN_VALIDITY_YEARS = 1;
 
 class ScimSettingsFormEntity extends ScimSettingsEntity {
   /**
@@ -41,7 +48,16 @@ class ScimSettingsFormEntity extends ScimSettingsEntity {
       scim_user_id: userId,
       setting_id: uuidv4(),
       secret_token: this.generateScimSecretToken(),
+      expired: ScimSettingsFormEntity.defaultExpiryDate(),
     });
+  }
+
+  /**
+   * Get the default expiry date for a freshly generated secret token, set one year in the future.
+   * @returns {string} The expiry date formatted as an ISO date (YYYY-MM-DD).
+   */
+  static defaultExpiryDate() {
+    return DateTime.now().plus({ years: SECRET_TOKEN_VALIDITY_YEARS }).toISODate();
   }
 }
 

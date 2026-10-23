@@ -15,6 +15,7 @@
 import { v4 as uuidv4 } from "uuid";
 import browser from "webextension-polyfill";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
+import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryService";
 
 /**
  * An InFormMenuField is represented by a DOM element identified as a menu field
@@ -169,7 +170,7 @@ class InFormMenuField {
    */
   removeInFormMenu() {
     const isIframeMouseOver = this.isMenuMousingOver;
-    const isActiveElement = document.activeElement === this.field;
+    const isActiveElement = ShadowDomQueryService.deepActiveElement() === this.field;
     if (!isIframeMouseOver && !isActiveElement) {
       this.removeIframe();
     }

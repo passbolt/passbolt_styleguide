@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "5.16.1",
+  "version": "5.17.3",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2023 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -59,7 +59,7 @@
     "jest-webextension-mock": "^4.1.1",
     "less": "^4.9.0",
     "less-loader": "^12.3.2",
-    "lockfile-lint": "^4.14.1",
+    "lockfile-lint": "^5.0.1",
     "playwright": "^1.62.1",
     "prettier": "3.6.2",
     "storybook": "^10.5.6",
@@ -74,12 +74,12 @@
     "grapheme-splitter": "^1.0.4",
     "html5-qrcode": "^2.3.8",
     "i18next": "^26.3.4",
-    "i18next-http-backend": "^4.0.0",
+    "i18next-http-backend": "^4.0.2",
     "ip-regex": "^5.0.0",
     "jssha": "^3.2.0",
     "luxon": "^3.4.4",
     "memoize-one": "^6.0.0",
-    "otpauth": "^9.1.4",
+    "otpauth": "^9.5.2",
     "prop-types": "^15.7.2",
     "qrcode": "^1.5.0",
     "react": "^18.3.1",
@@ -96,7 +96,11 @@
   },
   "overrides": {
     "uuid": "^14.0.0",
-    "js-yaml": "^4.3.2"
+    "shell-quote": "1.12.0",
+    "js-yaml": "^4.3.2",
+    "qrcode": {
+      "yargs": "^18.1.0"
+    }
   },
   "scripts": {
     "build": "webpack",

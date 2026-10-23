@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.13.0
  */
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import React from "react";
 import GroupPermissionItem from "./GroupPermissionItem";
 import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -93,6 +93,13 @@ export default class GroupPermissionItemPage {
   }
 
   /**
+   * Returns true if the row is highlighted as a group whose composition changed
+   */
+  get isCompositionChanged() {
+    return Boolean(this._page.container.querySelector("li.composition-changed"));
+  }
+
+  /**
    * Returns the group member visibility toggle button element
    */
   get groupVisibilityToggle() {
@@ -104,6 +111,28 @@ export default class GroupPermissionItemPage {
    */
   get variesIcon() {
     return this._page.container.querySelector(".varies-icon");
+  }
+
+  /**
+   * Returns the move attention icon, shown when some items keep their permissions
+   */
+  get attentionIcon() {
+    return this._page.container.querySelector(".attention-triangle");
+  }
+
+  /**
+   * Returns the text of the tooltip currently shown, rendered into a portal on document.body
+   */
+  get tooltipText() {
+    return document.body.querySelector(".tooltip-portal-text")?.textContent;
+  }
+
+  /**
+   * Hover the move attention icon to reveal its tooltip, which names the items left unchanged
+   */
+  async hoverAttentionIcon() {
+    await this.user.hover(this.attentionIcon.closest(".tooltip-portal"));
+    await waitFor(() => {});
   }
 
   /**

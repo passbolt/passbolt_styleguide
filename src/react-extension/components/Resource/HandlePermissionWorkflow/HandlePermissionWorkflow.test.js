@@ -18,6 +18,8 @@ import HandlePermissionWorkflow, { PERMISSION_WORKFLOW_OPERATION } from "./Handl
 import ResourceCreationFlow from "./flows/ResourceCreationFlow";
 import ResourceEditFlow from "./flows/ResourceEditFlow";
 import FolderShareFlow from "./flows/FolderShareFlow";
+import ResourceMoveFlow from "./flows/ResourceMoveFlow";
+import FolderMoveFlow from "./flows/FolderMoveFlow";
 
 jest.mock("./flows/ResourceCreationFlow", () => ({
   __esModule: true,
@@ -30,6 +32,16 @@ jest.mock("./flows/ResourceEditFlow", () => ({
 }));
 
 jest.mock("./flows/FolderShareFlow", () => ({
+  __esModule: true,
+  default: jest.fn(() => null),
+}));
+
+jest.mock("./flows/ResourceMoveFlow", () => ({
+  __esModule: true,
+  default: jest.fn(() => null),
+}));
+
+jest.mock("./flows/FolderMoveFlow", () => ({
   __esModule: true,
   default: jest.fn(() => null),
 }));
@@ -97,6 +109,50 @@ describe("HandlePermissionWorkflow (dispatcher)", () => {
     expect(FolderShareFlow).toHaveBeenCalledWith(
       expect.objectContaining({
         operation: PERMISSION_WORKFLOW_OPERATION.SHARE_FOLDER,
+        folder,
+        onStop,
+      }),
+      expect.anything(),
+    );
+  });
+
+  it("As LU starting a move-resources workflow I should see the resource-move flow rendered with the same props", () => {
+    expect.assertions(1);
+    const onStop = jest.fn();
+    const resources = [{ id: "some-resource-id" }];
+    render(
+      <HandlePermissionWorkflow
+        operation={PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES}
+        resources={resources}
+        onStop={onStop}
+      />,
+    );
+
+    expect(ResourceMoveFlow).toHaveBeenCalledWith(
+      expect.objectContaining({
+        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES,
+        resources,
+        onStop,
+      }),
+      expect.anything(),
+    );
+  });
+
+  it("As LU starting a move-folders workflow I should see the folder-move flow rendered with the same props", () => {
+    expect.assertions(1);
+    const onStop = jest.fn();
+    const folder = { id: "some-folder-id" };
+    render(
+      <HandlePermissionWorkflow
+        operation={PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS}
+        folder={folder}
+        onStop={onStop}
+      />,
+    );
+
+    expect(FolderMoveFlow).toHaveBeenCalledWith(
+      expect.objectContaining({
+        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS,
         folder,
         onStop,
       }),

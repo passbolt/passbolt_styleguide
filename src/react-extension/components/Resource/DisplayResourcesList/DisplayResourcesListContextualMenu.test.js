@@ -46,7 +46,6 @@ import {
   TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
   TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
-  TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
   TEST_RESOURCE_TYPE_V5_TOTP,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
@@ -364,8 +363,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       page = new DisplayResourcesListContextualMenuPage(props);
     });
 
-    it("As LU I should not be able to share a password I have update access", async () => {
-      expect.assertions(18);
+    it("As LU I should be able to edit and delete but not share a password I have update access", async () => {
+      expect.assertions(19);
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
@@ -379,7 +378,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.editItem).not.toBeNull();
       expect(page.editItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.shareItem).toBeNull();
-      expect(page.deleteItem).toBeNull();
+      expect(page.deleteItem).not.toBeNull();
+      expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.markAsExpiredItem).not.toBeNull();
       expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.setExpiryDateItem).not.toBeNull();
@@ -684,9 +684,8 @@ describe("DisplayResourcesListContextualMenu", () => {
     it.each([
       { scenario: "custom fields", resourceTypeId: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS },
       { scenario: "standalone note", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE },
-      { scenario: "standalone pin code", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE },
     ])(
-      "As LU I should not see the offline availability item for a v5 $scenario resource, it is neither a password nor a totp",
+      "As LU I should not see the offline availability item for a v5 $scenario resource, it is neither a password, pin code nor a totp",
       ({ resourceTypeId }) => {
         expect.assertions(1);
         const props = defaultProps({

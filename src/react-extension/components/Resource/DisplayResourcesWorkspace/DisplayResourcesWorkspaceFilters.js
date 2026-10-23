@@ -28,7 +28,7 @@ import VenetianMaskSVG from "../../../../img/svg/venetian_mask.svg";
 import CalendarClockSVG from "../../../../img/svg/calendar_clock.svg";
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
 import OwnedByMeSVG from "../../../../img/svg/owned_by_me.svg";
-import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
+import OfflineModeSVG from "../../../../img/svg/offline.svg";
 import { withRouter } from "react-router-dom";
 import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";

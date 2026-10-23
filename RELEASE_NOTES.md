@@ -1,6 +1,4 @@
-# v5.16.1
+# v5.17.3
 
 Provides:
-- Help section for Offline Mode settings
-- QuickAccess blank page on SSO login issue fix
-- Metadata key rotation creator name display issue fix
+- Add RBAC to hide Passkeys setup on the windows app
