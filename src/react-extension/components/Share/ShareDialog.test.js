@@ -1653,6 +1653,25 @@ describe("As LU running ShareDialog from a permission workflow", () => {
       expect(page.groupMember(1).textContent).toContain("Grace Hopper");
     });
 
+    it("As LU typing in the search field I should not see the group members resolved again", async () => {
+      expect.assertions(2);
+      const props = withGroupProps();
+      const searchedUser = defaultUserDto({
+        username: "admin@passbolt.com",
+        profile: defaultProfileDto({ first_name: "Admin", last_name: "User" }),
+      });
+      mockContextRequest((request) => (request === "passbolt.share.search-aros" ? [searchedUser] : undefined));
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      const member = props.initialUsers.items.find((user) => user.username === "betty@passbolt.com");
+      const toDtoSpy = jest.spyOn(member, "toDto");
+      await page.searchName("admin");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      expect(page.count).toBe(2);
+      expect(toDtoSpy).not.toHaveBeenCalled();
+    });
+
     it("As LU adding a group I belong to I am recognised as owner through it without expanding it", async () => {
       expect.assertions(2);
       const { props, operator } = operatorResourceShareProps({ ensureOperatorIsOwner: true });
