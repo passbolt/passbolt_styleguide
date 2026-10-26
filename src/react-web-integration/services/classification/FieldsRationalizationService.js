@@ -14,6 +14,9 @@
 
 import { FieldRole, FormRole } from "./Taxonomy";
 import { USERNAME_CANDIDATE_TYPES } from "../../lib/InForm/ScrapingDictionary";
+import { Keywords } from "./KeywordsDictionary";
+import KeywordMatchingService from "./KeywordMatchingService";
+import FieldFeatureService from "./FieldFeatureService";
 
 /**
  * Final pass fixing role inconsistencies across a whole scope.
@@ -29,6 +32,7 @@ class FieldsRationalizationService {
     // Order matters
     FieldsRationalizationService.rescueLoginPassword(scope, roles);
     FieldsRationalizationService.rescueUsername(scope, roles);
+    FieldsRationalizationService.rescueAccountNumber(scope, roles);
     FieldsRationalizationService.dedupeKeepFirst(scope, roles, FieldRole.USERNAME);
     FieldsRationalizationService.fixOrphanConfirmation(scope, roles);
     FieldsRationalizationService.enforceLoginConsistency(scope, roles);
@@ -105,6 +109,35 @@ class FieldsRationalizationService {
         roles.set(field.fieldId, field.type === "email" ? FieldRole.EMAIL : FieldRole.USERNAME);
         break;
       }
+    }
+  }
+
+  /**
+   * On a login form with neither identifier nor password (identifier-first step of a multi-step login),
+   * the first account number field, vetoed from USERNAME at the field level, becomes the USERNAME.
+   * @param {{formRole: string, fields: FieldScraping[]}} scope The scope.
+   * @param {Map<string, string>} roles The role map to update in place.
+   */
+  static rescueAccountNumber(scope, roles) {
+    if (
+      scope.formRole !== FormRole.LOGIN ||
+      FieldsRationalizationService.hasRolesField(
+        [FieldRole.USERNAME, FieldRole.EMAIL, FieldRole.CURRENT_PASSWORD, FieldRole.PASSWORD],
+        scope.fields,
+        roles,
+      )
+    ) {
+      return;
+    }
+    const candidate = scope.fields.find(
+      (field) =>
+        roles.get(field.fieldId) === FieldRole.OTHER &&
+        USERNAME_CANDIDATE_TYPES.includes(field.type) &&
+        field.tagName !== "BUTTON" &&
+        KeywordMatchingService.matchesAny(FieldFeatureService.fieldText(field), Keywords.ACCOUNT_NUMBER),
+    );
+    if (candidate) {
+      roles.set(candidate.fieldId, FieldRole.USERNAME);
     }
   }
 
