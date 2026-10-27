@@ -199,6 +199,171 @@ export default class ResourceViewPagePage {
   }
 
   /**
+   * The note button element, when the note is hidden.
+   * @returns {Element}
+   */
+  get note() {
+    return this._page.container.querySelector(".password-wrapper .secret.secret-note button");
+  }
+
+  /**
+   * The encrypted note placeholder, when the note is hidden.
+   * @returns {Element}
+   */
+  get encryptedNote() {
+    return this._page.container.querySelector(".password-wrapper .secret.secret-note .encrypted-description");
+  }
+
+  /**
+   * The previewed note block.
+   * @returns {Element}
+   */
+  get notePreviewed() {
+    return this._page.container.querySelector(".password-wrapper .secret.secret-note .note-previewed");
+  }
+
+  /**
+   * The preview note button.
+   * @returns {Element}
+   */
+  get previewNoteButton() {
+    return this._page.container.querySelector(".secret-note + .password-view");
+  }
+
+  /**
+   * The copy note button.
+   * @returns {Element}
+   */
+  get copyNoteButton() {
+    return this._page.container.querySelector(".copy-note");
+  }
+
+  /**
+   * The custom field rows.
+   * @returns {Array<Element>}
+   */
+  get customFieldRows() {
+    return Array.from(this._page.container.querySelectorAll(".secret.secret-custom-fields")).map((element) =>
+      element.closest(".custom-field"),
+    );
+  }
+
+  /**
+   * The label of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {string}
+   */
+  customFieldLabel(index) {
+    return this.customFieldRows[index].querySelector(".property-name").textContent;
+  }
+
+  /**
+   * The value button of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {Element}
+   */
+  customFieldValue(index) {
+    return this.customFieldRows[index].querySelector(".secret.secret-custom-fields button");
+  }
+
+  /**
+   * The value text content of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {string}
+   */
+  customFieldValueText(index) {
+    return this.customFieldRows[index].querySelector(".secret.secret-custom-fields button span").textContent;
+  }
+
+  /**
+   * The preview button of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {Element}
+   */
+  previewCustomFieldButton(index) {
+    return this.customFieldRows[index].querySelector(".password-view");
+  }
+
+  /**
+   * The copy button of the custom field row at the given index.
+   * @param {number} index The row index
+   * @returns {Element}
+   */
+  copyCustomFieldButton(index) {
+    return this.customFieldRows[index].querySelector(".copy-custom-field");
+  }
+
+  /**
+   * The empty custom fields message.
+   * @returns {Element}
+   */
+  get emptyCustomFields() {
+    return this._page.container.querySelector(".property:first-child .property-value.empty");
+  }
+
+  /**
+   * The error message.
+   * @returns {Element}
+   */
+  get errorMessage() {
+    return this._page.container.querySelector(".submit-wrapper .error-message");
+  }
+
+  /**
+   * The copy username button.
+   * @returns {Element}
+   */
+  get copyLoginButton() {
+    return this._page.container.querySelector(".property:first-child .property-action");
+  }
+
+  /**
+   * The row holding the secret with the given class.
+   * @param {string} secretClass The secret class, e.g. "secret-password"
+   * @returns {Element}
+   */
+  rowOf(secretClass) {
+    return this._page.container.querySelector(`.secret.${secretClass}`)?.closest(".property");
+  }
+
+  /**
+   * The title of the secret value with the given class.
+   * @param {string} secretClass The secret class, e.g. "secret-password"
+   * @returns {string|null}
+   */
+  secretTitle(secretClass) {
+    return this._page.container.querySelector(`.secret.${secretClass}`).getAttribute("title");
+  }
+
+  /**
+   * The state displayed by a copy action, read from its visible icon.
+   * @param {Element} copyAction The copy action element
+   * @returns {string} "default", "processing" or "done"
+   */
+  copyIconState(copyAction) {
+    const states = ["default", "processing", "done"];
+    const icons = Array.from(copyAction.querySelectorAll("span.transition"));
+    return states[icons.findIndex((icon) => !icon.classList.contains("visually-hidden"))];
+  }
+
+  /**
+   * Is the clipboard flush timer displayed next to the given copy action.
+   * Every svg renders as an opaque element in the tests, the timer is found as the sibling of the action.
+   * @param {Element} copyAction The copy action element
+   * @returns {boolean}
+   */
+  hasTimer(copyAction) {
+    return copyAction.nextElementSibling !== null;
+  }
+
+  /**
+   * Unmount the page.
+   */
+  unmount() {
+    this._page.unmount();
+  }
+
+  /**
    * Click on the given element.
    * @param {Element} element The element to click on.
    * @returns {Promise<void>}
