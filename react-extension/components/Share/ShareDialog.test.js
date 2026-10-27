@@ -28,6 +28,7 @@ import {
   folderMoveProps,
   folderShareProps,
   initialGroupForShareFixture,
+  largeMoveProps,
   operatorResourceShareProps,
   resourcesShareProps,
   twoResourcesShareProps,
@@ -666,6 +667,21 @@ describe("As LU running ShareDialog from a permission workflow", () => {
       expect(page.count).toBe(2);
       expect(page.changeChip(1)).toBeNull(); // Ada: owner before and after, no badge
       expect(page.changeChip(2).textContent).toBe("added"); // Betty: comes from the destination
+    });
+
+    it("[performance] should ensure opening on a move of a large selection remains effective.", async () => {
+      expect.assertions(2);
+      context.loggedInUser = { id: context.userSettings.id };
+      const props = largeMoveProps();
+      mockContextRequest(jest.fn());
+
+      const start = performance.now();
+      await act(() => (page = new ShareDialogPage(context, props)));
+      const time = performance.now() - start;
+
+      expect(page.count).toBeGreaterThan(0);
+      // Building the rows and rendering dominate here, the bound only guards against the dialog freezing.
+      expect(time).toBeLessThan(2000);
     });
 
     it("As LU moving, a recipient whose applied permission varies shows 'varies' and the varies 'i'", async () => {
@@ -1635,6 +1651,25 @@ describe("As LU running ShareDialog from a permission workflow", () => {
       // The second expansion displays the refetched membership, not the one the first resolved.
       expect(page.groupMemberCount).toBe(1);
       expect(page.groupMember(1).textContent).toContain("Grace Hopper");
+    });
+
+    it("As LU typing in the search field I should not see the group members resolved again", async () => {
+      expect.assertions(2);
+      const props = withGroupProps();
+      const searchedUser = defaultUserDto({
+        username: "admin@passbolt.com",
+        profile: defaultProfileDto({ first_name: "Admin", last_name: "User" }),
+      });
+      mockContextRequest((request) => (request === "passbolt.share.search-aros" ? [searchedUser] : undefined));
+
+      await act(() => (page = new ShareDialogPage(context, props)));
+
+      const member = props.initialUsers.items.find((user) => user.username === "betty@passbolt.com");
+      const toDtoSpy = jest.spyOn(member, "toDto");
+      await page.searchName("admin");
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
+      expect(page.count).toBe(2);
+      expect(toDtoSpy).not.toHaveBeenCalled();
     });
 
     it("As LU adding a group I belong to I am recognised as owner through it without expanding it", async () => {

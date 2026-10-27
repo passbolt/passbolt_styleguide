@@ -478,6 +478,28 @@ describe("FieldClassificationService", () => {
 
         expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
       });
+
+      it("should NOT classify an account number lookup field as USERNAME (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(
+          defaultField({
+            name: "originatorAlias-inputEl",
+            id: "originatorAlias-inputEl",
+            placeholder: "Originator Alias, Account number, Name",
+          }),
+        );
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should NOT classify a field with name 'account_no' as USERNAME (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ name: "account_no" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
     });
 
     describe("fallback", () => {

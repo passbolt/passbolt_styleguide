@@ -49,6 +49,9 @@ class ShareDialog extends Component {
     this.state = this.getDefaultState();
     this.shareChanges = null;
     this.unchangedAcoTypesByAroId = new Map();
+    // The initial collections are fixed for the dialog lifetime, so their group members are resolved once.
+    this.initialUsersById = new Map((props.initialUsers?.items || []).map((user) => [user.id, user]));
+    this.initialGroupMembersByGroupId = new Map();
     this.permissionListRef = React.createRef();
     // Set by the first group-members fetch failure, so only that one reports. See fetchGroupMembers.
     this.isAborting = false;
@@ -143,17 +146,20 @@ class ShareDialog extends Component {
    * @private
    */
   mergeMovedRows(permissions, appliedRows) {
+    const appliedRowByAroId = new Map(appliedRows.map((appliedRow) => [appliedRow.aro.id, appliedRow]));
+    const currentAroIds = new Set();
     const rows = [];
     for (const row of permissions) {
-      const appliedRow = appliedRows.find((applied) => applied.aro.id === row.aro.id);
+      const appliedRow = appliedRowByAroId.get(row.aro.id);
       if (appliedRow) {
         this.applyMovedRow(row, appliedRow);
       }
+      currentAroIds.add(row.aro.id);
       rows.push(row);
     }
     // The recipients the move grants who were not on the items yet go at the end, like an autocomplete add.
     for (const appliedRow of appliedRows) {
-      const isNewRecipient = !permissions.some((row) => row.aro.id === appliedRow.aro.id);
+      const isNewRecipient = !currentAroIds.has(appliedRow.aro.id);
       if (isNewRecipient) {
         rows.push(appliedRow);
       }
@@ -206,10 +212,13 @@ class ShareDialog extends Component {
    */
   buildMovedVariesDetails(aroId, appliedRow) {
     const variesDetails = { 0: [], 1: [], 7: [], 15: [] };
+    const appliedPermissionByAcoId = new Map(
+      appliedRow.permissions.map((applied) => [applied.aco_foreign_key, applied]),
+    );
     for (const aco of this.shareChanges.getAcos()) {
       let permission;
       if (this.props.initialAppliedPermissions.has(aco.id)) {
-        permission = appliedRow.permissions.find((applied) => applied.aco_foreign_key === aco.id);
+        permission = appliedPermissionByAcoId.get(aco.id);
       } else {
         permission = this.shareChanges.getAcoAroPermission(aco, aroId);
       }
@@ -592,12 +601,32 @@ class ShareDialog extends Component {
         .filter((groupUser) => groupUser.user)
         .map((groupUser) => groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
     }
+    return this.getInitialGroupMembers(groupId);
+  }
+
+  /**
+   * Resolve the member users of a group from the initial collections, once per group.
+   * @param {string} groupId The group identifier
+   * @returns {Array<object>} The member users DTOs
+   * @private
+   */
+  getInitialGroupMembers(groupId) {
+    if (this.initialGroupMembersByGroupId.has(groupId)) {
+      return this.initialGroupMembersByGroupId.get(groupId);
+    }
+
     const group = this.props.initialGroups?.items.find((item) => item.id === groupId);
     const groupsUsers = group?.groupsUsers?.items || [];
-    return groupsUsers
-      .map((groupUser) => this.props.initialUsers?.items.find((user) => user.id === groupUser.userId))
-      .filter(Boolean)
-      .map((user) => user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS));
+    const members = [];
+    for (const groupUser of groupsUsers) {
+      const user = this.initialUsersById.get(groupUser.userId);
+      if (user) {
+        members.push(user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS));
+      }
+    }
+
+    this.initialGroupMembersByGroupId.set(groupId, members);
+    return members;
   }
 
   /**

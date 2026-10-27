@@ -393,7 +393,7 @@ class ImportResources extends Component {
                 <Trans>Select a file to import</Trans>&nbsp;
                 <Tooltip
                   message={this.translate(
-                    "csv exports from browsers (safari, chrome, edge, brave, opera, vivaldi, firefox, waterfox), keepassx, logmeonce, lastpass, 1password, nordpass, dashlane and bitwarden are supported",
+                    "csv exports from browsers (safari, chrome, edge, brave, opera, vivaldi, firefox, waterfox), keepassx, logmeonce, lastpass, 1password, nordpass, dashlane, bitwarden and netwrix are supported",
                   )}
                 >
                   (

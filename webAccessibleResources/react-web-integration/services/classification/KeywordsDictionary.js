@@ -137,6 +137,17 @@ export const Keywords = Object.freeze({
     "lname",
     "middlename",
   ],
+  ACCOUNT_NUMBER: [
+    "accountnumber",
+    "accountno",
+    "accountnum",
+    "numerodecompte", // fr
+    "kontonummer", // de
+    "numerodecuenta", // es
+    "numerodiconto", // it
+    "numerodaconta", // pt
+    "iban",
+  ],
 
   PASSWORD: [
     "password",

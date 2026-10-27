@@ -289,6 +289,50 @@ describe("FieldsRationalizationService", () => {
     });
   });
 
+  describe("FieldsRationalizationService::rescueAccountNumber", () => {
+    const accountNumberScope = (formRole, extraSpecs = []) => {
+      const scope = defaultScope(formRole, [{ id: "a", role: FieldRole.OTHER }, ...extraSpecs]);
+      scope.fields[0].attributes = { name: "account_number" };
+      return scope;
+    };
+
+    it("should promote the account number field to USERNAME on a login form without identifier nor password", () => {
+      expect.assertions(1);
+
+      const scope = accountNumberScope(FormRole.LOGIN);
+      FieldsRationalizationService.rescueAccountNumber(scope, scope.roles);
+
+      expect(scope.roles.get("a")).toBe(FieldRole.USERNAME);
+    });
+
+    it("should not promote the account number field outside a login form", () => {
+      expect.assertions(1);
+
+      const scope = accountNumberScope(FormRole.OTHER);
+      FieldsRationalizationService.rescueAccountNumber(scope, scope.roles);
+
+      expect(scope.roles.get("a")).toBe(FieldRole.OTHER);
+    });
+
+    it("should not promote the account number field when the form already has an identifier", () => {
+      expect.assertions(1);
+
+      const scope = accountNumberScope(FormRole.LOGIN, [{ id: "e", role: FieldRole.EMAIL }]);
+      FieldsRationalizationService.rescueAccountNumber(scope, scope.roles);
+
+      expect(scope.roles.get("a")).toBe(FieldRole.OTHER);
+    });
+
+    it("should not promote a field which is not an account number", () => {
+      expect.assertions(1);
+
+      const scope = defaultScope(FormRole.LOGIN, [{ id: "a", role: FieldRole.OTHER }]);
+      FieldsRationalizationService.rescueAccountNumber(scope, scope.roles);
+
+      expect(scope.roles.get("a")).toBe(FieldRole.OTHER);
+    });
+  });
+
   describe("FieldsRationalizationService::fixOrphanConfirmation", () => {
     it("should rewrite an orphan password-confirmation to current-password via the later generic-password default", () => {
       expect.assertions(1);

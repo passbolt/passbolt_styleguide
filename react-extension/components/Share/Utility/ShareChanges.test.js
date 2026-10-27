@@ -22,6 +22,8 @@ import {
   board,
   carol,
   defaultSharedResourcesDtos,
+  largeMovedResourcesDtos,
+  largeSharedResourcesDtos,
   mixedOwnershipResourcesDtos,
 } from "./ShareChanges.test.data";
 import {
@@ -214,6 +216,28 @@ describe("ShareChanges", () => {
       const changes = shareChanges.getChanges();
       expect(changes).toEqual([expect.objectContaining({ aco_foreign_key: resources[0].id, type: 15 })]);
       expect(changes.some((change) => change.aco_foreign_key === resources[1].id)).toBe(false);
+    });
+
+    it("[performance] should ensure the computation on a large share selection remains effective.", () => {
+      expect.assertions(3);
+      const resourceCount = 500;
+      const aroCount = 100;
+      const resources = largeSharedResourcesDtos({ resourceCount, aroCount });
+
+      const shareChanges = new ShareChanges(resources);
+      const rows = shareChanges.aggregatePermissionsByAro();
+      const start = performance.now();
+      // Replay what the dialog runs on each edit and on the render that follows it.
+      for (let index = 0; index < 10; index++) {
+        shareChanges.updateAroPermissions(rows[index].id, 7);
+        rows.forEach((row) => shareChanges.getAroChangeStatus(row.id));
+      }
+      const time = performance.now() - start;
+
+      expect(rows).toHaveLength(aroCount);
+      expect(rows[0].permissions).toHaveLength(resourceCount);
+      // The bound sits well below what the same workload cost before the lookups were indexed.
+      expect(time).toBeLessThan(200);
     });
   });
 
@@ -458,6 +482,32 @@ describe("ShareChanges", () => {
       shareChanges.stageTargetPermissions(targetRows, [resources[0].id, resources[1].id]);
 
       expect(shareChanges.getChanges().some((change) => change.aco_foreign_key === resources[1].id)).toBe(false);
+    });
+
+    it("[performance] should ensure staging a move on a large selection remains effective.", () => {
+      expect.assertions(4);
+      const resourceCount = 500;
+      const aroCount = 100;
+      const resources = largeSharedResourcesDtos({ resourceCount, aroCount });
+      const movedResources = largeMovedResourcesDtos(resources);
+
+      const start = performance.now();
+      // Replay what the dialog runs when it opens on a move.
+      const shareChanges = new ShareChanges(resources);
+      const rows = shareChanges.aggregatePermissionsByAro();
+      const targetRows = new ShareChanges(movedResources).aggregatePermissionsByAro();
+      shareChanges.stageTargetPermissions(
+        targetRows,
+        resources.map((resource) => resource.id),
+      );
+      const time = performance.now() - start;
+
+      const changes = shareChanges.getChanges();
+      expect(rows).toHaveLength(aroCount);
+      expect(changes.length).toBeGreaterThan(0);
+      expect(changes.every((change) => change.type === 7 && !change.delete)).toBe(true);
+      // The bound sits well below what the same workload cost before the lookups were indexed.
+      expect(time).toBeLessThan(200);
     });
   });
 

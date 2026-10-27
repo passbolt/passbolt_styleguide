@@ -46,7 +46,10 @@ export default class ShareChanges {
       this._acos.push(folder);
     });
 
-    // Build the permission list
+    /** @type {Map<string, Array<object>>} The original permissions, by aro id. */
+    this._permissionsByAro = new Map();
+    /** @type {Map<string, Map<string, object>>} The original permission, by aro id then aco id. */
+    this._permissionByAroByAco = new Map();
     this._acos.forEach((aco) => {
       aco.permissions.forEach((permission) => {
         const aro = permission.user || permission.group;
@@ -54,12 +57,15 @@ export default class ShareChanges {
           this._aros[aro.id] = aro;
         }
         this._permissions.push(permission);
+        this._indexPermission(permission);
       });
     });
     // The items the operator owns, the only ones a change can be staged on. What is displayed still
     // covers every item (see aggregatePermissionsByAro).
     this._stageableAcos = this._acos.filter((aco) => aco.permission?.type === ADMIN);
-    this._changes = [];
+    /** @type {Map<string, Array<object>>} The pending permission changes, by aro id. */
+    this._changesByAro = new Map();
+    /** @type {Set<string>} The ids of the aros marked as initially new. */
     this._initiallyNewAroIds = new Set();
   }
 
@@ -84,27 +90,26 @@ export default class ShareChanges {
     return CHANGE_STATUS_REMOVED;
   }
 
-  // new
+  /**
+   * Get every pending permission change, grouped by aro and in staging order within each aro.
+   * @returns {Array<object>}
+   */
   getChanges() {
-    return this._changes;
+    const changes = [];
+    this._changesByAro.forEach((aroChanges) => {
+      changes.push(...aroChanges);
+    });
+    return changes;
   }
   getResourcesChanges() {
-    return this._changes.filter((element) => element.aco === "Resource");
+    return this.getChanges().filter((element) => element.aco === "Resource");
   }
   getFoldersChanges() {
-    return this._changes.filter((element) => element.aco === "Folder");
+    return this.getChanges().filter((element) => element.aco === "Folder");
   }
 
   getAcos() {
     return this._acos;
-  }
-
-  /**
-   * Check that a user is the original owner of the resources
-   * @return {boolean}
-   */
-  isOriginalResourcesOwner() {
-    return this._acos.reduce((carry, aco) => carry && aco.permission.type === ADMIN, true);
   }
 
   /**
@@ -122,8 +127,10 @@ export default class ShareChanges {
    */
   aggregatePermissionsByAro() {
     // Aggregate the data as expected.
-    const arosPermissions = this._permissions.reduce((carry, permission) => {
-      let aroPermission = carry.find((_data) => _data.id === permission.aro_foreign_key);
+    const arosPermissions = [];
+    const aroPermissionByAroId = new Map();
+    this._permissions.forEach((permission) => {
+      let aroPermission = aroPermissionByAroId.get(permission.aro_foreign_key);
       if (!aroPermission) {
         const aro = permission.user || permission.group;
         aroPermission = {
@@ -132,12 +139,12 @@ export default class ShareChanges {
           type: permission.type,
           permissions: [],
         };
-        carry.push(aroPermission);
+        arosPermissions.push(aroPermission);
+        aroPermissionByAroId.set(permission.aro_foreign_key, aroPermission);
       }
       aroPermission.type = aroPermission.type === permission.type ? aroPermission.type : -1;
       aroPermission.permissions.push(permission);
-      return carry;
-    }, []);
+    });
 
     // Calculate varies details
     arosPermissions.forEach((aroPermissions) => {
@@ -149,8 +156,7 @@ export default class ShareChanges {
         // For each permission, aggregate the resources aro has access.
         aroPermissions.variesDetails = this._acos.reduce(
           (carry, aco) => {
-            const result = aroPermissions.permissions.filter((permission) => permission.aco_foreign_key === aco.id);
-            const carryType = result[0]?.type || 0;
+            const carryType = this.getAcoAroPermission(aco, aroPermissions.id)?.type || 0;
             const acoName = aco.metadata.name;
             carry[carryType].push(acoName);
             return carry;
@@ -182,8 +188,7 @@ export default class ShareChanges {
    * @return {boolean}
    */
   hasChanges(aroId) {
-    const change = this._changes.find((change) => change.aro_foreign_key === aroId);
-    return change !== undefined;
+    return this._changesByAro.has(aroId) || this._initiallyNewAroIds.has(aroId);
   }
 
   /**
@@ -201,8 +206,8 @@ export default class ShareChanges {
        */
       return CHANGE_STATUS_ADDED;
     }
-    const changes = this._changes.filter((change) => change.aro_foreign_key === aroId);
-    if (!changes.length) {
+    const changes = this._changesByAro.get(aroId);
+    if (!changes?.length) {
       return null;
     }
     if (changes.every((change) => change.delete)) {
@@ -226,7 +231,7 @@ export default class ShareChanges {
    * @private
    */
   _hasOriginalPermissions(aroId) {
-    return this._permissions.some((permission) => permission.aro_foreign_key === aroId);
+    return this._permissionsByAro.has(aroId);
   }
 
   /**
@@ -272,12 +277,11 @@ export default class ShareChanges {
         if (permissionOriginal.type !== type) {
           const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
           permissionChange.type = type;
-          this._changes.push(permissionChange);
+          this._pushChange(permissionChange);
         }
       } else {
         const aro = this._aros[aroId];
-        const permissionChange = this._buildChange(aco, aro, type);
-        this._changes.push(permissionChange);
+        this._pushChange(this._buildChange(aco, aro, type));
       }
     });
   }
@@ -302,18 +306,18 @@ export default class ShareChanges {
         if (permissionOriginal) {
           const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
           permissionChange.delete = true;
-          this._changes.push(permissionChange);
+          this._pushChange(permissionChange);
         }
         return;
       }
       if (!permissionOriginal) {
-        this._changes.push(this._buildChange(aco, aro, type));
+        this._pushChange(this._buildChange(aco, aro, type));
         return;
       }
       if (permissionOriginal.type !== type) {
         const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
         permissionChange.type = type;
-        this._changes.push(permissionChange);
+        this._pushChange(permissionChange);
       }
     });
   }
@@ -325,15 +329,17 @@ export default class ShareChanges {
    * @param {Array<string>} acoIds The re-permissioned item ids. The other items are left alone.
    */
   stageTargetPermissions(targetRows, acoIds) {
+    const targetRowByAroId = new Map();
     for (const row of targetRows) {
       this._aros[row.aro.id] = row.aro;
+      targetRowByAroId.set(row.aro.id, row);
     }
     for (const aroId of Object.keys(this._aros)) {
       const targetTypeByAcoId = new Map();
       for (const acoId of acoIds) {
         targetTypeByAcoId.set(acoId, null);
       }
-      const targetRow = targetRows.find((row) => row.aro.id === aroId);
+      const targetRow = targetRowByAroId.get(aroId);
       if (targetRow) {
         for (const permission of targetRow.permissions) {
           targetTypeByAcoId.set(permission.aco_foreign_key, permission.type);
@@ -351,7 +357,7 @@ export default class ShareChanges {
    */
   markPermissionHasChanged(permission) {
     const permissionChange = this._buildChange(permission.permissions[0].aco, permission.aro, permission.type);
-    this._changes.push(permissionChange);
+    this._pushChange(permissionChange);
     this._initiallyNewAroIds.add(permission.aro.id);
   }
 
@@ -366,7 +372,7 @@ export default class ShareChanges {
       if (permissionOriginal) {
         const permissionChange = JSON.parse(JSON.stringify(permissionOriginal));
         permissionChange.delete = true;
-        this._changes.push(permissionChange);
+        this._pushChange(permissionChange);
       }
     });
   }
@@ -387,8 +393,8 @@ export default class ShareChanges {
    * @returns {int|null} 1|7|15, -1 when it varies across the acos, null when the aro had none.
    */
   getOriginalAroPermissionType(aroId) {
-    const originals = this._permissions.filter((permission) => permission.aro_foreign_key === aroId);
-    if (!originals.length) {
+    const originals = this._permissionsByAro.get(aroId);
+    if (!originals?.length) {
       return null;
     }
     if (originals.length !== this._acos.length) {
@@ -404,9 +410,7 @@ export default class ShareChanges {
    * @returns {object}
    */
   getAcoAroPermission(aco, aroId) {
-    return this._permissions.find(
-      (permission) => permission.aro_foreign_key === aroId && permission.aco_foreign_key === aco.id,
-    );
+    return this._permissionByAroByAco.get(aroId)?.get(aco.id);
   }
 
   /**
@@ -414,8 +418,9 @@ export default class ShareChanges {
    * @returns {Resource.List}
    */
   getResourcesWithNoOwner() {
+    const allChanges = this.getChanges();
     return this._acos.filter((aco) => {
-      const changes = this._changes.filter((change) => change.aco_foreign_key === aco.id);
+      const changes = allChanges.filter((change) => change.aco_foreign_key === aco.id);
       // Check if a new owner is promoted.
       const grantedOwner = changes.find((change) => change.type === ADMIN && !change.delete);
       if (grantedOwner) {
@@ -438,16 +443,45 @@ export default class ShareChanges {
   }
 
   /**
+   * Index an original permission by aro, and by aco within its aro.
+   * @param {object} permission The permission to index
+   * @private
+   */
+  _indexPermission(permission) {
+    const aroId = permission.aro_foreign_key;
+    if (!this._permissionsByAro.has(aroId)) {
+      this._permissionsByAro.set(aroId, []);
+      this._permissionByAroByAco.set(aroId, new Map());
+    }
+    this._permissionsByAro.get(aroId).push(permission);
+
+    const permissionByAcoId = this._permissionByAroByAco.get(aroId);
+    if (!permissionByAcoId.has(permission.aco_foreign_key)) {
+      permissionByAcoId.set(permission.aco_foreign_key, permission);
+    }
+  }
+
+  /**
+   * Stage a permission change, indexed by its aro.
+   * @param {object} change The change to stage
+   * @private
+   */
+  _pushChange(change) {
+    const aroChanges = this._changesByAro.get(change.aro_foreign_key);
+    if (aroChanges) {
+      aroChanges.push(change);
+    } else {
+      this._changesByAro.set(change.aro_foreign_key, [change]);
+    }
+  }
+
+  /**
    * Remove all the permissions changes related to a given aro.
    * @param {string} aroId  The aro to delete the changes for
    * @private
    */
   _removeAroChanges(aroId) {
-    this._acos.forEach((aco) => {
-      this._changes = this._changes.filter(
-        (change) => !(change.aco_foreign_key === aco.id && change.aro_foreign_key === aroId),
-      );
-    });
+    this._changesByAro.delete(aroId);
   }
 
   /**
