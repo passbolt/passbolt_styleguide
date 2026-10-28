@@ -18,6 +18,7 @@ import {
   resourceStandaloneNoteDto,
   resourceStandaloneTotpDto,
   resourceStandalonePinCodeNoUrisDto,
+  resourcePasskeyDto,
 } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import {
   TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
@@ -182,6 +183,29 @@ describe("HomePage", () => {
       expect(page.getSuggestedResourceItem(0).textContent).toStrictEqual(
         `${suggestedResource.metadata.name}${suggestedResource.metadata.uris[0]}`,
       );
+    });
+
+    it("it should not suggest passkey resources for the currently active URL", async () => {
+      expect.assertions(2);
+      const props = defaultProps({
+        resources: [
+          resourcePasskeyDto(),
+          defaultResourceDto({
+            metadata: defaultResourceMetadataDto({
+              name: "example password",
+              uris: ["https://example.com"],
+            }),
+          }),
+        ],
+      });
+      props.context.openerTabId = 1;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "https://example.com/login");
+      const page = new HomePagePage(props);
+
+      await waitForTrue(() => page.suggestedResourcesEntries?.length > 0);
+
+      expect(page.suggestedResourcesEntries.length).toStrictEqual(1);
+      expect(page.getSuggestedResourceItem(0).textContent).toContain("example password");
     });
 
     it("it should show both password and OTP suggested resources for the currently active URL", async () => {

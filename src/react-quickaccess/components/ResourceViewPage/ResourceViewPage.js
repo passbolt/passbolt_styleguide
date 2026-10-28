@@ -29,6 +29,7 @@ import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveS
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import SecretServiceWorkerService from "../../../shared/services/serviceWorker/secret/secretServiceWorkerService";
 import ResourceViewPagePassword from "./ResourceViewPagePassword";
+import ResourceViewPageUsername from "./ResourceViewPageUsername";
 import ResourceViewPageTotp from "./ResourceViewPageTotp";
 import ResourceViewPagePinCode from "./ResourceViewPagePinCode";
 import ResourceViewPageNote from "./ResourceViewPageNote";
@@ -466,6 +467,14 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
+   * Gate for the passkey section: the username row alone, a passkey secret never leaves the extension.
+   * @returns {boolean}
+   */
+  get isPasskeyResources() {
+    return Boolean(this.resourceType?.hasPasskey());
+  }
+
+  /**
    * Gate for the TOTP section: the type carries a TOTP.
    * @returns {boolean}
    */
@@ -561,6 +570,14 @@ class ResourceViewPage extends React.Component {
               onPreview={this.previewSecret}
               canCopy={canCopySecret}
               canPreview={canPreviewSecret}
+            />
+          )}
+          {this.isPasskeyResources && (
+            <ResourceViewPageUsername
+              username={this.state.resource.metadata?.username}
+              onCopy={this.handleCopyLoginClick}
+              copyingSecret={copyingSecret}
+              copyStatus={copyStatus}
             />
           )}
           {this.isTotpResources && (

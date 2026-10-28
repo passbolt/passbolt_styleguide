@@ -152,6 +152,10 @@ class HomePage extends React.Component {
 
     for (const i in resources) {
       const resource = resources[i];
+      // A suggestion fills the page with the resource secret.
+      if (!this.canDiscloseSecret(resource)) {
+        continue;
+      }
       if (CanSuggestService.canSuggestUris(activeTabUrl, resource.metadata.uris)) {
         suggestedResources.push(resource);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
@@ -162,6 +166,15 @@ class HomePage extends React.Component {
 
     return sortResourcesByUriMatchingScore(suggestedResources, activeTabUrl);
   });
+
+  /**
+   * Can the resource secret be shown or filled
+   * @param {Object} resource The resource
+   * @returns {boolean}
+   */
+  canDiscloseSecret(resource) {
+    return this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.canDiscloseSecret();
+  }
 
   /**
    * Get the resources for the browse section.

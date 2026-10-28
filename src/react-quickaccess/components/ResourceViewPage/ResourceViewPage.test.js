@@ -29,6 +29,7 @@ import {
   v5DefaultResourceProps,
   v5DefaultTotpResourceProps,
   v5DefaultSecretDto,
+  passkeyResourceProps,
 } from "./ResourceViewPage.test.data";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { offlineUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
@@ -314,6 +315,27 @@ describe("ResourceViewPage", () => {
       expect(page.listUris.length).toStrictEqual(4);
     });
   });
+  describe("As LU, I should see a passkey resource.", () => {
+    it("As LU, I should see the username and uri of a passkey, and no password, totp or use on this page", async () => {
+      expect.assertions(5);
+      const props = passkeyResourceProps();
+      jest.spyOn(props.context.port, "request");
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      expect(page.propertyNames).toStrictEqual(["Username", "URI"]);
+      expect(page.password).toBeNull();
+      expect(page.totp).toBeNull();
+      expect(page.useOnThisPageButton).toBeNull();
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        expect.anything(),
+      );
+    });
+  });
+
   describe("As LU, I should see and copy a PIN code resource.", () => {
     const pinCodeSecret = () => ({ object_type: "PASSBOLT_SECRET_DATA", pin_code: "482913" });
 
