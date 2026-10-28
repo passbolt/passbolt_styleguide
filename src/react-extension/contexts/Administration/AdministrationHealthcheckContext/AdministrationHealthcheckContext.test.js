@@ -15,13 +15,14 @@
 import { mockApiResponse, mockApiResponseError } from "../../../../../test/mocks/mockApiResponse";
 import { enableFetchMocks } from "jest-fetch-mock";
 import { AdministrationHealthcheckContextProvider } from "./AdministrationHealthcheckContext";
+import { defaultProps } from "./AdministrationHealthcheckContext.test.data";
+import HealthcheckChecksCollection from "../../../../shared/models/entity/healthcheck/healthcheckChecksCollection";
 import {
-  defaultProps,
-  mockHealthcheckData,
-  mockHealthcheckDataAllChecksFail,
-  mockHealthcheckWrongData,
-} from "./AdministrationHealthcheckContext.test.data";
-import HealthcheckEntity from "../../../../shared/models/entity/healthcheck/healthcheckEntity";
+  allPassHealthcheckApiBodyDto,
+  defaultHealthcheckCheckDto,
+  emptyHealthcheckApiBodyDto,
+  mixedStatusHealthcheckApiBodyDto,
+} from "../../../../shared/models/entity/healthcheck/healthcheck.test.data";
 
 describe("AdministrationHealthcheckContext", () => {
   let adminHealthcheckContext; // The adminHealthcheckContextProvider to test
@@ -35,34 +36,88 @@ describe("AdministrationHealthcheckContext", () => {
   });
 
   describe("AdministrationHealthcheckContext::loadHealthcheckData", () => {
-    it("should fetch healthcheck data", async () => {
+    it("should fetch the healthcheck and store it as a checks collection", async () => {
+      expect.assertions(3);
+      const body = mixedStatusHealthcheckApiBodyDto();
+      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(body));
+
+      await adminHealthcheckContext.state.loadHealthcheckData();
+
+      const expected = new HealthcheckChecksCollection(body);
+      expect(adminHealthcheckContext.state.healthcheckData).toBeInstanceOf(HealthcheckChecksCollection);
+      expect(adminHealthcheckContext.state.healthcheckData.length).toEqual(expected.length);
+      expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(expected.toDto());
+    });
+
+    it("should request the endpoint in its v5 format", async () => {
+      expect.assertions(1);
+      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mixedStatusHealthcheckApiBodyDto()));
+
+      await adminHealthcheckContext.state.loadHealthcheckData();
+
+      expect(fetch.mock.calls[0][0]).toContain("api-version=v5");
+    });
+
+    it("should keep the check order the API sent", async () => {
+      expect.assertions(1);
+      const body = mixedStatusHealthcheckApiBodyDto();
+      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(body));
+
+      await adminHealthcheckContext.state.loadHealthcheckData();
+
+      expect(adminHealthcheckContext.state.healthcheckData.items.map((check) => check.key)).toEqual(
+        body.map((check) => check.key),
+      );
+    });
+
+    it("should skip a malformed check rather than disable the whole page", async () => {
       expect.assertions(2);
-      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckData));
+      jest.spyOn(console, "error").mockImplementation(() => {});
+      jest.spyOn(console, "log").mockImplementation(() => {});
+      fetch.doMockOnceIf(/healthcheck*/, () =>
+        mockApiResponse([defaultHealthcheckCheckDto(), { domain_key: "environment", status: "pass" }]),
+      );
+
       await adminHealthcheckContext.state.loadHealthcheckData();
-      const expectedData = new HealthcheckEntity(mockHealthcheckData);
-      expect(adminHealthcheckContext.state.healthcheckData).not.toBeNull();
-      expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(expectedData.toDto());
+
+      expect(adminHealthcheckContext.state.isHealthcheckEndpointEnabled()).toBe(true);
+      expect(adminHealthcheckContext.state.healthcheckData.length).toEqual(1);
     });
-    it("should fail if healthcheck data are wrong", async () => {
-      expect.assertions(1);
-      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckWrongData));
+
+    it("should store an empty collection when the API reports no healthcheck at all", async () => {
+      expect.assertions(2);
+      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(emptyHealthcheckApiBodyDto()));
+
       await adminHealthcheckContext.state.loadHealthcheckData();
+
+      expect(adminHealthcheckContext.state.healthcheckData).toBeInstanceOf(HealthcheckChecksCollection);
+      expect(adminHealthcheckContext.state.healthcheckData.length).toEqual(0);
+    });
+
+    it("should latch the endpoint off and report the error if the server response is failing", async () => {
+      expect.assertions(2);
+      jest.spyOn(console, "error").mockImplementation(() => {});
+      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponseError(500, "Something went wrong."));
+
+      await adminHealthcheckContext.state.loadHealthcheckData();
+
       expect(adminHealthcheckContext.props.actionFeedbackContext.displayError).toHaveBeenCalled();
+      expect(adminHealthcheckContext.state.isHealthcheckEndpointEnabled()).toBe(false);
     });
-    it("should fail if server response is failing", async () => {
-      expect.assertions(1);
-      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponseError());
-      await adminHealthcheckContext.state.loadHealthcheckData();
-      expect(adminHealthcheckContext.props.actionFeedbackContext.displayError).toHaveBeenCalled();
-    });
-    it("should fail if no data received from server", async () => {
-      expect.assertions(1);
+
+    it("should store an empty collection and report the error if no data received from server", async () => {
+      expect.assertions(3);
       fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(null));
+
       await adminHealthcheckContext.state.loadHealthcheckData();
+
       expect(adminHealthcheckContext.props.actionFeedbackContext.displayError).toHaveBeenCalledWith(
         "No data received from the server",
       );
+      expect(adminHealthcheckContext.state.healthcheckData).toBeInstanceOf(HealthcheckChecksCollection);
+      expect(adminHealthcheckContext.state.healthcheckData.length).toEqual(0);
     });
+
     it("should load until data is received", async () => {
       expect.assertions(4);
       let updateResolve;
@@ -73,7 +128,7 @@ describe("AdministrationHealthcheckContext", () => {
       const loadDataPromise = adminHealthcheckContext.state.loadHealthcheckData();
       expect(adminHealthcheckContext.state.processing).toBeTruthy();
       expect(adminHealthcheckContext.state.isProcessing()).toBeTruthy();
-      updateResolve(JSON.stringify({ header: {}, body: mockHealthcheckData }));
+      updateResolve(JSON.stringify({ header: {}, body: mixedStatusHealthcheckApiBodyDto() }));
       await loadDataPromise;
       expect(adminHealthcheckContext.state.processing).toBeFalsy();
       expect(adminHealthcheckContext.state.isProcessing()).toBeFalsy();
@@ -85,7 +140,7 @@ describe("AdministrationHealthcheckContext", () => {
       expect.assertions(4);
 
       //init context
-      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckData));
+      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mixedStatusHealthcheckApiBodyDto()));
       await adminHealthcheckContext.state.loadHealthcheckData();
       expect(adminHealthcheckContext.state.healthcheckData).not.toBeNull();
 
@@ -98,20 +153,24 @@ describe("AdministrationHealthcheckContext", () => {
   });
 
   describe("AdministrationHealthcheckContext::refresh", () => {
-    it("should refresh the healthcheck data", async () => {
+    it("should replace the healthcheck data", async () => {
       expect.assertions(4);
 
-      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckData));
+      const body = mixedStatusHealthcheckApiBodyDto();
+      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(body));
       await adminHealthcheckContext.state.loadHealthcheckData();
-      const expectedData = new HealthcheckEntity(mockHealthcheckData);
       expect(adminHealthcheckContext.state.healthcheckData).not.toBeNull();
-      expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(expectedData.toDto());
+      expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(
+        new HealthcheckChecksCollection(body).toDto(),
+      );
 
-      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckDataAllChecksFail));
-      const expectedDataUpdated = new HealthcheckEntity(mockHealthcheckDataAllChecksFail);
+      const refreshedBody = allPassHealthcheckApiBodyDto();
+      fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(refreshedBody));
       await adminHealthcheckContext.state.loadHealthcheckData();
       expect(adminHealthcheckContext.state.healthcheckData).not.toBeNull();
-      expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(expectedDataUpdated.toDto());
+      expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(
+        new HealthcheckChecksCollection(refreshedBody).toDto(),
+      );
     });
   });
 });
