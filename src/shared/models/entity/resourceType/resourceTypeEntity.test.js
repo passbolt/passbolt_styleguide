@@ -26,6 +26,7 @@ import {
   resourceTypeV5PasswordStringDto,
   resourceTypeV5TotpDto,
   resourceTypeV5StandalonePinCodeDto,
+  resourceTypeV5PasskeyDto,
   resourceTypeWithoutSecretDefinitionDto,
 } from "./resourceTypeEntity.test.data";
 
@@ -237,6 +238,21 @@ describe("ResourceTypeEntity", () => {
       expect(resourceTypeEntity.definition.secret).toBeTruthy();
       expect(resourceTypeEntity.definition.secret).toStrictEqual(expectedSecretDefinition);
     });
+
+    it("should set the passkey definition requiring the metadata username and credential id", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "v5-passkey" });
+
+      const resourceTypeEntity = new ResourceTypeEntity(dto);
+
+      expect(resourceTypeEntity.definition.resource.required).toStrictEqual([
+        "name",
+        "username",
+        "uris",
+        "credential_id",
+      ]);
+    });
   });
 
   describe("::getters", () => {
@@ -344,6 +360,15 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasTotp()).toBeFalsy();
     });
+
+    it("passkey should not have totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasskeyDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasTotp()).toBeFalsy();
+    });
   });
 
   describe("::hasPassword", () => {
@@ -436,6 +461,15 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasPassword()).toBeFalsy();
     });
+
+    it("passkey should not have password", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasskeyDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPassword()).toBeFalsy();
+    });
   });
 
   describe("::hasCustomFields", () => {
@@ -524,6 +558,15 @@ describe("ResourceTypeEntity", () => {
       expect.assertions(1);
 
       const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeFalsy();
+    });
+
+    it("passkey should not have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasskeyDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasCustomFields()).toBeFalsy();
@@ -721,6 +764,15 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasSecretDescription()).toBeTruthy();
     });
+
+    it("passkey should not have secret description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasskeyDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasSecretDescription()).toBeFalsy();
+    });
   });
 
   describe("::hasMetadataDescription", () => {
@@ -822,6 +874,15 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasMetadataDescription()).toBeTruthy();
     });
+
+    it("passkey should have metadata description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasskeyDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasMetadataDescription()).toBeTruthy();
+    });
   });
 
   describe("::is V5 or V4", () => {
@@ -918,6 +979,16 @@ describe("ResourceTypeEntity", () => {
       expect.assertions(2);
 
       const dto = resourceTypeV5StandalonePinCodeDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeTruthy();
+      expect(entity.isV4()).toBeFalsy();
+    });
+
+    it("passkey should be v5 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeV5PasskeyDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.isV5()).toBeTruthy();
@@ -1071,6 +1142,15 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasPinCode()).toBeFalsy();
     });
+
+    it("passkey should not have pin code", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasskeyDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPinCode()).toBeFalsy();
+    });
   });
 
   describe("::isSupportedByQuickAccess", () => {
@@ -1079,6 +1159,10 @@ describe("ResourceTypeEntity", () => {
       expect(new ResourceTypeEntity(resourceTypeV5DefaultDto()).isSupportedByQuickAccess()).toBeTruthy();
       expect(new ResourceTypeEntity(resourceTypeV5TotpDto()).isSupportedByQuickAccess()).toBeTruthy();
       expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).isSupportedByQuickAccess()).toBeTruthy();
+    });
+    it("passkey type is supported", () => {
+      expect.assertions(1);
+      expect(new ResourceTypeEntity(resourceTypeV5PasskeyDto()).isSupportedByQuickAccess()).toBeTruthy();
     });
     it("note and custom fields types are supported", () => {
       expect.assertions(2);
@@ -1095,6 +1179,11 @@ describe("ResourceTypeEntity", () => {
       expect(new ResourceTypeEntity(resourceTypeV5PasswordStringDto()).isSupportedByOfflineMode()).toBeTruthy();
       expect(new ResourceTypeEntity(resourceTypeV5TotpDto()).isSupportedByOfflineMode()).toBeTruthy();
       expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).isSupportedByOfflineMode()).toBeTruthy();
+    });
+
+    it("v5 passkey type is not supported", () => {
+      expect.assertions(1);
+      expect(new ResourceTypeEntity(resourceTypeV5PasskeyDto()).isSupportedByOfflineMode()).toBeFalsy();
     });
 
     it("v5 note and custom fields types are supported", () => {
@@ -1259,6 +1348,45 @@ describe("ResourceTypeEntity", () => {
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.isStandaloneCustomFields()).toBeFalsy();
+    });
+  });
+
+  describe("::hasPasskey", () => {
+    it("passkey should have passkey", () => {
+      expect.assertions(1);
+      expect(new ResourceTypeEntity(resourceTypeV5PasskeyDto()).hasPasskey()).toBeTruthy();
+    });
+
+    it("other types should not have passkey", () => {
+      expect.assertions(5);
+      expect(new ResourceTypeEntity(resourceTypePasswordStringDto()).hasPasskey()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeV5DefaultDto()).hasPasskey()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeV5TotpDto()).hasPasskey()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto()).hasPasskey()).toBeFalsy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).hasPasskey()).toBeFalsy();
+    });
+  });
+
+  describe("::hasMetadataUris", () => {
+    it("passkey should have metadata uris", () => {
+      expect.assertions(1);
+      expect(new ResourceTypeEntity(resourceTypeV5PasskeyDto()).hasMetadataUris()).toBeTruthy();
+    });
+  });
+
+  describe("::canDiscloseSecret", () => {
+    it("types other than passkey can disclose their secret", () => {
+      expect.assertions(5);
+      expect(new ResourceTypeEntity(resourceTypePasswordStringDto()).canDiscloseSecret()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5DefaultDto()).canDiscloseSecret()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5TotpDto()).canDiscloseSecret()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto()).canDiscloseSecret()).toBeTruthy();
+      expect(new ResourceTypeEntity(resourceTypeV5StandalonePinCodeDto()).canDiscloseSecret()).toBeTruthy();
+    });
+
+    it("passkey cannot disclose its secret", () => {
+      expect.assertions(1);
+      expect(new ResourceTypeEntity(resourceTypeV5PasskeyDto()).canDiscloseSecret()).toBeFalsy();
     });
   });
 });

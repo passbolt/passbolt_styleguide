@@ -27,6 +27,7 @@ import ResourceTypeSchemasDefinition, {
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
 } from "./resourceTypeSchemasDefinition";
 
 const RESOURCE_TYPE_NAME_MAX_LENGTH = 255;
@@ -74,6 +75,7 @@ export const METADATA_DESCRIPTION_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
 ];
 
 // All v5 resource types except PIN code have URIs metadata
@@ -84,6 +86,7 @@ export const METADATA_URIS_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
 ];
 
 export const CUSTOM_FIELDS_RESOURCE_TYPES = [
@@ -264,6 +267,14 @@ class ResourceTypeEntity extends EntityV2 {
   }
 
   /**
+   * Has passkey
+   * @returns {boolean}
+   */
+  hasPasskey() {
+    return RESOURCE_TYPE_V5_PASSKEY_SLUG === this.slug;
+  }
+
+  /**
    * Can the quick acces list and display this resource type
    * @returns {boolean}
    */
@@ -273,7 +284,8 @@ class ResourceTypeEntity extends EntityV2 {
       this.hasTotp() ||
       this.hasPinCode() ||
       this.isStandaloneCustomFields() ||
-      this.isStandaloneNote()
+      this.isStandaloneNote() ||
+      this.hasPasskey()
     );
   }
 
@@ -290,6 +302,14 @@ class ResourceTypeEntity extends EntityV2 {
         this.isStandaloneNote() ||
         this.isStandaloneCustomFields())
     );
+  }
+
+  /**
+   * Can the secret be shown to the user or filled into a page. A passkey secret never leaves the extension.
+   * @returns {boolean}
+   */
+  canDiscloseSecret() {
+    return !this.hasPasskey();
   }
 
   /**

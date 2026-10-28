@@ -61,6 +61,20 @@ describe("ResourceMetadataEntity", () => {
       assertEntityProperty.arrayStringMaxLength(ResourceMetadataEntity, "uris", ResourceMetadataEntity.URI_MAX_LENGTH);
     });
 
+    it("validates credential_id property", () => {
+      assertEntityProperty.string(ResourceMetadataEntity, "credential_id");
+      assertEntityProperty.minLength(ResourceMetadataEntity, "credential_id", 22);
+      assertEntityProperty.maxLength(ResourceMetadataEntity, "credential_id", 1364);
+      assertEntityProperty.notRequired(ResourceMetadataEntity, "credential_id");
+      assertEntityProperty.assert(
+        ResourceMetadataEntity,
+        "credential_id",
+        [{ scenario: "base64url", value: "yuDS1TCepE-VXzAgRc2VJw" }],
+        [{ scenario: "base64", value: "yuDS1TCepE+VXzAgRc2VJw==" }],
+        "pattern",
+      );
+    });
+
     it("validates description property", () => {
       assertEntityProperty.string(ResourceMetadataEntity, "description");
       assertEntityProperty.maxLength(ResourceMetadataEntity, "description", 10_000);
@@ -111,6 +125,14 @@ describe("ResourceMetadataEntity", () => {
           resource_type_id: { required: "The resource_type_id is required." },
         });
       }
+    });
+
+    it("keeps the passkey credential id", () => {
+      expect.assertions(2);
+      const metadataDto = minimalResourceMetadataDto({ credential_id: "yuDS1TCepE-VXzAgRc2VJw" });
+      const metadataEntity = new ResourceMetadataEntity(metadataDto);
+      expect(metadataEntity.credentialId).toStrictEqual("yuDS1TCepE-VXzAgRc2VJw");
+      expect(metadataEntity.toDto()).toStrictEqual(metadataDto);
     });
 
     it("works if minimal DTO is provided", () => {
