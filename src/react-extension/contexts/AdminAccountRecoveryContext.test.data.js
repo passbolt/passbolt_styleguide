@@ -63,6 +63,7 @@ export function defaultProps(props = {}) {
     context: defaultAppContext(props?.appContext),
     accountRecoveryContext: {
       reloadAccountRecoveryPolicy: jest.fn(),
+      setUserAccountRecoveryStatus: jest.fn(),
     },
   };
   return Object.assign(defaultProps, props);
