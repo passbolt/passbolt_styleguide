@@ -50,7 +50,11 @@ export default class ShareChanges {
     this._permissionsByAro = new Map();
     /** @type {Map<string, Map<string, object>>} The original permission, by aro id then aco id. */
     this._permissionByAroByAco = new Map();
+    /** @type {Map<string, Set<string>>} The ids of the original owners, by aco id. */
+    this._ownerAroIdsByAco = new Map();
     this._acos.forEach((aco) => {
+      const ownerAroIds = new Set();
+      this._ownerAroIdsByAco.set(aco.id, ownerAroIds);
       aco.permissions.forEach((permission) => {
         const aro = permission.user || permission.group;
         if (!this._aros[aro.id]) {
@@ -58,6 +62,9 @@ export default class ShareChanges {
         }
         this._permissions.push(permission);
         this._indexPermission(permission);
+        if (permission.type === ADMIN) {
+          ownerAroIds.add(permission.aro_foreign_key);
+        }
       });
     });
     // The items the operator owns, the only ones a change can be staged on. What is displayed still
@@ -67,6 +74,8 @@ export default class ShareChanges {
     this._changesByAro = new Map();
     /** @type {Set<string>} The ids of the aros marked as initially new. */
     this._initiallyNewAroIds = new Set();
+    /** @type {Array<object>|null} The items left without owner by the pending changes, null until computed. */
+    this._resourcesWithNoOwner = null;
   }
 
   /**
@@ -414,32 +423,34 @@ export default class ShareChanges {
   }
 
   /**
-   * Get the resources with no owners after applying the changes.
+   * Get the resources with no owners after applying the changes: an item ends up owned by its
+   * original owners, minus the ones whose change revokes the ownership, plus the ones granted it.
+   * The dialog reads it on every render while it only changes when a change is staged or removed,
+   * so it is cached between the edits.
    * @returns {Resource.List}
    */
   getResourcesWithNoOwner() {
-    const allChanges = this.getChanges();
-    return this._acos.filter((aco) => {
-      const changes = allChanges.filter((change) => change.aco_foreign_key === aco.id);
-      // Check if a new owner is promoted.
-      const grantedOwner = changes.find((change) => change.type === ADMIN && !change.delete);
-      if (grantedOwner) {
-        return false;
-      }
-      // Check if there is at least one of the original owners after applying the change.
-      const originalOwnersPermissionsIds = this._permissions.reduce((carry, permission) => {
-        if (permission.aco_foreign_key === aco.id && permission.type === ADMIN) {
-          carry = [...carry, permission.id];
-        }
-        return carry;
-      }, []);
-      // Check if owner was removed
-      const revokedOwners = changes.filter(
-        (change) => (change.delete || change.type !== ADMIN) && originalOwnersPermissionsIds.indexOf(change.id) !== -1,
-      );
-
-      return revokedOwners.length === originalOwnersPermissionsIds.length;
+    if (this._resourcesWithNoOwner !== null) {
+      return this._resourcesWithNoOwner;
+    }
+    // Work on a copy, the original owners index must stay untouched.
+    const ownerAroIdsByAcoId = new Map();
+    this._ownerAroIdsByAco.forEach((ownerAroIds, acoId) => {
+      ownerAroIdsByAcoId.set(acoId, new Set(ownerAroIds));
     });
+    this.getChanges().forEach((change) => {
+      const ownerAroIds = ownerAroIdsByAcoId.get(change.aco_foreign_key);
+      if (!ownerAroIds) {
+        return;
+      }
+      if (change.type === ADMIN && !change.delete) {
+        ownerAroIds.add(change.aro_foreign_key);
+      } else {
+        ownerAroIds.delete(change.aro_foreign_key);
+      }
+    });
+    this._resourcesWithNoOwner = this._acos.filter((aco) => ownerAroIdsByAcoId.get(aco.id).size === 0);
+    return this._resourcesWithNoOwner;
   }
 
   /**
@@ -473,6 +484,7 @@ export default class ShareChanges {
     } else {
       this._changesByAro.set(change.aro_foreign_key, [change]);
     }
+    this._resourcesWithNoOwner = null;
   }
 
   /**
@@ -482,6 +494,7 @@ export default class ShareChanges {
    */
   _removeAroChanges(aroId) {
     this._changesByAro.delete(aroId);
+    this._resourcesWithNoOwner = null;
   }
 
   /**
