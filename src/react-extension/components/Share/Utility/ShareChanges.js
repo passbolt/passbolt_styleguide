@@ -320,14 +320,12 @@ export default class ShareChanges {
   }
 
   /**
-   * Used to initialise the ShareChanges list with already "changed" permissions.
+   * Mark an aro as initially new, its permissions displaying as pending changes from the start.
    * For example when creating a new shared resource, the permissions must be shown as "new"
    * instead of "already existing".
-   * @param {PermissionEntity} permission
+   * @param {object} permission The aggregated permission row of the aro to mark
    */
   markPermissionHasChanged(permission) {
-    const permissionChange = this._buildChange(permission.permissions[0].aco, permission.aro, permission.type);
-    this._pushChange(permissionChange);
     this._initiallyNewAroIds.add(permission.aro.id);
   }
 
