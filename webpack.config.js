@@ -29,7 +29,7 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: "babel-loader",
         options: {
-          presets: ["@babel/react"],
+          presets: [["@babel/react", { runtime: "classic" }]],
         },
       },
       lessRule,
