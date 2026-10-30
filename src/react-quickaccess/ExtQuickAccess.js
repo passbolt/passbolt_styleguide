@@ -41,6 +41,7 @@ import OfflineSettingsLocalStorageContextProvider from "../shared/context/offlin
 import ActiveSessionSessionStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import ExtQuickAccessContextProvider from "./contexts/ExtQuickAccessContext";
 import HandleBootstrapRoute from "./components/HandleBootstrapRoute/HandleBootstrapRoute";
+import PasskeyCreatePage from "./components/PasskeyCreatePage/PasskeyCreatePage";
 import QuickAccessServerUnavailable from "./components/QuickAccessServerUnavailable/QuickAccessServerUnavailable";
 import QuickAccessOfflineFooter from "./components/Offline/QuickAccessOfflineFooter";
 import OfflineLoginPage from "./components/Offline/OfflineLoginPage";
@@ -63,6 +64,7 @@ export const BOOTSTRAP_FEATURE = {
   SAVE_CREDENTIALS: "save-credentials",
   AUTOSAVE_CREDENTIALS: "autosave-credentials",
   REQUEST_PASSPHRASE: "request-passphrase",
+  PASSKEY_CREATE: "passkey-create",
 };
 
 class ExtQuickAccess extends React.Component {
@@ -358,6 +360,12 @@ class ExtQuickAccess extends React.Component {
                                           exact
                                           path="/webAccessibleResources/quickaccess/resources/autosave"
                                           component={SaveResource}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/passkeys/create"
+                                          component={PasskeyCreatePage}
+                                          requestId={this.props.bootstrapRequestId}
                                         />
                                         <PrivateRoute
                                           path="/webAccessibleResources/quickaccess/resources/view/:id"

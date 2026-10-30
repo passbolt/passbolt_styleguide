@@ -63,6 +63,8 @@ class HandleBootstrapRoute extends React.Component {
         return "/webAccessibleResources/quickaccess/resources/create";
       case BOOTSTRAP_FEATURE.AUTOSAVE_CREDENTIALS:
         return "/webAccessibleResources/quickaccess/resources/autosave";
+      case BOOTSTRAP_FEATURE.PASSKEY_CREATE:
+        return "/webAccessibleResources/quickaccess/passkeys/create";
     }
 
     return "/webAccessibleResources/quickaccess/home";
