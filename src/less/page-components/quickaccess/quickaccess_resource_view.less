@@ -11,7 +11,6 @@
                 display: flex;
                 align-items: center;
                 padding: 1.6rem;
-                position: relative;
 
                 &:last-child {
                   box-shadow: none;
@@ -26,6 +25,57 @@
                 button:hover {
                   color: var(--Palette-Contrast-1);
                 }
+            }
+            // Secret rows: the action and its ring sit on the value line next to the eye, the row keeps its height
+            .property:not(.custom-fields), .custom-field {
+              display: grid;
+              grid-template-columns: minmax(0, 1fr) auto;
+              grid-template-areas: "name ." "value action";
+              align-items: center;
+
+              // The clearfix pseudo-elements would be grid items
+              &:before, &:after {
+                content: none;
+              }
+
+              > .information {
+                display: contents;
+
+                > .property-name {
+                  grid-area: name;
+                }
+
+                > .property-value, > .password-wrapper, > .totp-wrapper {
+                  grid-area: value;
+                }
+              }
+
+              // The 2.4rem action overflows the 2rem value line by .2rem on each side.
+              > .property-action {
+                grid-area: action;
+                margin: -.2rem 0;
+              }
+
+              > .property-action + .timer {
+                grid-area: action;
+                place-self: center;
+                margin: -.6rem -.4rem;
+              }
+
+              // The eye shows while its row is hovered or reached with the keyboard.
+              .password-view, .totp-view {
+                opacity: 0;
+              }
+
+              &:hover, &:has(:focus-visible) {
+                .password-view, .totp-view {
+                  opacity: 1;
+
+                  &:disabled {
+                    opacity: .5;
+                  }
+                }
+              }
             }
             .property.custom-fields {
               flex-direction: column;
@@ -47,20 +97,9 @@
                 gap: .8rem;
               }
 
-              .custom-field {
-                display: flex;
-                align-items: center;
-                position: relative;
-
-                .property-name {
-                  font-size: 1.2rem;
-                  line-height: 1.6rem;
-                }
-
-                // The row has no padding, keep the timer centred on the copy action: 1.25rem - 1.6rem.
-                .property-action + .timer {
-                  right: -.35rem;
-                }
+              .custom-field .property-name {
+                font-size: 1.2rem;
+                line-height: 1.6rem;
               }
             }
             .information {
@@ -234,9 +273,6 @@
             .property-action + .timer {
               width: 3.2rem;
               height: 3.2rem;
-              position: absolute;
-              right: 1.25rem;
-              top: calc(50% - 1.6rem);
               --timer-delay: 0;
               --timer-stroke-width: 1;
               pointer-events: none;
