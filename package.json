@@ -81,7 +81,7 @@
     "less-loader": "^13.1.0",
     "lockfile-lint": "^5.1.0",
     "playwright": "^1.64.1",
-    "prettier": "3.6.2",
+    "prettier": "3.9.10",
     "storybook": "^10.6.5",
     "synckit": "^0.12.3",
     "wait-on": "^9.5.1",
