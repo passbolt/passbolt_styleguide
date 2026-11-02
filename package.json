@@ -80,7 +80,7 @@
     "less": "^4.9.1",
     "less-loader": "^12.3.2",
     "lockfile-lint": "^5.1.0",
-    "playwright": "^1.62.1",
+    "playwright": "^1.64.1",
     "prettier": "3.6.2",
     "storybook": "^10.5.6",
     "synckit": "^0.11.13",
