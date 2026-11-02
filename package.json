@@ -52,7 +52,7 @@
     "@testing-library/user-event": "^14.6.8",
     "babel-jest": "^30.5.2",
     "babel-loader": "^10.1.1",
-    "concurrently": "^10.0.0",
+    "concurrently": "^10.0.6",
     "copy-webpack-plugin": "^14.0.0",
     "css-minimizer-webpack-plugin": "^8.0.0",
     "eslint": "^10.14.0",
