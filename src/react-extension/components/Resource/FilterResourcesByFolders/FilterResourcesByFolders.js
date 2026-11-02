@@ -29,6 +29,11 @@ import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 import CabinetSVG from "../../../../img/svg/cabinet.svg";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import memoize from "memoize-one";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import HandlePermissionWorkflow, {
+  PERMISSION_WORKFLOW_OPERATION,
+} from "../HandlePermissionWorkflow/HandlePermissionWorkflow";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -372,17 +377,39 @@ class FilterResourcesByFolders extends React.Component {
    * Handle when the user is dropping the content on the title.
    */
   handleDropTitle() {
-    const folders = this.props.dragContext.draggedItems.folders.map((folder) => folder.id);
-    const resources = this.props.dragContext.draggedItems.resources.map((resource) => resource.id);
+    const folders = this.props.dragContext.draggedItems.folders;
+    const resources = this.props.dragContext.draggedItems.resources;
     if (folders?.length > 0) {
-      this.props.context.port.request("passbolt.folders.move-by-id", folders[0], null);
+      this.startPermissionWorkflow({
+        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_FOLDERS,
+        folder: folders[0],
+        destinationFolderId: null,
+      });
     } else if (resources?.length > 0) {
-      this.props.context.port.request("passbolt.resources.move-by-ids", resources, null);
+      this.startPermissionWorkflow({
+        operation: PERMISSION_WORKFLOW_OPERATION.MOVE_RESOURCES,
+        resources,
+        destinationFolderId: null,
+      });
     }
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOverTitle = false;
     this.setState({ draggingOverTitle });
+  }
+
+  /**
+   * Start the permission workflow for a drop, warning the operator when one is already running.
+   * @param {object} workflowProps The props to start HandlePermissionWorkflow with.
+   * @return {void}
+   */
+  startPermissionWorkflow(workflowProps) {
+    const workflowKey = this.props.workflowContext.start(HandlePermissionWorkflow, workflowProps);
+    if (!workflowKey) {
+      this.props.actionFeedbackContext.displayWarning(
+        this.props.t("Please complete the operation in progress before starting another one."),
+      );
+    }
   }
 
   /**
@@ -616,12 +643,17 @@ FilterResourcesByFolders.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any,
   dragContext: PropTypes.any,
+  workflowContext: PropTypes.any, // The workflow context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
 export default withRouter(
   withDialog(
     withContextualMenu(
-      withResourceWorkspace(withAppContext(withDrag(withTranslation("common")(FilterResourcesByFolders)))),
+      withResourceWorkspace(
+        withAppContext(withDrag(withWorkflow(withActionFeedback(withTranslation("common")(FilterResourcesByFolders))))),
+      ),
     ),
   ),
 );

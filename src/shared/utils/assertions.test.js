@@ -13,7 +13,8 @@
  */
 import each from "jest-each";
 import { v4 as uuid } from "uuid";
-import { assertArrayUUID, assertNumber, assertUuid } from "./assertions";
+import { assertArrayUUID, assertNumber, assertUuid, assertWebauthnRelyingPartyIsNotIpAddress } from "./assertions";
+import WebauthnRelyingPartyIpAddressError from "../lib/Error/WebauthnRelyingPartyIpAddressError";
 
 describe("Assertions", () => {
   describe("Assertions::assertUuid", () => {
@@ -90,5 +91,20 @@ describe("Assertions", () => {
         expect(() => assertNumber(props.value)).toThrow();
       });
     });
+  });
+
+  describe("Assertions::assertWebauthnRelyingPartyIsNotIpAddress", () => {
+    it.each(["passbolt.local", "10.passbolt.local", "localhost"])("Should accept the hostname %s", (hostname) => {
+      expect.assertions(1);
+      expect(() => assertWebauthnRelyingPartyIsNotIpAddress(hostname)).not.toThrow();
+    });
+
+    it.each(["192.168.1.10", "127.0.0.1", "::1", "[::1]", "[2001:db8::1]"])(
+      "Should reject the IP address %s",
+      (hostname) => {
+        expect.assertions(1);
+        expect(() => assertWebauthnRelyingPartyIsNotIpAddress(hostname)).toThrow(WebauthnRelyingPartyIpAddressError);
+      },
+    );
   });
 });

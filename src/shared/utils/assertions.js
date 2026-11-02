@@ -1,4 +1,6 @@
 import XRegExp from "xregexp";
+import Validator from "validator";
+import WebauthnRelyingPartyIpAddressError from "../lib/Error/WebauthnRelyingPartyIpAddressError";
 
 const EMAIL_HOSTNAME_REGEXP =
   "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
@@ -66,5 +68,16 @@ export const assertArrayUUID = (data, errorMessage = "The given parameter is not
 export const assertNumber = (value, errorMessage = "The given parameter is not a valid number") => {
   if (typeof value !== "undefined" && typeof value !== "number") {
     throw new TypeError(errorMessage);
+  }
+};
+
+/**
+ * Assert that the given hostname can be used as WebAuthn relying party id, WebAuthn forbids IP addresses.
+ * @param {string} hostname The relying party id or page hostname, IPv6 brackets are allowed
+ * @throws {WebauthnRelyingPartyIpAddressError} if the hostname is an IPv4 or IPv6 address
+ */
+export const assertWebauthnRelyingPartyIsNotIpAddress = (hostname) => {
+  if (Validator.isIP(hostname.replace(/^\[(.*)\]$/, "$1"))) {
+    throw new WebauthnRelyingPartyIpAddressError();
   }
 };

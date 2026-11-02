@@ -1,4 +1,6 @@
-# v5.16.2
+# v5.17.2
 
 Provides:
-- Resolve tab freezing after a certain time
+- Updates of the translation
+- fix for the error message whenever an admin wants to activate passkey MFA on an instance served with IP
+- autofill performance improvement

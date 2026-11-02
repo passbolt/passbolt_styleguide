@@ -187,6 +187,34 @@ class DisplayMfaAdministration extends React.Component {
                   <h4>
                     <span className="input toggle-switch form-element">
                       <input
+                        id="webauthn-provider-toggle-button"
+                        type="checkbox"
+                        className="toggle-switch-checkbox checkbox"
+                        name="webauthnToggle"
+                        onChange={this.handleInputChange}
+                        checked={settings.webauthnToggle}
+                        disabled={this.hasAllInputDisabled()}
+                      />
+                      <label htmlFor="webauthn-provider-toggle-button">
+                        <Trans>Passkeys</Trans>
+                      </label>
+                    </span>
+                  </h4>
+                  {!settings.webauthnToggle && (
+                    <p className="description">
+                      <Trans>Passkeys are disabled for all users.</Trans>
+                    </p>
+                  )}
+                  {settings.webauthnToggle && (
+                    <p className="description">
+                      <Trans>Passkeys are enabled for all users.</Trans>
+                    </p>
+                  )}
+                </div>
+                <div className="provider-section">
+                  <h4>
+                    <span className="input toggle-switch form-element">
+                      <input
                         id="yubikey-provider-toggle-button"
                         type="checkbox"
                         className="toggle-switch-checkbox checkbox"

@@ -12,11 +12,7 @@
  * @since         3.3.0
  */
 
-import InFormCallToActionField from "./InFormCallToActionField";
-import DomUtils from "../Dom/DomUtils";
-
-/** Button submit selector */
-const SUBMIT_BUTTON_SELECTOR = "button[type='submit'], input[type='submit']";
+import { SUBMIT_BUTTON_SELECTOR } from "./OrphanDictionary";
 
 /**
  * An InFormCredentialsFormField is represented by a DOM element identified as credentials form DOM element which once filled
@@ -24,37 +20,31 @@ const SUBMIT_BUTTON_SELECTOR = "button[type='submit'], input[type='submit']";
  */
 class InFormCredentialsFormField {
   /**
-   * Retrieve all the DOM elements which can be an credentials form fields
-   */
-  static findAll() {
-    const domFields = Array.from(document.querySelectorAll("form"));
-    const iframesFields = InFormCallToActionField.findAllInIframes();
-    return domFields.concat(iframesFields);
-  }
-
-  /**
-   * Retrieve all the iframes elements which can be an credential form field
-   * @return {*}
-   */
-  static findAllInIframes() {
-    const iframes = DomUtils.getAccessibleAndSameDomainIframes();
-    const queryMapper = (iframe) => Array.from(iframe.contentDocument.querySelectorAll("form"));
-    return iframes.map(queryMapper).flat();
-  }
-
-  /**
    * Default constructor
-   * @param field The DOM field which represents the field
-   * @param usernameField The username DOM field into the form
-   * @param passwordField The password DOM field into the form
+   * @param {Element} field The DOM field which represents the field
+   * @param {Partial} options The option
+   * @param {Element} options.usernameField The username DOM field into the form
+   * @param {Element} options.passwordField The password DOM field into the form
+   * @param {Element} options.otpField The OTP field, if any
+   * @param {Array<Element>} options.confirmPasswordFields The password confirmation fields
+   * @param {boolean} options.isPseudoForm true when the container was synthesized from orphan fields
    */
-  constructor(field, usernameField, passwordField) {
+  constructor(
+    field,
+    { usernameField, passwordField, isPseudoForm = false, otpField, confirmPasswordFields = [] } = {},
+  ) {
     /** The field to which the in-form is attached */
     this.field = field;
     /** The username field attached to the form */
     this.usernameField = usernameField;
     /** The password field attached to the form */
     this.passwordField = passwordField;
+    /** Flag telling if the container was created from orphan fields (i.e. not a real form) */
+    this.isPseudoForm = isPseudoForm;
+    /** The OTP field attached to the form */
+    this.otpField = otpField;
+    /** The password confirmation fields attached to the form */
+    this.confirmPasswordFields = confirmPasswordFields;
     /** Flag telling whether the form submission has already been performed (and avoid twice autosave call) */
     this.hasAlreadySubmitted = false;
 
@@ -93,7 +83,7 @@ class InFormCredentialsFormField {
       port.emit("passbolt.web-integration.autosave", {
         name: document.title,
         username: this.usernameField?.value || "",
-        password: this.passwordField.value,
+        password: this.passwordField?.value || "",
         url: document.URL,
       });
     }

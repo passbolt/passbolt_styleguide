@@ -62,6 +62,41 @@ export default class DisplayProviderListPage {
   }
 
   /**
+   * Returns the webauthn card
+   */
+  get webauthnCard() {
+    return this._page.container.querySelector("#webauthn");
+  }
+
+  /**
+   * Returns the webauthn card link for action
+   */
+  get webauthnCardLink() {
+    return this._page.container.querySelector("#webauthn a");
+  }
+
+  /**
+   * Returns the webauthn title card
+   */
+  get webauthnCardTitle() {
+    return this._page.container.querySelector("#webauthn .provider-name");
+  }
+
+  /**
+   * Returns the webauthn image card
+   */
+  get webauthnCardImage() {
+    return this._page.container.querySelector("#webauthn .provider-img");
+  }
+
+  /**
+   * Returns the webauthn card status
+   */
+  get webauthnCardStatus() {
+    return this._page.container.querySelector("#webauthn .mfa-provider-status");
+  }
+
+  /**
    * Returns the yubikey card
    */
   get yubikeyCard() {
@@ -164,6 +199,13 @@ export default class DisplayProviderListPage {
    */
   async clickOnTotpProvider() {
     await this.click(this.totpCardLink);
+  }
+
+  /**
+   * Click on the webauthn card
+   */
+  async clickOnWebauthnProvider() {
+    await this.click(this.webauthnCardLink);
   }
 
   /**

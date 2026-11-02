@@ -16,6 +16,7 @@ import DisplayHealthcheckAdministrationPage from "./DisplayHealthcheckAdministra
 import {
   defaultAdministrationHealthcheckContext,
   mockHealthcheckAirGappedEnvironment,
+  mockHealthcheckData,
   mockHealthcheckDataAllChecksFail,
 } from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
 
@@ -48,7 +49,7 @@ describe("See the healthCheck settings", () => {
     });
 
     it("should display all the healthcheck sections", () => {
-      expect.assertions(11);
+      expect.assertions(12);
       expect(page.healthCheckEnvironment).not.toBeNull();
       expect(page.healthCheckApp).not.toBeNull();
       expect(page.healthCheckGPG).not.toBeNull();
@@ -60,10 +61,11 @@ describe("See the healthCheck settings", () => {
       expect(page.healthcheckDirectorySync).not.toBeNull();
       expect(page.healthcheckSso).not.toBeNull();
       expect(page.healthcheckMetadata).not.toBeNull();
+      expect(page.healthcheckScim).not.toBeNull();
     });
 
     it("should display all subssections success status", () => {
-      expect.assertions(22);
+      expect.assertions(24);
       expect(page.isAllHealthcheckSubSectionEnvironmentSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionConfigFilesSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionCoreSuccess).toBeTruthy();
@@ -75,6 +77,7 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionDirectorySyncSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionSsoSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionMetadataSuccess).toBeTruthy();
+      expect(page.isAllHealthcheckSubSectionScimSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionEnvironmentFailed).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionConfigFilesWarned).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionCoreFailed).toBeFalsy();
@@ -86,6 +89,7 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionDirectorySyncWarned).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionSsoWarned).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionMetadataFailed).toBeFalsy();
+      expect(page.isAllHealthcheckSubSectionScimExpired).toBeFalsy();
     });
   });
 
@@ -101,7 +105,7 @@ describe("See the healthCheck settings", () => {
       page = new DisplayHealthcheckAdministrationPage(props);
     });
     it("should display all subssections fail status", async () => {
-      expect.assertions(22);
+      expect.assertions(24);
       expect(page.isAllHealthcheckSubSectionEnvironmentFailed).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionConfigFilesWarned).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionCoreFailed).toBeTruthy();
@@ -113,6 +117,7 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionDirectorySyncWarned).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionSsoWarned).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionMetadataFailed).toBeTruthy();
+      expect(page.isAllHealthcheckSubSectionScimExpired).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionEnvironmentSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionConfigFilesSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionCoreSuccess).toBeFalsy();
@@ -124,6 +129,7 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionDirectorySyncSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionSsoSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionMetadataSuccess).toBeFalsy();
+      expect(page.isAllHealthcheckSubSectionScimSuccess).toBeFalsy();
     });
   });
 
@@ -266,6 +272,61 @@ describe("See the healthCheck settings", () => {
       expect(page.healthcheckDirectorySync).not.toBeNull();
       expect(page.healthcheckSso).not.toBeNull();
       expect(page.healthcheckMetadata).toBeNull();
+    });
+  });
+
+  describe("As AD, I should see the SCIM secret token expiry lifecycle", () => {
+    it("should display a warning and no near-expiry contradiction when the token is expiring", () => {
+      expect.assertions(2);
+      const healthcheckData = {
+        ...mockHealthcheckData,
+        scim: { isScimTokenNotExpired: true, isScimTokenNotNearExpiry: false },
+      };
+      const props = defaultProps({
+        adminHealthcheckContext: defaultAdministrationHealthcheckContext({ healthcheckData }),
+      });
+      const page = new DisplayHealthcheckAdministrationPage(props);
+      expect(page.healthcheckScim).not.toBeNull();
+      expect(page.isAllHealthcheckSubSectionScimExpiring).toBeTruthy();
+    });
+
+    it("should not show the near-expiry line when the token is expired", () => {
+      expect.assertions(2);
+      const healthcheckData = {
+        ...mockHealthcheckData,
+        scim: { isScimTokenNotExpired: false, isScimTokenNotNearExpiry: true },
+      };
+      const props = defaultProps({
+        adminHealthcheckContext: defaultAdministrationHealthcheckContext({ healthcheckData }),
+      });
+      const page = new DisplayHealthcheckAdministrationPage(props);
+      expect(page.healthcheckScim).not.toBeNull();
+      expect(page.isAllHealthcheckSubSectionScimExpired).toBeTruthy();
+    });
+  });
+
+  describe("As AD, I am not able to see the SCIM section if it is disabled", () => {
+    let page, props;
+
+    beforeEach(() => {
+      props = defaultProps({ context: { siteSettings: { canIUse: (plugins) => plugins !== "scim" } } });
+      page = new DisplayHealthcheckAdministrationPage(props);
+    });
+
+    it("should display all the healthcheck sections except the scim", () => {
+      expect.assertions(12);
+      expect(page.healthCheckEnvironment).not.toBeNull();
+      expect(page.healthCheckApp).not.toBeNull();
+      expect(page.healthCheckGPG).not.toBeNull();
+      expect(page.healthCheckConfigurationFiles).not.toBeNull();
+      expect(page.healthCheckDatabase).not.toBeNull();
+      expect(page.healthCheckSmtp).not.toBeNull();
+      expect(page.healthCheckSSL).not.toBeNull();
+      expect(page.healthCheckCore).not.toBeNull();
+      expect(page.healthcheckDirectorySync).not.toBeNull();
+      expect(page.healthcheckSso).not.toBeNull();
+      expect(page.healthcheckMetadata).not.toBeNull();
+      expect(page.healthcheckScim).toBeNull();
     });
   });
 });

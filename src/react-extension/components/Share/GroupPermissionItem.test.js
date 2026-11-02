@@ -115,6 +115,21 @@ describe("GroupPermissionItem", () => {
       expect(page.groupVisibilityToggle).not.toBeNull();
     });
 
+    it("highlights the row when the group composition changed", () => {
+      expect.assertions(2);
+      const page = new GroupPermissionItemPage(
+        defaultOwnerProps({ changeStatus: "added", hasChangedComposition: true }),
+      );
+      expect(page.isCompositionChanged).toBe(true);
+      expect(page.changeChip.textContent).toBe("added");
+    });
+
+    it("does not highlight the row when the group composition did not change", () => {
+      expect.assertions(1);
+      const page = new GroupPermissionItemPage(defaultOwnerProps({ changeStatus: "added" }));
+      expect(page.isCompositionChanged).toBe(false);
+    });
+
     it("calls onRevert with the permission id when the revert button is clicked", async () => {
       expect.assertions(1);
       const props = defaultOwnerProps({ changeStatus: "removed" });
@@ -162,6 +177,63 @@ describe("GroupPermissionItem", () => {
       const page = new GroupPermissionItemPage(defaultVariesProps({ changeStatus: "removed" }));
       expect(page.changeChip.textContent).toBe("removed");
       expect(page.variesIcon).toBeNull();
+    });
+
+    it("in move mode, shows the attention icon when some items can't be re-permissioned", () => {
+      expect.assertions(1);
+      const page = new GroupPermissionItemPage(defaultVariesProps({ unappliedResources: [{ name: "R2", type: 7 }] }));
+      expect(page.attentionIcon).not.toBeNull();
+    });
+
+    it("in move mode, shows the plain varies icon (not attention) when every item can be re-permissioned", () => {
+      expect.assertions(2);
+      const page = new GroupPermissionItemPage(defaultVariesProps({ unappliedResources: [] }));
+      expect(page.variesIcon).not.toBeNull();
+      expect(page.attentionIcon).toBeNull();
+    });
+
+    it("in move mode, still shows the attention icon on a row pending deletion when some items are kept unchanged", () => {
+      expect.assertions(2);
+      const page = new GroupPermissionItemPage(
+        defaultVariesProps({
+          unappliedResources: [{ name: "R2", type: 7 }],
+          changeStatus: "removed",
+        }),
+      );
+      expect(page.changeChip.textContent).toBe("removed");
+      expect(page.attentionIcon).not.toBeNull();
+    });
+
+    it("in move mode, the attention icon's tooltip names the actual unreachable items with their permission level", async () => {
+      expect.assertions(2);
+      const page = new GroupPermissionItemPage(
+        defaultVariesProps({
+          unappliedResources: [
+            { name: "R2", type: 7 },
+            { name: "R3", type: 7 },
+          ],
+        }),
+      );
+      await page.hoverAttentionIcon();
+      expect(page.tooltipText).toContain("R2(Can edit)");
+      expect(page.tooltipText).toContain("R3(Can edit)");
+    });
+
+    it("in move mode, the attention icon's tooltip is entirely separate from the varies breakdown, even when both apply", async () => {
+      expect.assertions(2);
+      // defaultVariesProps also seeds variesDetails, so this row both varies and has items the
+      // choice cannot reach. The two tooltips answer different questions and must stay separate.
+      const page = new GroupPermissionItemPage(
+        defaultVariesProps({
+          unappliedResources: [
+            { name: "R2", type: 7 },
+            { name: "R3", type: 7 },
+          ],
+        }),
+      );
+      await page.hoverAttentionIcon();
+      expect(page.tooltipText).toContain("permissions cannot apply");
+      expect(page.tooltipText).not.toContain("permissions vary");
     });
   });
 });

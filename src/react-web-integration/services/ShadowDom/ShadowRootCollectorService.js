@@ -17,12 +17,7 @@ import { IGNORED_SUBTREES } from "./ShadowDomDictionary";
 
 class ShadowRootCollectorService {
   /**
-   * Host element of each shadow root we have ever collected, captured from the element we resolved the
-   * root *from* — never by reading `shadowRoot.host`.
-   *
-   * Reading `shadowRoot.host` on a root whose host has been torn down crashes the Firefox content process
-   * (Gecko bug 2063234, PB-54190). Consumers that need to know a cached root's host (e.g. to prune it on
-   * host disconnect) must read it here instead of from the root itself.
+   * Host element for every shadow root we have ever collected.
    * @private
    * @type {WeakMap<ShadowRoot, Element>}
    */
@@ -71,9 +66,7 @@ class ShadowRootCollectorService {
   }
 
   /**
-   * Resolve `element`'s shadow root and, if new, record it (along with `element` as its host) and push it.
-   * The host is captured from `element` — the element we resolved *from* — so we never read
-   * `shadowRoot.host`, which would crash on a torn-down host (see {@link _hostByShadowRoot}).
+   * Find `element`'s shadow root and record it (along with `element` as its host) and push it in `shadowRoots`.
    * @private
    * @param {Element} element The candidate host element.
    * @param {Set<ShadowRoot>} seen Already known roots to avoid duplication.

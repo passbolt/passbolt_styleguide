@@ -2,11 +2,13 @@ import React from "react";
 import ShareDialog from "./ShareDialog";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import {
-  controlledModeWithGroupProps,
+  withGroupProps,
   defaultAppContext,
+  mixedOwnershipMoveProps,
   propsWithStressPermissions,
   resources,
 } from "./ShareDialog.test.data";
+import { v4 as uuidv4 } from "uuid";
 import mockStorage from "../../../../test/mocks/mockStorage";
 import mockPort from "../../../../test/mocks/mockPort";
 
@@ -43,12 +45,21 @@ export const Loading = {
   },
 };
 
-// Controlled mode: seeded from initial collections (no port fetch). The "Developer" group can be
+// Seeded from initial collections (no port fetch). The "Developer" group can be
 // expanded to reveal its members rendered as GroupUserPermissionItem rows.
-export const ControlledModeWithExpandableGroup = {
+export const WithExpandableGroup = {
   args: {
     context: defaultAppContext({ port: mockPort(mockStorage()) }),
-    ...controlledModeWithGroupProps({ onClose: () => {}, onConfirm: () => {} }),
+    ...withGroupProps({ onClose: () => {}, onConfirm: () => {} }),
+  },
+};
+
+// A move of a batch the operator owns only part of: the only way to reach this state, and the
+// visual reference for the attention triangle, its warning-tinted tooltip and the footer banner.
+export const MoveModeMixedOwnership = {
+  args: {
+    context: defaultAppContext({ port: mockPort(mockStorage()) }),
+    ...mixedOwnershipMoveProps(uuidv4(), { onClose: () => {}, onConfirm: () => {} }),
   },
 };
 

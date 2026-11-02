@@ -12,11 +12,10 @@
  * @since         5.15.0
  */
 
-import InFormCallToActionField from "./InFormCallToActionField";
+import InFormCallToActionField, { CALL_TO_ACTION_REMOVAL_GRACE_DELAY } from "./InFormCallToActionField";
 import InFormFieldGeometryService from "./InFormFieldGeometryService";
 import ShadowRootCacheService from "../../services/ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../../services/ShadowDom/ShadowMutationObserverService";
-import DomUtils from "../Dom/DomUtils";
 import { initializeWindow } from "./InformManager.test.data";
 
 describe("InFormCallToActionField", () => {
@@ -52,80 +51,6 @@ describe("InFormCallToActionField", () => {
 
     return new InFormCallToActionField(field, "username", shadowRoot);
   };
-
-  describe("InFormCallToActionField::findAll", () => {
-    it("should return the matching fields without duplicates", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<div id='outer'><input type='text'/></div>";
-      const outer = document.getElementById("outer");
-
-      expect(InFormCallToActionField.findAll("#outer, #outer input")).toEqual([outer]);
-    });
-
-    it("should concatenate all matches", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<input type='text'/>";
-      const field = document.querySelector("input");
-      const iframeField = document.createElement("input");
-      const shadowField = document.createElement("input");
-      jest.spyOn(InFormCallToActionField, "findAllInIframes").mockReturnValue([iframeField]);
-      jest.spyOn(InFormCallToActionField, "findAllInShadowDom").mockReturnValue([shadowField]);
-
-      expect(InFormCallToActionField.findAll("input")).toEqual([field, iframeField, shadowField]);
-    });
-  });
-
-  describe("InFormCallToActionField::findAllInIframes", () => {
-    it("should return the matching fields of the accessible iframes", () => {
-      expect.assertions(1);
-
-      const iframeDocument = document.implementation.createHTMLDocument();
-      const field = iframeDocument.createElement("input");
-      iframeDocument.body.appendChild(field);
-      jest.spyOn(DomUtils, "getAccessibleAndSameDomainIframes").mockReturnValue([{ contentDocument: iframeDocument }]);
-
-      expect(InFormCallToActionField.findAllInIframes("input")).toEqual([field]);
-    });
-  });
-
-  describe("InFormCallToActionField::findAllInShadowDom", () => {
-    it("should return the matching fields from shadow roots", () => {
-      expect.assertions(1);
-
-      const host = document.createElement("div");
-      const shadowRoot = host.attachShadow({ mode: "open" });
-      const field = document.createElement("input");
-      shadowRoot.appendChild(field);
-      document.body.appendChild(host);
-
-      expect(InFormCallToActionField.findAllInShadowDom("input")).toEqual([field]);
-    });
-
-    it("should return the matching fields from nested shadow roots", () => {
-      expect.assertions(1);
-
-      const outerHost = document.createElement("div");
-      const outerRoot = outerHost.attachShadow({ mode: "open" });
-      document.body.appendChild(outerHost);
-      const innerHost = document.createElement("div");
-      const innerRoot = innerHost.attachShadow({ mode: "open" });
-      outerRoot.appendChild(innerHost);
-      const field = document.createElement("input");
-      innerRoot.appendChild(field);
-
-      expect(InFormCallToActionField.findAllInShadowDom("input")).toEqual([field]);
-    });
-
-    it("should not return the fields of the DOM", () => {
-      expect.assertions(1);
-
-      document.body.innerHTML = "<input type='text'/>";
-
-      expect(InFormCallToActionField.findAllInShadowDom("input")).toEqual([]);
-    });
-  });
 
   describe("InFormCallToActionField::calculateFieldPosition", () => {
     it("should delegate the position calculation to the geometry service", () => {
@@ -206,18 +131,62 @@ describe("InFormCallToActionField", () => {
   });
 
   describe("InFormCallToActionField::insertInformCallToActionIframe", () => {
-    it("should not create a second iframe when one is already inserted", async () => {
+    it("should not create a second iframe when a live one is already inserted", async () => {
       expect.assertions(1);
 
       const callToActionField = buildCallToActionField();
       const iframe = document.createElement("iframe");
       iframe.id = callToActionField.iframeId;
       callToActionField.shadowRoot.appendChild(iframe);
+      // The iframe still holds the browsing context it was loaded into (jsdom gives detached frames none).
+      const browsingContext = {};
+      Object.defineProperty(iframe, "contentWindow", { value: browsingContext });
+      callToActionField.callToActionWindow = browsingContext;
       callToActionField.createCallToActionIframe = jest.fn();
 
       await callToActionField.insertInformCallToActionIframe();
 
       expect(callToActionField.createCallToActionIframe).not.toHaveBeenCalled();
+    });
+
+    /*
+     * Moving the shadow host detaches it, which destroys the browsing context of the iframes it
+     * carries. The element stays in the shadow root but renders nothing, and must not keep matching
+     * the insertion guard or the call-to-action could never come back.
+     */
+    it("should replace an iframe whose browsing context was destroyed", async () => {
+      expect.assertions(2);
+
+      const callToActionField = buildCallToActionField();
+      const iframe = document.createElement("iframe");
+      iframe.id = callToActionField.iframeId;
+      callToActionField.shadowRoot.appendChild(iframe);
+      // A browsing context that is no longer the one the call-to-action was loaded into.
+      callToActionField.callToActionWindow = {};
+      callToActionField.removeIframe = jest.fn();
+      callToActionField.createCallToActionIframe = jest.fn().mockResolvedValue({ addEventListener: jest.fn() });
+      callToActionField.handleCallToActionClicked = jest.fn();
+
+      await callToActionField.insertInformCallToActionIframe();
+
+      expect(callToActionField.removeIframe).toHaveBeenCalledTimes(1);
+      expect(callToActionField.createCallToActionIframe).toHaveBeenCalledTimes(1);
+    });
+
+    it("should report an iframe as dead once it no longer holds its browsing context", () => {
+      expect.assertions(2);
+
+      const callToActionField = buildCallToActionField();
+      const iframe = document.createElement("iframe");
+      callToActionField.shadowRoot.appendChild(iframe);
+      const browsingContext = {};
+      Object.defineProperty(iframe, "contentWindow", { value: browsingContext });
+
+      callToActionField.callToActionWindow = browsingContext;
+      expect(callToActionField.isCallToActionIframeAlive(iframe)).toStrictEqual(true);
+
+      callToActionField.callToActionWindow = null;
+      expect(callToActionField.isCallToActionIframeAlive(iframe)).toStrictEqual(false);
     });
 
     it("should create the iframe and handle its click event", async () => {
@@ -256,6 +225,22 @@ describe("InFormCallToActionField", () => {
       mouseOutHandler();
 
       expect(callToActionField.isCallToActionMousingOver).toBe(false);
+    });
+
+    it("should stop the previous click watcher before starting a new one", () => {
+      expect.assertions(2);
+
+      const callToActionField = buildCallToActionField();
+      const iframe = { addEventListener: jest.fn() };
+      const clearIntervalSpy = jest.spyOn(global, "clearInterval");
+
+      callToActionField.handleCallToActionClicked(iframe);
+      const firstWatcher = callToActionField.callToActionClickWatcher;
+      callToActionField.handleCallToActionClicked(iframe);
+
+      expect(clearIntervalSpy).toHaveBeenCalledWith(firstWatcher);
+      expect(callToActionField.callToActionClickWatcher).not.toBe(firstWatcher);
+      clearInterval(callToActionField.callToActionClickWatcher);
     });
   });
 
@@ -308,15 +293,63 @@ describe("InFormCallToActionField", () => {
       expect(callToActionField.removeIframe).not.toHaveBeenCalled();
     });
 
-    it("should remove the iframe when the mouse moves out", () => {
-      expect.assertions(1);
+    it("should remove the iframe once the grace period elapsed when the mouse moves out", () => {
+      expect.assertions(2);
+      jest.useFakeTimers();
 
       const callToActionField = buildCallToActionField();
       callToActionField.removeIframe = jest.fn();
 
       callToActionField.removeInFormCallToActionWhenMouseOut({ relatedTarget: null });
 
+      // The pointer may still be travelling to the call-to-action, nothing is removed yet.
+      expect(callToActionField.removeIframe).not.toHaveBeenCalled();
+
+      jest.advanceTimersByTime(CALL_TO_ACTION_REMOVAL_GRACE_DELAY);
+
       expect(callToActionField.removeIframe).toHaveBeenCalledTimes(1);
+      jest.useRealTimers();
+    });
+
+    /*
+     * A field served in a same-origin iframe reports a null relatedTarget when the pointer leaves it
+     * for the call-to-action, which lives in the top document. The grace period is what keeps the
+     * call-to-action alive in that case.
+     */
+    it("should not remove the iframe when the pointer reaches the call-to-action during the grace period", () => {
+      expect.assertions(1);
+      jest.useFakeTimers();
+
+      const callToActionField = buildCallToActionField();
+      callToActionField.removeIframe = jest.fn();
+
+      callToActionField.removeInFormCallToActionWhenMouseOut({ relatedTarget: null });
+      // The call-to-action `mouseover` lands after the field `mouseout`, as it does in the browser.
+      callToActionField.isCallToActionMousingOver = true;
+      callToActionField.cancelScheduledRemoval();
+
+      jest.advanceTimersByTime(CALL_TO_ACTION_REMOVAL_GRACE_DELAY);
+
+      expect(callToActionField.removeIframe).not.toHaveBeenCalled();
+      jest.useRealTimers();
+    });
+
+    it("should cancel a pending removal when the pointer comes back on the field", async () => {
+      expect.assertions(1);
+      jest.useFakeTimers();
+
+      const callToActionField = buildCallToActionField();
+      callToActionField.removeIframe = jest.fn();
+      callToActionField.createCallToActionIframe = jest.fn().mockResolvedValue(document.createElement("iframe"));
+      callToActionField.handleCallToActionClicked = jest.fn();
+
+      callToActionField.removeInFormCallToActionWhenMouseOut({ relatedTarget: null });
+      await callToActionField.insertInformCallToActionIframe();
+
+      jest.advanceTimersByTime(CALL_TO_ACTION_REMOVAL_GRACE_DELAY);
+
+      expect(callToActionField.removeIframe).not.toHaveBeenCalled();
+      jest.useRealTimers();
     });
   });
 
@@ -349,6 +382,19 @@ describe("InFormCallToActionField", () => {
 
       expect(callToActionField.shadowRoot.querySelector("iframe")).toBe(iframe);
       expect(window.port.emit).not.toHaveBeenCalled();
+    });
+
+    it("should stop the click watcher", () => {
+      expect.assertions(1);
+
+      const callToActionField = buildCallToActionField();
+      callToActionField.handleCallToActionClicked({ addEventListener: jest.fn() });
+      const watcher = callToActionField.callToActionClickWatcher;
+      const clearIntervalSpy = jest.spyOn(global, "clearInterval");
+
+      callToActionField.removeIframe();
+
+      expect(clearIntervalSpy).toHaveBeenCalledWith(watcher);
     });
   });
 

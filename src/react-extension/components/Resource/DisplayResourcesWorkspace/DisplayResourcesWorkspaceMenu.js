@@ -55,7 +55,7 @@ import DeleteSVG from "../../../../img/svg/delete.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
-import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
+import OfflineModeSVG from "../../../../img/svg/offline.svg";
 import SecretHistorySVG from "../../../../img/svg/history.svg";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
@@ -586,10 +586,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   canUseOffline() {
-    const resourceType = this.props.resourceTypes?.getFirstById(this.selectedResources[0]?.resource_type_id);
-
     return (
-      resourceType?.isV5() &&
       this.props.context.siteSettings.canIUse("offlineMode") &&
       Boolean(this.props.offlineSettings) &&
       this.props.rbacContext.canIUseAction(
@@ -599,17 +596,17 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * To check if the resource is a Password or TOTP resource
+   * To check if the resource is supported by offline mode
    *
-   * This method is to add a conditional check for Offline Mode Phase 1
+   * This method is to add a conditional check for Offline Mode
    * where the option to mark/unmark a resource as available offline is
-   * only for passwords or TOTP
+   * only resources supported by offline mode
    *
    * @return {boolean}
    */
-  isPasswordOrTotp() {
+  isOfflineSupportedType() {
     const resourceType = this.props.resourceTypes?.getFirstById(this.selectedResources[0]?.resource_type_id);
-    return resourceType?.hasPassword() || resourceType?.hasTotp();
+    return resourceType?.isSupportedByOfflineMode();
   }
 
   /**
@@ -645,7 +642,8 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     // Copy menu
     const canCopySecret = this.canCopySecrets() && this.canCopyPassword();
     const canCopyTotp = this.canUseTotp() && this.canCopyTotp();
-    const canMarkOrRemoveOfflineAccess = hasOneResourceSelected && this.canUseOffline() && this.isPasswordOrTotp();
+    const canMarkOrRemoveOfflineAccess =
+      hasOneResourceSelected && this.canUseOffline() && this.isOfflineSupportedType();
 
     return (
       <div className="actions" ref={this.props.actionsButtonRef}>

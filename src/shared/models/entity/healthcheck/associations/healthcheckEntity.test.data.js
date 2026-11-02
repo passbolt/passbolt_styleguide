@@ -22,6 +22,7 @@ import { defaultSmtpSettingsData } from "./smtpSettingsEntity.data";
 import { defaultDirectorySyncData } from "./directorySyncEntity.data";
 import { defaultSsoData } from "./ssoEntity.data";
 import { defaultMetadataData } from "./metadataEntity.data";
+import { defaultScimData } from "./scimEntity.data";
 
 export const defaultHealthcheckData = (data = {}) => {
   const defaultData = {
@@ -36,6 +37,7 @@ export const defaultHealthcheckData = (data = {}) => {
     directorySync: defaultDirectorySyncData(),
     sso: defaultSsoData(),
     metadata: defaultMetadataData(),
+    scim: defaultScimData(),
     ...data,
   };
 

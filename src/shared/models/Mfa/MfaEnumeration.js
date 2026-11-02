@@ -14,6 +14,7 @@
 
 export const MfaProviders = {
   totp: "totp",
+  webauthn: "webauthn",
   yubikey: "yubikey",
   duo: "duo",
 };

@@ -14,7 +14,7 @@
 
 import ShadowRootCollectorService from "./ShadowRootCollectorService";
 import ShadowRootCacheService from "./ShadowRootCacheService";
-import { OBSERVE_OPTIONS } from "./ShadowDomDictionary";
+import { FIELD_ATTRIBUTES_TO_WATCH } from "../../lib/InForm/InFormFieldDictionary";
 
 class ShadowMutationObserverService {
   /**
@@ -34,6 +34,20 @@ class ShadowMutationObserverService {
   static _shadowMutationSubscribers = new Set();
 
   /**
+   * Options passed to every installed MutationObserver. `childList`/`subtree` watch the shadow
+   * topology (node add/remove); the attribute filter watches the InForm field-relevance attributes.
+   * @private
+   * @type {MutationObserverInit}
+   */
+  static _observeOptions = {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: FIELD_ATTRIBUTES_TO_WATCH,
+    attributeOldValue: false,
+  };
+
+  /**
    * Update the cache for `root` according to the given mutations.
    * @param {Document|ShadowRoot|Element} root
    * @param {MutationRecord[]} mutations
@@ -50,9 +64,9 @@ class ShadowMutationObserverService {
     // Filter out shadow roots whose host was removed.
     let hasRemovals = mutations.some((mutation) => mutation.removedNodes.length > 0);
     if (hasRemovals) {
-      // Prune via the host captured at collection time, NEVER `shadowRoot.host`: reading `.host` on a root
-      // whose host has been torn down (e.g. a <video> user-agent widget) crashes the Firefox content
-      // process (Gecko bug 2063234, PB-54190). A root with no known/connected host is dropped.
+      // A root with no known/connected host is dropped.
+      // We use the host captured at collection time, NEVER `shadowRoot.host` because  it may crash on Firefox
+      // @see Gecko bug 2063234, PB-54190
       foundRoots = cached.filter((shadowRoot) => {
         const host = ShadowRootCollectorService.getHost(shadowRoot);
         return Boolean(host) && root.contains(host);
@@ -89,7 +103,7 @@ class ShadowMutationObserverService {
 
   /**
    * Register a subscriber to the shadow root mutations
-   * @param {(root: Document|ShadowRoot|Element, mutations: MutationRecord[], shadowRootsChanged: boolean) => void} callback
+   * @param {(root: Document|ShadowRoot|Element, mutations: MutationRecord[], shadowRootsChanged: boolean, options: {fromFocus?: boolean}) => void} callback
    * @return {() => void} unsubscribe closure — must be called in the consumer's teardown.
    */
   static subscribeToShadowMutations(callback) {
@@ -102,11 +116,13 @@ class ShadowMutationObserverService {
    * @param {Document|ShadowRoot|Element} root
    * @param {MutationRecord[]} mutations
    * @param {boolean} shadowRootsChanged
+   * @param {object} [options]
+   * @param {boolean} [options.fromFocus=false] Whether the notification comes from the user focusing a field.
    */
-  static notifyShadowMutationSubscribers(root, mutations, shadowRootsChanged) {
+  static notifyShadowMutationSubscribers(root, mutations, shadowRootsChanged, options = {}) {
     for (const callback of ShadowMutationObserverService._shadowMutationSubscribers) {
       try {
-        callback(root, mutations, shadowRootsChanged);
+        callback(root, mutations, shadowRootsChanged, options);
       } catch (error) {
         console.warn("ShadowMutationObserverService shadow-mutation subscriber threw", error);
       }
@@ -128,7 +144,7 @@ class ShadowMutationObserverService {
       ShadowMutationObserverService.notifyShadowMutationSubscribers(root, mutations, shadowRootsChanged);
     });
 
-    observer.observe(root, OBSERVE_OPTIONS);
+    observer.observe(root, ShadowMutationObserverService._observeOptions);
     ShadowMutationObserverService._shadowRootsObservers.set(root, observer);
   }
 
