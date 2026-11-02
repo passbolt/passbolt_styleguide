@@ -44,7 +44,7 @@
     "@storybook/addon-docs": "^10.6.5",
     "@storybook/addon-webpack5-compiler-swc": "^4.0.3",
     "@storybook/react-webpack5": "^10.6.5",
-    "@storybook/test-runner": "^0.24.4",
+    "@storybook/test-runner": "^0.26.0",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
