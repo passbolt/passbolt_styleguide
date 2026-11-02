@@ -17,13 +17,13 @@ import ActiveSessionEntity from "../../models/entity/session/userActiveSessionEn
 import ActiveSessionServiceWorkerService from "../../services/serviceWorker/activeSession/activeSessionServiceWorkerService";
 
 export const ActiveSessionLocalStorageContext = React.createContext({
-  get: () => {}, // Get the active session from the local storage and/or init them if not the case already
-  activeSession: null, // the current active session loaded from the local storage
-  updateLocalStorage: () => {}, // triggers an update of the local storage
+  get: () => {}, // Get the active session from the session storage and/or init them if not the case already
+  activeSession: null, // the current active session loaded from the session storage
+  updateSessionStorage: () => {}, // triggers an update of the session storage
 });
 
 /**
- * The active session local storage context provider
+ * The active session session storage context provider
  */
 class ActiveSessionLocalStorageContextProvider extends React.Component {
   /**
@@ -44,9 +44,9 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      get: this.get.bind(this), // Get the active session from the local storage and/or init them if not the case already
-      activeSession: null, // the current active session loaded from the local storage
-      updateLocalStorage: this.updateLocalStorage.bind(this), // triggers an update of the local storage
+      get: this.get.bind(this), // Get the active session from the session storage and/or init them if not the case already
+      activeSession: null, // the current active session loaded from the session storage
+      updateSessionStorage: this.updateSessionStorage.bind(this), // triggers an update of the session storage
     };
   }
 
@@ -73,7 +73,7 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
   }
 
   /**
-   * Handles update of the active session in the local storage.
+   * Handles update of the active session in the session storage.
    */
   handleStorageChange(changes) {
     if (changes[this.storageKey] && changes[this.storageKey].newValue) {
@@ -92,7 +92,7 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
   }
 
   /**
-   * Get the active session from the local storage and/or init them if not the case already.
+   * Get the active session from the session storage and/or init them if not the case already.
    * @returns {ActiveSessionEntity|null}
    */
   get() {
@@ -113,15 +113,15 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
   }
 
   /**
-   * Load the active session from the local storage if it is available.
-   * If the local storage is not yet initialised, then it asks for its initialisation.
+   * Load the active session from the session storage if it is available.
+   * If the session storage is not yet initialised, then it asks for its initialisation.
    * @returns {Promise<void>}
    * @private
    */
   async loadLocalStorage() {
-    const storageData = await this.props.storage.local.get([this.storageKey]);
+    const storageData = await this.props.storage.session.get([this.storageKey]);
     if (!storageData[this.storageKey]) {
-      this.updateLocalStorage();
+      this.updateSessionStorage();
       return;
     }
 
@@ -129,10 +129,10 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
   }
 
   /**
-   * Forces the update of the active session in the local storage.
+   * Forces the update of the active session in the session storage.
    * @return {Promise<void>}
    */
-  async updateLocalStorage() {
+  async updateSessionStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
       this.runningLocalStorageUpdatePromise =
         this.activeSessionServiceWorkerService.findAndUpdateAuthenticationStatus();

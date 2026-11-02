@@ -45,14 +45,6 @@ class UserActiveSessionEntity extends EntityV2 {
           type: "string",
           enum: SUPPORTED_USER_ACTIVE_SESSION_TYPES,
         },
-        last_logged_in: {
-          type: "string",
-          format: "date-time",
-        },
-        last_seen_online: {
-          type: "string",
-          format: "date-time",
-        },
       },
     };
   }
@@ -93,22 +85,6 @@ class UserActiveSessionEntity extends EntityV2 {
    */
   get type() {
     return this._props.type;
-  }
-
-  /**
-   * Get the last logged in date, whether the sign-in was online or offline
-   * @returns {string}
-   */
-  get lastLoggedIn() {
-    return this._props.last_logged_in;
-  }
-
-  /**
-   * Get the last seen online date
-   * @returns {string}
-   */
-  get lastSeenOnline() {
-    return this._props.last_seen_online;
   }
 
   /**
@@ -171,24 +147,6 @@ class UserActiveSessionEntity extends EntityV2 {
   set type(type) {
     EntitySchema.validateProp("type", type, this.cachedSchema.properties.type);
     this._props.type = type;
-  }
-
-  /**
-   * Set the last logged in date
-   * @param {string} date
-   */
-  set lastLoggedIn(date) {
-    EntitySchema.validateProp("last_logged_in", date, this.cachedSchema.properties.last_logged_in);
-    this._props.last_logged_in = date;
-  }
-
-  /**
-   * Set the last seen online date
-   * @param {string} date
-   */
-  set lastSeenOnline(date) {
-    EntitySchema.validateProp("last_seen_online", date, this.cachedSchema.properties.last_seen_online);
-    this._props.last_seen_online = date;
   }
 }
 

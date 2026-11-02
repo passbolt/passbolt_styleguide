@@ -22,6 +22,7 @@ import { withOfflineSettingsLocalStorage } from "../../../shared/context/offline
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { formatDateTimeAgo, formatSecondsDuration } from "../../../shared/utils/dateUtils";
 import { DateTime } from "luxon";
+import SessionTimestampsServiceWorkerService from "../../../shared/services/serviceWorker/sessionTimestamps/sessionTimestampsServiceWorkerService";
 
 const SECONDS_PER_DAY = 24 * 60 * 60;
 
@@ -33,7 +34,24 @@ const SECONDS_PER_DAY = 24 * 60 * 60;
 class OfflineFooterDetailsPage extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      sessionTimestamps: null, // The session timestamps, from the background page.
+    };
+    this.sessionTimestampsServiceWorkerService = new SessionTimestampsServiceWorkerService(props.context.port);
     this.initEventHandlers();
+  }
+
+  /**
+   * Load the session timestamps.
+   * @returns {Promise<void>}
+   */
+  async componentDidMount() {
+    try {
+      const sessionTimestamps = await this.sessionTimestampsServiceWorkerService.get();
+      this.setState({ sessionTimestamps });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   initEventHandlers() {
@@ -74,7 +92,7 @@ class OfflineFooterDetailsPage extends React.Component {
    */
   get lastSync() {
     return (
-      formatDateTimeAgo(this.props.activeSession?.lastSeenOnline, this.translate, this.props.context.locale) ||
+      formatDateTimeAgo(this.state.sessionTimestamps?.lastSeenOnline, this.translate, this.props.context.locale) ||
       this.translate("Not available")
     );
   }
@@ -84,7 +102,7 @@ class OfflineFooterDetailsPage extends React.Component {
    * @returns {string}
    */
   get sessionDurationLeft() {
-    return this.formatTimeLeft(this.props.activeSession?.lastLoggedIn, this.props.offlineSettings?.sessionDuration);
+    return this.formatTimeLeft(this.state.sessionTimestamps?.lastLoggedIn, this.props.offlineSettings?.sessionDuration);
   }
 
   /**
@@ -94,7 +112,7 @@ class OfflineFooterDetailsPage extends React.Component {
    */
   get dataRetentionLeft() {
     const retentionPeriodInSeconds = this.props.offlineSettings?.maximumRetentionPeriod * SECONDS_PER_DAY;
-    return this.formatTimeLeft(this.props.activeSession?.lastSeenOnline, retentionPeriodInSeconds);
+    return this.formatTimeLeft(this.state.sessionTimestamps?.lastSeenOnline, retentionPeriodInSeconds);
   }
 
   /**
