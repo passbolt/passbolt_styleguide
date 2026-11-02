@@ -151,13 +151,15 @@ describe("MfaFormService", () => {
       expect(result).toEqual(errorMessage);
       //hostname should not include special character
       result = mfaFormService.validateDuoHostname("api-123456@89-duosecurity.com");
+      expect(result).toEqual(errorMessage);
       //hostname have uuid with max 16 characters
       result = mfaFormService.validateDuoHostname("api-0123456789azertyu-duosecurity.com");
+      expect(result).toEqual(errorMessage);
       //hostname have uuid with min 8 characters
       result = mfaFormService.validateDuoHostname("api-1L-duosecurity.com");
       expect(result).toEqual(errorMessage);
       expect(adminMfaContext.getErrors().duoHostnameError).toEqual(errorMessage);
-      expect.assertions(4);
+      expect.assertions(6);
     });
     it("should not return message", () => {
       const result = mfaFormService.validateDuoHostname("api-634253af.duosecurity.com");
