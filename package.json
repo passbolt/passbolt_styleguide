@@ -76,7 +76,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-junit": "^16.0.0",
     "jest-useragent-mock": "^0.1.1",
-    "jest-webextension-mock": "^4.1.1",
+    "jest-webextension-mock": "^4.2.0",
     "less": "^4.9.0",
     "less-loader": "^12.3.2",
     "lockfile-lint": "^5.0.1",
