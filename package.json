@@ -83,7 +83,7 @@
     "playwright": "^1.64.1",
     "prettier": "3.6.2",
     "storybook": "^10.6.5",
-    "synckit": "^0.11.13",
+    "synckit": "^0.12.3",
     "wait-on": "^9.5.1",
     "webpack": "^5.112.2",
     "webpack-cli": "^7.3.1"
