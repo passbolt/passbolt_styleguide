@@ -78,15 +78,23 @@ class DisplayAdministrationMfaActions extends React.Component {
 
   /**
    * Handle save operation error.
-   * @param {object} error The returned error
+   * @param {object} e The returned error
    */
-  async handleSaveError(error) {
+  async handleSaveError(e) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
-    if (error.name !== "UserAbortsOperationError") {
-      // Unexpected error occurred.
-      console.error(error);
-      await this.handleError(error);
+    if (e.name === "UserAbortsOperationError") {
+      return;
     }
+
+    let error = e;
+    // Handles specific webauthn error messages
+    if (error?.data?.body?.webauthn) {
+      const errorMessage = Object.values(error.data.body.webauthn).join(". ");
+      error = new Error(errorMessage);
+    }
+
+    console.error(error);
+    await this.handleError(error);
   }
 
   /**
