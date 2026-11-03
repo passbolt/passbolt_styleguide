@@ -43,7 +43,7 @@ const focusHandler = (event) => {
   }
 
   if (invalidated) {
-    ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true);
+    ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true, { fromFocus: true });
     return;
   }
 
@@ -55,7 +55,7 @@ const focusHandler = (event) => {
     !ShadowDomFocusHealerService._healAttempted.has(target)
   ) {
     ShadowDomFocusHealerService._healAttempted.add(target);
-    ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true);
+    ShadowMutationObserverService.notifyShadowMutationSubscribers(document, [], true, { fromFocus: true });
   }
 };
 
