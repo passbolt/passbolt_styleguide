@@ -33,7 +33,7 @@
     "react-transition-group": "^4.4.1",
     "uuid": "^14.0.0",
     "validator": "^13.15.26",
-    "webextension-polyfill": "^0.10.0",
+    "webextension-polyfill": "^0.12.0",
     "xregexp": "^5.1.2"
   },
   "devDependencies": {
