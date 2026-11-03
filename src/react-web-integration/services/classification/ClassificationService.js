@@ -95,7 +95,10 @@ class ClassificationService {
     const perField = new Map();
     for (const field of fields) {
       const { role, tier } = FieldClassificationService.classify(field);
+
+      field.tier = tier;
       field._byDeclared = tier === Tier.SAWF || tier === Tier.AUTOCOMPLETE;
+
       perField.set(field.fieldId, role);
     }
     return perField;
