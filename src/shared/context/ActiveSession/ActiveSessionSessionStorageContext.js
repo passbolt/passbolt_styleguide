@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import ActiveSessionEntity from "../../models/entity/session/userActiveSessionEntity";
 import ActiveSessionServiceWorkerService from "../../services/serviceWorker/activeSession/activeSessionServiceWorkerService";
 
-export const ActiveSessionLocalStorageContext = React.createContext({
+export const ActiveSessionSessionStorageContext = React.createContext({
   get: () => {}, // Get the active session from the session storage and/or init them if not the case already
   activeSession: null, // the current active session loaded from the session storage
   updateSessionStorage: () => {}, // triggers an update of the session storage
@@ -25,7 +25,7 @@ export const ActiveSessionLocalStorageContext = React.createContext({
 /**
  * The active session session storage context provider
  */
-class ActiveSessionLocalStorageContextProvider extends React.Component {
+class ActiveSessionSessionStorageContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -152,38 +152,38 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
    */
   render() {
     return (
-      <ActiveSessionLocalStorageContext.Provider value={this.state}>
+      <ActiveSessionSessionStorageContext.Provider value={this.state}>
         {this.props.children}
-      </ActiveSessionLocalStorageContext.Provider>
+      </ActiveSessionSessionStorageContext.Provider>
     );
   }
 }
 
-ActiveSessionLocalStorageContextProvider.propTypes = {
+ActiveSessionSessionStorageContextProvider.propTypes = {
   port: PropTypes.any, // The application port
   storage: PropTypes.any, // The application storage
   account: PropTypes.any, // The application account
   children: PropTypes.any, // The children components
 };
-export default ActiveSessionLocalStorageContextProvider;
+export default ActiveSessionSessionStorageContextProvider;
 
 /**
  * Offline Settings Local Storage Context Consumer HOC
  * @param WrappedComponent
  */
-export function withActiveSessionLocalStorage(WrappedComponent) {
-  return class WithActiveSessionLocalStorage extends React.Component {
+export function withActiveSessionSessionStorage(WrappedComponent) {
+  return class withActiveSessionSessionStorage extends React.Component {
     render() {
       return (
-        <ActiveSessionLocalStorageContext.Consumer>
-          {(activeSessionLocalStorageContext) => (
+        <ActiveSessionSessionStorageContext.Consumer>
+          {(ActiveSessionSessionStorageContext) => (
             <WrappedComponent
-              activeSessionLocalStorageContext={activeSessionLocalStorageContext}
-              activeSession={activeSessionLocalStorageContext.get()}
+              ActiveSessionSessionStorageContext={ActiveSessionSessionStorageContext}
+              activeSession={ActiveSessionSessionStorageContext.get()}
               {...this.props}
             />
           )}
-        </ActiveSessionLocalStorageContext.Consumer>
+        </ActiveSessionSessionStorageContext.Consumer>
       );
     }
   };

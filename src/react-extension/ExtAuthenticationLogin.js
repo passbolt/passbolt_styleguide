@@ -24,7 +24,7 @@ import Footer from "./components/Common/Footer/Footer";
 import OrchestrateLoginBoxFooter from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxFooter";
 import SsoContextProvider from "./contexts/SsoContext";
 import LogoSVG from "../img/svg/logo.svg";
-import ActiveSessionLocalStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import ActiveSessionSessionStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import AccountEntity from "../shared/models/entity/account/accountEntity";
 
 /**
@@ -139,7 +139,7 @@ class ExtAuthenticationLogin extends Component {
   render() {
     return (
       this.isReady() && (
-        <ActiveSessionLocalStorageContextProvider
+        <ActiveSessionSessionStorageContextProvider
           account={this.state.account}
           port={this.props.port}
           storage={this.props.storage}
@@ -170,7 +170,7 @@ class ExtAuthenticationLogin extends Component {
               </Router>
             </TranslationProvider>
           </AppContext.Provider>
-        </ActiveSessionLocalStorageContextProvider>
+        </ActiveSessionSessionStorageContextProvider>
       )
     );
   }

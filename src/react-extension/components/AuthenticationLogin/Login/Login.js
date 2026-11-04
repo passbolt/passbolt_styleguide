@@ -17,7 +17,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
-import { withActiveSessionLocalStorage } from "../../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../../shared/models/entity/session/userActiveSessionEntity";
 
 /**
@@ -412,4 +412,4 @@ Login.propTypes = {
   activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   t: PropTypes.func, // The translation function
 };
-export default withActiveSessionLocalStorage(withAppContext(withTranslation("common")(Login)));
+export default withActiveSessionSessionStorage(withAppContext(withTranslation("common")(Login)));

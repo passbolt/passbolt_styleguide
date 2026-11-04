@@ -20,7 +20,7 @@ import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
 import RbacServiceWorkerService from "../../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
 import SpinnerSVG from "../../img/svg/spinner.svg";
-import { withActiveSessionLocalStorage } from "../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../shared/models/entity/session/userActiveSessionEntity";
 import { BOOTSTRAP_FEATURE } from "../ExtQuickAccess";
 import LogoSVG from "../../img/svg/logo.svg";
@@ -55,7 +55,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
    */
   async initialize() {
     try {
-      await this.props.activeSessionLocalStorageContext.updateSessionStorage();
+      await this.props.ActiveSessionSessionStorageContext.updateSessionStorage();
       await this.getUserSettings();
       await this.getLocale();
       const siteSettings =
@@ -377,11 +377,11 @@ ExtQuickAccessContextProvider.propTypes = {
   storage: PropTypes.object, // The storage
   account: PropTypes.instanceOf(AccountEntity), // The user account
   activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
-  activeSessionLocalStorageContext: PropTypes.any, // The active session context
+  ActiveSessionSessionStorageContext: PropTypes.any, // The active session context
   openerTabId: PropTypes.string, // The opener tab id
   bootstrapFeature: PropTypes.string, // The bootstrap feature
   detached: PropTypes.bool, // The detached boolean property
   children: PropTypes.any, // The children components
 };
 
-export default withActiveSessionLocalStorage(ExtQuickAccessContextProvider);
+export default withActiveSessionSessionStorage(ExtQuickAccessContextProvider);

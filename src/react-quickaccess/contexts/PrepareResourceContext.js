@@ -16,7 +16,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { withPasswordPolicies } from "../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import { withAppContext } from "../../shared/context/AppContext/AppContext";
-import { withActiveSessionLocalStorage } from "../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../shared/models/entity/session/userActiveSessionEntity";
 
 /**
@@ -135,7 +135,7 @@ PrepareResourceContextProvider.propTypes = {
   children: PropTypes.any,
 };
 
-export default withActiveSessionLocalStorage(withAppContext(withPasswordPolicies(PrepareResourceContextProvider)));
+export default withActiveSessionSessionStorage(withAppContext(withPasswordPolicies(PrepareResourceContextProvider)));
 
 /**
  * Generate Password Context Consumer HOC

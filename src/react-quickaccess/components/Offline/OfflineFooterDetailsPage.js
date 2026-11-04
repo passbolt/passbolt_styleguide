@@ -17,7 +17,7 @@ import { withRouter } from "react-router-dom";
 import { Trans, withTranslation } from "react-i18next";
 import ArrowLeftSVG from "../../../img/svg/arrow_left.svg";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import { withOfflineSettingsLocalStorage } from "../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { formatDateTimeAgo, formatSecondsDuration } from "../../../shared/utils/dateUtils";
@@ -185,6 +185,6 @@ OfflineFooterDetailsPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withActiveSessionLocalStorage(
+export default withActiveSessionSessionStorage(
   withOfflineSettingsLocalStorage(withAppContext(withRouter(withTranslation("common")(OfflineFooterDetailsPage)))),
 );

@@ -13,7 +13,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { BOOTSTRAP_FEATURE } from "../../ExtQuickAccess";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { withRouter } from "react-router-dom";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
@@ -84,4 +84,4 @@ HandleBootstrapRoute.propTypes = {
   bootstrapFeature: PropTypes.string, // The bootstrap feature
 };
 
-export default withRouter(withAppContext(withActiveSessionLocalStorage(HandleBootstrapRoute)));
+export default withRouter(withAppContext(withActiveSessionSessionStorage(HandleBootstrapRoute)));

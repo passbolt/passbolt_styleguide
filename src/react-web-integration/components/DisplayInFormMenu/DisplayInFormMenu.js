@@ -34,7 +34,7 @@ import ResourceIcon from "../../../shared/components/Icons/ResourceIcon";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import Logger from "../../../shared/utils/logger";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 /** The maximum length of visibility of a generated password */
@@ -512,7 +512,7 @@ DisplayInFormMenu.propTypes = {
 };
 
 export default withAppContext(
-  withActiveSessionLocalStorage(
+  withActiveSessionSessionStorage(
     withResourceTypesLocalStorage(
       withMetadataTypesSettingsLocalStorage(
         withMetadataKeysSettingsLocalStorage(withPasswordPolicies(withTranslation("common")(DisplayInFormMenu))),

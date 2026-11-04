@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import RbacContextProvider from "../../../shared/context/Rbac/RbacContext";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 class PrivateRoute extends Component {
@@ -58,4 +58,4 @@ PrivateRoute.propTypes = {
   strict: PropTypes.bool, // Strict matching
 };
 
-export default withActiveSessionLocalStorage(withAppContext(PrivateRoute));
+export default withActiveSessionSessionStorage(withAppContext(PrivateRoute));
