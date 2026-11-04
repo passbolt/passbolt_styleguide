@@ -127,11 +127,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
       return;
     }
 
-    /*
-     * A local SSO kit can remain after the SSO plugin was disabled (i.e. downgrade to CE).
-     * In such case fallback on the passphrase sign-in, the kit will be removed after a successful sign-in.
-     */
-    if (!ssoLocalConfiguredProvider || !this.isSsoPluginEnabled()) {
+    if (!ssoLocalConfiguredProvider) {
       this.setState({ state: AuthenticationLoginWorkflowStates.SIGN_IN });
       return;
     }
@@ -365,19 +361,11 @@ export class AuthenticationLoginContextProvider extends React.Component {
   }
 
   /**
-   * Returns true if the SSO plugin is enabled on the organization
-   * @returns {boolean}
-   */
-  isSsoPluginEnabled() {
-    return Boolean(this.props.context.siteSettings?.canIUse("sso"));
-  }
-
-  /**
-   * Returns true if the SSO plugin is enabled and the user has an SSO kit registered locally
+   * Returns true if the user has an SSO kit registered locally
    * @returns {boolean}
    */
   isSsoAvailable() {
-    return this.isSsoPluginEnabled() && this.props.ssoContext.hasUserAnSsoKit();
+    return this.props.ssoContext.hasUserAnSsoKit();
   }
 
   /**

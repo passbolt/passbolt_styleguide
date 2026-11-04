@@ -76,7 +76,11 @@ class DisplayMfaAdministration extends React.Component {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    this.props.adminMfaContext.setSettings(name, value);
+    if (name === "duoToggle") {
+      this.props.adminMfaContext.setDuoToggle(value);
+    } else {
+      this.props.adminMfaContext.setSettings(name, value);
+    }
     this.validateInput(name, value);
   }
 
@@ -134,6 +138,7 @@ class DisplayMfaAdministration extends React.Component {
     const errors = this.props.adminMfaContext.getErrors();
     const hasSaveWarning =
       this.props.adminMfaContext.getCurrentSettings() !== null && this.props.adminMfaContext.hasSettingsChanges();
+    const hasDuoVerifySubscriberLockoutRisk = this.props.adminMfaContext.hasDuoVerifySubscriberLockoutRisk();
 
     return (
       <div className="row">
@@ -375,19 +380,59 @@ class DisplayMfaAdministration extends React.Component {
                           <div className="duo_client_secret error-message">{errors.duoClientSecretError}</div>
                         )}
                       </div>
+                      <span
+                        className={`input toggle-switch form-element ${hasDuoVerifySubscriberLockoutRisk ? "warning" : ""}`}
+                      >
+                        <input
+                          id="duo-verify-subscriber"
+                          type="checkbox"
+                          className="toggle-switch-checkbox checkbox"
+                          name="duoVerifySubscriber"
+                          onChange={this.handleInputChange}
+                          checked={settings.duoVerifySubscriber}
+                          disabled={this.hasAllInputDisabled()}
+                        />
+                        <label className="text" htmlFor="duo-verify-subscriber">
+                          <span className="name">
+                            <Trans>Verify Duo username (recommended)</Trans>
+                          </span>
+                          <span className="info">
+                            <Trans>Requires each user&apos;s Duo username to match their Passbolt username.</Trans>
+                          </span>
+                        </label>
+                      </span>
                     </>
                   )}
                 </div>
               </>
             )}
           </div>
-          {hasSaveWarning && (
+          {(hasSaveWarning || hasDuoVerifySubscriberLockoutRisk) && (
             <div className="warning message">
-              <div>
-                <p>
-                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
-                </p>
-              </div>
+              {hasSaveWarning && (
+                <div>
+                  <p>
+                    <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                  </p>
+                </div>
+              )}
+              {hasDuoVerifySubscriberLockoutRisk && (
+                <div id="duo-verify-subscriber-warning-banner">
+                  <p>
+                    <Trans>
+                      Users whose Duo username does not match their Passbolt username will be blocked at their next
+                      sign-in. Make sure usernames match in both systems before saving.
+                    </Trans>{" "}
+                    <a
+                      href="https://www.passbolt.com/docs/admin/authentication/mfa/duo"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Trans>Learn more</Trans>
+                    </a>
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>

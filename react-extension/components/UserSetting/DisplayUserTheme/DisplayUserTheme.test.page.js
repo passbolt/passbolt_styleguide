@@ -53,9 +53,6 @@ export default class DisplayUserThemePage {
       get name() {
         return element.querySelector(".theme-desc").textContent;
       },
-      get isSelected() {
-        return element.classList.contains("selected");
-      },
       async select() {
         await self.user.click(element);
       },

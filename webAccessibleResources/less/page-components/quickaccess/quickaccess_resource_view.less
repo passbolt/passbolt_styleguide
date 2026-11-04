@@ -1,11 +1,6 @@
 .quickaccess {
     .item-browse {
         .properties {
-            max-height: 40rem;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--Workspace-Elevator) transparent;
-
             .property {
                 .clearfix();
                 display: flex;
@@ -27,42 +22,6 @@
                   color: var(--Palette-Contrast-1);
                 }
             }
-            .property.custom-fields {
-              flex-direction: column;
-              align-items: stretch;
-              gap: .8rem;
-
-              // The clearfix pseudo-elements would be flex items and take a gap each.
-              &:before, &:after {
-                content: none;
-              }
-
-              > .property-name {
-                margin-bottom: 0;
-              }
-
-              ul {
-                display: flex;
-                flex-direction: column;
-                gap: .8rem;
-              }
-
-              .custom-field {
-                display: flex;
-                align-items: center;
-                position: relative;
-
-                .property-name {
-                  font-size: 1.2rem;
-                  line-height: 1.6rem;
-                }
-
-                // The row has no padding, keep the timer centred on the copy action: 1.25rem - 1.6rem.
-                .property-action + .timer {
-                  right: -.35rem;
-                }
-              }
-            }
             .information {
               flex: 1;
               display: flex;
@@ -80,10 +39,6 @@
                 .totp-code + .svg-icon.timer {
                   margin-left: .5rem;
                 }
-              }
-
-              .password-wrapper {
-                padding-right: 1.6rem;
               }
 
               .accordion {
@@ -135,14 +90,10 @@
                 }
             }
             .property-name {
-                font-size: 1.5rem;
-                line-height: 2rem;
+                font-size: 1.3rem;
+                line-height: 1.8rem;
                 color: var(--Text-and-icons-Secondary-text);
                 margin-bottom: .4rem;
-                .ellipsis();
-                &.empty {
-                  font-style: italic;
-                }
             }
             .secret {
                 display: inline-block;
@@ -162,7 +113,7 @@
                       font-family: 'Obfuscation', sans-serif;
                       font-style: normal;
                       font-weight: 400;
-                      font-size: 1.6rem;
+                      font-size: 1.8rem;
                       line-height: 100%;
                     }
                   }
@@ -179,12 +130,6 @@
                     }
                   }
 
-                  &.secret-custom-fields {
-                    > button:before {
-                      content: '00000000';
-                    }
-                  }
-
                   &.secret-totp {
                     > button {
                       &:before {
@@ -197,38 +142,6 @@
                     }
                   }
                 }
-
-                &.secret-note .encrypted-description {
-                  display: block;
-                  font-family: 'Obfuscation';
-                  color: var(--Text-and-icons-Main-text);
-                  opacity: .25;
-                  text-align: left;
-                  white-space: normal;
-                  padding-left: .4rem;
-                }
-
-                &.secret-note .note-previewed {
-                  display: block;
-                  max-height: 12rem;
-                  overflow-y: auto;
-                  overflow-wrap: anywhere;
-                  white-space: pre-wrap;
-                  scrollbar-width: thin;
-                  scrollbar-color: var(--Workspace-Elevator) transparent;
-                }
-            }
-
-            .property-action svg {
-              width: 1.8rem;
-              height: 1.8rem;
-            }
-
-            // The ring lets the pointer through: no bevel on the action while the ring is up.
-            .property-action:has(+ .timer) {
-              &:hover, &:active {
-                box-shadow: none;
-              }
             }
 
             .property-action + .timer {
@@ -236,7 +149,7 @@
               height: 3.2rem;
               position: absolute;
               right: 1.25rem;
-              top: calc(50% - 1.6rem);
+              top: 2.1rem;
               --timer-delay: 0;
               --timer-stroke-width: 1;
               pointer-events: none;

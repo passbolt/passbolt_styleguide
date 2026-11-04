@@ -810,7 +810,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </li>
         )}
-        {this.canUpdate() && (
+        {this.canShare() && (
           <li key="option-delete-resource" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">

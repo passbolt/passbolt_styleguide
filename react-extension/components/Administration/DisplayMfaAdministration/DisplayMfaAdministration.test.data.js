@@ -48,6 +48,7 @@ export const mockMfaSettings = {
     hostName: "api-123456af.duosecurity.com",
     integrationKey: "PAGI605APMFKP8YSME6T",
     secretKey: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT",
+    verifySubscriber: true,
   },
 };
 
@@ -55,6 +56,7 @@ export const mockDefaultMfaModel = {
   duoHostname: "",
   duoClientId: "",
   duoClientSecret: "",
+  duoVerifySubscriber: false,
   duoToggle: false,
   totpProviderToggle: false,
   webauthnToggle: false,
@@ -77,6 +79,7 @@ export const mockModel = {
   duoHostname: "api-123456af.duosecurity.com",
   duoClientId: "PAGI605APMFKP8YSME6T",
   duoClientSecret: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT",
+  duoVerifySubscriber: true,
 };
 
 /**

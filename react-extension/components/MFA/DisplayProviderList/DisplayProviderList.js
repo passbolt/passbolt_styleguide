@@ -74,9 +74,6 @@ class DisplayProviderList extends Component {
     if (!this.canUseDuoProvider) {
       delete providers.duo;
     }
-    if (!this.canUsePasskeysProvider) {
-      delete providers.webauthn;
-    }
     return providers;
   }
 
@@ -87,9 +84,6 @@ class DisplayProviderList extends Component {
     const settings = this.props.mfaContext.getMfaUserSettings();
     if (!this.canUseDuoProvider) {
       delete settings.duo;
-    }
-    if (!this.canUsePasskeysProvider) {
-      delete settings.webauthn;
     }
     return settings;
   }
@@ -115,14 +109,6 @@ class DisplayProviderList extends Component {
    */
   get canUseDuoProvider() {
     return this.props.rbacContext.canIUseAction(uiActions.DUO_CONFIGURATION);
-  }
-
-  /**
-   * Can the user configure the passkeys provider.
-   * @returns {bool}
-   */
-  get canUsePasskeysProvider() {
-    return this.props.rbacContext.canIUseAction(uiActions.PASSKEYS_CONFIGURATION);
   }
 
   /**

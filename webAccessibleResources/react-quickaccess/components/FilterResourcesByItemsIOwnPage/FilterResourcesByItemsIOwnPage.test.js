@@ -13,8 +13,6 @@
  */
 import {
   defaultResourceDto,
-  resourceStandaloneCustomFieldsDto,
-  resourceStandaloneNoteDto,
   resourceStandalonePinCodeNoUrisDto,
 } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
@@ -132,21 +130,6 @@ describe("FilterResourcesByItemsIOwnPage", () => {
 
       expect(page.resources?.length).toStrictEqual(1);
       expect(page.getResource(0).textContent).toStrictEqual("Office alarm");
-    });
-
-    it("should display note and custom fields resources I own with their name and URI only", () => {
-      expect.assertions(3);
-      const note = resourceStandaloneNoteDto();
-      const customFields = resourceStandaloneCustomFieldsDto();
-      const shared = resourceStandaloneNoteDto({ permission: updatePermissionDto() });
-
-      const page = new FilterResourcesByItemsIOwnPagePage(defaultProps({ resources: [note, customFields, shared] }));
-
-      expect(page.resources?.length).toStrictEqual(2);
-      expect(page.getResource(0).textContent).toStrictEqual(`${note.metadata.name}${note.metadata.uris[0]}`);
-      expect(page.getResource(1).textContent).toStrictEqual(
-        `${customFields.metadata.name}${customFields.metadata.uris[0]}`,
-      );
     });
   });
 

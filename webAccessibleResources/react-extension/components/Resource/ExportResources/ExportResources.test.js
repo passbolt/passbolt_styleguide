@@ -304,7 +304,6 @@ describe("As LU I should see the password export dialog", () => {
         "csv (dashlane)",
         "csv (nordpass)",
         "csv (logmeonce)",
-        "csv (netwrix)",
       ]);
     });
 

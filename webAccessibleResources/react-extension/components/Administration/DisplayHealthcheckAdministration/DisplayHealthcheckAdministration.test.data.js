@@ -13,42 +13,16 @@
  */
 
 import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
-import {
-  defaultAdministrationHealthcheckContext,
-  healthcheckChecksCollection,
-} from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
+import { defaultAdministrationHealthcheckContext } from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
 
-/**
- * Default props.
- * @param {object} [data] overrides
- * @returns {object}
- */
 export function defaultProps(data = {}) {
-  // Merged through the factory, so that a test can override one entry without restating the mocks.
-  const { context, adminHealthcheckContext, ...rest } = data;
-  return {
-    context: defaultAppContext(context),
-    adminHealthcheckContext: defaultAdministrationHealthcheckContext(adminHealthcheckContext),
+  const defaultProps = {
+    context: defaultAppContext(data?.context),
+    adminHealthcheckContext: defaultAdministrationHealthcheckContext(data?.adminHealthcheckContext),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn(),
     },
-    ...rest,
   };
-}
-
-/**
- * Props carrying the healthcheck built from the given v5 response body.
- * @param {array} body a v5 response body
- * @param {object} [data] overrides
- * @returns {object}
- */
-export function propsWithHealthcheckApiBody(body, data = {}) {
-  return defaultProps({
-    ...data,
-    adminHealthcheckContext: {
-      healthcheckData: healthcheckChecksCollection(body),
-      ...data?.adminHealthcheckContext,
-    },
-  });
+  return Object.assign(defaultProps, data);
 }

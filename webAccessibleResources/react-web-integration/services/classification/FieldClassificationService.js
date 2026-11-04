@@ -223,10 +223,7 @@ class FieldClassificationService {
     ) {
       return { role: FieldRole.PASSWORD, tier: Tier.EXPLICIT_LABEL };
     }
-    if (
-      KeywordMatchingService.matchesAny(strongText, Keywords.IDENTIFIER) &&
-      !KeywordMatchingService.matchesAny(strongText, Keywords.ACCOUNT_NUMBER)
-    ) {
+    if (KeywordMatchingService.matchesAny(strongText, Keywords.IDENTIFIER)) {
       return { role: FieldRole.USERNAME, tier: Tier.EXPLICIT_LABEL };
     }
     return null;
@@ -254,8 +251,7 @@ class FieldClassificationService {
     }
     if (
       KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER) &&
-      !KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER_EXCLUDE) &&
-      !KeywordMatchingService.matchesAny(weakText, Keywords.ACCOUNT_NUMBER)
+      !KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER_EXCLUDE)
     ) {
       return { role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD };
     }

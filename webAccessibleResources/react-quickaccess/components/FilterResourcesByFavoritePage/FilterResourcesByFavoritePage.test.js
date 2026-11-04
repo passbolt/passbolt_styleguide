@@ -13,8 +13,6 @@
  */
 import {
   defaultResourceDto,
-  resourceStandaloneCustomFieldsDto,
-  resourceStandaloneNoteDto,
   resourceStandalonePinCodeNoUrisDto,
 } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
@@ -142,24 +140,6 @@ describe("FilterResourcesByFavoritePage", () => {
 
       expect(page.resources?.length).toStrictEqual(2);
       expect(page.getResource(1).textContent).toStrictEqual("Office alarm");
-    });
-
-    it("should display favourite note and custom fields resources with their name and URI only", () => {
-      expect.assertions(3);
-      const resource1 = defaultResourceDto({}, { withFavorite: true });
-      const note = resourceStandaloneNoteDto({}, { withFavorite: true });
-      const customFields = resourceStandaloneCustomFieldsDto({}, { withFavorite: true });
-      const notFavourite = resourceStandaloneNoteDto({}, { withFavorite: false });
-
-      const page = new FilterResourcesByFavoritePagePage(
-        defaultProps({ resources: [resource1, note, customFields, notFavourite] }),
-      );
-
-      expect(page.resources?.length).toStrictEqual(3);
-      expect(page.getResource(1).textContent).toStrictEqual(`${note.metadata.name}${note.metadata.uris[0]}`);
-      expect(page.getResource(2).textContent).toStrictEqual(
-        `${customFields.metadata.name}${customFields.metadata.uris[0]}`,
-      );
     });
   });
 
