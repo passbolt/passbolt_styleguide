@@ -105,10 +105,7 @@
     "watch": "NODE_ENV=development webpack --watch"
   },
   "overrides": {
-    "glob@^13": "^14.0.3",
-    "test-exclude": {
-      "glob": "^14.0.3"
-    },
+    "glob@": "^14.0.3",
     "uuid": "^14.0.0",
     "@storybook/builder-webpack5": {
       "webpack-dev-middleware": "^7.4.6"
