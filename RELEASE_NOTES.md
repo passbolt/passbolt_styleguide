@@ -1,4 +1,3 @@
-# v5.17.3
+# v5.18.0-alpha.5
 
-Provides:
-- Add RBAC to hide Passkeys setup on the windows app
+Provides Duo verify subscriber
