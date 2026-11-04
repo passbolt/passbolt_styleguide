@@ -1,4 +1,3 @@
-# v5.17.0
+# v5.18.0-alpha.5
 
-Provides:
-- Webauthn features
+Provides Duo verify subscriber
