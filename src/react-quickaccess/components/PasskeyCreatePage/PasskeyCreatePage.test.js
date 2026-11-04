@@ -137,8 +137,18 @@ describe("PasskeyCreatePage", () => {
     const props = defaultProps();
     mockCreateRequest(props.context);
     await renderWithRequest(props);
-    await props.context.port.emit("passbolt.passkey.create-request-ended");
+    await props.context.port.emit("passbolt.passkey.request-ended");
     expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
+  });
+
+  it("As a signed-in user who left the page, the window should not close when the site ends the request", async () => {
+    expect.assertions(1);
+    const props = defaultProps();
+    mockCreateRequest(props.context);
+    const page = await renderWithRequest(props);
+    page.unmount();
+    await props.context.port.emit("passbolt.passkey.request-ended");
+    expect(props.context.closeWindow).not.toHaveBeenCalled();
   });
 
   it("As a signed-in user, I should not see the names the site left empty", async () => {
@@ -153,7 +163,7 @@ describe("PasskeyCreatePage", () => {
   it("As a signed-in user, I should be told when the site no longer waits for the passkey", async () => {
     expect.assertions(3);
     const props = defaultProps();
-    props.context.port.addRequestListener("passbolt.passkey.get-create-request", () => {
+    props.context.port.addRequestListener("passbolt.passkey.get-pending-request", () => {
       throw new Error("The passkey request is no longer pending.");
     });
     const page = new PasskeyCreatePagePage(props);

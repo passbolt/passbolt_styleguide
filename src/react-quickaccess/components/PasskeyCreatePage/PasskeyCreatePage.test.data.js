@@ -45,5 +45,5 @@ export function defaultProps(data = {}) {
  * @param {object} request The request.
  */
 export function mockCreateRequest(context, request = defaultPasskeyCreateRequestDto()) {
-  context.port.addRequestListener("passbolt.passkey.get-create-request", () => request);
+  context.port.addRequestListener("passbolt.passkey.get-pending-request", () => request);
 }

@@ -42,6 +42,7 @@ import ActiveSessionSessionStorageContextProvider from "../shared/context/Active
 import ExtQuickAccessContextProvider from "./contexts/ExtQuickAccessContext";
 import HandleBootstrapRoute from "./components/HandleBootstrapRoute/HandleBootstrapRoute";
 import PasskeyCreatePage from "./components/PasskeyCreatePage/PasskeyCreatePage";
+import PasskeySelectPage from "./components/PasskeySelectPage/PasskeySelectPage";
 import QuickAccessServerUnavailable from "./components/QuickAccessServerUnavailable/QuickAccessServerUnavailable";
 import QuickAccessOfflineFooter from "./components/Offline/QuickAccessOfflineFooter";
 import OfflineLoginPage from "./components/Offline/OfflineLoginPage";
@@ -65,6 +66,7 @@ export const BOOTSTRAP_FEATURE = {
   AUTOSAVE_CREDENTIALS: "autosave-credentials",
   REQUEST_PASSPHRASE: "request-passphrase",
   PASSKEY_CREATE: "passkey-create",
+  PASSKEY_GET: "passkey-get",
 };
 
 class ExtQuickAccess extends React.Component {
@@ -365,6 +367,12 @@ class ExtQuickAccess extends React.Component {
                                           exact
                                           path="/webAccessibleResources/quickaccess/passkeys/create"
                                           component={PasskeyCreatePage}
+                                          requestId={this.props.bootstrapRequestId}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/passkeys/get"
+                                          component={PasskeySelectPage}
                                           requestId={this.props.bootstrapRequestId}
                                         />
                                         <PrivateRoute

@@ -46,6 +46,14 @@ describe("HandleBootstrapRoute", () => {
       expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/passkeys/create");
     });
 
+    it("As LU I should be redirected to the passkey selection page", () => {
+      expect.assertions(1);
+      const props = defaultProps({ bootstrapFeature: BOOTSTRAP_FEATURE.PASSKEY_GET });
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/passkeys/get");
+    });
+
     it("As LU I should be redirected to login page", () => {
       expect.assertions(1);
       const props = defaultProps({

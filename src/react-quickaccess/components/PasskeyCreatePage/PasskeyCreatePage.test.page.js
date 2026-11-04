@@ -73,21 +73,21 @@ export default class PasskeyCreatePagePage {
    * Returns the hint telling how to use another authenticator
    */
   get hint() {
-    return this._page.container.querySelector(".passkey-create-message.hint");
+    return this._page.container.querySelector(".passkey-message.hint");
   }
 
   /**
    * Returns the message telling the passkey is already saved
    */
   get alreadySavedMessage() {
-    return this._page.container.querySelector(".passkey-create-message.already-saved");
+    return this._page.container.querySelector(".passkey-message.already-saved");
   }
 
   /**
    * Returns the error message
    */
   get errorMessage() {
-    return this._page.container.querySelector(".passkey-create-message.error-message");
+    return this._page.container.querySelector(".passkey-message.error-message");
   }
 
   /**
@@ -116,6 +116,13 @@ export default class PasskeyCreatePagePage {
    */
   async clickOnSave() {
     await this.user.click(this.saveButton);
+  }
+
+  /**
+   * Unmount the page, as when the user navigates away from it
+   */
+  unmount() {
+    this._page.unmount();
   }
 
   /**

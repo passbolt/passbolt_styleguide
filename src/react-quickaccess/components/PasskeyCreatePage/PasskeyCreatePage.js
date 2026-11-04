@@ -19,8 +19,6 @@ import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 
 /** The error the background gives when the site excludes a passkey the user already holds. */
 const PASSKEY_CREDENTIAL_EXCLUDED_ERROR = "PasskeyCredentialExcludedError";
-/** The error the background gives when the user cancels the passphrase prompt. */
-const USER_ABORTS_OPERATION_ERROR = "UserAbortsOperationError";
 
 /**
  * Asks the user whether to save in passbolt the passkey a site wants to register. Closing the window hands the
@@ -59,16 +57,23 @@ class PasskeyCreatePage extends React.Component {
    */
   async componentDidMount() {
     // The page ended the request: the Save of this window could no longer answer it.
-    this.props.context.port.on("passbolt.passkey.create-request-ended", this.handleClose);
+    this.props.context.port.on("passbolt.passkey.request-ended", this.handleClose);
     try {
       const request = await this.props.context.port.request(
-        "passbolt.passkey.get-create-request",
+        "passbolt.passkey.get-pending-request",
         this.props.requestId,
       );
       this.setState({ request });
     } catch (error) {
       this.setState({ errorMessage: error.message });
     }
+  }
+
+  /**
+   * Whenever the component will unmount
+   */
+  componentWillUnmount() {
+    this.props.context.port.removeListener("passbolt.passkey.request-ended", this.handleClose);
   }
 
   /**
@@ -95,7 +100,7 @@ class PasskeyCreatePage extends React.Component {
    * @returns {Promise<void>}
    */
   async handleSaveError(error) {
-    if (error.name === USER_ABORTS_OPERATION_ERROR) {
+    if (error.name === "UserAbortsOperationError") {
       await this.props.context.closeWindow();
     } else if (error.name === PASSKEY_CREDENTIAL_EXCLUDED_ERROR) {
       this.setState({ processing: false, isAlreadySaved: true });
@@ -168,13 +173,13 @@ class PasskeyCreatePage extends React.Component {
           </>
         )}
         {this.state.isAlreadySaved && (
-          <p className="passkey-create-message already-saved">
+          <p className="passkey-message already-saved">
             <Trans>A passkey for this account is already saved in passbolt.</Trans>
           </p>
         )}
-        {this.state.errorMessage && <p className="passkey-create-message error-message">{this.state.errorMessage}</p>}
+        {this.state.errorMessage && <p className="passkey-message error-message">{this.state.errorMessage}</p>}
         {!this.isEnded && (
-          <p className="passkey-create-message hint">
+          <p className="passkey-message hint">
             <Trans>Close this window to use a security key or another passkey.</Trans>
           </p>
         )}
