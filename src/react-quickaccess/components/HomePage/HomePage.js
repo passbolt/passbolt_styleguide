@@ -43,6 +43,7 @@ import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/Me
 import { sortResourcesByUriMatchingScore } from "../../../shared/utils/sortUtils";
 import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import { isRpIdOfUrl, parseRpIdFromUris } from "../../../shared/utils/passkeyRpIdUtils";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -75,6 +76,8 @@ class HomePage extends React.Component {
       activeTabUrl: null,
       usingOnThisTab: false,
       passwordDraftsCount: 0, // The number of generated passwords waiting to be saved
+      pendingPasskeyRequests: [], // The passkey sign-ins the pages of the tab wait for
+      signingInWithPasskeyId: null, // The id of the passkey the user signs in with
     };
   }
 
@@ -99,6 +102,7 @@ class HomePage extends React.Component {
 
     this.loadActiveTabUrl();
     this.loadPasswordDrafts();
+    this.loadPendingPasskeyRequests();
   }
 
   /**
@@ -106,6 +110,7 @@ class HomePage extends React.Component {
    */
   initEventHandlers() {
     this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
+    this.handleSignInWithPasskeyClick = this.handleSignInWithPasskeyClick.bind(this);
   }
 
   /**
@@ -136,6 +141,46 @@ class HomePage extends React.Component {
       console.error(error);
     }
   }
+
+  /**
+   * Loads the passkey sign-ins the pages of the tab wait for into the state.
+   * @returns {Promise<void>}
+   */
+  async loadPendingPasskeyRequests() {
+    try {
+      const pendingPasskeyRequests = await this.props.context.port.request(
+        "passbolt.passkey.get-tab-pending-requests",
+        this.props.context.openerTabId,
+      );
+      this.setState({ pendingPasskeyRequests });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * Get the passkeys of the site of the active tab: those whose relying party is the tab host or a parent domain of
+   * it. The passkeys a waiting sign-in of the page accepts come first, with the id of that sign-in.
+   * @param {Array<Object>} resources The list of resources to filter.
+   * @param {string} activeTabUrl The active tab url.
+   * @param {Array<{id: string, passkey_ids: Array<string>}>} pendingPasskeyRequests The sign-ins the tab waits for.
+   * @return {Array<{resource: Object, rpId: string, pendingRequestId: string|null}>}
+   */
+  filterSitePasskeys = memoize((resources, activeTabUrl, pendingPasskeyRequests) => {
+    const sitePasskeys = [];
+    for (const resource of resources) {
+      if (!this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.hasPasskey()) {
+        continue;
+      }
+      const rpId = parseRpIdFromUris(resource.metadata.uris);
+      if (!isRpIdOfUrl(rpId, activeTabUrl)) {
+        continue;
+      }
+      const pendingRequest = pendingPasskeyRequests.find((request) => request.passkey_ids.includes(resource.id));
+      sitePasskeys.push({ resource, rpId, pendingRequestId: pendingRequest?.id ?? null });
+    }
+    return sitePasskeys.sort((a, b) => Number(Boolean(b.pendingRequestId)) - Number(Boolean(a.pendingRequestId)));
+  });
 
   /**
    * Get the resources for the suggested section.
@@ -218,6 +263,26 @@ class HomePage extends React.Component {
   }
 
   /**
+   * Handles the click on a passkey a waiting sign-in of the page accepts: signs in with it.
+   * @param {string} passkeyId The id of the passkey resource.
+   * @param {string} pendingRequestId The id of the waiting sign-in.
+   * @returns {Promise<void>}
+   */
+  async handleSignInWithPasskeyClick(passkeyId, pendingRequestId) {
+    this.setState({ signingInWithPasskeyId: passkeyId, useOnThisTabError: null });
+    try {
+      await this.props.context.port.request("passbolt.passkey.authenticate", pendingRequestId, passkeyId);
+      await this.props.context.closeWindow();
+    } catch (error) {
+      if (error?.name !== "UserAbortsOperationError") {
+        console.error(error);
+        this.setState({ useOnThisTabError: this.props.t("Unable to sign in with the passkey on this page.") });
+      }
+      this.setState({ signingInWithPasskeyId: null });
+    }
+  }
+
+  /**
    * Get the resources the quick access can list
    * @return {Array}
    */
@@ -287,11 +352,13 @@ class HomePage extends React.Component {
     // The groups are retrieved from the API, the filter is not offered while in an offline session.
     const isSessionOnline = Boolean(this.props.activeSession?.isSessionOnline);
     let browsedResources, suggestedResources;
+    let sitePasskeys = [];
 
     if (isReady) {
       const resources = this.resourcesSupportedByQuickAccess;
       browsedResources = this.filterSearchedResources(resources, this.props.context.search);
       suggestedResources = this.filterSuggestedResources(resources, this.state.activeTabUrl);
+      sitePasskeys = this.filterSitePasskeys(resources, this.state.activeTabUrl, this.state.pendingPasskeyRequests);
     }
 
     return (
@@ -364,6 +431,61 @@ class HomePage extends React.Component {
                       </Link>
                     </li>
                   ))}
+              </ul>
+            </div>
+          )}
+          {showSuggestedSection && sitePasskeys.length > 0 && (
+            <div className="list-section">
+              <div className="list-title">
+                <h2>
+                  <Trans>Passkeys</Trans>
+                </h2>
+              </div>
+              <ul className="list-items">
+                {sitePasskeys.map(({ resource, rpId, pendingRequestId }) => {
+                  const viewUrl = `/webAccessibleResources/quickaccess/resources/view/${resource.id}`;
+                  const name = (
+                    <div className="inline-resource-name">
+                      <span className="title">{resource.metadata.name}</span>
+                      <span className="username">
+                        {resource.metadata.username ? ` (${resource.metadata.username})` : ""}
+                      </span>
+                    </div>
+                  );
+                  return (
+                    <li className="suggested-resource-entry suggested-passkey-entry" key={resource.id}>
+                      {pendingRequestId ? (
+                        <button
+                          type="button"
+                          className="resource-details link"
+                          disabled={this.state.signingInWithPasskeyId !== null}
+                          onClick={() => this.handleSignInWithPasskeyClick(resource.id, pendingRequestId)}
+                        >
+                          {name}
+                          <div className="uris">
+                            <span className="url sign-in">
+                              {this.state.signingInWithPasskeyId === resource.id ? (
+                                <SpinnerSVG />
+                              ) : (
+                                <Trans>Sign in on this page</Trans>
+                              )}
+                            </span>
+                          </div>
+                        </button>
+                      ) : (
+                        <Link className="resource-details" to={viewUrl}>
+                          {name}
+                          <div className="uris">
+                            <span className="url">{rpId}</span>
+                          </div>
+                        </Link>
+                      )}
+                      <Link className="chevron-right-wrapper" to={viewUrl}>
+                        <CaretRightSVG />
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}

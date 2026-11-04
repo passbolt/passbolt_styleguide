@@ -200,6 +200,7 @@ describe("HomePage", () => {
       });
       props.context.openerTabId = 1;
       props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "https://example.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", async () => []);
       const page = new HomePagePage(props);
 
       await waitForTrue(() => page.suggestedResourcesEntries?.length > 0);
@@ -514,6 +515,92 @@ describe("HomePage", () => {
       expect(page.suggestedResourcesEntries.length).toStrictEqual(2);
       expect(suggestedResources).toContain(`${note.metadata.name}${note.metadata.uris[0]}`);
       expect(suggestedResources).toContain(`${customFields.metadata.name}${customFields.metadata.uris[0]}`);
+    });
+  });
+
+  describe("As LU I can see the passkeys of the site of the current tab", () => {
+    const otherSitePasskey = () =>
+      resourcePasskeyDto({
+        metadata: defaultResourceMetadataDto({
+          name: "Other site passkey",
+          uris: ["https://other.com"],
+          credential_id: "AAECAwQFBgcICQoLDA0ODw",
+        }),
+      });
+
+    /**
+     * Render the home page on a tab of www.example.com.
+     * @param {Array<object>} resources The resources.
+     * @param {Array<object>} pendingRequests The passkey sign-ins the tab waits for.
+     * @returns {Promise<{page: HomePagePage, props: object}>}
+     */
+    const renderOnExampleTab = async (resources, pendingRequests = []) => {
+      const props = defaultProps({ resources });
+      props.context.openerTabId = 1;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "https://www.example.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", async (tabId) => {
+        expect(tabId).toStrictEqual(1);
+        return pendingRequests;
+      });
+      const page = new HomePagePage(props);
+      await waitForTrue(() => page.passkeyEntries.length > 0);
+      return { page, props };
+    };
+
+    it("I can see the passkeys of the site and its parent domains, which open their view", async () => {
+      expect.assertions(4);
+      const passkey = resourcePasskeyDto();
+      const { page } = await renderOnExampleTab([passkey, otherSitePasskey()]);
+      expect(page.passkeyEntries.length).toStrictEqual(1);
+      expect(page.passkeyEntries[0].textContent).toContain("Example passkey (ada@example.com)example.com");
+      expect(page.isPasskeyEntrySigningIn(0)).toBe(false);
+    });
+
+    it("I can see first the passkeys a sign-in of the page waits for, and sign in with one", async () => {
+      expect.assertions(5);
+      const waitingPasskey = resourcePasskeyDto({
+        metadata: defaultResourceMetadataDto({
+          name: "Waiting passkey",
+          uris: ["https://example.com"],
+          credential_id: "AAECAwQFBgcICQoLDA0ODw",
+        }),
+      });
+      const pendingRequest = { id: uuidv4(), rp_id: "example.com", passkey_ids: [waitingPasskey.id] };
+      const { page, props } = await renderOnExampleTab([resourcePasskeyDto(), waitingPasskey], [pendingRequest]);
+      await waitForTrue(() => page.isPasskeyEntrySigningIn(0));
+      expect(page.passkeyEntries[0].textContent).toContain("Waiting passkey (admin@passbolt.com)Sign in on this page");
+      props.context.port.addRequestListener("passbolt.passkey.authenticate", async (pendingRequestId, resourceId) => {
+        expect(pendingRequestId).toStrictEqual(pendingRequest.id);
+        expect(resourceId).toStrictEqual(waitingPasskey.id);
+      });
+      await page.clickPasskeyEntry(0);
+      await waitForTrue(() => props.context.closeWindow.mock.calls.length > 0);
+      expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
+    });
+
+    it("I stay on the home page without an error when I cancel the passphrase prompt", async () => {
+      expect.assertions(3);
+      const passkey = resourcePasskeyDto();
+      const pendingRequest = { id: uuidv4(), rp_id: "example.com", passkey_ids: [passkey.id] };
+      const { page, props } = await renderOnExampleTab([passkey], [pendingRequest]);
+      await waitForTrue(() => page.isPasskeyEntrySigningIn(0));
+      props.context.port.addRequestListener("passbolt.passkey.authenticate", async () => {
+        throw { name: "UserAbortsOperationError" };
+      });
+      await page.clickPasskeyEntry(0);
+      await waitForTrue(() => !page.passkeyEntries[0].querySelector("button").disabled);
+      expect(props.context.closeWindow).not.toHaveBeenCalled();
+      expect(page.useOnThisTabError).toBeNull();
+    });
+
+    it("I cannot see a passkeys section on a site without passkeys", async () => {
+      expect.assertions(1);
+      const props = defaultProps({ resources: [otherSitePasskey(), defaultResourceDto()] });
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "https://www.example.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", async () => []);
+      const page = new HomePagePage(props);
+      await waitForTrue(() => page.suggestedResourcesContent);
+      expect(page.passkeyEntries.length).toStrictEqual(0);
     });
   });
 

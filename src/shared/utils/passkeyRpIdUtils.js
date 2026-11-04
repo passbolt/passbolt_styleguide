@@ -43,3 +43,18 @@ export const parseRpIdFromUris = (uris) => {
   const match = PASSKEY_URI_REGEXP.exec(uris[0]);
   return match && isValidPasskeyRpId(match[1]) ? match[1] : null;
 };
+
+/**
+ * Check that a passkey of the relying party id belongs to the site of a page: the host of the page is the relying
+ * party id or one of its subdomains.
+ * @param {string} rpId The relying party id of the passkey.
+ * @param {string} url The url of the page.
+ * @returns {boolean}
+ */
+export const isRpIdOfUrl = (rpId, url) => {
+  if (typeof rpId !== "string" || !URL.canParse(url)) {
+    return false;
+  }
+  const host = new URL(url).hostname;
+  return host === rpId || host.endsWith(`.${rpId}`);
+};

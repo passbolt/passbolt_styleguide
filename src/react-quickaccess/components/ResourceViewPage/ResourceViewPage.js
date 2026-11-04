@@ -35,6 +35,7 @@ import ResourceViewPagePinCode from "./ResourceViewPagePinCode";
 import ResourceViewPageNote from "./ResourceViewPageNote";
 import ResourceViewPageCustomFields from "./ResourceViewPageCustomFields";
 import ResourceViewPageUris from "./ResourceViewPageUris";
+import UsePasskeyOnThisPage from "../UsePasskeyOnThisPage/UsePasskeyOnThisPage";
 import { CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND, COPY_STATUSES, SECRET_KEYS } from "./secretState";
 
 /**
@@ -649,6 +650,7 @@ class ResourceViewPage extends React.Component {
               {!this.state.usingOnThisTab && <Trans>Use on this page</Trans>}
             </a>
           )}
+          {this.isPasskeyResources && <UsePasskeyOnThisPage resource={this.state.resource} />}
           {this.state.error && <div className="error-message">{this.state.error}</div>}
         </div>
       </div>

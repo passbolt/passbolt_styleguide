@@ -316,13 +316,38 @@ describe("ResourceViewPage", () => {
     });
   });
   describe("As LU, I should see a passkey resource.", () => {
-    it("As LU, I should see the username and uri of a passkey, and no password, totp or use on this page", async () => {
+    it("As LU, I should be able to use a passkey on its site when a sign-in of the page waits for it", async () => {
+      expect.assertions(1);
+      const props = passkeyResourceProps();
+      const passkeyId = (await props.context.storage.local.get(["resources"])).resources[0].id;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", () => "https://example.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", () => [
+        { id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856", rp_id: "example.com", passkey_ids: [passkeyId] },
+      ]);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+      await waitForTrue(() => page.useOnThisPageButton);
+      expect(page.useOnThisPageButton.classList.contains("disabled")).toBe(false);
+    });
+
+    it("As LU, I should see the username and uri of a passkey, and no password, totp or use on this page off its site", async () => {
       expect.assertions(5);
       const props = passkeyResourceProps();
+      const passkeyId = (await props.context.storage.local.get(["resources"])).resources[0].id;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", () => "https://other.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", () => [
+        { id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856", rp_id: "example.com", passkey_ids: [passkeyId] },
+      ]);
       jest.spyOn(props.context.port, "request");
       let page;
       await act(async () => {
         page = new ResourceViewPagePage(props);
+      });
+      // Let the tab url and the waiting sign-ins reach the page before asserting the action is absent.
+      await act(async () => {
+        await Promise.all(props.context.port.request.mock.results.map((result) => result.value));
       });
 
       expect(page.propertyNames).toStrictEqual(["Username", "URI"]);

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.18.0
  */
-import { isValidPasskeyRpId, parseRpIdFromUris } from "./passkeyRpIdUtils";
+import { isRpIdOfUrl, isValidPasskeyRpId, parseRpIdFromUris } from "./passkeyRpIdUtils";
 
 const LABEL_63 = "a".repeat(63);
 
@@ -96,6 +96,21 @@ describe("passkeyRpIdUtils", () => {
       expect(parseRpIdFromUris(undefined)).toBeNull();
       expect(parseRpIdFromUris(null)).toBeNull();
       expect(parseRpIdFromUris("https://example.com")).toBeNull();
+    });
+  });
+
+  describe("::isRpIdOfUrl", () => {
+    it.each([
+      ["github.com", "https://github.com/login", true],
+      ["github.com", "https://www.github.com/", true],
+      ["github.com", "https://notgithub.com/", false],
+      ["www.github.com", "https://github.com/", false],
+      ["github.com", "not a url", false],
+      ["github.com", null, false],
+      [null, "https://github.com/", false],
+    ])("should tell whether %s belongs to the site of %s", (rpId, url, expected) => {
+      expect.assertions(1);
+      expect(isRpIdOfUrl(rpId, url)).toBe(expected);
     });
   });
 });
