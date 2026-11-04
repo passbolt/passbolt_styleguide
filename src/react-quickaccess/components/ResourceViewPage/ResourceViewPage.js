@@ -497,7 +497,7 @@ class ResourceViewPage extends React.Component {
     const resourceType = this.resourceType;
     return Boolean(
       resourceType?.isStandaloneCustomFields() ||
-        (resourceType?.hasCustomFields() && this.state.resource.metadata?.custom_fields?.length > 0),
+      (resourceType?.hasCustomFields() && this.state.resource.metadata?.custom_fields?.length > 0),
     );
   }
 
