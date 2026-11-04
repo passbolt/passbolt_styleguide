@@ -110,6 +110,9 @@
     "@storybook/builder-webpack5": {
       "webpack-dev-middleware": "^7.4.6"
     },
+    "@storybook/test-runner": {
+      "nyc": "^18.0.0"
+    },
     "eslint-plugin-react": {
       "eslint": "$eslint"
     },
