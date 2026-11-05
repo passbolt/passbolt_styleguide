@@ -2,7 +2,7 @@ const path = require("path");
 
 const CopyPlugin = require("copy-webpack-plugin");
 const I18nextExtractionPlugin = require("./config/webpack.i18n");
-const { buildLessEntries, lessRule, lessMinimizer } = require("./config/webpack.less");
+const { buildLessEntries, lessRule, lessMinimizer, themesJsonPlugin } = require("./config/webpack.less");
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -75,6 +75,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [{ from: path.resolve(__dirname, "./src/locales"), to: path.resolve(__dirname, "./build/locales") }],
     }),
+    themesJsonPlugin,
   ],
   optimization: {
     splitChunks: {
