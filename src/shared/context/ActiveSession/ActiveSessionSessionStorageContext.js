@@ -16,16 +16,16 @@ import PropTypes from "prop-types";
 import ActiveSessionEntity from "../../models/entity/session/userActiveSessionEntity";
 import ActiveSessionServiceWorkerService from "../../services/serviceWorker/activeSession/activeSessionServiceWorkerService";
 
-export const ActiveSessionLocalStorageContext = React.createContext({
-  get: () => {}, // Get the active session from the local storage and/or init them if not the case already
-  activeSession: null, // the current active session loaded from the local storage
-  updateLocalStorage: () => {}, // triggers an update of the local storage
+export const ActiveSessionSessionStorageContext = React.createContext({
+  get: () => {}, // Get the active session from the session storage and/or init them if not the case already
+  activeSession: null, // the current active session loaded from the session storage
+  updateSessionStorage: () => {}, // triggers an update of the session storage
 });
 
 /**
- * The active session local storage context provider
+ * The active session session storage context provider
  */
-class ActiveSessionLocalStorageContextProvider extends React.Component {
+class ActiveSessionSessionStorageContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -44,9 +44,9 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      get: this.get.bind(this), // Get the active session from the local storage and/or init them if not the case already
-      activeSession: null, // the current active session loaded from the local storage
-      updateLocalStorage: this.updateLocalStorage.bind(this), // triggers an update of the local storage
+      get: this.get.bind(this), // Get the active session from the session storage and/or init them if not the case already
+      activeSession: null, // the current active session loaded from the session storage
+      updateSessionStorage: this.updateSessionStorage.bind(this), // triggers an update of the session storage
     };
   }
 
@@ -73,7 +73,7 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
   }
 
   /**
-   * Handles update of the active session in the local storage.
+   * Handles update of the active session in the session storage.
    */
   handleStorageChange(changes) {
     if (changes[this.storageKey] && changes[this.storageKey].newValue) {
@@ -92,7 +92,7 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
   }
 
   /**
-   * Get the active session from the local storage and/or init them if not the case already.
+   * Get the active session from the session storage and/or init them if not the case already.
    * @returns {ActiveSessionEntity|null}
    */
   get() {
@@ -113,15 +113,15 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
   }
 
   /**
-   * Load the active session from the local storage if it is available.
-   * If the local storage is not yet initialised, then it asks for its initialisation.
+   * Load the active session from the session storage if it is available.
+   * If the session storage is not yet initialised, then it asks for its initialisation.
    * @returns {Promise<void>}
    * @private
    */
   async loadLocalStorage() {
-    const storageData = await this.props.storage.local.get([this.storageKey]);
+    const storageData = await this.props.storage.session.get([this.storageKey]);
     if (!storageData[this.storageKey]) {
-      this.updateLocalStorage();
+      this.updateSessionStorage();
       return;
     }
 
@@ -129,10 +129,10 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
   }
 
   /**
-   * Forces the update of the active session in the local storage.
+   * Forces the update of the active session in the session storage.
    * @return {Promise<void>}
    */
-  async updateLocalStorage() {
+  async updateSessionStorage() {
     if (this.runningLocalStorageUpdatePromise === null) {
       this.runningLocalStorageUpdatePromise =
         this.activeSessionServiceWorkerService.findAndUpdateAuthenticationStatus();
@@ -152,38 +152,38 @@ class ActiveSessionLocalStorageContextProvider extends React.Component {
    */
   render() {
     return (
-      <ActiveSessionLocalStorageContext.Provider value={this.state}>
+      <ActiveSessionSessionStorageContext.Provider value={this.state}>
         {this.props.children}
-      </ActiveSessionLocalStorageContext.Provider>
+      </ActiveSessionSessionStorageContext.Provider>
     );
   }
 }
 
-ActiveSessionLocalStorageContextProvider.propTypes = {
+ActiveSessionSessionStorageContextProvider.propTypes = {
   port: PropTypes.any, // The application port
   storage: PropTypes.any, // The application storage
   account: PropTypes.any, // The application account
   children: PropTypes.any, // The children components
 };
-export default ActiveSessionLocalStorageContextProvider;
+export default ActiveSessionSessionStorageContextProvider;
 
 /**
  * Offline Settings Local Storage Context Consumer HOC
  * @param WrappedComponent
  */
-export function withActiveSessionLocalStorage(WrappedComponent) {
-  return class WithActiveSessionLocalStorage extends React.Component {
+export function withActiveSessionSessionStorage(WrappedComponent) {
+  return class withActiveSessionSessionStorage extends React.Component {
     render() {
       return (
-        <ActiveSessionLocalStorageContext.Consumer>
-          {(activeSessionLocalStorageContext) => (
+        <ActiveSessionSessionStorageContext.Consumer>
+          {(ActiveSessionSessionStorageContext) => (
             <WrappedComponent
-              activeSessionLocalStorageContext={activeSessionLocalStorageContext}
-              activeSession={activeSessionLocalStorageContext.get()}
+              ActiveSessionSessionStorageContext={ActiveSessionSessionStorageContext}
+              activeSession={ActiveSessionSessionStorageContext.get()}
               {...this.props}
             />
           )}
-        </ActiveSessionLocalStorageContext.Consumer>
+        </ActiveSessionSessionStorageContext.Consumer>
       );
     }
   };

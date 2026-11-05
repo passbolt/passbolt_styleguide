@@ -25,7 +25,7 @@ import ResourceTypesCollection from "../../../shared/models/entity/resourceType/
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import GoSVG from "../../../img/svg/go.svg";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import SecretServiceWorkerService from "../../../shared/services/serviceWorker/secret/secretServiceWorkerService";
 import ResourceViewPagePassword from "./ResourceViewPagePassword";
@@ -651,6 +651,6 @@ ResourceViewPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withActiveSessionLocalStorage(
+export default withActiveSessionSessionStorage(
   withAppContext(withRbac(withRouter(withResourceTypesLocalStorage(withTranslation("common")(ResourceViewPage))))),
 );

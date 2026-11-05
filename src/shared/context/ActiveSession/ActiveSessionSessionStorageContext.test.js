@@ -14,8 +14,8 @@
 
 import { act } from "@testing-library/react";
 import mockComponentSetState from "../../../react-extension/test/mock/components/React/mockSetState";
-import { defaultProps } from "./ActiveSessionLocalStorageContext.test.data";
-import ActiveSessionLocalStorageContextProvider from "./ActiveSessionLocalStorageContext";
+import { defaultProps } from "./ActiveSessionSessionStorageContext.test.data";
+import ActiveSessionSessionStorageContextProvider from "./ActiveSessionSessionStorageContext";
 import { defaultUserActiveSessionDto } from "../../models/entity/session/userActiveSessionEntity.test.data";
 import UserActiveSessionEntity from "../../models/entity/session/userActiveSessionEntity";
 import { AUTH_FIND_AND_UPDATE_ACTIVE_SESSION_EVENT } from "../../services/serviceWorker/activeSession/activeSessionServiceWorkerService";
@@ -24,12 +24,12 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("ActiveSessionLocalStorageContext", () => {
+describe("ActiveSessionSessionStorageContext", () => {
   describe("::constructor", () => {
     it("should initialise the default state and handlers", () => {
       expect.assertions(3);
 
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(defaultProps());
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
       expect(contextProvider.runningLocalStorageUpdatePromise).not.toBeUndefined();
@@ -37,7 +37,7 @@ describe("ActiveSessionLocalStorageContext", () => {
       expect(contextProvider.state).toMatchObject({
         get: expect.any(Function),
         activeSession: null,
-        updateLocalStorage: expect.any(Function),
+        updateSessionStorage: expect.any(Function),
       });
     });
   });
@@ -46,7 +46,7 @@ describe("ActiveSessionLocalStorageContext", () => {
     it("should listen to the expected event", () => {
       expect.assertions(2);
 
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(defaultProps());
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
       contextProvider.componentDidMount();
@@ -61,7 +61,7 @@ describe("ActiveSessionLocalStorageContext", () => {
     it("should listen to the expected event", () => {
       expect.assertions(2);
 
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(defaultProps());
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
       contextProvider.componentDidMount();
@@ -77,7 +77,7 @@ describe("ActiveSessionLocalStorageContext", () => {
       expect.assertions(1);
 
       const props = defaultProps();
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(props);
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
       const expectedActiveSession = defaultUserActiveSessionDto();
@@ -94,7 +94,7 @@ describe("ActiveSessionLocalStorageContext", () => {
     it("should ignore storage change event that are not related to active session", () => {
       expect.assertions(1);
 
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(defaultProps());
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
       contextProvider.handleStorageChange({
@@ -110,7 +110,7 @@ describe("ActiveSessionLocalStorageContext", () => {
       expect.assertions(1);
 
       const props = defaultProps();
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(props);
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
       const expectedActiveSession = defaultUserActiveSessionDto();
@@ -128,9 +128,9 @@ describe("ActiveSessionLocalStorageContext", () => {
       expect.assertions(3);
 
       const props = defaultProps();
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(props);
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(props);
 
-      props.storage.local.set({ [contextProvider.storageKey]: null });
+      props.storage.session.set({ [contextProvider.storageKey]: null });
 
       /*
        * Hold the service worker call pending: the blocking promise is reset as soon as the update settles,
@@ -161,7 +161,7 @@ describe("ActiveSessionLocalStorageContext", () => {
 
       const activeSession = defaultUserActiveSessionDto();
 
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(defaultProps());
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
       expect(contextProvider.state.activeSession).toBeNull();
@@ -176,7 +176,7 @@ describe("ActiveSessionLocalStorageContext", () => {
       const activeSessionDto = defaultUserActiveSessionDto();
       const activeSessionEntity = new UserActiveSessionEntity(activeSessionDto);
 
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(defaultProps());
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
       expect(contextProvider.state.activeSession).toBeNull();
@@ -187,15 +187,15 @@ describe("ActiveSessionLocalStorageContext", () => {
   });
 
   describe("::loadLocalStorage", () => {
-    it("should find the active session from the local storage and set the context state with it.", async () => {
+    it("should find the active session from the session storage and set the context state with it.", async () => {
       expect.assertions(1);
 
       const activeSession = defaultUserActiveSessionDto();
 
       const props = defaultProps();
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(props);
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(props);
 
-      props.storage.local.set({ [contextProvider.storageKey]: activeSession });
+      props.storage.session.set({ [contextProvider.storageKey]: activeSession });
       mockComponentSetState(contextProvider);
 
       await contextProvider.loadLocalStorage();
@@ -203,13 +203,13 @@ describe("ActiveSessionLocalStorageContext", () => {
       expect(contextProvider.state.activeSession.toDto()).toStrictEqual(activeSession);
     });
 
-    it("should call for updating the local storage if there is no active session in the local storage.", async () => {
+    it("should call for updating the session storage if there is no active session in the session storage.", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(props);
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(props);
 
-      props.storage.local.set({ [contextProvider.storageKey]: null });
+      props.storage.session.set({ [contextProvider.storageKey]: null });
       props.port.addRequestListener(AUTH_FIND_AND_UPDATE_ACTIVE_SESSION_EVENT, async () =>
         defaultUserActiveSessionDto(),
       );
@@ -225,22 +225,22 @@ describe("ActiveSessionLocalStorageContext", () => {
     });
   });
 
-  describe("::updateLocalStorage", () => {
-    it("should call the service worker with the right event to trigger the local storage update.", async () => {
+  describe("::updateSessionStorage", () => {
+    it("should call the service worker with the right event to trigger the session storage update.", async () => {
       expect.assertions(3);
 
       const props = defaultProps();
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(props);
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(props);
 
       const expectedActiveSession = defaultUserActiveSessionDto();
-      props.storage.local.set({ [contextProvider.storageKey]: null });
+      props.storage.session.set({ [contextProvider.storageKey]: null });
       props.port.addRequestListener(AUTH_FIND_AND_UPDATE_ACTIVE_SESSION_EVENT, async () => expectedActiveSession);
 
       const spyOnRequest = jest.spyOn(props.port, "request");
 
       mockComponentSetState(contextProvider);
 
-      await contextProvider.updateLocalStorage();
+      await contextProvider.updateSessionStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
       expect(spyOnRequest).toHaveBeenCalledWith(AUTH_FIND_AND_UPDATE_ACTIVE_SESSION_EVENT);
@@ -253,23 +253,23 @@ describe("ActiveSessionLocalStorageContext", () => {
       const props = defaultProps();
       let resolveUpdateLocalStoragePromise;
 
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(props);
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(props);
       const spyOnRequest = jest
         .spyOn(contextProvider.activeSessionServiceWorkerService, "findAndUpdateAuthenticationStatus")
         .mockImplementation(() => new Promise((resolve) => (resolveUpdateLocalStoragePromise = resolve)));
       mockComponentSetState(contextProvider);
 
-      contextProvider.updateLocalStorage();
+      contextProvider.updateSessionStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
 
-      contextProvider.updateLocalStorage();
+      contextProvider.updateSessionStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
 
       await resolveUpdateLocalStoragePromise();
 
-      contextProvider.updateLocalStorage();
+      contextProvider.updateSessionStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(2);
 
@@ -286,14 +286,14 @@ describe("ActiveSessionLocalStorageContext", () => {
 
       const spyOnRequest = jest.spyOn(props.port, "request");
 
-      const contextProvider = new ActiveSessionLocalStorageContextProvider(props);
+      const contextProvider = new ActiveSessionSessionStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      contextProvider.updateLocalStorage();
+      contextProvider.updateSessionStorage();
       expect(contextProvider.runningLocalStorageUpdatePromise).not.toBeNull();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
-      contextProvider.updateLocalStorage();
+      contextProvider.updateSessionStorage();
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
 
       await contextProvider.runningLocalStorageUpdatePromise;
@@ -301,7 +301,7 @@ describe("ActiveSessionLocalStorageContext", () => {
       // promise should be reinit now;
       expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
 
-      contextProvider.updateLocalStorage();
+      contextProvider.updateSessionStorage();
 
       expect(spyOnRequest).toHaveBeenCalledTimes(2);
     });

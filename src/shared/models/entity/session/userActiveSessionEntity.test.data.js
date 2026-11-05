@@ -35,8 +35,6 @@ export const defaultUserActiveSessionDto = (data = {}) => ({
   is_mfa_required: false,
   is_server_reachable: true,
   type: USER_ACTIVE_SESSION_ONLINE,
-  last_logged_in: "2025-08-04T18:58:11+00:00",
-  last_seen_online: "2025-08-04T18:59:11+00:00",
   ...data,
 });
 

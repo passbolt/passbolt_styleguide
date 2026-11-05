@@ -55,7 +55,7 @@ export function defaultAppContext(data = {}) {
     mfaRequiredCallback: jest.fn(),
     bootstrapFeature: "",
     activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ is_authenticated: false })),
-    activeSessionLocalStorageContext: {
+    ActiveSessionSessionStorageContext: {
       get: jest.fn(),
       activeSession: null,
       updateLocalStorage: jest.fn(),

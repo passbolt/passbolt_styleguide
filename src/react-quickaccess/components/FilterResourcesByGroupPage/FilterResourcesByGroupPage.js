@@ -27,7 +27,7 @@ import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/Me
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import GroupServiceWorkerService from "../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 import GroupEntity from "../../../shared/models/entity/group/groupEntity";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 const BROWSED_RESOURCES_LIMIT = 500;
@@ -424,7 +424,7 @@ FilterResourcesByGroupPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withActiveSessionLocalStorage(
+export default withActiveSessionSessionStorage(
   withAppContext(
     withRouter(
       withResourceTypesLocalStorage(

@@ -48,18 +48,6 @@ describe("UserActiveSession", () => {
       assertEntityProperty.enumeration(UserActiveSessionEntity, "type", expectedValues, unexpectedValues);
       assertEntityProperty.required(UserActiveSessionEntity, "type");
     });
-
-    it("validates last_logged_in property", () => {
-      assertEntityProperty.string(UserActiveSessionEntity, "last_logged_in");
-      assertEntityProperty.dateTime(UserActiveSessionEntity, "last_logged_in");
-      assertEntityProperty.notRequired(UserActiveSessionEntity, "last_logged_in");
-    });
-
-    it("validates last_seen_online property", () => {
-      assertEntityProperty.string(UserActiveSessionEntity, "last_seen_online");
-      assertEntityProperty.dateTime(UserActiveSessionEntity, "last_seen_online");
-      assertEntityProperty.notRequired(UserActiveSessionEntity, "last_seen_online");
-    });
   });
 
   describe("::constructor", () => {
@@ -73,7 +61,7 @@ describe("UserActiveSession", () => {
     });
 
     it("constructor works if valid DTO is provided", () => {
-      expect.assertions(6);
+      expect.assertions(4);
       const dto = defaultUserActiveSessionDto();
       const entity = new UserActiveSessionEntity(dto);
 
@@ -81,8 +69,6 @@ describe("UserActiveSession", () => {
       expect(entity._props.is_mfa_required).toStrictEqual(dto.is_mfa_required);
       expect(entity._props.is_server_reachable).toStrictEqual(dto.is_server_reachable);
       expect(entity._props.type).toStrictEqual(dto.type);
-      expect(entity._props.last_logged_in).toStrictEqual(dto.last_logged_in);
-      expect(entity._props.last_seen_online).toStrictEqual(dto.last_seen_online);
     });
   });
 
@@ -155,40 +141,6 @@ describe("UserActiveSession", () => {
       expect(entity.type).toStrictEqual(USER_ACTIVE_SESSION_ONLINE);
       entity.type = USER_ACTIVE_SESSION_OFFLINE;
       expect(entity.type).toStrictEqual(USER_ACTIVE_SESSION_OFFLINE);
-    });
-  });
-
-  describe("::lastLoggedIn", () => {
-    it("get last_logged_in property value", () => {
-      expect.assertions(1);
-      const last_logged_in = "2024-10-05T12:10:00+00:00";
-      const entity = new UserActiveSessionEntity(defaultUserActiveSessionDto({ last_logged_in }));
-      expect(entity.lastLoggedIn).toStrictEqual(last_logged_in);
-    });
-
-    it("set last_logged_in property value", () => {
-      expect.assertions(1);
-      const last_logged_in = "2024-10-05T12:10:00+00:00";
-      const entity = new UserActiveSessionEntity(defaultUserActiveSessionDto());
-      entity.lastLoggedIn = last_logged_in;
-      expect(entity.lastLoggedIn).toStrictEqual(last_logged_in);
-    });
-  });
-
-  describe("::lastSeenOnline", () => {
-    it("get last_seen_online property value", () => {
-      expect.assertions(1);
-      const last_seen_online = "2024-10-05T12:10:00+00:00";
-      const entity = new UserActiveSessionEntity(defaultUserActiveSessionDto({ last_seen_online }));
-      expect(entity.lastSeenOnline).toStrictEqual(last_seen_online);
-    });
-
-    it("set last_seen_online property value", () => {
-      expect.assertions(1);
-      const last_seen_online = "2024-10-05T12:10:00+00:00";
-      const entity = new UserActiveSessionEntity(defaultUserActiveSessionDto());
-      entity.lastSeenOnline = last_seen_online;
-      expect(entity.lastSeenOnline).toStrictEqual(last_seen_online);
     });
   });
 
