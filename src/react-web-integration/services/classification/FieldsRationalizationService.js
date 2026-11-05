@@ -53,14 +53,22 @@ class FieldsRationalizationService {
   }
 
   /**
-   * Keeps the first field (DOM order) with the given role and demotes the rest to OTHER.
+   * Keeps the first field (tier first, then DOM order) with the given role and demotes the rest to OTHER.
    * @param {{fields: FieldScraping[]}} scope The scope.
    * @param {Map<string, string>} roles The role map to update in place.
    * @param {string} role The role to deduplicate.
    */
   static dedupeKeepFirst(scope, roles, role) {
     const hits = scope.fields.filter((field) => roles.get(field.fieldId) === role);
-    hits.slice(1).forEach((field) => roles.set(field.fieldId, FieldRole.OTHER));
+
+    hits
+      // Sort by Tier first, DOM order is preserved otherwise
+      // i.e. if two fields have the same tier, the one that appears first in the DOM will be kept before the other
+      .sort((fieldA, fieldB) => fieldA.tier - fieldB.tier)
+      // Keep (skip) the first one
+      .slice(1)
+      // Demote the rest to OTHER
+      .forEach((field) => roles.set(field.fieldId, FieldRole.OTHER));
   }
 
   /**

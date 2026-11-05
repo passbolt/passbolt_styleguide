@@ -13,7 +13,7 @@
  */
 
 import ClassificationService from "./ClassificationService";
-import { FieldRole, FormRole } from "./Taxonomy";
+import { FieldRole, FormRole, Tier } from "./Taxonomy";
 import { MAX_CLASSIFIED_FIELDS } from "./KeywordsDictionary";
 import { defaultField, defaultForm, defaultPage } from "./ClassificationService.test.data";
 import FieldScraperService from "../Scraping/FieldScraperService";
@@ -108,7 +108,7 @@ describe("ClassificationService", () => {
 
   describe("ClassificationService::classifyFields", () => {
     it("should map a SAWF-declared field to its role and flag it as declared", () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const field = defaultField("f0", { dataFormType: "username" });
 
@@ -116,10 +116,11 @@ describe("ClassificationService", () => {
 
       expect(perField.get("f0")).toBe(FieldRole.USERNAME);
       expect(field._byDeclared).toBe(true);
+      expect(field.tier).toBe(Tier.SAWF);
     });
 
     it("should map an autocomplete-declared field to its role and flag it as declared", () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const field = defaultField("f0", { autoComplete: "username" });
 
@@ -127,10 +128,11 @@ describe("ClassificationService", () => {
 
       expect(perField.get("f0")).toBe(FieldRole.USERNAME);
       expect(field._byDeclared).toBe(true);
+      expect(field.tier).toBe(Tier.AUTOCOMPLETE);
     });
 
     it("should map an inferred field to its role and flag it as not declared", () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const field = defaultField("f0", { type: "password" });
 
@@ -138,6 +140,7 @@ describe("ClassificationService", () => {
 
       expect(perField.get("f0")).toBe(FieldRole.PASSWORD);
       expect(field._byDeclared).toBe(false);
+      expect(field.tier).toBe(Tier.INPUT_TYPE);
     });
   });
 
