@@ -20,19 +20,57 @@ describe("Duo model", () => {
   const randomClientSecret = "random-client-secret";
 
   describe("Duo::constructor", () => {
-    it("should init with hostName, integrationKey, salt and secretKey", () => {
+    it("should init with hostName, integrationKey, salt, secretKey and verifySubscriber", () => {
       const duoParam = {
         duoHostname: randomHostname,
         duoClientId: randomClientId,
         duoClientSecret: randomClientSecret,
+        duoVerifySubscriber: true,
       };
       const duo = new Duo(duoParam);
 
-      expect.assertions(3);
+      expect.assertions(4);
 
       expect(duo.apiHostName).toEqual(duoParam.duoHostname);
       expect(duo.clientId).toEqual(duoParam.duoClientId);
       expect(duo.clientSecret).toEqual(duoParam.duoClientSecret);
+      expect(duo.verifySubscriber).toStrictEqual(true);
+    });
+
+    describe("verifySubscriber", () => {
+      it("should be true when the model duoVerifySubscriber is true", () => {
+        expect.assertions(1);
+        const duo = new Duo({ duoVerifySubscriber: true });
+        expect(duo.verifySubscriber).toStrictEqual(true);
+      });
+
+      it("should be false when the model duoVerifySubscriber is false", () => {
+        expect.assertions(1);
+        const duo = new Duo({ duoVerifySubscriber: false });
+        expect(duo.verifySubscriber).toStrictEqual(false);
+      });
+
+      it("should be false when the model duoVerifySubscriber is missing", () => {
+        expect.assertions(1);
+        const duo = new Duo({
+          duoHostname: randomHostname,
+          duoClientId: randomClientId,
+          duoClientSecret: randomClientSecret,
+        });
+        expect(duo.verifySubscriber).toStrictEqual(false);
+      });
+
+      it("should be false when no model is given", () => {
+        expect.assertions(1);
+        const duo = new Duo();
+        expect(duo.verifySubscriber).toStrictEqual(false);
+      });
+
+      it.each([null, undefined, "", 0])("should be false when the model duoVerifySubscriber is falsy: %p", (value) => {
+        expect.assertions(1);
+        const duo = new Duo({ duoVerifySubscriber: value });
+        expect(duo.verifySubscriber).toStrictEqual(false);
+      });
     });
   });
 });

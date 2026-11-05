@@ -32,5 +32,44 @@ describe("MFAModel", () => {
       expect.assertions(1);
       expect(model).toEqual(mockModel);
     });
+
+    describe("duoVerifySubscriber", () => {
+      it("should be true when the verifySubscriber policy is true", () => {
+        expect.assertions(1);
+        const model = new MfaModel({ ...mockMfaSettings, duo: { ...mockMfaSettings.duo, verifySubscriber: true } });
+        expect(model.duoVerifySubscriber).toStrictEqual(true);
+      });
+
+      it("should be false when the verifySubscriber policy is false", () => {
+        expect.assertions(1);
+        const model = new MfaModel({ ...mockMfaSettings, duo: { ...mockMfaSettings.duo, verifySubscriber: false } });
+        expect(model.duoVerifySubscriber).toStrictEqual(false);
+      });
+
+      it("should be false when the verifySubscriber policy is missing", () => {
+        expect.assertions(1);
+        const duo = { ...mockMfaSettings.duo };
+        delete duo.verifySubscriber;
+        const model = new MfaModel({ ...mockMfaSettings, duo });
+        expect(model.duoVerifySubscriber).toStrictEqual(false);
+      });
+
+      it("should be false when the duo settings are missing", () => {
+        expect.assertions(1);
+        const settings = { ...mockMfaSettings };
+        delete settings.duo;
+        const model = new MfaModel(settings);
+        expect(model.duoVerifySubscriber).toStrictEqual(false);
+      });
+
+      it.each([null, undefined, "true", 1, {}])(
+        "should be false when the verifySubscriber policy is not exactly true: %p",
+        (value) => {
+          expect.assertions(1);
+          const model = new MfaModel({ ...mockMfaSettings, duo: { ...mockMfaSettings.duo, verifySubscriber: value } });
+          expect(model.duoVerifySubscriber).toStrictEqual(false);
+        },
+      );
+    });
   });
 });
