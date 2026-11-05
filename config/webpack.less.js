@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.12.0
  */
+const fs = require("fs");
 const path = require("path");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
@@ -91,4 +92,12 @@ const lessRule = {
 
 const lessMinimizer = new CssMinimizerPlugin();
 
-module.exports = { buildLessEntries, lessRule, lessMinimizer };
+// writes the theme list next to the compiled themes, for the consumers and the Storybook toolbar
+const themesJsonPlugin = {
+  apply: (compiler) =>
+    compiler.hooks.afterEmit.tap("ThemesJsonPlugin", () =>
+      fs.writeFileSync(path.join(compiler.outputPath, "css/themes/themes.json"), JSON.stringify(THEMES)),
+    ),
+};
+
+module.exports = { buildLessEntries, lessRule, lessMinimizer, themesJsonPlugin };

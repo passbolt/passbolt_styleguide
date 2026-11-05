@@ -2,6 +2,7 @@ import React from 'react';
 import {fn} from 'storybook/test';
 import AppContext from '../src/shared/context/AppContext/AppContext';
 import MockTranslationProvider from "../src/react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import themes from '../build/css/themes/themes.json';
 
 // Mock jest.fn to be able to use jest test data mock in storybook.
 // The benefit is to be able to keep consistent any changes on the Component props in order to keep the storybook stable.
@@ -77,12 +78,8 @@ const globalTypes = {
     toolbar: {
       icon: 'photo',
       items: [
-        { value: 'default', title: 'Default'},
-        { value: 'midgar', title: 'Midgar'},
-        { value: 'solarized_light', title: 'Solarized Light'},
-        { value: 'solarized_dark', title: 'Solarized Dark'},
-        { value: 'sakura', title: 'Sakura'},
-        { value: 'layette', title: 'Layette'},
+        // title from the name: underscore to space, each word capitalised
+        ...themes.map(name => ({ value: name, title: name.split('_').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')})),
         ...(process.env.STORYBOOK_DEV ? [{ value: 'custom', title: 'Custom'}] : [])
       ],
     },
