@@ -1,3 +1,8 @@
-# v5.18.0-alpha.6
+# v5.18.0
 
-Provides Duo verify subscriber
+Release version of the Styleguide package that includes:
+- security improvement
+- 2 new themes
+- autofill improvement
+- duo security hardening
+- ShareDialog performance optimization
