@@ -1,7 +1,8 @@
-class LocalStorage {
-  constructor(changeCallbacks) {
+class StorageArea {
+  constructor(changeCallbacks, areaName) {
     this.storage = {};
     this.changeCallbacks = changeCallbacks;
+    this.areaName = areaName;
   }
 
   get(keys) {
@@ -20,14 +21,15 @@ class LocalStorage {
       storageChangeEventValue[key] = {};
       storageChangeEventValue[key].newValue = data[key];
     });
-    this.changeCallbacks.forEach((callback) => callback(storageChangeEventValue));
+    this.changeCallbacks.forEach((callback) => callback(storageChangeEventValue, this.areaName));
   }
 }
 
 class MockStorage {
   constructor() {
     this.changeCallbacks = [];
-    this.local = new LocalStorage(this.changeCallbacks);
+    this.local = new StorageArea(this.changeCallbacks, "local");
+    this.session = new StorageArea(this.changeCallbacks, "session");
     this.onChanged = {
       addListener: (listener) => {
         this.changeCallbacks.push(listener);

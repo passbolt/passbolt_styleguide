@@ -27,6 +27,8 @@ export const AdminMfaContext = React.createContext({
   getCurrentSettings: () => {}, // Returns settings saved
   getSettings: () => {}, // Returns settings for UI changes
   setSettings: () => {}, // Set the settings object with changes
+  setDuoToggle: () => {}, // Turn the Duo provider on or off
+  hasDuoVerifySubscriberLockoutRisk: () => {}, // Check if turning the Duo verify subscriber policy on could lock out users
   hasSettingsChanges: () => {}, // Check if the policy has changes
   findMfaSettings: () => {}, // Find the current Mfa settings and store it in the state
   save: () => {}, // Save settings
@@ -68,6 +70,8 @@ export class AdminMfaContextProvider extends React.Component {
       getCurrentSettings: this.getCurrentSettings.bind(this), // Returns settings saved
       getSettings: this.getSettings.bind(this), // Returns settings for UI changes
       setSettings: this.setSettings.bind(this), // Set the settings object with changes
+      setDuoToggle: this.setDuoToggle.bind(this), // Turn the Duo provider on or off
+      hasDuoVerifySubscriberLockoutRisk: this.hasDuoVerifySubscriberLockoutRisk.bind(this), // Check if turning the Duo verify subscriber policy on could lock out users
       findMfaSettings: this.findMfaSettings.bind(this), // Find the current settings and store it in the state
       hasSettingsChanges: this.hasSettingsChanges.bind(this), // Check if setting has changes
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
@@ -135,6 +139,38 @@ export class AdminMfaContextProvider extends React.Component {
   setSettings(key, value) {
     const newSettings = Object.assign({}, this.state.settings, { [key]: value });
     this.setState({ settings: newSettings });
+  }
+
+  /**
+   * Turn the Duo provider on or off.
+   * When Duo is enabled for the first time, the verify subscriber policy is turned on by default.
+   * Otherwise, the saved verify subscriber policy is used.
+   * @param {boolean} enabled True to enable Duo, false to disable it
+   * @returns {void}
+   */
+  setDuoToggle(enabled) {
+    const currentSettings = this.state.currentSettings;
+    const isFirstDuoSetup = enabled && !currentSettings?.duoToggle;
+    const duoVerifySubscriber = isFirstDuoSetup || Boolean(currentSettings?.duoVerifySubscriber);
+    const newSettings = Object.assign({}, this.state.settings, { duoToggle: enabled, duoVerifySubscriber });
+    this.setState({ settings: newSettings });
+  }
+
+  /**
+   * Check if saving the settings could lock out users.
+   * It happens when the Duo verify subscriber policy is turned on for an existing Duo integration:
+   * users whose Duo username doesn't match their Passbolt username would be refused at their next sign-in.
+   * @returns {boolean}
+   */
+  hasDuoVerifySubscriberLockoutRisk() {
+    const currentSettings = this.state.currentSettings;
+    const settings = this.state.settings;
+    return Boolean(
+      currentSettings?.duoToggle &&
+      !currentSettings.duoVerifySubscriber &&
+      settings.duoToggle &&
+      settings.duoVerifySubscriber,
+    );
   }
 
   /**

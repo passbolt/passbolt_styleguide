@@ -42,7 +42,12 @@ class LoginPage extends React.Component {
   async componentDidMount() {
     this.initDefaultRememberMeChoice();
     const ssoLocalConfiguredProvider = await this.props.ssoContext.loadSsoConfiguration();
-    if (ssoLocalConfiguredProvider) {
+    /*
+     * A local SSO kit can remain after the SSO plugin was disabled (i.e. downgrade to CE).
+     * In such case fallback on the passphrase sign-in, the kit will be removed after a successful sign-in.
+     */
+    const isSsoPluginEnabled = Boolean(this.props.context.siteSettings?.canIUse("sso"));
+    if (ssoLocalConfiguredProvider && isSsoPluginEnabled) {
       this.setState({ isSsoAvailable: true, displaySso: true, isReady: true });
     } else {
       this.setState({ isReady: true }, () => this.focusOnPassphrase());

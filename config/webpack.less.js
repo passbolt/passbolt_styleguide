@@ -18,7 +18,7 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const packageJson = require("../package.json");
 
 const ROOT_DIR = path.resolve(__dirname, "..");
-const THEMES = ["default", "midgar", "solarized_dark", "solarized_light"];
+const THEMES = ["default", "midgar", "solarized_dark", "solarized_light", "sakura", "layette"];
 
 const buildLessEntries = () => {
   const rootThemesPath = path.resolve(ROOT_DIR, "src/less/themes");

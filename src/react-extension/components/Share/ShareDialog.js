@@ -49,9 +49,17 @@ class ShareDialog extends Component {
     this.state = this.getDefaultState();
     this.shareChanges = null;
     this.unchangedAcoTypesByAroId = new Map();
+    // The initial collections are fixed for the dialog lifetime, so their users and groups are converted, and their group members resolved, only once.
+    this.initialUsersById = new Map((props.initialUsers?.items || []).map((user) => [user.id, user]));
+    this.initialGroupMembersByGroupId = new Map();
+    const userContain = props.initialUsers?.entityClass?.ALL_CONTAIN_OPTIONS;
+    this.userDtosById = new Map((props.initialUsers?.items || []).map((user) => [user.id, user.toDto(userContain)]));
+    this.groupDtosById = new Map((props.initialGroups?.items || []).map((group) => [group.id, group.toDto()]));
     this.permissionListRef = React.createRef();
     // Set by the first group-members fetch failure, so only that one reports. See fetchGroupMembers.
     this.isAborting = false;
+    // Not in the state as nothing renders it: the search results open it on each debounced search.
+    this.autocompleteOpen = false;
     this.bindEventHandlers();
   }
 
@@ -143,17 +151,20 @@ class ShareDialog extends Component {
    * @private
    */
   mergeMovedRows(permissions, appliedRows) {
+    const appliedRowByAroId = new Map(appliedRows.map((appliedRow) => [appliedRow.aro.id, appliedRow]));
+    const currentAroIds = new Set();
     const rows = [];
     for (const row of permissions) {
-      const appliedRow = appliedRows.find((applied) => applied.aro.id === row.aro.id);
+      const appliedRow = appliedRowByAroId.get(row.aro.id);
       if (appliedRow) {
         this.applyMovedRow(row, appliedRow);
       }
+      currentAroIds.add(row.aro.id);
       rows.push(row);
     }
     // The recipients the move grants who were not on the items yet go at the end, like an autocomplete add.
     for (const appliedRow of appliedRows) {
-      const isNewRecipient = !permissions.some((row) => row.aro.id === appliedRow.aro.id);
+      const isNewRecipient = !currentAroIds.has(appliedRow.aro.id);
       if (isNewRecipient) {
         rows.push(appliedRow);
       }
@@ -206,10 +217,13 @@ class ShareDialog extends Component {
    */
   buildMovedVariesDetails(aroId, appliedRow) {
     const variesDetails = { 0: [], 1: [], 7: [], 15: [] };
+    const appliedPermissionByAcoId = new Map(
+      appliedRow.permissions.map((applied) => [applied.aco_foreign_key, applied]),
+    );
     for (const aco of this.shareChanges.getAcos()) {
       let permission;
       if (this.props.initialAppliedPermissions.has(aco.id)) {
-        permission = appliedRow.permissions.find((applied) => applied.aco_foreign_key === aco.id);
+        permission = appliedPermissionByAcoId.get(aco.id);
       } else {
         permission = this.shareChanges.getAcoAroPermission(aco, aroId);
       }
@@ -230,53 +244,44 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Build the resource DTOs the dialog renders so ShareChanges + ReactList work
-   * without touching the server: one entry per resource provided in `initialResources`, each seeded
-   * with its id, metadata, the operator's own permission, and its permission set. Create/edit pass a
-   * single synthetic resource whose id is null (the resource does not exist yet); share passes the
-   * real resources. The user/group lookup maps are built once and shared across resources.
+   * Convert the items into the plain objects the dialog displays.
+   * On create and edit, there is a single item whose id is null, as it does not exist yet.
+   * @param {Array<object>} items The items, with their permissions.
    * @returns {Array<object>}
    */
-  buildResourcesDtos(resourcesList) {
-    const groupsById = {};
-    this.props.initialGroups?.items.forEach((group) => {
-      groupsById[group.id] = group.toDto();
-    });
-    const usersById = {};
-    this.props.initialUsers?.items.forEach((user) => {
-      usersById[user.id] = user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS);
-    });
-
-    return resourcesList.map((resource) => this.buildResourceDto(resource, groupsById, usersById));
+  buildResourcesDtos(items) {
+    return items.map((item) => this.buildResourceDto(item));
   }
 
   /**
-   * Build a single resource DTO, embedding the referenced user/group from the
-   * provided lookup maps, falling back to the aro embedded in the permission itself when the maps
-   * do not carry it, so ShareChanges can render and track edits.
-   * @param {{id: (string|null), metadata: object, permission: object, permissions: PermissionsCollection}} resource
-   * @param {object} groupsById The referenced groups keyed by id.
-   * @param {object} usersById The referenced users keyed by id.
+   * Convert one item and its permissions, each with the user or group it is given to.
+   * @param {{id: (string|null), metadata: object, permission: object, permissions: PermissionsCollection}} item
    * @returns {object}
    */
-  buildResourceDto(resource, groupsById, usersById) {
-    const mappedPermissions = resource.permissions.items.map((permission) => {
-      const dto = permission.toDto(PermissionEntity.ALL_CONTAIN_OPTIONS);
+  buildResourceDto(item) {
+    const permissions = [];
+    for (const permission of item.permissions.items) {
+      const dto = permission.toDto();
       dto.aco = this.props.acoType ?? PermissionEntity.ACO_RESOURCE;
-      dto.aco_foreign_key = resource.id;
-      if (dto.aro === PermissionEntity.ARO_USER) {
-        dto.user = usersById[dto.aro_foreign_key] ?? dto.user;
-      } else if (dto.aro === PermissionEntity.ARO_GROUP) {
-        dto.group = groupsById[dto.aro_foreign_key] ?? dto.group;
+      dto.aco_foreign_key = item.id;
+
+      if (permission.aro === PermissionEntity.ARO_USER) {
+        // Take the user already converted, the permission's own copy only when missing, as it is costly.
+        dto.user =
+          this.userDtosById.get(permission.aroForeignKey) ??
+          permission.user?.toDto(PermissionEntity.ALL_CONTAIN_OPTIONS.user);
+      } else if (permission.aro === PermissionEntity.ARO_GROUP) {
+        // Take the group already converted, the permission's own copy only when missing.
+        dto.group = this.groupDtosById.get(permission.aroForeignKey) ?? permission.group?.toDto();
       }
-      return dto;
-    });
+      permissions.push(dto);
+    }
 
     return {
-      id: resource.id,
-      metadata: { name: resource.metadata?.name ?? "" },
-      permission: { type: resource.permission?.type ?? PermissionEntity.PERMISSION_OWNER },
-      permissions: mappedPermissions,
+      id: item.id,
+      metadata: { name: item.metadata?.name ?? "" },
+      permission: { type: item.permission?.type ?? PermissionEntity.PERMISSION_OWNER },
+      permissions: permissions,
     };
   }
 
@@ -302,9 +307,6 @@ class ShareDialog extends Component {
 
       // ids of the added groups found changed at the last save attempt
       changedGroupIds: [],
-
-      // autocomplete
-      autocompleteOpen: false,
 
       // ids of the groups whose members are currently being fetched
       fetchingGroupIds: [],
@@ -345,7 +347,7 @@ class ShareDialog extends Component {
    * @return {void}
    */
   handleAutocompleteOpen() {
-    this.setState({ autocompleteOpen: true });
+    this.autocompleteOpen = true;
   }
 
   /**
@@ -353,7 +355,7 @@ class ShareDialog extends Component {
    * @return {void}
    */
   handleAutocompleteClose() {
-    this.setState({ autocompleteOpen: false });
+    this.autocompleteOpen = false;
   }
 
   /**
@@ -365,7 +367,7 @@ class ShareDialog extends Component {
     event.preventDefault();
 
     // Prevent enter on autocomplete to trigger submit
-    if (this.state.autocompleteOpen) {
+    if (this.autocompleteOpen) {
       return;
     }
     // Do not re-submit an already processing form
@@ -592,12 +594,32 @@ class ShareDialog extends Component {
         .filter((groupUser) => groupUser.user)
         .map((groupUser) => groupUser.user.toDto(UserEntity.ALL_CONTAIN_OPTIONS));
     }
+    return this.getInitialGroupMembers(groupId);
+  }
+
+  /**
+   * Resolve the member users of a group from the initial collections, once per group.
+   * @param {string} groupId The group identifier
+   * @returns {Array<object>} The member users DTOs
+   * @private
+   */
+  getInitialGroupMembers(groupId) {
+    if (this.initialGroupMembersByGroupId.has(groupId)) {
+      return this.initialGroupMembersByGroupId.get(groupId);
+    }
+
     const group = this.props.initialGroups?.items.find((item) => item.id === groupId);
     const groupsUsers = group?.groupsUsers?.items || [];
-    return groupsUsers
-      .map((groupUser) => this.props.initialUsers?.items.find((user) => user.id === groupUser.userId))
-      .filter(Boolean)
-      .map((user) => user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS));
+    const members = [];
+    for (const groupUser of groupsUsers) {
+      const user = this.initialUsersById.get(groupUser.userId);
+      if (user) {
+        members.push(user.toDto(this.props.initialUsers.entityClass?.ALL_CONTAIN_OPTIONS));
+      }
+    }
+
+    this.initialGroupMembersByGroupId.set(groupId, members);
+    return members;
   }
 
   /**
@@ -872,14 +894,6 @@ class ShareDialog extends Component {
    */
   hasNoOwner() {
     return this.shareChanges && this.shareChanges.getResourcesWithNoOwner().length > 0;
-  }
-
-  /**
-   * Return true if the permission list have changed since the start
-   * @returns {null|boolean}
-   */
-  hasChanges() {
-    return this.shareChanges && this.shareChanges.getChanges().length > 0;
   }
 
   /**

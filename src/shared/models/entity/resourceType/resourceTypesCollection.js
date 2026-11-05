@@ -121,14 +121,11 @@ class ResourceTypesCollection extends EntityV2Collection {
   }
 
   /**
-   * Filter by Password and TOTP resource types.
+   * Filter by resource types supported by the quick access.
    * @return {void} The function alters the collection itself.
    */
-  filterByPasswordAndTOTPResourceTypes() {
-    this.filterByCallback(
-      (resourceType) =>
-        PASSWORD_RESOURCE_TYPES.includes(resourceType.slug) || TOTP_RESOURCE_TYPES.includes(resourceType.slug),
-    );
+  filterByQuickAccessResourceTypes() {
+    this.filterByCallback((resourceType) => resourceType.isSupportedByQuickAccess());
   }
 
   /**

@@ -59,6 +59,35 @@ describe("DomUtils", () => {
       const points = DOMUtils.generateUniquePointsInElement(element);
       expect(points.length).toBe(0);
     });
+
+    it("Should generate points rounded to 6 significant digits in element with fractional coordinates", () => {
+      expect.assertions(3);
+
+      const element = document.createElement("div");
+      const top = 224.83436804199218;
+      const left = 91.5714340209961;
+      const width = 370.0000305175781;
+      const height = 220;
+
+      jest.spyOn(element, "getBoundingClientRect").mockImplementationOnce(() => ({ top, left, width, height }));
+
+      const points = DOMUtils.generateUniquePointsInElement(element);
+
+      const minX = Number(left.toPrecision(6));
+      const maxX = Number((left + width).toPrecision(6));
+      const minY = Number(top.toPrecision(6));
+      const maxY = Number((top + height).toPrecision(6));
+
+      expect(points.every((point) => typeof point.x === "number" && typeof point.y === "number")).toBe(true);
+      expect(
+        points.every(
+          (point) => Number(point.x.toPrecision(6)) === point.x && Number(point.y.toPrecision(6)) === point.y,
+        ),
+      ).toBe(true);
+      expect(points.every((point) => point.x >= minX && point.x <= maxX && point.y >= minY && point.y <= maxY)).toBe(
+        true,
+      );
+    });
   });
 
   describe("DomUtils::getContainingDialog", () => {

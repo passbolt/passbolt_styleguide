@@ -1,12 +1,16 @@
 .quickaccess {
     .item-browse {
         .properties {
+            max-height: 40rem;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--Workspace-Elevator) transparent;
+
             .property {
                 .clearfix();
                 display: flex;
                 align-items: center;
                 padding: 1.6rem;
-                position: relative;
 
                 &:last-child {
                   box-shadow: none;
@@ -21,6 +25,82 @@
                 button:hover {
                   color: var(--Palette-Contrast-1);
                 }
+            }
+            // Secret rows: the action and its ring sit on the value line next to the eye, the row keeps its height
+            .property:not(.custom-fields), .custom-field {
+              display: grid;
+              grid-template-columns: minmax(0, 1fr) auto;
+              grid-template-areas: "name ." "value action";
+              align-items: center;
+
+              // The clearfix pseudo-elements would be grid items
+              &:before, &:after {
+                content: none;
+              }
+
+              > .information {
+                display: contents;
+
+                > .property-name {
+                  grid-area: name;
+                }
+
+                > .property-value, > .password-wrapper, > .totp-wrapper {
+                  grid-area: value;
+                }
+              }
+
+              // The 2.4rem action overflows the 2rem value line by .2rem on each side.
+              > .property-action {
+                grid-area: action;
+                margin: -.2rem 0;
+              }
+
+              > .property-action + .timer {
+                grid-area: action;
+                place-self: center;
+                margin: -.6rem -.4rem;
+              }
+
+              // The eye shows while its row is hovered or reached with the keyboard.
+              .password-view, .totp-view {
+                opacity: 0;
+              }
+
+              &:hover, &:has(:focus-visible) {
+                .password-view, .totp-view {
+                  opacity: 1;
+
+                  &:disabled {
+                    opacity: .5;
+                  }
+                }
+              }
+            }
+            .property.custom-fields {
+              flex-direction: column;
+              align-items: stretch;
+              gap: .8rem;
+
+              // The clearfix pseudo-elements would be flex items and take a gap each.
+              &:before, &:after {
+                content: none;
+              }
+
+              > .property-name {
+                margin-bottom: 0;
+              }
+
+              ul {
+                display: flex;
+                flex-direction: column;
+                gap: .8rem;
+              }
+
+              .custom-field .property-name {
+                font-size: 1.2rem;
+                line-height: 1.6rem;
+              }
             }
             .information {
               flex: 1;
@@ -39,6 +119,10 @@
                 .totp-code + .svg-icon.timer {
                   margin-left: .5rem;
                 }
+              }
+
+              .password-wrapper {
+                padding-right: 1.6rem;
               }
 
               .accordion {
@@ -90,10 +174,14 @@
                 }
             }
             .property-name {
-                font-size: 1.3rem;
-                line-height: 1.8rem;
+                font-size: 1.5rem;
+                line-height: 2rem;
                 color: var(--Text-and-icons-Secondary-text);
                 margin-bottom: .4rem;
+                .ellipsis();
+                &.empty {
+                  font-style: italic;
+                }
             }
             .secret {
                 display: inline-block;
@@ -113,7 +201,7 @@
                       font-family: 'Obfuscation', sans-serif;
                       font-style: normal;
                       font-weight: 400;
-                      font-size: 1.8rem;
+                      font-size: 1.6rem;
                       line-height: 100%;
                     }
                   }
@@ -130,6 +218,12 @@
                     }
                   }
 
+                  &.secret-custom-fields {
+                    > button:before {
+                      content: '00000000';
+                    }
+                  }
+
                   &.secret-totp {
                     > button {
                       &:before {
@@ -142,14 +236,43 @@
                     }
                   }
                 }
+
+                &.secret-note .encrypted-description {
+                  display: block;
+                  font-family: 'Obfuscation';
+                  color: var(--Text-and-icons-Main-text);
+                  opacity: .25;
+                  text-align: left;
+                  white-space: normal;
+                  padding-left: .4rem;
+                }
+
+                &.secret-note .note-previewed {
+                  display: block;
+                  max-height: 12rem;
+                  overflow-y: auto;
+                  overflow-wrap: anywhere;
+                  white-space: pre-wrap;
+                  scrollbar-width: thin;
+                  scrollbar-color: var(--Workspace-Elevator) transparent;
+                }
+            }
+
+            .property-action svg {
+              width: 1.8rem;
+              height: 1.8rem;
+            }
+
+            // The ring lets the pointer through: no bevel on the action while the ring is up.
+            .property-action:has(+ .timer) {
+              &:hover, &:active {
+                box-shadow: none;
+              }
             }
 
             .property-action + .timer {
               width: 3.2rem;
               height: 3.2rem;
-              position: absolute;
-              right: 1.25rem;
-              top: 2.1rem;
               --timer-delay: 0;
               --timer-stroke-width: 1;
               pointer-events: none;

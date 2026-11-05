@@ -1,6 +1,8 @@
-# v5.17.2
+# v5.18.0
 
-Provides:
-- Updates of the translation
-- fix for the error message whenever an admin wants to activate passkey MFA on an instance served with IP
-- autofill performance improvement
+Release version of the Styleguide package that includes:
+- security improvement
+- 2 new themes
+- autofill improvement
+- duo security hardening
+- ShareDialog performance optimization

@@ -265,7 +265,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   hasMetadataTypesV4AndV5() {
     return Boolean(
       this.props.metadataTypeSettings?.allowCreationOfV5Resources &&
-        this.props.metadataTypeSettings?.allowCreationOfV4Resources,
+      this.props.metadataTypeSettings?.allowCreationOfV4Resources,
     );
   }
 

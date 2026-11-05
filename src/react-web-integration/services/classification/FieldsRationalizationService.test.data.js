@@ -15,7 +15,7 @@
 /**
  * Build a rationalization scope from a form role and an ordered (DOM order) list of field specs.
  * @param {string} formRole The FormRole.
- * @param {Array<{id: string, role: string, type?: string, tagName?: string, byDeclared?: boolean}>} specs The ordered field specs.
+ * @param {Array<{id: string, role: string, type?: string, tagName?: string, byDeclared?: boolean, tier?: number}>} specs The ordered field specs.
  * @returns {{formRole: string, fields: object[], roles: Map<string, string>}} The scope.
  */
 export const defaultScope = (formRole, specs) => {
@@ -24,6 +24,7 @@ export const defaultScope = (formRole, specs) => {
     type: spec.type ?? "text",
     tagName: spec.tagName ?? "INPUT",
     _byDeclared: spec.byDeclared ?? false,
+    tier: spec.tier,
   }));
   const roles = new Map(specs.map((spec) => [spec.id, spec.role]));
   return { formRole, fields, roles };

@@ -25,4 +25,10 @@ export default () => ([{
 }, {
   id: "solarized_dark",
   name: "solarized_dark",
+}, {
+  id: "sakura",
+  name: "sakura",
+}, {
+  id: "layette",
+  name: "layette",
 }]);

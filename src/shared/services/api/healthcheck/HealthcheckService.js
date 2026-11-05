@@ -15,6 +15,7 @@
 import { ApiClient } from "../../../lib/apiClient/apiClient";
 
 const HEALTHCHECK_RESOURCE_NAME = "healthcheck";
+const HEALTHCHECK_API_VERSION = "v5";
 
 /**
  * Model related to the Healthcheck service settings
@@ -32,6 +33,10 @@ class HealthcheckService {
     this.initClient();
   }
 
+  /**
+   * Fetch the healthcheck in its generic (v5) format.
+   * @returns {Promise<array>} the response body, a flat list of checks
+   */
   async fetchHealthcheck() {
     this.initClient();
     const result = await this.apiClient.findAll();
@@ -40,11 +45,14 @@ class HealthcheckService {
 
   /**
    * Initializes the API client with the specified resource name.
+   * The version is pinned on the client and not on apiClientOptions, which is shared with every
+   * other service and would carry it over to the next client built from it.
    * @returns {void}
    */
   initClient() {
     this.apiClientOptions.setResourceName(HEALTHCHECK_RESOURCE_NAME);
     this.apiClient = new ApiClient(this.apiClientOptions);
+    this.apiClient.setApiVersion(HEALTHCHECK_API_VERSION);
   }
 }
 export default HealthcheckService;

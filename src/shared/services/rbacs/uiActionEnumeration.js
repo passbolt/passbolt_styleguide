@@ -30,4 +30,5 @@ export const uiActions = {
   DUO_CONFIGURATION: "Duo.configuration",
   AVATAR_UPLOAD: "Avatar.upload",
   SHARE_FOLDER: "Folders.share",
+  PASSKEYS_CONFIGURATION: "Passkeys.configuration",
 };

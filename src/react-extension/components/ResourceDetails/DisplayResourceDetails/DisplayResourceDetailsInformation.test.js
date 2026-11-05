@@ -150,6 +150,12 @@ describe("DisplayResourceDetailsInformation", () => {
       },
     });
     props.resourceWorkspaceContext.details.resource.expired = "2024-02-25T15:06:49+00:00";
+    const user = props.context.users[0];
+    const resourceWithContain = Object.assign({}, props.resourceWorkspaceContext.details.resource, {
+      creator: user,
+      modifier: user,
+    });
+    props.context.port.addRequestListener("passbolt.resources.find-details", async () => resourceWithContain);
 
     describe("AttentionRequired SVG icon should be visible", () => {
       it("By Default", () => {

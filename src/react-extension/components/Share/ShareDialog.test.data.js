@@ -27,6 +27,7 @@ import UsersCollection from "../../../shared/models/entity/user/usersCollection"
 import { v4 as uuidv4 } from "uuid";
 import mockPort from "../../../../test/mocks/mockPort";
 import mockStorage from "../../../../test/mocks/mockStorage";
+import { largeMovedResourcesDtos, largeSharedResourcesDtos } from "./Utility/ShareChanges.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -1818,4 +1819,33 @@ export function propsWithStressPermissions(data = {}) {
     onConfirm: () => {},
     ...data,
   });
+}
+
+/**
+ * Build move props on a large selection, to exercise what the dialog computes when it opens on a
+ * move at a scale a "select all then move" reaches. Most recipients are left out of some resources,
+ * so their rows read "varies" and get their per-item list built.
+ * @param {object} [options]
+ * @param {number} [options.resourceCount=200] The number of resources moved.
+ * @param {number} [options.aroCount=100] The number of recipients holding a permission.
+ * @returns {object}
+ */
+export function largeMoveProps({ resourceCount = 200, aroCount = 100 } = {}) {
+  const resources = largeSharedResourcesDtos({ resourceCount, aroCount });
+  const movedResources = largeMovedResourcesDtos(resources);
+  const toCollection = (permissions) => new PermissionsCollection(permissions, { assertAtLeastOneOwner: false });
+  const usersById = new Map();
+  resources.forEach((resource) =>
+    resource.permissions.forEach((permission) => usersById.set(permission.user.id, permission.user)),
+  );
+  return {
+    ...defaultProps(),
+    initialResources: resources.map((resource) => ({ ...resource, permissions: toCollection(resource.permissions) })),
+    initialGroups: new GroupsCollection([]),
+    initialUsers: new UsersCollection(Array.from(usersById.values())),
+    initialAppliedPermissions: new Map(
+      movedResources.map((resource) => [resource.id, toCollection(resource.permissions)]),
+    ),
+    onConfirm: jest.fn(),
+  };
 }

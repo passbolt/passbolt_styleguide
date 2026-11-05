@@ -26,7 +26,7 @@ import {
   propsWithTextFilter,
 } from "./FilterUsersByBreadcrumb.test.data";
 import { UserWorkspaceFilterTypes } from "../../../contexts/UserWorkspaceContext";
-import { waitFor } from "@babel/core/lib/gensync-utils/async";
+import { waitFor } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();

@@ -214,6 +214,7 @@ class ExportResources extends React.Component {
       { label: "csv (dashlane)", value: "csv-dashlane" },
       { label: "csv (nordpass)", value: "csv-nordpass" },
       { label: "csv (logmeonce)", value: "csv-logmeonce" },
+      { label: "csv (netwrix)", value: "csv-netwrix" },
     ];
 
     if (this.exportPoliciesSettings?.allowCsvFormat === false) {

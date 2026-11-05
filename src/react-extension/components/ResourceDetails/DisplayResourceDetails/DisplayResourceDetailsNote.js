@@ -20,11 +20,13 @@ import { withAppContext } from "../../../../shared/context/AppContext/AppContext
 import { Trans, withTranslation } from "react-i18next";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
 import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * This component display the note section of a resource
@@ -192,6 +194,10 @@ class DisplayResourceDetailsNote extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const canPreviewSecret =
+      this.props.context.siteSettings?.canIUse("previewPassword") &&
+      this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
+
     return (
       <div className="detailed-information accordion sidebar-section secure-note">
         <div className="accordion-header">
@@ -225,14 +231,14 @@ class DisplayResourceDetailsNote extends React.Component {
                 </div>
               </>
             )}
-            {this.mustShowEmptyNote() && (
+            {canPreviewSecret && this.mustShowEmptyNote() && (
               <p className="description-content">
                 <span className="empty-content">
                   <Trans>There is no note.</Trans>
                 </span>
               </p>
             )}
-            {this.mustShowNote() && (
+            {canPreviewSecret && this.mustShowNote() && (
               <>
                 <p className="description-content">{this.state.note}</p>
                 <button type="button" onClick={this.handleHideNoteClickEvent}>
@@ -247,16 +253,18 @@ class DisplayResourceDetailsNote extends React.Component {
                   Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never gonna
                   make you cry. Never gonna say goodbye. Never gonna tell a lie and hurt you.
                 </p>
-                <button
-                  type="button"
-                  className={`button ${this.state.isSecretDecrypting ? "processing" : ""}`}
-                  disabled={this.state.isSecretDecrypting}
-                  onClick={this.handleRetryDecryptClickEvent}
-                >
-                  <EyeOpenSVG />
-                  <Trans>Show</Trans>
-                  {this.state.isSecretDecrypting && <SpinnerSVG />}
-                </button>
+                {canPreviewSecret && (
+                  <button
+                    type="button"
+                    className={`button ${this.state.isSecretDecrypting ? "processing" : ""}`}
+                    disabled={this.state.isSecretDecrypting}
+                    onClick={this.handleRetryDecryptClickEvent}
+                  >
+                    <EyeOpenSVG />
+                    <Trans>Show</Trans>
+                    {this.state.isSecretDecrypting && <SpinnerSVG />}
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -268,6 +276,7 @@ class DisplayResourceDetailsNote extends React.Component {
 
 DisplayResourceDetailsNote.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The role based access control context
   resourceWorkspaceContext: PropTypes.any, // The resource
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.object, // The action feedback context
@@ -276,6 +285,6 @@ DisplayResourceDetailsNote.propTypes = {
 
 export default withAppContext(
   withResourceWorkspace(
-    withResourceTypesLocalStorage(withActionFeedback(withTranslation("common")(DisplayResourceDetailsNote))),
+    withResourceTypesLocalStorage(withRbac(withActionFeedback(withTranslation("common")(DisplayResourceDetailsNote)))),
   ),
 );

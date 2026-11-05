@@ -20,7 +20,7 @@ import ShareSVG from "../../../img/svg/share.svg";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 class MoreFiltersPage extends React.Component {
@@ -180,7 +180,7 @@ MoreFiltersPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withActiveSessionLocalStorage(
+export default withActiveSessionSessionStorage(
   withRouter(
     withAppContext(
       withResourceTypesLocalStorage(

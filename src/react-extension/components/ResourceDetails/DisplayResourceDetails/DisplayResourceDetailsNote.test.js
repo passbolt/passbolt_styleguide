@@ -15,7 +15,12 @@
 /**
  * Unit tests on DisplayResourceDetailsNote in regard of specifications
  */
-import { defaultProps, resourceWithDescriptionMock } from "./DisplayResourceDetailsNote.test.data";
+import {
+  defaultProps,
+  propsWithApiFlagDisabled,
+  propsWithDenyUiAction,
+  resourceWithDescriptionMock,
+} from "./DisplayResourceDetailsNote.test.data";
 import DisplayResourceDetailsNotePage from "./DisplayResourceDetailsNote.test.page";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
@@ -176,5 +181,27 @@ describe("See secure note", () => {
 
     expect(displayError).toHaveBeenCalledTimes(1);
     expect(displayError).toHaveBeenCalledWith("The operation was cancelled.");
+  });
+
+  it("AS LU, I cannot preview the secure note if denied by RBAC", async () => {
+    expect.assertions(3);
+
+    const props = propsWithDenyUiAction({ resource: resourceWithDescriptionMock });
+    const page = new DisplayResourceDetailsNotePage(props);
+
+    expect(page.encryptedDescription).not.toBeNull();
+    expect(page.showButton).toBeNull();
+    expect(page.hideButton).toBeNull();
+  });
+
+  it("AS LU, I cannot preview the secure note if disabled by API flag", async () => {
+    expect.assertions(3);
+
+    const props = propsWithApiFlagDisabled({ resource: resourceWithDescriptionMock });
+    const page = new DisplayResourceDetailsNotePage(props);
+
+    expect(page.encryptedDescription).not.toBeNull();
+    expect(page.showButton).toBeNull();
+    expect(page.hideButton).toBeNull();
   });
 });

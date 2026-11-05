@@ -40,7 +40,7 @@ import TagV2SVG from "../../../img/svg/tag_v2.svg";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import { sortResourcesByUriMatchingScore } from "../../../shared/utils/sortUtils";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
@@ -446,7 +446,7 @@ HomePage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withActiveSessionLocalStorage(
+export default withActiveSessionSessionStorage(
   withAppContext(
     withRbac(
       withRouter(

@@ -37,7 +37,7 @@ import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataT
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import ActionAbortedMissingMetadataKeysPage from "./components/ActionAbortedMissingMetadataKeysPage/ActionAbortedMissingMetadataKeysPage";
 import OfflineSettingsLocalStorageContextProvider from "../shared/context/offline/OfflineSettingsLocalStorageContext";
-import ActiveSessionLocalStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import ActiveSessionSessionStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import ExtQuickAccessContextProvider from "./contexts/ExtQuickAccessContext";
 import HandleBootstrapRoute from "./components/HandleBootstrapRoute/HandleBootstrapRoute";
 import QuickAccessServerUnavailable from "./components/QuickAccessServerUnavailable/QuickAccessServerUnavailable";
@@ -224,7 +224,7 @@ class ExtQuickAccess extends React.Component {
   render() {
     return (
       this.isReady() && (
-        <ActiveSessionLocalStorageContextProvider
+        <ActiveSessionSessionStorageContextProvider
           account={this.state.account}
           port={this.props.port}
           storage={this.props.storage}
@@ -400,7 +400,7 @@ class ExtQuickAccess extends React.Component {
               </OfflineSettingsLocalStorageContextProvider>
             </TranslationProvider>
           </ExtQuickAccessContextProvider>
-        </ActiveSessionLocalStorageContextProvider>
+        </ActiveSessionSessionStorageContextProvider>
       )
     );
   }
